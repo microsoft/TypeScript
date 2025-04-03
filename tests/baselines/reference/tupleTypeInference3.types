@@ -1,0 +1,891 @@
+//// [tests/cases/compiler/tupleTypeInference3.ts] ////
+
+=== tupleTypeInference3.ts ===
+// Repro from #55632
+
+type InferArg =
+>InferArg : InferArg
+>         : ^^^^^^^^
+
+  | [1, (a: number) => void]
+>a : number
+>  : ^^^^^^
+
+  | [2, (b: string) => void];
+>b : string
+>  : ^^^^^^
+
+const arg: InferArg = [1, (a) => { }];
+>arg : InferArg
+>    : ^^^^^^^^
+>[1, (a) => { }] : [1, (a: number) => void]
+>                : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { } : (a: number) => void
+>           : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+
+// More tests
+
+type T1 = [1, (a: number) => void];
+>T1 : T1
+>   : ^^
+>a : number
+>  : ^^^^^^
+
+type T2 = { 0: 1, 1: (a: boolean) => void, 2: number };
+>T2 : T2
+>   : ^^
+>0 : 1
+>  : ^
+>1 : (a: boolean) => void
+>  : ^ ^^       ^^^^^    
+>a : boolean
+>  : ^^^^^^^
+>2 : number
+>  : ^^^^^^
+
+type T3 = T1 | T2;
+>T3 : T3
+>   : ^^
+
+const v31: T3 = [1, (a) => { a === 0 }];
+>v31 : T3
+>    : ^^
+>[1, (a) => { a === 0 }] : [1, (a: number) => void]
+>                        : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === 0 } : (a: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>a === 0 : boolean
+>        : ^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+const v32: T3 = [1, (a) => { a === true }, 0];
+>v32 : T3
+>    : ^^
+>[1, (a) => { a === true }, 0] : [1, (a: boolean) => void, number]
+>                              : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === true } : (a: boolean) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>a === true : boolean
+>           : ^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+>0 : 0
+>  : ^
+
+const v33: T3 = [1, (a) => { a === true }, 0, 0];
+>v33 : T3
+>    : ^^
+>[1, (a) => { a === true }, 0, 0] : [1, (a: boolean) => void, number, number]
+>                                 : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === true } : (a: boolean) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>a === true : boolean
+>           : ^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+const v34: T3 = [1, (a: boolean) => { a === true }]; // Error
+>v34 : T3
+>    : ^^
+>[1, (a: boolean) => { a === true }] : [1, (a: boolean) => void]
+>                                    : ^^^^^ ^^       ^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a: boolean) => { a === true } : (a: boolean) => void
+>                               : ^ ^^       ^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>a === true : boolean
+>           : ^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+type T4 = T3 | [2, (b: string) => void]
+>T4 : T4
+>   : ^^
+>b : string
+>  : ^^^^^^
+
+const v41: T4 = [1, (a) => { a === 0 }];
+>v41 : T4
+>    : ^^
+>[1, (a) => { a === 0 }] : [1, (a: number) => void]
+>                        : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === 0 } : (a: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>a === 0 : boolean
+>        : ^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+const v42: T4 = [1, (a) => { a === true }, 0];
+>v42 : T4
+>    : ^^
+>[1, (a) => { a === true }, 0] : [1, (a: boolean) => void, number]
+>                              : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === true } : (a: boolean) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>a === true : boolean
+>           : ^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+>0 : 0
+>  : ^
+
+const v43: T4 = [2, (a) => { a === "" }];
+>v43 : T4
+>    : ^^
+>[2, (a) => { a === "" }] : [2, (a: string) => void]
+>                         : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+type T5 = T4 | {}
+>T5 : T5
+>   : ^^
+
+const v52: T5 = [1, (a) => { a === 0 }];
+>v52 : T5
+>    : ^^
+>[1, (a) => { a === 0 }] : [1, (a: number) => void]
+>                        : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === 0 } : (a: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>a === 0 : boolean
+>        : ^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+const v53: T5 = [1, (a) => { a === true }, 0];
+>v53 : T5
+>    : ^^
+>[1, (a) => { a === true }, 0] : [1, (a: boolean) => void, number]
+>                              : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === true } : (a: boolean) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>a === true : boolean
+>           : ^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+>0 : 0
+>  : ^
+
+const v54: T5 = [2, (a) => { a === "" }];
+>v54 : T5
+>    : ^^
+>[2, (a) => { a === "" }] : [2, (a: string) => void]
+>                         : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+type T6 = T1 | { 0: 1, 1: (a: boolean) => void, 2?: number }
+>T6 : T6
+>   : ^^
+>0 : 1
+>  : ^
+>1 : (a: boolean) => void
+>  : ^ ^^       ^^^^^    
+>a : boolean
+>  : ^^^^^^^
+>2 : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+const v61: T6 = [1, (a) => { a === true }, 0];
+>v61 : T6
+>    : ^^
+>[1, (a) => { a === true }, 0] : [1, (a: boolean) => void, number]
+>                              : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === true } : (a: boolean) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>a === true : boolean
+>           : ^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+>0 : 0
+>  : ^
+
+const v62: T6 = [1, (a) => { }]; // Error
+>v62 : T6
+>    : ^^
+>[1, (a) => { }] : [1, (a: any) => void]
+>                : ^^^^^ ^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { } : (a: any) => void
+>           : ^ ^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+
+type T7 = [1, (a: number) => void, ...number[]];
+>T7 : T7
+>   : ^^
+>a : number
+>  : ^^^^^^
+
+type T8 = T7 | [1, (a: boolean) => void]
+>T8 : T8
+>   : ^^
+>a : boolean
+>  : ^^^^^^^
+
+const v81: T8 = [1, (a) => { a === 0 }, 0];
+>v81 : T8
+>    : ^^
+>[1, (a) => { a === 0 }, 0] : [1, (a: number) => void, number]
+>                           : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === 0 } : (a: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>a === 0 : boolean
+>        : ^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+const v82: T8 = [1, (a) => { }]; // Error
+>v82 : T8
+>    : ^^
+>[1, (a) => { }] : [1, (a: any) => void]
+>                : ^^^^^ ^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { } : (a: any) => void
+>           : ^ ^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+
+type T9 = [1, (a: number) => void, ...[number, string]] | [1, (b: string) => void, number?];
+>T9 : T9
+>   : ^^
+>a : number
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+const v91: T9 = [1, (a) => { a === 0 }, 0, ""];
+>v91 : T9
+>    : ^^
+>[1, (a) => { a === 0 }, 0, ""] : [1, (a: number) => void, number, string]
+>                               : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === 0 } : (a: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>a === 0 : boolean
+>        : ^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+>"" : ""
+>   : ^^
+
+const v92: T9 = [1, (a) => { a === "" }];
+>v92 : T9
+>    : ^^
+>[1, (a) => { a === "" }] : [1, (a: string) => void]
+>                         : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+const v93: T9 = [1, (a) => { a === "" }, 0];
+>v93 : T9
+>    : ^^
+>[1, (a) => { a === "" }, 0] : [1, (a: string) => void, number]
+>                            : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>0 : 0
+>  : ^
+
+type T10 = [1, (a: number) => void, ...[number, string]] | [1, (b: string) => void, number?, string?];
+>T10 : T10
+>    : ^^^
+>a : number
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+const v101: T10 = [1, (a) => { a === "" }];
+>v101 : T10
+>     : ^^^
+>[1, (a) => { a === "" }] : [1, (a: string) => void]
+>                         : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+const v102: T10 = [1, (a) => { a === "" }, 0];
+>v102 : T10
+>     : ^^^
+>[1, (a) => { a === "" }, 0] : [1, (a: string) => void, number]
+>                            : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>0 : 0
+>  : ^
+
+const v103: T10 = [1, (a) => { }, 0, ""]; // Error
+>v103 : T10
+>     : ^^^
+>[1, (a) => { }, 0, ""] : [1, (a: any) => void, number, string]
+>                       : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { } : (a: any) => void
+>           : ^ ^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+>0 : 0
+>  : ^
+>"" : ""
+>   : ^^
+
+type T11 = [1, (a: number) => void, ...[number, string]] | [1, (b: string) => void, number?, boolean?];
+>T11 : T11
+>    : ^^^
+>a : number
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+const v111: T11 = [1, (a) => { a === "" }];
+>v111 : T11
+>     : ^^^
+>[1, (a) => { a === "" }] : [1, (a: string) => void]
+>                         : ^^^^^ ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+const v112: T11 = [1, (a) => { a === "" }, 0];
+>v112 : T11
+>     : ^^^
+>[1, (a) => { a === "" }, 0] : [1, (a: string) => void, number]
+>                            : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>0 : 0
+>  : ^
+
+const v113: T11 = [1, (a) => { a === 0 }, 0, ""];
+>v113 : T11
+>     : ^^^
+>[1, (a) => { a === 0 }, 0, ""] : [1, (a: number) => void, number, string]
+>                               : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === 0 } : (a: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>a === 0 : boolean
+>        : ^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+>"" : ""
+>   : ^^
+
+const v114: T11 = [1, (a) => { a === "" }, 0, true];
+>v114 : T11
+>     : ^^^
+>[1, (a) => { a === "" }, 0, true] : [1, (a: string) => void, number, true]
+>                                  : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>0 : 0
+>  : ^
+>true : true
+>     : ^^^^
+
+type T12 =
+>T12 : T12
+>    : ^^^
+
+  | { 1: (arg: File) => void }
+>1 : (arg: File) => void
+>  : ^   ^^    ^^^^^    
+>arg : File
+>    : ^^^^
+
+  | { 0?: number, 1: (arg: Date) => void }
+>0 : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>1 : (arg: Date) => void
+>  : ^   ^^    ^^^^^    
+>arg : Date
+>    : ^^^^
+
+  | { 0: (arg: boolean) => void }
+>0 : (arg: boolean) => void
+>  : ^   ^^       ^^^^^    
+>arg : boolean
+>    : ^^^^^^^
+
+  | { 0: boolean, 1: (arg: number) => void }
+>0 : boolean
+>  : ^^^^^^^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+
+  | [null, (arg: string) => void];
+>arg : string
+>    : ^^^^^^
+
+declare function f(a: T12): void;
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^    
+>a : T12
+>  : ^^^
+
+f([null, (a) => { a === "" }]);
+>f([null, (a) => { a === "" }]) : void
+>                               : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^    
+>[null, (a) => { a === "" }] : [null, (a: string) => void]
+>                            : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+f([true, (a) => { a === 0 }]);
+>f([true, (a) => { a === 0 }]) : void
+>                              : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^    
+>[true, (a) => { a === 0 }] : [true, (a: number) => void]
+>                           : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>(a) => { a === 0 } : (a: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>a === 0 : boolean
+>        : ^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+f([(a) => { a === true }]);
+>f([(a) => { a === true }]) : void
+>                           : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^    
+>[(a) => { a === true }] : [(a: boolean) => void]
+>                        : ^^ ^^^^^^^^^^^^^^^^^^^
+>(a) => { a === true } : (a: boolean) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>a === true : boolean
+>           : ^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+f([0, (a) => { a as Date }]);
+>f([0, (a) => { a as Date }]) : void
+>                             : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^    
+>[0, (a) => { a as Date }] : [number, (a: Date) => void]
+>                          : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>(a) => { a as Date } : (a: Date) => void
+>                     : ^ ^^^^^^^^^^^^^^^
+>a : Date
+>  : ^^^^
+>a as Date : Date
+>          : ^^^^
+>a : Date
+>  : ^^^^
+
+f([, (a) => { }]); // Error
+>f([, (a) => { }]) : void
+>                  : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^    
+>[, (a) => { }] : [undefined, (a: any) => void]
+>               : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>(a) => { } : (a: any) => void
+>           : ^ ^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+
+declare function f2(_: { 0: number, 1: (arg: number) => void } | { 0: number, 1: (arg: boolean) => void, 2: any }): void;
+>f2 : (_: { 0: number; 1: (arg: number) => void; } | { 0: number; 1: (arg: boolean) => void; 2: any; }) => void
+>   : ^ ^^                                                                                            ^^^^^    
+>_ : { 0: number; 1: (arg: number) => void; } | { 0: number; 1: (arg: boolean) => void; 2: any; }
+>  : ^^^^^      ^^^^^                     ^^^^^^^^^^^      ^^^^^                      ^^^^^   ^^^
+>0 : number
+>  : ^^^^^^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>0 : number
+>  : ^^^^^^
+>1 : (arg: boolean) => void
+>  : ^   ^^       ^^^^^    
+>arg : boolean
+>    : ^^^^^^^
+>2 : any
+>  : ^^^
+
+f2([1, arg => { arg === 0 }] as const);
+>f2([1, arg => { arg === 0 }] as const) : void
+>                                       : ^^^^
+>f2 : (_: { 0: number; 1: (arg: number) => void; } | { 0: number; 1: (arg: boolean) => void; 2: any; }) => void
+>   : ^ ^^                                                                                            ^^^^^    
+>[1, arg => { arg === 0 }] as const : readonly [1, (arg: number) => void]
+>                                   : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>[1, arg => { arg === 0 }] : readonly [1, (arg: number) => void]
+>                          : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>arg => { arg === 0 } : (arg: number) => void
+>                     : ^   ^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>arg === 0 : boolean
+>          : ^^^^^^^
+>arg : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+declare function f3(_: { 0: number, 1: (arg: number) => void } | { 0: number, 1: (arg: boolean) => void, 2?: any }): void;
+>f3 : (_: { 0: number; 1: (arg: number) => void; } | { 0: number; 1: (arg: boolean) => void; 2?: any; }) => void
+>   : ^ ^^                                                                                             ^^^^^    
+>_ : { 0: number; 1: (arg: number) => void; } | { 0: number; 1: (arg: boolean) => void; 2?: any; }
+>  : ^^^^^      ^^^^^                     ^^^^^^^^^^^      ^^^^^                      ^^^^^^   ^^^
+>0 : number
+>  : ^^^^^^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>0 : number
+>  : ^^^^^^
+>1 : (arg: boolean) => void
+>  : ^   ^^       ^^^^^    
+>arg : boolean
+>    : ^^^^^^^
+>2 : any
+>  : ^^^
+
+f3([1, arg => { }] as const); // Error
+>f3([1, arg => { }] as const) : void
+>                             : ^^^^
+>f3 : (_: { 0: number; 1: (arg: number) => void; } | { 0: number; 1: (arg: boolean) => void; 2?: any; }) => void
+>   : ^ ^^                                                                                             ^^^^^    
+>[1, arg => { }] as const : readonly [1, (arg: any) => void]
+>                         : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>[1, arg => { }] : readonly [1, (arg: any) => void]
+>                : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>arg => { } : (arg: any) => void
+>           : ^   ^^^^^^^^^^^^^^
+>arg : any
+>    : ^^^
+
+declare function f4(_: [(arg: number) => void] | [(arg: string) => void, true]): void;
+>f4 : (_: [(arg: number) => void] | [(arg: string) => void, true]) => void
+>   : ^ ^^                                                       ^^^^^    
+>_ : [(arg: number) => void] | [(arg: string) => void, true]
+>  : ^^   ^^      ^^^^^    ^^^^^^   ^^      ^^^^^    ^^^^^^^
+>arg : number
+>    : ^^^^^^
+>arg : string
+>    : ^^^^^^
+>true : true
+>     : ^^^^
+
+f4([arg => { arg === 0 }] as const);
+>f4([arg => { arg === 0 }] as const) : void
+>                                    : ^^^^
+>f4 : (_: [(arg: number) => void] | [(arg: string) => void, true]) => void
+>   : ^ ^^                                                       ^^^^^    
+>[arg => { arg === 0 }] as const : [(arg: number) => void]
+>                                : ^^   ^^^^^^^^^^^^^^^^^^
+>[arg => { arg === 0 }] : [(arg: number) => void]
+>                       : ^^   ^^^^^^^^^^^^^^^^^^
+>arg => { arg === 0 } : (arg: number) => void
+>                     : ^   ^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>arg === 0 : boolean
+>          : ^^^^^^^
+>arg : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+declare function f5(arg: { 0: null, 1: (arg: number) => void, foo?: string } | [1, (arg: boolean) => void]): void;
+>f5 : (arg: { 0: null; 1: (arg: number) => void; foo?: string; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                  ^^^^^    
+>arg : { 0: null; 1: (arg: number) => void; foo?: string; } | [1, (arg: boolean) => void]
+>    : ^^^^^    ^^^^^                     ^^^^^^^^      ^^^^^^^^^^^   ^^       ^^^^^    ^
+>0 : null
+>  : ^^^^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+
+f5([null, (arg) => { arg === 0 }] as const);
+>f5([null, (arg) => { arg === 0 }] as const) : void
+>                                            : ^^^^
+>f5 : (arg: { 0: null; 1: (arg: number) => void; foo?: string; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                  ^^^^^    
+>[null, (arg) => { arg === 0 }] as const : readonly [null, (arg: number) => void]
+>                                        : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>[null, (arg) => { arg === 0 }] : readonly [null, (arg: number) => void]
+>                               : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>(arg) => { arg === 0 } : (arg: number) => void
+>                       : ^   ^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>arg === 0 : boolean
+>          : ^^^^^^^
+>arg : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+f5([1, (arg) => { arg === true }] as const);
+>f5([1, (arg) => { arg === true }] as const) : void
+>                                            : ^^^^
+>f5 : (arg: { 0: null; 1: (arg: number) => void; foo?: string; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                  ^^^^^    
+>[1, (arg) => { arg === true }] as const : [1, (arg: boolean) => void]
+>                                        : ^^^^^   ^^^^^^^^^^^^^^^^^^^
+>[1, (arg) => { arg === true }] : [1, (arg: boolean) => void]
+>                               : ^^^^^   ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(arg) => { arg === true } : (arg: boolean) => void
+>                          : ^   ^^^^^^^^^^^^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+>arg === true : boolean
+>             : ^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+>true : true
+>     : ^^^^
+
+declare function f6(arg: { 1: (arg: number) => void, [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
+>f6 : (arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                                  ^^^^^    
+>arg : { [k: number]: (...args: never) => void; 1: (arg: number) => void; } | [1, (arg: boolean) => void]
+>    : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^    ^^^^^                     ^^^^^^^^^^^   ^^       ^^^^^    ^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>k : number
+>  : ^^^^^^
+>args : never
+>     : ^^^^^
+>arg : boolean
+>    : ^^^^^^^
+
+f6([1, (arg) => { }] as const); // Error
+>f6([1, (arg) => { }] as const) : void
+>                               : ^^^^
+>f6 : (arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                                  ^^^^^    
+>[1, (arg) => { }] as const : [1, (arg: any) => void]
+>                           : ^^^^^   ^^^^^^^^^^^^^^^
+>[1, (arg) => { }] : [1, (arg: any) => void]
+>                  : ^^^^^   ^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(arg) => { } : (arg: any) => void
+>             : ^   ^^^^^^^^^^^^^^
+>arg : any
+>    : ^^^
+
