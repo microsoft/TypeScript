@@ -233,6 +233,19 @@ export class TypeWriterWalker {
         return ts.isIntrinsicJsxName(node.getText());
     }
 
+    private shouldSkipNode(node: ts.Node) {
+        if (ts.isPartOfTypeNode(node)) {
+            return true;
+        }
+        if (ts.isIdentifier(node)) {
+            if (ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) {
+                return ts.isModuleDeclaration(node.parent) && ts.getModuleInstanceState(node.parent) === ts.ModuleInstanceState.ConstEnumOnly;
+            }
+            return !(ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node);
+        }
+        return false;
+    }
+
     private writeTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): TypeWriterResult | undefined {
         const actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         const lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
@@ -241,9 +254,7 @@ export class TypeWriterWalker {
         if (!isSymbolWalk) {
             // Don't try to get the type of something that's already a type.
             // Exception for `T` in `type T = something` because that may evaluate to some interesting type.
-            if (ts.isPartOfTypeNode(node) || ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) && !(ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node)) {
-                return undefined;
-            }
+            if (this.shouldSkipNode(node)) return undefined;
 
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
