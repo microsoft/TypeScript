@@ -111,9 +111,8 @@ jobs:
         if: ${{ always() && matrix.coverage }}
         with:
           use_oidc: true
-          disable_search: true
           name: ${{ matrix.name || matrix.os }}
-          files: ./coverage.out
+          directory: ./coverage
 
       - run: git diff --staged --exit-code --stat
 

@@ -239,12 +239,26 @@ export const generate = task({
     },
 });
 
-const goTestFlags = [
-    ...goBuildFlags,
-    ...goBuildTags(),
-    ...(options.tests ? [`-run=${options.tests}`] : []),
-    ...(options.coverage ? ["-coverprofile=coverage.out", "-coverpkg=./..."] : []),
-];
+const coverageDir = path.join(__dirname, "coverage");
+
+const ensureCoverageDirExists = memoize(() => {
+    if (options.coverage) {
+        fs.mkdirSync(coverageDir, { recursive: true });
+    }
+});
+
+/**
+ * @param {string} taskName
+ */
+function goTestFlags(taskName) {
+    ensureCoverageDirExists();
+    return [
+        ...goBuildFlags,
+        ...goBuildTags(),
+        ...(options.tests ? [`-run=${options.tests}`] : []),
+        ...(options.coverage ? [`-coverprofile=${path.join(coverageDir, "coverage." + taskName + ".out")}`, "-coverpkg=./..."] : []),
+    ];
+}
 
 const goTestEnv = {
     ...(options.concurrentTestPrograms ? { TS_TEST_PROGRAM_SINGLE_THREADED: "false" } : {}),
@@ -260,18 +274,24 @@ const goTestSumFlags = [
 
 const $test = $({ env: goTestEnv });
 
-const gotestsum = memoize(() => {
+/**
+ * @param {string} taskName
+ */
+function gotestsum(taskName) {
     const args = isInstalled("gotestsum") ? ["gotestsum", ...goTestSumFlags, "--"] : ["go", "test"];
-    return args.concat(goTestFlags);
-});
+    return args.concat(goTestFlags(taskName));
+}
 
-const goTest = memoize(() => {
-    return ["go", "test"].concat(goTestFlags);
-});
+/**
+ * @param {string} taskName
+ */
+function goTest(taskName) {
+    return ["go", "test"].concat(goTestFlags(taskName));
+}
 
 async function runTests() {
     warnIfTypeScriptSubmoduleNotCloned();
-    await $test`${gotestsum()} ./... ${isCI ? ["--timeout=45m"] : []}`;
+    await $test`${gotestsum("tests")} ./... ${isCI ? ["--timeout=45m"] : []}`;
 }
 
 export const test = task({
@@ -282,7 +302,7 @@ export const test = task({
 async function runTestBenchmarks() {
     warnIfTypeScriptSubmoduleNotCloned();
     // Run the benchmarks once to ensure they compile and run without errors.
-    await $test`${goTest()} -run=- -bench=. -benchtime=1x ./...`;
+    await $test`${goTest("benchmarks")} -run=- -bench=. -benchtime=1x ./...`;
 }
 
 export const testBenchmarks = task({
@@ -291,7 +311,7 @@ export const testBenchmarks = task({
 });
 
 async function runTestTools() {
-    await $test({ cwd: path.join(__dirname, "_tools") })`${gotestsum()} ./...`;
+    await $test({ cwd: path.join(__dirname, "_tools") })`${gotestsum("tools")} ./...`;
 }
 
 export const testTools = task({
