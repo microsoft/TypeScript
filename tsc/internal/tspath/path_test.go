@@ -463,8 +463,8 @@ func BenchmarkGetNormalizedAbsolutePath(b *testing.B) {
 			for fnName, fn := range funcs {
 				b.Run(fnName, func(b *testing.B) {
 					b.ReportAllocs()
-					for _, test := range tests {
-						for b.Loop() {
+					for b.Loop() {
+						for _, test := range tests {
 							fn(test[0], test[1])
 						}
 					}
