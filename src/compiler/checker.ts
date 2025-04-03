@@ -31540,13 +31540,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isPossiblyAliasedThisProperty(binaryExpression, kind)) {
                     return getContextualTypeForThisPropertyAssignment(binaryExpression);
                 }
+                let nodeSymbol;
+                if (canHaveSymbol(binaryExpression.left)) {
+                    nodeSymbol = binaryExpression.left.symbol;
+                    if (!nodeSymbol) {
+                        const resolvedSymbol = getNodeLinks(binaryExpression.left).resolvedSymbol;
+                        if (resolvedSymbol && getIsLateCheckFlag(resolvedSymbol)) {
+                            nodeSymbol = resolvedSymbol;
+                        }
+                    }
+                }
                 // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                 // See `bindStaticPropertyAssignment` in `binder.ts`.
-                else if (!canHaveSymbol(binaryExpression.left) || !binaryExpression.left.symbol) {
+                if (!nodeSymbol) {
                     return getTypeOfExpression(binaryExpression.left);
                 }
                 else {
-                    const decl = binaryExpression.left.symbol.valueDeclaration;
+                    const decl = nodeSymbol.valueDeclaration;
                     if (!decl) {
                         return undefined;
                     }
@@ -31569,6 +31579,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return undefined;
                         }
                     }
+                    Debug.assert(canHaveSymbol(binaryExpression.left));
                     return isInJSFile(decl) || decl === binaryExpression.left ? undefined : getTypeOfExpression(binaryExpression.left);
                 }
             case AssignmentDeclarationKind.ExportsProperty:
