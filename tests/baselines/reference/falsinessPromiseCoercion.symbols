@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/falsinessPromiseCoercion.ts] ////
+
+=== falsinessPromiseCoercion.ts ===
+function test1() {
+>test1 : Symbol(test1, Decl(falsinessPromiseCoercion.ts, 0, 0))
+
+    async function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 0, 18))
+
+    if (!canAccess()) { // error
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 0, 18))
+    }
+}
+
+async function test2() {
+>test2 : Symbol(test2, Decl(falsinessPromiseCoercion.ts, 5, 1))
+
+    async function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 7, 24))
+
+    const res = canAccess()
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 10, 9))
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 7, 24))
+
+    if (!res) { // ok
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 10, 9))
+
+        return
+    }
+
+   await res
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 10, 9))
+}
+
+function test3() {
+>test3 : Symbol(test3, Decl(falsinessPromiseCoercion.ts, 17, 1))
+
+    async function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 19, 18))
+
+    if (!!!canAccess()) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 19, 18))
+    }
+}
+
+function test4(canAccess: () => Promise<boolean>) {
+>test4 : Symbol(test4, Decl(falsinessPromiseCoercion.ts, 24, 1))
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 26, 15))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    if (!canAccess()) { // error
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 26, 15))
+    }
+}
+
+function test5(canAccess: () => Promise<boolean> | undefined) {
+>test5 : Symbol(test5, Decl(falsinessPromiseCoercion.ts, 29, 1))
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 31, 15))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    if (!canAccess()) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessPromiseCoercion.ts, 31, 15))
+    }
+}
+
+function test6() {
+>test6 : Symbol(test6, Decl(falsinessPromiseCoercion.ts, 34, 1))
+
+    const x = {
+>x : Symbol(x, Decl(falsinessPromiseCoercion.ts, 37, 9))
+
+        foo: {
+>foo : Symbol(foo, Decl(falsinessPromiseCoercion.ts, 37, 15))
+
+            async bar() { return true; }
+>bar : Symbol(bar, Decl(falsinessPromiseCoercion.ts, 38, 14))
+        }
+    };
+
+    if (!x.foo.bar()) { // error
+>x.foo.bar : Symbol(bar, Decl(falsinessPromiseCoercion.ts, 38, 14))
+>x.foo : Symbol(foo, Decl(falsinessPromiseCoercion.ts, 37, 15))
+>x : Symbol(x, Decl(falsinessPromiseCoercion.ts, 37, 9))
+>foo : Symbol(foo, Decl(falsinessPromiseCoercion.ts, 37, 15))
+>bar : Symbol(bar, Decl(falsinessPromiseCoercion.ts, 38, 14))
+    }
+}
+
+async function test7() {
+>test7 : Symbol(test7, Decl(falsinessPromiseCoercion.ts, 45, 1))
+
+    const x = {
+>x : Symbol(x, Decl(falsinessPromiseCoercion.ts, 48, 9))
+
+        foo: {
+>foo : Symbol(foo, Decl(falsinessPromiseCoercion.ts, 48, 15))
+
+            async bar() { return true; }
+>bar : Symbol(bar, Decl(falsinessPromiseCoercion.ts, 49, 14))
+        }
+    };
+
+    const res = x.foo.bar();
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 54, 9))
+>x.foo.bar : Symbol(bar, Decl(falsinessPromiseCoercion.ts, 49, 14))
+>x.foo : Symbol(foo, Decl(falsinessPromiseCoercion.ts, 48, 15))
+>x : Symbol(x, Decl(falsinessPromiseCoercion.ts, 48, 9))
+>foo : Symbol(foo, Decl(falsinessPromiseCoercion.ts, 48, 15))
+>bar : Symbol(bar, Decl(falsinessPromiseCoercion.ts, 49, 14))
+
+    if (!res) { // ok
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 54, 9))
+    }
+
+    await res;
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 54, 9))
+}
+
+class Test8 {
+>Test8 : Symbol(Test8, Decl(falsinessPromiseCoercion.ts, 60, 1))
+
+    async isUser() {
+>isUser : Symbol(Test8.isUser, Decl(falsinessPromiseCoercion.ts, 62, 13))
+
+        return true;
+    }
+
+    test() {
+>test : Symbol(Test8.test, Decl(falsinessPromiseCoercion.ts, 65, 5))
+
+        if (!this.isUser()) { // error
+>this.isUser : Symbol(Test8.isUser, Decl(falsinessPromiseCoercion.ts, 62, 13))
+>this : Symbol(Test8, Decl(falsinessPromiseCoercion.ts, 60, 1))
+>isUser : Symbol(Test8.isUser, Decl(falsinessPromiseCoercion.ts, 62, 13))
+        }
+    }
+}
+
+class Test9 {
+>Test9 : Symbol(Test9, Decl(falsinessPromiseCoercion.ts, 71, 1))
+
+    async isUser() {
+>isUser : Symbol(Test9.isUser, Decl(falsinessPromiseCoercion.ts, 73, 13))
+
+        return true;
+    }
+
+    async test() {
+>test : Symbol(Test9.test, Decl(falsinessPromiseCoercion.ts, 76, 5))
+
+        const res = this.isUser();
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 79, 13))
+>this.isUser : Symbol(Test9.isUser, Decl(falsinessPromiseCoercion.ts, 73, 13))
+>this : Symbol(Test9, Decl(falsinessPromiseCoercion.ts, 71, 1))
+>isUser : Symbol(Test9.isUser, Decl(falsinessPromiseCoercion.ts, 73, 13))
+
+        if (!res) { // ok
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 79, 13))
+        }
+
+        await res;
+>res : Symbol(res, Decl(falsinessPromiseCoercion.ts, 79, 13))
+    }
+}
+
