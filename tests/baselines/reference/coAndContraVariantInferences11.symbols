@@ -1,0 +1,199 @@
+//// [tests/cases/compiler/coAndContraVariantInferences11.ts] ////
+
+=== coAndContraVariantInferences11.ts ===
+// based on https://github.com/microsoft/TypeScript/issues/59656
+
+interface Box<T> {
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+>T : Symbol(T, Decl(coAndContraVariantInferences11.ts, 2, 14))
+
+  select: <A>(op: (source: T) => A) => A;
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>A : Symbol(A, Decl(coAndContraVariantInferences11.ts, 3, 11))
+>op : Symbol(op, Decl(coAndContraVariantInferences11.ts, 3, 14))
+>source : Symbol(source, Decl(coAndContraVariantInferences11.ts, 3, 19))
+>T : Symbol(T, Decl(coAndContraVariantInferences11.ts, 2, 14))
+>A : Symbol(A, Decl(coAndContraVariantInferences11.ts, 3, 11))
+>A : Symbol(A, Decl(coAndContraVariantInferences11.ts, 3, 11))
+
+  _v: T;
+>_v : Symbol(Box._v, Decl(coAndContraVariantInferences11.ts, 3, 41))
+>T : Symbol(T, Decl(coAndContraVariantInferences11.ts, 2, 14))
+}
+declare function tap<T>(next: (value: T) => void): (source: T) => T;
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences11.ts, 6, 21))
+>next : Symbol(next, Decl(coAndContraVariantInferences11.ts, 6, 24))
+>value : Symbol(value, Decl(coAndContraVariantInferences11.ts, 6, 31))
+>T : Symbol(T, Decl(coAndContraVariantInferences11.ts, 6, 21))
+>source : Symbol(source, Decl(coAndContraVariantInferences11.ts, 6, 52))
+>T : Symbol(T, Decl(coAndContraVariantInferences11.ts, 6, 21))
+>T : Symbol(T, Decl(coAndContraVariantInferences11.ts, 6, 21))
+
+declare const box1: Box<{
+>box1 : Symbol(box1, Decl(coAndContraVariantInferences11.ts, 8, 13))
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+
+  prop?: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 8, 25))
+
+}>;
+function test1(): {} {
+>test1 : Symbol(test1, Decl(coAndContraVariantInferences11.ts, 10, 3))
+
+  return box1.select(tap((arg) => {}));
+>box1.select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>box1 : Symbol(box1, Decl(coAndContraVariantInferences11.ts, 8, 13))
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences11.ts, 12, 26))
+}
+
+declare const box2: Box<{
+>box2 : Symbol(box2, Decl(coAndContraVariantInferences11.ts, 15, 13))
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+
+  prop: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 15, 25))
+
+}>;
+function test2(): {} {
+>test2 : Symbol(test2, Decl(coAndContraVariantInferences11.ts, 17, 3))
+
+  return box2.select(tap((arg) => {}));
+>box2.select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>box2 : Symbol(box2, Decl(coAndContraVariantInferences11.ts, 15, 13))
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences11.ts, 19, 26))
+}
+
+declare const box3: Box<{
+>box3 : Symbol(box3, Decl(coAndContraVariantInferences11.ts, 22, 13))
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+
+  prop: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 22, 25))
+
+  prop2?: number;
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences11.ts, 23, 15))
+
+}>;
+function test3(): {} {
+>test3 : Symbol(test3, Decl(coAndContraVariantInferences11.ts, 25, 3))
+
+  return box3.select(tap((arg) => {}));
+>box3.select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>box3 : Symbol(box3, Decl(coAndContraVariantInferences11.ts, 22, 13))
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences11.ts, 27, 26))
+}
+
+declare const box4: Box<{
+>box4 : Symbol(box4, Decl(coAndContraVariantInferences11.ts, 30, 13))
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+
+  prop?: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 30, 25))
+
+  prop2?: number;
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences11.ts, 31, 16))
+
+}>;
+function test4(): { prop?: string } {
+>test4 : Symbol(test4, Decl(coAndContraVariantInferences11.ts, 33, 3))
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 34, 19))
+
+  return box4.select(tap((arg) => {}));
+>box4.select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>box4 : Symbol(box4, Decl(coAndContraVariantInferences11.ts, 30, 13))
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences11.ts, 35, 26))
+}
+
+declare const box5: Box<{
+>box5 : Symbol(box5, Decl(coAndContraVariantInferences11.ts, 38, 13))
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+
+  prop: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 38, 25))
+
+  prop2?: number;
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences11.ts, 39, 15))
+
+}>;
+function test5(): { prop: string } {
+>test5 : Symbol(test5, Decl(coAndContraVariantInferences11.ts, 41, 3))
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 42, 19))
+
+  return box5.select(tap((arg) => {}));
+>box5.select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>box5 : Symbol(box5, Decl(coAndContraVariantInferences11.ts, 38, 13))
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences11.ts, 43, 26))
+}
+
+declare const box6: Box<{
+>box6 : Symbol(box6, Decl(coAndContraVariantInferences11.ts, 46, 13))
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+
+  prop: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 46, 25))
+
+  prop2?: number;
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences11.ts, 47, 15))
+
+}>;
+function test6(): { prop2?: number } {
+>test6 : Symbol(test6, Decl(coAndContraVariantInferences11.ts, 49, 3))
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences11.ts, 50, 19))
+
+  return box6.select(tap((arg) => {}));
+>box6.select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>box6 : Symbol(box6, Decl(coAndContraVariantInferences11.ts, 46, 13))
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences11.ts, 51, 26))
+}
+
+declare const box7: Box<{
+>box7 : Symbol(box7, Decl(coAndContraVariantInferences11.ts, 54, 13))
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+
+  prop?: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 54, 25))
+
+}>;
+function test7(): any {
+>test7 : Symbol(test7, Decl(coAndContraVariantInferences11.ts, 56, 3))
+
+  return box7.select(tap((arg) => {}));
+>box7.select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>box7 : Symbol(box7, Decl(coAndContraVariantInferences11.ts, 54, 13))
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences11.ts, 58, 26))
+}
+
+declare const box8: Box<{
+>box8 : Symbol(box8, Decl(coAndContraVariantInferences11.ts, 61, 13))
+>Box : Symbol(Box, Decl(coAndContraVariantInferences11.ts, 0, 0))
+
+  prop?: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences11.ts, 61, 25))
+
+}>;
+function test8(): unknown {
+>test8 : Symbol(test8, Decl(coAndContraVariantInferences11.ts, 63, 3))
+
+  return box8.select(tap((arg) => {}));
+>box8.select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>box8 : Symbol(box8, Decl(coAndContraVariantInferences11.ts, 61, 13))
+>select : Symbol(Box.select, Decl(coAndContraVariantInferences11.ts, 2, 18))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences11.ts, 5, 1))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences11.ts, 65, 26))
+}
+
