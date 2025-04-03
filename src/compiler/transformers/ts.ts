@@ -103,6 +103,8 @@ import {
     isInstantiatedModule,
     isJsonSourceFile,
     isJsxAttributes,
+    isJsxIntrinsicTagName,
+    isJSXTagName,
     isJsxTagNameExpression,
     isLeftHandSideExpression,
     isLocalName,
@@ -2688,8 +2690,10 @@ export function transformTypeScript(context: TransformationContext): Transformer
             // an identifier that is exported from a merged namespace.
             const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
             if (container && container.kind !== SyntaxKind.SourceFile) {
-                const substitute = (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
-                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
+                let originalNode;
+                const substitute = ((applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
+                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration)) &&
+                    (!isJSXTagName(originalNode = getOriginalNode(node, isIdentifier)) || !isJsxIntrinsicTagName(originalNode));
                 if (substitute) {
                     return setTextRange(
                         factory.createPropertyAccessExpression(factory.getGeneratedNameForNode(container), node),
