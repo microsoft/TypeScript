@@ -5052,6 +5052,7 @@ export interface TypeChecker {
     getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
     getTypeOfSymbol(symbol: Symbol): Type;
     getDeclaredTypeOfSymbol(symbol: Symbol): Type;
+    /** @internal */ getBaseConstructorTypeOfClass(type: InterfaceType): Type;
     getPropertiesOfType(type: Type): Symbol[];
     getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
     getPrivateIdentifierPropertyOfType(leftType: Type, name: string, location: Node): Symbol | undefined;
