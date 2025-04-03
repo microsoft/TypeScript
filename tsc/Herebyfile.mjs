@@ -21,24 +21,48 @@ const isCI = !!process.env.CI;
 const $pipe = _$({ verbose: "short" });
 const $ = _$({ verbose: "short", stdio: "inherit" });
 
+/**
+ * @param {string} name
+ * @param {boolean} defaultValue
+ * @returns {boolean}
+ */
+function parseEnvBoolean(name, defaultValue = false) {
+    name = "TSGO_HEREBY_" + name.toUpperCase();
+
+    const value = process.env[name];
+    if (!value) {
+        return defaultValue;
+    }
+    switch (value.toUpperCase()) {
+        case "1":
+        case "TRUE":
+        case "YES":
+        case "ON":
+            return true;
+        case "0":
+        case "FALSE":
+        case "NO":
+        case "OFF":
+            return false;
+    }
+    throw new Error(`Invalid value for ${name}: ${value}`);
+}
+
 const { values: options } = parseArgs({
     args: process.argv.slice(2),
     options: {
-        race: { type: "boolean" },
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
-        noembed: { type: "boolean" },
         debug: { type: "boolean" },
-        concurrentTestPrograms: { type: "boolean" },
-        coverage: { type: "boolean" },
+
+        race: { type: "boolean", default: parseEnvBoolean("RACE") },
+        noembed: { type: "boolean", default: parseEnvBoolean("NOEMBED") },
+        concurrentTestPrograms: { type: "boolean", default: parseEnvBoolean("CONCURRENT_TEST_PROGRAMS") },
+        coverage: { type: "boolean", default: parseEnvBoolean("COVERAGE") },
     },
     strict: false,
     allowPositionals: true,
     allowNegative: true,
-    noembed: false,
-    debug: false,
-    concurrentTestPrograms: false,
-    coverage: false,
 });
 
 const defaultGoBuildTags = [
