@@ -1,0 +1,137 @@
+//// [tests/cases/compiler/javascriptDefinePropertyPrototypeBlockShadowing1.ts] ////
+
+=== src/index.js ===
+export function X() {}
+>X : () => void
+>  : ^^^^^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  const X = function() {}
+>X : typeof X
+>  : ^^^^^^^^
+>function() {} : typeof X
+>              : ^^^^^^^^
+
+  Object.defineProperty(X.prototype, "test", { value: 1 });
+>Object.defineProperty(X.prototype, "test", { value: 1 }) : any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>X.prototype : any
+>X : typeof X
+>  : ^^^^^^^^
+>prototype : any
+>          : ^^^
+>"test" : "test"
+>       : ^^^^^^
+>{ value: 1 } : { value: number; }
+>             : ^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+export function Y() {}
+>Y : typeof Y
+>  : ^^^^^^^^
+
+Object.defineProperty(Y.prototype, "test", { value: "foo" });
+>Object.defineProperty(Y.prototype, "test", { value: "foo" }) : any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Y.prototype : any
+>Y : typeof Y
+>  : ^^^^^^^^
+>prototype : any
+>          : ^^^
+>"test" : "test"
+>       : ^^^^^^
+>{ value: "foo" } : { value: string; }
+>                 : ^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const AliasTopY = Y;
+>AliasTopY : typeof Y
+>          : ^^^^^^^^
+>Y : typeof Y
+>  : ^^^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  const Y = function Y() {}
+>Y : typeof Y
+>  : ^^^^^^^^
+>function Y() {} : typeof Y
+>                : ^^^^^^^^
+>Y : typeof Y
+>  : ^^^^^^^^
+
+  Object.defineProperty(Y.prototype, "test", { value: 42 });
+>Object.defineProperty(Y.prototype, "test", { value: 42 }) : any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Y.prototype : any
+>Y : typeof Y
+>  : ^^^^^^^^
+>prototype : any
+>          : ^^^
+>"test" : "test"
+>       : ^^^^^^
+>{ value: 42 } : { value: number; }
+>              : ^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+
+  /** @type {{ test: string }} */
+  const topYcheck = new AliasTopY();
+>topYcheck : { test: string; }
+>          : ^^^^^^^^      ^^^
+>new AliasTopY() : import("src/index").Y
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>AliasTopY : typeof import("src/index").Y
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  /** @type {{ test: number }} */
+  const blockYcheck = new Y();
+>blockYcheck : { test: number; }
+>            : ^^^^^^^^      ^^^
+>new Y() : Y
+>        : ^
+>Y : typeof Y
+>  : ^^^^^^^^
+}
+
