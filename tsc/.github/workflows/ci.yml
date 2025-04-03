@@ -47,8 +47,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
+            coverage: true
           - os: windows-latest
+            coverage: true
           - os: macos-latest
+            coverage: true
           - os: ubuntu-latest
             name: 'no submodules'
             no-submodules: true
@@ -61,10 +64,15 @@ jobs:
           - os: ubuntu-latest
             name: 'concurrent test programs'
             concurrent-test-program: true
+            coverage: true
 
     name: test (${{ matrix.name || matrix.os }})
 
     runs-on: ${{ matrix.os }}
+
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - run: git config --system core.longpaths true
@@ -89,13 +97,23 @@ jobs:
 
       - name: Tests
         id: test
-        run: npx hereby test:all ${RACE_FLAG:+"$RACE_FLAG"} ${NOEMBED_FLAG:+"$NOEMBED_FLAG"} ${CONCURRENTTESTPROGRAM_FLAG:+"$CONCURRENTTESTPROGRAM_FLAG"}
+        run: npx hereby test:all ${RACE_FLAG:+"$RACE_FLAG"} ${NOEMBED_FLAG:+"$NOEMBED_FLAG"} ${CONCURRENTTESTPROGRAM_FLAG:+"$CONCURRENTTESTPROGRAM_FLAG"} ${COVERAGE_FLAG:+"$COVERAGE_FLAG"}
         env:
           RACE_FLAG: ${{ (matrix.race && '--race') || '' }}
           NOEMBED_FLAG: ${{ (matrix.noembed && '--noembed') || '' }}
           CONCURRENTTESTPROGRAM_FLAG: ${{ (matrix.concurrent-test-program && '--concurrentTestPrograms') || '' }}
+          COVERAGE_FLAG: ${{ (matrix.coverage && '--coverage') || '' }}
 
       - run: git add .
+
+      - uses: codecov/codecov-action@0565863a31f2c772f9f0395002a31e3f06189574 # v5.4.0
+        if: ${{ always() && matrix.coverage }}
+        with:
+          use_oidc: true
+          disable_search: true
+          name: ${{ matrix.name || matrix.os }}
+          files: ./coverage.out
+
       - run: git diff --staged --exit-code --stat
 
       - name: Print baseline diff on failure

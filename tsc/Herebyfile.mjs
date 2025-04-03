@@ -30,6 +30,7 @@ const { values: options } = parseArgs({
         noembed: { type: "boolean" },
         debug: { type: "boolean" },
         concurrentTestPrograms: { type: "boolean" },
+        coverage: { type: "boolean" },
     },
     strict: false,
     allowPositionals: true,
@@ -37,6 +38,7 @@ const { values: options } = parseArgs({
     noembed: false,
     debug: false,
     concurrentTestPrograms: false,
+    coverage: false,
 });
 
 const defaultGoBuildTags = [
@@ -217,6 +219,7 @@ const goTestFlags = [
     ...goBuildFlags,
     ...goBuildTags(),
     ...(options.tests ? [`-run=${options.tests}`] : []),
+    ...(options.coverage ? ["-coverprofile=coverage.out", "-coverpkg=./..."] : []),
 ];
 
 const goTestEnv = {
