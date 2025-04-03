@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile3.ts] ////
+
+=== emitClassExpressionInDeclarationFile3.ts ===
+export var noPrivates = class {
+>noPrivates : Symbol(noPrivates, Decl(emitClassExpressionInDeclarationFile3.ts, 0, 10))
+
+    static getTags() { }
+>getTags : Symbol(noPrivates.getTags, Decl(emitClassExpressionInDeclarationFile3.ts, 0, 31))
+
+    tags() { }
+>tags : Symbol(noPrivates.tags, Decl(emitClassExpressionInDeclarationFile3.ts, 1, 24))
+
+    static #ps = -1
+>#ps : Symbol(noPrivates.#ps, Decl(emitClassExpressionInDeclarationFile3.ts, 2, 14))
+
+    #p = 12
+>#p : Symbol(noPrivates.#p, Decl(emitClassExpressionInDeclarationFile3.ts, 3, 19))
+}
+
+export class FooItem {
+>FooItem : Symbol(FooItem, Decl(emitClassExpressionInDeclarationFile3.ts, 5, 1))
+
+    foo(): void { }
+>foo : Symbol(FooItem.foo, Decl(emitClassExpressionInDeclarationFile3.ts, 7, 22))
+
+    name?: string;
+>name : Symbol(FooItem.name, Decl(emitClassExpressionInDeclarationFile3.ts, 8, 19))
+
+    #property = "capitalism"
+>#property : Symbol(FooItem.#property, Decl(emitClassExpressionInDeclarationFile3.ts, 9, 18))
+}
+
+export type Constructor<T> = new(...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(emitClassExpressionInDeclarationFile3.ts, 11, 1))
+>T : Symbol(T, Decl(emitClassExpressionInDeclarationFile3.ts, 13, 24))
+>args : Symbol(args, Decl(emitClassExpressionInDeclarationFile3.ts, 13, 33))
+>T : Symbol(T, Decl(emitClassExpressionInDeclarationFile3.ts, 13, 24))
+
+export function WithTags<T extends Constructor<FooItem>>(Base: T) {
+>WithTags : Symbol(WithTags, Decl(emitClassExpressionInDeclarationFile3.ts, 13, 54))
+>T : Symbol(T, Decl(emitClassExpressionInDeclarationFile3.ts, 14, 25))
+>Constructor : Symbol(Constructor, Decl(emitClassExpressionInDeclarationFile3.ts, 11, 1))
+>FooItem : Symbol(FooItem, Decl(emitClassExpressionInDeclarationFile3.ts, 5, 1))
+>Base : Symbol(Base, Decl(emitClassExpressionInDeclarationFile3.ts, 14, 57))
+>T : Symbol(T, Decl(emitClassExpressionInDeclarationFile3.ts, 14, 25))
+
+    return class extends Base {
+>Base : Symbol(Base, Decl(emitClassExpressionInDeclarationFile3.ts, 14, 57))
+
+        static getTags(): void { }
+>getTags : Symbol((Anonymous class).getTags, Decl(emitClassExpressionInDeclarationFile3.ts, 15, 31))
+
+        tags(): void { }
+>tags : Symbol((Anonymous class).tags, Decl(emitClassExpressionInDeclarationFile3.ts, 16, 34))
+    }
+}
+
+export class Test extends WithTags(FooItem) {}
+>Test : Symbol(Test, Decl(emitClassExpressionInDeclarationFile3.ts, 19, 1))
+>WithTags : Symbol(WithTags, Decl(emitClassExpressionInDeclarationFile3.ts, 13, 54))
+>FooItem : Symbol(FooItem, Decl(emitClassExpressionInDeclarationFile3.ts, 5, 1))
+
+export class Test2 {
+>Test2 : Symbol(Test2, Decl(emitClassExpressionInDeclarationFile3.ts, 21, 46))
+
+  nested = class {
+>nested : Symbol(Test2.nested, Decl(emitClassExpressionInDeclarationFile3.ts, 23, 20))
+
+    #prop = 42;
+>#prop : Symbol((Anonymous class).#prop, Decl(emitClassExpressionInDeclarationFile3.ts, 24, 18))
+  }
+}
+
