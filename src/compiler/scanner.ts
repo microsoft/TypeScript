@@ -1967,7 +1967,18 @@ export function createScanner(
                         }
                         return pos += 2, token = SyntaxKind.ExclamationEqualsToken;
                     }
+                    const hasLeadingWhitespace = isWhiteSpaceLike(charCodeChecked(pos - 1));
                     pos++;
+                    const nextIdentifierToken = lookAhead(() => {
+                        tokenValue = scanIdentifierParts();
+                        return getIdentifierToken();
+                    });
+                    if (hasLeadingWhitespace && nextIdentifierToken === SyntaxKind.InKeyword) {
+                        error(Diagnostics.Confusing_combination_of_token_and_in_keyword_like_a_in_b_is_disallowed_as_it_might_be_misinterpreted_as_a_in_b);
+                    }
+                    if (hasLeadingWhitespace && nextIdentifierToken === SyntaxKind.InstanceOfKeyword) {
+                        error(Diagnostics.Confusing_combination_of_token_and_instanceof_keyword_like_a_instanceof_b_is_disallowed_as_it_might_be_misinterpreted_as_a_instanceof_b);
+                    }
                     return token = SyntaxKind.ExclamationToken;
                 case CharacterCodes.doubleQuote:
                 case CharacterCodes.singleQuote:

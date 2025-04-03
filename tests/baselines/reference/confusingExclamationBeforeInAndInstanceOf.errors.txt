@@ -1,0 +1,32 @@
+confusingExclamationBeforeInAndInstanceOf.ts(8,4): error TS1545: Confusing combination of '!' token and 'instanceof' keyword like 'a !instanceof b' is disallowed, as it might be misinterpreted as '!(a instanceof b)'
+confusingExclamationBeforeInAndInstanceOf.ts(9,4): error TS1545: Confusing combination of '!' token and 'instanceof' keyword like 'a !instanceof b' is disallowed, as it might be misinterpreted as '!(a instanceof b)'
+confusingExclamationBeforeInAndInstanceOf.ts(15,4): error TS1546: Confusing combination of '!' token and 'in' keyword like 'a !in b' is disallowed, as it might be misinterpreted as '!(a in b)'
+confusingExclamationBeforeInAndInstanceOf.ts(16,4): error TS1546: Confusing combination of '!' token and 'in' keyword like 'a !in b' is disallowed, as it might be misinterpreted as '!(a in b)'
+
+
+==== confusingExclamationBeforeInAndInstanceOf.ts (4 errors) ====
+    declare let a: any;
+    declare let b: any;
+    
+    a! instanceof b; // should work
+    a!instanceof b; // should work
+    a/**/!instanceof b; // should work
+    a!/**/instanceof b; // should work
+    a !instanceof b; // should error
+       
+!!! error TS1545: Confusing combination of '!' token and 'instanceof' keyword like 'a !instanceof b' is disallowed, as it might be misinterpreted as '!(a instanceof b)'
+    a	!instanceof b; // should error
+     	 
+!!! error TS1545: Confusing combination of '!' token and 'instanceof' keyword like 'a !instanceof b' is disallowed, as it might be misinterpreted as '!(a instanceof b)'
+    
+    a! in b; // should work
+    a!in b; // should work
+    a/**/!in b; // should work
+    a!/**/in b; // should work
+    a !in b; // should error
+       
+!!! error TS1546: Confusing combination of '!' token and 'in' keyword like 'a !in b' is disallowed, as it might be misinterpreted as '!(a in b)'
+    a	!in b; // should error
+     	 
+!!! error TS1546: Confusing combination of '!' token and 'in' keyword like 'a !in b' is disallowed, as it might be misinterpreted as '!(a in b)'
+    
