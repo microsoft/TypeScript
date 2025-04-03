@@ -156,7 +156,6 @@ jobs:
 
       - run: npm ci
 
-      - run: npx hereby install-tools
       - run: npx hereby lint
 
   format:
