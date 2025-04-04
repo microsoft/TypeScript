@@ -1175,8 +1175,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 if (elements.transformFlags === undefined) {
                     aggregateChildrenFlags(elements as MutableNodeArray<T>);
                 }
-                Debug.attachNodeArrayDebugInfo(elements);
-                return elements;
             }
 
             // This *was* a `NodeArray`, but the `hasTrailingComma` option differs. Recreate the
@@ -1185,7 +1183,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             const array = elements.slice() as MutableNodeArray<T>;
             array.pos = elements.pos;
             array.end = elements.end;
-            array.hasTrailingComma = hasTrailingComma;
+            array.hasTrailingComma = hasTrailingComma ?? elements.hasTrailingComma;
             array.transformFlags = elements.transformFlags;
             Debug.attachNodeArrayDebugInfo(array);
             return array;
