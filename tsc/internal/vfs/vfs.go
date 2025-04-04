@@ -4,6 +4,8 @@ import (
 	"io/fs"
 )
 
+//go:generate go tool github.com/matryer/moq -fmt goimports -out vfsmock/mock_generated.go -pkg vfsmock . FS
+
 // FS is a file system abstraction.
 type FS interface {
 	// UseCaseSensitiveFileNames returns true if the file system is case-sensitive.
