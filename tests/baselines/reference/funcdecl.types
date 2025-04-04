@@ -61,6 +61,7 @@ function withMultiParams(a : number, b, c: Object) {
 >a : number
 >  : ^^^^^^
 >b : any
+>  : ^^^
 >c : Object
 >  : ^^^^^^
 
@@ -92,6 +93,7 @@ function withInitializedParams(a: string, b0, b = 30, c = "string value") {
 >a : string
 >  : ^^^^^^
 >b0 : any
+>   : ^^^
 >b : number
 >  : ^^^^^^
 >30 : 30
@@ -157,10 +159,13 @@ function overload1(ns: any) {
 >overload1 : { (n: number): string; (s: string): string; }
 >          : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
+>   : ^^^
 
     return ns.toString();
 >ns.toString() : any
+>              : ^^^
 >ns.toString : any
+>            : ^^^
 >ns : any
 >   : ^^^
 >toString : any

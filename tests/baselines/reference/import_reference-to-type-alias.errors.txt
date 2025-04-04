@@ -1,0 +1,24 @@
+file1.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file1.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== file2.ts (0 errors) ====
+    import appJs = require("file1");
+    import Services = appJs.App.Services;
+    var x = new Services.UserServices().getUserName();
+    
+==== file1.ts (2 errors) ====
+    export module App {
+                  ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Services {
+                      ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class UserServices {
+                public getUserName(): string {
+                    return "Bill Gates";
+                }
+            }
+        }
+    }
+    

@@ -1,3 +1,4 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(10,8): error TS1003: Identifier expected.
 file.tsx(10,10): error TS1005: ';' expected.
 file.tsx(10,10): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
@@ -13,8 +14,10 @@ file.tsx(11,13): error TS1005: ';' expected.
 file.tsx(11,19): error TS1161: Unterminated regular expression literal.
 
 
-==== file.tsx (13 errors) ====
+==== file.tsx (14 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
     		test1: { "data-foo"?: string };

@@ -9,6 +9,7 @@ module M {
   }
   catch (e) {
 >e : any
+>  : ^^^
   }
 }
 var v = M;

@@ -1,0 +1,83 @@
+moduleVisibilityTest1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest1.ts(4,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest1.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest1.ts(13,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest1.ts(53,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleVisibilityTest1.ts (5 errors) ====
+    module OuterMod {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export function someExportedOuterFunc() { return -1; }
+    
+    	export module OuterInnerMod {
+    	              ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    		export function someExportedOuterInnerFunc() { return "foo"; }
+    	}
+    }
+    
+    import OuterInnerAlias = OuterMod.OuterInnerMod;
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    	export module InnerMod {
+    	              ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    		export function someExportedInnerFunc() { return -2; }
+    	}
+    
+    	export enum E {
+    		A,
+    		B,
+    		C,
+    	}
+    
+    	export var x = 5;
+    	export declare var exported_var;
+    
+    	var y = x + x;
+    
+    
+    	export interface I {
+    		someMethod():number;
+    	}
+    
+    	 class B {public b = 0;}
+    
+    	 export class C implements I {
+    		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
+    		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
+    		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
+    		public someMethod() { return 0; }
+    		public someProp = 1;
+    
+    		constructor() {
+    		    function someInnerFunc() { return 2; }
+                var someInnerVar = 3;
+    		}
+    	}
+    
+    	var someModuleVar = 4;
+    
+    	function someModuleFunction() { return 5;}
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export var c = x;
+    	export var meb = M.E.B;
+    }
+    
+    var cprime : M.I = <M.I>null;
+    
+    var c = new M.C();
+    var z = M.x;
+    var alpha = M.E.A;
+    var omega = M.exported_var;
+    c.someMethodThatCallsAnOuterMethod();
+    

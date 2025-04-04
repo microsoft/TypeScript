@@ -1,7 +1,8 @@
+ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(11,24): error TS2341: Property 'sfn' is private and only accessible within class 'clodule<T>'.
 
 
-==== ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts (1 errors) ====
+==== ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts (2 errors) ====
     class clodule<T> {
         id: string;
         value: T;
@@ -10,6 +11,8 @@ ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics
     }
     
     module clodule {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): number {
             return clodule.sfn('a');

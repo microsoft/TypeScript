@@ -1,8 +1,17 @@
+crashRegressionTest.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+crashRegressionTest.ts(1,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+crashRegressionTest.ts(1,22): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 crashRegressionTest.ts(16,56): error TS2339: Property '_name' does not exist on type 'StringTemplate'.
 
 
-==== crashRegressionTest.ts (1 errors) ====
+==== crashRegressionTest.ts (4 errors) ====
     module MsPortal.Util.TemplateEngine {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                         ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         "use strict";
      
         interface TemplateKeyValue {

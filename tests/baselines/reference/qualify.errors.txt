@@ -1,5 +1,16 @@
+qualify.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualify.ts(3,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualify.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualify.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualify.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualify.ts(20,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 qualify.ts(21,13): error TS2322: Type 'number' is not assignable to type 'I'.
+qualify.ts(28,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualify.ts(29,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 qualify.ts(30,13): error TS2322: Type 'number' is not assignable to type 'I2'.
+qualify.ts(34,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualify.ts(35,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualify.ts(40,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 qualify.ts(45,13): error TS2741: Property 'zeep' is missing in type 'I4' but required in type 'I3'.
 qualify.ts(46,13): error TS2740: Type 'I4' is missing the following properties from type 'I3[]': length, pop, push, concat, and 16 more.
 qualify.ts(47,13): error TS2322: Type 'I4' is not assignable to type '() => I3'.
@@ -10,16 +21,24 @@ qualify.ts(49,13): error TS2741: Property 'k' is missing in type 'I4' but requir
 qualify.ts(58,5): error TS2741: Property 'p' is missing in type 'I' but required in type 'T.I'.
 
 
-==== qualify.ts (8 errors) ====
+==== qualify.ts (19 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var m=0;
         export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var n=1;
         }
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var y=m;
             var x=n+y;
         }
@@ -27,10 +46,14 @@ qualify.ts(58,5): error TS2741: Property 'p' is missing in type 'I' but required
     
     
     module T {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I {
             p;
         }
         export module U {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var z:I=3;
                 ~
 !!! error TS2322: Type 'number' is not assignable to type 'I'.
@@ -41,7 +64,11 @@ qualify.ts(58,5): error TS2741: Property 'p' is missing in type 'I' but required
     }
     
     module Peer {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module U2 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var z:T.U.I2=3;
                 ~
 !!! error TS2322: Type 'number' is not assignable to type 'I2'.
@@ -49,12 +76,18 @@ qualify.ts(58,5): error TS2741: Property 'p' is missing in type 'I' but required
     }
     
     module Everest {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module K1 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I3 {
                 zeep;
             }
         }
         export module K2 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I4 {
                 z;
             }

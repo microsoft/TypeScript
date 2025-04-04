@@ -1,0 +1,29 @@
+a.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+a.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+b.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== b.ts (1 errors) ====
+    ///<reference path="a.ts"/>
+    module ElidedModule3 {
+           ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+==== a.ts (2 errors) ====
+    /*!=================
+        Keep this pinned
+       =================
+    */
+    
+    /*! Don't keep this pinned comment */
+    module ElidedModule {
+           ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    
+    // Don't keep this comment.
+    module ElidedModule2 {
+           ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    

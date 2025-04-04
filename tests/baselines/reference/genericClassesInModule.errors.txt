@@ -1,0 +1,14 @@
+genericClassesInModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== genericClassesInModule.ts (1 errors) ====
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export class B<T>{ }
+    
+        export class A { }
+    }
+    
+    var a = new Foo.B<Foo.A>();

@@ -1,10 +1,16 @@
+variableDeclaratorResolvedDuringContextualTyping.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+variableDeclaratorResolvedDuringContextualTyping.ts(66,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+variableDeclaratorResolvedDuringContextualTyping.ts(84,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+variableDeclaratorResolvedDuringContextualTyping.ts(91,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 variableDeclaratorResolvedDuringContextualTyping.ts(115,29): error TS2304: Cannot find name 'IUploadResult'.
 variableDeclaratorResolvedDuringContextualTyping.ts(116,32): error TS2339: Property 'jsonToStat' does not exist on type 'FileService'.
 variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Cannot find name 'newFilePath'.
 
 
-==== variableDeclaratorResolvedDuringContextualTyping.ts (3 errors) ====
+==== variableDeclaratorResolvedDuringContextualTyping.ts (7 errors) ====
     module WinJS {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface ValueCallback {
             (value: any): any;
         }
@@ -70,6 +76,8 @@ variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Canno
     }
     
     module Services {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface IRequestService {
             /**
              * Returns the URL that can be used to access the provided service. The optional second argument can
@@ -88,6 +96,8 @@ variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Canno
     }
     
     module Errors {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class ConnectionError /* extends Error */ {
             constructor(request: XMLHttpRequest) {
             }
@@ -95,6 +105,8 @@ variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Canno
     }
     
     module Files {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface IUploadResult {
             stat: string;
             isNew: boolean;

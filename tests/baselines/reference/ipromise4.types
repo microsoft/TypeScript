@@ -13,9 +13,11 @@ declare module Windows.Foundation {
 >error : (error: any) => IPromise<U>
 >      : ^     ^^   ^^^^^           
 >error : any
+>      : ^^^
 >progress : (progress: any) => void
 >         : ^        ^^   ^^^^^    
 >progress : any
+>         : ^^^
 >Windows : any
 >        : ^^^
 >Foundation : any
@@ -31,9 +33,11 @@ declare module Windows.Foundation {
 >error : (error: any) => U
 >      : ^     ^^   ^^^^^ 
 >error : any
+>      : ^^^
 >progress : (progress: any) => void
 >         : ^        ^^   ^^^^^    
 >progress : any
+>         : ^^^
 >Windows : any
 >        : ^^^
 >Foundation : any
@@ -49,9 +53,11 @@ declare module Windows.Foundation {
 >error : (error: any) => IPromise<U>
 >      : ^     ^^   ^^^^^           
 >error : any
+>      : ^^^
 >progress : (progress: any) => void
 >         : ^        ^^   ^^^^^    
 >progress : any
+>         : ^^^
 >Windows : any
 >        : ^^^
 >Foundation : any
@@ -67,9 +73,11 @@ declare module Windows.Foundation {
 >error : (error: any) => U
 >      : ^     ^^   ^^^^^ 
 >error : any
+>      : ^^^
 >progress : (progress: any) => void
 >         : ^        ^^   ^^^^^    
 >progress : any
+>         : ^^^
 >Windows : any
 >        : ^^^
 >Foundation : any
@@ -85,9 +93,11 @@ declare module Windows.Foundation {
 >error : (error: any) => any
 >      : ^     ^^   ^^^^^   
 >error : any
+>      : ^^^
 >progress : (progress: any) => void
 >         : ^        ^^   ^^^^^    
 >progress : any
+>         : ^^^
     }
 }
  

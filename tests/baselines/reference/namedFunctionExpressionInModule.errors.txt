@@ -1,0 +1,12 @@
+namedFunctionExpressionInModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== namedFunctionExpressionInModule.ts (1 errors) ====
+    module Variables{
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x = function bar(a, b, c) {
+        }
+        x(1, 2, 3);
+    }
+    

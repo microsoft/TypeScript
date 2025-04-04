@@ -2,6 +2,8 @@ duplicateVarsAcrossFileBoundaries_1.ts(1,5): error TS2403: Subsequent variable d
 duplicateVarsAcrossFileBoundaries_2.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
 duplicateVarsAcrossFileBoundaries_2.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'number'.
 duplicateVarsAcrossFileBoundaries_2.ts(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'number', but here has type 'boolean'.
+duplicateVarsAcrossFileBoundaries_4.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateVarsAcrossFileBoundaries_5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
 ==== duplicateVarsAcrossFileBoundaries_0.ts (0 errors) ====
@@ -34,12 +36,16 @@ duplicateVarsAcrossFileBoundaries_2.ts(3,5): error TS2403: Subsequent variable d
     var y = "";
     var z = 0;
     
-==== duplicateVarsAcrossFileBoundaries_4.ts (0 errors) ====
+==== duplicateVarsAcrossFileBoundaries_4.ts (1 errors) ====
     module P { }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     import p = P;
     var q;
     
-==== duplicateVarsAcrossFileBoundaries_5.ts (0 errors) ====
+==== duplicateVarsAcrossFileBoundaries_5.ts (1 errors) ====
     module Q { }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     import q = Q;
     var p;

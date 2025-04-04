@@ -10,7 +10,8 @@ module M {
     export import X = N;
 >X : any
 >  : ^^^
->N : error
+>N : any
+>  : ^^^
 }
 
 import r = M.X;

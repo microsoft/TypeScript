@@ -7,6 +7,7 @@ module M {
 
     export declare var x;
 >x : any
+>  : ^^^
 
     export declare function f();
 >f : () => any
@@ -29,6 +30,7 @@ module M2 {
 
     declare var x;
 >x : any
+>  : ^^^
 
     declare function f();
 >f : () => any

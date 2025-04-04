@@ -1,0 +1,11 @@
+reboundBaseClassSymbol.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== reboundBaseClassSymbol.ts (1 errors) ====
+    interface A { a: number; }
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var A = 1;
+        interface B extends A { b: string; } 
+    }

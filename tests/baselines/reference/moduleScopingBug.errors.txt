@@ -1,0 +1,38 @@
+moduleScopingBug.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleScopingBug.ts(21,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleScopingBug.ts (2 errors) ====
+    module M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    {
+    
+        var outer: number;
+    
+        function f() {
+    
+            var inner = outer;   // Ok
+    
+        }
+    
+        class C {
+    
+            constructor() {
+                var inner = outer;   // Ok
+            }
+    
+        }
+    
+        module X {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+            var inner = outer;   // Error: outer not visible
+    
+        }
+    
+    }
+    
+    

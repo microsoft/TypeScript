@@ -3,11 +3,12 @@ file1.d.ts(5,16): error TS1039: Initializers are not allowed in ambient contexts
 file1.d.ts(6,16): error TS1183: An implementation cannot be declared in ambient contexts.
 file1.d.ts(11,17): error TS1039: Initializers are not allowed in ambient contexts.
 file1.d.ts(12,17): error TS1039: Initializers are not allowed in ambient contexts.
+file1.d.ts(14,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file1.d.ts(15,2): error TS1036: Statements are not allowed in ambient contexts.
 file1.d.ts(17,18): error TS1039: Initializers are not allowed in ambient contexts.
 
 
-==== file1.d.ts (7 errors) ====
+==== file1.d.ts (8 errors) ====
     // Errors: Initializers & statements in declaration file
     
     declare class Foo {
@@ -32,6 +33,8 @@ file1.d.ts(17,18): error TS1039: Initializers are not allowed in ambient context
 !!! error TS1039: Initializers are not allowed in ambient contexts.
     
     declare module M1 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	while(true);
     	~~~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.

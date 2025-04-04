@@ -1,8 +1,11 @@
+qualifiedModuleLocals.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 qualifiedModuleLocals.ts(5,27): error TS2339: Property 'b' does not exist on type 'typeof A'.
 
 
-==== qualifiedModuleLocals.ts (1 errors) ====
+==== qualifiedModuleLocals.ts (2 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
       function b() {}
     

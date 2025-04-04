@@ -1,7 +1,8 @@
 constDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+constDeclarations-validContexts.ts(85,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== constDeclarations-validContexts.ts (1 errors) ====
+==== constDeclarations-validContexts.ts (2 errors) ====
     // Control flow statements with blocks
     if (true) { 
         const c1 = 0;
@@ -89,6 +90,8 @@ constDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is 
     
     // modules
     module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         const c22 = 0;
     
         {

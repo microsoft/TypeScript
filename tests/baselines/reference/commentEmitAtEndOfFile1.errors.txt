@@ -1,0 +1,19 @@
+commentEmitAtEndOfFile1.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+commentEmitAtEndOfFile1.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== commentEmitAtEndOfFile1.ts (2 errors) ====
+    // test
+    var f = ''
+    // test #2
+    module foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            function bar() { }
+    }
+    // test #3
+    module empty {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    // test #4

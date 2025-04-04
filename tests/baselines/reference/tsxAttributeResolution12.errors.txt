@@ -1,11 +1,15 @@
+file.tsx(17,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(25,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
 file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
+react.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== react.d.ts (0 errors) ====
+==== react.d.ts (1 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
     	}
@@ -17,7 +21,7 @@ file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAtt
     	}
     }
     
-==== file.tsx (2 errors) ====
+==== file.tsx (3 errors) ====
     declare class Component<P, S>  {
     	constructor(props?: P, context?: any);
     	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
@@ -35,6 +39,8 @@ file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAtt
     }
     
     declare module TestMod {
+                   ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface TestClass extends ComponentClass<{reqd: any}> {
     	}
     	var Test: TestClass;

@@ -1,0 +1,14 @@
+privacyCheckExportAssignmentOnExportedGenericInterface1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== privacyCheckExportAssignmentOnExportedGenericInterface1.ts (1 errors) ====
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface A<T> {
+        }
+    }
+    interface Foo<T> {
+    }
+    var Foo: new () => Foo.A<Foo<string>>;
+    export = Foo;

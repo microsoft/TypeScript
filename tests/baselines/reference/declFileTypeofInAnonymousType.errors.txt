@@ -1,0 +1,27 @@
+declFileTypeofInAnonymousType.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileTypeofInAnonymousType.ts (1 errors) ====
+    module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class c {
+        }
+        export enum e {
+            weekday,
+            weekend,
+            holiday
+        }
+    }
+    var a: { c: m1.c; };
+    var b = {
+        c: m1.c,
+        m1: m1
+    };
+    var c = { m1: m1 };
+    var d = {
+        m: { mod: m1 },
+        mc: { cl: m1.c },
+        me: { en: m1.e },
+        mh: m1.e.holiday
+    };

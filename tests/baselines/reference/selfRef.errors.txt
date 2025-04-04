@@ -1,9 +1,12 @@
+selfRef.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 selfRef.ts(8,8): error TS2304: Cannot find name 'name'.
 selfRef.ts(12,18): error TS2304: Cannot find name 'name'.
 
 
-==== selfRef.ts (2 errors) ====
+==== selfRef.ts (3 errors) ====
     module M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     {
         export class Test
         {

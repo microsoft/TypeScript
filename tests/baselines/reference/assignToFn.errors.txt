@@ -1,8 +1,11 @@
+assignToFn.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignToFn.ts(8,5): error TS2322: Type 'string' is not assignable to type '(n: number) => boolean'.
 
 
-==== assignToFn.ts (1 errors) ====
+==== assignToFn.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface I {
     	f(n:number):boolean;
         }

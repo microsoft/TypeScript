@@ -1,11 +1,24 @@
+complicatedPrivacy.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+complicatedPrivacy.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 complicatedPrivacy.ts(11,24): error TS1054: A 'get' accessor cannot have parameters.
 complicatedPrivacy.ts(35,6): error TS2693: 'number' only refers to a type, but is being used as a value here.
+complicatedPrivacy.ts(44,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+complicatedPrivacy.ts(70,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+complicatedPrivacy.ts(71,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported member 'i6'.
+complicatedPrivacy.ts(79,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+complicatedPrivacy.ts(82,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+complicatedPrivacy.ts(84,31): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+complicatedPrivacy.ts(95,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== complicatedPrivacy.ts (3 errors) ====
+==== complicatedPrivacy.ts (12 errors) ====
     module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module m2 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     
             export function f1(c1: C1) {
@@ -52,6 +65,8 @@ complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported me
         }) {
         }
         module m3 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             function f2(f1: C1) {
             }
     
@@ -78,7 +93,11 @@ complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported me
     }
     
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module m3 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
             export class c_pr  implements mglo5.i5, mglo5.i6 {
                                                           ~~
@@ -89,11 +108,17 @@ complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported me
             }
             
             module m4 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 class C {
                 }
                 module m5 {
+                       ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                     
                     export module m6 {
+                                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                         function f1() {
                             return new C();
                         }
@@ -105,6 +130,8 @@ complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported me
     }
     
     module mglo5 {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface i5 {
             f1(): string;
         }

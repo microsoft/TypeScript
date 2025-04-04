@@ -34,6 +34,7 @@ module EndGate.Tweening {
 
             this._from = from.Clone();
 >this._from = from.Clone() : any
+>                          : ^^^
 >this._from : T
 >           : ^
 >this : this
@@ -41,6 +42,7 @@ module EndGate.Tweening {
 >_from : T
 >      : ^
 >from.Clone() : any
+>             : ^^^
 >from.Clone : () => any
 >           : ^^^^^^   
 >from : T
