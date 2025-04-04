@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/declarationEmitJsPrivateClassStatics.ts] ////
+
+=== input.js ===
+class Test {
+>Test : Symbol(Test, Decl(input.js, 0, 0))
+
+    static #privateStaticProp = 'Not removed for JS declaration generation; is removed for TS.';
+>#privateStaticProp : Symbol(Test.#privateStaticProp, Decl(input.js, 0, 12))
+
+    static #privateStaticFn() { return 'Not removed for JS declaration generation; is removed for TS.'; }
+>#privateStaticFn : Symbol(Test.#privateStaticFn, Decl(input.js, 1, 96))
+
+    #privateProp = 'This is removed in JS / TS declaration generation.';
+>#privateProp : Symbol(Test.#privateProp, Decl(input.js, 3, 105))
+
+    #privateFn() { return 'This is removed in JS / TS declaration generation.'; }
+>#privateFn : Symbol(Test.#privateFn, Decl(input.js, 5, 72))
+}
+
