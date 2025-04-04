@@ -212,6 +212,7 @@ const libEntries: [string, string][] = [
     ["es2020.intl", "lib.es2020.intl.d.ts"],
     ["es2020.number", "lib.es2020.number.d.ts"],
     ["es2021.promise", "lib.es2021.promise.d.ts"],
+    ["es2021.symbol.wellknown", "lib.es2021.symbol.wellknown.d.ts"],
     ["es2021.string", "lib.es2021.string.d.ts"],
     ["es2021.weakref", "lib.es2021.weakref.d.ts"],
     ["es2021.intl", "lib.es2021.intl.d.ts"],
