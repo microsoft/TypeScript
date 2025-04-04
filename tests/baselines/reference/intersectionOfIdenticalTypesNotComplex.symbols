@@ -1,0 +1,45 @@
+=== tests/cases/compiler/intersectionOfIdenticalTypesNotComplex.ts ===
+// Just a short block to make a union with > 300 unique members
+export type Bit = 0 | 1;
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+
+export type SyntaxKind = `${Bit}${Bit}${Bit}${Bit}${Bit}${Bit}${Bit}${Bit}${Bit}`
+>SyntaxKind : Symbol(SyntaxKind, Decl(intersectionOfIdenticalTypesNotComplex.ts, 1, 24))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+>Bit : Symbol(Bit, Decl(intersectionOfIdenticalTypesNotComplex.ts, 0, 0))
+
+type NodeMaker<T extends SyntaxKind = SyntaxKind> = T extends T ? {kind: T}: never;
+>NodeMaker : Symbol(NodeMaker, Decl(intersectionOfIdenticalTypesNotComplex.ts, 2, 81))
+>T : Symbol(T, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 15))
+>SyntaxKind : Symbol(SyntaxKind, Decl(intersectionOfIdenticalTypesNotComplex.ts, 1, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(intersectionOfIdenticalTypesNotComplex.ts, 1, 24))
+>T : Symbol(T, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 15))
+>T : Symbol(T, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 15))
+>kind : Symbol(kind, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 67))
+>T : Symbol(T, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 15))
+
+type Node = NodeMaker;
+>Node : Symbol(Node, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 83))
+>NodeMaker : Symbol(NodeMaker, Decl(intersectionOfIdenticalTypesNotComplex.ts, 2, 81))
+
+type Ok = Node & Node;
+>Ok : Symbol(Ok, Decl(intersectionOfIdenticalTypesNotComplex.ts, 5, 22))
+>Node : Symbol(Node, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 83))
+>Node : Symbol(Node, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 83))
+
+type Node2 = NodeMaker;
+>Node2 : Symbol(Node2, Decl(intersectionOfIdenticalTypesNotComplex.ts, 6, 22))
+>NodeMaker : Symbol(NodeMaker, Decl(intersectionOfIdenticalTypesNotComplex.ts, 2, 81))
+
+type Wat = Node & Node2;
+>Wat : Symbol(Wat, Decl(intersectionOfIdenticalTypesNotComplex.ts, 8, 23))
+>Node : Symbol(Node, Decl(intersectionOfIdenticalTypesNotComplex.ts, 3, 83))
+>Node2 : Symbol(Node2, Decl(intersectionOfIdenticalTypesNotComplex.ts, 6, 22))
+
