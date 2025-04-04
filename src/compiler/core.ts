@@ -16,13 +16,7 @@ import {
 /** @internal */
 export const emptyArray: never[] = [] as never[];
 /** @internal */
-export const emptyMap: ReadonlyMap<never, never> = new Map<never, never>();
-
-/** @internal */
-export const voidMap: Map<never, never> = new Map<never, never>();
-voidMap.set = function () {
-    return this;
-};
+export const emptyMap: Map<never, never> = new Map<never, never>();
 
 /** @internal */
 export function length(array: readonly any[] | undefined): number {

@@ -164,6 +164,7 @@ import {
     EmitResolver,
     EmitTextWriter,
     emptyArray,
+    emptyMap,
     EntityName,
     EntityNameExpression,
     EntityNameOrEntityNameExpression,
@@ -1124,7 +1125,6 @@ import {
     Visitor,
     VisitResult,
     VoidExpression,
-    voidMap,
     walkUpBindingElementsAndPatterns,
     walkUpOuterExpressions,
     walkUpParenthesizedExpressions,
@@ -2111,14 +2111,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return t;
     }, () => "(unmeasurable reporter)");
-    reportUnreliableMapper.instantiations = voidMap;
+    reportUnreliableMapper.instantiations = emptyMap;
     var reportUnmeasurableMapper = makeFunctionTypeMapper(t => {
         if (outofbandVarianceMarkerHandler && (t === markerSuperType || t === markerSubType || t === markerOtherType)) {
             outofbandVarianceMarkerHandler(/*onlyUnreliable*/ false);
         }
         return t;
     }, () => "(unreliable reporter)");
-    reportUnmeasurableMapper.instantiations = voidMap;
+    reportUnmeasurableMapper.instantiations = emptyMap;
 
     var emptyObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var emptyJsxObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
@@ -20374,16 +20374,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
             return errorType;
         }
-        const key = type.id + getAliasId(aliasSymbol, aliasTypeArguments);
-        const cached = (mapper.instantiations ??= new Map()).get(key);
-        if (cached) {
-            return cached;
+        let key: string
+        if (mapper.instantiations !== emptyMap) {
+            key = type.id + getAliasId(aliasSymbol, aliasTypeArguments);
+            const cached = (mapper.instantiations ??= new Map()).get(key);
+            if (cached) {
+                return cached;
+            }
         }
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
         const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
-        mapper.instantiations?.set(key, result);
+        if (mapper.instantiations !== emptyMap) {
+            // volatile caches (like on `nonFixingMapper`) could have been cleared by the above `instantiateTypeWorker`
+            // if so, we don't want to cache the result as it likely won't be valid anymore anyway
+            mapper.instantiations?.set(key!, result);
+        }
         instantiationDepth--;
         return result;
     }
