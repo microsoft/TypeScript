@@ -493,18 +493,18 @@ export class TestState {
         this.openFile(0);
 
         function memoWrap(ls: ts.LanguageService, target: TestState): ts.LanguageService {
-            const cacheableMembers: (keyof typeof ls)[] = [
+            const cacheableMembers = new Set<keyof typeof ls>([
                 "getCompletionEntryDetails",
                 "getCompletionEntrySymbol",
                 "getQuickInfoAtPosition",
                 "getReferencesAtPosition",
                 "getDocumentHighlights",
-            ];
+            ]);
             const proxy = {} as ts.LanguageService;
             const keys = ts.getAllKeys(ls);
             for (const k of keys) {
                 const key = k as keyof typeof ls;
-                if (!cacheableMembers.includes(key)) {
+                if (!cacheableMembers.has(key)) {
                     proxy[key] = (...args: any[]) => (ls[key] as (...args: any[]) => any)(...args);
                     continue;
                 }
@@ -2256,7 +2256,7 @@ export class TestState {
                 const isEmpty = selectionStart.line === selectionEnd.line && selectionStart.character === selectionEnd.character;
                 const selectionPadLength = lineNumber === selectionStart.line ? selectionStart.character : 0;
                 const selectionPad = " ".repeat(selectionPadLength + lineNumberPrefixLength);
-                const selectionLength = isEmpty ? 0 : Math.max(lineNumber < selectionEnd.line ? spanLine.trimRight().length - selectionPadLength : selectionEnd.character - selectionPadLength, 1);
+                const selectionLength = isEmpty ? 0 : Math.max(lineNumber < selectionEnd.line ? spanLine.trimEnd().length - selectionPadLength : selectionEnd.character - selectionPadLength, 1);
                 const selectionLine = isEmpty ? "<" : "^".repeat(selectionLength);
                 output.push(`${selectionPad}${selectionLine}`);
             }
@@ -4282,7 +4282,7 @@ export class TestState {
         let text = "";
         text += `${prefix}╭ ${file.fileName}:${startLc.line + 1}:${startLc.character + 1}-${endLc.line + 1}:${endLc.character + 1}\n`;
         for (const line of lines) {
-            text += `${prefix}│ ${line.trimRight()}\n`;
+            text += `${prefix}│ ${line.trimEnd()}\n`;
         }
         text += `${trailingPrefix}╰\n`;
         return text;
@@ -4863,7 +4863,7 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
             directive = getNonFileNameOptionInObject(globalOptions);
         }
         if (directive) {
-            throw Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
+            throw new Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
         }
     }
 
@@ -5244,7 +5244,7 @@ function highlightDifferenceBetweenStrings(source: string, target: string) {
             range.start + 1 + additionalOffset,
             range.start + range.length + 1 + additionalOffset,
         );
-        const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
+        const after = emTarget.slice(range.start + range.length + 1 + additionalOffset);
         emTarget = before + lhs + between + rhs + after;
     });
     return emTarget;

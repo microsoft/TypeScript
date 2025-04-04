@@ -229,7 +229,7 @@ function verifyTscEditDiscrepancies(
                 incrementalReadableBuildInfo.affectedFilesPendingEmit?.forEach(([actualFileOrArray]) => {
                     const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
                     if (
-                        !ts.find(
+                        !ts.some(
                             (cleanReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.affectedFilesPendingEmit,
                             ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                         )
@@ -259,7 +259,7 @@ function verifyTscEditDiscrepancies(
             const readableCleanBuildInfo = cleanReadableBuildInfo as ReadableIncrementalBuildInfo | undefined;
             readableIncrementalBuildInfo?.changeFileSet?.forEach(actualFile => {
                 if (
-                    !ts.find(
+                    !ts.some(
                         readableCleanBuildInfo?.changeFileSet,
                         expectedFile => actualFile === expectedFile,
                     )
@@ -308,7 +308,7 @@ function verifyTscEditDiscrepancies(
                     // if there are errors in the file
                     !ts.isString(cleanFileDiagnostics?.[1]) &&
                     // and its not already verified, its issue with the error caching
-                    !ts.find(
+                    !ts.some(
                         readableIncrementalBuildInfo?.semanticDiagnosticsPerFile,
                         ([actualFile]) => actualFile === expectedFile,
                     )
@@ -323,12 +323,12 @@ function verifyTscEditDiscrepancies(
             readableIncrementalBuildInfo?.emitDiagnosticsPerFile?.forEach(([actualFile]) => {
                 if (
                     // Does not have emit diagnostics in clean buildInfo
-                    !ts.find(
+                    !ts.some(
                         readableCleanBuildInfo!.emitDiagnosticsPerFile,
                         ([expectedFile]) => actualFile === expectedFile,
                     ) &&
                     // Is not marked as affectedFilesPendingEmit in clean buildInfo
-                    (!ts.find(
+                    (!ts.some(
                         (readableCleanBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo).affectedFilesPendingEmit,
                         ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                     )) &&

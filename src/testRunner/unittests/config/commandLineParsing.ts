@@ -13,7 +13,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             baseline.push("WatchOptions::");
             baseline.push(jsonToReadableText(parsed.watchOptions));
             baseline.push("FileNames::");
-            baseline.push(parsed.fileNames.join());
+            baseline.push(parsed.fileNames.join(","));
             baseline.push("Errors::");
             baseline.push(ts.formatDiagnostics(parsed.errors, {
                 getCurrentDirectory: () => "/",
@@ -205,7 +205,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
             baseline.push("WatchOptions::");
             baseline.push(jsonToReadableText(parsed.watchOptions));
             baseline.push("Projects::");
-            baseline.push(parsed.projects.join());
+            baseline.push(parsed.projects.join(","));
             baseline.push("Errors::");
             baseline.push(ts.formatDiagnostics(parsed.errors, {
                 getCurrentDirectory: () => "/",

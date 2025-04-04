@@ -226,7 +226,7 @@ export function start(importTests: () => Promise<unknown>): void {
     function runSuite(task: Task, suite: Mocha.Suite, fn: (result: TaskResult) => void) {
         const errors: ErrorInfo[] = [];
         const passes: TestInfo[] = [];
-        const start = +new Date();
+        const start = Date.now();
         const runner = new Mocha.Runner(suite, { delay: false });
 
         runner
@@ -244,7 +244,7 @@ export function start(importTests: () => Promise<unknown>): void {
                 runner.dispose();
             })
             .run(() => {
-                fn({ task, errors, passes, passing: passes.length, duration: +new Date() - start });
+                fn({ task, errors, passes, passing: passes.length, duration: Date.now() - start });
             });
     }
 

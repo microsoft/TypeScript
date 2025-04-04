@@ -85,7 +85,7 @@ function createNodeIO(): IO {
             let paths: string[] = [];
             for (const file of files) {
                 const pathToFile = pathModule.join(folder, file);
-                if (!spec || file.match(spec)) {
+                if (!spec || spec.test(file)) {
                     paths.push(pathToFile);
                 }
             }
@@ -672,7 +672,7 @@ export namespace Compiler {
                         // Calculate the start of the squiggle
                         const squiggleStart = Math.max(0, relativeOffset);
                         // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
-                        outputLines += newLine() + "    " + line.substr(0, squiggleStart).replace(/\S/g, " ") + new Array(Math.min(length, line.length - squiggleStart) + 1).join("~");
+                        outputLines += newLine() + "    " + line.substr(0, squiggleStart).replace(/\S/g, " ") + "~".repeat(Math.min(length, line.length - squiggleStart));
 
                         // If the error ended here, or we're at the end of the file, emit its message
                         if ((lineIndex === lines.length - 1) || nextLineStart > end) {
@@ -889,7 +889,7 @@ export namespace Compiler {
                         typeLines += codeLines.slice(0, result.line + 1).join("\r\n") + "\r\n";
                     }
                     else if (result.line !== lastIndexWritten) {
-                        if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                        if (!((lastIndexWritten + 1 < codeLines.length) && (/^\s*[{|}]\s*$/.test(codeLines[lastIndexWritten + 1]) || codeLines[lastIndexWritten + 1].trim() === ""))) {
                             typeLines += "\r\n";
                         }
                         typeLines += codeLines.slice(lastIndexWritten + 1, result.line + 1).join("\r\n") + "\r\n";
@@ -906,7 +906,7 @@ export namespace Compiler {
 
                 lastIndexWritten ??= -1;
                 if (lastIndexWritten + 1 < codeLines.length) {
-                    if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                    if (!((lastIndexWritten + 1 < codeLines.length) && (/^\s*[{|}]\s*$/.test(codeLines[lastIndexWritten + 1]) || codeLines[lastIndexWritten + 1].trim() === ""))) {
                         typeLines += "\r\n";
                     }
                     typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");

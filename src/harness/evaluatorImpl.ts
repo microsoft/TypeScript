@@ -444,6 +444,8 @@ class SystemLoader extends Loader<SystemModule> {
     }
 
     private resetDependers(module: SystemModule, stack: SystemModule[]) {
+        // We want to indicate that the search should go backwards for perf.
+        // eslint-disable-next-line unicorn/prefer-includes
         if (stack.lastIndexOf(module) !== -1) {
             return;
         }
@@ -460,6 +462,8 @@ class SystemLoader extends Loader<SystemModule> {
         if (module.state < SystemModuleState.Linked) throw new Error("Invalid state for evaluation.");
         if (module.state !== SystemModuleState.Linked) return;
 
+        // We want to indicate that the search should go backwards for perf.
+        // eslint-disable-next-line unicorn/prefer-includes
         if (stack.lastIndexOf(module) !== -1) {
             // we are already evaluating this module
             return;
@@ -703,6 +707,8 @@ class AmdLoader extends Loader<AmdModule> {
     }
 
     private resetDependers(module: AmdModule, stack: AmdModule[]) {
+        // We want to indicate that the search should go backwards for perf.
+        // eslint-disable-next-line unicorn/prefer-includes
         if (stack.lastIndexOf(module) !== -1) {
             return;
         }
@@ -721,6 +727,8 @@ class AmdLoader extends Loader<AmdModule> {
         if (module.state < AmdModuleState.Linked) throw new Error("Invalid state for evaluation.");
         if (module.state !== AmdModuleState.Linked) return;
 
+        // We want to indicate that the search should go backwards for perf.
+        // eslint-disable-next-line unicorn/prefer-includes
         if (stack.lastIndexOf(module) !== -1) {
             // we are already evaluating this module
             return;

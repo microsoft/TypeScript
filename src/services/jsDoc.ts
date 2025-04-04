@@ -311,12 +311,12 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
                 forEach(templateTag.typeParameters, tp => {
                     displayParts.push(namePart(tp.getText()));
                     if (lastTypeParameter !== tp) {
-                        displayParts.push(...[punctuationPart(SyntaxKind.CommaToken), spacePart()]);
+                        displayParts.push(punctuationPart(SyntaxKind.CommaToken), spacePart());
                     }
                 });
             }
             if (comment) {
-                displayParts.push(...[spacePart(), ...getDisplayPartsFromComment(comment, checker)]);
+                displayParts.push(spacePart(), ...getDisplayPartsFromComment(comment, checker));
             }
             return displayParts;
         case SyntaxKind.JSDocTypeTag:
@@ -341,7 +341,7 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
 
     function addComment(s: string) {
         if (comment) {
-            if (s.match(/^https?$/)) {
+            if (/^https?$/.test(s)) {
                 return [textPart(s), ...getDisplayPartsFromComment(comment, checker)];
             }
             else {

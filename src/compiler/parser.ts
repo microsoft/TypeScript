@@ -10561,7 +10561,7 @@ export function processCommentPragmas(context: PragmaContext, sourceText: string
     for (const pragma of pragmas) {
         if (context.pragmas.has(pragma.name)) {
             const currentValue = context.pragmas.get(pragma.name);
-            if (currentValue instanceof Array) {
+            if (Array.isArray(currentValue)) {
                 currentValue.push(pragma.args);
             }
             else {
@@ -10622,7 +10622,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 break;
             }
             case "amd-module": {
-                if (entryOrList instanceof Array) {
+                if (Array.isArray(entryOrList)) {
                     for (const entry of entryOrList) {
                         if (context.moduleName) {
                             // TODO: It's probably fine to issue this diagnostic on all instances of the pragma

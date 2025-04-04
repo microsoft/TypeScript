@@ -304,7 +304,7 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
     const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file?.fileName === value?.fileName));
     if (distinctFiles.length === 0) return "";
 
-    const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1;
+    const numberLength = (num: number) => Math.log10(num) + 1;
     const fileToErrorCount = distinctFiles.map(file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const));
     const maxErrors = maxBy(fileToErrorCount, 0, value => value[1]);
 
@@ -317,7 +317,7 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
     tabularData += " ".repeat(headerPadding) + headerRow + "\n";
     fileToErrorCount.forEach(row => {
         const [file, errorCount] = row;
-        const errorCountDigitsLength = Math.log(errorCount) * Math.LOG10E + 1 | 0;
+        const errorCountDigitsLength = Math.log10(errorCount) + 1 | 0;
         const leftPadding = errorCountDigitsLength < leftPaddingGoal ?
             " ".repeat(leftPaddingGoal - errorCountDigitsLength)
             : "";
@@ -786,7 +786,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
 /** @internal */
 export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string): string {
     // If text can contain the sourceMapUrl ignore sourceMapUrl for calcualting hash
-    if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
+    if (sourceMapCommentRegExpDontCareLineStart.test(text)) {
         let lineEnd = text.length;
         let lineStart = lineEnd;
         for (let pos = lineEnd - 1; pos >= 0; pos--) {
@@ -808,12 +808,12 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
             }
             // This is start of the line
             const line = text.substring(lineStart, lineEnd);
-            if (line.match(sourceMapCommentRegExp)) {
+            if (sourceMapCommentRegExp.test(line)) {
                 text = text.substring(0, lineStart);
                 break;
             }
             // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
-            else if (!line.match(whitespaceOrMapCommentRegExp)) {
+            else if (!whitespaceOrMapCommentRegExp.test(line)) {
                 break;
             }
             lineEnd = lineStart;

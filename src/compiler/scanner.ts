@@ -2950,7 +2950,7 @@ export function createScanner(
                     ch = charCodeChecked(pos);
                     if (isASCIILetter(ch)) {
                         pos++;
-                        return String.fromCharCode(ch & 0x1f);
+                        return String.fromCharCode(ch & 0x1F);
                     }
                     if (anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
