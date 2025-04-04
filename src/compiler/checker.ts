@@ -20374,7 +20374,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
             return errorType;
         }
-        let key: string
+        let key: string;
         if (mapper.instantiations !== emptyMap) {
             key = type.id + getAliasId(aliasSymbol, aliasTypeArguments);
             const cached = (mapper.instantiations ??= new Map()).get(key);
