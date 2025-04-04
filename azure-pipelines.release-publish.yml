@@ -64,6 +64,7 @@ extends:
                   artifactName: 'tgz'
                   targetPath: '$(Pipeline.Workspace)/tgz'
             steps:
+              - checkout: none
               - task: CmdLine@2
                 displayName: Rename versioned drop to typescript.tgz
                 inputs:
@@ -107,6 +108,7 @@ extends:
       #             artifactName: 'tgz'
       #             targetPath: '$(Pipeline.Workspace)/tgz'
       #       steps:
+      #         - checkout: none
       #         - task: GitHubRelease@1
       #           displayName: GitHub release (create)
       #           inputs:
