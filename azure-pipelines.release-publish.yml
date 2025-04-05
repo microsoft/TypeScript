@@ -50,7 +50,7 @@ extends:
       - stage: Publish
         displayName: Publish tarball
         jobs:
-          - job: npm
+          - job: tarball
             displayName: Publish tarball
             condition: succeeded()
             timeoutInMinutes: 0
@@ -84,7 +84,8 @@ extends:
                   publishEndpoint: Typescript NPM
 
           - job: github
-            displayName: Publish git tag
+            displayName: Create github release
+            dependsOn: tarball
             condition: succeeded()
             timeoutInMinutes: 0
             templateContext:
