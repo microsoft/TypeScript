@@ -1480,6 +1480,15 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
+    [SyntaxKind.EnumLiteralExpression]: function visitEachChildOfEnumDeclaration(node, visitor, context, nodesVisitor, _tokenVisitor) {
+        return context.factory.updateEnumLiteralExpression(
+            node,
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
+            node.name,
+            nodesVisitor(node.members, visitor, isEnumMember),
+        );
+    },
+
     [SyntaxKind.ModuleDeclaration]: function visitEachChildOfModuleDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateModuleDeclaration(
             node,
