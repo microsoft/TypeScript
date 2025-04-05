@@ -164,7 +164,6 @@ import {
     EmitResolver,
     EmitTextWriter,
     emptyArray,
-    emptyMap,
     EntityName,
     EntityNameExpression,
     EntityNameOrEntityNameExpression,
@@ -2111,14 +2110,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return t;
     }, () => "(unmeasurable reporter)");
-    reportUnreliableMapper.instantiations = emptyMap;
     var reportUnmeasurableMapper = makeFunctionTypeMapper(t => {
         if (outofbandVarianceMarkerHandler && (t === markerSuperType || t === markerSubType || t === markerOtherType)) {
             outofbandVarianceMarkerHandler(/*onlyUnreliable*/ false);
         }
         return t;
     }, () => "(unreliable reporter)");
-    reportUnmeasurableMapper.instantiations = emptyMap;
 
     var emptyObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var emptyJsxObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
@@ -2318,6 +2315,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var inferenceContextNodes: Node[] = [];
     var inferenceContexts: (InferenceContext | undefined)[] = [];
     var inferenceContextCount = 0;
+
+    var activeTypeMappers: TypeMapper[] = [];
+    var activeTypeMappersCaches: Map<string, Type>[] = [];
+    var activeTypeMappersCount = 0;
 
     var emptyStringType = getStringLiteralType("");
     var zeroType = getNumberLiteralType(0);
@@ -20374,22 +20375,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
             return errorType;
         }
-        let key: string;
-        if (mapper.instantiations !== emptyMap) {
-            key = type.id + getAliasId(aliasSymbol, aliasTypeArguments);
-            const cached = (mapper.instantiations ??= new Map()).get(key);
-            if (cached) {
-                return cached;
-            }
+        const index = findActiveMapper(mapper);
+        if (index === -1) {
+            pushActiveMapper(mapper);
+        }
+        const key = type.id + getAliasId(aliasSymbol, aliasTypeArguments);
+        const mapperCache = activeTypeMappersCaches[index !== -1 ? index : activeTypeMappersCount - 1];
+        const cached = mapperCache.get(key);
+        if (cached) {
+            return cached;
         }
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
         const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
-        if (mapper.instantiations !== emptyMap) {
-            // volatile caches (like on `nonFixingMapper`) could have been cleared by the above `instantiateTypeWorker`
-            // if so, we don't want to cache the result as it likely won't be valid anymore anyway
-            mapper.instantiations?.set(key!, result);
+        if (index === -1) {
+            popActiveMapper();
+        }
+        else {
+            mapperCache.set(key, result);
         }
         instantiationDepth--;
         return result;
@@ -25594,7 +25598,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function clearCachedInferences(context: InferenceContext | undefined, inferences: InferenceInfo[]) {
         if (context) {
-            context.nonFixingMapper.instantiations = undefined;
+            clearActiveMapperCache(context.nonFixingMapper);
         }
         for (const inference of inferences) {
             if (!inference.isFixed) {
@@ -26967,7 +26971,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // instantiating the constraint could reenter this function if the type parameter's constraint depends on that parameter
                     // in such a case the reentering call just returns the preemptively set `.inferredType`
                     // but given the `.inferredType` gets changed changed above, the cached instantiations have to be cleared because they were cached for the wrong type
-                    context.nonFixingMapper.instantiations = undefined;
+                    clearActiveMapperCache(context.nonFixingMapper);
                 }
             }
         }
@@ -32183,6 +32187,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isNodeDescendantOf(node, inferenceContextNodes[i])) {
                 return inferenceContexts[i];
             }
+        }
+    }
+
+    function pushActiveMapper(mapper: TypeMapper) {
+        activeTypeMappers[activeTypeMappersCount] = mapper;
+        activeTypeMappersCaches[activeTypeMappersCount] = new Map();
+        activeTypeMappersCount++;
+    }
+
+    function popActiveMapper() {
+        activeTypeMappersCount--;
+    }
+
+    function findActiveMapper(mapper: TypeMapper) {
+        for (let i = activeTypeMappersCount - 1; i >= 0; i--) {
+            if (mapper === activeTypeMappers[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function clearActiveMapperCache(mapper: TypeMapper) {
+        const index = findActiveMapper(mapper);
+        if (index !== -1) {
+            activeTypeMappersCaches[index] = new Map();
         }
     }
 

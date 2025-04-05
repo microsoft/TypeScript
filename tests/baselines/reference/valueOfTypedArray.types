@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 1,000
-Instantiation count: 1,000
+Instantiation count: 2,500
 
 === valueOfTypedArray.ts ===
 // All declarations should pass, as valueOf has been specialized for all TypedArrays

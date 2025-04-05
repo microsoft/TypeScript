@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/promiseTypeStrictNull.ts] ////
 
+=== Performance Stats ===
+Instantiation count: 2,500
+
 === promiseTypeStrictNull.ts ===
 declare var p: Promise<boolean>;
 >p : Promise<boolean>

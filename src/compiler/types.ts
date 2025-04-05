@@ -7029,11 +7029,11 @@ export const enum TypeMapKind {
 
 /** @internal */
 export type TypeMapper =
-    | { kind: TypeMapKind.Simple; source: Type; target: Type; instantiations?: Map<string, Type>; }
-    | { kind: TypeMapKind.Array; sources: readonly Type[]; targets: readonly Type[] | undefined; instantiations?: Map<string, Type>; }
-    | { kind: TypeMapKind.Deferred; sources: readonly Type[]; targets: (() => Type)[]; instantiations?: Map<string, Type>; }
-    | { kind: TypeMapKind.Function; func: (t: Type) => Type; debugInfo?: () => string; instantiations?: Map<string, Type>; }
-    | { kind: TypeMapKind.Composite | TypeMapKind.Merged; mapper1: TypeMapper; mapper2: TypeMapper; instantiations?: Map<string, Type>; };
+    | { kind: TypeMapKind.Simple; source: Type; target: Type; }
+    | { kind: TypeMapKind.Array; sources: readonly Type[]; targets: readonly Type[] | undefined; }
+    | { kind: TypeMapKind.Deferred; sources: readonly Type[]; targets: (() => Type)[]; }
+    | { kind: TypeMapKind.Function; func: (t: Type) => Type; debugInfo?: () => string; }
+    | { kind: TypeMapKind.Composite | TypeMapKind.Merged; mapper1: TypeMapper; mapper2: TypeMapper; };
 
 // dprint-ignore
 export const enum InferencePriority {

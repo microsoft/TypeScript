@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/longObjectInstantiationChain1.ts] ////
 
 === Performance Stats ===
-Instantiation count: 5,000
+Instantiation count: 10,000
 
 === longObjectInstantiationChain1.ts ===
 export type merge<base, props> = Omit<base, keyof props & keyof base> & props;

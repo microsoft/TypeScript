@@ -2,6 +2,7 @@
 
 === Performance Stats ===
 Assignability cache: 1,000
+Instantiation count: 1,000
 
 === templateLiteralTypes4.ts ===
 // infer from number
