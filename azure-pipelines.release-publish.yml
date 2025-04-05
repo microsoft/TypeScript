@@ -47,11 +47,11 @@ extends:
         os: windows
 
     stages:
-      - stage: Stage_1
+      - stage: Publish
         displayName: Publish tarball
         jobs:
-          - job: Job_1
-            displayName: Agent job
+          - job: npm
+            displayName: Publish tarball
             condition: succeeded()
             timeoutInMinutes: 0
             templateContext:
@@ -83,12 +83,8 @@ extends:
                   customEndpoint: Typescript NPM
                   publishEndpoint: Typescript NPM
 
-      - stage: Stage_2
-        displayName: Publish git tag
-        dependsOn: Stage_1
-        jobs:
-          - job: Job_1
-            displayName: Agent job
+          - job: github
+            displayName: Publish git tag
             condition: succeeded()
             timeoutInMinutes: 0
             templateContext:
