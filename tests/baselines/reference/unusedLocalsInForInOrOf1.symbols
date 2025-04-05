@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/unusedLocalsInForInOrOf1.ts] ////
+
+=== unusedLocalsInForInOrOf1.ts ===
+for (let x of [1, 2]) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 0, 8))
+
+  function f() {
+>f : Symbol(f, Decl(unusedLocalsInForInOrOf1.ts, 0, 23))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 0, 8))
+  }
+}
+
+for (let x of [1, 2]) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 6, 8))
+
+  let f = () => {
+>f : Symbol(f, Decl(unusedLocalsInForInOrOf1.ts, 7, 5))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 6, 8))
+
+  };
+}
+
+for (const x of [1, 2]) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 12, 10))
+
+  function g() {
+>g : Symbol(g, Decl(unusedLocalsInForInOrOf1.ts, 12, 25))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 12, 10))
+  }
+}
+
+for (let x in { a: 1, b: 2 }) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 18, 8))
+>a : Symbol(a, Decl(unusedLocalsInForInOrOf1.ts, 18, 15))
+>b : Symbol(b, Decl(unusedLocalsInForInOrOf1.ts, 18, 21))
+
+  function f2() {
+>f2 : Symbol(f2, Decl(unusedLocalsInForInOrOf1.ts, 18, 31))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 18, 8))
+  }
+}
+
+for (let x in { a: 1, b: 2 }) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 24, 8))
+>a : Symbol(a, Decl(unusedLocalsInForInOrOf1.ts, 24, 15))
+>b : Symbol(b, Decl(unusedLocalsInForInOrOf1.ts, 24, 21))
+
+  let f2 = () => {
+>f2 : Symbol(f2, Decl(unusedLocalsInForInOrOf1.ts, 25, 5))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 24, 8))
+
+  };
+}
+
+for (const x in { a: 1, b: 2 }) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 30, 10))
+>a : Symbol(a, Decl(unusedLocalsInForInOrOf1.ts, 30, 17))
+>b : Symbol(b, Decl(unusedLocalsInForInOrOf1.ts, 30, 23))
+
+  function g2() {
+>g2 : Symbol(g2, Decl(unusedLocalsInForInOrOf1.ts, 30, 33))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 30, 10))
+  }
+}
+
+for (let { x } of [{ x: 1 }, { x: 2 }]) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 36, 10))
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 36, 20))
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 36, 30))
+
+  function f3() {
+>f3 : Symbol(f3, Decl(unusedLocalsInForInOrOf1.ts, 36, 41))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 36, 10))
+  }
+}
+
+for (let { x } of [{ x: 1 }, { x: 2 }]) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 42, 10))
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 42, 20))
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 42, 30))
+
+  let f3 = () => {
+>f3 : Symbol(f3, Decl(unusedLocalsInForInOrOf1.ts, 43, 5))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 42, 10))
+
+  };
+}
+
+for (const { x } of [{ x: 1 }, { x: 2 }]) {
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 48, 12))
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 48, 22))
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 48, 32))
+
+  function g3() {
+>g3 : Symbol(g3, Decl(unusedLocalsInForInOrOf1.ts, 48, 43))
+
+    x;
+>x : Symbol(x, Decl(unusedLocalsInForInOrOf1.ts, 48, 12))
+  }
+}
+
