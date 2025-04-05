@@ -1,8 +1,5 @@
 //// [tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 2,500
-
 === isomorphicMappedTypeInference.ts ===
 type Box<T> = {
 >Box : Box<T>
