@@ -48,7 +48,7 @@ extends:
 
     stages:
       - stage: Publish
-        displayName: Publish tarball
+        displayName: Publish
         jobs:
           - job: tarball
             displayName: Publish tarball
