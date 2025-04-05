@@ -39,7 +39,7 @@ System.register(["react/jsx-dev-runtime"], function (exports_1, context_1) {
                 function Component() {
                 }
                 Component.prototype.render = function () {
-                    return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
+                    return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 16 }, this);
                 };
                 return Component;
             }());
