@@ -295,7 +295,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function visitJsxFragment(node: JsxFragment, isChild: boolean) {
         const tagTransform = currentFileState.importSpecifier === undefined ? visitJsxOpeningFragmentCreateElement : visitJsxOpeningFragmentJSX;
-        return tagTransform(node.openingFragment, node.children, isChild, /*location*/ node);
+        return tagTransform(node.openingFragment, node.children, isChild, /*location*/ createRange(getTokenPosOfNode(node, currentSourceFile), node.end));
     }
 
     function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
