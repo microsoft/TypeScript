@@ -70,7 +70,7 @@ Status overview:
  * Type checking (check for problems in functions, classes, and statements): **done**. You should see the same errors, in the same locations, with the same messages, as TS 5.8
     * Types printback in errors may display slightly differently; this is in progress
  * JavaScript-specific inference and JS Doc: **not ready**
- * JSX: **not ready**
+ * JSX: **done**
  * Declaration emit: **not ready**. Coming soon!
  * Emit (JS output): **in progress**. `target: esnext` (minimal downleveling) is well-supported but other targets may have gaps
  * Watch mode: **prototype** (watches the correct files and rebuilds, but doesn't do incremental rechecking)
