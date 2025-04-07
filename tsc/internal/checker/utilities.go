@@ -655,9 +655,11 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 	if n2 == nil {
 		return -1
 	}
-	f1 := c.fileIndexMap[ast.GetSourceFileOfNode(n1)]
-	f2 := c.fileIndexMap[ast.GetSourceFileOfNode(n2)]
-	if f1 != f2 {
+	s1 := ast.GetSourceFileOfNode(n1)
+	s2 := ast.GetSourceFileOfNode(n2)
+	if s1 != s2 {
+		f1 := c.fileIndexMap[s1]
+		f2 := c.fileIndexMap[s2]
 		// Order by index of file in the containing program
 		return f1 - f2
 	}
