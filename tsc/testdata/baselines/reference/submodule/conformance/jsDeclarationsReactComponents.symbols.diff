@@ -26,8 +26,10 @@
      version: PropTypes.number,
  >version : Symbol(version, Decl(jsDeclarationsReactComponents1.jsx, 11, 30))
 ->PropTypes.number : Symbol(PropTypes.number, Decl(react16.d.ts, 64, 16))
++>PropTypes.number : Symbol(number, Decl(react16.d.ts, 64, 16))
  >PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents1.jsx, 2, 6))
 ->number : Symbol(PropTypes.number, Decl(react16.d.ts, 64, 16))
++>number : Symbol(number, Decl(react16.d.ts, 64, 16))
  
  };
  
@@ -41,7 +43,7 @@
  
      tabs: undefined
  >tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents1.jsx, 16, 33))
-@@= skipped -35, +31 lines =@@
+@@= skipped -35, +33 lines =@@
  };
  
  export default TabbedShowLayout;
@@ -193,8 +195,10 @@
      classes: PropTypes.object,
  >classes : Symbol(classes, Decl(jsDeclarationsReactComponents5.jsx, 7, 18))
 ->PropTypes.object : Symbol(PropTypes.object, Decl(react16.d.ts, 65, 16))
++>PropTypes.object : Symbol(object, Decl(react16.d.ts, 65, 16))
  >PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents5.jsx, 1, 6))
 ->object : Symbol(PropTypes.object, Decl(react16.d.ts, 65, 16))
++>object : Symbol(object, Decl(react16.d.ts, 65, 16))
  
  };
  
@@ -208,7 +212,7 @@
  
      classes: {},
  >classes : Symbol(classes, Decl(jsDeclarationsReactComponents5.jsx, 11, 21))
-@@= skipped -34, +31 lines =@@
+@@= skipped -34, +33 lines =@@
  };
  
  export default Tree;

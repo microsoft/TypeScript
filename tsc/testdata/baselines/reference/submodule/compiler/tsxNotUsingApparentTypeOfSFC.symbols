@@ -21,9 +21,9 @@ function test<P>(wrappedProps: P) {
     };
     class MyComponent extends React.Component<P> {
 >MyComponent : Symbol(MyComponent, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 7, 6))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >React : Symbol(React, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 2, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >P : Symbol(P, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 14))
 
         render() {

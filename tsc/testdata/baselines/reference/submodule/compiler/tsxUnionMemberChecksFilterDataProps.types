@@ -3,7 +3,7 @@
 === tsxUnionMemberChecksFilterDataProps.tsx ===
 /// <reference path="react16.d.ts" />
 import React, { ReactElement } from "react";
->React : any
+>React : typeof React
 >ReactElement : any
 
 declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): ReactElement<any>;

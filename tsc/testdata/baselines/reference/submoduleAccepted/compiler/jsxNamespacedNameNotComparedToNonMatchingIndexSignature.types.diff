@@ -5,7 +5,7 @@
  
  declare module "react" {
 ->"react" : typeof import("react")
-+>"react" : any
++>"react" : typeof React
  
      interface Attributes {
          [key: `do-${string}`]: Function;

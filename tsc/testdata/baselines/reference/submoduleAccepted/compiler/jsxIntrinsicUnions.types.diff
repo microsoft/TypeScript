@@ -1,15 +1,6 @@
 --- old.jsxIntrinsicUnions.types
 +++ new.jsxIntrinsicUnions.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- const El = Math.random() ? 'h1' : 'h2';
- >El : "h1" | "h2"
-@@= skipped -13, +13 lines =@@
+@@= skipped -16, +16 lines =@@
  >'h2' : "h2"
  
  const tag = <El className="ok" key="key">{"Title"}</El>;

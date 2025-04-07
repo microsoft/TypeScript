@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 import * as React from 'react'
->React : any
+>React : typeof React
 
 type Tab = [string, React.ReactNode]  // [tabName, tabContent]
 >Tab : Tab
@@ -26,9 +26,9 @@ function TabLayout(props: Props) {
 
 export class App extends React.Component<{}> {
 >App : App
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{}, {}, any>
+>React : typeof React
+>Component : typeof Component
 
     render() {
 >render : () => any

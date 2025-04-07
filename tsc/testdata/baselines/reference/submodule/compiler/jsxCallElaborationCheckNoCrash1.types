@@ -4,14 +4,14 @@
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";
->React : any
+>React : typeof React
 
 type Tags = "span" | "div";
 >Tags : Tags
 
 export const Hoc = <Tag extends Tags>(
->Hoc : <Tag extends Tags>(TagElement: Tag) => SFC
-><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => SFC
+>Hoc : <Tag extends Tags>(TagElement: Tag) => SFC<{}>
+><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => SFC<{}>
 
    TagElement: Tag,
 >TagElement : Tag

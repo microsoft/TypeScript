@@ -1,11 +1,7 @@
 --- old.jsxRuntimePragma(jsx=react).types
 +++ new.jsxRuntimePragma(jsx=react).types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- /* @jsxRuntime classic */
- import * as React from "react";
-->React : typeof React
-+>React : any
+@@= skipped -6, +6 lines =@@
+ >React : typeof React
  
  export const HelloWorld = () => <h1>Hello world</h1>;
 ->HelloWorld : () => JSX.Element
@@ -103,11 +99,8 @@
  
  === four.tsx ===
  /// <reference path="react16.d.ts" />
- /* @jsxRuntime automatic */
- /* @jsxRuntime classic */
- import * as React from "react";
-->React : typeof React
-+>React : any
+@@= skipped -74, +74 lines =@@
+ >React : typeof React
  
  export const HelloWorld = () => <h1>Hello world</h1>;
 ->HelloWorld : () => JSX.Element

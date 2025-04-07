@@ -11,11 +11,11 @@ function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.In
 >props : Symbol(props, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 49))
 >element : Symbol(element, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 57))
 >T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 23))
->JSX : Symbol(JSX)
->IntrinsicElements : Symbol(IntrinsicElements)
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86))
 >T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 23))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
 
     // Just so the return value is RectElement, the rendered element doesnt matter
     return <div />

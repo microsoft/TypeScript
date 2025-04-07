@@ -1,6 +1,6 @@
 --- old.reactDefaultPropsInferenceSuccess.errors.txt
 +++ new.reactDefaultPropsInferenceSuccess.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -reactDefaultPropsInferenceSuccess.tsx(27,36): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(props: Readonly<Props>): FieldFeedback<Props>', gave the following error.
 -    Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
@@ -26,24 +26,36 @@
 -  Overload 2 of 2, '(props: MyPropsProps, context?: any): FieldFeedback2<MyPropsProps>', gave the following error.
 -    Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 -      Type 'void' is not assignable to type 'boolean'.
-+reactDefaultPropsInferenceSuccess.tsx(3,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+reactDefaultPropsInferenceSuccess.tsx(55,10): error TS2339: Property 'props' does not exist on type 'FieldFeedback2<P>'.
- 
- 
+-
+-
 -==== reactDefaultPropsInferenceSuccess.tsx (3 errors) ====
-+==== reactDefaultPropsInferenceSuccess.tsx (2 errors) ====
-     /// <reference path="/.lib/react16.d.ts" />
-     
-     import React from 'react';
-+                      ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface BaseProps {
-       when?: ((value: string) => boolean) | "a" | "b";
-@@= skipped -52, +31 lines =@@
-     
-     // Error: Void not assignable to boolean
-     const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
+-    /// <reference path="/.lib/react16.d.ts" />
+-    
+-    import React from 'react';
+-    
+-    interface BaseProps {
+-      when?: ((value: string) => boolean) | "a" | "b";
+-      error?: boolean;
+-    }
+-    
+-    interface Props extends BaseProps {
+-    }
+-    
+-    class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
+-      static defaultProps = {
+-        when: () => true
+-      };
+-    
+-      render() {
+-        return <div>Hello</div>;
+-      }
+-    }
+-    
+-    // OK
+-    const Test1 = () => <FieldFeedback when={value => !!value} />;
+-    
+-    // Error: Void not assignable to boolean
+-    const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 -                                       ~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedback<Props>', gave the following error.
@@ -56,13 +68,22 @@
 -!!! error TS2769:         Type 'void' is not assignable to type 'boolean'.
 -!!! related TS6500 reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
 -!!! related TS6500 reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
-     
-     class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
-       static defaultProps: BaseProps = {
-@@= skipped -28, +16 lines =@@
-     
-     // Error: Void not assignable to boolean
-     const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
+-    
+-    class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
+-      static defaultProps: BaseProps = {
+-        when: () => true
+-      };
+-    
+-      render() {
+-        return <div>Hello</div>;
+-      }
+-    }
+-    
+-    // OK
+-    const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta>;
+-    
+-    // Error: Void not assignable to boolean
+-    const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
 -                                            ~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedbackBeta<Props>', gave the following error.
@@ -75,22 +96,27 @@
 -!!! error TS2769:         Type 'void' is not assignable to type 'boolean'.
 -!!! related TS6500 reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, keyof Props>> & Partial<Pick<BaseProps, never>>'
 -!!! related TS6500 reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, keyof Props>> & Partial<Pick<BaseProps, never>>'
-     
-     interface MyPropsProps extends Props {
-       when: (value: string) => boolean;
-@@= skipped -24, +12 lines =@@
-     
-       render() {
-         this.props.when("now"); // OK, always defined
-+             ~~~~~
-+!!! error TS2339: Property 'props' does not exist on type 'FieldFeedback2<P>'.
-         return <div>Hello</div>;
-       }
-     }
-@@= skipped -9, +11 lines =@@
-     
-     // Error: Void not assignable to boolean
-     const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
+-    
+-    interface MyPropsProps extends Props {
+-      when: (value: string) => boolean;
+-    }
+-    
+-    class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedback<P> {
+-      static defaultProps = {
+-        when: () => true
+-      };
+-    
+-      render() {
+-        this.props.when("now"); // OK, always defined
+-        return <div>Hello</div>;
+-      }
+-    }
+-    
+-    // OK
+-    const Test3 = () => <FieldFeedback2 when={value => !!value} />;
+-    
+-    // Error: Void not assignable to boolean
+-    const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
 -                                        ~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(props: Readonly<MyPropsProps>): FieldFeedback2<MyPropsProps>', gave the following error.
@@ -101,6 +127,9 @@
 -!!! error TS2769:       Type 'void' is not assignable to type 'boolean'.
 -!!! related TS6500 reactDefaultPropsInferenceSuccess.tsx:46:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback2<MyPropsProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
 -!!! related TS6500 reactDefaultPropsInferenceSuccess.tsx:46:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback2<MyPropsProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
-     
-     // OK
-     const Test5 = () => <FieldFeedback2 />;
+-    
+-    // OK
+-    const Test5 = () => <FieldFeedback2 />;
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

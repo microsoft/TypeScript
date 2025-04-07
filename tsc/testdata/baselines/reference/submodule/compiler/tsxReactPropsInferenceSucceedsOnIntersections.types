@@ -4,10 +4,10 @@
 /// <reference path="react16.d.ts" />
 
 import React from "react";
->React : any
+>React : typeof React
 
 export type ButtonProps<T = {}> = React.ButtonHTMLAttributes<HTMLButtonElement> & {
->ButtonProps : any
+>ButtonProps : ButtonProps<T>
 >React : any
 
     outline?: boolean;
@@ -17,9 +17,9 @@ export type ButtonProps<T = {}> = React.ButtonHTMLAttributes<HTMLButtonElement> 
 
 declare class Button<T = {}> extends React.Component<ButtonProps<T>> { }
 >Button : Button<T>
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<ButtonProps<T>, {}, any>
+>React : typeof React
+>Component : typeof Component
 
 interface CustomButtonProps extends ButtonProps {
     customProp: string;
@@ -29,9 +29,9 @@ interface CustomButtonProps extends ButtonProps {
 const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;
 >CustomButton : SFC<CustomButtonProps>
 >React : any
->props => <Button {...props} /> : (props: any) => any
->props : any
+>props => <Button {...props} /> : (props: CustomButtonProps & { children?: ReactNode; }) => any
+>props : CustomButtonProps & { children?: ReactNode; }
 ><Button {...props} /> : any
 >Button : typeof Button
->props : any
+>props : CustomButtonProps & { children?: ReactNode; }
 

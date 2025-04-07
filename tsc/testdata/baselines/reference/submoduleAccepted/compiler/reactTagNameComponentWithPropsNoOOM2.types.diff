@@ -1,19 +1,15 @@
 --- old.reactTagNameComponentWithPropsNoOOM2.types
 +++ new.reactTagNameComponentWithPropsNoOOM2.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import * as React from "react";
-->React : typeof React
-+>React : any
+@@= skipped -6, +6 lines =@@
+ >React : typeof React
  
  declare const Tag: keyof React.ReactHTML;
 ->Tag : keyof React.ReactHTML
-+>Tag : string | number | symbol
++>Tag : keyof ReactHTML
  >React : any
  
  const classes = "";
-@@= skipped -11, +11 lines =@@
+@@= skipped -8, +8 lines =@@
  >"" : ""
  
  const rest: React.HTMLAttributes<HTMLElement> = {};
@@ -30,7 +26,7 @@
 ->Tag : keyof React.ReactHTML
 ->className : string
 +><Tag className={classes} {...rest}>{children}</Tag> : any
-+>Tag : string | number | symbol
++>Tag : keyof ReactHTML
 +>className : any
  >classes : ""
 ->rest : React.HTMLAttributes<HTMLElement>
@@ -41,5 +37,5 @@
  
  </Tag>
 ->Tag : keyof React.ReactHTML
-+>Tag : string | number | symbol
++>Tag : keyof ReactHTML
  

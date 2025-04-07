@@ -3,11 +3,11 @@
 === reactReadonlyHOCAssignabilityReal.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
->myHigherOrderComponent : <P>(Inner: ComponentClass<P & { name: string; }>) => ComponentClass<P>
->Inner : ComponentClass<P & { name: string; }>
+>myHigherOrderComponent : <P>(Inner: ComponentClass<P & { name: string; }, any>) => ComponentClass<P, any>
+>Inner : ComponentClass<P & { name: string; }, any>
 >React : any
 >name : string
 >React : any
@@ -15,19 +15,19 @@ function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string
     return class OuterComponent extends React.Component<P> {
 >class OuterComponent extends React.Component<P> {        render() {            return <Inner {...this.props} name="Matt"/>;        }    } : typeof OuterComponent
 >OuterComponent : typeof OuterComponent
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<P, {}, any>
+>React : typeof React
+>Component : typeof Component
 
         render() {
 >render : () => any
 
             return <Inner {...this.props} name="Matt"/>;
 ><Inner {...this.props} name="Matt"/> : any
->Inner : ComponentClass<P & { name: string; }>
->this.props : any
+>Inner : ComponentClass<P & { name: string; }, any>
+>this.props : Readonly<{ children?: ReactNode; }> & Readonly<P>
 >this : this
->props : any
+>props : Readonly<{ children?: ReactNode; }> & Readonly<P>
 >name : any
         }
     };

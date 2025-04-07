@@ -1,11 +1,7 @@
 --- old.reactImportUnusedInNewJSXEmit(jsx=react-jsx).types
 +++ new.reactImportUnusedInNewJSXEmit(jsx=react-jsx).types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React from "react";
-->React : typeof React
-+>React : any
+@@= skipped -6, +6 lines =@@
+ >React : typeof React
  
  function Bar() {
 ->Bar : () => JSX.Element

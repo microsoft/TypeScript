@@ -1,15 +1,12 @@
-controlFlowOptionalChain3.tsx(5,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
 controlFlowOptionalChain3.tsx(36,31): error TS18048: 'options' is possibly 'undefined'.
 
 
-==== controlFlowOptionalChain3.tsx (2 errors) ====
+==== controlFlowOptionalChain3.tsx (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     // https://github.com/microsoft/TypeScript/issues/56482
     
     import React from "react";
-                      ~~~~~~~
-!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
     
     interface Foo {
       bar: boolean;

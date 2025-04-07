@@ -27,9 +27,9 @@ class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
 >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 12, 20))
 >Props : Symbol(Props, Decl(reactDefaultPropsInferenceSuccess.tsx, 7, 1))
 >BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >React : Symbol(React, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 12, 20))
 
   static defaultProps = {
@@ -71,9 +71,9 @@ class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> 
 >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 24))
 >Props : Symbol(Props, Decl(reactDefaultPropsInferenceSuccess.tsx, 7, 1))
 >BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >React : Symbol(React, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 24))
 
   static defaultProps: BaseProps = {
@@ -144,7 +144,11 @@ class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedbac
 >render : Symbol(render, Decl(reactDefaultPropsInferenceSuccess.tsx, 51, 4))
 
     this.props.when("now"); // OK, always defined
+>this.props.when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 38))
+>this.props : Symbol(props, Decl(react16.d.ts, 367, 32))
 >this : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 46, 1))
+>props : Symbol(props, Decl(react16.d.ts, 367, 32))
+>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 38))
 
     return <div>Hello</div>;
   }

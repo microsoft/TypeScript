@@ -1,15 +1,6 @@
 --- old.checkJsxUnionSFXContextualTypeInferredCorrectly.types
 +++ new.checkJsxUnionSFXContextualTypeInferredCorrectly.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React from 'react';
-->React : typeof React
-+>React : any
- 
- interface PS {
-     multi: false
-@@= skipped -29, +29 lines =@@
+@@= skipped -32, +32 lines =@@
  }
  
  export function ComponentWithUnion(props: PM | PS) {

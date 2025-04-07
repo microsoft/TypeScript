@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 import React = require('react');
->React : any
+>React : typeof React
 
 type TranslationEntry = {
 >TranslationEntry : TranslationEntry

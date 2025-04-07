@@ -3,7 +3,7 @@
 === jsxElementTypeLiteral.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 declare global {
 >global : any

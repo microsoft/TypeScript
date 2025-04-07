@@ -13,7 +13,9 @@ const propTypes = {
 
   bar: PropTypes.bool,
 >bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 4, 19))
+>PropTypes.bool : Symbol(bool, Decl(react16.d.ts, 62, 16))
 >PropTypes : Symbol(PropTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 1, 6))
+>bool : Symbol(bool, Decl(react16.d.ts, 62, 16))
 
 };
 

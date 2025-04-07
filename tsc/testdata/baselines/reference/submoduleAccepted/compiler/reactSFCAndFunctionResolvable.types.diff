@@ -1,11 +1,7 @@
 --- old.reactSFCAndFunctionResolvable.types
 +++ new.reactSFCAndFunctionResolvable.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import * as React from 'react';
-->React : typeof React
-+>React : any
+@@= skipped -6, +6 lines =@@
+ >React : typeof React
  
  declare const Radio: (props: {}) => React.ReactElement<{}>;
 ->Radio : (props: {}) => React.ReactElement<{}>
@@ -20,27 +16,27 @@
  
  declare const Checkbox: React.SFC;
 ->Checkbox : React.SFC<{}>
-+>Checkbox : SFC
++>Checkbox : SFC<{}>
  >React : any
  
  declare const condition1: boolean;
-@@= skipped -25, +25 lines =@@
+@@= skipped -22, +22 lines =@@
  >condition3 : boolean
  
  const RandomComponent: React.SFC = () => {
 ->RandomComponent : React.SFC<{}>
-+>RandomComponent : SFC
++>RandomComponent : SFC<{}>
  >React : any
 ->() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => JSX.Element
 +>() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => any
  
    const Component =
 ->Component : React.SFC<{}> | ((props: {}) => React.ReactElement<{}>)
-+>Component : any
++>Component : SFC<{}> | ((props: {}) => ReactElement<{}>)
  
      condition1
 ->condition1      ? Radio      : Checkbox : React.SFC<{}> | ((props: {}) => React.ReactElement<{}>)
-+>condition1      ? Radio      : Checkbox : any
++>condition1      ? Radio      : Checkbox : SFC<{}> | ((props: {}) => ReactElement<{}>)
  >condition1 : boolean
  
        ? Radio
@@ -49,15 +45,15 @@
  
        : Checkbox;
 ->Checkbox : React.SFC<{}>
-+>Checkbox : SFC
++>Checkbox : SFC<{}>
  
    const OtherComponent =
 ->OtherComponent : React.SFC<{}> | (() => React.ReactElement<{}>)
-+>OtherComponent : any
++>OtherComponent : SFC<{}> | (() => ReactElement<{}>)
  
      condition2
 ->condition2      ? OtherRadio      : Checkbox : React.SFC<{}> | (() => React.ReactElement<{}>)
-+>condition2      ? OtherRadio      : Checkbox : any
++>condition2      ? OtherRadio      : Checkbox : SFC<{}> | (() => ReactElement<{}>)
  >condition2 : boolean
  
        ? OtherRadio
@@ -66,7 +62,7 @@
  
        : Checkbox;
 ->Checkbox : React.SFC<{}>
-+>Checkbox : SFC
++>Checkbox : SFC<{}>
  
    return condition1 ? <Component /> : <OtherComponent />;
 ->condition1 ? <Component /> : <OtherComponent /> : JSX.Element
@@ -77,9 +73,9 @@
 -><OtherComponent /> : JSX.Element
 ->OtherComponent : React.SFC<{}> | (() => React.ReactElement<{}>)
 +><Component /> : any
-+>Component : any
++>Component : SFC<{}> | ((props: {}) => ReactElement<{}>)
 +><OtherComponent /> : any
-+>OtherComponent : any
++>OtherComponent : SFC<{}> | (() => ReactElement<{}>)
  
  };
  

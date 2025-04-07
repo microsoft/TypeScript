@@ -3,13 +3,13 @@
 === jsxElementType.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 type React18ReactFragment = ReadonlyArray<React18ReactNode>;
 >React18ReactFragment : React18ReactFragment
 
 type React18ReactNode =
->React18ReactNode : any
+>React18ReactNode : React18ReactNode
 
   | React.ReactElement<any>
 >React : any
@@ -196,20 +196,20 @@ Component = RenderPromise;
 // Class components still work
 class RenderStringClass extends React.Component<{ title: string }> {
 >RenderStringClass : RenderStringClass
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{ title: string; }, {}, any>
+>React : typeof React
+>Component : typeof Component
 >title : string
 
   render() {
->render : () => any
+>render : () => string
 
     return this.props.title;
->this.props.title : any
->this.props : any
+>this.props.title : string
+>this.props : Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>
 >this : this
->props : any
->title : any
+>props : Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>
+>title : string
   }
 }
 Component = RenderStringClass;

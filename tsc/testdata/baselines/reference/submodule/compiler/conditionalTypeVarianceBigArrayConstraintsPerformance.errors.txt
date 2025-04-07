@@ -1,19 +1,21 @@
-conditionalTypeVarianceBigArrayConstraintsPerformance.ts(4,21): error TS2503: Cannot find namespace 'JSX'.
-conditionalTypeVarianceBigArrayConstraintsPerformance.ts(5,11): error TS2503: Cannot find namespace 'JSX'.
+conditionalTypeVarianceBigArrayConstraintsPerformance.ts(9,5): error TS2322: Type 'Stuff<U>' is not assignable to type 'Stuff<T>'.
+  Type 'U' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
 
-==== conditionalTypeVarianceBigArrayConstraintsPerformance.ts (2 errors) ====
+==== conditionalTypeVarianceBigArrayConstraintsPerformance.ts (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     type Stuff<T> =
         T extends keyof JSX.IntrinsicElements
-                        ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
             ? JSX.IntrinsicElements[T]
-              ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
             : any;
     
     function F<T, U>(p1: Stuff<T>, p2: Stuff<U>) {
         p1 = p2; // Error
+        ~~
+!!! error TS2322: Type 'Stuff<U>' is not assignable to type 'Stuff<T>'.
+!!! error TS2322:   Type 'U' is not assignable to type 'T'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 conditionalTypeVarianceBigArrayConstraintsPerformance.ts:8:15: This type parameter might need an `extends T` constraint.
     }

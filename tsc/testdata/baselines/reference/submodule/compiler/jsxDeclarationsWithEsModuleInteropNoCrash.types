@@ -3,20 +3,20 @@
 === jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
 /// <reference path="react16.d.ts" preserve="true" />
 import PropTypes from 'prop-types';
->PropTypes : any
+>PropTypes : typeof import("prop-types")
 
 import React from 'react';
->React : any
+>React : typeof React
 
 const propTypes = {
->propTypes : { bar: any; }
->{  bar: PropTypes.bool,} : { bar: any; }
+>propTypes : { bar: Requireable<boolean>; }
+>{  bar: PropTypes.bool,} : { bar: Requireable<boolean>; }
 
   bar: PropTypes.bool,
->bar : any
->PropTypes.bool : any
->PropTypes : any
->bool : any
+>bar : Requireable<boolean>
+>PropTypes.bool : Requireable<boolean>
+>PropTypes : typeof import("prop-types")
+>bool : Requireable<boolean>
 
 };
 
@@ -31,7 +31,7 @@ const defaultProps = {
 };
 
 function Foo({ bar }) {
->Foo : { (__0: { bar: any; }): any; propTypes: { bar: any; }; defaultProps: { bar: boolean; }; }
+>Foo : { (__0: { bar: any; }): any; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
 >bar : any
 
   return <div>{bar}</div>;
@@ -42,19 +42,19 @@ function Foo({ bar }) {
 }
 
 Foo.propTypes = propTypes;
->Foo.propTypes = propTypes : { bar: any; }
->Foo.propTypes : { bar: any; }
->Foo : { (__0: { bar: any; }): any; propTypes: { bar: any; }; defaultProps: { bar: boolean; }; }
->propTypes : { bar: any; }
->propTypes : { bar: any; }
+>Foo.propTypes = propTypes : { bar: Requireable<boolean>; }
+>Foo.propTypes : { bar: Requireable<boolean>; }
+>Foo : { (__0: { bar: any; }): any; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
+>propTypes : { bar: Requireable<boolean>; }
+>propTypes : { bar: Requireable<boolean>; }
 
 Foo.defaultProps = defaultProps;
 >Foo.defaultProps = defaultProps : { bar: boolean; }
 >Foo.defaultProps : { bar: boolean; }
->Foo : { (__0: { bar: any; }): any; propTypes: { bar: any; }; defaultProps: { bar: boolean; }; }
+>Foo : { (__0: { bar: any; }): any; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
 >defaultProps : { bar: boolean; }
 >defaultProps : { bar: boolean; }
 
 export default Foo;
->Foo : { (__0: { bar: any; }): any; propTypes: { bar: any; }; defaultProps: { bar: boolean; }; }
+>Foo : { (__0: { bar: any; }): any; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
 

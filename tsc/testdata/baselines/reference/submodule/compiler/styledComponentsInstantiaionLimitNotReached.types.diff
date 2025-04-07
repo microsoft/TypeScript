@@ -1,15 +1,6 @@
 --- old.styledComponentsInstantiaionLimitNotReached.types
 +++ new.styledComponentsInstantiaionLimitNotReached.types
-@@= skipped -2, +2 lines =@@
- === styledComponentsInstantiaionLimitNotReached.ts ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- interface REACT_STATICS {
-     childContextTypes: true;
-@@= skipped -245, +245 lines =@@
+@@= skipped -247, +247 lines =@@
      any
  >
      ? { children?: React.ReactNode }
@@ -20,7 +11,7 @@
      : {};
  export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 ->IntrinsicElementsKeys : keyof JSX.IntrinsicElements
-+>IntrinsicElementsKeys : string | number | symbol
++>IntrinsicElementsKeys : keyof IntrinsicElements
  >JSX : any
  
  type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
@@ -29,7 +20,7 @@
  
      withComponent<WithC extends AnyStyledComponent>(
 ->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC_1 extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC_1): StyledComponent<WithC_1, T, O, A>; }
-+>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends any>(component: WithC): StyledComponent<WithC, T, O, A>; }
++>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends ComponentType<any> | keyof IntrinsicElements>(component: WithC): StyledComponent<WithC, T, O, A>; }
  
          component: WithC,
  >component : WithC
@@ -38,7 +29,7 @@
      >;
      withComponent<WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
 ->withComponent : { <WithC_1 extends AnyStyledComponent>(component: WithC_1): StyledComponent<StyledComponentInnerComponent<WithC_1>, T, O & StyledComponentInnerOtherProps<WithC_1>, A | StyledComponentInnerAttrs<WithC_1>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
-+>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends any>(component: WithC): StyledComponent<WithC, T, O, A>; }
++>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends ComponentType<any> | keyof IntrinsicElements>(component: WithC): StyledComponent<WithC, T, O, A>; }
  >JSX : any
  >React : any
  

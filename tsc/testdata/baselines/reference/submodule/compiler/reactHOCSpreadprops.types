@@ -3,19 +3,19 @@
 === reactHOCSpreadprops.tsx ===
 /// <reference path="react16.d.ts" />
 import React = require("react");
->React : any
+>React : typeof React
 
 function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void {
->f : <P>(App: any) => void
->App : any
+>f : <P>(App: ComponentClass<P, any> | StatelessComponent<P>) => void
+>App : ComponentClass<P, any> | StatelessComponent<P>
 >React : any
 >React : any
 
     class C extends React.Component<P & { x: number }> {
 >C : C<P>
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<P & { x: number; }, {}, any>
+>React : typeof React
+>Component : typeof Component
 >x : number
 
         render() {
@@ -23,10 +23,10 @@ function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void 
 
             return <App {...this.props} />;
 ><App {...this.props} /> : any
->App : any
->this.props : any
+>App : ComponentClass<P, any> | StatelessComponent<P>
+>this.props : Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>
 >this : this
->props : any
+>props : Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>
         }
     }
 }

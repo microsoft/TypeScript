@@ -3,7 +3,7 @@
 === tsxInvokeComponentType.tsx ===
 /// <reference path="react16.d.ts" />
 import React, { ComponentType } from "react";
->React : any
+>React : typeof React
 >ComponentType : any
 
 declare const Elem: ComponentType<{ someKey: string }>;

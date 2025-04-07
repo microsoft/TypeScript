@@ -22,8 +22,8 @@ declare function Yadda(props: Props): JSX.Element;
 >Yadda : Symbol(Yadda, Decl(ignoredJsxAttributes.tsx, 9, 1))
 >props : Symbol(props, Decl(ignoredJsxAttributes.tsx, 11, 23))
 >Props : Symbol(Props, Decl(ignoredJsxAttributes.tsx, 4, 31))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
 
 let props: Props = {
 >props : Symbol(props, Decl(ignoredJsxAttributes.tsx, 13, 3))

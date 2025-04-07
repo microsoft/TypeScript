@@ -1,14 +1,6 @@
 --- old.callsOnComplexSignatures.types
 +++ new.callsOnComplexSignatures.types
-@@= skipped -2, +2 lines =@@
- === callsOnComplexSignatures.tsx ===
- /// <reference path="react16.d.ts" />
- import React from "react";
-->React : typeof React
-+>React : any
- 
- // Simple calls from real usecases
- function test1() {
+@@= skipped -9, +9 lines =@@
  >test1 : () => void
  
      type stringType1 = "foo" | "bar";
@@ -36,7 +28,7 @@
      }
  
      function test(t: Temp1 | Temp2) {
-@@= skipped -31, +31 lines =@@
+@@= skipped -24, +24 lines =@@
          const z = t.getValue("bar"); // Should be fine
  >z : string | number
  >t.getValue("bar") : string | number
@@ -197,21 +189,21 @@
 ->App : (props: { component: React.ReactType; }) => JSX.Element
 ->props : { component: React.ReactType; }
 ->component : React.ReactType<any>
-+>App : (props: { component: ReactType; }) => any
-+>props : { component: ReactType; }
-+>component : ReactType
++>App : (props: { component: ReactType<any>; }) => any
++>props : { component: ReactType<any>; }
++>component : ReactType<any>
  >React : any
  
          const Comp: React.ReactType = props.component;
 ->Comp : React.ReactType<any>
-+>Comp : ReactType
++>Comp : ReactType<any>
  >React : any
 ->props.component : React.ReactType<any>
 ->props : { component: React.ReactType; }
 ->component : React.ReactType<any>
-+>props.component : ReactType
-+>props : { component: ReactType; }
-+>component : ReactType
++>props.component : ReactType<any>
++>props : { component: ReactType<any>; }
++>component : ReactType<any>
  
          return (<Comp />);
 ->(<Comp />) : JSX.Element
@@ -219,7 +211,7 @@
 ->Comp : React.ReactType<any>
 +>(<Comp />) : any
 +><Comp /> : any
-+>Comp : ReactType
++>Comp : ReactType<any>
      }
  
      // custom components with non-subset props
@@ -228,7 +220,7 @@
  
          var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;
 ->C : React.ComponentType<P1> | React.ComponentType<P2>
-+>C : any
++>C : ComponentType<P1> | ComponentType<P2>
  >React : any
  >React : any
  >null as any : any
@@ -240,7 +232,7 @@
 ->p : true
 +>a : any
 +><C p={true} /> : any
-+>C : any
++>C : ComponentType<P1> | ComponentType<P2>
 +>p : any
  >true : true
      }

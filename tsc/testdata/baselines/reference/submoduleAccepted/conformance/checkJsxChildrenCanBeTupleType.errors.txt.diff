@@ -1,6 +1,6 @@
 --- old.checkJsxChildrenCanBeTupleType.errors.txt
 +++ new.checkJsxChildrenCanBeTupleType.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -checkJsxChildrenCanBeTupleType.tsx(17,18): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(props: Readonly<ResizablePanelProps>): ResizablePanel', gave the following error.
 -    Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
@@ -12,22 +12,26 @@
 -      Types of property 'children' are incompatible.
 -        Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
 -          Source has 3 element(s) but target allows only 2.
-+checkJsxChildrenCanBeTupleType.tsx(3,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
- ==== checkJsxChildrenCanBeTupleType.tsx (1 errors) ====
-     /// <reference path="/.lib/react16.d.ts" />
-     
-     import React from 'react'
-+                      ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface ResizablePanelProps {
-       children: [React.ReactNode, React.ReactNode]
-@@= skipped -28, +20 lines =@@
-     </ResizablePanel>
-     
-     const testErr = <ResizablePanel>
+-
+-
+-==== checkJsxChildrenCanBeTupleType.tsx (1 errors) ====
+-    /// <reference path="/.lib/react16.d.ts" />
+-    
+-    import React from 'react'
+-    
+-    interface ResizablePanelProps {
+-      children: [React.ReactNode, React.ReactNode]
+-    }
+-    
+-    class ResizablePanel extends React.Component<
+-      ResizablePanelProps, any> {}
+-    
+-    const test = <ResizablePanel>
+-      <div />
+-      <div />
+-    </ResizablePanel>
+-    
+-    const testErr = <ResizablePanel>
 -                     ~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(props: Readonly<ResizablePanelProps>): ResizablePanel', gave the following error.
@@ -40,6 +44,9 @@
 -!!! error TS2769:       Types of property 'children' are incompatible.
 -!!! error TS2769:         Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
 -!!! error TS2769:           Source has 3 element(s) but target allows only 2.
-       <div />
-       <div />
-       <div />
+-      <div />
+-      <div />
+-      <div />
+-    </ResizablePanel>
+@@= skipped --1, +1 lines =@@
++<no content>

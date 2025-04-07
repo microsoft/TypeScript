@@ -2,20 +2,15 @@
 +++ new.controlFlowOptionalChain3.errors.txt
 @@= skipped -0, +0 lines =@@
 -controlFlowOptionalChain3.tsx(30,8): error TS18048: 'foo' is possibly 'undefined'.
-+controlFlowOptionalChain3.tsx(5,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
  controlFlowOptionalChain3.tsx(36,31): error TS18048: 'options' is possibly 'undefined'.
  
  
-@@= skipped -7, +7 lines =@@
+-==== controlFlowOptionalChain3.tsx (2 errors) ====
++==== controlFlowOptionalChain3.tsx (1 errors) ====
+     /// <reference path="/.lib/react16.d.ts" />
+     
      // https://github.com/microsoft/TypeScript/issues/56482
-     
-     import React from "react";
-+                      ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface Foo {
-       bar: boolean;
-@@= skipped -25, +27 lines =@@
+@@= skipped -32, +31 lines =@@
          <div>
            {foo?.bar === false && "foo"}
            {foo.bar ? "true" : "false"}

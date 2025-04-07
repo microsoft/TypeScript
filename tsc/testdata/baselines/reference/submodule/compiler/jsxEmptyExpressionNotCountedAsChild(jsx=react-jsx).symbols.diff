@@ -8,7 +8,7 @@
 +>children : Symbol(children, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 3, 17))
  >React : Symbol(React, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 1, 6))
 ->ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
-+>ReactElement : Symbol(ReactElement)
++>ReactElement : Symbol(ReactElement, Decl(react16.d.ts, 135, 9))
  }
  
  function Wrapper(props: Props) {

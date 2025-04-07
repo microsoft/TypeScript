@@ -6,7 +6,7 @@
 // repro from #53493
 
 import React = require('react');
->React : any
+>React : typeof React
 
 export type Props =
 >Props : Props

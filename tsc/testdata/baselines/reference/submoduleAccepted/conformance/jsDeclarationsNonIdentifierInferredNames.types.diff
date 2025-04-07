@@ -1,14 +1,6 @@
 --- old.jsDeclarationsNonIdentifierInferredNames.types
 +++ new.jsDeclarationsNonIdentifierInferredNames.types
-@@= skipped -2, +2 lines =@@
- === jsDeclarationsNonIdentifierInferredNames.jsx ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- const dynPropName = "data-dyn";
- >dynPropName : "data-dyn"
+@@= skipped -9, +9 lines =@@
  >"data-dyn" : "data-dyn"
  
  export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (

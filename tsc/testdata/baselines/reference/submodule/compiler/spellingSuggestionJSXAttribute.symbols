@@ -15,9 +15,9 @@ function MyComp2(props: { className?: string, htmlFor?: string }) {
 }
 class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
 >MyComp : Symbol(MyComp, Decl(spellingSuggestionJSXAttribute.tsx, 5, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >React : Symbol(React, Decl(spellingSuggestionJSXAttribute.tsx, 1, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >className : Symbol(className, Decl(spellingSuggestionJSXAttribute.tsx, 6, 38))
 >htmlFor : Symbol(htmlFor, Decl(spellingSuggestionJSXAttribute.tsx, 6, 58))
 

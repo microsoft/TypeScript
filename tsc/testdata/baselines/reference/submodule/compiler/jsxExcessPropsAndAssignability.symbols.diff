@@ -5,7 +5,7 @@
  >ComposedComponent : Symbol(ComposedComponent, Decl(jsxExcessPropsAndAssignability.tsx, 4, 51))
  >React : Symbol(React, Decl(jsxExcessPropsAndAssignability.tsx, 2, 6))
 ->ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
-+>ComponentClass : Symbol(ComponentClass)
++>ComponentClass : Symbol(ComponentClass, Decl(react16.d.ts, 421, 9))
  >ComposedComponentProps : Symbol(ComposedComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 4, 15))
  
  ) => {
@@ -14,7 +14,7 @@
  >WrapperComponent : Symbol(WrapperComponent, Decl(jsxExcessPropsAndAssignability.tsx, 8, 9))
  >React : Symbol(React, Decl(jsxExcessPropsAndAssignability.tsx, 2, 6))
 ->ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
-+>ComponentClass : Symbol(ComponentClass)
++>ComponentClass : Symbol(ComponentClass, Decl(react16.d.ts, 421, 9))
  >WrapperComponentProps : Symbol(WrapperComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 6, 6))
  
      const props: ComposedComponentProps = null as any;

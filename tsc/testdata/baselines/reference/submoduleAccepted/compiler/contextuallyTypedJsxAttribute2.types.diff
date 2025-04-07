@@ -1,14 +1,6 @@
 --- old.contextuallyTypedJsxAttribute2.types
 +++ new.contextuallyTypedJsxAttribute2.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React from "react";
-->React : typeof React
-+>React : any
- 
- import { ComponentPropsWithRef, ElementType } from "react";
- >ComponentPropsWithRef : any
+@@= skipped -10, +10 lines =@@
  >ElementType : any
  
  function UnwrappedLink<T extends ElementType = ElementType>(
@@ -49,7 +41,7 @@
  
      as?: T;
  >as : T | undefined
-@@= skipped -38, +38 lines =@@
+@@= skipped -31, +31 lines =@@
    },
  ) {
    return <a></a>;

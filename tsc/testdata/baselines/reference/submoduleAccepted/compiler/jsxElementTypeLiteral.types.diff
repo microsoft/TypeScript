@@ -1,15 +1,6 @@
 --- old.jsxElementTypeLiteral.types
 +++ new.jsxElementTypeLiteral.types
-@@= skipped -2, +2 lines =@@
- === jsxElementTypeLiteral.tsx ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- declare global {
- >global : any
-@@= skipped -15, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  
  // should be fine - `ElementType` accepts `div`
  let a = <div />;

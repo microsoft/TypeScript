@@ -1,11 +1,6 @@
 --- old.checkJsxChildrenCanBeTupleType.types
 +++ new.checkJsxChildrenCanBeTupleType.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React from 'react'
-->React : typeof React
-+>React : any
+@@= skipped -7, +7 lines =@@
  
  interface ResizablePanelProps {
    children: [React.ReactNode, React.ReactNode]
@@ -18,11 +13,10 @@
  class ResizablePanel extends React.Component<
  >ResizablePanel : ResizablePanel
 ->React.Component : React.Component<ResizablePanelProps, any, any>
-->React : typeof React
++>React.Component : Component<ResizablePanelProps, any, any>
+ >React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>Component : typeof Component
  
    ResizablePanelProps, any> {}
  

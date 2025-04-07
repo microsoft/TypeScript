@@ -1,11 +1,6 @@
 --- old.tsxUnionMemberChecksFilterDataProps.types
 +++ new.tsxUnionMemberChecksFilterDataProps.types
-@@= skipped -2, +2 lines =@@
- === tsxUnionMemberChecksFilterDataProps.tsx ===
- /// <reference path="react16.d.ts" />
- import React, { ReactElement } from "react";
-->React : typeof React
-+>React : any
+@@= skipped -6, +6 lines =@@
  >ReactElement : any
  
  declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): ReactElement<any>;
@@ -14,7 +9,7 @@
  >props : { fixed?: boolean; } | { value?: number; }
  >fixed : boolean
  >value : number
-@@= skipped -16, +16 lines =@@
+@@= skipped -12, +12 lines =@@
  >value : number
  
  const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);

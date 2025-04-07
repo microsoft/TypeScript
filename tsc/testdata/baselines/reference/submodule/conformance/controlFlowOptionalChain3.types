@@ -6,7 +6,7 @@
 // https://github.com/microsoft/TypeScript/issues/56482
 
 import React from "react";
->React : any
+>React : typeof React
 
 interface Foo {
   bar: boolean;

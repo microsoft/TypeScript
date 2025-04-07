@@ -1,15 +1,6 @@
 --- old.typeInferenceWithExcessPropertiesJsx.types
 +++ new.typeInferenceWithExcessPropertiesJsx.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React = require('react');
-->React : typeof React
-+>React : any
- 
- type TranslationEntry = {
- >TranslationEntry : TranslationEntry
-@@= skipped -33, +33 lines =@@
+@@= skipped -36, +36 lines =@@
  } : {});
  
  declare function T<Entry extends TranslationEntry>(

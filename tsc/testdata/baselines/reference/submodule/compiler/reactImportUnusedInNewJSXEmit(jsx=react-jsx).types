@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 import React from "react";
->React : any
+>React : typeof React
 
 function Bar() {
 >Bar : () => any

@@ -5,15 +5,15 @@
  
          let c1: JSX.IntrinsicElements[T1] = {};
 ->c1 : JSX.IntrinsicElements[T1]
-+>c1 : IntrinsicElements
++>c1 : IntrinsicElements[T1]
  >JSX : any
  >{} : {}
  
          const c2: JSX.IntrinsicElements[T2] = c1;
 ->c2 : JSX.IntrinsicElements[T2]
-+>c2 : IntrinsicElements
++>c2 : IntrinsicElements[T2]
  >JSX : any
 ->c1 : JSX.IntrinsicElements[T1]
-+>c1 : IntrinsicElements
++>c1 : IntrinsicElements[T1]
      }
  }

@@ -15,7 +15,7 @@ type React18ReactNode =
 
   | React.ReactElement<any>
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
->ReactElement : Symbol(ReactElement)
+>ReactElement : Symbol(ReactElement, Decl(react16.d.ts, 135, 9))
 
   | string
   | number
@@ -24,7 +24,7 @@ type React18ReactNode =
 
   | React.ReactPortal
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
->ReactPortal : Symbol(ReactPortal)
+>ReactPortal : Symbol(ReactPortal, Decl(react16.d.ts, 172, 9))
 
   | boolean
   | null
@@ -47,27 +47,27 @@ type NewReactJSXElementConstructor<P> =
 >props : Symbol(props, Decl(jsxElementType.tsx, 18, 10))
 >P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
->Component : Symbol(Component)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
 
 declare global {
 >global : Symbol((Missing), Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
 
   namespace JSX {
->JSX : Symbol(JSX, Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
 
     type ElementType = string | NewReactJSXElementConstructor<any>;
 >ElementType : Symbol(ElementType, Decl(jsxElementType.tsx, 21, 17))
 >NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 13, 30))
 
     interface IntrinsicElements {
->IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
 
       ['my-custom-element']: React.DOMAttributes<unknown>;
 >['my-custom-element'] : Symbol(['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
 >'my-custom-element' : Symbol(['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
->DOMAttributes : Symbol(DOMAttributes)
+>DOMAttributes : Symbol(DOMAttributes, Decl(react16.d.ts, 844, 9))
     }
   }
 }
@@ -187,16 +187,20 @@ Component = RenderPromise;
 // Class components still work
 class RenderStringClass extends React.Component<{ title: string }> {
 >RenderStringClass : Symbol(RenderStringClass, Decl(jsxElementType.tsx, 60, 29))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >title : Symbol(title, Decl(jsxElementType.tsx, 63, 49))
 
   render() {
 >render : Symbol(render, Decl(jsxElementType.tsx, 63, 68))
 
     return this.props.title;
+>this.props.title : Symbol(title, Decl(jsxElementType.tsx, 63, 49))
+>this.props : Symbol(props, Decl(react16.d.ts, 367, 32))
 >this : Symbol(RenderStringClass, Decl(jsxElementType.tsx, 60, 29))
+>props : Symbol(props, Decl(react16.d.ts, 367, 32))
+>title : Symbol(title, Decl(jsxElementType.tsx, 63, 49))
   }
 }
 Component = RenderStringClass;
@@ -237,7 +241,7 @@ function ReactNativeFlatList(
   ref: React.ForwardedRef<typeof ReactNativeFlatList>
 >ref : Symbol(ref, Decl(jsxElementType.tsx, 85, 12))
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
->ForwardedRef : Symbol(ForwardedRef)
+>ForwardedRef : Symbol(ForwardedRef, Decl(react16.d.ts, 2355, 9))
 >ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 83, 43))
 
 ) {
@@ -252,7 +256,7 @@ function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 >T : Symbol(T, Decl(jsxElementType.tsx, 93, 12))
 >props : Symbol(props, Decl(jsxElementType.tsx, 93, 23))
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
->ReactElement : Symbol(ReactElement)
+>ReactElement : Symbol(ReactElement, Decl(react16.d.ts, 135, 9))
 >Component : Symbol(Component, Decl(jsxElementType.tsx, 93, 62))
 >T : Symbol(T, Decl(jsxElementType.tsx, 93, 12))
 
@@ -268,10 +272,10 @@ declare global {
 >global : Symbol((Missing), Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
 
     namespace JSX {
->JSX : Symbol(JSX, Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
 
       interface IntrinsicElements {
->IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
 
           ['a:b']: { a: string };
 >['a:b'] : Symbol(['a:b'], Decl(jsxElementType.tsx, 102, 35))

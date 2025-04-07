@@ -14,6 +14,9 @@ interface PropsType {
 }
 declare class Foo extends React.Component<PropsType, {}> {}
 >Foo : Symbol(Foo, Decl(index.tsx, 7, 1))
+>React.Component : Symbol(Component, Decl(react18.d.ts, 427, 50), Decl(react18.d.ts, 430, 90))
+>React : Symbol(React, Decl(react18.d.ts, 62, 15))
+>Component : Symbol(Component, Decl(react18.d.ts, 427, 50), Decl(react18.d.ts, 430, 90))
 >PropsType : Symbol(PropsType, Decl(index.tsx, 0, 0))
 
 const b = (

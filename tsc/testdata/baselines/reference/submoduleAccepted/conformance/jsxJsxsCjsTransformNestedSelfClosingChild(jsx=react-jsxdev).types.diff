@@ -1,15 +1,6 @@
 --- old.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).types
 +++ new.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).types
-@@= skipped -2, +2 lines =@@
- === jsxJsxsCjsTransformNestedSelfClosingChild.tsx ===
- /// <reference path="react16.d.ts" />
- import type * as React from 'react';
-->React : typeof React
-+>React : any
- 
- console.log(
- >console.log(  <div>    <div />  </div>) : void
-@@= skipped -9, +9 lines =@@
+@@= skipped -11, +11 lines =@@
  >log : (...data: any[]) => void
  
    <div>

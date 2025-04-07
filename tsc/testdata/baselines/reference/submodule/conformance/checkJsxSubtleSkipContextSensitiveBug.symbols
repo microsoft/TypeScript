@@ -29,9 +29,9 @@ interface AsyncLoaderProps<TResult> {
 class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
 >AsyncLoader : Symbol(AsyncLoader, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 9, 1))
 >TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 11, 18))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >React : Symbol(React, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >AsyncLoaderProps : Symbol(AsyncLoaderProps, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 3, 37))
 >TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 11, 18))
 

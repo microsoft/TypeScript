@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime classic */
 import * as React from "react";
->React : any
+>React : typeof React
 
 export const HelloWorld = () => <h1>Hello world</h1>;
 >HelloWorld : () => any
@@ -78,7 +78,7 @@ export const selfClosing = <img src="./image.png" />;
 /* @jsxRuntime automatic */
 /* @jsxRuntime classic */
 import * as React from "react";
->React : any
+>React : typeof React
 
 export const HelloWorld = () => <h1>Hello world</h1>;
 >HelloWorld : () => any

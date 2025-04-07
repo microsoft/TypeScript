@@ -27,8 +27,8 @@ declare namespace DropdownMenu {
 >children : Symbol(children, Decl(contextuallyTypedJsxChildren.tsx, 10, 49))
 >props : Symbol(props, Decl(contextuallyTypedJsxChildren.tsx, 11, 13))
 >onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 11, 21))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
 
     controls?: never | undefined;
 >controls : Symbol(controls, Decl(contextuallyTypedJsxChildren.tsx, 11, 58))
@@ -58,7 +58,7 @@ declare namespace DropdownMenu {
 declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 >DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
 >React : Symbol(React, Decl(contextuallyTypedJsxChildren.tsx, 2, 6))
->ComponentType : Symbol(ComponentType)
+>ComponentType : Symbol(ComponentType, Decl(react16.d.ts, 117, 60))
 >DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
 >Props : Symbol(Props, Decl(contextuallyTypedJsxChildren.tsx, 20, 3))
 

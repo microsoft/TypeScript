@@ -15,9 +15,8 @@
  >p : { value?: unknown; }
  >p : { value?: unknown; }
  
- import React from 'react';
-->React : typeof React
-+>React : any
+@@= skipped -12, +12 lines =@@
+ >React : typeof React
  
  export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
 ->Repro : ({ SelectProps }: { SelectProps?: Partial<Parameters<typeof Select>[0]>; }) => JSX.Element

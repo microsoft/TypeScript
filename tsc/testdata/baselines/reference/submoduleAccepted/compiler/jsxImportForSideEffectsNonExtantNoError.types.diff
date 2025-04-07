@@ -1,12 +1,6 @@
 --- old.jsxImportForSideEffectsNonExtantNoError.types
 +++ new.jsxImportForSideEffectsNonExtantNoError.types
-@@= skipped -2, +2 lines =@@
- === jsxImportForSideEffectsNonExtantNoError.tsx ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
+@@= skipped -7, +7 lines =@@
  import "./App.css"; // doesn't actually exist
  
  const tag = <div></div>;

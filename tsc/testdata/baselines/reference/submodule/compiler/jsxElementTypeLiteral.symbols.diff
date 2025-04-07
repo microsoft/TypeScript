@@ -8,11 +8,7 @@
 +>global : Symbol((Missing), Decl(jsxElementTypeLiteral.tsx, 1, 31))
  
    namespace JSX {
-->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteral.tsx, 3, 16))
-+>JSX : Symbol(JSX, Decl(jsxElementTypeLiteral.tsx, 3, 16))
- 
-     // This should only use keys of JSX.IntrinsicElements.
-     // Diverging here to illustrate different error messages.
+ >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteral.tsx, 3, 16))
 @@= skipped -15, +15 lines =@@
  // should be fine - `ElementType` accepts `div`
  let a = <div />;

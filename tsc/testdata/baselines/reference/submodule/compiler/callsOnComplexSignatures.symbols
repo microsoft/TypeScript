@@ -261,7 +261,7 @@ function test5() {
 >render : Symbol(render, Decl(callsOnComplexSignatures.tsx, 73, 18))
 >url : Symbol(url, Decl(callsOnComplexSignatures.tsx, 75, 20))
 >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
->ReactNode : Symbol(ReactNode)
+>ReactNode : Symbol(ReactNode, Decl(react16.d.ts, 216, 49))
 
         const Tag = url ? 'a' : 'button';
 >Tag : Symbol(Tag, Decl(callsOnComplexSignatures.tsx, 76, 13))
@@ -278,12 +278,12 @@ function test5() {
 >props : Symbol(props, Decl(callsOnComplexSignatures.tsx, 81, 17))
 >component : Symbol(component, Decl(callsOnComplexSignatures.tsx, 81, 25))
 >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
->ReactType : Symbol(ReactType)
+>ReactType : Symbol(ReactType, Decl(react16.d.ts, 112, 21))
 
         const Comp: React.ReactType = props.component;
 >Comp : Symbol(Comp, Decl(callsOnComplexSignatures.tsx, 82, 13))
 >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
->ReactType : Symbol(ReactType)
+>ReactType : Symbol(ReactType, Decl(react16.d.ts, 112, 21))
 >props.component : Symbol(component, Decl(callsOnComplexSignatures.tsx, 81, 25))
 >props : Symbol(props, Decl(callsOnComplexSignatures.tsx, 81, 17))
 >component : Symbol(component, Decl(callsOnComplexSignatures.tsx, 81, 25))
@@ -321,10 +321,10 @@ function test5() {
         var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;
 >C : Symbol(C, Decl(callsOnComplexSignatures.tsx, 98, 11))
 >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
->ComponentType : Symbol(ComponentType)
+>ComponentType : Symbol(ComponentType, Decl(react16.d.ts, 117, 60))
 >P1 : Symbol(P1, Decl(callsOnComplexSignatures.tsx, 87, 24))
 >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
->ComponentType : Symbol(ComponentType)
+>ComponentType : Symbol(ComponentType, Decl(react16.d.ts, 117, 60))
 >P2 : Symbol(P2, Decl(callsOnComplexSignatures.tsx, 91, 9))
 
         const a = <C p={true} />;

@@ -2,6 +2,7 @@ package harnessutil
 
 import (
 	"fmt"
+	"io/fs"
 	"maps"
 	"os"
 	"path/filepath"
@@ -29,7 +30,7 @@ import (
 )
 
 // Posix-style path to additional test libraries
-var testLibFolder = "/.lib"
+const testLibFolder = "/.lib"
 
 type TestFile struct {
 	UnitName string
@@ -128,6 +129,9 @@ func CompileFilesEx(
 	// 	programFileNames = append(programFileNames, tspath.CombinePaths(builtFolder, harnessOptions.includeBuiltFile))
 	// }
 
+	// Performance optimization; avoid copying in the /.lib folder if the test doesn't need it.
+	includeLibDir := core.Some(inputFiles, func(file *TestFile) bool { return strings.Contains(file.Content, testLibFolder+"/") })
+
 	// Files from testdata\lib that are requested by "@libFiles"
 	if len(harnessOptions.LibFiles) > 0 {
 		for _, libFile := range harnessOptions.LibFiles {
@@ -136,7 +140,7 @@ func CompileFilesEx(
 				continue
 			}
 			programFileNames = append(programFileNames, tspath.CombinePaths(testLibFolder, libFile))
-			otherFiles = append(otherFiles, createLibFile(libFile))
+			includeLibDir = true
 		}
 	}
 
@@ -187,6 +191,10 @@ func CompileFilesEx(
 		testfs[srcFileName] = vfstest.Symlink(targetFileName)
 	}
 
+	if includeLibDir {
+		maps.Copy(testfs, testLibFolderMap())
+	}
+
 	fs := vfstest.FromMap(testfs, harnessOptions.UseCaseSensitiveFileNames)
 	fs = bundled.WrapFS(fs)
 	fs = NewOutputRecorderFS(fs)
@@ -203,19 +211,30 @@ func CompileFilesEx(
 	return result
 }
 
-// Creates a test file as specified by "@libFiles".
-func createLibFile(libFile string) *TestFile {
-	libPath := filepath.Join(repo.TypeScriptSubmodulePath, "tests", "lib")
-	libFilePath := filepath.Join(libPath, libFile)
-	content, err := os.ReadFile(libFilePath)
+var testLibFolderMap = sync.OnceValue(func() map[string]any {
+	testfs := make(map[string]any)
+	libfs := os.DirFS(filepath.Join(repo.TypeScriptSubmodulePath, "tests", "lib"))
+	err := fs.WalkDir(libfs, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		content, err := fs.ReadFile(libfs, path)
+		if err != nil {
+			return err
+		}
+		testfs[testLibFolder+"/"+path] = &fstest.MapFile{
+			Data: content,
+		}
+		return nil
+	})
 	if err != nil {
-		panic(fmt.Sprintf("Failed to read lib file %s: %v", libFile, err))
+		panic(fmt.Sprintf("Failed to read lib dir: %v", err))
 	}
-	return &TestFile{
-		UnitName: tspath.CombinePaths(testLibFolder, libFile),
-		Content:  string(content),
-	}
-}
+	return testfs
+})
 
 func setOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *HarnessOptions) {
 	for name, value := range testConfig {

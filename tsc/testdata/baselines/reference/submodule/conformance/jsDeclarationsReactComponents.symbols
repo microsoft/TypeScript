@@ -24,7 +24,9 @@ TabbedShowLayout.propTypes = {
 
     version: PropTypes.number,
 >version : Symbol(version, Decl(jsDeclarationsReactComponents1.jsx, 11, 30))
+>PropTypes.number : Symbol(number, Decl(react16.d.ts, 64, 16))
 >PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents1.jsx, 2, 6))
+>number : Symbol(number, Decl(react16.d.ts, 64, 16))
 
 };
 
@@ -161,7 +163,9 @@ Tree.propTypes = {
 
     classes: PropTypes.object,
 >classes : Symbol(classes, Decl(jsDeclarationsReactComponents5.jsx, 7, 18))
+>PropTypes.object : Symbol(object, Decl(react16.d.ts, 65, 16))
 >PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents5.jsx, 1, 6))
+>object : Symbol(object, Decl(react16.d.ts, 65, 16))
 
 };
 

@@ -1,24 +1,14 @@
 --- old.checkJsxSubtleSkipContextSensitiveBug.types
 +++ new.checkJsxSubtleSkipContextSensitiveBug.types
-@@= skipped -2, +2 lines =@@
- === checkJsxSubtleSkipContextSensitiveBug.tsx ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- interface ErrorResult { error: true }
- >error : true
-@@= skipped -17, +17 lines =@@
+@@= skipped -19, +19 lines =@@
  
  class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
  >AsyncLoader : AsyncLoader<TResult>
 ->React.Component : React.Component<AsyncLoaderProps<TResult>, {}, any>
-->React : typeof React
++>React.Component : Component<AsyncLoaderProps<TResult>, {}, any>
+ >React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>Component : typeof Component
  
      render() { return null; }
  >render : () => null

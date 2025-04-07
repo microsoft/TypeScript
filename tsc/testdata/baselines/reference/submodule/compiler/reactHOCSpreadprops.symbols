@@ -10,17 +10,17 @@ function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void 
 >P : Symbol(P, Decl(reactHOCSpreadprops.tsx, 2, 11))
 >App : Symbol(App, Decl(reactHOCSpreadprops.tsx, 2, 14))
 >React : Symbol(React, Decl(reactHOCSpreadprops.tsx, 0, 0))
->ComponentClass : Symbol(ComponentClass)
+>ComponentClass : Symbol(ComponentClass, Decl(react16.d.ts, 421, 9))
 >P : Symbol(P, Decl(reactHOCSpreadprops.tsx, 2, 11))
 >React : Symbol(React, Decl(reactHOCSpreadprops.tsx, 0, 0))
->StatelessComponent : Symbol(StatelessComponent)
+>StatelessComponent : Symbol(StatelessComponent, Decl(react16.d.ts, 406, 49))
 >P : Symbol(P, Decl(reactHOCSpreadprops.tsx, 2, 11))
 
     class C extends React.Component<P & { x: number }> {
 >C : Symbol(C, Decl(reactHOCSpreadprops.tsx, 2, 81))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >React : Symbol(React, Decl(reactHOCSpreadprops.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >P : Symbol(P, Decl(reactHOCSpreadprops.tsx, 2, 11))
 >x : Symbol(x, Decl(reactHOCSpreadprops.tsx, 3, 41))
 
@@ -29,7 +29,9 @@ function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void 
 
             return <App {...this.props} />;
 >App : Symbol(App, Decl(reactHOCSpreadprops.tsx, 2, 14))
+>this.props : Symbol(props, Decl(react16.d.ts, 367, 32))
 >this : Symbol(C, Decl(reactHOCSpreadprops.tsx, 2, 81))
+>props : Symbol(props, Decl(react16.d.ts, 367, 32))
         }
     }
 }

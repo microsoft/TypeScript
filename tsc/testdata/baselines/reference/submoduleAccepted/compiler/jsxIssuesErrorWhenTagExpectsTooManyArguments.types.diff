@@ -1,15 +1,6 @@
 --- old.jsxIssuesErrorWhenTagExpectsTooManyArguments.types
 +++ new.jsxIssuesErrorWhenTagExpectsTooManyArguments.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- interface MyProps {
-     x: number;
-@@= skipped -8, +8 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {

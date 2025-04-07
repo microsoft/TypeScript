@@ -3,13 +3,13 @@
 === returnTypePredicateIsInstantiateInContextOfTarget.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }> {
 >TestComponent : TestComponent
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{ isAny: <T>(obj: any) => obj is T; }, {}, any>
+>React : typeof React
+>Component : typeof Component
 >isAny : <T>(obj: any) => obj is T
 >obj : any
 

@@ -1,17 +1,13 @@
 --- old.jsxIntrinsicElementsCompatability.types
 +++ new.jsxIntrinsicElementsCompatability.types
-@@= skipped -2, +2 lines =@@
- === jsxIntrinsicElementsCompatability.tsx ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
+@@= skipped -5, +5 lines =@@
+ >React : typeof React
  
  function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
 ->SomeComponent : <T extends "button" | "a">(props: { element?: T; } & JSX.IntrinsicElements[T]) => JSX.Element
 ->props : { element?: T; } & JSX.IntrinsicElements[T]
-+>SomeComponent : <T extends "a" | "button">(props: any) => Element
-+>props : any
++>SomeComponent : <T extends "a" | "button">(props: { element?: T | undefined; } & IntrinsicElements[T]) => Element
++>props : { element?: T | undefined; } & IntrinsicElements[T]
  >element : T | undefined
  >JSX : any
  >JSX : any
@@ -33,7 +29,7 @@
 ->SomeComponent : <T_1 extends "button" | "a">(props: { element?: T_1; } & JSX.IntrinsicElements[T_1]) => JSX.Element
 ->element : T
 +><SomeComponent element={el} /> : any
-+>SomeComponent : <T extends "a" | "button">(props: any) => Element
++>SomeComponent : <T extends "a" | "button">(props: { element?: T | undefined; } & IntrinsicElements[T]) => Element
 +>element : any
  >el : T
  }

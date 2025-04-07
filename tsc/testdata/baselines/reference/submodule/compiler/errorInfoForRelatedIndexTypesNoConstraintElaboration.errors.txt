@@ -1,23 +1,18 @@
-errorInfoForRelatedIndexTypesNoConstraintElaboration.ts(3,26): error TS2503: Cannot find namespace 'JSX'.
-errorInfoForRelatedIndexTypesNoConstraintElaboration.ts(3,66): error TS2503: Cannot find namespace 'JSX'.
-errorInfoForRelatedIndexTypesNoConstraintElaboration.ts(5,17): error TS2503: Cannot find namespace 'JSX'.
-errorInfoForRelatedIndexTypesNoConstraintElaboration.ts(6,19): error TS2503: Cannot find namespace 'JSX'.
+errorInfoForRelatedIndexTypesNoConstraintElaboration.ts(6,15): error TS2322: Type 'IntrinsicElements[T1]' is not assignable to type 'IntrinsicElements[T2]'.
+  Type 'T1' is not assignable to type 'T2'.
+    'T1' is assignable to the constraint of type 'T2', but 'T2' could be instantiated with a different subtype of constraint 'keyof IntrinsicElements'.
 
 
-==== errorInfoForRelatedIndexTypesNoConstraintElaboration.ts (4 errors) ====
+==== errorInfoForRelatedIndexTypesNoConstraintElaboration.ts (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicElements> {
-                             ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-                                                                     ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
         M() {
             let c1: JSX.IntrinsicElements[T1] = {};
-                    ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
             const c2: JSX.IntrinsicElements[T2] = c1;
-                      ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
+                  ~~
+!!! error TS2322: Type 'IntrinsicElements[T1]' is not assignable to type 'IntrinsicElements[T2]'.
+!!! error TS2322:   Type 'T1' is not assignable to type 'T2'.
+!!! error TS2322:     'T1' is assignable to the constraint of type 'T2', but 'T2' could be instantiated with a different subtype of constraint 'keyof IntrinsicElements'.
         }
     }

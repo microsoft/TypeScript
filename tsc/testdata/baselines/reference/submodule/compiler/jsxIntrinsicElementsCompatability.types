@@ -3,11 +3,11 @@
 === jsxIntrinsicElementsCompatability.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
->SomeComponent : <T extends "a" | "button">(props: any) => Element
->props : any
+>SomeComponent : <T extends "a" | "button">(props: { element?: T | undefined; } & IntrinsicElements[T]) => Element
+>props : { element?: T | undefined; } & IntrinsicElements[T]
 >element : T | undefined
 >JSX : any
 >JSX : any
@@ -24,7 +24,7 @@ function Test<T extends 'button' | 'a'>(el: T) {
 
     return <SomeComponent element={el} />
 ><SomeComponent element={el} /> : any
->SomeComponent : <T extends "a" | "button">(props: any) => Element
+>SomeComponent : <T extends "a" | "button">(props: { element?: T | undefined; } & IntrinsicElements[T]) => Element
 >element : any
 >el : T
 }

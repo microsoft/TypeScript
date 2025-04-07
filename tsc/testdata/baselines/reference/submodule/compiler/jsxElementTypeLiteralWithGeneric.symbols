@@ -9,7 +9,7 @@ declare global {
 >global : Symbol((Missing), Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 31))
 
   namespace JSX {
->JSX : Symbol(JSX, Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
 
     type ElementType<P = any> =
 >ElementType : Symbol(ElementType, Decl(jsxElementTypeLiteralWithGeneric.tsx, 4, 17))
@@ -18,11 +18,11 @@ declare global {
       | {
         [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]
 >K : Symbol(K, Decl(jsxElementTypeLiteralWithGeneric.tsx, 7, 9))
->JSX : Symbol(JSX, Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
->IntrinsicElements : Symbol(IntrinsicElements)
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86))
 >P : Symbol(P, Decl(jsxElementTypeLiteralWithGeneric.tsx, 5, 21))
->JSX : Symbol(JSX, Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
->IntrinsicElements : Symbol(IntrinsicElements)
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86))
 >K : Symbol(K, Decl(jsxElementTypeLiteralWithGeneric.tsx, 7, 9))
 
         ? K
@@ -30,12 +30,12 @@ declare global {
 
         : never;
       }[keyof JSX.IntrinsicElements]
->JSX : Symbol(JSX, Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
->IntrinsicElements : Symbol(IntrinsicElements)
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86))
 
       | React.ComponentType<P>;
 >React : Symbol(React, Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 6))
->ComponentType : Symbol(ComponentType)
+>ComponentType : Symbol(ComponentType, Decl(react16.d.ts, 117, 60))
 >P : Symbol(P, Decl(jsxElementTypeLiteralWithGeneric.tsx, 5, 21))
   }
 }

@@ -1,29 +1,24 @@
 --- old.reactHOCSpreadprops.types
 +++ new.reactHOCSpreadprops.types
-@@= skipped -2, +2 lines =@@
- === reactHOCSpreadprops.tsx ===
- /// <reference path="react16.d.ts" />
- import React = require("react");
-->React : typeof React
-+>React : any
+@@= skipped -5, +5 lines =@@
+ >React : typeof React
  
  function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void {
 ->f : <P>(App: React.ComponentClass<P> | React.StatelessComponent<P>) => void
 ->App : React.ComponentClass<P, any> | React.StatelessComponent<P>
-+>f : <P>(App: any) => void
-+>App : any
++>f : <P>(App: ComponentClass<P, any> | StatelessComponent<P>) => void
++>App : ComponentClass<P, any> | StatelessComponent<P>
  >React : any
  >React : any
  
      class C extends React.Component<P & { x: number }> {
 ->C : C
 ->React.Component : React.Component<P & { x: number; }, {}, any>
-->React : typeof React
-->Component : typeof React.Component
 +>C : C<P>
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<P & { x: number; }, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
  >x : number
  
          render() {
@@ -35,11 +30,11 @@
 ->App : React.ComponentClass<P, any> | React.StatelessComponent<P>
 ->this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P & { x: number; }>
 +><App {...this.props} /> : any
-+>App : any
-+>this.props : any
++>App : ComponentClass<P, any> | StatelessComponent<P>
++>this.props : Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>
  >this : this
 ->props : Readonly<{ children?: React.ReactNode; }> & Readonly<P & { x: number; }>
-+>props : any
++>props : Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>
          }
      }
  }

@@ -1,21 +1,17 @@
 --- old.jsDeclarationsReactComponents.types
 +++ new.jsDeclarationsReactComponents.types
-@@= skipped -2, +2 lines =@@
- === jsDeclarationsReactComponents1.jsx ===
- /// <reference path="react16.d.ts" preserve="true" />
- import React from "react";
-->React : typeof React
-+>React : any
+@@= skipped -5, +5 lines =@@
+ >React : typeof React
  
  import PropTypes from "prop-types"
 ->PropTypes : typeof PropTypes
-+>PropTypes : any
++>PropTypes : typeof import("prop-types")
  
  const TabbedShowLayout = ({
 ->TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
 ->({}) => {    return (        <div />    );} : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
-+>TabbedShowLayout : { (__0: {}): any; propTypes: { version: any; }; defaultProps: { tabs: undefined; }; }
-+>({}) => {    return (        <div />    );} : { (__0: {}): any; propTypes: { version: any; }; defaultProps: { tabs: undefined; }; }
++>TabbedShowLayout : { (__0: {}): any; propTypes: { version: Requireable<number>; }; defaultProps: { tabs: undefined; }; }
++>({}) => {    return (        <div />    );} : { (__0: {}): any; propTypes: { version: Requireable<number>; }; defaultProps: { tabs: undefined; }; }
  
  }) => {
      return (
@@ -36,21 +32,21 @@
 ->TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
 ->propTypes : { version: PropTypes.Requireable<number>; }
 ->{    version: PropTypes.number,} : { version: PropTypes.Requireable<number>; }
-+>TabbedShowLayout.propTypes = {    version: PropTypes.number,} : { version: any; }
-+>TabbedShowLayout.propTypes : { version: any; }
-+>TabbedShowLayout : { (__0: {}): any; propTypes: { version: any; }; defaultProps: { tabs: undefined; }; }
-+>propTypes : { version: any; }
-+>{    version: PropTypes.number,} : { version: any; }
++>TabbedShowLayout.propTypes = {    version: PropTypes.number,} : { version: Requireable<number>; }
++>TabbedShowLayout.propTypes : { version: Requireable<number>; }
++>TabbedShowLayout : { (__0: {}): any; propTypes: { version: Requireable<number>; }; defaultProps: { tabs: undefined; }; }
++>propTypes : { version: Requireable<number>; }
++>{    version: PropTypes.number,} : { version: Requireable<number>; }
  
      version: PropTypes.number,
 ->version : PropTypes.Requireable<number>
 ->PropTypes.number : PropTypes.Requireable<number>
 ->PropTypes : typeof PropTypes
 ->number : PropTypes.Requireable<number>
-+>version : any
-+>PropTypes.number : any
-+>PropTypes : any
-+>number : any
++>version : Requireable<number>
++>PropTypes.number : Requireable<number>
++>PropTypes : typeof import("prop-types")
++>number : Requireable<number>
  
  };
  
@@ -58,23 +54,20 @@
  >TabbedShowLayout.defaultProps = {    tabs: undefined} : { tabs: undefined; }
  >TabbedShowLayout.defaultProps : { tabs: undefined; }
 ->TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
-+>TabbedShowLayout : { (__0: {}): any; propTypes: { version: any; }; defaultProps: { tabs: undefined; }; }
++>TabbedShowLayout : { (__0: {}): any; propTypes: { version: Requireable<number>; }; defaultProps: { tabs: undefined; }; }
  >defaultProps : { tabs: undefined; }
  >{    tabs: undefined} : { tabs: undefined; }
  
-@@= skipped -49, +49 lines =@@
+@@= skipped -46, +46 lines =@@
  };
  
  export default TabbedShowLayout;
 ->TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
-+>TabbedShowLayout : { (__0: {}): any; propTypes: { version: any; }; defaultProps: { tabs: undefined; }; }
++>TabbedShowLayout : { (__0: {}): any; propTypes: { version: Requireable<number>; }; defaultProps: { tabs: undefined; }; }
  
  === jsDeclarationsReactComponents2.jsx ===
  import React from "react";
-->React : typeof React
-+>React : any
- 
- /**
+@@= skipped -10, +10 lines =@@
   * @type {React.SFC}
   */
  const TabbedShowLayout = () => {
@@ -98,7 +91,7 @@
  
              ok
          </div>
-@@= skipped -31, +31 lines =@@
+@@= skipped -21, +21 lines =@@
  
  TabbedShowLayout.defaultProps = {
  >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
@@ -120,10 +113,7 @@
  
  === jsDeclarationsReactComponents3.jsx ===
  import React from "react";
-->React : typeof React
-+>React : any
- 
- /**
+@@= skipped -10, +10 lines =@@
   * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
   */
  const TabbedShowLayout = () => {
@@ -147,7 +137,7 @@
  
              ok
          </div>
-@@= skipped -32, +32 lines =@@
+@@= skipped -22, +22 lines =@@
  TabbedShowLayout.defaultProps = {
  >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
  >TabbedShowLayout.defaultProps : { tabs: string; }
@@ -165,8 +155,7 @@
  
  === jsDeclarationsReactComponents4.jsx ===
  import React from "react";
-->React : typeof React
-+>React : any
+ >React : typeof React
  
  const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
 ->TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
@@ -215,16 +204,15 @@
  
  === jsDeclarationsReactComponents5.jsx ===
  import React from 'react';
-->React : typeof React
-+>React : any
+ >React : typeof React
  
  import PropTypes from 'prop-types';
 ->PropTypes : typeof PropTypes
-+>PropTypes : any
++>PropTypes : typeof import("prop-types")
  
  function Tree({ allowDropOnRoot }) {
 ->Tree : typeof Tree
-+>Tree : { (__0: { allowDropOnRoot: any; }): any; propTypes: { classes: any; }; defaultProps: { classes: {}; parentSource: string; }; }
++>Tree : { (__0: { allowDropOnRoot: any; }): any; propTypes: { classes: Requireable<object>; }; defaultProps: { classes: {}; parentSource: string; }; }
  >allowDropOnRoot : any
  
    return <div />
@@ -239,21 +227,21 @@
 ->Tree : typeof Tree
 ->propTypes : { classes: PropTypes.Requireable<object>; }
 ->{    classes: PropTypes.object,} : { classes: PropTypes.Requireable<object>; }
-+>Tree.propTypes = {    classes: PropTypes.object,} : { classes: any; }
-+>Tree.propTypes : { classes: any; }
-+>Tree : { (__0: { allowDropOnRoot: any; }): any; propTypes: { classes: any; }; defaultProps: { classes: {}; parentSource: string; }; }
-+>propTypes : { classes: any; }
-+>{    classes: PropTypes.object,} : { classes: any; }
++>Tree.propTypes = {    classes: PropTypes.object,} : { classes: Requireable<object>; }
++>Tree.propTypes : { classes: Requireable<object>; }
++>Tree : { (__0: { allowDropOnRoot: any; }): any; propTypes: { classes: Requireable<object>; }; defaultProps: { classes: {}; parentSource: string; }; }
++>propTypes : { classes: Requireable<object>; }
++>{    classes: PropTypes.object,} : { classes: Requireable<object>; }
  
      classes: PropTypes.object,
 ->classes : PropTypes.Requireable<object>
 ->PropTypes.object : PropTypes.Requireable<object>
 ->PropTypes : typeof PropTypes
 ->object : PropTypes.Requireable<object>
-+>classes : any
-+>PropTypes.object : any
-+>PropTypes : any
-+>object : any
++>classes : Requireable<object>
++>PropTypes.object : Requireable<object>
++>PropTypes : typeof import("prop-types")
++>object : Requireable<object>
  
  };
  
@@ -261,7 +249,7 @@
  >Tree.defaultProps = {    classes: {},    parentSource: 'parent_id',} : { classes: {}; parentSource: string; }
  >Tree.defaultProps : { classes: {}; parentSource: string; }
 ->Tree : typeof Tree
-+>Tree : { (__0: { allowDropOnRoot: any; }): any; propTypes: { classes: any; }; defaultProps: { classes: {}; parentSource: string; }; }
++>Tree : { (__0: { allowDropOnRoot: any; }): any; propTypes: { classes: Requireable<object>; }; defaultProps: { classes: {}; parentSource: string; }; }
  >defaultProps : { classes: {}; parentSource: string; }
  >{    classes: {},    parentSource: 'parent_id',} : { classes: {}; parentSource: string; }
  
@@ -270,5 +258,5 @@
  
  export default Tree;
 ->Tree : typeof Tree
-+>Tree : { (__0: { allowDropOnRoot: any; }): any; propTypes: { classes: any; }; defaultProps: { classes: {}; parentSource: string; }; }
++>Tree : { (__0: { allowDropOnRoot: any; }): any; propTypes: { classes: Requireable<object>; }; defaultProps: { classes: {}; parentSource: string; }; }
  

@@ -1,11 +1,6 @@
 --- old.tsxInvokeComponentType.types
 +++ new.tsxInvokeComponentType.types
-@@= skipped -2, +2 lines =@@
- === tsxInvokeComponentType.tsx ===
- /// <reference path="react16.d.ts" />
- import React, { ComponentType } from "react";
-->React : typeof React
-+>React : any
+@@= skipped -6, +6 lines =@@
  >ComponentType : any
  
  declare const Elem: ComponentType<{ someKey: string }>;

@@ -5,10 +5,10 @@
  class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }> {
  >TestComponent : Symbol(TestComponent, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 1, 31))
 ->React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
-+>React.Component : Symbol(unknown)
++>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
  >React : Symbol(React, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 1, 6))
 ->Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
-+>Component : Symbol(unknown)
++>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
  >isAny : Symbol(isAny, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 45))
  >T : Symbol(T, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 54))
  >obj : Symbol(obj, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 57))

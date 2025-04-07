@@ -1,26 +1,16 @@
 --- old.genericInferenceDefaultTypeParameterJsxReact.types
 +++ new.genericInferenceDefaultTypeParameterJsxReact.types
-@@= skipped -5, +5 lines =@@
- // Repro from #50858
- 
- import React, { ComponentPropsWithRef, ElementType, ReactNode } from 'react';
-->React : typeof React
-+>React : any
- >ComponentPropsWithRef : any
- >ElementType : any
- >ReactNode : any
+@@= skipped -12, +12 lines =@@
  
  type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { children?: ReactNode };
-->ButtonBaseProps : ButtonBaseProps<T>
+ >ButtonBaseProps : ButtonBaseProps<T>
 ->children : React.ReactNode
-+>ButtonBaseProps : any
-+>children : any
++>children : ReactNode
  
  function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
 ->Component : <T extends ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
-->props : ButtonBaseProps<T>
-+>Component : <T extends ElementType>(props: any) => any
-+>props : any
++>Component : <T extends ElementType>(props: ButtonBaseProps<T>) => any
+ >props : ButtonBaseProps<T>
  
      return <></>;
 -><></> : JSX.Element
@@ -40,7 +30,7 @@
 ->preventDefault : () => void
 +>v1 : any
 +><Component onClick={e => e.preventDefault()} /> : any
-+>Component : <T extends ElementType>(props: any) => any
++>Component : <T extends ElementType>(props: ButtonBaseProps<T>) => any
 +>onClick : any
 +>e => e.preventDefault() : (e: any) => any
 +>e : any

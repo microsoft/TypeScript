@@ -3,7 +3,7 @@
 === jsxEmptyExpressionNotCountedAsChild.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from 'react'
->React : any
+>React : typeof React
 
 interface Props {
     children: React.ReactElement<any>

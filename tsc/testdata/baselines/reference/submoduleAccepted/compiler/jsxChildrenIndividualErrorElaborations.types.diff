@@ -1,15 +1,6 @@
 --- old.jsxChildrenIndividualErrorElaborations.types
 +++ new.jsxChildrenIndividualErrorElaborations.types
-@@= skipped -2, +2 lines =@@
- === index.tsx ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- interface Props {
-   children: (x: number) => string;
-@@= skipped -9, +9 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  export function Blah(props: Props) {

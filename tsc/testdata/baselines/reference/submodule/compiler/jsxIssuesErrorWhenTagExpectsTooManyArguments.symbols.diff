@@ -36,14 +36,12 @@
  }
  
  const a = <MyComp4 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
-@@= skipped -25, +23 lines =@@
- >MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+@@= skipped -26, +24 lines =@@
  >context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 22, 60))
  >nonReactArg : Symbol(nonReactArg, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 22, 74))
-->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+ >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
 ->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
  
  const d = <MyTagWithOptionalNonJSXBits x={2} />; // Technically OK, but probably questionable
  >d : Symbol(d, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 23, 5))

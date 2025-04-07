@@ -5,7 +5,7 @@
  ): React.SFC => {
  >React : Symbol(React, Decl(jsxCallElaborationCheckNoCrash1.tsx, 2, 6))
 ->SFC : Symbol(React.SFC, Decl(react16.d.ts, 400, 9))
-+>SFC : Symbol(SFC)
++>SFC : Symbol(SFC, Decl(react16.d.ts, 400, 9))
  
     const Component = () => <TagElement />;
  >Component : Symbol(Component, Decl(jsxCallElaborationCheckNoCrash1.tsx, 9, 8))

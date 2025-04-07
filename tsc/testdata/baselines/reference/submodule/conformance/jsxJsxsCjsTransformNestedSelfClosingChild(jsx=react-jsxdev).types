@@ -3,7 +3,7 @@
 === jsxJsxsCjsTransformNestedSelfClosingChild.tsx ===
 /// <reference path="react16.d.ts" />
 import type * as React from 'react';
->React : any
+>React : typeof React
 
 console.log(
 >console.log(  <div>    <div />  </div>) : void

@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 import React from 'react';
->React : any
+>React : typeof React
 
 // repro from https://github.com/microsoft/TypeScript/issues/53941
 declare namespace DropdownMenu {

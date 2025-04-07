@@ -1,23 +1,6 @@
 --- old.jsxElementTypeLiteralWithGeneric.types
 +++ new.jsxElementTypeLiteralWithGeneric.types
-@@= skipped -2, +2 lines =@@
- === jsxElementTypeLiteralWithGeneric.tsx ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- declare global {
- >global : any
- 
-   namespace JSX {
-     type ElementType<P = any> =
-->ElementType : ElementType<P>
-+>ElementType : any
- 
-       | {
-         [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]
-@@= skipped -26, +26 lines =@@
+@@= skipped -28, +28 lines =@@
  
  // should be fine - `ElementType` accepts `div`
  let a = <div />;

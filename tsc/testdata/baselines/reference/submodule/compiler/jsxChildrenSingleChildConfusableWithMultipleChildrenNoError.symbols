@@ -9,7 +9,7 @@ import * as React from 'react'
 type Tab = [string, React.ReactNode]  // [tabName, tabContent]
 >Tab : Symbol(Tab, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 2, 30))
 >React : Symbol(React, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 2, 6))
->ReactNode : Symbol(ReactNode)
+>ReactNode : Symbol(ReactNode, Decl(react16.d.ts, 216, 49))
 
 interface Props {
 >Props : Symbol(Props, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 4, 36))
@@ -29,9 +29,9 @@ function TabLayout(props: Props) {
 
 export class App extends React.Component<{}> {
 >App : Symbol(App, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 12, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 >React : Symbol(React, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 2, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 
     render() {
 >render : Symbol(render, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 14, 46))

@@ -3,7 +3,7 @@
 === callsOnComplexSignatures.tsx ===
 /// <reference path="react16.d.ts" />
 import React from "react";
->React : any
+>React : typeof React
 
 // Simple calls from real usecases
 function test1() {
@@ -360,22 +360,22 @@ function test5() {
 
     // Union of all intrinsics and components of `any`
     function App(props: { component:React.ReactType }) {
->App : (props: { component: ReactType; }) => any
->props : { component: ReactType; }
->component : ReactType
+>App : (props: { component: ReactType<any>; }) => any
+>props : { component: ReactType<any>; }
+>component : ReactType<any>
 >React : any
 
         const Comp: React.ReactType = props.component;
->Comp : ReactType
+>Comp : ReactType<any>
 >React : any
->props.component : ReactType
->props : { component: ReactType; }
->component : ReactType
+>props.component : ReactType<any>
+>props : { component: ReactType<any>; }
+>component : ReactType<any>
 
         return (<Comp />);
 >(<Comp />) : any
 ><Comp /> : any
->Comp : ReactType
+>Comp : ReactType<any>
     }
 
     // custom components with non-subset props
@@ -401,7 +401,7 @@ function test5() {
         }
 
         var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;
->C : any
+>C : ComponentType<P1> | ComponentType<P2>
 >React : any
 >React : any
 >null as any : any
@@ -409,7 +409,7 @@ function test5() {
         const a = <C p={true} />;
 >a : any
 ><C p={true} /> : any
->C : any
+>C : ComponentType<P1> | ComponentType<P2>
 >p : any
 >true : true
     }

@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 import React from 'react';
->React : any
+>React : typeof React
 
 function test<P>(wrappedProps: P) {
 >test : <P>(wrappedProps: P) => void
@@ -21,9 +21,9 @@ function test<P>(wrappedProps: P) {
     };
     class MyComponent extends React.Component<P> {
 >MyComponent : MyComponent<P>
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<P, {}, any>
+>React : typeof React
+>Component : typeof Component
 
         render() {
 >render : () => any

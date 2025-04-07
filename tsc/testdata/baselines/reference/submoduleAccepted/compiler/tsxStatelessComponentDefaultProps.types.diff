@@ -1,15 +1,6 @@
 --- old.tsxStatelessComponentDefaultProps.types
 +++ new.tsxStatelessComponentDefaultProps.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React from 'react';
-->React : typeof React
-+>React : any
- 
- interface Props {
-     text: string;
-@@= skipped -8, +8 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  function BackButton(_props: Props) {

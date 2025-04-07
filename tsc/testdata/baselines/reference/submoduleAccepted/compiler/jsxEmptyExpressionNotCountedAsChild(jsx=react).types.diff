@@ -1,11 +1,6 @@
 --- old.jsxEmptyExpressionNotCountedAsChild(jsx=react).types
 +++ new.jsxEmptyExpressionNotCountedAsChild(jsx=react).types
-@@= skipped -2, +2 lines =@@
- === jsxEmptyExpressionNotCountedAsChild.tsx ===
- /// <reference path="react16.d.ts" />
- import * as React from 'react'
-->React : typeof React
-+>React : any
+@@= skipped -6, +6 lines =@@
  
  interface Props {
      children: React.ReactElement<any>

@@ -1,18 +1,6 @@
 --- old.jsxNamespacedNameNotComparedToNonMatchingIndexSignature.symbols
 +++ new.jsxNamespacedNameNotComparedToNonMatchingIndexSignature.symbols
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- declare module "react" {
-->"react" : Symbol(React, Decl(react16.d.ts, 110, 19), Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 0, 0))
-+>"react" : Symbol("react", Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 0, 0))
- 
-     interface Attributes {
-->Attributes : Symbol(Attributes, Decl(react16.d.ts, 128, 34), Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 2, 24))
-+>Attributes : Symbol(Attributes, Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 2, 24))
- 
-         [key: `do-${string}`]: Function;
- >key : Symbol(key, Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 4, 9))
+@@= skipped -13, +13 lines =@@
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
  
          "ns:thing"?: string;

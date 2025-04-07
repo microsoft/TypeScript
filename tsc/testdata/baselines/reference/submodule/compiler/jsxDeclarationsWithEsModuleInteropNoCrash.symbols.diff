@@ -5,12 +5,14 @@
    bar: PropTypes.bool,
  >bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 4, 19))
 ->PropTypes.bool : Symbol(PropTypes.bool, Decl(react16.d.ts, 62, 16))
++>PropTypes.bool : Symbol(bool, Decl(react16.d.ts, 62, 16))
  >PropTypes : Symbol(PropTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 1, 6))
 ->bool : Symbol(PropTypes.bool, Decl(react16.d.ts, 62, 16))
++>bool : Symbol(bool, Decl(react16.d.ts, 62, 16))
  
  };
  
-@@= skipped -15, +13 lines =@@
+@@= skipped -15, +15 lines =@@
  };
  
  function Foo({ bar }) {

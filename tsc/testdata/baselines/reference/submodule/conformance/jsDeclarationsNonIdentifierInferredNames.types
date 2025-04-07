@@ -3,7 +3,7 @@
 === jsDeclarationsNonIdentifierInferredNames.jsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 const dynPropName = "data-dyn";
 >dynPropName : "data-dyn"

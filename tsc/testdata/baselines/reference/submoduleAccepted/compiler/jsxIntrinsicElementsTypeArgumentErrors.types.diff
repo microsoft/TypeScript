@@ -1,11 +1,6 @@
 --- old.jsxIntrinsicElementsTypeArgumentErrors.types
 +++ new.jsxIntrinsicElementsTypeArgumentErrors.types
-@@= skipped -2, +2 lines =@@
- === jsxIntrinsicElementsTypeArgumentErrors.tsx ===
- /// <reference path="react16.d.ts" />
- import * as React from "react";
-->React : typeof React
-+>React : any
+@@= skipped -6, +6 lines =@@
  
  // opening + closing
  const a = <div<>></div>; // empty type args

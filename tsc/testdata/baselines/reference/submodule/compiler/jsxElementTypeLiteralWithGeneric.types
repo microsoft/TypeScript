@@ -3,14 +3,14 @@
 === jsxElementTypeLiteralWithGeneric.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 declare global {
 >global : any
 
   namespace JSX {
     type ElementType<P = any> =
->ElementType : any
+>ElementType : ElementType<P>
 
       | {
         [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]

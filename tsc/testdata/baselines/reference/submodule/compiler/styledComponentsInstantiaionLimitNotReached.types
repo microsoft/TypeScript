@@ -3,7 +3,7 @@
 === styledComponentsInstantiaionLimitNotReached.ts ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 interface REACT_STATICS {
     childContextTypes: true;
@@ -253,7 +253,7 @@ type WithChildrenIfReactComponentClass<C extends string | React.ComponentType<an
 
     : {};
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
->IntrinsicElementsKeys : string | number | symbol
+>IntrinsicElementsKeys : keyof IntrinsicElements
 >JSX : any
 
 type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
@@ -332,7 +332,7 @@ export interface StyledComponentBase<
 >React : any
 
     withComponent<WithC extends AnyStyledComponent>(
->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends any>(component: WithC): StyledComponent<WithC, T, O, A>; }
+>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends ComponentType<any> | keyof IntrinsicElements>(component: WithC): StyledComponent<WithC, T, O, A>; }
 
         component: WithC,
 >component : WithC
@@ -344,7 +344,7 @@ export interface StyledComponentBase<
         A | StyledComponentInnerAttrs<WithC>
     >;
     withComponent<WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends any>(component: WithC): StyledComponent<WithC, T, O, A>; }
+>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends ComponentType<any> | keyof IntrinsicElements>(component: WithC): StyledComponent<WithC, T, O, A>; }
 >JSX : any
 >React : any
 

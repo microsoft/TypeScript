@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 declare module "react" {
->"react" : any
+>"react" : typeof React
 
     interface Attributes {
         [key: `do-${string}`]: Function;

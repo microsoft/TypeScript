@@ -4,14 +4,14 @@
 /// <reference path="react16.d.ts" />
 
 import * as React from 'react';
->React : any
+>React : typeof React
 
 const myHoc = <ComposedComponentProps extends any>(
->myHoc : <ComposedComponentProps extends unknown>(ComposedComponent: ComponentClass<ComposedComponentProps>) => void
-><ComposedComponentProps extends any>(    ComposedComponent: React.ComponentClass<ComposedComponentProps>,) => {    type WrapperComponentProps = ComposedComponentProps & { myProp: string };    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;    const props: ComposedComponentProps = null as any;    <WrapperComponent {...props} myProp={'1000000'} />;    <WrapperComponent {...props} myProp={1000000} />;} : <ComposedComponentProps extends unknown>(ComposedComponent: ComponentClass<ComposedComponentProps>) => void
+>myHoc : <ComposedComponentProps extends unknown>(ComposedComponent: ComponentClass<ComposedComponentProps, any>) => void
+><ComposedComponentProps extends any>(    ComposedComponent: React.ComponentClass<ComposedComponentProps>,) => {    type WrapperComponentProps = ComposedComponentProps & { myProp: string };    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;    const props: ComposedComponentProps = null as any;    <WrapperComponent {...props} myProp={'1000000'} />;    <WrapperComponent {...props} myProp={1000000} />;} : <ComposedComponentProps extends unknown>(ComposedComponent: ComponentClass<ComposedComponentProps, any>) => void
 
     ComposedComponent: React.ComponentClass<ComposedComponentProps>,
->ComposedComponent : ComponentClass<ComposedComponentProps>
+>ComposedComponent : ComponentClass<ComposedComponentProps, any>
 >React : any
 
 ) => {
@@ -20,7 +20,7 @@ const myHoc = <ComposedComponentProps extends any>(
 >myProp : string
 
     const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;
->WrapperComponent : ComponentClass<WrapperComponentProps>
+>WrapperComponent : ComponentClass<WrapperComponentProps, any>
 >React : any
 >null as any : any
 
@@ -30,14 +30,14 @@ const myHoc = <ComposedComponentProps extends any>(
 
     <WrapperComponent {...props} myProp={'1000000'} />;
 ><WrapperComponent {...props} myProp={'1000000'} /> : any
->WrapperComponent : ComponentClass<WrapperComponentProps>
+>WrapperComponent : ComponentClass<WrapperComponentProps, any>
 >props : ComposedComponentProps
 >myProp : any
 >'1000000' : "1000000"
 
     <WrapperComponent {...props} myProp={1000000} />;
 ><WrapperComponent {...props} myProp={1000000} /> : any
->WrapperComponent : ComponentClass<WrapperComponentProps>
+>WrapperComponent : ComponentClass<WrapperComponentProps, any>
 >props : ComposedComponentProps
 >myProp : any
 >1000000 : 1000000

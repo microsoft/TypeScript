@@ -1,14 +1,6 @@
 --- old.tsxNotUsingApparentTypeOfSFC.types
 +++ new.tsxNotUsingApparentTypeOfSFC.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React from 'react';
-->React : typeof React
-+>React : any
- 
- function test<P>(wrappedProps: P) {
- >test : <P>(wrappedProps: P) => void
+@@= skipped -10, +10 lines =@@
  >wrappedProps : P
  
      let MySFC = function(props: P) {
@@ -26,12 +18,11 @@
      class MyComponent extends React.Component<P> {
 ->MyComponent : MyComponent
 ->React.Component : React.Component<P, {}, any>
-->React : typeof React
-->Component : typeof React.Component
 +>MyComponent : MyComponent<P>
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<P, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
  
          render() {
 ->render : () => JSX.Element

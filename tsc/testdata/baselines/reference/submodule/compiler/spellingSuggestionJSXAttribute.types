@@ -3,7 +3,7 @@
 === spellingSuggestionJSXAttribute.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 function MyComp2(props: { className?: string, htmlFor?: string }) {
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
@@ -16,9 +16,9 @@ function MyComp2(props: { className?: string, htmlFor?: string }) {
 }
 class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
 >MyComp : MyComp
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{ className?: string; htmlFor?: string; }, {}, any>
+>React : typeof React
+>Component : typeof Component
 >className : string
 >htmlFor : string
 

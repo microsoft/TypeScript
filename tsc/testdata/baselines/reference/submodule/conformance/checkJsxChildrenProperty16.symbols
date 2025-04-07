@@ -30,8 +30,8 @@ export declare function Foo(props: Props): JSX.Element;
 >Foo : Symbol(Foo, Decl(checkJsxChildrenProperty16.tsx, 11, 6))
 >props : Symbol(props, Decl(checkJsxChildrenProperty16.tsx, 13, 28))
 >Props : Symbol(Props, Decl(checkJsxChildrenProperty16.tsx, 4, 32))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
 
 export const Test = () => {
 >Test : Symbol(Test, Decl(checkJsxChildrenProperty16.tsx, 15, 12))

@@ -12,9 +12,9 @@ interface PropsType {
 }
 declare class Foo extends React.Component<PropsType, {}> {}
 >Foo : Foo
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<PropsType, {}, any>
+>React : typeof React
+>Component : typeof Component
 
 const b = (
 >b : any

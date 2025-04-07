@@ -1,15 +1,6 @@
 --- old.contextuallyTypedJsxChildren.types
 +++ new.contextuallyTypedJsxChildren.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React from 'react';
-->React : typeof React
-+>React : any
- 
- // repro from https://github.com/microsoft/TypeScript/issues/53941
- declare namespace DropdownMenu {
-@@= skipped -13, +13 lines =@@
+@@= skipped -16, +16 lines =@@
    }
    interface PropsWithChildren extends BaseProps {
      children(props: { onClose: () => void }): JSX.Element;

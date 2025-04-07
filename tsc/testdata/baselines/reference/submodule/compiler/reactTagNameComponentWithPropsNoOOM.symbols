@@ -9,7 +9,7 @@ import * as React from "react";
 declare const Tag: keyof React.ReactHTML;
 >Tag : Symbol(Tag, Decl(reactTagNameComponentWithPropsNoOOM.tsx, 3, 13))
 >React : Symbol(React, Decl(reactTagNameComponentWithPropsNoOOM.tsx, 2, 6))
->ReactHTML : Symbol(ReactHTML)
+>ReactHTML : Symbol(ReactHTML, Decl(react16.d.ts, 2089, 9))
 
 const classes = "";
 >classes : Symbol(classes, Decl(reactTagNameComponentWithPropsNoOOM.tsx, 5, 5))

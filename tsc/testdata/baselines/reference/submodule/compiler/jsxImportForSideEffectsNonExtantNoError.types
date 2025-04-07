@@ -3,7 +3,7 @@
 === jsxImportForSideEffectsNonExtantNoError.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
->React : any
+>React : typeof React
 
 import "./App.css"; // doesn't actually exist
 

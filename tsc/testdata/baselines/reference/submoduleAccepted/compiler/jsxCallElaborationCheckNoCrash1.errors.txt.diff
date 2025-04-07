@@ -1,25 +1,24 @@
 --- old.jsxCallElaborationCheckNoCrash1.errors.txt
 +++ new.jsxCallElaborationCheckNoCrash1.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -jsxCallElaborationCheckNoCrash1.tsx(10,29): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<Tag, DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>'.
-+jsxCallElaborationCheckNoCrash1.tsx(3,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
- ==== jsxCallElaborationCheckNoCrash1.tsx (1 errors) ====
-     /// <reference path="/.lib/react16.d.ts" />
-     
-     import * as React from "react";
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     type Tags = "span" | "div";
-     
-@@= skipped -11, +13 lines =@@
-        TagElement: Tag,
-     ): React.SFC => {
-        const Component = () => <TagElement />;
+-
+-
+-==== jsxCallElaborationCheckNoCrash1.tsx (1 errors) ====
+-    /// <reference path="/.lib/react16.d.ts" />
+-    
+-    import * as React from "react";
+-    
+-    type Tags = "span" | "div";
+-    
+-    export const Hoc = <Tag extends Tags>(
+-       TagElement: Tag,
+-    ): React.SFC => {
+-       const Component = () => <TagElement />;
 -                                ~~~~~~~~~~
 -!!! error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<Tag, DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>'.
-        return Component;
-     };
-     
+-       return Component;
+-    };
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

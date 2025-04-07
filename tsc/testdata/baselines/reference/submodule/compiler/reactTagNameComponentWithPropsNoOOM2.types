@@ -4,10 +4,10 @@
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";
->React : any
+>React : typeof React
 
 declare const Tag: keyof React.ReactHTML;
->Tag : string | number | symbol
+>Tag : keyof ReactHTML
 >React : any
 
 const classes = "";
@@ -25,7 +25,7 @@ const children: any[] = [];
 
 <Tag className={classes} {...rest}>
 ><Tag className={classes} {...rest}>{children}</Tag> : any
->Tag : string | number | symbol
+>Tag : keyof ReactHTML
 >className : any
 >classes : ""
 >rest : HTMLAttributes<HTMLElement>
@@ -34,5 +34,5 @@ const children: any[] = [];
 >children : any[]
 
 </Tag>
->Tag : string | number | symbol
+>Tag : keyof ReactHTML
 

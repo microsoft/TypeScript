@@ -1,24 +1,14 @@
 --- old.reactDefaultPropsInferenceSuccess.types
 +++ new.reactDefaultPropsInferenceSuccess.types
-@@= skipped -3, +3 lines =@@
- /// <reference path="react16.d.ts" />
- 
- import React from 'react';
-->React : typeof React
-+>React : any
- 
- interface BaseProps {
-   when?: ((value: string) => boolean) | "a" | "b";
-@@= skipped -16, +16 lines =@@
+@@= skipped -19, +19 lines =@@
  
  class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
  >FieldFeedback : FieldFeedback<P>
 ->React.Component : React.Component<P, {}, any>
-->React : typeof React
++>React.Component : Component<P, {}, any>
+ >React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>Component : typeof Component
  
    static defaultProps = {
  >defaultProps : { when: () => boolean; }
@@ -82,11 +72,10 @@
  class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
  >FieldFeedbackBeta : FieldFeedbackBeta<P>
 ->React.Component : React.Component<P, {}, any>
-->React : typeof React
++>React.Component : Component<P, {}, any>
+ >React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>Component : typeof Component
  
    static defaultProps: BaseProps = {
  >defaultProps : BaseProps
@@ -162,17 +151,14 @@
 +>render : () => any
  
      this.props.when("now"); // OK, always defined
-->this.props.when("now") : boolean
-->this.props.when : P["when"]
+ >this.props.when("now") : boolean
+ >this.props.when : P["when"]
 ->this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
-+>this.props.when("now") : any
-+>this.props.when : any
-+>this.props : any
++>this.props : Readonly<{ children?: ReactNode; }> & Readonly<P>
  >this : this
 ->props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
-->when : P["when"]
-+>props : any
-+>when : any
++>props : Readonly<{ children?: ReactNode; }> & Readonly<P>
+ >when : P["when"]
  >"now" : "now"
  
      return <div>Hello</div>;

@@ -1,15 +1,6 @@
 --- old.ignoredJsxAttributes.types
 +++ new.ignoredJsxAttributes.types
-@@= skipped -5, +5 lines =@@
- // Repro from #44797
- 
- import * as React from "react";
-->React : typeof React
-+>React : any
- 
- interface Props {
-     foo: string;
-@@= skipped -11, +11 lines =@@
+@@= skipped -16, +16 lines =@@
  }
  
  declare function Yadda(props: Props): JSX.Element;

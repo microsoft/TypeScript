@@ -1,15 +1,6 @@
 --- old.checkJsxChildrenProperty16.types
 +++ new.checkJsxChildrenProperty16.types
-@@= skipped -5, +5 lines =@@
- // repro from #53493
- 
- import React = require('react');
-->React : typeof React
-+>React : any
- 
- export type Props =
- >Props : Props
-@@= skipped -23, +23 lines =@@
+@@= skipped -28, +28 lines =@@
      };
  
  export declare function Foo(props: Props): JSX.Element;

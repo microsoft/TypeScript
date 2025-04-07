@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";
->React : any
+>React : typeof React
 
 const El = Math.random() ? 'h1' : 'h2';
 >El : "h1" | "h2"

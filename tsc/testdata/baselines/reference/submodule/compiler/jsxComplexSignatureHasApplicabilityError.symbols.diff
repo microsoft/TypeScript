@@ -21,13 +21,13 @@
  >WrappedComponent : Symbol(WrappedComponent, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 21, 2))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
-+>ComponentType : Symbol(ComponentType)
++>ComponentType : Symbol(ComponentType, Decl(react16.d.ts, 117, 60))
  >WrappedProps : Symbol(WrappedProps, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 19, 40))
  
  ): React.ComponentType<ReactSingleSelectProps<WrappedProps>> {
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
-+>ComponentType : Symbol(ComponentType)
++>ComponentType : Symbol(ComponentType, Decl(react16.d.ts, 117, 60))
  >ReactSingleSelectProps : Symbol(ReactSingleSelectProps, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 10, 75))
  >WrappedProps : Symbol(WrappedProps, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 19, 40))
  
@@ -36,8 +36,10 @@
                  value={props.value}
  >value : Symbol(value, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 29, 32))
 ->props.value : Symbol(Props.value, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 5, 41))
++>props.value : Symbol(value, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 5, 41))
  >props : Symbol(props, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 24, 12))
 ->value : Symbol(Props.value, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 5, 41))
++>value : Symbol(value, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 5, 41))
  
                  onChange={(value) => {
  >onChange : Symbol(onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 30, 35))
@@ -45,25 +47,29 @@
  
                      if (props.onChange) {
 ->props.onChange : Symbol(Props.onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 6, 26))
++>props.onChange : Symbol(onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 6, 26))
  >props : Symbol(props, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 24, 12))
 ->onChange : Symbol(Props.onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 6, 26))
++>onChange : Symbol(onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 6, 26))
  
                          props.onChange(value === null ? undefined : value);
 ->props.onChange : Symbol(Props.onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 6, 26))
++>props.onChange : Symbol(onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 6, 26))
  >props : Symbol(props, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 24, 12))
 ->onChange : Symbol(Props.onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 6, 26))
++>onChange : Symbol(onChange, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 6, 26))
  >value : Symbol(value, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 31, 27))
  >undefined : Symbol(undefined)
  >value : Symbol(value, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 31, 27))
-@@= skipped -55, +49 lines =@@
+@@= skipped -55, +55 lines =@@
  >ReactSelectClass : Symbol(ReactSelectClass, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 44, 61))
  >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 47, 31))
  >OptionValues : Symbol(OptionValues, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 124, 1))
 ->React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
-+>React.Component : Symbol(unknown)
++>React.Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
-+>Component : Symbol(unknown)
++>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
  >ReactSelectProps : Symbol(ReactSelectProps, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 253, 1))
  >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 47, 31))
  
@@ -82,7 +88,7 @@
  >OptionValues : Symbol(OptionValues, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 124, 1))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
-+>ComponentType : Symbol(ComponentType)
++>ComponentType : Symbol(ComponentType, Decl(react16.d.ts, 117, 60))
  >OptionComponentProps : Symbol(OptionComponentProps, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 169, 1))
  >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 52, 32))
  
@@ -91,16 +97,15 @@
  >OptionValues : Symbol(OptionValues, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 124, 1))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
-+>ComponentType : Symbol(ComponentType)
++>ComponentType : Symbol(ComponentType, Decl(react16.d.ts, 117, 60))
  >ValueComponentProps : Symbol(ValueComponentProps, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 242, 1))
  >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 53, 31))
  
  export type HandlerRendererResult = JSX.Element | null | false;
  >HandlerRendererResult : Symbol(HandlerRendererResult, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 53, 106))
-->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+ >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
 ->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
  
  // Handlers
  export type FocusOptionHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
@@ -109,7 +114,7 @@
  >OnInputKeyDownHandler : Symbol(OnInputKeyDownHandler, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 67, 66))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->KeyboardEventHandler : Symbol(React.KeyboardEventHandler, Decl(react16.d.ts, 804, 76))
-+>KeyboardEventHandler : Symbol(KeyboardEventHandler)
++>KeyboardEventHandler : Symbol(KeyboardEventHandler, Decl(react16.d.ts, 804, 76))
  >HTMLDivElement : Symbol(HTMLDivElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
  >HTMLInputElement : Symbol(HTMLInputElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
  
@@ -118,7 +123,7 @@
  >OnFocusHandler : Symbol(OnFocusHandler, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 70, 39))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->FocusEventHandler : Symbol(React.FocusEventHandler, Decl(react16.d.ts, 801, 72))
-+>FocusEventHandler : Symbol(FocusEventHandler)
++>FocusEventHandler : Symbol(FocusEventHandler, Decl(react16.d.ts, 801, 72))
  >HTMLDivElement : Symbol(HTMLDivElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
  >HTMLInputElement : Symbol(HTMLInputElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
  
@@ -126,7 +131,7 @@
  >OnBlurHandler : Symbol(OnBlurHandler, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 71, 88))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->FocusEventHandler : Symbol(React.FocusEventHandler, Decl(react16.d.ts, 801, 72))
-+>FocusEventHandler : Symbol(FocusEventHandler)
++>FocusEventHandler : Symbol(FocusEventHandler, Decl(react16.d.ts, 801, 72))
  >HTMLDivElement : Symbol(HTMLDivElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
  >HTMLInputElement : Symbol(HTMLInputElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
  
@@ -135,7 +140,7 @@
  >event : Symbol(event, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 75, 81))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->MouseEvent : Symbol(React.MouseEvent, Decl(react16.d.ts, 725, 9))
-+>MouseEvent : Symbol(MouseEvent)
++>MouseEvent : Symbol(MouseEvent, Decl(react16.d.ts, 725, 9))
  >HTMLAnchorElement : Symbol(HTMLAnchorElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
  
  export type IsOptionUniqueHandler<TValue = OptionValues> = (arg: { option: Option<TValue>, options: Options<TValue>, labelKey: string, valueKey: string }) => boolean;
@@ -364,7 +369,7 @@
 +>onMouseDown : Symbol(onMouseDown, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 232, 37))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->MouseEventHandler : Symbol(React.MouseEventHandler, Decl(react16.d.ts, 805, 80))
-+>MouseEventHandler : Symbol(MouseEventHandler)
++>MouseEventHandler : Symbol(MouseEventHandler, Decl(react16.d.ts, 805, 80))
  
      /**
       * whether the Select is open or not.
@@ -427,10 +432,10 @@
  >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 255, 34))
  >OptionValues : Symbol(OptionValues, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 124, 1))
 ->React.Props : Symbol(React.Props, Decl(react16.d.ts, 812, 84))
-+>React.Props : Symbol(unknown)
++>React.Props : Symbol(Props, Decl(react16.d.ts, 812, 84))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->Props : Symbol(React.Props, Decl(react16.d.ts, 812, 84))
-+>Props : Symbol(unknown)
++>Props : Symbol(Props, Decl(react16.d.ts, 812, 84))
  >ReactSelectClass : Symbol(ReactSelectClass, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 44, 61))
  >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 255, 34))
  
@@ -709,7 +714,7 @@
 +>menuContainerStyle : Symbol(menuContainerStyle, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 417, 24))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->CSSProperties : Symbol(React.CSSProperties, Decl(react16.d.ts, 1037, 9))
-+>CSSProperties : Symbol(CSSProperties)
++>CSSProperties : Symbol(CSSProperties, Decl(react16.d.ts, 1037, 9))
  
      /**
       * renders a custom menu with options
@@ -728,7 +733,7 @@
 +>menuStyle : Symbol(menuStyle, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 425, 47))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->CSSProperties : Symbol(React.CSSProperties, Decl(react16.d.ts, 1037, 9))
-+>CSSProperties : Symbol(CSSProperties)
++>CSSProperties : Symbol(CSSProperties, Decl(react16.d.ts, 1037, 9))
  
      /**
       * multi-value input
@@ -751,11 +756,10 @@
       */
      noResultsText?: string | JSX.Element;
 ->noResultsText : Symbol(ReactSelectProps.noResultsText, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 438, 18))
-->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
-->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 +>noResultsText : Symbol(noResultsText, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 438, 18))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
+ >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
++>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
  
      /**
       * onBlur handler: function (event) {}
@@ -910,11 +914,10 @@
       */
      placeholder?: string | JSX.Element;
 ->placeholder : Symbol(ReactSelectProps.placeholder, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 524, 22))
-->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
-->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 +>placeholder : Symbol(placeholder, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 524, 22))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
+ >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
++>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
  
      /**
       * whether the selected option is removed from the dropdown on multi selects
@@ -1004,7 +1007,7 @@
 +>style : Symbol(style, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 576, 49))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->CSSProperties : Symbol(React.CSSProperties, Decl(react16.d.ts, 1037, 9))
-+>CSSProperties : Symbol(CSSProperties)
++>CSSProperties : Symbol(CSSProperties, Decl(react16.d.ts, 1037, 9))
  
      /**
       *  optional tab index of the control
@@ -1030,7 +1033,7 @@
 +>wrapperStyle : Symbol(wrapperStyle, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 590, 48))
  >React : Symbol(React, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 2, 6))
 ->CSSProperties : Symbol(React.CSSProperties, Decl(react16.d.ts, 1037, 9))
-+>CSSProperties : Symbol(CSSProperties)
++>CSSProperties : Symbol(CSSProperties, Decl(react16.d.ts, 1037, 9))
  
      /**
       * onClick handler for value labels: function (value, event) {}
