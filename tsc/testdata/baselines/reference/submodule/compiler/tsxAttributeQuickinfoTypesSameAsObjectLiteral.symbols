@@ -22,9 +22,11 @@ const Foo = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
 >Foo : Symbol(Foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 5))
 >props : Symbol(props, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 13))
 >foo : Symbol(foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 21))
+>span : Symbol(span, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 1, 40))
 >props.foo : Symbol(foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 21))
 >props : Symbol(props, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 13))
 >foo : Symbol(foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 21))
+>span : Symbol(span, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 1, 40))
 
 Foo({
 >Foo : Symbol(Foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 5))

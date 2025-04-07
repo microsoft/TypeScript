@@ -5,6 +5,7 @@
  
    return <div />;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function Foo() {

@@ -1,0 +1,72 @@
+--- old.jsxUnclosedParserRecovery.types
++++ new.jsxUnclosedParserRecovery.types
+@@= skipped -337, +337 lines =@@
+ >div : any
+ 
+     <diddy>
+-><diddy>    <diddy/> : any
++><diddy> : any
+ >diddy : () => any
+ 
+     <diddy/>
+ ><diddy/> : any
+ >diddy : () => any
++> : any
+ 
+ </div>;
+-> : any
+ >div : any
+ 
+ function noSelfcloseTrailingTag() { }
+@@= skipped -20, +20 lines =@@
+ >div : any
+ 
+     <diddy<boolean> bananas="please">
+-><diddy<boolean> bananas="please">    <diddy/> : any
++><diddy<boolean> bananas="please"> : any
+ >diddy : () => any
+ >bananas : string
+ 
+     <diddy/>
+ ><diddy/> : any
+ >diddy : () => any
++> : any
+ 
+ </div>;
+-> : any
+ >div : any
+ 
+ function noSelfcloseTypeArgAttrsTrailingTag() { }
+@@= skipped -155, +155 lines =@@
+ >div : any
+ 
+     <diddy>
+-><diddy>    Cranky Wrinkly Funky : any
++><diddy> : any
+ >diddy : () => any
+ 
+     Cranky Wrinkly Funky
+-</div>;
+ > : any
++
++</div>;
+ >div : any
+ 
+ function noSelfcloseTrailingText() { }
+@@= skipped -17, +18 lines =@@
+ >div : any
+ 
+     <diddy<boolean> bananas="please">
+-><diddy<boolean> bananas="please">    Cranky Wrinkly Funky : any
++><diddy<boolean> bananas="please"> : any
+ >diddy : () => any
+ >bananas : string
+ 
+     Cranky Wrinkly Funky
+-</div>;
+ > : any
++
++</div>;
+ >div : any
+ 
+ function noSelfcloseTypeArgAttrsTrailingText() { }

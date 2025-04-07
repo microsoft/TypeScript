@@ -22,6 +22,8 @@ const element = (
 //// [jsxEmptyExpressionNotCountedAsChild.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+const React = require("react");
 function Wrapper(props) {
     return <div>{props.children}</div>;
 }

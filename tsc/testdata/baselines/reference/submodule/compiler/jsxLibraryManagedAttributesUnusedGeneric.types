@@ -46,7 +46,7 @@ declare const Comp: (p: { className?: string }) => null
 >className : string
 
 ;<Comp css="color:hotpink;" />
-><Comp css="color:hotpink;" /> : any
+><Comp css="color:hotpink;" /> : Element
 >Comp : (p: { className?: string; }) => null
->css : any
+>css : string
 

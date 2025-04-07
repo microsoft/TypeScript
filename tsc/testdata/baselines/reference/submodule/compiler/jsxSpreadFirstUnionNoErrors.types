@@ -15,12 +15,12 @@ type InfoProps =
 >content : string
 
 const Info = (props: InfoProps) =>
->Info : (props: InfoProps) => any
->(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => any
+>Info : (props: InfoProps) => Element
+>(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => Element
 >props : InfoProps
 
 props.status === "hidden"
->props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : any
+>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : Element
 >props.status === "hidden" : boolean
 >props.status : "hidden" | "visible"
 >props : InfoProps
@@ -28,11 +28,11 @@ props.status === "hidden"
 >"hidden" : "hidden"
 
   ? <noscript />
-><noscript /> : any
+><noscript /> : Element
 >noscript : any
 
   : <div>{props.content}</div>;
-><div>{props.content}</div> : any
+><div>{props.content}</div> : Element
 >div : any
 >props.content : string
 >props : { status: "visible"; content: string; }
@@ -40,24 +40,24 @@ props.status === "hidden"
 >div : any
 
 const a = <Info status="hidden" />;
->a : any
-><Info status="hidden" /> : any
->Info : (props: InfoProps) => any
->status : any
+>a : Element
+><Info status="hidden" /> : Element
+>Info : (props: InfoProps) => Element
+>status : "hidden"
 
 const b = <Info status="visible" content="hello world" />;
->b : any
-><Info status="visible" content="hello world" /> : any
->Info : (props: InfoProps) => any
->status : any
->content : any
+>b : Element
+><Info status="visible" content="hello world" /> : Element
+>Info : (props: InfoProps) => Element
+>status : "visible"
+>content : string
 
 declare const infoProps: InfoProps;
 >infoProps : InfoProps
 
 const c = <Info {...infoProps} />;
->c : any
-><Info {...infoProps} /> : any
->Info : (props: InfoProps) => any
+>c : Element
+><Info {...infoProps} /> : Element
+>Info : (props: InfoProps) => Element
 >infoProps : InfoProps
 

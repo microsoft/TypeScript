@@ -20,5 +20,6 @@ declare module "react" {
 
 export const tag = <div ns:thing="a"/>
 >tag : Symbol(tag, Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 9, 12))
->ns:thing : Symbol(ns:thing, Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 9, 23))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>ns:thing : Symbol("þmissing", Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 9, 23))
 

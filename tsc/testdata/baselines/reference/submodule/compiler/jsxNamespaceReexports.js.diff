@@ -16,4 +16,5 @@
  Object.defineProperty(exports, "__esModule", { value: true });
 -var MyLib = require("./library");
 -var content = MyLib.createElement("my-element", null);
++const MyLib = require("./library");
 +const content = <my-element />;

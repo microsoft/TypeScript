@@ -36,10 +36,10 @@ class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
   };
 
   render() {
->render : () => any
+>render : () => Element
 
     return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
   }
@@ -47,31 +47,31 @@ class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
 
 // OK
 const Test1 = () => <FieldFeedback when={value => !!value} />;
->Test1 : () => any
->() => <FieldFeedback when={value => !!value} /> : () => any
-><FieldFeedback when={value => !!value} /> : any
+>Test1 : () => Element
+>() => <FieldFeedback when={value => !!value} /> : () => Element
+><FieldFeedback when={value => !!value} /> : Element
 >FieldFeedback : typeof FieldFeedback
->when : any
->value => !!value : (value: any) => boolean
->value : any
+>when : (value: string) => boolean
+>value => !!value : (value: string) => boolean
+>value : string
 >!!value : boolean
 >!value : boolean
->value : any
+>value : string
 
 // Error: Void not assignable to boolean
 const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
->Test2 : () => any
->() => <FieldFeedback when={value => console.log(value)} /> : () => any
-><FieldFeedback when={value => console.log(value)} /> : any
+>Test2 : () => Element
+>() => <FieldFeedback when={value => console.log(value)} /> : () => Element
+><FieldFeedback when={value => console.log(value)} /> : Element
 >FieldFeedback : typeof FieldFeedback
->when : any
->value => console.log(value) : (value: any) => void
->value : any
+>when : (value: string) => void
+>value => console.log(value) : (value: string) => void
+>value : string
 >console.log(value) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->value : any
+>value : string
 
 class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
 >FieldFeedbackBeta : FieldFeedbackBeta<P>
@@ -91,10 +91,10 @@ class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> 
   };
 
   render() {
->render : () => any
+>render : () => Element
 
     return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
   }
@@ -102,34 +102,34 @@ class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> 
 
 // OK
 const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta>;
->Test1a : () => any
->() => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta> : () => any
-><FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta> : any
+>Test1a : () => Element
+>() => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta> : () => Element
+><FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta> : Element
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
->when : any
->value => !!value : (value: any) => boolean
->value : any
+>when : (value: string) => boolean
+>value => !!value : (value: string) => boolean
+>value : string
 >!!value : boolean
 >!value : boolean
->value : any
->error : any
+>value : string
+>error : true
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
 
 // Error: Void not assignable to boolean
 const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
->Test2a : () => any
->() => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta> : () => any
-><FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta> : any
+>Test2a : () => Element
+>() => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta> : () => Element
+><FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta> : Element
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
->when : any
->value => console.log(value) : (value: any) => void
->value : any
+>when : (value: string) => void
+>value => console.log(value) : (value: string) => void
+>value : string
 >console.log(value) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->value : any
->error : any
+>value : string
+>error : true
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
 
 interface MyPropsProps extends Props {
@@ -154,7 +154,7 @@ class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedbac
   };
 
   render() {
->render : () => any
+>render : () => Element
 
     this.props.when("now"); // OK, always defined
 >this.props.when("now") : boolean
@@ -166,7 +166,7 @@ class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedbac
 >"now" : "now"
 
     return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
   }
@@ -174,36 +174,36 @@ class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedbac
 
 // OK
 const Test3 = () => <FieldFeedback2 when={value => !!value} />;
->Test3 : () => any
->() => <FieldFeedback2 when={value => !!value} /> : () => any
-><FieldFeedback2 when={value => !!value} /> : any
+>Test3 : () => Element
+>() => <FieldFeedback2 when={value => !!value} /> : () => Element
+><FieldFeedback2 when={value => !!value} /> : Element
 >FieldFeedback2 : typeof FieldFeedback2
->when : any
->value => !!value : (value: any) => boolean
->value : any
+>when : (value: string) => boolean
+>value => !!value : (value: string) => boolean
+>value : string
 >!!value : boolean
 >!value : boolean
->value : any
+>value : string
 
 // Error: Void not assignable to boolean
 const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
->Test4 : () => any
->() => <FieldFeedback2 when={value => console.log(value)} /> : () => any
-><FieldFeedback2 when={value => console.log(value)} /> : any
+>Test4 : () => Element
+>() => <FieldFeedback2 when={value => console.log(value)} /> : () => Element
+><FieldFeedback2 when={value => console.log(value)} /> : Element
 >FieldFeedback2 : typeof FieldFeedback2
->when : any
->value => console.log(value) : (value: any) => void
->value : any
+>when : (value: string) => void
+>value => console.log(value) : (value: string) => void
+>value : string
 >console.log(value) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->value : any
+>value : string
 
 // OK
 const Test5 = () => <FieldFeedback2 />;
->Test5 : () => any
->() => <FieldFeedback2 /> : () => any
-><FieldFeedback2 /> : any
+>Test5 : () => Element
+>() => <FieldFeedback2 /> : () => Element
+><FieldFeedback2 /> : Element
 >FieldFeedback2 : typeof FieldFeedback2
 

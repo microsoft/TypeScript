@@ -7,18 +7,24 @@
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
  
  === Error2.tsx ===
  let x2 = <div></span>;
  >x2 : Symbol(x2, Decl(Error2.tsx, 0, 3))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
  
  
  === Error3.tsx ===
  let x3 = <div>;
  >x3 : Symbol(x3, Decl(Error3.tsx, 0, 3))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
  
  
  === Error4.tsx ===
@@ -27,11 +33,16 @@
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
  
  === Error5.tsx ===
  let x5 = <div><span>
  >x5 : Symbol(x5, Decl(Error5.tsx, 0, 3))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
  
  

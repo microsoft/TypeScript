@@ -131,53 +131,53 @@ class Component extends ReactComponent {
 }
 
 const a = <Component foo={12} bar="yes" baz="yeah" />;
->a : any
-><Component foo={12} bar="yes" baz="yeah" /> : any
+>a : Element
+><Component foo={12} bar="yes" baz="yeah" /> : Element
 >Component : typeof Component
->foo : any
+>foo : number
 >12 : 12
->bar : any
->baz : any
+>bar : string
+>baz : string
 
 const b = <Component foo={12} />; // Error, missing required prop bar
->b : any
-><Component foo={12} /> : any
+>b : Element
+><Component foo={12} /> : Element
 >Component : typeof Component
->foo : any
+>foo : number
 >12 : 12
 
 const c = <Component bar="yes" baz="yeah" />;
->c : any
-><Component bar="yes" baz="yeah" /> : any
+>c : Element
+><Component bar="yes" baz="yeah" /> : Element
 >Component : typeof Component
->bar : any
->baz : any
+>bar : string
+>baz : string
 
 const d = <Component bar="yes" baz="yo" bat="ohno" />; // Error, baz not a valid prop
->d : any
-><Component bar="yes" baz="yo" bat="ohno" /> : any
+>d : Element
+><Component bar="yes" baz="yo" bat="ohno" /> : Element
 >Component : typeof Component
->bar : any
->baz : any
->bat : any
+>bar : string
+>baz : string
+>bat : string
 
 const e = <Component foo={12} bar={null} baz="cool" />; // bar is nullable/undefinable since it's not marked `isRequired`
->e : any
-><Component foo={12} bar={null} baz="cool" /> : any
+>e : Element
+><Component foo={12} bar={null} baz="cool" /> : Element
 >Component : typeof Component
->foo : any
+>foo : number
 >12 : 12
->bar : any
->baz : any
+>bar : null
+>baz : string
 
 const f = <Component foo={12} bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
->f : any
-><Component foo={12} bar="yeah" baz={null} /> : any
+>f : Element
+><Component foo={12} bar="yeah" baz={null} /> : Element
 >Component : typeof Component
->foo : any
+>foo : number
 >12 : 12
->bar : any
->baz : any
+>bar : string
+>baz : null
 
 class JustPropTypes extends ReactComponent {
 >JustPropTypes : JustPropTypes
@@ -205,33 +205,33 @@ class JustPropTypes extends ReactComponent {
 }
 
 const g = <JustPropTypes foo={12} bar="ok" />;
->g : any
-><JustPropTypes foo={12} bar="ok" /> : any
+>g : Element
+><JustPropTypes foo={12} bar="ok" /> : Element
 >JustPropTypes : typeof JustPropTypes
->foo : any
+>foo : number
 >12 : 12
->bar : any
+>bar : string
 
 const h = <JustPropTypes foo="no" />; // error, wrong type
->h : any
-><JustPropTypes foo="no" /> : any
+>h : Element
+><JustPropTypes foo="no" /> : Element
 >JustPropTypes : typeof JustPropTypes
->foo : any
+>foo : string
 
 const i = <JustPropTypes foo={null} bar="ok" />;
->i : any
-><JustPropTypes foo={null} bar="ok" /> : any
+>i : Element
+><JustPropTypes foo={null} bar="ok" /> : Element
 >JustPropTypes : typeof JustPropTypes
->foo : any
->bar : any
+>foo : null
+>bar : string
 
 const j = <JustPropTypes foo={12} bar={null} />; // error, bar is required
->j : any
-><JustPropTypes foo={12} bar={null} /> : any
+>j : Element
+><JustPropTypes foo={12} bar={null} /> : Element
 >JustPropTypes : typeof JustPropTypes
->foo : any
+>foo : number
 >12 : 12
->bar : any
+>bar : null
 
 class JustDefaultProps extends ReactComponent {
 >JustDefaultProps : JustDefaultProps
@@ -249,25 +249,25 @@ class JustDefaultProps extends ReactComponent {
 }
 
 const k = <JustDefaultProps foo={12} />;
->k : any
-><JustDefaultProps foo={12} /> : any
+>k : Element
+><JustDefaultProps foo={12} /> : Element
 >JustDefaultProps : typeof JustDefaultProps
->foo : any
+>foo : number
 >12 : 12
 
 const l = <JustDefaultProps foo={12} bar="ok" />; // error, no prop named bar
->l : any
-><JustDefaultProps foo={12} bar="ok" /> : any
+>l : Element
+><JustDefaultProps foo={12} bar="ok" /> : Element
 >JustDefaultProps : typeof JustDefaultProps
->foo : any
+>foo : number
 >12 : 12
->bar : any
+>bar : string
 
 const m = <JustDefaultProps foo="no" />; // error, wrong type
->m : any
-><JustDefaultProps foo="no" /> : any
+>m : Element
+><JustDefaultProps foo="no" /> : Element
 >JustDefaultProps : typeof JustDefaultProps
->foo : any
+>foo : string
 
 interface FooProps {
     foo: string;
@@ -314,53 +314,53 @@ class BothWithSpecifiedGeneric extends ReactComponent<FooProps> {
     };
 }
 const n = <BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} />;
->n : any
-><BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} /> : any
+>n : Element
+><BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} /> : Element
 >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
->foo : any
->bar : any
->baz : any
+>foo : string
+>bar : string
+>baz : number
 >12 : 12
 
 const o = <BothWithSpecifiedGeneric foo="no" />; // Error, missing required prop bar
->o : any
-><BothWithSpecifiedGeneric foo="no" /> : any
+>o : Element
+><BothWithSpecifiedGeneric foo="no" /> : Element
 >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
->foo : any
+>foo : string
 
 const p = <BothWithSpecifiedGeneric bar="yes" baz={12} />;
->p : any
-><BothWithSpecifiedGeneric bar="yes" baz={12} /> : any
+>p : Element
+><BothWithSpecifiedGeneric bar="yes" baz={12} /> : Element
 >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
->bar : any
->baz : any
+>bar : string
+>baz : number
 >12 : 12
 
 const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, baz not a valid prop
->q : any
-><BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" /> : any
+>q : Element
+><BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" /> : Element
 >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
->bar : any
->baz : any
+>bar : string
+>baz : number
 >12 : 12
->bat : any
+>bat : string
 
 const r = <BothWithSpecifiedGeneric foo="no" bar={null} baz={0} />; // bar is nullable/undefinable since it's not marked `isRequired`
->r : any
-><BothWithSpecifiedGeneric foo="no" bar={null} baz={0} /> : any
+>r : Element
+><BothWithSpecifiedGeneric foo="no" bar={null} baz={0} /> : Element
 >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
->foo : any
->bar : any
->baz : any
+>foo : string
+>bar : null
+>baz : number
 >0 : 0
 
 const s = <BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
->s : any
-><BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} /> : any
+>s : Element
+><BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} /> : Element
 >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
->foo : any
->bar : any
->baz : any
+>foo : string
+>bar : string
+>baz : null
 
 class JustPropTypesWithSpecifiedGeneric extends ReactComponent<FooProps> {
 >JustPropTypesWithSpecifiedGeneric : JustPropTypesWithSpecifiedGeneric
@@ -387,32 +387,32 @@ class JustPropTypesWithSpecifiedGeneric extends ReactComponent<FooProps> {
     };
 }
 const t = <JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" />;
->t : any
-><JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" /> : any
+>t : Element
+><JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" /> : Element
 >JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
->foo : any
->bar : any
+>foo : string
+>bar : string
 
 const u = <JustPropTypesWithSpecifiedGeneric foo={12} />; // error, wrong type
->u : any
-><JustPropTypesWithSpecifiedGeneric foo={12} /> : any
+>u : Element
+><JustPropTypesWithSpecifiedGeneric foo={12} /> : Element
 >JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
->foo : any
+>foo : number
 >12 : 12
 
 const v = <JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" />; // generic overrides propTypes required-ness, null isn't valid
->v : any
-><JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" /> : any
+>v : Element
+><JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" /> : Element
 >JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
->foo : any
->bar : any
+>foo : null
+>bar : string
 
 const w = <JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} />; // error, bar is required
->w : any
-><JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} /> : any
+>w : Element
+><JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} /> : Element
 >JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
->foo : any
->bar : any
+>foo : string
+>bar : null
 
 class JustDefaultPropsWithSpecifiedGeneric extends ReactComponent<FooProps> {
 >JustDefaultPropsWithSpecifiedGeneric : JustDefaultPropsWithSpecifiedGeneric
@@ -430,27 +430,27 @@ class JustDefaultPropsWithSpecifiedGeneric extends ReactComponent<FooProps> {
 }
 
 const x = <JustDefaultPropsWithSpecifiedGeneric foo="eh" />;
->x : any
-><JustDefaultPropsWithSpecifiedGeneric foo="eh" /> : any
+>x : Element
+><JustDefaultPropsWithSpecifiedGeneric foo="eh" /> : Element
 >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
->foo : any
+>foo : string
 
 const y = <JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" />; // error, no prop named bar
->y : any
-><JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" /> : any
+>y : Element
+><JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" /> : Element
 >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
->foo : any
->bar : any
+>foo : string
+>bar : string
 
 const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type
->z : any
-><JustDefaultPropsWithSpecifiedGeneric foo={12} /> : any
+>z : Element
+><JustDefaultPropsWithSpecifiedGeneric foo={12} /> : Element
 >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
->foo : any
+>foo : number
 >12 : 12
 
 const aa = <JustDefaultPropsWithSpecifiedGeneric />;
->aa : any
-><JustDefaultPropsWithSpecifiedGeneric /> : any
+>aa : Element
+><JustDefaultPropsWithSpecifiedGeneric /> : Element
 >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
 

@@ -1,16 +1,17 @@
 --- old.inlineJsxFactoryOverridesCompilerOption.js
 +++ new.inlineJsxFactoryOverridesCompilerOption.js
-@@= skipped -21, +21 lines =@@
- //// [reacty.js]
+@@= skipped -22, +22 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/** @jsx dom */
+ /** @jsx dom */
 -var renderer_1 = require("./renderer");
 -(0, renderer_1.dom)("h", null);
++const renderer_1 = require("./renderer");
 +<h></h>;
  //// [index.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var renderer_1 = require("./renderer");
 -(0, renderer_1.p)("h", null);
++const renderer_1 = require("./renderer");
 +<h></h>;

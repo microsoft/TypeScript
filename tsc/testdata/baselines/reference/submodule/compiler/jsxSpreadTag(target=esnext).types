@@ -17,7 +17,7 @@ const t2 = <div {...<span className="foo" />} />;
 >div : any
 ><span className="foo" /> : any
 >span : any
->className : any
+>className : string
 
 const t3 = <Comp
 >t3 : any

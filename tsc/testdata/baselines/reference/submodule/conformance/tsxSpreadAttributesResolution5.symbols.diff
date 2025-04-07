@@ -28,10 +28,12 @@
          return <div>Hello</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
      }
  }
  
-@@= skipped -41, +39 lines =@@
+@@= skipped -41, +41 lines =@@
  
  class EmptyProp extends React.Component<{}, {}> {
  >EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
@@ -48,6 +50,8 @@
          return <div>Default hi</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
      }
      greeting: string;
 ->greeting : Symbol(EmptyProp.greeting, Decl(file.tsx, 24, 5))

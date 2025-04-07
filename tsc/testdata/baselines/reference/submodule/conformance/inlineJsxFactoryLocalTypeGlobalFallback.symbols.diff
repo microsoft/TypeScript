@@ -87,13 +87,17 @@
  export default <h></h>
 ->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
 ->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
  
  === index.tsx ===
  /** @jsx dom */
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  
  elem = <h></h>; // Expect assignability error here
  >elem : Symbol(elem, Decl(index.tsx, 3, 3))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  

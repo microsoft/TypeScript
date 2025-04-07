@@ -8,12 +8,16 @@ function EmptySFC1() {
 >EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 0, 32))
 
     return <div>hello</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 }
 
 function EmptySFC2() {
 >EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 4, 1))
 
     return <div>Hello</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 }
 
 function SFC2(prop: { x: boolean }) {
@@ -22,6 +26,8 @@ function SFC2(prop: { x: boolean }) {
 >x : Symbol(x, Decl(file.tsx, 10, 21))
 
     return <h1>World</h1>;
+>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
 }
 
 var EmptySFCComp = EmptySFC1 || EmptySFC2;
@@ -41,7 +47,7 @@ let a = <EmptySFCComp />
 let a1 = <EmptySFCComp data-prop />
 >a1 : Symbol(a1, Decl(file.tsx, 18, 3))
 >EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 14, 3))
->data-prop : Symbol(data-prop, Decl(file.tsx, 18, 22))
+>data-prop : Symbol("data-prop", Decl(file.tsx, 18, 22))
 
 let b = <SFC2AndEmptyComp x />
 >b : Symbol(b, Decl(file.tsx, 19, 3))

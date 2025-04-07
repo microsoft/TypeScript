@@ -1,0 +1,31 @@
+--- old.tsxReactPropsInferenceSucceedsOnIntersections.types
++++ new.tsxReactPropsInferenceSucceedsOnIntersections.types
+@@= skipped -16, +16 lines =@@
+ 
+ declare class Button<T = {}> extends React.Component<ButtonProps<T>> { }
+ >Button : Button<T>
+->React.Component : React.Component<ButtonProps<T>, {}, any>
++>React.Component : Component<ButtonProps<T>, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+ interface CustomButtonProps extends ButtonProps {
+     customProp: string;
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;
+->CustomButton : React.SFC<CustomButtonProps>
++>CustomButton : SFC<CustomButtonProps>
+ >React : any
+->props => <Button {...props} /> : (props: CustomButtonProps & { children?: React.ReactNode; }) => JSX.Element
+->props : CustomButtonProps & { children?: React.ReactNode; }
+-><Button {...props} /> : JSX.Element
++>props => <Button {...props} /> : (props: CustomButtonProps & { children?: ReactNode; }) => Element
++>props : CustomButtonProps & { children?: ReactNode; }
++><Button {...props} /> : Element
+ >Button : typeof Button
+->props : CustomButtonProps & { children?: React.ReactNode; }
++>props : CustomButtonProps & { children?: ReactNode; }
+ 

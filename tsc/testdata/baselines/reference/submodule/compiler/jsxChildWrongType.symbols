@@ -8,8 +8,16 @@ const a = (
 >a : Symbol(a, Decl(index.tsx, 3, 5))
 
   <main>
+>main : Symbol(main, Decl(react18.d.ts, 3206, 102))
+
     {(<div />) as unknown}
+>div : Symbol(div, Decl(react18.d.ts, 3174, 110))
+
     <span />
+>span : Symbol(span, Decl(react18.d.ts, 3238, 110))
+
   </main>
+>main : Symbol(main, Decl(react18.d.ts, 3206, 102))
+
 );
 

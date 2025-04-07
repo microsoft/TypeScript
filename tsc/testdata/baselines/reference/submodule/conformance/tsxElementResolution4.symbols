@@ -22,13 +22,16 @@ declare module JSX {
 
 // OK
 <div n='x' />;
+>div : Symbol(div, Decl(file.tsx, 2, 30))
 >n : Symbol(n, Decl(file.tsx, 9, 4))
 
 // OK
 <span m='ok' />;
+>span : Symbol(span, Decl(file.tsx, 3, 25))
 >m : Symbol(m, Decl(file.tsx, 12, 5))
 
 // Error
 <span q='' />;
+>span : Symbol(span, Decl(file.tsx, 3, 25))
 >q : Symbol(q, Decl(file.tsx, 15, 5))
 

@@ -16,6 +16,7 @@
  
      return <package />
 ->package : Symbol(JSX.IntrinsicElements["package"], Decl(a.tsx, 2, 33))
++>package : Symbol(package, Decl(a.tsx, 2, 33))
  }
  
  function B() {
@@ -24,5 +25,7 @@
      return <package></package>
 ->package : Symbol(JSX.IntrinsicElements["package"], Decl(a.tsx, 2, 33))
 ->package : Symbol(JSX.IntrinsicElements["package"], Decl(a.tsx, 2, 33))
++>package : Symbol(package, Decl(a.tsx, 2, 33))
++>package : Symbol(package, Decl(a.tsx, 2, 33))
  }
  

@@ -47,6 +47,7 @@ const e2 = <TestingOptional y1 y3 extra-prop/>
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 // OK
 const c1 = <OneThing yxx='ok'/>;
 const c2 = <OneThing yy={100} yy1="hello"/>;

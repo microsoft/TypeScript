@@ -20,6 +20,8 @@ export function Counter({ count = 0 }: CounterProps) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Counter = Counter;
+/// <reference path="react16.d.ts" />
+const react_1 = require("react");
 function Counter({ count = 0 }) {
     const [cnt, setCnt] = null;
     return <>

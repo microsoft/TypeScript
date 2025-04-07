@@ -1,9 +1,0 @@
---- old.reactNamespaceMissingDeclaration.types
-+++ new.reactNamespaceMissingDeclaration.types
-@@= skipped -4, +4 lines =@@
- <foo data/>
- ><foo data/> : any
- >foo : any
-->data : true
-+>data : any
- 

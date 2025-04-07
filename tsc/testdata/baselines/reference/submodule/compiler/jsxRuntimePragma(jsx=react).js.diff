@@ -1,13 +1,12 @@
 --- old.jsxRuntimePragma(jsx=react).js
 +++ new.jsxRuntimePragma(jsx=react).js
-@@= skipped -37, +37 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -39, +39 lines =@@
  exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
--/// <reference path="react16.d.ts" />
--/* @jsxRuntime classic */
+ /// <reference path="react16.d.ts" />
+ /* @jsxRuntime classic */
 -var React = require("react");
 -var HelloWorld = function () { return React.createElement("h1", null, "Hello world"); };
++const React = require("react");
 +const HelloWorld = () => <h1>Hello world</h1>;
  exports.HelloWorld = HelloWorld;
 -exports.frag = React.createElement(React.Fragment, null,

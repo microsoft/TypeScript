@@ -3,6 +3,8 @@
 === file.tsx ===
 export const a = <div></div>;
 >a : Symbol(a, Decl(file.tsx, 0, 12))
+>div : Symbol((Missing), Decl(index.d.ts, 1, 33))
+>div : Symbol((Missing), Decl(index.d.ts, 1, 33))
 
 === node_modules/@types/react/index.d.ts ===
 declare namespace JSX {

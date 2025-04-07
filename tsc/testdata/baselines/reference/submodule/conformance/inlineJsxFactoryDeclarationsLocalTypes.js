@@ -91,6 +91,8 @@ const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tree = exports.MyClass = exports.MySFC = void 0;
+/** @jsx predom */
+const renderer2_1 = require("./renderer2");
 const MySFC = (props) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
 exports.MySFC = MySFC;
 class MyClass {
@@ -112,6 +114,8 @@ exports.default = <h></h>;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/** @jsx dom */
+const renderer_1 = require("./renderer");
 const component_1 = require("./component");
 let elem = component_1.default;
 elem = <h></h>; // Expect assignability error here

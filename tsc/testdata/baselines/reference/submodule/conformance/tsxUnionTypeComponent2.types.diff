@@ -1,0 +1,20 @@
+--- old.tsxUnionTypeComponent2.types
++++ new.tsxUnionTypeComponent2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ type Invalid1 = React.ComponentClass<any> | number;
+ >Invalid1 : Invalid1
+@@= skipped -11, +11 lines =@@
+ >1 : 1
+ 
+ <X />;
+-><X /> : JSX.Element
++><X /> : Element
+ >X : number
+ 
+ 

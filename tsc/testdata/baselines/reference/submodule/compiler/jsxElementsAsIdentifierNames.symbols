@@ -20,11 +20,14 @@ function A() {
 >A : Symbol(A, Decl(a.tsx, 5, 1))
 
     return <package />
+>package : Symbol(package, Decl(a.tsx, 2, 33))
 }
 
 function B() {
 >B : Symbol(B, Decl(a.tsx, 9, 1))
 
     return <package></package>
+>package : Symbol(package, Decl(a.tsx, 2, 33))
+>package : Symbol(package, Decl(a.tsx, 2, 33))
 }
 

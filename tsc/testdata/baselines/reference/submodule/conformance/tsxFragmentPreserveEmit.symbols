@@ -22,5 +22,19 @@ declare var React: any;
 < /*starting wrap*/ ></ /*ending wrap*/>; // comments in the tags
 <>hi</>; // text inside
 <><span>hi</span><div>bye</div></>; // children
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>div : Symbol((Missing), Decl(file.tsx, 2, 30))
+>div : Symbol((Missing), Decl(file.tsx, 2, 30))
+
 <><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></>; // nested fragments
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+
 <>#</>; // # would cause scanning error if not in jsxtext

@@ -1,8 +1,7 @@
 index.tsx(3,8): error TS6133: 'React' is declared but its value is never read.
-index.tsx(5,10): error TS6133: 'Bar' is declared but its value is never read.
 
 
-==== index.tsx (2 errors) ====
+==== index.tsx (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     import React from "react";
@@ -10,8 +9,6 @@ index.tsx(5,10): error TS6133: 'Bar' is declared but its value is never read.
 !!! error TS6133: 'React' is declared but its value is never read.
     
     function Bar() {
-             ~~~
-!!! error TS6133: 'Bar' is declared but its value is never read.
       return <div />;
     }
     

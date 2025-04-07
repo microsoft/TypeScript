@@ -26,17 +26,17 @@ namespace M {
 >foo : any
 
 	var spread1 = <div x='' {...foo} y='' />;
->spread1 : any
-><div x='' {...foo} y='' /> : any
+>spread1 : Element
+><div x='' {...foo} y='' /> : Element
 >div : any
->x : any
+>x : string
 >foo : any
->y : any
+>y : string
 
 	// Quotes
 	var x = <div>This "quote" thing</div>;
->x : any
-><div>This "quote" thing</div> : any
+>x : Element
+><div>This "quote" thing</div> : Element
 >div : any
 >div : any
 }

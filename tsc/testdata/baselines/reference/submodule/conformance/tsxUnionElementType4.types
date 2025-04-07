@@ -80,21 +80,21 @@ var PartRCComp = RC1 || RC4;
 
 // Error
 let a = <RCComp x />;
->a : any
-><RCComp x /> : any
+>a : Element
+><RCComp x /> : Element
 >RCComp : typeof RC1 | typeof RC2
->x : any
+>x : true
 
 let b = <PartRCComp x={10} />
->b : any
-><PartRCComp x={10} /> : any
+>b : Element
+><PartRCComp x={10} /> : Element
 >PartRCComp : typeof RC4
->x : any
+>x : number
 >10 : 10
 
 let c = <EmptyRCComp prop />;
->c : any
-><EmptyRCComp prop /> : any
+>c : Element
+><EmptyRCComp prop /> : Element
 >EmptyRCComp : typeof RC3
->prop : any
+>prop : true
 

@@ -14,19 +14,19 @@ namespace JSX {
 >key : string
 }
 const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
->Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
-><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
+>Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => Element
+><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U>(p: { prop: T; children: (t: T) => T; }) => Element
 >p : { prop: T; children: (t: T) => T; }
 >prop : T
 >children : (t: T) => T
 >t : T
-><div></div> : any
+><div></div> : Element
 >div : any
 >div : any
 
 Elem({prop: {a: "x"}, children: i => ({a: "z"})});
->Elem({prop: {a: "x"}, children: i => ({a: "z"})}) : any
->Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
+>Elem({prop: {a: "x"}, children: i => ({a: "z"})}) : Element
+>Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => Element
 >{prop: {a: "x"}, children: i => ({a: "z"})} : { prop: { a: string; }; children: (i: { a: string; }) => { a: string; }; }
 >prop : { a: string; }
 >{a: "x"} : { a: string; }
@@ -41,36 +41,36 @@ Elem({prop: {a: "x"}, children: i => ({a: "z"})});
 >"z" : "z"
 
 const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
->q : any
-><Elem prop={{a: "x"}} children={i => ({a: "z"})} /> : any
->Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
->prop : any
+>q : Element
+><Elem prop={{a: "x"}} children={i => ({a: "z"})} /> : Element
+>Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => Element
+>prop : { a: string; }
 >{a: "x"} : { a: string; }
 >a : string
 >"x" : "x"
->children : any
->i => ({a: "z"}) : (i: any) => { a: string; }
->i : any
+>children : (i: { a: string; }) => { a: string; }
+>i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
+>i : { a: string; }
 >({a: "z"}) : { a: string; }
 >{a: "z"} : { a: string; }
 >a : string
 >"z" : "z"
 
 const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
->qq : any
-><Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem> : any
->Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
->prop : any
+>qq : Element
+><Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem> : Element
+>Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => Element
+>prop : { a: string; }
 >{a: "x"} : { a: string; }
 >a : string
 >"x" : "x"
->i => ({a: "z"}) : (i: any) => { a: string; }
->i : any
+>i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
+>i : { a: string; }
 >({a: "z"}) : { a: string; }
 >{a: "z"} : { a: string; }
 >a : string
 >"z" : "z"
->Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
+>Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => Element
 
 interface LitProps<T> { prop: T, children: (x: this) => T }
 >prop : T
@@ -78,16 +78,16 @@ interface LitProps<T> { prop: T, children: (x: this) => T }
 >x : this
 
 const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
->ElemLit : <T extends string>(p: LitProps<T>) => any
-><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => any
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
+><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => Element
 >p : LitProps<T>
-><div></div> : any
+><div></div> : Element
 >div : any
 >div : any
 
 ElemLit({prop: "x", children: () => "x"});
->ElemLit({prop: "x", children: () => "x"}) : any
->ElemLit : <T extends string>(p: LitProps<T>) => any
+>ElemLit({prop: "x", children: () => "x"}) : Element
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
 >{prop: "x", children: () => "x"} : { prop: "x"; children: () => "x"; }
 >prop : "x"
 >"x" : "x"
@@ -96,50 +96,50 @@ ElemLit({prop: "x", children: () => "x"});
 >"x" : "x"
 
 const j = <ElemLit prop="x" children={() => "x"} />
->j : any
-><ElemLit prop="x" children={() => "x"} /> : any
->ElemLit : <T extends string>(p: LitProps<T>) => any
->prop : any
->children : any
->() => "x" : () => string
+>j : Element
+><ElemLit prop="x" children={() => "x"} /> : Element
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
+>prop : "x"
+>children : () => "x"
+>() => "x" : () => "x"
 >"x" : "x"
 
 const jj = <ElemLit prop="x">{() => "x"}</ElemLit>
->jj : any
-><ElemLit prop="x">{() => "x"}</ElemLit> : any
->ElemLit : <T extends string>(p: LitProps<T>) => any
->prop : any
->() => "x" : () => string
+>jj : Element
+><ElemLit prop="x">{() => "x"}</ElemLit> : Element
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
+>prop : "x"
+>() => "x" : () => "x"
 >"x" : "x"
->ElemLit : <T extends string>(p: LitProps<T>) => any
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
 
 // Should error
 const arg = <ElemLit prop="x" children={p => "y"} />
->arg : any
-><ElemLit prop="x" children={p => "y"} /> : any
->ElemLit : <T extends string>(p: LitProps<T>) => any
->prop : any
->children : any
->p => "y" : (p: any) => string
->p : any
+>arg : Element
+><ElemLit prop="x" children={p => "y"} /> : Element
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
+>prop : "x"
+>children : (p: IntrinsicAttributes & LitProps<"x">) => "y"
+>p => "y" : (p: IntrinsicAttributes & LitProps<"x">) => "y"
+>p : IntrinsicAttributes & LitProps<"x">
 >"y" : "y"
 
 const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
->argchild : any
-><ElemLit prop="x">{p => "y"}</ElemLit> : any
->ElemLit : <T extends string>(p: LitProps<T>) => any
->prop : any
->p => "y" : (p: any) => string
->p : any
+>argchild : Element
+><ElemLit prop="x">{p => "y"}</ElemLit> : Element
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
+>prop : "x"
+>p => "y" : (p: IntrinsicAttributes & LitProps<"x">) => "y"
+>p : IntrinsicAttributes & LitProps<"x">
 >"y" : "y"
->ElemLit : <T extends string>(p: LitProps<T>) => any
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
 
 const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
->mismatched : any
-><ElemLit prop="x">{() => 12}</ElemLit> : any
->ElemLit : <T extends string>(p: LitProps<T>) => any
->prop : any
+>mismatched : Element
+><ElemLit prop="x">{() => 12}</ElemLit> : Element
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
+>prop : "x"
 >() => 12 : () => number
 >12 : 12
->ElemLit : <T extends string>(p: LitProps<T>) => any
+>ElemLit : <T extends string>(p: LitProps<T>) => Element
 

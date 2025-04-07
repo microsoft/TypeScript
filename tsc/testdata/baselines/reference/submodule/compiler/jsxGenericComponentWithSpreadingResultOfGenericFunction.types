@@ -25,7 +25,7 @@ declare function GenericComponent<T>(props: T): null
 >props : T
 
 <GenericComponent {...omit(['bar'], otherProps)} />; // no error
-><GenericComponent {...omit(['bar'], otherProps)} /> : any
+><GenericComponent {...omit(['bar'], otherProps)} /> : Element
 >GenericComponent : <T>(props: T) => null
 >omit(['bar'], otherProps) : Omit<{ bar: string; qwe: boolean; }, "bar">
 >omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }

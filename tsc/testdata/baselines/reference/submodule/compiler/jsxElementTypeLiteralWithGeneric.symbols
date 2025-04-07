@@ -43,6 +43,7 @@ declare global {
 // should be fine - `ElementType` accepts `div`
 let a = <div />;
 >a : Symbol(a, Decl(jsxElementTypeLiteralWithGeneric.tsx, 16, 3))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 
 // Should be an error.
 // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`

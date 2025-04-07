@@ -133,13 +133,17 @@
  
    return <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 66, 33))
--
++>div : Symbol(div, Decl(index.d.ts, 66, 33))
+ 
      <span>Scope:</span> {displayEnum("VALUE")}
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(index.d.ts, 67, 14))
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(index.d.ts, 67, 14))
++>span : Symbol(span, Decl(index.d.ts, 67, 14))
++>span : Symbol(span, Decl(index.d.ts, 67, 14))
  >displayEnum : Symbol(displayEnum, Decl(index.tsx, 4, 5))
  
    </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 66, 33))
++>div : Symbol(div, Decl(index.d.ts, 66, 33))
  }
  

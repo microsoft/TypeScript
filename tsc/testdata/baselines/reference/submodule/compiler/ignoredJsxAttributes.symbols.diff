@@ -18,3 +18,17 @@
  
  let props: Props = {
  >props : Symbol(props, Decl(ignoredJsxAttributes.tsx, 13, 3))
+@@= skipped -18, +18 lines =@@
+ >x1 : Symbol(x1, Decl(ignoredJsxAttributes.tsx, 18, 3))
+ >Yadda : Symbol(Yadda, Decl(ignoredJsxAttributes.tsx, 9, 1))
+ >foo : Symbol(foo, Decl(ignoredJsxAttributes.tsx, 18, 15))
+->data-yadda : Symbol(data-yadda, Decl(ignoredJsxAttributes.tsx, 18, 27))
++>data-yadda : Symbol("data-yadda", Decl(ignoredJsxAttributes.tsx, 18, 27))
+ 
+ let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
+ >x2 : Symbol(x2, Decl(ignoredJsxAttributes.tsx, 19, 3))
+ >Yadda : Symbol(Yadda, Decl(ignoredJsxAttributes.tsx, 9, 1))
+ >bar : Symbol(bar, Decl(ignoredJsxAttributes.tsx, 19, 15))
+->data-yadda : Symbol(data-yadda, Decl(ignoredJsxAttributes.tsx, 19, 27))
++>data-yadda : Symbol("data-yadda", Decl(ignoredJsxAttributes.tsx, 19, 27))
+ 

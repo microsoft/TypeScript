@@ -80,30 +80,30 @@ var RCComp = RC1 || RC2;
 
 // OK
 let a = <RCComp x="Hi" />;
->a : any
-><RCComp x="Hi" /> : any
+>a : Element
+><RCComp x="Hi" /> : Element
 >RCComp : typeof RC1 | typeof RC2
->x : any
+>x : string
 
 let a1 = <EmptyRCComp />;
->a1 : any
-><EmptyRCComp /> : any
+>a1 : Element
+><EmptyRCComp /> : Element
 >EmptyRCComp : typeof RC3
 
 let a2 = <EmptyRCComp data-prop="hello" />;
->a2 : any
-><EmptyRCComp data-prop="hello" /> : any
+>a2 : Element
+><EmptyRCComp data-prop="hello" /> : Element
 >EmptyRCComp : typeof RC3
->data-prop : any
+>data-prop : string
 
 let b = <PartRCComp />
->b : any
-><PartRCComp /> : any
+>b : Element
+><PartRCComp /> : Element
 >PartRCComp : typeof RC4
 
 let c = <PartRCComp data-extra="hello" />
->c : any
-><PartRCComp data-extra="hello" /> : any
+>c : Element
+><PartRCComp data-extra="hello" /> : Element
 >PartRCComp : typeof RC4
->data-extra : any
+>data-extra : string
 

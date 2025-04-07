@@ -1,0 +1,57 @@
+--- old.tsxSpreadChildren.types
++++ new.tsxSpreadChildren.types
+@@= skipped -22, +22 lines =@@
+ >todos : TodoProp[]
+ }
+ function Todo(prop: { key: number, todo: string }) {
+->Todo : (prop: { key: number; todo: string; }) => JSX.Element
++>Todo : (prop: { key: number; todo: string; }) => Element
+ >prop : { key: number; todo: string; }
+ >key : number
+ >todo : string
+ 
+     return <div>{prop.key.toString() + prop.todo}</div>;
+-><div>{prop.key.toString() + prop.todo}</div> : JSX.Element
++><div>{prop.key.toString() + prop.todo}</div> : Element
+ >div : any
+ >prop.key.toString() + prop.todo : string
+ >prop.key.toString() : string
+@@= skipped -21, +21 lines =@@
+ >div : any
+ }
+ function TodoList({ todos }: TodoListProps) {
+->TodoList : ({ todos }: TodoListProps) => JSX.Element
++>TodoList : (__0: TodoListProps) => Element
+ >todos : TodoProp[]
+ 
+     return <div>
+-><div>        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}    </div> : JSX.Element
++><div>        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}    </div> : Element
+ >div : any
+ 
+         {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
+->todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
++>todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : Element[]
+ >todos.map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
+ >todos : TodoProp[]
+ >map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
+->todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => JSX.Element
++>todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => Element
+ >todo : TodoProp
+-><Todo key={todo.id} todo={todo.todo}/> : JSX.Element
+->Todo : (prop: { key: number; todo: string; }) => JSX.Element
++><Todo key={todo.id} todo={todo.todo}/> : Element
++>Todo : (prop: { key: number; todo: string; }) => Element
+ >key : number
+ >todo.id : number
+ >todo : TodoProp
+@@= skipped -32, +32 lines =@@
+ >x : TodoListProps
+ 
+     <TodoList {...x}/>
+-><TodoList {...x}/> : JSX.Element
+->TodoList : ({ todos }: TodoListProps) => JSX.Element
++><TodoList {...x}/> : Element
++>TodoList : (__0: TodoListProps) => Element
+ >x : TodoListProps
+ 

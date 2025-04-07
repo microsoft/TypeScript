@@ -6,6 +6,7 @@
  Object.defineProperty(exports, "__esModule", { value: true });
 -var React = require("react");
 -var Tag = function (x) { return <div></div>; };
++const React = require("react");
 +const Tag = (x) => <div></div>;
  // OK
 -var k1 = <Tag />;

@@ -15,91 +15,91 @@ var p;
 >p : any
 
 var selfClosed1 = <div />;
->selfClosed1 : any
-><div /> : any
+>selfClosed1 : Element
+><div /> : Element
 >div : any
 
 var selfClosed2 = <div x="1" />;
->selfClosed2 : any
-><div x="1" /> : any
+>selfClosed2 : Element
+><div x="1" /> : Element
 >div : any
->x : any
+>x : string
 
 var selfClosed3 = <div x='1' />;
->selfClosed3 : any
-><div x='1' /> : any
+>selfClosed3 : Element
+><div x='1' /> : Element
 >div : any
->x : any
+>x : string
 
 var selfClosed4 = <div x="1" y='0' />;
->selfClosed4 : any
-><div x="1" y='0' /> : any
+>selfClosed4 : Element
+><div x="1" y='0' /> : Element
 >div : any
->x : any
->y : any
+>x : string
+>y : string
 
 var selfClosed5 = <div x={0} y='0' />;
->selfClosed5 : any
-><div x={0} y='0' /> : any
+>selfClosed5 : Element
+><div x={0} y='0' /> : Element
 >div : any
->x : any
+>x : number
 >0 : 0
->y : any
+>y : string
 
 var selfClosed6 = <div x={"1"} y='0' />;
->selfClosed6 : any
-><div x={"1"} y='0' /> : any
+>selfClosed6 : Element
+><div x={"1"} y='0' /> : Element
 >div : any
->x : any
+>x : string
 >"1" : "1"
->y : any
+>y : string
 
 var selfClosed7 = <div x={p} y='p' b />;
->selfClosed7 : any
-><div x={p} y='p' b /> : any
+>selfClosed7 : Element
+><div x={p} y='p' b /> : Element
 >div : any
 >x : any
 >p : any
->y : any
->b : any
+>y : string
+>b : true
 
 var openClosed1 = <div></div>;
->openClosed1 : any
-><div></div> : any
+>openClosed1 : Element
+><div></div> : Element
 >div : any
 >div : any
 
 var openClosed2 = <div n='m'>foo</div>;
->openClosed2 : any
-><div n='m'>foo</div> : any
+>openClosed2 : Element
+><div n='m'>foo</div> : Element
 >div : any
->n : any
+>n : string
 >div : any
 
 var openClosed3 = <div n='m'>{p}</div>;
->openClosed3 : any
-><div n='m'>{p}</div> : any
+>openClosed3 : Element
+><div n='m'>{p}</div> : Element
 >div : any
->n : any
+>n : string
 >p : any
 >div : any
 
 var openClosed4 = <div n='m'>{p < p}</div>;
->openClosed4 : any
-><div n='m'>{p < p}</div> : any
+>openClosed4 : Element
+><div n='m'>{p < p}</div> : Element
 >div : any
->n : any
+>n : string
 >p < p : boolean
 >p : any
 >p : any
 >div : any
 
 var openClosed5 = <div n='m' b>{p > p}</div>;
->openClosed5 : any
-><div n='m' b>{p > p}</div> : any
+>openClosed5 : Element
+><div n='m' b>{p > p}</div> : Element
 >div : any
->n : any
->b : any
+>n : string
+>b : true
 >p > p : boolean
 >p : any
 >p : any
@@ -112,16 +112,16 @@ class SomeClass {
 >f : () => void
 
 		var rewrites1 = <div>{() => this}</div>;
->rewrites1 : any
-><div>{() => this}</div> : any
+>rewrites1 : Element
+><div>{() => this}</div> : Element
 >div : any
 >() => this : () => this
 >this : this
 >div : any
 
 		var rewrites2 = <div>{[p, ...p, p]}</div>;
->rewrites2 : any
-><div>{[p, ...p, p]}</div> : any
+>rewrites2 : Element
+><div>{[p, ...p, p]}</div> : Element
 >div : any
 >[p, ...p, p] : any[]
 >p : any
@@ -131,27 +131,27 @@ class SomeClass {
 >div : any
 
 		var rewrites3 = <div>{{p}}</div>;
->rewrites3 : any
-><div>{{p}}</div> : any
+>rewrites3 : Element
+><div>{{p}}</div> : Element
 >div : any
 >{p} : { p: any; }
 >p : any
 >div : any
 
 		var rewrites4 = <div a={() => this}></div>;
->rewrites4 : any
-><div a={() => this}></div> : any
+>rewrites4 : Element
+><div a={() => this}></div> : Element
 >div : any
->a : any
+>a : () => this
 >() => this : () => this
 >this : this
 >div : any
 
 		var rewrites5 = <div a={[p, ...p, p]}></div>;
->rewrites5 : any
-><div a={[p, ...p, p]}></div> : any
+>rewrites5 : Element
+><div a={[p, ...p, p]}></div> : Element
 >div : any
->a : any
+>a : any[]
 >[p, ...p, p] : any[]
 >p : any
 >...p : any
@@ -160,10 +160,10 @@ class SomeClass {
 >div : any
 
 		var rewrites6 = <div a={{p}}></div>;
->rewrites6 : any
-><div a={{p}}></div> : any
+>rewrites6 : Element
+><div a={{p}}></div> : Element
 >div : any
->a : any
+>a : { p: any; }
 >{p} : { p: any; }
 >p : any
 >div : any
@@ -171,21 +171,21 @@ class SomeClass {
 }
 
 var whitespace1 = <div>      </div>;
->whitespace1 : any
-><div>      </div> : any
+>whitespace1 : Element
+><div>      </div> : Element
 >div : any
 >div : any
 
 var whitespace2 = <div>  {p}    </div>;
->whitespace2 : any
-><div>  {p}    </div> : any
+>whitespace2 : Element
+><div>  {p}    </div> : Element
 >div : any
 >p : any
 >div : any
 
 var whitespace3 = <div>  
->whitespace3 : any
-><div>        {p}          </div> : any
+>whitespace3 : Element
+><div>        {p}          </div> : Element
 >div : any
 
       {p}    

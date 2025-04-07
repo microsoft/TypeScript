@@ -35,12 +35,15 @@ export function MyComponent(props: { foo: string }) {
 >foo : Symbol(foo, Decl(b.tsx, 2, 36))
 
   return <div />;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 }
 
 let x = (
 >x : Symbol(x, Decl(b.tsx, 6, 3))
 
   <div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
     {/*
    @ts-ignore */}
     <MyComponent foo={100} />
@@ -82,5 +85,7 @@ let x = (
 >foo : Symbol(foo, Decl(b.tsx, 32, 16))
 
   </div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
 );
 

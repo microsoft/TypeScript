@@ -209,7 +209,11 @@ func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeBase {
 }
 
 func (n *Node) Symbol() *Symbol {
-	return n.DeclarationData().Symbol
+	data := n.DeclarationData()
+	if data != nil {
+		return data.Symbol
+	}
+	return nil
 }
 
 func (n *Node) LocalSymbol() *Symbol {
@@ -257,7 +261,7 @@ func (n *Node) Text() string {
 	case KindTemplateTail:
 		return n.AsTemplateTail().Text
 	case KindJsxNamespacedName:
-		return n.AsJsxNamespacedName().Namespace.Text() + ":" + n.AsJsxNamespacedName().Name().Text()
+		return n.AsJsxNamespacedName().Namespace.Text() + ":" + n.AsJsxNamespacedName().name.Text()
 	case KindRegularExpressionLiteral:
 		return n.AsRegularExpressionLiteral().Text
 	}
@@ -332,6 +336,10 @@ func (n *Node) Expression() *Node {
 		return n.AsExportAssignment().Expression
 	case KindDecorator:
 		return n.AsDecorator().Expression
+	case KindJsxExpression:
+		return n.AsJsxExpression().Expression
+	case KindJsxSpreadAttribute:
+		return n.AsJsxSpreadAttribute().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -692,6 +700,26 @@ func (n *Node) Label() *Node {
 		return n.AsContinueStatement().Label
 	}
 	panic("Unhandled case in Node.Label: " + n.Kind.String())
+}
+
+func (n *Node) Attributes() *Node {
+	switch n.Kind {
+	case KindJsxOpeningElement:
+		return n.AsJsxOpeningElement().Attributes
+	case KindJsxSelfClosingElement:
+		return n.AsJsxSelfClosingElement().Attributes
+	}
+	panic("Unhandled case in Node.Attributes: " + n.Kind.String())
+}
+
+func (n *Node) Children() *NodeList {
+	switch n.Kind {
+	case KindJsxElement:
+		return n.AsJsxElement().Children
+	case KindJsxFragment:
+		return n.AsJsxFragment().Children
+	}
+	panic("Unhandled case in Node.Children: " + n.Kind.String())
 }
 
 // Determines if `n` contains `descendant` by walking up the `Parent` pointers from `descendant`. This method panics if
@@ -7894,6 +7922,10 @@ func (node *JsxElement) computeSubtreeFacts() SubtreeFacts {
 		SubtreeContainsJsx
 }
 
+func IsJsxElement(node *Node) bool {
+	return node.Kind == KindJsxElement
+}
+
 // JsxAttributes
 type JsxAttributes struct {
 	ExpressionBase
@@ -8249,6 +8281,10 @@ func (node *JsxSpreadAttribute) computeSubtreeFacts() SubtreeFacts {
 	return propagateSubtreeFacts(node.Expression) | SubtreeContainsJsx
 }
 
+func IsJsxSpreadAttribute(node *Node) bool {
+	return node.Kind == KindJsxSpreadAttribute
+}
+
 // JsxClosingElement
 
 type JsxClosingElement struct {
@@ -8327,6 +8363,10 @@ func (node *JsxExpression) computeSubtreeFacts() SubtreeFacts {
 	return propagateSubtreeFacts(node.Expression) | SubtreeContainsJsx
 }
 
+func IsJsxExpression(node *Node) bool {
+	return node.Kind == KindJsxExpression
+}
+
 // JsxText
 
 type JsxText struct {
@@ -8348,6 +8388,10 @@ func (node *JsxText) Clone(f *NodeFactory) *Node {
 
 func (node *JsxText) computeSubtreeFacts() SubtreeFacts {
 	return SubtreeContainsJsx
+}
+
+func IsJsxText(node *Node) bool {
+	return node.Kind == KindJsxText
 }
 
 // SyntaxList
@@ -9829,15 +9873,15 @@ func IsSourceFile(node *Node) bool {
 
 type CommentRange struct {
 	core.TextRange
-	HasTrailingNewLine bool
 	Kind               Kind
+	HasTrailingNewLine bool
 }
 
 func (f *NodeFactory) NewCommentRange(kind Kind, pos int, end int, hasTrailingNewLine bool) CommentRange {
 	return CommentRange{
 		TextRange:          core.NewTextRange(pos, end),
-		HasTrailingNewLine: hasTrailingNewLine,
 		Kind:               kind,
+		HasTrailingNewLine: hasTrailingNewLine,
 	}
 }
 
@@ -9855,9 +9899,9 @@ type PragmaArgument struct {
 }
 
 type Pragma struct {
-	Name      string
-	Args      map[string]PragmaArgument
-	ArgsRange CommentRange
+	CommentRange
+	Name string
+	Args map[string]PragmaArgument
 }
 
 type PragmaKindFlags = uint8

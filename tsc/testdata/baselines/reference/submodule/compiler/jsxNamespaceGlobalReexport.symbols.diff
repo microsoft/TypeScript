@@ -82,4 +82,6 @@
  >Comp : Symbol(Comp, Decl(index.tsx, 0, 12))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 32, 33))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 32, 33))
++>div : Symbol(div, Decl(index.d.ts, 32, 33))
++>div : Symbol(div, Decl(index.d.ts, 32, 33))
  

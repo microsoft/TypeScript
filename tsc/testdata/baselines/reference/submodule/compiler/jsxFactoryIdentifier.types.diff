@@ -1,0 +1,27 @@
+--- old.jsxFactoryIdentifier.types
++++ new.jsxFactoryIdentifier.types
+@@= skipped -34, +34 lines =@@
+ >Element : typeof Element
+ 
+     export function isElement(el: any): el is JSX.Element {
+->isElement : (el: any) => el is JSX.Element
++>isElement : (el: any) => el is Element
+ >el : any
+ >JSX : any
+ 
+@@= skipped -78, +78 lines =@@
+ >[			<meta content="helloworld"></meta>,			<meta content={c.a!.b}></meta>		] : any[]
+ 
+ 			<meta content="helloworld"></meta>,
+-><meta content="helloworld"></meta> : error
++><meta content="helloworld"></meta> : any
+ >meta : any
+ >content : string
+ >meta : any
+ 
+ 			<meta content={c.a!.b}></meta>
+-><meta content={c.a!.b}></meta> : error
++><meta content={c.a!.b}></meta> : any
+ >meta : any
+ >content : string
+ >c.a!.b : string

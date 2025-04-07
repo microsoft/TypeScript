@@ -1,0 +1,8 @@
+reactNamespaceMissingDeclaration.tsx(2,2): error TS2874: This JSX tag requires 'myReactLib' to be in scope, but it could not be found.
+
+
+==== reactNamespaceMissingDeclaration.tsx (1 errors) ====
+    // Error myReactLib not declared
+    <foo data/>
+     ~~~
+!!! error TS2874: This JSX tag requires 'myReactLib' to be in scope, but it could not be found.

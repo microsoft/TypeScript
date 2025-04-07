@@ -7,6 +7,7 @@
 -var React = require("react");
 -var decorator = function (Component) {
 -    return function (props) { return <Component {...props}></Component>; };
++const React = require("react");
 +const decorator = function (Component) {
 +    return (props) => <Component {...props}></Component>;
  };

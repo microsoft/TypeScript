@@ -1,0 +1,73 @@
+--- old.jsxElementType.errors.txt
++++ new.jsxElementType.errors.txt
+@@= skipped -13, +13 lines =@@
+ jsxElementType.tsx(61,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+ jsxElementType.tsx(70,2): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
++  The last overload gave the following error.
+     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
+-  Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
+-    Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
+ jsxElementType.tsx(72,20): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
++  The last overload gave the following error.
+     Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+       Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+-  Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
+-    Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+-      Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+ jsxElementType.tsx(78,1): error TS2339: Property 'boop' does not exist on type 'JSX.IntrinsicElements'.
+ jsxElementType.tsx(79,1): error TS2339: Property 'my-undeclared-custom-element' does not exist on type 'JSX.IntrinsicElements'.
+ jsxElementType.tsx(91,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
+-  Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
+-    Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
+-      Target signature provides too few arguments. Expected 2 or more, but got 1.
++  Its type '(props: {}, ref: ForwardedRef<???>) => null' is not a valid JSX element type.
++    Type '(props: {}, ref: ForwardedRef<???>) => null' is not assignable to type '((props: any) => React18ReactNode) | (new (props: any) => Component<any, any, any>)'.
++      Type '(props: {}, ref: ForwardedRef<???>) => null' is not assignable to type '(props: any) => React18ReactNode'.
++        Target signature provides too few arguments. Expected 2 or more, but got 1.
+ jsxElementType.tsx(95,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
+ jsxElementType.tsx(98,2): error TS2304: Cannot find name 'Unresolved'.
+ jsxElementType.tsx(99,2): error TS2304: Cannot find name 'Unresolved'.
+@@= skipped -129, +125 lines =@@
+     <RenderStringClass />;
+      ~~~~~~~~~~~~~~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
+-!!! error TS2769:   Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
+-!!! error TS2769:     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
+ !!! related TS2728 jsxElementType.tsx:64:51: 'title' is declared here.
+-!!! related TS2728 jsxElementType.tsx:64:51: 'title' is declared here.
++!!! related TS2771 react16.d.ts:357:13: The last overload is declared here.
+     <RenderStringClass title="react" />;
+     <RenderStringClass excessProp />;
+                        ~~~~~~~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+ !!! error TS2769:       Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+-!!! error TS2769:   Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
+-!!! error TS2769:     Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+-!!! error TS2769:       Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
++!!! related TS2771 react16.d.ts:357:13: The last overload is declared here.
+     
+     // Host element types still work
+     <div />;
+@@= skipped -41, +37 lines =@@
+     <ReactNativeFlatList />;
+      ~~~~~~~~~~~~~~~~~~~
+ !!! error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
+-!!! error TS2786:   Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
+-!!! error TS2786:     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
+-!!! error TS2786:       Target signature provides too few arguments. Expected 2 or more, but got 1.
++!!! error TS2786:   Its type '(props: {}, ref: ForwardedRef<???>) => null' is not a valid JSX element type.
++!!! error TS2786:     Type '(props: {}, ref: ForwardedRef<???>) => null' is not assignable to type '((props: any) => React18ReactNode) | (new (props: any) => Component<any, any, any>)'.
++!!! error TS2786:       Type '(props: {}, ref: ForwardedRef<???>) => null' is not assignable to type '(props: any) => React18ReactNode'.
++!!! error TS2786:         Target signature provides too few arguments. Expected 2 or more, but got 1.
+     
+     // testing higher-order component compat
+     function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {

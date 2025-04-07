@@ -1,0 +1,267 @@
+--- old.tsxLibraryManagedAttributes.types
++++ new.tsxLibraryManagedAttributes.types
+@@= skipped -130, +130 lines =@@
+ }
+ 
+ const a = <Component foo={12} bar="yes" baz="yeah" />;
+->a : JSX.Element
+-><Component foo={12} bar="yes" baz="yeah" /> : JSX.Element
++>a : Element
++><Component foo={12} bar="yes" baz="yeah" /> : Element
+ >Component : typeof Component
+ >foo : number
+ >12 : 12
+@@= skipped -9, +9 lines =@@
+ >baz : string
+ 
+ const b = <Component foo={12} />; // Error, missing required prop bar
+->b : JSX.Element
+-><Component foo={12} /> : JSX.Element
++>b : Element
++><Component foo={12} /> : Element
+ >Component : typeof Component
+ >foo : number
+ >12 : 12
+ 
+ const c = <Component bar="yes" baz="yeah" />;
+->c : JSX.Element
+-><Component bar="yes" baz="yeah" /> : JSX.Element
++>c : Element
++><Component bar="yes" baz="yeah" /> : Element
+ >Component : typeof Component
+ >bar : string
+ >baz : string
+ 
+ const d = <Component bar="yes" baz="yo" bat="ohno" />; // Error, baz not a valid prop
+->d : JSX.Element
+-><Component bar="yes" baz="yo" bat="ohno" /> : JSX.Element
++>d : Element
++><Component bar="yes" baz="yo" bat="ohno" /> : Element
+ >Component : typeof Component
+ >bar : string
+ >baz : string
+ >bat : string
+ 
+ const e = <Component foo={12} bar={null} baz="cool" />; // bar is nullable/undefinable since it's not marked `isRequired`
+->e : JSX.Element
+-><Component foo={12} bar={null} baz="cool" /> : JSX.Element
++>e : Element
++><Component foo={12} bar={null} baz="cool" /> : Element
+ >Component : typeof Component
+ >foo : number
+ >12 : 12
+@@= skipped -31, +31 lines =@@
+ >baz : string
+ 
+ const f = <Component foo={12} bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
+->f : JSX.Element
+-><Component foo={12} bar="yeah" baz={null} /> : JSX.Element
++>f : Element
++><Component foo={12} bar="yeah" baz={null} /> : Element
+ >Component : typeof Component
+ >foo : number
+ >12 : 12
+@@= skipped -34, +34 lines =@@
+ }
+ 
+ const g = <JustPropTypes foo={12} bar="ok" />;
+->g : JSX.Element
+-><JustPropTypes foo={12} bar="ok" /> : JSX.Element
++>g : Element
++><JustPropTypes foo={12} bar="ok" /> : Element
+ >JustPropTypes : typeof JustPropTypes
+ >foo : number
+ >12 : 12
+ >bar : string
+ 
+ const h = <JustPropTypes foo="no" />; // error, wrong type
+->h : JSX.Element
+-><JustPropTypes foo="no" /> : JSX.Element
++>h : Element
++><JustPropTypes foo="no" /> : Element
+ >JustPropTypes : typeof JustPropTypes
+ >foo : string
+ 
+ const i = <JustPropTypes foo={null} bar="ok" />;
+->i : JSX.Element
+-><JustPropTypes foo={null} bar="ok" /> : JSX.Element
++>i : Element
++><JustPropTypes foo={null} bar="ok" /> : Element
+ >JustPropTypes : typeof JustPropTypes
+ >foo : null
+ >bar : string
+ 
+ const j = <JustPropTypes foo={12} bar={null} />; // error, bar is required
+->j : JSX.Element
+-><JustPropTypes foo={12} bar={null} /> : JSX.Element
++>j : Element
++><JustPropTypes foo={12} bar={null} /> : Element
+ >JustPropTypes : typeof JustPropTypes
+ >foo : number
+ >12 : 12
+@@= skipped -44, +44 lines =@@
+ }
+ 
+ const k = <JustDefaultProps foo={12} />;
+->k : JSX.Element
+-><JustDefaultProps foo={12} /> : JSX.Element
++>k : Element
++><JustDefaultProps foo={12} /> : Element
+ >JustDefaultProps : typeof JustDefaultProps
+ >foo : number
+ >12 : 12
+ 
+ const l = <JustDefaultProps foo={12} bar="ok" />; // error, no prop named bar
+->l : JSX.Element
+-><JustDefaultProps foo={12} bar="ok" /> : JSX.Element
++>l : Element
++><JustDefaultProps foo={12} bar="ok" /> : Element
+ >JustDefaultProps : typeof JustDefaultProps
+ >foo : number
+ >12 : 12
+ >bar : string
+ 
+ const m = <JustDefaultProps foo="no" />; // error, wrong type
+->m : JSX.Element
+-><JustDefaultProps foo="no" /> : JSX.Element
++>m : Element
++><JustDefaultProps foo="no" /> : Element
+ >JustDefaultProps : typeof JustDefaultProps
+ >foo : string
+ 
+@@= skipped -65, +65 lines =@@
+     };
+ }
+ const n = <BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} />;
+->n : JSX.Element
+-><BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} /> : JSX.Element
++>n : Element
++><BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} /> : Element
+ >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+ >foo : string
+ >bar : string
+@@= skipped -9, +9 lines =@@
+ >12 : 12
+ 
+ const o = <BothWithSpecifiedGeneric foo="no" />; // Error, missing required prop bar
+->o : JSX.Element
+-><BothWithSpecifiedGeneric foo="no" /> : JSX.Element
++>o : Element
++><BothWithSpecifiedGeneric foo="no" /> : Element
+ >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+ >foo : string
+ 
+ const p = <BothWithSpecifiedGeneric bar="yes" baz={12} />;
+->p : JSX.Element
+-><BothWithSpecifiedGeneric bar="yes" baz={12} /> : JSX.Element
++>p : Element
++><BothWithSpecifiedGeneric bar="yes" baz={12} /> : Element
+ >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+ >bar : string
+ >baz : number
+ >12 : 12
+ 
+ const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, baz not a valid prop
+->q : JSX.Element
+-><BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" /> : JSX.Element
++>q : Element
++><BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" /> : Element
+ >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+ >bar : string
+ >baz : number
+@@= skipped -23, +23 lines =@@
+ >bat : string
+ 
+ const r = <BothWithSpecifiedGeneric foo="no" bar={null} baz={0} />; // bar is nullable/undefinable since it's not marked `isRequired`
+->r : JSX.Element
+-><BothWithSpecifiedGeneric foo="no" bar={null} baz={0} /> : JSX.Element
++>r : Element
++><BothWithSpecifiedGeneric foo="no" bar={null} baz={0} /> : Element
+ >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+ >foo : string
+ >bar : null
+@@= skipped -9, +9 lines =@@
+ >0 : 0
+ 
+ const s = <BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
+->s : JSX.Element
+-><BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} /> : JSX.Element
++>s : Element
++><BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} /> : Element
+ >BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+ >foo : string
+ >bar : string
+@@= skipped -32, +32 lines =@@
+     };
+ }
+ const t = <JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" />;
+->t : JSX.Element
+-><JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" /> : JSX.Element
++>t : Element
++><JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" /> : Element
+ >JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
+ >foo : string
+ >bar : string
+ 
+ const u = <JustPropTypesWithSpecifiedGeneric foo={12} />; // error, wrong type
+->u : JSX.Element
+-><JustPropTypesWithSpecifiedGeneric foo={12} /> : JSX.Element
++>u : Element
++><JustPropTypesWithSpecifiedGeneric foo={12} /> : Element
+ >JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
+ >foo : number
+ >12 : 12
+ 
+ const v = <JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" />; // generic overrides propTypes required-ness, null isn't valid
+->v : JSX.Element
+-><JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" /> : JSX.Element
++>v : Element
++><JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" /> : Element
+ >JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
+ >foo : null
+ >bar : string
+ 
+ const w = <JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} />; // error, bar is required
+->w : JSX.Element
+-><JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} /> : JSX.Element
++>w : Element
++><JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} /> : Element
+ >JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
+ >foo : string
+ >bar : null
+@@= skipped -43, +43 lines =@@
+ }
+ 
+ const x = <JustDefaultPropsWithSpecifiedGeneric foo="eh" />;
+->x : JSX.Element
+-><JustDefaultPropsWithSpecifiedGeneric foo="eh" /> : JSX.Element
++>x : Element
++><JustDefaultPropsWithSpecifiedGeneric foo="eh" /> : Element
+ >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
+ >foo : string
+ 
+ const y = <JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" />; // error, no prop named bar
+->y : JSX.Element
+-><JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" /> : JSX.Element
++>y : Element
++><JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" /> : Element
+ >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
+ >foo : string
+ >bar : string
+ 
+ const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type
+->z : JSX.Element
+-><JustDefaultPropsWithSpecifiedGeneric foo={12} /> : JSX.Element
++>z : Element
++><JustDefaultPropsWithSpecifiedGeneric foo={12} /> : Element
+ >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
+ >foo : number
+ >12 : 12
+ 
+ const aa = <JustDefaultPropsWithSpecifiedGeneric />;
+->aa : JSX.Element
+-><JustDefaultPropsWithSpecifiedGeneric /> : JSX.Element
++>aa : Element
++><JustDefaultPropsWithSpecifiedGeneric /> : Element
+ >JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
+ 

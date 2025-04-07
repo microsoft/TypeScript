@@ -1,0 +1,13 @@
+--- old.jsxJsxsCjsTransformSubstitutesNames(jsx=react-jsx).types
++++ new.jsxJsxsCjsTransformSubstitutesNames(jsx=react-jsx).types
+@@= skipped -2, +2 lines =@@
+ === jsxJsxsCjsTransformSubstitutesNames.tsx ===
+ /// <reference path="react16.d.ts" />
+ const a = <div></div>
+->a : JSX.Element
+-><div></div> : JSX.Element
++>a : Element
++><div></div> : Element
+ >div : any
+ >div : any
+ 

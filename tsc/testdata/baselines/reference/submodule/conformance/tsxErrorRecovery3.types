@@ -4,24 +4,24 @@
 declare namespace JSX { interface Element { } }
 
 <div></div>
-><div></div><div></div> : any
-><div></div> : any
+><div></div><div></div> : Element
+><div></div> : Element
 >div : any
 >div : any
 
 <div></div>
-><div></div> : any
+><div></div> : Element
 >div : any
 >div : any
 
 === file2.tsx ===
 var x = <div></div><div></div>
->x : any
-><div></div><div></div> : any
-><div></div> : any
+>x : Element
+><div></div><div></div> : Element
+><div></div> : Element
 >div : any
 >div : any
-><div></div> : any
+><div></div> : Element
 >div : any
 >div : any
 

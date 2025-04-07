@@ -1,0 +1,43 @@
+--- old.jsxIntrinsicElementsTypeArgumentErrors.errors.txt
++++ new.jsxIntrinsicElementsTypeArgumentErrors.errors.txt
+@@= skipped -0, +0 lines =@@
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(5,15): error TS1099: Type argument list cannot be empty.
++jsxIntrinsicElementsTypeArgumentErrors.tsx(5,16): error TS2558: Expected 0 type arguments, but got 0.
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(7,16): error TS2558: Expected 0 type arguments, but got 1.
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(7,22): error TS1009: Trailing comma not allowed.
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(9,16): error TS2304: Cannot find name 'Missing'.
+@@= skipped -9, +10 lines =@@
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(13,23): error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(15,16): error TS2558: Expected 0 type arguments, but got 1.
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(18,15): error TS1099: Type argument list cannot be empty.
++jsxIntrinsicElementsTypeArgumentErrors.tsx(18,16): error TS2558: Expected 0 type arguments, but got 0.
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(20,16): error TS2558: Expected 0 type arguments, but got 1.
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(20,22): error TS1009: Trailing comma not allowed.
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(22,16): error TS2304: Cannot find name 'Missing'.
+@@= skipped -12, +13 lines =@@
+ jsxIntrinsicElementsTypeArgumentErrors.tsx(28,16): error TS2558: Expected 0 type arguments, but got 1.
+ 
+ 
+-==== jsxIntrinsicElementsTypeArgumentErrors.tsx (22 errors) ====
++==== jsxIntrinsicElementsTypeArgumentErrors.tsx (24 errors) ====
+     /// <reference path="/.lib/react16.d.ts" />
+     import * as React from "react";
+     
+@@= skipped -8, +8 lines =@@
+     const a = <div<>></div>; // empty type args
+                   ~~
+ !!! error TS1099: Type argument list cannot be empty.
++                   
++!!! error TS2558: Expected 0 type arguments, but got 0.
+     
+     const b = <div<number,>></div>; // trailing comma type args
+                    ~~~~~~~
+@@= skipped -35, +37 lines =@@
+     const g = <div<>/>; // empty type args
+                   ~~
+ !!! error TS1099: Type argument list cannot be empty.
++                   
++!!! error TS2558: Expected 0 type arguments, but got 0.
+     
+     const h = <div<number,>/>; // trailing comma type args
+                    ~~~~~~~

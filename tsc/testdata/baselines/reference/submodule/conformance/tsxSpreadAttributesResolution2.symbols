@@ -25,6 +25,8 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 >render : Symbol(render, Decl(file.tsx, 7, 58))
 
         return <div>Hello</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
     }
 }
 

@@ -5,142 +5,166 @@
  
      return <div className={"T1"} { ...a }>T1</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 3, 15))
  >a : Symbol(a, Decl(test.tsx, 2, 19))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T2(a: any, b: any) {
-@@= skipped -12, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  >b : Symbol(b, Decl(test.tsx, 6, 26))
  
      return <div className={"T2"} { ...a } { ...b }>T2</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 7, 15))
  >a : Symbol(a, Decl(test.tsx, 6, 19))
  >b : Symbol(b, Decl(test.tsx, 6, 26))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T3(a: any, b: any) {
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +13 lines =@@
  >b : Symbol(b, Decl(test.tsx, 10, 26))
  
      return <div { ...a } className={"T3"} { ...b }>T3</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >a : Symbol(a, Decl(test.tsx, 10, 19))
  >className : Symbol(className, Decl(test.tsx, 11, 24))
  >b : Symbol(b, Decl(test.tsx, 10, 26))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T4(a: any, b: any) {
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +13 lines =@@
  >b : Symbol(b, Decl(test.tsx, 14, 26))
  
      return <div className={"T4"} { ...{ ...a, ...b } }>T4</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 15, 15))
  >a : Symbol(a, Decl(test.tsx, 14, 19))
  >b : Symbol(b, Decl(test.tsx, 14, 26))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T5(a: any, b: any, c: any, d: any) {
-@@= skipped -15, +13 lines =@@
+@@= skipped -15, +15 lines =@@
  >d : Symbol(d, Decl(test.tsx, 18, 42))
  
      return <div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 19, 15))
  >a : Symbol(a, Decl(test.tsx, 18, 19))
  >b : Symbol(b, Decl(test.tsx, 18, 26))
  >c : Symbol(c, Decl(test.tsx, 19, 56))
  >d : Symbol(d, Decl(test.tsx, 19, 59))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T6(a: any, b: any, c: any, d: any) {
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  >d : Symbol(d, Decl(test.tsx, 22, 42))
  
      return <div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 23, 15))
  >a : Symbol(a, Decl(test.tsx, 22, 19))
  >b : Symbol(b, Decl(test.tsx, 22, 26))
  >c : Symbol(c, Decl(test.tsx, 22, 34))
  >d : Symbol(d, Decl(test.tsx, 22, 42))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T7(a: any, b: any, c: any, d: any) {
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  >d : Symbol(d, Decl(test.tsx, 26, 42))
  
      return <div>T7</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T8(a: any, b: any, c: any, d: any) {
-@@= skipped -12, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  >d : Symbol(d, Decl(test.tsx, 30, 42))
  
      return <div className={"T8"} { ...{ __proto__: null, dir: 'rtl' } }>T8</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 31, 15))
  >__proto__ : Symbol(__proto__, Decl(test.tsx, 31, 39))
  >dir : Symbol(dir, Decl(test.tsx, 31, 56))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T9(a: any, b: any, c: any, d: any) {
-@@= skipped -15, +13 lines =@@
+@@= skipped -15, +15 lines =@@
  >d : Symbol(d, Decl(test.tsx, 34, 42))
  
      return <div className={"T9"} { ...{ "__proto__": null } }>T9</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 35, 15))
 ->"__proto__" : Symbol("__proto__", Decl(test.tsx, 35, 39))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 +>"__proto__" : Symbol(__proto__, Decl(test.tsx, 35, 39))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  declare const __proto__: string;
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  >d : Symbol(d, Decl(test.tsx, 40, 43))
  
      return <div className={"T10"} { ...{ [__proto__]: null } }>T10</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 41, 15))
  >[__proto__] : Symbol([__proto__], Decl(test.tsx, 41, 40))
  >__proto__ : Symbol(__proto__, Decl(test.tsx, 38, 13))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T11(a: any, b: any, c: any, d: any) {
-@@= skipped -15, +13 lines =@@
+@@= skipped -15, +15 lines =@@
  >d : Symbol(d, Decl(test.tsx, 44, 43))
  
      return <div className={"T11"} { ...{ ["__proto__"]: null } }>T11</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 45, 15))
 ->["__proto__"] : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
 ->"__proto__" : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 +>["__proto__"] : Symbol(__proto__, Decl(test.tsx, 45, 40))
 +>"__proto__" : Symbol(__proto__, Decl(test.tsx, 45, 40))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  export function T12(a: any, b: any, c: any, d: any) {
-@@= skipped -15, +13 lines =@@
+@@= skipped -15, +15 lines =@@
  >d : Symbol(d, Decl(test.tsx, 48, 43))
  
      return <div className={"T12"} { ...{ __proto__ } }>T12</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 49, 15))
  >__proto__ : Symbol(__proto__, Decl(test.tsx, 49, 40))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  

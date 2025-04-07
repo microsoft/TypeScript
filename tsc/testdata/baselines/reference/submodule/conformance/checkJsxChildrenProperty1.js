@@ -27,6 +27,7 @@ let k2 =
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 function Comp(p) {
     return <div>{p.b}</div>;
 }

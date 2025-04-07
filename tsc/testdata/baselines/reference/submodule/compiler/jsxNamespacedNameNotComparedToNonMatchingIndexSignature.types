@@ -16,10 +16,10 @@ declare module "react" {
 }
 
 export const tag = <div ns:thing="a"/>
->tag : any
-><div ns:thing="a"/> : any
+>tag : Element
+><div ns:thing="a"/> : Element
 >div : any
->ns:thing : any
+>ns:thing : string
 >ns : any
 >thing : any
 

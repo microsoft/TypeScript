@@ -24,9 +24,9 @@ const children: any[] = [];
 >[] : never[]
 
 <Tag className={classes} {...rest}>
-><Tag className={classes} {...rest}>{children}</Tag> : any
+><Tag className={classes} {...rest}>{children}</Tag> : Element
 >Tag : keyof ReactHTML
->className : any
+>className : string
 >classes : ""
 >rest : HTMLAttributes<HTMLElement>
 

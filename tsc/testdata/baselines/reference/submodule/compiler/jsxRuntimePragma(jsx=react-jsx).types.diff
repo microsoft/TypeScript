@@ -1,0 +1,126 @@
+--- old.jsxRuntimePragma(jsx=react-jsx).types
++++ new.jsxRuntimePragma(jsx=react-jsx).types
+@@= skipped -6, +6 lines =@@
+ >React : typeof React
+ 
+ export const HelloWorld = () => <h1>Hello world</h1>;
+->HelloWorld : () => JSX.Element
+->() => <h1>Hello world</h1> : () => JSX.Element
+-><h1>Hello world</h1> : JSX.Element
++>HelloWorld : () => Element
++>() => <h1>Hello world</h1> : () => Element
++><h1>Hello world</h1> : Element
+ >h1 : any
+ >h1 : any
+ 
+ export const frag = <><div></div></>;
+->frag : JSX.Element
+-><><div></div></> : JSX.Element
+-><div></div> : JSX.Element
++>frag : Element
++><><div></div></> : Element
++><div></div> : Element
+ >div : any
+ >div : any
+ 
+ export const selfClosing = <img src="./image.png" />;
+->selfClosing : JSX.Element
+-><img src="./image.png" /> : JSX.Element
++>selfClosing : Element
++><img src="./image.png" /> : Element
+ >img : any
+ >src : string
+ 
+@@= skipped -23, +23 lines =@@
+ /// <reference path="react16.d.ts" />
+ /* @jsxRuntime automatic */
+ export const HelloWorld = () => <h1>Hello world</h1>;
+->HelloWorld : () => JSX.Element
+->() => <h1>Hello world</h1> : () => JSX.Element
+-><h1>Hello world</h1> : JSX.Element
++>HelloWorld : () => Element
++>() => <h1>Hello world</h1> : () => Element
++><h1>Hello world</h1> : Element
+ >h1 : any
+ >h1 : any
+ 
+ export const frag = <><div></div></>;
+->frag : JSX.Element
+-><><div></div></> : JSX.Element
+-><div></div> : JSX.Element
++>frag : Element
++><><div></div></> : Element
++><div></div> : Element
+ >div : any
+ >div : any
+ 
+ export const selfClosing = <img src="./image.png" />;
+->selfClosing : JSX.Element
+-><img src="./image.png" /> : JSX.Element
++>selfClosing : Element
++><img src="./image.png" /> : Element
+ >img : any
+ >src : string
+ 
+@@= skipped -24, +24 lines =@@
+ /* @jsxRuntime classic */
+ /* @jsxRuntime automatic */
+ export const HelloWorld = () => <h1>Hello world</h1>;
+->HelloWorld : () => JSX.Element
+->() => <h1>Hello world</h1> : () => JSX.Element
+-><h1>Hello world</h1> : JSX.Element
++>HelloWorld : () => Element
++>() => <h1>Hello world</h1> : () => Element
++><h1>Hello world</h1> : Element
+ >h1 : any
+ >h1 : any
+ 
+ export const frag = <><div></div></>;
+->frag : JSX.Element
+-><><div></div></> : JSX.Element
+-><div></div> : JSX.Element
++>frag : Element
++><><div></div></> : Element
++><div></div> : Element
+ >div : any
+ >div : any
+ 
+ export const selfClosing = <img src="./image.png" />;
+->selfClosing : JSX.Element
+-><img src="./image.png" /> : JSX.Element
++>selfClosing : Element
++><img src="./image.png" /> : Element
+ >img : any
+ >src : string
+ 
+@@= skipped -27, +27 lines =@@
+ >React : typeof React
+ 
+ export const HelloWorld = () => <h1>Hello world</h1>;
+->HelloWorld : () => JSX.Element
+->() => <h1>Hello world</h1> : () => JSX.Element
+-><h1>Hello world</h1> : JSX.Element
++>HelloWorld : () => Element
++>() => <h1>Hello world</h1> : () => Element
++><h1>Hello world</h1> : Element
+ >h1 : any
+ >h1 : any
+ 
+ export const frag = <><div></div></>;
+->frag : JSX.Element
+-><><div></div></> : JSX.Element
+-><div></div> : JSX.Element
++>frag : Element
++><><div></div></> : Element
++><div></div> : Element
+ >div : any
+ >div : any
+ 
+ export const selfClosing = <img src="./image.png" />;
+->selfClosing : JSX.Element
+-><img src="./image.png" /> : JSX.Element
++>selfClosing : Element
++><img src="./image.png" /> : Element
+ >img : any
+ >src : string
+ 

@@ -13,12 +13,12 @@ const decorator4 = function <T extends { x: number }>(Component: React.Stateless
 >React : any
 
     return (props) => <Component {...props} y={"blah"} ></Component>
->(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: ReactNode; }) => any
+>(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: ReactNode; }) => Element
 >props : T & { children?: ReactNode; }
-><Component {...props} y={"blah"} ></Component> : any
+><Component {...props} y={"blah"} ></Component> : Element
 >Component : StatelessComponent<T>
 >props : T & { children?: ReactNode; }
->y : any
+>y : string
 >"blah" : "blah"
 >Component : StatelessComponent<T>
 

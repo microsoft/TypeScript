@@ -1,6 +1,46 @@
 --- old.jsxNamespacePrefixInName.symbols
 +++ new.jsxNamespacePrefixInName.symbols
-@@= skipped -78, +78 lines =@@
+@@= skipped -45, +45 lines =@@
+ 
+ var justAttribute1 = <element a:attr={"value"} />;
+ >justAttribute1 : Symbol(justAttribute1, Decl(jsxNamespacePrefixInName.tsx, 12, 3))
+->a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 12, 29))
++>a:attr : Symbol("þmissing", Decl(jsxNamespacePrefixInName.tsx, 12, 29))
+ 
+ var justAttribute2 = <element a:attr={"value"}></element>;
+ >justAttribute2 : Symbol(justAttribute2, Decl(jsxNamespacePrefixInName.tsx, 13, 3))
+->a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 13, 29))
++>a:attr : Symbol("þmissing", Decl(jsxNamespacePrefixInName.tsx, 13, 29))
+ 
+ var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;
+ >justAttribute3 : Symbol(justAttribute3, Decl(jsxNamespacePrefixInName.tsx, 14, 3))
+->a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 14, 29))
++>a:attr : Symbol("þmissing", Decl(jsxNamespacePrefixInName.tsx, 14, 29))
+ 
+ var both1 = <a:element a:attr={"value"} />;
+ >both1 : Symbol(both1, Decl(jsxNamespacePrefixInName.tsx, 16, 3))
+->a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 16, 22))
++>a:attr : Symbol("þmissing", Decl(jsxNamespacePrefixInName.tsx, 16, 22))
+ 
+ var both2 = <a:element k:attr={"value"}></a:element>;
+ >both2 : Symbol(both2, Decl(jsxNamespacePrefixInName.tsx, 17, 3))
+->k:attr : Symbol(k:attr, Decl(jsxNamespacePrefixInName.tsx, 17, 22))
++>k:attr : Symbol("þmissing", Decl(jsxNamespacePrefixInName.tsx, 17, 22))
+ 
+ var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
+ >both3 : Symbol(both3, Decl(jsxNamespacePrefixInName.tsx, 18, 3))
+->a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 18, 22))
++>a:attr : Symbol("þmissing", Decl(jsxNamespacePrefixInName.tsx, 18, 22))
+ 
+ var endOfIdent1 = <a: attr={"value"} />;
+ >endOfIdent1 : Symbol(endOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 20, 3))
+ 
+ var endOfIdent2 = <a attr:={"value"} />;
+ >endOfIdent2 : Symbol(endOfIdent2, Decl(jsxNamespacePrefixInName.tsx, 21, 3))
+->attr: : Symbol(attr:, Decl(jsxNamespacePrefixInName.tsx, 21, 20))
++>attr: : Symbol("þmissing", Decl(jsxNamespacePrefixInName.tsx, 21, 20))
+ 
+ var beginOfIdent1 = <:a attr={"value"} />;
  >beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 23, 3))
  >a : Symbol(a, Decl(jsxNamespacePrefixInName.tsx, 23, 22))
  >attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 23, 23))

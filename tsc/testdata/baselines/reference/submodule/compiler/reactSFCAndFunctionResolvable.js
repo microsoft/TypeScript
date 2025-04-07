@@ -30,6 +30,8 @@ const RandomComponent: React.SFC = () => {
 //// [reactSFCAndFunctionResolvable.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+const React = require("react");
 const RandomComponent = () => {
     const Component = condition1
         ? Radio

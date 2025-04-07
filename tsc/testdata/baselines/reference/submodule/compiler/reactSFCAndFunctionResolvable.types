@@ -31,7 +31,7 @@ declare const condition3: boolean;
 const RandomComponent: React.SFC = () => {
 >RandomComponent : SFC<{}>
 >React : any
->() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => any
+>() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => Element
 
   const Component =
 >Component : SFC<{}> | ((props: {}) => ReactElement<{}>)
@@ -60,11 +60,11 @@ const RandomComponent: React.SFC = () => {
 >Checkbox : SFC<{}>
 
   return condition1 ? <Component /> : <OtherComponent />;
->condition1 ? <Component /> : <OtherComponent /> : any
+>condition1 ? <Component /> : <OtherComponent /> : Element
 >condition1 : boolean
-><Component /> : any
+><Component /> : Element
 >Component : SFC<{}> | ((props: {}) => ReactElement<{}>)
-><OtherComponent /> : any
+><OtherComponent /> : Element
 >OtherComponent : SFC<{}> | (() => ReactElement<{}>)
 
 };

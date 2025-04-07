@@ -180,13 +180,13 @@ declare function App4<State, Actions extends ActionsObjectOr<State>>(props: Opti
 >JSX : any
 
 const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number, but JSX resolution is missing an inferential pass
->a : any
-><App4 state={100} foo={s => s} /> : any
+>a : Element
+><App4 state={100} foo={s => s} /> : Element
 >App4 : <State, Actions extends ActionsObjectOr<State>>(props: (string | Actions) & { state: State; }) => Element
->state : any
+>state : number
 >100 : 100
->foo : any
->s => s : (s: any) => any
->s : any
->s : any
+>foo : (s: number) => number
+>s => s : (s: number) => number
+>s : number
+>s : number
 

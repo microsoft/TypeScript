@@ -1,0 +1,20 @@
+--- old.tsxTypeArgumentPartialDefinitionStillErrors.types
++++ new.tsxTypeArgumentPartialDefinitionStillErrors.types
+@@= skipped -3, +3 lines =@@
+ declare namespace JSX {
+     interface Element {
+         render(): Element | string | false;
+->render : () => Element | string | false
++>render : () => string | false | Element
+ >false : false
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ <SFC<string> prop={1}></SFC>; // should error
+-><SFC<string> prop={1}></SFC> : JSX.Element
++><SFC<string> prop={1}></SFC> : Element
+ >SFC : <T>(props: Record<string, T>) => string
+ >prop : number
+ >1 : 1

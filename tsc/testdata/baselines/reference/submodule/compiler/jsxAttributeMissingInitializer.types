@@ -5,7 +5,7 @@ const x = <div foo= ></div>;
 >x : any
 ><div foo= ></div> : any
 >div : any
->foo : any
+>foo : true
 >div : any
 
 const y = 0;

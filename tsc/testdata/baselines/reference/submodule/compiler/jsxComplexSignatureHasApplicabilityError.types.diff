@@ -1,0 +1,158 @@
+--- old.jsxComplexSignatureHasApplicabilityError.types
++++ new.jsxComplexSignatureHasApplicabilityError.types
+@@= skipped -28, +28 lines =@@
+ >;
+ 
+ export function createReactSingleSelect<
+->createReactSingleSelect : <WrappedProps extends ReactSelectProps<any>>(WrappedComponent: React.ComponentType<WrappedProps>) => React.ComponentType<ReactSingleSelectProps<WrappedProps>>
++>createReactSingleSelect : <WrappedProps extends ReactSelectProps<any>>(WrappedComponent: ComponentType<WrappedProps>) => ComponentType<ReactSingleSelectProps<WrappedProps>>
+ 
+     WrappedProps extends ReactSelectProps<any>
+ >(
+     WrappedComponent: React.ComponentType<WrappedProps>
+->WrappedComponent : React.ComponentType<WrappedProps>
++>WrappedComponent : ComponentType<WrappedProps>
+ >React : any
+ 
+ ): React.ComponentType<ReactSingleSelectProps<WrappedProps>> {
+ >React : any
+ 
+     return (props) => {
+->(props) => {        return (            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        );    } : (props: Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }) => JSX.Element
+->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
++>(props) => {        return (            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        );    } : (props: Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & (keyof Props<ExtractValueType<WrappedProps>>)> & Props<ExtractValueType<WrappedProps>> & { children?: ReactNode; }) => Element
++>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & (keyof Props<ExtractValueType<WrappedProps>>)> & Props<ExtractValueType<WrappedProps>> & { children?: ReactNode; }
+ 
+         return (
+->(            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        ) : JSX.Element
++>(            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        ) : Element
+ 
+             <ReactSelectClass<ExtractValueType<WrappedProps>>
+-><ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            /> : JSX.Element
++><ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            /> : Element
+ >ReactSelectClass : typeof ReactSelectClass
+ 
+                 {...props}
+->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
++>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & (keyof Props<ExtractValueType<WrappedProps>>)> & Props<ExtractValueType<WrappedProps>> & { children?: ReactNode; }
+ 
+                 multi={false}
+ >multi : false
+@@= skipped -36, +36 lines =@@
+                 value={props.value}
+ >value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
+ >props.value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
+->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
++>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & (keyof Props<ExtractValueType<WrappedProps>>)> & Props<ExtractValueType<WrappedProps>> & { children?: ReactNode; }
+ >value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
+ 
+                 onChange={(value) => {
+@@= skipped -10, +10 lines =@@
+ 
+                     if (props.onChange) {
+ >props.onChange : ((value: Option<ExtractValueType<WrappedProps>> | undefined) => void) | undefined
+->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
++>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & (keyof Props<ExtractValueType<WrappedProps>>)> & Props<ExtractValueType<WrappedProps>> & { children?: ReactNode; }
+ >onChange : ((value: Option<ExtractValueType<WrappedProps>> | undefined) => void) | undefined
+ 
+                         props.onChange(value === null ? undefined : value);
+ >props.onChange(value === null ? undefined : value) : void
+ >props.onChange : (value: Option<ExtractValueType<WrappedProps>> | undefined) => void
+->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
++>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & (keyof Props<ExtractValueType<WrappedProps>>)> & Props<ExtractValueType<WrappedProps>> & { children?: ReactNode; }
+ >onChange : (value: Option<ExtractValueType<WrappedProps>> | undefined) => void
+ >value === null ? undefined : value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | undefined
+ >value === null : boolean
+@@= skipped -31, +31 lines =@@
+ // Everything below here copied from "@types/react-select" version 1.3.4
+ declare class ReactSelectClass<TValue = OptionValues> extends React.Component<ReactSelectProps<TValue>> {
+ >ReactSelectClass : ReactSelectClass<TValue>
+->React.Component : React.Component<ReactSelectProps<TValue>, {}, any>
++>React.Component : Component<ReactSelectProps<TValue>, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+     focus(): void;
+ >focus : () => void
+@@= skipped -98, +98 lines =@@
+ export type OnValueClickHandler<TValue = OptionValues> = (option: Option<TValue>, event: React.MouseEvent<HTMLAnchorElement>) => void;
+ >OnValueClickHandler : OnValueClickHandler<TValue>
+ >option : Option<TValue>
+->event : React.MouseEvent<HTMLAnchorElement>
++>event : MouseEvent<HTMLAnchorElement>
+ >React : any
+ 
+ export type IsOptionUniqueHandler<TValue = OptionValues> = (arg: { option: Option<TValue>, options: Options<TValue>, labelKey: string, valueKey: string }) => boolean;
+@@= skipped -248, +248 lines =@@
+      * Arrow mouse down event handler.
+      */
+     onMouseDown: React.MouseEventHandler<any>;
+->onMouseDown : React.MouseEventHandler<any>
++>onMouseDown : MouseEventHandler<any>
+ >React : any
+ 
+     /**
+@@= skipped -27, +27 lines =@@
+ >onRemove : SelectValueHandler<TValue> | undefined
+ 
+     placeholder: ReactSelectProps<TValue>['placeholder'];
+->placeholder : string | JSX.Element | undefined
++>placeholder : string | Element | undefined
+ 
+     value: Option<TValue>;
+ >value : Option<TValue>
+@@= skipped -245, +245 lines =@@
+      * optional style to apply to the menu container
+      */
+     menuContainerStyle?: React.CSSProperties;
+->menuContainerStyle : React.CSSProperties | undefined
++>menuContainerStyle : CSSProperties | undefined
+ >React : any
+ 
+     /**
+@@= skipped -13, +13 lines =@@
+      * optional style to apply to the menu
+      */
+     menuStyle?: React.CSSProperties;
+->menuStyle : React.CSSProperties | undefined
++>menuStyle : CSSProperties | undefined
+ >React : any
+ 
+     /**
+@@= skipped -21, +21 lines =@@
+      * @default "No results found"
+      */
+     noResultsText?: string | JSX.Element;
+->noResultsText : string | JSX.Element | undefined
++>noResultsText : string | Element | undefined
+ >JSX : any
+ 
+     /**
+@@= skipped -125, +125 lines =@@
+      * @default "Select..."
+      */
+     placeholder?: string | JSX.Element;
+->placeholder : string | JSX.Element | undefined
++>placeholder : string | Element | undefined
+ >JSX : any
+ 
+     /**
+@@= skipped -74, +74 lines =@@
+      *  optional style to apply to the control
+      */
+     style?: React.CSSProperties;
+->style : React.CSSProperties | undefined
++>style : CSSProperties | undefined
+ >React : any
+ 
+     /**
+@@= skipped -19, +19 lines =@@
+      *  optional style to apply to the component wrapper
+      */
+     wrapperStyle?: React.CSSProperties;
+->wrapperStyle : React.CSSProperties | undefined
++>wrapperStyle : CSSProperties | undefined
+ >React : any
+ 
+     /**

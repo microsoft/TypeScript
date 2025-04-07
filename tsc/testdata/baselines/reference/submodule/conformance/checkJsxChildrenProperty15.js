@@ -18,6 +18,7 @@ const k5 = <Tag key="1"><div></div><div></div></Tag>;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 const Tag = (x) => <div></div>;
 // OK
 const k1 = <Tag />;

@@ -1,0 +1,16 @@
+--- old.tsxElementResolution1.types
++++ new.tsxElementResolution1.types
+@@= skipped -10, +10 lines =@@
+ 
+ // OK
+ <div />;
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+ // Fail
+ <span />;
+-><span /> : JSX.Element
++><span /> : Element
+ >span : any
+ 

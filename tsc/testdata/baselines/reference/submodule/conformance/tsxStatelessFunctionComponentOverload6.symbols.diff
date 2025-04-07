@@ -101,3 +101,28 @@
  
  const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
  >b8 : Symbol(b8, Decl(file.tsx, 49, 5))
+@@= skipped -13, +13 lines =@@
+ >b9 : Symbol(b9, Decl(file.tsx, 50, 5))
+ >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
+ >to : Symbol(to, Decl(file.tsx, 50, 22))
+->extra-prop : Symbol(extra-prop, Decl(file.tsx, 50, 38))
++>extra-prop : Symbol("extra-prop", Decl(file.tsx, 50, 38))
+ >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
+ 
+ const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;
+@@= skipped -16, +16 lines =@@
+ >onClick : Symbol(onClick, Decl(file.tsx, 52, 23))
+ >e : Symbol(e, Decl(file.tsx, 52, 34))
+ >className : Symbol(className, Decl(file.tsx, 52, 43))
+->data-format : Symbol(data-format, Decl(file.tsx, 52, 61))
++>data-format : Symbol("data-format", Decl(file.tsx, 52, 61))
+ >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
+ 
+ const b12 = <MainButton data-format="Hello world" />
+ >b12 : Symbol(b12, Decl(file.tsx, 53, 5))
+ >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
+->data-format : Symbol(data-format, Decl(file.tsx, 53, 23))
++>data-format : Symbol("data-format", Decl(file.tsx, 53, 23))
+ 
+ 
+ 

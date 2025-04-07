@@ -31,6 +31,7 @@ const x = { video: () => null }
 
 
 //// [file.js]
+import * as React from "react";
 const Compa = (x) => <div>{"" + x}</div>;
 const x = { video: () => null };
 <\u0061></a>;
@@ -44,4 +45,3 @@ const x = { video: () => null };
 <Comp\u{0061} x={12}/>;
 <video data-\u0076ideo/>;
 <video \u0073rc=""/>;
-export {};

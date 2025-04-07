@@ -10,4 +10,5 @@ declare namespace JSX {
 }
 
 <a />;
+>a : Symbol(IntrinsicElements, Decl(index.tsx, 0, 23))
 

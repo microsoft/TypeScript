@@ -33,9 +33,9 @@ class MyComponent {
 
 // Should be an OK
 var x = <MyComponent bar='world' />;
->x : any
-><MyComponent bar='world' /> : any
+>x : Element
+><MyComponent bar='world' /> : Element
 >MyComponent : typeof MyComponent
->bar : any
+>bar : string
 
 

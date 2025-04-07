@@ -161,7 +161,7 @@ func NewProgram(options ProgramOptions) *Program {
 
 	for _, file := range p.files {
 		extension := tspath.TryGetExtensionFromPath(file.FileName())
-		if extension == tspath.ExtensionTsx || slices.Contains(tspath.SupportedJSExtensionsFlat, extension) {
+		if slices.Contains(tspath.SupportedJSExtensionsFlat, extension) {
 			p.unsupportedExtensions = core.AppendIfUnique(p.unsupportedExtensions, extension)
 		}
 	}

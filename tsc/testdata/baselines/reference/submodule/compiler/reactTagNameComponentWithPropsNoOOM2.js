@@ -16,6 +16,8 @@ const children: any[] = [];
 //// [reactTagNameComponentWithPropsNoOOM2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+const React = require("react");
 const classes = "";
 const rest = {};
 const children = [];

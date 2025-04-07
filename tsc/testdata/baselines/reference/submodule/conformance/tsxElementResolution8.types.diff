@@ -1,0 +1,55 @@
+--- old.tsxElementResolution8.types
++++ new.tsxElementResolution8.types
+@@= skipped -11, +11 lines =@@
+ >3 : 3
+ 
+ <Div />;
+-><Div /> : JSX.Element
++><Div /> : Element
+ >Div : number
+ 
+ // OK
+@@= skipped -8, +8 lines =@@
+ >Fact : () => any
+ 
+ <Fact />
+-><Fact /> : JSX.Element
++><Fact /> : Element
+ >Fact : () => any
+ 
+ // Error
+@@= skipped -9, +9 lines =@@
+ >42 : 42
+ 
+ <Fnum />
+-><Fnum /> : JSX.Element
++><Fnum /> : Element
+ >Fnum : () => number
+ 
+ interface Obj1 {
+@@= skipped -11, +11 lines =@@
+ >Obj1 : Obj1
+ 
+ <Obj1 />; // OK, prefer construct signatures
+-><Obj1 /> : JSX.Element
++><Obj1 /> : Element
+ >Obj1 : Obj1
+ 
+ interface Obj2 {
+@@= skipped -10, +10 lines =@@
+ >Obj2 : Obj2
+ 
+ <Obj2 />; // Error
+-><Obj2 /> : JSX.Element
++><Obj2 /> : Element
+ >Obj2 : Obj2
+ 
+ interface Obj3 {
+@@= skipped -9, +9 lines =@@
+ >Obj3 : Obj3
+ 
+ <Obj3 />; // Error
+-><Obj3 /> : JSX.Element
++><Obj3 /> : Element
+ >Obj3 : Obj3
+ 

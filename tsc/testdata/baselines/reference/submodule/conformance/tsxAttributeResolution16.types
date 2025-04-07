@@ -39,10 +39,10 @@ export class AddressComp extends React.Component<Properties, void> {
 }
 
 let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />
->a : any
-><AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" /> : any
+>a : Element
+><AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" /> : Element
 >AddressComp : typeof AddressComp
->postalCode : any
->street : any
->country : any
+>postalCode : string
+>street : string
+>country : string
 

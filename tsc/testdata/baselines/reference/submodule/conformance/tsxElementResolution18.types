@@ -7,7 +7,7 @@ declare module JSX {
 
 // Error under implicit any
 <div n='x' />;
-><div n='x' /> : any
+><div n='x' /> : Element
 >div : any
->n : any
+>n : string
 

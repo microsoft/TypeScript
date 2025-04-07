@@ -37,33 +37,39 @@
          return (<div>My Button</div>)
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
      }
  }
  
-@@= skipped -33, +31 lines =@@
+@@= skipped -33, +33 lines =@@
  >p : Symbol(p, Decl(file.tsx, 14, 23))
  
      return <h1>Just Another Button</h1>;
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
++>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
++>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
  }
  
  function Comp(p: Prop) {
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
  >Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
  
      return <div>{p.b}</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->p.b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 +>p.b : Symbol(b, Decl(file.tsx, 3, 14))
  >p : Symbol(p, Decl(file.tsx, 18, 14))
 ->b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 +>b : Symbol(b, Decl(file.tsx, 3, 14))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  }
  
  // OK
-@@= skipped -39, +37 lines =@@
+@@= skipped -39, +39 lines =@@
  >SingleChildProp : Symbol(SingleChildProp, Decl(file.tsx, 25, 69))
  
      a: number,
@@ -89,11 +95,13 @@
      return <div>{p.b}</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->p.b : Symbol(SingleChildProp.b, Decl(file.tsx, 28, 14))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 +>p.b : Symbol(b, Decl(file.tsx, 28, 14))
  >p : Symbol(p, Decl(file.tsx, 33, 25))
 ->b : Symbol(SingleChildProp.b, Decl(file.tsx, 28, 14))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 +>b : Symbol(b, Decl(file.tsx, 28, 14))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  }
  
  // OK

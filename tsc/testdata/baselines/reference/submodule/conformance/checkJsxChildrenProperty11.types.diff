@@ -1,0 +1,78 @@
+--- old.checkJsxChildrenProperty11.types
++++ new.checkJsxChildrenProperty11.types
+@@= skipped -24, +24 lines =@@
+ >props : {}
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return (<div>My Button</div>)
+->(<div>My Button</div>) : JSX.Element
+-><div>My Button</div> : JSX.Element
++>(<div>My Button</div>) : Element
++><div>My Button</div> : Element
+ >div : any
+ >div : any
+     }
+@@= skipped -12, +12 lines =@@
+ 
+ // OK
+ let k1 = <div> <h2> Hello </h2> <h1> world </h1></div>;
+->k1 : JSX.Element
+-><div> <h2> Hello </h2> <h1> world </h1></div> : JSX.Element
++>k1 : Element
++><div> <h2> Hello </h2> <h1> world </h1></div> : Element
+ >div : any
+-><h2> Hello </h2> : JSX.Element
++><h2> Hello </h2> : Element
+ >h2 : any
+ >h2 : any
+-><h1> world </h1> : JSX.Element
++><h1> world </h1> : Element
+ >h1 : any
+ >h1 : any
+ >div : any
+ 
+ let k2 = <div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div>;
+->k2 : JSX.Element
+-><div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div> : JSX.Element
++>k2 : Element
++><div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div> : Element
+ >div : any
+-><h2> Hello </h2> : JSX.Element
++><h2> Hello </h2> : Element
+ >h2 : any
+ >h2 : any
+->(user: any) => <h2>{user.name}</h2> : (user: any) => JSX.Element
++>(user: any) => <h2>{user.name}</h2> : (user: any) => Element
+ >user : any
+-><h2>{user.name}</h2> : JSX.Element
++><h2>{user.name}</h2> : Element
+ >h2 : any
+ >user.name : any
+ >user : any
+@@= skipped -29, +29 lines =@@
+ >div : any
+ 
+ let k3 = <div> {1} {"That is a number"} </div>;
+->k3 : JSX.Element
+-><div> {1} {"That is a number"} </div> : JSX.Element
++>k3 : Element
++><div> {1} {"That is a number"} </div> : Element
+ >div : any
+ >1 : 1
+ >"That is a number" : "That is a number"
+ >div : any
+ 
+ let k4 = <Button> <h2> Hello </h2> </Button>;
+->k4 : JSX.Element
+-><Button> <h2> Hello </h2> </Button> : JSX.Element
++>k4 : Element
++><Button> <h2> Hello </h2> </Button> : Element
+ >Button : typeof Button
+-><h2> Hello </h2> : JSX.Element
++><h2> Hello </h2> : Element
+ >h2 : any
+ >h2 : any
+ >Button : typeof Button

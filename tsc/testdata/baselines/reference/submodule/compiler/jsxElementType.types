@@ -57,33 +57,33 @@ let Component: NewReactJSXElementConstructor<{ title: string }>;
 >title : string
 
 const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
->RenderElement : (__0: { title: string; }) => any
->({ title }: { title: string }) => <div>{title}</div> : (__0: { title: string; }) => any
+>RenderElement : (__0: { title: string; }) => Element
+>({ title }: { title: string }) => <div>{title}</div> : (__0: { title: string; }) => Element
 >title : string
 >title : string
-><div>{title}</div> : any
+><div>{title}</div> : Element
 >div : any
 >title : string
 >div : any
 
 Component = RenderElement;
->Component = RenderElement : (__0: { title: string; }) => any
+>Component = RenderElement : (__0: { title: string; }) => Element
 >Component : NewReactJSXElementConstructor<{ title: string; }>
->RenderElement : (__0: { title: string; }) => any
+>RenderElement : (__0: { title: string; }) => Element
 
 <RenderElement />;
-><RenderElement /> : any
->RenderElement : (__0: { title: string; }) => any
+><RenderElement /> : Element
+>RenderElement : (__0: { title: string; }) => Element
 
 <RenderElement title="react" />;
-><RenderElement title="react" /> : any
->RenderElement : (__0: { title: string; }) => any
->title : any
+><RenderElement title="react" /> : Element
+>RenderElement : (__0: { title: string; }) => Element
+>title : string
 
 <RenderElement excessProp />;
-><RenderElement excessProp /> : any
->RenderElement : (__0: { title: string; }) => any
->excessProp : any
+><RenderElement excessProp /> : Element
+>RenderElement : (__0: { title: string; }) => Element
+>excessProp : true
 
 const RenderString = ({ title }: { title: string }) => title;
 >RenderString : (__0: { title: string; }) => string
@@ -98,18 +98,18 @@ Component = RenderString;
 >RenderString : (__0: { title: string; }) => string
 
 <RenderString />;
-><RenderString /> : any
+><RenderString /> : Element
 >RenderString : (__0: { title: string; }) => string
 
 <RenderString title="react" />;
-><RenderString title="react" /> : any
+><RenderString title="react" /> : Element
 >RenderString : (__0: { title: string; }) => string
->title : any
+>title : string
 
 <RenderString excessProp />;
-><RenderString excessProp /> : any
+><RenderString excessProp /> : Element
 >RenderString : (__0: { title: string; }) => string
->excessProp : any
+>excessProp : true
 
 const RenderNumber = ({ title }: { title: string }) => title.length;
 >RenderNumber : (__0: { title: string; }) => number
@@ -126,18 +126,18 @@ Component = RenderNumber;
 >RenderNumber : (__0: { title: string; }) => number
 
 <RenderNumber />;
-><RenderNumber /> : any
+><RenderNumber /> : Element
 >RenderNumber : (__0: { title: string; }) => number
 
 <RenderNumber title="react" />;
-><RenderNumber title="react" /> : any
+><RenderNumber title="react" /> : Element
 >RenderNumber : (__0: { title: string; }) => number
->title : any
+>title : string
 
 <RenderNumber excessProp />;
-><RenderNumber excessProp /> : any
+><RenderNumber excessProp /> : Element
 >RenderNumber : (__0: { title: string; }) => number
->excessProp : any
+>excessProp : true
 
 const RenderArray = ({ title }: { title: string }) => [title];
 >RenderArray : (__0: { title: string; }) => string[]
@@ -153,18 +153,18 @@ Component = RenderArray;
 >RenderArray : (__0: { title: string; }) => string[]
 
 <RenderArray />;
-><RenderArray /> : any
+><RenderArray /> : Element
 >RenderArray : (__0: { title: string; }) => string[]
 
 <RenderArray title="react" />;
-><RenderArray title="react" /> : any
+><RenderArray title="react" /> : Element
 >RenderArray : (__0: { title: string; }) => string[]
->title : any
+>title : string
 
 <RenderArray excessProp />;
-><RenderArray excessProp /> : any
+><RenderArray excessProp /> : Element
 >RenderArray : (__0: { title: string; }) => string[]
->excessProp : any
+>excessProp : true
 
 // React Server Component
 const RenderPromise = async ({ title }: { title: string }) => "react";
@@ -180,18 +180,18 @@ Component = RenderPromise;
 >RenderPromise : (__0: { title: string; }) => Promise<string>
 
 <RenderPromise />;
-><RenderPromise /> : any
+><RenderPromise /> : Element
 >RenderPromise : (__0: { title: string; }) => Promise<string>
 
 <RenderPromise title="react" />;
-><RenderPromise title="react" /> : any
+><RenderPromise title="react" /> : Element
 >RenderPromise : (__0: { title: string; }) => Promise<string>
->title : any
+>title : string
 
 <RenderPromise excessProp />;
-><RenderPromise excessProp /> : any
+><RenderPromise excessProp /> : Element
 >RenderPromise : (__0: { title: string; }) => Promise<string>
->excessProp : any
+>excessProp : true
 
 // Class components still work
 class RenderStringClass extends React.Component<{ title: string }> {
@@ -218,35 +218,35 @@ Component = RenderStringClass;
 >RenderStringClass : typeof RenderStringClass
 
 <RenderStringClass />;
-><RenderStringClass /> : any
+><RenderStringClass /> : Element
 >RenderStringClass : typeof RenderStringClass
 
 <RenderStringClass title="react" />;
-><RenderStringClass title="react" /> : any
+><RenderStringClass title="react" /> : Element
 >RenderStringClass : typeof RenderStringClass
->title : any
+>title : string
 
 <RenderStringClass excessProp />;
-><RenderStringClass excessProp /> : any
+><RenderStringClass excessProp /> : Element
 >RenderStringClass : typeof RenderStringClass
->excessProp : any
+>excessProp : true
 
 // Host element types still work
 <div />;
-><div /> : any
+><div /> : Element
 >div : any
 
 <my-custom-element />;
-><my-custom-element /> : any
+><my-custom-element /> : Element
 >my-custom-element : any
 
 // Undeclared host element types are still rejected
 <boop />;
-><boop /> : any
+><boop /> : Element
 >boop : any
 
 <my-undeclared-custom-element />;
-><my-undeclared-custom-element /> : any
+><my-undeclared-custom-element /> : Element
 >my-undeclared-custom-element : any
 
 // Highlighting various ecosystem compat issues
@@ -268,29 +268,29 @@ function ReactNativeFlatList(
   return null;
 }
 <ReactNativeFlatList />;
-><ReactNativeFlatList /> : any
+><ReactNativeFlatList /> : Element
 >ReactNativeFlatList : (props: {}, ref: ForwardedRef<???>) => null
 
 // testing higher-order component compat
 function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
->f1 : <T extends (props: {}) => ReactElement<any>>(Component: T) => any
+>f1 : <T extends (props: {}) => ReactElement<any>>(Component: T) => Element
 >props : {}
 >React : any
 >Component : T
 
   return <Component />;
-><Component /> : any
+><Component /> : Element
 >Component : T
 }
 
 <Unresolved />;
-><Unresolved /> : any
+><Unresolved /> : Element
 >Unresolved : any
 
 <Unresolved foo="abc" />;
-><Unresolved foo="abc" /> : any
+><Unresolved foo="abc" /> : Element
 >Unresolved : any
->foo : any
+>foo : string
 
 declare global {
 >global : any
@@ -306,21 +306,21 @@ declare global {
 }
 
 <a:b a="accepted" />;
-><a:b a="accepted" /> : any
+><a:b a="accepted" /> : Element
 >a : any
 >b : any
->a : any
+>a : string
 
 <a:b b="rejected" />;
-><a:b b="rejected" /> : any
+><a:b b="rejected" /> : Element
 >a : any
 >b : any
->b : any
+>b : string
 
 <a:b a="accepted" b="rejected" />;
-><a:b a="accepted" b="rejected" /> : any
+><a:b a="accepted" b="rejected" /> : Element
 >a : any
 >b : any
->a : any
->b : any
+>a : string
+>b : string
 

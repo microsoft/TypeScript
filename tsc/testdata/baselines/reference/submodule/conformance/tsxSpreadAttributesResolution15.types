@@ -13,18 +13,18 @@ interface ComponentProps {
 }
 
 export default function Component(props: ComponentProps) {
->Component : (props: ComponentProps) => any
+>Component : (props: ComponentProps) => Element
 >props : ComponentProps
 
     return (
->(        <AnotherComponent {...props} property2 AnotherProperty1="hi"/>    ) : any
+>(        <AnotherComponent {...props} property2 AnotherProperty1="hi"/>    ) : Element
 
         <AnotherComponent {...props} property2 AnotherProperty1="hi"/>
-><AnotherComponent {...props} property2 AnotherProperty1="hi"/> : any
->AnotherComponent : (__0: AnotherComponentProps) => any
+><AnotherComponent {...props} property2 AnotherProperty1="hi"/> : Element
+>AnotherComponent : (__0: AnotherComponentProps) => Element
 >props : ComponentProps
->property2 : any
->AnotherProperty1 : any
+>property2 : true
+>AnotherProperty1 : string
 
     );
 }
@@ -41,14 +41,14 @@ interface AnotherComponentProps {
 }
 
 function AnotherComponent({ property1 }: AnotherComponentProps) {
->AnotherComponent : (__0: AnotherComponentProps) => any
+>AnotherComponent : (__0: AnotherComponentProps) => Element
 >property1 : string
 
     return (
->(        <span>{property1}</span>    ) : any
+>(        <span>{property1}</span>    ) : Element
 
         <span>{property1}</span>
-><span>{property1}</span> : any
+><span>{property1}</span> : Element
 >span : any
 >property1 : string
 >span : any

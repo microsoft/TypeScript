@@ -1,0 +1,34 @@
+--- old.tsxReactComponentWithDefaultTypeParameter1.types
++++ new.tsxReactComponentWithDefaultTypeParameter1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ interface Prop {
+     a: number,
+@@= skipped -12, +12 lines =@@
+ 
+ declare class MyComp<P = Prop> extends React.Component<P, {}> {
+ >MyComp : MyComp<P>
+->React.Component : React.Component<P, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<P, {}>
++>React : typeof __React
++>Component : typeof Component
+ 
+     internalProp: P;
+ >internalProp : P
+ }
+ 
+ let x = <MyComp a={10} b="hi" />
+->x : JSX.Element
+-><MyComp a={10} b="hi" /> : JSX.Element
++>x : Element
++><MyComp a={10} b="hi" /> : Element
+ >MyComp : typeof MyComp
+ >a : number
+ >10 : 10

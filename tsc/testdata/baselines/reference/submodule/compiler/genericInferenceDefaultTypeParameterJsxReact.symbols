@@ -36,5 +36,7 @@ const v1 = <Component onClick={e => e.preventDefault()} />;
 >Component : Symbol(Component, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 6, 98))
 >onClick : Symbol(onClick, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 12, 21))
 >e : Symbol(e, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 12, 31))
+>e.preventDefault : Symbol(preventDefault, Decl(react16.d.ts, 642, 31))
 >e : Symbol(e, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 12, 31))
+>preventDefault : Symbol(preventDefault, Decl(react16.d.ts, 642, 31))
 

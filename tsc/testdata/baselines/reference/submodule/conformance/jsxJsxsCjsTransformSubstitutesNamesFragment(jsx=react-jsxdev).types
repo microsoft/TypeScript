@@ -3,17 +3,17 @@
 === jsxJsxsCjsTransformSubstitutesNamesFragment.tsx ===
 /// <reference path="react16.d.ts" />
 const a = <>
->a : any
-><>  <p></p>  text  <div></div></> : any
+>a : Element
+><>  <p></p>  text  <div></div></> : Element
 
   <p></p>
-><p></p> : any
+><p></p> : Element
 >p : any
 >p : any
 
   text
   <div></div>
-><div></div> : any
+><div></div> : Element
 >div : any
 >div : any
 

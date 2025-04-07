@@ -23,10 +23,10 @@ declare class MyComp<P = Prop> extends React.Component<P, {}> {
 }
 
 let x = <MyComp a={10} b="hi" />
->x : any
-><MyComp a={10} b="hi" /> : any
+>x : Element
+><MyComp a={10} b="hi" /> : Element
 >MyComp : typeof MyComp
->a : any
+>a : number
 >10 : 10
->b : any
+>b : string
 

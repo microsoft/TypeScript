@@ -9,10 +9,3 @@
  
  <T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" />
  >T : Symbol(T, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 15, 8))
- >getTranslationEntry : Symbol(getTranslationEntry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 2))
- >allTranslations : Symbol(allTranslations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 25))
-->allTranslations.a : Symbol(a, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 7, 21))
- >allTranslations : Symbol(allTranslations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 25))
-->a : Symbol(a, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 7, 21))
- >args : Symbol(args, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 63))
- 

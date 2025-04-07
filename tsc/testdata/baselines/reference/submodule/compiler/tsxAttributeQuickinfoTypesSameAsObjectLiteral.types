@@ -13,11 +13,11 @@ namespace JSX {
 }
 
 const Foo = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
->Foo : (props: { foo: "A" | "B" | "C"; }) => any
->(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: { foo: "A" | "B" | "C"; }) => any
+>Foo : (props: { foo: "A" | "B" | "C"; }) => Element
+>(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: { foo: "A" | "B" | "C"; }) => Element
 >props : { foo: "A" | "B" | "C"; }
 >foo : "A" | "B" | "C"
-><span>{props.foo}</span> : any
+><span>{props.foo}</span> : Element
 >span : any
 >props.foo : "A" | "B" | "C"
 >props : { foo: "A" | "B" | "C"; }
@@ -25,8 +25,8 @@ const Foo = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
 >span : any
 
 Foo({
->Foo({    foo: "B"}) : any
->Foo : (props: { foo: "A" | "B" | "C"; }) => any
+>Foo({    foo: "B"}) : Element
+>Foo : (props: { foo: "A" | "B" | "C"; }) => Element
 >{    foo: "B"} : { foo: "B"; }
 
     foo: "B"
@@ -36,7 +36,7 @@ Foo({
 });
 
 <Foo foo="B" />
-><Foo foo="B" /> : any
->Foo : (props: { foo: "A" | "B" | "C"; }) => any
->foo : any
+><Foo foo="B" /> : Element
+>Foo : (props: { foo: "A" | "B" | "C"; }) => Element
+>foo : "B"
 

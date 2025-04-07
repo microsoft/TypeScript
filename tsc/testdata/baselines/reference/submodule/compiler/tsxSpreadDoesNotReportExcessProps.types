@@ -15,16 +15,16 @@ class MyComponent extends React.Component<{dataSource: number[], onClick?: any},
 >onClick : any
 
     render() {
->render : () => any
+>render : () => Element
 
         return (<div {...this.props} className="ok"></div>);
->(<div {...this.props} className="ok"></div>) : any
-><div {...this.props} className="ok"></div> : any
+>(<div {...this.props} className="ok"></div>) : Element
+><div {...this.props} className="ok"></div> : Element
 >div : any
 >this.props : Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
 >this : this
 >props : Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
->className : any
+>className : string
 >div : any
     }
 }

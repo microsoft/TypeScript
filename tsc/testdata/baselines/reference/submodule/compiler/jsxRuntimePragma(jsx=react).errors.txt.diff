@@ -1,0 +1,52 @@
+--- old.jsxRuntimePragma(jsx=react).errors.txt
++++ new.jsxRuntimePragma(jsx=react).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++three.tsx(4,34): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++three.tsx(5,21): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++three.tsx(5,24): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++three.tsx(6,29): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++
++
++==== one.tsx (0 errors) ====
++    /// <reference path="/.lib/react16.d.ts" />
++    /* @jsxRuntime classic */
++    import * as React from "react";
++    export const HelloWorld = () => <h1>Hello world</h1>;
++    export const frag = <><div></div></>;
++    export const selfClosing = <img src="./image.png" />;
++==== two.tsx (0 errors) ====
++    /// <reference path="/.lib/react16.d.ts" />
++    /* @jsxRuntime automatic */
++    export const HelloWorld = () => <h1>Hello world</h1>;
++    export const frag = <><div></div></>;
++    export const selfClosing = <img src="./image.png" />;
++==== three.tsx (4 errors) ====
++    /// <reference path="/.lib/react16.d.ts" />
++    /* @jsxRuntime classic */
++    /* @jsxRuntime automatic */
++    export const HelloWorld = () => <h1>Hello world</h1>;
++                                     ~~
++!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++    export const frag = <><div></div></>;
++                        ~~
++!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++                           ~~~
++!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++    export const selfClosing = <img src="./image.png" />;
++                                ~~~
++!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++==== four.tsx (0 errors) ====
++    /// <reference path="/.lib/react16.d.ts" />
++    /* @jsxRuntime automatic */
++    /* @jsxRuntime classic */
++    import * as React from "react";
++    export const HelloWorld = () => <h1>Hello world</h1>;
++    export const frag = <><div></div></>;
++    export const selfClosing = <img src="./image.png" />;
++==== index.ts (0 errors) ====
++    export * as one from "./one.js";
++    export * as two from "./two.js";
++    export * as three from "./three.js";
++    export * as four from "./four.js";

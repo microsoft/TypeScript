@@ -1,0 +1,55 @@
+--- old.checkJsxChildrenProperty9.types
++++ new.checkJsxChildrenProperty9.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ // OK
+ let k1 = <div> <h2> Hello </h2> <h1> world </h1></div>;
+->k1 : JSX.Element
+-><div> <h2> Hello </h2> <h1> world </h1></div> : JSX.Element
++>k1 : Element
++><div> <h2> Hello </h2> <h1> world </h1></div> : Element
+ >div : any
+-><h2> Hello </h2> : JSX.Element
++><h2> Hello </h2> : Element
+ >h2 : any
+ >h2 : any
+-><h1> world </h1> : JSX.Element
++><h1> world </h1> : Element
+ >h1 : any
+ >h1 : any
+ >div : any
+ 
+ let k2 = <div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div>;
+->k2 : JSX.Element
+-><div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div> : JSX.Element
++>k2 : Element
++><div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div> : Element
+ >div : any
+-><h2> Hello </h2> : JSX.Element
++><h2> Hello </h2> : Element
+ >h2 : any
+ >h2 : any
+->(user: any) => <h2>{user.name}</h2> : (user: any) => JSX.Element
++>(user: any) => <h2>{user.name}</h2> : (user: any) => Element
+ >user : any
+-><h2>{user.name}</h2> : JSX.Element
++><h2>{user.name}</h2> : Element
+ >h2 : any
+ >user.name : any
+ >user : any
+@@= skipped -33, +33 lines =@@
+ >div : any
+ 
+ let k3 = <div> {1} {"That is a number"} </div>;
+->k3 : JSX.Element
+-><div> {1} {"That is a number"} </div> : JSX.Element
++>k3 : Element
++><div> {1} {"That is a number"} </div> : Element
+ >div : any
+ >1 : 1
+ >"That is a number" : "That is a number"

@@ -1,0 +1,13 @@
+--- old.tsxReactEmit5.types
++++ new.tsxReactEmit5.types
+@@= skipped -22, +22 lines =@@
+ >foo : any
+ 
+ var spread1 = <div x='' {...foo} y='' />;
+->spread1 : JSX.Element
+-><div x='' {...foo} y='' /> : JSX.Element
++>spread1 : Element
++><div x='' {...foo} y='' /> : Element
+ >div : any
+ >x : string
+ >foo : any

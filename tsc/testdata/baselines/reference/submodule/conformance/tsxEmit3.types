@@ -28,9 +28,9 @@ module M {
 
 	// Emit M.Foo
 	Foo, <Foo />;
->Foo, <Foo /> : any
+>Foo, <Foo /> : Element
 >Foo : typeof Foo
-><Foo /> : any
+><Foo /> : Element
 >Foo : typeof Foo
 
 	export module S {
@@ -38,16 +38,16 @@ module M {
 
 		// Emit M.Foo
 		Foo, <Foo />;
->Foo, <Foo /> : any
+>Foo, <Foo /> : Element
 >Foo : typeof Foo
-><Foo /> : any
+><Foo /> : Element
 >Foo : typeof Foo
 
 		// Emit S.Bar
 		Bar, <Bar />;
->Bar, <Bar /> : any
+>Bar, <Bar /> : Element
 >Bar : typeof Bar
-><Bar /> : any
+><Bar /> : Element
 >Bar : typeof Bar
 	}
 
@@ -58,11 +58,11 @@ module M {
 
 	// Emit M.S.Bar
 	S.Bar, <S.Bar />;
->S.Bar, <S.Bar /> : any
+>S.Bar, <S.Bar /> : Element
 >S.Bar : typeof Bar
 >S : typeof S
 >Bar : typeof Bar
-><S.Bar /> : any
+><S.Bar /> : Element
 >S.Bar : typeof Bar
 >S : typeof S
 >Bar : typeof Bar
@@ -77,9 +77,9 @@ module M {
 
 	// Emit M_1.Foo
 	Foo, <Foo />;
->Foo, <Foo /> : any
+>Foo, <Foo /> : Element
 >Foo : typeof Foo
-><Foo /> : any
+><Foo /> : Element
 >Foo : typeof Foo
 }
 

@@ -15,7 +15,9 @@
  <h></h>
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
--
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+ 
  === index.tsx ===
  import { p } from "./renderer";
  >p : Symbol(p, Decl(index.tsx, 0, 8))
@@ -23,4 +25,6 @@
  <h></h>
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  

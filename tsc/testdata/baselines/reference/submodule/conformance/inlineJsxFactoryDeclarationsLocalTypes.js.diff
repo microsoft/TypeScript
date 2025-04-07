@@ -16,13 +16,14 @@
 -var _this = this;
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.tree = exports.MyClass = exports.MySFC = void 0;
--/** @jsx predom */
+ /** @jsx predom */
 -var renderer2_1 = require("./renderer2");
 -var MySFC = function (props) { return renderer2_1.predom.apply(void 0, __spreadArray(["p", null, props.x,
 -    " + ",
 -    props.y,
 -    " = ",
 -    props.x + props.y], _this.props.children, false)); };
++const renderer2_1 = require("./renderer2");
 +const MySFC = (props) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
  exports.MySFC = MySFC;
 -var MyClass = /** @class */ (function () {
@@ -68,7 +69,7 @@
 -    return to.concat(ar || Array.prototype.slice.call(from));
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
--/** @jsx dom */
+ /** @jsx dom */
 -var renderer_1 = require("./renderer");
 -var component_1 = require("./component");
 -var elem = component_1.default;
@@ -82,6 +83,7 @@
 -    props.children); };
 -var DOMClass = /** @class */ (function () {
 -    function DOMClass(props) {
++const renderer_1 = require("./renderer");
 +const component_1 = require("./component");
 +let elem = component_1.default;
 +elem = <h></h>; // Expect assignability error here

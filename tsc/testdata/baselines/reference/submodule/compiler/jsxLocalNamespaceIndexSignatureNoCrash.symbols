@@ -34,4 +34,6 @@ function A() {
 >A : Symbol(A, Decl(index.tsx, 12, 1))
 
     return (<p>Hello</p>);
+>p : Symbol((Missing), Decl(index.tsx, 8, 41))
+>p : Symbol((Missing), Decl(index.tsx, 8, 41))
 }

@@ -1,0 +1,87 @@
+--- old.tsxSpreadAttributesResolution2.types
++++ new.tsxSpreadAttributesResolution2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ interface PoisonedProp {
+     x: string;
+@@= skipped -12, +12 lines =@@
+ 
+ class Poisoned extends React.Component<PoisonedProp, {}> {
+ >Poisoned : Poisoned
+->React.Component : React.Component<PoisonedProp, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<PoisonedProp, {}>
++>React : typeof __React
++>Component : typeof Component
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return <div>Hello</div>;
+-><div>Hello</div> : JSX.Element
++><div>Hello</div> : Element
+ >div : any
+ >div : any
+     }
+@@= skipped -20, +20 lines =@@
+ 
+ // OK
+ <Poisoned {...{x: "ok", y: "2"}} />;
+-><Poisoned {...{x: "ok", y: "2"}} /> : JSX.Element
++><Poisoned {...{x: "ok", y: "2"}} /> : Element
+ >Poisoned : typeof Poisoned
+ >{x: "ok", y: "2"} : { x: string; y: "2"; }
+ >x : string
+@@= skipped -10, +10 lines =@@
+ 
+ // Error
+ let p = <Poisoned {...obj} />;
+->p : JSX.Element
+-><Poisoned {...obj} /> : JSX.Element
++>p : Element
++><Poisoned {...obj} /> : Element
+ >Poisoned : typeof Poisoned
+ >obj : {}
+ 
+ let y = <Poisoned />;
+->y : JSX.Element
+-><Poisoned /> : JSX.Element
++>y : Element
++><Poisoned /> : Element
+ >Poisoned : typeof Poisoned
+ 
+ let z = <Poisoned x y/>;
+->z : JSX.Element
+-><Poisoned x y/> : JSX.Element
++>z : Element
++><Poisoned x y/> : Element
+ >Poisoned : typeof Poisoned
+ >x : true
+ >y : true
+ 
+ let w = <Poisoned {...{x: 5, y: "2"}}/>;
+->w : JSX.Element
+-><Poisoned {...{x: 5, y: "2"}}/> : JSX.Element
++>w : Element
++><Poisoned {...{x: 5, y: "2"}}/> : Element
+ >Poisoned : typeof Poisoned
+ >{x: 5, y: "2"} : { x: number; y: "2"; }
+ >x : number
+@@= skipped -28, +28 lines =@@
+ >"2" : "2"
+ 
+ let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
+->w1 : JSX.Element
+-><Poisoned {...{x: 5, y: "2"}} X="hi" /> : JSX.Element
++>w1 : Element
++><Poisoned {...{x: 5, y: "2"}} X="hi" /> : Element
+ >Poisoned : typeof Poisoned
+ >{x: 5, y: "2"} : { x: number; y: "2"; }
+ >x : number

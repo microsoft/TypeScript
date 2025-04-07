@@ -1,0 +1,67 @@
+--- old.tsxNotUsingApparentTypeOfSFC.types
++++ new.tsxNotUsingApparentTypeOfSFC.types
+@@= skipped -10, +10 lines =@@
+ >wrappedProps : P
+ 
+     let MySFC = function(props: P) {
+->MySFC : (props: P) => JSX.Element
+->function(props: P) {        return <>hello</>;    } : (props: P) => JSX.Element
++>MySFC : (props: P) => Element
++>function(props: P) {        return <>hello</>;    } : (props: P) => Element
+ >props : P
+ 
+         return <>hello</>;
+-><>hello</> : JSX.Element
++><>hello</> : Element
+ 
+     };
+     class MyComponent extends React.Component<P> {
+->MyComponent : MyComponent
+->React.Component : React.Component<P, {}, any>
++>MyComponent : MyComponent<P>
++>React.Component : Component<P, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+         render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+             return <>hello</>;
+-><>hello</> : JSX.Element
++><>hello</> : Element
+         }
+     }
+     let x = <MySFC />;  // should error
+->x : JSX.Element
+-><MySFC /> : JSX.Element
+->MySFC : (props: P) => JSX.Element
++>x : Element
++><MySFC /> : Element
++>MySFC : (props: P) => Element
+ 
+     let y = <MyComponent />;  // should error
+->y : JSX.Element
+-><MyComponent /> : JSX.Element
++>y : Element
++><MyComponent /> : Element
+ >MyComponent : typeof MyComponent
+ 
+     let z = <MySFC {...wrappedProps} /> // should work
+->z : JSX.Element
+-><MySFC {...wrappedProps} /> : JSX.Element
+->MySFC : (props: P) => JSX.Element
++>z : Element
++><MySFC {...wrappedProps} /> : Element
++>MySFC : (props: P) => Element
+ >wrappedProps : P
+ 
+     let q = <MyComponent {...wrappedProps} /> // should work
+->q : JSX.Element
+-><MyComponent {...wrappedProps} /> : JSX.Element
++>q : Element
++><MyComponent {...wrappedProps} /> : Element
+ >MyComponent : typeof MyComponent
+ >wrappedProps : P
+ }

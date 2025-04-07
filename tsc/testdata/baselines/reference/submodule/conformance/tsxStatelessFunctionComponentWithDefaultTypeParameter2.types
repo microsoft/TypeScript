@@ -10,11 +10,11 @@ interface MyComponentProp {
 }
 
 function MyComponent1<T extends MyComponentProp>(attr: T) {
->MyComponent1 : <T extends MyComponentProp>(attr: T) => any
+>MyComponent1 : <T extends MyComponentProp>(attr: T) => Element
 >attr : T
 
     return <div>attr.values</div>
-><div>attr.values</div> : any
+><div>attr.values</div> : Element
 >div : any
 >div : any
 }
@@ -22,9 +22,9 @@ function MyComponent1<T extends MyComponentProp>(attr: T) {
 
 // Error
 let i1 = <MyComponent1 values={5}/>;
->i1 : any
-><MyComponent1 values={5}/> : any
->MyComponent1 : <T extends MyComponentProp>(attr: T) => any
->values : any
+>i1 : Element
+><MyComponent1 values={5}/> : Element
+>MyComponent1 : <T extends MyComponentProp>(attr: T) => Element
+>values : number
 >5 : 5
 

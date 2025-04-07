@@ -1,0 +1,11 @@
+--- old.tsxElementResolution14.types
++++ new.tsxElementResolution14.types
+@@= skipped -12, +12 lines =@@
+ >obj1 : Obj1
+ 
+ <obj1 x={10} />; // OK
+-><obj1 x={10} /> : JSX.Element
++><obj1 x={10} /> : Element
+ >obj1 : Obj1
+ >x : number
+ >10 : 10

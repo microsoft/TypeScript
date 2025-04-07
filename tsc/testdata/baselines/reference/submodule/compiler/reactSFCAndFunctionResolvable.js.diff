@@ -9,6 +9,8 @@
 -var React = require("react");
 -var RandomComponent = function () {
 -    var Component = condition1
++/// <reference path="react16.d.ts" />
++const React = require("react");
 +const RandomComponent = () => {
 +    const Component = condition1
          ? Radio

@@ -21,6 +21,7 @@ const c = <Info {...infoProps} />;
 //// [jsxSpreadFirstUnionNoErrors.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = require("react");
 const Info = (props) => props.status === "hidden"
     ? <noscript />
     : <div>{props.content}</div>;

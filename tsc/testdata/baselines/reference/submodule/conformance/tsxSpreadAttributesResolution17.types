@@ -20,10 +20,10 @@ export class Empty extends React.Component<{}, {}> {
 >Component : any
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
     }
@@ -35,8 +35,8 @@ declare const obj: { a: number | undefined } | undefined;
 
 // OK
 let unionedSpread = <Empty {...obj} />;
->unionedSpread : any
-><Empty {...obj} /> : any
+>unionedSpread : Element
+><Empty {...obj} /> : Element
 >Empty : typeof Empty
 >obj : { a: number | undefined; } | undefined
 

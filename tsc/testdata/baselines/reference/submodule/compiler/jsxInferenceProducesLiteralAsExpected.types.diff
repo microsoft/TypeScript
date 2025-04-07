@@ -1,0 +1,47 @@
+--- old.jsxInferenceProducesLiteralAsExpected.types
++++ new.jsxInferenceProducesLiteralAsExpected.types
+@@= skipped -1, +1 lines =@@
+ 
+ === jsxInferenceProducesLiteralAsExpected.tsx ===
+ import React = require("react");
+->React : typeof React
++>React : typeof __React
+ 
+ type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
+ >FunctionPropertyNames : FunctionPropertyNames<T>
+@@= skipped -28, +28 lines =@@
+ >foo : FunctionPropertyNames<T>
+ }
+ function Test<T>(props: TestProps<T>) { return <></>; }
+->Test : <T>(props: TestProps<T>) => JSX.Element
++>Test : <T>(props: TestProps<T>) => Element
+ >props : TestProps<T>
+-><></> : JSX.Element
++><></> : Element
+ 
+ const model = new TestObject();
+ >model : TestObject
+@@= skipped -10, +10 lines =@@
+ >TestObject : typeof TestObject
+ 
+ const el1 = <Test model={model} foo="c" />;
+->el1 : JSX.Element
+-><Test model={model} foo="c" /> : JSX.Element
+->Test : <T>(props: TestProps<T>) => JSX.Element
++>el1 : Element
++><Test model={model} foo="c" /> : Element
++>Test : <T>(props: TestProps<T>) => Element
+ >model : TestObject
+ >model : TestObject
+ >foo : "c"
+ 
+ const el2 = <Test<TestObject> model={model} foo="c" />;
+->el2 : JSX.Element
+-><Test<TestObject> model={model} foo="c" /> : JSX.Element
+->Test : <T>(props: TestProps<T>) => JSX.Element
++>el2 : Element
++><Test<TestObject> model={model} foo="c" /> : Element
++>Test : <T>(props: TestProps<T>) => Element
+ >model : TestObject
+ >model : TestObject
+ >foo : "c"

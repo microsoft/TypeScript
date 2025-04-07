@@ -59,6 +59,8 @@ function Test3({ foo }: { foo: Foo | undefined }) {
 
   return (
     <div>
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+
       {foo?.bar === false && "foo"}
 >foo?.bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 >foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 25, 16))
@@ -70,6 +72,8 @@ function Test3({ foo }: { foo: Foo | undefined }) {
 >bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 
     </div>
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+
   );
 }
 

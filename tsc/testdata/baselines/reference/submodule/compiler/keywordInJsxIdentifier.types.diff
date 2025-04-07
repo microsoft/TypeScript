@@ -1,0 +1,29 @@
+--- old.keywordInJsxIdentifier.types
++++ new.keywordInJsxIdentifier.types
+@@= skipped -4, +4 lines =@@
+ >React : any
+ 
+ <foo class-id/>;
+-><foo class-id/> : error
++><foo class-id/> : any
+ >foo : any
+ >class-id : true
+ 
+ <foo class/>;
+-><foo class/> : error
++><foo class/> : any
+ >foo : any
+ >class : true
+ 
+ <foo class-id="1"/>;
+-><foo class-id="1"/> : error
++><foo class-id="1"/> : any
+ >foo : any
+ >class-id : string
+ 
+ <foo class="1"/>;
+-><foo class="1"/> : error
++><foo class="1"/> : any
+ >foo : any
+ >class : string
+ 

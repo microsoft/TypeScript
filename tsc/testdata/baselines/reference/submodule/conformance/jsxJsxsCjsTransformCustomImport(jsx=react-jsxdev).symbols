@@ -6,9 +6,14 @@ const a = <>
 >a : Symbol(a, Decl(jsxJsxsCjsTransformCustomImport.tsx, 1, 5))
 
   <p></p>
+>p : Symbol(p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(p, Decl(react16.d.ts, 2593, 102))
+
   text
   <div className="foo"></div>
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 >className : Symbol(className, Decl(jsxJsxsCjsTransformCustomImport.tsx, 4, 6))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 
 </>
 

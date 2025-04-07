@@ -18,7 +18,7 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         const { AnyComponent } = this.props;
 >AnyComponent : ComponentClass<any> | StatelessComponent<any>
@@ -27,19 +27,19 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 >props : ComponentProps & { children?: ReactNode; }
 
         return (<AnyComponent />);
->(<AnyComponent />) : any
-><AnyComponent /> : any
+>(<AnyComponent />) : Element
+><AnyComponent /> : Element
 >AnyComponent : ComponentClass<any> | StatelessComponent<any>
     }
 }
 
 // Stateless Component As Props
 <MyComponent AnyComponent={() => <button>test</button>}/>
-><MyComponent AnyComponent={() => <button>test</button>}/> : any
+><MyComponent AnyComponent={() => <button>test</button>}/> : Element
 >MyComponent : typeof MyComponent
->AnyComponent : any
->() => <button>test</button> : () => any
-><button>test</button> : any
+>AnyComponent : () => Element
+>() => <button>test</button> : () => Element
+><button>test</button> : Element
 >button : any
 >button : any
 
@@ -52,9 +52,9 @@ class MyButtonComponent extends React.Component<{},{}> {
 }
 
 <MyComponent AnyComponent={MyButtonComponent} />
-><MyComponent AnyComponent={MyButtonComponent} /> : any
+><MyComponent AnyComponent={MyButtonComponent} /> : Element
 >MyComponent : typeof MyComponent
->AnyComponent : any
+>AnyComponent : typeof MyButtonComponent
 >MyButtonComponent : typeof MyButtonComponent
 
 

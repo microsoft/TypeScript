@@ -1,0 +1,73 @@
+--- old.tsxSpreadChildrenInvalidType(jsx=react,target=es5).types
++++ new.tsxSpreadChildrenInvalidType(jsx=react,target=es5).types
+@@= skipped -22, +22 lines =@@
+ >todos : TodoProp[]
+ }
+ function Todo(prop: { key: number, todo: string }) {
+->Todo : (prop: { key: number; todo: string; }) => JSX.Element
++>Todo : (prop: { key: number; todo: string; }) => Element
+ >prop : { key: number; todo: string; }
+ >key : number
+ >todo : string
+ 
+     return <div>{prop.key.toString() + prop.todo}</div>;
+-><div>{prop.key.toString() + prop.todo}</div> : JSX.Element
++><div>{prop.key.toString() + prop.todo}</div> : Element
+ >div : any
+ >prop.key.toString() + prop.todo : string
+ >prop.key.toString() : string
+@@= skipped -21, +21 lines =@@
+ >div : any
+ }
+ function TodoList({ todos }: TodoListProps) {
+->TodoList : ({ todos }: TodoListProps) => JSX.Element
++>TodoList : (__0: TodoListProps) => Element
+ >todos : TodoProp[]
+ 
+     return <div>
+-><div>        {...<Todo key={todos[0].id} todo={todos[0].todo} />}    </div> : JSX.Element
++><div>        {...<Todo key={todos[0].id} todo={todos[0].todo} />}    </div> : Element
+ >div : any
+ 
+         {...<Todo key={todos[0].id} todo={todos[0].todo} />}
+-><Todo key={todos[0].id} todo={todos[0].todo} /> : JSX.Element
+->Todo : (prop: { key: number; todo: string; }) => JSX.Element
++><Todo key={todos[0].id} todo={todos[0].todo} /> : Element
++>Todo : (prop: { key: number; todo: string; }) => Element
+ >key : number
+ >todos[0].id : number
+ >todos[0] : TodoProp
+@@= skipped -27, +27 lines =@@
+ >div : any
+ }
+ function TodoListNoError({ todos }: TodoListProps) {
+->TodoListNoError : ({ todos }: TodoListProps) => JSX.Element
++>TodoListNoError : (__0: TodoListProps) => Element
+ >todos : TodoProp[]
+ 
+     // any is not checked
+     return <div>
+-><div>        {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}    </div> : JSX.Element
++><div>        {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}    </div> : Element
+ >div : any
+ 
+         {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
+ >(<Todo key={todos[0].id} todo={todos[0].todo} /> as any) : any
+ ><Todo key={todos[0].id} todo={todos[0].todo} /> as any : any
+-><Todo key={todos[0].id} todo={todos[0].todo} /> : JSX.Element
+->Todo : (prop: { key: number; todo: string; }) => JSX.Element
++><Todo key={todos[0].id} todo={todos[0].todo} /> : Element
++>Todo : (prop: { key: number; todo: string; }) => Element
+ >key : number
+ >todos[0].id : number
+ >todos[0] : TodoProp
+@@= skipped -33, +33 lines =@@
+ >x : TodoListProps
+ 
+     <TodoList {...x}/>
+-><TodoList {...x}/> : JSX.Element
+->TodoList : ({ todos }: TodoListProps) => JSX.Element
++><TodoList {...x}/> : Element
++>TodoList : (__0: TodoListProps) => Element
+ >x : TodoListProps
+ 

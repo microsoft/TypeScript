@@ -22,46 +22,46 @@ interface Attribs2 {
 }
 
 function make1<T extends {x: string}> (obj: T) {
->make1 : <T extends { x: string; }>(obj: T) => any
+>make1 : <T extends { x: string; }>(obj: T) => Element
 >x : string
 >obj : T
 
 	return <test1 {...obj} />; // OK
-><test1 {...obj} /> : any
+><test1 {...obj} /> : Element
 >test1 : any
 >obj : T
 }
 
 function make2<T extends {x: number}> (obj: T) {
->make2 : <T extends { x: number; }>(obj: T) => any
+>make2 : <T extends { x: number; }>(obj: T) => Element
 >x : number
 >obj : T
 
 	return <test1 {...obj} />; // Error (x is number, not string)
-><test1 {...obj} /> : any
+><test1 {...obj} /> : Element
 >test1 : any
 >obj : T
 }
 
 function make3<T extends {y: string}> (obj: T) {
->make3 : <T extends { y: string; }>(obj: T) => any
+>make3 : <T extends { y: string; }>(obj: T) => Element
 >y : string
 >obj : T
 
 	return <test1 {...obj} />; // Error, missing x
-><test1 {...obj} /> : any
+><test1 {...obj} /> : Element
 >test1 : any
 >obj : T
 }
 
 
 <test1 {...{}} />; // Error, missing x
-><test1 {...{}} /> : any
+><test1 {...{}} /> : Element
 >test1 : any
 >{} : {}
 
 <test2 {...{}} />; // Error, missing toString
-><test2 {...{}} /> : any
+><test2 {...{}} /> : Element
 >test2 : any
 >{} : {}
 

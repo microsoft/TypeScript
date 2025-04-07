@@ -75,11 +75,3 @@
  
  export namespace EmotionJSX {
  >EmotionJSX : Symbol(EmotionJSX, Decl(jsx-namespace.d.ts, 13, 54))
-@@= skipped -107, +107 lines =@@
- /* @jsxImportSource @emotion/react */
- export const Comp = () => <div css="color: hotpink;"></div>;
- >Comp : Symbol(Comp, Decl(index.tsx, 1, 12))
-->div : Symbol(div, Decl(index.d.ts, 14, 37))
- >css : Symbol(css, Decl(index.tsx, 1, 30))
-->div : Symbol(div, Decl(index.d.ts, 14, 37))
- 

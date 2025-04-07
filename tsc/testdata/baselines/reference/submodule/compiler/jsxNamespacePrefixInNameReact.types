@@ -23,7 +23,7 @@ var justElement3 = <a:element attr={"value"}></a:element>;
 ><a:element attr={"value"}></a:element> : any
 >a : any
 >element : any
->attr : any
+>attr : string
 >"value" : "value"
 >a : any
 >element : any
@@ -42,7 +42,7 @@ var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
 ><a:element attr={"value"}>{"text"}</a:element> : any
 >a : any
 >element : any
->attr : any
+>attr : string
 >"value" : "value"
 >"text" : "text"
 >a : any
@@ -53,14 +53,14 @@ var tooManySeparators1 = <a:ele:ment />;
 ><a:ele:ment /> : any
 >a : any
 >ele : any
->ment : any
+>ment : true
 
 var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
 >tooManySeparators2 : any
 ><a:ele:ment></a:ele : any
 >a : any
 >ele : any
->ment : any
+>ment : true
 >a : any
 >ele : any
 >ment : any
@@ -73,8 +73,8 @@ var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
 ><a:ele:ment attr={"value"}></a:ele : any
 >a : any
 >ele : any
->ment : any
->attr : any
+>ment : true
+>attr : string
 >"value" : "value"
 >a : any
 >ele : any
@@ -88,7 +88,7 @@ var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
 ><a:ele:ment>{"text"}</a:ele : any
 >a : any
 >ele : any
->ment : any
+>ment : true
 >"text" : "text"
 >a : any
 >ele : any
@@ -102,8 +102,8 @@ var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
 ><a:ele:ment attr={"value"}>{"text"}</a:ele : any
 >a : any
 >ele : any
->ment : any
->attr : any
+>ment : true
+>attr : string
 >"value" : "value"
 >"text" : "text"
 >a : any
@@ -117,7 +117,7 @@ var justAttribute1 = <element a:attr={"value"} />;
 >justAttribute1 : any
 ><element a:attr={"value"} /> : any
 >element : any
->a:attr : any
+>a:attr : string
 >a : any
 >attr : any
 >"value" : "value"
@@ -126,7 +126,7 @@ var justAttribute2 = <element a:attr={"value"}></element>;
 >justAttribute2 : any
 ><element a:attr={"value"}></element> : any
 >element : any
->a:attr : any
+>a:attr : string
 >a : any
 >attr : any
 >"value" : "value"
@@ -136,7 +136,7 @@ var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;
 >justAttribute3 : any
 ><element a:attr={"value"}>{"text"}</element> : any
 >element : any
->a:attr : any
+>a:attr : string
 >a : any
 >attr : any
 >"value" : "value"
@@ -148,7 +148,7 @@ var both1 = <a:element a:attr={"value"} />;
 ><a:element a:attr={"value"} /> : any
 >a : any
 >element : any
->a:attr : any
+>a:attr : string
 >a : any
 >attr : any
 >"value" : "value"
@@ -158,7 +158,7 @@ var both2 = <a:element k:attr={"value"}></a:element>;
 ><a:element k:attr={"value"}></a:element> : any
 >a : any
 >element : any
->k:attr : any
+>k:attr : string
 >k : any
 >attr : any
 >"value" : "value"
@@ -170,7 +170,7 @@ var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
 ><a:element a:attr={"value"}>{"text"}</a:element> : any
 >a : any
 >element : any
->a:attr : any
+>a:attr : string
 >a : any
 >attr : any
 >"value" : "value"
@@ -189,7 +189,7 @@ var endOfIdent2 = <a attr:={"value"} />;
 >endOfIdent2 : any
 ><a attr:={"value"} /> : any
 >a : any
->attr: : any
+>attr: : string
 >attr : any
 > : any
 >"value" : "value"

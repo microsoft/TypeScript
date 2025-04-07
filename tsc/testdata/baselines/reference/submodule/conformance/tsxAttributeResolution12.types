@@ -78,14 +78,14 @@ const T = TestMod.Test;
 >Test : TestClass
 
 var t1 = <T />;
->t1 : any
-><T /> : any
+>t1 : Element
+><T /> : Element
 >T : TestClass
 
 // Should error
 var t2 = <TestMod.Test />;
->t2 : any
-><TestMod.Test /> : any
+>t2 : Element
+><TestMod.Test /> : Element
 >TestMod.Test : TestClass
 >TestMod : typeof TestMod
 >Test : TestClass

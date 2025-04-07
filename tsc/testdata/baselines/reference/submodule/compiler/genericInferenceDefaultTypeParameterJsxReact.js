@@ -18,7 +18,13 @@ const v1 = <Component onClick={e => e.preventDefault()} />;
 
 //// [genericInferenceDefaultTypeParameterJsxReact.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+// Repro from #50858
+const react_1 = __importDefault(require("react"));
 function Component(props) {
     return <></>;
 }

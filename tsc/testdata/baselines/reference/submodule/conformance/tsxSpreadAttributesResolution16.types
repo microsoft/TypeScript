@@ -13,16 +13,16 @@ interface ComponentProps {
 }
 
 export default function Component(props: ComponentProps) {
->Component : (props: ComponentProps) => any
+>Component : (props: ComponentProps) => Element
 >props : ComponentProps
 
     return (
->(        // Error: missing property        <AnotherComponent {...props} />    ) : any
+>(        // Error: missing property        <AnotherComponent {...props} />    ) : Element
 
         // Error: missing property
         <AnotherComponent {...props} />
-><AnotherComponent {...props} /> : any
->AnotherComponent : (__0: AnotherComponentProps) => any
+><AnotherComponent {...props} /> : Element
+>AnotherComponent : (__0: AnotherComponentProps) => Element
 >props : ComponentProps
 
     );
@@ -40,14 +40,14 @@ interface AnotherComponentProps {
 }
 
 function AnotherComponent({ property1 }: AnotherComponentProps) {
->AnotherComponent : (__0: AnotherComponentProps) => any
+>AnotherComponent : (__0: AnotherComponentProps) => Element
 >property1 : string
 
     return (
->(        <span>{property1}</span>    ) : any
+>(        <span>{property1}</span>    ) : Element
 
         <span>{property1}</span>
-><span>{property1}</span> : any
+><span>{property1}</span> : Element
 >span : any
 >property1 : string
 >span : any

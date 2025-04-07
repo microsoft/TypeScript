@@ -627,6 +627,10 @@ func IsJsxChild(node *Node) bool {
 	return false
 }
 
+func IsJsxAttributeLike(node *Node) bool {
+	return IsJsxAttribute(node) || IsJsxSpreadAttribute(node)
+}
+
 func isDeclarationStatementKind(kind Kind) bool {
 	switch kind {
 	case KindFunctionDeclaration,

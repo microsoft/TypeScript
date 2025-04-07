@@ -15,17 +15,17 @@ function createComponent<T extends { prop: number }>(arg: T) {
 >arg : T
 
     let a1 = <Component {...arg} />;
->a1 : any
-><Component {...arg} /> : any
+>a1 : Element
+><Component {...arg} /> : Element
 >Component : <U>(l: U) => Element
 >arg : T
 
     let a2 = <Component {...arg} prop1 />;
->a2 : any
-><Component {...arg} prop1 /> : any
+>a2 : Element
+><Component {...arg} prop1 /> : Element
 >Component : <U>(l: U) => Element
 >arg : T
->prop1 : any
+>prop1 : true
 }
 
 declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
@@ -47,32 +47,32 @@ function Bar<T extends { prop: number }>(arg: T) {
 >arg : T
 
     let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
->a1 : any
-><ComponentSpecific {...arg} ignore-prop="hi" /> : any
+>a1 : Element
+><ComponentSpecific {...arg} ignore-prop="hi" /> : Element
 >ComponentSpecific : <U>(l: { prop: U; }) => Element
 >arg : T
->ignore-prop : any
+>ignore-prop : string
 
     let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
->a2 : any
-><ComponentSpecific1 {...arg} ignore-prop={10} /> : any
+>a2 : Element
+><ComponentSpecific1 {...arg} ignore-prop={10} /> : Element
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => Element
 >arg : T
->ignore-prop : any
+>ignore-prop : number
 >10 : 10
 
     let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
->a3 : any
-><ComponentSpecific {...arg} prop="hello" /> : any
+>a3 : Element
+><ComponentSpecific {...arg} prop="hello" /> : Element
 >ComponentSpecific : <U>(l: { prop: U; }) => Element
 >arg : T
->prop : any
+>prop : string
 
     let a4 = <ComponentSpecific {...arg} prop1="hello" />;   // U is "hello"
->a4 : any
-><ComponentSpecific {...arg} prop1="hello" /> : any
+>a4 : Element
+><ComponentSpecific {...arg} prop1="hello" /> : Element
 >ComponentSpecific : <U>(l: { prop: U; }) => Element
 >arg : T
->prop1 : any
+>prop1 : string
 }
 

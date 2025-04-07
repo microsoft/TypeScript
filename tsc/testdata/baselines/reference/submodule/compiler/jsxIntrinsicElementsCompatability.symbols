@@ -19,6 +19,7 @@ function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.In
 
     // Just so the return value is RectElement, the rendered element doesnt matter
     return <div />
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 
 function Test<T extends 'button' | 'a'>(el: T) {

@@ -63,7 +63,11 @@ function UserName0() {
 >user : Symbol(user, Decl(file.tsx, 22, 13))
 
                 <h1>{ user.Name }</h1>
+>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
+>user.Name : Symbol(Name, Decl(file.tsx, 2, 17))
 >user : Symbol(user, Decl(file.tsx, 22, 13))
+>Name : Symbol(Name, Decl(file.tsx, 2, 17))
+>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
 
             ) }
         </FetchUser>
@@ -83,7 +87,11 @@ function UserName1() {
 >user : Symbol(user, Decl(file.tsx, 33, 13))
 
                 <h1>{ user.Name }</h1>
+>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
+>user.Name : Symbol(Name, Decl(file.tsx, 2, 17))
 >user : Symbol(user, Decl(file.tsx, 33, 13))
+>Name : Symbol(Name, Decl(file.tsx, 2, 17))
+>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
 
             ) }
         </FetchUser>

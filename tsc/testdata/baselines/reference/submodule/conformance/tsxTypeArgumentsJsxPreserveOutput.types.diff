@@ -1,0 +1,130 @@
+--- old.tsxTypeArgumentsJsxPreserveOutput.types
++++ new.tsxTypeArgumentsJsxPreserveOutput.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ type TypeProps = { foo?: boolean; };
+ >TypeProps : TypeProps
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ <>
+-><>    {/* JsxSelfClosingElement */}    <Foo<unknown> />    <Foo<string> />    <Foo<boolean> />    <Foo<object> />    <Foo<null> />    <Foo<any> />    <Foo<never> />    <Foo<undefined> />    <Foo<TypeProps> />    <Foo<InterfaceProps> />    {/* JsxOpeningElement */}    <Foo<unknown>></Foo>    <Foo<string>></Foo>    <Foo<boolean>></Foo>    <Foo<object>></Foo>    <Foo<null>></Foo>    <Foo<any>></Foo>    <Foo<never>></Foo>    <Foo<undefined>></Foo>    <Foo<TypeProps>></Foo>    <Foo<InterfaceProps>></Foo></> : JSX.Element
++><>    {/* JsxSelfClosingElement */}    <Foo<unknown> />    <Foo<string> />    <Foo<boolean> />    <Foo<object> />    <Foo<null> />    <Foo<any> />    <Foo<never> />    <Foo<undefined> />    <Foo<TypeProps> />    <Foo<InterfaceProps> />    {/* JsxOpeningElement */}    <Foo<unknown>></Foo>    <Foo<string>></Foo>    <Foo<boolean>></Foo>    <Foo<object>></Foo>    <Foo<null>></Foo>    <Foo<any>></Foo>    <Foo<never>></Foo>    <Foo<undefined>></Foo>    <Foo<TypeProps>></Foo>    <Foo<InterfaceProps>></Foo></> : Element
+ 
+     {/* JsxSelfClosingElement */}
+     <Foo<unknown> />
+-><Foo<unknown> /> : JSX.Element
++><Foo<unknown> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<string> />
+-><Foo<string> /> : JSX.Element
++><Foo<string> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<boolean> />
+-><Foo<boolean> /> : JSX.Element
++><Foo<boolean> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<object> />
+-><Foo<object> /> : JSX.Element
++><Foo<object> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<null> />
+-><Foo<null> /> : JSX.Element
++><Foo<null> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<any> />
+-><Foo<any> /> : JSX.Element
++><Foo<any> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<never> />
+-><Foo<never> /> : JSX.Element
++><Foo<never> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<undefined> />
+-><Foo<undefined> /> : JSX.Element
++><Foo<undefined> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<TypeProps> />
+-><Foo<TypeProps> /> : JSX.Element
++><Foo<TypeProps> /> : Element
+ >Foo : <T>() => any
+ 
+     <Foo<InterfaceProps> />
+-><Foo<InterfaceProps> /> : JSX.Element
++><Foo<InterfaceProps> /> : Element
+ >Foo : <T>() => any
+ 
+     {/* JsxOpeningElement */}
+     <Foo<unknown>></Foo>
+-><Foo<unknown>></Foo> : JSX.Element
++><Foo<unknown>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<string>></Foo>
+-><Foo<string>></Foo> : JSX.Element
++><Foo<string>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<boolean>></Foo>
+-><Foo<boolean>></Foo> : JSX.Element
++><Foo<boolean>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<object>></Foo>
+-><Foo<object>></Foo> : JSX.Element
++><Foo<object>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<null>></Foo>
+-><Foo<null>></Foo> : JSX.Element
++><Foo<null>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<any>></Foo>
+-><Foo<any>></Foo> : JSX.Element
++><Foo<any>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<never>></Foo>
+-><Foo<never>></Foo> : JSX.Element
++><Foo<never>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<undefined>></Foo>
+-><Foo<undefined>></Foo> : JSX.Element
++><Foo<undefined>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<TypeProps>></Foo>
+-><Foo<TypeProps>></Foo> : JSX.Element
++><Foo<TypeProps>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 
+     <Foo<InterfaceProps>></Foo>
+-><Foo<InterfaceProps>></Foo> : JSX.Element
++><Foo<InterfaceProps>></Foo> : Element
+ >Foo : <T>() => any
+ >Foo : <T>() => any
+ 

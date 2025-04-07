@@ -1,0 +1,81 @@
+--- old.reactSFCAndFunctionResolvable.types
++++ new.reactSFCAndFunctionResolvable.types
+@@= skipped -6, +6 lines =@@
+ >React : typeof React
+ 
+ declare const Radio: (props: {}) => React.ReactElement<{}>;
+->Radio : (props: {}) => React.ReactElement<{}>
++>Radio : (props: {}) => ReactElement<{}>
+ >props : {}
+ >React : any
+ 
+ declare const OtherRadio: () => React.ReactElement<{}>;
+->OtherRadio : () => React.ReactElement<{}>
++>OtherRadio : () => ReactElement<{}>
+ >React : any
+ 
+ declare const Checkbox: React.SFC;
+->Checkbox : React.SFC<{}>
++>Checkbox : SFC<{}>
+ >React : any
+ 
+ declare const condition1: boolean;
+@@= skipped -22, +22 lines =@@
+ >condition3 : boolean
+ 
+ const RandomComponent: React.SFC = () => {
+->RandomComponent : React.SFC<{}>
++>RandomComponent : SFC<{}>
+ >React : any
+->() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => JSX.Element
++>() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => Element
+ 
+   const Component =
+->Component : React.SFC<{}> | ((props: {}) => React.ReactElement<{}>)
++>Component : SFC<{}> | ((props: {}) => ReactElement<{}>)
+ 
+     condition1
+->condition1      ? Radio      : Checkbox : React.SFC<{}> | ((props: {}) => React.ReactElement<{}>)
++>condition1      ? Radio      : Checkbox : SFC<{}> | ((props: {}) => ReactElement<{}>)
+ >condition1 : boolean
+ 
+       ? Radio
+->Radio : (props: {}) => React.ReactElement<{}>
++>Radio : (props: {}) => ReactElement<{}>
+ 
+       : Checkbox;
+->Checkbox : React.SFC<{}>
++>Checkbox : SFC<{}>
+ 
+   const OtherComponent =
+->OtherComponent : React.SFC<{}> | (() => React.ReactElement<{}>)
++>OtherComponent : SFC<{}> | (() => ReactElement<{}>)
+ 
+     condition2
+->condition2      ? OtherRadio      : Checkbox : React.SFC<{}> | (() => React.ReactElement<{}>)
++>condition2      ? OtherRadio      : Checkbox : SFC<{}> | (() => ReactElement<{}>)
+ >condition2 : boolean
+ 
+       ? OtherRadio
+->OtherRadio : () => React.ReactElement<{}>
++>OtherRadio : () => ReactElement<{}>
+ 
+       : Checkbox;
+->Checkbox : React.SFC<{}>
++>Checkbox : SFC<{}>
+ 
+   return condition1 ? <Component /> : <OtherComponent />;
+->condition1 ? <Component /> : <OtherComponent /> : JSX.Element
++>condition1 ? <Component /> : <OtherComponent /> : Element
+ >condition1 : boolean
+-><Component /> : JSX.Element
+->Component : React.SFC<{}> | ((props: {}) => React.ReactElement<{}>)
+-><OtherComponent /> : JSX.Element
+->OtherComponent : React.SFC<{}> | (() => React.ReactElement<{}>)
++><Component /> : Element
++>Component : SFC<{}> | ((props: {}) => ReactElement<{}>)
++><OtherComponent /> : Element
++>OtherComponent : SFC<{}> | (() => ReactElement<{}>)
+ 
+ };
+ 

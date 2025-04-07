@@ -1,0 +1,67 @@
+--- old.tsxGenericArrowFunctionParsing.types
++++ new.tsxGenericArrowFunctionParsing.types
+@@= skipped -12, +12 lines =@@
+ 
+ // This is an element
+ var x1 = <T>() => {}</T>;
+->x1 : JSX.Element
+-><T>() => {}</T> : JSX.Element
++>x1 : Element
++><T>() => {}</T> : Element
+ >T : any
+ >T : any
+ 
+ x1.isElement;
+ >x1.isElement : any
+->x1 : JSX.Element
++>x1 : Element
+ >isElement : any
+ 
+ // This is a generic function
+@@= skipped -30, +30 lines =@@
+ 
+ // This is an element
+ var x4 = <T extends={true}>() => {}</T>;
+->x4 : JSX.Element
+-><T extends={true}>() => {}</T> : JSX.Element
++>x4 : Element
++><T extends={true}>() => {}</T> : Element
+ >T : any
+ >extends : boolean
+ >true : true
+@@= skipped -9, +9 lines =@@
+ 
+ x4.isElement;
+ >x4.isElement : any
+->x4 : JSX.Element
++>x4 : Element
+ >isElement : any
+ 
+ // This is an element
+ var x5 = <T extends>() => {}</T>;
+->x5 : JSX.Element
+-><T extends>() => {}</T> : JSX.Element
++>x5 : Element
++><T extends>() => {}</T> : Element
+ >T : any
+ >extends : true
+ >T : any
+ 
+ x5.isElement;
+ >x5.isElement : any
+->x5 : JSX.Element
++>x5 : Element
+ >isElement : any
+ 
+ // This is a generic function
+ var x6 = <T = string,>() => {};
+->x6 : <T = string>() => void
+-><T = string,>() => {} : <T = string>() => void
++>x6 : <T>() => void
++><T = string,>() => {} : <T>() => void
+ 
+ x6();
+ >x6() : void
+->x6 : <T = string>() => void
++>x6 : <T>() => void
+ 

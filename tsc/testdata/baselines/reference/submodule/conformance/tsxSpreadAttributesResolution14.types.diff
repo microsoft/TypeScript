@@ -1,0 +1,50 @@
+--- old.tsxSpreadAttributesResolution14.types
++++ new.tsxSpreadAttributesResolution14.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ interface ComponentProps {
+     property1: string;
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ export default function Component(props: ComponentProps) {
+->Component : (props: ComponentProps) => JSX.Element
++>Component : (props: ComponentProps) => Element
+ >props : ComponentProps
+ 
+     return (
+->(        // Error extra property        <AnotherComponent {...props} Property1/>    ) : JSX.Element
++>(        // Error extra property        <AnotherComponent {...props} Property1/>    ) : Element
+ 
+         // Error extra property
+         <AnotherComponent {...props} Property1/>
+-><AnotherComponent {...props} Property1/> : JSX.Element
+->AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
++><AnotherComponent {...props} Property1/> : Element
++>AnotherComponent : (__0: AnotherComponentProps) => Element
+ >props : ComponentProps
+ >Property1 : true
+ 
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ function AnotherComponent({ property1 }: AnotherComponentProps) {
+->AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
++>AnotherComponent : (__0: AnotherComponentProps) => Element
+ >property1 : string
+ 
+     return (
+->(        <span>{property1}</span>    ) : JSX.Element
++>(        <span>{property1}</span>    ) : Element
+ 
+         <span>{property1}</span>
+-><span>{property1}</span> : JSX.Element
++><span>{property1}</span> : Element
+ >span : any
+ >property1 : string
+ >span : any

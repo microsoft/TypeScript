@@ -1,0 +1,46 @@
+--- old.jsxJsxsCjsTransformCustomImportPragma(jsx=react-jsx).types
++++ new.jsxJsxsCjsTransformCustomImportPragma(jsx=react-jsx).types
+@@= skipped -4, +4 lines =@@
+ /* @jsxImportSource react */
+ import "./preact";
+ const a = <>
+->a : JSX.Element
+-><>  <p></p>  text  <div className="foo"></div></> : JSX.Element
++>a : Element
++><>  <p></p>  text  <div className="foo"></div></> : Element
+ 
+   <p></p>
+-><p></p> : JSX.Element
++><p></p> : Element
+ >p : any
+ >p : any
+ 
+   text
+   <div className="foo"></div>
+-><div className="foo"></div> : JSX.Element
++><div className="foo"></div> : Element
+ >div : any
+ >className : string
+ >div : any
+@@= skipped -22, +22 lines =@@
+ /// <reference path="react16.d.ts" />
+ /* @jsxImportSource preact */
+ const a = <>
+->a : JSX.Element
+-><>  <p></p>  text  <div className="foo"></div></> : JSX.Element
++>a : Element
++><>  <p></p>  text  <div className="foo"></div></> : Element
+ 
+   <p></p>
+-><p></p> : JSX.Element
++><p></p> : Element
+ >p : any
+ >p : any
+ 
+   text
+   <div className="foo"></div>
+-><div className="foo"></div> : JSX.Element
++><div className="foo"></div> : Element
+ >div : any
+ >className : string
+ >div : any

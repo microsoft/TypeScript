@@ -1,0 +1,36 @@
+--- old.contextualTypingOfOptionalMembers.types
++++ new.contextualTypingOfOptionalMembers.types
+@@= skipped -65, +65 lines =@@
+ >x : string | T
+ 
+ const y = foo({
+->y : { bar(x: number): void; }
+->foo({    bar(x) { // Should be typed number => void    }}) : { bar(x: number): void; }
++>y : { bar: (x: number) => void; }
++>foo({    bar(x) { // Should be typed number => void    }}) : { bar: (x: number) => void; }
+ >foo : <T extends Bar>(x: string | T) => T
+->{    bar(x) { // Should be typed number => void    }} : { bar(x: number): void; }
++>{    bar(x) { // Should be typed number => void    }} : { bar: (x: number) => void; }
+ 
+     bar(x) { // Should be typed number => void
+ >bar : (x: number) => void
+@@= skipped -108, +108 lines =@@
+ }
+ 
+ declare function App4<State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State }): JSX.Element;
+->App4 : <State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State; }) => JSX.Element
++>App4 : <State, Actions extends ActionsObjectOr<State>>(props: (string | Actions) & { state: State; }) => Element
+ >props : (string | Actions) & { state: State; }
+ >state : State
+ >JSX : any
+ 
+ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number, but JSX resolution is missing an inferential pass
+->a : JSX.Element
+-><App4 state={100} foo={s => s} /> : JSX.Element
+->App4 : <State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State; }) => JSX.Element
++>a : Element
++><App4 state={100} foo={s => s} /> : Element
++>App4 : <State, Actions extends ActionsObjectOr<State>>(props: (string | Actions) & { state: State; }) => Element
+ >state : number
+ >100 : 100
+ >foo : (s: number) => number

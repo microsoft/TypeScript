@@ -1,0 +1,32 @@
+--- old.tsxSpreadDoesNotReportExcessProps.types
++++ new.tsxSpreadDoesNotReportExcessProps.types
+@@= skipped -7, +7 lines =@@
+ 
+ class MyComponent extends React.Component<{dataSource: number[], onClick?: any}, {}> {
+ >MyComponent : MyComponent
+->React.Component : React.Component<{ dataSource: number[]; onClick?: any; }, {}, any>
++>React.Component : Component<{ dataSource: number[]; onClick?: any; }, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ >dataSource : number[]
+ >onClick : any
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return (<div {...this.props} className="ok"></div>);
+->(<div {...this.props} className="ok"></div>) : JSX.Element
+-><div {...this.props} className="ok"></div> : JSX.Element
++>(<div {...this.props} className="ok"></div>) : Element
++><div {...this.props} className="ok"></div> : Element
+ >div : any
+->this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
++>this.props : Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
+ >this : this
+->props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
++>props : Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
+ >className : string
+ >div : any
+     }

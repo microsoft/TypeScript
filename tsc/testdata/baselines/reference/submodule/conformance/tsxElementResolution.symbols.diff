@@ -23,15 +23,17 @@
  var a = <foundFirst  x="hello" />;
  >a : Symbol(a, Decl(tsxElementResolution.tsx, 16, 3))
 ->foundFirst : Symbol(JSX.IntrinsicElements.foundFirst, Decl(tsxElementResolution.tsx, 1, 30))
++>foundFirst : Symbol(foundFirst, Decl(tsxElementResolution.tsx, 1, 30))
  >x : Symbol(x, Decl(tsxElementResolution.tsx, 16, 19))
  
  var b = <string_named />;
  >b : Symbol(b, Decl(tsxElementResolution.tsx, 17, 3))
 ->string_named : Symbol(JSX.IntrinsicElements['string_named'], Decl(tsxElementResolution.tsx, 2, 28))
++>string_named : Symbol(string_named, Decl(tsxElementResolution.tsx, 2, 28))
  
  // TODO: This should not be a parse error (should
  //        parse a property name here, not identifier)
-@@= skipped -16, +14 lines =@@
+@@= skipped -16, +16 lines =@@
  
  var e = <Dotted.Name />;
  >e : Symbol(e, Decl(tsxElementResolution.tsx, 22, 3))

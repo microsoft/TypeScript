@@ -11,6 +11,6 @@ export function Foo() {
     return <T extends/>
 ><T extends/> : any
 >T : any
->extends : any
+>extends : true
 }
 

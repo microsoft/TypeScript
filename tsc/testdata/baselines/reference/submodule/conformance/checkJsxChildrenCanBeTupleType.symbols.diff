@@ -29,25 +29,28 @@
  
    <div />
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
    <div />
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
  </ResizablePanel>
  >ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
- 
-@@= skipped -13, +9 lines =@@
+@@= skipped -13, +13 lines =@@
  >ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
  
    <div />
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
    <div />
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
    <div />
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
  </ResizablePanel>
  >ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
- 

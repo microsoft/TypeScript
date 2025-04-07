@@ -5,10 +5,12 @@
  // OK
  <div n='x' />;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
  >n : Symbol(n, Decl(file.tsx, 8, 4))
  
  // Error
  <span w='err' />;
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
  >w : Symbol(w, Decl(file.tsx, 11, 5))
  

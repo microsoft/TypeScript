@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-	"regexp"
 	"strings"
 	"sync"
 
@@ -178,6 +176,15 @@ func ParseJSONText(fileName string, path tspath.Path, sourceText string) *ast.So
 	result.SetDiagnostics(attachFileToDiagnostics(p.diagnostics, result))
 	result.SetJSDocDiagnostics(attachFileToDiagnostics(p.jsdocDiagnostics, result))
 	return result
+}
+
+func ParseIsolatedEntityName(text string, languageVersion core.ScriptTarget) *ast.EntityName {
+	p := getParser()
+	defer putParser(p)
+	p.initializeState("", "", text, languageVersion, core.ScriptKindJS, scanner.JSDocParsingModeParseAll)
+	p.nextToken()
+	entityName := p.parseEntityName(true, nil)
+	return core.IfElse(p.token == ast.KindEndOfFile && len(p.diagnostics) == 0, entityName, nil)
 }
 
 func (p *Parser) initializeState(fileName string, path tspath.Path, sourceText string, languageVersion core.ScriptTarget, scriptKind core.ScriptKind, jsdocParsingMode scanner.JSDocParsingMode) {
@@ -6396,119 +6403,148 @@ func getCommentPragmas(f *ast.NodeFactory, sourceText string) (pragmas []ast.Pra
 		comment := sourceText[commentRange.Pos():commentRange.End()]
 		pragmas = append(pragmas, extractPragmas(commentRange, comment)...)
 	}
-
 	return pragmas
 }
 
-var ReferencePragmaSpec = &ast.PragmaSpecification{
-	Args: []ast.PragmaArgumentSpecification{
-		{Name: "types", Optional: false, CaptureSpan: true},
-		{Name: "lib", Optional: false, CaptureSpan: true},
-		{Name: "path", Optional: false, CaptureSpan: true},
-		{Name: "no-default-lib", Optional: false, CaptureSpan: true},
-		{Name: "resolution-mode", Optional: false, CaptureSpan: true},
-		{Name: "preserve", Optional: false, CaptureSpan: true},
-	},
-	Kind: ast.PragmaKindTripleSlashXML,
-}
-
-func getCommentPragmaSpec(name string) (*ast.PragmaSpecification, bool) {
-	switch name {
-	case "reference":
-		return ReferencePragmaSpec, true
-	default:
-		return nil, false
-	}
-}
-
-type NamedArgRegEx struct {
-	regex *regexp.Regexp
-	once  sync.Once
-}
-
-var namedArgRegExCache sync.Map
-
-func getNamedArgRegEx(name string) *regexp.Regexp {
-	value, _ := namedArgRegExCache.LoadOrStore(name, &NamedArgRegEx{})
-	namedArgRegex := value.(*NamedArgRegEx)
-	namedArgRegex.once.Do(func() {
-		namedArgRegex.regex = regexp.MustCompile(fmt.Sprintf(`(?im)(\s%s\s*=\s*)(?:(?:'([^']*)')|(?:"([^"]*)"))`, name))
-	})
-	return namedArgRegex.regex
-}
-
-var (
-	tripleSlashXMLCommentStartRegEx = regexp.MustCompile(`(?m)^\/\/\/\s*<(\S+)\s.*?\/>`)
-	singleLinePragmaRegEx           = regexp.MustCompile(`(?m)^\/\/\/?\s*@([^\s:]+)((?:[^\S\r\n]|:).*)?$`)
-)
-
 func extractPragmas(commentRange ast.CommentRange, text string) []ast.Pragma {
-	if commentRange.Kind == ast.KindSingleLineCommentTrivia {
-		matches := tripleSlashXMLCommentStartRegEx.FindStringSubmatch(text)
-		if len(matches) < 2 {
-			return nil
+	if commentRange.Kind == ast.KindSingleLineCommentTrivia && match(text, 0, "//") {
+		pos := 2
+		tripleSlash := match(text, pos, "/")
+		if tripleSlash {
+			pos++
 		}
-
-		name := strings.ToLower(matches[1])
-		pragmaSpec, ok := getCommentPragmaSpec(name)
-		if !(ok && pragmaSpec.IsTripleSlash()) {
-			return nil
-		}
-
-		pragma := ast.Pragma{
-			Name:      name,
-			Args:      make(map[string]ast.PragmaArgument),
-			ArgsRange: commentRange,
-		}
-		if len(pragmaSpec.Args) > 0 {
-			for _, argSpec := range pragmaSpec.Args {
-				argMatcher := getNamedArgRegEx(argSpec.Name)
-				argMatchIndicies := argMatcher.FindStringSubmatchIndex(text)
-				argMatches := argMatcher.FindStringSubmatch(text)
-				if len(argMatches) < 2 {
-					continue
-				}
-				var value string
-				if argMatches[2] != "" {
-					value = argMatches[2]
-				} else if len(argMatches) > 3 {
-					value = argMatches[3]
-				}
-				if argSpec.CaptureSpan {
-					startPos := commentRange.Pos() + argMatchIndicies[0] + len(argMatches[1]) + 1
-
-					newArg := ast.PragmaArgument{
-						Name:      argSpec.Name,
-						Value:     value,
-						TextRange: core.NewTextRange(startPos, startPos+len(value)),
-					}
-
-					pragma.Args[argSpec.Name] = newArg
-				} else {
-					newArg := ast.PragmaArgument{
-						Value: value,
-					}
-
-					pragma.Args[argSpec.Name] = newArg
-				}
+		pos = skipBlanks(text, pos)
+		if tripleSlash && match(text, pos, "<") {
+			tagName := extractName(text, pos+1)
+			if tagName != "reference" {
+				return nil
 			}
+			pos += 10
+			args := make(map[string]ast.PragmaArgument)
+			for {
+				pos = skipBlanks(text, pos)
+				if match(text, pos, "/>") {
+					break
+				}
+				argName := extractName(text, pos)
+				if argName == "" {
+					return nil
+				}
+				pos = skipBlanks(text, pos+len(argName))
+				if !match(text, pos, "=") {
+					return nil
+				}
+				pos = skipBlanks(text, pos+1)
+				value, ok := extractQuotedString(text, pos)
+				if !ok {
+					return nil
+				}
+				args[argName] = ast.PragmaArgument{
+					Name:      argName,
+					Value:     value,
+					TextRange: core.NewTextRange(commentRange.Pos()+pos+1, commentRange.Pos()+pos+1+len(value)),
+				}
+				pos += len(value) + 2
+			}
+			return []ast.Pragma{{
+				CommentRange: commentRange,
+				Name:         "reference",
+				Args:         args,
+			}}
 		}
-		return []ast.Pragma{pragma}
+		if match(text, pos, "@") {
+			pos++
+			pragmaName := extractName(text, pos)
+			if !(pragmaName == "ts-check" || pragmaName == "ts-nocheck") {
+				return nil
+			}
+			return []ast.Pragma{{
+				CommentRange: commentRange,
+				Name:         pragmaName,
+			}}
+		}
+	}
+	if commentRange.Kind == ast.KindMultiLineCommentTrivia {
+		pos := 2
+		var pragmas []ast.Pragma
+		for {
+			if pos = skipTo(text, pos, "@"); pos < 0 {
+				break
+			}
+			pragmaName := extractName(text, pos+1)
+			if !(pragmaName == "jsx" || pragmaName == "jsxfrag" || pragmaName == "jsximportsource" || pragmaName == "jsxruntime") {
+				break
+			}
+			start := skipBlanks(text, pos+len(pragmaName)+1)
+			pos = skipNonBlanks(text, start)
+			args := make(map[string]ast.PragmaArgument, 1)
+			args["factory"] = ast.PragmaArgument{
+				Name:      "factory",
+				Value:     text[start:pos],
+				TextRange: core.NewTextRange(commentRange.Pos()+start, commentRange.Pos()+pos),
+			}
+			pragmas = append(pragmas, ast.Pragma{
+				CommentRange: commentRange,
+				Name:         pragmaName,
+				Args:         args,
+			})
+		}
+		return pragmas
 	}
 	return nil
+}
 
-	// const singleLine = range.kind === SyntaxKind.SingleLineCommentTrivia && singleLinePragmaRegEx.exec(text);
-	// if (singleLine) {
-	//     return addPragmaForMatch(pragmas, range, PragmaKindFlags.SingleLine, singleLine);
-	// }
+func match(text string, pos int, s string) bool {
+	return strings.HasPrefix(text[pos:], s)
+}
 
-	// if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
-	//     const multiLinePragmaRegEx = /@(\S+)(\s+(?:\S.*)?)?$/gm; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
-	//     let multiLineMatch: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
-	//     while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
-	//         addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
-	//     }
-	// }
+func skipBlanks(text string, pos int) int {
+	for pos < len(text) && (text[pos] == ' ' || text[pos] == '\t') {
+		pos++
+	}
+	return pos
+}
+
+func skipNonBlanks(text string, pos int) int {
+	for pos < len(text) && (text[pos] != ' ' && text[pos] != '\t' && text[pos] != '\r' && text[pos] != '\n') {
+		pos++
+	}
+	return pos
+}
+
+func skipTo(text string, pos int, s string) int {
+	i := strings.Index(text[pos:], s)
+	if i < 0 {
+		return -1
+	}
+	return pos + i
+}
+
+func extractName(text string, pos int) string {
+	start := pos
+	for pos < len(text) && (text[pos] >= 'A' && text[pos] <= 'Z' || text[pos] >= 'a' && text[pos] <= 'z' || text[pos] == '-') {
+		pos++
+	}
+	return strings.ToLower(text[start:pos])
+}
+
+func extractQuotedString(text string, pos int) (string, bool) {
+	if pos == len(text) {
+		return "", false
+	}
+	quote := text[pos]
+	if quote != '\'' && quote != '"' {
+		return "", false
+	}
+	pos++
+	start := pos
+	for pos < len(text) && text[pos] != quote {
+		pos++
+	}
+	if pos == len(text) {
+		return "", false
+	}
+	return text[start:pos], true
 }
 
 func processPragmasIntoFields(context *ast.SourceFile /* !!! reportDiagnostic func(*ast.Diagnostic)*/) {
@@ -6556,9 +6592,12 @@ func processPragmasIntoFields(context *ast.SourceFile /* !!! reportDiagnostic fu
 			} else {
 				// reportDiagnostic(argMap.Pos, argMap.End-argMap.Pos, "Invalid reference directive syntax")
 			}
-
+		case "ts-check", "ts-nocheck":
+			// !!!
+		case "jsx", "jsxfrag", "jsximportsource", "jsxruntime":
+			// !!!
 		default:
-			panic("Unhandled pragma kind")
+			panic("Unhandled pragma kind: " + pragma.Name)
 		}
 	}
 }

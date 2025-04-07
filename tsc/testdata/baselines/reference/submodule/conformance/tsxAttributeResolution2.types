@@ -16,19 +16,19 @@ interface Attribs1 {
 
 // OK
 <test1 c1={(x) => x.length} />; // OK
-><test1 c1={(x) => x.length} /> : any
+><test1 c1={(x) => x.length} /> : Element
 >test1 : any
->c1 : any
->(x) => x.length : (x: any) => any
->x : any
->x.length : any
->x : any
->length : any
+>c1 : (x: string) => number
+>(x) => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
 
 <test1 data-c1={(x) => x.leng} />; // OK
-><test1 data-c1={(x) => x.leng} /> : any
+><test1 data-c1={(x) => x.leng} /> : Element
 >test1 : any
->data-c1 : any
+>data-c1 : (x: any) => any
 >(x) => x.leng : (x: any) => any
 >x : any
 >x.leng : any
@@ -38,12 +38,12 @@ interface Attribs1 {
 
 // Errors
 <test1 c1={(x) => x.leng} />; // Error, no leng on 'string'
-><test1 c1={(x) => x.leng} /> : any
+><test1 c1={(x) => x.leng} /> : Element
 >test1 : any
->c1 : any
->(x) => x.leng : (x: any) => any
->x : any
+>c1 : (x: string) => any
+>(x) => x.leng : (x: string) => any
+>x : string
 >x.leng : any
->x : any
+>x : string
 >leng : any
 

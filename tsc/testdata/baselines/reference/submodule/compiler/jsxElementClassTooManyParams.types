@@ -30,11 +30,11 @@ class ElemClass<T extends {x: number}> implements JSX.ElementClass {
 >props : T
 }
 const elem = <ElemClass x={12} y={24} />
->elem : any
-><ElemClass x={12} y={24} /> : any
+>elem : Element
+><ElemClass x={12} y={24} /> : Element
 >ElemClass : typeof ElemClass
->x : any
+>x : number
 >12 : 12
->y : any
+>y : number
 >24 : 24
 

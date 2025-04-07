@@ -18,5 +18,6 @@ let x1 = <MyComp a="hi"/>
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 let x = <MyComp />;
 let x1 = <MyComp a="hi"/>;

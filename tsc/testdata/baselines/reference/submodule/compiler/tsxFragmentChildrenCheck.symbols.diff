@@ -6,10 +6,12 @@
      return <span>my component</span>;
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
  }
  
  === file1.tsx ===
-@@= skipped -19, +17 lines =@@
+@@= skipped -19, +19 lines =@@
  
  class RenderString extends React.PureComponent<any, any> {
  >RenderString : Symbol(RenderString, Decl(file1.tsx, 4, 38))
@@ -30,11 +32,14 @@
  
          <span>{ MY_STRING }</span>
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
  >MY_STRING : Symbol(MY_STRING, Decl(file1.tsx, 3, 5))
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
  
          <span className={ MY_CLASSNAME } />
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
  >className : Symbol(className, Decl(file1.tsx, 12, 13))
  >MY_CLASSNAME : Symbol(MY_CLASSNAME, Decl(file1.tsx, 4, 5))
  

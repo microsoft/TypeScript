@@ -1,0 +1,23 @@
+file.tsx(1,18): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+
+
+==== file.tsx (1 errors) ====
+    export const a = <div></div>;
+                     ~~~~~~~~~~~
+!!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+==== node_modules/@types/react/package.json (0 errors) ====
+    {
+        "name": "@types/react",
+        "version": "0.0.1",
+        "main": "",
+        "types": "index.d.ts",
+    }
+==== node_modules/@types/react/index.d.ts (0 errors) ====
+    declare namespace JSX {
+        interface IntrinsicElements { [x: string]: any; }
+    }
+==== node_modules/@types/react/jsx-runtime.d.ts (0 errors) ====
+    import './';
+==== node_modules/@types/react/jsx-dev-runtime.d.ts (0 errors) ====
+    import './';
+    

@@ -1,21 +1,22 @@
 --- old.inlineJsxFactoryLocalTypeGlobalFallback.js
 +++ new.inlineJsxFactoryLocalTypeGlobalFallback.js
-@@= skipped -47, +47 lines =@@
- //// [component.js]
+@@= skipped -48, +48 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/** @jsx predom */
+ /** @jsx predom */
 -var renderer2_1 = require("./renderer2");
 -exports.default = (0, renderer2_1.predom)("h", null);
++const renderer2_1 = require("./renderer2");
 +exports.default = <h></h>;
  //// [index.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/** @jsx dom */
+ /** @jsx dom */
 -var renderer_1 = require("./renderer");
 -var component_1 = require("./component");
 -var elem = component_1.default;
 -elem = (0, renderer_1.dom)("h", null); // Expect assignability error here
++const renderer_1 = require("./renderer");
 +const component_1 = require("./component");
 +let elem = component_1.default;
 +elem = <h></h>; // Expect assignability error here

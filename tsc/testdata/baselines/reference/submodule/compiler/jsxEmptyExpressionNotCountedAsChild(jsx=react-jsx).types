@@ -12,11 +12,11 @@ interface Props {
 }
 
 function Wrapper(props: Props) {
->Wrapper : (props: Props) => any
+>Wrapper : (props: Props) => Element
 >props : Props
 
     return <div>{props.children}</div>
-><div>{props.children}</div> : any
+><div>{props.children}</div> : Element
 >div : any
 >props.children : ReactElement<any>
 >props : Props
@@ -25,20 +25,20 @@ function Wrapper(props: Props) {
 }
 
 const element = (
->element : any
->(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : any
+>element : Element
+>(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : Element
 
     <Wrapper>
-><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : any
->Wrapper : (props: Props) => any
+><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : Element
+>Wrapper : (props: Props) => Element
 
     {/* comment */}
      <div>Hello</div>
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
 
     </Wrapper>
->Wrapper : (props: Props) => any
+>Wrapper : (props: Props) => Element
 
 )

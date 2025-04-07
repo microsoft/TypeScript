@@ -1,0 +1,11 @@
+--- old.jsxEmitAttributeWithPreserve.types
++++ new.jsxEmitAttributeWithPreserve.types
+@@= skipped -4, +4 lines =@@
+ >React : any
+ 
+ <foo data/>
+-><foo data/> : error
++><foo data/> : any
+ >foo : any
+ >data : true
+ 

@@ -23,43 +23,43 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 >htmlFor : string
 
 <a class="" />;
-><a class="" /> : any
+><a class="" /> : Element
 >a : any
->class : any
+>class : string
 
 <a for="" />; // should have no fix
-><a for="" /> : any
+><a for="" /> : Element
 >a : any
->for : any
+>for : string
 
 <label for="" />;
-><label for="" /> : any
+><label for="" /> : Element
 >label : any
->for : any
+>for : string
 
 <label for="" class="" />;
-><label for="" class="" /> : any
+><label for="" class="" /> : Element
 >label : any
->for : any
->class : any
+>for : string
+>class : string
 
 <MyComp class="" />;
-><MyComp class="" /> : any
+><MyComp class="" /> : Element
 >MyComp : typeof MyComp
->class : any
+>class : string
 
 <MyComp2 class="" />;
-><MyComp2 class="" /> : any
+><MyComp2 class="" /> : Element
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->class : any
+>class : string
 
 <MyComp for="" />;
-><MyComp for="" /> : any
+><MyComp for="" /> : Element
 >MyComp : typeof MyComp
->for : any
+>for : string
 
 <MyComp2 for="" />;
-><MyComp2 for="" /> : any
+><MyComp2 for="" /> : Element
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->for : any
+>for : string
 

@@ -20,12 +20,12 @@ let render = (ctrl, model) =>
     <section class="todoapp">
 ><section class="todoapp">        <header class="header">            <h1>todos &lt;x&gt;</h1>            <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" value={model.newTodo} onKeyup={ctrl.addTodo.bind(ctrl, model)} />        </header>        <section class="main" style={{display:(model.todos && model.todos.length) ? "block" : "none"}}>            <input class="toggle-all" type="checkbox" onChange={ctrl.toggleAll.bind(ctrl)}/>            <ul class="todo-list">                {model.filteredTodos.map((todo) =>                    <li class={{todo: true, completed: todo.completed, editing: todo == model.editedTodo}}>                        <div class="view">                            {(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null                            }                            <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>                            <button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button>                            <div class="iconBorder">                                <div class="icon"/>                            </div>                        </div>                    </li>                )}            </ul>        </section>    </section> : any
 >section : any
->class : any
+>class : string
 
         <header class="header">
 ><header class="header">            <h1>todos &lt;x&gt;</h1>            <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" value={model.newTodo} onKeyup={ctrl.addTodo.bind(ctrl, model)} />        </header> : any
 >header : any
->class : any
+>class : string
 
             <h1>todos &lt;x&gt;</h1>
 ><h1>todos &lt;x&gt;</h1> : any
@@ -35,10 +35,10 @@ let render = (ctrl, model) =>
             <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" value={model.newTodo} onKeyup={ctrl.addTodo.bind(ctrl, model)} />
 ><input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" value={model.newTodo} onKeyup={ctrl.addTodo.bind(ctrl, model)} /> : any
 >input : any
->class : any
->autofocus : any
->autocomplete : any
->placeholder : any
+>class : string
+>autofocus : true
+>autocomplete : string
+>placeholder : string
 >value : any
 >model.newTodo : any
 >model : any
@@ -59,8 +59,8 @@ let render = (ctrl, model) =>
         <section class="main" style={{display:(model.todos && model.todos.length) ? "block" : "none"}}>
 ><section class="main" style={{display:(model.todos && model.todos.length) ? "block" : "none"}}>            <input class="toggle-all" type="checkbox" onChange={ctrl.toggleAll.bind(ctrl)}/>            <ul class="todo-list">                {model.filteredTodos.map((todo) =>                    <li class={{todo: true, completed: todo.completed, editing: todo == model.editedTodo}}>                        <div class="view">                            {(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null                            }                            <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>                            <button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button>                            <div class="iconBorder">                                <div class="icon"/>                            </div>                        </div>                    </li>                )}            </ul>        </section> : any
 >section : any
->class : any
->style : any
+>class : string
+>style : { display: string; }
 >{display:(model.todos && model.todos.length) ? "block" : "none"} : { display: string; }
 >display : string
 >(model.todos && model.todos.length) ? "block" : "none" : "block" | "none"
@@ -80,8 +80,8 @@ let render = (ctrl, model) =>
             <input class="toggle-all" type="checkbox" onChange={ctrl.toggleAll.bind(ctrl)}/>
 ><input class="toggle-all" type="checkbox" onChange={ctrl.toggleAll.bind(ctrl)}/> : any
 >input : any
->class : any
->type : any
+>class : string
+>type : string
 >onChange : any
 >ctrl.toggleAll.bind(ctrl) : any
 >ctrl.toggleAll.bind : any
@@ -94,7 +94,7 @@ let render = (ctrl, model) =>
             <ul class="todo-list">
 ><ul class="todo-list">                {model.filteredTodos.map((todo) =>                    <li class={{todo: true, completed: todo.completed, editing: todo == model.editedTodo}}>                        <div class="view">                            {(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null                            }                            <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>                            <button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button>                            <div class="iconBorder">                                <div class="icon"/>                            </div>                        </div>                    </li>                )}            </ul> : any
 >ul : any
->class : any
+>class : string
 
                 {model.filteredTodos.map((todo) =>
 >model.filteredTodos.map((todo) =>                    <li class={{todo: true, completed: todo.completed, editing: todo == model.editedTodo}}>                        <div class="view">                            {(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null                            }                            <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>                            <button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button>                            <div class="iconBorder">                                <div class="icon"/>                            </div>                        </div>                    </li>                ) : any
@@ -109,7 +109,7 @@ let render = (ctrl, model) =>
                     <li class={{todo: true, completed: todo.completed, editing: todo == model.editedTodo}}>
 ><li class={{todo: true, completed: todo.completed, editing: todo == model.editedTodo}}>                        <div class="view">                            {(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null                            }                            <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>                            <button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button>                            <div class="iconBorder">                                <div class="icon"/>                            </div>                        </div>                    </li> : any
 >li : any
->class : any
+>class : { todo: boolean; completed: any; editing: boolean; }
 >{todo: true, completed: todo.completed, editing: todo == model.editedTodo} : { todo: boolean; completed: any; editing: boolean; }
 >todo : boolean
 >true : true
@@ -127,7 +127,7 @@ let render = (ctrl, model) =>
                         <div class="view">
 ><div class="view">                            {(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null                            }                            <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>                            <button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button>                            <div class="iconBorder">                                <div class="icon"/>                            </div>                        </div> : any
 >div : any
->class : any
+>class : string
 
                             {(!todo.editable) ?
 >(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null : any
@@ -140,8 +140,8 @@ let render = (ctrl, model) =>
                                 <input class="toggle" type="checkbox"></input>
 ><input class="toggle" type="checkbox"></input> : any
 >input : any
->class : any
->type : any
+>class : string
+>type : string
 >input : any
 
                                 : null
@@ -149,7 +149,7 @@ let render = (ctrl, model) =>
                             <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>
 ><label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label> : any
 >label : any
->onDoubleClick : any
+>onDoubleClick : () => void
 >()=>{ctrl.editTodo(todo)} : () => void
 >ctrl.editTodo(todo) : any
 >ctrl.editTodo : any
@@ -164,7 +164,7 @@ let render = (ctrl, model) =>
                             <button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button>
 ><button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button> : any
 >button : any
->class : any
+>class : string
 >onClick : any
 >ctrl.removeTodo.bind(ctrl,todo) : any
 >ctrl.removeTodo.bind : any
@@ -179,12 +179,12 @@ let render = (ctrl, model) =>
                             <div class="iconBorder">
 ><div class="iconBorder">                                <div class="icon"/>                            </div> : any
 >div : any
->class : any
+>class : string
 
                                 <div class="icon"/>
 ><div class="icon"/> : any
 >div : any
->class : any
+>class : string
 
                             </div>
 >div : any

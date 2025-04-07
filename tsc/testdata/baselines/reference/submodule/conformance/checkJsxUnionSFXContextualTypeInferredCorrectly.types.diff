@@ -1,0 +1,45 @@
+--- old.checkJsxUnionSFXContextualTypeInferredCorrectly.types
++++ new.checkJsxUnionSFXContextualTypeInferredCorrectly.types
+@@= skipped -32, +32 lines =@@
+ }
+ 
+ export function ComponentWithUnion(props: PM | PS) {
+->ComponentWithUnion : (props: PM | PS) => JSX.Element
++>ComponentWithUnion : (props: PM | PS) => Element
+ >props : PM | PS
+ 
+     return <h1></h1>;
+-><h1></h1> : JSX.Element
++><h1></h1> : Element
+ >h1 : any
+ >h1 : any
+ }
+ 
+ // Usage with React tsx
+ export function HereIsTheError() {
+->HereIsTheError : () => JSX.Element
++>HereIsTheError : () => Element
+ 
+     return (
+->(        <ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        />    ) : JSX.Element
++>(        <ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        />    ) : Element
+ 
+         <ComponentWithUnion
+-><ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        /> : JSX.Element
+->ComponentWithUnion : (props: PM | PS) => JSX.Element
++><ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        /> : Element
++>ComponentWithUnion : (props: PM | PS) => Element
+ 
+             multi={false}
+ >multi : false
+@@= skipped -44, +44 lines =@@
+ 
+ // Usage with pure TypeScript
+ ComponentWithUnion({
+->ComponentWithUnion({    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine}) : JSX.Element
+->ComponentWithUnion : (props: PM | PS) => JSX.Element
++>ComponentWithUnion({    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine}) : Element
++>ComponentWithUnion : (props: PM | PS) => Element
+ >{    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine} : { multi: false; value: string; onChange: (val: string | undefined) => void; }
+ 
+     multi: false,

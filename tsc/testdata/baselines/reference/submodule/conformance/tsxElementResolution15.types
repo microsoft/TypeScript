@@ -18,8 +18,8 @@ var Obj1: Obj1type;
 >Obj1 : Obj1type
 
 <Obj1 x={10} />; // Error
-><Obj1 x={10} /> : any
+><Obj1 x={10} /> : Element
 >Obj1 : Obj1type
->x : any
+>x : number
 >10 : 10
 

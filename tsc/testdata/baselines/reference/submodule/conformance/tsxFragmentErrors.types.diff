@@ -1,0 +1,15 @@
+--- old.tsxFragmentErrors.types
++++ new.tsxFragmentErrors.types
+@@= skipped -11, +11 lines =@@
+ >React : any
+ 
+ <>hi</div> // Error
+-><>hi</ : JSX.Element
++><>hi</ : Element
+ >div> // Error<>eof   // Error : boolean
+ >div : any
+ 
+ <>eof   // Error
+-><>eof   // Error : JSX.Element
++><>eof   // Error : Element
+ 

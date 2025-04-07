@@ -32,28 +32,28 @@ let obj2: any;
 
 // Error
 const c0 = <OneThing extraProp />;  // extra property;
->c0 : any
-><OneThing extraProp /> : any
+>c0 : Element
+><OneThing extraProp /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
->extraProp : any
+>extraProp : true
 
 const c1 = <OneThing yy={10}/>;  // missing property;
->c1 : any
-><OneThing yy={10}/> : any
+>c1 : Element
+><OneThing yy={10}/> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
->yy : any
+>yy : number
 >10 : 10
 
 const c2 = <OneThing {...obj} yy1 />; // type incompatible;
->c2 : any
-><OneThing {...obj} yy1 /> : any
+>c2 : Element
+><OneThing {...obj} yy1 /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj : { yy: number; yy1: string; }
->yy1 : any
+>yy1 : true
 
 const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK because all attribute are spread
->c3 : any
-><OneThing {...obj} {...{extra: "extra attr"}} /> : any
+>c3 : Element
+><OneThing {...obj} {...{extra: "extra attr"}} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj : { yy: number; yy1: string; }
 >{extra: "extra attr"} : { extra: string; }
@@ -61,16 +61,16 @@ const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK bec
 >"extra attr" : "extra attr"
 
 const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
->c4 : any
-><OneThing {...obj} y1={10000} /> : any
+>c4 : Element
+><OneThing {...obj} y1={10000} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj : { yy: number; yy1: string; }
->y1 : any
+>y1 : number
 >10000 : 10000
 
 const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
->c5 : any
-><OneThing {...obj} {...{yy: true}} /> : any
+>c5 : Element
+><OneThing {...obj} {...{yy: true}} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj : { yy: number; yy1: string; }
 >{yy: true} : { yy: boolean; }
@@ -78,8 +78,8 @@ const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
 >true : true
 
 const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
->c6 : any
-><OneThing {...obj2} {...{extra: "extra attr"}} /> : any
+>c6 : Element
+><OneThing {...obj2} {...{extra: "extra attr"}} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj2 : any
 >{extra: "extra attr"} : { extra: string; }
@@ -87,11 +87,11 @@ const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error a
 >"extra attr" : "extra attr"
 
 const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
->c7 : any
-><OneThing {...obj2} yy /> : any
+>c7 : Element
+><OneThing {...obj2} yy /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj2 : any
->yy : any
+>yy : true
 
 declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
 >TestingOneThing : { (j: { "extra-data": string; }): Element; (n: { yy: string; direction?: number; }): Element; }
@@ -108,17 +108,17 @@ declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Eleme
 
 // Error
 const d1 = <TestingOneThing extra-data />
->d1 : any
-><TestingOneThing extra-data /> : any
+>d1 : Element
+><TestingOneThing extra-data /> : Element
 >TestingOneThing : { (j: { "extra-data": string; }): Element; (n: { yy: string; direction?: number; }): Element; }
->extra-data : any
+>extra-data : true
 
 const d2 = <TestingOneThing yy="hello" direction="left" />
->d2 : any
-><TestingOneThing yy="hello" direction="left" /> : any
+>d2 : Element
+><TestingOneThing yy="hello" direction="left" /> : Element
 >TestingOneThing : { (j: { "extra-data": string; }): Element; (n: { yy: string; direction?: number; }): Element; }
->yy : any
->direction : any
+>yy : string
+>direction : string
 
 declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >TestingOptional : { (a: { y1?: string; y2?: number; }): Element; (a: { y1?: string; y2?: number; children: Element; }): Element; (a: { y1: boolean; y2?: number; y3: boolean; }): Element; }
@@ -146,36 +146,36 @@ declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JS
 
 // Error
 const e1 = <TestingOptional y1 y3="hello"/>
->e1 : any
-><TestingOptional y1 y3="hello"/> : any
+>e1 : Element
+><TestingOptional y1 y3="hello"/> : Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): Element; (a: { y1?: string; y2?: number; children: Element; }): Element; (a: { y1: boolean; y2?: number; y3: boolean; }): Element; }
->y1 : any
->y3 : any
+>y1 : true
+>y3 : string
 
 const e2 = <TestingOptional y1="hello" y2={1000} y3 />
->e2 : any
-><TestingOptional y1="hello" y2={1000} y3 /> : any
+>e2 : Element
+><TestingOptional y1="hello" y2={1000} y3 /> : Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): Element; (a: { y1?: string; y2?: number; children: Element; }): Element; (a: { y1: boolean; y2?: number; y3: boolean; }): Element; }
->y1 : any
->y2 : any
+>y1 : string
+>y2 : number
 >1000 : 1000
->y3 : any
+>y3 : true
 
 const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
->e3 : any
-><TestingOptional y1="hello" y2={1000} children="hi" /> : any
+>e3 : Element
+><TestingOptional y1="hello" y2={1000} children="hi" /> : Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): Element; (a: { y1?: string; y2?: number; children: Element; }): Element; (a: { y1: boolean; y2?: number; y3: boolean; }): Element; }
->y1 : any
->y2 : any
+>y1 : string
+>y2 : number
 >1000 : 1000
->children : any
+>children : string
 
 const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
->e4 : any
-><TestingOptional y1="hello" y2={1000}>Hi</TestingOptional> : any
+>e4 : Element
+><TestingOptional y1="hello" y2={1000}>Hi</TestingOptional> : Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): Element; (a: { y1?: string; y2?: number; children: Element; }): Element; (a: { y1: boolean; y2?: number; y3: boolean; }): Element; }
->y1 : any
->y2 : any
+>y1 : string
+>y2 : number
 >1000 : 1000
 >TestingOptional : { (a: { y1?: string; y2?: number; }): Element; (a: { y1?: string; y2?: number; children: Element; }): Element; (a: { y1: boolean; y2?: number; y3: boolean; }): Element; }
 

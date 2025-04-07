@@ -28,6 +28,7 @@ function createLink(func: (a: number)=>void) {
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 // OK
 function Baz(arg1, arg2) {
     let a0 = <OverloadComponent {...arg1} a="hello" ignore-prop/>;

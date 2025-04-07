@@ -43,6 +43,8 @@
  >AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 14, 12))
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))
++>button : Symbol(button, Decl(react.d.ts, 2386, 43))
++>button : Symbol(button, Decl(react.d.ts, 2386, 43))
  
  // Component Class as Props
  class MyButtonComponent extends React.Component<{},{}> {

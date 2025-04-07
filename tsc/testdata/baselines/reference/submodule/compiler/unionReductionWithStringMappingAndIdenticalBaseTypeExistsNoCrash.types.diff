@@ -1,0 +1,20 @@
+--- old.unionReductionWithStringMappingAndIdenticalBaseTypeExistsNoCrash.types
++++ new.unionReductionWithStringMappingAndIdenticalBaseTypeExistsNoCrash.types
+@@= skipped -151, +151 lines =@@
+ >toLowerCase : () => string
+ 
+ function Comp() {
+->Comp : () => React.JSX.Element
++>Comp : () => Element
+ 
+   return <div>
+-><div>    <span>Scope:</span> {displayEnum("VALUE")}  </div> : React.JSX.Element
++><div>    <span>Scope:</span> {displayEnum("VALUE")}  </div> : Element
+ >div : any
+ 
+     <span>Scope:</span> {displayEnum("VALUE")}
+-><span>Scope:</span> : React.JSX.Element
++><span>Scope:</span> : Element
+ >span : any
+ >span : any
+ >displayEnum("VALUE") : Capitalize<string>

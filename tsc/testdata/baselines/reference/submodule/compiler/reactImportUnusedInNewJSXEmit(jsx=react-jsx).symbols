@@ -10,6 +10,7 @@ function Bar() {
 >Bar : Symbol(Bar, Decl(index.tsx, 2, 26))
 
   return <div />;
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 
 export function Foo() {

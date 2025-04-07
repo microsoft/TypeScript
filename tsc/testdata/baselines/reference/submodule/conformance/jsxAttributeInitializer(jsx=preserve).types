@@ -35,7 +35,7 @@ declare var React: any;
     <div attr= />
 ><div attr= /> : any
 >div : any
->attr : any
+>attr : true
 
 </div>
 >div : any

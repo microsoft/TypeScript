@@ -8,8 +8,8 @@ import * as React from "react";
 import "./App.css"; // doesn't actually exist
 
 const tag = <div></div>;
->tag : any
-><div></div> : any
+>tag : Element
+><div></div> : Element
 >div : any
 >div : any
 

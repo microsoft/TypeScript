@@ -1,0 +1,56 @@
+--- old.tsxAttributeResolution14.types
++++ new.tsxAttributeResolution14.types
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ function VerticalNavMenuItem(prop: IProps) {
+->VerticalNavMenuItem : (prop: IProps) => JSX.Element
++>VerticalNavMenuItem : (prop: IProps) => Element
+ >prop : IProps
+ 
+   return <div>props.primaryText</div>
+-><div>props.primaryText</div> : JSX.Element
++><div>props.primaryText</div> : Element
+ >div : any
+ >div : any
+ }
+ 
+ function VerticalNav() {
+->VerticalNav : () => JSX.Element
++>VerticalNav : () => Element
+ 
+   return (
+->(    <div>      <VerticalNavMenuItem primaryText={2} />  // error      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error    </div>  ) : JSX.Element
++>(    <div>      <VerticalNavMenuItem primaryText={2} />  // error      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error    </div>  ) : Element
+ 
+     <div>
+-><div>      <VerticalNavMenuItem primaryText={2} />  // error      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error    </div> : JSX.Element
++><div>      <VerticalNavMenuItem primaryText={2} />  // error      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error    </div> : Element
+ >div : any
+ 
+       <VerticalNavMenuItem primaryText={2} />  // error
+-><VerticalNavMenuItem primaryText={2} /> : JSX.Element
+->VerticalNavMenuItem : (prop: IProps) => JSX.Element
++><VerticalNavMenuItem primaryText={2} /> : Element
++>VerticalNavMenuItem : (prop: IProps) => Element
+ >primaryText : number
+ >2 : 2
+ 
+       <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok
+-><VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} /> : JSX.Element
+->VerticalNavMenuItem : (prop: IProps) => JSX.Element
++><VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} /> : Element
++>VerticalNavMenuItem : (prop: IProps) => Element
+ >justRandomProp : number
+ >2 : 2
+ >primaryText : string
+ >"hello" : "hello"
+ 
+       <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error
+-><VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} /> : JSX.Element
+->VerticalNavMenuItem : (prop: IProps) => JSX.Element
++><VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} /> : Element
++>VerticalNavMenuItem : (prop: IProps) => Element
+ >justRandomProp1 : boolean
+ >true : true
+ >primaryText : string

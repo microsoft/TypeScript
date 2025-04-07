@@ -11,27 +11,27 @@ import { ComponentPropsWithRef, ElementType } from "react";
 >ElementType : any
 
 function UnwrappedLink<T extends ElementType = ElementType>(
->UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => any
+>UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => Element
 
   props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">,
 >props : Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">
 
 ) {
   return <a></a>;
-><a></a> : any
+><a></a> : Element
 >a : any
 >a : any
 }
 
 <UnwrappedLink onClick={(e) => {}} />;
-><UnwrappedLink onClick={(e) => {}} /> : any
->UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => any
->onClick : any
->(e) => {} : (e: any) => void
->e : any
+><UnwrappedLink onClick={(e) => {}} /> : Element
+>UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => Element
+>onClick : (e: MouseEvent<HTMLAnchorElement>) => void
+>(e) => {} : (e: MouseEvent<HTMLAnchorElement>) => void
+>e : MouseEvent<HTMLAnchorElement>
 
 function UnwrappedLink2<T extends ElementType = ElementType>(
->UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => any
+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => Element
 
   props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & {
 >props : Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }
@@ -42,23 +42,23 @@ function UnwrappedLink2<T extends ElementType = ElementType>(
   },
 ) {
   return <a></a>;
-><a></a> : any
+><a></a> : Element
 >a : any
 >a : any
 }
 
 <UnwrappedLink2 onClick={(e) => {}} />;
-><UnwrappedLink2 onClick={(e) => {}} /> : any
->UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => any
->onClick : any
->(e) => {} : (e: any) => void
->e : any
+><UnwrappedLink2 onClick={(e) => {}} /> : Element
+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => Element
+>onClick : (e: MouseEvent<HTMLAnchorElement>) => void
+>(e) => {} : (e: MouseEvent<HTMLAnchorElement>) => void
+>e : MouseEvent<HTMLAnchorElement>
 
 <UnwrappedLink2 as="button" onClick={(e) => {}} />;
-><UnwrappedLink2 as="button" onClick={(e) => {}} /> : any
->UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => any
->as : any
->onClick : any
->(e) => {} : (e: any) => void
->e : any
+><UnwrappedLink2 as="button" onClick={(e) => {}} /> : Element
+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => Element
+>as : "button"
+>onClick : (e: MouseEvent<HTMLButtonElement>) => void
+>(e) => {} : (e: MouseEvent<HTMLButtonElement>) => void
+>e : MouseEvent<HTMLButtonElement>
 

@@ -37,6 +37,8 @@
  >ComponentProps : Symbol(ComponentProps, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 78))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
  >Fail1 : Symbol(Fail1, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 18, 3))

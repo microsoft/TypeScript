@@ -5,36 +5,36 @@ import React = require('react');
 >React : typeof __React
 
 function SFC1(prop: { x: number }) {
->SFC1 : (prop: { x: number; }) => any
+>SFC1 : (prop: { x: number; }) => Element
 >prop : { x: number; }
 >x : number
 
     return <div>hello</div>;
-><div>hello</div> : any
+><div>hello</div> : Element
 >div : any
 >div : any
 
 };
 
 function SFC2(prop: { x: boolean }) {
->SFC2 : (prop: { x: boolean; }) => any
+>SFC2 : (prop: { x: boolean; }) => Element
 >prop : { x: boolean; }
 >x : boolean
 
     return <h1>World </h1>;
-><h1>World </h1> : any
+><h1>World </h1> : Element
 >h1 : any
 >h1 : any
 }
 
 var SFCComp = SFC1 || SFC2;
->SFCComp : ((prop: { x: number; }) => any) | ((prop: { x: boolean; }) => any)
->SFC1 || SFC2 : ((prop: { x: number; }) => any) | ((prop: { x: boolean; }) => any)
->SFC1 : (prop: { x: number; }) => any
->SFC2 : (prop: { x: boolean; }) => any
+>SFCComp : ((prop: { x: number; }) => Element) | ((prop: { x: boolean; }) => Element)
+>SFC1 || SFC2 : ((prop: { x: number; }) => Element) | ((prop: { x: boolean; }) => Element)
+>SFC1 : (prop: { x: number; }) => Element
+>SFC2 : (prop: { x: boolean; }) => Element
 
 <SFCComp x />
-><SFCComp x /> : any
->SFCComp : ((prop: { x: number; }) => any) | ((prop: { x: boolean; }) => any)
->x : any
+><SFCComp x /> : Element
+>SFCComp : ((prop: { x: number; }) => Element) | ((prop: { x: boolean; }) => Element)
+>x : true
 

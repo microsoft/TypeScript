@@ -31,11 +31,11 @@ import * as React from "react";
 >React : typeof __React
 
 let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
->x : any
-><MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js : any
-><MyComp : any
+>x : Element
+><MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js : Element
+><MyComp : Element
 >MyComp : typeof MyComp
-><Prop> a={10} b="hi" />; // error, no type arguments in js : any
+><Prop> a={10} b="hi" />; // error, no type arguments in js : Element
 >Prop : any
 >10 : 10
 

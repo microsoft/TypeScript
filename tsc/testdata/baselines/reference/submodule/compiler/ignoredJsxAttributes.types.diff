@@ -1,0 +1,35 @@
+--- old.ignoredJsxAttributes.types
++++ new.ignoredJsxAttributes.types
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ declare function Yadda(props: Props): JSX.Element;
+->Yadda : (props: Props) => JSX.Element
++>Yadda : (props: Props) => Element
+ >props : Props
+ >JSX : any
+ 
+@@= skipped -19, +19 lines =@@
+ };
+ 
+ let x1 = <Yadda foo="hello" data-yadda={42}/>;
+->x1 : JSX.Element
+-><Yadda foo="hello" data-yadda={42}/> : JSX.Element
+->Yadda : (props: Props) => JSX.Element
++>x1 : Element
++><Yadda foo="hello" data-yadda={42}/> : Element
++>Yadda : (props: Props) => Element
+ >foo : string
+ >data-yadda : number
+ >42 : 42
+ 
+ let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
+->x2 : JSX.Element
+-><Yadda bar="hello" data-yadda={42}/> : JSX.Element
+->Yadda : (props: Props) => JSX.Element
++>x2 : Element
++><Yadda bar="hello" data-yadda={42}/> : Element
++>Yadda : (props: Props) => Element
+ >bar : string
+ >data-yadda : number
+ >42 : 42

@@ -1,10 +1,13 @@
+/src/a.js(2,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 /src/a.js(2,10): error TS17008: JSX element 'string' has no corresponding closing tag.
 /src/a.js(3,1): error TS1005: '</' expected.
 
 
-==== /src/a.js (2 errors) ====
+==== /src/a.js (3 errors) ====
     0 as number;
     var v = <string>undefined;
+            ~~~~~~~~
+!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
              ~~~~~~
 !!! error TS17008: JSX element 'string' has no corresponding closing tag.
     

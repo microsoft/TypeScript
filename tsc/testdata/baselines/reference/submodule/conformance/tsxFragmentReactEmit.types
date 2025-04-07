@@ -12,42 +12,42 @@ declare var React: any;
 >React : any
 
 <></>; // no whitespace
-><></> : any
+><></> : Element
 
 <    ></   >; // lots of whitespace
-><    ></   > : any
+><    ></   > : Element
 
 < /*starting wrap*/ ></ /*ending wrap*/>; // comments in the tags
->< /*starting wrap*/ ></ /*ending wrap*/> : any
+>< /*starting wrap*/ ></ /*ending wrap*/> : Element
 
 <>hi</>; // text inside
-><>hi</> : any
+><>hi</> : Element
 
 <><span>hi</span><div>bye</div></>; // children
-><><span>hi</span><div>bye</div></> : any
-><span>hi</span> : any
+><><span>hi</span><div>bye</div></> : Element
+><span>hi</span> : Element
 >span : any
 >span : any
-><div>bye</div> : any
+><div>bye</div> : Element
 >div : any
 >div : any
 
 <><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></>; // nested fragments
-><><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></> : any
-><span>1</span> : any
+><><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></> : Element
+><span>1</span> : Element
 >span : any
 >span : any
-><><span>2.1</span><span>2.2</span></> : any
-><span>2.1</span> : any
+><><span>2.1</span><span>2.2</span></> : Element
+><span>2.1</span> : Element
 >span : any
 >span : any
-><span>2.2</span> : any
+><span>2.2</span> : Element
 >span : any
 >span : any
-><span>3</span> : any
+><span>3</span> : Element
 >span : any
 >span : any
 
 <>#</>; // # would cause scanning error if not in jsxtext
-><>#</> : any
+><>#</> : Element
 

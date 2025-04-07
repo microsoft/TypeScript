@@ -17,6 +17,7 @@
 -var model = new TestObject();
 -var el1 = React.createElement(Test, { model: model, foo: "c" });
 -var el2 = React.createElement(Test, { model: model, foo: "c" });
++const React = require("react");
 +class TestObject {
 +    a = '';
 +    b = 1;

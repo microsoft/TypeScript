@@ -1,0 +1,40 @@
+--- old.reactTagNameComponentWithPropsNoOOM2.types
++++ new.reactTagNameComponentWithPropsNoOOM2.types
+@@= skipped -6, +6 lines =@@
+ >React : typeof React
+ 
+ declare const Tag: keyof React.ReactHTML;
+->Tag : keyof React.ReactHTML
++>Tag : keyof ReactHTML
+ >React : any
+ 
+ const classes = "";
+@@= skipped -8, +8 lines =@@
+ >"" : ""
+ 
+ const rest: React.HTMLAttributes<HTMLElement> = {};
+->rest : React.HTMLAttributes<HTMLElement>
++>rest : HTMLAttributes<HTMLElement>
+ >React : any
+ >{} : {}
+ 
+@@= skipped -9, +9 lines =@@
+ >[] : never[]
+ 
+ <Tag className={classes} {...rest}>
+-><Tag className={classes} {...rest}>{children}</Tag> : JSX.Element
+->Tag : keyof React.ReactHTML
++><Tag className={classes} {...rest}>{children}</Tag> : Element
++>Tag : keyof ReactHTML
+ >className : string
+ >classes : ""
+->rest : React.HTMLAttributes<HTMLElement>
++>rest : HTMLAttributes<HTMLElement>
+ 
+ {children}
+ >children : any[]
+ 
+ </Tag>
+->Tag : keyof React.ReactHTML
++>Tag : keyof ReactHTML
+ 

@@ -1,0 +1,17 @@
+--- old.tsxAttributeResolution9.types
++++ new.tsxAttributeResolution9.types
+@@= skipped -29, +29 lines =@@
+ }
+ 
+ <MyComponent foo="bar" />; // ok  
+-><MyComponent foo="bar" /> : JSX.Element
++><MyComponent foo="bar" /> : Element
+ >MyComponent : typeof MyComponent
+ >foo : string
+ 
+ <MyComponent foo={0} />; // should be an error
+-><MyComponent foo={0} /> : JSX.Element
++><MyComponent foo={0} /> : Element
+ >MyComponent : typeof MyComponent
+ >foo : number
+ >0 : 0

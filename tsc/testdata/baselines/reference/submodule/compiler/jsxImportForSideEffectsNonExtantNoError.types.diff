@@ -1,0 +1,13 @@
+--- old.jsxImportForSideEffectsNonExtantNoError.types
++++ new.jsxImportForSideEffectsNonExtantNoError.types
+@@= skipped -7, +7 lines =@@
+ import "./App.css"; // doesn't actually exist
+ 
+ const tag = <div></div>;
+->tag : JSX.Element
+-><div></div> : JSX.Element
++>tag : Element
++><div></div> : Element
+ >div : any
+ >div : any
+ 

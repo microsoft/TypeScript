@@ -24,23 +24,23 @@ declare class MyComp<P extends Prop> extends React.Component<P, {}> {
 
 // Error
 let x1 = <MyComp />
->x1 : any
-><MyComp /> : any
+>x1 : Element
+><MyComp /> : Element
 >MyComp : typeof MyComp
 
 // OK
 let x = <MyComp a={10} b="hi" />
->x : any
-><MyComp a={10} b="hi" /> : any
+>x : Element
+><MyComp a={10} b="hi" /> : Element
 >MyComp : typeof MyComp
->a : any
+>a : number
 >10 : 10
->b : any
+>b : string
 
 // Error
 let x2 = <MyComp a="hi"/>
->x2 : any
-><MyComp a="hi"/> : any
+>x2 : Element
+><MyComp a="hi"/> : Element
 >MyComp : typeof MyComp
->a : any
+>a : string
 

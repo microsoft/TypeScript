@@ -10,7 +10,7 @@ import s2 = require('elements2');
 >s2 : typeof import("elements2")
 
 <s1.MyElement />;
-><s1.MyElement /> : any
+><s1.MyElement /> : Element
 >s1.MyElement : typeof MyElement
 >s1 : typeof import("elements1")
 >MyElement : typeof MyElement

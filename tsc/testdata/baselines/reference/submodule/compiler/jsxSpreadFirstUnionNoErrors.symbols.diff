@@ -5,13 +5,16 @@
  
    ? <noscript />
 ->noscript : Symbol(JSX.IntrinsicElements.noscript, Decl(react.d.ts, 2439, 42))
--
++>noscript : Symbol(noscript, Decl(react.d.ts, 2439, 42))
+ 
    : <div>{props.content}</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  >props.content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 22))
  >props : Symbol(props, Decl(jsxSpreadFirstUnionNoErrors.tsx, 6, 14))
  >content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 22))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  const a = <Info status="hidden" />;
  >a : Symbol(a, Decl(jsxSpreadFirstUnionNoErrors.tsx, 11, 5))

@@ -13,10 +13,10 @@ class B1<T extends { x: string } = { x:string } > extends React.Component<T, {}>
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>hi</div>; 
-><div>hi</div> : any
+><div>hi</div> : Element
 >div : any
 >div : any
     }
@@ -28,14 +28,14 @@ class B<U> extends React.Component<U, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <B1 {...this.props} x="hi" />;
-><B1 {...this.props} x="hi" /> : any
+><B1 {...this.props} x="hi" /> : Element
 >B1 : typeof B1
 >this.props : U & { children?: ReactNode; }
 >this : this
 >props : U & { children?: ReactNode; }
->x : any
+>x : string
     }
 }

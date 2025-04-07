@@ -1,0 +1,8 @@
+reactNamespaceInvalidInput.tsx(1,2): error TS2874: This JSX tag requires 'my-React-Lib' to be in scope, but it could not be found.
+
+
+==== reactNamespaceInvalidInput.tsx (1 errors) ====
+    <foo data/>;
+     ~~~
+!!! error TS2874: This JSX tag requires 'my-React-Lib' to be in scope, but it could not be found.
+    

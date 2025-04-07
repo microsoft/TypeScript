@@ -11,10 +11,10 @@ class Poisoned extends React.Component<{}, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
     }
@@ -26,13 +26,13 @@ const obj = {};
 
 // OK
 let p = <Poisoned {...obj} />;
->p : any
-><Poisoned {...obj} /> : any
+>p : Element
+><Poisoned {...obj} /> : Element
 >Poisoned : typeof Poisoned
 >obj : {}
 
 let y = <Poisoned />;
->y : any
-><Poisoned /> : any
+>y : Element
+><Poisoned /> : Element
 >Poisoned : typeof Poisoned
 

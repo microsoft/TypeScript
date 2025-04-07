@@ -31,9 +31,11 @@ const Foo = (props: Props) => <div>{ props.a }</div>;
 >Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
 >props : Symbol(props, Decl(file.tsx, 11, 13))
 >Props : Symbol(Props, Decl(file.tsx, 0, 32))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >props.a : Symbol(a, Decl(file.tsx, 2, 17))
 >props : Symbol(props, Decl(file.tsx, 11, 13))
 >a : Symbol(a, Decl(file.tsx, 2, 17))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 
 // ok
 const a1 = <Foo {...props}></Foo>;

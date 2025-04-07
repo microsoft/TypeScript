@@ -9,19 +9,19 @@ const props = { answer: 42 }
 >42 : 42
 
 const a = <div key="foo" {...props}>text</div>;
->a : any
-><div key="foo" {...props}>text</div> : any
+>a : Element
+><div key="foo" {...props}>text</div> : Element
 >div : any
->key : any
+>key : string
 >props : { answer: number; }
 >div : any
 
 const b = <div {...props} key="bar">text</div>;
->b : any
-><div {...props} key="bar">text</div> : any
+>b : Element
+><div {...props} key="bar">text</div> : Element
 >div : any
 >props : { answer: number; }
->key : any
+>key : string
 >div : any
 
 export {};

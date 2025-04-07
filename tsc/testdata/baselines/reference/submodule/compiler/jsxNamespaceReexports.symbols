@@ -29,4 +29,5 @@ import * as MyLib from "./library";
 
 const content = <my-element/>;
 >content : Symbol(content, Decl(index.tsx, 2, 5))
+>my-element : Symbol((Missing), Decl(library.ts, 3, 38))
 

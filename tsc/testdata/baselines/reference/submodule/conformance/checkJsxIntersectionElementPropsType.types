@@ -33,5 +33,5 @@ const x = <C foobar="example" />
 >x : any
 ><C foobar="example" /> : any
 >C : typeof C
->foobar : any
+>foobar : string
 

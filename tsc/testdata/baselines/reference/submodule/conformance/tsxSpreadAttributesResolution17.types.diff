@@ -1,0 +1,26 @@
+--- old.tsxSpreadAttributesResolution17.types
++++ new.tsxSpreadAttributesResolution17.types
+@@= skipped -19, +19 lines =@@
+ >Component : any
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return <div>Hello</div>;
+-><div>Hello</div> : JSX.Element
++><div>Hello</div> : Element
+ >div : any
+ >div : any
+     }
+@@= skipped -15, +15 lines =@@
+ 
+ // OK
+ let unionedSpread = <Empty {...obj} />;
+->unionedSpread : JSX.Element
+-><Empty {...obj} /> : JSX.Element
++>unionedSpread : Element
++><Empty {...obj} /> : Element
+ >Empty : typeof Empty
+ >obj : { a: number | undefined; } | undefined
+ 

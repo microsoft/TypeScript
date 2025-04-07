@@ -1,0 +1,62 @@
+--- old.checkJsxChildrenProperty7.errors.txt
++++ new.checkJsxChildrenProperty7.errors.txt
+@@= skipped -0, +0 lines =@@
+-file.tsx(24,40): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
+-file.tsx(26,22): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
+-file.tsx(27,30): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
++file.tsx(24,11): error TS2322: Type '{ a: number; b: string; children: (string | Element)[]; }' is not assignable to type 'Prop'.
++  Types of property 'children' are incompatible.
++    Type '(string | Element)[]' is not assignable to type 'Element[] | Element'.
++      Type '(string | Element)[]' is not assignable to type 'Element[]'.
++        Type 'string | Element' is not assignable to type 'Element'.
++          Type 'string' is not assignable to type 'ReactElement<any>'.
++file.tsx(25,11): error TS2322: Type '{ a: number; b: string; children: (string | Element)[]; }' is not assignable to type 'Prop'.
++  Types of property 'children' are incompatible.
++    Type '(string | Element)[]' is not assignable to type 'Element[] | Element'.
++      Type '(string | Element)[]' is not assignable to type 'Element[]'.
++        Type 'string | Element' is not assignable to type 'Element'.
++          Type 'string' is not assignable to type 'ReactElement<any>'.
++file.tsx(27,11): error TS2322: Type '{ a: number; b: string; children: (string | Element)[]; }' is not assignable to type 'Prop'.
++  Types of property 'children' are incompatible.
++    Type '(string | Element)[]' is not assignable to type 'Element[] | Element'.
++      Type '(string | Element)[]' is not assignable to type 'Element[]'.
++        Type 'string | Element' is not assignable to type 'Element'.
++          Type 'string' is not assignable to type 'ReactElement<any>'.
+ 
+ 
+ ==== file.tsx (3 errors) ====
+@@= skipped -27, +42 lines =@@
+     
+     // Error: whitespaces matters
+     let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
+-                                           ~~
+-!!! error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
++              ~~~~
++!!! error TS2322: Type '{ a: number; b: string; children: (string | Element)[]; }' is not assignable to type 'Prop'.
++!!! error TS2322:   Types of property 'children' are incompatible.
++!!! error TS2322:     Type '(string | Element)[]' is not assignable to type 'Element[] | Element'.
++!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element[]'.
++!!! error TS2322:         Type 'string | Element' is not assignable to type 'Element'.
++!!! error TS2322:           Type 'string' is not assignable to type 'ReactElement<any>'.
+     let k2 = <Comp a={10} b="hi"><Button />
++              ~~~~
++!!! error TS2322: Type '{ a: number; b: string; children: (string | Element)[]; }' is not assignable to type 'Prop'.
++!!! error TS2322:   Types of property 'children' are incompatible.
++!!! error TS2322:     Type '(string | Element)[]' is not assignable to type 'Element[] | Element'.
++!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element[]'.
++!!! error TS2322:         Type 'string | Element' is not assignable to type 'Element'.
++!!! error TS2322:           Type 'string' is not assignable to type 'ReactElement<any>'.
+         <AnotherButton />  </Comp>;
+-                         ~~
+-!!! error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
+     let k3 = <Comp a={10} b="hi">    <Button />
+-                                 ~~~~
+-!!! error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
++              ~~~~
++!!! error TS2322: Type '{ a: number; b: string; children: (string | Element)[]; }' is not assignable to type 'Prop'.
++!!! error TS2322:   Types of property 'children' are incompatible.
++!!! error TS2322:     Type '(string | Element)[]' is not assignable to type 'Element[] | Element'.
++!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element[]'.
++!!! error TS2322:         Type 'string | Element' is not assignable to type 'Element'.
++!!! error TS2322:           Type 'string' is not assignable to type 'ReactElement<any>'.
+         <AnotherButton /></Comp>;

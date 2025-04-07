@@ -37,6 +37,9 @@ class Button extends React.Component<ButtonProp, any> {
 >children : Symbol(children, Decl(file.tsx, 11, 44))
 
             <div>Hello World</div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
             </InnerButton>);
 >InnerButton : Symbol(InnerButton, Decl(file.tsx, 19, 1))
     }
@@ -60,6 +63,8 @@ class InnerButton extends React.Component<InnerButtonProp, any> {
 >render : Symbol(render, Decl(file.tsx, 21, 65))
 
 		return (<button>Hello</button>);
+>button : Symbol(button, Decl(react.d.ts, 2386, 43))
+>button : Symbol(button, Decl(react.d.ts, 2386, 43))
 	}
 }
 

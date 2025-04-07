@@ -24,32 +24,32 @@ class Button extends React.Component<any, any> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return (<div>My Button</div>)
->(<div>My Button</div>) : any
-><div>My Button</div> : any
+>(<div>My Button</div>) : Element
+><div>My Button</div> : Element
 >div : any
 >div : any
     }
 }
 
 function AnotherButton(p: any) {
->AnotherButton : (p: any) => any
+>AnotherButton : (p: any) => Element
 >p : any
 
     return <h1>Just Another Button</h1>;
-><h1>Just Another Button</h1> : any
+><h1>Just Another Button</h1> : Element
 >h1 : any
 >h1 : any
 }
 
 function Comp(p: Prop) {
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 >p : Prop
 
     return <div>{p.b}</div>;
-><div>{p.b}</div> : any
+><div>{p.b}</div> : Element
 >div : any
 >p.b : string
 >p : Prop
@@ -59,46 +59,46 @@ function Comp(p: Prop) {
 
 // OK
 let k1 = <Comp a={10} b="hi"><></><Button /><AnotherButton /></Comp>;
->k1 : any
-><Comp a={10} b="hi"><></><Button /><AnotherButton /></Comp> : any
->Comp : (p: Prop) => any
->a : any
+>k1 : Element
+><Comp a={10} b="hi"><></><Button /><AnotherButton /></Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
-><></> : any
-><Button /> : any
+>b : string
+><></> : Element
+><Button /> : Element
 >Button : typeof Button
-><AnotherButton /> : any
->AnotherButton : (p: any) => any
->Comp : (p: Prop) => any
+><AnotherButton /> : Element
+>AnotherButton : (p: any) => Element
+>Comp : (p: Prop) => Element
 
 let k2 = <Comp a={10} b="hi"><><Button /></><AnotherButton /></Comp>;
->k2 : any
-><Comp a={10} b="hi"><><Button /></><AnotherButton /></Comp> : any
->Comp : (p: Prop) => any
->a : any
+>k2 : Element
+><Comp a={10} b="hi"><><Button /></><AnotherButton /></Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
-><><Button /></> : any
-><Button /> : any
+>b : string
+><><Button /></> : Element
+><Button /> : Element
 >Button : typeof Button
-><AnotherButton /> : any
->AnotherButton : (p: any) => any
->Comp : (p: Prop) => any
+><AnotherButton /> : Element
+>AnotherButton : (p: any) => Element
+>Comp : (p: Prop) => Element
 
 let k3 = <Comp a={10} b="hi"><><Button /><AnotherButton /></></Comp>;
->k3 : any
-><Comp a={10} b="hi"><><Button /><AnotherButton /></></Comp> : any
->Comp : (p: Prop) => any
->a : any
+>k3 : Element
+><Comp a={10} b="hi"><><Button /><AnotherButton /></></Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
-><><Button /><AnotherButton /></> : any
-><Button /> : any
+>b : string
+><><Button /><AnotherButton /></> : Element
+><Button /> : Element
 >Button : typeof Button
-><AnotherButton /> : any
->AnotherButton : (p: any) => any
->Comp : (p: Prop) => any
+><AnotherButton /> : Element
+>AnotherButton : (p: any) => Element
+>Comp : (p: Prop) => Element
 
 interface SingleChildProp {
     a: number,
@@ -113,11 +113,11 @@ interface SingleChildProp {
 }
 
 function SingleChildComp(p: SingleChildProp) {
->SingleChildComp : (p: SingleChildProp) => any
+>SingleChildComp : (p: SingleChildProp) => Element
 >p : SingleChildProp
 
     return <div>{p.b}</div>;
-><div>{p.b}</div> : any
+><div>{p.b}</div> : Element
 >div : any
 >p.b : string
 >p : SingleChildProp
@@ -127,31 +127,31 @@ function SingleChildComp(p: SingleChildProp) {
 
 // OK
 let k4 = <SingleChildComp a={10} b="hi"><><Button /><AnotherButton /></></SingleChildComp>;
->k4 : any
-><SingleChildComp a={10} b="hi"><><Button /><AnotherButton /></></SingleChildComp> : any
->SingleChildComp : (p: SingleChildProp) => any
->a : any
+>k4 : Element
+><SingleChildComp a={10} b="hi"><><Button /><AnotherButton /></></SingleChildComp> : Element
+>SingleChildComp : (p: SingleChildProp) => Element
+>a : number
 >10 : 10
->b : any
-><><Button /><AnotherButton /></> : any
-><Button /> : any
+>b : string
+><><Button /><AnotherButton /></> : Element
+><Button /> : Element
 >Button : typeof Button
-><AnotherButton /> : any
->AnotherButton : (p: any) => any
->SingleChildComp : (p: SingleChildProp) => any
+><AnotherButton /> : Element
+>AnotherButton : (p: any) => Element
+>SingleChildComp : (p: SingleChildProp) => Element
 
 // Error
 let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;
->k5 : any
-><SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp> : any
->SingleChildComp : (p: SingleChildProp) => any
->a : any
+>k5 : Element
+><SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp> : Element
+>SingleChildComp : (p: SingleChildProp) => Element
+>a : number
 >10 : 10
->b : any
-><></> : any
-><Button /> : any
+>b : string
+><></> : Element
+><Button /> : Element
 >Button : typeof Button
-><AnotherButton /> : any
->AnotherButton : (p: any) => any
->SingleChildComp : (p: SingleChildProp) => any
+><AnotherButton /> : Element
+>AnotherButton : (p: any) => Element
+>SingleChildComp : (p: SingleChildProp) => Element
 

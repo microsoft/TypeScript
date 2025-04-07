@@ -25,7 +25,7 @@ function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
 >JSX : any
 
     return <div />;
-><div /> : any
+><div /> : Element
 >div : any
 }
 
@@ -65,35 +65,35 @@ ShouldInferFromData({ data: 2, convert: n => "" + n });
 
 
 const f1 = <ShouldInferFromData data={"1"} />;
->f1 : any
-><ShouldInferFromData data={"1"} /> : any
+>f1 : Element
+><ShouldInferFromData data={"1"} /> : Element
 >ShouldInferFromData : <T>(props: Props<T>) => Element
->data : any
+>data : string
 >"1" : "1"
 
 const f2 = <ShouldInferFromData data={"1"} convert={n => "" + n} />;
->f2 : any
-><ShouldInferFromData data={"1"} convert={n => "" + n} /> : any
+>f2 : Element
+><ShouldInferFromData data={"1"} convert={n => "" + n} /> : Element
 >ShouldInferFromData : <T>(props: Props<T>) => Element
->data : any
+>data : string
 >"1" : "1"
->convert : any
->n => "" + n : (n: any) => string
->n : any
+>convert : (n: string) => string
+>n => "" + n : (n: string) => string
+>n : string
 >"" + n : string
 >"" : ""
->n : any
+>n : string
 
 const f3 = <ShouldInferFromData data={2} convert={n => "" + n} />;
->f3 : any
-><ShouldInferFromData data={2} convert={n => "" + n} /> : any
+>f3 : Element
+><ShouldInferFromData data={2} convert={n => "" + n} /> : Element
 >ShouldInferFromData : <T>(props: Props<T>) => Element
->data : any
+>data : number
 >2 : 2
->convert : any
->n => "" + n : (n: any) => string
->n : any
+>convert : (n: number) => string
+>n => "" + n : (n: number) => string
+>n : number
 >"" + n : string
 >"" : ""
->n : any
+>n : number
 

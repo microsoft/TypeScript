@@ -35,8 +35,8 @@ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }
 }
 
 const TestRender = () => <TestComponent />;
->TestRender : () => any
->() => <TestComponent /> : () => any
-><TestComponent /> : any
+>TestRender : () => Element
+>() => <TestComponent /> : () => Element
+><TestComponent /> : Element
 >TestComponent : typeof TestComponent
 

@@ -24,6 +24,8 @@ class TextComponent extends React.Component<TextProps, {}> {
 >render : Symbol(render, Decl(file.tsx, 5, 60))
 
         return <span>Some Text..</span>;
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
     }
 }
 

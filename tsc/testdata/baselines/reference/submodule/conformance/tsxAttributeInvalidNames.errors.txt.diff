@@ -1,0 +1,20 @@
+--- old.tsxAttributeInvalidNames.errors.txt
++++ new.tsxAttributeInvalidNames.errors.txt
+@@= skipped -10, +10 lines =@@
+ file.tsx(11,9): error TS2304: Cannot find name 'data'.
+ file.tsx(11,13): error TS1005: ';' expected.
+ file.tsx(11,19): error TS1161: Unterminated regular expression literal.
++file.tsx(11,22): error TS1161: Unterminated regular expression literal.
+ 
+ 
+-==== file.tsx (13 errors) ====
++==== file.tsx (14 errors) ====
+     declare module JSX {
+     	interface Element { }
+     	interface IntrinsicElements {
+@@= skipped -40, +41 lines =@@
+ !!! error TS1005: ';' expected.
+                       ~~
+ !!! error TS1161: Unterminated regular expression literal.
++                         
++!!! error TS1161: Unterminated regular expression literal.

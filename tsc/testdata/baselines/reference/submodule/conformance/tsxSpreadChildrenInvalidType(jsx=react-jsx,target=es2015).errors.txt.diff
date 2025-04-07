@@ -1,0 +1,17 @@
+--- old.tsxSpreadChildrenInvalidType(jsx=react-jsx,target=es2015).errors.txt
++++ new.tsxSpreadChildrenInvalidType(jsx=react-jsx,target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-tsxSpreadChildrenInvalidType.tsx(17,12): error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++tsxSpreadChildrenInvalidType.tsx(17,12): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+ tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
+ 
+ 
+@@= skipped -20, +20 lines =@@
+     function Todo(prop: { key: number, todo: string }) {
+         return <div>{prop.key.toString() + prop.todo}</div>;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+     }
+     function TodoList({ todos }: TodoListProps) {
+         return <div>

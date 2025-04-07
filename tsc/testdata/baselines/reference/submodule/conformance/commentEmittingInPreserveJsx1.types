@@ -5,7 +5,7 @@ import React = require('react');
 >React : typeof __React
 
 <div>
-><div>    // Not Comment</div> : any
+><div>    // Not Comment</div> : Element
 >div : any
 
     // Not Comment
@@ -13,7 +13,7 @@ import React = require('react');
 >div : any
 
 <div>
-><div>    // Not Comment    {        //Comment just Fine    }    // Another not Comment</div> : any
+><div>    // Not Comment    {        //Comment just Fine    }    // Another not Comment</div> : Element
 >div : any
 
     // Not Comment
@@ -25,7 +25,7 @@ import React = require('react');
 >div : any
 
 <div>
-><div>    // Not Comment    {        //Comment just Fine        "Hi"    }    // Another not Comment</div> : any
+><div>    // Not Comment    {        //Comment just Fine        "Hi"    }    // Another not Comment</div> : Element
 >div : any
 
     // Not Comment
@@ -39,7 +39,7 @@ import React = require('react');
 >div : any
 
 <div>
-><div>    /* Not Comment */    {        //Comment just Fine        "Hi"    }</div> : any
+><div>    /* Not Comment */    {        //Comment just Fine        "Hi"    }</div> : Element
 >div : any
 
     /* Not Comment */

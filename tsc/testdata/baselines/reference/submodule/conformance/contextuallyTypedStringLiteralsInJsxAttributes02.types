@@ -65,49 +65,49 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
 }
 
 const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
->b0 : any
-><MainButton {...{onClick: (k) => {console.log(k)}}} extra /> : any
+>b0 : Element
+><MainButton {...{onClick: (k) => {console.log(k)}}} extra /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
->{onClick: (k) => {console.log(k)}} : { onClick: (k: any) => void; }
->onClick : (k: any) => void
->(k) => {console.log(k)} : (k: any) => void
->k : any
+>{onClick: (k) => {console.log(k)}} : { onClick: (k: "left" | "right") => void; }
+>onClick : (k: "left" | "right") => void
+>(k) => {console.log(k)} : (k: "left" | "right") => void
+>k : "left" | "right"
 >console.log(k) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
 >console : Console
 >log : (message?: any, ...optionalParams: any[]) => void
->k : any
->extra : any
+>k : "left" | "right"
+>extra : true
 
 const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
->b2 : any
-><MainButton onClick={(k)=>{console.log(k)}} extra /> : any
+>b2 : Element
+><MainButton onClick={(k)=>{console.log(k)}} extra /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
->onClick : any
->(k)=>{console.log(k)} : (k: any) => void
->k : any
+>onClick : (k: "left" | "right") => void
+>(k)=>{console.log(k)} : (k: "left" | "right") => void
+>k : "left" | "right"
 >console.log(k) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
 >console : Console
 >log : (message?: any, ...optionalParams: any[]) => void
->k : any
->extra : any
+>k : "left" | "right"
+>extra : true
 
 const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
->b3 : any
-><MainButton {...{goTo:"home"}} extra /> : any
+>b3 : Element
+><MainButton {...{goTo:"home"}} extra /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
->{goTo:"home"} : { goTo: string; }
->goTo : string
+>{goTo:"home"} : { goTo: "home"; }
+>goTo : "home"
 >"home" : "home"
->extra : any
+>extra : true
 
 const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact"
->b4 : any
-><MainButton goTo="home" extra /> : any
+>b4 : Element
+><MainButton goTo="home" extra /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
->goTo : any
->extra : any
+>goTo : "home"
+>extra : true
 
 export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undefined }
 >NoOverload : (buttonProps: ButtonProps) => Element
@@ -116,19 +116,19 @@ export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undef
 >undefined : undefined
 
 const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
->c1 : any
-><NoOverload  {...{onClick: (k) => {console.log(k)}}} extra /> : any
+>c1 : Element
+><NoOverload  {...{onClick: (k) => {console.log(k)}}} extra /> : Element
 >NoOverload : (buttonProps: ButtonProps) => Element
->{onClick: (k) => {console.log(k)}} : { onClick: (k: any) => void; }
->onClick : (k: any) => void
->(k) => {console.log(k)} : (k: any) => void
->k : any
+>{onClick: (k) => {console.log(k)}} : { onClick: (k: "left" | "right") => void; }
+>onClick : (k: "left" | "right") => void
+>(k) => {console.log(k)} : (k: "left" | "right") => void
+>k : "left" | "right"
 >console.log(k) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
 >console : Console
 >log : (message?: any, ...optionalParams: any[]) => void
->k : any
->extra : any
+>k : "left" | "right"
+>extra : true
 
 export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
 >NoOverload1 : (linkProps: LinkProps) => Element
@@ -137,11 +137,11 @@ export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefine
 >undefined : undefined
 
 const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"
->d1 : any
-><NoOverload1 {...{goTo:"home"}} extra  /> : any
+>d1 : Element
+><NoOverload1 {...{goTo:"home"}} extra  /> : Element
 >NoOverload1 : (linkProps: LinkProps) => Element
->{goTo:"home"} : { goTo: string; }
->goTo : string
+>{goTo:"home"} : { goTo: "home"; }
+>goTo : "home"
 >"home" : "home"
->extra : any
+>extra : true
 

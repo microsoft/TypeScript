@@ -5,31 +5,31 @@ import React = require('react');
 >React : typeof __React
 
 const Foo = (props: any) => <div/>;
->Foo : (props: any) => any
->(props: any) => <div/> : (props: any) => any
+>Foo : (props: any) => Element
+>(props: any) => <div/> : (props: any) => Element
 >props : any
-><div/> : any
+><div/> : Element
 >div : any
 
 // Should be OK
 const foo = <Foo />;
->foo : any
-><Foo /> : any
->Foo : (props: any) => any
+>foo : Element
+><Foo /> : Element
+>Foo : (props: any) => Element
 
 
 // Should be OK
 var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
 >MainMenu : StatelessComponent<{}>
 >React : any
->(props) => (<div>    <h3>Main Menu</h3></div>) : (props: { children?: ReactNode; }) => any
+>(props) => (<div>    <h3>Main Menu</h3></div>) : (props: { children?: ReactNode; }) => Element
 >props : { children?: ReactNode; }
->(<div>    <h3>Main Menu</h3></div>) : any
-><div>    <h3>Main Menu</h3></div> : any
+>(<div>    <h3>Main Menu</h3></div>) : Element
+><div>    <h3>Main Menu</h3></div> : Element
 >div : any
 
     <h3>Main Menu</h3>
-><h3>Main Menu</h3> : any
+><h3>Main Menu</h3> : Element
 >h3 : any
 >h3 : any
 
@@ -40,16 +40,16 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 >App : StatelessComponent<{ children: any; }>
 >React : any
 >children : any
->({children}) => (    <div >        <MainMenu/>	</div>) : (__0: { children: any; } & { children?: ReactNode; }) => any
+>({children}) => (    <div >        <MainMenu/>	</div>) : (__0: { children: any; } & { children?: ReactNode; }) => Element
 >children : any
->(    <div >        <MainMenu/>	</div>) : any
+>(    <div >        <MainMenu/>	</div>) : Element
 
     <div >
-><div >        <MainMenu/>	</div> : any
+><div >        <MainMenu/>	</div> : Element
 >div : any
 
         <MainMenu/>
-><MainMenu/> : any
+><MainMenu/> : Element
 >MainMenu : StatelessComponent<{}>
 
 	</div>

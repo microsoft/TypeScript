@@ -36,29 +36,34 @@
  
  	return <test1 {...obj} />; // OK
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >obj : Symbol(obj, Decl(file.tsx, 15, 39))
  }
  
-@@= skipped -12, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  >T : Symbol(T, Decl(file.tsx, 19, 15))
  
  	return <test1 {...obj} />; // Error (x is number, not string)
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >obj : Symbol(obj, Decl(file.tsx, 19, 39))
  }
  
-@@= skipped -12, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  >T : Symbol(T, Decl(file.tsx, 23, 15))
  
  	return <test1 {...obj} />; // Error, missing x
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >obj : Symbol(obj, Decl(file.tsx, 23, 39))
  }
  
  
  <test1 {...{}} />; // Error, missing x
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
--
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
+ 
  <test2 {...{}} />; // Error, missing toString
 ->test2 : Symbol(JSX.IntrinsicElements.test2, Decl(file.tsx, 3, 18))
++>test2 : Symbol(test2, Decl(file.tsx, 3, 18))
  

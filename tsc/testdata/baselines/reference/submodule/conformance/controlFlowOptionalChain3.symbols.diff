@@ -38,7 +38,8 @@
    return (
      <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
        {foo?.bar === false && "foo"}
 ->foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 +>foo?.bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
@@ -55,7 +56,7 @@
  
      </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
    );
  }
- 

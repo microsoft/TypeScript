@@ -14,7 +14,7 @@ var customTag = "h1";
 >"h1" : "h1"
 
 <customTag> Hello World </customTag>  // This should be an error. The lower-case is look up as an intrinsic element name
-><customTag> Hello World </customTag> : any
+><customTag> Hello World </customTag> : Element
 >customTag : string
 >customTag : string
 

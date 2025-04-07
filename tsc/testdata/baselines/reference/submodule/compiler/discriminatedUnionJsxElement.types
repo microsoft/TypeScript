@@ -28,8 +28,8 @@ function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>
     return <ListItem variant={listItemVariant} />;
 ><ListItem variant={listItemVariant} /> : any
 >ListItem : (_data: IListItemData) => null
->variant : any
->listItemVariant : ListItemVariant.OneLine | MenuItemVariant
+>variant : ListItemVariant
+>listItemVariant : ListItemVariant
 }
 
 type IListItemData = { variant: ListItemVariant.Avatar; } | { variant: ListItemVariant.OneLine; };

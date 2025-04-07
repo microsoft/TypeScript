@@ -17,7 +17,7 @@ var CustomTag: "h1" = "h1";
 >"h1" : "h1"
 
 <CustomTag> Hello World </CustomTag>
-><CustomTag> Hello World </CustomTag> : any
+><CustomTag> Hello World </CustomTag> : Element
 >CustomTag : "h1"
 >CustomTag : "h1"
 

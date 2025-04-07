@@ -11,10 +11,10 @@ class BigGreeter extends React.Component<{ }, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>Default hi</div>;
-><div>Default hi</div> : any
+><div>Default hi</div> : Element
 >div : any
 >div : any
     }
@@ -24,28 +24,28 @@ class BigGreeter extends React.Component<{ }, {}> {
 
 // Error
 let a = <BigGreeter prop1="hello" />
->a : any
-><BigGreeter prop1="hello" /> : any
+>a : Element
+><BigGreeter prop1="hello" /> : Element
 >BigGreeter : typeof BigGreeter
->prop1 : any
+>prop1 : string
 
 // OK
 let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
->b : any
-><BigGreeter ref={(input) => { this.textInput = input; }} /> : any
+>b : Element
+><BigGreeter ref={(input) => { this.textInput = input; }} /> : Element
 >BigGreeter : typeof BigGreeter
->ref : any
->(input) => { this.textInput = input; } : (input: any) => void
->input : any
->this.textInput = input : any
+>ref : (input: BigGreeter) => void
+>(input) => { this.textInput = input; } : (input: BigGreeter) => void
+>input : BigGreeter
+>this.textInput = input : BigGreeter
 >this.textInput : any
 >this : undefined
 >textInput : any
->input : any
+>input : BigGreeter
 
 let c = <BigGreeter data-extra="hi" />
->c : any
-><BigGreeter data-extra="hi" /> : any
+>c : Element
+><BigGreeter data-extra="hi" /> : Element
 >BigGreeter : typeof BigGreeter
->data-extra : any
+>data-extra : string
 

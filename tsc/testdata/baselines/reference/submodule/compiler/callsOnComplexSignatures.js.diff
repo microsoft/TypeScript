@@ -1,15 +1,11 @@
 --- old.callsOnComplexSignatures.js
 +++ new.callsOnComplexSignatures.js
-@@= skipped -107, +107 lines =@@
- 
- //// [callsOnComplexSignatures.js]
- "use strict";
--var __importDefault = (this && this.__importDefault) || function (mod) {
--    return (mod && mod.__esModule) ? mod : { "default": mod };
--};
+@@= skipped -112, +112 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var react_1 = __importDefault(require("react"));
++const react_1 = __importDefault(require("react"));
  // Simple calls from real usecases
  function test1() {
      function test(t) {
@@ -36,7 +32,7 @@
  }
  function test4(arg1, arg2, arg3, arg4, arg5, arg6) {
      arg1();
-@@= skipped -47, +40 lines =@@
+@@= skipped -42, +40 lines =@@
  function test5() {
      // Pair of non-like intrinsics
      function render(url) {

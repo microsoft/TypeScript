@@ -1,0 +1,26 @@
+--- old.correctlyMarkAliasAsReferences1.types
++++ new.correctlyMarkAliasAsReferences1.types
+@@= skipped -5, +5 lines =@@
+ >cx : any
+ 
+ import * as React from "react";
+->React : typeof React
++>React : typeof __React
+ 
+ let buttonProps; // any
+ >buttonProps : any
+ 
+ let k = <button {...buttonProps}>
+->k : JSX.Element
+-><button {...buttonProps}>            <span className={cx('class1', { class2: true })} />        </button> : JSX.Element
++>k : Element
++><button {...buttonProps}>            <span className={cx('class1', { class2: true })} />        </button> : Element
+ >button : any
+ >buttonProps : any
+ 
+             <span className={cx('class1', { class2: true })} />
+-><span className={cx('class1', { class2: true })} /> : JSX.Element
++><span className={cx('class1', { class2: true })} /> : Element
+ >span : any
+ >className : any
+ >cx('class1', { class2: true }) : any

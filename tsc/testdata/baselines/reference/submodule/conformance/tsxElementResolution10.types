@@ -19,9 +19,9 @@ var Obj1: Obj1type;
 >Obj1 : Obj1type
 
 <Obj1 x={10} />; // Error, no render member
-><Obj1 x={10} /> : any
+><Obj1 x={10} /> : Element
 >Obj1 : Obj1type
->x : any
+>x : number
 >10 : 10
 
 interface Obj2type {
@@ -34,10 +34,10 @@ var Obj2: Obj2type;
 >Obj2 : Obj2type
 
 <Obj2 x={32} render={100} />; // OK
-><Obj2 x={32} render={100} /> : any
+><Obj2 x={32} render={100} /> : Element
 >Obj2 : Obj2type
->x : any
+>x : number
 >32 : 32
->render : any
+>render : number
 >100 : 100
 

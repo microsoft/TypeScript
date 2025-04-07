@@ -1,7 +1,8 @@
 jsxImportSourceNonPragmaComment.tsx(3,21): error TS2307: Cannot find module '@emotion/react' or its corresponding type declarations.
+jsxImportSourceNonPragmaComment.tsx(7,5): error TS2875: This JSX tag requires the module path '*//jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 
 
-==== jsxImportSourceNonPragmaComment.tsx (1 errors) ====
+==== jsxImportSourceNonPragmaComment.tsx (2 errors) ====
     /* eslint-disable react/react-in-jsx-scope -- Unaware of @jsxImportSource */
     /** @jsxImportSource @emotion/react */
     import { css } from "@emotion/react";
@@ -11,9 +12,15 @@ jsxImportSourceNonPragmaComment.tsx(3,21): error TS2307: Cannot find module '@em
     export default function Component() {
       return (
         <input
+        ~~~~~~
           css={css`
+    ~~~~~~~~~~~~~~~
             color: red;
+    ~~~~~~~~~~~~~~~~~~~
           `}
+    ~~~~~~~~
         />
+    ~~~~~~
+!!! error TS2875: This JSX tag requires the module path '*//jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
       );
     }

@@ -1,7 +1,8 @@
+controlFlowOptionalChain3.tsx(30,8): error TS18048: 'foo' is possibly 'undefined'.
 controlFlowOptionalChain3.tsx(36,31): error TS18048: 'options' is possibly 'undefined'.
 
 
-==== controlFlowOptionalChain3.tsx (1 errors) ====
+==== controlFlowOptionalChain3.tsx (2 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     // https://github.com/microsoft/TypeScript/issues/56482
@@ -32,6 +33,8 @@ controlFlowOptionalChain3.tsx(36,31): error TS18048: 'options' is possibly 'unde
         <div>
           {foo?.bar === false && "foo"}
           {foo.bar ? "true" : "false"}
+           ~~~
+!!! error TS18048: 'foo' is possibly 'undefined'.
         </div>
       );
     }

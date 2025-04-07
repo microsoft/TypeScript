@@ -21,12 +21,14 @@
  // OK
  <test1 {... {x: (n) => 0} } />;
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >x : Symbol(x, Decl(file.tsx, 11, 13))
  >n : Symbol(n, Decl(file.tsx, 11, 17))
  
  // Error, no member 'len' on 'string'
  <test1 {... {x: (n) => n.len} } />;
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >x : Symbol(x, Decl(file.tsx, 14, 13))
  >n : Symbol(n, Decl(file.tsx, 14, 17))
  >n : Symbol(n, Decl(file.tsx, 14, 17))

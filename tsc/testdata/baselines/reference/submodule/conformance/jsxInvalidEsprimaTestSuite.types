@@ -30,8 +30,8 @@ declare var React: any;
 <a b=d />;
 ><a b=d /> : any
 >a : any
->b : any
->d : any
+>b : true
+>d : true
 
 === 5.tsx ===
 <a>;
@@ -49,7 +49,7 @@ declare var React: any;
 <a foo="bar;
 ><a foo="bar; : any
 >a : any
->foo : any
+>foo : string
 
 === 8.tsx ===
 <a:b></b>;
@@ -63,7 +63,7 @@ declare var React: any;
 ><a:b.c></a:b : any
 >a : any
 >b : any
->c : any
+>c : true
 >a : any
 >b : any
 >c> : boolean
@@ -76,7 +76,7 @@ declare var React: any;
 >a.b : any
 >a : any
 >b : any
->c : any
+>c : true
 >a.b : any
 >a : any
 >b : any
@@ -193,14 +193,14 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <span className="a", id="b" />;
 ><span className="a", id="b" /> : any
 >span : any
->className : any
->id : any
+>className : string
+>id : string
 
 === 22.tsx ===
 <div className"app">;
 ><div className : any
 >div : any
->className : any
+>className : true
 >"app"> : boolean
 >"app" : "app"
 > : any
@@ -249,7 +249,7 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <a b=}>;
 ><a b=}>; : any
 >a : any
->b : any
+>b : true
 
 > : any
 
@@ -273,5 +273,5 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <a .../*hai*/asdf/>;
 ><a .../*hai*/asdf/> : any
 >a : any
->asdf : any
+>asdf : true
 

@@ -5,7 +5,7 @@ const a = <input value="
 >a : any
 ><input value="  foo: 23"></input> : any
 >input : any
->value : any
+>value : string
 
   foo: 23
 "></input>;
@@ -15,7 +15,7 @@ const b = <input value='
 >b : any
 ><input value='foo: 23'></input> : any
 >input : any
->value : any
+>value : string
 
 foo: 23
 '></input>;

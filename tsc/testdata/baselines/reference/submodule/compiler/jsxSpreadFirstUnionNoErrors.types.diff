@@ -1,0 +1,75 @@
+--- old.jsxSpreadFirstUnionNoErrors.types
++++ new.jsxSpreadFirstUnionNoErrors.types
+@@= skipped -1, +1 lines =@@
+ 
+ === jsxSpreadFirstUnionNoErrors.tsx ===
+ import React from "react";
+->React : typeof React
++>React : typeof __React
+ 
+ type InfoProps =
+ >InfoProps : InfoProps
+@@= skipped -13, +13 lines =@@
+ >content : string
+ 
+ const Info = (props: InfoProps) =>
+->Info : (props: InfoProps) => JSX.Element
+->(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => JSX.Element
++>Info : (props: InfoProps) => Element
++>(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => Element
+ >props : InfoProps
+ 
+ props.status === "hidden"
+->props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : JSX.Element
++>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : Element
+ >props.status === "hidden" : boolean
+ >props.status : "hidden" | "visible"
+ >props : InfoProps
+@@= skipped -13, +13 lines =@@
+ >"hidden" : "hidden"
+ 
+   ? <noscript />
+-><noscript /> : JSX.Element
++><noscript /> : Element
+ >noscript : any
+ 
+   : <div>{props.content}</div>;
+-><div>{props.content}</div> : JSX.Element
++><div>{props.content}</div> : Element
+ >div : any
+ >props.content : string
+ >props : { status: "visible"; content: string; }
+@@= skipped -12, +12 lines =@@
+ >div : any
+ 
+ const a = <Info status="hidden" />;
+->a : JSX.Element
+-><Info status="hidden" /> : JSX.Element
+->Info : (props: InfoProps) => JSX.Element
++>a : Element
++><Info status="hidden" /> : Element
++>Info : (props: InfoProps) => Element
+ >status : "hidden"
+ 
+ const b = <Info status="visible" content="hello world" />;
+->b : JSX.Element
+-><Info status="visible" content="hello world" /> : JSX.Element
+->Info : (props: InfoProps) => JSX.Element
++>b : Element
++><Info status="visible" content="hello world" /> : Element
++>Info : (props: InfoProps) => Element
+ >status : "visible"
+ >content : string
+ 
+@@= skipped -16, +16 lines =@@
+ >infoProps : InfoProps
+ 
+ const c = <Info {...infoProps} />;
+->c : JSX.Element
+-><Info {...infoProps} /> : JSX.Element
+->Info : (props: InfoProps) => JSX.Element
++>c : Element
++><Info {...infoProps} /> : Element
++>Info : (props: InfoProps) => Element
+ >infoProps : InfoProps
+ 

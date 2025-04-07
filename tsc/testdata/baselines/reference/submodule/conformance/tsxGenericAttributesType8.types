@@ -10,24 +10,24 @@ declare function Component<T>(props: T) : JSX.Element;
 >JSX : any
 
 const decorator = function <U>(props: U) {
->decorator : <U>(props: U) => any
->function <U>(props: U) {    return <Component {...props} />;} : <U>(props: U) => any
+>decorator : <U>(props: U) => Element
+>function <U>(props: U) {    return <Component {...props} />;} : <U>(props: U) => Element
 >props : U
 
     return <Component {...props} />;
-><Component {...props} /> : any
+><Component {...props} /> : Element
 >Component : <T>(props: T) => Element
 >props : U
 }
 
 const decorator1 = function <U extends {x: string}>(props: U) {
->decorator1 : <U extends { x: string; }>(props: U) => any
->function <U extends {x: string}>(props: U) {    return <Component {...props} />;} : <U extends { x: string; }>(props: U) => any
+>decorator1 : <U extends { x: string; }>(props: U) => Element
+>function <U extends {x: string}>(props: U) {    return <Component {...props} />;} : <U extends { x: string; }>(props: U) => Element
 >x : string
 >props : U
 
     return <Component {...props} />;
-><Component {...props} /> : any
+><Component {...props} /> : Element
 >Component : <T>(props: T) => Element
 >props : U
 }

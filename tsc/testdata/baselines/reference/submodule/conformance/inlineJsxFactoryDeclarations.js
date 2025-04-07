@@ -40,6 +40,8 @@ export * from "./reacty";
 //// [otherreacty.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/** @jsx React.createElement */
+const React = require("./renderer");
 <h></h>;
 //// [other.js]
 "use strict";
@@ -52,11 +54,14 @@ exports.prerendered = <renderer_1.dom></h>;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.prerendered2 = void 0;
+/** @jsx otherdom */
+const renderer_1 = require("./renderer");
 exports.prerendered2 = <h></h>;
 //// [reacty.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.prerendered3 = void 0;
+const renderer_1 = require("./renderer");
 exports.prerendered3 = <h></h>;
 //// [index.js]
 "use strict";
@@ -75,6 +80,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/** @jsx dom */
+const renderer_1 = require("./renderer");
 <h></h>;
 __exportStar(require("./other"), exports);
 __exportStar(require("./othernoalias"), exports);

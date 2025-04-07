@@ -22,6 +22,7 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 const Foo = (props) => <div />;
 // Should be OK
 const foo = <Foo />;

@@ -18,23 +18,23 @@ function Baz<T,U>(key1: T, value: U) {
 >value : U
 
     let a0 = <ComponentWithTwoAttributes key1={key1} value={value} />
->a0 : any
-><ComponentWithTwoAttributes key1={key1} value={value} /> : any
+>a0 : Element
+><ComponentWithTwoAttributes key1={key1} value={value} /> : Element
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
->key1 : any
 >key1 : T
->value : any
+>key1 : T
+>value : U
 >value : U
 
     let a1 = <ComponentWithTwoAttributes {...{key1, value: value}} key="Component" />
->a1 : any
-><ComponentWithTwoAttributes {...{key1, value: value}} key="Component" /> : any
+>a1 : Element
+><ComponentWithTwoAttributes {...{key1, value: value}} key="Component" /> : Element
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
 >{key1, value: value} : { key1: T; value: U; }
 >key1 : T
 >value : U
 >value : U
->key : any
+>key : string
 }
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
@@ -51,10 +51,10 @@ function createLink(func: (a: number)=>void) {
 >a : number
 
     let o = <Link func={func} />
->o : any
-><Link func={func} /> : any
+>o : Element
+><Link func={func} /> : Element
 >Link : <U>(l: { func: (arg: U) => void; }) => Element
->func : any
+>func : (a: number) => void
 >func : (a: number) => void
 }
 
@@ -64,10 +64,10 @@ function createLink1(func: (a: number)=>boolean) {
 >a : number
 
     let o = <Link func={func} />
->o : any
-><Link func={func} /> : any
+>o : Element
+><Link func={func} /> : Element
 >Link : <U>(l: { func: (arg: U) => void; }) => Element
->func : any
+>func : (a: number) => boolean
 >func : (a: number) => boolean
 }
 
@@ -87,16 +87,16 @@ declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 
 // OK
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;
->i : any
-><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} /> : any
+>i : Element
+><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} /> : Element
 >InferParamComponent : <T>(attr: InferParamProp<T>) => Element
->values : any
+>values : number[]
 >[1, 2, 3, 4] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
 >4 : 4
->selectHandler : any
->(val) => { } : (val: any) => void
->val : any
+>selectHandler : (val: number) => void
+>(val) => { } : (val: number) => void
+>val : number
 

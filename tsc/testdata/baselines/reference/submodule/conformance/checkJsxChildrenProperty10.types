@@ -25,11 +25,11 @@ class Button {
 >props : {}
 
     render() {
->render : () => any
+>render : () => Element
 
         return (<div>My Button</div>)
->(<div>My Button</div>) : any
-><div>My Button</div> : any
+>(<div>My Button</div>) : Element
+><div>My Button</div> : Element
 >div : any
 >div : any
     }
@@ -37,27 +37,27 @@ class Button {
 
 // OK
 let k1 = <div> <h2> Hello </h2> <h1> world </h1></div>;
->k1 : any
-><div> <h2> Hello </h2> <h1> world </h1></div> : any
+>k1 : Element
+><div> <h2> Hello </h2> <h1> world </h1></div> : Element
 >div : any
-><h2> Hello </h2> : any
+><h2> Hello </h2> : Element
 >h2 : any
 >h2 : any
-><h1> world </h1> : any
+><h1> world </h1> : Element
 >h1 : any
 >h1 : any
 >div : any
 
 let k2 = <div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div>;
->k2 : any
-><div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div> : any
+>k2 : Element
+><div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div> : Element
 >div : any
-><h2> Hello </h2> : any
+><h2> Hello </h2> : Element
 >h2 : any
 >h2 : any
->(user: any) => <h2>{user.name}</h2> : (user: any) => any
+>(user: any) => <h2>{user.name}</h2> : (user: any) => Element
 >user : any
-><h2>{user.name}</h2> : any
+><h2>{user.name}</h2> : Element
 >h2 : any
 >user.name : any
 >user : any
@@ -66,18 +66,18 @@ let k2 = <div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div>;
 >div : any
 
 let k3 = <div> {1} {"That is a number"} </div>;
->k3 : any
-><div> {1} {"That is a number"} </div> : any
+>k3 : Element
+><div> {1} {"That is a number"} </div> : Element
 >div : any
 >1 : 1
 >"That is a number" : "That is a number"
 >div : any
 
 let k4 = <Button> <h2> Hello </h2> </Button>;
->k4 : any
-><Button> <h2> Hello </h2> </Button> : any
+>k4 : Element
+><Button> <h2> Hello </h2> </Button> : Element
 >Button : typeof Button
-><h2> Hello </h2> : any
+><h2> Hello </h2> : Element
 >h2 : any
 >h2 : any
 >Button : typeof Button

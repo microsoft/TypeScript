@@ -10,25 +10,25 @@ interface MyComponentProp {
 }
 
 function MyComponent<T = MyComponentProp>(attr: T) {
->MyComponent : <T>(attr: T) => any
+>MyComponent : <T>(attr: T) => Element
 >attr : T
 
     return <div>attr.values</div>
-><div>attr.values</div> : any
+><div>attr.values</div> : Element
 >div : any
 >div : any
 }
 
 // OK
 let i = <MyComponent values />;  // We infer type arguments here
->i : any
-><MyComponent values /> : any
->MyComponent : <T>(attr: T) => any
->values : any
+>i : Element
+><MyComponent values /> : Element
+>MyComponent : <T>(attr: T) => Element
+>values : true
 
 let i1 = <MyComponent values="Hello"/>;
->i1 : any
-><MyComponent values="Hello"/> : any
->MyComponent : <T>(attr: T) => any
->values : any
+>i1 : Element
+><MyComponent values="Hello"/> : Element
+>MyComponent : <T>(attr: T) => Element
+>values : string
 

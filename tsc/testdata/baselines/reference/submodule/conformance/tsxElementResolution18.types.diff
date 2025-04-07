@@ -1,0 +1,11 @@
+--- old.tsxElementResolution18.types
++++ new.tsxElementResolution18.types
+@@= skipped -6, +6 lines =@@
+ 
+ // Error under implicit any
+ <div n='x' />;
+-><div n='x' /> : JSX.Element
++><div n='x' /> : Element
+ >div : any
+ >n : string
+ 

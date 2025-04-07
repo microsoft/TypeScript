@@ -5,21 +5,21 @@
 /// <reference path="react18/global.d.ts" />
 
 const a = (
->a : any
->(  <main>    {(<div />) as unknown}    <span />  </main>) : any
+>a : Element
+>(  <main>    {(<div />) as unknown}    <span />  </main>) : Element
 
   <main>
-><main>    {(<div />) as unknown}    <span />  </main> : any
+><main>    {(<div />) as unknown}    <span />  </main> : Element
 >main : any
 
     {(<div />) as unknown}
 >(<div />) as unknown : unknown
->(<div />) : any
-><div /> : any
+>(<div />) : Element
+><div /> : Element
 >div : any
 
     <span />
-><span /> : any
+><span /> : Element
 >span : any
 
   </main>

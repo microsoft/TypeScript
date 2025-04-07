@@ -18,6 +18,7 @@ let i1 = <MyComponent1 values={5}/>;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 function MyComponent1(attr) {
     return <div>attr.values</div>;
 }

@@ -20,15 +20,15 @@ function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string
 >Component : typeof Component
 
         render() {
->render : () => any
+>render : () => Element
 
             return <Inner {...this.props} name="Matt"/>;
-><Inner {...this.props} name="Matt"/> : any
+><Inner {...this.props} name="Matt"/> : Element
 >Inner : ComponentClass<P & { name: string; }, any>
 >this.props : Readonly<{ children?: ReactNode; }> & Readonly<P>
 >this : this
 >props : Readonly<{ children?: ReactNode; }> & Readonly<P>
->name : any
+>name : "Matt"
         }
     };
 }

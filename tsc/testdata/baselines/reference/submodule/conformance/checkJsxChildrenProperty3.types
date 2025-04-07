@@ -50,26 +50,26 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 
 // Ok
 function UserName0() {
->UserName0 : () => any
+>UserName0 : () => Element
 
     return (
->(        <FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser>    ) : any
+>(        <FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser>    ) : Element
 
         <FetchUser>
-><FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser> : any
+><FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser> : Element
 >FetchUser : typeof FetchUser
 
             { user => (
->user => (                <h1>{ user.Name }</h1>            ) : (user: any) => any
->user : any
->(                <h1>{ user.Name }</h1>            ) : any
+>user => (                <h1>{ user.Name }</h1>            ) : (user: IUser) => Element
+>user : IUser
+>(                <h1>{ user.Name }</h1>            ) : Element
 
                 <h1>{ user.Name }</h1>
-><h1>{ user.Name }</h1> : any
+><h1>{ user.Name }</h1> : Element
 >h1 : any
->user.Name : any
->user : any
->Name : any
+>user.Name : string
+>user : IUser
+>Name : string
 >h1 : any
 
             ) }
@@ -80,26 +80,26 @@ function UserName0() {
 }
 
 function UserName1() {
->UserName1 : () => any
+>UserName1 : () => Element
 
     return (
->(        <FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser>    ) : any
+>(        <FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser>    ) : Element
 
         <FetchUser>
-><FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser> : any
+><FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser> : Element
 >FetchUser : typeof FetchUser
 
             { user => (
->user => (                <h1>{ user.Name }</h1>            ) : (user: any) => any
->user : any
->(                <h1>{ user.Name }</h1>            ) : any
+>user => (                <h1>{ user.Name }</h1>            ) : (user: IUser) => Element
+>user : IUser
+>(                <h1>{ user.Name }</h1>            ) : Element
 
                 <h1>{ user.Name }</h1>
-><h1>{ user.Name }</h1> : any
+><h1>{ user.Name }</h1> : Element
 >h1 : any
->user.Name : any
->user : any
->Name : any
+>user.Name : string
+>user : IUser
+>Name : string
 >h1 : any
 
             ) }

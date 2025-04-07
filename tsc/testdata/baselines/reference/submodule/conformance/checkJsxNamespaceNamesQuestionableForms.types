@@ -29,7 +29,7 @@ declare namespace JSX {
 ><b:c.x></b:c : any
 >b : any
 >c : any
->x : any
+>x : true
 >b : any
 >c : any
 >x> : boolean

@@ -16,19 +16,19 @@ declare module JSX {
 
 // OK
 <div n='x' />;
-><div n='x' /> : any
+><div n='x' /> : Element
 >div : any
->n : any
+>n : string
 
 // OK
 <span m='ok' />;
-><span m='ok' /> : any
+><span m='ok' /> : Element
 >span : any
->m : any
+>m : string
 
 // Error
 <span q='' />;
-><span q='' /> : any
+><span q='' /> : Element
 >span : any
->q : any
+>q : string
 

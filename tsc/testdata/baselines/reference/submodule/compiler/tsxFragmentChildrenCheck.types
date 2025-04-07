@@ -5,11 +5,11 @@ declare var React: any;
 >React : any
 
 export function MyComponent(props: any) {
->MyComponent : (props: any) => any
+>MyComponent : (props: any) => Element
 >props : any
 
     return <span>my component</span>;
-><span>my component</span> : any
+><span>my component</span> : Element
 >span : any
 >span : any
 }
@@ -19,7 +19,7 @@ import * as React from 'react'
 >React : typeof __React
 
 import { MyComponent } from './my-component'
->MyComponent : (props: any) => any
+>MyComponent : (props: any) => Element
 
 const MY_STRING: string = 'Ceci n\'est pas une string.'
 >MY_STRING : string
@@ -36,28 +36,28 @@ class RenderString extends React.PureComponent<any, any> {
 >PureComponent : typeof PureComponent
 
   render() {
->render : () => any
+>render : () => Element
 
     return (
->(      <>        <MyComponent />        <span>{ MY_STRING }</span>        <span className={ MY_CLASSNAME } />      </>    ) : any
+>(      <>        <MyComponent />        <span>{ MY_STRING }</span>        <span className={ MY_CLASSNAME } />      </>    ) : Element
 
       <>
-><>        <MyComponent />        <span>{ MY_STRING }</span>        <span className={ MY_CLASSNAME } />      </> : any
+><>        <MyComponent />        <span>{ MY_STRING }</span>        <span className={ MY_CLASSNAME } />      </> : Element
 
         <MyComponent />
-><MyComponent /> : any
->MyComponent : (props: any) => any
+><MyComponent /> : Element
+>MyComponent : (props: any) => Element
 
         <span>{ MY_STRING }</span>
-><span>{ MY_STRING }</span> : any
+><span>{ MY_STRING }</span> : Element
 >span : any
 >MY_STRING : string
 >span : any
 
         <span className={ MY_CLASSNAME } />
-><span className={ MY_CLASSNAME } /> : any
+><span className={ MY_CLASSNAME } /> : Element
 >span : any
->className : any
+>className : string
 >MY_CLASSNAME : string
 
       </>

@@ -10,6 +10,8 @@
 -var React = require("react");
 -var Hoc = function (TagElement) {
 -    var Component = function () { return React.createElement(TagElement, null); };
++/// <reference path="react16.d.ts" />
++const React = require("react");
 +const Hoc = (TagElement) => {
 +    const Component = () => <TagElement />;
      return Component;

@@ -23,3 +23,10 @@
  
    	[s: string]: boolean;
  >s : Symbol(s, Decl(file.tsx, 5, 4))
+@@= skipped -24, +24 lines =@@
+ // Should be ok
+ <MyComponent data-bar='hello' />;
+ >MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+->data-bar : Symbol(data-bar, Decl(file.tsx, 16, 12))
++>data-bar : Symbol("data-bar", Decl(file.tsx, 16, 12))
+ 

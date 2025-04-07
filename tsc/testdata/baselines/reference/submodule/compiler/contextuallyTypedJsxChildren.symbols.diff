@@ -67,34 +67,40 @@
  
      <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
        <button onClick={onClose}>Click me</button>
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
++>button : Symbol(button, Decl(react16.d.ts, 2532, 96))
  >onClick : Symbol(onClick, Decl(contextuallyTypedJsxChildren.tsx, 28, 13))
  >onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 26, 5))
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
++>button : Symbol(button, Decl(react16.d.ts, 2532, 96))
  
      </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
    )}
  </DropdownMenu>;
- >DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
-@@= skipped -29, +23 lines =@@
+@@= skipped -29, +29 lines =@@
  >onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 36, 14))
  
      <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
        <button onClick={onClose}>Click me</button>
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
++>button : Symbol(button, Decl(react16.d.ts, 2532, 96))
  >onClick : Symbol(onClick, Decl(contextuallyTypedJsxChildren.tsx, 38, 13))
  >onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 36, 14))
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
++>button : Symbol(button, Decl(react16.d.ts, 2532, 96))
  
      </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
    )}
  />;
- 

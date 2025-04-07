@@ -1,0 +1,41 @@
+--- old.tsxElementResolution.types
++++ new.tsxElementResolution.types
+@@= skipped -29, +29 lines =@@
+ 
+ // Should find the intrinsic element, not the class element
+ var a = <foundFirst  x="hello" />;
+->a : error
+-><foundFirst  x="hello" /> : error
++>a : any
++><foundFirst  x="hello" /> : any
+ >foundFirst : typeof foundFirst
+ >x : string
+ 
+ var b = <string_named />;
+->b : error
+-><string_named /> : error
++>b : any
++><string_named /> : any
+ >string_named : any
+ 
+ // TODO: This should not be a parse error (should
+ //        parse a property name here, not identifier)
+ // var c = <var />;
+ var d = <Other />;
+->d : error
+-><Other /> : error
++>d : any
++><Other /> : any
+ >Other : typeof Other
+ 
+ var e = <Dotted.Name />;
+->e : error
+-><Dotted.Name /> : error
+->Dotted.Name : typeof Dotted.Name
++>e : any
++><Dotted.Name /> : any
++>Dotted.Name : typeof Name
+ >Dotted : typeof Dotted
+->Name : typeof Dotted.Name
++>Name : typeof Name
+ 

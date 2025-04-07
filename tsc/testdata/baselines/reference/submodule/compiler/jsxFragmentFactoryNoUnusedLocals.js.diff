@@ -1,10 +1,9 @@
 --- old.jsxFragmentFactoryNoUnusedLocals.js
 +++ new.jsxFragmentFactoryNoUnusedLocals.js
-@@= skipped -19, +19 lines =@@
- "use strict";
+@@= skipped -20, +20 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Counter = Counter;
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var react_1 = require("react");
 -function Counter(_a) {
 -    var _b = _a.count, count = _b === void 0 ? 0 : _b;
@@ -12,6 +11,7 @@
 -    return (0, react_1.createElement)(react_1.Fragment, null,
 -        (0, react_1.createElement)("p", null, cnt),
 -        (0, react_1.createElement)("button", { onClick: function () { return setCnt(function (prev) { return prev + 1; }); }, type: "button" }, "Update"));
++const react_1 = require("react");
 +function Counter({ count = 0 }) {
 +    const [cnt, setCnt] = null;
 +    return <>

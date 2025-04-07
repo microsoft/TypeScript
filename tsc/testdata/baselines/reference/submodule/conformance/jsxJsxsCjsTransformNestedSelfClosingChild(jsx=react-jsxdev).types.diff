@@ -1,0 +1,59 @@
+--- old.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).types
++++ new.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).types
+@@= skipped -11, +11 lines =@@
+ >log : (...data: any[]) => void
+ 
+   <div>
+-><div>    <div />  </div> : JSX.Element
++><div>    <div />  </div> : Element
+ >div : any
+ 
+     <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+   </div>
+@@= skipped -19, +19 lines =@@
+ >log : (...data: any[]) => void
+ 
+   <div>
+-><div>    <div />    <div />  </div> : JSX.Element
++><div>    <div />    <div />  </div> : Element
+ >div : any
+ 
+     <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+     <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+   </div>
+@@= skipped -23, +23 lines =@@
+ >log : (...data: any[]) => void
+ 
+   <div>
+-><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : JSX.Element
++><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : Element
+ >div : any
+ 
+     {[1, 2].map(i => <div key={i}>{i}</div>)}
+->[1, 2].map(i => <div key={i}>{i}</div>) : JSX.Element[]
++>[1, 2].map(i => <div key={i}>{i}</div>) : Element[]
+ >[1, 2].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+ >[1, 2] : number[]
+ >1 : 1
+ >2 : 2
+ >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+->i => <div key={i}>{i}</div> : (i: number) => JSX.Element
++>i => <div key={i}>{i}</div> : (i: number) => Element
+ >i : number
+-><div key={i}>{i}</div> : JSX.Element
++><div key={i}>{i}</div> : Element
+ >div : any
+ >key : number
+ >i : number

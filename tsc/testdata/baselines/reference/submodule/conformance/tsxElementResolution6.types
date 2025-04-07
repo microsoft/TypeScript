@@ -11,7 +11,7 @@ var div: any;
 
 // Still an error
 <div n='x' />;
-><div n='x' /> : any
+><div n='x' /> : Element
 >div : any
->n : any
+>n : string
 

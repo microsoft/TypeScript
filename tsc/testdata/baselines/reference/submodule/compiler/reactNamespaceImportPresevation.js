@@ -16,4 +16,5 @@ declare var foo: any;
 //// [test.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const myReactLib = require("my-React-Lib"); // should not be elided
 <foo data/>;

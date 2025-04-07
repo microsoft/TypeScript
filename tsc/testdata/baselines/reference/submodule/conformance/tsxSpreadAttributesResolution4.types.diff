@@ -1,0 +1,108 @@
+--- old.tsxSpreadAttributesResolution4.types
++++ new.tsxSpreadAttributesResolution4.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ interface PoisonedProp {
+     x: string;
+@@= skipped -12, +12 lines =@@
+ 
+ class Poisoned extends React.Component<PoisonedProp, {}> {
+ >Poisoned : Poisoned
+->React.Component : React.Component<PoisonedProp, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<PoisonedProp, {}>
++>React : typeof __React
++>Component : typeof Component
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return <div>Hello</div>;
+-><div>Hello</div> : JSX.Element
++><div>Hello</div> : Element
+ >div : any
+ >div : any
+     }
+@@= skipped -30, +30 lines =@@
+ 
+ // OK
+ let p = <Poisoned {...obj} />;
+->p : JSX.Element
+-><Poisoned {...obj} /> : JSX.Element
++>p : Element
++><Poisoned {...obj} /> : Element
+ >Poisoned : typeof Poisoned
+ >obj : PoisonedProp
+ 
+ class EmptyProp extends React.Component<{}, {}> {
+ >EmptyProp : EmptyProp
+->React.Component : React.Component<{}, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<{}, {}>
++>React : typeof __React
++>Component : typeof Component
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return <div>Default hi</div>;
+-><div>Default hi</div> : JSX.Element
++><div>Default hi</div> : Element
+ >div : any
+ >div : any
+     }
+@@= skipped -26, +26 lines =@@
+ >j : any
+ 
+ let e1 = <EmptyProp {...{}} />;
+->e1 : JSX.Element
+-><EmptyProp {...{}} /> : JSX.Element
++>e1 : Element
++><EmptyProp {...{}} /> : Element
+ >EmptyProp : typeof EmptyProp
+ >{} : {}
+ 
+ let e2 = <EmptyProp {...j} />
+->e2 : JSX.Element
+-><EmptyProp {...j} /> : JSX.Element
++>e2 : Element
++><EmptyProp {...j} /> : Element
+ >EmptyProp : typeof EmptyProp
+ >j : any
+ 
+ let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
+->e3 : JSX.Element
+-><EmptyProp {...{ ref: (input) => { this.textInput = input; } }} /> : JSX.Element
++>e3 : Element
++><EmptyProp {...{ ref: (input) => { this.textInput = input; } }} /> : Element
+ >EmptyProp : typeof EmptyProp
+ >{ ref: (input) => { this.textInput = input; } } : { ref: (input: EmptyProp) => void; }
+ >ref : (input: EmptyProp) => void
+@@= skipped -26, +26 lines =@@
+ >input : EmptyProp
+ 
+ let e4 = <EmptyProp data-prop />
+->e4 : JSX.Element
+-><EmptyProp data-prop /> : JSX.Element
++>e4 : Element
++><EmptyProp data-prop /> : Element
+ >EmptyProp : typeof EmptyProp
+ >data-prop : true
+ 
+ let e5 = <EmptyProp {...{ "data-prop": true}} />
+->e5 : JSX.Element
+-><EmptyProp {...{ "data-prop": true}} /> : JSX.Element
++>e5 : Element
++><EmptyProp {...{ "data-prop": true}} /> : Element
+ >EmptyProp : typeof EmptyProp
+ >{ "data-prop": true} : { "data-prop": boolean; }
+ >"data-prop" : boolean

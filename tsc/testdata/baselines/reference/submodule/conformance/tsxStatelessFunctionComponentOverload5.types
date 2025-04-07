@@ -111,28 +111,28 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 
 // Error
 const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // extra property;
->b0 : any
-><MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton> : any
+>b0 : Element
+><MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->to : any
->onClick : any
->(e)=>{} : (e: any) => void
->e : any
+>to : string
+>onClick : (e: MouseEvent<any>) => void
+>(e)=>{} : (e: MouseEvent<any>) => void
+>e : MouseEvent<any>
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 
 const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
->b1 : any
-><MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton> : any
+>b1 : Element
+><MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->onClick : any
+>onClick : (e: any) => void
 >(e: any)=> {} : (e: any) => void
 >e : any
 >obj0 : { to: string; }
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 
 const b2 = <MainButton {...{to: "10000"}} {...obj2} />;  // extra property
->b2 : any
-><MainButton {...{to: "10000"}} {...obj2} /> : any
+>b2 : Element
+><MainButton {...{to: "10000"}} {...obj2} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >{to: "10000"} : { to: string; }
 >to : string
@@ -140,27 +140,27 @@ const b2 = <MainButton {...{to: "10000"}} {...obj2} />;  // extra property
 >obj2 : { onClick: () => void; }
 
 const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extra property
->b3 : any
-><MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} /> : any
+>b3 : Element
+><MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >{to: "10000"} : { to: string; }
 >to : string
 >"10000" : "10000"
->{onClick: (k) => {}} : { onClick: (k: any) => void; }
->onClick : (k: any) => void
->(k) => {} : (k: any) => void
->k : any
+>{onClick: (k) => {}} : { onClick: (k: MouseEvent<any>) => void; }
+>onClick : (k: MouseEvent<any>) => void
+>(k) => {} : (k: MouseEvent<any>) => void
+>k : MouseEvent<any>
 
 const b4 = <MainButton {...obj3} to />;  // Should error because Incorrect type; but attributes are any so everything is allowed
->b4 : any
-><MainButton {...obj3} to /> : any
+>b4 : Element
+><MainButton {...obj3} to /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >obj3 : any
->to : any
+>to : true
 
 const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
->b5 : any
-><MainButton {...{ onClick(e: any) { } }} {...obj0} /> : any
+>b5 : Element
+><MainButton {...{ onClick(e: any) { } }} {...obj0} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >{ onClick(e: any) { } } : { onClick: (e: any) => void; }
 >onClick : (e: any) => void
@@ -168,28 +168,28 @@ const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread ret
 >obj0 : { to: string; }
 
 const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
->b6 : any
-><MainButton {...{ onClick(e: any){} }} children={10} /> : any
+>b6 : Element
+><MainButton {...{ onClick(e: any){} }} children={10} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >{ onClick(e: any){} } : { onClick: (e: any) => void; }
 >onClick : (e: any) => void
 >e : any
->children : any
+>children : number
 >10 : 10
 
 const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
->b7 : any
-><MainButton {...{ onClick(e: any){} }} children="hello" className /> : any
+>b7 : Element
+><MainButton {...{ onClick(e: any){} }} children="hello" className /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >{ onClick(e: any){} } : { onClick: (e: any) => void; }
 >onClick : (e: any) => void
 >e : any
->children : any
->className : any
+>children : string
+>className : true
 
 const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
->b8 : any
-><MainButton data-format /> : any
+>b8 : Element
+><MainButton data-format /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->data-format : any
+>data-format : true
 

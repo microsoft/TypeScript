@@ -6,6 +6,8 @@
      return <div>hello</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  }
  
  function EmptySFC2() {
@@ -14,15 +16,28 @@
      return <div>Hello</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  }
  
  function SFC2(prop: { x: boolean }) {
-@@= skipped -18, +14 lines =@@
+@@= skipped -18, +18 lines =@@
  >x : Symbol(x, Decl(file.tsx, 10, 21))
  
      return <h1>World</h1>;
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
++>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
++>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
  }
  
  var EmptySFCComp = EmptySFC1 || EmptySFC2;
+@@= skipped -21, +21 lines =@@
+ let a1 = <EmptySFCComp data-prop />
+ >a1 : Symbol(a1, Decl(file.tsx, 18, 3))
+ >EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 14, 3))
+->data-prop : Symbol(data-prop, Decl(file.tsx, 18, 22))
++>data-prop : Symbol("data-prop", Decl(file.tsx, 18, 22))
+ 
+ let b = <SFC2AndEmptyComp x />
+ >b : Symbol(b, Decl(file.tsx, 19, 3))

@@ -1,12 +1,12 @@
 --- old.inlineJsxFactoryDeclarations.js
 +++ new.inlineJsxFactoryDeclarations.js
-@@= skipped -39, +39 lines =@@
- //// [otherreacty.js]
+@@= skipped -40, +40 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/** @jsx React.createElement */
+ /** @jsx React.createElement */
 -var React = require("./renderer");
 -React.createElement("h", null);
++const React = require("./renderer");
 +<h></h>;
  //// [other.js]
  "use strict";
@@ -21,9 +21,10 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.prerendered2 = void 0;
--/** @jsx otherdom */
+ /** @jsx otherdom */
 -var renderer_1 = require("./renderer");
 -exports.prerendered2 = (0, renderer_1.otherdom)("h", null);
++const renderer_1 = require("./renderer");
 +exports.prerendered2 = <h></h>;
  //// [reacty.js]
  "use strict";
@@ -31,17 +32,18 @@
  exports.prerendered3 = void 0;
 -var renderer_1 = require("./renderer");
 -exports.prerendered3 = renderer_1.default.createElement("h", null);
++const renderer_1 = require("./renderer");
 +exports.prerendered3 = <h></h>;
  //// [index.js]
  "use strict";
  var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-@@= skipped -40, +35 lines =@@
-     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+@@= skipped -40, +40 lines =@@
  };
  Object.defineProperty(exports, "__esModule", { value: true });
--/** @jsx dom */
+ /** @jsx dom */
 -var renderer_1 = require("./renderer");
 -(0, renderer_1.dom)("h", null);
++const renderer_1 = require("./renderer");
 +<h></h>;
  __exportStar(require("./other"), exports);
  __exportStar(require("./othernoalias"), exports);

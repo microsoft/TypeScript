@@ -20,13 +20,13 @@ export const Hoc = <Tag extends Tags>(
 >React : any
 
    const Component = () => <TagElement />;
->Component : () => any
->() => <TagElement /> : () => any
-><TagElement /> : any
+>Component : () => Element
+>() => <TagElement /> : () => Element
+><TagElement /> : Element
 >TagElement : Tag
 
    return Component;
->Component : () => any
+>Component : () => Element
 
 };
 

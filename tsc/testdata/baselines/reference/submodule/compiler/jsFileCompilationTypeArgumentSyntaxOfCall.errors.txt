@@ -7,18 +7,25 @@ a.jsx(2,5): error TS2693: 'number' only refers to a type, but is being used as a
 a.jsx(3,1): error TS2304: Cannot find name 'Foo'.
 a.jsx(3,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
 a.jsx(3,5): error TS2693: 'number' only refers to a type, but is being used as a value here.
+a.jsx(4,1): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 a.jsx(4,1): error TS2657: JSX expressions must have one parent element.
+a.jsx(4,2): error TS2304: Cannot find name 'Foo'.
 a.jsx(4,5): error TS1003: Identifier expected.
+a.jsx(4,5): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 a.jsx(4,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+a.jsx(4,16): error TS2304: Cannot find name 'Foo'.
 a.jsx(4,16): error TS17002: Expected corresponding JSX closing tag for 'number'.
+a.jsx(5,1): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 a.jsx(5,1): error TS2657: JSX expressions must have one parent element.
+a.jsx(5,2): error TS2304: Cannot find name 'Foo'.
 a.jsx(5,5): error TS1003: Identifier expected.
+a.jsx(5,5): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 a.jsx(5,6): error TS17008: JSX element 'number' has no corresponding closing tag.
 a.jsx(5,14): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 a.jsx(6,1): error TS1005: '</' expected.
 
 
-==== a.jsx (18 errors) ====
+==== a.jsx (25 errors) ====
     Foo<number>();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
@@ -41,18 +48,32 @@ a.jsx(6,1): error TS1005: '</' expected.
         ~~~~~~
 !!! error TS2693: 'number' only refers to a type, but is being used as a value here.
     <Foo<number>></Foo>;
+    ~~~~
+!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
     ~~~~~~~~~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
+     ~~~
+!!! error TS2304: Cannot find name 'Foo'.
         ~
 !!! error TS1003: Identifier expected.
+        ~~~~~~~~
+!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
                 ~
 !!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
                    ~~~
+!!! error TS2304: Cannot find name 'Foo'.
+                   ~~~
 !!! error TS17002: Expected corresponding JSX closing tag for 'number'.
     <Foo<number>/>;
+    ~~~~
+!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
     ~~~~~~~~~~~~~~~
+     ~~~
+!!! error TS2304: Cannot find name 'Foo'.
         ~
 !!! error TS1003: Identifier expected.
+        ~~~~~~~~
+!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
          ~~~~~~
 !!! error TS17008: JSX element 'number' has no corresponding closing tag.
                  ~

@@ -34,44 +34,44 @@ export declare function Foo(props: Props): JSX.Element;
 >JSX : any
 
 export const Test = () => {
->Test : () => any
->() => {  return (    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  );} : () => any
+>Test : () => Element
+>() => {  return (    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  );} : () => Element
 
   return (
->(    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  ) : any
+>(    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  ) : Element
 
     <>
-><>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </> : any
+><>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </> : Element
 
       <Foo>{(value) => {}}</Foo>
-><Foo>{(value) => {}}</Foo> : any
+><Foo>{(value) => {}}</Foo> : Element
 >Foo : (props: Props) => Element
 >(value) => {} : (value: any) => void
 >value : any
 >Foo : (props: Props) => Element
 
       <Foo renderNumber>{(value) => {}}</Foo>
-><Foo renderNumber>{(value) => {}}</Foo> : any
+><Foo renderNumber>{(value) => {}}</Foo> : Element
 >Foo : (props: Props) => Element
->renderNumber : any
->(value) => {} : (value: any) => void
->value : any
+>renderNumber : true
+>(value) => {} : (value: number) => void
+>value : number
 >Foo : (props: Props) => Element
 
       <Foo children={(value) => {}} />
-><Foo children={(value) => {}} /> : any
+><Foo children={(value) => {}} /> : Element
 >Foo : (props: Props) => Element
->children : any
->(value) => {} : (value: any) => void
->value : any
+>children : (value: string) => void
+>(value) => {} : (value: string) => void
+>value : string
 
       <Foo renderNumber children={(value) => {}} />
-><Foo renderNumber children={(value) => {}} /> : any
+><Foo renderNumber children={(value) => {}} /> : Element
 >Foo : (props: Props) => Element
->renderNumber : any
->children : any
->(value) => {} : (value: any) => void
->value : any
+>renderNumber : true
+>children : (value: number) => void
+>(value) => {} : (value: number) => void
+>value : number
 
     </>
   );

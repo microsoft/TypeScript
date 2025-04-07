@@ -1,0 +1,38 @@
+--- old.genericInferenceDefaultTypeParameterJsxReact.types
++++ new.genericInferenceDefaultTypeParameterJsxReact.types
+@@= skipped -12, +12 lines =@@
+ 
+ type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { children?: ReactNode };
+ >ButtonBaseProps : ButtonBaseProps<T>
+->children : React.ReactNode
++>children : ReactNode
+ 
+ function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
+->Component : <T extends ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
++>Component : <T extends ElementType>(props: ButtonBaseProps<T>) => Element
+ >props : ButtonBaseProps<T>
+ 
+     return <></>;
+-><></> : JSX.Element
++><></> : Element
+ }
+ 
+ const v1 = <Component onClick={e => e.preventDefault()} />;
+->v1 : JSX.Element
+-><Component onClick={e => e.preventDefault()} /> : JSX.Element
+->Component : <T extends ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
+->onClick : (e: React.MouseEvent<HTMLSpanElement>) => void
+->e => e.preventDefault() : (e: React.MouseEvent<HTMLSpanElement>) => void
+->e : React.MouseEvent<HTMLSpanElement>
++>v1 : Element
++><Component onClick={e => e.preventDefault()} /> : Element
++>Component : <T extends ElementType>(props: ButtonBaseProps<T>) => Element
++>onClick : (e: MouseEvent<HTMLSpanElement>) => void
++>e => e.preventDefault() : (e: MouseEvent<HTMLSpanElement>) => void
++>e : MouseEvent<HTMLSpanElement>
+ >e.preventDefault() : void
+ >e.preventDefault : () => void
+->e : React.MouseEvent<HTMLSpanElement>
++>e : MouseEvent<HTMLSpanElement>
+ >preventDefault : () => void
+ 

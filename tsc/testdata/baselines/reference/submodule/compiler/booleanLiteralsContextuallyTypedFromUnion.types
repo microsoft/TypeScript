@@ -70,31 +70,31 @@ type ComponentProps =
     };
 
 let Funk = (_props: ComponentProps) => <div>Hello</div>;
->Funk : (_props: ComponentProps) => any
->(_props: ComponentProps) => <div>Hello</div> : (_props: ComponentProps) => any
+>Funk : (_props: ComponentProps) => Element
+>(_props: ComponentProps) => <div>Hello</div> : (_props: ComponentProps) => Element
 >_props : ComponentProps
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
 
 let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
->Fail1 : () => any
->() => <Funk mandatoryFn={() => { }} optionalBool={true} /> : () => any
-><Funk mandatoryFn={() => { }} optionalBool={true} /> : any
->Funk : (_props: ComponentProps) => any
->mandatoryFn : any
+>Fail1 : () => Element
+>() => <Funk mandatoryFn={() => { }} optionalBool={true} /> : () => Element
+><Funk mandatoryFn={() => { }} optionalBool={true} /> : Element
+>Funk : (_props: ComponentProps) => Element
+>mandatoryFn : () => void
 >() => { } : () => void
->optionalBool : any
+>optionalBool : true
 >true : true
 
 let Fail2 = () => <Funk mandatoryFn={() => { }} optionalBool={true as true} />
->Fail2 : () => any
->() => <Funk mandatoryFn={() => { }} optionalBool={true as true} /> : () => any
-><Funk mandatoryFn={() => { }} optionalBool={true as true} /> : any
->Funk : (_props: ComponentProps) => any
->mandatoryFn : any
+>Fail2 : () => Element
+>() => <Funk mandatoryFn={() => { }} optionalBool={true as true} /> : () => Element
+><Funk mandatoryFn={() => { }} optionalBool={true as true} /> : Element
+>Funk : (_props: ComponentProps) => Element
+>mandatoryFn : () => void
 >() => { } : () => void
->optionalBool : any
+>optionalBool : true
 >true as true : true
 >true : true
 >true : true
@@ -106,13 +106,13 @@ let True = true as true;
 >true : true
 
 let Fail3 = () => <Funk mandatoryFn={() => { }} optionalBool={True} />
->Fail3 : () => any
->() => <Funk mandatoryFn={() => { }} optionalBool={True} /> : () => any
-><Funk mandatoryFn={() => { }} optionalBool={True} /> : any
->Funk : (_props: ComponentProps) => any
->mandatoryFn : any
+>Fail3 : () => Element
+>() => <Funk mandatoryFn={() => { }} optionalBool={True} /> : () => Element
+><Funk mandatoryFn={() => { }} optionalBool={True} /> : Element
+>Funk : (_props: ComponentProps) => Element
+>mandatoryFn : () => void
 >() => { } : () => void
->optionalBool : any
+>optionalBool : true
 >True : true
 
 let attrs2 = { optionalBool: true as true, mandatoryFn: () => { } }
@@ -126,9 +126,9 @@ let attrs2 = { optionalBool: true as true, mandatoryFn: () => { } }
 >() => { } : () => void
 
 let Success = () => <Funk {...attrs2} />
->Success : () => any
->() => <Funk {...attrs2} /> : () => any
-><Funk {...attrs2} /> : any
->Funk : (_props: ComponentProps) => any
+>Success : () => Element
+>() => <Funk {...attrs2} /> : () => Element
+><Funk {...attrs2} /> : Element
+>Funk : (_props: ComponentProps) => Element
 >attrs2 : { optionalBool: true; mandatoryFn: () => void; }
 

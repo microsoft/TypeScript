@@ -19,10 +19,10 @@ class Opt extends React.Component<OptionProp, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
     }
@@ -43,33 +43,33 @@ const obj1: OptionProp = {
 
 // OK
 let p = <Opt />;
->p : any
-><Opt /> : any
+>p : Element
+><Opt /> : Element
 >Opt : typeof Opt
 
 let y = <Opt {...obj} />;
->y : any
-><Opt {...obj} /> : any
+>y : Element
+><Opt {...obj} /> : Element
 >Opt : typeof Opt
 >obj : OptionProp
 
 let y1 = <Opt {...obj1} />;
->y1 : any
-><Opt {...obj1} /> : any
+>y1 : Element
+><Opt {...obj1} /> : Element
 >Opt : typeof Opt
 >obj1 : OptionProp
 
 let y2 = <Opt {...obj1} y/>;
->y2 : any
-><Opt {...obj1} y/> : any
+>y2 : Element
+><Opt {...obj1} y/> : Element
 >Opt : typeof Opt
 >obj1 : OptionProp
->y : any
+>y : true
 
 let y3 = <Opt x={2} />;
->y3 : any
-><Opt x={2} /> : any
+>y3 : Element
+><Opt x={2} /> : Element
 >Opt : typeof Opt
->x : any
+>x : 2
 >2 : 2
 

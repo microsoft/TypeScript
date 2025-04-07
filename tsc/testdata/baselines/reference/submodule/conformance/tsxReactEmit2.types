@@ -17,24 +17,24 @@ var p1: any, p2: any, p3: any;
 >p3 : any
 
 var spreads1 = <div {...p1}>{p2}</div>;
->spreads1 : any
-><div {...p1}>{p2}</div> : any
+>spreads1 : Element
+><div {...p1}>{p2}</div> : Element
 >div : any
 >p1 : any
 >p2 : any
 >div : any
 
 var spreads2 = <div {...p1}>{p2}</div>;
->spreads2 : any
-><div {...p1}>{p2}</div> : any
+>spreads2 : Element
+><div {...p1}>{p2}</div> : Element
 >div : any
 >p1 : any
 >p2 : any
 >div : any
 
 var spreads3 = <div x={p3} {...p1}>{p2}</div>;
->spreads3 : any
-><div x={p3} {...p1}>{p2}</div> : any
+>spreads3 : Element
+><div x={p3} {...p1}>{p2}</div> : Element
 >div : any
 >x : any
 >p3 : any
@@ -43,8 +43,8 @@ var spreads3 = <div x={p3} {...p1}>{p2}</div>;
 >div : any
 
 var spreads4 = <div {...p1} x={p3} >{p2}</div>;
->spreads4 : any
-><div {...p1} x={p3} >{p2}</div> : any
+>spreads4 : Element
+><div {...p1} x={p3} >{p2}</div> : Element
 >div : any
 >p1 : any
 >x : any
@@ -53,8 +53,8 @@ var spreads4 = <div {...p1} x={p3} >{p2}</div>;
 >div : any
 
 var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
->spreads5 : any
-><div x={p2} {...p1} y={p3}>{p2}</div> : any
+>spreads5 : Element
+><div x={p2} {...p1} y={p3}>{p2}</div> : Element
 >div : any
 >x : any
 >p2 : any

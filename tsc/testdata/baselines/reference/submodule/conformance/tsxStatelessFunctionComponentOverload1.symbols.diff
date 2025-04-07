@@ -45,7 +45,23 @@
  
  // OK
  const c1 = <OneThing yxx='ok' />
-@@= skipped -38, +38 lines =@@
+@@= skipped -18, +18 lines =@@
+ >c3 : Symbol(c3, Decl(file.tsx, 11, 5))
+ >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 76), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
+ >yxx : Symbol(yxx, Decl(file.tsx, 11, 20))
+->ignore-prop : Symbol(ignore-prop, Decl(file.tsx, 11, 32))
++>ignore-prop : Symbol("ignore-prop", Decl(file.tsx, 11, 32))
+ 
+ const c4 = <OneThing data="hello" data-prop />
+ >c4 : Symbol(c4, Decl(file.tsx, 12, 5))
+ >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 76), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
+ >data : Symbol(data, Decl(file.tsx, 12, 20))
+->data-prop : Symbol(data-prop, Decl(file.tsx, 12, 33))
++>data-prop : Symbol("data-prop", Decl(file.tsx, 12, 33))
+ 
+ const c5 = <OneThing yxx1='ok'>Hello</OneThing>
+ >c5 : Symbol(c5, Decl(file.tsx, 13, 5))
+@@= skipped -20, +20 lines =@@
  >y1 : Symbol(y1)
  >string : Symbol(string, Decl(file.tsx, 16, 34))
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
@@ -81,6 +97,41 @@
  
  // OK
  const d1 = <TestingOneThing y1 extra-data />;
+ >d1 : Symbol(d1, Decl(file.tsx, 22, 5))
+ >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 13, 47), Decl(file.tsx, 16, 60), Decl(file.tsx, 17, 86), Decl(file.tsx, 18, 83))
+ >y1 : Symbol(y1, Decl(file.tsx, 22, 27))
+->extra-data : Symbol(extra-data, Decl(file.tsx, 22, 30))
++>extra-data : Symbol("extra-data", Decl(file.tsx, 22, 30))
+ 
+ const d2 = <TestingOneThing extra-data="hello" />;
+ >d2 : Symbol(d2, Decl(file.tsx, 23, 5))
+ >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 13, 47), Decl(file.tsx, 16, 60), Decl(file.tsx, 17, 86), Decl(file.tsx, 18, 83))
+->extra-data : Symbol(extra-data, Decl(file.tsx, 23, 27))
++>extra-data : Symbol("extra-data", Decl(file.tsx, 23, 27))
+ 
+ const d3 = <TestingOneThing extra-data="hello" yy="hihi" />;
+ >d3 : Symbol(d3, Decl(file.tsx, 24, 5))
+ >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 13, 47), Decl(file.tsx, 16, 60), Decl(file.tsx, 17, 86), Decl(file.tsx, 18, 83))
+->extra-data : Symbol(extra-data, Decl(file.tsx, 24, 27))
++>extra-data : Symbol("extra-data", Decl(file.tsx, 24, 27))
+ >yy : Symbol(yy, Decl(file.tsx, 24, 46))
+ 
+ const d4 = <TestingOneThing extra-data="hello" yy={9} direction={10} />;
+ >d4 : Symbol(d4, Decl(file.tsx, 25, 5))
+ >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 13, 47), Decl(file.tsx, 16, 60), Decl(file.tsx, 17, 86), Decl(file.tsx, 18, 83))
+->extra-data : Symbol(extra-data, Decl(file.tsx, 25, 27))
++>extra-data : Symbol("extra-data", Decl(file.tsx, 25, 27))
+ >yy : Symbol(yy, Decl(file.tsx, 25, 46))
+ >direction : Symbol(direction, Decl(file.tsx, 25, 53))
+ 
+ const d5 = <TestingOneThing extra-data="hello" yy="hello" name="Bob" />;
+ >d5 : Symbol(d5, Decl(file.tsx, 26, 5))
+ >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 13, 47), Decl(file.tsx, 16, 60), Decl(file.tsx, 17, 86), Decl(file.tsx, 18, 83))
+->extra-data : Symbol(extra-data, Decl(file.tsx, 26, 27))
++>extra-data : Symbol("extra-data", Decl(file.tsx, 26, 27))
+ >yy : Symbol(yy, Decl(file.tsx, 26, 46))
+ >name : Symbol(name, Decl(file.tsx, 26, 57))
+ 
 @@= skipped -41, +41 lines =@@
  >y1 : Symbol(y1, Decl(file.tsx, 29, 37))
  >y2 : Symbol(y2, Decl(file.tsx, 29, 49))
@@ -99,3 +150,12 @@
  
  // OK
  const e1 = <TestingOptional />
+@@= skipped -36, +36 lines =@@
+ >TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 26, 72), Decl(file.tsx, 29, 77))
+ >y1 : Symbol(y1, Decl(file.tsx, 38, 27))
+ >y3 : Symbol(y3, Decl(file.tsx, 38, 30))
+->extra-prop : Symbol(extra-prop, Decl(file.tsx, 38, 33))
++>extra-prop : Symbol("extra-prop", Decl(file.tsx, 38, 33))
+ 
+ 
+ 

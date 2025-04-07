@@ -6,16 +6,16 @@
  export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (
 ->ExampleFunctionalComponent : ({ "data-testid": dataTestId, [dynPropName]: dynProp }: { "data-dyn": any; "data-testid": any; }) => JSX.Element
 ->({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (    <>Hello</>) : ({ "data-testid": dataTestId, [dynPropName]: dynProp }: { "data-dyn": any; "data-testid": any; }) => JSX.Element
-+>ExampleFunctionalComponent : (__0: { data-dyn: any; data-testid: any; }) => any
-+>({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (    <>Hello</>) : (__0: { data-dyn: any; data-testid: any; }) => any
++>ExampleFunctionalComponent : (__0: { data-dyn: any; data-testid: any; }) => Element
++>({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (    <>Hello</>) : (__0: { data-dyn: any; data-testid: any; }) => Element
  >dataTestId : any
  >dynPropName : "data-dyn"
  >dynProp : any
 ->(    <>Hello</>) : JSX.Element
-+>(    <>Hello</>) : any
++>(    <>Hello</>) : Element
  
      <>Hello</>
 -><>Hello</> : JSX.Element
-+><>Hello</> : any
++><>Hello</> : Element
  
  );

@@ -1,0 +1,20 @@
+--- old.tsxElementResolution10.types
++++ new.tsxElementResolution10.types
+@@= skipped -18, +18 lines =@@
+ >Obj1 : Obj1type
+ 
+ <Obj1 x={10} />; // Error, no render member
+-><Obj1 x={10} /> : JSX.Element
++><Obj1 x={10} /> : Element
+ >Obj1 : Obj1type
+ >x : number
+ >10 : 10
+@@= skipped -15, +15 lines =@@
+ >Obj2 : Obj2type
+ 
+ <Obj2 x={32} render={100} />; // OK
+-><Obj2 x={32} render={100} /> : JSX.Element
++><Obj2 x={32} render={100} /> : Element
+ >Obj2 : Obj2type
+ >x : number
+ >32 : 32

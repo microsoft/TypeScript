@@ -15,7 +15,9 @@
  <h></h>
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
--
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+ 
  === other.tsx ===
  /** @jsx h */
  import { dom as h } from "./renderer"
@@ -27,34 +29,41 @@
  >prerendered : Symbol(prerendered, Decl(other.tsx, 2, 12))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  
  === othernoalias.tsx ===
  /** @jsx otherdom */
-@@= skipped -21, +16 lines =@@
+@@= skipped -21, +21 lines =@@
  
  export const prerendered2 = <h></h>;
  >prerendered2 : Symbol(prerendered2, Decl(othernoalias.tsx, 2, 12))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  
  === reacty.tsx ===
  import React from "./renderer"
-@@= skipped -9, +7 lines =@@
+@@= skipped -9, +9 lines =@@
  
  export const prerendered3 = <h></h>;
  >prerendered3 : Symbol(prerendered3, Decl(reacty.tsx, 1, 12))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  
  === index.tsx ===
  /** @jsx dom */
-@@= skipped -9, +7 lines =@@
+@@= skipped -9, +9 lines =@@
  >dom : Symbol(dom, Decl(index.tsx, 1, 8))
  
  <h></h>
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
--
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+ 
  export * from "./other";
  export * from "./othernoalias";
- export * from "./reacty";

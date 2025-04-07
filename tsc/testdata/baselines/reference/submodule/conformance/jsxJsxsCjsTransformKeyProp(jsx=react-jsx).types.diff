@@ -1,0 +1,23 @@
+--- old.jsxJsxsCjsTransformKeyProp(jsx=react-jsx).types
++++ new.jsxJsxsCjsTransformKeyProp(jsx=react-jsx).types
+@@= skipped -8, +8 lines =@@
+ >42 : 42
+ 
+ const a = <div key="foo" {...props}>text</div>;
+->a : JSX.Element
+-><div key="foo" {...props}>text</div> : JSX.Element
++>a : Element
++><div key="foo" {...props}>text</div> : Element
+ >div : any
+ >key : string
+ >props : { answer: number; }
+ >div : any
+ 
+ const b = <div {...props} key="bar">text</div>;
+->b : JSX.Element
+-><div {...props} key="bar">text</div> : JSX.Element
++>b : Element
++><div {...props} key="bar">text</div> : Element
+ >div : any
+ >props : { answer: number; }
+ >key : string

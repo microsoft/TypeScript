@@ -15,4 +15,12 @@ declare module JSX {
 
 var x = <div><div><span><div></div></span></div></div>;
 >x : Symbol(x, Decl(file.tsx, 5, 3))
+>div : Symbol(div, Decl(file.tsx, 2, 30))
+>div : Symbol(div, Decl(file.tsx, 2, 30))
+>span : Symbol(span, Decl(file.tsx, 2, 35))
+>div : Symbol(div, Decl(file.tsx, 2, 30))
+>div : Symbol(div, Decl(file.tsx, 2, 30))
+>span : Symbol(span, Decl(file.tsx, 2, 35))
+>div : Symbol(div, Decl(file.tsx, 2, 30))
+>div : Symbol(div, Decl(file.tsx, 2, 30))
 

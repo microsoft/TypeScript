@@ -1,11 +1,11 @@
 --- old.jsxChildrenIndividualErrorElaborations.js
 +++ new.jsxChildrenIndividualErrorElaborations.js
-@@= skipped -83, +83 lines =@@
- exports.Blah = Blah;
+@@= skipped -84, +84 lines =@@
  exports.Blah2 = Blah2;
  exports.Blah3 = Blah3;
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var React = require("react");
++const React = require("react");
  function Blah(props) {
 -    return React.createElement(React.Fragment, null);
 +    return <></>;

@@ -9,7 +9,7 @@ const a = <svg:path a:b={1}></svg:path>;
 ><svg:path a:b={1}></svg:path> : any
 >svg : any
 >path : any
->a:b : any
+>a:b : number
 >a : any
 >b : any
 >1 : 1
@@ -21,7 +21,7 @@ const b = <svg : path a:b={1}></svg : path>;
 ><svg : path a:b={1}></svg : path> : any
 >svg : any
 >path : any
->a:b : any
+>a:b : number
 >a : any
 >b : any
 >1 : 1

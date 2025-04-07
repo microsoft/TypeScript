@@ -18,7 +18,16 @@
  
  // Error
  function Bar<T extends {prop: number}>(arg: T) {
-@@= skipped -38, +38 lines =@@
+@@= skipped -14, +14 lines =@@
+ >a1 : Symbol(a1, Decl(file.tsx, 7, 7))
+ >ComponentSpecific1 : Symbol(ComponentSpecific1, Decl(file.tsx, 0, 31))
+ >arg : Symbol(arg, Decl(file.tsx, 6, 39))
+->ignore-prop : Symbol(ignore-prop, Decl(file.tsx, 7, 41))
++>ignore-prop : Symbol("ignore-prop", Decl(file.tsx, 7, 41))
+  }
+ 
+ // Error
+@@= skipped -24, +24 lines =@@
  >arg : Symbol(arg, Decl(file.tsx, 15, 36))
  >U : Symbol(U, Decl(file.tsx, 15, 22))
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))

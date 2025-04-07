@@ -15,31 +15,39 @@
  <><span></span></>
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
++>span : Symbol((Missing), Decl(react.d.ts, 2, 37))
++>span : Symbol((Missing), Decl(react.d.ts, 2, 37))
  
  === preacty.tsx ===
  /**
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +13 lines =@@
  >Frag : Symbol(Frag, Decl(preacty.tsx, 4, 10))
  
  <><div></div></>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
++>div : Symbol((Missing), Decl(react.d.ts, 2, 37))
++>div : Symbol((Missing), Decl(react.d.ts, 2, 37))
  
  === snabbdomy.tsx ===
  /**
-@@= skipped -12, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  >h : Symbol(h, Decl(snabbdomy.tsx, 4, 8))
  
  <><div></div></>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
++>div : Symbol((Missing), Decl(react.d.ts, 2, 37))
++>div : Symbol((Missing), Decl(react.d.ts, 2, 37))
  
  === mix-n-match.tsx ===
  /* @jsx h */
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +13 lines =@@
  >Fragment : Symbol(Fragment, Decl(mix-n-match.tsx, 3, 8))
  
  <><span></span></>
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
--
++>span : Symbol((Missing), Decl(react.d.ts, 2, 37))
++>span : Symbol((Missing), Decl(react.d.ts, 2, 37))
+ 

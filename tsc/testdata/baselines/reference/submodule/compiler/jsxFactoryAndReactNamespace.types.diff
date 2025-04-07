@@ -1,0 +1,11 @@
+--- old.jsxFactoryAndReactNamespace.types
++++ new.jsxFactoryAndReactNamespace.types
+@@= skipped -34, +34 lines =@@
+ >Element : typeof Element
+ 
+     export function isElement(el: any): el is JSX.Element {
+->isElement : (el: any) => el is JSX.Element
++>isElement : (el: any) => el is Element
+ >el : any
+ >JSX : any
+ 

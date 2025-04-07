@@ -1,0 +1,13 @@
+a.tsx(5,12): error TS2639: React components cannot include JSX namespace names
+
+
+==== a.tsx (1 errors) ====
+    declare var React: any;
+    
+    const a = <svg:path></svg:path>;
+    const b = <svg : path></svg : path>;
+    const c = <A:foo></A:foo>;
+               ~~~~~
+!!! error TS2639: React components cannot include JSX namespace names
+    const d = <a:foo></a:foo>;
+    

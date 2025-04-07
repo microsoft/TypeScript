@@ -41,6 +41,7 @@ function make1<T extends {x: string}> (obj: T) {
 >T : Symbol(T, Decl(file.tsx, 15, 15))
 
 	return <test1 {...obj} />; // OK
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >obj : Symbol(obj, Decl(file.tsx, 15, 39))
 }
 
@@ -52,6 +53,7 @@ function make2<T extends {x: number}> (obj: T) {
 >T : Symbol(T, Decl(file.tsx, 19, 15))
 
 	return <test1 {...obj} />; // Error (x is number, not string)
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >obj : Symbol(obj, Decl(file.tsx, 19, 39))
 }
 
@@ -63,10 +65,14 @@ function make3<T extends {y: string}> (obj: T) {
 >T : Symbol(T, Decl(file.tsx, 23, 15))
 
 	return <test1 {...obj} />; // Error, missing x
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >obj : Symbol(obj, Decl(file.tsx, 23, 39))
 }
 
 
 <test1 {...{}} />; // Error, missing x
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
+
 <test2 {...{}} />; // Error, missing toString
+>test2 : Symbol(test2, Decl(file.tsx, 3, 18))
 

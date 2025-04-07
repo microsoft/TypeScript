@@ -12,13 +12,13 @@ let buttonProps;
 >buttonProps : any
 
 let k = <button {...buttonProps}>
->k : any
-><button {...buttonProps}>            <span className={cx('class1', { class2: true })} />        </button> : any
+>k : Element
+><button {...buttonProps}>            <span className={cx('class1', { class2: true })} />        </button> : Element
 >button : any
 >buttonProps : undefined
 
             <span className={cx('class1', { class2: true })} />
-><span className={cx('class1', { class2: true })} /> : any
+><span className={cx('class1', { class2: true })} /> : Element
 >span : any
 >className : any
 >cx('class1', { class2: true }) : any

@@ -34,6 +34,8 @@ import {h, Fragment} from "./renderer";
 >Fragment : Symbol(Fragment, Decl(preacty.tsx, 4, 10))
 
 <><div></div></>
+>div : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+>div : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 
 === snabbdomy.tsx ===
 /* @jsx jsx */
@@ -42,6 +44,8 @@ import {jsx} from "./renderer";
 >jsx : Symbol(jsx, Decl(snabbdomy.tsx, 2, 8))
 
 <><span></span></>
+>span : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+>span : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 
 === preacty-only-fragment.tsx ===
 /**
@@ -89,6 +93,8 @@ import {h, Fragment} from "./renderer";
 >Fragment : Symbol(Fragment, Decl(preacty-no-fragment.tsx, 4, 10))
 
 <div></div>
+>div : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+>div : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 
 === snabbdomy-no-fragment.tsx ===
 /* @jsx jsx */
@@ -97,6 +103,8 @@ import {jsx} from "./renderer";
 >jsx : Symbol(jsx, Decl(snabbdomy-no-fragment.tsx, 2, 8))
 
 <div></div>
+>div : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+>div : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 
 === preacty-only-component.tsx ===
 /**

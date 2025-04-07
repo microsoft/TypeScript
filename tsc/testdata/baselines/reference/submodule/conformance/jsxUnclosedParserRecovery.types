@@ -113,7 +113,7 @@ var donkey = <div>
     <diddy bananas="please"
 ><diddy bananas="please" : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
 </div>;
 >div : any
@@ -129,7 +129,7 @@ var donkey = <div>
     <diddy<boolean> bananas="please"
 ><diddy<boolean> bananas="please" : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
 </div>;
 >div : any
@@ -160,7 +160,7 @@ var donkey = <div>
     <diddy<boolean> bananas="please"/
 ><diddy<boolean> bananas="please"/ : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
 </div>;
 >div : any
@@ -192,7 +192,7 @@ var donkey = <div>
     <diddy<boolean> bananas="please">
 ><diddy<boolean> bananas="please"> : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
 </div>;
 > : any
@@ -261,7 +261,7 @@ var donkey = <div>
     <diddy bananas="please"
 ><diddy bananas="please" : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
     <diddy/>
 ><diddy/> : any
@@ -281,7 +281,7 @@ var donkey = <div>
     <diddy<boolean> bananas="please"
 ><diddy<boolean> bananas="please" : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
     <diddy/>
 ><diddy/> : any
@@ -320,7 +320,7 @@ var donkey = <div>
     <diddy<boolean> bananas="please"/
 ><diddy<boolean> bananas="please"/ : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
     <diddy/>
 ><diddy/> : any
@@ -360,7 +360,7 @@ var donkey = <div>
     <diddy<boolean> bananas="please">
 ><diddy<boolean> bananas="please"> : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
     <diddy/>
 ><diddy/> : any
@@ -383,8 +383,8 @@ var donkey = <div>
 
     Cranky Wrinkly Funky
 >Cranky : any
->Wrinkly : any
->Funky : any
+>Wrinkly : true
+>Funky : true
 
 </div>;
 >div : any
@@ -402,9 +402,9 @@ var donkey = <div>
 >diddy : () => any
 
     Cranky Wrinkly Funky
->Cranky : any
->Wrinkly : any
->Funky : any
+>Cranky : true
+>Wrinkly : true
+>Funky : true
 
 </div>;
 >div : any
@@ -422,9 +422,9 @@ var donkey = <div>
 >diddy : () => any
 
     Cranky Wrinkly Funky
->Cranky : any
->Wrinkly : any
->Funky : any
+>Cranky : true
+>Wrinkly : true
+>Funky : true
 
 </div>;
 >div : any
@@ -440,12 +440,12 @@ var donkey = <div>
     <diddy bananas="please"
 ><diddy bananas="please"    Cranky Wrinkly Funky : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
     Cranky Wrinkly Funky
->Cranky : any
->Wrinkly : any
->Funky : any
+>Cranky : true
+>Wrinkly : true
+>Funky : true
 
 </div>;
 >div : any
@@ -461,12 +461,12 @@ var donkey = <div>
     <diddy<boolean> bananas="please"
 ><diddy<boolean> bananas="please"    Cranky Wrinkly Funky : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
     Cranky Wrinkly Funky
->Cranky : any
->Wrinkly : any
->Funky : any
+>Cranky : true
+>Wrinkly : true
+>Funky : true
 
 </div>;
 >div : any
@@ -498,7 +498,7 @@ var donkey = <div>
     <diddy<boolean> bananas="please"/
 ><diddy<boolean> bananas="please"/ : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
     Cranky Wrinkly Funky
 </div>;
@@ -533,7 +533,7 @@ var donkey = <div>
     <diddy<boolean> bananas="please">
 ><diddy<boolean> bananas="please"> : any
 >diddy : () => any
->bananas : any
+>bananas : string
 
     Cranky Wrinkly Funky
 > : any

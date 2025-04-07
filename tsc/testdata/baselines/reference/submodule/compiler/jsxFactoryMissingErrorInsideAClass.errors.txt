@@ -1,0 +1,12 @@
+test.tsx(3,17): error TS2874: This JSX tag requires 'factory' to be in scope, but it could not be found.
+
+
+==== test.tsx (1 errors) ====
+    export class C {
+        factory() {
+            return <div></div>;
+                    ~~~
+!!! error TS2874: This JSX tag requires 'factory' to be in scope, but it could not be found.
+        }
+    }
+    

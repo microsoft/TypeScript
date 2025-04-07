@@ -1,0 +1,33 @@
+--- old.jsxImportInAttribute.types
++++ new.jsxImportInAttribute.types
+@@= skipped -2, +2 lines =@@
+ === consumer.tsx ===
+ /// <reference path="component.d.ts" />
+ import Test from 'Test';
+->Test : typeof Test
++>Test : typeof default
+ 
+ let x = Test; // emit test_1.default
+->x : typeof Test
+->Test : typeof Test
++>x : typeof default
++>Test : typeof default
+ 
+ <anything attr={Test} />; // ?
+-><anything attr={Test} /> : error
++><anything attr={Test} /> : any
+ >anything : any
+->attr : typeof Test
+->Test : typeof Test
++>attr : typeof default
++>Test : typeof default
+ 
+ === component.d.ts ===
+ declare module "Test" {
+ >"Test" : typeof import("Test")
+ 
+ 	export default class Text { }
+->Text : Text
++>Text : default
+ }
+ 

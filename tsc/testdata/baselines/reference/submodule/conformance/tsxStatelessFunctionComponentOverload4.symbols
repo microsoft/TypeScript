@@ -95,7 +95,7 @@ declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Eleme
 const d1 = <TestingOneThing extra-data />
 >d1 : Symbol(d1, Decl(file.tsx, 24, 5))
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
->extra-data : Symbol(extra-data, Decl(file.tsx, 24, 27))
+>extra-data : Symbol("extra-data", Decl(file.tsx, 24, 27))
 
 const d2 = <TestingOneThing yy="hello" direction="left" />
 >d2 : Symbol(d2, Decl(file.tsx, 25, 5))

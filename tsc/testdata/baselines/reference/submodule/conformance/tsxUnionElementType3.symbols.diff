@@ -69,3 +69,19 @@
  
          return null;
      }
+@@= skipped -39, +39 lines =@@
+ let a2 = <EmptyRCComp data-prop="hello" />;
+ >a2 : Symbol(a2, Decl(file.tsx, 33, 3))
+ >EmptyRCComp : Symbol(EmptyRCComp, Decl(file.tsx, 27, 3))
+->data-prop : Symbol(data-prop, Decl(file.tsx, 33, 21))
++>data-prop : Symbol("data-prop", Decl(file.tsx, 33, 21))
+ 
+ let b = <PartRCComp />
+ >b : Symbol(b, Decl(file.tsx, 34, 3))
+@@= skipped -9, +9 lines =@@
+ let c = <PartRCComp data-extra="hello" />
+ >c : Symbol(c, Decl(file.tsx, 35, 3))
+ >PartRCComp : Symbol(PartRCComp, Decl(file.tsx, 28, 3))
+->data-extra : Symbol(data-extra, Decl(file.tsx, 35, 19))
++>data-extra : Symbol("data-extra", Decl(file.tsx, 35, 19))
+ 

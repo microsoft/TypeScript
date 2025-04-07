@@ -26,6 +26,8 @@ function UnwrappedLink<T extends ElementType = ElementType>(
 
 ) {
   return <a></a>;
+>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
+>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
 }
 
 <UnwrappedLink onClick={(e) => {}} />;
@@ -54,6 +56,8 @@ function UnwrappedLink2<T extends ElementType = ElementType>(
   },
 ) {
   return <a></a>;
+>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
+>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
 }
 
 <UnwrappedLink2 onClick={(e) => {}} />;

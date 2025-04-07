@@ -29,20 +29,20 @@ export class MyComponent {
 
 // Should be an error
 <MyComponent bar='world' />;
-><MyComponent bar='world' /> : any
+><MyComponent bar='world' /> : Element
 >MyComponent : typeof MyComponent
->bar : any
+>bar : string
 
 // Should be OK
 <MyComponent bar={true} />;
-><MyComponent bar={true} /> : any
+><MyComponent bar={true} /> : Element
 >MyComponent : typeof MyComponent
->bar : any
+>bar : true
 >true : true
 
 // Should be ok
 <MyComponent data-bar='hello' />;
-><MyComponent data-bar='hello' /> : any
+><MyComponent data-bar='hello' /> : Element
 >MyComponent : typeof MyComponent
->data-bar : any
+>data-bar : string
 

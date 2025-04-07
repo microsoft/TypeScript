@@ -27,9 +27,15 @@ import * as React from "./renderer";
 >React : Symbol(React, Decl(reacty.tsx, 1, 6))
 
 <><h></h></>
+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+
 === index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer";
 >dom : Symbol(dom, Decl(index.tsx, 1, 8))
 
 <><h></h></>
+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+

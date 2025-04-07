@@ -19,10 +19,10 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
     }
@@ -34,51 +34,51 @@ const obj = {};
 
 // OK
 <Poisoned {...{x: "ok", y: "2"}} />;
-><Poisoned {...{x: "ok", y: "2"}} /> : any
+><Poisoned {...{x: "ok", y: "2"}} /> : Element
 >Poisoned : typeof Poisoned
->{x: "ok", y: "2"} : { x: string; y: string; }
+>{x: "ok", y: "2"} : { x: string; y: "2"; }
 >x : string
 >"ok" : "ok"
->y : string
+>y : "2"
 >"2" : "2"
 
 // Error
 let p = <Poisoned {...obj} />;
->p : any
-><Poisoned {...obj} /> : any
+>p : Element
+><Poisoned {...obj} /> : Element
 >Poisoned : typeof Poisoned
 >obj : {}
 
 let y = <Poisoned />;
->y : any
-><Poisoned /> : any
+>y : Element
+><Poisoned /> : Element
 >Poisoned : typeof Poisoned
 
 let z = <Poisoned x y/>;
->z : any
-><Poisoned x y/> : any
+>z : Element
+><Poisoned x y/> : Element
 >Poisoned : typeof Poisoned
->x : any
->y : any
+>x : true
+>y : true
 
 let w = <Poisoned {...{x: 5, y: "2"}}/>;
->w : any
-><Poisoned {...{x: 5, y: "2"}}/> : any
+>w : Element
+><Poisoned {...{x: 5, y: "2"}}/> : Element
 >Poisoned : typeof Poisoned
->{x: 5, y: "2"} : { x: number; y: string; }
+>{x: 5, y: "2"} : { x: number; y: "2"; }
 >x : number
 >5 : 5
->y : string
+>y : "2"
 >"2" : "2"
 
 let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
->w1 : any
-><Poisoned {...{x: 5, y: "2"}} X="hi" /> : any
+>w1 : Element
+><Poisoned {...{x: 5, y: "2"}} X="hi" /> : Element
 >Poisoned : typeof Poisoned
->{x: 5, y: "2"} : { x: number; y: string; }
+>{x: 5, y: "2"} : { x: number; y: "2"; }
 >x : number
 >5 : 5
->y : string
+>y : "2"
 >"2" : "2"
->X : any
+>X : string
 

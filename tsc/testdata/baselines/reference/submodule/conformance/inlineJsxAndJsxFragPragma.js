@@ -80,14 +80,27 @@ function Component() { return null; }
 //// [preacty.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @jsx h
+ * @jsxFrag Fragment
+ */
+const renderer_1 = require("./renderer");
 <><div></div></>;
 //// [snabbdomy.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* @jsx jsx */
+/* @jsxfrag null */
+const renderer_1 = require("./renderer");
 <><span></span></>;
 //// [preacty-only-fragment.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @jsx h
+ * @jsxFrag Fragment
+ */
+const renderer_1 = require("./renderer");
 <></>;
 //// [snabbdomy-only-fragment.js]
 "use strict";
@@ -96,6 +109,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [preacty-only-fragment-no-jsx.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @jsx h
+ * @jsxFrag Fragment
+ */
+const renderer_1 = require("./renderer");
 <></>;
 //// [snabbdomy-only-fragment-no-jsx.js]
 "use strict";
@@ -104,13 +122,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [preacty-no-fragment.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @jsx h
+ * @jsxFrag Fragment
+ */
+const renderer_1 = require("./renderer");
 <div></div>;
 //// [snabbdomy-no-fragment.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* @jsx jsx */
+/* @jsxfrag null */
+const renderer_1 = require("./renderer");
 <div></div>;
 //// [preacty-only-component.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @jsx h
+ */
+const renderer_1 = require("./renderer");
 function Component() { return null; }
 <Component />;

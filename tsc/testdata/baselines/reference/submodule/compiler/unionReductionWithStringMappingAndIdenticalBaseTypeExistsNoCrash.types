@@ -152,14 +152,14 @@ const displayEnum = (value: string) => upperFirst(value.toLowerCase())
 >toLowerCase : () => string
 
 function Comp() {
->Comp : () => any
+>Comp : () => Element
 
   return <div>
-><div>    <span>Scope:</span> {displayEnum("VALUE")}  </div> : any
+><div>    <span>Scope:</span> {displayEnum("VALUE")}  </div> : Element
 >div : any
 
     <span>Scope:</span> {displayEnum("VALUE")}
-><span>Scope:</span> : any
+><span>Scope:</span> : Element
 >span : any
 >span : any
 >displayEnum("VALUE") : Capitalize<string>

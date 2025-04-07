@@ -23,10 +23,10 @@ var foo: any;
 >foo : any
 
 var spread1 = <div x='' {...foo} y='' />;
->spread1 : any
-><div x='' {...foo} y='' /> : any
+>spread1 : Element
+><div x='' {...foo} y='' /> : Element
 >div : any
->x : any
+>x : string
 >foo : any
->y : any
+>y : string
 

@@ -1,10 +1,9 @@
 --- old.unicodeEscapesInJsxtags.js
 +++ new.unicodeEscapesInJsxtags.js
-@@= skipped -30, +30 lines =@@
- 
+@@= skipped -31, +31 lines =@@
  
  //// [file.js]
--import * as React from "react";
+ import * as React from "react";
 -const Compa = (x) => React.createElement("div", null, "" + x);
 +const Compa = (x) => <div>{"" + x}</div>;
  const x = { video: () => null };
@@ -30,4 +29,3 @@
 +<Comp\u{0061} x={12}/>;
 +<video data-\u0076ideo/>;
 +<video \u0073rc=""/>;
-+export {};

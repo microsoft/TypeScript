@@ -1,0 +1,20 @@
+--- old.tsxAttributeResolution4.types
++++ new.tsxAttributeResolution4.types
+@@= skipped -15, +15 lines =@@
+ 
+ // OK
+ <test1 {... {x: (n) => 0} } />;
+-><test1 {... {x: (n) => 0} } /> : JSX.Element
++><test1 {... {x: (n) => 0} } /> : Element
+ >test1 : any
+ >{x: (n) => 0} : { x: (n: string) => number; }
+ >x : (n: string) => number
+@@= skipped -10, +10 lines =@@
+ 
+ // Error, no member 'len' on 'string'
+ <test1 {... {x: (n) => n.len} } />;
+-><test1 {... {x: (n) => n.len} } /> : JSX.Element
++><test1 {... {x: (n) => n.len} } /> : Element
+ >test1 : any
+ >{x: (n) => n.len} : { x: (n: string) => any; }
+ >x : (n: string) => any

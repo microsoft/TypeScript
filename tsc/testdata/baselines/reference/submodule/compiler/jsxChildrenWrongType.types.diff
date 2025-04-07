@@ -1,0 +1,35 @@
+--- old.jsxChildrenWrongType.types
++++ new.jsxChildrenWrongType.types
+@@= skipped -6, +6 lines =@@
+ 
+ interface PropsType {
+     children: [string, number?] | Iterable<boolean>;
+->children : Iterable<boolean> | [string, number?]
++>children : Iterable<boolean, any, any> | [string, number?]
+ }
+ declare class Foo extends React.Component<PropsType, {}> {}
+ >Foo : Foo
+->React.Component : React.Component<PropsType, {}, any>
++>React.Component : Component<PropsType, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+ const b = (
+->b : JSX.Element
+->(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : JSX.Element
++>b : Element
++>(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : Element
+ 
+     <Foo>
+-><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : JSX.Element
++><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : Element
+ >Foo : typeof Foo
+ 
+         {<div/> as unknown}
+ ><div/> as unknown : unknown
+-><div/> : JSX.Element
++><div/> : Element
+ >div : any
+ 
+         {"aa"}

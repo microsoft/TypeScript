@@ -614,6 +614,8 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createReactSingleSelect = createReactSingleSelect;
+/// <reference path="react16.d.ts" />
+const React = require("react");
 function createReactSingleSelect(WrappedComponent) {
     return (props) => {
         return (<ReactSelectClass {...props} multi={false} autosize={false} value={props.value} onChange={(value) => {

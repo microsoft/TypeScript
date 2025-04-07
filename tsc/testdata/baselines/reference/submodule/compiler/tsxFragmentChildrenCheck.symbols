@@ -9,6 +9,8 @@ export function MyComponent(props: any) {
 >props : Symbol(props, Decl(my-component.tsx, 2, 28))
 
     return <span>my component</span>;
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
 }
 
 === file1.tsx ===
@@ -39,9 +41,12 @@ class RenderString extends React.PureComponent<any, any> {
 >MyComponent : Symbol(MyComponent, Decl(file1.tsx, 1, 8))
 
         <span>{ MY_STRING }</span>
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
 >MY_STRING : Symbol(MY_STRING, Decl(file1.tsx, 3, 5))
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
 
         <span className={ MY_CLASSNAME } />
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
 >className : Symbol(className, Decl(file1.tsx, 12, 13))
 >MY_CLASSNAME : Symbol(MY_CLASSNAME, Decl(file1.tsx, 4, 5))
 

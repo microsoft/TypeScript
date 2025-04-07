@@ -23,4 +23,5 @@ function createElement(element, props, ...children) { }
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const MyLib = require("./library");
 const content = <my-element />;

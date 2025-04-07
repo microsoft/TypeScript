@@ -1,0 +1,40 @@
+--- old.reactReadonlyHOCAssignabilityReal.types
++++ new.reactReadonlyHOCAssignabilityReal.types
+@@= skipped -5, +5 lines =@@
+ >React : typeof React
+ 
+ function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
+->myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & { name: string; }>) => React.ComponentClass<P>
+->Inner : React.ComponentClass<P & { name: string; }, any>
++>myHigherOrderComponent : <P>(Inner: ComponentClass<P & { name: string; }, any>) => ComponentClass<P, any>
++>Inner : ComponentClass<P & { name: string; }, any>
+ >React : any
+ >name : string
+ >React : any
+@@= skipped -9, +9 lines =@@
+     return class OuterComponent extends React.Component<P> {
+ >class OuterComponent extends React.Component<P> {        render() {            return <Inner {...this.props} name="Matt"/>;        }    } : typeof OuterComponent
+ >OuterComponent : typeof OuterComponent
+->React.Component : React.Component<P, {}, any>
++>React.Component : Component<P, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+         render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+             return <Inner {...this.props} name="Matt"/>;
+-><Inner {...this.props} name="Matt"/> : JSX.Element
+->Inner : React.ComponentClass<P & { name: string; }, any>
+->this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
++><Inner {...this.props} name="Matt"/> : Element
++>Inner : ComponentClass<P & { name: string; }, any>
++>this.props : Readonly<{ children?: ReactNode; }> & Readonly<P>
+ >this : this
+->props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
++>props : Readonly<{ children?: ReactNode; }> & Readonly<P>
+ >name : "Matt"
+         }
+     };

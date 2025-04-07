@@ -1,0 +1,14 @@
+--- old.tsxNamespacedAttributeName2.symbols
++++ new.tsxNamespacedAttributeName2.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ const a = <svg:path a:b={1}></svg:path>;
+ >a : Symbol(a, Decl(a.tsx, 2, 5))
+->a:b : Symbol(a:b, Decl(a.tsx, 2, 19))
++>a:b : Symbol("þmissing", Decl(a.tsx, 2, 19))
+ 
+ const b = <svg : path a:b={1}></svg : path>;
+ >b : Symbol(b, Decl(a.tsx, 3, 5))
+->a:b : Symbol(a:b, Decl(a.tsx, 3, 21))
++>a:b : Symbol("þmissing", Decl(a.tsx, 3, 21))
+ 

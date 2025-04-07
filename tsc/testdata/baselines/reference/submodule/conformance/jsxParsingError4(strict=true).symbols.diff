@@ -6,15 +6,19 @@
    <public-foo></public-foo>
 ->public-foo : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
 ->public-foo : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
--
++>public-foo : Symbol((Missing), Decl(a.tsx, 2, 33))
++>public-foo : Symbol((Missing), Decl(a.tsx, 2, 33))
+ 
  );
  
- const b = (
+@@= skipped -9, +9 lines =@@
  >b : Symbol(b, Decl(a.tsx, 11, 5))
  
    <public></public>
 ->public : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
 ->public : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
--
++>public : Symbol((Missing), Decl(a.tsx, 2, 33))
++>public : Symbol((Missing), Decl(a.tsx, 2, 33))
+ 
  );
  

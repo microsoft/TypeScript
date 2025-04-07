@@ -11,11 +11,11 @@ declare module JSX {
 
 // OK
 <div />;
-><div /> : any
+><div /> : Element
 >div : any
 
 // OK
 <span />;
-><span /> : any
+><span /> : Element
 >span : any
 

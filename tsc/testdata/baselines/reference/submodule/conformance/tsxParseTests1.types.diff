@@ -1,0 +1,22 @@
+--- old.tsxParseTests1.types
++++ new.tsxParseTests1.types
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ var x = <div><div><span><div></div></span></div></div>;
+->x : JSX.Element
+-><div><div><span><div></div></span></div></div> : JSX.Element
++>x : Element
++><div><div><span><div></div></span></div></div> : Element
+ >div : any
+-><div><span><div></div></span></div> : JSX.Element
++><div><span><div></div></span></div> : Element
+ >div : any
+-><span><div></div></span> : JSX.Element
++><span><div></div></span> : Element
+ >span : any
+-><div></div> : JSX.Element
++><div></div> : Element
+ >div : any
+ >div : any
+ >span : any

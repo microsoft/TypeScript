@@ -1,0 +1,38 @@
+--- old.tsxAttributeQuickinfoTypesSameAsObjectLiteral.types
++++ new.tsxAttributeQuickinfoTypesSameAsObjectLiteral.types
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ const Foo = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
+->Foo : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+->(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
++>Foo : (props: { foo: "A" | "B" | "C"; }) => Element
++>(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: { foo: "A" | "B" | "C"; }) => Element
+ >props : { foo: "A" | "B" | "C"; }
+ >foo : "A" | "B" | "C"
+-><span>{props.foo}</span> : JSX.Element
++><span>{props.foo}</span> : Element
+ >span : any
+ >props.foo : "A" | "B" | "C"
+ >props : { foo: "A" | "B" | "C"; }
+@@= skipped -12, +12 lines =@@
+ >span : any
+ 
+ Foo({
+->Foo({    foo: "B"}) : JSX.Element
+->Foo : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
++>Foo({    foo: "B"}) : Element
++>Foo : (props: { foo: "A" | "B" | "C"; }) => Element
+ >{    foo: "B"} : { foo: "B"; }
+ 
+     foo: "B"
+@@= skipped -11, +11 lines =@@
+ });
+ 
+ <Foo foo="B" />
+-><Foo foo="B" /> : JSX.Element
+->Foo : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
++><Foo foo="B" /> : Element
++>Foo : (props: { foo: "A" | "B" | "C"; }) => Element
+ >foo : "B"
+ 

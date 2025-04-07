@@ -12,26 +12,26 @@ declare module JSX {
 === Error1.tsx ===
 // Issue error about missing span closing tag, not missing div closing tag
 let x1 = <div><span></div>;
->x1 : any
-><div><span></div> : any
+>x1 : Element
+><div><span></div> : Element
 >div : any
-><span> : any
+><span> : Element
 >span : any
 > : any
 >div : any
 
 === Error2.tsx ===
 let x2 = <div></span>;
->x2 : any
-><div></span> : any
+>x2 : Element
+><div></span> : Element
 >div : any
 >span : any
 
 
 === Error3.tsx ===
 let x3 = <div>;
->x3 : any
-><div>; : any
+>x3 : Element
+><div>; : Element
 >div : any
 
 
@@ -39,10 +39,10 @@ let x3 = <div>;
 
 === Error4.tsx ===
 let x4 = <div><div></span>;
->x4 : any
-><div><div></span>; : any
+>x4 : Element
+><div><div></span>; : Element
 >div : any
-><div></span> : any
+><div></span> : Element
 >div : any
 >span : any
 
@@ -50,10 +50,10 @@ let x4 = <div><div></span>;
 
 === Error5.tsx ===
 let x5 = <div><span>
->x5 : any
-><div><span> : any
+>x5 : Element
+><div><span> : Element
 >div : any
-><span> : any
+><span> : Element
 >span : any
 
 

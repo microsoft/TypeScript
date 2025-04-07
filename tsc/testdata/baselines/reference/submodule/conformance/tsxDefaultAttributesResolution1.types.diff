@@ -1,0 +1,43 @@
+--- old.tsxDefaultAttributesResolution1.types
++++ new.tsxDefaultAttributesResolution1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ interface Prop {
+     x: boolean;
+@@= skipped -8, +8 lines =@@
+ }
+ class Poisoned extends React.Component<Prop, {}> {
+ >Poisoned : Poisoned
+->React.Component : React.Component<Prop, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<Prop, {}>
++>React : typeof __React
++>Component : typeof Component
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return <div>Hello</div>;
+-><div>Hello</div> : JSX.Element
++><div>Hello</div> : Element
+ >div : any
+ >div : any
+     }
+@@= skipped -16, +16 lines =@@
+ 
+ // OK
+ let p = <Poisoned x/>;
+->p : JSX.Element
+-><Poisoned x/> : JSX.Element
++>p : Element
++><Poisoned x/> : Element
+ >Poisoned : typeof Poisoned
+ >x : true
+ 

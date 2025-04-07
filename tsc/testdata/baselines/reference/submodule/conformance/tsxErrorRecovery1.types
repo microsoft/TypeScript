@@ -7,8 +7,8 @@ function foo() {
 >foo : () => void
 
 	var x = <div>  { </div>
->x : any
-><div>  { </div> : any
+>x : Element
+><div>  { </div> : Element
 >div : any
 > : any
 >div : any

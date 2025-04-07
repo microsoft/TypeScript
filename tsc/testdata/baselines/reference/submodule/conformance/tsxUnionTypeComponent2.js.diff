@@ -7,5 +7,6 @@
 -var React = require("react");
 -var X = 1;
 -React.createElement(X, null);
++const React = require("react");
 +const X = 1;
 +<X />;

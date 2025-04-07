@@ -1,18 +1,14 @@
 --- old.tsxInvokeComponentType.js
 +++ new.tsxInvokeComponentType.js
-@@= skipped -15, +15 lines =@@
- 
- //// [tsxInvokeComponentType.js]
- "use strict";
--var __importDefault = (this && this.__importDefault) || function (mod) {
--    return (mod && mod.__esModule) ? mod : { "default": mod };
--};
+@@= skipped -20, +20 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var react_1 = __importDefault(require("react"));
 -var bad = react_1.default.createElement(Elem, null);
 -var good = react_1.default.createElement(Elem, { someKey: "ok" });
 -var alsoOk = react_1.default.createElement(Elem2, null, "text");
++const react_1 = __importDefault(require("react"));
 +const bad = <Elem />;
 +const good = <Elem someKey="ok"/>;
 +const alsoOk = <Elem2>text</Elem2>;

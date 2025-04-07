@@ -52,15 +52,15 @@ function test2(foo: Foo | undefined) {
 }
 
 function Test3({ foo }: { foo: Foo | undefined }) {
->Test3 : (__0: { foo: Foo | undefined; }) => any
+>Test3 : (__0: { foo: Foo | undefined; }) => Element
 >foo : Foo | undefined
 >foo : Foo | undefined
 
   return (
->(    <div>      {foo?.bar === false && "foo"}      {foo.bar ? "true" : "false"}    </div>  ) : any
+>(    <div>      {foo?.bar === false && "foo"}      {foo.bar ? "true" : "false"}    </div>  ) : Element
 
     <div>
-><div>      {foo?.bar === false && "foo"}      {foo.bar ? "true" : "false"}    </div> : any
+><div>      {foo?.bar === false && "foo"}      {foo.bar ? "true" : "false"}    </div> : Element
 >div : any
 
       {foo?.bar === false && "foo"}

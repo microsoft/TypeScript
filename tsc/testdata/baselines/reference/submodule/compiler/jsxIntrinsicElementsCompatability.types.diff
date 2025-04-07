@@ -1,0 +1,34 @@
+--- old.jsxIntrinsicElementsCompatability.types
++++ new.jsxIntrinsicElementsCompatability.types
+@@= skipped -5, +5 lines =@@
+ >React : typeof React
+ 
+ function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
+->SomeComponent : <T extends "button" | "a">(props: { element?: T; } & JSX.IntrinsicElements[T]) => JSX.Element
+->props : { element?: T; } & JSX.IntrinsicElements[T]
++>SomeComponent : <T extends "a" | "button">(props: { element?: T | undefined; } & IntrinsicElements[T]) => Element
++>props : { element?: T | undefined; } & IntrinsicElements[T]
+ >element : T | undefined
+ >JSX : any
+ >JSX : any
+ 
+     // Just so the return value is RectElement, the rendered element doesnt matter
+     return <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ }
+ 
+ function Test<T extends 'button' | 'a'>(el: T) {
+->Test : <T extends "button" | "a">(el: T) => JSX.Element
++>Test : <T extends "a" | "button">(el: T) => Element
+ >el : T
+ 
+     return <SomeComponent element={el} />
+-><SomeComponent element={el} /> : JSX.Element
+->SomeComponent : <T_1 extends "button" | "a">(props: { element?: T_1; } & JSX.IntrinsicElements[T_1]) => JSX.Element
++><SomeComponent element={el} /> : Element
++>SomeComponent : <T extends "a" | "button">(props: { element?: T | undefined; } & IntrinsicElements[T]) => Element
+ >element : T
+ >el : T
+ }

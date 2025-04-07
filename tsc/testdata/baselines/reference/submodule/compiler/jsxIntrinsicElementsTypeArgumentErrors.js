@@ -34,6 +34,8 @@ const l = <div<number>/>; // existing type argument with no internal issues
 //// [jsxIntrinsicElementsTypeArgumentErrors.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+const React = require("react");
 // opening + closing
 const a = <div></div>; // empty type args
 const b = <div></div>; // trailing comma type args

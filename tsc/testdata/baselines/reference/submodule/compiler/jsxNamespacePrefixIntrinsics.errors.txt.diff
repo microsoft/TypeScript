@@ -1,0 +1,38 @@
+--- old.jsxNamespacePrefixIntrinsics.errors.txt
++++ new.jsxNamespacePrefixIntrinsics.errors.txt
+@@= skipped -0, +0 lines =@@
++jsxNamespacePrefixIntrinsics.tsx(11,16): error TS2741: Property '"ns:attribute"' is missing in type '{}' but required in type '{ "ns:attribute": string; }'.
+ jsxNamespacePrefixIntrinsics.tsx(15,18): error TS2339: Property 'element' does not exist on type 'JSX.IntrinsicElements'.
+ jsxNamespacePrefixIntrinsics.tsx(16,30): error TS2322: Type '{ attribute: string; }' is not assignable to type '{ "ns:attribute": string; }'.
+   Property 'attribute' does not exist on type '{ "ns:attribute": string; }'. Did you mean '"ns:attribute"'?
+-jsxNamespacePrefixIntrinsics.tsx(17,30): error TS2322: Type '{ "ns:invalid": string; }' is not assignable to type '{ "ns:attribute": string; }'.
+-  Property 'ns:invalid' does not exist on type '{ "ns:attribute": string; }'.
++jsxNamespacePrefixIntrinsics.tsx(17,19): error TS2741: Property '"ns:attribute"' is missing in type '{}' but required in type '{ "ns:attribute": string; }'.
+ 
+ 
+-==== jsxNamespacePrefixIntrinsics.tsx (3 errors) ====
++==== jsxNamespacePrefixIntrinsics.tsx (4 errors) ====
+     declare namespace JSX {
+       interface IntrinsicElements {
+         "ns:element": {
+@@= skipped -16, +16 lines =@@
+     }
+     
+     const valid = <ns:element ns:attribute="yep" />;
++                   ~~~~~~~~~~
++!!! error TS2741: Property '"ns:attribute"' is missing in type '{}' but required in type '{ "ns:attribute": string; }'.
++!!! related TS2728 jsxNamespacePrefixIntrinsics.tsx:4:7: '"ns:attribute"' is declared here.
+     const validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;
+     const validUpcase2 = <NS:NamespacedUpcaseAlsoIntrinsic />;
+     
+@@= skipped -11, +14 lines =@@
+ !!! error TS2322: Type '{ attribute: string; }' is not assignable to type '{ "ns:attribute": string; }'.
+ !!! error TS2322:   Property 'attribute' does not exist on type '{ "ns:attribute": string; }'. Did you mean '"ns:attribute"'?
+     const invalid3 = <ns:element ns:invalid="nope" />;
+-                                 ~~~~~~~~~~
+-!!! error TS2322: Type '{ "ns:invalid": string; }' is not assignable to type '{ "ns:attribute": string; }'.
+-!!! error TS2322:   Property 'ns:invalid' does not exist on type '{ "ns:attribute": string; }'.
++                      ~~~~~~~~~~
++!!! error TS2741: Property '"ns:attribute"' is missing in type '{}' but required in type '{ "ns:attribute": string; }'.
++!!! related TS2728 jsxNamespacePrefixIntrinsics.tsx:4:7: '"ns:attribute"' is declared here.
+     

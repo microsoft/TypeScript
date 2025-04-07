@@ -344,9 +344,13 @@ type AssertionLinks struct {
 // SourceFile links
 
 type SourceFileLinks struct {
-	typeChecked          bool
-	deferredNodes        collections.OrderedSet[*ast.Node]
-	identifierCheckNodes []*ast.Node
+	typeChecked               bool
+	deferredNodes             collections.OrderedSet[*ast.Node]
+	identifierCheckNodes      []*ast.Node
+	localJsxNamespace         string
+	localJsxFragmentNamespace string
+	localJsxFactory           *ast.EntityName
+	localJsxFragmentFactory   *ast.EntityName
 }
 
 // Signature specific links

@@ -49,9 +49,9 @@ export class MyComponent<T extends RouteProps = RouteProps> extends Component<T>
 >Component : Component<T, {}>
 
 <MyComponent children={({ x }) => {}}/>
-><MyComponent children={({ x }) => {}}/> : any
+><MyComponent children={({ x }) => {}}/> : Element
 >MyComponent : typeof MyComponent
->children : any
->({ x }) => {} : (__0: { x: any; }) => void
->x : any
+>children : (__0: { x: number; }) => void
+>({ x }) => {} : (__0: { x: number; }) => void
+>x : number
 

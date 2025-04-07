@@ -17,6 +17,7 @@ declare module JSX {
 
 // OK
 <div />;
+>div : Symbol(div, Decl(file.tsx, 2, 30))
 
 // Fail
 <span />;

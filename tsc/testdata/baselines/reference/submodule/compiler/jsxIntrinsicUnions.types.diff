@@ -1,0 +1,13 @@
+--- old.jsxIntrinsicUnions.types
++++ new.jsxIntrinsicUnions.types
+@@= skipped -16, +16 lines =@@
+ >'h2' : "h2"
+ 
+ const tag = <El className="ok" key="key">{"Title"}</El>;
+->tag : JSX.Element
+-><El className="ok" key="key">{"Title"}</El> : JSX.Element
++>tag : Element
++><El className="ok" key="key">{"Title"}</El> : Element
+ >El : "h1" | "h2"
+ >className : string
+ >key : string

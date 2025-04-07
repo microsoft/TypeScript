@@ -5,18 +5,26 @@ import React = require('react');
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 
 <div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
     // Not Comment
 </div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 
 <div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
     // Not Comment
     {
         //Comment just Fine
     }
     // Another not Comment
 </div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 
 <div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
     // Not Comment
     {
         //Comment just Fine
@@ -24,11 +32,16 @@ import React = require('react');
     }
     // Another not Comment
 </div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 
 <div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
     /* Not Comment */
     {
         //Comment just Fine
         "Hi"
     }
 </div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+

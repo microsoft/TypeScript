@@ -9,14 +9,14 @@ declare module JSX {
 }
 
 var x = <div><div><span><div></div></span></div></div>;
->x : any
-><div><div><span><div></div></span></div></div> : any
+>x : Element
+><div><div><span><div></div></span></div></div> : Element
 >div : any
-><div><span><div></div></span></div> : any
+><div><span><div></div></span></div> : Element
 >div : any
-><span><div></div></span> : any
+><span><div></div></span> : Element
 >span : any
-><div></div> : any
+><div></div> : Element
 >div : any
 >div : any
 >span : any

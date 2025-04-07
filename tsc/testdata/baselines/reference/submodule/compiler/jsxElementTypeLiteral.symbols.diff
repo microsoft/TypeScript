@@ -14,11 +14,13 @@
  let a = <div />;
  >a : Symbol(a, Decl(jsxElementTypeLiteral.tsx, 12, 3))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  
  // should be an error - `ElementType` does not accept `span`
  let b = <span />;
  >b : Symbol(b, Decl(jsxElementTypeLiteral.tsx, 15, 3))
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
++>span : Symbol(span, Decl(react16.d.ts, 2609, 114))
  
  // Should be an error.
  // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`

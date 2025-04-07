@@ -6,6 +6,8 @@
  >a : Symbol(a, Decl(jsxJsxsCjsTransformChildren.tsx, 1, 5))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  
  export {};
  

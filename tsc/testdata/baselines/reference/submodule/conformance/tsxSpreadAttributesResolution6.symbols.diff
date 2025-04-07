@@ -18,6 +18,8 @@
          return <span>Some Text..</span>;
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
      }
  }
  

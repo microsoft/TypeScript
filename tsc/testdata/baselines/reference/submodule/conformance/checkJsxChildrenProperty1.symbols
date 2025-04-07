@@ -25,9 +25,11 @@ function Comp(p: Prop) {
 >Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
 
     return <div>{p.b}</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >p.b : Symbol(b, Decl(file.tsx, 3, 14))
 >p : Symbol(p, Decl(file.tsx, 8, 14))
 >b : Symbol(b, Decl(file.tsx, 3, 14))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 }
 
 // OK
@@ -59,6 +61,9 @@ let k2 =
 >b : Symbol(b, Decl(file.tsx, 19, 16))
 
         <div>hi hi hi!</div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
     </Comp>;
 >Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
 

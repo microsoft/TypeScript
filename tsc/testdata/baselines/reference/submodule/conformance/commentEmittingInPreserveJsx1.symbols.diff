@@ -5,42 +5,49 @@
  
  <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
      // Not Comment
  </div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
      // Not Comment
      {
-         //Comment just Fine
+@@= skipped -15, +15 lines =@@
      }
      // Another not Comment
  </div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
      // Not Comment
      {
-         //Comment just Fine
-@@= skipped -27, +19 lines =@@
+@@= skipped -12, +12 lines =@@
      }
      // Another not Comment
  </div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
      /* Not Comment */
      {
-         //Comment just Fine
+@@= skipped -11, +11 lines =@@
          "Hi"
      }
  </div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 

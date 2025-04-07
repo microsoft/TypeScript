@@ -6,15 +6,19 @@
    return <a></a>;
 ->a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
 ->a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
++>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
++>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
  }
  
  <UnwrappedLink onClick={(e) => {}} />;
-@@= skipped -30, +28 lines =@@
+@@= skipped -30, +30 lines =@@
    },
  ) {
    return <a></a>;
 ->a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
 ->a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
++>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
++>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
  }
  
  <UnwrappedLink2 onClick={(e) => {}} />;

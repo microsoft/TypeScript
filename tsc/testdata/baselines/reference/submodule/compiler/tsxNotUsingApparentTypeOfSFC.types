@@ -11,12 +11,12 @@ function test<P>(wrappedProps: P) {
 >wrappedProps : P
 
     let MySFC = function(props: P) {
->MySFC : (props: P) => any
->function(props: P) {        return <>hello</>;    } : (props: P) => any
+>MySFC : (props: P) => Element
+>function(props: P) {        return <>hello</>;    } : (props: P) => Element
 >props : P
 
         return <>hello</>;
-><>hello</> : any
+><>hello</> : Element
 
     };
     class MyComponent extends React.Component<P> {
@@ -26,31 +26,31 @@ function test<P>(wrappedProps: P) {
 >Component : typeof Component
 
         render() {
->render : () => any
+>render : () => Element
 
             return <>hello</>;
-><>hello</> : any
+><>hello</> : Element
         }
     }
     let x = <MySFC />;  // should error
->x : any
-><MySFC /> : any
->MySFC : (props: P) => any
+>x : Element
+><MySFC /> : Element
+>MySFC : (props: P) => Element
 
     let y = <MyComponent />;  // should error
->y : any
-><MyComponent /> : any
+>y : Element
+><MyComponent /> : Element
 >MyComponent : typeof MyComponent
 
     let z = <MySFC {...wrappedProps} /> // should work
->z : any
-><MySFC {...wrappedProps} /> : any
->MySFC : (props: P) => any
+>z : Element
+><MySFC {...wrappedProps} /> : Element
+>MySFC : (props: P) => Element
 >wrappedProps : P
 
     let q = <MyComponent {...wrappedProps} /> // should work
->q : any
-><MyComponent {...wrappedProps} /> : any
+>q : Element
+><MyComponent {...wrappedProps} /> : Element
 >MyComponent : typeof MyComponent
 >wrappedProps : P
 }

@@ -3,11 +3,11 @@
 === jsxPartialSpread.tsx ===
 /// <reference path="react16.d.ts" />
 const Select = (p: {value?: unknown}) => <p></p>;
->Select : (p: { value?: unknown; }) => any
->(p: {value?: unknown}) => <p></p> : (p: { value?: unknown; }) => any
+>Select : (p: { value?: unknown; }) => Element
+>(p: {value?: unknown}) => <p></p> : (p: { value?: unknown; }) => Element
 >p : { value?: unknown; }
 >value : unknown
-><p></p> : any
+><p></p> : Element
 >p : { value?: unknown; }
 >p : { value?: unknown; }
 
@@ -15,19 +15,19 @@ import React from 'react';
 >React : typeof React
 
 export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
->Repro : (__0: { SelectProps?: Partial<{ value?: unknown; }> | undefined; }) => any
+>Repro : (__0: { SelectProps?: Partial<{ value?: unknown; }> | undefined; }) => Element
 >SelectProps : Partial<{ value?: unknown; }>
 >{} : {}
 >SelectProps : Partial<{ value?: unknown; }> | undefined
->Select : (p: { value?: unknown; }) => any
+>Select : (p: { value?: unknown; }) => Element
 
     return (
->(        <Select value={'test'} {...SelectProps} />    ) : any
+>(        <Select value={'test'} {...SelectProps} />    ) : Element
 
         <Select value={'test'} {...SelectProps} />
-><Select value={'test'} {...SelectProps} /> : any
->Select : (p: { value?: unknown; }) => any
->value : any
+><Select value={'test'} {...SelectProps} /> : Element
+>Select : (p: { value?: unknown; }) => Element
+>value : string
 >'test' : "test"
 >SelectProps : Partial<{ value?: unknown; }>
 

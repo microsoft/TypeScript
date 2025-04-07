@@ -1,0 +1,57 @@
+--- old.tsxAttributeResolution5.types
++++ new.tsxAttributeResolution5.types
+@@= skipped -21, +21 lines =@@
+ }
+ 
+ function make1<T extends {x: string}> (obj: T) {
+->make1 : <T extends { x: string; }>(obj: T) => JSX.Element
++>make1 : <T extends { x: string; }>(obj: T) => Element
+ >x : string
+ >obj : T
+ 
+ 	return <test1 {...obj} />; // OK
+-><test1 {...obj} /> : JSX.Element
++><test1 {...obj} /> : Element
+ >test1 : any
+ >obj : T
+ }
+ 
+ function make2<T extends {x: number}> (obj: T) {
+->make2 : <T extends { x: number; }>(obj: T) => JSX.Element
++>make2 : <T extends { x: number; }>(obj: T) => Element
+ >x : number
+ >obj : T
+ 
+ 	return <test1 {...obj} />; // Error (x is number, not string)
+-><test1 {...obj} /> : JSX.Element
++><test1 {...obj} /> : Element
+ >test1 : any
+ >obj : T
+ }
+ 
+ function make3<T extends {y: string}> (obj: T) {
+->make3 : <T extends { y: string; }>(obj: T) => JSX.Element
++>make3 : <T extends { y: string; }>(obj: T) => Element
+ >y : string
+ >obj : T
+ 
+ 	return <test1 {...obj} />; // Error, missing x
+-><test1 {...obj} /> : JSX.Element
++><test1 {...obj} /> : Element
+ >test1 : any
+ >obj : T
+ }
+ 
+ 
+ <test1 {...{}} />; // Error, missing x
+-><test1 {...{}} /> : JSX.Element
++><test1 {...{}} /> : Element
+ >test1 : any
+ >{} : {}
+ 
+ <test2 {...{}} />; // Error, missing toString
+-><test2 {...{}} /> : JSX.Element
++><test2 {...{}} /> : Element
+ >test2 : any
+ >{} : {}
+ 

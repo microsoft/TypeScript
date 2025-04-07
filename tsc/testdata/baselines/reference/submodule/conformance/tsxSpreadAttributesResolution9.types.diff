@@ -1,0 +1,75 @@
+--- old.tsxSpreadAttributesResolution9.types
++++ new.tsxSpreadAttributesResolution9.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ interface OptionProp {
+     x?: 2
+@@= skipped -12, +12 lines =@@
+ 
+ class Opt extends React.Component<OptionProp, {}> {
+ >Opt : Opt
+->React.Component : React.Component<OptionProp, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<OptionProp, {}>
++>React : typeof __React
++>Component : typeof Component
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return <div>Hello</div>;
+-><div>Hello</div> : JSX.Element
++><div>Hello</div> : Element
+ >div : any
+ >div : any
+     }
+@@= skipped -29, +29 lines =@@
+ 
+ // OK
+ let p = <Opt />;
+->p : JSX.Element
+-><Opt /> : JSX.Element
++>p : Element
++><Opt /> : Element
+ >Opt : typeof Opt
+ 
+ let y = <Opt {...obj} />;
+->y : JSX.Element
+-><Opt {...obj} /> : JSX.Element
++>y : Element
++><Opt {...obj} /> : Element
+ >Opt : typeof Opt
+ >obj : OptionProp
+ 
+ let y1 = <Opt {...obj1} />;
+->y1 : JSX.Element
+-><Opt {...obj1} /> : JSX.Element
++>y1 : Element
++><Opt {...obj1} /> : Element
+ >Opt : typeof Opt
+ >obj1 : OptionProp
+ 
+ let y2 = <Opt {...obj1} y/>;
+->y2 : JSX.Element
+-><Opt {...obj1} y/> : JSX.Element
++>y2 : Element
++><Opt {...obj1} y/> : Element
+ >Opt : typeof Opt
+ >obj1 : OptionProp
+ >y : true
+ 
+ let y3 = <Opt x={2} />;
+->y3 : JSX.Element
+-><Opt x={2} /> : JSX.Element
++>y3 : Element
++><Opt x={2} /> : Element
+ >Opt : typeof Opt
+ >x : 2
+ >2 : 2

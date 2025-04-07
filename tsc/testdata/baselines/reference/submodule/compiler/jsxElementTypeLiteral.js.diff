@@ -1,11 +1,11 @@
 --- old.jsxElementTypeLiteral.js
 +++ new.jsxElementTypeLiteral.js
-@@= skipped -25, +25 lines =@@
- //// [jsxElementTypeLiteral.js]
+@@= skipped -26, +26 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var React = require("react");
++const React = require("react");
  // should be fine - `ElementType` accepts `div`
 -var a = React.createElement("div", null);
 +let a = <div />;

@@ -1,0 +1,59 @@
+--- old.tsxAttributeResolution15.types
++++ new.tsxAttributeResolution15.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ class BigGreeter extends React.Component<{ }, {}> {
+ >BigGreeter : BigGreeter
+->React.Component : React.Component<{}, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<{}, {}>
++>React : typeof __React
++>Component : typeof Component
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return <div>Default hi</div>;
+-><div>Default hi</div> : JSX.Element
++><div>Default hi</div> : Element
+ >div : any
+ >div : any
+     }
+@@= skipped -22, +22 lines =@@
+ 
+ // Error
+ let a = <BigGreeter prop1="hello" />
+->a : JSX.Element
+-><BigGreeter prop1="hello" /> : JSX.Element
++>a : Element
++><BigGreeter prop1="hello" /> : Element
+ >BigGreeter : typeof BigGreeter
+ >prop1 : string
+ 
+ // OK
+ let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
+->b : JSX.Element
+-><BigGreeter ref={(input) => { this.textInput = input; }} /> : JSX.Element
++>b : Element
++><BigGreeter ref={(input) => { this.textInput = input; }} /> : Element
+ >BigGreeter : typeof BigGreeter
+ >ref : (input: BigGreeter) => void
+ >(input) => { this.textInput = input; } : (input: BigGreeter) => void
+@@= skipped -20, +20 lines =@@
+ >input : BigGreeter
+ 
+ let c = <BigGreeter data-extra="hi" />
+->c : JSX.Element
+-><BigGreeter data-extra="hi" /> : JSX.Element
++>c : Element
++><BigGreeter data-extra="hi" /> : Element
+ >BigGreeter : typeof BigGreeter
+ >data-extra : string
+ 

@@ -12,11 +12,11 @@ console.log(
 >log : (...data: any[]) => void
 
   <div>
-><div>    <div />  </div> : any
+><div>    <div />  </div> : Element
 >div : any
 
     <div />
-><div /> : any
+><div /> : Element
 >div : any
 
   </div>
@@ -31,15 +31,15 @@ console.log(
 >log : (...data: any[]) => void
 
   <div>
-><div>    <div />    <div />  </div> : any
+><div>    <div />    <div />  </div> : Element
 >div : any
 
     <div />
-><div /> : any
+><div /> : Element
 >div : any
 
     <div />
-><div /> : any
+><div /> : Element
 >div : any
 
   </div>
@@ -54,21 +54,21 @@ console.log(
 >log : (...data: any[]) => void
 
   <div>
-><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : any
+><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : Element
 >div : any
 
     {[1, 2].map(i => <div key={i}>{i}</div>)}
->[1, 2].map(i => <div key={i}>{i}</div>) : any[]
+>[1, 2].map(i => <div key={i}>{i}</div>) : Element[]
 >[1, 2].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >[1, 2] : number[]
 >1 : 1
 >2 : 2
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->i => <div key={i}>{i}</div> : (i: number) => any
+>i => <div key={i}>{i}</div> : (i: number) => Element
 >i : number
-><div key={i}>{i}</div> : any
+><div key={i}>{i}</div> : Element
 >div : any
->key : any
+>key : number
 >i : number
 >i : number
 >div : any

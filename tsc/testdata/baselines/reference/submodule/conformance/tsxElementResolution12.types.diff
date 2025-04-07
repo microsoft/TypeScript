@@ -1,0 +1,60 @@
+--- old.tsxElementResolution12.types
++++ new.tsxElementResolution12.types
+@@= skipped -16, +16 lines =@@
+ >Obj1 : Obj1type
+ 
+ <Obj1 x={10} />; // OK
+-><Obj1 x={10} /> : JSX.Element
++><Obj1 x={10} /> : Element
+ >Obj1 : Obj1type
+ >x : number
+ >10 : 10
+@@= skipped -15, +15 lines =@@
+ >Obj2 : Obj2type
+ 
+ <Obj2 x={10} />; // OK
+-><Obj2 x={10} /> : JSX.Element
++><Obj2 x={10} /> : Element
+ >Obj2 : Obj2type
+ >x : number
+ >10 : 10
+@@= skipped -14, +14 lines =@@
+ >Obj3 : Obj3type
+ 
+ <Obj3 x={10} />; // Error
+-><Obj3 x={10} /> : JSX.Element
++><Obj3 x={10} /> : Element
+ >Obj3 : Obj3type
+ >x : number
+ >10 : 10
+@@= skipped -9, +9 lines =@@
+ >attributes : any
+ 
+ <Obj3 {...attributes} />; // Error
+-><Obj3 {...attributes} /> : JSX.Element
++><Obj3 {...attributes} /> : Element
+ >Obj3 : Obj3type
+ >attributes : any
+ 
+ <Obj3 {...{}} />; // OK
+-><Obj3 {...{}} /> : JSX.Element
++><Obj3 {...{}} /> : Element
+ >Obj3 : Obj3type
+ >{} : {}
+ 
+@@= skipped -20, +20 lines =@@
+ >Obj4 : Obj4type
+ 
+ <Obj4 x={10} />; // OK
+-><Obj4 x={10} /> : JSX.Element
++><Obj4 x={10} /> : Element
+ >Obj4 : Obj4type
+ >x : number
+ >10 : 10
+ 
+ <Obj4 x={'10'} />; // Error
+-><Obj4 x={'10'} /> : JSX.Element
++><Obj4 x={'10'} /> : Element
+ >Obj4 : Obj4type
+ >x : string
+ >'10' : "10"

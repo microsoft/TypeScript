@@ -29,12 +29,12 @@
 ->x : JSX.Element
 -><MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js : JSX.Element
 -><MyComp : JSX.Element
-+>x : any
-+><MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js : any
-+><MyComp : any
++>x : Element
++><MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js : Element
++><MyComp : Element
  >MyComp : typeof MyComp
 -><Prop> a={10} b="hi" />; // error, no type arguments in js : JSX.Element
-+><Prop> a={10} b="hi" />; // error, no type arguments in js : any
++><Prop> a={10} b="hi" />; // error, no type arguments in js : Element
  >Prop : any
  >10 : 10
  

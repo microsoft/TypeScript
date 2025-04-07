@@ -10,7 +10,9 @@ function Greet(x: {name?: string}) {
 >name : Symbol(name, Decl(file.tsx, 2, 19))
 
 	return <div>Hello, {x}</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >x : Symbol(x, Decl(file.tsx, 2, 15))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 }
 
 class BigGreeter extends React.Component<{ name?: string }, {}> {
@@ -24,6 +26,8 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 >render : Symbol(render, Decl(file.tsx, 6, 65))
 
 		return <div></div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 	}
 	greeting: string;
 >greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
@@ -53,7 +57,11 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 4, 1))
 >ref : Symbol(ref, Decl(file.tsx, 22, 19))
 >x : Symbol(x, Decl(file.tsx, 22, 25))
+>x.greeting.substr : Symbol(substr, Decl(lib.d.ts, --, --))
+>x.greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
 >x : Symbol(x, Decl(file.tsx, 22, 25))
+>greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
+>substr : Symbol(substr, Decl(lib.d.ts, --, --))
 
 // Error ('subtr' not on string)
 let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
@@ -61,7 +69,9 @@ let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
 >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 4, 1))
 >ref : Symbol(ref, Decl(file.tsx, 24, 19))
 >x : Symbol(x, Decl(file.tsx, 24, 25))
+>x.greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
 >x : Symbol(x, Decl(file.tsx, 24, 25))
+>greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
 
 // Error (ref callback is contextually typed)
 let f = <BigGreeter ref={x => x.notARealProperty} />;
@@ -80,13 +90,17 @@ let g = <BigGreeter key={100} />;
 // OK - contextually typed intrinsic ref callback parameter
 let h = <div ref={x => x.innerText} />;
 >h : Symbol(h, Decl(file.tsx, 32, 3))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >ref : Symbol(ref, Decl(file.tsx, 32, 12))
 >x : Symbol(x, Decl(file.tsx, 32, 18))
+>x.innerText : Symbol(innerText, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(file.tsx, 32, 18))
+>innerText : Symbol(innerText, Decl(lib.d.ts, --, --))
 
 // Error - property not on ontextually typed intrinsic ref callback parameter
 let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
 >i : Symbol(i, Decl(file.tsx, 34, 3))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >ref : Symbol(ref, Decl(file.tsx, 34, 12))
 >x : Symbol(x, Decl(file.tsx, 34, 18))
 >x : Symbol(x, Decl(file.tsx, 34, 18))

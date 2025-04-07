@@ -15,8 +15,8 @@ class MyComponent<P extends Props = Props> extends React.Component<P, {}> {}
 >Component : typeof Component
 
 const m = <MyComponent x="a"/>
->m : any
-><MyComponent x="a"/> : any
+>m : Element
+><MyComponent x="a"/> : Element
 >MyComponent : typeof MyComponent
->x : any
+>x : "a"
 

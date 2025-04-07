@@ -6,15 +6,19 @@
  >x : Symbol(x, Decl(file.tsx, 2, 13))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  // OK
  const k1 = <Tag />;
-@@= skipped -18, +16 lines =@@
+@@= skipped -18, +18 lines =@@
  >k3 : Symbol(k3, Decl(file.tsx, 9, 5))
  >Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
  >children : Symbol(children, Decl(file.tsx, 9, 15))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  const k4 = <Tag key="1"><div></div></Tag>;
  >k4 : Symbol(k4, Decl(file.tsx, 10, 5))
@@ -22,6 +26,8 @@
  >key : Symbol(key, Decl(file.tsx, 10, 15))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  >Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
  
  const k5 = <Tag key="1"><div></div><div></div></Tag>;
@@ -32,5 +38,9 @@
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  >Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
  

@@ -17,11 +17,11 @@ interface Prop {
 }
 
 function Comp(p: Prop) {
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 >p : Prop
 
     return <div>{p.b}</div>;
-><div>{p.b}</div> : any
+><div>{p.b}</div> : Element
 >div : any
 >p.b : string
 >p : Prop
@@ -31,27 +31,27 @@ function Comp(p: Prop) {
 
 // Error: missing children
 let k = <Comp a={10} b="hi" />;
->k : any
-><Comp a={10} b="hi" /> : any
->Comp : (p: Prop) => any
->a : any
+>k : Element
+><Comp a={10} b="hi" /> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
 let k0 =
->k0 : any
+>k0 : Element
 
     <Comp a={10} b="hi" children="Random" >
-><Comp a={10} b="hi" children="Random" >        hi hi hi!    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi" children="Random" >        hi hi hi!    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
->children : any
+>b : string
+>children : string
 
         hi hi hi!
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 
 let o = {
 >o : { children: string; }
@@ -62,59 +62,59 @@ let o = {
 >"Random" : "Random"
 }
 let k1 =
->k1 : any
+>k1 : Element
 
     <Comp a={10} b="hi" {...o} >
-><Comp a={10} b="hi" {...o} >        hi hi hi!    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi" {...o} >        hi hi hi!    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 >o : { children: string; }
 
         hi hi hi!
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 
 // Error: incorrect type
 let k2 =
->k2 : any
+>k2 : Element
 
     <Comp a={10} b="hi">
-><Comp a={10} b="hi">        <div> My Div </div>        {(name: string) => <div> My name {name} </div>}    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi">        <div> My Div </div>        {(name: string) => <div> My name {name} </div>}    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
         <div> My Div </div>
-><div> My Div </div> : any
+><div> My Div </div> : Element
 >div : any
 >div : any
 
         {(name: string) => <div> My name {name} </div>}
->(name: string) => <div> My name {name} </div> : (name: string) => any
+>(name: string) => <div> My name {name} </div> : (name: string) => Element
 >name : string
-><div> My name {name} </div> : any
+><div> My name {name} </div> : Element
 >div : any
 >name : string
 >div : any
 
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 
 let k3 =
->k3 : any
+>k3 : Element
 
     <Comp a={10} b="hi">
-><Comp a={10} b="hi">        <div> My Div </div>        {1000000}    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi">        <div> My Div </div>        {1000000}    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
         <div> My Div </div>
-><div> My Div </div> : any
+><div> My Div </div> : Element
 >div : any
 >div : any
 
@@ -122,47 +122,47 @@ let k3 =
 >1000000 : 1000000
 
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 
 let k4 =
->k4 : any
+>k4 : Element
 
     <Comp a={10} b="hi" >
-><Comp a={10} b="hi" >        <div> My Div </div>        hi hi hi!    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi" >        <div> My Div </div>        hi hi hi!    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
         <div> My Div </div>
-><div> My Div </div> : any
+><div> My Div </div> : Element
 >div : any
 >div : any
 
         hi hi hi!
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 
 let k5 =
->k5 : any
+>k5 : Element
 
     <Comp a={10} b="hi" >
-><Comp a={10} b="hi" >        <div> My Div </div>        <div> My Div </div>    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi" >        <div> My Div </div>        <div> My Div </div>    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
         <div> My Div </div>
-><div> My Div </div> : any
+><div> My Div </div> : Element
 >div : any
 >div : any
 
         <div> My Div </div>
-><div> My Div </div> : any
+><div> My Div </div> : Element
 >div : any
 >div : any
 
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 

@@ -1,0 +1,56 @@
+--- old.jsxComponentTypeErrors.errors.txt
++++ new.jsxComponentTypeErrors.errors.txt
+@@= skipped -16, +16 lines =@@
+   Its instance type 'ClassComponent' is not a valid JSX element.
+     Types of property 'type' are incompatible.
+       Type 'string' is not assignable to type '"element-class"'.
+-jsxComponentTypeErrors.tsx(28,16): error TS2786: 'MixedComponent' cannot be used as a JSX component.
+-  Its element type 'ClassComponent | { type: string | undefined; }' is not a valid JSX element.
+-    Type 'ClassComponent' is not assignable to type 'Element | ElementClass | null'.
+-      Type 'ClassComponent' is not assignable to type 'Element | ElementClass'.
+-        Type 'ClassComponent' is not assignable to type 'ElementClass'.
+-          Types of property 'type' are incompatible.
+-            Type 'string' is not assignable to type '"element-class"'.
++jsxComponentTypeErrors.tsx(28,16): error TS2604: JSX element type 'MixedComponent' does not have any construct or call signatures.
+ jsxComponentTypeErrors.tsx(37,16): error TS2786: 'obj.MemberFunctionComponent' cannot be used as a JSX component.
+-  Its return type '{}' is not a valid JSX element.
+-    Property 'type' is missing in type '{}' but required in type 'Element'.
++  Property 'type' is missing in type '{}' but required in type 'Element'.
+ jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. MemberClassComponent' cannot be used as a JSX component.
+-  Its instance type 'MemberClassComponent' is not a valid JSX element.
+-    Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
++  Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
+ 
+ 
+ ==== jsxComponentTypeErrors.tsx (7 errors) ====
+@@= skipped -68, +60 lines =@@
+ !!! error TS2786:       Type 'string' is not assignable to type '"element-class"'.
+     const elem4 = <MixedComponent />;
+                    ~~~~~~~~~~~~~~
+-!!! error TS2786: 'MixedComponent' cannot be used as a JSX component.
+-!!! error TS2786:   Its element type 'ClassComponent | { type: string | undefined; }' is not a valid JSX element.
+-!!! error TS2786:     Type 'ClassComponent' is not assignable to type 'Element | ElementClass | null'.
+-!!! error TS2786:       Type 'ClassComponent' is not assignable to type 'Element | ElementClass'.
+-!!! error TS2786:         Type 'ClassComponent' is not assignable to type 'ElementClass'.
+-!!! error TS2786:           Types of property 'type' are incompatible.
+-!!! error TS2786:             Type 'string' is not assignable to type '"element-class"'.
++!!! error TS2604: JSX element type 'MixedComponent' does not have any construct or call signatures.
+     
+     const obj = {
+       MemberFunctionComponent() {
+@@= skipped -18, +12 lines =@@
+     const elem5 = <obj.MemberFunctionComponent />;
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2786: 'obj.MemberFunctionComponent' cannot be used as a JSX component.
+-!!! error TS2786:   Its return type '{}' is not a valid JSX element.
+-!!! error TS2786:     Property 'type' is missing in type '{}' but required in type 'Element'.
++!!! error TS2786:   Property 'type' is missing in type '{}' but required in type 'Element'.
+ !!! related TS2728 jsxComponentTypeErrors.tsx:3:5: 'type' is declared here.
+     const elem6 = <obj. MemberClassComponent />;
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2786: 'obj. MemberClassComponent' cannot be used as a JSX component.
+-!!! error TS2786:   Its instance type 'MemberClassComponent' is not a valid JSX element.
+-!!! error TS2786:     Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
++!!! error TS2786:   Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
+ !!! related TS2728 jsxComponentTypeErrors.tsx:6:5: 'type' is declared here.
+     

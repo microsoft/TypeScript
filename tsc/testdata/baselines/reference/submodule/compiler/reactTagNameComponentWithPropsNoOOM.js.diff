@@ -22,6 +22,8 @@
 -var rest = {};
 -var children = [];
 -React.createElement(Tag, __assign({ className: classes }, rest), children);
++/// <reference path="react16.d.ts" />
++const React = require("react");
 +const classes = "";
 +const rest = {};
 +const children = [];

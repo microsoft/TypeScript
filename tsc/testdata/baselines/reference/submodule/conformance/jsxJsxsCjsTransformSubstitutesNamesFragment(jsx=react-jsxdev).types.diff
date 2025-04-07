@@ -1,0 +1,24 @@
+--- old.jsxJsxsCjsTransformSubstitutesNamesFragment(jsx=react-jsxdev).types
++++ new.jsxJsxsCjsTransformSubstitutesNamesFragment(jsx=react-jsxdev).types
+@@= skipped -2, +2 lines =@@
+ === jsxJsxsCjsTransformSubstitutesNamesFragment.tsx ===
+ /// <reference path="react16.d.ts" />
+ const a = <>
+->a : JSX.Element
+-><>  <p></p>  text  <div></div></> : JSX.Element
++>a : Element
++><>  <p></p>  text  <div></div></> : Element
+ 
+   <p></p>
+-><p></p> : JSX.Element
++><p></p> : Element
+ >p : any
+ >p : any
+ 
+   text
+   <div></div>
+-><div></div> : JSX.Element
++><div></div> : Element
+ >div : any
+ >div : any
+ 

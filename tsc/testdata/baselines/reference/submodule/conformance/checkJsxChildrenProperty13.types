@@ -22,20 +22,20 @@ class Button extends React.Component<ButtonProp, any> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         // Error children are specified twice
         return (<InnerButton {...this.props} children="hi">
->(<InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton>) : any
-><InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton> : any
+>(<InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton>) : Element
+><InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton> : Element
 >InnerButton : typeof InnerButton
 >this.props : ButtonProp & { children?: ReactNode | undefined; }
 >this : this
 >props : ButtonProp & { children?: ReactNode | undefined; }
->children : any
+>children : string
 
             <div>Hello World</div>
-><div>Hello World</div> : any
+><div>Hello World</div> : Element
 >div : any
 >div : any
 
@@ -56,11 +56,11 @@ class InnerButton extends React.Component<InnerButtonProp, any> {
 >Component : typeof Component
 
 	render() {
->render : () => any
+>render : () => Element
 
 		return (<button>Hello</button>);
->(<button>Hello</button>) : any
-><button>Hello</button> : any
+>(<button>Hello</button>) : Element
+><button>Hello</button> : Element
 >button : any
 >button : any
 	}

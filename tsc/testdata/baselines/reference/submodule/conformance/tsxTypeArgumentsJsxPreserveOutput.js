@@ -40,6 +40,7 @@ function Foo<T>() {
 //// [foo.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 function Foo() {
     return null;
 }

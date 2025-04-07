@@ -29,6 +29,7 @@ function AnotherComponent({ property1 }: AnotherComponentProps) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Component;
+const React = require("react");
 function Component(props) {
     return (
     // Error extra property

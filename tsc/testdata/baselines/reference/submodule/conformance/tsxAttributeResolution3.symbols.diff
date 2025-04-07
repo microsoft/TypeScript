@@ -31,54 +31,61 @@
  
  <test1 {...obj1} />
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >obj1 : Symbol(obj1, Decl(file.tsx, 13, 3))
  
  // Error, x is not string
-@@= skipped -9, +8 lines =@@
+@@= skipped -9, +9 lines =@@
  >x : Symbol(x, Decl(file.tsx, 17, 12))
  
  <test1 {...obj2} />
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >obj2 : Symbol(obj2, Decl(file.tsx, 17, 3))
  
  // Error, x is missing
-@@= skipped -9, +8 lines =@@
+@@= skipped -9, +9 lines =@@
  >y : Symbol(y, Decl(file.tsx, 21, 12))
  
  <test1 {...obj3} />
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >obj3 : Symbol(obj3, Decl(file.tsx, 21, 3))
  
  // OK
-@@= skipped -10, +9 lines =@@
+@@= skipped -10, +10 lines =@@
  >y : Symbol(y, Decl(file.tsx, 25, 19))
  
  <test1 {...obj4} x="ok" />
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >obj4 : Symbol(obj4, Decl(file.tsx, 25, 3))
  >x : Symbol(x, Decl(file.tsx, 26, 16))
  
-@@= skipped -11, +10 lines =@@
+@@= skipped -11, +11 lines =@@
  >y : Symbol(y, Decl(file.tsx, 29, 19))
  
  <test1 x="ok" {...obj5} />
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >x : Symbol(x, Decl(file.tsx, 30, 6))
  >obj5 : Symbol(obj5, Decl(file.tsx, 29, 3))
  
-@@= skipped -12, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  >extra : Symbol(extra, Decl(file.tsx, 33, 28))
  
  <test1 {...obj6} />
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >obj6 : Symbol(obj6, Decl(file.tsx, 33, 3))
  
  // OK (spread override)
-@@= skipped -9, +8 lines =@@
+@@= skipped -9, +9 lines =@@
  >x : Symbol(x, Decl(file.tsx, 37, 12))
  
  <test1 x={32} {...obj7} />
 ->test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
++>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
  >x : Symbol(x, Decl(file.tsx, 38, 6))
  >obj7 : Symbol(obj7, Decl(file.tsx, 37, 3))
  

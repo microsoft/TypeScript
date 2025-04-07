@@ -54,11 +54,12 @@
  				<div>Hello World</div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
  				</InnerButton>);
  >InnerButton : Symbol(InnerButton, Decl(file.tsx, 24, 1))
- 		}
-@@= skipped -25, +22 lines =@@
+@@= skipped -25, +25 lines =@@
  >InnerButtonProp : Symbol(InnerButtonProp, Decl(file.tsx, 20, 1))
  
  	a: number
@@ -82,6 +83,8 @@
  		return (<button>Hello</button>);
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))
++>button : Symbol(button, Decl(react.d.ts, 2386, 43))
++>button : Symbol(button, Decl(react.d.ts, 2386, 43))
  	}
  }
  

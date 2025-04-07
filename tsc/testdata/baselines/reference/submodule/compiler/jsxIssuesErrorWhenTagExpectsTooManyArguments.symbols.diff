@@ -15,28 +15,34 @@
      return <div></div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  function MyComp3(props: MyProps, context: any, bad: any) {
  >MyComp3 : Symbol(MyComp3, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 10, 1))
-@@= skipped -11, +9 lines =@@
+@@= skipped -11, +11 lines =@@
  >bad : Symbol(bad, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 11, 46))
  
      return <div></div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  function MyComp2(props: MyProps, context: any) {
  >MyComp2 : Symbol(MyComp2, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 13, 1))
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
  >context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 14, 32))
  
      return <div></div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  const a = <MyComp4 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
-@@= skipped -26, +24 lines =@@
+@@= skipped -26, +26 lines =@@
  >context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 22, 60))
  >nonReactArg : Symbol(nonReactArg, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 22, 74))
  >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))

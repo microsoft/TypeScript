@@ -29,17 +29,17 @@ const myHoc = <ComposedComponentProps extends any>(
 >null as any : any
 
     <WrapperComponent {...props} myProp={'1000000'} />;
-><WrapperComponent {...props} myProp={'1000000'} /> : any
+><WrapperComponent {...props} myProp={'1000000'} /> : Element
 >WrapperComponent : ComponentClass<WrapperComponentProps, any>
 >props : ComposedComponentProps
->myProp : any
+>myProp : "1000000"
 >'1000000' : "1000000"
 
     <WrapperComponent {...props} myProp={1000000} />;
-><WrapperComponent {...props} myProp={1000000} /> : any
+><WrapperComponent {...props} myProp={1000000} /> : Element
 >WrapperComponent : ComponentClass<WrapperComponentProps, any>
 >props : ComposedComponentProps
->myProp : any
+>myProp : number
 >1000000 : 1000000
 
 };

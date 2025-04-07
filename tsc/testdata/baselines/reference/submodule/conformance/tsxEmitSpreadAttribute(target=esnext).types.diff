@@ -1,0 +1,101 @@
+--- old.tsxEmitSpreadAttribute(target=esnext).types
++++ new.tsxEmitSpreadAttribute(target=esnext).types
+@@= skipped -8, +8 lines =@@
+ >a : any
+ 
+     return <div className={"T1"} { ...a }>T1</div>;
+-><div className={"T1"} { ...a }>T1</div> : error
++><div className={"T1"} { ...a }>T1</div> : any
+ >div : any
+ >className : string
+ >"T1" : "T1"
+@@= skipped -14, +14 lines =@@
+ >b : any
+ 
+     return <div className={"T2"} { ...a } { ...b }>T2</div>;
+-><div className={"T2"} { ...a } { ...b }>T2</div> : error
++><div className={"T2"} { ...a } { ...b }>T2</div> : any
+ >div : any
+ >className : string
+ >"T2" : "T2"
+@@= skipped -15, +15 lines =@@
+ >b : any
+ 
+     return <div { ...a } className={"T3"} { ...b }>T3</div>;
+-><div { ...a } className={"T3"} { ...b }>T3</div> : error
++><div { ...a } className={"T3"} { ...b }>T3</div> : any
+ >div : any
+ >a : any
+ >className : string
+@@= skipped -15, +15 lines =@@
+ >b : any
+ 
+     return <div className={"T4"} { ...{ ...a, ...b } }>T4</div>;
+-><div className={"T4"} { ...{ ...a, ...b } }>T4</div> : error
++><div className={"T4"} { ...{ ...a, ...b } }>T4</div> : any
+ >div : any
+ >className : string
+ >"T4" : "T4"
+@@= skipped -18, +18 lines =@@
+ >d : any
+ 
+     return <div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div>;
+-><div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div> : error
++><div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div> : any
+ >div : any
+ >className : string
+ >"T5" : "T5"
+@@= skipped -21, +21 lines =@@
+ >d : any
+ 
+     return <div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div>;
+-><div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div> : error
++><div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div> : any
+ >div : any
+ >className : string
+ >"T6" : "T6"
+@@= skipped -21, +21 lines =@@
+ >d : any
+ 
+     return <div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div>;
+-><div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div> : error
++><div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div> : any
+ >div : any
+ >className : string
+ >"T7" : "T7"
+@@= skipped -19, +19 lines =@@
+ >d : any
+ 
+     return <div className={"T8"} { ...{ "__proto__": null } }>T8</div>;
+-><div className={"T8"} { ...{ "__proto__": null } }>T8</div> : error
++><div className={"T8"} { ...{ "__proto__": null } }>T8</div> : any
+ >div : any
+ >className : string
+ >"T8" : "T8"
+@@= skipped -20, +20 lines =@@
+ >d : any
+ 
+     return <div className={"T9"} { ...{ [__proto__]: null } }>T9</div>;
+-><div className={"T9"} { ...{ [__proto__]: null } }>T9</div> : error
++><div className={"T9"} { ...{ [__proto__]: null } }>T9</div> : any
+ >div : any
+ >className : string
+ >"T9" : "T9"
+@@= skipped -18, +18 lines =@@
+ >d : any
+ 
+     return <div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div>;
+-><div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div> : error
++><div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div> : any
+ >div : any
+ >className : string
+ >"T10" : "T10"
+@@= skipped -18, +18 lines =@@
+ >d : any
+ 
+     return <div className={"T11"} { ...{ __proto__ } }>T11</div>;
+-><div className={"T11"} { ...{ __proto__ } }>T11</div> : error
++><div className={"T11"} { ...{ __proto__ } }>T11</div> : any
+ >div : any
+ >className : string
+ >"T11" : "T11"

@@ -23,7 +23,7 @@ const valid = <ns:element ns:attribute="yep" />;
 ><ns:element ns:attribute="yep" /> : any
 >ns : any
 >element : any
->ns:attribute : any
+>ns:attribute : string
 >ns : any
 >attribute : any
 
@@ -49,14 +49,14 @@ const invalid2 = <ns:element attribute="nope" />;
 ><ns:element attribute="nope" /> : any
 >ns : any
 >element : any
->attribute : any
+>attribute : string
 
 const invalid3 = <ns:element ns:invalid="nope" />;
 >invalid3 : any
 ><ns:element ns:invalid="nope" /> : any
 >ns : any
 >element : any
->ns:invalid : any
+>ns:invalid : string
 >ns : any
 >invalid : any
 

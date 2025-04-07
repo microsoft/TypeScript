@@ -462,8 +462,8 @@ func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, rel
 		return c.elaborateArrayLiteral(node, source, target, relation, diagnosticOutput)
 	case ast.KindArrowFunction:
 		return c.elaborateArrowFunction(node, source, target, relation, diagnosticOutput)
-		// case ast.KindJsxAttributes:
-		// 	return c.elaborateJsxComponents(node.AsJsxAttributes(), source, target, relation, containingMessageChain, errorOutputContainer)
+	case ast.KindJsxAttributes:
+		return c.elaborateJsxComponents(node, source, target, relation, diagnosticOutput)
 	}
 	return false
 }
@@ -2694,27 +2694,20 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 						panic("No errorNode in hasExcessProperties")
 					}
 					if ast.IsJsxAttributes(r.errorNode) || isJsxOpeningLikeElement(r.errorNode) || isJsxOpeningLikeElement(r.errorNode.Parent) {
-						// !!!
-						// // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
-						// // However, using an object-literal error message will be very confusing to the users so we give different a message.
-						// if prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration) && ast.GetSourceFileOfNode(errorNode) == ast.GetSourceFileOfNode(prop.valueDeclaration.name) {
-						// 	// Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
-						// 	// since `children` is a Kind.PropertySignature instead of a Kind.JsxAttribute.
-						// 	errorNode = prop.valueDeclaration.name
-						// }
-						// propName := c.symbolToString(prop)
-						// suggestionSymbol := c.getSuggestedSymbolForNonexistentJSXAttribute(propName, errorTarget)
-						// var suggestion *string
-						// if suggestionSymbol {
-						// 	suggestion = c.symbolToString(suggestionSymbol)
-						// } else {
-						// 	suggestion = nil
-						// }
-						// if suggestion {
-						// 	reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, c.TypeToString(errorTarget), suggestion)
-						// } else {
-						// 	reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, c.TypeToString(errorTarget))
-						// }
+						// JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
+						// However, using an object-literal error message will be very confusing to the users so we give different a message.
+						if prop.ValueDeclaration != nil && ast.IsJsxAttribute(prop.ValueDeclaration) && ast.GetSourceFileOfNode(r.errorNode) == ast.GetSourceFileOfNode(prop.ValueDeclaration.Name()) {
+							// Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
+							// since `children` is a Kind.PropertySignature instead of a Kind.JsxAttribute.
+							r.errorNode = prop.ValueDeclaration.Name()
+						}
+						propName := r.c.symbolToString(prop)
+						suggestionSymbol := r.c.getSuggestedSymbolForNonexistentJSXAttribute(propName, errorTarget)
+						if suggestionSymbol != nil {
+							r.reportError(diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, r.c.TypeToString(errorTarget), r.c.symbolToString(suggestionSymbol))
+						} else {
+							r.reportError(diagnostics.Property_0_does_not_exist_on_type_1, propName, r.c.TypeToString(errorTarget))
+						}
 					} else {
 						// use the property's value declaration if the property is assigned inside the literal itself
 						var objectLiteralDeclaration *ast.Node
@@ -4638,14 +4631,12 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
 	case source.symbol != nil && source.flags&TypeFlagsObject != 0 && r.c.globalObjectType == source:
 		r.reportError(diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead)
 	case source.objectFlags&ObjectFlagsJsxAttributes != 0 && target.flags&TypeFlagsIntersection != 0:
-		// !!!
-		// targetTypes := target.Types()
-		// intrinsicAttributes := c.getJsxType(JsxNames.IntrinsicAttributes, errorNode)
-		// intrinsicClassAttributes := c.getJsxType(JsxNames.IntrinsicClassAttributes, errorNode)
-		// if !c.isErrorType(intrinsicAttributes) && !c.isErrorType(intrinsicClassAttributes) && (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes)) {
-		// 	// do not report top error
-		// 	return
-		// }
+		targetTypes := target.Types()
+		intrinsicAttributes := r.c.getJsxType(JsxNames.IntrinsicAttributes, r.errorNode)
+		intrinsicClassAttributes := r.c.getJsxType(JsxNames.IntrinsicClassAttributes, r.errorNode)
+		if !r.c.isErrorType(intrinsicAttributes) && !r.c.isErrorType(intrinsicClassAttributes) && (slices.Contains(targetTypes, intrinsicAttributes) || slices.Contains(targetTypes, intrinsicClassAttributes)) {
+			return
+		}
 	case originalTarget.flags&TypeFlagsIntersection != 0 && originalTarget.objectFlags&ObjectFlagsIsNeverIntersection != 0:
 		message := diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents
 		prop := core.Find(r.c.getPropertiesOfUnionOrIntersectionType(originalTarget), r.c.isDiscriminantWithNeverType)

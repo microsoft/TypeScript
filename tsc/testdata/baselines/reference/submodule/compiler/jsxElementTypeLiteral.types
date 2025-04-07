@@ -18,20 +18,20 @@ declare global {
 
 // should be fine - `ElementType` accepts `div`
 let a = <div />;
->a : any
-><div /> : any
+>a : Element
+><div /> : Element
 >div : any
 
 // should be an error - `ElementType` does not accept `span`
 let b = <span />;
->b : any
-><span /> : any
+>b : Element
+><span /> : Element
 >span : any
 
 // Should be an error.
 // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
 let c = <ruhroh />;
->c : any
-><ruhroh /> : any
+>c : Element
+><ruhroh /> : Element
 >ruhroh : any
 

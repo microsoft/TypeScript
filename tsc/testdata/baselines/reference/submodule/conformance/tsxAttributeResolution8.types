@@ -15,7 +15,7 @@ var x: any;
 
 // Should be OK
 <test1 {...x} />
-><test1 {...x} /> : any
+><test1 {...x} /> : Element
 >test1 : any
 >x : any
 

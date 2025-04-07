@@ -84,6 +84,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Blah = Blah;
 exports.Blah2 = Blah2;
 exports.Blah3 = Blah3;
+/// <reference path="react16.d.ts" />
+const React = require("react");
 function Blah(props) {
     return <></>;
 }

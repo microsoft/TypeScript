@@ -25,7 +25,9 @@ const Compa = (x: {x: number}) => <div>{"" + x}</div>;
 >Compa : Symbol(Compa, Decl(file.tsx, 9, 5))
 >x : Symbol(x, Decl(file.tsx, 9, 15))
 >x : Symbol(x, Decl(file.tsx, 9, 19))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >x : Symbol(x, Decl(file.tsx, 9, 15))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 
 const x = { video: () => null }
 >x : Symbol(x, Decl(file.tsx, 10, 5))
@@ -34,8 +36,17 @@ const x = { video: () => null }
 // unicode escape sequence is not allowed in tag name or JSX attribute name.
 // tag name:
 ; <\u0061></a>
+>\u0061 : Symbol(a, Decl(react.d.ts, 2370, 33))
+>a : Symbol(a, Decl(react.d.ts, 2370, 33))
+
 ; <\u0061-b></a-b>
+>\u0061-b : Symbol("a-b", Decl(file.tsx, 3, 37))
+>a-b : Symbol("a-b", Decl(file.tsx, 3, 37))
+
 ; <a-\u0063></a-c>
+>a-\u0063 : Symbol("a-c", Decl(file.tsx, 4, 23))
+>a-c : Symbol("a-c", Decl(file.tsx, 4, 23))
+
 ; <Comp\u0061 x={12} />
 >Comp\u0061 : Symbol(Compa, Decl(file.tsx, 9, 5))
 >x : Symbol(x, Decl(file.tsx, 17, 13))
@@ -46,16 +57,27 @@ const x = { video: () => null }
 >\u0076ideo : Symbol(video, Decl(file.tsx, 10, 11))
 
 ; <\u{0061}></a>
+>\u{0061} : Symbol(a, Decl(react.d.ts, 2370, 33))
+>a : Symbol(a, Decl(react.d.ts, 2370, 33))
+
 ; <\u{0061}-b></a-b>
+>\u{0061}-b : Symbol("a-b", Decl(file.tsx, 3, 37))
+>a-b : Symbol("a-b", Decl(file.tsx, 3, 37))
+
 ; <a-\u{0063}></a-c>
+>a-\u{0063} : Symbol("a-c", Decl(file.tsx, 4, 23))
+>a-c : Symbol("a-c", Decl(file.tsx, 4, 23))
+
 ; <Comp\u{0061} x={12} />
 >Comp\u{0061} : Symbol(Compa, Decl(file.tsx, 9, 5))
 >x : Symbol(x, Decl(file.tsx, 22, 15))
 
 // attribute name
 ;<video data-\u0076ideo />
->data-\u0076ideo : Symbol(data-\u0076ideo, Decl(file.tsx, 25, 7))
+>video : Symbol(video, Decl(react.d.ts, 2481, 44))
+>data-\u0076ideo : Symbol("data-video", Decl(file.tsx, 25, 7))
 
 ;<video \u0073rc="" />
+>video : Symbol(video, Decl(react.d.ts, 2481, 44))
 >\u0073rc : Symbol(src, Decl(file.tsx, 26, 7))
 

@@ -33,21 +33,3 @@
  >Values : Symbol(Values, Decl(file.tsx, 5, 42))
  }
  
-@@= skipped -37, +37 lines =@@
- >nextValues : Symbol(nextValues, Decl(file.tsx, 11, 52))
- >a : Symbol(a, Decl(file.tsx, 11, 65))
- >x : Symbol(x, Decl(file.tsx, 11, 72))
-->a.x : Symbol(x, Decl(file.tsx, 11, 42))
- >a : Symbol(a, Decl(file.tsx, 11, 65))
-->x : Symbol(x, Decl(file.tsx, 11, 42))
- 
- let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; // Error - `string` is not assignable to `{x: string}`
- >d : Symbol(d, Decl(file.tsx, 12, 3))
-@@= skipped -11, +9 lines =@@
- >x : Symbol(x, Decl(file.tsx, 12, 42))
- >nextValues : Symbol(nextValues, Decl(file.tsx, 12, 52))
- >a : Symbol(a, Decl(file.tsx, 12, 65))
-->a.x : Symbol(x, Decl(file.tsx, 12, 42))
- >a : Symbol(a, Decl(file.tsx, 12, 65))
-->x : Symbol(x, Decl(file.tsx, 12, 42))
- 

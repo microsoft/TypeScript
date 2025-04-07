@@ -1,0 +1,13 @@
+--- old.jsxElementClassTooManyParams.types
++++ new.jsxElementClassTooManyParams.types
+@@= skipped -29, +29 lines =@@
+ >props : T
+ }
+ const elem = <ElemClass x={12} y={24} />
+->elem : JSX.Element
+-><ElemClass x={12} y={24} /> : JSX.Element
++>elem : Element
++><ElemClass x={12} y={24} /> : Element
+ >ElemClass : typeof ElemClass
+ >x : number
+ >12 : 12

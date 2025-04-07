@@ -15,6 +15,7 @@ const G = <Greet />;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 const Foo = (props) => undefined;
 function Greet(x) {
     return undefined;

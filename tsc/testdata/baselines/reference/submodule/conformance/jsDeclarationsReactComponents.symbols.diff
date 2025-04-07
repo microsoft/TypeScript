@@ -11,7 +11,8 @@
      return (
          <div />
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
      );
  };
  
@@ -43,7 +44,7 @@
  
      tabs: undefined
  >tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents1.jsx, 16, 33))
-@@= skipped -35, +33 lines =@@
+@@= skipped -35, +35 lines =@@
  };
  
  export default TabbedShowLayout;
@@ -62,13 +63,15 @@
      return (
          <div className="" key="">
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(jsDeclarationsReactComponents2.jsx, 6, 12))
  >key : Symbol(key, Decl(jsDeclarationsReactComponents2.jsx, 6, 25))
  
              ok
          </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
      );
  };
  
@@ -82,7 +85,7 @@
  
      tabs: "default value"
  >tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents2.jsx, 12, 33))
-@@= skipped -26, +23 lines =@@
+@@= skipped -26, +26 lines =@@
  };
  
  export default TabbedShowLayout;
@@ -101,13 +104,15 @@
      return (
          <div className="" key="">
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(jsDeclarationsReactComponents3.jsx, 6, 12))
  >key : Symbol(key, Decl(jsDeclarationsReactComponents3.jsx, 6, 25))
  
              ok
          </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
      );
  };
  
@@ -121,7 +126,7 @@
  
      tabs: "default value"
  >tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents3.jsx, 12, 33))
-@@= skipped -26, +23 lines =@@
+@@= skipped -26, +26 lines =@@
  };
  
  export default TabbedShowLayout;
@@ -140,6 +145,7 @@
      return (
          <div className={prop.className} key="">
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 3, 12))
 ->prop.className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 1, 38))
  >prop : Symbol(prop, Decl(jsDeclarationsReactComponents4.jsx, 1, 26))
@@ -149,7 +155,8 @@
              ok
          </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
      );
  };
  
@@ -163,7 +170,7 @@
  
      tabs: "default value"
  >tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents4.jsx, 9, 33))
-@@= skipped -37, +32 lines =@@
+@@= skipped -37, +35 lines =@@
  };
  
  export default TabbedShowLayout;
@@ -182,6 +189,7 @@
  
    return <div />
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  Tree.propTypes = {
@@ -212,7 +220,7 @@
  
      classes: {},
  >classes : Symbol(classes, Decl(jsDeclarationsReactComponents5.jsx, 11, 21))
-@@= skipped -34, +33 lines =@@
+@@= skipped -34, +34 lines =@@
  };
  
  export default Tree;

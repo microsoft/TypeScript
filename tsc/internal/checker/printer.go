@@ -39,6 +39,9 @@ func (c *Checker) symbolToString(s *ast.Symbol) string {
 		return s.Name
 	}
 	if s.ValueDeclaration != nil {
+		if ast.IsJsxAttribute(s.ValueDeclaration) {
+			return "\"" + s.Name + "\""
+		}
 		name := ast.GetNameOfDeclaration(s.ValueDeclaration)
 		if name != nil {
 			return scanner.GetTextOfNode(name)

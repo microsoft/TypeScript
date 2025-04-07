@@ -23,6 +23,7 @@ function Bar<T extends { prop: number }>(arg: T) {
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 function createComponent(arg) {
     let a1 = <Component {...arg}/>;
     let a2 = <Component {...arg} prop1/>;

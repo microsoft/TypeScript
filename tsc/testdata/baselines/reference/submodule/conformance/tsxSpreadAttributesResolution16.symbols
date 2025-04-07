@@ -48,7 +48,9 @@ function AnotherComponent({ property1 }: AnotherComponentProps) {
 
     return (
         <span>{property1}</span>
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
 >property1 : Symbol(property1, Decl(file.tsx, 20, 27))
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
 
     );
 }

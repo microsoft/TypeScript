@@ -3,8 +3,8 @@
 === jsxJsxsCjsTransformSubstitutesNames.tsx ===
 /// <reference path="react16.d.ts" />
 const a = <div></div>
->a : any
-><div></div> : any
+>a : Element
+><div></div> : Element
 >div : any
 >div : any
 

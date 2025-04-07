@@ -41,10 +41,12 @@
      return <div>Hello</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
    }
  }
  
-@@= skipped -22, +20 lines =@@
+@@= skipped -22, +22 lines =@@
  >FieldFeedback : Symbol(FieldFeedback, Decl(reactDefaultPropsInferenceSuccess.tsx, 10, 1))
  >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 34))
  >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 41))
@@ -83,10 +85,12 @@
      return <div>Hello</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
    }
  }
  
-@@= skipped -24, +22 lines =@@
+@@= skipped -24, +24 lines =@@
  >FieldFeedbackBeta : Symbol(FieldFeedbackBeta, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 73))
  >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 39))
  >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 46))
@@ -135,10 +139,12 @@
      return <div>Hello</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
    }
  }
  
-@@= skipped -29, +27 lines =@@
+@@= skipped -29, +29 lines =@@
  >FieldFeedback2 : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 46, 1))
  >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 63, 35))
  >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 63, 42))

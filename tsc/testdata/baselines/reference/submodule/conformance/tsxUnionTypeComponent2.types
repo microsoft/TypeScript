@@ -13,7 +13,7 @@ const X: Invalid1 = 1;
 >1 : 1
 
 <X />;
-><X /> : any
+><X /> : Element
 >X : number
 
 

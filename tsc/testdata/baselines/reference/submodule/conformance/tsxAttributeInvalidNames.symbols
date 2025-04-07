@@ -22,6 +22,9 @@ declare module JSX {
 
 // Invalid names
 <test1 32data={32} />;
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >32 : Symbol(32, Decl(file.tsx, 9, 15))
 
 <test2 -data={32} />;
+>test2 : Symbol(test2, Decl(file.tsx, 3, 33))
+

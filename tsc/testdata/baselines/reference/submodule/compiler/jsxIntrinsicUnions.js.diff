@@ -9,5 +9,7 @@
 -var React = require("react");
 -var El = Math.random() ? 'h1' : 'h2';
 -var tag = React.createElement(El, { className: "ok", key: "key" }, "Title");
++/// <reference path="react16.d.ts" />
++const React = require("react");
 +const El = Math.random() ? 'h1' : 'h2';
 +const tag = <El className="ok" key="key">{"Title"}</El>;

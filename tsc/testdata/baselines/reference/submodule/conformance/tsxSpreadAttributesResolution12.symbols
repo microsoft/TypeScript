@@ -50,6 +50,8 @@ class OverWriteAttr extends React.Component<Prop, {}> {
 >render : Symbol(render, Decl(file.tsx, 17, 55))
 
         return <div>Hello</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
     }
 }
 

@@ -15,8 +15,8 @@ var p: any;
 >p : any
 
 var openClosed1 = <div>
->openClosed1 : any
-><div>   {blah}</div> : any
+>openClosed1 : Element
+><div>   {blah}</div> : Element
 >div : any
 
    {blah}
@@ -27,10 +27,10 @@ var openClosed1 = <div>
 
 // Should emit React.__spread({}, p, {x: 0})
 var spread1 = <div {...p} x={0} />;
->spread1 : any
-><div {...p} x={0} /> : any
+>spread1 : Element
+><div {...p} x={0} /> : Element
 >div : any
 >p : any
->x : any
+>x : number
 >0 : 0
 

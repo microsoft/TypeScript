@@ -93,14 +93,16 @@
 ->p : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
 +>JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
 +>Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
++>p : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
  >props.x : Symbol(x, Decl(component.tsx, 3, 30))
  >props : Symbol(props, Decl(component.tsx, 3, 22))
  >x : Symbol(x, Decl(component.tsx, 3, 30))
-@@= skipped -15, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  >props.y : Symbol(y, Decl(component.tsx, 3, 40))
  >props : Symbol(props, Decl(component.tsx, 3, 22))
  >y : Symbol(y, Decl(component.tsx, 3, 40))
 ->p : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
++>p : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
  
  export class MyClass implements predom.JSX.Element {
  >MyClass : Symbol(MyClass, Decl(component.tsx, 3, 164))
@@ -136,7 +138,8 @@
  
          return <p>
 ->p : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
--
++>p : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
+ 
              {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
  >this.props.x : Symbol(x, Decl(component.tsx, 7, 31))
 ->this.props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
@@ -178,28 +181,33 @@
  
          </p>;
 ->p : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
++>p : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
      }
  }
  export const tree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
-@@= skipped -75, +71 lines =@@
+@@= skipped -75, +75 lines =@@
  >MySFC : Symbol(MySFC, Decl(component.tsx, 3, 12))
  
  export default <h></h>
 ->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
 ->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
  
  === index.tsx ===
  /** @jsx dom */
-@@= skipped -20, +18 lines =@@
+@@= skipped -20, +20 lines =@@
  
  elem = <h></h>; // Expect assignability error here
  >elem : Symbol(elem, Decl(index.tsx, 3, 3))
 ->h : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  
  const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
  >DOMSFC : Symbol(DOMSFC, Decl(index.tsx, 6, 5))
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
  >y : Symbol(y, Decl(index.tsx, 6, 34))
  >children : Symbol(children, Decl(index.tsx, 6, 45))
  >dom : Symbol(dom, Decl(index.tsx, 1, 8))
@@ -208,14 +216,16 @@
 ->p : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 +>JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 22))
 +>Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
++>p : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  >props.x : Symbol(x, Decl(index.tsx, 6, 24))
  >props : Symbol(props, Decl(index.tsx, 6, 16))
  >x : Symbol(x, Decl(index.tsx, 6, 24))
-@@= skipped -18, +17 lines =@@
+@@= skipped -18, +18 lines =@@
  >props.children : Symbol(children, Decl(index.tsx, 6, 45))
  >props : Symbol(props, Decl(index.tsx, 6, 16))
  >children : Symbol(children, Decl(index.tsx, 6, 45))
 ->p : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>p : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  
  class DOMClass implements dom.JSX.Element {
  >DOMClass : Symbol(DOMClass, Decl(index.tsx, 6, 147))
@@ -251,6 +261,7 @@
  
          return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;
 ->p : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>p : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
  >this.props.x : Symbol(x, Decl(index.tsx, 10, 31))
 ->this.props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
 +>this.props : Symbol(props, Decl(index.tsx, 10, 16))
@@ -287,6 +298,7 @@
 +>props : Symbol(props, Decl(index.tsx, 10, 16))
  >children : Symbol(children, Decl(index.tsx, 10, 52))
 ->p : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>p : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
      }
  }
  

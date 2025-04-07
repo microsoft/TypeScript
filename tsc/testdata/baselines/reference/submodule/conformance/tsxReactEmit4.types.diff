@@ -1,0 +1,24 @@
+--- old.tsxReactEmit4.types
++++ new.tsxReactEmit4.types
+@@= skipped -14, +14 lines =@@
+ >p : any
+ 
+ var openClosed1 = <div>
+->openClosed1 : JSX.Element
+-><div>   {blah}</div> : JSX.Element
++>openClosed1 : Element
++><div>   {blah}</div> : Element
+ >div : any
+ 
+    {blah}
+@@= skipped -12, +12 lines =@@
+ 
+ // Should emit React.__spread({}, p, {x: 0})
+ var spread1 = <div {...p} x={0} />;
+->spread1 : JSX.Element
+-><div {...p} x={0} /> : JSX.Element
++>spread1 : Element
++><div {...p} x={0} /> : Element
+ >div : any
+ >p : any
+ >x : number

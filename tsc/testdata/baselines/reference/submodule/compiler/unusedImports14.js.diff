@@ -6,4 +6,5 @@
  exports.FooComponent = void 0;
 -var React = require("react");
 -exports.FooComponent = React.createElement("div", null);
++const React = require("react");
 +exports.FooComponent = <div></div>;

@@ -11,23 +11,23 @@ declare const Elem: ComponentType<{ someKey: string }>;
 >someKey : string
 
 const bad = <Elem />;
->bad : any
-><Elem /> : any
+>bad : Element
+><Elem /> : Element
 >Elem : ComponentType<{ someKey: string; }>
 
 const good = <Elem someKey="ok" />;
->good : any
-><Elem someKey="ok" /> : any
+>good : Element
+><Elem someKey="ok" /> : Element
 >Elem : ComponentType<{ someKey: string; }>
->someKey : any
+>someKey : string
 
 declare const Elem2: ComponentType<{ opt?: number }>;
 >Elem2 : ComponentType<{ opt?: number | undefined; }>
 >opt : number | undefined
 
 const alsoOk = <Elem2>text</Elem2>;
->alsoOk : any
-><Elem2>text</Elem2> : any
+>alsoOk : Element
+><Elem2>text</Elem2> : Element
 >Elem2 : ComponentType<{ opt?: number | undefined; }>
 >Elem2 : ComponentType<{ opt?: number | undefined; }>
 

@@ -25,18 +25,23 @@ interface Attribs1 {
 
 // OK
 <test1 c1={(x) => x.length} />; // OK
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >c1 : Symbol(c1, Decl(file.tsx, 11, 6))
 >x : Symbol(x, Decl(file.tsx, 11, 12))
+>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(file.tsx, 11, 12))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
 <test1 data-c1={(x) => x.leng} />; // OK
->data-c1 : Symbol(data-c1, Decl(file.tsx, 12, 6))
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
+>data-c1 : Symbol("data-c1", Decl(file.tsx, 12, 6))
 >x : Symbol(x, Decl(file.tsx, 12, 17))
 >x : Symbol(x, Decl(file.tsx, 12, 17))
 
 
 // Errors
 <test1 c1={(x) => x.leng} />; // Error, no leng on 'string'
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >c1 : Symbol(c1, Decl(file.tsx, 16, 6))
 >x : Symbol(x, Decl(file.tsx, 16, 12))
 >x : Symbol(x, Decl(file.tsx, 16, 12))

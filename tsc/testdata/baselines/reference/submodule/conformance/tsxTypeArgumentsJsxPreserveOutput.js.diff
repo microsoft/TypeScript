@@ -5,6 +5,7 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var React = require("react");
++const React = require("react");
  function Foo() {
      return null;
  }
@@ -14,7 +15,7 @@
      <Foo />
      <Foo />
      <Foo />
-@@= skipped -17, +16 lines =@@
+@@= skipped -17, +17 lines =@@
      <Foo />
      <Foo />
  

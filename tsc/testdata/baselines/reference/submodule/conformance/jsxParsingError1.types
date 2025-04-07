@@ -19,10 +19,10 @@ const class2 = "bar";
 >"bar" : "bar"
 
 const elem = <div className={class1, class2}/>;
->elem : any
-><div className={class1, class2}/> : any
+>elem : Element
+><div className={class1, class2}/> : Element
 >div : any
->className : any
+>className : string
 >class1, class2 : "bar"
 >class1 : "foo"
 >class2 : "bar"

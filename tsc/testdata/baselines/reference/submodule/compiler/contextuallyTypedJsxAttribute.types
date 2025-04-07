@@ -26,12 +26,12 @@ declare function Test<C extends keyof Elements>(props: Props<C>): null;
 >Test : <C extends keyof Elements>(props: Props<C>) => null
 
   as="bar"
->as : any
+>as : "bar"
 
   callback={(value) => {}}
->callback : any
->(value) => {} : (value: any) => void
->value : any
+>callback : (value: string) => void
+>(value) => {} : (value: string) => void
+>value : string
 
 />;
 
@@ -56,12 +56,12 @@ Test({
 >Test : <C extends keyof Elements>(props: Props<C>) => null
 
   as="bar"
->as : any
+>as : "bar"
 
   callback={(value) => {}}
->callback : any
->(value) => {} : (value: any) => void
->value : any
+>callback : (value: string) => void
+>(value) => {} : (value: string) => void
+>value : string
 
 />;
 

@@ -35,6 +35,7 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} 
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 // OK
 function Baz(key1, value) {
     let a0 = <ComponentWithTwoAttributes key1={key1} value={value}/>;

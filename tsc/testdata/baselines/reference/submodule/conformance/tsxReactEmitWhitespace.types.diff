@@ -1,0 +1,96 @@
+--- old.tsxReactEmitWhitespace.types
++++ new.tsxReactEmitWhitespace.types
+@@= skipped -19, +19 lines =@@
+ 
+ // Emit "   "
+ <div>   </div>;
+-><div>   </div> : JSX.Element
++><div>   </div> : Element
+ >div : any
+ >div : any
+ 
+ // Emit "  ", p, "   "
+ <div>  {p}    </div>;
+-><div>  {p}    </div> : JSX.Element
++><div>  {p}    </div> : Element
+ >div : any
+ >p : number
+ >div : any
+ 
+ // Emit only p
+ <div>  
+-><div>        {p}          </div> : JSX.Element
++><div>        {p}          </div> : Element
+ >div : any
+ 
+       {p}    
+@@= skipped -24, +24 lines =@@
+ 
+ // Emit only p
+ <div>
+-><div>  {p}    </div> : JSX.Element
++><div>  {p}    </div> : Element
+ >div : any
+ 
+   {p}
+@@= skipped -11, +11 lines =@@
+ 
+ // Emit "  3"
+ <div>  3  
+-><div>  3    </div> : JSX.Element
++><div>  3    </div> : Element
+ >div : any
+ 
+   </div>;
+@@= skipped -8, +8 lines =@@
+ 
+ // Emit "  3  "
+ <div>  3  </div>;
+-><div>  3  </div> : JSX.Element
++><div>  3  </div> : Element
+ >div : any
+ >div : any
+ 
+ // Emit "3"
+ <div>   
+-><div>      3       </div> : JSX.Element
++><div>      3       </div> : Element
+ >div : any
+ 
+    3    
+@@= skipped -15, +15 lines =@@
+ 
+ // Emit no args
+ <div>   
+-><div>      </div> : JSX.Element
++><div>      </div> : Element
+ >div : any
+ 
+    </div>;
+@@= skipped -8, +8 lines =@@
+ 
+ // Emit "foo bar"
+ <div>  
+-><div>     foo bar     </div> : JSX.Element
++><div>     foo bar     </div> : Element
+ >div : any
+ 
+    foo
+@@= skipped -12, +12 lines =@@
+ 
+ // Emit "hello\\ world"
+ <div>
+-><div>    hello\world</div> : JSX.Element
++><div>    hello\world</div> : Element
+ >div : any
+ 
+     hello\
+@@= skipped -11, +11 lines =@@
+ 
+ // Emit "  a b  c d  "
+ <div>  a
+-><div>  a    b  c    d  </div> : JSX.Element
++><div>  a    b  c    d  </div> : Element
+ >div : any
+ 
+     b  c

@@ -26,6 +26,8 @@ const b = (
 >Foo : Symbol(Foo, Decl(index.tsx, 7, 1))
 
         {<div/> as unknown}
+>div : Symbol(div, Decl(react18.d.ts, 3174, 110))
+
         {"aa"}
     </Foo>
 >Foo : Symbol(Foo, Decl(index.tsx, 7, 1))

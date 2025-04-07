@@ -11,19 +11,19 @@ const props2 = { answer: 42 }
 >42 : 42
 
 const a2 = <div key="foo" {...props2}>text</div>;
->a2 : any
-><div key="foo" {...props2}>text</div> : any
+>a2 : Element
+><div key="foo" {...props2}>text</div> : Element
 >div : any
->key : any
+>key : string
 >props2 : { answer: number; }
 >div : any
 
 const b2 = <div {...props2} key="bar">text</div>;
->b2 : any
-><div {...props2} key="bar">text</div> : any
+>b2 : Element
+><div {...props2} key="bar">text</div> : Element
 >div : any
 >props2 : { answer: number; }
->key : any
+>key : string
 >div : any
 
 export {};
@@ -38,19 +38,19 @@ const props = { answer: 42 }
 >42 : 42
 
 const a = <div key="foo" {...props}>text</div>;
->a : any
-><div key="foo" {...props}>text</div> : any
+>a : Element
+><div key="foo" {...props}>text</div> : Element
 >div : any
->key : any
+>key : string
 >props : { answer: number; }
 >div : any
 
 const b = <div {...props} key="bar">text</div>;
->b : any
-><div {...props} key="bar">text</div> : any
+>b : Element
+><div {...props} key="bar">text</div> : Element
 >div : any
 >props : { answer: number; }
->key : any
+>key : string
 >div : any
 
 export {};

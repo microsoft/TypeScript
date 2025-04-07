@@ -6,12 +6,15 @@
    <p></p>
 ->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
 ->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
--
++>p : Symbol(p, Decl(react16.d.ts, 2593, 102))
++>p : Symbol(p, Decl(react16.d.ts, 2593, 102))
+ 
    text
    <div></div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
--
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+ 
  </>
  
- export {};

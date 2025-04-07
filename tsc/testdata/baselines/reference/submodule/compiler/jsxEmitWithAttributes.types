@@ -109,13 +109,13 @@ class A {
 			<meta content="helloworld"></meta>,
 ><meta content="helloworld"></meta> : any
 >meta : any
->content : any
+>content : string
 >meta : any
 
 			<meta content={c.a!.b}></meta>
 ><meta content={c.a!.b}></meta> : any
 >meta : any
->content : any
+>content : string
 >c.a!.b : string
 >c.a! : { b: string; }
 >c.a : { b: string; }

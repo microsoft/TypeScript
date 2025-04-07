@@ -1,0 +1,25 @@
+--- old.reactImportUnusedInNewJSXEmit(jsx=react-jsxdev).types
++++ new.reactImportUnusedInNewJSXEmit(jsx=react-jsxdev).types
+@@= skipped -6, +6 lines =@@
+ >React : typeof React
+ 
+ function Bar() {
+->Bar : () => JSX.Element
++>Bar : () => Element
+ 
+   return <div />;
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ }
+ 
+ export function Foo() {
+->Foo : () => JSX.Element
++>Foo : () => Element
+ 
+   return <Bar />;
+-><Bar /> : JSX.Element
+->Bar : () => JSX.Element
++><Bar /> : Element
++>Bar : () => Element
+ }

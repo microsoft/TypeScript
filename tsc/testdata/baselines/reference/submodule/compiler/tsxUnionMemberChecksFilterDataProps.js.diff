@@ -1,16 +1,12 @@
 --- old.tsxUnionMemberChecksFilterDataProps.js
 +++ new.tsxUnionMemberChecksFilterDataProps.js
-@@= skipped -12, +12 lines =@@
- 
- //// [tsxUnionMemberChecksFilterDataProps.js]
- "use strict";
--var __importDefault = (this && this.__importDefault) || function (mod) {
--    return (mod && mod.__esModule) ? mod : { "default": mod };
--};
+@@= skipped -17, +17 lines =@@
+ };
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var react_1 = __importDefault(require("react"));
 -var RootNotHappy = function () { return (react_1.default.createElement(NotHappy, { "data-testid": "my-test-id" })); };
 -var RootHappy = function () { return (react_1.default.createElement(Happy, { "data-testid": "my-test-id" })); };
++const react_1 = __importDefault(require("react"));
 +const RootNotHappy = () => (<NotHappy data-testid="my-test-id"/>);
 +const RootHappy = () => (<Happy data-testid="my-test-id"/>);

@@ -1,0 +1,22 @@
+--- old.checkJsxIntersectionElementPropsType.types
++++ new.checkJsxIntersectionElementPropsType.types
+@@= skipped -17, +17 lines =@@
+ 
+ class C<T> extends Component<{ x?: boolean; } & T> {}
+ >C : C<T>
+->Component : Component<{ x?: boolean; } & T>
++>Component : Component<{ x?: boolean | undefined; } & T>
+ >x : boolean | undefined
+ 
+ const y = new C({foobar: "example"});
+@@= skipped -12, +12 lines =@@
+ >"example" : "example"
+ 
+ const x = <C foobar="example" />
+->x : error
+-><C foobar="example" /> : error
++>x : any
++><C foobar="example" /> : any
+ >C : typeof C
+ >foobar : string
+ 

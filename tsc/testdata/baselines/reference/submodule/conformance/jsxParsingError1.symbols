@@ -24,6 +24,7 @@ const class2 = "bar";
 
 const elem = <div className={class1, class2}/>;
 >elem : Symbol(elem, Decl(file.tsx, 10, 5))
+>div : Symbol((Missing), Decl(file.tsx, 2, 30))
 >className : Symbol(className, Decl(file.tsx, 10, 17))
 >class1 : Symbol(class1, Decl(file.tsx, 8, 5))
 >class2 : Symbol(class2, Decl(file.tsx, 9, 5))

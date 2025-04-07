@@ -30,9 +30,9 @@ interface TestProps<T> {
 >foo : FunctionPropertyNames<T>
 }
 function Test<T>(props: TestProps<T>) { return <></>; }
->Test : <T>(props: TestProps<T>) => any
+>Test : <T>(props: TestProps<T>) => Element
 >props : TestProps<T>
-><></> : any
+><></> : Element
 
 const model = new TestObject();
 >model : TestObject
@@ -40,18 +40,18 @@ const model = new TestObject();
 >TestObject : typeof TestObject
 
 const el1 = <Test model={model} foo="c" />;
->el1 : any
-><Test model={model} foo="c" /> : any
->Test : <T>(props: TestProps<T>) => any
->model : any
+>el1 : Element
+><Test model={model} foo="c" /> : Element
+>Test : <T>(props: TestProps<T>) => Element
 >model : TestObject
->foo : any
+>model : TestObject
+>foo : "c"
 
 const el2 = <Test<TestObject> model={model} foo="c" />;
->el2 : any
-><Test<TestObject> model={model} foo="c" /> : any
->Test : <T>(props: TestProps<T>) => any
->model : any
+>el2 : Element
+><Test<TestObject> model={model} foo="c" /> : Element
+>Test : <T>(props: TestProps<T>) => Element
 >model : TestObject
->foo : any
+>model : TestObject
+>foo : "c"
 

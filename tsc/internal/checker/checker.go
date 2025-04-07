@@ -619,6 +619,7 @@ type Checker struct {
 	assertionLinks                             core.LinkStore[*ast.Node, AssertionLinks]
 	arrayLiteralLinks                          core.LinkStore[*ast.Node, ArrayLiteralLinks]
 	switchStatementLinks                       core.LinkStore[*ast.Node, SwitchStatementLinks]
+	jsxElementLinks                            core.LinkStore[*ast.Node, JsxElementLinks]
 	symbolReferenceLinks                       core.LinkStore[*ast.Symbol, SymbolReferenceLinks]
 	valueSymbolLinks                           core.LinkStore[*ast.Symbol, ValueSymbolLinks]
 	mappedSymbolLinks                          core.LinkStore[*ast.Symbol, MappedSymbolLinks]
@@ -682,6 +683,7 @@ type Checker struct {
 	restrictiveMapper                          *TypeMapper
 	permissiveMapper                           *TypeMapper
 	emptyObjectType                            *Type
+	emptyJsxObjectType                         *Type
 	emptyTypeLiteralType                       *Type
 	unknownEmptyObjectType                     *Type
 	unknownUnionType                           *Type
@@ -817,6 +819,8 @@ type Checker struct {
 	markNodeAssignments                        func(*ast.Node) bool
 	emitResolver                               *emitResolver
 	emitResolverOnce                           sync.Once
+	_jsxNamespace                              string
+	_jsxFactoryEntity                          *ast.Node
 }
 
 func NewChecker(program Program) *Checker {
@@ -934,6 +938,7 @@ func NewChecker(program Program) *Checker {
 	c.restrictiveMapper = newFunctionTypeMapper(c.restrictiveMapperWorker)
 	c.permissiveMapper = newFunctionTypeMapper(c.permissiveMapperWorker)
 	c.emptyObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
+	c.emptyJsxObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyTypeLiteralType = c.newAnonymousType(c.newSymbol(ast.SymbolFlagsTypeLiteral, ast.InternalSymbolNameType), nil, nil, nil, nil)
 	c.unknownEmptyObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.unknownUnionType = c.createUnknownUnionType()
@@ -8276,10 +8281,6 @@ func (c *Checker) getDiagnosticHeadMessageForDecoratorResolution(node *ast.Node)
 	panic("Unhandled case in getDiagnosticHeadMessageForDecoratorResolution")
 }
 
-func (c *Checker) resolveJsxOpeningLikeElement(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
-	return c.unknownSignature // !!!
-}
-
 func (c *Checker) resolveInstanceofExpression(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
 	// if rightType is an object type with a custom `[Symbol.hasInstance]` method, then it is potentially
 	// valid on the right-hand side of the `instanceof` operator. This allows normal `object` types to
@@ -8633,25 +8634,13 @@ func (c *Checker) hasCorrectArity(node *ast.Node, args []*ast.Node, signature *S
 	case ast.IsBinaryExpression(node):
 		argCount = 1
 	case isJsxOpeningLikeElement(node):
-		argCount = len(args)
-		// !!!
-		// callIsIncomplete = node.Attributes.End == node.End
-		// if callIsIncomplete {
-		// 	return true
-		// }
-		// if effectiveMinimumArguments == 0 {
-		// 	argCount = args.length
-		// } else {
-		// 	argCount = 1
-		// }
-		// if args.length == 0 {
-		// 	effectiveParameterCount = effectiveParameterCount
-		// } else {
-		// 	effectiveParameterCount = 1
-		// }
-		// // class may have argumentless ctor functions - still resolve ctor and compare vs props member type
-		// effectiveMinimumArguments = min(effectiveMinimumArguments, 1)
-		// // sfc may specify context argument - handled by framework and not typechecked
+		callIsIncomplete = node.Attributes().End() == node.End()
+		if callIsIncomplete {
+			return true
+		}
+		argCount = core.IfElse(effectiveMinimumArguments == 0, len(args), 1)
+		effectiveParameterCount = core.IfElse(len(args) == 0, effectiveParameterCount, 1) // class may have argumentless ctor functions - still resolve ctor and compare vs props member type
+		effectiveMinimumArguments = min(effectiveMinimumArguments, 1)                     // sfc may specify context argument - handled by framework and not typechecked
 	case ast.IsNewExpression(node) && node.ArgumentList() == nil:
 		// This only happens when we have something of the form: 'new C'
 		return c.getMinArgumentCount(signature) == 0
@@ -8765,12 +8754,7 @@ func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*
 
 func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signature *Signature, relation *Relation, checkMode CheckMode, reportErrors bool, inferenceContext *InferenceContext, diagnosticOutput *[]*ast.Diagnostic) bool {
 	if isJsxOpeningLikeElement(node) {
-		// !!!
-		// if !c.checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer) {
-		// 	Debug.assert(!reportErrors || errorOutputContainer.errors != nil, "jsx should have errors when reporting errors")
-		// 	return errorOutputContainer.errors || emptyArray
-		// }
-		return true
+		return c.checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, diagnosticOutput)
 	}
 	thisType := c.getThisTypeOfSignature(signature)
 	if thisType != nil && thisType != c.voidType && !(ast.IsNewExpression(node) || ast.IsCallExpression(node) && isSuperProperty(node.Expression())) {
@@ -8911,9 +8895,7 @@ func (c *Checker) getEffectiveCheckNode(argument *ast.Node) *ast.Node {
 
 func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args []*ast.Node, checkMode CheckMode, context *InferenceContext) []*Type {
 	if isJsxOpeningLikeElement(node) {
-		// !!!
-		// return c.inferJsxTypeArguments(node, signature, checkMode, context)
-		return core.Map(context.inferences, func(*InferenceInfo) *Type { return c.anyType })
+		return c.inferJsxTypeArguments(node, signature, checkMode, context)
 	}
 	// If a contextual type is available, infer from that type to the return type of the call expression. For
 	// example, given a 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
@@ -10352,40 +10334,6 @@ func (c *Checker) checkSyntheticExpression(node *ast.Node) *Type {
 		return c.getIndexedAccessType(t, c.numberType)
 	}
 	return t
-}
-
-func (c *Checker) checkJsxExpression(node *ast.Node, checkMode CheckMode) *Type {
-	// !!!
-	return c.errorType
-}
-
-func (c *Checker) checkJsxElement(node *ast.Node, checkMode CheckMode) *Type {
-	c.checkNodeDeferred(node)
-	// !!!
-	return c.errorType
-}
-
-func (c *Checker) checkJsxElementDeferred(node *ast.Node) {
-}
-
-func (c *Checker) checkJsxSelfClosingElement(node *ast.Node, checkMode CheckMode) *Type {
-	c.checkNodeDeferred(node)
-	// !!!
-	return c.errorType
-}
-
-func (c *Checker) checkJsxSelfClosingElementDeferred(node *ast.Node) {
-	// !!!
-}
-
-func (c *Checker) checkJsxFragment(node *ast.Node) *Type {
-	// !!!
-	return c.errorType
-}
-
-func (c *Checker) checkJsxAttributes(node *ast.Node, checkMode CheckMode) *Type {
-	// !!!
-	return c.errorType
 }
 
 func (c *Checker) checkIdentifier(node *ast.Node, checkMode CheckMode) *Type {
@@ -13054,10 +13002,6 @@ func (c *Checker) checkObjectLiteralMethod(node *ast.Node, checkMode CheckMode) 
 	return c.instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode)
 }
 
-func (c *Checker) checkJsxAttribute(node *ast.JsxAttribute, checkMode CheckMode) *Type {
-	return c.anyType // !!!
-}
-
 func (c *Checker) checkExpressionForMutableLocation(node *ast.Node, checkMode CheckMode) *Type {
 	t := c.checkExpressionEx(node, checkMode)
 	switch {
@@ -15261,7 +15205,7 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 	case ast.KindBinaryExpression:
 		result = c.getWidenedTypeForAssignmentDeclaration(symbol)
 	case ast.KindJsxAttribute:
-		result = c.checkJsxAttribute(declaration.AsJsxAttribute(), CheckModeNormal)
+		result = c.checkJsxAttribute(declaration, CheckModeNormal)
 	case ast.KindEnumMember:
 		result = c.getTypeOfEnumMember(symbol)
 	default:
@@ -26498,7 +26442,39 @@ func (c *Checker) markExportAssignmentAliasReferenced(location *ast.Node /*Expor
 }
 
 func (c *Checker) markJsxAliasReferenced(node *ast.Node /*JsxOpeningLikeElement | JsxOpeningFragment*/) {
-	// !!!
+	if c.getJsxNamespaceContainerForImplicitImport(node) != nil {
+		return
+	}
+	// The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
+	// And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
+	jsxFactoryRefErr := core.IfElse(c.compilerOptions.Jsx == core.JsxEmitReact, diagnostics.This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found, nil)
+	jsxFactoryNamespace := c.getJsxNamespace(node)
+	jsxFactoryLocation := node
+	if isJsxOpeningLikeElement(node) {
+		jsxFactoryLocation = node.TagName()
+	}
+	// allow null as jsxFragmentFactory
+	var jsxFactorySym *ast.Symbol
+	if !(ast.IsJsxOpeningFragment(node) && jsxFactoryNamespace == "null") {
+		jsxFactorySym = c.resolveName(jsxFactoryLocation, jsxFactoryNamespace, ast.SymbolFlagsValue, jsxFactoryRefErr, true /*isUse*/, false /*excludeGlobals*/)
+	}
+	if jsxFactorySym != nil {
+		// Mark local symbol as referenced here because it might not have been marked
+		// if jsx emit was not jsxFactory as there wont be error being emitted
+		c.symbolReferenced(jsxFactorySym, ast.SymbolFlagsAll)
+		// If react/jsxFactory symbol is alias, mark it as refereced
+		if c.canCollectSymbolAliasAccessibilityData && jsxFactorySym.Flags&ast.SymbolFlagsAlias != 0 && c.getTypeOnlyAliasDeclaration(jsxFactorySym) == nil {
+			c.markAliasSymbolAsReferenced(jsxFactorySym)
+		}
+	}
+	// For JsxFragment, mark jsx pragma as referenced via resolveName
+	if ast.IsJsxOpeningFragment(node) {
+		file := ast.GetSourceFileOfNode(node)
+		localJsxNamespace := c.getLocalJsxNamespace(file)
+		if localJsxNamespace != "" {
+			c.resolveName(jsxFactoryLocation, localJsxNamespace, ast.SymbolFlagsValue, jsxFactoryRefErr, true /*isUse*/, false /*excludeGlobals*/)
+		}
+	}
 }
 
 func (c *Checker) markImportEqualsAliasReferenced(location *ast.Node /*ImportEqualsDeclaration*/) {
@@ -27519,10 +27495,9 @@ func (c *Checker) getContextualTypeForArgumentAtIndex(callTarget *ast.Node, argI
 	} else {
 		signature = c.getResolvedSignature(callTarget, nil, CheckModeNormal)
 	}
-	// !!!
-	// if isJsxOpeningLikeElement(callTarget) && argIndex == 0 {
-	// 	return c.getEffectiveFirstArgumentForJsxSignature(signature, callTarget)
-	// }
+	if isJsxOpeningLikeElement(callTarget) && argIndex == 0 {
+		return c.getEffectiveFirstArgumentForJsxSignature(signature, callTarget)
+	}
 	restIndex := len(signature.parameters) - 1
 	if signatureHasRestParameter(signature) && argIndex >= restIndex {
 		return c.getIndexedAccessTypeEx(c.getTypeOfSymbol(signature.parameters[restIndex]), c.getNumberLiteralType(jsnum.Number(argIndex-restIndex)), AccessFlagsContextual, nil, nil)
@@ -27716,18 +27691,6 @@ func (c *Checker) getContextualTypeForSubstitutionExpression(template *ast.Node,
 	return nil
 }
 
-func (c *Checker) getContextualTypeForJsxExpression(node *ast.Node, contextFlags ContextFlags) *Type {
-	return nil // !!!
-}
-
-func (c *Checker) getContextualTypeForJsxAttribute(attribute *ast.Node, contextFlags ContextFlags) *Type {
-	return nil // !!!
-}
-
-func (c *Checker) getContextualJsxElementAttributesType(attribute *ast.Node, contextFlags ContextFlags) *Type {
-	return nil // !!!
-}
-
 func (c *Checker) getContextualImportAttributeType(node *ast.Node) *Type {
 	return c.getTypeOfPropertyOfContextualType(c.getGlobalImportAttributesType(), node.Name().Text())
 }
@@ -27754,10 +27717,9 @@ func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
 		// Handles instanceof operator
 		return []*ast.Node{node.AsBinaryExpression().Left}
 	case isJsxOpeningLikeElement(node):
-		// !!!
-		// if node.Attributes.Properties.length > 0 || (isJsxOpeningElement(node) && node.Parent.Children.length > 0) {
-		// 	return []JsxAttributes{node.Attributes}
-		// }
+		if len(node.Attributes().AsJsxAttributes().Properties.Nodes) != 0 || (ast.IsJsxOpeningElement(node) && len(node.Parent.Children().Nodes) != 0) {
+			return []*ast.Node{node.Attributes()}
+		}
 		return nil
 	default:
 		args := node.Arguments()
@@ -28422,8 +28384,13 @@ func (d *ObjectLiteralDiscriminator) matches(index int, t *Type) bool {
 	var propType *Type
 	if index < len(d.props) {
 		prop := d.props[index]
-		if ast.IsPropertyAssignment(prop) {
-			propType = d.c.getContextFreeTypeOfExpression(prop.Initializer())
+		if ast.IsPropertyAssignment(prop) || ast.IsJsxAttribute(prop) {
+			initializer := prop.Initializer()
+			if initializer != nil {
+				propType = d.c.getContextFreeTypeOfExpression(prop.Initializer())
+			} else {
+				propType = d.c.trueType // JsxAttribute without initializer is always true
+			}
 		} else {
 			propType = d.c.getContextFreeTypeOfExpression(prop.Name())
 		}
@@ -28492,15 +28459,10 @@ func (c *Checker) isPossiblyDiscriminantValue(node *ast.Node) bool {
 		return true
 	case ast.KindPropertyAccessExpression, ast.KindParenthesizedExpression:
 		return c.isPossiblyDiscriminantValue(node.Expression())
-		// !!!
-		// case ast.KindJsxExpression:
-		// 	return node.AsJsxExpression().Expression == nil || c.isPossiblyDiscriminantValue(node.AsJsxExpression().Expression)
+	case ast.KindJsxExpression:
+		return node.AsJsxExpression().Expression == nil || c.isPossiblyDiscriminantValue(node.AsJsxExpression().Expression)
 	}
 	return false
-}
-
-func (c *Checker) discriminateContextualTypeByJSXAttributes(node *ast.Node, contextualType *Type) *Type {
-	return contextualType // !!!
 }
 
 // If the given contextual type contains instantiable types and if a mapper representing
@@ -28595,17 +28557,16 @@ func (c *Checker) isContextSensitive(node *ast.Node) bool {
 		return c.isContextSensitive(node.Initializer())
 	case ast.KindParenthesizedExpression:
 		return c.isContextSensitive(node.Expression())
-		// !!!
-		// case ast.KindJsxAttributes:
-		// 	return core.Some(node.AsJsxAttributes().Properties, c.isContextSensitive) || isJsxOpeningElement(node.Parent) && core.Some(node.Parent.Parent.Children, c.isContextSensitive)
-		// case ast.KindJsxAttribute:
-		// 	// If there is no initializer, JSX attribute has a boolean value of true which is not context sensitive.
-		// 	TODO_IDENTIFIER := node.AsJsxAttribute()
-		// 	return initializer != nil && c.isContextSensitive(initializer)
-		// case ast.KindJsxExpression:
-		// 	// It is possible to that node.expression is undefined (e.g <div x={} />)
-		// 	TODO_IDENTIFIER := node.AsJsxExpression()
-		// 	return expression != nil && c.isContextSensitive(expression)
+	case ast.KindJsxAttributes:
+		return core.Some(node.AsJsxAttributes().Properties.Nodes, c.isContextSensitive) || ast.IsJsxOpeningElement(node.Parent) && core.Some(node.Parent.Parent.Children().Nodes, c.isContextSensitive)
+	case ast.KindJsxAttribute:
+		// If there is no initializer, JSX attribute has a boolean value of true which is not context sensitive.
+		initializer := node.Initializer()
+		return initializer != nil && c.isContextSensitive(initializer)
+	case ast.KindJsxExpression:
+		// It is possible to that node.expression is undefined (e.g <div x={} />)
+		expression := node.Expression()
+		return expression != nil && c.isContextSensitive(expression)
 	}
 	return false
 }
@@ -29425,15 +29386,6 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 	default:
 		return nil
 	}
-}
-
-// Looks up an intrinsic tag name and returns a symbol that either points to an intrinsic
-// property (in which case nodeLinks.jsxFlags will be IntrinsicNamedElement) or an intrinsic
-// string index signature (in which case nodeLinks.jsxFlags will be IntrinsicIndexedElement).
-// May also return unknownSymbol if both of these lookups fail.
-func (c *Checker) getIntrinsicTagSymbol(node *ast.Node) *ast.Symbol {
-	// !!! JSX
-	return nil
 }
 
 func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast.Symbol {

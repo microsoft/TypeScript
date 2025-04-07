@@ -36,18 +36,18 @@ let props: Props = {
 };
 
 let x1 = <Yadda foo="hello" data-yadda={42}/>;
->x1 : any
-><Yadda foo="hello" data-yadda={42}/> : any
+>x1 : Element
+><Yadda foo="hello" data-yadda={42}/> : Element
 >Yadda : (props: Props) => Element
->foo : any
->data-yadda : any
+>foo : string
+>data-yadda : number
 >42 : 42
 
 let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
->x2 : any
-><Yadda bar="hello" data-yadda={42}/> : any
+>x2 : Element
+><Yadda bar="hello" data-yadda={42}/> : Element
 >Yadda : (props: Props) => Element
->bar : any
->data-yadda : any
+>bar : string
+>data-yadda : number
 >42 : 42
 

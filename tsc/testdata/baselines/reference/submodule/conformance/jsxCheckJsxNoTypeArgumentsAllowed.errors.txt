@@ -1,5 +1,6 @@
 file.jsx(4,9): error TS2657: JSX expressions must have one parent element.
 file.jsx(4,16): error TS1003: Identifier expected.
+file.jsx(4,17): error TS2693: 'Prop' only refers to a type, but is being used as a value here.
 file.jsx(4,17): error TS17008: JSX element 'Prop' has no corresponding closing tag.
 file.jsx(4,38): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 file.jsx(5,1): error TS1005: '</' expected.
@@ -16,7 +17,7 @@ file.jsx(5,1): error TS1005: '</' expected.
         b: string
     }
     
-==== file.jsx (5 errors) ====
+==== file.jsx (6 errors) ====
     import { MyComp, Prop } from "./component";
     import * as React from "react";
     
@@ -24,6 +25,8 @@ file.jsx(5,1): error TS1005: '</' expected.
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                    ~
 !!! error TS1003: Identifier expected.
+                    ~~~~
+!!! error TS2693: 'Prop' only refers to a type, but is being used as a value here.
                     ~~~~
 !!! error TS17008: JSX element 'Prop' has no corresponding closing tag.
                                          ~

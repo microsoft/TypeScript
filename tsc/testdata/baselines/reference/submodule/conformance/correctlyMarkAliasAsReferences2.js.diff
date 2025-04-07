@@ -1,10 +1,8 @@
 --- old.correctlyMarkAliasAsReferences2.js
 +++ new.correctlyMarkAliasAsReferences2.js
-@@= skipped -16, +16 lines =@@
- //// [0.js]
- ///<reference path="declaration.d.ts" />
+@@= skipped -18, +18 lines =@@
  import * as cx from 'classnames';
--import * as React from "react";
+ import * as React from "react";
  let buttonProps;
 -let k = React.createElement("button", Object.assign({}, buttonProps),
 -    React.createElement("span", { className: cx('class1', { class2: true }) }));

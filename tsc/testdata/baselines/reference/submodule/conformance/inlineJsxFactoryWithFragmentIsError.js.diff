@@ -1,19 +1,20 @@
 --- old.inlineJsxFactoryWithFragmentIsError.js
 +++ new.inlineJsxFactoryWithFragmentIsError.js
-@@= skipped -21, +21 lines =@@
- //// [reacty.js]
+@@= skipped -22, +22 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/** @jsx React.createElement */
+ /** @jsx React.createElement */
 -var React = require("./renderer");
 -React.createElement(React.Fragment, null,
 -    React.createElement("h", null));
++const React = require("./renderer");
 +<><h></h></>;
  //// [index.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/** @jsx dom */
+ /** @jsx dom */
 -var renderer_1 = require("./renderer");
 -(0, renderer_1.dom)(React.Fragment, null,
 -    (0, renderer_1.dom)("h", null));
++const renderer_1 = require("./renderer");
 +<><h></h></>;

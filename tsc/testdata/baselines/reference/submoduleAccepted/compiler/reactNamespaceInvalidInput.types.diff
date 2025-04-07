@@ -1,9 +1,0 @@
---- old.reactNamespaceInvalidInput.types
-+++ new.reactNamespaceInvalidInput.types
-@@= skipped -3, +3 lines =@@
- <foo data/>;
- ><foo data/> : any
- >foo : any
-->data : true
-+>data : any
- 

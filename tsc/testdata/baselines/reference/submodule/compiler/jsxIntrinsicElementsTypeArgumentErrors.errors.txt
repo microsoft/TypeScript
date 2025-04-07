@@ -1,0 +1,104 @@
+jsxIntrinsicElementsTypeArgumentErrors.tsx(5,15): error TS1099: Type argument list cannot be empty.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(5,16): error TS2558: Expected 0 type arguments, but got 0.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(7,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(7,22): error TS1009: Trailing comma not allowed.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(9,16): error TS2304: Cannot find name 'Missing'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(9,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(11,16): error TS2304: Cannot find name 'Missing'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(11,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(11,24): error TS2304: Cannot find name 'AlsoMissing'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(13,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(13,23): error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(15,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(18,15): error TS1099: Type argument list cannot be empty.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(18,16): error TS2558: Expected 0 type arguments, but got 0.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(20,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(20,22): error TS1009: Trailing comma not allowed.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(22,16): error TS2304: Cannot find name 'Missing'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(22,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(24,16): error TS2304: Cannot find name 'Missing'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(24,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(24,24): error TS2304: Cannot find name 'AlsoMissing'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(26,16): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(26,23): error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+jsxIntrinsicElementsTypeArgumentErrors.tsx(28,16): error TS2558: Expected 0 type arguments, but got 1.
+
+
+==== jsxIntrinsicElementsTypeArgumentErrors.tsx (24 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    // opening + closing
+    const a = <div<>></div>; // empty type args
+                  ~~
+!!! error TS1099: Type argument list cannot be empty.
+                   
+!!! error TS2558: Expected 0 type arguments, but got 0.
+    
+    const b = <div<number,>></div>; // trailing comma type args
+                   ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+                         ~
+!!! error TS1009: Trailing comma not allowed.
+    
+    const c = <div<Missing>></div>; // nonexistant type args
+                   ~~~~~~~
+!!! error TS2304: Cannot find name 'Missing'.
+                   ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    const d = <div<Missing<AlsoMissing>>></div>; // nested missing type args
+                   ~~~~~~~
+!!! error TS2304: Cannot find name 'Missing'.
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+                           ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'AlsoMissing'.
+    
+    const e = <div<Record<object, object>>></div>; // existing but incorrect nested type args
+                   ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+                          ~~~~~~
+!!! error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+    
+    const f = <div<number>></div>; // existing type argument with no internal issues
+                   ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    // self-closing
+    const g = <div<>/>; // empty type args
+                  ~~
+!!! error TS1099: Type argument list cannot be empty.
+                   
+!!! error TS2558: Expected 0 type arguments, but got 0.
+    
+    const h = <div<number,>/>; // trailing comma type args
+                   ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+                         ~
+!!! error TS1009: Trailing comma not allowed.
+    
+    const i = <div<Missing>/>; // nonexistant type args
+                   ~~~~~~~
+!!! error TS2304: Cannot find name 'Missing'.
+                   ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    const j = <div<Missing<AlsoMissing>>/>; // nested missing type args
+                   ~~~~~~~
+!!! error TS2304: Cannot find name 'Missing'.
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+                           ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'AlsoMissing'.
+    
+    const k = <div<Record<object, object>>/>; // existing but incorrect nested type args
+                   ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+                          ~~~~~~
+!!! error TS2344: Type 'object' does not satisfy the constraint 'string | number | symbol'.
+    
+    const l = <div<number>/>; // existing type argument with no internal issues
+                   ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    

@@ -1149,21 +1149,14 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 	return false
 }
 
-func (c *Checker) checkGrammarJsxElement(node *ast.Node, jsxCommon struct {
-	tagName       *ast.JsxTagNameExpression
-	typeArguments *ast.NodeList
-	attributes    *ast.JsxAttributesNode
-},
-) bool {
-	c.checkGrammarJsxName(jsxCommon.tagName)
-	c.checkGrammarTypeArguments(node, jsxCommon.typeArguments)
+func (c *Checker) checkGrammarJsxElement(node *ast.Node) bool {
+	c.checkGrammarJsxName(node.TagName())
+	c.checkGrammarTypeArguments(node, node.TypeArgumentList())
 	var seen core.Set[string]
-
-	for _, attrNode := range jsxCommon.attributes.AsJsxAttributes().Properties.Nodes {
+	for _, attrNode := range node.Attributes().AsJsxAttributes().Properties.Nodes {
 		if attrNode.Kind == ast.KindJsxSpreadAttribute {
 			continue
 		}
-
 		attr := attrNode.AsJsxAttribute()
 		name := attr.Name()
 		initializer := attr.Initializer
@@ -1173,7 +1166,6 @@ func (c *Checker) checkGrammarJsxElement(node *ast.Node, jsxCommon struct {
 		} else {
 			return c.grammarErrorOnNode(name, diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name)
 		}
-
 		if initializer != nil && initializer.Kind == ast.KindJsxExpression && initializer.Expression() == nil {
 			return c.grammarErrorOnNode(initializer, diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression)
 		}

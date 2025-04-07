@@ -18,11 +18,11 @@ interface MyInnerProps {
 }
 
 export function MyComponent(_props: MyProps) {
->MyComponent : (_props: MyProps) => any
+>MyComponent : (_props: MyProps) => Element
 >_props : MyProps
 
     return <span>my component</span>;
-><span>my component</span> : any
+><span>my component</span> : Element
 >span : any
 >span : any
 }
@@ -32,14 +32,14 @@ import * as React from 'react'
 >React : typeof __React
 
 import { MyComponent } from './my-component'
->MyComponent : (_props: MyProps) => any
+>MyComponent : (_props: MyProps) => Element
 
 export const result = <MyComponent x="yes" y={{
->result : any
-><MyComponent x="yes" y={{    value: 42}} /> : any
->MyComponent : (_props: MyProps) => any
->x : any
->y : any
+>result : Element
+><MyComponent x="yes" y={{    value: 42}} /> : Element
+>MyComponent : (_props: MyProps) => Element
+>x : string
+>y : { value: number; }
 >{    value: 42} : { value: number; }
 
     value: 42

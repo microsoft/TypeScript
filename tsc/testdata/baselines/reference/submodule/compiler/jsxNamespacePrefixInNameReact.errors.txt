@@ -17,6 +17,7 @@ jsxNamespacePrefixInNameReact.tsx(13,73): error TS1005: ',' expected.
 jsxNamespacePrefixInNameReact.tsx(13,74): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(23,27): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(23,29): error TS1005: '...' expected.
+jsxNamespacePrefixInNameReact.tsx(23,29): error TS2698: Spread types may only be created from object types.
 jsxNamespacePrefixInNameReact.tsx(24,27): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(26,21): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(26,22): error TS1109: Expression expected.
@@ -27,9 +28,10 @@ jsxNamespacePrefixInNameReact.tsx(26,41): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(26,42): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(27,29): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(27,31): error TS1005: '...' expected.
+jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be created from object types.
 
 
-==== jsxNamespacePrefixInNameReact.tsx (29 errors) ====
+==== jsxNamespacePrefixInNameReact.tsx (31 errors) ====
     declare var React: any;
     
     var justElement1 = <a:element />;
@@ -91,6 +93,8 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS1005: '...' expected.
 !!! error TS1003: Identifier expected.
                                 ~~~~~~~
 !!! error TS1005: '...' expected.
+                                ~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
     var endOfIdent2 = <a attr:={"value"} />;
                               ~
 !!! error TS1003: Identifier expected.
@@ -115,6 +119,8 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS1005: '...' expected.
 !!! error TS1003: Identifier expected.
                                   ~~~~~~~
 !!! error TS1005: '...' expected.
+                                  ~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
     
     var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
     var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic

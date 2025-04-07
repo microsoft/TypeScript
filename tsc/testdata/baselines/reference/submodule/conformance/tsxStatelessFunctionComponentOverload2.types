@@ -55,43 +55,43 @@ let defaultObj: any;
 
 // OK
 const c1 = <OneThing />
->c1 : any
-><OneThing /> : any
+>c1 : Element
+><OneThing /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 
 const c2 = <OneThing {...obj}/>
->c2 : any
-><OneThing {...obj}/> : any
+>c2 : Element
+><OneThing {...obj}/> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj : { yy: number; yy1: string; }
 
 const c3 = <OneThing {...{}} />
->c3 : any
-><OneThing {...{}} /> : any
+>c3 : Element
+><OneThing {...{}} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >{} : {}
 
 const c4 = <OneThing {...obj1} {...obj} />
->c4 : any
-><OneThing {...obj1} {...obj} /> : any
+>c4 : Element
+><OneThing {...obj1} {...obj} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj1 : { yy: boolean; }
 >obj : { yy: number; yy1: string; }
 
 const c5 = <OneThing {...obj1} yy={42} {...{yy1: "hi"}}/>
->c5 : any
-><OneThing {...obj1} yy={42} {...{yy1: "hi"}}/> : any
+>c5 : Element
+><OneThing {...obj1} yy={42} {...{yy1: "hi"}}/> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj1 : { yy: boolean; }
->yy : any
+>yy : number
 >42 : 42
 >{yy1: "hi"} : { yy1: string; }
 >yy1 : string
 >"hi" : "hi"
 
 const c6 = <OneThing {...obj1} {...{yy: 10000, yy1: "true"}} />
->c6 : any
-><OneThing {...obj1} {...{yy: 10000, yy1: "true"}} /> : any
+>c6 : Element
+><OneThing {...obj1} {...{yy: 10000, yy1: "true"}} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj1 : { yy: boolean; }
 >{yy: 10000, yy1: "true"} : { yy: number; yy1: string; }
@@ -101,32 +101,32 @@ const c6 = <OneThing {...obj1} {...{yy: 10000, yy1: "true"}} />
 >"true" : "true"
 
 const c7 = <OneThing {...defaultObj} yy {...obj} />;  // No error. should pick second overload
->c7 : any
-><OneThing {...defaultObj} yy {...obj} /> : any
+>c7 : Element
+><OneThing {...defaultObj} yy {...obj} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >defaultObj : any
->yy : any
+>yy : true
 >obj : { yy: number; yy1: string; }
 
 const c8 = <OneThing ignore-prop={100} />
->c8 : any
-><OneThing ignore-prop={100} /> : any
+>c8 : Element
+><OneThing ignore-prop={100} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
->ignore-prop : any
+>ignore-prop : number
 >100 : 100
 
 const c9 = <OneThing {...{ "ignore-prop":200 }} />;
->c9 : any
-><OneThing {...{ "ignore-prop":200 }} /> : any
+>c9 : Element
+><OneThing {...{ "ignore-prop":200 }} /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >{ "ignore-prop":200 } : { "ignore-prop": number; }
 >"ignore-prop" : number
 >200 : 200
 
 const c10 = <OneThing {...obj2} yy1="boo" />;
->c10 : any
-><OneThing {...obj2} yy1="boo" /> : any
+>c10 : Element
+><OneThing {...obj2} yy1="boo" /> : Element
 >OneThing : { (): Element; (l: { yy: number; yy1: string; }): Element; }
 >obj2 : { yy: number; "ignore-prop": string; }
->yy1 : any
+>yy1 : string
 

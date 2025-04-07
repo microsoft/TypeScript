@@ -5,12 +5,12 @@ import React = require('react');
 >React : typeof __React
 
 function Greet(x: {name?: string}) {
->Greet : (x: { name?: string; }) => any
+>Greet : (x: { name?: string; }) => Element
 >x : { name?: string; }
 >name : string
 
 	return <div>Hello, {x}</div>;
-><div>Hello, {x}</div> : any
+><div>Hello, {x}</div> : Element
 >div : any
 >x : { name?: string; }
 >div : any
@@ -24,10 +24,10 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 >name : string
 
 	render() {
->render : () => any
+>render : () => Element
 
 		return <div></div>;
-><div></div> : any
+><div></div> : Element
 >div : any
 >div : any
 	}
@@ -37,99 +37,99 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 
 // OK
 let a = <Greet />;
->a : any
-><Greet /> : any
->Greet : (x: { name?: string; }) => any
+>a : Element
+><Greet /> : Element
+>Greet : (x: { name?: string; }) => Element
 
 // OK - always valid to specify 'key'
 let b = <Greet key="k" />;
->b : any
-><Greet key="k" /> : any
->Greet : (x: { name?: string; }) => any
->key : any
+>b : Element
+><Greet key="k" /> : Element
+>Greet : (x: { name?: string; }) => Element
+>key : string
 
 // Error - not allowed to specify 'ref' on SFCs
 let c = <Greet ref="myRef" />;
->c : any
-><Greet ref="myRef" /> : any
->Greet : (x: { name?: string; }) => any
->ref : any
+>c : Element
+><Greet ref="myRef" /> : Element
+>Greet : (x: { name?: string; }) => Element
+>ref : string
 
 
 // OK - ref is valid for classes
 let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
->d : any
-><BigGreeter ref={x => x.greeting.substr(10)} /> : any
+>d : Element
+><BigGreeter ref={x => x.greeting.substr(10)} /> : Element
 >BigGreeter : typeof BigGreeter
->ref : any
->x => x.greeting.substr(10) : (x: any) => any
->x : any
->x.greeting.substr(10) : any
->x.greeting.substr : any
->x.greeting : any
->x : any
->greeting : any
->substr : any
+>ref : (x: BigGreeter) => string
+>x => x.greeting.substr(10) : (x: BigGreeter) => string
+>x : BigGreeter
+>x.greeting.substr(10) : string
+>x.greeting.substr : (from: number, length?: number) => string
+>x.greeting : string
+>x : BigGreeter
+>greeting : string
+>substr : (from: number, length?: number) => string
 >10 : 10
 
 // Error ('subtr' not on string)
 let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
->e : any
-><BigGreeter ref={x => x.greeting.subtr(10)} /> : any
+>e : Element
+><BigGreeter ref={x => x.greeting.subtr(10)} /> : Element
 >BigGreeter : typeof BigGreeter
->ref : any
->x => x.greeting.subtr(10) : (x: any) => any
->x : any
+>ref : (x: BigGreeter) => any
+>x => x.greeting.subtr(10) : (x: BigGreeter) => any
+>x : BigGreeter
 >x.greeting.subtr(10) : any
 >x.greeting.subtr : any
->x.greeting : any
->x : any
->greeting : any
+>x.greeting : string
+>x : BigGreeter
+>greeting : string
 >subtr : any
 >10 : 10
 
 // Error (ref callback is contextually typed)
 let f = <BigGreeter ref={x => x.notARealProperty} />;
->f : any
-><BigGreeter ref={x => x.notARealProperty} /> : any
+>f : Element
+><BigGreeter ref={x => x.notARealProperty} /> : Element
 >BigGreeter : typeof BigGreeter
->ref : any
->x => x.notARealProperty : (x: any) => any
->x : any
+>ref : (x: BigGreeter) => any
+>x => x.notARealProperty : (x: BigGreeter) => any
+>x : BigGreeter
 >x.notARealProperty : any
->x : any
+>x : BigGreeter
 >notARealProperty : any
 
 // OK - key is always valid
 let g = <BigGreeter key={100} />;
->g : any
-><BigGreeter key={100} /> : any
+>g : Element
+><BigGreeter key={100} /> : Element
 >BigGreeter : typeof BigGreeter
->key : any
+>key : number
 >100 : 100
 
 // OK - contextually typed intrinsic ref callback parameter
 let h = <div ref={x => x.innerText} />;
->h : any
-><div ref={x => x.innerText} /> : any
+>h : Element
+><div ref={x => x.innerText} /> : Element
 >div : any
->ref : any
->x => x.innerText : (x: any) => any
->x : any
->x.innerText : any
->x : any
->innerText : any
+>ref : (x: HTMLDivElement) => string
+>x => x.innerText : (x: HTMLDivElement) => string
+>x : HTMLDivElement
+>x.innerText : string
+>x : HTMLDivElement
+>innerText : string
 
 // Error - property not on ontextually typed intrinsic ref callback parameter
 let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
->i : any
-><div ref={x => x.propertyNotOnHtmlDivElement} /> : any
+>i : Element
+><div ref={x => x.propertyNotOnHtmlDivElement} /> : Element
 >div : any
->ref : any
->x => x.propertyNotOnHtmlDivElement : (x: any) => any
->x : any
+>ref : (x: HTMLDivElement) => any
+>x => x.propertyNotOnHtmlDivElement : (x: HTMLDivElement) => any
+>x : HTMLDivElement
 >x.propertyNotOnHtmlDivElement : any
->x : any
+>x : HTMLDivElement
 >propertyNotOnHtmlDivElement : any
 
 

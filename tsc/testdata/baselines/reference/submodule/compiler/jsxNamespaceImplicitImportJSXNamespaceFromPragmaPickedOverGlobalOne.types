@@ -106,10 +106,10 @@ export namespace EmotionJSX {
 === /index.tsx ===
 /* @jsxImportSource @emotion/react */
 export const Comp = () => <div css="color: hotpink;"></div>;
->Comp : () => any
->() => <div css="color: hotpink;"></div> : () => any
-><div css="color: hotpink;"></div> : any
+>Comp : () => Element
+>() => <div css="color: hotpink;"></div> : () => Element
+><div css="color: hotpink;"></div> : Element
 >div : any
->css : any
+>css : string
 >div : any
 

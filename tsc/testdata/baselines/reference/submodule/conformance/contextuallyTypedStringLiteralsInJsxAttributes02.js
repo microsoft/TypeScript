@@ -45,6 +45,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainButton = MainButton;
 exports.NoOverload = NoOverload;
 exports.NoOverload1 = NoOverload1;
+const React = require("react");
 function MainButton(props) {
     const linkProps = props;
     if (linkProps.goTo) {

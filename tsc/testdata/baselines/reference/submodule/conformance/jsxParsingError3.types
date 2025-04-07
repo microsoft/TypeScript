@@ -11,46 +11,46 @@ declare module JSX {
 
 === Error1.tsx ===
 let x1 = <div>}</div>;
->x1 : any
-><div>}</div> : any
+>x1 : Element
+><div>}</div> : Element
 >div : any
 >div : any
 
 === Error2.tsx ===
 let x2 = <div>></div>;
->x2 : any
-><div>></div> : any
+>x2 : Element
+><div>></div> : Element
 >div : any
 >div : any
 
 === Error3.tsx ===
 let x3 = <div>{"foo"}}</div>;
->x3 : any
-><div>{"foo"}}</div> : any
+>x3 : Element
+><div>{"foo"}}</div> : Element
 >div : any
 >"foo" : "foo"
 >div : any
 
 === Error4.tsx ===
 let x4 = <div>{"foo"}></div>;
->x4 : any
-><div>{"foo"}></div> : any
+>x4 : Element
+><div>{"foo"}></div> : Element
 >div : any
 >"foo" : "foo"
 >div : any
 
 === Error5.tsx ===
 let x5 = <div>}{"foo"}</div>;
->x5 : any
-><div>}{"foo"}</div> : any
+>x5 : Element
+><div>}{"foo"}</div> : Element
 >div : any
 >"foo" : "foo"
 >div : any
 
 === Error6.tsx ===
 let x6 = <div>>{"foo"}</div>;
->x6 : any
-><div>>{"foo"}</div> : any
+>x6 : Element
+><div>>{"foo"}</div> : Element
 >div : any
 >"foo" : "foo"
 >div : any

@@ -1,0 +1,67 @@
+--- old.checkJsxGenericTagHasCorrectInferences.types
++++ new.checkJsxGenericTagHasCorrectInferences.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import * as React from "react";
+->React : typeof React
++>React : typeof __React
+ 
+ interface BaseProps<T> {
+   initialValues: T;
+@@= skipped -12, +12 lines =@@
+ }
+ declare class GenericComponent<Props = {}, Values = object> extends React.Component<Props & BaseProps<Values>, {}> {
+ >GenericComponent : GenericComponent<Props, Values>
+->React.Component : React.Component<Props & BaseProps<Values>, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<Props & BaseProps<Values>, {}>
++>React : typeof __React
++>Component : typeof Component
+ 
+   iv: Values;
+ >iv : Values
+ }
+ 
+ let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // No error
+->a : JSX.Element
+-><GenericComponent initialValues={{ x: "y" }} nextValues={a => a} /> : JSX.Element
++>a : Element
++><GenericComponent initialValues={{ x: "y" }} nextValues={a => a} /> : Element
+ >GenericComponent : typeof GenericComponent
+ >initialValues : { x: string; }
+ >{ x: "y" } : { x: string; }
+@@= skipped -22, +22 lines =@@
+ >a : { x: string; }
+ 
+ let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)
+->b : JSX.Element
+-><GenericComponent initialValues={12} nextValues={a => a} /> : JSX.Element
++>b : Element
++><GenericComponent initialValues={12} nextValues={a => a} /> : Element
+ >GenericComponent : typeof GenericComponent
+ >initialValues : number
+ >12 : 12
+@@= skipped -11, +11 lines =@@
+ >a : number
+ 
+ let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} />; // No Error
+->c : JSX.Element
+-><GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} /> : JSX.Element
++>c : Element
++><GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} /> : Element
+ >GenericComponent : typeof GenericComponent
+ >initialValues : { x: string; }
+ >{ x: "y" } : { x: string; }
+@@= skipped -18, +18 lines =@@
+ >x : string
+ 
+ let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; // Error - `string` is not assignable to `{x: string}`
+->d : JSX.Element
+-><GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} /> : JSX.Element
++>d : Element
++><GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} /> : Element
+ >GenericComponent : typeof GenericComponent
+ >initialValues : { x: string; }
+ >{ x: "y" } : { x: string; }

@@ -29,23 +29,26 @@
    return <div>props.primaryText</div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2, 30))
++>div : Symbol(div, Decl(react.d.ts, 2, 30))
++>div : Symbol(div, Decl(react.d.ts, 2, 30))
  }
  
  function VerticalNav() {
-@@= skipped -9, +7 lines =@@
+@@= skipped -9, +9 lines =@@
  
    return (
      <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2, 30))
--
++>div : Symbol(div, Decl(react.d.ts, 2, 30))
+ 
        <VerticalNavMenuItem primaryText={2} />  // error
  >VerticalNavMenuItem : Symbol(VerticalNavMenuItem, Decl(file.tsx, 3, 1))
- >primaryText : Symbol(primaryText, Decl(file.tsx, 12, 26))
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  >primaryText : Symbol(primaryText, Decl(file.tsx, 14, 49))
  
      </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2, 30))
--
++>div : Symbol(div, Decl(react.d.ts, 2, 30))
+ 
    )
  } 

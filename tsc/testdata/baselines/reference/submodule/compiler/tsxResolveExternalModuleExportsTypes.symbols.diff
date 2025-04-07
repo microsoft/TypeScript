@@ -24,4 +24,6 @@
  >Foo : Symbol(Foo, Decl(foo.tsx, 1, 5))
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
++>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
++>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
  

@@ -177,5 +177,5 @@ const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;
 const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
 >b8 : Symbol(b8, Decl(file.tsx, 55, 5))
 >MainButton : Symbol(MainButton, Decl(file.tsx, 32, 14), Decl(file.tsx, 34, 66), Decl(file.tsx, 35, 62), Decl(file.tsx, 36, 66))
->data-format : Symbol(data-format, Decl(file.tsx, 55, 22))
+>data-format : Symbol("data-format", Decl(file.tsx, 55, 22))
 

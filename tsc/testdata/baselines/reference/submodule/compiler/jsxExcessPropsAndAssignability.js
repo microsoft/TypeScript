@@ -21,6 +21,8 @@ const myHoc = <ComposedComponentProps extends any>(
 //// [jsxExcessPropsAndAssignability.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+const React = require("react");
 const myHoc = (ComposedComponent) => {
     const WrapperComponent = null;
     const props = null;

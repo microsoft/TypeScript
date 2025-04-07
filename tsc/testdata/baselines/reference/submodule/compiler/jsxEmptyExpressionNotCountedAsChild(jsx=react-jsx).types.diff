@@ -1,0 +1,52 @@
+--- old.jsxEmptyExpressionNotCountedAsChild(jsx=react-jsx).types
++++ new.jsxEmptyExpressionNotCountedAsChild(jsx=react-jsx).types
+@@= skipped -6, +6 lines =@@
+ 
+ interface Props {
+     children: React.ReactElement<any>
+->children : React.ReactElement<any>
++>children : ReactElement<any>
+ >React : any
+ }
+ 
+ function Wrapper(props: Props) {
+->Wrapper : (props: Props) => JSX.Element
++>Wrapper : (props: Props) => Element
+ >props : Props
+ 
+     return <div>{props.children}</div>
+-><div>{props.children}</div> : JSX.Element
++><div>{props.children}</div> : Element
+ >div : any
+->props.children : React.ReactElement<any>
++>props.children : ReactElement<any>
+ >props : Props
+->children : React.ReactElement<any>
++>children : ReactElement<any>
+ >div : any
+ }
+ 
+ const element = (
+->element : JSX.Element
+->(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : JSX.Element
++>element : Element
++>(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : Element
+ 
+     <Wrapper>
+-><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : JSX.Element
+->Wrapper : (props: Props) => JSX.Element
++><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : Element
++>Wrapper : (props: Props) => Element
+ 
+     {/* comment */}
+      <div>Hello</div>
+-><div>Hello</div> : JSX.Element
++><div>Hello</div> : Element
+ >div : any
+ >div : any
+ 
+     </Wrapper>
+->Wrapper : (props: Props) => JSX.Element
++>Wrapper : (props: Props) => Element
+ 
+ )

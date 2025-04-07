@@ -1,0 +1,11 @@
+--- old.jsxSpreadTag(target=es2015).types
++++ new.jsxSpreadTag(target=es2015).types
+@@= skipped -49, +49 lines =@@
+ >div : any
+ 
+     {...{ wrong() { return <div>x</div>; }}}
+->{ wrong() { return <div>x</div>; }} : { wrong(): any; }
++>{ wrong() { return <div>x</div>; }} : { wrong: () => any; }
+ >wrong : () => any
+ ><div>x</div> : any
+ >div : any

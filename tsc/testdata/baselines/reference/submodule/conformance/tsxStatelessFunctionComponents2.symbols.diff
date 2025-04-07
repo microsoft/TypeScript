@@ -5,8 +5,10 @@
  
  	return <div>Hello, {x}</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  >x : Symbol(x, Decl(file.tsx, 2, 15))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  }
  
  class BigGreeter extends React.Component<{ name?: string }, {}> {
@@ -25,6 +27,8 @@
  		return <div></div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  	}
  	greeting: string;
 ->greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
@@ -32,43 +36,53 @@
  }
  
  // OK
-@@= skipped -47, +43 lines =@@
+@@= skipped -47, +47 lines =@@
  >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 4, 1))
  >ref : Symbol(ref, Decl(file.tsx, 22, 19))
  >x : Symbol(x, Decl(file.tsx, 22, 25))
 ->x.greeting.substr : Symbol(String.substr, Decl(lib.d.ts, --, --))
 ->x.greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
++>x.greeting.substr : Symbol(substr, Decl(lib.d.ts, --, --))
++>x.greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
  >x : Symbol(x, Decl(file.tsx, 22, 25))
 ->greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
 ->substr : Symbol(String.substr, Decl(lib.d.ts, --, --))
++>greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
++>substr : Symbol(substr, Decl(lib.d.ts, --, --))
  
  // Error ('subtr' not on string)
  let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
-@@= skipped -12, +8 lines =@@
+@@= skipped -12, +12 lines =@@
  >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 4, 1))
  >ref : Symbol(ref, Decl(file.tsx, 24, 19))
  >x : Symbol(x, Decl(file.tsx, 24, 25))
 ->x.greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
++>x.greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
  >x : Symbol(x, Decl(file.tsx, 24, 25))
 ->greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
++>greeting : Symbol(greeting, Decl(file.tsx, 9, 2))
  
  // Error (ref callback is contextually typed)
  let f = <BigGreeter ref={x => x.notARealProperty} />;
-@@= skipped -21, +19 lines =@@
+@@= skipped -21, +21 lines =@@
  // OK - contextually typed intrinsic ref callback parameter
  let h = <div ref={x => x.innerText} />;
  >h : Symbol(h, Decl(file.tsx, 32, 3))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  >ref : Symbol(ref, Decl(file.tsx, 32, 12))
  >x : Symbol(x, Decl(file.tsx, 32, 18))
 ->x.innerText : Symbol(HTMLElement.innerText, Decl(lib.d.ts, --, --))
++>x.innerText : Symbol(innerText, Decl(lib.d.ts, --, --))
  >x : Symbol(x, Decl(file.tsx, 32, 18))
 ->innerText : Symbol(HTMLElement.innerText, Decl(lib.d.ts, --, --))
++>innerText : Symbol(innerText, Decl(lib.d.ts, --, --))
  
  // Error - property not on ontextually typed intrinsic ref callback parameter
  let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
  >i : Symbol(i, Decl(file.tsx, 34, 3))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  >ref : Symbol(ref, Decl(file.tsx, 34, 12))
  >x : Symbol(x, Decl(file.tsx, 34, 18))
  >x : Symbol(x, Decl(file.tsx, 34, 18))

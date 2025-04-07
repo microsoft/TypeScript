@@ -353,14 +353,14 @@ function test5() {
 >'button' : "button"
 
         return <Tag>test</Tag>;
-><Tag>test</Tag> : any
+><Tag>test</Tag> : Element
 >Tag : "a" | "button"
 >Tag : "a" | "button"
     }
 
     // Union of all intrinsics and components of `any`
     function App(props: { component:React.ReactType }) {
->App : (props: { component: ReactType<any>; }) => any
+>App : (props: { component: ReactType<any>; }) => Element
 >props : { component: ReactType<any>; }
 >component : ReactType<any>
 >React : any
@@ -373,8 +373,8 @@ function test5() {
 >component : ReactType<any>
 
         return (<Comp />);
->(<Comp />) : any
-><Comp /> : any
+>(<Comp />) : Element
+><Comp /> : Element
 >Comp : ReactType<any>
     }
 
@@ -407,10 +407,10 @@ function test5() {
 >null as any : any
 
         const a = <C p={true} />;
->a : any
-><C p={true} /> : any
+>a : Element
+><C p={true} /> : Element
 >C : ComponentType<P1> | ComponentType<P2>
->p : any
+>p : true
 >true : true
     }
 }

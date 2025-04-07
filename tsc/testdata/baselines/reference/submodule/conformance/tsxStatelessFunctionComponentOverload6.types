@@ -100,30 +100,30 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 
 // OK
 const b0 = <MainButton to='/some/path'>GO</MainButton>;
->b0 : any
-><MainButton to='/some/path'>GO</MainButton> : any
+>b0 : Element
+><MainButton to='/some/path'>GO</MainButton> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->to : any
+>to : string
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 
 const b1 = <MainButton onClick={(e) => {}}>Hello world</MainButton>;
->b1 : any
-><MainButton onClick={(e) => {}}>Hello world</MainButton> : any
+>b1 : Element
+><MainButton onClick={(e) => {}}>Hello world</MainButton> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->onClick : any
->(e) => {} : (e: any) => void
->e : any
+>onClick : (e: MouseEvent<any>) => void
+>(e) => {} : (e: MouseEvent<any>) => void
+>e : MouseEvent<any>
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 
 const b2 = <MainButton {...obj} />;
->b2 : any
-><MainButton {...obj} /> : any
+>b2 : Element
+><MainButton {...obj} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >obj : { children: string; to: string; }
 
 const b3 = <MainButton {...{to: 10000}} {...obj} />;
->b3 : any
-><MainButton {...{to: 10000}} {...obj} /> : any
+>b3 : Element
+><MainButton {...{to: 10000}} {...obj} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >{to: 10000} : { to: number; }
 >to : number
@@ -131,27 +131,27 @@ const b3 = <MainButton {...{to: 10000}} {...obj} />;
 >obj : { children: string; to: string; }
 
 const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
->b4 : any
-><MainButton {...obj1} /> : any
+>b4 : Element
+><MainButton {...obj1} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >obj1 : any
 
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
->b5 : any
-><MainButton {...obj1} to="/to/somewhere" /> : any
+>b5 : Element
+><MainButton {...obj1} to="/to/somewhere" /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >obj1 : any
->to : any
+>to : string
 
 const b6 = <MainButton {...obj2} />;
->b6 : any
-><MainButton {...obj2} /> : any
+>b6 : Element
+><MainButton {...obj2} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >obj2 : { onClick: () => void; }
 
 const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
->b7 : any
-><MainButton {...{onClick: () => { console.log("hi") }}} /> : any
+>b7 : Element
+><MainButton {...{onClick: () => { console.log("hi") }}} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >{onClick: () => { console.log("hi") }} : { onClick: () => void; }
 >onClick : () => void
@@ -163,44 +163,44 @@ const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
 >"hi" : "hi"
 
 const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
->b8 : any
-><MainButton {...{onClick() {}}} /> : any
+>b8 : Element
+><MainButton {...{onClick() {}}} /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 >{onClick() {}} : { onClick: () => void; }
 >onClick : () => void
 
 const b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
->b9 : any
-><MainButton to='/some/path' extra-prop>GO</MainButton> : any
+>b9 : Element
+><MainButton to='/some/path' extra-prop>GO</MainButton> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->to : any
->extra-prop : any
+>to : string
+>extra-prop : true
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 
 const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;
->b10 : any
-><MainButton to='/some/path' children="hi" ></MainButton> : any
+>b10 : Element
+><MainButton to='/some/path' children="hi" ></MainButton> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->to : any
->children : any
+>to : string
+>children : string
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 
 const b11 = <MainButton onClick={(e) => {}} className="hello" data-format>Hello world</MainButton>;
->b11 : any
-><MainButton onClick={(e) => {}} className="hello" data-format>Hello world</MainButton> : any
+>b11 : Element
+><MainButton onClick={(e) => {}} className="hello" data-format>Hello world</MainButton> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->onClick : any
->(e) => {} : (e: any) => void
->e : any
->className : any
->data-format : any
+>onClick : (e: MouseEvent<any>) => void
+>(e) => {} : (e: MouseEvent<any>) => void
+>e : MouseEvent<any>
+>className : string
+>data-format : true
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
 
 const b12 = <MainButton data-format="Hello world" />
->b12 : any
-><MainButton data-format="Hello world" /> : any
+>b12 : Element
+><MainButton data-format="Hello world" /> : Element
 >MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
->data-format : any
+>data-format : string
 
 
 

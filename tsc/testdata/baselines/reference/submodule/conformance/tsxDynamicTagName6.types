@@ -16,8 +16,8 @@ const t = {tag:'h1'}
 >'h1' : "h1"
 
 const foo = <t.tag/>  // No error
->foo : any
-><t.tag/> : any
+>foo : Element
+><t.tag/> : Element
 >t.tag : string
 >t : { tag: string; }
 >tag : string

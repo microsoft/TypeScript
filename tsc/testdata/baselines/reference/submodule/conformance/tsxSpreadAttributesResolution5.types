@@ -19,10 +19,10 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
     }
@@ -44,8 +44,8 @@ let obj = {
 
 // Error as "obj" has type { x: string; y: number }
 let p = <Poisoned {...obj} />;
->p : any
-><Poisoned {...obj} /> : any
+>p : Element
+><Poisoned {...obj} /> : Element
 >Poisoned : typeof Poisoned
 >obj : { x: string; y: number; }
 
@@ -56,10 +56,10 @@ class EmptyProp extends React.Component<{}, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>Default hi</div>;
-><div>Default hi</div> : any
+><div>Default hi</div> : Element
 >div : any
 >div : any
     }
@@ -77,8 +77,8 @@ let o = {
 }
 // Ok
 let e = <EmptyProp {...o} />;
->e : any
-><EmptyProp {...o} /> : any
+>e : Element
+><EmptyProp {...o} /> : Element
 >EmptyProp : typeof EmptyProp
 >o : { prop1: boolean; }
 

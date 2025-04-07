@@ -32,7 +32,9 @@ function Foo({ bar }) {
 >bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 12, 14))
 
   return <div>{bar}</div>;
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 >bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 12, 14))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 
 Foo.propTypes = propTypes;

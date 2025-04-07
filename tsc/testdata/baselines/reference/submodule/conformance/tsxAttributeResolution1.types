@@ -26,73 +26,73 @@ interface Attribs1 {
 
 // OK
 <test1 x={0} />; // OK
-><test1 x={0} /> : any
+><test1 x={0} /> : Element
 >test1 : any
->x : any
+>x : number
 >0 : 0
 
 <test1 />; // OK
-><test1 /> : any
+><test1 /> : Element
 >test1 : any
 
 <test1 data-x={true} />; // OK
-><test1 data-x={true} /> : any
+><test1 data-x={true} /> : Element
 >test1 : any
->data-x : any
+>data-x : boolean
 >true : true
 
 <test2 reqd='true' />; // OK
-><test2 reqd='true' /> : any
+><test2 reqd='true' /> : Element
 >test2 : any
->reqd : any
+>reqd : string
 
 <test2 reqd={'true'} />; // OK
-><test2 reqd={'true'} /> : any
+><test2 reqd={'true'} /> : Element
 >test2 : any
->reqd : any
+>reqd : string
 >'true' : "true"
 
 // Errors
 <test1 x={'0'} />; // Error, '0' is not number
-><test1 x={'0'} /> : any
+><test1 x={'0'} /> : Element
 >test1 : any
->x : any
+>x : string
 >'0' : "0"
 
 <test1 y={0} />; // Error, no property "y"
-><test1 y={0} /> : any
+><test1 y={0} /> : Element
 >test1 : any
->y : any
+>y : number
 >0 : 0
 
 <test1 y="foo" />; // Error, no property "y"
-><test1 y="foo" /> : any
+><test1 y="foo" /> : Element
 >test1 : any
->y : any
+>y : string
 
 <test1 x="32" />; // Error, "32" is not number
-><test1 x="32" /> : any
+><test1 x="32" /> : Element
 >test1 : any
->x : any
+>x : string
 
 <test1 var="10" />; // Error, no 'var' property
-><test1 var="10" /> : any
+><test1 var="10" /> : Element
 >test1 : any
->var : any
+>var : string
 
 <test2 />; // Error, missing reqd
-><test2 /> : any
+><test2 /> : Element
 >test2 : any
 
 <test2 reqd={10} />; // Error, reqd is not string
-><test2 reqd={10} /> : any
+><test2 reqd={10} /> : Element
 >test2 : any
->reqd : any
+>reqd : number
 >10 : 10
 
 // Should be OK
 <var var='var' />;
-><var var='var' /> : any
+><var var='var' /> : Element
 >var : any
->var : any
+>var : string
 

@@ -1,6 +1,6 @@
 a.ts(12,1): error TS2578: Unused '@ts-expect-error' directive.
-b.tsx(17,1): error TS2578: Unused '@ts-expect-error' directive.
-b.tsx(28,6): error TS2578: Unused '@ts-expect-error' directive.
+b.tsx(22,18): error TS2322: Type 'number' is not assignable to type 'string'.
+b.tsx(26,18): error TS2322: Type 'number' is not assignable to type 'string'.
 b.tsx(32,1): error TS2578: Unused '@ts-expect-error' directive.
 
 
@@ -39,21 +39,23 @@ b.tsx(32,1): error TS2578: Unused '@ts-expect-error' directive.
     
         {/*
        @ts-expect-error */}
-    ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2578: Unused '@ts-expect-error' directive.
         <MyComponent foo={100} />
     
         {/*
        // @ts-expect-error */}
         <MyComponent foo={100} />
+                     ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 b.tsx:3:38: The expected type comes from property 'foo' which is declared here on type 'IntrinsicAttributes & { foo: string; }'
     
         {/*
        * @ts-expect-error */}
         <MyComponent foo={100} />
+                     ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 b.tsx:3:38: The expected type comes from property 'foo' which is declared here on type 'IntrinsicAttributes & { foo: string; }'
     
         {/*@ts-expect-error*/}
-         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2578: Unused '@ts-expect-error' directive.
         <MyComponent foo={100} />
     
         {/*

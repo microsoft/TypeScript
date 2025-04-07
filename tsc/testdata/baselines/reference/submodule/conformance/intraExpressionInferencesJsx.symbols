@@ -224,6 +224,7 @@ function Foo<T>(props: Props<T>) {
 >T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 90, 13))
 
   return <div />;
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 
 <Foo
@@ -235,7 +236,9 @@ function Foo<T>(props: Props<T>) {
   b={(arg) => { arg.toString(); }}
 >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 95, 14))
 >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
+>arg.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 
 />;
 
@@ -249,7 +252,9 @@ function Foo<T>(props: Props<T>) {
   b={(arg) => { arg.toString(); }}
 >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 100, 15))
 >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
+>arg.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 
 />;
 
@@ -263,7 +268,9 @@ function Foo<T>(props: Props<T>) {
   b: (arg) => { arg.toString(); },
 >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 105, 15))
 >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
+>arg.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 
 }} />;
 

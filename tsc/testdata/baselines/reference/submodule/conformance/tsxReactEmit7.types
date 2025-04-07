@@ -10,66 +10,66 @@ declare module JSX {
 }
 
 var m = <div x-y="val"></div>;
->m : any
-><div x-y="val"></div> : any
+>m : Element
+><div x-y="val"></div> : Element
 >div : any
->x-y : any
+>x-y : string
 >div : any
 
 var n = <div xx-y="val"></div>;
->n : any
-><div xx-y="val"></div> : any
+>n : Element
+><div xx-y="val"></div> : Element
 >div : any
->xx-y : any
+>xx-y : string
 >div : any
 
 var o = <div x-yy="val"></div>;
->o : any
-><div x-yy="val"></div> : any
+>o : Element
+><div x-yy="val"></div> : Element
 >div : any
->x-yy : any
+>x-yy : string
 >div : any
 
 var p = <div xx-yy="val"></div>;
->p : any
-><div xx-yy="val"></div> : any
+>p : Element
+><div xx-yy="val"></div> : Element
 >div : any
->xx-yy : any
+>xx-yy : string
 >div : any
 
 // Investigation
 var a = <div x="val"></div>;
->a : any
-><div x="val"></div> : any
+>a : Element
+><div x="val"></div> : Element
 >div : any
->x : any
+>x : string
 >div : any
 
 var b = <div xx="val"></div>;
->b : any
-><div xx="val"></div> : any
+>b : Element
+><div xx="val"></div> : Element
 >div : any
->xx : any
+>xx : string
 >div : any
 
 var c = <div xxx="val"></div>;
->c : any
-><div xxx="val"></div> : any
+>c : Element
+><div xxx="val"></div> : Element
 >div : any
->xxx : any
+>xxx : string
 >div : any
 
 var d = <div xxxx="val"></div>;
->d : any
-><div xxxx="val"></div> : any
+>d : Element
+><div xxxx="val"></div> : Element
 >div : any
->xxxx : any
+>xxxx : string
 >div : any
 
 var e = <div xxxxx="val"></div>;
->e : any
-><div xxxxx="val"></div> : any
+>e : Element
+><div xxxxx="val"></div> : Element
 >div : any
->xxxxx : any
+>xxxxx : string
 >div : any
 

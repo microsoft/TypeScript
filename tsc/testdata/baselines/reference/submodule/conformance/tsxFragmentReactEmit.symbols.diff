@@ -8,7 +8,11 @@
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
--
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
+ 
  <><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></>; // nested fragments
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
@@ -18,5 +22,13 @@
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
--
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
++>span : Symbol((Missing), Decl(file.tsx, 2, 30))
+ 
  <>#</>; // # would cause scanning error if not in jsxtext

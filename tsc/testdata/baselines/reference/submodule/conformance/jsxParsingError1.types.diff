@@ -1,0 +1,13 @@
+--- old.jsxParsingError1.types
++++ new.jsxParsingError1.types
+@@= skipped -18, +18 lines =@@
+ >"bar" : "bar"
+ 
+ const elem = <div className={class1, class2}/>;
+->elem : JSX.Element
+-><div className={class1, class2}/> : JSX.Element
++>elem : Element
++><div className={class1, class2}/> : Element
+ >div : any
+ >className : string
+ >class1, class2 : "bar"

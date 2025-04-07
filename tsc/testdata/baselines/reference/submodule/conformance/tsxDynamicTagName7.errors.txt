@@ -1,0 +1,22 @@
+app.tsx(8,8): error TS2604: JSX element type 'this' does not have any construct or call signatures.
+
+
+==== react.d.ts (0 errors) ====
+    declare module 'react' {
+    	class Component<T, U> { }
+    }
+    
+==== app.tsx (1 errors) ====
+    import * as React from 'react';
+    
+    export class Text extends React.Component<{}, {}> {
+      _tagName: string = 'div';
+    
+      render() {
+        return (
+          <this/>  // this should be an error
+           ~~~~
+!!! error TS2604: JSX element type 'this' does not have any construct or call signatures.
+        );
+      }
+    }

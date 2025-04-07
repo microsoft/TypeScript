@@ -22,4 +22,6 @@
      return (<p>Hello</p>);
 ->p : Symbol(X.JSX.IntrinsicElements.__index, Decl(index.tsx, 8, 41))
 ->p : Symbol(X.JSX.IntrinsicElements.__index, Decl(index.tsx, 8, 41))
++>p : Symbol((Missing), Decl(index.tsx, 8, 41))
++>p : Symbol((Missing), Decl(index.tsx, 8, 41))
  }

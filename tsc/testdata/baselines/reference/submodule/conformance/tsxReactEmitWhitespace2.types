@@ -13,27 +13,27 @@ declare var React: any;
 
 // Emit ' word' in the last string
 <div>word <code>code</code> word</div>;
-><div>word <code>code</code> word</div> : any
+><div>word <code>code</code> word</div> : Element
 >div : any
-><code>code</code> : any
+><code>code</code> : Element
 >code : any
 >code : any
 >div : any
 
 // Same here
 <div><code>code</code> word</div>;
-><div><code>code</code> word</div> : any
+><div><code>code</code> word</div> : Element
 >div : any
-><code>code</code> : any
+><code>code</code> : Element
 >code : any
 >code : any
 >div : any
 
 // And here
 <div><code /> word</div>;
-><div><code /> word</div> : any
+><div><code /> word</div> : Element
 >div : any
-><code /> : any
+><code /> : Element
 >code : any
 >div : any
 

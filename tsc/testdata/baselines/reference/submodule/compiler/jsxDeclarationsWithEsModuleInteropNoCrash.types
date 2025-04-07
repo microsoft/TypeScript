@@ -31,11 +31,11 @@ const defaultProps = {
 };
 
 function Foo({ bar }) {
->Foo : { (__0: { bar: any; }): any; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
+>Foo : { (__0: { bar: any; }): Element; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
 >bar : any
 
   return <div>{bar}</div>;
-><div>{bar}</div> : any
+><div>{bar}</div> : Element
 >div : any
 >bar : any
 >div : any
@@ -44,17 +44,17 @@ function Foo({ bar }) {
 Foo.propTypes = propTypes;
 >Foo.propTypes = propTypes : { bar: Requireable<boolean>; }
 >Foo.propTypes : { bar: Requireable<boolean>; }
->Foo : { (__0: { bar: any; }): any; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
+>Foo : { (__0: { bar: any; }): Element; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
 >propTypes : { bar: Requireable<boolean>; }
 >propTypes : { bar: Requireable<boolean>; }
 
 Foo.defaultProps = defaultProps;
 >Foo.defaultProps = defaultProps : { bar: boolean; }
 >Foo.defaultProps : { bar: boolean; }
->Foo : { (__0: { bar: any; }): any; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
+>Foo : { (__0: { bar: any; }): Element; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
 >defaultProps : { bar: boolean; }
 >defaultProps : { bar: boolean; }
 
 export default Foo;
->Foo : { (__0: { bar: any; }): any; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
+>Foo : { (__0: { bar: any; }): Element; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
 

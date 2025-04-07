@@ -24,11 +24,11 @@ function Bar<T extends {prop: number}>(arg: T) {
 >arg : T
 
     let a1 = <ComponentSpecific1 {...arg} ignore-prop={10} />;
->a1 : any
-><ComponentSpecific1 {...arg} ignore-prop={10} /> : any
+>a1 : Element
+><ComponentSpecific1 {...arg} ignore-prop={10} /> : Element
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => Element
 >arg : T
->ignore-prop : any
+>ignore-prop : number
 >10 : 10
  }
 
@@ -38,8 +38,8 @@ function Baz<T>(arg: T) {
 >arg : T
 
     let a0 = <ComponentSpecific1 {...arg} />
->a0 : any
-><ComponentSpecific1 {...arg} /> : any
+>a0 : Element
+><ComponentSpecific1 {...arg} /> : Element
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => Element
 >arg : T
 }
@@ -59,10 +59,10 @@ function createLink(func: (a: number, b: string)=>void) {
 >b : string
 
     let o = <Link func={func} />
->o : any
-><Link func={func} /> : any
+>o : Element
+><Link func={func} /> : Element
 >Link : <U>(l: { func: (arg: U) => void; }) => Element
->func : any
+>func : (a: number, b: string) => void
 >func : (a: number, b: string) => void
 }
 
@@ -82,16 +82,16 @@ declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 
 // Error
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;
->i : any
-><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} /> : any
+>i : Element
+><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} /> : Element
 >InferParamComponent : <T>(attr: InferParamProp<T>) => Element
->values : any
+>values : number[]
 >[1, 2, 3, 4] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
 >4 : 4
->selectHandler : any
+>selectHandler : (val: string) => void
 >(val: string) => { } : (val: string) => void
 >val : string
 

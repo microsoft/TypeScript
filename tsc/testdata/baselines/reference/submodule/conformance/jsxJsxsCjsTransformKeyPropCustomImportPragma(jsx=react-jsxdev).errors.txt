@@ -1,0 +1,24 @@
+preact.tsx(4,11): error TS2875: This JSX tag requires the module path 'preact/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+
+
+==== react.tsx (0 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    /* @jsxImportSource react */
+    import "./preact";
+    const props2 = { answer: 42 }
+    const a2 = <div key="foo" {...props2}>text</div>;
+    const b2 = <div {...props2} key="bar">text</div>;
+    
+    export {};
+    
+==== preact.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    /* @jsxImportSource preact */
+    const props = { answer: 42 }
+    const a = <div key="foo" {...props}>text</div>;
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2875: This JSX tag requires the module path 'preact/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+    const b = <div {...props} key="bar">text</div>;
+    
+    export {};
+    

@@ -31,6 +31,8 @@ class Button extends React.Component<any, any> {
 >render : Symbol(render, Decl(file.tsx, 8, 48))
 
         return (<div>My Button</div>)
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
     }
 }
 
@@ -39,6 +41,8 @@ function AnotherButton(p: any) {
 >p : Symbol(p, Decl(file.tsx, 14, 23))
 
     return <h1>Just Another Button</h1>;
+>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
 }
 
 function Comp(p: Prop) {
@@ -47,9 +51,11 @@ function Comp(p: Prop) {
 >Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
 
     return <div>{p.b}</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >p.b : Symbol(b, Decl(file.tsx, 3, 14))
 >p : Symbol(p, Decl(file.tsx, 18, 14))
 >b : Symbol(b, Decl(file.tsx, 3, 14))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 }
 
 // Ok

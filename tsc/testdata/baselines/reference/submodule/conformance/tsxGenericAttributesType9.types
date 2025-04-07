@@ -20,10 +20,10 @@ export function makeP<P>(Ctor: React.ComponentClass<P>) {
 >JSX : any
 
 			return (
->(				<Ctor {...this.props } />			) : any
+>(				<Ctor {...this.props } />			) : Element
 
 				<Ctor {...this.props } />
-><Ctor {...this.props } /> : any
+><Ctor {...this.props } /> : Element
 >Ctor : ComponentClass<P>
 >this.props : P & { children?: ReactNode; }
 >this : this

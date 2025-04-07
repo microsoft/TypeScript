@@ -5,15 +5,19 @@
  
    <main>
 ->main : Symbol(JSX.IntrinsicElements.main, Decl(react18.d.ts, 3206, 102))
--
++>main : Symbol(main, Decl(react18.d.ts, 3206, 102))
+ 
      {(<div />) as unknown}
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react18.d.ts, 3174, 110))
--
++>div : Symbol(div, Decl(react18.d.ts, 3174, 110))
+ 
      <span />
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react18.d.ts, 3238, 110))
--
++>span : Symbol(span, Decl(react18.d.ts, 3238, 110))
+ 
    </main>
 ->main : Symbol(JSX.IntrinsicElements.main, Decl(react18.d.ts, 3206, 102))
--
++>main : Symbol(main, Decl(react18.d.ts, 3206, 102))
+ 
  );
  

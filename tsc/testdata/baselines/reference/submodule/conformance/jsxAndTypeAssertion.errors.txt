@@ -1,4 +1,5 @@
 jsxAndTypeAssertion.tsx(6,6): error TS17008: JSX element 'any' has no corresponding closing tag.
+jsxAndTypeAssertion.tsx(6,13): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
 jsxAndTypeAssertion.tsx(6,17): error TS1005: '}' expected.
 jsxAndTypeAssertion.tsx(6,31): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 jsxAndTypeAssertion.tsx(8,6): error TS17008: JSX element 'any' has no corresponding closing tag.
@@ -22,7 +23,7 @@ jsxAndTypeAssertion.tsx(21,1): error TS1005: ':' expected.
 jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' expected.
 
 
-==== jsxAndTypeAssertion.tsx (22 errors) ====
+==== jsxAndTypeAssertion.tsx (23 errors) ====
     declare var createElement: any;
     
     class foo {}
@@ -31,6 +32,8 @@ jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' expected.
     x = <any> { test: <any></any> };
          ~~~
 !!! error TS17008: JSX element 'any' has no corresponding closing tag.
+                ~~~~
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
                     ~
 !!! error TS1005: '}' expected.
                                   ~

@@ -1,0 +1,42 @@
+--- old.tsxAttributeResolution6.types
++++ new.tsxAttributeResolution6.types
+@@= skipped -16, +16 lines =@@
+ 
+ // Error
+ <test1 s />;
+-><test1 s /> : JSX.Element
++><test1 s /> : Element
+ >test1 : any
+ >s : true
+ 
+ <test1 n='true' />;
+-><test1 n='true' /> : JSX.Element
++><test1 n='true' /> : Element
+ >test1 : any
+ >n : string
+ 
+ <test2 />;
+-><test2 /> : JSX.Element
++><test2 /> : Element
+ >test2 : any
+ 
+ // OK
+ <test1 n />;
+-><test1 n /> : JSX.Element
++><test1 n /> : Element
+ >test1 : any
+ >n : true
+ 
+ <test1 n={false} />;
+-><test1 n={false} /> : JSX.Element
++><test1 n={false} /> : Element
+ >test1 : any
+ >n : false
+ >false : false
+ 
+ <test2 n />;
+-><test2 n /> : JSX.Element
++><test2 n /> : Element
+ >test2 : any
+ >n : true
+ 

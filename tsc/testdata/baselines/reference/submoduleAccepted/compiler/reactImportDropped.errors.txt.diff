@@ -5,6 +5,9 @@
 @@= skipped --1, +1 lines =@@
 +src/components/TabBar.js(1,16): error TS2686: 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead.
 +src/modules/navigation/NavigationView.js(2,22): error TS2307: Cannot find module '../../utils/theme' or its corresponding type declarations.
++src/modules/navigation/NavigationView.js(3,12): error TS2686: 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead.
++src/modules/navigation/NavigationView.js(3,19): error TS2322: Type '{ height: any; }' is not assignable to type 'ClassicComponentClass'.
++  Property 'height' does not exist on type 'ClassicComponentClass'.
 +
 +
 +==== react.d.ts (0 errors) ====
@@ -38,10 +41,15 @@
 +      }
 +    });
 +    
-+==== src/modules/navigation/NavigationView.js (1 errors) ====
++==== src/modules/navigation/NavigationView.js (3 errors) ====
 +    import TabBar from '../../components/TabBar';
 +    import {layout} from '../../utils/theme'; // <- DO NOT DROP this import
 +                         ~~~~~~~~~~~~~~~~~~~
 +!!! error TS2307: Cannot find module '../../utils/theme' or its corresponding type declarations.
 +    const x = <TabBar height={layout.footerHeight} />;
++               ~~~~~~
++!!! error TS2686: 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead.
++                      ~~~~~~
++!!! error TS2322: Type '{ height: any; }' is not assignable to type 'ClassicComponentClass'.
++!!! error TS2322:   Property 'height' does not exist on type 'ClassicComponentClass'.
 +    

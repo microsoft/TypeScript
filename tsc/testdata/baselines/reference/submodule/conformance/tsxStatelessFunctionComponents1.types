@@ -2,128 +2,128 @@
 
 === file.tsx ===
 function EmptyPropSFC() {
->EmptyPropSFC : () => any
+>EmptyPropSFC : () => Element
 
     return <div> Default Greeting </div>;
-><div> Default Greeting </div> : any
+><div> Default Greeting </div> : Element
 >div : any
 >div : any
 }
 
 function Greet(x: {name: string}) {
->Greet : (x: { name: string; }) => any
+>Greet : (x: { name: string; }) => Element
 >x : { name: string; }
 >name : string
 
 	return <div>Hello, {x}</div>;
-><div>Hello, {x}</div> : any
+><div>Hello, {x}</div> : Element
 >div : any
 >x : { name: string; }
 >div : any
 }
 function Meet({name = 'world'}) {
->Meet : (__0: { name?: string; }) => any
+>Meet : (__0: { name?: string; }) => Element
 >name : string
 >'world' : "world"
 
 	return <div>Hello, {name}</div>;
-><div>Hello, {name}</div> : any
+><div>Hello, {name}</div> : Element
 >div : any
 >name : string
 >div : any
 }
 function MeetAndGreet(k: {"prop-name": string}) {
->MeetAndGreet : (k: { "prop-name": string; }) => any
+>MeetAndGreet : (k: { "prop-name": string; }) => Element
 >k : { "prop-name": string; }
 >"prop-name" : string
 
 	return <div>Hi Hi</div>;
-><div>Hi Hi</div> : any
+><div>Hi Hi</div> : Element
 >div : any
 >div : any
 }
 
 // OK
 let a = <Greet name='world' />;
->a : any
-><Greet name='world' /> : any
->Greet : (x: { name: string; }) => any
->name : any
+>a : Element
+><Greet name='world' /> : Element
+>Greet : (x: { name: string; }) => Element
+>name : string
 
 let a1 = <Greet name='world' extra-prop />;
->a1 : any
-><Greet name='world' extra-prop /> : any
->Greet : (x: { name: string; }) => any
->name : any
->extra-prop : any
+>a1 : Element
+><Greet name='world' extra-prop /> : Element
+>Greet : (x: { name: string; }) => Element
+>name : string
+>extra-prop : true
 
 // Error
 let b = <Greet naaame='world' />;
->b : any
-><Greet naaame='world' /> : any
->Greet : (x: { name: string; }) => any
->naaame : any
+>b : Element
+><Greet naaame='world' /> : Element
+>Greet : (x: { name: string; }) => Element
+>naaame : string
 
 // OK
 let c = <Meet />;
->c : any
-><Meet /> : any
->Meet : (__0: { name?: string; }) => any
+>c : Element
+><Meet /> : Element
+>Meet : (__0: { name?: string; }) => Element
 
 let c1 = <Meet extra-prop/>;
->c1 : any
-><Meet extra-prop/> : any
->Meet : (__0: { name?: string; }) => any
->extra-prop : any
+>c1 : Element
+><Meet extra-prop/> : Element
+>Meet : (__0: { name?: string; }) => Element
+>extra-prop : true
 
 // OK
 let d = <Meet name='me' />;
->d : any
-><Meet name='me' /> : any
->Meet : (__0: { name?: string; }) => any
->name : any
+>d : Element
+><Meet name='me' /> : Element
+>Meet : (__0: { name?: string; }) => Element
+>name : string
 
 // Error
 let e = <Meet name={42} />;
->e : any
-><Meet name={42} /> : any
->Meet : (__0: { name?: string; }) => any
->name : any
+>e : Element
+><Meet name={42} /> : Element
+>Meet : (__0: { name?: string; }) => Element
+>name : number
 >42 : 42
 
 // Error
 let f = <Meet naaaaaaame='no' />;
->f : any
-><Meet naaaaaaame='no' /> : any
->Meet : (__0: { name?: string; }) => any
->naaaaaaame : any
+>f : Element
+><Meet naaaaaaame='no' /> : Element
+>Meet : (__0: { name?: string; }) => Element
+>naaaaaaame : string
 
 // OK
 let g = <MeetAndGreet prop-name="Bob" />;
->g : any
-><MeetAndGreet prop-name="Bob" /> : any
->MeetAndGreet : (k: { "prop-name": string; }) => any
->prop-name : any
+>g : Element
+><MeetAndGreet prop-name="Bob" /> : Element
+>MeetAndGreet : (k: { "prop-name": string; }) => Element
+>prop-name : string
 
 // Error
 let h = <MeetAndGreet extra-prop-name="World" />;
->h : any
-><MeetAndGreet extra-prop-name="World" /> : any
->MeetAndGreet : (k: { "prop-name": string; }) => any
->extra-prop-name : any
+>h : Element
+><MeetAndGreet extra-prop-name="World" /> : Element
+>MeetAndGreet : (k: { "prop-name": string; }) => Element
+>extra-prop-name : string
 
 // Error
 let i = <EmptyPropSFC prop1 />
->i : any
-><EmptyPropSFC prop1 /> : any
->EmptyPropSFC : () => any
->prop1 : any
+>i : Element
+><EmptyPropSFC prop1 /> : Element
+>EmptyPropSFC : () => Element
+>prop1 : true
 
 let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
->i1 : any
-><EmptyPropSFC ref={x => x.greeting.substr(10)} /> : any
->EmptyPropSFC : () => any
->ref : any
+>i1 : Element
+><EmptyPropSFC ref={x => x.greeting.substr(10)} /> : Element
+>EmptyPropSFC : () => Element
+>ref : (x: any) => any
 >x => x.greeting.substr(10) : (x: any) => any
 >x : any
 >x.greeting.substr(10) : any
@@ -145,9 +145,9 @@ let o = {
 
 // OK as access properties are allow when spread
 let i2 = <EmptyPropSFC {...o} />
->i2 : any
-><EmptyPropSFC {...o} /> : any
->EmptyPropSFC : () => any
+>i2 : Element
+><EmptyPropSFC {...o} /> : Element
+>EmptyPropSFC : () => Element
 >o : { prop1: boolean; }
 
 let o1: any;
@@ -155,32 +155,32 @@ let o1: any;
 
 // OK
 let j = <EmptyPropSFC {...o1} />
->j : any
-><EmptyPropSFC {...o1} /> : any
->EmptyPropSFC : () => any
+>j : Element
+><EmptyPropSFC {...o1} /> : Element
+>EmptyPropSFC : () => Element
 >o1 : any
 
 let j1 = <EmptyPropSFC />
->j1 : any
-><EmptyPropSFC /> : any
->EmptyPropSFC : () => any
+>j1 : Element
+><EmptyPropSFC /> : Element
+>EmptyPropSFC : () => Element
 
 let j2 = <EmptyPropSFC data-prop />
->j2 : any
-><EmptyPropSFC data-prop /> : any
->EmptyPropSFC : () => any
->data-prop : any
+>j2 : Element
+><EmptyPropSFC data-prop /> : Element
+>EmptyPropSFC : () => Element
+>data-prop : true
 
 let j3 = <EmptyPropSFC {...{}} />
->j3 : any
-><EmptyPropSFC {...{}} /> : any
->EmptyPropSFC : () => any
+>j3 : Element
+><EmptyPropSFC {...{}} /> : Element
+>EmptyPropSFC : () => Element
 >{} : {}
 
 let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
->j4 : any
-><EmptyPropSFC {...{ "data-info": "hi"}} /> : any
->EmptyPropSFC : () => any
+>j4 : Element
+><EmptyPropSFC {...{ "data-info": "hi"}} /> : Element
+>EmptyPropSFC : () => Element
 >{ "data-info": "hi"} : { "data-info": string; }
 >"data-info" : string
 >"hi" : "hi"

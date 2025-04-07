@@ -12,7 +12,7 @@ let x = Test; // emit test_1.default
 <anything attr={Test} />; // ?
 ><anything attr={Test} /> : any
 >anything : any
->attr : any
+>attr : typeof default
 >Test : typeof default
 
 === component.d.ts ===

@@ -37,75 +37,75 @@ import * as React from "react";
 >React : typeof __React
 
 export function MyComponent(props: { foo: string }) {
->MyComponent : (props: { foo: string; }) => any
+>MyComponent : (props: { foo: string; }) => Element
 >props : { foo: string; }
 >foo : string
 
   return <div />;
-><div /> : any
+><div /> : Element
 >div : any
 }
 
 let x = (
->x : any
->(  <div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div>) : any
+>x : Element
+>(  <div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div>) : Element
 
   <div>
-><div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div> : any
+><div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div> : Element
 >div : any
 
     {/*
    @ts-ignore */}
     <MyComponent foo={100} />
-><MyComponent foo={100} /> : any
->MyComponent : (props: { foo: string; }) => any
->foo : any
+><MyComponent foo={100} /> : Element
+>MyComponent : (props: { foo: string; }) => Element
+>foo : number
 >100 : 100
 
     {/*@ts-ignore*/}
     <MyComponent foo={100} />
-><MyComponent foo={100} /> : any
->MyComponent : (props: { foo: string; }) => any
->foo : any
+><MyComponent foo={100} /> : Element
+>MyComponent : (props: { foo: string; }) => Element
+>foo : number
 >100 : 100
 
     {/*
    @ts-expect-error */}
     <MyComponent foo={100} />
-><MyComponent foo={100} /> : any
->MyComponent : (props: { foo: string; }) => any
->foo : any
+><MyComponent foo={100} /> : Element
+>MyComponent : (props: { foo: string; }) => Element
+>foo : number
 >100 : 100
 
     {/*
    // @ts-expect-error */}
     <MyComponent foo={100} />
-><MyComponent foo={100} /> : any
->MyComponent : (props: { foo: string; }) => any
->foo : any
+><MyComponent foo={100} /> : Element
+>MyComponent : (props: { foo: string; }) => Element
+>foo : number
 >100 : 100
 
     {/*
    * @ts-expect-error */}
     <MyComponent foo={100} />
-><MyComponent foo={100} /> : any
->MyComponent : (props: { foo: string; }) => any
->foo : any
+><MyComponent foo={100} /> : Element
+>MyComponent : (props: { foo: string; }) => Element
+>foo : number
 >100 : 100
 
     {/*@ts-expect-error*/}
     <MyComponent foo={100} />
-><MyComponent foo={100} /> : any
->MyComponent : (props: { foo: string; }) => any
->foo : any
+><MyComponent foo={100} /> : Element
+>MyComponent : (props: { foo: string; }) => Element
+>foo : number
 >100 : 100
 
     {/*
    @ts-expect-error */}
     <MyComponent foo={"hooray"} />
-><MyComponent foo={"hooray"} /> : any
->MyComponent : (props: { foo: string; }) => any
->foo : any
+><MyComponent foo={"hooray"} /> : Element
+>MyComponent : (props: { foo: string; }) => Element
+>foo : string
 >"hooray" : "hooray"
 
   </div>

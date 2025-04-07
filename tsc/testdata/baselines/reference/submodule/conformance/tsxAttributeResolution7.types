@@ -12,27 +12,27 @@ declare module JSX {
 
 // Error
 <test1 data-foo={32} />;
-><test1 data-foo={32} /> : any
+><test1 data-foo={32} /> : Element
 >test1 : any
->data-foo : any
+>data-foo : number
 >32 : 32
 
 // OK
 <test1 data-foo={'32'} />;
-><test1 data-foo={'32'} /> : any
+><test1 data-foo={'32'} /> : Element
 >test1 : any
->data-foo : any
+>data-foo : string
 >'32' : "32"
 
 <test1 data-bar={'32'} />;
-><test1 data-bar={'32'} /> : any
+><test1 data-bar={'32'} /> : Element
 >test1 : any
->data-bar : any
+>data-bar : string
 >'32' : "32"
 
 <test1 data-bar={32} />;
-><test1 data-bar={32} /> : any
+><test1 data-bar={32} /> : Element
 >test1 : any
->data-bar : any
+>data-bar : number
 >32 : 32
 

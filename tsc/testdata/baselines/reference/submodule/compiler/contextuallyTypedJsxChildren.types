@@ -45,25 +45,25 @@ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 >DropdownMenu : any
 
 <DropdownMenu icon="move" label="Select a direction">
-><DropdownMenu icon="move" label="Select a direction">  {({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}</DropdownMenu> : any
+><DropdownMenu icon="move" label="Select a direction">  {({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}</DropdownMenu> : Element
 >DropdownMenu : ComponentType<Props>
->icon : any
->label : any
+>icon : string
+>label : string
 
   {({ onClose }) => (
->({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: any; }) => any
->onClose : any
->(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : any
+>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: () => void; }) => Element
+>onClose : () => void
+>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : Element
 
     <div>
-><div>      <button onClick={onClose}>Click me</button>    </div> : any
+><div>      <button onClick={onClose}>Click me</button>    </div> : Element
 >div : any
 
       <button onClick={onClose}>Click me</button>
-><button onClick={onClose}>Click me</button> : any
+><button onClick={onClose}>Click me</button> : Element
 >button : any
->onClick : any
->onClose : any
+>onClick : () => void
+>onClose : () => void
 >button : any
 
     </div>
@@ -74,30 +74,30 @@ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 >DropdownMenu : ComponentType<Props>
 
 <DropdownMenu
-><DropdownMenu  icon="move"  label="Select a direction"  children={({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}/> : any
+><DropdownMenu  icon="move"  label="Select a direction"  children={({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}/> : Element
 >DropdownMenu : ComponentType<Props>
 
   icon="move"
->icon : any
+>icon : string
 
   label="Select a direction"
->label : any
+>label : string
 
   children={({ onClose }) => (
->children : any
->({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: any; }) => any
->onClose : any
->(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : any
+>children : (__0: { onClose: () => void; }) => Element
+>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: () => void; }) => Element
+>onClose : () => void
+>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : Element
 
     <div>
-><div>      <button onClick={onClose}>Click me</button>    </div> : any
+><div>      <button onClick={onClose}>Click me</button>    </div> : Element
 >div : any
 
       <button onClick={onClose}>Click me</button>
-><button onClick={onClose}>Click me</button> : any
+><button onClick={onClose}>Click me</button> : Element
 >button : any
->onClick : any
->onClose : any
+>onClick : () => void
+>onClose : () => void
 >button : any
 
     </div>

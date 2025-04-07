@@ -1,0 +1,44 @@
+--- old.jsxJsxsCjsTransformKeyPropCustomImportPragma(jsx=react-jsxdev).types
++++ new.jsxJsxsCjsTransformKeyPropCustomImportPragma(jsx=react-jsxdev).types
+@@= skipped -10, +10 lines =@@
+ >42 : 42
+ 
+ const a2 = <div key="foo" {...props2}>text</div>;
+->a2 : JSX.Element
+-><div key="foo" {...props2}>text</div> : JSX.Element
++>a2 : Element
++><div key="foo" {...props2}>text</div> : Element
+ >div : any
+ >key : string
+ >props2 : { answer: number; }
+ >div : any
+ 
+ const b2 = <div {...props2} key="bar">text</div>;
+->b2 : JSX.Element
+-><div {...props2} key="bar">text</div> : JSX.Element
++>b2 : Element
++><div {...props2} key="bar">text</div> : Element
+ >div : any
+ >props2 : { answer: number; }
+ >key : string
+@@= skipped -27, +27 lines =@@
+ >42 : 42
+ 
+ const a = <div key="foo" {...props}>text</div>;
+->a : JSX.Element
+-><div key="foo" {...props}>text</div> : JSX.Element
++>a : Element
++><div key="foo" {...props}>text</div> : Element
+ >div : any
+ >key : string
+ >props : { answer: number; }
+ >div : any
+ 
+ const b = <div {...props} key="bar">text</div>;
+->b : JSX.Element
+-><div {...props} key="bar">text</div> : JSX.Element
++>b : Element
++><div {...props} key="bar">text</div> : Element
+ >div : any
+ >props : { answer: number; }
+ >key : string

@@ -1,0 +1,120 @@
+--- old.contextuallyTypedStringLiteralsInJsxAttributes02.types
++++ new.contextuallyTypedStringLiteralsInJsxAttributes02.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react')
+->React : typeof React
++>React : typeof __React
+ 
+ export interface ClickableProps {
+     children?: string;
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ export function MainButton(buttonProps: ButtonProps): JSX.Element;
+->MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
++>MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
+ >buttonProps : ButtonProps
+ >JSX : any
+ 
+ export function MainButton(linkProps: LinkProps): JSX.Element;
+->MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
++>MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
+ >linkProps : LinkProps
+ >JSX : any
+ 
+ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
+->MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
++>MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
+ >props : ButtonProps | LinkProps
+ >JSX : any
+ 
+@@= skipped -41, +41 lines =@@
+ }
+ 
+ const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
+->b0 : JSX.Element
+-><MainButton {...{onClick: (k) => {console.log(k)}}} extra /> : JSX.Element
+->MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
++>b0 : Element
++><MainButton {...{onClick: (k) => {console.log(k)}}} extra /> : Element
++>MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
+ >{onClick: (k) => {console.log(k)}} : { onClick: (k: "left" | "right") => void; }
+ >onClick : (k: "left" | "right") => void
+ >(k) => {console.log(k)} : (k: "left" | "right") => void
+@@= skipped -15, +15 lines =@@
+ >extra : true
+ 
+ const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
+->b2 : JSX.Element
+-><MainButton onClick={(k)=>{console.log(k)}} extra /> : JSX.Element
+->MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
++>b2 : Element
++><MainButton onClick={(k)=>{console.log(k)}} extra /> : Element
++>MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
+ >onClick : (k: "left" | "right") => void
+ >(k)=>{console.log(k)} : (k: "left" | "right") => void
+ >k : "left" | "right"
+@@= skipped -14, +14 lines =@@
+ >extra : true
+ 
+ const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
+->b3 : JSX.Element
+-><MainButton {...{goTo:"home"}} extra /> : JSX.Element
+->MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
++>b3 : Element
++><MainButton {...{goTo:"home"}} extra /> : Element
++>MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
+ >{goTo:"home"} : { goTo: "home"; }
+ >goTo : "home"
+ >"home" : "home"
+ >extra : true
+ 
+ const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact"
+->b4 : JSX.Element
+-><MainButton goTo="home" extra /> : JSX.Element
+->MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
++>b4 : Element
++><MainButton goTo="home" extra /> : Element
++>MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; }
+ >goTo : "home"
+ >extra : true
+ 
+ export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undefined }
+->NoOverload : (buttonProps: ButtonProps) => JSX.Element
++>NoOverload : (buttonProps: ButtonProps) => Element
+ >buttonProps : ButtonProps
+ >JSX : any
+ >undefined : undefined
+ 
+ const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
+->c1 : JSX.Element
+-><NoOverload  {...{onClick: (k) => {console.log(k)}}} extra /> : JSX.Element
+->NoOverload : (buttonProps: ButtonProps) => JSX.Element
++>c1 : Element
++><NoOverload  {...{onClick: (k) => {console.log(k)}}} extra /> : Element
++>NoOverload : (buttonProps: ButtonProps) => Element
+ >{onClick: (k) => {console.log(k)}} : { onClick: (k: "left" | "right") => void; }
+ >onClick : (k: "left" | "right") => void
+ >(k) => {console.log(k)} : (k: "left" | "right") => void
+@@= skipped -37, +37 lines =@@
+ >extra : true
+ 
+ export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
+->NoOverload1 : (linkProps: LinkProps) => JSX.Element
++>NoOverload1 : (linkProps: LinkProps) => Element
+ >linkProps : LinkProps
+ >JSX : any
+ >undefined : undefined
+ 
+ const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"
+->d1 : JSX.Element
+-><NoOverload1 {...{goTo:"home"}} extra  /> : JSX.Element
+->NoOverload1 : (linkProps: LinkProps) => JSX.Element
++>d1 : Element
++><NoOverload1 {...{goTo:"home"}} extra  /> : Element
++>NoOverload1 : (linkProps: LinkProps) => Element
+ >{goTo:"home"} : { goTo: "home"; }
+ >goTo : "home"
+ >"home" : "home"

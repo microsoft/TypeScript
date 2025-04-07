@@ -1,0 +1,60 @@
+--- old.jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.types
++++ new.jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.types
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ function TabLayout(props: Props) {
+->TabLayout : (props: Props) => JSX.Element
++>TabLayout : (props: Props) => Element
+ >props : Props
+ 
+     return <div/>
+-><div/> : JSX.Element
++><div/> : Element
+ >div : any
+ }
+ 
+ export class App extends React.Component<{}> {
+ >App : App
+->React.Component : React.Component<{}, {}, any>
++>React.Component : Component<{}, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         return <TabLayout>
+-><TabLayout>            {[                ['Users', <div/>],                ['Products', <div/>]            ]}        </TabLayout> : JSX.Element
+->TabLayout : (props: Props) => JSX.Element
++><TabLayout>            {[                ['Users', <div/>],                ['Products', <div/>]            ]}        </TabLayout> : Element
++>TabLayout : (props: Props) => Element
+ 
+             {[
+->[                ['Users', <div/>],                ['Products', <div/>]            ] : [string, JSX.Element][]
++>[                ['Users', <div/>],                ['Products', <div/>]            ] : [string, Element][]
+ 
+                 ['Users', <div/>],
+->['Users', <div/>] : [string, JSX.Element]
++>['Users', <div/>] : [string, Element]
+ >'Users' : "Users"
+-><div/> : JSX.Element
++><div/> : Element
+ >div : any
+ 
+                 ['Products', <div/>]
+->['Products', <div/>] : [string, JSX.Element]
++>['Products', <div/>] : [string, Element]
+ >'Products' : "Products"
+-><div/> : JSX.Element
++><div/> : Element
+ >div : any
+ 
+             ]}
+         </TabLayout>
+->TabLayout : (props: Props) => JSX.Element
++>TabLayout : (props: Props) => Element
+     }
+ }

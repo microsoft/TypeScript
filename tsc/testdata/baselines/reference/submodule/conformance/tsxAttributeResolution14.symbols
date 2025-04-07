@@ -35,6 +35,8 @@ function VerticalNavMenuItem(prop: IProps) {
 >IProps : Symbol(IProps, Decl(file.tsx, 0, 0))
 
   return <div>props.primaryText</div>
+>div : Symbol(div, Decl(react.d.ts, 2, 30))
+>div : Symbol(div, Decl(react.d.ts, 2, 30))
 }
 
 function VerticalNav() {
@@ -42,6 +44,8 @@ function VerticalNav() {
 
   return (
     <div>
+>div : Symbol(div, Decl(react.d.ts, 2, 30))
+
       <VerticalNavMenuItem primaryText={2} />  // error
 >VerticalNavMenuItem : Symbol(VerticalNavMenuItem, Decl(file.tsx, 3, 1))
 >primaryText : Symbol(primaryText, Decl(file.tsx, 12, 26))
@@ -57,5 +61,7 @@ function VerticalNav() {
 >primaryText : Symbol(primaryText, Decl(file.tsx, 14, 49))
 
     </div>
+>div : Symbol(div, Decl(react.d.ts, 2, 30))
+
   )
 } 

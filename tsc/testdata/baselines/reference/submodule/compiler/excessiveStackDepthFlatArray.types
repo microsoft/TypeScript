@@ -95,7 +95,7 @@ const Component = () => {
         <li key={category}>{category}</li> // Error about 'key' only
 ><li key={category}>{category}</li> : any
 >li : any
->key : any
+>key : string
 >category : string
 >category : string
 >li : any

@@ -15,10 +15,10 @@ class Poisoned extends React.Component<Prop, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <div>Hello</div>;
-><div>Hello</div> : any
+><div>Hello</div> : Element
 >div : any
 >div : any
     }
@@ -26,8 +26,8 @@ class Poisoned extends React.Component<Prop, {}> {
 
 // OK
 let p = <Poisoned x/>;
->p : any
-><Poisoned x/> : any
+>p : Element
+><Poisoned x/> : Element
 >Poisoned : typeof Poisoned
->x : any
+>x : true
 

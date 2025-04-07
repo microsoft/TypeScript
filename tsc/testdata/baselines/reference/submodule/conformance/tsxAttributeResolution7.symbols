@@ -18,15 +18,19 @@ declare module JSX {
 
 // Error
 <test1 data-foo={32} />;
->data-foo : Symbol(data-foo, Decl(file.tsx, 8, 6))
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
+>data-foo : Symbol("data-foo", Decl(file.tsx, 8, 6))
 
 // OK
 <test1 data-foo={'32'} />;
->data-foo : Symbol(data-foo, Decl(file.tsx, 11, 6))
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
+>data-foo : Symbol("data-foo", Decl(file.tsx, 11, 6))
 
 <test1 data-bar={'32'} />;
->data-bar : Symbol(data-bar, Decl(file.tsx, 12, 6))
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
+>data-bar : Symbol("data-bar", Decl(file.tsx, 12, 6))
 
 <test1 data-bar={32} />;
->data-bar : Symbol(data-bar, Decl(file.tsx, 13, 6))
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
+>data-bar : Symbol("data-bar", Decl(file.tsx, 13, 6))
 

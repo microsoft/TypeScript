@@ -1,0 +1,100 @@
+--- old.multiline.types
++++ new.multiline.types
+@@= skipped -33, +33 lines =@@
+ 
+ === b.tsx ===
+ import * as React from "react";
+->React : typeof React
++>React : typeof __React
+ 
+ export function MyComponent(props: { foo: string }) {
+->MyComponent : (props: { foo: string; }) => JSX.Element
++>MyComponent : (props: { foo: string; }) => Element
+ >props : { foo: string; }
+ >foo : string
+ 
+   return <div />;
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ }
+ 
+ let x = (
+->x : JSX.Element
+->(  <div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div>) : JSX.Element
++>x : Element
++>(  <div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div>) : Element
+ 
+   <div>
+-><div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div> : JSX.Element
++><div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div> : Element
+ >div : any
+ 
+     {/*
+    @ts-ignore */}
+     <MyComponent foo={100} />
+-><MyComponent foo={100} /> : JSX.Element
+->MyComponent : (props: { foo: string; }) => JSX.Element
++><MyComponent foo={100} /> : Element
++>MyComponent : (props: { foo: string; }) => Element
+ >foo : number
+ >100 : 100
+ 
+     {/*@ts-ignore*/}
+     <MyComponent foo={100} />
+-><MyComponent foo={100} /> : JSX.Element
+->MyComponent : (props: { foo: string; }) => JSX.Element
++><MyComponent foo={100} /> : Element
++>MyComponent : (props: { foo: string; }) => Element
+ >foo : number
+ >100 : 100
+ 
+     {/*
+    @ts-expect-error */}
+     <MyComponent foo={100} />
+-><MyComponent foo={100} /> : JSX.Element
+->MyComponent : (props: { foo: string; }) => JSX.Element
++><MyComponent foo={100} /> : Element
++>MyComponent : (props: { foo: string; }) => Element
+ >foo : number
+ >100 : 100
+ 
+     {/*
+    // @ts-expect-error */}
+     <MyComponent foo={100} />
+-><MyComponent foo={100} /> : JSX.Element
+->MyComponent : (props: { foo: string; }) => JSX.Element
++><MyComponent foo={100} /> : Element
++>MyComponent : (props: { foo: string; }) => Element
+ >foo : number
+ >100 : 100
+ 
+     {/*
+    * @ts-expect-error */}
+     <MyComponent foo={100} />
+-><MyComponent foo={100} /> : JSX.Element
+->MyComponent : (props: { foo: string; }) => JSX.Element
++><MyComponent foo={100} /> : Element
++>MyComponent : (props: { foo: string; }) => Element
+ >foo : number
+ >100 : 100
+ 
+     {/*@ts-expect-error*/}
+     <MyComponent foo={100} />
+-><MyComponent foo={100} /> : JSX.Element
+->MyComponent : (props: { foo: string; }) => JSX.Element
++><MyComponent foo={100} /> : Element
++>MyComponent : (props: { foo: string; }) => Element
+ >foo : number
+ >100 : 100
+ 
+     {/*
+    @ts-expect-error */}
+     <MyComponent foo={"hooray"} />
+-><MyComponent foo={"hooray"} /> : JSX.Element
+->MyComponent : (props: { foo: string; }) => JSX.Element
++><MyComponent foo={"hooray"} /> : Element
++>MyComponent : (props: { foo: string; }) => Element
+ >foo : string
+ >"hooray" : "hooray"
+ 

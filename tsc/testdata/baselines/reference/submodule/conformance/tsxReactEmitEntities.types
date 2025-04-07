@@ -12,51 +12,51 @@ declare var React: any;
 >React : any
 
 <div>Dot goes here: &middot; &notAnEntity; </div>;
-><div>Dot goes here: &middot; &notAnEntity; </div> : any
+><div>Dot goes here: &middot; &notAnEntity; </div> : Element
 >div : any
 >div : any
 
 <div>Be careful of &quot;-ed strings!</div>;
-><div>Be careful of &quot;-ed strings!</div> : any
+><div>Be careful of &quot;-ed strings!</div> : Element
 >div : any
 >div : any
 
 <div>&#0123;&#123;braces&#x7d;&#x7D;</div>;
-><div>&#0123;&#123;braces&#x7d;&#x7D;</div> : any
+><div>&#0123;&#123;braces&#x7d;&#x7D;</div> : Element
 >div : any
 >div : any
 
 // Escapes do nothing
 <div>\n</div>;
-><div>\n</div> : any
+><div>\n</div> : Element
 >div : any
 >div : any
 
 // Also works in string literal attributes
 <div attr="&#0123;&hellip;&#x7D;\"></div>;
-><div attr="&#0123;&hellip;&#x7D;\"></div> : any
+><div attr="&#0123;&hellip;&#x7D;\"></div> : Element
 >div : any
->attr : any
+>attr : string
 >div : any
 
 // Does not happen for a string literal that happens to be inside an attribute (and escapes then work)
 <div attr={"&#0123;&hellip;&#x7D;\""}></div>;
-><div attr={"&#0123;&hellip;&#x7D;\""}></div> : any
+><div attr={"&#0123;&hellip;&#x7D;\""}></div> : Element
 >div : any
->attr : any
+>attr : string
 >"&#0123;&hellip;&#x7D;\"" : "&#0123;&hellip;&#x7D;\""
 >div : any
 
 // Preserves single quotes
 <div attr='"'></div>;
-><div attr='"'></div> : any
+><div attr='"'></div> : Element
 >div : any
->attr : any
+>attr : string
 >div : any
 
 // https://github.com/microsoft/TypeScript/issues/35732
 <div>&#x1F408;&#x1F415;&#128007;&#128017;</div>;
-><div>&#x1F408;&#x1F415;&#128007;&#128017;</div> : any
+><div>&#x1F408;&#x1F415;&#128007;&#128017;</div> : Element
 >div : any
 >div : any
 

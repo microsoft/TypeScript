@@ -1,0 +1,37 @@
+--- old.jsxChildrenWrongType.errors.txt
++++ new.jsxChildrenWrongType.errors.txt
+@@= skipped -0, +0 lines =@@
+ other.tsx(10,6): error TS2769: No overload matches this call.
+-  Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
+-    Type 'unknown' is not assignable to type 'string | boolean'.
+-  Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
+-    Type 'string' is not assignable to type 'number | boolean'.
++  The last overload gave the following error.
++    Type '{ children: [unknown, string]; }' is not assignable to type 'Readonly<PropsType>'.
++      Types of property 'children' are incompatible.
++        Type '[unknown, string]' is not assignable to type 'Iterable<boolean, any, any> | [string, number?]'.
++          Type '[unknown, string]' is not assignable to type '[string, number?]'.
++            Type at position 0 in source is not compatible with type at position 0 in target.
++              Type 'unknown' is not assignable to type 'string'.
+ 
+ 
+ ==== other.tsx (1 errors) ====
+@@= skipped -17, +20 lines =@@
+         <Foo>
+          ~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
+-!!! error TS2769:     Type 'unknown' is not assignable to type 'string | boolean'.
+-!!! error TS2769:   Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
+-!!! error TS2769:     Type 'string' is not assignable to type 'number | boolean'.
++!!! error TS2769:   The last overload gave the following error.
++!!! error TS2769:     Type '{ children: [unknown, string]; }' is not assignable to type 'Readonly<PropsType>'.
++!!! error TS2769:       Types of property 'children' are incompatible.
++!!! error TS2769:         Type '[unknown, string]' is not assignable to type 'Iterable<boolean, any, any> | [string, number?]'.
++!!! error TS2769:           Type '[unknown, string]' is not assignable to type '[string, number?]'.
++!!! error TS2769:             Type at position 0 in source is not compatible with type at position 0 in target.
++!!! error TS2769:               Type 'unknown' is not assignable to type 'string'.
++!!! related TS2771 react18/react18.d.ts:478:9: The last overload is declared here.
+             {<div/> as unknown}
+             {"aa"}
+         </Foo>

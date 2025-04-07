@@ -1,0 +1,24 @@
+--- old.tsxReactEmit3.types
++++ new.tsxReactEmit3.types
+@@= skipped -10, +10 lines =@@
+ >baz : any
+ 
+ <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
+-><Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo> : JSX.Element
++><Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo> : Element
+ >Foo : any
+-><Bar> q </Bar> : JSX.Element
++><Bar> q </Bar> : Element
+ >Bar : any
+ >Bar : any
+-><Bar/> : JSX.Element
++><Bar/> : Element
+ >Bar : any
+-><Bar/> : JSX.Element
++><Bar/> : Element
+ >Bar : any
+-><Bar/> : JSX.Element
++><Bar/> : Element
+ >Bar : any
+ >Foo : any
+ 

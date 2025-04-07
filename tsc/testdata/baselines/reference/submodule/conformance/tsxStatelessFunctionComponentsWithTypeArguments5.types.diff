@@ -1,0 +1,95 @@
+--- old.tsxStatelessFunctionComponentsWithTypeArguments5.types
++++ new.tsxStatelessFunctionComponentsWithTypeArguments5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react')
+->React : typeof React
++>React : typeof __React
+ 
+ declare function Component<U>(l: U): JSX.Element;
+->Component : <U>(l: U) => JSX.Element
++>Component : <U>(l: U) => Element
+ >l : U
+ >JSX : any
+ 
+@@= skipped -13, +13 lines =@@
+ >arg : T
+ 
+     let a1 = <Component {...arg} />;
+->a1 : JSX.Element
+-><Component {...arg} /> : JSX.Element
+->Component : <U>(l: U) => JSX.Element
++>a1 : Element
++><Component {...arg} /> : Element
++>Component : <U>(l: U) => Element
+ >arg : T
+ 
+     let a2 = <Component {...arg} prop1 />;
+->a2 : JSX.Element
+-><Component {...arg} prop1 /> : JSX.Element
+->Component : <U>(l: U) => JSX.Element
++>a2 : Element
++><Component {...arg} prop1 /> : Element
++>Component : <U>(l: U) => Element
+ >arg : T
+ >prop1 : true
+ }
+ 
+ declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
+->ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
++>ComponentSpecific : <U>(l: { prop: U; }) => Element
+ >l : { prop: U; }
+ >prop : U
+ >JSX : any
+ 
+ declare function ComponentSpecific1<U>(l: { prop: U, "ignore-prop": number }): JSX.Element;
+->ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
++>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => Element
+ >l : { prop: U; "ignore-prop": number; }
+ >prop : U
+ >"ignore-prop" : number
+@@= skipped -32, +32 lines =@@
+ >arg : T
+ 
+     let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
+->a1 : JSX.Element
+-><ComponentSpecific {...arg} ignore-prop="hi" /> : JSX.Element
+->ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
++>a1 : Element
++><ComponentSpecific {...arg} ignore-prop="hi" /> : Element
++>ComponentSpecific : <U>(l: { prop: U; }) => Element
+ >arg : T
+ >ignore-prop : string
+ 
+     let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
+->a2 : JSX.Element
+-><ComponentSpecific1 {...arg} ignore-prop={10} /> : JSX.Element
+->ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
++>a2 : Element
++><ComponentSpecific1 {...arg} ignore-prop={10} /> : Element
++>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => Element
+ >arg : T
+ >ignore-prop : number
+ >10 : 10
+ 
+     let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
+->a3 : JSX.Element
+-><ComponentSpecific {...arg} prop="hello" /> : JSX.Element
+->ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
++>a3 : Element
++><ComponentSpecific {...arg} prop="hello" /> : Element
++>ComponentSpecific : <U>(l: { prop: U; }) => Element
+ >arg : T
+ >prop : string
+ 
+     let a4 = <ComponentSpecific {...arg} prop1="hello" />;   // U is "hello"
+->a4 : JSX.Element
+-><ComponentSpecific {...arg} prop1="hello" /> : JSX.Element
+->ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
++>a4 : Element
++><ComponentSpecific {...arg} prop1="hello" /> : Element
++>ComponentSpecific : <U>(l: { prop: U; }) => Element
+ >arg : T
+ >prop1 : string
+ }

@@ -13,7 +13,7 @@ interface ComponentProps {
 }
 
 export default function Component(props: ComponentProps) {
->Component : (props: ComponentProps) => any
+>Component : (props: ComponentProps) => Element
 >props : ComponentProps
 
     let condition1: boolean;
@@ -23,22 +23,22 @@ export default function Component(props: ComponentProps) {
 >condition1 : boolean
 
         return (
->(            <ChildComponent {...props} />        ) : any
+>(            <ChildComponent {...props} />        ) : Element
 
             <ChildComponent {...props} />
-><ChildComponent {...props} /> : any
->ChildComponent : (__0: AnotherComponentProps) => any
+><ChildComponent {...props} /> : Element
+>ChildComponent : (__0: AnotherComponentProps) => Element
 >props : ComponentProps
 
         );
     }
     else {
         return (<ChildComponent {...props} property1="NewString" />);
->(<ChildComponent {...props} property1="NewString" />) : any
-><ChildComponent {...props} property1="NewString" /> : any
->ChildComponent : (__0: AnotherComponentProps) => any
+>(<ChildComponent {...props} property1="NewString" />) : Element
+><ChildComponent {...props} property1="NewString" /> : Element
+>ChildComponent : (__0: AnotherComponentProps) => Element
 >props : ComponentProps
->property1 : any
+>property1 : string
     }
 }
 
@@ -48,14 +48,14 @@ interface AnotherComponentProps {
 }
 
 function ChildComponent({ property1 }: AnotherComponentProps) {
->ChildComponent : (__0: AnotherComponentProps) => any
+>ChildComponent : (__0: AnotherComponentProps) => Element
 >property1 : string
 
     return (
->(        <span>{property1}</span>    ) : any
+>(        <span>{property1}</span>    ) : Element
 
         <span>{property1}</span>
-><span>{property1}</span> : any
+><span>{property1}</span> : Element
 >span : any
 >property1 : string
 >span : any

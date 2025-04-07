@@ -1,0 +1,40 @@
+--- old.checkJsxSubtleSkipContextSensitiveBug.types
++++ new.checkJsxSubtleSkipContextSensitiveBug.types
+@@= skipped -19, +19 lines =@@
+ 
+ class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
+ >AsyncLoader : AsyncLoader<TResult>
+->React.Component : React.Component<AsyncLoaderProps<TResult>, {}, any>
++>React.Component : Component<AsyncLoaderProps<TResult>, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+     render() { return null; }
+ >render : () => null
+ }
+ 
+ async function load(): Promise<{ success: true } | ErrorResult> {
+->load : () => Promise<{ success: true; } | ErrorResult>
++>load : () => Promise<ErrorResult | { success: true; }>
+ >success : true
+ >true : true
+ 
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ const loader = <AsyncLoader
+->loader : JSX.Element
+-><AsyncLoader    prop1={load}    prop2={result => result}/> : JSX.Element
++>loader : Element
++><AsyncLoader    prop1={load}    prop2={result => result}/> : Element
+ >AsyncLoader : typeof AsyncLoader
+ 
+     prop1={load}
+->prop1 : () => Promise<{ success: true; } | ErrorResult>
+->load : () => Promise<{ success: true; } | ErrorResult>
++>prop1 : () => Promise<ErrorResult | { success: true; }>
++>load : () => Promise<ErrorResult | { success: true; }>
+ 
+     prop2={result => result}
+ >prop2 : (result: { success: true; }) => { success: true; }

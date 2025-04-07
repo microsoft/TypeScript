@@ -5,10 +5,11 @@
  >Foo : Symbol(Foo, Decl(file.tsx, 2, 5))
  >props : Symbol(props, Decl(file.tsx, 2, 13))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  // Should be OK
  const foo = <Foo />;
-@@= skipped -12, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
  >MainMenu : Symbol(MainMenu, Decl(file.tsx, 8, 3))
  >React : Symbol(React, Decl(file.tsx, 0, 0))
@@ -16,13 +17,17 @@
 +>StatelessComponent : Symbol(StatelessComponent, Decl(react.d.ts, 198, 40))
  >props : Symbol(props, Decl(file.tsx, 8, 46))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
      <h3>Main Menu</h3>
 ->h3 : Symbol(JSX.IntrinsicElements.h3, Decl(react.d.ts, 2412, 48))
 ->h3 : Symbol(JSX.IntrinsicElements.h3, Decl(react.d.ts, 2412, 48))
--
++>h3 : Symbol(h3, Decl(react.d.ts, 2412, 48))
++>h3 : Symbol(h3, Decl(react.d.ts, 2412, 48))
+ 
  </div>);
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  
  var App: React.StatelessComponent<{ children }> = ({children}) => (
  >App : Symbol(App, Decl(file.tsx, 12, 3))
@@ -34,11 +39,13 @@
  
      <div >
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
          <MainMenu/>
  >MainMenu : Symbol(MainMenu, Decl(file.tsx, 8, 3))
  
  	</div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
  );

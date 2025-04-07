@@ -8,18 +8,29 @@
 ->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
--
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>code : Symbol((Missing), Decl(file.tsx, 2, 30))
++>code : Symbol((Missing), Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
+ 
  // Same here
  <div><code>code</code> word</div>;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
--
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>code : Symbol((Missing), Decl(file.tsx, 2, 30))
++>code : Symbol((Missing), Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
+ 
  // And here
  <div><code /> word</div>;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
++>code : Symbol((Missing), Decl(file.tsx, 2, 30))
++>div : Symbol((Missing), Decl(file.tsx, 2, 30))
  
  

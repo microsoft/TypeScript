@@ -3,19 +3,19 @@
 === jsxJsxsCjsTransformCustomImport.tsx ===
 /// <reference path="react16.d.ts" />
 const a = <>
->a : any
-><>  <p></p>  text  <div className="foo"></div></> : any
+>a : Element
+><>  <p></p>  text  <div className="foo"></div></> : Element
 
   <p></p>
-><p></p> : any
+><p></p> : Element
 >p : any
 >p : any
 
   text
   <div className="foo"></div>
-><div className="foo"></div> : any
+><div className="foo"></div> : Element
 >div : any
->className : any
+>className : string
 >div : any
 
 </>

@@ -32,12 +32,7 @@ func NewDiagnosticChainForNode(chain *ast.Diagnostic, node *ast.Node, message *d
 }
 
 func IsIntrinsicJsxName(name string) bool {
-	if len(name) == 0 {
-		return false
-	}
-
-	ch := name[0]
-	return (ch >= 'a' && ch <= 'z') || strings.ContainsRune(name, '-')
+	return len(name) != 0 && (name[0] >= 'a' && name[0] <= 'z' || strings.ContainsRune(name, '-'))
 }
 
 func findInMap[K comparable, V any](m map[K]V, predicate func(V) bool) V {
@@ -442,6 +437,9 @@ func entityNameToString(name *ast.Node) string {
 	case ast.KindThisKeyword:
 		return "this"
 	case ast.KindIdentifier, ast.KindPrivateIdentifier:
+		if ast.NodeIsSynthesized(name) {
+			return name.Text()
+		}
 		return scanner.GetTextOfNode(name)
 	case ast.KindQualifiedName:
 		return entityNameToString(name.AsQualifiedName().Left) + "." + entityNameToString(name.AsQualifiedName().Right)

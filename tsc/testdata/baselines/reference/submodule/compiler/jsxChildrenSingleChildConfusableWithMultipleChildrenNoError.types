@@ -16,11 +16,11 @@ interface Props {
 }
 
 function TabLayout(props: Props) {
->TabLayout : (props: Props) => any
+>TabLayout : (props: Props) => Element
 >props : Props
 
     return <div/>
-><div/> : any
+><div/> : Element
 >div : any
 }
 
@@ -31,29 +31,29 @@ export class App extends React.Component<{}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <TabLayout>
-><TabLayout>            {[                ['Users', <div/>],                ['Products', <div/>]            ]}        </TabLayout> : any
->TabLayout : (props: Props) => any
+><TabLayout>            {[                ['Users', <div/>],                ['Products', <div/>]            ]}        </TabLayout> : Element
+>TabLayout : (props: Props) => Element
 
             {[
->[                ['Users', <div/>],                ['Products', <div/>]            ] : any[][]
+>[                ['Users', <div/>],                ['Products', <div/>]            ] : [string, Element][]
 
                 ['Users', <div/>],
->['Users', <div/>] : any[]
+>['Users', <div/>] : [string, Element]
 >'Users' : "Users"
-><div/> : any
+><div/> : Element
 >div : any
 
                 ['Products', <div/>]
->['Products', <div/>] : any[]
+>['Products', <div/>] : [string, Element]
 >'Products' : "Products"
-><div/> : any
+><div/> : Element
 >div : any
 
             ]}
         </TabLayout>
->TabLayout : (props: Props) => any
+>TabLayout : (props: Props) => Element
     }
 }

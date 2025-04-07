@@ -22,10 +22,10 @@ class TextComponent extends React.Component<TextProps, {}> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return <span>Some Text..</span>;
-><span>Some Text..</span> : any
+><span>Some Text..</span> : Element
 >span : any
 >span : any
     }
@@ -33,10 +33,10 @@ class TextComponent extends React.Component<TextProps, {}> {
 
 // Error
 let x = <TextComponent editable={true} />
->x : any
-><TextComponent editable={true} /> : any
+>x : Element
+><TextComponent editable={true} /> : Element
 >TextComponent : typeof TextComponent
->editable : any
+>editable : true
 >true : true
 
 const textProps: TextProps = {

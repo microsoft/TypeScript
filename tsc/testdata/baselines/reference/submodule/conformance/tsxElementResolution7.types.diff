@@ -1,0 +1,49 @@
+--- old.tsxElementResolution7.types
++++ new.tsxElementResolution7.types
+@@= skipped -13, +13 lines =@@
+ }
+ // OK
+ <my.div n='x' />;
+-><my.div n='x' /> : JSX.Element
++><my.div n='x' /> : Element
+ >my.div : any
+ >my : typeof my
+ >div : any
+@@= skipped -8, +8 lines =@@
+ 
+ // Error
+ <my.other />;
+-><my.other /> : JSX.Element
++><my.other /> : Element
+ >my.other : any
+ >my : typeof my
+ >other : any
+@@= skipped -9, +9 lines =@@
+ >q : typeof q
+ 
+     import mine = my;
+->mine : typeof mine
+->my : typeof mine
++>mine : typeof my
++>my : typeof my
+ 
+     // OK
+     <mine.div n='x' />;
+-><mine.div n='x' /> : JSX.Element
++><mine.div n='x' /> : Element
+ >mine.div : any
+->mine : typeof mine
++>mine : typeof my
+ >div : any
+ >n : string
+ 
+     // Error
+     <mine.non />;
+-><mine.non /> : JSX.Element
++><mine.non /> : Element
+ >mine.non : any
+->mine : typeof mine
++>mine : typeof my
+ >non : any
+ }
+ 

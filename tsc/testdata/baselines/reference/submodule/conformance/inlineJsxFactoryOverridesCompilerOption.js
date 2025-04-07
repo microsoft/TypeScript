@@ -22,8 +22,11 @@ import { p } from "./renderer";
 //// [reacty.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/** @jsx dom */
+const renderer_1 = require("./renderer");
 <h></h>;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const renderer_1 = require("./renderer");
 <h></h>;

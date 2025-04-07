@@ -20,36 +20,43 @@
  
    return <div />;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  <Foo
-@@= skipped -12, +11 lines =@@
+@@= skipped -12, +12 lines =@@
    b={(arg) => { arg.toString(); }}
  >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 95, 14))
  >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
 ->arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>arg.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  
  />;
  
-@@= skipped -16, +14 lines =@@
+@@= skipped -16, +16 lines =@@
    b={(arg) => { arg.toString(); }}
  >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 100, 15))
  >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
 ->arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>arg.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  
  />;
  
-@@= skipped -16, +14 lines =@@
+@@= skipped -16, +16 lines =@@
    b: (arg) => { arg.toString(); },
  >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 105, 15))
  >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
 ->arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>arg.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  
  }} />;
  

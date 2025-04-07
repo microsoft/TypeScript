@@ -22,6 +22,8 @@ function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {
 >verybad : Symbol(verybad, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 56))
 
     return <div></div>;
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 function MyComp3(props: MyProps, context: any, bad: any) {
 >MyComp3 : Symbol(MyComp3, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 10, 1))
@@ -31,6 +33,8 @@ function MyComp3(props: MyProps, context: any, bad: any) {
 >bad : Symbol(bad, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 11, 46))
 
     return <div></div>;
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 function MyComp2(props: MyProps, context: any) {
 >MyComp2 : Symbol(MyComp2, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 13, 1))
@@ -39,6 +43,8 @@ function MyComp2(props: MyProps, context: any) {
 >context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 14, 32))
 
     return <div></div>
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 
 const a = <MyComp4 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides

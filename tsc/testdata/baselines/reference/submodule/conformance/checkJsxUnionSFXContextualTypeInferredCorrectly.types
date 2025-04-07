@@ -33,43 +33,43 @@ interface PM {
 }
 
 export function ComponentWithUnion(props: PM | PS) {
->ComponentWithUnion : (props: PM | PS) => any
+>ComponentWithUnion : (props: PM | PS) => Element
 >props : PM | PS
 
     return <h1></h1>;
-><h1></h1> : any
+><h1></h1> : Element
 >h1 : any
 >h1 : any
 }
 
 // Usage with React tsx
 export function HereIsTheError() {
->HereIsTheError : () => any
+>HereIsTheError : () => Element
 
     return (
->(        <ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        />    ) : any
+>(        <ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        />    ) : Element
 
         <ComponentWithUnion
-><ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        /> : any
->ComponentWithUnion : (props: PM | PS) => any
+><ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        /> : Element
+>ComponentWithUnion : (props: PM | PS) => Element
 
             multi={false}
->multi : any
+>multi : false
 >false : false
 
             value={'s'}
->value : any
+>value : string
 >'s' : "s"
 
             onChange={val => console.log(val)} // <- this throws an error
->onChange : any
->val => console.log(val) : (val: any) => void
->val : any
+>onChange : (val: string | undefined) => void
+>val => console.log(val) : (val: string | undefined) => void
+>val : string | undefined
 >console.log(val) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->val : any
+>val : string | undefined
 
         />
     );
@@ -77,8 +77,8 @@ export function HereIsTheError() {
 
 // Usage with pure TypeScript
 ComponentWithUnion({
->ComponentWithUnion({    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine}) : any
->ComponentWithUnion : (props: PM | PS) => any
+>ComponentWithUnion({    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine}) : Element
+>ComponentWithUnion : (props: PM | PS) => Element
 >{    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine} : { multi: false; value: string; onChange: (val: string | undefined) => void; }
 
     multi: false,

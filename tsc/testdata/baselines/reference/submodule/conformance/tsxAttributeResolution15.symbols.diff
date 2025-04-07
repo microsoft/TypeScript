@@ -17,6 +17,8 @@
          return <div>Default hi</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
      }
      greeting: string;
 ->greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 5, 5))
@@ -24,3 +26,10 @@
  }
  
  // Error
+@@= skipped -32, +32 lines =@@
+ let c = <BigGreeter data-extra="hi" />
+ >c : Symbol(c, Decl(file.tsx, 14, 3))
+ >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 0, 32))
+->data-extra : Symbol(data-extra, Decl(file.tsx, 14, 19))
++>data-extra : Symbol("data-extra", Decl(file.tsx, 14, 19))
+ 

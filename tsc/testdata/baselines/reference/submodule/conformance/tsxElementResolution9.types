@@ -21,7 +21,7 @@ var Obj1: Obj1;
 >Obj1 : Obj1
 
 <Obj1 />; // Error, return type is not an object type
-><Obj1 /> : any
+><Obj1 /> : Element
 >Obj1 : Obj1
 
 interface Obj2 {
@@ -37,7 +37,7 @@ var Obj2: Obj2;
 >Obj2 : Obj2
 
 <Obj2 />; // Error, return type is not an object type
-><Obj2 /> : any
+><Obj2 /> : Element
 >Obj2 : Obj2
 
 interface Obj3 {
@@ -54,8 +54,8 @@ var Obj3: Obj3;
 >Obj3 : Obj3
 
 <Obj3 x={42} />; // OK
-><Obj3 x={42} /> : any
+><Obj3 x={42} /> : Element
 >Obj3 : Obj3
->x : any
+>x : number
 >42 : 42
 

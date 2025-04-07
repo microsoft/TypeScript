@@ -26,21 +26,24 @@
      return <div>{p.b}</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->p.b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 +>p.b : Symbol(b, Decl(file.tsx, 3, 14))
  >p : Symbol(p, Decl(file.tsx, 8, 14))
 ->b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 +>b : Symbol(b, Decl(file.tsx, 3, 14))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  }
  
  // OK
-@@= skipped -36, +34 lines =@@
+@@= skipped -36, +36 lines =@@
  >b : Symbol(b, Decl(file.tsx, 19, 16))
  
          <div>hi hi hi!</div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
      </Comp>;
  >Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
- 

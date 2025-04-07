@@ -1,0 +1,28 @@
+--- old.tsxSfcReturnNull.types
++++ new.tsxSfcReturnNull.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ const Foo = (props: any) => null;
+ >Foo : (props: any) => any
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ const foo = <Foo />;
+->foo : JSX.Element
+-><Foo /> : JSX.Element
++>foo : Element
++><Foo /> : Element
+ >Foo : (props: any) => any
+ 
+ const G = <Greet />;
+->G : JSX.Element
+-><Greet /> : JSX.Element
++>G : Element
++><Greet /> : Element
+ >Greet : (x: { name?: string; }) => any
+ 

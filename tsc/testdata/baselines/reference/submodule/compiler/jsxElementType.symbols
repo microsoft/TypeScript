@@ -81,7 +81,9 @@ const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
 >RenderElement : Symbol(RenderElement, Decl(jsxElementType.tsx, 31, 5))
 >title : Symbol(title, Decl(jsxElementType.tsx, 31, 24))
 >title : Symbol(title, Decl(jsxElementType.tsx, 31, 35))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 >title : Symbol(title, Decl(jsxElementType.tsx, 31, 24))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 
 Component = RenderElement;
 >Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
@@ -220,7 +222,11 @@ Component = RenderStringClass;
 
 // Host element types still work
 <div />;
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+
 <my-custom-element />;
+>my-custom-element : Symbol(['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
+
 // Undeclared host element types are still rejected
 <boop />;
 <my-undeclared-custom-element />;

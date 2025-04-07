@@ -1,0 +1,36 @@
+file.tsx(9,15): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Property 'b' is missing in type '{ a: number; }' but required in type '{ b: unknown; a: number; }'.
+file.tsx(10,15): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
+      Type 'T & { "ignore-prop": true; }' is not assignable to type '{ b: unknown; a: unknown; }'.
+        Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
+
+
+==== file.tsx (2 errors) ====
+    import React = require('react')
+    
+    declare function OverloadComponent<U>(): JSX.Element;
+    declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
+    declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
+    
+    // Error
+    function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
+        let a0 = <OverloadComponent a={arg1.b}/>
+                  ~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Property 'b' is missing in type '{ a: number; }' but required in type '{ b: unknown; a: number; }'.
+!!! related TS2728 file.tsx:5:49: 'b' is declared here.
+!!! related TS2771 file.tsx:5:18: The last overload is declared here.
+        let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
+                  ~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
+!!! error TS2769:       Type 'T & { "ignore-prop": true; }' is not assignable to type '{ b: unknown; a: unknown; }'.
+!!! error TS2769:         Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
+!!! related TS2728 file.tsx:5:55: 'a' is declared here.
+!!! related TS2771 file.tsx:5:18: The last overload is declared here.
+    }

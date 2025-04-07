@@ -16,7 +16,7 @@ declare module JSX {
 
 // Invalid names
 <test1 32data={32} />;
-><test1 : any
+><test1 : Element
 >test1 : any
 >32 : 32
 >data={32} /> : boolean
@@ -31,7 +31,7 @@ declare module JSX {
 
 <test2 -data={32} />;
 ><test2 -data : number
-><test2 : any
+><test2 : Element
 >test2 : any
 >data : any
 >32 : 32

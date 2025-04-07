@@ -28,6 +28,7 @@ const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 const props = { a: 1, b: 1 };
 const Foo = (props) => <div>{props.a}</div>;
 // ok

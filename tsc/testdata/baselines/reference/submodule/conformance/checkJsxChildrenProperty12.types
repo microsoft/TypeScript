@@ -22,7 +22,7 @@ class Button extends React.Component<ButtonProp, any> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
 		let condition: boolean;
 >condition : boolean
@@ -31,7 +31,7 @@ class Button extends React.Component<ButtonProp, any> {
 >condition : boolean
 
         	return <InnerButton {...this.props} />
-><InnerButton {...this.props} /> : any
+><InnerButton {...this.props} /> : Element
 >InnerButton : typeof InnerButton
 >this.props : ButtonProp & { children?: ReactNode; }
 >this : this
@@ -39,15 +39,15 @@ class Button extends React.Component<ButtonProp, any> {
 		}
 		else {
 			return (<InnerButton {...this.props} >
->(<InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton>) : any
-><InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton> : any
+>(<InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton>) : Element
+><InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton> : Element
 >InnerButton : typeof InnerButton
 >this.props : ButtonProp & { children?: ReactNode; }
 >this : this
 >props : ButtonProp & { children?: ReactNode; }
 
 				<div>Hello World</div>
-><div>Hello World</div> : any
+><div>Hello World</div> : Element
 >div : any
 >div : any
 
@@ -69,11 +69,11 @@ class InnerButton extends React.Component<InnerButtonProp, any> {
 >Component : typeof Component
 
 	render() {
->render : () => any
+>render : () => Element
 
 		return (<button>Hello</button>);
->(<button>Hello</button>) : any
-><button>Hello</button> : any
+>(<button>Hello</button>) : Element
+><button>Hello</button> : Element
 >button : any
 >button : any
 	}

@@ -18,97 +18,97 @@ function Foo<T>() {
 }
 
 <>
-><>    {/* JsxSelfClosingElement */}    <Foo<unknown> />    <Foo<string> />    <Foo<boolean> />    <Foo<object> />    <Foo<null> />    <Foo<any> />    <Foo<never> />    <Foo<undefined> />    <Foo<TypeProps> />    <Foo<InterfaceProps> />    {/* JsxOpeningElement */}    <Foo<unknown>></Foo>    <Foo<string>></Foo>    <Foo<boolean>></Foo>    <Foo<object>></Foo>    <Foo<null>></Foo>    <Foo<any>></Foo>    <Foo<never>></Foo>    <Foo<undefined>></Foo>    <Foo<TypeProps>></Foo>    <Foo<InterfaceProps>></Foo></> : any
+><>    {/* JsxSelfClosingElement */}    <Foo<unknown> />    <Foo<string> />    <Foo<boolean> />    <Foo<object> />    <Foo<null> />    <Foo<any> />    <Foo<never> />    <Foo<undefined> />    <Foo<TypeProps> />    <Foo<InterfaceProps> />    {/* JsxOpeningElement */}    <Foo<unknown>></Foo>    <Foo<string>></Foo>    <Foo<boolean>></Foo>    <Foo<object>></Foo>    <Foo<null>></Foo>    <Foo<any>></Foo>    <Foo<never>></Foo>    <Foo<undefined>></Foo>    <Foo<TypeProps>></Foo>    <Foo<InterfaceProps>></Foo></> : Element
 
     {/* JsxSelfClosingElement */}
     <Foo<unknown> />
-><Foo<unknown> /> : any
+><Foo<unknown> /> : Element
 >Foo : <T>() => any
 
     <Foo<string> />
-><Foo<string> /> : any
+><Foo<string> /> : Element
 >Foo : <T>() => any
 
     <Foo<boolean> />
-><Foo<boolean> /> : any
+><Foo<boolean> /> : Element
 >Foo : <T>() => any
 
     <Foo<object> />
-><Foo<object> /> : any
+><Foo<object> /> : Element
 >Foo : <T>() => any
 
     <Foo<null> />
-><Foo<null> /> : any
+><Foo<null> /> : Element
 >Foo : <T>() => any
 
     <Foo<any> />
-><Foo<any> /> : any
+><Foo<any> /> : Element
 >Foo : <T>() => any
 
     <Foo<never> />
-><Foo<never> /> : any
+><Foo<never> /> : Element
 >Foo : <T>() => any
 
     <Foo<undefined> />
-><Foo<undefined> /> : any
+><Foo<undefined> /> : Element
 >Foo : <T>() => any
 
     <Foo<TypeProps> />
-><Foo<TypeProps> /> : any
+><Foo<TypeProps> /> : Element
 >Foo : <T>() => any
 
     <Foo<InterfaceProps> />
-><Foo<InterfaceProps> /> : any
+><Foo<InterfaceProps> /> : Element
 >Foo : <T>() => any
 
     {/* JsxOpeningElement */}
     <Foo<unknown>></Foo>
-><Foo<unknown>></Foo> : any
+><Foo<unknown>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<string>></Foo>
-><Foo<string>></Foo> : any
+><Foo<string>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<boolean>></Foo>
-><Foo<boolean>></Foo> : any
+><Foo<boolean>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<object>></Foo>
-><Foo<object>></Foo> : any
+><Foo<object>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<null>></Foo>
-><Foo<null>></Foo> : any
+><Foo<null>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<any>></Foo>
-><Foo<any>></Foo> : any
+><Foo<any>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<never>></Foo>
-><Foo<never>></Foo> : any
+><Foo<never>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<undefined>></Foo>
-><Foo<undefined>></Foo> : any
+><Foo<undefined>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<TypeProps>></Foo>
-><Foo<TypeProps>></Foo> : any
+><Foo<TypeProps>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 
     <Foo<InterfaceProps>></Foo>
-><Foo<InterfaceProps>></Foo> : any
+><Foo<InterfaceProps>></Foo> : Element
 >Foo : <T>() => any
 >Foo : <T>() => any
 

@@ -67,8 +67,8 @@ type AnimatedViewProps<T extends Animations> = {
 };
 
 const Component = <T extends Animations>({
->Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
-><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+>Component : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
+><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
 
   animations,
 >animations : T
@@ -77,22 +77,22 @@ const Component = <T extends Animations>({
 >style : (animationsValues: StyleParam<T>) => string
 
 }: AnimatedViewProps<T>) => <></>;
-><></> : any
+><></> : Element
 
 <Component
-><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,    },  }}  style={(anim) => {    return "";  }}/> : any
->Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,    },  }}  style={(anim) => {    return "";  }}/> : Element
+>Component : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
 
   animations={{
->animations : any
->{    test: {      kind: "a",      value: 1,      a: true,    },  } : { test: { kind: string; value: number; a: boolean; }; }
+>animations : { test: { kind: "a"; value: number; a: true; }; }
+>{    test: {      kind: "a",      value: 1,      a: true,    },  } : { test: { kind: "a"; value: number; a: true; }; }
 
     test: {
->test : { kind: string; value: number; a: boolean; }
->{      kind: "a",      value: 1,      a: true,    } : { kind: string; value: number; a: boolean; }
+>test : { kind: "a"; value: number; a: true; }
+>{      kind: "a",      value: 1,      a: true,    } : { kind: "a"; value: number; a: true; }
 
       kind: "a",
->kind : string
+>kind : "a"
 >"a" : "a"
 
       value: 1,
@@ -100,15 +100,15 @@ const Component = <T extends Animations>({
 >1 : 1
 
       a: true,
->a : boolean
+>a : true
 >true : true
 
     },
   }}
   style={(anim) => {
->style : any
->(anim) => {    return "";  } : (anim: any) => string
->anim : any
+>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
+>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
+>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>
 
     return "";
 >"" : ""
@@ -116,19 +116,19 @@ const Component = <T extends Animations>({
   }}
 />;
 <Component
-><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : any
->Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : Element
+>Component : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
 
   animations={{
->animations : any
->{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  } : { test: { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }; }
+>animations : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
+>{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  } : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
 
     test: {
->test : { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }
->{      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    } : { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }
+>test : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
+>{      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    } : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
 
       kind: "a",
->kind : string
+>kind : "a"
 >"a" : "a"
 
       value: 1,
@@ -136,17 +136,17 @@ const Component = <T extends Animations>({
 >1 : 1
 
       a: true,
->a : boolean
+>a : true
 >true : true
 
       func() {
->func : () => { a: boolean; }
+>func : () => { a: true; }
 
         return {
->{          a: true,        } : { a: boolean; }
+>{          a: true,        } : { a: true; }
 
           a: true,
->a : boolean
+>a : true
 >true : true
 
         };
@@ -154,9 +154,9 @@ const Component = <T extends Animations>({
     },
   }}
   style={(anim) => {
->style : any
->(anim) => {    return "";  } : (anim: any) => string
->anim : any
+>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
+>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
+>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>
 
     return "";
 >"" : ""
@@ -164,19 +164,19 @@ const Component = <T extends Animations>({
   }}
 />;
 <Component
-><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : any
->Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : Element
+>Component : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
 
   animations={{
->animations : any
->{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  } : { test: { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }; }
+>animations : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
+>{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  } : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
 
     test: {
->test : { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }
->{      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    } : { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }
+>test : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
+>{      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    } : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
 
       kind: "a",
->kind : string
+>kind : "a"
 >"a" : "a"
 
       value: 1,
@@ -184,18 +184,18 @@ const Component = <T extends Animations>({
 >1 : 1
 
       a: true,
->a : boolean
+>a : true
 >true : true
 
       func: () => {
->func : () => { a: boolean; }
->() => {        return {          a: true,        };      } : () => { a: boolean; }
+>func : () => { a: true; }
+>() => {        return {          a: true,        };      } : () => { a: true; }
 
         return {
->{          a: true,        } : { a: boolean; }
+>{          a: true,        } : { a: true; }
 
           a: true,
->a : boolean
+>a : true
 >true : true
 
         };
@@ -203,9 +203,9 @@ const Component = <T extends Animations>({
     },
   }}
   style={(anim) => {
->style : any
->(anim) => {    return "";  } : (anim: any) => string
->anim : any
+>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
+>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
+>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>
 
     return "";
 >"" : ""
@@ -226,74 +226,74 @@ interface Props<T> {
 }
 
 function Foo<T>(props: Props<T>) {
->Foo : <T>(props: Props<T>) => any
+>Foo : <T>(props: Props<T>) => Element
 >props : Props<T>
 
   return <div />;
-><div /> : any
+><div /> : Element
 >div : any
 }
 
 <Foo
-><Foo  a={() => 10}  b={(arg) => { arg.toString(); }}/> : any
->Foo : <T>(props: Props<T>) => any
+><Foo  a={() => 10}  b={(arg) => { arg.toString(); }}/> : Element
+>Foo : <T>(props: Props<T>) => Element
 
   a={() => 10}
->a : any
+>a : () => number
 >() => 10 : () => number
 >10 : 10
 
   b={(arg) => { arg.toString(); }}
->b : any
->(arg) => { arg.toString(); } : (arg: any) => void
->arg : any
->arg.toString() : any
->arg.toString : any
->arg : any
->toString : any
+>b : (arg: number) => void
+>(arg) => { arg.toString(); } : (arg: number) => void
+>arg : number
+>arg.toString() : string
+>arg.toString : (radix?: number | undefined) => string
+>arg : number
+>toString : (radix?: number | undefined) => string
 
 />;
 
 <Foo
-><Foo  a={(x) => 10}  b={(arg) => { arg.toString(); }}/> : any
->Foo : <T>(props: Props<T>) => any
+><Foo  a={(x) => 10}  b={(arg) => { arg.toString(); }}/> : Element
+>Foo : <T>(props: Props<T>) => Element
 
   a={(x) => 10}
->a : any
->(x) => 10 : (x: any) => number
->x : any
+>a : (x: string) => number
+>(x) => 10 : (x: string) => number
+>x : string
 >10 : 10
 
   b={(arg) => { arg.toString(); }}
->b : any
->(arg) => { arg.toString(); } : (arg: any) => void
->arg : any
->arg.toString() : any
->arg.toString : any
->arg : any
->toString : any
+>b : (arg: number) => void
+>(arg) => { arg.toString(); } : (arg: number) => void
+>arg : number
+>arg.toString() : string
+>arg.toString : (radix?: number | undefined) => string
+>arg : number
+>toString : (radix?: number | undefined) => string
 
 />;
 
 <Foo {...{
-><Foo {...{  a: (x) => 10,  b: (arg) => { arg.toString(); },}} /> : any
->Foo : <T>(props: Props<T>) => any
->{  a: (x) => 10,  b: (arg) => { arg.toString(); },} : { a: (x: any) => number; b: (arg: any) => void; }
+><Foo {...{  a: (x) => 10,  b: (arg) => { arg.toString(); },}} /> : Element
+>Foo : <T>(props: Props<T>) => Element
+>{  a: (x) => 10,  b: (arg) => { arg.toString(); },} : { a: (x: string) => number; b: (arg: number) => void; }
 
   a: (x) => 10,
->a : (x: any) => number
->(x) => 10 : (x: any) => number
->x : any
+>a : (x: string) => number
+>(x) => 10 : (x: string) => number
+>x : string
 >10 : 10
 
   b: (arg) => { arg.toString(); },
->b : (arg: any) => void
->(arg) => { arg.toString(); } : (arg: any) => void
->arg : any
->arg.toString() : any
->arg.toString : any
->arg : any
->toString : any
+>b : (arg: number) => void
+>(arg) => { arg.toString(); } : (arg: number) => void
+>arg : number
+>arg.toString() : string
+>arg.toString : (radix?: number | undefined) => string
+>arg : number
+>toString : (radix?: number | undefined) => string
 
 }} />;
 

@@ -5,17 +5,21 @@
  
  <foobaz prop="smth" />;
 ->foobaz : Symbol(JSX.IntrinsicElements.__index, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31))
++>foobaz : Symbol((Missing), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31))
  >prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 9, 7))
  
  <foobaz prop={10} />;
 ->foobaz : Symbol(JSX.IntrinsicElements.__index, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31))
++>foobaz : Symbol((Missing), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31))
  >prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 10, 7))
  
  <foobarbaz prop="literal"/>;
 ->foobarbaz : Symbol(JSX.IntrinsicElements.__index, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 4, 42))
++>foobarbaz : Symbol((Missing), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 4, 42))
  >prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 12, 10))
  
  <foobarbaz prop="smth"/>;
 ->foobarbaz : Symbol(JSX.IntrinsicElements.__index, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 4, 42))
++>foobarbaz : Symbol((Missing), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 4, 42))
  >prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 13, 10))
  

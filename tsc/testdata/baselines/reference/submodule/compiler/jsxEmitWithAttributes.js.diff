@@ -1,11 +1,6 @@
 --- old.jsxEmitWithAttributes.js
 +++ new.jsxEmitWithAttributes.js
-@@= skipped -70, +70 lines =@@
- //// [test.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--const Element_1 = require("./Element");
- let c;
+@@= skipped -75, +75 lines =@@
  class A {
      view() {
          return [

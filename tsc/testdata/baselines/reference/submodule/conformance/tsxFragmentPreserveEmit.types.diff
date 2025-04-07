@@ -1,0 +1,59 @@
+--- old.tsxFragmentPreserveEmit.types
++++ new.tsxFragmentPreserveEmit.types
+@@= skipped -11, +11 lines =@@
+ >React : any
+ 
+ <></>; // no whitespace
+-><></> : JSX.Element
++><></> : Element
+ 
+ <    ></   >; // lots of whitespace
+-><    ></   > : JSX.Element
++><    ></   > : Element
+ 
+ < /*starting wrap*/ ></ /*ending wrap*/>; // comments in the tags
+->< /*starting wrap*/ ></ /*ending wrap*/> : JSX.Element
++>< /*starting wrap*/ ></ /*ending wrap*/> : Element
+ 
+ <>hi</>; // text inside
+-><>hi</> : JSX.Element
++><>hi</> : Element
+ 
+ <><span>hi</span><div>bye</div></>; // children
+-><><span>hi</span><div>bye</div></> : JSX.Element
+-><span>hi</span> : JSX.Element
++><><span>hi</span><div>bye</div></> : Element
++><span>hi</span> : Element
+ >span : any
+ >span : any
+-><div>bye</div> : JSX.Element
++><div>bye</div> : Element
+ >div : any
+ >div : any
+ 
+ <><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></>; // nested fragments
+-><><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></> : JSX.Element
+-><span>1</span> : JSX.Element
++><><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></> : Element
++><span>1</span> : Element
+ >span : any
+ >span : any
+-><><span>2.1</span><span>2.2</span></> : JSX.Element
+-><span>2.1</span> : JSX.Element
++><><span>2.1</span><span>2.2</span></> : Element
++><span>2.1</span> : Element
+ >span : any
+ >span : any
+-><span>2.2</span> : JSX.Element
++><span>2.2</span> : Element
+ >span : any
+ >span : any
+-><span>3</span> : JSX.Element
++><span>3</span> : Element
+ >span : any
+ >span : any
+ 
+ <>#</>; // # would cause scanning error if not in jsxtext
+-><>#</> : JSX.Element
++><>#</> : Element
+ 

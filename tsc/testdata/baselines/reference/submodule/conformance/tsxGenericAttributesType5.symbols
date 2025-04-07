@@ -17,6 +17,8 @@ class B1<T extends { x: string }> extends React.Component<T, {}> {
 >render : Symbol(render, Decl(file.tsx, 2, 66))
 
         return <div>hi</div>; 
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
     }
 }
 class B<U> extends React.Component<U, {}> {

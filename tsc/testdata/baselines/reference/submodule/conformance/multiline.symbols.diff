@@ -35,6 +35,7 @@
  
    return <div />;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  }
  
  let x = (
@@ -42,15 +43,16 @@
  
    <div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
      {/*
     @ts-ignore */}
-     <MyComponent foo={100} />
-@@= skipped -50, +47 lines =@@
+@@= skipped -50, +50 lines =@@
  >foo : Symbol(foo, Decl(b.tsx, 32, 16))
  
    </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
  );
  

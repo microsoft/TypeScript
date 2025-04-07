@@ -16,44 +16,44 @@ declare namespace JSX {
 
 // didn't work
 <div>{() => <div text="wat" />}</div>;
-><div>{() => <div text="wat" />}</div> : any
+><div>{() => <div text="wat" />}</div> : Element
 >div : any
->() => <div text="wat" /> : () => any
-><div text="wat" /> : any
+>() => <div text="wat" /> : () => Element
+><div text="wat" /> : Element
 >div : any
->text : any
+>text : string
 >div : any
 
 // didn't work
 <div>{x => <div text="wat" />}</div>;
-><div>{x => <div text="wat" />}</div> : any
+><div>{x => <div text="wat" />}</div> : Element
 >div : any
->x => <div text="wat" /> : (x: any) => any
+>x => <div text="wat" /> : (x: any) => Element
 >x : any
-><div text="wat" /> : any
+><div text="wat" /> : Element
 >div : any
->text : any
+>text : string
 >div : any
 
 // worked
 <div>{() => (<div text="wat" />)}</div>;
-><div>{() => (<div text="wat" />)}</div> : any
+><div>{() => (<div text="wat" />)}</div> : Element
 >div : any
->() => (<div text="wat" />) : () => any
->(<div text="wat" />) : any
-><div text="wat" /> : any
+>() => (<div text="wat" />) : () => Element
+>(<div text="wat" />) : Element
+><div text="wat" /> : Element
 >div : any
->text : any
+>text : string
 >div : any
 
 // worked (!)
 <div>{() => <div text="wat"></div>}</div>;
-><div>{() => <div text="wat"></div>}</div> : any
+><div>{() => <div text="wat"></div>}</div> : Element
 >div : any
->() => <div text="wat"></div> : () => any
-><div text="wat"></div> : any
+>() => <div text="wat"></div> : () => Element
+><div text="wat"></div> : Element
 >div : any
->text : any
+>text : string
 >div : any
 >div : any
 

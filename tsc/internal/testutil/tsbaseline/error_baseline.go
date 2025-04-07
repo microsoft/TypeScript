@@ -243,9 +243,9 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 		func(d *ast.Diagnostic) bool {
 			return d.File() != nil && isTsConfigFile(d.File().FileName())
 		})
-
 	// Verify we didn't miss any errors in total
 	assert.Check(t, cmp.Equal(totalErrorsReportedInNonLibraryNonTsconfigFiles+numLibraryDiagnostics+numTsconfigDiagnostics, len(diagnostics)), "total number of errors")
+
 	return result
 }
 

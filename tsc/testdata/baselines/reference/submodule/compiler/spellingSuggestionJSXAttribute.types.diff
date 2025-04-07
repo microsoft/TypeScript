@@ -1,0 +1,63 @@
+--- old.spellingSuggestionJSXAttribute.types
++++ new.spellingSuggestionJSXAttribute.types
+@@= skipped -15, +15 lines =@@
+ }
+ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
+ >MyComp : MyComp
+->React.Component : React.Component<{ className?: string; htmlFor?: string; }, {}, any>
++>React.Component : Component<{ className?: string; htmlFor?: string; }, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ >className : string
+ >htmlFor : string
+ 
+ <a class="" />;
+-><a class="" /> : JSX.Element
++><a class="" /> : Element
+ >a : any
+ >class : string
+ 
+ <a for="" />; // should have no fix
+-><a for="" /> : JSX.Element
++><a for="" /> : Element
+ >a : any
+ >for : string
+ 
+ <label for="" />;
+-><label for="" /> : JSX.Element
++><label for="" /> : Element
+ >label : any
+ >for : string
+ 
+ <label for="" class="" />;
+-><label for="" class="" /> : JSX.Element
++><label for="" class="" /> : Element
+ >label : any
+ >for : string
+ >class : string
+ 
+ <MyComp class="" />;
+-><MyComp class="" /> : JSX.Element
++><MyComp class="" /> : Element
+ >MyComp : typeof MyComp
+ >class : string
+ 
+ <MyComp2 class="" />;
+-><MyComp2 class="" /> : JSX.Element
++><MyComp2 class="" /> : Element
+ >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+ >class : string
+ 
+ <MyComp for="" />;
+-><MyComp for="" /> : JSX.Element
++><MyComp for="" /> : Element
+ >MyComp : typeof MyComp
+ >for : string
+ 
+ <MyComp2 for="" />;
+-><MyComp2 for="" /> : JSX.Element
++><MyComp2 for="" /> : Element
+ >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+ >for : string
+ 

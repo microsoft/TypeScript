@@ -1,0 +1,15 @@
+--- old.jsxEsprimaFbTestSuite.symbols
++++ new.jsxEsprimaFbTestSuite.symbols
+@@= skipped -27, +27 lines =@@
+ <a />;
+ 
+ <n:a n:v />;
+->n:v : Symbol(n:v, Decl(jsxEsprimaFbTestSuite.tsx, 11, 4))
++>n:v : Symbol("þmissing", Decl(jsxEsprimaFbTestSuite.tsx, 11, 4))
+ 
+ <a n:foo="bar"> {value} <b><c /></b></a>;
+->n:foo : Symbol(n:foo, Decl(jsxEsprimaFbTestSuite.tsx, 13, 2))
++>n:foo : Symbol("þmissing", Decl(jsxEsprimaFbTestSuite.tsx, 13, 2))
+ >value : Symbol(value, Decl(jsxEsprimaFbTestSuite.tsx, 7, 11))
+ 
+ <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;

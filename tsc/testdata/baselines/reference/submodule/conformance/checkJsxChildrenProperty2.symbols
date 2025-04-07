@@ -25,9 +25,11 @@ function Comp(p: Prop) {
 >Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
 
     return <div>{p.b}</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >p.b : Symbol(b, Decl(file.tsx, 3, 14))
 >p : Symbol(p, Decl(file.tsx, 8, 14))
 >b : Symbol(b, Decl(file.tsx, 3, 14))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 }
 
 // Error: missing children
@@ -79,9 +81,14 @@ let k2 =
 >b : Symbol(b, Decl(file.tsx, 30, 16))
 
         <div> My Div </div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
         {(name: string) => <div> My name {name} </div>}
 >name : Symbol(name, Decl(file.tsx, 32, 10))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 >name : Symbol(name, Decl(file.tsx, 32, 10))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 
     </Comp>;
 >Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
@@ -95,6 +102,9 @@ let k3 =
 >b : Symbol(b, Decl(file.tsx, 36, 16))
 
         <div> My Div </div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
         {1000000}
     </Comp>;
 >Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
@@ -108,6 +118,9 @@ let k4 =
 >b : Symbol(b, Decl(file.tsx, 42, 16))
 
         <div> My Div </div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
         hi hi hi!
     </Comp>;
 >Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
@@ -121,7 +134,13 @@ let k5 =
 >b : Symbol(b, Decl(file.tsx, 48, 16))
 
         <div> My Div </div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
         <div> My Div </div>
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+
     </Comp>;
 >Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
 

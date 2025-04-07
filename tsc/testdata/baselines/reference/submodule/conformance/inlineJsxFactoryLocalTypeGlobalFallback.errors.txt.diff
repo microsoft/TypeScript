@@ -1,0 +1,16 @@
+--- old.inlineJsxFactoryLocalTypeGlobalFallback.errors.txt
++++ new.inlineJsxFactoryLocalTypeGlobalFallback.errors.txt
+@@= skipped -0, +0 lines =@@
+-index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
++index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type '(Missing).JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+ 
+ 
+ ==== renderer.d.ts (0 errors) ====
+@@= skipped -44, +44 lines =@@
+     let elem = prerendered;
+     elem = <h></h>; // Expect assignability error here
+     ~~~~
+-!!! error TS2741: Property '__predomBrand' is missing in type 'JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
++!!! error TS2741: Property '__predomBrand' is missing in type '(Missing).JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+ !!! related TS2728 renderer2.d.ts:7:13: '__predomBrand' is declared here.
+     

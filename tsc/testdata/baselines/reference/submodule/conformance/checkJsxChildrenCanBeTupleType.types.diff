@@ -1,0 +1,65 @@
+--- old.checkJsxChildrenCanBeTupleType.types
++++ new.checkJsxChildrenCanBeTupleType.types
+@@= skipped -7, +7 lines =@@
+ 
+ interface ResizablePanelProps {
+   children: [React.ReactNode, React.ReactNode]
+->children : [React.ReactNode, React.ReactNode]
++>children : [ReactNode, ReactNode]
+ >React : any
+ >React : any
+ }
+ 
+ class ResizablePanel extends React.Component<
+ >ResizablePanel : ResizablePanel
+->React.Component : React.Component<ResizablePanelProps, any, any>
++>React.Component : Component<ResizablePanelProps, any, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+   ResizablePanelProps, any> {}
+ 
+ const test = <ResizablePanel>
+->test : JSX.Element
+-><ResizablePanel>  <div />  <div /></ResizablePanel> : JSX.Element
++>test : Element
++><ResizablePanel>  <div />  <div /></ResizablePanel> : Element
+ >ResizablePanel : typeof ResizablePanel
+ 
+   <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+   <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+ </ResizablePanel>
+ >ResizablePanel : typeof ResizablePanel
+ 
+ const testErr = <ResizablePanel>
+->testErr : JSX.Element
+-><ResizablePanel>  <div />  <div />  <div /></ResizablePanel> : JSX.Element
++>testErr : Element
++><ResizablePanel>  <div />  <div />  <div /></ResizablePanel> : Element
+ >ResizablePanel : typeof ResizablePanel
+ 
+   <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+   <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+   <div />
+-><div /> : JSX.Element
++><div /> : Element
+ >div : any
+ 
+ </ResizablePanel>

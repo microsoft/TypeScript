@@ -1,0 +1,26 @@
+--- old.jsxGenericComponentWithSpreadingResultOfGenericFunction.types
++++ new.jsxGenericComponentWithSpreadingResultOfGenericFunction.types
+@@= skipped -5, +5 lines =@@
+ // repro #51577
+ 
+ declare function omit<T, K extends string>(names: readonly K[], obj: T): Omit<T, K>;
+->omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K_1 extends string>(names: readonly K_1[]): <T_1>(obj: T_1) => Omit<T_1, K_1>; }
++>omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
+ >names : readonly K[]
+ >obj : T
+ 
+ declare function omit<K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>;
+->omit : { <T, K_1 extends string>(names: readonly K_1[], obj: T): Omit<T, K_1>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
++>omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
+ >names : readonly K[]
+ >obj : T
+ 
+@@= skipped -19, +19 lines =@@
+ >props : T
+ 
+ <GenericComponent {...omit(['bar'], otherProps)} />; // no error
+-><GenericComponent {...omit(['bar'], otherProps)} /> : JSX.Element
++><GenericComponent {...omit(['bar'], otherProps)} /> : Element
+ >GenericComponent : <T>(props: T) => null
+ >omit(['bar'], otherProps) : Omit<{ bar: string; qwe: boolean; }, "bar">
+ >omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }

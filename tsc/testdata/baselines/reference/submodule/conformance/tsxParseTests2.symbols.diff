@@ -14,4 +14,6 @@
  >x : Symbol(x, Decl(file.tsx, 5, 3))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(file.tsx, 2, 30))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(file.tsx, 2, 30))
++>div : Symbol(div, Decl(file.tsx, 2, 30))
++>div : Symbol(div, Decl(file.tsx, 2, 30))
  

@@ -17,9 +17,9 @@ var Obj1: Obj1type;
 >Obj1 : Obj1type
 
 <Obj1 x={10} />; // OK
-><Obj1 x={10} /> : any
+><Obj1 x={10} /> : Element
 >Obj1 : Obj1type
->x : any
+>x : number
 >10 : 10
 
 interface Obj2type {
@@ -32,9 +32,9 @@ var Obj2: Obj2type;
 >Obj2 : Obj2type
 
 <Obj2 x={10} />; // OK
-><Obj2 x={10} /> : any
+><Obj2 x={10} /> : Element
 >Obj2 : Obj2type
->x : any
+>x : number
 >10 : 10
 
 interface Obj3type {
@@ -46,21 +46,21 @@ var Obj3: Obj3type;
 >Obj3 : Obj3type
 
 <Obj3 x={10} />; // Error
-><Obj3 x={10} /> : any
+><Obj3 x={10} /> : Element
 >Obj3 : Obj3type
->x : any
+>x : number
 >10 : 10
 
 var attributes: any;
 >attributes : any
 
 <Obj3 {...attributes} />; // Error
-><Obj3 {...attributes} /> : any
+><Obj3 {...attributes} /> : Element
 >Obj3 : Obj3type
 >attributes : any
 
 <Obj3 {...{}} />; // OK
-><Obj3 {...{}} /> : any
+><Obj3 {...{}} /> : Element
 >Obj3 : Obj3type
 >{} : {}
 
@@ -75,14 +75,14 @@ var Obj4: Obj4type;
 >Obj4 : Obj4type
 
 <Obj4 x={10} />; // OK
-><Obj4 x={10} /> : any
+><Obj4 x={10} /> : Element
 >Obj4 : Obj4type
->x : any
+>x : number
 >10 : 10
 
 <Obj4 x={'10'} />; // Error
-><Obj4 x={'10'} /> : any
+><Obj4 x={'10'} /> : Element
 >Obj4 : Obj4type
->x : any
+>x : string
 >'10' : "10"
 

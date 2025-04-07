@@ -20,20 +20,20 @@ var p = 0;
 
 // Emit "   "
 <div>   </div>;
-><div>   </div> : any
+><div>   </div> : Element
 >div : any
 >div : any
 
 // Emit "  ", p, "   "
 <div>  {p}    </div>;
-><div>  {p}    </div> : any
+><div>  {p}    </div> : Element
 >div : any
 >p : number
 >div : any
 
 // Emit only p
 <div>  
-><div>        {p}          </div> : any
+><div>        {p}          </div> : Element
 >div : any
 
       {p}    
@@ -44,7 +44,7 @@ var p = 0;
 
 // Emit only p
 <div>
-><div>  {p}    </div> : any
+><div>  {p}    </div> : Element
 >div : any
 
   {p}
@@ -55,7 +55,7 @@ var p = 0;
 
 // Emit "  3"
 <div>  3  
-><div>  3    </div> : any
+><div>  3    </div> : Element
 >div : any
 
   </div>;
@@ -63,13 +63,13 @@ var p = 0;
 
 // Emit "  3  "
 <div>  3  </div>;
-><div>  3  </div> : any
+><div>  3  </div> : Element
 >div : any
 >div : any
 
 // Emit "3"
 <div>   
-><div>      3       </div> : any
+><div>      3       </div> : Element
 >div : any
 
    3    
@@ -78,7 +78,7 @@ var p = 0;
 
 // Emit no args
 <div>   
-><div>      </div> : any
+><div>      </div> : Element
 >div : any
 
    </div>;
@@ -86,7 +86,7 @@ var p = 0;
 
 // Emit "foo bar"
 <div>  
-><div>     foo bar     </div> : any
+><div>     foo bar     </div> : Element
 >div : any
 
    foo
@@ -98,7 +98,7 @@ var p = 0;
 
 // Emit "hello\\ world"
 <div>
-><div>    hello\world</div> : any
+><div>    hello\world</div> : Element
 >div : any
 
     hello\
@@ -109,7 +109,7 @@ world
 
 // Emit "  a b  c d  "
 <div>  a
-><div>  a    b  c    d  </div> : any
+><div>  a    b  c    d  </div> : Element
 >div : any
 
     b  c

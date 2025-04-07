@@ -21,5 +21,6 @@ var x: any;
 
 // Should be OK
 <test1 {...x} />
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >x : Symbol(x, Decl(file.tsx, 7, 3))
 

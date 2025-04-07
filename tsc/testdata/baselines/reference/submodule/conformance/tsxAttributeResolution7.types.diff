@@ -1,0 +1,33 @@
+--- old.tsxAttributeResolution7.types
++++ new.tsxAttributeResolution7.types
+@@= skipped -11, +11 lines =@@
+ 
+ // Error
+ <test1 data-foo={32} />;
+-><test1 data-foo={32} /> : JSX.Element
++><test1 data-foo={32} /> : Element
+ >test1 : any
+ >data-foo : number
+ >32 : 32
+ 
+ // OK
+ <test1 data-foo={'32'} />;
+-><test1 data-foo={'32'} /> : JSX.Element
++><test1 data-foo={'32'} /> : Element
+ >test1 : any
+ >data-foo : string
+ >'32' : "32"
+ 
+ <test1 data-bar={'32'} />;
+-><test1 data-bar={'32'} /> : JSX.Element
++><test1 data-bar={'32'} /> : Element
+ >test1 : any
+ >data-bar : string
+ >'32' : "32"
+ 
+ <test1 data-bar={32} />;
+-><test1 data-bar={32} /> : JSX.Element
++><test1 data-bar={32} /> : Element
+ >test1 : any
+ >data-bar : number
+ >32 : 32

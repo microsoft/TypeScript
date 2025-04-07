@@ -14,17 +14,17 @@ function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.In
 
     // Just so the return value is RectElement, the rendered element doesnt matter
     return <div />
-><div /> : any
+><div /> : Element
 >div : any
 }
 
 function Test<T extends 'button' | 'a'>(el: T) {
->Test : <T extends "a" | "button">(el: T) => any
+>Test : <T extends "a" | "button">(el: T) => Element
 >el : T
 
     return <SomeComponent element={el} />
-><SomeComponent element={el} /> : any
+><SomeComponent element={el} /> : Element
 >SomeComponent : <T extends "a" | "button">(props: { element?: T | undefined; } & IntrinsicElements[T]) => Element
->element : any
+>element : T
 >el : T
 }

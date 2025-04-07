@@ -6,16 +6,19 @@
      return <div>hello</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
--
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+ 
  };
  
- function SFC2(prop: { x: boolean }) {
-@@= skipped -11, +8 lines =@@
+@@= skipped -11, +11 lines =@@
  >x : Symbol(x, Decl(file.tsx, 6, 21))
  
      return <h1>World </h1>;
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
++>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
++>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
  }
  
  var SFCComp = SFC1 || SFC2;

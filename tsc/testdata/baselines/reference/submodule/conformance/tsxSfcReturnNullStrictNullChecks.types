@@ -18,12 +18,12 @@ function Greet(x: {name?: string}) {
 }
 
 const foo = <Foo />;
->foo : any
-><Foo /> : any
+>foo : Element
+><Foo /> : Element
 >Foo : (props: any) => null
 
 const G = <Greet />;
->G : any
-><Greet /> : any
+>G : Element
+><Greet /> : Element
 >Greet : (x: { name?: string | undefined; }) => null
 

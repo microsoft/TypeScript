@@ -59,6 +59,7 @@ x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2>; // error
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 let x = <MyComp a={10} b="hi"/>; // OK
 x = <MyComp a={10} b="hi"></MyComp>; // OK
 x = <MyComp a={10} b={20}/>; // error

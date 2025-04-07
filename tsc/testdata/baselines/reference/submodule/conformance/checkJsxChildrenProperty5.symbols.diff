@@ -32,20 +32,24 @@
          return (<div>My Button</div>)
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
      }
  }
  
-@@= skipped -31, +29 lines =@@
+@@= skipped -31, +31 lines =@@
  >Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
  
      return <div>{p.b}</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->p.b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
 +>p.b : Symbol(b, Decl(file.tsx, 3, 14))
  >p : Symbol(p, Decl(file.tsx, 14, 14))
 ->b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 +>b : Symbol(b, Decl(file.tsx, 3, 14))
++>div : Symbol(div, Decl(react.d.ts, 2400, 45))
  }
  
  // Error: no children specified

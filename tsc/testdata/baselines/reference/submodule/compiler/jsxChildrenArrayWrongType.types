@@ -17,16 +17,16 @@ declare class Foo extends React.Component<PropsType, {}> {}
 >Component : typeof Component
 
 const b = (
->b : any
->(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : any
+>b : Element
+>(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : Element
 
     <Foo>
-><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : any
+><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : Element
 >Foo : typeof Foo
 
         {<div/> as unknown}
 ><div/> as unknown : unknown
-><div/> : any
+><div/> : Element
 >div : any
 
         {"aa"}

@@ -4,6 +4,8 @@
 /// <reference path="react16.d.ts" />
 const a = <div>text</div>;
 >a : Symbol(a, Decl(jsxJsxsCjsTransformChildren.tsx, 1, 5))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 
 export {};
 

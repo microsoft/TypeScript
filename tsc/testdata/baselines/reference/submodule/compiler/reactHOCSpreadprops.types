@@ -19,10 +19,10 @@ function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void 
 >x : number
 
         render() {
->render : () => any
+>render : () => Element
 
             return <App {...this.props} />;
-><App {...this.props} /> : any
+><App {...this.props} /> : Element
 >App : ComponentClass<P, any> | StatelessComponent<P>
 >this.props : Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>
 >this : this

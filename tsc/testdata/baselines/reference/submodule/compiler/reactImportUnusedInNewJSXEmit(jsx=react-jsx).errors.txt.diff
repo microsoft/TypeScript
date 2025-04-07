@@ -1,0 +1,16 @@
+--- old.reactImportUnusedInNewJSXEmit(jsx=react-jsx).errors.txt
++++ new.reactImportUnusedInNewJSXEmit(jsx=react-jsx).errors.txt
+@@= skipped -0, +0 lines =@@
+-index.tsx(3,1): error TS6133: 'React' is declared but its value is never read.
++index.tsx(3,8): error TS6133: 'React' is declared but its value is never read.
+ 
+ 
+ ==== index.tsx (1 errors) ====
+     /// <reference path="/.lib/react16.d.ts" />
+     
+     import React from "react";
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
++           ~~~~~
+ !!! error TS6133: 'React' is declared but its value is never read.
+     
+     function Bar() {

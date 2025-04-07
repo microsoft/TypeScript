@@ -28,6 +28,8 @@
      return <span>my component</span>;
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
++>span : Symbol(span, Decl(react.d.ts, 2461, 51))
  }
  
  === file1.tsx ===

@@ -7,69 +7,69 @@ import * as React from "react";
 
 // opening + closing
 const a = <div<>></div>; // empty type args
->a : any
-><div<>></div> : any
+>a : Element
+><div<>></div> : Element
 >div : any
 >div : any
 
 const b = <div<number,>></div>; // trailing comma type args
->b : any
-><div<number,>></div> : any
+>b : Element
+><div<number,>></div> : Element
 >div : any
 >div : any
 
 const c = <div<Missing>></div>; // nonexistant type args
->c : any
-><div<Missing>></div> : any
+>c : Element
+><div<Missing>></div> : Element
 >div : any
 >div : any
 
 const d = <div<Missing<AlsoMissing>>></div>; // nested missing type args
->d : any
-><div<Missing<AlsoMissing>>></div> : any
+>d : Element
+><div<Missing<AlsoMissing>>></div> : Element
 >div : any
 >div : any
 
 const e = <div<Record<object, object>>></div>; // existing but incorrect nested type args
->e : any
-><div<Record<object, object>>></div> : any
+>e : Element
+><div<Record<object, object>>></div> : Element
 >div : any
 >div : any
 
 const f = <div<number>></div>; // existing type argument with no internal issues
->f : any
-><div<number>></div> : any
+>f : Element
+><div<number>></div> : Element
 >div : any
 >div : any
 
 // self-closing
 const g = <div<>/>; // empty type args
->g : any
-><div<>/> : any
+>g : Element
+><div<>/> : Element
 >div : any
 
 const h = <div<number,>/>; // trailing comma type args
->h : any
-><div<number,>/> : any
+>h : Element
+><div<number,>/> : Element
 >div : any
 
 const i = <div<Missing>/>; // nonexistant type args
->i : any
-><div<Missing>/> : any
+>i : Element
+><div<Missing>/> : Element
 >div : any
 
 const j = <div<Missing<AlsoMissing>>/>; // nested missing type args
->j : any
-><div<Missing<AlsoMissing>>/> : any
+>j : Element
+><div<Missing<AlsoMissing>>/> : Element
 >div : any
 
 const k = <div<Record<object, object>>/>; // existing but incorrect nested type args
->k : any
-><div<Record<object, object>>/> : any
+>k : Element
+><div<Record<object, object>>/> : Element
 >div : any
 
 const l = <div<number>/>; // existing type argument with no internal issues
->l : any
-><div<number>/> : any
+>l : Element
+><div<number>/> : Element
 >div : any
 

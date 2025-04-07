@@ -22,6 +22,8 @@ class Opt extends React.Component<OptionProp, {}> {
 >render : Symbol(render, Decl(file.tsx, 6, 51))
 
         return <div>Hello</div>;
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(div, Decl(react.d.ts, 2400, 45))
     }
 }
 

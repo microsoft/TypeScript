@@ -13,14 +13,17 @@ let buttonProps;
 
 let k = <button {...buttonProps}>
 >k : Symbol(k, Decl(0.tsx, 5, 3))
+>button : Symbol(button, Decl(react.d.ts, 2386, 43))
 >buttonProps : Symbol(buttonProps, Decl(0.tsx, 4, 3))
 
             <span className={cx('class1', { class2: true })} />
+>span : Symbol(span, Decl(react.d.ts, 2461, 51))
 >className : Symbol(className, Decl(0.tsx, 6, 17))
 >cx : Symbol(cx, Decl(0.tsx, 1, 6))
 >class2 : Symbol(class2, Decl(0.tsx, 6, 43))
 
         </button>;
+>button : Symbol(button, Decl(react.d.ts, 2386, 43))
 
 === declaration.d.ts ===
 declare module "classnames";

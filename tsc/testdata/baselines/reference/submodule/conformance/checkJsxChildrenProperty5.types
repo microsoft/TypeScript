@@ -22,22 +22,22 @@ class Button extends React.Component<any, any> {
 >Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return (<div>My Button</div>)
->(<div>My Button</div>) : any
-><div>My Button</div> : any
+>(<div>My Button</div>) : Element
+><div>My Button</div> : Element
 >div : any
 >div : any
     }
 }
 
 function Comp(p: Prop) {
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 >p : Prop
 
     return <div>{p.b}</div>;
-><div>{p.b}</div> : any
+><div>{p.b}</div> : Element
 >div : any
 >p.b : string
 >p : Prop
@@ -47,44 +47,44 @@ function Comp(p: Prop) {
 
 // Error: no children specified
 let k = <Comp a={10} b="hi" />;
->k : any
-><Comp a={10} b="hi" /> : any
->Comp : (p: Prop) => any
->a : any
+>k : Element
+><Comp a={10} b="hi" /> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
 // Error: JSX.element is not the same as JSX.ElementClass
 let k1 =
->k1 : any
+>k1 : Element
 
     <Comp a={10} b="hi">
-><Comp a={10} b="hi">        <Button />    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi">        <Button />    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
         <Button />
-><Button /> : any
+><Button /> : Element
 >Button : typeof Button
 
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 
 let k2 =
->k2 : any
+>k2 : Element
 
     <Comp a={10} b="hi">
-><Comp a={10} b="hi">        {Button}    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi">        {Button}    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
         {Button}
 >Button : typeof Button
 
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 

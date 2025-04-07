@@ -35,6 +35,8 @@ module M {
 //// [test.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// Should emit 'react-router' in the AMD dependency list
+const React = require("react");
 const ReactRouter = require("react-router");
 var routes1 = <Route />;
 var M;

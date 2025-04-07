@@ -1,0 +1,69 @@
+--- old.checkJsxChildrenProperty13.types
++++ new.checkJsxChildrenProperty13.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ interface ButtonProp {
+     a: number,
+@@= skipped -15, +15 lines =@@
+ 
+ class Button extends React.Component<ButtonProp, any> {
+ >Button : Button
+->React.Component : React.Component<ButtonProp, any>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<ButtonProp, any>
++>React : typeof __React
++>Component : typeof Component
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+         // Error children are specified twice
+         return (<InnerButton {...this.props} children="hi">
+->(<InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton>) : JSX.Element
+-><InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton> : JSX.Element
++>(<InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton>) : Element
++><InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton> : Element
+ >InnerButton : typeof InnerButton
+->this.props : ButtonProp & { children?: React.ReactNode; }
++>this.props : ButtonProp & { children?: ReactNode | undefined; }
+ >this : this
+->props : ButtonProp & { children?: React.ReactNode; }
++>props : ButtonProp & { children?: ReactNode | undefined; }
+ >children : string
+ 
+             <div>Hello World</div>
+-><div>Hello World</div> : JSX.Element
++><div>Hello World</div> : Element
+ >div : any
+ >div : any
+ 
+@@= skipped -34, +34 lines =@@
+ 
+ class InnerButton extends React.Component<InnerButtonProp, any> {
+ >InnerButton : InnerButton
+->React.Component : React.Component<InnerButtonProp, any>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<InnerButtonProp, any>
++>React : typeof __React
++>Component : typeof Component
+ 
+ 	render() {
+->render : () => JSX.Element
++>render : () => Element
+ 
+ 		return (<button>Hello</button>);
+->(<button>Hello</button>) : JSX.Element
+-><button>Hello</button> : JSX.Element
++>(<button>Hello</button>) : Element
++><button>Hello</button> : Element
+ >button : any
+ >button : any
+ 	}

@@ -8,8 +8,7 @@
  //// [test.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--const Element_1 = require("./Element");
- let c;
+@@= skipped -9, +8 lines =@@
  class A {
      view() {
          return [

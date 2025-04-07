@@ -9,25 +9,25 @@ class C {
 >C : C
 
     static a = <C.z></C.z>;
->a : any
-><C.z></C.z> : any
->C.z : () => any
+>a : Element
+><C.z></C.z> : Element
+>C.z : () => Element
 >C : typeof C
->z : () => any
->C.z : () => any
+>z : () => Element
+>C.z : () => Element
 >C : typeof C
->z : () => any
+>z : () => Element
 
     static b = <C.z/>;
->b : any
-><C.z/> : any
->C.z : () => any
+>b : Element
+><C.z/> : Element
+>C.z : () => Element
 >C : typeof C
->z : () => any
+>z : () => Element
 
     static c = <span {...C.x}></span>;
->c : any
-><span {...C.x}></span> : any
+>c : Element
+><span {...C.x}></span> : Element
 >span : any
 >C.x : {}
 >C : typeof C
@@ -35,18 +35,18 @@ class C {
 >span : any
 
     static d = <span id={C.y}></span>;
->d : any
-><span id={C.y}></span> : any
+>d : Element
+><span id={C.y}></span> : Element
 >span : any
->id : any
+>id : string
 >C.y : string
 >C : typeof C
 >y : string
 >span : any
 
     static e = <span>{C.y}</span>;
->e : any
-><span>{C.y}</span> : any
+>e : Element
+><span>{C.y}</span> : Element
 >span : any
 >C.y : string
 >C : typeof C
@@ -62,9 +62,9 @@ class C {
 >'' : ""
 
     static z = () => <b></b>;
->z : () => any
->() => <b></b> : () => any
-><b></b> : any
+>z : () => Element
+>() => <b></b> : () => Element
+><b></b> : Element
 >b : any
 >b : any
 }

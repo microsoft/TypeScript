@@ -102,7 +102,12 @@ const Component = () => {
 
   return (
     <ul>
+>ul : Symbol(ul, Decl(index.tsx, 20, 31))
+
       <li>All</li>
+>li : Symbol(li, Decl(index.tsx, 21, 90))
+>li : Symbol(li, Decl(index.tsx, 21, 90))
+
       {categories.map((category) => (
 >categories.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
 >categories : Symbol(categories, Decl(index.tsx, 28, 7))
@@ -110,12 +115,16 @@ const Component = () => {
 >category : Symbol(category, Decl(index.tsx, 33, 23))
 
         <li key={category}>{category}</li> // Error about 'key' only
+>li : Symbol(li, Decl(index.tsx, 21, 90))
 >key : Symbol(key, Decl(index.tsx, 34, 11))
 >category : Symbol(category, Decl(index.tsx, 33, 23))
 >category : Symbol(category, Decl(index.tsx, 33, 23))
+>li : Symbol(li, Decl(index.tsx, 21, 90))
 
       ))}
     </ul>
+>ul : Symbol(ul, Decl(index.tsx, 20, 31))
+
   );
 };
 

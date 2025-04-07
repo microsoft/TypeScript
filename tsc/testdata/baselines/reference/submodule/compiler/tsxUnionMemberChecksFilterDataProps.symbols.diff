@@ -1,0 +1,15 @@
+--- old.tsxUnionMemberChecksFilterDataProps.symbols
++++ new.tsxUnionMemberChecksFilterDataProps.symbols
+@@= skipped -22, +22 lines =@@
+ const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);
+ >RootNotHappy : Symbol(RootNotHappy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 6, 5))
+ >NotHappy : Symbol(NotHappy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 1, 44))
+->data-testid : Symbol(data-testid, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 6, 37))
++>data-testid : Symbol("data-testid", Decl(tsxUnionMemberChecksFilterDataProps.tsx, 6, 37))
+ 
+ const RootHappy = () => (<Happy data-testid="my-test-id" />);
+ >RootHappy : Symbol(RootHappy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 7, 5))
+ >Happy : Symbol(Happy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 3, 96))
+->data-testid : Symbol(data-testid, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 7, 31))
++>data-testid : Symbol("data-testid", Decl(tsxUnionMemberChecksFilterDataProps.tsx, 7, 31))
+ 

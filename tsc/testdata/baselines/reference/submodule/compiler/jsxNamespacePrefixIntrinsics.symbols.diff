@@ -21,3 +21,17 @@
    }
  }
  
+ const valid = <ns:element ns:attribute="yep" />;
+ >valid : Symbol(valid, Decl(jsxNamespacePrefixIntrinsics.tsx, 10, 5))
+->ns:attribute : Symbol(ns:attribute, Decl(jsxNamespacePrefixIntrinsics.tsx, 10, 25))
++>ns:attribute : Symbol("þmissing", Decl(jsxNamespacePrefixIntrinsics.tsx, 10, 25))
+ 
+ const validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;
+ >validUpcase1 : Symbol(validUpcase1, Decl(jsxNamespacePrefixIntrinsics.tsx, 11, 5))
+@@= skipped -33, +33 lines =@@
+ 
+ const invalid3 = <ns:element ns:invalid="nope" />;
+ >invalid3 : Symbol(invalid3, Decl(jsxNamespacePrefixIntrinsics.tsx, 16, 5))
+->ns:invalid : Symbol(ns:invalid, Decl(jsxNamespacePrefixIntrinsics.tsx, 16, 28))
++>ns:invalid : Symbol("þmissing", Decl(jsxNamespacePrefixIntrinsics.tsx, 16, 28))
+ 

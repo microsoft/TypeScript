@@ -27,7 +27,7 @@ var obj1 = { x: 'foo' };
 >'foo' : "foo"
 
 <test1 {...obj1} />
-><test1 {...obj1} /> : any
+><test1 {...obj1} /> : Element
 >test1 : any
 >obj1 : { x: string; }
 
@@ -39,7 +39,7 @@ var obj2 = { x: 32 };
 >32 : 32
 
 <test1 {...obj2} />
-><test1 {...obj2} /> : any
+><test1 {...obj2} /> : Element
 >test1 : any
 >obj2 : { x: number; }
 
@@ -51,7 +51,7 @@ var obj3 = { y: 32 };
 >32 : 32
 
 <test1 {...obj3} />
-><test1 {...obj3} /> : any
+><test1 {...obj3} /> : Element
 >test1 : any
 >obj3 : { y: number; }
 
@@ -65,10 +65,10 @@ var obj4 = { x: 32, y: 32 };
 >32 : 32
 
 <test1 {...obj4} x="ok" />
-><test1 {...obj4} x="ok" /> : any
+><test1 {...obj4} x="ok" /> : Element
 >test1 : any
 >obj4 : { x: number; y: number; }
->x : any
+>x : string
 
 // Error
 var obj5 = { x: 32, y: 32 };
@@ -80,9 +80,9 @@ var obj5 = { x: 32, y: 32 };
 >32 : 32
 
 <test1 x="ok" {...obj5} />
-><test1 x="ok" {...obj5} /> : any
+><test1 x="ok" {...obj5} /> : Element
 >test1 : any
->x : any
+>x : string
 >obj5 : { x: number; y: number; }
 
 // Ok
@@ -97,7 +97,7 @@ var obj6 = { x: 'ok', y: 32, extra: 100 };
 >100 : 100
 
 <test1 {...obj6} />
-><test1 {...obj6} /> : any
+><test1 {...obj6} /> : Element
 >test1 : any
 >obj6 : { x: string; y: number; extra: number; }
 
@@ -109,9 +109,9 @@ var obj7 = { x: 'foo' };
 >'foo' : "foo"
 
 <test1 x={32} {...obj7} />
-><test1 x={32} {...obj7} /> : any
+><test1 x={32} {...obj7} /> : Element
 >test1 : any
->x : any
+>x : number
 >32 : 32
 >obj7 : { x: string; }
 

@@ -1,0 +1,21 @@
+--- old.jsxElementTypeLiteralWithGeneric.types
++++ new.jsxElementTypeLiteralWithGeneric.types
+@@= skipped -28, +28 lines =@@
+ 
+ // should be fine - `ElementType` accepts `div`
+ let a = <div />;
+->a : JSX.Element
+-><div /> : JSX.Element
++>a : Element
++><div /> : Element
+ >div : any
+ 
+ // Should be an error.
+ // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
+ let c = <ruhroh />;
+->c : JSX.Element
+-><ruhroh /> : JSX.Element
++>c : Element
++><ruhroh /> : Element
+ >ruhroh : any
+ 

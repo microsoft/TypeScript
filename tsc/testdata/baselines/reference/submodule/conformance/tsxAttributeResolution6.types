@@ -17,33 +17,33 @@ declare module JSX {
 
 // Error
 <test1 s />;
-><test1 s /> : any
+><test1 s /> : Element
 >test1 : any
->s : any
+>s : true
 
 <test1 n='true' />;
-><test1 n='true' /> : any
+><test1 n='true' /> : Element
 >test1 : any
->n : any
+>n : string
 
 <test2 />;
-><test2 /> : any
+><test2 /> : Element
 >test2 : any
 
 // OK
 <test1 n />;
-><test1 n /> : any
+><test1 n /> : Element
 >test1 : any
->n : any
+>n : true
 
 <test1 n={false} />;
-><test1 n={false} /> : any
+><test1 n={false} /> : Element
 >test1 : any
->n : any
+>n : false
 >false : false
 
 <test2 n />;
-><test2 n /> : any
+><test2 n /> : Element
 >test2 : any
->n : any
+>n : true
 

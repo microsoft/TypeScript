@@ -1,0 +1,28 @@
+--- old.checkJsxChildrenProperty15.errors.txt
++++ new.checkJsxChildrenProperty15.errors.txt
+@@= skipped -0, +0 lines =@@
+ file.tsx(10,17): error TS2322: Type '{ children: Element; }' is not assignable to type 'IntrinsicAttributes'.
+   Property 'children' does not exist on type 'IntrinsicAttributes'.
+-file.tsx(11,13): error TS2322: Type '{ key: string; children: Element; }' is not assignable to type 'IntrinsicAttributes'.
+-  Property 'children' does not exist on type 'IntrinsicAttributes'.
+-file.tsx(12,13): error TS2322: Type '{ key: string; children: Element[]; }' is not assignable to type 'IntrinsicAttributes'.
+-  Property 'children' does not exist on type 'IntrinsicAttributes'.
+ 
+ 
+-==== file.tsx (3 errors) ====
++==== file.tsx (1 errors) ====
+     import React = require('react');
+     
+     const Tag = (x: {}) => <div></div>;
+@@= skipped -20, +16 lines =@@
+ !!! error TS2322: Type '{ children: Element; }' is not assignable to type 'IntrinsicAttributes'.
+ !!! error TS2322:   Property 'children' does not exist on type 'IntrinsicAttributes'.
+     const k4 = <Tag key="1"><div></div></Tag>;
+-                ~~~
+-!!! error TS2322: Type '{ key: string; children: Element; }' is not assignable to type 'IntrinsicAttributes'.
+-!!! error TS2322:   Property 'children' does not exist on type 'IntrinsicAttributes'.
+     const k5 = <Tag key="1"><div></div><div></div></Tag>;
+-                ~~~
+-!!! error TS2322: Type '{ key: string; children: Element[]; }' is not assignable to type 'IntrinsicAttributes'.
+-!!! error TS2322:   Property 'children' does not exist on type 'IntrinsicAttributes'.
+     

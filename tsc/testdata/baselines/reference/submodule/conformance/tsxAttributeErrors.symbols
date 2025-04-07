@@ -27,10 +27,12 @@ declare namespace JSX {
 
 // Error, number is not assignable to string
 <div text={42} />;
+>div : Symbol(div, Decl(tsxAttributeErrors.tsx, 2, 30))
 >text : Symbol(text, Decl(tsxAttributeErrors.tsx, 13, 4))
 
 // Error, string is not assignable to number
 <div width={'foo'} />;
+>div : Symbol(div, Decl(tsxAttributeErrors.tsx, 2, 30))
 >width : Symbol(width, Decl(tsxAttributeErrors.tsx, 16, 4))
 
 // Error, number is not assignable to string
@@ -39,10 +41,12 @@ var attribs = { text: 100 };
 >text : Symbol(text, Decl(tsxAttributeErrors.tsx, 19, 15))
 
 <div {...attribs} />;
+>div : Symbol(div, Decl(tsxAttributeErrors.tsx, 2, 30))
 >attribs : Symbol(attribs, Decl(tsxAttributeErrors.tsx, 19, 3))
 
 // No errors here
 <span foo='bar' bar={'foo'} />;
+>span : Symbol(span, Decl(tsxAttributeErrors.tsx, 6, 3))
 >foo : Symbol(foo, Decl(tsxAttributeErrors.tsx, 23, 5))
 >bar : Symbol(bar, Decl(tsxAttributeErrors.tsx, 23, 15))
 

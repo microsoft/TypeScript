@@ -1,0 +1,22 @@
+--- old.modulePreserve3.errors.txt
++++ new.modulePreserve3.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS2688: Cannot find type definition file for 'react'.
+-  The file is in the program because:
+-    Entry point for implicit type library 'react'
++/index.tsx(2,2): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+ 
+ 
+-!!! error TS2688: Cannot find type definition file for 'react'.
+-!!! error TS2688:   The file is in the program because:
+-!!! error TS2688:     Entry point for implicit type library 'react'
+ ==== /node_modules/@types/react/jsx-runtime.d.ts (0 errors) ====
+     export namespace JSX {}
+     
+-==== /index.tsx (0 errors) ====
++==== /index.tsx (1 errors) ====
+     export {};
+     (<div />);
++     ~~~~~~~
++!!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+     

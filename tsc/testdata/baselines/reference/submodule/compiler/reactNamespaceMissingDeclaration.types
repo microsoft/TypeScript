@@ -5,5 +5,5 @@
 <foo data/>
 ><foo data/> : any
 >foo : any
->data : any
+>data : true
 

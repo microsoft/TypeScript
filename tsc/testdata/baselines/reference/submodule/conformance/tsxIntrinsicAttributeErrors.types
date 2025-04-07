@@ -46,8 +46,8 @@ var E: I;
 >E : I
 
 <E x={10} />
-><E x={10} /> : any
+><E x={10} /> : Element
 >E : I
->x : any
+>x : number
 >10 : 10
 

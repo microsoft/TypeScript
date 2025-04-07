@@ -116,6 +116,7 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >predom : Symbol(predom, Decl(component.tsx, 1, 8))
 >JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
 >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+>p : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
 >props.x : Symbol(x, Decl(component.tsx, 3, 30))
 >props : Symbol(props, Decl(component.tsx, 3, 22))
 >x : Symbol(x, Decl(component.tsx, 3, 30))
@@ -128,6 +129,7 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >props.y : Symbol(y, Decl(component.tsx, 3, 40))
 >props : Symbol(props, Decl(component.tsx, 3, 22))
 >y : Symbol(y, Decl(component.tsx, 3, 40))
+>p : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
 
 export class MyClass implements predom.JSX.Element {
 >MyClass : Symbol(MyClass, Decl(component.tsx, 3, 164))
@@ -153,6 +155,8 @@ export class MyClass implements predom.JSX.Element {
 >render : Symbol(render, Decl(component.tsx, 7, 89))
 
         return <p>
+>p : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
+
             {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
 >this.props.x : Symbol(x, Decl(component.tsx, 7, 31))
 >this.props : Symbol(props, Decl(component.tsx, 7, 16))
@@ -183,6 +187,7 @@ export class MyClass implements predom.JSX.Element {
 >children : Symbol(children, Decl(component.tsx, 7, 52))
 
         </p>;
+>p : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
     }
 }
 export const tree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
@@ -199,6 +204,8 @@ export const tree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={
 >MySFC : Symbol(MySFC, Decl(component.tsx, 3, 12))
 
 export default <h></h>
+>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
+>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
 
 === index.tsx ===
 /** @jsx dom */
@@ -217,6 +224,8 @@ let elem = prerendered;
 
 elem = <h></h>; // Expect assignability error here
 >elem : Symbol(elem, Decl(index.tsx, 3, 3))
+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 
 const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
 >DOMSFC : Symbol(DOMSFC, Decl(index.tsx, 6, 5))
@@ -227,6 +236,7 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 >dom : Symbol(dom, Decl(index.tsx, 1, 8))
 >JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 22))
 >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+>p : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 >props.x : Symbol(x, Decl(index.tsx, 6, 24))
 >props : Symbol(props, Decl(index.tsx, 6, 16))
 >x : Symbol(x, Decl(index.tsx, 6, 24))
@@ -242,6 +252,7 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 >props.children : Symbol(children, Decl(index.tsx, 6, 45))
 >props : Symbol(props, Decl(index.tsx, 6, 16))
 >children : Symbol(children, Decl(index.tsx, 6, 45))
+>p : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 
 class DOMClass implements dom.JSX.Element {
 >DOMClass : Symbol(DOMClass, Decl(index.tsx, 6, 147))
@@ -267,6 +278,7 @@ class DOMClass implements dom.JSX.Element {
 >render : Symbol(render, Decl(index.tsx, 10, 86))
 
         return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;
+>p : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 >this.props.x : Symbol(x, Decl(index.tsx, 10, 31))
 >this.props : Symbol(props, Decl(index.tsx, 10, 16))
 >this : Symbol(DOMClass, Decl(index.tsx, 6, 147))
@@ -292,6 +304,7 @@ class DOMClass implements dom.JSX.Element {
 >this : Symbol(DOMClass, Decl(index.tsx, 6, 147))
 >props : Symbol(props, Decl(index.tsx, 10, 16))
 >children : Symbol(children, Decl(index.tsx, 10, 52))
+>p : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
     }
 }
 

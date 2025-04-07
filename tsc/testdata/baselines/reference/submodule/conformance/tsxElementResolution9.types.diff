@@ -1,0 +1,29 @@
+--- old.tsxElementResolution9.types
++++ new.tsxElementResolution9.types
+@@= skipped -20, +20 lines =@@
+ >Obj1 : Obj1
+ 
+ <Obj1 />; // Error, return type is not an object type
+-><Obj1 /> : JSX.Element
++><Obj1 /> : Element
+ >Obj1 : Obj1
+ 
+ interface Obj2 {
+@@= skipped -16, +16 lines =@@
+ >Obj2 : Obj2
+ 
+ <Obj2 />; // Error, return type is not an object type
+-><Obj2 /> : JSX.Element
++><Obj2 /> : Element
+ >Obj2 : Obj2
+ 
+ interface Obj3 {
+@@= skipped -17, +17 lines =@@
+ >Obj3 : Obj3
+ 
+ <Obj3 x={42} />; // OK
+-><Obj3 x={42} /> : JSX.Element
++><Obj3 x={42} /> : Element
+ >Obj3 : Obj3
+ >x : number
+ >42 : 42

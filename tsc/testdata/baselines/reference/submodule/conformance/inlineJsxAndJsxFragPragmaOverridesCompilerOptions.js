@@ -48,16 +48,31 @@ import {Fragment} from "./react";
 //// [reacty.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = require("./react");
 <><span></span></>;
 //// [preacty.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @jsx h
+ * @jsxFrag Frag
+ */
+const preact_1 = require("./preact");
 <><div></div></>;
 //// [snabbdomy.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @jsx h
+ * @jsxfrag null
+ */
+const snabbdom_1 = require("./snabbdom");
 <><div></div></>;
 //// [mix-n-match.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* @jsx h */
+/* @jsxFrag Fragment */
+const preact_1 = require("./preact");
+const react_1 = require("./react");
 <><span></span></>;

@@ -23,7 +23,7 @@
  
          {<div/> as unknown}
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react18.d.ts, 3174, 110))
--
++>div : Symbol(div, Decl(react18.d.ts, 3174, 110))
+ 
          {"aa"}
      </Foo>
- >Foo : Symbol(Foo, Decl(other.tsx, 6, 1))

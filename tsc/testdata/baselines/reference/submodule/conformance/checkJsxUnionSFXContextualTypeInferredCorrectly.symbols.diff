@@ -40,10 +40,12 @@
      return <h1></h1>;
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
++>h1 : Symbol(h1, Decl(react16.d.ts, 2556, 106))
++>h1 : Symbol(h1, Decl(react16.d.ts, 2556, 106))
  }
  
  // Usage with React tsx
-@@= skipped -21, +19 lines =@@
+@@= skipped -21, +21 lines =@@
              onChange={val => console.log(val)} // <- this throws an error
  >onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 25, 23))
  >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 26, 22))

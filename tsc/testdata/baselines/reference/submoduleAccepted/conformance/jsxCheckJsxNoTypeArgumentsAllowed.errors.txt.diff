@@ -4,28 +4,16 @@
 -file.jsx(1,18): error TS18042: 'Prop' is a type and cannot be imported in JavaScript files. Use 'import("./component").Prop' in a JSDoc type annotation.
  file.jsx(4,9): error TS2657: JSX expressions must have one parent element.
  file.jsx(4,16): error TS1003: Identifier expected.
--file.jsx(4,17): error TS2693: 'Prop' only refers to a type, but is being used as a value here.
- file.jsx(4,17): error TS17008: JSX element 'Prop' has no corresponding closing tag.
- file.jsx(4,38): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
- file.jsx(5,1): error TS1005: '</' expected.
-@@= skipped -17, +15 lines =@@
+ file.jsx(4,17): error TS2693: 'Prop' only refers to a type, but is being used as a value here.
+@@= skipped -17, +16 lines =@@
          b: string
      }
      
 -==== file.jsx (7 errors) ====
-+==== file.jsx (5 errors) ====
++==== file.jsx (6 errors) ====
      import { MyComp, Prop } from "./component";
 -                     ~~~~
 -!!! error TS18042: 'Prop' is a type and cannot be imported in JavaScript files. Use 'import("./component").Prop' in a JSDoc type annotation.
      import * as React from "react";
      
      let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
-@@= skipped -11, +9 lines =@@
-                    ~
- !!! error TS1003: Identifier expected.
-                     ~~~~
--!!! error TS2693: 'Prop' only refers to a type, but is being used as a value here.
--                    ~~~~
- !!! error TS17008: JSX element 'Prop' has no corresponding closing tag.
-                                          ~
- !!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?

@@ -1,0 +1,42 @@
+--- old.commentEmittingInPreserveJsx1.types
++++ new.commentEmittingInPreserveJsx1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : typeof __React
+ 
+ <div>
+-><div>    // Not Comment</div> : JSX.Element
++><div>    // Not Comment</div> : Element
+ >div : any
+ 
+     // Not Comment
+@@= skipped -11, +11 lines =@@
+ >div : any
+ 
+ <div>
+-><div>    // Not Comment    {        //Comment just Fine    }    // Another not Comment</div> : JSX.Element
++><div>    // Not Comment    {        //Comment just Fine    }    // Another not Comment</div> : Element
+ >div : any
+ 
+     // Not Comment
+@@= skipped -12, +12 lines =@@
+ >div : any
+ 
+ <div>
+-><div>    // Not Comment    {        //Comment just Fine        "Hi"    }    // Another not Comment</div> : JSX.Element
++><div>    // Not Comment    {        //Comment just Fine        "Hi"    }    // Another not Comment</div> : Element
+ >div : any
+ 
+     // Not Comment
+@@= skipped -14, +14 lines =@@
+ >div : any
+ 
+ <div>
+-><div>    /* Not Comment */    {        //Comment just Fine        "Hi"    }</div> : JSX.Element
++><div>    /* Not Comment */    {        //Comment just Fine        "Hi"    }</div> : Element
+ >div : any
+ 
+     /* Not Comment */

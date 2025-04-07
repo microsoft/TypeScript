@@ -1,0 +1,11 @@
+--- old.tsxAttributeResolution8.types
++++ new.tsxAttributeResolution8.types
+@@= skipped -14, +14 lines =@@
+ 
+ // Should be OK
+ <test1 {...x} />
+-><test1 {...x} /> : JSX.Element
++><test1 {...x} /> : Element
+ >test1 : any
+ >x : any
+ 

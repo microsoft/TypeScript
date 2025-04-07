@@ -31,9 +31,9 @@ import { Test } from 'a';
 >Test : null
 
 const Foo = (<h1></h1>);
->Foo : any
->(<h1></h1>) : any
-><h1></h1> : any
+>Foo : Element
+>(<h1></h1>) : Element
+><h1></h1> : Element
 >h1 : any
 >h1 : any
 

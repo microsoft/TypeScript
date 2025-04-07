@@ -1,0 +1,40 @@
+--- old.jsxChildWrongType.errors.txt
++++ new.jsxChildWrongType.errors.txt
+@@= skipped -0, +0 lines =@@
+-index.tsx(6,5): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
++index.tsx(5,4): error TS2322: Type '{ children: unknown[]; }' is not assignable to type 'DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>'.
++  Type '{ children: unknown[]; }' is not assignable to type 'HTMLAttributes<HTMLElement>'.
++    Types of property 'children' are incompatible.
++      Type 'unknown[]' is not assignable to type 'ReactNode'.
++        Type 'unknown[]' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal'.
++          Type 'unknown[]' is not assignable to type 'ReactFragment'.
++            The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
++              Type 'IteratorResult<unknown, undefined>' is not assignable to type 'IteratorResult<ReactNode, any>'.
++                Type 'IteratorYieldResult<unknown>' is not assignable to type 'IteratorResult<ReactNode, any>'.
++                  Type 'IteratorYieldResult<unknown>' is not assignable to type 'IteratorYieldResult<ReactNode>'.
++                    Type 'unknown' is not assignable to type 'ReactNode'.
+ 
+ 
+ ==== index.tsx (1 errors) ====
+@@= skipped -6, +16 lines =@@
+     
+     const a = (
+       <main>
++       ~~~~
++!!! error TS2322: Type '{ children: unknown[]; }' is not assignable to type 'DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>'.
++!!! error TS2322:   Type '{ children: unknown[]; }' is not assignable to type 'HTMLAttributes<HTMLElement>'.
++!!! error TS2322:     Types of property 'children' are incompatible.
++!!! error TS2322:       Type 'unknown[]' is not assignable to type 'ReactNode'.
++!!! error TS2322:         Type 'unknown[]' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal'.
++!!! error TS2322:           Type 'unknown[]' is not assignable to type 'ReactFragment'.
++!!! error TS2322:             The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
++!!! error TS2322:               Type 'IteratorResult<unknown, undefined>' is not assignable to type 'IteratorResult<ReactNode, any>'.
++!!! error TS2322:                 Type 'IteratorYieldResult<unknown>' is not assignable to type 'IteratorResult<ReactNode, any>'.
++!!! error TS2322:                   Type 'IteratorYieldResult<unknown>' is not assignable to type 'IteratorYieldResult<ReactNode>'.
++!!! error TS2322:                     Type 'unknown' is not assignable to type 'ReactNode'.
+         {(<div />) as unknown}
+-        ~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+         <span />
+       </main>
+     );

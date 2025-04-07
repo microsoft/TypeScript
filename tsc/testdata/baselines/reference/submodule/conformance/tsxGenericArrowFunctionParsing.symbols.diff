@@ -14,28 +14,34 @@
  
  x1.isElement;
 ->x1.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
++>x1.isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
  >x1 : Symbol(x1, Decl(file.tsx, 7, 3))
 ->isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
++>isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
  
  // This is a generic function
  var x2 = <T extends {}>() => {};
-@@= skipped -29, +27 lines =@@
+@@= skipped -29, +29 lines =@@
  >T : Symbol(T, Decl(file.tsx, 4, 3))
  
  x4.isElement;
 ->x4.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
++>x4.isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
  >x4 : Symbol(x4, Decl(file.tsx, 19, 3))
 ->isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
++>isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
  
  // This is an element
  var x5 = <T extends>() => {}</T>;
-@@= skipped -12, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  >T : Symbol(T, Decl(file.tsx, 4, 3))
  
  x5.isElement;
 ->x5.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
++>x5.isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
  >x5 : Symbol(x5, Decl(file.tsx, 23, 3))
 ->isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
++>isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
  
  // This is a generic function
  var x6 = <T = string,>() => {};

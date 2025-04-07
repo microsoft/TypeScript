@@ -1,0 +1,58 @@
+--- old.inlineJsxFactoryLocalTypeGlobalFallback.types
++++ new.inlineJsxFactoryLocalTypeGlobalFallback.types
+@@= skipped -26, +26 lines =@@
+     }
+ }
+ export function dom(): JSX.Element;
+->dom : () => JSX.Element
++>dom : () => Element
+ >JSX : any
+ 
+ === renderer2.d.ts ===
+@@= skipped -28, +28 lines =@@
+     }
+ }
+ export function predom(): predom.JSX.Element;
+->predom : () => predom.JSX.Element
++>predom : () => Element
+ >predom : any
+ >JSX : any
+ 
+ === component.tsx ===
+ /** @jsx predom */
+ import { predom } from "./renderer2"
+->predom : () => predom.JSX.Element
++>predom : () => Element
+ 
+ export default <h></h>
+-><h></h> : predom.JSX.Element
++><h></h> : Element
+ >h : any
+ >h : any
+ 
+ === index.tsx ===
+ /** @jsx dom */
+ import { dom } from "./renderer"
+->dom : () => JSX.Element
++>dom : () => Element
+ 
+ import prerendered from "./component";
+->prerendered : import("renderer2").predom.JSX.Element
++>prerendered : Element
+ 
+ let elem = prerendered;
+->elem : import("renderer2").predom.JSX.Element
+->prerendered : import("renderer2").predom.JSX.Element
++>elem : Element
++>prerendered : Element
+ 
+ elem = <h></h>; // Expect assignability error here
+->elem = <h></h> : JSX.Element
+->elem : import("renderer2").predom.JSX.Element
+-><h></h> : JSX.Element
++>elem = <h></h> : Element
++>elem : Element
++><h></h> : Element
+ >h : any
+ >h : any
+ 

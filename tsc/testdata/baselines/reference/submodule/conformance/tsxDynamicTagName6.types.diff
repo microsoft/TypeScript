@@ -1,0 +1,13 @@
+--- old.tsxDynamicTagName6.types
++++ new.tsxDynamicTagName6.types
+@@= skipped -15, +15 lines =@@
+ >'h1' : "h1"
+ 
+ const foo = <t.tag/>  // No error
+->foo : JSX.Element
+-><t.tag/> : JSX.Element
++>foo : Element
++><t.tag/> : Element
+ >t.tag : string
+ >t : { tag: string; }
+ >tag : string

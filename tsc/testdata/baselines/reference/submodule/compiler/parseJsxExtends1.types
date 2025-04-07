@@ -11,7 +11,7 @@ export function Foo() {
     return <const T extends/>
 ><const T extends/> : any
 >const : any
->T : any
->extends : any
+>T : true
+>extends : true
 }
 

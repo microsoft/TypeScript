@@ -14,7 +14,7 @@ type CounterProps = {
 }
 
 export function Counter({ count = 0 }: CounterProps) {
->Counter : (__0: CounterProps) => any
+>Counter : (__0: CounterProps) => Element
 >count : number
 >0 : 0
 
@@ -24,18 +24,18 @@ export function Counter({ count = 0 }: CounterProps) {
 >null as any : any
 
     return <>
-><>        <p>{cnt}</p>        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>    </> : any
+><>        <p>{cnt}</p>        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>    </> : Element
 
         <p>{cnt}</p>
-><p>{cnt}</p> : any
+><p>{cnt}</p> : Element
 >p : any
 >cnt : any
 >p : any
 
         <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>
-><button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button> : any
+><button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button> : Element
 >button : any
->onClick : any
+>onClick : () => any
 >() => setCnt((prev) => prev + 1) : () => any
 >setCnt((prev) => prev + 1) : any
 >setCnt : any
@@ -44,7 +44,7 @@ export function Counter({ count = 0 }: CounterProps) {
 >prev + 1 : any
 >prev : any
 >1 : 1
->type : any
+>type : string
 >button : any
 
     </>

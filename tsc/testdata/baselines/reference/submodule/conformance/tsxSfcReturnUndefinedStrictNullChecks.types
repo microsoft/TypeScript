@@ -21,12 +21,12 @@ function Greet(x: {name?: string}) {
 
 // Error
 const foo = <Foo />;
->foo : any
-><Foo /> : any
+>foo : Element
+><Foo /> : Element
 >Foo : (props: any) => undefined
 
 const G = <Greet />;
->G : any
-><Greet /> : any
+>G : Element
+><Greet /> : Element
 >Greet : (x: { name?: string | undefined; }) => undefined
 

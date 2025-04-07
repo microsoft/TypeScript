@@ -1,0 +1,42 @@
+--- old.jsxFragmentFactoryNoUnusedLocals.types
++++ new.jsxFragmentFactoryNoUnusedLocals.types
+@@= skipped -2, +2 lines =@@
+ === jsxFragmentFactoryNoUnusedLocals.tsx ===
+ /// <reference path="react16.d.ts" />
+ import { Fragment, createElement } from "react"
+->Fragment : import("react").ComponentType<{}>
+->createElement : { (type: "input", props?: (import("react").InputHTMLAttributes<HTMLInputElement> & import("react").ClassAttributes<HTMLInputElement>) | null, ...children: import("react").ReactNode[]): import("react").DetailedReactHTMLElement<import("react").InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>; <P extends import("react").HTMLAttributes<T>, T extends HTMLElement>(type: keyof import("react").ReactHTML, props?: (import("react").ClassAttributes<T> & P) | null, ...children: import("react").ReactNode[]): import("react").DetailedReactHTMLElement<P, T>; <P extends import("react").SVGAttributes<T>, T extends SVGElement>(type: keyof import("react").ReactSVG, props?: (import("react").ClassAttributes<T> & P) | null, ...children: import("react").ReactNode[]): import("react").ReactSVGElement; <P extends import("react").DOMAttributes<T>, T extends Element>(type: string, props?: (import("react").ClassAttributes<T> & P) | null, ...children: import("react").ReactNode[]): import("react").DOMElement<P, T>; <P>(type: import("react").SFC<P>, props?: (import("react").Attributes & P) | null, ...children: import("react").ReactNode[]): import("react").SFCElement<P>; <P>(type: import("react").ClassType<P, import("react").ClassicComponent<P, import("react").ComponentState>, import("react").ClassicComponentClass<P>>, props?: (import("react").ClassAttributes<import("react").ClassicComponent<P, import("react").ComponentState>> & P) | null, ...children: import("react").ReactNode[]): import("react").CElement<P, import("react").ClassicComponent<P, import("react").ComponentState>>; <P, T extends import("react").Component<P, import("react").ComponentState>, C extends import("react").ComponentClass<P>>(type: import("react").ClassType<P, T, C>, props?: (import("react").ClassAttributes<T> & P) | null, ...children: import("react").ReactNode[]): import("react").CElement<P, T>; <P>(type: import("react").SFC<P> | import("react").ComponentClass<P> | string, props?: (import("react").Attributes & P) | null, ...children: import("react").ReactNode[]): import("react").ReactElement<P>; }
++>Fragment : ComponentType<{}>
++>createElement : { (type: "input", props?: InputHTMLAttributes<HTMLInputElement> & ClassAttributes<HTMLInputElement>, ...children: ReactNode[]): DetailedReactHTMLElement<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>; <P extends HTMLAttributes<T>, T extends HTMLElement>(type: keyof ReactHTML, props?: ClassAttributes<T> & P, ...children: ReactNode[]): DetailedReactHTMLElement<P, T>; <P extends SVGAttributes<T>, T extends SVGElement>(type: keyof ReactSVG, props?: ClassAttributes<T> & P, ...children: ReactNode[]): ReactSVGElement; <P extends DOMAttributes<T>, T extends Element>(type: string, props?: ClassAttributes<T> & P, ...children: ReactNode[]): DOMElement<P, T>; <P>(type: SFC<P>, props?: Attributes & P, ...children: ReactNode[]): SFCElement<P>; <P>(type: ClassType<P, ClassicComponent<P, any>, ClassicComponentClass<P>>, props?: ClassAttributes<ClassicComponent<P, any>> & P, ...children: ReactNode[]): CElement<P, ClassicComponent<P, any>>; <P, T extends Component<P, any, any>, C extends ComponentClass<P, any>>(type: ClassType<P, T, C>, props?: ClassAttributes<T> & P, ...children: ReactNode[]): CElement<P, T>; <P>(type: string | ComponentClass<P, any> | SFC<P>, props?: Attributes & P, ...children: ReactNode[]): ReactElement<P>; (type: "input", props?: InputHTMLAttributes<HTMLInputElement> & ClassAttributes<HTMLInputElement>, ...children: ReactNode[]): DetailedReactHTMLElement<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>; <P extends HTMLAttributes<T>, T extends HTMLElement>(type: keyof ReactHTML, props?: ClassAttributes<T> & P, ...children: ReactNode[]): DetailedReactHTMLElement<P, T>; <P extends SVGAttributes<T>, T extends SVGElement>(type: keyof ReactSVG, props?: ClassAttributes<T> & P, ...children: ReactNode[]): ReactSVGElement; <P extends DOMAttributes<T>, T extends Element>(type: string, props?: ClassAttributes<T> & P, ...children: ReactNode[]): DOMElement<P, T>; <P>(type: SFC<P>, props?: Attributes & P, ...children: ReactNode[]): SFCElement<P>; <P>(type: ClassType<P, ClassicComponent<P, any>, ClassicComponentClass<P>>, props?: ClassAttributes<ClassicComponent<P, any>> & P, ...children: ReactNode[]): CElement<P, ClassicComponent<P, any>>; <P, T extends Component<P, any, any>, C extends ComponentClass<P, any>>(type: ClassType<P, T, C>, props?: ClassAttributes<T> & P, ...children: ReactNode[]): CElement<P, T>; <P>(type: string | ComponentClass<P, any> | SFC<P>, props?: Attributes & P, ...children: ReactNode[]): ReactElement<P>; }
+ 
+ type CounterProps = {
+ >CounterProps : CounterProps
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ export function Counter({ count = 0 }: CounterProps) {
+->Counter : ({ count }: CounterProps) => JSX.Element
++>Counter : (__0: CounterProps) => Element
+ >count : number
+ >0 : 0
+ 
+@@= skipped -10, +10 lines =@@
+ >null as any : any
+ 
+     return <>
+-><>        <p>{cnt}</p>        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>    </> : JSX.Element
++><>        <p>{cnt}</p>        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>    </> : Element
+ 
+         <p>{cnt}</p>
+-><p>{cnt}</p> : JSX.Element
++><p>{cnt}</p> : Element
+ >p : any
+ >cnt : any
+ >p : any
+ 
+         <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>
+-><button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button> : JSX.Element
++><button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button> : Element
+ >button : any
+ >onClick : () => any
+ >() => setCnt((prev) => prev + 1) : () => any

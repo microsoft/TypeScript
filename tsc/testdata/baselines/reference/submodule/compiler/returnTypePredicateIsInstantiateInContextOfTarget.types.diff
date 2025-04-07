@@ -1,0 +1,26 @@
+--- old.returnTypePredicateIsInstantiateInContextOfTarget.types
++++ new.returnTypePredicateIsInstantiateInContextOfTarget.types
+@@= skipped -6, +6 lines =@@
+ 
+ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }> {
+ >TestComponent : TestComponent
+->React.Component : React.Component<{ isAny: <T>(obj: any) => obj is T; }, {}, any>
++>React.Component : Component<{ isAny: <T>(obj: any) => obj is T; }, {}, any>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ >isAny : <T>(obj: any) => obj is T
+ >obj : any
+ 
+@@= skipped -28, +28 lines =@@
+ }
+ 
+ const TestRender = () => <TestComponent />;
+->TestRender : () => JSX.Element
+->() => <TestComponent /> : () => JSX.Element
+-><TestComponent /> : JSX.Element
++>TestRender : () => Element
++>() => <TestComponent /> : () => Element
++><TestComponent /> : Element
+ >TestComponent : typeof TestComponent
+ 

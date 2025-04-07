@@ -17,11 +17,11 @@ interface Prop {
 }
 
 function Comp(p: Prop) {
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 >p : Prop
 
     return <div>{p.b}</div>;
-><div>{p.b}</div> : any
+><div>{p.b}</div> : Element
 >div : any
 >p.b : string
 >p : Prop
@@ -31,43 +31,43 @@ function Comp(p: Prop) {
 
 // OK
 let k = <Comp a={10} b="hi" children ="lol" />;
->k : any
-><Comp a={10} b="hi" children ="lol" /> : any
->Comp : (p: Prop) => any
->a : any
+>k : Element
+><Comp a={10} b="hi" children ="lol" /> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
->children : any
+>b : string
+>children : string
 
 let k1 =
->k1 : any
+>k1 : Element
 
     <Comp a={10} b="hi">
-><Comp a={10} b="hi">        hi hi hi!    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi">        hi hi hi!    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
         hi hi hi!
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 
 let k2 =
->k2 : any
+>k2 : Element
 
     <Comp a={10} b="hi">
-><Comp a={10} b="hi">        <div>hi hi hi!</div>    </Comp> : any
->Comp : (p: Prop) => any
->a : any
+><Comp a={10} b="hi">        <div>hi hi hi!</div>    </Comp> : Element
+>Comp : (p: Prop) => Element
+>a : number
 >10 : 10
->b : any
+>b : string
 
         <div>hi hi hi!</div>
-><div>hi hi hi!</div> : any
+><div>hi hi hi!</div> : Element
 >div : any
 >div : any
 
     </Comp>;
->Comp : (p: Prop) => any
+>Comp : (p: Prop) => Element
 

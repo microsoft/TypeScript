@@ -23,20 +23,26 @@ declare module JSX {
 
 // Error
 <test1 s />;
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >s : Symbol(s, Decl(file.tsx, 9, 6))
 
 <test1 n='true' />;
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >n : Symbol(n, Decl(file.tsx, 10, 6))
 
 <test2 />;
+>test2 : Symbol(test2, Decl(file.tsx, 3, 36))
 
 // OK
 <test1 n />;
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >n : Symbol(n, Decl(file.tsx, 14, 6))
 
 <test1 n={false} />;
+>test1 : Symbol(test1, Decl(file.tsx, 2, 30))
 >n : Symbol(n, Decl(file.tsx, 15, 6))
 
 <test2 n />;
+>test2 : Symbol(test2, Decl(file.tsx, 3, 36))
 >n : Symbol(n, Decl(file.tsx, 16, 6))
 

@@ -26,6 +26,8 @@ let c = <ruhroh />;
 //// [jsxElementTypeLiteral.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+const React = require("react");
 // should be fine - `ElementType` accepts `div`
 let a = <div />;
 // should be an error - `ElementType` does not accept `span`

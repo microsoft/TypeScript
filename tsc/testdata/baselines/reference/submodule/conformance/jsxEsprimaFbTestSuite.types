@@ -33,14 +33,14 @@ declare var value;
 ><n:a n:v /> : any
 >n : any
 >a : any
->n:v : any
+>n:v : true
 >n : any
 >v : any
 
 <a n:foo="bar"> {value} <b><c /></b></a>;
 ><a n:foo="bar"> {value} <b><c /></b></a> : any
 >a : any
->n:foo : any
+>n:foo : string
 >n : any
 >foo : any
 >value : any
@@ -54,19 +54,19 @@ declare var value;
 <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
 ><a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" /> : any
 >a : any
->b : any
+>b : string
 >" " : " "
->c : any
->d : any
->e : any
->f : any
->g : any
->h : any
+>c : string
+>d : string
+>e : string
+>f : string
+>g : string
+>h : string
 
 <a b="&notanentity;" />;
 ><a b="&notanentity;" /> : any
 >a : any
->b : any
+>b : string
 
 <a
 ><a/> : any
@@ -84,7 +84,7 @@ declare var value;
 >AbC_def : any
 
   test="&#x0026;&#38;">
->test : any
+>test : string
 
 bar
 baz
@@ -173,13 +173,13 @@ baz
 ><div {...props} post="attribute" /> : any
 >div : any
 >props : any
->post : any
+>post : string
 
 <div pre="leading" pre2="attribute" {...props}></div>;
 ><div pre="leading" pre2="attribute" {...props}></div> : any
 >div : any
->pre : any
->pre2 : any
+>pre : string
+>pre2 : string
 >props : any
 >div : any
 

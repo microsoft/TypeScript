@@ -47,5 +47,5 @@ export class MyComponent {
 // Should be ok
 <MyComponent data-bar='hello' />;
 >MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
->data-bar : Symbol(data-bar, Decl(file.tsx, 16, 12))
+>data-bar : Symbol("data-bar", Decl(file.tsx, 16, 12))
 

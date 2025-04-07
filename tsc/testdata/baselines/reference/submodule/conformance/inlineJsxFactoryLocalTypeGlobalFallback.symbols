@@ -87,6 +87,8 @@ import { predom } from "./renderer2"
 >predom : Symbol(predom, Decl(component.tsx, 1, 8))
 
 export default <h></h>
+>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
+>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
 
 === index.tsx ===
 /** @jsx dom */
@@ -102,4 +104,6 @@ let elem = prerendered;
 
 elem = <h></h>; // Expect assignability error here
 >elem : Symbol(elem, Decl(index.tsx, 3, 3))
+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
 

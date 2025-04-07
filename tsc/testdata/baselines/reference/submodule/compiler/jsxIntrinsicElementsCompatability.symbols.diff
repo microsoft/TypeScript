@@ -14,6 +14,7 @@
      // Just so the return value is RectElement, the rendered element doesnt matter
      return <div />
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
++>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
  
  function Test<T extends 'button' | 'a'>(el: T) {

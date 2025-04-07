@@ -1,11 +1,11 @@
 --- old.jsxImportForSideEffectsNonExtantNoError.js
 +++ new.jsxImportForSideEffectsNonExtantNoError.js
-@@= skipped -11, +11 lines =@@
- //// [jsxImportForSideEffectsNonExtantNoError.js]
+@@= skipped -12, +12 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var React = require("react");
++const React = require("react");
  require("./App.css"); // doesn't actually exist
 -var tag = React.createElement("div", null);
 +const tag = <div></div>;

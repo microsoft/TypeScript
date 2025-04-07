@@ -18,6 +18,7 @@ let i1 = <MyComponent values="Hello"/>;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 function MyComponent(attr) {
     return <div>attr.values</div>;
 }

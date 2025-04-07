@@ -23,13 +23,13 @@ interface TodoListProps {
 >todos : TodoProp[]
 }
 function Todo(prop: { key: number, todo: string }) {
->Todo : (prop: { key: number; todo: string; }) => any
+>Todo : (prop: { key: number; todo: string; }) => Element
 >prop : { key: number; todo: string; }
 >key : number
 >todo : string
 
     return <div>{prop.key.toString() + prop.todo}</div>;
-><div>{prop.key.toString() + prop.todo}</div> : any
+><div>{prop.key.toString() + prop.todo}</div> : Element
 >div : any
 >prop.key.toString() + prop.todo : string
 >prop.key.toString() : string
@@ -44,27 +44,27 @@ function Todo(prop: { key: number, todo: string }) {
 >div : any
 }
 function TodoList({ todos }: TodoListProps) {
->TodoList : (__0: TodoListProps) => any
+>TodoList : (__0: TodoListProps) => Element
 >todos : TodoProp[]
 
     return <div>
-><div>        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}    </div> : any
+><div>        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}    </div> : Element
 >div : any
 
         {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
->todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : any[]
+>todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : Element[]
 >todos.map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
 >todos : TodoProp[]
 >map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
->todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => any
+>todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => Element
 >todo : TodoProp
-><Todo key={todo.id} todo={todo.todo}/> : any
->Todo : (prop: { key: number; todo: string; }) => any
->key : any
+><Todo key={todo.id} todo={todo.todo}/> : Element
+>Todo : (prop: { key: number; todo: string; }) => Element
+>key : number
 >todo.id : number
 >todo : TodoProp
 >id : number
->todo : any
+>todo : string
 >todo.todo : string
 >todo : TodoProp
 >todo : string
@@ -76,7 +76,7 @@ let x: TodoListProps;
 >x : TodoListProps
 
     <TodoList {...x}/>
-><TodoList {...x}/> : any
->TodoList : (__0: TodoListProps) => any
+><TodoList {...x}/> : Element
+>TodoList : (__0: TodoListProps) => Element
 >x : TodoListProps
 

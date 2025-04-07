@@ -1,0 +1,22 @@
+--- old.typeInferenceWithExcessPropertiesJsx.types
++++ new.typeInferenceWithExcessPropertiesJsx.types
+@@= skipped -36, +36 lines =@@
+ } : {});
+ 
+ declare function T<Entry extends TranslationEntry>(
+->T : <Entry extends TranslationEntry>(props: TProps<Entry>) => JSX.Element
++>T : <Entry extends TranslationEntry>(props: TProps<Entry>) => Element
+ 
+     props: TProps<Entry>
+ >props : TProps<Entry>
+@@= skipped -9, +9 lines =@@
+ >JSX : any
+ 
+ <T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" />
+-><T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" /> : JSX.Element
+->T : <Entry extends TranslationEntry>(props: TProps<Entry>) => JSX.Element
++><T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" /> : Element
++>T : <Entry extends TranslationEntry>(props: TProps<Entry>) => Element
+ >getTranslationEntry : (allTranslations: Translations) => { args: [string]; }
+ >(allTranslations) => allTranslations.a : (allTranslations: Translations) => { args: [string]; }
+ >allTranslations : Translations

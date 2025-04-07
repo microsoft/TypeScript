@@ -5,13 +5,14 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.default = Component;
 -var React = require("react");
++const React = require("react");
  function Component(props) {
 -    var condition1;
 +    let condition1;
      if (condition1) {
          return (<ChildComponent {...props}/>);
      }
-@@= skipped -10, +9 lines =@@
+@@= skipped -10, +10 lines =@@
          return (<ChildComponent {...props} property1="NewString"/>);
      }
  }

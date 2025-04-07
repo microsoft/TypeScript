@@ -26,6 +26,7 @@
      return <div>{prop.key.toString() + prop.todo}</div>;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(tsxSpreadChildren.tsx, 2, 30))
 ->prop.key.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>div : Symbol((Missing), Decl(tsxSpreadChildren.tsx, 2, 30))
 +>prop.key.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >prop.key : Symbol(key, Decl(tsxSpreadChildren.tsx, 15, 21))
  >prop : Symbol(prop, Decl(tsxSpreadChildren.tsx, 15, 14))
@@ -36,15 +37,17 @@
  >prop : Symbol(prop, Decl(tsxSpreadChildren.tsx, 15, 14))
  >todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 15, 34))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(tsxSpreadChildren.tsx, 2, 30))
++>div : Symbol((Missing), Decl(tsxSpreadChildren.tsx, 2, 30))
  }
  function TodoList({ todos }: TodoListProps) {
  >TodoList : Symbol(TodoList, Decl(tsxSpreadChildren.tsx, 17, 1))
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  >TodoListProps : Symbol(TodoListProps, Decl(tsxSpreadChildren.tsx, 11, 1))
  
      return <div>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(tsxSpreadChildren.tsx, 2, 30))
--
++>div : Symbol((Missing), Decl(tsxSpreadChildren.tsx, 2, 30))
+ 
          {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
 ->todos.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 +>todos.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
@@ -68,6 +71,7 @@
  
      </div>;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(tsxSpreadChildren.tsx, 2, 30))
++>div : Symbol((Missing), Decl(tsxSpreadChildren.tsx, 2, 30))
  }
  let x: TodoListProps;
  >x : Symbol(x, Decl(tsxSpreadChildren.tsx, 23, 3))

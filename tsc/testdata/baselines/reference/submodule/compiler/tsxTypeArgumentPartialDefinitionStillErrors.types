@@ -18,9 +18,9 @@ function SFC<T>(props: Record<string, T>) {
 }
 
 <SFC<string> prop={1}></SFC>; // should error
-><SFC<string> prop={1}></SFC> : any
+><SFC<string> prop={1}></SFC> : Element
 >SFC : <T>(props: Record<string, T>) => string
->prop : any
+>prop : number
 >1 : 1
 >SFC : <T>(props: Record<string, T>) => string
 

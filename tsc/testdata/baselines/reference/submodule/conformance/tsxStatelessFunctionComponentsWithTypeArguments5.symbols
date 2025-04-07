@@ -61,13 +61,13 @@ function Bar<T extends { prop: number }>(arg: T) {
 >a1 : Symbol(a1, Decl(file.tsx, 12, 7))
 >ComponentSpecific : Symbol(ComponentSpecific, Decl(file.tsx, 6, 1))
 >arg : Symbol(arg, Decl(file.tsx, 11, 41))
->ignore-prop : Symbol(ignore-prop, Decl(file.tsx, 12, 40))
+>ignore-prop : Symbol("ignore-prop", Decl(file.tsx, 12, 40))
 
     let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
 >a2 : Symbol(a2, Decl(file.tsx, 13, 7))
 >ComponentSpecific1 : Symbol(ComponentSpecific1, Decl(file.tsx, 8, 67))
 >arg : Symbol(arg, Decl(file.tsx, 11, 41))
->ignore-prop : Symbol(ignore-prop, Decl(file.tsx, 13, 41))
+>ignore-prop : Symbol("ignore-prop", Decl(file.tsx, 13, 41))
 
     let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
 >a3 : Symbol(a3, Decl(file.tsx, 14, 7))

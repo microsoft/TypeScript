@@ -1,0 +1,37 @@
+--- old.checkJsxChildrenProperty16.errors.txt
++++ new.checkJsxChildrenProperty16.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++checkJsxChildrenProperty16.tsx(19,14): error TS7006: Parameter 'value' implicitly has an 'any' type.
++
++
++==== checkJsxChildrenProperty16.tsx (1 errors) ====
++    /// <reference path="/.lib/react16.d.ts" />
++    
++    // repro from #53493
++    
++    import React = require('react');
++    
++    export type Props =
++      | { renderNumber?: false; children: (arg: string) => void }
++      | {
++          renderNumber: true;
++          children: (arg: number) => void;
++        };
++    
++    export declare function Foo(props: Props): JSX.Element;
++    
++    export const Test = () => {
++      return (
++        <>
++          <Foo>{(value) => {}}</Foo>
++                 ~~~~~
++!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
++          <Foo renderNumber>{(value) => {}}</Foo>
++    
++          <Foo children={(value) => {}} />
++          <Foo renderNumber children={(value) => {}} />
++        </>
++      );
++    };

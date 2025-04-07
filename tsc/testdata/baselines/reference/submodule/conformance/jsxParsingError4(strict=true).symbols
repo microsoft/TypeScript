@@ -19,11 +19,17 @@ const a = (
 >a : Symbol(a, Decl(a.tsx, 7, 5))
 
   <public-foo></public-foo>
+>public-foo : Symbol((Missing), Decl(a.tsx, 2, 33))
+>public-foo : Symbol((Missing), Decl(a.tsx, 2, 33))
+
 );
 
 const b = (
 >b : Symbol(b, Decl(a.tsx, 11, 5))
 
   <public></public>
+>public : Symbol((Missing), Decl(a.tsx, 2, 33))
+>public : Symbol((Missing), Decl(a.tsx, 2, 33))
+
 );
 
