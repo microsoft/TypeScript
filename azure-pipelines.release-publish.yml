@@ -3,12 +3,22 @@ pr: none
 
 parameters:
   - name: _REMINDER
-    default: Review & undraft the release at https://github.com/microsoft/TypeScript/releases once it appears!
+    displayName: Review & undraft the release at https://github.com/microsoft/TypeScript/releases once it appears!
+    type: boolean
+    default: false
   - name: PUBLISH_TAG
+    displayName: npm publish tag
     default: dev
+    values:
+      - dev
+      - beta
+      - rc
+      - latest
   - name: RELEASE_TITLE_NAME
+    displayName: GitHub release title name
     default: 0.0.0 Test
   - name: TAG_NAME
+    displayName: Git tag name
     default: v0.0.0-SetMe
 
 variables:
