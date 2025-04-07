@@ -311,10 +311,19 @@ func (p *Program) getSyntacticDiagnosticsForFile(sourceFile *ast.SourceFile) []*
 }
 
 func (p *Program) getBindDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	// TODO: restore this; tsgo's main depends on this function binding all files for timing.
+	// if checker.SkipTypeChecking(sourceFile, p.compilerOptions) {
+	// 	return nil
+	// }
+
 	return sourceFile.BindDiagnostics()
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	if checker.SkipTypeChecking(sourceFile, p.compilerOptions) {
+		return nil
+	}
+
 	var fileChecker *checker.Checker
 	if sourceFile != nil {
 		fileChecker = p.GetTypeCheckerForFile(sourceFile)

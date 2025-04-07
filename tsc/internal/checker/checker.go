@@ -2027,7 +2027,7 @@ func (c *Checker) getSymbol(symbols ast.SymbolTable, name string, meaning ast.Sy
 }
 
 func (c *Checker) CheckSourceFile(sourceFile *ast.SourceFile) {
-	if skipTypeChecking(sourceFile, c.compilerOptions) {
+	if SkipTypeChecking(sourceFile, c.compilerOptions) {
 		return
 	}
 	c.checkSourceFile(sourceFile)

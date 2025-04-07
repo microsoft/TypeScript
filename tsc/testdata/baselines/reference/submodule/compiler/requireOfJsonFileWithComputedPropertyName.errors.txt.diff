@@ -1,17 +1,22 @@
 --- old.requireOfJsonFileWithComputedPropertyName.errors.txt
 +++ new.requireOfJsonFileWithComputedPropertyName.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -b.json(2,5): error TS1327: String literal with double quotes expected.
-+b.json(2,6): error TS2304: Cannot find name 'a'.
- 
- 
- ==== file1.ts (0 errors) ====
-@@= skipped -11, +11 lines =@@
- ==== b.json (1 errors) ====
-     {
-         [a]: 10
+-
+-
+-==== file1.ts (0 errors) ====
+-    import b1 = require('./b.json');
+-    let x = b1;
+-    import b2 = require('./b.json');
+-    if (x) {
+-        x = b2;
+-    }
+-    
+-==== b.json (1 errors) ====
+-    {
+-        [a]: 10
 -        ~~~
 -!!! error TS1327: String literal with double quotes expected.
-+         ~
-+!!! error TS2304: Cannot find name 'a'.
-     }
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>
