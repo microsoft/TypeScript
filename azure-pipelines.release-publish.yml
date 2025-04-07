@@ -109,12 +109,14 @@ extends:
                   title: TypeScript $(RELEASE_TITLE_NAME)
                   releaseNotesSource: inline
                   releaseNotesInline: |
+                    <!--
                     For release notes, check out the [release announcement]().
                     For new features, check out the [What's new in TypeScript $(TAG_NAME)]().
                     For the complete list of fixed issues, check out the
                     * [fixed issues query for TypeScript $(TAG_NAME)](https://github.com/microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue+milestone%3A%22TypeScript+3.3%22+is%3Aclosed+).
                     Downloads are available on:
                     * [npm](https://www.npmjs.com/package/typescript)
+                    -->
                   assets: $(Pipeline.Workspace)/tgz/**/typescript-*.tgz
-                  isDraft: true
+                  isDraft: $[ not(eq(variables['PUBLISH_TAG'], 'latest')) ]
                   addChangeLog: false
