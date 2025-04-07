@@ -1455,17 +1455,17 @@ func IsExternalModule(file *SourceFile) bool {
 	return file.ExternalModuleIndicator != nil
 }
 
-func IsExternalOrCommonJsModule(file *SourceFile) bool {
-	return file.ExternalModuleIndicator != nil || file.CommonJsModuleIndicator != nil
+func IsExternalOrCommonJSModule(file *SourceFile) bool {
+	return file.ExternalModuleIndicator != nil || file.CommonJSModuleIndicator != nil
 }
 
-// TODO: Should we deprecate `IsExternalOrCommonJsModule` in favor of this function?
+// TODO: Should we deprecate `IsExternalOrCommonJSModule` in favor of this function?
 func IsEffectiveExternalModule(node *SourceFile, compilerOptions *core.CompilerOptions) bool {
-	return IsExternalModule(node) || (isCommonJSContainingModuleKind(compilerOptions.GetEmitModuleKind()) && node.CommonJsModuleIndicator != nil)
+	return IsExternalModule(node) || (isCommonJSContainingModuleKind(compilerOptions.GetEmitModuleKind()) && node.CommonJSModuleIndicator != nil)
 }
 
 func IsEffectiveExternalModuleWorker(node *SourceFile, moduleKind core.ModuleKind) bool {
-	return IsExternalModule(node) || (isCommonJSContainingModuleKind(moduleKind) && node.CommonJsModuleIndicator != nil)
+	return IsExternalModule(node) || (isCommonJSContainingModuleKind(moduleKind) && node.CommonJSModuleIndicator != nil)
 }
 
 func isCommonJSContainingModuleKind(kind core.ModuleKind) bool {
@@ -2290,7 +2290,7 @@ func IsConstTypeReference(node *Node) bool {
 }
 
 func IsGlobalSourceFile(node *Node) bool {
-	return node.Kind == KindSourceFile && !IsExternalOrCommonJsModule(node.AsSourceFile())
+	return node.Kind == KindSourceFile && !IsExternalOrCommonJSModule(node.AsSourceFile())
 }
 
 func IsParameterLikeOrReturnTag(node *Node) bool {
@@ -2467,9 +2467,9 @@ func GetNodeAtPosition(file *SourceFile, position int, isJavaScriptFile bool) *N
 	for {
 		var child *Node
 		if isJavaScriptFile {
-			for _, jsDoc := range current.JSDoc(file) {
-				if nodeContainsPosition(jsDoc, position) {
-					child = jsDoc
+			for _, jsdoc := range current.JSDoc(file) {
+				if nodeContainsPosition(jsdoc, position) {
+					child = jsdoc
 					break
 				}
 			}

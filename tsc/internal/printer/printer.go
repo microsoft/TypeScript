@@ -42,7 +42,7 @@ type PrinterOptions struct {
 	// InlineSources                 bool
 	OmitBraceSourceMapPositions bool
 	// ExtendedDiagnostics           bool
-	OnlyPrintJsDocStyle bool
+	OnlyPrintJSDocStyle bool
 	// NeverAsciiEscape              bool
 	// StripInternal                 bool
 	PreserveSourceNewlines bool
@@ -707,7 +707,7 @@ func (p *Printer) shouldEmitComments(node *ast.Node) bool {
 }
 
 func (p *Printer) shouldWriteComment(comment ast.CommentRange) bool {
-	return !p.Options.OnlyPrintJsDocStyle ||
+	return !p.Options.OnlyPrintJSDocStyle ||
 		p.currentSourceFile != nil && isJSDocLikeText(p.currentSourceFile.Text, comment) ||
 		p.currentSourceFile != nil && isPinnedComment(p.currentSourceFile.Text, comment)
 }

@@ -242,7 +242,7 @@ func (tx *CommonJSModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.
 
 func (tx *CommonJSModuleTransformer) shouldEmitUnderscoreUnderscoreESModule() bool {
 	if tspath.FileExtensionIsOneOf(tx.currentSourceFile.FileName(), tspath.SupportedJSExtensionsFlat) &&
-		tx.currentSourceFile.CommonJsModuleIndicator != nil &&
+		tx.currentSourceFile.CommonJSModuleIndicator != nil &&
 		(tx.currentSourceFile.ExternalModuleIndicator == nil /*|| tx.currentSourceFile.ExternalModuleIndicator == true*/) { // !!!
 		return false
 	}
@@ -1709,7 +1709,7 @@ func (tx *CommonJSModuleTransformer) visitImportCallExpression(node *ast.CallExp
 func (tx *CommonJSModuleTransformer) createImportCallExpressionCommonJS(arg *ast.Expression) *ast.Expression {
 	// import(x)
 	// emit as
-	// Promise.resolve(`${x}`).then((s) => require(s)) /*CommonJs Require*/
+	// Promise.resolve(`${x}`).then((s) => require(s)) /*CommonJS Require*/
 	// We have to wrap require in then callback so that require is done in asynchronously
 	// if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
 	// If the arg is not inlineable, we have to evaluate and ToString() it in the current scope

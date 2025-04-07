@@ -297,7 +297,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(file *ast.SourceFile) 
 			// - module name comes from the list of imports
 			// - it's not a top level JavaScript module that exceeded the search max
 
-			// const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
+			// const elideImport = isJSFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
 
 			// Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
 			// This may still end up being an untyped module -- the file won't be included but imports will be allowed.

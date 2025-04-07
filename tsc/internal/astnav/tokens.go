@@ -191,7 +191,7 @@ func getPosition(node *ast.Node, sourceFile *ast.SourceFile, allowPositionInLead
 	if allowPositionInLeadingTrivia {
 		return node.Pos()
 	}
-	return scanner.GetTokenPosOfNode(node, sourceFile, true /*includeJsDoc*/)
+	return scanner.GetTokenPosOfNode(node, sourceFile, true /*includeJSDoc*/)
 }
 
 func findRightmostNode(node *ast.Node) *ast.Node {
@@ -236,11 +236,11 @@ func findRightmostNode(node *ast.Node) *ast.Node {
 
 func visitEachChildAndJSDoc(node *ast.Node, sourceFile *ast.SourceFile, visitor *ast.NodeVisitor) {
 	if node.Flags&ast.NodeFlagsHasJSDoc != 0 {
-		for _, jsDoc := range node.JSDoc(sourceFile) {
+		for _, jsdoc := range node.JSDoc(sourceFile) {
 			if visitor.Hooks.VisitNode != nil {
-				visitor.Hooks.VisitNode(jsDoc, visitor)
+				visitor.Hooks.VisitNode(jsdoc, visitor)
 			} else {
-				visitor.VisitNode(jsDoc)
+				visitor.VisitNode(jsdoc)
 			}
 		}
 	}

@@ -26,7 +26,7 @@ func (l *LanguageService) ProvideDefinitions(fileName string, position int) []Lo
 		for _, decl := range symbol.Declarations {
 			file := ast.GetSourceFileOfNode(decl)
 			loc := decl.Loc
-			pos := scanner.GetTokenPosOfNode(decl, file, false /*includeJsDoc*/)
+			pos := scanner.GetTokenPosOfNode(decl, file, false /*includeJSDoc*/)
 
 			locations = append(locations, Location{
 				FileName: file.FileName(),

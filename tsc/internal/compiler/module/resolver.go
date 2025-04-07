@@ -506,7 +506,7 @@ func (r *resolutionState) loadModuleFromSelfNameReference() *resolved {
 	// to ensure that self-name imports of their own package can resolve back to their
 	// input JS files via `tryLoadInputFileForPath` at a higher priority than their output
 	// declaration files, so we need to do a single pass with all extensions for that case.
-	if r.compilerOptions.GetAllowJs() && !strings.Contains(r.containingDirectory, "/node_modules/") {
+	if r.compilerOptions.GetAllowJS() && !strings.Contains(r.containingDirectory, "/node_modules/") {
 		return r.loadModuleFromExports(scope, r.extensions, subpath)
 	}
 	priorityExtensions := r.extensions & (extensionsTypeScript | extensionsDeclaration)

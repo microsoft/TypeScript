@@ -551,8 +551,8 @@ type CompilationResult struct {
 	Program          *compiler.Program
 	Options          *core.CompilerOptions
 	HarnessOptions   *HarnessOptions
-	Js               collections.OrderedMap[string, *TestFile]
-	Dts              collections.OrderedMap[string, *TestFile]
+	JS               collections.OrderedMap[string, *TestFile]
+	DTS              collections.OrderedMap[string, *TestFile]
 	Maps             collections.OrderedMap[string, *TestFile]
 	Symlinks         map[string]string
 	Repeat           func(TestConfiguration) *CompilationResult
@@ -563,8 +563,8 @@ type CompilationResult struct {
 
 type CompilationOutput struct {
 	Inputs []*TestFile
-	Js     *TestFile
-	Dts    *TestFile
+	JS     *TestFile
+	DTS    *TestFile
 	Map    *TestFile
 }
 
@@ -614,22 +614,22 @@ func newCompilationResult(
 					extname := core.GetOutputExtension(sourceFile.FileName(), options.Jsx)
 					outputs := &CompilationOutput{
 						Inputs: []*TestFile{input},
-						Js:     js.GetOrZero(c.getOutputPath(sourceFile.FileName(), extname)),
-						Dts:    dts.GetOrZero(c.getOutputPath(sourceFile.FileName(), tspath.GetDeclarationEmitExtensionForPath(sourceFile.FileName()))),
+						JS:     js.GetOrZero(c.getOutputPath(sourceFile.FileName(), extname)),
+						DTS:    dts.GetOrZero(c.getOutputPath(sourceFile.FileName(), tspath.GetDeclarationEmitExtensionForPath(sourceFile.FileName()))),
 						Map:    maps.GetOrZero(c.getOutputPath(sourceFile.FileName(), extname+".map")),
 					}
 					c.inputsAndOutputs.Set(sourceFile.FileName(), outputs)
-					if outputs.Js != nil {
-						c.inputsAndOutputs.Set(outputs.Js.UnitName, outputs)
-						c.Js.Set(outputs.Js.UnitName, outputs.Js)
-						js.Delete(outputs.Js.UnitName)
-						c.outputs = append(c.outputs, outputs.Js)
+					if outputs.JS != nil {
+						c.inputsAndOutputs.Set(outputs.JS.UnitName, outputs)
+						c.JS.Set(outputs.JS.UnitName, outputs.JS)
+						js.Delete(outputs.JS.UnitName)
+						c.outputs = append(c.outputs, outputs.JS)
 					}
-					if outputs.Dts != nil {
-						c.inputsAndOutputs.Set(outputs.Dts.UnitName, outputs)
-						c.Dts.Set(outputs.Dts.UnitName, outputs.Dts)
-						dts.Delete(outputs.Dts.UnitName)
-						c.outputs = append(c.outputs, outputs.Dts)
+					if outputs.DTS != nil {
+						c.inputsAndOutputs.Set(outputs.DTS.UnitName, outputs)
+						c.DTS.Set(outputs.DTS.UnitName, outputs.DTS)
+						dts.Delete(outputs.DTS.UnitName)
+						c.outputs = append(c.outputs, outputs.DTS)
 					}
 					if outputs.Map != nil {
 						c.inputsAndOutputs.Set(outputs.Map.UnitName, outputs)
@@ -643,10 +643,10 @@ func newCompilationResult(
 
 		// add any unhandled outputs, ordered by unit name
 		for _, document := range slices.SortedFunc(js.Values(), compareTestFiles) {
-			c.Js.Set(document.UnitName, document)
+			c.JS.Set(document.UnitName, document)
 		}
 		for _, document := range slices.SortedFunc(dts.Values(), compareTestFiles) {
-			c.Dts.Set(document.UnitName, document)
+			c.DTS.Set(document.UnitName, document)
 		}
 		for _, document := range slices.SortedFunc(maps.Values(), compareTestFiles) {
 			c.Maps.Set(document.UnitName, document)
@@ -694,10 +694,10 @@ func (r *CompilationResult) FS() vfs.FS {
 
 func (r *CompilationResult) GetNumberOfJSFiles(includeJson bool) int {
 	if includeJson {
-		return r.Js.Size()
+		return r.JS.Size()
 	}
 	count := 0
-	for file := range r.Js.Values() {
+	for file := range r.JS.Values() {
 		if !tspath.FileExtensionIs(file.UnitName, tspath.ExtensionJson) {
 			count++
 		}
@@ -730,9 +730,9 @@ func (c *CompilationResult) GetOutput(path string, kind string /*"js" | "dts" | 
 	if outputs != nil {
 		switch kind {
 		case "js":
-			return outputs.Js
+			return outputs.JS
 		case "dts":
-			return outputs.Dts
+			return outputs.DTS
 		case "map":
 			return outputs.Map
 		}

@@ -1035,7 +1035,7 @@ func createFileIndexMap(files []*ast.SourceFile) map[*ast.SourceFile]int {
 func countGlobalSymbols(files []*ast.SourceFile) int {
 	count := 0
 	for _, file := range files {
-		if !ast.IsExternalOrCommonJsModule(file) {
+		if !ast.IsExternalOrCommonJSModule(file) {
 			count += len(file.Locals)
 		}
 	}
@@ -1197,7 +1197,7 @@ func (c *Checker) initializeChecker() {
 	// Initialize global symbol table
 	augmentations := make([][]*ast.Node, 0, len(c.files))
 	for _, file := range c.files {
-		if !ast.IsExternalOrCommonJsModule(file) {
+		if !ast.IsExternalOrCommonJSModule(file) {
 			c.mergeSymbolTable(c.globals, file.Locals, false, nil)
 		}
 		c.patternAmbientModules = append(c.patternAmbientModules, file.PatternAmbientModules...)
@@ -1651,7 +1651,7 @@ func (c *Checker) getSpellingSuggestionForName(name string, symbols []*ast.Symbo
 
 func (c *Checker) onSuccessfullyResolvedSymbol(errorLocation *ast.Node, result *ast.Symbol, meaning ast.SymbolFlags, lastLocation *ast.Node, associatedDeclarationForContainingInitializerOrBindingName *ast.Node, withinDeferredContext bool) {
 	name := result.Name
-	isInExternalModule := lastLocation != nil && ast.IsSourceFile(lastLocation) && ast.IsExternalOrCommonJsModule(lastLocation.AsSourceFile())
+	isInExternalModule := lastLocation != nil && ast.IsSourceFile(lastLocation) && ast.IsExternalOrCommonJSModule(lastLocation.AsSourceFile())
 	// Only check for block-scoped variable if we have an error location and are looking for the
 	// name with variable meaning
 	//      For example,
@@ -2042,7 +2042,7 @@ func (c *Checker) checkSourceFile(sourceFile *ast.SourceFile) {
 		c.checkSourceElements(sourceFile.Statements.Nodes)
 		c.checkDeferredNodes(sourceFile)
 		c.checkJSDocNodes(sourceFile)
-		if ast.IsExternalOrCommonJsModule(sourceFile) {
+		if ast.IsExternalOrCommonJSModule(sourceFile) {
 			c.checkExternalModuleExports(sourceFile.AsNode())
 			c.registerForUnusedIdentifiersCheck(sourceFile.AsNode())
 		}
@@ -7344,7 +7344,7 @@ func (c *Checker) checkSuperExpression(node *ast.Node) *Type {
 	// 		// block scope containers so that we can report potential collisions with
 	// 		// `Reflect`.
 	// 		forEachEnclosingBlockScopeContainer(node.Parent, func(current *ast.Node) {
-	// 			if !isSourceFile(current) || isExternalOrCommonJsModule(current) {
+	// 			if !isSourceFile(current) || isExternalOrCommonJSModule(current) {
 	// 				c.getNodeLinks(current).flags |= NodeCheckFlagsContainsSuperPropertyInStaticInitializer
 	// 			}
 	// 		})
@@ -9906,7 +9906,7 @@ func (c *Checker) checkCollisionWithRequireExportsInGeneratedCode(node *ast.Node
 	}
 	// In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
 	parent := ast.GetDeclarationContainer(node)
-	if ast.IsSourceFile(parent) && ast.IsExternalOrCommonJsModule(parent.AsSourceFile()) {
+	if ast.IsSourceFile(parent) && ast.IsExternalOrCommonJSModule(parent.AsSourceFile()) {
 		// If the declaration happens to be in external module, report error that require and exports are reserved keywords
 		c.error(name, diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module, scanner.DeclarationNameToString(name), scanner.DeclarationNameToString(name))
 	}
@@ -10641,7 +10641,7 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 			}
 			// !!!
 			// containingClass := getContainingClassExcludingClassDecorators(right)
-			// if containingClass && isPlainJsFile(ast.GetSourceFileOfNode(containingClass), c.compilerOptions.checkJs) {
+			// if containingClass && isPlainJSFile(ast.GetSourceFileOfNode(containingClass), c.compilerOptions.checkJs) {
 			// 	c.grammarErrorOnNode(right, diagnostics.Private_field_0_must_be_declared_in_an_enclosing_class, right.Text())
 			// }
 		} else {
@@ -13375,10 +13375,10 @@ func (c *Checker) reportMergeSymbolError(target *ast.Symbol, source *ast.Symbol)
 	// 			"secondFileLocations": []never{},
 	// 		})
 	// 	})
-	// 	if !isSourcePlainJs {
+	// 	if !isSourcePlainJS {
 	// 		addDuplicateLocations(conflictingSymbolInfo.firstFileLocations, source)
 	// 	}
-	// 	if !isTargetPlainJs {
+	// 	if !isTargetPlainJS {
 	// 		addDuplicateLocations(conflictingSymbolInfo.secondFileLocations, target)
 	// 	}
 	// } else {
@@ -14293,7 +14293,7 @@ func (c *Checker) tryFindAmbientModule(moduleName string, withAugmentations bool
 func (c *Checker) resolveExternalModuleSymbol(moduleSymbol *ast.Symbol, dontResolveAlias bool) *ast.Symbol {
 	if moduleSymbol != nil {
 		exportEquals := c.resolveSymbolEx(moduleSymbol.Exports[ast.InternalSymbolNameExportEquals], dontResolveAlias)
-		exported := c.getMergedSymbol(c.getCommonJsExportEquals(c.getMergedSymbol(exportEquals), c.getMergedSymbol(moduleSymbol)))
+		exported := c.getMergedSymbol(c.getCommonJSExportEquals(c.getMergedSymbol(exportEquals), c.getMergedSymbol(moduleSymbol)))
 		if exported != nil {
 			return exported
 		}
@@ -14301,7 +14301,7 @@ func (c *Checker) resolveExternalModuleSymbol(moduleSymbol *ast.Symbol, dontReso
 	return moduleSymbol
 }
 
-func (c *Checker) getCommonJsExportEquals(exported *ast.Symbol, moduleSymbol *ast.Symbol) *ast.Symbol {
+func (c *Checker) getCommonJSExportEquals(exported *ast.Symbol, moduleSymbol *ast.Symbol) *ast.Symbol {
 	if exported == nil || exported == c.unknownSymbol || exported == moduleSymbol || len(moduleSymbol.Exports) == 1 || exported.Flags&ast.SymbolFlagsAlias != 0 {
 		return exported
 	}

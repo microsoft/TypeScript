@@ -12,7 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-func DoJsEmitBaseline(
+func DoJSEmitBaseline(
 	t *testing.T,
 	baselinePath string,
 	header string,
@@ -24,7 +24,7 @@ func DoJsEmitBaseline(
 	harnessSettings *harnessutil.HarnessOptions,
 	opts baseline.Options,
 ) {
-	if options.GetAllowJs() {
+	if options.GetAllowJS() {
 		t.Skip("AllowJS is not supported")
 		return
 	}
@@ -33,7 +33,7 @@ func DoJsEmitBaseline(
 		return
 	}
 
-	if !options.NoEmit.IsTrue() && !options.EmitDeclarationOnly.IsTrue() && result.Js.Size() == 0 && len(result.Diagnostics) == 0 {
+	if !options.NoEmit.IsTrue() && !options.EmitDeclarationOnly.IsTrue() && result.JS.Size() == 0 && len(result.Diagnostics) == 0 {
 		panic("Expected at least one js file to be emitted or at least one error to be created.")
 	}
 
@@ -55,7 +55,7 @@ func DoJsEmitBaseline(
 	}
 
 	var jsCode strings.Builder
-	for file := range result.Js.Values() {
+	for file := range result.JS.Values() {
 		if jsCode.Len() > 0 && !strings.HasSuffix(jsCode.String(), "\n") {
 			jsCode.WriteString("\r\n")
 		}
@@ -138,8 +138,8 @@ func DoJsEmitBaseline(
 	////			}
 	////		}
 	////	}
-	////	compareResultFileSets(withoutChecking.Dts, result.Dts)
-	////	compareResultFileSets(withoutChecking.Js, result.Js)
+	////	compareResultFileSets(withoutChecking.DTS, result.DTS)
+	////	compareResultFileSets(withoutChecking.JS, result.JS)
 	////}
 
 	if tspath.FileExtensionIsOneOf(baselinePath, []string{tspath.ExtensionTs, tspath.ExtensionTsx}) {
@@ -185,10 +185,10 @@ func prepareDeclarationCompilationContext(
 ) *declarationCompilationContext {
 	if options.Declaration.IsTrue() && len(result.Diagnostics) == 0 {
 		if options.EmitDeclarationOnly.IsTrue() {
-			if result.Js.Size() > 0 || (result.Dts.Size() == 0 && !options.NoEmit.IsTrue()) {
+			if result.JS.Size() > 0 || (result.DTS.Size() == 0 && !options.NoEmit.IsTrue()) {
 				panic("Only declaration files should be generated when emitDeclarationOnly:true")
 			}
-		} else if result.Dts.Size() != result.GetNumberOfJSFiles(false /*includeJson*/) {
+		} else if result.DTS.Size() != result.GetNumberOfJSFiles(false /*includeJson*/) {
 			panic("There were no errors and declFiles generated did not match number of js files generated")
 		}
 	}
@@ -228,13 +228,13 @@ func prepareDeclarationCompilationContext(
 		////}
 
 		dTsFileName := tspath.RemoveFileExtension(sourceFileName) + tspath.GetDeclarationEmitExtensionForPath(sourceFileName)
-		return result.Dts.GetOrZero(dTsFileName)
+		return result.DTS.GetOrZero(dTsFileName)
 	}
 
 	addDtsFile := func(file *harnessutil.TestFile, dtsFiles []*harnessutil.TestFile) []*harnessutil.TestFile {
 		if tspath.IsDeclarationFileName(file.UnitName) || tspath.HasJSONFileExtension(file.UnitName) {
 			dtsFiles = append(dtsFiles, file)
-		} else if tspath.HasTSFileExtension(file.UnitName) || (tspath.HasJSFileExtension(file.UnitName) && options.GetAllowJs()) {
+		} else if tspath.HasTSFileExtension(file.UnitName) || (tspath.HasJSFileExtension(file.UnitName) && options.GetAllowJS()) {
 			declFile := findResultCodeFile(file.UnitName)
 			if declFile != nil && findUnit(declFile.UnitName, declInputFiles) == nil && findUnit(declFile.UnitName, declOtherFiles) == nil {
 				dtsFiles = append(dtsFiles, &harnessutil.TestFile{
@@ -247,7 +247,7 @@ func prepareDeclarationCompilationContext(
 	}
 
 	// if the .d.ts is non-empty, confirm it compiles correctly as well
-	if options.Declaration.IsTrue() && len(result.Diagnostics) == 0 && result.Dts.Size() > 0 {
+	if options.Declaration.IsTrue() && len(result.Diagnostics) == 0 && result.DTS.Size() > 0 {
 		for _, file := range inputFiles {
 			declInputFiles = addDtsFile(file, declInputFiles)
 		}

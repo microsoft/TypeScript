@@ -33,7 +33,7 @@ type emitter struct {
 
 func (e *emitter) emit() {
 	// !!! tracing
-	e.emitJsFile(e.sourceFile, e.paths.jsFilePath, e.paths.sourceMapFilePath)
+	e.emitJSFile(e.sourceFile, e.paths.jsFilePath, e.paths.sourceMapFilePath)
 	e.emitDeclarationFile(e.sourceFile, e.paths.declarationFilePath, e.paths.declarationMapPath)
 	e.emitBuildInfo(e.paths.buildInfoPath)
 }
@@ -93,7 +93,7 @@ func (e *emitter) getScriptTransformers(emitContext *printer.EmitContext, source
 	return tx
 }
 
-func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sourceMapFilePath string) {
+func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath string, sourceMapFilePath string) {
 	options := e.host.Options()
 
 	if sourceFile == nil || e.emitOnly != emitAll && e.emitOnly != emitOnlyJs || len(jsFilePath) == 0 {

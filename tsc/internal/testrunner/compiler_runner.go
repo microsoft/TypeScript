@@ -358,7 +358,7 @@ func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string, is
 			headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
 		}
 		header := tspath.GetPathFromPathComponents(headerComponents)
-		tsbaseline.DoJsEmitBaseline(
+		tsbaseline.DoJSEmitBaseline(
 			t,
 			c.configuredName,
 			header,

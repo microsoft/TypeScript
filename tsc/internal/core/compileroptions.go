@@ -207,7 +207,7 @@ func (options *CompilerOptions) ShouldPreserveConstEnums() bool {
 	return options.PreserveConstEnums == TSTrue || options.IsolatedModules == TSTrue
 }
 
-func (options *CompilerOptions) GetAllowJs() bool {
+func (options *CompilerOptions) GetAllowJS() bool {
 	if options.AllowJs != TSUnknown {
 		return options.AllowJs == TSTrue
 	}

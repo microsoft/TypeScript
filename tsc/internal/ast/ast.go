@@ -9467,35 +9467,35 @@ func (node *JSDocTypedefTag) Clone(f *NodeFactory) *Node {
 type JSDocTypeLiteral struct {
 	TypeNodeBase
 	DeclarationBase
-	JsDocPropertyTags []*Node
+	JSDocPropertyTags []*Node
 	IsArrayType       bool
 }
 
-func (f *NodeFactory) NewJSDocTypeLiteral(jsDocPropertyTags []*Node, isArrayType bool) *Node {
+func (f *NodeFactory) NewJSDocTypeLiteral(jsdocPropertyTags []*Node, isArrayType bool) *Node {
 	data := &JSDocTypeLiteral{}
-	data.JsDocPropertyTags = jsDocPropertyTags
+	data.JSDocPropertyTags = jsdocPropertyTags
 	data.IsArrayType = isArrayType
 	return newNode(KindJSDocTypeLiteral, data, f.hooks)
 }
 
-func (f *NodeFactory) UpdateJSDocTypeLiteral(node *JSDocTypeLiteral, jsDocPropertyTags []*Node, isArrayType bool) *Node {
-	if !core.Same(jsDocPropertyTags, node.JsDocPropertyTags) || isArrayType != node.IsArrayType {
-		return updateNode(f.NewJSDocTypeLiteral(jsDocPropertyTags, isArrayType), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateJSDocTypeLiteral(node *JSDocTypeLiteral, jsdocPropertyTags []*Node, isArrayType bool) *Node {
+	if !core.Same(jsdocPropertyTags, node.JSDocPropertyTags) || isArrayType != node.IsArrayType {
+		return updateNode(f.NewJSDocTypeLiteral(jsdocPropertyTags, isArrayType), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocTypeLiteral) ForEachChild(v Visitor) bool {
-	return visitNodes(v, node.JsDocPropertyTags)
+	return visitNodes(v, node.JSDocPropertyTags)
 }
 
 func (node *JSDocTypeLiteral) VisitEachChild(v *NodeVisitor) *Node {
-	jsdocPropertyTags := core.SameMap(node.JsDocPropertyTags, func(n *Node) *Node { return v.visitNode(n) })
+	jsdocPropertyTags := core.SameMap(node.JSDocPropertyTags, func(n *Node) *Node { return v.visitNode(n) })
 	return v.Factory.UpdateJSDocTypeLiteral(node, jsdocPropertyTags, node.IsArrayType)
 }
 
 func (node *JSDocTypeLiteral) Clone(f *NodeFactory) *Node {
-	return cloneNode(f.NewJSDocTypeLiteral(node.JsDocPropertyTags, node.IsArrayType), node.AsNode(), f.hooks)
+	return cloneNode(f.NewJSDocTypeLiteral(node.JSDocPropertyTags, node.IsArrayType), node.AsNode(), f.hooks)
 }
 
 // JSDocSignature
@@ -9657,9 +9657,9 @@ type SourceFile struct {
 
 	// !!!
 
-	CommonJsModuleIndicator *Node
+	CommonJSModuleIndicator *Node
 	ExternalModuleIndicator *Node
-	JsGlobalAugmentations   SymbolTable
+	JSGlobalAugmentations   SymbolTable
 }
 
 func (f *NodeFactory) NewSourceFile(text string, fileName string, path tspath.Path, statements *NodeList) *Node {
@@ -9741,9 +9741,9 @@ func (node *SourceFile) copyFrom(other *SourceFile) {
 	node.ReferencedFiles = other.ReferencedFiles
 	node.TypeReferenceDirectives = other.TypeReferenceDirectives
 	node.LibReferenceDirectives = other.LibReferenceDirectives
-	node.CommonJsModuleIndicator = other.CommonJsModuleIndicator
+	node.CommonJSModuleIndicator = other.CommonJSModuleIndicator
 	node.ExternalModuleIndicator = other.ExternalModuleIndicator
-	node.JsGlobalAugmentations = other.JsGlobalAugmentations
+	node.JSGlobalAugmentations = other.JSGlobalAugmentations
 	node.Flags |= other.Flags
 }
 

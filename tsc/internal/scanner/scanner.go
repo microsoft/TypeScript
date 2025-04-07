@@ -322,7 +322,7 @@ func (s *Scanner) ResetPos(pos int) {
 	s.tokenStart = pos
 }
 
-func (scanner *Scanner) SetSkipJsDocLeadingAsterisks(skip bool) {
+func (scanner *Scanner) SetSkipJSDocLeadingAsterisks(skip bool) {
 	if skip {
 		scanner.skipJSDocLeadingAsterisks += 1
 	} else {
@@ -2247,7 +2247,7 @@ func GetRangeOfTokenAtPosition(sourceFile *ast.SourceFile, pos int) core.TextRan
 	return core.NewTextRange(s.tokenStart, s.pos)
 }
 
-func GetTokenPosOfNode(node *ast.Node, sourceFile *ast.SourceFile, includeJsDoc bool) int {
+func GetTokenPosOfNode(node *ast.Node, sourceFile *ast.SourceFile, includeJSDoc bool) int {
 	// With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
 	// want to skip trivia because this will launch us forward to the next token.
 	if ast.NodeIsMissing(node) {
@@ -2259,8 +2259,8 @@ func GetTokenPosOfNode(node *ast.Node, sourceFile *ast.SourceFile, includeJsDoc 
 		return SkipTriviaEx(sourceFile.Text, node.Pos(), &SkipTriviaOptions{StopAtComments: true})
 	}
 
-	if includeJsDoc && len(node.JSDoc(sourceFile)) > 0 {
-		return GetTokenPosOfNode(node.JSDoc(sourceFile)[0], sourceFile, false /*includeJsDoc*/)
+	if includeJSDoc && len(node.JSDoc(sourceFile)) > 0 {
+		return GetTokenPosOfNode(node.JSDoc(sourceFile)[0], sourceFile, false /*includeJSDoc*/)
 	}
 
 	return SkipTriviaEx(

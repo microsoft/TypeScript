@@ -2108,7 +2108,7 @@ func (p *Parser) parseImportDeclarationOrImportEqualsDeclaration(pos int, hasJSD
 		p.statementHasAwaitIdentifier = saveHasAwaitIdentifier // Import= declaration is always parsed in an Await context, no need to reparse
 		return importEquals
 	}
-	importClause := p.tryParseImportClause(identifier, afterImportPos, isTypeOnly, false /*skipJsDocLeadingAsterisks*/)
+	importClause := p.tryParseImportClause(identifier, afterImportPos, isTypeOnly, false /*skipJSDocLeadingAsterisks*/)
 	p.statementHasAwaitIdentifier = saveHasAwaitIdentifier // import clause is always parsed in an Await context
 	moduleSpecifier := p.parseModuleSpecifier()
 	attributes := p.tryParseImportAttributes()
@@ -2175,19 +2175,19 @@ func (p *Parser) parseModuleSpecifier() *ast.Expression {
 	return p.parseExpression()
 }
 
-func (p *Parser) tryParseImportClause(identifier *ast.Node, pos int, isTypeOnly bool, skipJsDocLeadingAsterisks bool) *ast.Node {
+func (p *Parser) tryParseImportClause(identifier *ast.Node, pos int, isTypeOnly bool, skipJSDocLeadingAsterisks bool) *ast.Node {
 	// ImportDeclaration:
 	//  import ImportClause from ModuleSpecifier ;
 	//  import ModuleSpecifier;
 	if identifier != nil || p.token == ast.KindAsteriskToken || p.token == ast.KindOpenBraceToken {
-		importClause := p.parseImportClause(identifier, pos, isTypeOnly, skipJsDocLeadingAsterisks)
+		importClause := p.parseImportClause(identifier, pos, isTypeOnly, skipJSDocLeadingAsterisks)
 		p.parseExpected(ast.KindFromKeyword)
 		return importClause
 	}
 	return nil
 }
 
-func (p *Parser) parseImportClause(identifier *ast.Node, pos int, isTypeOnly bool, skipJsDocLeadingAsterisks bool) *ast.Node {
+func (p *Parser) parseImportClause(identifier *ast.Node, pos int, isTypeOnly bool, skipJSDocLeadingAsterisks bool) *ast.Node {
 	// ImportClause:
 	//  ImportedDefaultBinding
 	//  NameSpaceImport
@@ -2199,16 +2199,16 @@ func (p *Parser) parseImportClause(identifier *ast.Node, pos int, isTypeOnly boo
 	var namedBindings *ast.Node
 	saveHasAwaitIdentifier := p.statementHasAwaitIdentifier
 	if identifier == nil || p.parseOptional(ast.KindCommaToken) {
-		if skipJsDocLeadingAsterisks {
-			p.scanner.SetSkipJsDocLeadingAsterisks(true)
+		if skipJSDocLeadingAsterisks {
+			p.scanner.SetSkipJSDocLeadingAsterisks(true)
 		}
 		if p.token == ast.KindAsteriskToken {
 			namedBindings = p.parseNamespaceImport()
 		} else {
 			namedBindings = p.parseNamedImports()
 		}
-		if skipJsDocLeadingAsterisks {
-			p.scanner.SetSkipJsDocLeadingAsterisks(false)
+		if skipJSDocLeadingAsterisks {
+			p.scanner.SetSkipJSDocLeadingAsterisks(false)
 		}
 	}
 	result := p.factory.NewImportClause(isTypeOnly, identifier, namedBindings)
@@ -2716,12 +2716,12 @@ func (p *Parser) parseJSDocNullableType() *ast.Node {
 }
 
 func (p *Parser) parseJSDocType() *ast.TypeNode {
-	p.scanner.SetSkipJsDocLeadingAsterisks(true)
+	p.scanner.SetSkipJSDocLeadingAsterisks(true)
 	pos := p.nodePos()
 
 	hasDotDotDot := p.parseOptional(ast.KindDotDotDotToken)
 	t := p.parseTypeOrTypePredicate()
-	p.scanner.SetSkipJsDocLeadingAsterisks(false)
+	p.scanner.SetSkipJSDocLeadingAsterisks(false)
 	if hasDotDotDot {
 		t = p.factory.NewJSDocVariadicType(t)
 		p.finishNode(t, pos)

@@ -1518,16 +1518,16 @@ func getFileNamesFromConfigSpecs(
 }
 
 func GetSupportedExtensions(options *core.CompilerOptions, extraFileExtensions []fileExtensionInfo) [][]string {
-	needJsExtensions := options.GetAllowJs()
+	needJSExtensions := options.GetAllowJS()
 	if len(extraFileExtensions) == 0 {
-		if needJsExtensions {
+		if needJSExtensions {
 			return tspath.AllSupportedExtensions
 		} else {
 			return tspath.SupportedTSExtensions
 		}
 	}
 	var builtins [][]string
-	if needJsExtensions {
+	if needJSExtensions {
 		builtins = tspath.AllSupportedExtensions
 	} else {
 		builtins = tspath.SupportedTSExtensions
@@ -1535,7 +1535,7 @@ func GetSupportedExtensions(options *core.CompilerOptions, extraFileExtensions [
 	flatBuiltins := core.Flatten(builtins)
 	var result [][]string
 	for _, x := range extraFileExtensions {
-		if x.scriptKind == core.ScriptKindDeferred || (needJsExtensions && (x.scriptKind == core.ScriptKindJS || x.scriptKind == core.ScriptKindJSX)) && !slices.Contains(flatBuiltins, x.extension) {
+		if x.scriptKind == core.ScriptKindDeferred || (needJSExtensions && (x.scriptKind == core.ScriptKindJS || x.scriptKind == core.ScriptKindJSX)) && !slices.Contains(flatBuiltins, x.extension) {
 			result = append(result, []string{x.extension})
 		}
 	}
