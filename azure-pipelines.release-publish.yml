@@ -5,7 +5,7 @@ parameters:
   - name: _REMINDER
     displayName: Review & undraft the release at https://github.com/microsoft/TypeScript/releases once it appears!
     type: boolean
-    default: false
+    default: true
   - name: PUBLISH_TAG
     displayName: npm publish tag
     default: dev
