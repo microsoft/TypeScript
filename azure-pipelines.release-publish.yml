@@ -119,7 +119,7 @@ extends:
                   title: TypeScript $(RELEASE_TITLE_NAME)
                   releaseNotesSource: inline
                   releaseNotesInline: |
-                    <!--
+                    <!---
                     For release notes, check out the [release announcement]().
                     For new features, check out the [What's new in TypeScript $(TAG_NAME)]().
                     For the complete list of fixed issues, check out the
