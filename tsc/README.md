@@ -60,24 +60,22 @@ This will launch a new VS Code instance which uses the Corsa LS as the backend. 
 
 This is still a work in progress and is not yet at full feature parity with TypeScript. Bugs may exist. Please check this list carefully before logging a new issue or assuming an intentional change.
 
-Status overview:
-
- * Program creation (read `lib`, `target`, `reference`, `import`, `files`, `include`, and `exclude`): **done**. You should see the *same files*, with modules resolved to the *same locations*, as in a TypeScript 5.8 (TS5.8) invocation
-   * Not all resolution modes are supported yet
- * Parsing/scanning (read source text and determine syntax shape): **done**. You should see the exact same *syntax errors* as in a TS5.8 invocation
- * Commandline and `tsconfig.json` parsing: **mostly done**. Note that the entry point is slightly different (for now)
- * Type resolution (resolve computed types to a concrete internal representation): **done**. You should see the same types as in TS5.8
- * Type checking (check for problems in functions, classes, and statements): **done**. You should see the same errors, in the same locations, with the same messages, as TS 5.8
-    * Types printback in errors may display slightly differently; this is in progress
- * JavaScript-specific inference and JS Doc: **not ready**
- * JSX: **done**
- * Declaration emit: **not ready**. Coming soon!
- * Emit (JS output): **in progress**. `target: esnext` (minimal downleveling) is well-supported but other targets may have gaps
- * Watch mode: **prototype** (watches the correct files and rebuilds, but doesn't do incremental rechecking)
- * Build mode / project references: **not ready**
- * Incremental build: **not ready**
- * Language service (LSP): **prototype** only, expect minimal functionality (errors, hover, go to def). More features soon!
- * API: **not ready**
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Program creation | done | Same files and module resolution as TS5.8. Not all resolution modes supported yet. |
+| Parsing/scanning | done | Exact same syntax errors as TS5.8 |
+| Commandline and `tsconfig.json` parsing | mostly done | Entry point slightly different for now |
+| Type resolution | done | Same types as TS5.8 |
+| Type checking | done | Same errors, locations, and messages as TS5.8. Types printback in errors may display differently (in progress) |
+| JavaScript-specific inference and JS Doc | not ready | - |
+| JSX | done | - |
+| Declaration emit | not ready | Coming soon |
+| Emit (JS output) | in progress | `target: esnext` well-supported, other targets may have gaps |
+| Watch mode | prototype | Watches files and rebuilds, but no incremental rechecking |
+| Build mode / project references | not ready | - |
+| Incremental build | not ready | - |
+| Language service (LSP) | prototype | Minimal functionality (errors, hover, go to def). More features coming soon |
+| API | not ready | - |
 
 Definitions:
 
