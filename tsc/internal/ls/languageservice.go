@@ -11,12 +11,14 @@ import (
 var _ compiler.CompilerHost = (*LanguageService)(nil)
 
 type LanguageService struct {
-	host Host
+	converters *Converters
+	host       Host
 }
 
 func NewLanguageService(host Host) *LanguageService {
 	return &LanguageService{
-		host: host,
+		host:       host,
+		converters: NewConverters(host.GetPositionEncoding(), host.GetScriptInfo),
 	}
 }
 
