@@ -429,18 +429,18 @@ type cachedCompilerHost struct {
 	options *core.CompilerOptions
 }
 
-var sourceFileCache sync.Map
+var sourceFileCache collections.SyncMap[sourceFileCacheKey, *ast.SourceFile]
+
+type sourceFileCacheKey struct {
+	core.SourceFileAffectingCompilerOptions
+	fileName        string
+	path            tspath.Path
+	languageVersion core.ScriptTarget
+	text            string
+}
 
 func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, languageVersion core.ScriptTarget) *ast.SourceFile {
 	text, _ := h.FS().ReadFile(fileName)
-
-	type sourceFileCacheKey struct {
-		core.SourceFileAffectingCompilerOptions
-		fileName        string
-		path            tspath.Path
-		languageVersion core.ScriptTarget
-		text            string
-	}
 
 	key := sourceFileCacheKey{
 		SourceFileAffectingCompilerOptions: h.options.SourceFileAffecting(),
@@ -451,7 +451,7 @@ func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, la
 	}
 
 	if cached, ok := sourceFileCache.Load(key); ok {
-		return cached.(*ast.SourceFile)
+		return cached
 	}
 
 	// !!! dedupe with compiler.compilerHost
@@ -464,7 +464,7 @@ func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, la
 	}
 
 	result, _ := sourceFileCache.LoadOrStore(key, sourceFile)
-	return result.(*ast.SourceFile)
+	return result
 }
 
 func createCompilerHost(fs vfs.FS, defaultLibraryPath string, options *core.CompilerOptions, currentDirectory string) compiler.CompilerHost {

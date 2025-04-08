@@ -1,19 +1,18 @@
 package cachedvfs
 
 import (
-	"sync"
-
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 type FS struct {
 	fs vfs.FS
 
-	directoryExistsCache      sync.Map // map[string]bool
-	fileExistsCache           sync.Map // map[string]bool
-	getAccessibleEntriesCache sync.Map // map[string]vfs.Entries
-	realpathCache             sync.Map // map[string]string
-	statCache                 sync.Map // map[string]vfs.FileInfo
+	directoryExistsCache      collections.SyncMap[string, bool]
+	fileExistsCache           collections.SyncMap[string, bool]
+	getAccessibleEntriesCache collections.SyncMap[string, vfs.Entries]
+	realpathCache             collections.SyncMap[string, string]
+	statCache                 collections.SyncMap[string, vfs.FileInfo]
 }
 
 var _ vfs.FS = (*FS)(nil)
@@ -32,7 +31,7 @@ func (fsys *FS) ClearCache() {
 
 func (fsys *FS) DirectoryExists(path string) bool {
 	if ret, ok := fsys.directoryExistsCache.Load(path); ok {
-		return ret.(bool)
+		return ret
 	}
 	ret := fsys.fs.DirectoryExists(path)
 	fsys.directoryExistsCache.Store(path, ret)
@@ -41,7 +40,7 @@ func (fsys *FS) DirectoryExists(path string) bool {
 
 func (fsys *FS) FileExists(path string) bool {
 	if ret, ok := fsys.fileExistsCache.Load(path); ok {
-		return ret.(bool)
+		return ret
 	}
 	ret := fsys.fs.FileExists(path)
 	fsys.fileExistsCache.Store(path, ret)
@@ -50,7 +49,7 @@ func (fsys *FS) FileExists(path string) bool {
 
 func (fsys *FS) GetAccessibleEntries(path string) vfs.Entries {
 	if ret, ok := fsys.getAccessibleEntriesCache.Load(path); ok {
-		return ret.(vfs.Entries)
+		return ret
 	}
 	ret := fsys.fs.GetAccessibleEntries(path)
 	fsys.getAccessibleEntriesCache.Store(path, ret)
@@ -63,7 +62,7 @@ func (fsys *FS) ReadFile(path string) (contents string, ok bool) {
 
 func (fsys *FS) Realpath(path string) string {
 	if ret, ok := fsys.realpathCache.Load(path); ok {
-		return ret.(string)
+		return ret
 	}
 	ret := fsys.fs.Realpath(path)
 	fsys.realpathCache.Store(path, ret)
