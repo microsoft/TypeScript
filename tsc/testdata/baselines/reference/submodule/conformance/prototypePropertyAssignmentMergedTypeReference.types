@@ -21,7 +21,7 @@ f.prototype.a = "a";
 
 /** @type {new () => f} */
 var x = f;
->x : () => number
+>x : new () => f
 >f : () => number
 
 

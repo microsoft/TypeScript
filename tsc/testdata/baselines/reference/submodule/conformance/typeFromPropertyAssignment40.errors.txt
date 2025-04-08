@@ -1,0 +1,14 @@
+typeFromPropertyAssignment40.js(5,12): error TS2749: 'Outer' refers to a value, but is being used as a type here. Did you mean 'typeof Outer'?
+
+
+==== typeFromPropertyAssignment40.js (1 errors) ====
+    function Outer() {
+        var self = this
+        self.y = 2
+    }
+    /** @type {Outer} */
+               ~~~~~
+!!! error TS2749: 'Outer' refers to a value, but is being used as a type here. Did you mean 'typeof Outer'?
+    var ok
+    ok.y
+    

@@ -30,10 +30,11 @@ c.Cls = class {}
  * @return {string} 
  */
 export function d(a, b) { return /** @type {*} */(null); }
->d : (a: any, b: any) => any
->a : any
->b : any
->(null) : null
+>d : (a: number, b: number) => string
+>a : number
+>b : number
+>(null) : any
+>null : any
 
 /**
  * @template T,U
@@ -42,75 +43,76 @@ export function d(a, b) { return /** @type {*} */(null); }
  * @return {T & U} 
  */
 export function e(a, b) { return /** @type {*} */(null); }
->e : (a: any, b: any) => any
->a : any
->b : any
->(null) : null
+>e : <T, U>(a: T, b: U) => T & U
+>a : T
+>b : U
+>(null) : any
+>null : any
 
 /**
  * @template T
  * @param {T} a
  */
 export function f(a) {
->f : { (a: any): any; self: ???; }
->a : any
+>f : { <T>(a: T): T; self: ???; }
+>a : T
 
     return a;
->a : any
+>a : T
 }
 f.self = f;
->f.self = f : { (a: any): any; self: ???; }
->f.self : { (a: any): any; self: ???; }
->f : { (a: any): any; self: ???; }
->self : { (a: any): any; self: ???; }
->f : { (a: any): any; self: ???; }
+>f.self = f : { <T>(a: T): T; self: ???; }
+>f.self : { <T>(a: T): T; self: ???; }
+>f : { <T>(a: T): T; self: ???; }
+>self : { <T>(a: T): T; self: ???; }
+>f : { <T>(a: T): T; self: ???; }
 
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
  */
 function g(a, b) {
->g : (a: any, b: any) => any
->a : any
->b : any
+>g : (a: { x: string; }, b: { y: ???; }) => any
+>a : { x: string; }
+>b : { y: ???; }
 
     return a.x && b.y();
 >a.x && b.y() : any
->a.x : any
->a : any
->x : any
+>a.x : string
+>a : { x: string; }
+>x : string
 >b.y() : any
->b.y : any
->b : any
->y : any
+>b.y : { y: ???; }
+>b : { y: ???; }
+>y : { y: ???; }
 }
 
 export { g };
->g : (a: any, b: any) => any
+>g : (a: { x: string; }, b: { y: ???; }) => any
 
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
  */
 function hh(a, b) {
->hh : (a: any, b: any) => any
->a : any
->b : any
+>hh : (a: { x: string; }, b: { y: ???; }) => any
+>a : { x: string; }
+>b : { y: ???; }
 
     return a.x && b.y();
 >a.x && b.y() : any
->a.x : any
->a : any
->x : any
+>a.x : string
+>a : { x: string; }
+>x : string
 >b.y() : any
->b.y : any
->b : any
->y : any
+>b.y : { y: ???; }
+>b : { y: ???; }
+>y : { y: ???; }
 }
 
 export { hh as h };
->hh : (a: any, b: any) => any
->h : (a: any, b: any) => any
+>hh : (a: { x: string; }, b: { y: ???; }) => any
+>h : (a: { x: string; }, b: { y: ???; }) => any
 
 export function i() {}
 >i : () => void

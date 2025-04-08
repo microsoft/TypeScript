@@ -3,24 +3,18 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+/a.js(5,21): error TS7006: Parameter 'x' implicitly has an 'any' type.
-+/a.js(5,24): error TS7006: Parameter 'y' implicitly has an 'any' type.
 +/a.js(6,11): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +/a.js(7,16): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +/a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +/a.js(10,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +
 +
-+==== /a.js (6 errors) ====
++==== /a.js (4 errors) ====
 +    /**
 +     * @param {number | undefined} x
 +     * @param {number | undefined} y
 +     */
 +    export function Foo(x, y) {
-+                        ~
-+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
-+                           ~
-+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
 +        if (!(this instanceof Foo)) {
 +              ~~~~
 +!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.

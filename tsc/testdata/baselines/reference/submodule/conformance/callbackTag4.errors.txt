@@ -1,9 +1,10 @@
+a.js(9,12): error TS2304: Cannot find name 'C'.
 a.js(10,22): error TS7006: Parameter 'a' implicitly has an 'any' type.
 a.js(10,25): error TS7006: Parameter 'b' implicitly has an 'any' type.
 a.js(11,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== a.js (3 errors) ====
+==== a.js (4 errors) ====
     /**
      * @callback C
      * @this {{ a: string, b: number }}
@@ -13,6 +14,8 @@ a.js(11,5): error TS2683: 'this' implicitly has type 'any' because it does not h
      */
     
     /** @type {C} */
+               ~
+!!! error TS2304: Cannot find name 'C'.
     const cb = function (a, b) {
                          ~
 !!! error TS7006: Parameter 'a' implicitly has an 'any' type.

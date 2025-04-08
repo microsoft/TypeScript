@@ -20,12 +20,11 @@
  >prototype : any
  >a : any
  >"a" : "a"
- 
+@@= skipped -8, +8 lines =@@
  /** @type {new () => f} */
  var x = f;
-->x : new () => f
+ >x : new () => f
 ->f : typeof f
-+>x : () => number
 +>f : () => number
  
  

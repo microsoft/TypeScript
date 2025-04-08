@@ -57,7 +57,7 @@ const test8: ClassComponent<any> = new C();
 === file1.js ===
 /** @type {ClassComponent<any>} */
 const test9 = new C();
->test9 : C
+>test9 : ClassComponent<any>
 >new C() : C
 >C : typeof C
 

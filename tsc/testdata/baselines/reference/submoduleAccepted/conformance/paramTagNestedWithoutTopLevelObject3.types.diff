@@ -1,11 +1,17 @@
 --- old.paramTagNestedWithoutTopLevelObject3.types
 +++ new.paramTagNestedWithoutTopLevelObject3.types
-@@= skipped -5, +5 lines =@@
-  * @param {number} xyz.bar.p
+@@= skipped -6, +6 lines =@@
   */
  function g(xyz) {
-->g : (xyz: object) => any
-+>g : (xyz: any) => any
- >xyz : any
+ >g : (xyz: object) => any
+->xyz : any
++>xyz : object
  
      return xyz.bar.p;
+ >xyz.bar.p : any
+ >xyz.bar : any
+->xyz : any
++>xyz : object
+ >bar : any
+ >p : any
+ }

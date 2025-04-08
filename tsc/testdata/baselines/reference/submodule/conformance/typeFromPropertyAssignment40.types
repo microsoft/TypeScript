@@ -17,10 +17,10 @@ function Outer() {
 }
 /** @type {Outer} */
 var ok
->ok : any
+>ok : Outer
 
 ok.y
 >ok.y : any
->ok : any
+>ok : Outer
 >y : any
 

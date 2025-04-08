@@ -1,0 +1,9 @@
+/a.js(1,13): error TS1098: Type parameter list cannot be empty.
+
+
+==== /a.js (1 errors) ====
+    /** @param {<} x */
+                ~~
+!!! error TS1098: Type parameter list cannot be empty.
+    function f(x) {}
+    

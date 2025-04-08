@@ -5,18 +5,18 @@
 
 /** @type {Test<number>} */
 const test = dibbity => dibbity
->test : (dibbity: any) => any
->dibbity => dibbity : (dibbity: any) => any
->dibbity : any
->dibbity : any
+>test : <T1 extends T>(data: T1) => T1
+>dibbity => dibbity : <T1 extends T>(dibbity: T1) => T1
+>dibbity : T1
+>dibbity : T1
 
 test(1) // ok, T=1
->test(1) : any
->test : (dibbity: any) => any
+>test(1) : 1
+>test : <T1 extends T>(data: T1) => T1
 >1 : 1
 
 test('hi') // error, T=number
->test('hi') : any
->test : (dibbity: any) => any
+>test('hi') : "hi"
+>test : <T1 extends T>(data: T1) => T1
 >'hi' : "hi"
 

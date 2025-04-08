@@ -21,12 +21,12 @@
  * @returns {string}
  */
  function getTypeName(x) {
->getTypeName : (x: any) => "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : any
+>getTypeName : (x: unknown) => string
+>x : unknown
 
   return typeof x;
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : any
+>x : unknown
 }
 
 /**
@@ -35,10 +35,10 @@
  * @returns {T}
  */
 const identity = x => x;
->identity : (x: any) => any
->x => x : (x: any) => any
->x : any
->x : any
+>identity : <T>(x: T) => T
+>x => x : <T>(x: T) => T
+>x : T
+>x : T
 
 /**
  * @template T
@@ -60,14 +60,14 @@ const identity = x => x;
  * @returns {unknown[]}
  */
 function flatMap(array, iterable = identity) {
->flatMap : (array: any, iterable?: (x: any) => any) => any[]
->array : any
->iterable : (x: any) => any
->identity : (x: any) => any
+>flatMap : (array: unknown[], iterable?: (x: unknown) => unknown) => unknown[]
+>array : unknown[]
+>iterable : (x: unknown) => unknown
+>identity : <T>(x: T) => T
 
   /** @type {unknown[]} */
   const result = [];
->result : any[]
+>result : unknown[]
 >[] : undefined[]
 
   for (let i = 0; i < array.length; i += 1) {
@@ -75,27 +75,28 @@ function flatMap(array, iterable = identity) {
 >0 : 0
 >i < array.length : boolean
 >i : number
->array.length : any
->array : any
->length : any
+>array.length : number
+>array : unknown[]
+>length : number
 >i += 1 : number
 >i : number
 >1 : 1
 
     result.push(.../** @type {unknown[]} */(iterable(array[i])));
 >result.push(.../** @type {unknown[]} */(iterable(array[i]))) : number
->result.push : (...items: any[]) => number
->result : any[]
->push : (...items: any[]) => number
->.../** @type {unknown[]} */(iterable(array[i])) : any
->(iterable(array[i])) : any
->iterable(array[i]) : any
->iterable : (x: any) => any
->array[i] : any
->array : any
+>result.push : (...items: unknown[]) => number
+>result : unknown[]
+>push : (...items: unknown[]) => number
+>.../** @type {unknown[]} */(iterable(array[i])) : unknown
+>(iterable(array[i])) : unknown[]
+>iterable(array[i]) : unknown[]
+>iterable(array[i]) : unknown
+>iterable : (x: unknown) => unknown
+>array[i] : unknown
+>array : unknown[]
 >i : number
   }
   return result;
->result : any[]
+>result : unknown[]
 }
 

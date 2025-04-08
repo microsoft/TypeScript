@@ -17,19 +17,19 @@
  * @returns {string | number}
  */
 export function overloaded(a,b) {
->overloaded : (a: any, b: any) => string | number
->a : any
->b : any
+>overloaded : (a: string | number, b: string | number) => string | number
+>a : string | number
+>b : string | number
 
   if (typeof a === "string" && typeof b === "string") {
 >typeof a === "string" && typeof b === "string" : boolean
 >typeof a === "string" : boolean
 >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->a : any
+>a : string | number
 >"string" : "string"
 >typeof b === "string" : boolean
 >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->b : any
+>b : string | number
 >"string" : "string"
 
     return a + b;
@@ -41,11 +41,11 @@ export function overloaded(a,b) {
 >typeof a === "number" && typeof b === "number" : boolean
 >typeof a === "number" : boolean
 >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->a : any
+>a : string | number
 >"number" : "number"
 >typeof b === "number" : boolean
 >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->b : any
+>b : string | number
 >"number" : "number"
 
     return a + b;
@@ -61,21 +61,21 @@ export function overloaded(a,b) {
 var o1 = overloaded(1,2)
 >o1 : string | number
 >overloaded(1,2) : string | number
->overloaded : (a: any, b: any) => string | number
+>overloaded : (a: string | number, b: string | number) => string | number
 >1 : 1
 >2 : 2
 
 var o2 = overloaded("zero", "one")
 >o2 : string | number
 >overloaded("zero", "one") : string | number
->overloaded : (a: any, b: any) => string | number
+>overloaded : (a: string | number, b: string | number) => string | number
 >"zero" : "zero"
 >"one" : "one"
 
 var o3 = overloaded("a",false)
 >o3 : string | number
 >overloaded("a",false) : string | number
->overloaded : (a: any, b: any) => string | number
+>overloaded : (a: string | number, b: string | number) => string | number
 >"a" : "a"
 >false : false
 

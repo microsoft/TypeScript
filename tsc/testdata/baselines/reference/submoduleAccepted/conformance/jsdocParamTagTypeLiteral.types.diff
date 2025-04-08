@@ -1,26 +1,6 @@
 --- old.jsdocParamTagTypeLiteral.types
 +++ new.jsdocParamTagTypeLiteral.types
-@@= skipped -5, +5 lines =@@
-  * @param {string} unrelated - not actually related because it's not notSpecial.unrelated
-  */
- function normal(notSpecial) {
-->normal : (notSpecial: Object) => void
-->notSpecial : Object
-+>normal : (notSpecial: any) => void
-+>notSpecial : any
- 
-     notSpecial; // should just be 'Object'
-->notSpecial : Object
-+>notSpecial : any
- }
- normal(12);
- >normal(12) : void
-->normal : (notSpecial: Object) => void
-+>normal : (notSpecial: any) => void
- >12 : 12
- 
- /**
-@@= skipped -19, +19 lines =@@
+@@= skipped -24, +24 lines =@@
   * @param {string} [opts1.w="hi"] doc5
   */
  function foo1(opts1) {

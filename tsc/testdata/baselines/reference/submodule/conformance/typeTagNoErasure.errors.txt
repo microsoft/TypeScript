@@ -1,0 +1,14 @@
+typeTagNoErasure.js(1,39): error TS2304: Cannot find name 'T'.
+
+
+==== typeTagNoErasure.js (1 errors) ====
+    /** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */
+                                          ~
+!!! error TS2304: Cannot find name 'T'.
+    
+    /** @type {Test<number>} */
+    const test = dibbity => dibbity
+    
+    test(1) // ok, T=1
+    test('hi') // error, T=number
+    

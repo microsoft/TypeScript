@@ -12,7 +12,7 @@ var ex;
 
 /** @type {App} */
 const app = {
->app : { name: string; icons: { image32: string; image64: string; }; }
+>app : App
 >{    name: 'name',    icons: {        image32: 'x.png',        image64: 'y.png',    }} : { name: string; icons: { image32: string; image64: string; }; }
 
     name: 'name',
@@ -45,7 +45,7 @@ var intercessor = 1
 
 /** @type {Opp} */
 var mistake;
->mistake : any
+>mistake : string
 
 /** @typedef {Object} Upp
  * @property {string} name
@@ -55,7 +55,7 @@ var mistake;
 
 /** @type {Upp} */
 var sala = { name: 'uppsala', not: 0, nested: "ok" };
->sala : { name: string; not: number; nested: string; }
+>sala : Upp
 >{ name: 'uppsala', not: 0, nested: "ok" } : { name: string; not: number; nested: string; }
 >name : string
 >'uppsala' : "uppsala"
@@ -65,17 +65,17 @@ var sala = { name: 'uppsala', not: 0, nested: "ok" };
 >"ok" : "ok"
 
 sala.name
->sala.name : string
->sala : { name: string; not: number; nested: string; }
->name : string
+>sala.name : any
+>sala : Upp
+>name : any
 
 sala.not
->sala.not : number
->sala : { name: string; not: number; nested: string; }
->not : number
+>sala.not : any
+>sala : Upp
+>not : any
 
 sala.nested
->sala.nested : string
->sala : { name: string; not: number; nested: string; }
->nested : string
+>sala.nested : any
+>sala : Upp
+>nested : any
 

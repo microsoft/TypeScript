@@ -1,7 +1,11 @@
+a.js(24,13): error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
+a.js(25,12): error TS2749: 'Second' refers to a value, but is being used as a type here. Did you mean 'typeof Second'?
+a.js(26,12): error TS2749: 'Fs' refers to a value, but is being used as a type here. Did you mean 'typeof Fs'?
+a.js(35,16): error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
 a.js(37,16): error TS2339: Property 'UNKNOWN' does not exist on type '{ START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }'.
 
 
-==== a.js (1 errors) ====
+==== a.js (5 errors) ====
     /** @enum {string} */
     const Target = {
         START: "start",
@@ -26,8 +30,14 @@ a.js(37,16): error TS2339: Property 'UNKNOWN' does not exist on type '{ START: s
     }
     
     /** @param {Target} t
+                ~~~~~~
+!!! error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
      * @param {Second} s
+               ~~~~~~
+!!! error TS2749: 'Second' refers to a value, but is being used as a type here. Did you mean 'typeof Second'?
      * @param {Fs} f
+               ~~
+!!! error TS2749: 'Fs' refers to a value, but is being used as a type here. Did you mean 'typeof Fs'?
      */
     function consume(t,s,f) {
         /** @type {string} */
@@ -37,6 +47,8 @@ a.js(37,16): error TS2339: Property 'UNKNOWN' does not exist on type '{ START: s
         /** @type {(n: number) => number} */
         var fun = f
         /** @type {Target} */
+                   ~~~~~~
+!!! error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
         var v = Target.START
         v = Target.UNKNOWN // error, can't find 'UNKNOWN'
                    ~~~~~~~

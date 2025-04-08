@@ -21,16 +21,13 @@
  >y : any
  >2 : 2
  }
- /** @type {Outer} */
- var ok
-->ok : Outer
-+>ok : any
+@@= skipped -18, +18 lines =@@
+ >ok : Outer
  
  ok.y
 ->ok.y : number
-->ok : Outer
-->y : number
 +>ok.y : any
-+>ok : any
+ >ok : Outer
+->y : number
 +>y : any
  

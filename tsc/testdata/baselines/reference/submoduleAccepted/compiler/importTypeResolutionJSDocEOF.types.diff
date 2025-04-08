@@ -5,6 +5,6 @@
  /** @type {Bar} */
  export let bar;
 ->bar : import("interfaces").Bar
-+>bar : any
++>bar : Bar
  
  /** @typedef {import('./interfaces').Bar} Bar */

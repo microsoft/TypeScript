@@ -8,12 +8,10 @@
 +>inlined : Symbol(inlined, Decl(propertyAssignmentUseParentType2.js, 1, 12))
  
  inlined.nuo = 789
-->inlined.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 0, 25))
+ >inlined.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 0, 25))
 ->inlined : Symbol(inlined, Decl(propertyAssignmentUseParentType2.js, 1, 12), Decl(propertyAssignmentUseParentType2.js, 1, 33))
-->nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 0, 25))
-+>inlined.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 1, 33))
 +>inlined : Symbol(inlined, Decl(propertyAssignmentUseParentType2.js, 1, 12))
-+>nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 1, 33))
+ >nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 0, 25))
  
  /** @type {{ (): boolean; nuo: 789 }} */
  export const duplicated = () => true
@@ -22,12 +20,10 @@
  
  /** @type {789} */
  duplicated.nuo = 789
-->duplicated.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 4, 25))
+ >duplicated.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 4, 25))
 ->duplicated : Symbol(duplicated, Decl(propertyAssignmentUseParentType2.js, 5, 12), Decl(propertyAssignmentUseParentType2.js, 5, 36))
-->nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 4, 25))
-+>duplicated.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 5, 36))
 +>duplicated : Symbol(duplicated, Decl(propertyAssignmentUseParentType2.js, 5, 12))
-+>nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 5, 36))
+ >nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 4, 25))
  
  /** @type {{ (): boolean; nuo: 789 }} */
  export const conflictingDuplicated = () => true
@@ -36,10 +32,8 @@
  
  /** @type {1000} */
  conflictingDuplicated.nuo = 789
-->conflictingDuplicated.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 9, 25))
+ >conflictingDuplicated.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 9, 25))
 ->conflictingDuplicated : Symbol(conflictingDuplicated, Decl(propertyAssignmentUseParentType2.js, 10, 12), Decl(propertyAssignmentUseParentType2.js, 10, 47))
-->nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 9, 25))
-+>conflictingDuplicated.nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 10, 47))
 +>conflictingDuplicated : Symbol(conflictingDuplicated, Decl(propertyAssignmentUseParentType2.js, 10, 12))
-+>nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 10, 47))
+ >nuo : Symbol(nuo, Decl(propertyAssignmentUseParentType2.js, 9, 25))
  

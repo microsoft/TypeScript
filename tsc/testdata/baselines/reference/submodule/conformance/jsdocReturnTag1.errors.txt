@@ -1,12 +1,16 @@
+returns.js(5,5): error TS2322: Type 'number' is not assignable to type 'string'.
+returns.js(12,5): error TS2322: Type 'number' is not assignable to type 'string'.
 returns.js(19,12): error TS2872: This kind of expression is always truthy.
 
 
-==== returns.js (1 errors) ====
+==== returns.js (3 errors) ====
     /**
      * @returns {string} This comment is not currently exposed
      */
     function f() {
         return 5;
+        ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     }
     
     /**
@@ -14,6 +18,8 @@ returns.js(19,12): error TS2872: This kind of expression is always truthy.
      */
     function f1() {
         return 5;
+        ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     }
     
     /**

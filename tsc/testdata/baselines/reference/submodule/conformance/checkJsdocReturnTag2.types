@@ -6,7 +6,7 @@
  * @returns {string} This comment is not currently exposed
  */
 function f() {
->f : () => number
+>f : () => string
 
     return 5;
 >5 : 5
@@ -16,7 +16,7 @@ function f() {
  * @returns {string | number} This comment is not currently exposed
  */
 function f1() {
->f1 : () => 5 | true
+>f1 : () => string | number
 
     return 5 || true;
 >5 || true : 5 | true

@@ -29,7 +29,7 @@
   */
  var stringFromCharCode = String.fromCharCode;
 ->stringFromCharCode : (...arg0: number[]) => string
-+>stringFromCharCode : (...codes: number[]) => string
++>stringFromCharCode : function
  >String.fromCharCode : (...codes: number[]) => string
  >String : StringConstructor
  >fromCharCode : (...codes: number[]) => string

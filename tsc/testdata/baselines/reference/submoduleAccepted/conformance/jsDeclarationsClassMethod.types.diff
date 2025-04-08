@@ -94,28 +94,7 @@
  }
  
  class C2 {
-@@= skipped -24, +24 lines =@@
-      * @returns {number}
-      */
-     method1(x, y) {
-->method1 : (x: number, y: number) => number
-->x : number
-->y : number
-+>method1 : (x: any, y: any) => any
-+>x : any
-+>y : any
- 
-         return x + y;
-->x + y : number
-->x : number
-->y : number
-+>x + y : any
-+>x : any
-+>y : any
-     }
- }
- 
-@@= skipped -18, +18 lines =@@
+@@= skipped -42, +42 lines =@@
   * @returns {number}
   */
  C2.prototype.method2 = function (x, y) {

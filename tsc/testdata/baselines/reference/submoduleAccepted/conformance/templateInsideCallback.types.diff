@@ -5,70 +5,28 @@
   */
  const identity = x => x;
 ->identity : any
-->x => x : <T>(x: any) => any
-+>identity : (x: any) => any
-+>x => x : (x: any) => any
++>identity : Call<T>
+ >x => x : <T>(x: any) => any
  >x : any
  >x : any
- 
 @@= skipped -34, +34 lines =@@
   * @returns {unknown[]}
   */
  function flatMap(array, iterable = identity) {
 ->flatMap : { <U>(): any; (): any; }
-->array : unknown[]
-->iterable : (x: unknown) => unknown
++>flatMap : (array: unknown[], iterable?: (x: unknown) => unknown) => unknown[]
+ >array : unknown[]
+ >iterable : (x: unknown) => unknown
 ->identity : any
-+>flatMap : (array: any, iterable?: (x: any) => any) => any[]
-+>array : any
-+>iterable : (x: any) => any
-+>identity : (x: any) => any
++>identity : Call<T>
  
    /** @type {unknown[]} */
    const result = [];
-->result : unknown[]
-+>result : any[]
- >[] : never[]
- 
-   for (let i = 0; i < array.length; i += 1) {
-@@= skipped -15, +15 lines =@@
- >0 : 0
- >i < array.length : boolean
- >i : number
-->array.length : number
-->array : unknown[]
-->length : number
-+>array.length : any
-+>array : any
-+>length : any
- >i += 1 : number
- >i : number
- >1 : 1
- 
-     result.push(.../** @type {unknown[]} */(iterable(array[i])));
- >result.push(.../** @type {unknown[]} */(iterable(array[i]))) : number
-->result.push : (...items: unknown[]) => number
-->result : unknown[]
-->push : (...items: unknown[]) => number
-->.../** @type {unknown[]} */(iterable(array[i])) : unknown
-->(iterable(array[i])) : unknown[]
-->iterable(array[i]) : unknown
-->iterable : (x: unknown) => unknown
-->array[i] : unknown
-->array : unknown[]
-+>result.push : (...items: any[]) => number
-+>result : any[]
-+>push : (...items: any[]) => number
-+>.../** @type {unknown[]} */(iterable(array[i])) : any
-+>(iterable(array[i])) : any
-+>iterable(array[i]) : any
-+>iterable : (x: any) => any
-+>array[i] : any
-+>array : any
- >i : number
-   }
-   return result;
-->result : unknown[]
-+>result : any[]
- }
- 
+@@= skipped -29, +29 lines =@@
+ >push : (...items: unknown[]) => number
+ >.../** @type {unknown[]} */(iterable(array[i])) : unknown
+ >(iterable(array[i])) : unknown[]
++>iterable(array[i]) : unknown[]
+ >iterable(array[i]) : unknown
+ >iterable : (x: unknown) => unknown
+ >array[i] : unknown

@@ -1,0 +1,15 @@
+usage.js(1,12): error TS2304: Cannot find name 'Bar'.
+
+
+==== interfaces.d.ts (0 errors) ====
+    export interface Bar {
+        prop: string
+    }
+    
+==== usage.js (1 errors) ====
+    /** @type {Bar} */
+               ~~~
+!!! error TS2304: Cannot find name 'Bar'.
+    export let bar;
+    
+    /** @typedef {import('./interfaces').Bar} Bar */

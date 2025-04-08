@@ -47,21 +47,21 @@ Ns.Two.prototype = {
  * @type {Ns.One}
  */
 var one;
->one : any
+>one : One
 
 one.wat;
 >one.wat : any
->one : any
+>one : One
 >wat : any
 
 /**
  * @type {Ns.Two}
  */
 var two;
->two : any
+>two : Two
 
 two.wat;
 >two.wat : any
->two : any
+>two : Two
 >wat : any
 

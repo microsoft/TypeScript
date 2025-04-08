@@ -6,17 +6,16 @@
 -/index.js(5,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
 -/index.js(6,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
 -/index.js(7,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
-+/index.js(5,10): error TS2304: Cannot find name 'JSDocType'.
-+/index.js(6,10): error TS2304: Cannot find name 'JSDocType'.
++/index.js(5,10): error TS2484: Export declaration conflicts with exported declaration of 'JSDocType'.
  
  
  ==== /node_modules/@types/node/index.d.ts (0 errors) ====
-@@= skipped -10, +7 lines =@@
+@@= skipped -10, +6 lines =@@
        export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;
      }
      
 -==== /index.js (5 errors) ====
-+==== /index.js (2 errors) ====
++==== /index.js (1 errors) ====
      import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
 -                        ~~~~~~~~~~~~~~~~
 -!!! error TS18042: 'WriteFileOptions' is a type and cannot be imported in JavaScript files. Use 'import("fs").WriteFileOptions' in a JSDoc type annotation.
@@ -29,12 +28,11 @@
               ~~~~~~~~~
 -!!! error TS18043: Types cannot appear in export declarations in JavaScript files.
 -!!! related TS18044 /index.js:3:5: 'JSDocType' is automatically exported here.
-+!!! error TS2304: Cannot find name 'JSDocType'.
++!!! error TS2484: Export declaration conflicts with exported declaration of 'JSDocType'.
      export { JSDocType as ThisIsFine };
-              ~~~~~~~~~
+-             ~~~~~~~~~
 -!!! error TS18043: Types cannot appear in export declarations in JavaScript files.
 -!!! related TS18044 /index.js:3:5: 'JSDocType' is automatically exported here.
-+!!! error TS2304: Cannot find name 'JSDocType'.
      export { WriteFileOptions };
 -             ~~~~~~~~~~~~~~~~
 -!!! error TS18043: Types cannot appear in export declarations in JavaScript files.

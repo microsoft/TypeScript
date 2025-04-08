@@ -124,14 +124,14 @@ a.empty.push('hi')
 
 /** @type {number | undefined} */
 var n;
->n : any
+>n : number | undefined
 
 // should get any on parameter initialisers
 function f(a = null, b = n, l = []) {
->f : (a?: null, b?: any, l?: never[]) => void
+>f : (a?: null, b?: number | undefined, l?: never[]) => void
 >a : null
->b : any
->n : any
+>b : number | undefined
+>n : number | undefined
 >l : never[]
 >[] : never[]
 
@@ -168,17 +168,17 @@ function f(a = null, b = n, l = []) {
     // b should be number | undefined, not any
     b = 1
 >b = 1 : 1
->b : any
+>b : number | undefined
 >1 : 1
 
     b = undefined
 >b = undefined : undefined
->b : any
+>b : number | undefined
 >undefined : undefined
 
     b = 'error'
 >b = 'error' : "error"
->b : any
+>b : number | undefined
 >'error' : "error"
 
     // l should be any[]
@@ -240,11 +240,11 @@ l.push('ok')
 
 /** @type {(v: unknown) => v is undefined} */
 const isUndef = v => v === undefined;
->isUndef : (v: any) => boolean
->v => v === undefined : (v: any) => boolean
->v : any
+>isUndef : (v: unknown) => v is undefined
+>v => v === undefined : (v: unknown) => v is undefined
+>v : unknown
 >v === undefined : boolean
->v : any
+>v : unknown
 >undefined : undefined
 
 const e = [1, undefined];
@@ -255,10 +255,10 @@ const e = [1, undefined];
 
 // should be undefined[]
 const g = e.filter(isUndef);
->g : (number | undefined)[]
->e.filter(isUndef) : (number | undefined)[]
+>g : undefined[]
+>e.filter(isUndef) : undefined[]
 >e.filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
 >e : (number | undefined)[]
 >filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
->isUndef : (v: any) => boolean
+>isUndef : (v: unknown) => v is undefined
 

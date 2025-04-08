@@ -5,22 +5,26 @@
  
          x.length;
 ->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
      }
      if (!!true) {
          assert2(typeof x === "string");
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
  >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
  
          x.length;
 ->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
      }
      if (!!true) {
          assertIsString(x);
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
  >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
  
          x.length;

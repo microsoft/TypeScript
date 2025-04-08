@@ -9,21 +9,3 @@
  >value : T
  }
  === lib.js ===
-@@= skipped -9, +9 lines =@@
-  * @implements {IEncoder<T>}
-  */
- export class Encoder {
-->Encoder : Encoder<T>
-+>Encoder : Encoder
- 
-     /**
-      * @param {T} value 
-      */
-     encode(value) {
-->encode : (value: T) => Uint8Array<ArrayBuffer>
-->value : T
-+>encode : (value: any) => Uint8Array<ArrayBuffer>
-+>value : any
- 
-         return new Uint8Array(0)
- >new Uint8Array(0) : Uint8Array<ArrayBuffer>

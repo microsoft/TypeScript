@@ -17,27 +17,27 @@
  /** @type {Outer} */
  var si
 ->si : O
-+>si : any
++>si : Outer
  
  si.m
 ->si.m : (x: any, y: any) => void
 ->si : O
 ->m : (x: any, y: any) => void
 +>si.m : any
-+>si : any
++>si : Outer
 +>m : any
  
  /** @type {Outer.Inner} */
  var oi
 ->oi : I
-+>oi : any
++>oi : Inner
  
  oi.n
 ->oi.n : (a: any, b: any) => void
 ->oi : I
 ->n : (a: any, b: any) => void
 +>oi.n : any
-+>oi : any
++>oi : Inner
 +>n : any
  
  

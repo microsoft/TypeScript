@@ -400,7 +400,7 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "export", "abstract")
 				} else if flags&ast.ModifierFlagsAsync != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "export", "async")
-				} else if ast.IsClassLike(node.Parent) {
+				} else if ast.IsClassLike(node.Parent) && !ast.IsJSTypeAliasDeclaration(node) {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_class_elements_of_this_kind, "export")
 				} else if node.Kind == ast.KindParameter {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_a_parameter, "export")
@@ -604,7 +604,8 @@ func (c *Checker) findFirstIllegalModifier(node *ast.Node) *ast.Node {
 		ast.KindFunctionExpression,
 		ast.KindArrowFunction,
 		ast.KindParameter,
-		ast.KindTypeParameter:
+		ast.KindTypeParameter,
+		ast.KindJSTypeAliasDeclaration:
 		return nil
 	case ast.KindClassStaticBlockDeclaration,
 		ast.KindPropertyAssignment,
@@ -1395,7 +1396,7 @@ func (c *Checker) checkGrammarTypeOperatorNode(node *ast.TypeOperatorNode) bool 
 				return c.grammarErrorOnNode((parent.AsVariableDeclaration()).Name(), diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const)
 			}
 		case ast.KindPropertyDeclaration:
-			if !ast.IsStatic(parent) || !hasEffectiveReadonlyModifier(parent) {
+			if !ast.IsStatic(parent) || !hasReadonlyModifier(parent) {
 				return c.grammarErrorOnNode((parent.AsPropertyDeclaration()).Name(), diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly)
 			}
 		case ast.KindPropertySignature:
@@ -1848,16 +1849,6 @@ func (c *Checker) checkGrammarMetaProperty(node *ast.MetaProperty) bool {
 }
 
 func (c *Checker) checkGrammarConstructorTypeParameters(node *ast.ConstructorDeclaration) bool {
-	// !!!
-	// var jsdocTypeParameters []*ast.TypeParameterDeclaration
-	// if ast.IsInJSFile(node.AsNode()) {
-	// 	jsdocTypeParameters = getJSDocTypeParameterDeclarations(node)
-	// } else {
-	// 	jsdocTypeParameters = nil
-	// }
-	// if range_ == nil {
-	// 	range_ = core.FirstOrNil(jsdocTypeParameters)
-	// }
 	range_ := node.TypeParameters
 	if range_ != nil {
 		var pos int

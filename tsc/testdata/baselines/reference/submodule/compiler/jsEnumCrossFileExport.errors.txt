@@ -2,7 +2,10 @@ enumDef.js(2,6): error TS2339: Property 'UserMetrics' does not exist on type '{}
 enumDef.js(4,6): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
 enumDef.js(16,6): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
 index.js(2,7): error TS2339: Property 'Cls' does not exist on type '{}'.
-index.js(8,26): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+index.js(4,17): error TS2503: Cannot find namespace 'Host'.
+index.js(8,21): error TS2304: Cannot find name 'Host'.
+index.js(13,11): error TS2503: Cannot find namespace 'Host'.
+index.js(18,11): error TS2503: Cannot find namespace 'Host'.
 
 
 ==== enumDef.js (3 errors) ====
@@ -30,29 +33,35 @@ index.js(8,26): error TS2339: Property 'UserMetrics' does not exist on type '{}'
 !!! error TS2339: Property 'UserMetrics' does not exist on type '{}'.
         x: 12
     }
-==== index.js (2 errors) ====
+==== index.js (5 errors) ====
     var Other = {};
     Other.Cls = class {
           ~~~
 !!! error TS2339: Property 'Cls' does not exist on type '{}'.
         /**
          * @param {!Host.UserMetrics.Action} p
+                    ~~~~
+!!! error TS2503: Cannot find namespace 'Host'.
          */
         method(p) {}
         usage() {
             this.method(Host.UserMetrics.Action.WindowDocked);
-                             ~~~~~~~~~~~
-!!! error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+                        ~~~~
+!!! error TS2304: Cannot find name 'Host'.
         }
     }
     
     /**
      * @type {Host.UserMetrics.Bargh}
+              ~~~~
+!!! error TS2503: Cannot find namespace 'Host'.
      */
     var x = "ok";
     
     /**
      * @type {Host.UserMetrics.Blah}
+              ~~~~
+!!! error TS2503: Cannot find namespace 'Host'.
      */
     var y = "ok";
     

@@ -1,0 +1,11 @@
+a.js(3,12): error TS2503: Cannot find namespace 'ns'.
+
+
+==== a.js (1 errors) ====
+    // #22973
+    var ns = (function() {})();
+    /** @type {ns.NotFound} */
+               ~~
+!!! error TS2503: Cannot find namespace 'ns'.
+    var crash;
+    

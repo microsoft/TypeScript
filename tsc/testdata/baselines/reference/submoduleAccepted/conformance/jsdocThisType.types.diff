@@ -6,14 +6,14 @@
  export const f1 = function() {
 ->f1 : import("/types").M
 ->function() {    this.test();} : (this: import("/types").Foo) => void
-+>f1 : () => void
-+>function() {    this.test();} : () => void
++>f1 : M
++>function() {    this.test();} : (this: Foo) => void
  
      this.test();
  >this.test() : any
  >this.test : any
 ->this : import("/types").Foo
-+>this : any
++>this : Foo
  >test : any
  }
  
@@ -34,14 +34,14 @@
  export const f3 = function() {
 ->f3 : (this: import("./types").Foo) => void
 ->function() {    this.test();} : (this: import("./types").Foo) => void
-+>f3 : () => void
-+>function() {    this.test();} : () => void
++>f3 : (this: Foo) => void
++>function() {    this.test();} : (this: Foo) => void
  
      this.test();
  >this.test() : any
  >this.test : any
 ->this : import("/types").Foo
-+>this : any
++>this : Foo
  >test : any
  }
  
@@ -62,7 +62,7 @@
  export const f5 = function() {
 ->f5 : (this: import("./types").Foo) => void
 ->function() {    this.test();} : (this: import("./types").Foo) => void
-+>f5 : () => void
++>f5 : function
 +>function() {    this.test();} : () => void
  
      this.test();

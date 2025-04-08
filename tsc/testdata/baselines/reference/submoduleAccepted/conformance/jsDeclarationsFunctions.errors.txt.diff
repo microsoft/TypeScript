@@ -1,0 +1,76 @@
+--- old.jsDeclarationsFunctions.errors.txt
++++ new.jsDeclarationsFunctions.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(38,21): error TS2349: This expression is not callable.
++  Type '{ y: ???; }' has no call signatures.
++index.js(48,21): error TS2349: This expression is not callable.
++  Type '{ y: ???; }' has no call signatures.
++
++
++==== index.js (2 errors) ====
++    export function a() {}
++    
++    export function b() {}
++    b.cat = "cat";
++    
++    export function c() {}
++    c.Cls = class {}
++    
++    /**
++     * @param {number} a
++     * @param {number} b
++     * @return {string} 
++     */
++    export function d(a, b) { return /** @type {*} */(null); }
++    
++    /**
++     * @template T,U
++     * @param {T} a
++     * @param {U} b
++     * @return {T & U} 
++     */
++    export function e(a, b) { return /** @type {*} */(null); }
++    
++    /**
++     * @template T
++     * @param {T} a
++     */
++    export function f(a) {
++        return a;
++    }
++    f.self = f;
++    
++    /**
++     * @param {{x: string}} a
++     * @param {{y: typeof b}} b
++     */
++    function g(a, b) {
++        return a.x && b.y();
++                        ~
++!!! error TS2349: This expression is not callable.
++!!! error TS2349:   Type '{ y: ???; }' has no call signatures.
++    }
++    
++    export { g };
++    
++    /**
++     * @param {{x: string}} a
++     * @param {{y: typeof b}} b
++     */
++    function hh(a, b) {
++        return a.x && b.y();
++                        ~
++!!! error TS2349: This expression is not callable.
++!!! error TS2349:   Type '{ y: ???; }' has no call signatures.
++    }
++    
++    export { hh as h };
++    
++    export function i() {}
++    export { i as ii };
++    
++    export { j as jj };
++    export function j() {}
++    

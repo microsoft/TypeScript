@@ -7,11 +7,11 @@
  * @param {string} [s]
  */
 var x = function foo(n, s) {}
->x : (n: any, s: any) => void
->function foo(n, s) {} : (n: any, s: any) => void
->foo : (n: any, s: any) => void
->n : any
->s : any
+>x : (n?: number, s?: string) => void
+>function foo(n, s) {} : (n?: number, s?: string) => void
+>foo : (n?: number, s?: string) => void
+>n : number
+>s : string
 
 var y;
 >y : any
@@ -30,9 +30,9 @@ y = function bar(b) {}
  * @param {string} s
  */
 var one = function (s) { }, two = function (untyped) { };
->one : (s: any) => void
->function (s) { } : (s: any) => void
->s : any
+>one : (s: string) => void
+>function (s) { } : (s: string) => void
+>s : string
 >two : (untyped: any) => void
 >function (untyped) { } : (untyped: any) => void
 >untyped : any

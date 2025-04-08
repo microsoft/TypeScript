@@ -1,22 +1,14 @@
 --- old.jsDeclarationsTypeReassignmentFromDeclaration.types
 +++ new.jsDeclarationsTypeReassignmentFromDeclaration.types
-@@= skipped -13, +13 lines =@@
- === index.js ===
- /** @type {typeof import("/some-mod")} */
- const items = [];
-->items : Item[]
-+>items : any[]
- >[] : undefined[]
+@@= skipped -18, +18 lines =@@
  
  module.exports = items;
-->module.exports = items : Item[]
+ >module.exports = items : Item[]
 ->module.exports : Item[]
 ->module : { exports: Item[]; }
 ->exports : Item[]
-->items : Item[]
-+>module.exports = items : any[]
 +>module.exports : any
 +>module : any
 +>exports : any
-+>items : any[]
+ >items : Item[]
  

@@ -1,39 +1,72 @@
 --- old.recursiveTypeReferences2.errors.txt
 +++ new.recursiveTypeReferences2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -bug39372.js(25,7): error TS2322: Type '{}' is not assignable to type 'XMLObject<{ foo: string; }>'.
 -  Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[]; }; $O: { foo?: { $$?: Record<string, string>; } & { $: string; }; }; $$?: Record<string, string>; }': $A, $O
--
--
++bug39372.js(1,36): error TS2456: Type alias 'JsonArray' circularly references itself.
++bug39372.js(3,88): error TS2456: Type alias 'Json' circularly references itself.
++bug39372.js(9,17): error TS2304: Cannot find name 'T'.
++bug39372.js(9,32): error TS2304: Cannot find name 'T'.
++bug39372.js(12,17): error TS2304: Cannot find name 'T'.
++bug39372.js(14,10): error TS2304: Cannot find name 'T'.
++bug39372.js(14,55): error TS2304: Cannot find name 'T'.
++bug39372.js(18,15): error TS2304: Cannot find name 'T'.
++bug39372.js(19,5): error TS2304: Cannot find name 'T'.
++bug39372.js(20,19): error TS2304: Cannot find name 'T'.
++bug39372.js(25,7): error TS2322: Type '{}' is not assignable to type '{ $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; } & { [x: string]: string | { $A: { [x: string]: (??? & ???)[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & (??? | ??? & ???); }; $$?: Record<string, string>; } & ???; }'.
++  Type '{}' is missing the following properties from type '{ $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; }': $A, $O
+ 
+ 
 -==== bug39372.js (1 errors) ====
--    /** @typedef {ReadonlyArray<Json>} JsonArray */
--    /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
--    /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */
--    
--    /**
--     * @template T
--     * @typedef {{
--      $A: {
--        [K in keyof T]?: XMLObject<T[K]>[]
--      },
--      $O: {
--        [K in keyof T]?: {
--          $$?: Record<string, string>
--        } & (T[K] extends string ? {$:string} : XMLObject<T[K]>)
--      },
--      $$?: Record<string, string>,
--      } & {
--      [K in keyof T]?: (
--        T[K] extends string ? string
--          : XMLObject<T[K]>
--      )
--    }} XMLObject<T> */
--    
--    /** @type {XMLObject<{foo:string}>} */
--    const p = {};
--          ~
++==== bug39372.js (11 errors) ====
+     /** @typedef {ReadonlyArray<Json>} JsonArray */
++                                       ~~~~~~~~~
++!!! error TS2456: Type alias 'JsonArray' circularly references itself.
+     /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
+     /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */
++                                                                                           ~~~~
++!!! error TS2456: Type alias 'Json' circularly references itself.
+     
+     /**
+      * @template T
+      * @typedef {{
+       $A: {
+         [K in keyof T]?: XMLObject<T[K]>[]
++                    ~
++!!! error TS2304: Cannot find name 'T'.
++                                   ~
++!!! error TS2304: Cannot find name 'T'.
+       },
+       $O: {
+         [K in keyof T]?: {
++                    ~
++!!! error TS2304: Cannot find name 'T'.
+           $$?: Record<string, string>
+         } & (T[K] extends string ? {$:string} : XMLObject<T[K]>)
++             ~
++!!! error TS2304: Cannot find name 'T'.
++                                                          ~
++!!! error TS2304: Cannot find name 'T'.
+       },
+       $$?: Record<string, string>,
+       } & {
+       [K in keyof T]?: (
++                  ~
++!!! error TS2304: Cannot find name 'T'.
+         T[K] extends string ? string
++        ~
++!!! error TS2304: Cannot find name 'T'.
+           : XMLObject<T[K]>
++                      ~
++!!! error TS2304: Cannot find name 'T'.
+       )
+     }} XMLObject<T> */
+     
+     /** @type {XMLObject<{foo:string}>} */
+     const p = {};
+           ~
 -!!! error TS2322: Type '{}' is not assignable to type 'XMLObject<{ foo: string; }>'.
 -!!! error TS2322:   Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[]; }; $O: { foo?: { $$?: Record<string, string>; } & { $: string; }; }; $$?: Record<string, string>; }': $A, $O
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
++!!! error TS2322: Type '{}' is not assignable to type '{ $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; } & { [x: string]: string | { $A: { [x: string]: (??? & ???)[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & (??? | ??? & ???); }; $$?: Record<string, string>; } & ???; }'.
++!!! error TS2322:   Type '{}' is missing the following properties from type '{ $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; }': $A, $O
+     

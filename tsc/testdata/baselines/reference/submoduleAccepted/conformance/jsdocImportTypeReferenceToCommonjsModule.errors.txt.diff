@@ -1,0 +1,22 @@
+--- old.jsdocImportTypeReferenceToCommonjsModule.errors.txt
++++ new.jsdocImportTypeReferenceToCommonjsModule.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++test.js(1,13): error TS1340: Module './ex' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./ex')'?
++
++
++==== ex.d.ts (0 errors) ====
++    declare var config: {
++        fix: boolean
++    }
++    export = config;
++    
++==== test.js (1 errors) ====
++    /** @param {import('./ex')} a */
++                ~~~~~~~~~~~~~~
++!!! error TS1340: Module './ex' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./ex')'?
++    function demo(a) {
++        a.fix
++    }
++    

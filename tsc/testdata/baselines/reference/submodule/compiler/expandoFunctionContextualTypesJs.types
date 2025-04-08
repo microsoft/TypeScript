@@ -11,15 +11,15 @@
   * @type {StatelessComponent<MyComponentProps>}
   */
 const MyComponent = () => /* @type {any} */(null);
->MyComponent : { (): any; defaultProps: { color: string; }; }
+>MyComponent : { (): any; defaultProps?: P; }
 >() => /* @type {any} */(null) : { (): any; defaultProps: { color: string; }; }
 >(null) : null
 
 MyComponent.defaultProps = {
 >MyComponent.defaultProps = {    color: "red"} : { color: string; }
->MyComponent.defaultProps : { color: string; }
->MyComponent : { (): any; defaultProps: { color: string; }; }
->defaultProps : { color: string; }
+>MyComponent.defaultProps : P
+>MyComponent : { (): any; defaultProps?: P; }
+>defaultProps : P
 >{    color: "red"} : { color: string; }
 
     color: "red"
@@ -51,7 +51,7 @@ MyComponent2.defaultProps = {
   * @type {StatelessComponent<MyComponentProps>}
  */
 const check = MyComponent2;
->check : { (): any; defaultProps: { color: string; }; }
+>check : { (): any; defaultProps?: P; }
 >MyComponent2 : { (): any; defaultProps: { color: string; }; }
 
 /**
@@ -59,8 +59,8 @@ const check = MyComponent2;
  * @param {{ props: MyComponentProps }} p 
  */
 function expectLiteral(p) {}
->expectLiteral : (p: any) => void
->p : any
+>expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
+>p : { props: { color: "blue" | "red"; }; }
 
 function foo() {
 >foo : () => void
@@ -79,7 +79,7 @@ function foo() {
 
     expectLiteral(this);
 >expectLiteral(this) : void
->expectLiteral : (p: any) => void
+>expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
 >this : any
 }
 
@@ -100,7 +100,7 @@ module.exports = {
 
 expectLiteral({ props: module.exports });
 >expectLiteral({ props: module.exports }) : void
->expectLiteral : (p: any) => void
+>expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
 >{ props: module.exports } : { props: any; }
 >props : any
 >module.exports : any

@@ -11,6 +11,7 @@
 
 /** @type {Foo} */
 export default { a: 1, b: 1, c: 1 };
+>{ a: 1, b: 1, c: 1 } : Foo
 >{ a: 1, b: 1, c: 1 } : { a: number; b: number; c: number; }
 >a : number
 >1 : 1
@@ -21,8 +22,8 @@ export default { a: 1, b: 1, c: 1 };
 
 === b.js ===
 import a from "./a";
->a : { a: number; b: number; c: number; }
+>a : Foo
 
 a;
->a : { a: number; b: number; c: number; }
+>a : Foo
 

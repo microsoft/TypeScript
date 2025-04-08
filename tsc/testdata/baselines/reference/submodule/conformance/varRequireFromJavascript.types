@@ -27,12 +27,12 @@ crunch.n
  * @param {ex.Crunch} wrap
  */
 function f(wrap) {
->f : (wrap: any) => void
->wrap : any
+>f : (wrap: Crunch) => void
+>wrap : Crunch
 
     wrap.n
 >wrap.n : any
->wrap : any
+>wrap : Crunch
 >n : any
 }
 

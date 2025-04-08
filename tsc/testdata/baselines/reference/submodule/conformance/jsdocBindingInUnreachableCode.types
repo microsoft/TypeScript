@@ -8,9 +8,9 @@ if (false) {
      * @param {string} s
      */
     const x = function (s) {
->x : (s: any) => void
->function (s) {    } : (s: any) => void
->s : any
+>x : (s: string) => void
+>function (s) {    } : (s: string) => void
+>s : string
 
     };
 }

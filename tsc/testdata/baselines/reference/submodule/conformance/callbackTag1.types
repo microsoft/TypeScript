@@ -11,7 +11,7 @@ var x = 1
 
 /** @type {Sid} smallId */
 var sid = s => s + "!";
->sid : (s: any) => string
+>sid : Sid
 >s => s + "!" : (s: any) => string
 >s : any
 >s + "!" : string
@@ -21,7 +21,7 @@ var sid = s => s + "!";
 
 /** @type {NoReturn} */
 var noreturn = obj => void obj.title
->noreturn : (obj: any) => any
+>noreturn : NoReturn
 >obj => void obj.title : (obj: any) => any
 >obj : any
 >void obj.title : undefined

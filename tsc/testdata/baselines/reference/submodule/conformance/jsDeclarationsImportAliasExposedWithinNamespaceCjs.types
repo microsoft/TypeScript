@@ -13,7 +13,7 @@ const {myTypes} = require('./file.js');
  * @type {Object<string,*>}
  */
 const testFnTypes = {
->testFnTypes : {}
+>testFnTypes : any
 >{    // SOME PROPS HERE} : {}
 
     // SOME PROPS HERE
@@ -28,13 +28,13 @@ const testFnTypes = {
  * @returns {number|null} Result.
  */
 function testFn(input) {
->testFn : (input: any) => number
->input : any
+>testFn : (input: input) => number
+>input : input
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
 >typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->input : any
+>input : input
 >'number' : "number"
 
         return 2 * input;
@@ -48,11 +48,11 @@ function testFn(input) {
 }
 
 module.exports = {testFn, testFnTypes};
->module.exports = {testFn, testFnTypes} : { testFn: (input: any) => number; testFnTypes: {}; }
+>module.exports = {testFn, testFnTypes} : { testFn: (input: input) => number; testFnTypes: any; }
 >module.exports : any
 >module : any
 >exports : any
->{testFn, testFnTypes} : { testFn: (input: any) => number; testFnTypes: {}; }
->testFn : (input: any) => number
->testFnTypes : {}
+>{testFn, testFnTypes} : { testFn: (input: input) => number; testFnTypes: any; }
+>testFn : (input: input) => number
+>testFnTypes : any
 

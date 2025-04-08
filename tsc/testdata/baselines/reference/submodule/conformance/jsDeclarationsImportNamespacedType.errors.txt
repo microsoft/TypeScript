@@ -1,0 +1,14 @@
+file.js(2,29): error TS2694: Namespace '"mod1"' has no exported member 'Dotted'.
+
+
+==== file.js (1 errors) ====
+    import { dummy } from './mod1'
+    /** @type {import('./mod1').Dotted.Name} - should work */
+                                ~~~~~~
+!!! error TS2694: Namespace '"mod1"' has no exported member 'Dotted'.
+    var dot2
+    
+==== mod1.js (0 errors) ====
+    /** @typedef {number} Dotted.Name */
+    export var dummy = 1
+    

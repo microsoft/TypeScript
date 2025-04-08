@@ -9,15 +9,15 @@ const LazySet = require("./LazySet");
 
 /** @type {LazySet} */
 const stringSet = undefined;
->stringSet : any
+>stringSet : LazySet
 >undefined : undefined
 
 stringSet.addAll(stringSet);
 >stringSet.addAll(stringSet) : any
 >stringSet.addAll : any
->stringSet : any
+>stringSet : LazySet
 >addAll : any
->stringSet : any
+>stringSet : LazySet
 
 
 === LazySet.js ===
@@ -32,8 +32,8 @@ class LazySet {
      * @param {LazySet} iterable
      */
     addAll(iterable) {}
->addAll : (iterable: any) => void
->iterable : any
+>addAll : (iterable: LazySet) => void
+>iterable : LazySet
 
     [Symbol.iterator]() {}
 >[Symbol.iterator] : () => void
@@ -43,9 +43,9 @@ class LazySet {
 }
 
 module.exports = LazySet;
->module.exports = LazySet : any
+>module.exports = LazySet : typeof LazySet
 >module.exports : any
 >module : any
 >exports : any
->LazySet : any
+>LazySet : typeof LazySet
 

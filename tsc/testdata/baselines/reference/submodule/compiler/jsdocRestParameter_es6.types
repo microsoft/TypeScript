@@ -3,10 +3,10 @@
 === /a.js ===
 /** @param {...number} a */
 function f(...a) {
->f : (...a: any[]) => void
->a : any[]
+>f : (...a: number[]) => void
+>a : number[]
 
     a; // number[]
->a : any[]
+>a : number[]
 }
 

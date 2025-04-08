@@ -9,7 +9,7 @@ const other = require('./other');
 
 /** @type {Puppeteer.Keyboard} */
 var ppk;
->ppk : any
+>ppk : Keyboard
 
 Puppeteer.connect;
 >Puppeteer.connect : (name: string) => void

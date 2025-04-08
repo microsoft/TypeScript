@@ -1,0 +1,20 @@
+--- old.jsdocVariadicType.errors.txt
++++ new.jsdocVariadicType.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(2,11): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++
++
++==== a.js (1 errors) ====
++    /**
++     * @type {function(boolean, string, ...*):void}
++              ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
++     */
++    const foo = function (a, b, ...r) { };
++    
++==== b.ts (0 errors) ====
++    foo(false, '');
++    

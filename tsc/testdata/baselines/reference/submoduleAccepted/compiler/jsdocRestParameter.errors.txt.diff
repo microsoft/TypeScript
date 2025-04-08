@@ -3,19 +3,12 @@
 @@= skipped -0, +0 lines =@@
 -/a.js(7,3): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'number'.
 -/a.js(8,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-+/a.js(2,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
 +/a.js(8,6): error TS2554: Expected 1 arguments, but got 2.
 +/a.js(9,6): error TS2554: Expected 1 arguments, but got 2.
  
  
--==== /a.js (2 errors) ====
-+==== /a.js (3 errors) ====
-     /** @param {...number} a */
-     function f(a) {
-+               ~
-+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
-         a; // number | undefined
-         // Ideally this would be a number. But currently checker.ts has only one `argumentsSymbol`, so it's `any`.
+ ==== /a.js (2 errors) ====
+@@= skipped -9, +9 lines =@@
          arguments[0];
      }
      f([1, 2]); // Error

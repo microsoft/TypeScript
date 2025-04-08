@@ -5,6 +5,6 @@
  /** @type {Foo<typeof x, "a">} */
  const y = "a";
 ->y : number
-+>y : "a"
++>y : T
  >"a" : "a"
  

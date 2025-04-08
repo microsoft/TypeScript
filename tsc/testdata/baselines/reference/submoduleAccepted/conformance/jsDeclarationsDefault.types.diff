@@ -31,8 +31,9 @@
      a = /** @type {Foo} */(null);
 ->a : Foo
 ->(null) : Foo
-+>a : any
-+>(null) : null
++>a : default
++>(null) : default
++>null : default
  
  };
  export const X = Foo;
@@ -58,10 +59,9 @@
 +>Fab : default
  
      x = /** @type {Bar} */(null);
-->x : Bar
-->(null) : Bar
-+>x : any
-+>(null) : null
+ >x : Bar
+ >(null) : Bar
++>null : Bar
  }
  export default Bar;
  >Bar : Bar

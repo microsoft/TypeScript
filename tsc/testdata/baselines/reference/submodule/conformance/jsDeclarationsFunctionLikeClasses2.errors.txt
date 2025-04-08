@@ -1,8 +1,9 @@
 referencer.js(3,23): error TS2350: Only a void function can be called with the 'new' keyword.
+source.js(13,16): error TS2749: 'Vec' refers to a value, but is being used as a type here. Did you mean 'typeof Vec'?
 source.js(40,16): error TS2350: Only a void function can be called with the 'new' keyword.
 
 
-==== source.js (1 errors) ====
+==== source.js (2 errors) ====
     /**
      * @param {number} len
      */
@@ -16,6 +17,8 @@ source.js(40,16): error TS2350: Only a void function can be called with the 'new
     Vec.prototype = {
         /**
          * @param {Vec} other
+                   ~~~
+!!! error TS2749: 'Vec' refers to a value, but is being used as a type here. Did you mean 'typeof Vec'?
          */
         dot(other) {
             if (other.storage.length !== this.storage.length) {

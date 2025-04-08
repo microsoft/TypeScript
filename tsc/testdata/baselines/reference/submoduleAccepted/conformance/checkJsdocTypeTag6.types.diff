@@ -1,14 +1,6 @@
 --- old.checkJsdocTypeTag6.types
 +++ new.checkJsdocTypeTag6.types
-@@= skipped -10, +10 lines =@@
- 
- /** @type {{ prop: string }} */
- var g = function (prop) {
-->g : { prop: string; }
-+>g : (prop: any) => void
- >function (prop) {} : (prop: any) => void
- >prop : any
- }
+@@= skipped -17, +17 lines =@@
  
  /** @type {(a: number) => number} */
  function add1(a, b) { return a + b; }
@@ -63,17 +55,7 @@
  >more : any
  
  /** @type {() => void} */
- const variableWithMoreParameters = function (more) {}; // error
-->variableWithMoreParameters : () => void
-+>variableWithMoreParameters : (more: any) => void
- >function (more) {} : (more: any) => void
- >more : any
- 
- /** @type {() => void} */
- const arrowWithMoreParameters = (more) => {}; // error
-->arrowWithMoreParameters : () => void
-+>arrowWithMoreParameters : (more: any) => void
- >(more) => {} : (more: any) => void
+@@= skipped -47, +47 lines =@@
  >more : any
  
  ({

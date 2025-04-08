@@ -1,46 +1,16 @@
 --- old.jsdocTemplateTag.types
 +++ new.jsdocTemplateTag.types
-@@= skipped -5, +5 lines =@@
-  * @template T
-  */
- function f(a) {
-->f : <T>(a: T) => () => T
-->a : T
-+>f : (a: any) => () => any
-+>a : any
- 
-     return () => a
-->() => a : () => T
-->a : T
-+>() => a : () => any
-+>a : any
- }
- let n = f(1)()
-->n : number
-->f(1)() : number
-->f(1) : () => number
-->f : <T>(a: T) => () => T
-+>n : any
-+>f(1)() : any
-+>f(1) : () => any
-+>f : (a: any) => () => any
- >1 : 1
- 
- /**
-@@= skipped -20, +20 lines =@@
+@@= skipped -25, +25 lines =@@
   * @returns {function(): T}
   */
  function g(a) {
 ->g : <T>(a: T) => () => T
-->a : T
-+>g : (a: any) => () => any
-+>a : any
++>g : <T>(a: T) => function
+ >a : T
  
      return () => a
-->() => a : () => T
-->a : T
-+>() => a : () => any
-+>a : any
+@@= skipped -8, +8 lines =@@
+ >a : T
  }
  let s = g('hi')()
 ->s : string
@@ -49,8 +19,8 @@
 ->g : <T>(a: T) => () => T
 +>s : any
 +>g('hi')() : any
-+>g('hi') : () => any
-+>g : (a: any) => () => any
++>g('hi') : function
++>g : <T>(a: T) => function
  >'hi' : "hi"
  
  /**

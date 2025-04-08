@@ -9,12 +9,3 @@
  
      return "hello world";
  >"hello world" : "hello world"
-@@= skipped -10, +10 lines =@@
-  * @returns {string|number} This comment is not currently exposed
-  */
- function f2() {
-->f2 : () => string | number
-+>f2 : () => "hello" | 5
- 
-     return 5 || "hello";
- >5 || "hello" : "hello" | 5

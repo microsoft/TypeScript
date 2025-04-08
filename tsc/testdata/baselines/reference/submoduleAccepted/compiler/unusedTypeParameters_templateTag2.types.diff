@@ -1,12 +1,6 @@
 --- old.unusedTypeParameters_templateTag2.types
 +++ new.unusedTypeParameters_templateTag2.types
-@@= skipped -5, +5 lines =@@
-  * @template V
-  */
- class C1 {
-->C1 : C1<T, V>
-+>C1 : C1
- 
+@@= skipped -10, +10 lines =@@
      constructor() {
          /** @type {T} */
          this.p;
@@ -18,22 +12,7 @@
      }
  }
  
-@@= skipped -15, +15 lines =@@
-  * @template T,V
-  */
- class C2 {
-->C2 : C2<T, V>
-+>C2 : C2
- 
-     constructor() { }
- }
-@@= skipped -9, +9 lines =@@
-  * @template T,V,X
-  */
- class C3 {
-->C3 : C3<T, V, X>
-+>C3 : C3
- 
+@@= skipped -24, +24 lines =@@
      constructor() {
          /** @type {T} */
          this.p;

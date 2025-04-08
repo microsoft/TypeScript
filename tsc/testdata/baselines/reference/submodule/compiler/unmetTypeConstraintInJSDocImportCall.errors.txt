@@ -1,0 +1,19 @@
+file1.js(3,21): error TS2304: Cannot find name 'T'.
+
+
+==== file1.js (1 errors) ====
+    /**
+     * @template {string} T
+     * @typedef {{ foo: T }} Foo
+                        ~
+!!! error TS2304: Cannot find name 'T'.
+     */
+    
+    export default {};
+    
+==== file2.js (0 errors) ====
+    /**
+     * @template T
+     * @typedef {import('./file1').Foo<T>} Bar
+     */
+    

@@ -3,7 +3,7 @@
 === jsdocArrayObjectPromiseImplicitAny.js ===
 /** @type {Array} */
 var anyArray = [5];
->anyArray : number[]
+>anyArray : any
 >[5] : number[]
 >5 : 5
 
@@ -27,7 +27,7 @@ function returnAnyArray(arr) {
 
 /** @type {Promise} */
 var anyPromise = Promise.resolve(5);
->anyPromise : Promise<number>
+>anyPromise : any
 >Promise.resolve(5) : Promise<number>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
@@ -57,14 +57,14 @@ function returnAnyPromise(pr) {
 
 /** @type {Object} */
 var anyObject = {valueOf: 1}; // not an error since assigning to any.
->anyObject : { valueOf: number; }
+>anyObject : Object
 >{valueOf: 1} : { valueOf: number; }
 >valueOf : number
 >1 : 1
 
 /** @type {Object<string, number>} */
 var paramedObject = {valueOf: 1};
->paramedObject : { valueOf: number; }
+>paramedObject : any
 >{valueOf: 1} : { valueOf: number; }
 >valueOf : number
 >1 : 1
@@ -74,10 +74,10 @@ var paramedObject = {valueOf: 1};
  * @return {Object}
  */
 function returnAnyObject(obj) {
->returnAnyObject : (obj: any) => any
->obj : any
+>returnAnyObject : (obj: Object) => Object
+>obj : Object
 
   return obj;
->obj : any
+>obj : Object
 }
 

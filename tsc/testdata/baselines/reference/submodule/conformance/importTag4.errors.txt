@@ -1,0 +1,24 @@
+/foo.js(10,13): error TS2304: Cannot find name 'Foo'.
+
+
+==== /types.ts (0 errors) ====
+    export interface Foo {
+        a: number;
+    }
+    
+==== /foo.js (1 errors) ====
+    /**
+     * @import { Foo } from "./types"
+     */
+    
+    /**
+     * @import { Foo } from "./types"
+     */
+    
+    /**
+     * @param { Foo } foo
+                ~~~
+!!! error TS2304: Cannot find name 'Foo'.
+     */
+    function f(foo) {}
+    

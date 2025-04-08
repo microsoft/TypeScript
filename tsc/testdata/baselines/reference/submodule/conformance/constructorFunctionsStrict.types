@@ -3,21 +3,21 @@
 === a.js ===
 /** @param {number} x */
 function C(x) {
->C : (x: any) => void
->x : any
+>C : (x: number) => void
+>x : number
 
     this.x = x
->this.x = x : any
+>this.x = x : number
 >this.x : any
 >this : any
 >x : any
->x : any
+>x : number
 }
 C.prototype.m = function() {
 >C.prototype.m = function() {    this.y = 12} : () => void
 >C.prototype.m : any
 >C.prototype : any
->C : (x: any) => void
+>C : (x: number) => void
 >prototype : any
 >m : any
 >function() {    this.y = 12} : () => void
@@ -32,7 +32,7 @@ C.prototype.m = function() {
 var c = new C(1)
 >c : any
 >new C(1) : any
->C : (x: any) => void
+>C : (x: number) => void
 >1 : 1
 
 c.x = undefined // should error
@@ -51,38 +51,38 @@ c.y = undefined // ok
 
 /** @param {number} x */
 function A(x) {
->A : (x: any) => any
->x : any
+>A : (x: number) => any
+>x : number
 
     if (!(this instanceof A)) {
 >!(this instanceof A) : boolean
 >(this instanceof A) : boolean
 >this instanceof A : boolean
 >this : any
->A : (x: any) => any
+>A : (x: number) => any
 
         return new A(x)
 >new A(x) : any
->A : (x: any) => any
->x : any
+>A : (x: number) => any
+>x : number
     }
     this.x = x
->this.x = x : any
+>this.x = x : number
 >this.x : any
 >this : any
 >x : any
->x : any
+>x : number
 }
 var k = A(1)
 >k : any
 >A(1) : any
->A : (x: any) => any
+>A : (x: number) => any
 >1 : 1
 
 var j = new A(2)
 >j : any
 >new A(2) : any
->A : (x: any) => any
+>A : (x: number) => any
 >2 : 2
 
 k.x === j.x

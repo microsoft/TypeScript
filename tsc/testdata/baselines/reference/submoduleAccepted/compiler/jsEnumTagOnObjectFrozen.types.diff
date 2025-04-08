@@ -44,9 +44,8 @@
  
      /** @type {LogEntry} */
      const logEntry = {
-->logEntry : LogEntry
+ >logEntry : LogEntry
 ->{        time: Date.now(),        type,    } : { time: number; type: string; }
-+>logEntry : { time: number; type: any; }
 +>{        time: Date.now(),        type,    } : { time: number; type: any; }
  
          time: Date.now(),

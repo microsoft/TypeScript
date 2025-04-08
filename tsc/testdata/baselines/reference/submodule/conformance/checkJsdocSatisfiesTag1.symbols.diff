@@ -5,8 +5,10 @@
  >t5 : Symbol(t5, Decl(a.js, 27, 5))
  >m : Symbol(m, Decl(a.js, 27, 35))
 ->m.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>m.substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
  >m : Symbol(m, Decl(a.js, 27, 35))
 ->substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
  
  const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
  >t6 : Symbol(t6, Decl(a.js, 28, 5))

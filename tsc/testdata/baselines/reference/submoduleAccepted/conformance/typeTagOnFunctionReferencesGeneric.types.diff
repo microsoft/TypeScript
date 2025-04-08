@@ -21,22 +21,3 @@
  >1 : 1
  
  /**@type {IFn}*/
- const inJsArrow = (j) => {
-->inJsArrow : IFn
-->(j) => {    return j;} : <T>(j: T) => T
-->j : T
-+>inJsArrow : (j: any) => any
-+>(j) => {    return j;} : (j: any) => any
-+>j : any
- 
-     return j;
-->j : T
-+>j : any
- }
- inJsArrow(2); // no error gets linted as expected
-->inJsArrow(2) : 2
-->inJsArrow : IFn
-+>inJsArrow(2) : any
-+>inJsArrow : (j: any) => any
- >2 : 2
- 

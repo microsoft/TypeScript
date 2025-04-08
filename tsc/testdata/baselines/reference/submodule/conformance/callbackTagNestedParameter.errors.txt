@@ -1,0 +1,23 @@
+cb_nested.js(11,12): error TS2304: Cannot find name 'WorksWithPeopleCallback'.
+
+
+==== cb_nested.js (1 errors) ====
+    /**
+     * @callback WorksWithPeopleCallback
+     * @param {Object} person
+     * @param {string} person.name
+     * @param {number} [person.age]
+     * @returns {void}
+     */
+    
+    /**
+     * For each person, calls your callback.
+     * @param {WorksWithPeopleCallback} callback
+               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'WorksWithPeopleCallback'.
+     * @returns {void}
+     */
+    function eachPerson(callback) {
+        callback({ name: "Empty" });
+    }
+    

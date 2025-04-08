@@ -12,7 +12,7 @@ export class Foo {
      * @param {string} baz Baz.
      */
     set bar(baz) {}
->bar : any
->baz : any
+>bar : string
+>baz : string
 }
 

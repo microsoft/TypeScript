@@ -18,9 +18,8 @@
       */
      constructor(x, y){}
 ->x : import("module").TaskGroup
-->y : TaskNode
 +>x : any
-+>y : any
+ >y : TaskNode
  }
  
  module.exports = MainThreadTasks;

@@ -9,12 +9,3 @@
  >v : Vnode<MyAttrs, Lifecycle<MyAttrs, any>>
  >0 : 0
  }
-@@= skipped -13, +13 lines =@@
- === file1.js ===
- /** @type {ClassComponent<any>} */
- const test9 = new C();
-->test9 : ClassComponent<any>
-+>test9 : C
- >new C() : C
- >C : typeof C
- 

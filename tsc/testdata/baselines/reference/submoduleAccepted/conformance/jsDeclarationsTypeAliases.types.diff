@@ -1,25 +1,6 @@
 --- old.jsDeclarationsTypeAliases.types
 +++ new.jsDeclarationsTypeAliases.types
-@@= skipped -37, +37 lines =@@
-  * @returns {SomeType}
-  */
- function doTheThing(x) {
-->doTheThing : (x: number) => SomeType
-->x : number
-+>doTheThing : (x: any) => { x: string; }
-+>x : any
- 
-     return {x: ""+x};
- >{x: ""+x} : { x: string; }
- >x : string
- >""+x : string
- >"" : ""
-->x : number
-+>x : any
- }
- class ExportedThing {
- >ExportedThing : ExportedThing
-@@= skipped -18, +18 lines =@@
+@@= skipped -55, +55 lines =@@
  >"ok" : "ok"
  }
  module.exports = {
@@ -27,16 +8,10 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-->{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
-+>module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: any) => { x: string; }; ExportedThing: typeof ExportedThing; }
++>module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
 +>module.exports : any
 +>module : any
 +>exports : any
-+>{    doTheThing,    ExportedThing,} : { doTheThing: (x: any) => { x: string; }; ExportedThing: typeof ExportedThing; }
+ >{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
  
      doTheThing,
-->doTheThing : (x: number) => SomeType
-+>doTheThing : (x: any) => { x: string; }
- 
-     ExportedThing,
- >ExportedThing : typeof ExportedThing

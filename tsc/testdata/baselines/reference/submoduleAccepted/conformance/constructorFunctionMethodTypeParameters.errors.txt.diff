@@ -1,0 +1,48 @@
+--- old.constructorFunctionMethodTypeParameters.errors.txt
++++ new.constructorFunctionMethodTypeParameters.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++constructorFunctionMethodTypeParameters.js(22,16): error TS2304: Cannot find name 'T'.
++constructorFunctionMethodTypeParameters.js(24,17): error TS2304: Cannot find name 'T'.
++
++
++==== constructorFunctionMethodTypeParameters.js (2 errors) ====
++    /**
++     * @template {string} T
++     * @param {T} t
++     */
++    function Cls(t) {
++        this.t = t;
++    }
++    
++    /**
++     * @template {string} V
++     * @param {T} t
++     * @param {V} v
++     * @return {V}
++     */
++    Cls.prototype.topLevelComment = function (t, v) {
++        return v
++    };
++    
++    Cls.prototype.nestedComment =
++        /**
++         * @template {string} U
++         * @param {T} t
++                   ~
++!!! error TS2304: Cannot find name 'T'.
++         * @param {U} u
++         * @return {T}
++                    ~
++!!! error TS2304: Cannot find name 'T'.
++         */
++        function (t, u) {
++            return t
++        };
++    
++    var c = new Cls('a');
++    const s = c.topLevelComment('a', 'b');
++    const t = c.nestedComment('a', 'b');
++    
++    

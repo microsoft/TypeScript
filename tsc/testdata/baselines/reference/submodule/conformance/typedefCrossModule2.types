@@ -13,7 +13,7 @@ var b;
 
 /** @type {mod.Baz} */
 var bb;
->bb : any
+>bb : Baz
 
 var bbb = new mod.Baz();
 >bbb : any

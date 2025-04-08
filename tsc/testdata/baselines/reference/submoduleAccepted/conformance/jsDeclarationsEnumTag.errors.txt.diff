@@ -1,0 +1,68 @@
+--- old.jsDeclarationsEnumTag.errors.txt
++++ new.jsDeclarationsEnumTag.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(23,12): error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
++index.js(24,12): error TS2749: 'Second' refers to a value, but is being used as a type here. Did you mean 'typeof Second'?
++index.js(25,12): error TS2749: 'Fs' refers to a value, but is being used as a type here. Did you mean 'typeof Fs'?
++index.js(34,16): error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
++
++
++==== index.js (4 errors) ====
++    /** @enum {string} */
++    export const Target = {
++        START: "start",
++        MIDDLE: "middle",
++        END: "end",
++        /** @type {number} */
++        OK_I_GUESS: 2
++    }
++    /** @enum number */
++    export const Second = {
++        OK: 1,
++        /** @type {number} */
++        FINE: 2,
++    }
++    /** @enum {function(number): number} */
++    export const Fs = {
++        ADD1: n => n + 1,
++        ID: n => n,
++        SUB1: n => n - 1
++    }
++    
++    /**
++     * @param {Target} t
++               ~~~~~~
++!!! error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
++     * @param {Second} s
++               ~~~~~~
++!!! error TS2749: 'Second' refers to a value, but is being used as a type here. Did you mean 'typeof Second'?
++     * @param {Fs} f
++               ~~
++!!! error TS2749: 'Fs' refers to a value, but is being used as a type here. Did you mean 'typeof Fs'?
++     */
++    export function consume(t,s,f) {
++        /** @type {string} */
++        var str = t
++        /** @type {number} */
++        var num = s
++        /** @type {(n: number) => number} */
++        var fun = f
++        /** @type {Target} */
++                   ~~~~~~
++!!! error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
++        var v = Target.START
++        v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
++    }
++    /** @param {string} s */
++    export function ff(s) {
++        // element access with arbitrary string is an error only with noImplicitAny
++        if (!Target[s]) {
++            return null
++        }
++        else {
++            return Target[s]
++        }
++    }
++    

@@ -74,7 +74,7 @@ export class MyClass {
      * @param {typeof TopLevelSym | typeof InnerSym} _p
      */
     constructor(_p = InnerSym) {
->_p : symbol
+>_p : unique symbol | unique symbol
 >InnerSym : unique symbol
 
         // switch on _p

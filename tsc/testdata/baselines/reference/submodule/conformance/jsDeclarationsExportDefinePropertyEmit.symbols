@@ -91,8 +91,12 @@ function g(a, b) {
 >b : Symbol(b, Decl(index.js, 37, 13))
 
     return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 34, 12))
 >a : Symbol(a, Decl(index.js, 37, 11))
+>x : Symbol(x, Decl(index.js, 34, 12))
+>b.y : Symbol(y, Decl(index.js, 35, 12))
 >b : Symbol(b, Decl(index.js, 37, 13))
+>y : Symbol(y, Decl(index.js, 35, 12))
 }
 Object.defineProperty(module.exports, "g", { value: g });
 >Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -112,8 +116,12 @@ function hh(a, b) {
 >b : Symbol(b, Decl(index.js, 47, 14))
 
     return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 44, 12))
 >a : Symbol(a, Decl(index.js, 47, 12))
+>x : Symbol(x, Decl(index.js, 44, 12))
+>b.y : Symbol(y, Decl(index.js, 45, 12))
 >b : Symbol(b, Decl(index.js, 47, 14))
+>y : Symbol(y, Decl(index.js, 45, 12))
 }
 Object.defineProperty(module.exports, "h", { value: hh });
 >Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))

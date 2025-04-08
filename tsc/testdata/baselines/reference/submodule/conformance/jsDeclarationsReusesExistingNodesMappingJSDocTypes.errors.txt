@@ -1,0 +1,41 @@
+index.js(16,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+index.js(19,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+index.js(22,12): error TS2315: Type 'Object' is not generic.
+index.js(22,18): error TS8020: JSDoc types can only be used inside documentation comments.
+
+
+==== index.js (4 errors) ====
+    /** @type {?} */
+    export const a = null;
+    
+    /** @type {*} */
+    export const b = null;
+    
+    /** @type {string?} */
+    export const c = null;
+    
+    /** @type {string=} */
+    export const d = null;
+    
+    /** @type {string!} */
+    export const e = null;
+    
+    /** @type {function(string, number): object} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+    export const f = null;
+    
+    /** @type {function(new: object, string, number)} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+    export const g = null;
+    
+    /** @type {Object.<string, number>} */
+               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
+                     ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    export const h = null;
+    

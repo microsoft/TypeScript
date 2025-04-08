@@ -5,12 +5,11 @@
   */
  export function Vec(len) {
 ->Vec : typeof Vec
-->len : number
-+>Vec : { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }
-+>len : any
++>Vec : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
+ >len : number
  
      /**
-      * @type {number[]}
+@@= skipped -8, +8 lines =@@
       */
      this.storage = new Array(len);
  >this.storage = new Array(len) : any[]
@@ -22,8 +21,7 @@
 +>storage : any
  >new Array(len) : any[]
  >Array : ArrayConstructor
-->len : number
-+>len : any
+ >len : number
  }
  
  Vec.prototype = {
@@ -32,26 +30,23 @@
 ->Vec : typeof Vec
 ->prototype : { dot(other: Vec): number; magnitude(): number; }
 ->{    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot(other: Vec): number; magnitude(): number; }
-+>Vec.prototype = {    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot: (other: any) => number; magnitude: () => number; }
-+>Vec.prototype : { dot: (other: any) => number; magnitude: () => number; }
-+>Vec : { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }
-+>prototype : { dot: (other: any) => number; magnitude: () => number; }
-+>{    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot: (other: any) => number; magnitude: () => number; }
++>Vec.prototype = {    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot: (other: Vec) => number; magnitude: () => number; }
++>Vec.prototype : { dot: (other: Vec) => number; magnitude: () => number; }
++>Vec : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
++>prototype : { dot: (other: Vec) => number; magnitude: () => number; }
++>{    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot: (other: Vec) => number; magnitude: () => number; }
  
      /**
       * @param {Vec} other
-      */
-     dot(other) {
-->dot : (other: Vec) => number
-->other : Vec
-+>dot : (other: any) => number
-+>other : any
+@@= skipped -24, +24 lines =@@
  
          if (other.storage.length !== this.storage.length) {
  >other.storage.length !== this.storage.length : boolean
 ->other.storage.length : number
 ->other.storage : number[]
-->other : Vec
++>other.storage.length : any
++>other.storage : any
+ >other : Vec
 ->storage : number[]
 ->length : number
 ->this.storage.length : number
@@ -59,9 +54,6 @@
 ->this : this
 ->storage : number[]
 ->length : number
-+>other.storage.length : any
-+>other.storage : any
-+>other : any
 +>storage : any
 +>length : any
 +>this.storage.length : any
@@ -72,7 +64,7 @@
  
              throw new Error(`Dot product only applicable for vectors of equal length`);
  >new Error(`Dot product only applicable for vectors of equal length`) : Error
-@@= skipped -57, +57 lines =@@
+@@= skipped -25, +25 lines =@@
  >0 : 0
  >i < this.storage.length : boolean
  >i : number
@@ -104,11 +96,10 @@
  >i : number
 ->other.storage[i] : number
 ->other.storage : number[]
-->other : Vec
-->storage : number[]
 +>other.storage[i] : any
 +>other.storage : any
-+>other : any
+ >other : Vec
+->storage : number[]
 +>storage : any
  >i : number
          }
@@ -150,64 +141,56 @@
   */
  export function Point2D(x, y) {
 ->Point2D : typeof Point2D
-->x : number
-->y : number
-+>Point2D : { (x: any, y: any): any; prototype: { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }; }
-+>x : any
-+>y : any
++>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
+ >x : number
+ >y : number
  
-     if (!(this instanceof Point2D)) {
+@@= skipped -8, +8 lines =@@
  >!(this instanceof Point2D) : boolean
  >(this instanceof Point2D) : boolean
  >this instanceof Point2D : boolean
 ->this : this
 ->Point2D : typeof Point2D
 +>this : any
-+>Point2D : { (x: any, y: any): any; prototype: { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }; }
++>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
  
          return new Point2D(x, y);
 ->new Point2D(x, y) : Point2D
 ->Point2D : typeof Point2D
-->x : number
-->y : number
 +>new Point2D(x, y) : any
-+>Point2D : { (x: any, y: any): any; prototype: { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }; }
-+>x : any
-+>y : any
++>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
+ >x : number
+ >y : number
      }
      Vec.call(this, 2);
  >Vec.call(this, 2) : any
  >Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 ->Vec : typeof Vec
-+>Vec : { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }
++>Vec : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
  >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 ->this : this
 +>this : any
  >2 : 2
  
      this.x = x;
-->this.x = x : number
+ >this.x = x : number
 ->this.x : number
 ->this : this
-->x : number
-->x : number
-+>this.x = x : any
 +>this.x : any
 +>this : any
 +>x : any
-+>x : any
+ >x : number
+->x : number
  
      this.y = y;
-->this.y = y : number
+ >this.y = y : number
 ->this.y : number
 ->this : this
-->y : number
-->y : number
-+>this.y = y : any
 +>this.y : any
 +>this : any
 +>y : any
-+>y : any
+ >y : number
+->y : number
  }
  
  Point2D.prototype = {
@@ -216,22 +199,21 @@
 ->Point2D : typeof Point2D
 ->prototype : { x: number; y: number; __proto__: typeof Vec; }
 ->{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { x: number; y: number; __proto__: typeof Vec; }
-+>Point2D.prototype = {    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }
-+>Point2D.prototype : { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }
-+>Point2D : { (x: any, y: any): any; prototype: { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }; }
-+>prototype : { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }
-+>{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }
++>Point2D.prototype = {    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }
++>Point2D.prototype : { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }
++>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
++>prototype : { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }
++>{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }
  
      __proto__: Vec,
 ->__proto__ : typeof Vec
 ->Vec : typeof Vec
-+>__proto__ : { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }
-+>Vec : { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }
++>__proto__ : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
++>Vec : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
  
      get x() {
-->x : number
-+>x : any
- 
+ >x : number
+@@= skipped -49, +49 lines =@@
          return this.storage[0];
  >this.storage[0] : any
  >this.storage : any
@@ -240,32 +222,16 @@
  >storage : any
  >0 : 0
  
-@@= skipped -66, +66 lines =@@
-      * @param {number} x
-      */
-     set x(x) {
-->x : number
-->x : number
-+>x : any
-+>x : any
- 
-         this.storage[0] = x;
-->this.storage[0] = x : number
-+>this.storage[0] = x : any
+@@= skipped -16, +16 lines =@@
+ >this.storage[0] = x : number
  >this.storage[0] : any
  >this.storage : any
 ->this : { x: number; y: number; __proto__: typeof Vec; }
 +>this : any
  >storage : any
  >0 : 0
-->x : number
-+>x : any
- 
-     },
-     get y() {
-->y : number
-+>y : any
- 
+ >x : number
+@@= skipped -12, +12 lines =@@
          return this.storage[1];
  >this.storage[1] : any
  >this.storage : any
@@ -274,33 +240,21 @@
  >storage : any
  >1 : 1
  
-@@= skipped -28, +28 lines =@@
-      * @param {number} y
-      */
-     set y(y) {
-->y : number
-->y : number
-+>y : any
-+>y : any
- 
-         this.storage[1] = y;
-->this.storage[1] = y : number
-+>this.storage[1] = y : any
+@@= skipped -16, +16 lines =@@
+ >this.storage[1] = y : number
  >this.storage[1] : any
  >this.storage : any
 ->this : { x: number; y: number; __proto__: typeof Vec; }
 +>this : any
  >storage : any
  >1 : 1
-->y : number
-+>y : any
-     }
- };
+ >y : number
+@@= skipped -9, +9 lines =@@
  
  === referencer.js ===
  import {Point2D} from "./source";
 ->Point2D : typeof Point2D
-+>Point2D : { (x: any, y: any): any; prototype: { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }; }
++>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
  
  export const origin = new Point2D(0, 0);
 ->origin : Point2D
@@ -308,7 +262,7 @@
 ->Point2D : typeof Point2D
 +>origin : any
 +>new Point2D(0, 0) : any
-+>Point2D : { (x: any, y: any): any; prototype: { __proto__: { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }; x: any; y: any; }; }
++>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
  >0 : 0
  >0 : 0
  

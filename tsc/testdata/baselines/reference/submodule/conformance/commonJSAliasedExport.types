@@ -9,10 +9,10 @@ const { funky } = require('./commonJSAliasedExport');
 
 /** @type {boolean} */
 var diddy
->diddy : any
+>diddy : boolean
 
 var diddy = funky(1)
->diddy : any
+>diddy : boolean
 >funky(1) : any
 >funky : any
 >1 : 1

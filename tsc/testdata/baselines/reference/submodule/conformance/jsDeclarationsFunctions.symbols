@@ -68,8 +68,12 @@ function g(a, b) {
 >b : Symbol(b, Decl(index.js, 36, 13))
 
     return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 33, 12))
 >a : Symbol(a, Decl(index.js, 36, 11))
+>x : Symbol(x, Decl(index.js, 33, 12))
+>b.y : Symbol(y, Decl(index.js, 34, 12))
 >b : Symbol(b, Decl(index.js, 36, 13))
+>y : Symbol(y, Decl(index.js, 34, 12))
 }
 
 export { g };
@@ -85,8 +89,12 @@ function hh(a, b) {
 >b : Symbol(b, Decl(index.js, 46, 14))
 
     return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 43, 12))
 >a : Symbol(a, Decl(index.js, 46, 12))
+>x : Symbol(x, Decl(index.js, 43, 12))
+>b.y : Symbol(y, Decl(index.js, 44, 12))
 >b : Symbol(b, Decl(index.js, 46, 14))
+>y : Symbol(y, Decl(index.js, 44, 12))
 }
 
 export { hh as h };

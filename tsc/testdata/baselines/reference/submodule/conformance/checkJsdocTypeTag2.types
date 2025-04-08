@@ -4,17 +4,17 @@
 // @ts-check
 /** @type {String} */
 var S = true;
->S : boolean
+>S : String
 >true : true
 
 /** @type {number} */
 var n = "hello";
->n : string
+>n : number
 >"hello" : "hello"
 
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
->x1 : (a: any) => any
+>x1 : function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -23,12 +23,12 @@ const x1 = (a) => a + 1;
 
 x1("string");
 >x1("string") : any
->x1 : (a: any) => any
+>x1 : function
 >"string" : "string"
 
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
->x2 : (a: any) => any
+>x2 : function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -37,18 +37,18 @@ const x2 = (a) => a + 1;
 
 /** @type {string} */
 var a;
->a : any
+>a : string
 
 a = x2(0);
 >a = x2(0) : any
->a : any
+>a : string
 >x2(0) : any
->x2 : (a: any) => any
+>x2 : function
 >0 : 0
 
 /** @type {function (number): number} */
 const x3 = (a) => a.concat("hi");
->x3 : (a: any) => any
+>x3 : function
 >(a) => a.concat("hi") : (a: any) => any
 >a : any
 >a.concat("hi") : any
@@ -59,12 +59,12 @@ const x3 = (a) => a.concat("hi");
 
 x3(0);
 >x3(0) : any
->x3 : (a: any) => any
+>x3 : function
 >0 : 0
 
 /** @type {function (number): string} */
 const x4 = (a) => a + 1;
->x4 : (a: any) => any
+>x4 : function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -73,6 +73,6 @@ const x4 = (a) => a + 1;
 
 x4(0);
 >x4(0) : any
->x4 : (a: any) => any
+>x4 : function
 >0 : 0
 

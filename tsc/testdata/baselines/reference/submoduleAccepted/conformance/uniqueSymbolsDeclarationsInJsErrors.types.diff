@@ -1,25 +1,11 @@
 --- old.uniqueSymbolsDeclarationsInJsErrors.types
 +++ new.uniqueSymbolsDeclarationsInJsErrors.types
-@@= skipped -7, +7 lines =@@
-      * @type {unique symbol}
-      */
-     static readwriteStaticType;
-->readwriteStaticType : symbol
-+>readwriteStaticType : any
- 
-     /**
-      * @type {unique symbol}
+@@= skipped -14, +14 lines =@@
       * @readonly
       */
      static readonlyType;
 ->readonlyType : unique symbol
-+>readonlyType : any
++>readonlyType : symbol
  
      /**
       * @type {unique symbol}
-      */
-     static readwriteType;
-->readwriteType : symbol
-+>readwriteType : any
- }
- 

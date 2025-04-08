@@ -6,5 +6,5 @@
   * @type {string}
   */
 var v;
->v : any
+>v : number
 

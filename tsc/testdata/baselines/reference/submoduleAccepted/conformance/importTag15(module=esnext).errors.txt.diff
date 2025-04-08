@@ -1,23 +1,25 @@
 --- old.importTag15(module=esnext).errors.txt
 +++ new.importTag15(module=esnext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -1.js(1,30): error TS2857: Import attributes cannot be used with type-only imports or exports.
 -1.js(2,33): error TS2857: Import attributes cannot be used with type-only imports or exports.
--
--
--==== 0.ts (0 errors) ====
--    export interface I { }
--    
++1.js(4,13): error TS2304: Cannot find name 'I'.
+ 
+ 
+ ==== 0.ts (0 errors) ====
+     export interface I { }
+     
 -==== 1.js (2 errors) ====
--    /** @import { I } from './0' with { type: "json" } */
++==== 1.js (1 errors) ====
+     /** @import { I } from './0' with { type: "json" } */
 -                                 ~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2857: Import attributes cannot be used with type-only imports or exports.
--    /** @import * as foo from './0' with { type: "json" } */
+     /** @import * as foo from './0' with { type: "json" } */
 -                                    ~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2857: Import attributes cannot be used with type-only imports or exports.
--    
--    /** @param {I} a */
--    function f(a) {}
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
+     
+     /** @param {I} a */
++                ~
++!!! error TS2304: Cannot find name 'I'.
+     function f(a) {}
+     

@@ -6,18 +6,18 @@
  * @param {number} a\u0061
  */
 function foo(a, aa) {
->foo : (a: any, aa: any) => void
->a : any
->aa : any
+>foo : (a: number, aa: number) => void
+>a : number
+>aa : number
 
     console.log(a + aa);
 >console.log(a + aa) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->a + aa : any
->a : any
->aa : any
+>a + aa : number
+>a : number
+>aa : number
 }
 
 /**
@@ -25,17 +25,17 @@ function foo(a, aa) {
  * @param {number} a\u{0061}
  */
 function bar(a, aa) {
->bar : (a: any, aa: any) => void
->a : any
->aa : any
+>bar : (a: number, aa: number) => void
+>a : number
+>aa : number
 
     console.log(a + aa);
 >console.log(a + aa) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->a + aa : any
->a : any
->aa : any
+>a + aa : number
+>a : number
+>aa : number
 }
 

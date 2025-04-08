@@ -1,8 +1,10 @@
 bug25127.js(3,14): error TS2339: Property 'c' does not exist on type 'Entry'.
 bug25127.js(15,14): error TS2339: Property 'd' does not exist on type 'Group'.
+bug25127.js(27,41): error TS2339: Property 'c' does not exist on type 'Entry'.
+bug25127.js(27,51): error TS2339: Property 'd' does not exist on type 'Group'.
 
 
-==== bug25127.js (2 errors) ====
+==== bug25127.js (4 errors) ====
     class Entry {
         constructor() {
             this.c = 1
@@ -34,6 +36,10 @@ bug25127.js(15,14): error TS2339: Property 'd' does not exist on type 'Group'.
     /** @param {Entry | Group} chunk */
     function f(chunk) {
         let x = chunk.isInit(chunk) ? chunk.c : chunk.d
+                                            ~
+!!! error TS2339: Property 'c' does not exist on type 'Entry'.
+                                                      ~
+!!! error TS2339: Property 'd' does not exist on type 'Group'.
         return x
     }
     

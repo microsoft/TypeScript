@@ -21,7 +21,7 @@ import { symb } from "./types";
  * @returns {import("./types").TestSymb}
  */
 export function test() {
->test : () => { (): void; inner[symb]: boolean; }
+>test : () => TestSymb
 
   function inner() {}
 >inner : { (): void; inner[symb]: boolean; }

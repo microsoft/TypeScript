@@ -12,5 +12,5 @@ export class MyClass {
  */
 /** @type {options} */
 let v;
->v : any
+>v : options
 

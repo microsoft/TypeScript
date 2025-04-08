@@ -5,7 +5,7 @@
   */
  const myTypes = {
 ->myTypes : { [x: string]: any; }
-+>myTypes : {}
++>myTypes : any
  >{    // SOME PROPS HERE} : {}
  
      // SOME PROPS HERE
@@ -14,12 +14,12 @@
  
  export {myTypes};
 ->myTypes : { [x: string]: any; }
-+>myTypes : {}
++>myTypes : any
  
  === file2.js ===
  import {myTypes} from './file.js';
 ->myTypes : { [x: string]: any; }
-+>myTypes : {}
++>myTypes : any
  
  /**
   * @namespace testFnTypes
@@ -28,7 +28,7 @@
   */
  const testFnTypes = {
 ->testFnTypes : { [x: string]: any; }
-+>testFnTypes : {}
++>testFnTypes : any
  >{    // SOME PROPS HERE} : {}
  
      // SOME PROPS HERE
@@ -38,14 +38,14 @@
  function testFn(input) {
 ->testFn : (input: testFnTypes.input) => number | null
 ->input : import("file2").testFnTypes.input
-+>testFn : (input: any) => number
-+>input : any
++>testFn : (input: input) => number
++>input : input
  
      if (typeof input === 'number') {
  >typeof input === 'number' : boolean
  >typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->input : import("file2").testFnTypes.input
-+>input : any
++>input : input
  >'number' : "number"
  
          return 2 * input;
@@ -62,6 +62,6 @@
  export {testFn, testFnTypes};
 ->testFn : (input: testFnTypes.input) => number | null
 ->testFnTypes : { [x: string]: any; }
-+>testFn : (input: any) => number
-+>testFnTypes : {}
++>testFn : (input: input) => number
++>testFnTypes : any
  

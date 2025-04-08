@@ -11,16 +11,12 @@
  >require : any
  >'./commonJSAliasedExport' : "./commonJSAliasedExport"
  
- /** @type {boolean} */
- var diddy
-->diddy : boolean
-+>diddy : any
+@@= skipped -11, +11 lines =@@
  
  var diddy = funky(1)
-->diddy : boolean
+ >diddy : boolean
 ->funky(1) : boolean
 ->funky : (declaration: any) => boolean
-+>diddy : any
 +>funky(1) : any
 +>funky : any
  >1 : 1

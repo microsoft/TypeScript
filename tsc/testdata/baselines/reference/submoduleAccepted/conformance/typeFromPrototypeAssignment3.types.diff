@@ -5,7 +5,7 @@
  === bug26885.js ===
  function Multimap3() {
 ->Multimap3 : typeof Multimap3
-+>Multimap3 : { (): void; prototype: { get: (key: any) => any; }; }
++>Multimap3 : { (): void; prototype: { get: (key: string) => number; }; }
  
      this._map = {};
  >this._map = {} : {}
@@ -23,21 +23,15 @@
 ->Multimap3 : typeof Multimap3
 ->prototype : { get(key: string): number; }
 ->{    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: string): number; }
-+>Multimap3.prototype = {    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: any) => any; }
-+>Multimap3.prototype : { get: (key: any) => any; }
-+>Multimap3 : { (): void; prototype: { get: (key: any) => any; }; }
-+>prototype : { get: (key: any) => any; }
-+>{    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: any) => any; }
++>Multimap3.prototype = {    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: string) => number; }
++>Multimap3.prototype : { get: (key: string) => number; }
++>Multimap3 : { (): void; prototype: { get: (key: string) => number; }; }
++>prototype : { get: (key: string) => number; }
++>{    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: string) => number; }
  
      /**
       * @param {string} key
-      * @returns {number} the value ok
-      */
-     get(key) {
-->get : (key: string) => number
-->key : string
-+>get : (key: any) => any
-+>key : any
+@@= skipped -28, +28 lines =@@
  
          return this._map[key + ''];
  >this._map[key + ''] : any
@@ -45,34 +39,29 @@
 ->this : this
 ->_map : {}
 +>this._map : any
-+>this : { get: (key: any) => any; }
++>this : { get: (key: string) => number; }
 +>_map : any
  >key + '' : string
-->key : string
-+>key : any
+ >key : string
  >'' : ""
-     }
- }
- 
+@@= skipped -12, +12 lines =@@
  /** @type {Multimap3} */
  const map = new Multimap3();
-->map : Multimap3
+ >map : Multimap3
 ->new Multimap3() : Multimap3
 ->Multimap3 : typeof Multimap3
-+>map : any
 +>new Multimap3() : any
-+>Multimap3 : { (): void; prototype: { get: (key: any) => any; }; }
++>Multimap3 : { (): void; prototype: { get: (key: string) => number; }; }
  
  const n = map.get('hi')
 ->n : number
 ->map.get('hi') : number
 ->map.get : (key: string) => number
-->map : Multimap3
-->get : (key: string) => number
 +>n : any
 +>map.get('hi') : any
 +>map.get : any
-+>map : any
+ >map : Multimap3
+->get : (key: string) => number
 +>get : any
  >'hi' : "hi"
  

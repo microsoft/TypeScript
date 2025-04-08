@@ -1,54 +1,71 @@
 --- old.checkJsdocTypeTag2.errors.txt
 +++ new.checkJsdocTypeTag2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -0.js(3,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
--0.js(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
++0.js(3,5): error TS2322: Type 'boolean' is not assignable to type 'String'.
+ 0.js(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
 -0.js(8,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 -0.js(10,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 -0.js(17,1): error TS2322: Type 'number' is not assignable to type 'string'.
 -0.js(20,21): error TS2339: Property 'concat' does not exist on type 'number'.
 -0.js(24,19): error TS2322: Type 'number' is not assignable to type 'string'.
--
--
++0.js(8,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++0.js(12,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++0.js(19,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++0.js(23,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+ 
+ 
 -==== 0.js (7 errors) ====
--    // @ts-check
--    /** @type {String} */
--    var S = true;
--        ~
++==== 0.js (6 errors) ====
+     // @ts-check
+     /** @type {String} */
+     var S = true;
+         ~
 -!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
--    
--    /** @type {number} */
--    var n = "hello";
--        ~
--!!! error TS2322: Type 'string' is not assignable to type 'number'.
--    
--    /** @type {function (number)} */
++!!! error TS2322: Type 'boolean' is not assignable to type 'String'.
+     
+     /** @type {number} */
+     var n = "hello";
+@@= skipped -19, +18 lines =@@
+ !!! error TS2322: Type 'string' is not assignable to type 'number'.
+     
+     /** @type {function (number)} */
 -               ~~~~~~~~~~~~~~~~~
 -!!! error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
--    const x1 = (a) => a + 1;
--    x1("string");
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const x1 = (a) => a + 1;
+     x1("string");
 -       ~~~~~~~~
 -!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
--    
--    /** @type {function (number): number} */
--    const x2 = (a) => a + 1;
--    
--    /** @type {string} */
--    var a;
--    a = x2(0);
+     
+     /** @type {function (number): number} */
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const x2 = (a) => a + 1;
+     
+     /** @type {string} */
+     var a;
+     a = x2(0);
 -    ~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
--    
--    /** @type {function (number): number} */
--    const x3 = (a) => a.concat("hi");
+     
+     /** @type {function (number): number} */
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const x3 = (a) => a.concat("hi");
 -                        ~~~~~~
 -!!! error TS2339: Property 'concat' does not exist on type 'number'.
--    x3(0);
--    
--    /** @type {function (number): string} */
--    const x4 = (a) => a + 1;
+     x3(0);
+     
+     /** @type {function (number): string} */
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const x4 = (a) => a + 1;
 -                      ~~~~~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
--    x4(0);
-@@= skipped --1, +1 lines =@@
-+<no content>
+     x4(0);

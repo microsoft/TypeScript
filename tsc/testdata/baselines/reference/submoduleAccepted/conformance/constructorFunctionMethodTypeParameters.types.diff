@@ -5,22 +5,17 @@
   */
  function Cls(t) {
 ->Cls : typeof Cls
-->t : T
-+>Cls : (t: any) => void
-+>t : any
++>Cls : <T extends string>(t: T) => void
+ >t : T
  
      this.t = t;
-->this.t = t : T
-+>this.t = t : any
+ >this.t = t : T
  >this.t : any
 ->this : this
 +>this : any
  >t : any
-->t : T
-+>t : any
+ >t : T
  }
- 
- /**
 @@= skipped -18, +18 lines =@@
   * @return {V}
   */
@@ -30,7 +25,7 @@
  >Cls.prototype.topLevelComment : any
  >Cls.prototype : any
 ->Cls : typeof Cls
-+>Cls : (t: any) => void
++>Cls : <T extends string>(t: T) => void
  >prototype : any
  >topLevelComment : any
 ->function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
@@ -46,31 +41,16 @@
  
  };
  
- Cls.prototype.nestedComment =
-->Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
-+>Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : (t: any, u: any) => any
+@@= skipped -19, +19 lines =@@
+ >Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
  >Cls.prototype.nestedComment : any
  >Cls.prototype : any
 ->Cls : typeof Cls
-+>Cls : (t: any) => void
++>Cls : <T extends string>(t: T) => void
  >prototype : any
  >nestedComment : any
  
-@@= skipped -30, +30 lines =@@
-      * @return {T}
-      */
-     function (t, u) {
-->function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
-->t : T
-->u : U
-+>function (t, u) {        return t    } : (t: any, u: any) => any
-+>t : any
-+>u : any
- 
-         return t
-->t : T
-+>t : any
- 
+@@= skipped -21, +21 lines =@@
      };
  
  var c = new Cls('a');
@@ -79,7 +59,7 @@
 ->Cls : typeof Cls
 +>c : any
 +>new Cls('a') : any
-+>Cls : (t: any) => void
++>Cls : <T extends string>(t: T) => void
  >'a' : "a"
  
  const s = c.topLevelComment('a', 'b');

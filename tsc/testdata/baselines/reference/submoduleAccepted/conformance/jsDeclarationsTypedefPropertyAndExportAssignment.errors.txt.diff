@@ -4,15 +4,18 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +index.js(1,39): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(3,22): error TS2307: Cannot find module './module.js' or its corresponding type declarations.
 +index.js(21,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +
 +
-+==== index.js (2 errors) ====
++==== index.js (3 errors) ====
 +    const {taskGroups, taskNameToGroup} = require('./module.js');
 +                                          ~~~~~~~
 +!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +    
 +    /** @typedef {import('./module.js').TaskGroup} TaskGroup */
++                         ~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module './module.js' or its corresponding type declarations.
 +    
 +    /**
 +     * @typedef TaskNode

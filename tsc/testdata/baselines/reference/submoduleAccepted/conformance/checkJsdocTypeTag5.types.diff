@@ -13,25 +13,19 @@
  
  /** @type {(x: number) => string} */
  var f = x => x
-->f : (x: number) => string
+ >f : (x: number) => string
 ->x => x : (x: number) => string
-->x : number
-->x : number
-+>f : (x: any) => any
-+>x => x : (x: any) => any
-+>x : any
-+>x : any
++>x => x : (x: number) => number
+ >x : number
+ >x : number
  
  /** @type {(x: number) => string} */
  var g = function (x) { return x }
-->g : (x: number) => string
+ >g : (x: number) => string
 ->function (x) { return x } : (x: number) => string
-->x : number
-->x : number
-+>g : (x: any) => any
-+>function (x) { return x } : (x: any) => any
-+>x : any
-+>x : any
++>function (x) { return x } : (x: number) => number
+ >x : number
+ >x : number
  
  /** @type {{ (x: number): string }} */
  function i(x) { return x }
@@ -44,27 +38,21 @@
  
  /** @type {{ (x: number): string }} */
  var j = x => x
-->j : (x: number) => string
+ >j : (x: number) => string
 ->x => x : (x: number) => string
-->x : number
-->x : number
-+>j : (x: any) => any
-+>x => x : (x: any) => any
-+>x : any
-+>x : any
++>x => x : (x: number) => number
+ >x : number
+ >x : number
  
  /** @type {{ (x: number): string }} */
  var k = function (x) { return x }
-->k : (x: number) => string
+ >k : (x: number) => string
 ->function (x) { return x } : (x: number) => string
-->x : number
-->x : number
-+>k : (x: any) => any
-+>function (x) { return x } : (x: any) => any
-+>x : any
-+>x : any
++>function (x) { return x } : (x: number) => number
+ >x : number
+ >x : number
  
- 
+@@= skipped -42, +42 lines =@@
  /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
  /** @type {Argle} */
  function blargle(s) {
@@ -75,25 +63,14 @@
  
      return 0;
  >0 : 0
-@@= skipped -51, +51 lines =@@
- 
+@@= skipped -10, +10 lines =@@
  /** @type {0 | 1 | 2} - assignment should not error */
  var zeroonetwo = blargle('hi')
-->zeroonetwo : 0 | 1 | 2
+ >zeroonetwo : 0 | 1 | 2
 ->blargle('hi') : 0 | 1 | 2
 ->blargle : (x: "hi" | "bye") => 0 | 1 | 2
-+>zeroonetwo : number
 +>blargle('hi') : number
 +>blargle : (s: any) => number
  >'hi' : "hi"
  
  /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */
-@@= skipped -24, +24 lines =@@
- 
- /** @type {2 | 3} - overloads are not supported, so there will be an error */
- var twothree = monaLisa(false);
-->twothree : 2 | 3
-+>twothree : number
- >monaLisa(false) : 1 | 2
- >monaLisa : (sb: any) => 1 | 2
- >false : false

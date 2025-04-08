@@ -102,16 +102,7 @@
  
  /**
   * @param {{x: string}} a
-@@= skipped -23, +11 lines =@@
- >b : Symbol(b, Decl(index.js, 36, 13))
- 
-     return a.x && b.y();
-->a.x : Symbol(x, Decl(index.js, 33, 12))
- >a : Symbol(a, Decl(index.js, 36, 11))
-->x : Symbol(x, Decl(index.js, 33, 12))
-->b.y : Symbol(y, Decl(index.js, 34, 12))
- >b : Symbol(b, Decl(index.js, 36, 13))
-->y : Symbol(y, Decl(index.js, 34, 12))
+@@= skipped -32, +20 lines =@@
  }
  
  module.exports.g = g;
@@ -123,16 +114,7 @@
  >g : Symbol(g, Decl(index.js, 30, 41))
  
  /**
-@@= skipped -26, +17 lines =@@
- >b : Symbol(b, Decl(index.js, 46, 14))
- 
-     return a.x && b.y();
-->a.x : Symbol(x, Decl(index.js, 43, 12))
- >a : Symbol(a, Decl(index.js, 46, 12))
-->x : Symbol(x, Decl(index.js, 43, 12))
-->b.y : Symbol(y, Decl(index.js, 44, 12))
- >b : Symbol(b, Decl(index.js, 46, 14))
-->y : Symbol(y, Decl(index.js, 44, 12))
+@@= skipped -26, +21 lines =@@
  }
  
  module.exports.h = hh;

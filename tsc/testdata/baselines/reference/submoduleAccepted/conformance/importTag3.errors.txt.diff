@@ -1,0 +1,25 @@
+--- old.importTag3.errors.txt
++++ new.importTag3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/foo.js(6,13): error TS2304: Cannot find name 'Foo'.
++
++
++==== /types.ts (0 errors) ====
++    export default interface Foo {
++        a: number;
++    }
++    
++==== /foo.js (1 errors) ====
++    /**
++     * @import Foo from "./types"
++     */
++    
++    /**
++     * @param { Foo } foo
++                ~~~
++!!! error TS2304: Cannot find name 'Foo'.
++     */
++    export function f(foo) {}
++    

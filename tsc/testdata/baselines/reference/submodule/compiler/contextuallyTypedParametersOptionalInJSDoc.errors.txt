@@ -1,20 +1,15 @@
-index.js(5,20): error TS7006: Parameter 'num' implicitly has an 'any' type.
-index.js(16,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
-index.js(16,20): error TS7006: Parameter 'b' implicitly has an 'any' type.
-index.js(18,5): error TS2554: Expected 2 arguments, but got 1.
-index.js(27,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
-index.js(27,20): error TS7006: Parameter 'b' implicitly has an 'any' type.
-index.js(29,5): error TS2554: Expected 2 arguments, but got 1.
+index.js(17,15): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+index.js(28,15): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
 
 
-==== index.js (7 errors) ====
+==== index.js (2 errors) ====
     /**
      * 
      * @param {number} num 
      */
     function acceptNum(num) {}
-                       ~~~
-!!! error TS7006: Parameter 'num' implicitly has an 'any' type.
     
     /**
      * @typedef {(a: string, b: number) => void} Fn
@@ -26,15 +21,11 @@ index.js(29,5): error TS2554: Expected 2 arguments, but got 1.
        * @param [b]
        */
       function self(a, b) {
-                    ~
-!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
-                       ~
-!!! error TS7006: Parameter 'b' implicitly has an 'any' type.
         acceptNum(b); // error
+                  ~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
         self("");
-        ~~~~
-!!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 index.js:16:20: An argument for 'b' was not provided.
         self("", undefined);
       };
     
@@ -44,15 +35,11 @@ index.js(29,5): error TS2554: Expected 2 arguments, but got 1.
        * @param {number} [b]
        */
       function self(a, b) {
-                    ~
-!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
-                       ~
-!!! error TS7006: Parameter 'b' implicitly has an 'any' type.
         acceptNum(b); // error
+                  ~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
         self("");
-        ~~~~
-!!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 index.js:27:20: An argument for 'b' was not provided.
         self("", undefined);
       };
     

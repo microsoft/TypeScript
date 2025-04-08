@@ -1,0 +1,15 @@
+/a.js(5,12): error TS2304: Cannot find name 'B'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @template T
+     * @callback B
+     */
+    /** @type {B<string>} */
+               ~
+!!! error TS2304: Cannot find name 'B'.
+    let b;
+    b();
+    b(1);
+    

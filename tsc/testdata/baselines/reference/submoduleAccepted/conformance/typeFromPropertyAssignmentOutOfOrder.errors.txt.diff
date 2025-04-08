@@ -8,9 +8,10 @@
 +index.js(2,37): error TS2339: Property 'Item' does not exist on type '{}'.
 +index.js(4,11): error TS2339: Property 'Object' does not exist on type '{}'.
 +index.js(4,41): error TS2339: Property 'Object' does not exist on type '{}'.
++index.js(6,12): error TS2503: Cannot find namespace 'Workspace'.
 +
 +
-+==== index.js (5 errors) ====
++==== index.js (6 errors) ====
 +    First.Item = class I {}
 +          ~~~~
 +!!! error TS2339: Property 'Item' does not exist on type '{}'.
@@ -27,6 +28,8 @@
 +!!! error TS2339: Property 'Object' does not exist on type '{}'.
 +    
 +    /** @type {Workspace.Object} */
++               ~~~~~~~~~
++!!! error TS2503: Cannot find namespace 'Workspace'.
 +    var am;
 +    
 +==== roots.js (0 errors) ====

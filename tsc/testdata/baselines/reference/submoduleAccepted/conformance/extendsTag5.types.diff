@@ -1,31 +1,11 @@
 --- old.extendsTag5.types
 +++ new.extendsTag5.types
-@@= skipped -11, +11 lines =@@
- * @template {Foo} T
- */
- class A {
-->A : A<T>
-+>A : A
- 
-    /**
-     * @param {T} a
-     */
-    constructor(a) {
-->a : T
-+>a : any
- 
-        return a
-->a : T
-+>a : any
-    }
- }
- 
-@@= skipped -21, +21 lines =@@
+@@= skipped -32, +32 lines =@@
  */
  class B extends A {}
  >B : B
 ->A : A<{ a: string; b: string[]; }>
-+>A : A
++>A : typeof A
  
  /**
   * @extends {A<{
@@ -34,7 +14,7 @@
  class C extends A {}
  >C : C
 ->A : A<{ a: string; b: string; }>
-+>A : A
++>A : typeof A
  
  /**
   * @extends {A<{a: string, b: string[]}>}
@@ -42,7 +22,7 @@
  class D extends A {}
  >D : D
 ->A : A<{ a: string; b: string[]; }>
-+>A : A
++>A : typeof A
  
  /**
   * @extends {A<{a: string, b: string}>}
@@ -50,5 +30,5 @@
  class E extends A {}
  >E : E
 ->A : A<{ a: string; b: string; }>
-+>A : A
++>A : typeof A
  

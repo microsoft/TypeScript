@@ -30,17 +30,15 @@
  
      /** @type {any} */
      var x = {}
-->x : any
-+>x : {}
+@@= skipped -13, +13 lines =@@
  >{} : {}
  
      return new MW(x);
 ->new MW(x) : MW
 ->MW : typeof MW
-->x : any
 +>new MW(x) : any
 +>MW : any
-+>x : {}
+ >x : any
  
  };
  

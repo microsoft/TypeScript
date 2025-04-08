@@ -9,3 +9,12 @@
  
  === use.js ===
  import MyEnum from "./def";
+@@= skipped -8, +8 lines =@@
+ 
+ /** @type {MyEnum} */
+ const v = MyEnum.b;
+->v : number
++>v : MyEnum
+ >MyEnum.b : number
+ >MyEnum : { a: number; b: number; }
+ >b : number

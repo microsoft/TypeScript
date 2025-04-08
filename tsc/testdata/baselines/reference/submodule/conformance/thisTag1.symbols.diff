@@ -8,8 +8,10 @@
 ->this : Symbol(this)
 ->n : Symbol(n, Decl(a.js, 0, 12))
 ->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >s : Symbol(s, Decl(a.js, 4, 11))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  }
  
  const o = {

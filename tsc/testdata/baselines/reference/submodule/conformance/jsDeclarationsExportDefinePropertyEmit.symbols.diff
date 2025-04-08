@@ -113,16 +113,8 @@
  
  /**
   * @param {{x: string}} a
-@@= skipped -37, +22 lines =@@
- >b : Symbol(b, Decl(index.js, 37, 13))
- 
-     return a.x && b.y();
-->a.x : Symbol(x, Decl(index.js, 34, 12))
- >a : Symbol(a, Decl(index.js, 37, 11))
-->x : Symbol(x, Decl(index.js, 34, 12))
-->b.y : Symbol(y, Decl(index.js, 35, 12))
- >b : Symbol(b, Decl(index.js, 37, 13))
-->y : Symbol(y, Decl(index.js, 35, 12))
+@@= skipped -45, +30 lines =@@
+ >y : Symbol(y, Decl(index.js, 35, 12))
  }
  Object.defineProperty(module.exports, "g", { value: g });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -137,16 +129,8 @@
  >value : Symbol(value, Decl(index.js, 40, 44))
  >g : Symbol(g, Decl(index.js, 31, 77))
  
-@@= skipped -29, +21 lines =@@
- >b : Symbol(b, Decl(index.js, 47, 14))
- 
-     return a.x && b.y();
-->a.x : Symbol(x, Decl(index.js, 44, 12))
- >a : Symbol(a, Decl(index.js, 47, 12))
-->x : Symbol(x, Decl(index.js, 44, 12))
-->b.y : Symbol(y, Decl(index.js, 45, 12))
- >b : Symbol(b, Decl(index.js, 47, 14))
-->y : Symbol(y, Decl(index.js, 45, 12))
+@@= skipped -29, +25 lines =@@
+ >y : Symbol(y, Decl(index.js, 45, 12))
  }
  Object.defineProperty(module.exports, "h", { value: hh });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))

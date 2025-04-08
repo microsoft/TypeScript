@@ -1,6 +1,6 @@
 --- old.typedefCrossModule5.errors.txt
 +++ new.typedefCrossModule5.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -[96mmod1.js[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
 -
 -[7m1[0m /** @typedef {number} Foo */
@@ -10,18 +10,17 @@
 -    [7m1[0m class Foo { } // should error
 -    [7m [0m [96m      ~~~[0m
 -    'Foo' was also declared here.
- [96mmod1.js[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
- 
- [7m2[0m class Bar {}
- [7m [0m [91m      ~~~[0m
- 
+-[96mmod1.js[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
+-
+-[7m2[0m class Bar {}
+-[7m [0m [91m      ~~~[0m
+-
 -  [96mmod2.js[0m:[93m2[0m:[93m7[0m
-+  [96mmod2.js[0m:[93m2[0m:[93m7[0m - 'Bar' was also declared here.
-     [7m2[0m const Bar = 3;
-     [7m [0m [96m      ~~~[0m
+-    [7m2[0m const Bar = 3;
+-    [7m [0m [96m      ~~~[0m
 -    'Bar' was also declared here.
 -[96mmod2.js[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
- 
+-
 -[7m1[0m class Foo { } // should error
 -[7m [0m [91m      ~~~[0m
 -
@@ -29,46 +28,41 @@
 -    [7m1[0m /** @typedef {number} Foo */
 -    [7m [0m [96m                      ~~~[0m
 -    'Foo' was also declared here.
- [96mmod2.js[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
- 
- [7m2[0m const Bar = 3;
- [7m [0m [91m      ~~~[0m
- 
+-[96mmod2.js[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
+-
+-[7m2[0m const Bar = 3;
+-[7m [0m [91m      ~~~[0m
+-
 -  [96mmod1.js[0m:[93m2[0m:[93m7[0m
-+  [96mmod1.js[0m:[93m2[0m:[93m7[0m - 'Bar' was also declared here.
-     [7m2[0m class Bar {}
-     [7m [0m [96m      ~~~[0m
+-    [7m2[0m class Bar {}
+-    [7m [0m [96m      ~~~[0m
 -    'Bar' was also declared here.
- 
- 
+-
+-
 -==== mod1.js (2 errors) ====
-+==== mod1.js (1 errors) ====
-     /** @typedef {number} Foo */
+-    /** @typedef {number} Foo */
 -                          ~~~
 -!!! error TS2300: Duplicate identifier 'Foo'.
 -!!! related TS6203 mod2.js:1:7: 'Foo' was also declared here.
-     class Bar {}
-           ~~~
- !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
- !!! related TS6203 mod2.js:2:7: 'Bar' was also declared here.
-     
+-    class Bar {}
+-          ~~~
+-!!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+-!!! related TS6203 mod2.js:2:7: 'Bar' was also declared here.
+-    
 -==== mod2.js (2 errors) ====
-+==== mod2.js (1 errors) ====
-     class Foo { } // should error
+-    class Foo { } // should error
 -          ~~~
 -!!! error TS2300: Duplicate identifier 'Foo'.
 -!!! related TS6203 mod1.js:1:23: 'Foo' was also declared here.
-     const Bar = 3;
-           ~~~
- !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
- !!! related TS6203 mod1.js:2:7: 'Bar' was also declared here.
-     
+-    const Bar = 3;
+-          ~~~
+-!!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+-!!! related TS6203 mod1.js:2:7: 'Bar' was also declared here.
+-    
 -Found 4 errors in 2 files.
-+Found 2 errors in 2 files.
- 
- Errors  Files
+-
+-Errors  Files
 -     2  mod1.js[90m:1[0m
 -     2  mod2.js[90m:1[0m
-+     1  mod1.js[90m:2[0m
-+     1  mod2.js[90m:2[0m
-+
+@@= skipped --1, +1 lines =@@
++<no content>

@@ -39,29 +39,23 @@
  
      x: 1,
  >x : number
-@@= skipped -31, +31 lines =@@
- === use.js ===
- /** @type {Outer.Inner} */
- var inner
-->inner : Inner
-+>inner : any
+@@= skipped -34, +34 lines =@@
+ >inner : Inner
  
  inner.x
 ->inner.x : number
-->inner : Inner
-->x : number
 +>inner.x : any
-+>inner : any
+ >inner : Inner
+->x : number
 +>x : any
  
  inner.m()
 ->inner.m() : void
 ->inner.m : () => void
-->inner : Inner
-->m : () => void
 +>inner.m() : any
 +>inner.m : any
-+>inner : any
+ >inner : Inner
+->m : () => void
 +>m : any
  
  var inno = new Outer.Inner()

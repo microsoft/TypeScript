@@ -9,13 +9,13 @@ const { K } = require("./mod1");
 
 /** @param {K} k */
 function f(k) {
->f : (k: any) => void
->k : any
+>f : (k: K) => void
+>k : K
 
     k.values()
 >k.values() : any
 >k.values : any
->k : any
+>k : K
 >values : any
 }
 

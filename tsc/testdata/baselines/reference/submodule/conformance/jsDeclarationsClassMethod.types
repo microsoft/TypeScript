@@ -80,14 +80,14 @@ class C2 {
      * @returns {number}
      */
     method1(x, y) {
->method1 : (x: any, y: any) => any
->x : any
->y : any
+>method1 : (x: number, y: number) => number
+>x : number
+>y : number
 
         return x + y;
->x + y : any
->x : any
->y : any
+>x + y : number
+>x : number
+>y : number
     }
 }
 

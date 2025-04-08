@@ -35,7 +35,7 @@ var msgs = Outer.i.messages()
 
 /** @param {Outer.Inner} inner */
 function x(inner) {
->x : (inner: any) => void
->inner : any
+>x : (inner: Inner) => void
+>inner : Inner
 }
 

@@ -1,0 +1,42 @@
+--- old.uniqueSymbolsDeclarationsInJs.errors.txt
++++ new.uniqueSymbolsDeclarationsInJs.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++uniqueSymbolsDeclarationsInJs.js(11,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
++uniqueSymbolsDeclarationsInJs.js(16,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
++
++
++==== uniqueSymbolsDeclarationsInJs.js (2 errors) ====
++    // classes
++    class C {
++        /**
++         * @readonly
++         */
++        static readonlyStaticCall = Symbol();
++        /**
++         * @type {unique symbol}
++         * @readonly
++         */
++        static readonlyStaticType;
++               ~~~~~~~~~~~~~~~~~~
++!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
++        /**
++         * @type {unique symbol}
++         * @readonly
++         */
++        static readonlyStaticTypeAndCall = Symbol();
++               ~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
++        static readwriteStaticCall = Symbol();
++    
++        /**
++         * @readonly
++         */
++        readonlyCall = Symbol();
++        readwriteCall = Symbol();
++    }
++    
++    /** @type {unique symbol} */
++    const a = Symbol();
++    

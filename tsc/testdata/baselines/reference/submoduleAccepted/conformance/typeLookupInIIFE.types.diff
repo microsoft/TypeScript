@@ -5,5 +5,5 @@
  /** @type {ns.NotFound} */
  var crash;
 ->crash : ns.NotFound
-+>crash : any
++>crash : NotFound
  

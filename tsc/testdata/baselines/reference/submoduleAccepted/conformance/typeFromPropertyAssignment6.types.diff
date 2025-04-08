@@ -42,7 +42,7 @@
  function x(inner) {
 ->x : (inner: I) => void
 ->inner : I
-+>x : (inner: any) => void
-+>inner : any
++>x : (inner: Inner) => void
++>inner : Inner
  }
  

@@ -69,7 +69,8 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
 >d : (a: any, b: any) => any
 >a : any
 >b : any
->(null) : null
+>(null) : any
+>null : any
 
 /**
  * @template T,U
@@ -88,7 +89,8 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
 >e : (a: any, b: any) => any
 >a : any
 >b : any
->(null) : null
+>(null) : any
+>null : any
 
 /**
  * @template T
@@ -128,58 +130,58 @@ module.exports.f.self = module.exports.f;
  * @param {{y: typeof module.exports.b}} b
  */
 function g(a, b) {
->g : (a: any, b: any) => any
->a : any
->b : any
+>g : (a: { x: string; }, b: { y: any; }) => any
+>a : { x: string; }
+>b : { y: any; }
 
     return a.x && b.y();
 >a.x && b.y() : any
->a.x : any
->a : any
->x : any
+>a.x : string
+>a : { x: string; }
+>x : string
 >b.y() : any
 >b.y : any
->b : any
+>b : { y: any; }
 >y : any
 }
 
 module.exports.g = g;
->module.exports.g = g : (a: any, b: any) => any
+>module.exports.g = g : (a: { x: string; }, b: { y: any; }) => any
 >module.exports.g : any
 >module.exports : any
 >module : any
 >exports : any
 >g : any
->g : (a: any, b: any) => any
+>g : (a: { x: string; }, b: { y: any; }) => any
 
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
  */
 function hh(a, b) {
->hh : (a: any, b: any) => any
->a : any
->b : any
+>hh : (a: { x: string; }, b: { y: any; }) => any
+>a : { x: string; }
+>b : { y: any; }
 
     return a.x && b.y();
 >a.x && b.y() : any
->a.x : any
->a : any
->x : any
+>a.x : string
+>a : { x: string; }
+>x : string
 >b.y() : any
 >b.y : any
->b : any
+>b : { y: any; }
 >y : any
 }
 
 module.exports.h = hh;
->module.exports.h = hh : (a: any, b: any) => any
+>module.exports.h = hh : (a: { x: string; }, b: { y: any; }) => any
 >module.exports.h : any
 >module.exports : any
 >module : any
 >exports : any
 >h : any
->hh : (a: any, b: any) => any
+>hh : (a: { x: string; }, b: { y: any; }) => any
 
 module.exports.i = function i() {}
 >module.exports.i = function i() {} : () => void

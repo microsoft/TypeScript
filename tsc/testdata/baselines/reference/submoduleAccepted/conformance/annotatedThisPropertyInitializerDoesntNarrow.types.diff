@@ -1,17 +1,6 @@
 --- old.annotatedThisPropertyInitializerDoesntNarrow.types
 +++ new.annotatedThisPropertyInitializerDoesntNarrow.types
-@@= skipped -3, +3 lines =@@
- // from webpack/lib/Compilation.js and filed at #26427
- /** @param {{ [s: string]: number }} map */
- function mappy(map) {}
-->mappy : (map: { [s: string]: number; }) => void
-->map : { [s: string]: number; }
-+>mappy : (map: any) => void
-+>map : any
- 
- export class C {
- >C : C
-@@= skipped -10, +10 lines =@@
+@@= skipped -13, +13 lines =@@
          /** @type {{ [assetName: string]: number}} */
          this.assets = {};
  >this.assets = {} : {}
@@ -23,13 +12,11 @@
  >{} : {}
      }
      m() {
-@@= skipped -10, +10 lines =@@
- 
+@@= skipped -11, +11 lines =@@
          mappy(this.assets)
  >mappy(this.assets) : void
-->mappy : (map: { [s: string]: number; }) => void
+ >mappy : (map: { [s: string]: number; }) => void
 ->this.assets : { [assetName: string]: number; }
-+>mappy : (map: any) => void
 +>this.assets : any
  >this : this
 ->assets : { [assetName: string]: number; }

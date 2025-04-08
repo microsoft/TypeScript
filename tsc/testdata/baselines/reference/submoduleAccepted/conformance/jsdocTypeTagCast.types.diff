@@ -1,48 +1,38 @@
 --- old.jsdocTypeTagCast.types
 +++ new.jsdocTypeTagCast.types
-@@= skipped -7, +7 lines =@@
- // @ts-check
+@@= skipped -8, +8 lines =@@
  var W = /** @type {string} */(/** @type {*} */ (4));
  >W : string
-->(/** @type {*} */ (4)) : string
-->(4) : any
-+>(/** @type {*} */ (4)) : 4
-+>(4) : 4
+ >(/** @type {*} */ (4)) : string
++>(4) : string
+ >(4) : any
++>4 : any
  >4 : 4
  
  var W = /** @type {string} */(4); // Error
  >W : string
-->(4) : string
-+>(4) : 4
+ >(4) : string
++>4 : string
  >4 : 4
  
  /** @type {*} */
-@@= skipped -15, +15 lines =@@
- 
- /** @type {string} */
- var s;
-->s : string
-+>s : any
- 
+@@= skipped -19, +22 lines =@@
  var a = /** @type {*} */("" + 4);
  >a : any
-->("" + 4) : any
-+>("" + 4) : string
+ >("" + 4) : any
++>"" + 4 : any
  >"" + 4 : string
  >"" : ""
  >4 : 4
- 
- var s = "" + /** @type {*} */(4);
-->s : string
-+>s : any
+@@= skipped -9, +10 lines =@@
  >"" + /** @type {*} */(4) : string
  >"" : ""
-->(4) : any
-+>(4) : 4
+ >(4) : any
++>4 : any
  >4 : 4
  
  class SomeBase {
-@@= skipped -59, +59 lines =@@
+@@= skipped -45, +46 lines =@@
  }
  
  function SomeFakeClass() {
@@ -73,63 +63,67 @@
 +>SomeFakeClass : () => void
  
  someBase = /** @type {SomeBase} */(someDerived);
-->someBase = /** @type {SomeBase} */(someDerived) : SomeBase
-+>someBase = /** @type {SomeBase} */(someDerived) : SomeDerived
+ >someBase = /** @type {SomeBase} */(someDerived) : SomeBase
  >someBase : SomeBase
-->(someDerived) : SomeBase
-+>(someDerived) : SomeDerived
+ >(someDerived) : SomeBase
++>someDerived : SomeBase
  >someDerived : SomeDerived
  
  someBase = /** @type {SomeBase} */(someBase);
-@@= skipped -17, +17 lines =@@
+@@= skipped -15, +16 lines =@@
  >someBase : SomeBase
+ >(someBase) : SomeBase
+ >someBase : SomeBase
++>someBase : SomeBase
  
  someBase = /** @type {SomeBase} */(someOther); // Error
-->someBase = /** @type {SomeBase} */(someOther) : SomeBase
-+>someBase = /** @type {SomeBase} */(someOther) : SomeOther
+ >someBase = /** @type {SomeBase} */(someOther) : SomeBase
  >someBase : SomeBase
-->(someOther) : SomeBase
-+>(someOther) : SomeOther
+ >(someOther) : SomeBase
++>someOther : SomeBase
  >someOther : SomeOther
  
  someDerived = /** @type {SomeDerived} */(someDerived);
-@@= skipped -12, +12 lines =@@
+@@= skipped -12, +14 lines =@@
  >someDerived : SomeDerived
+ >(someDerived) : SomeDerived
+ >someDerived : SomeDerived
++>someDerived : SomeDerived
  
  someDerived = /** @type {SomeDerived} */(someBase);
-->someDerived = /** @type {SomeDerived} */(someBase) : SomeDerived
-+>someDerived = /** @type {SomeDerived} */(someBase) : SomeBase
+ >someDerived = /** @type {SomeDerived} */(someBase) : SomeDerived
  >someDerived : SomeDerived
-->(someBase) : SomeDerived
-+>(someBase) : SomeBase
+ >(someBase) : SomeDerived
++>someBase : SomeDerived
  >someBase : SomeBase
  
  someDerived = /** @type {SomeDerived} */(someOther); // Error
-->someDerived = /** @type {SomeDerived} */(someOther) : SomeDerived
-+>someDerived = /** @type {SomeDerived} */(someOther) : SomeOther
+ >someDerived = /** @type {SomeDerived} */(someOther) : SomeDerived
  >someDerived : SomeDerived
-->(someOther) : SomeDerived
-+>(someOther) : SomeOther
+ >(someOther) : SomeDerived
++>someOther : SomeDerived
  >someOther : SomeOther
  
  someOther = /** @type {SomeOther} */(someDerived); // Error
-->someOther = /** @type {SomeOther} */(someDerived) : SomeOther
-+>someOther = /** @type {SomeOther} */(someDerived) : SomeDerived
+ >someOther = /** @type {SomeOther} */(someDerived) : SomeOther
  >someOther : SomeOther
-->(someDerived) : SomeOther
-+>(someDerived) : SomeDerived
+ >(someDerived) : SomeOther
++>someDerived : SomeOther
  >someDerived : SomeDerived
  
  someOther = /** @type {SomeOther} */(someBase); // Error
-->someOther = /** @type {SomeOther} */(someBase) : SomeOther
-+>someOther = /** @type {SomeOther} */(someBase) : SomeBase
+ >someOther = /** @type {SomeOther} */(someBase) : SomeOther
  >someOther : SomeOther
-->(someBase) : SomeOther
-+>(someBase) : SomeBase
+ >(someBase) : SomeOther
++>someBase : SomeOther
  >someBase : SomeBase
  
  someOther = /** @type {SomeOther} */(someOther);
-@@= skipped -31, +31 lines =@@
+@@= skipped -30, +35 lines =@@
+ >someOther : SomeOther
+ >(someOther) : SomeOther
+ >someOther : SomeOther
++>someOther : SomeOther
  
  someFakeClass = someBase;
  >someFakeClass = someBase : SomeBase
@@ -151,59 +145,34 @@
 +>someFakeClass : any
  
  someBase = /** @type {SomeBase} */(someFakeClass);
-->someBase = /** @type {SomeBase} */(someFakeClass) : SomeBase
-+>someBase = /** @type {SomeBase} */(someFakeClass) : any
+ >someBase = /** @type {SomeBase} */(someFakeClass) : SomeBase
  >someBase : SomeBase
-->(someFakeClass) : SomeBase
+ >(someFakeClass) : SomeBase
 ->someFakeClass : SomeFakeClass
-+>(someFakeClass) : any
++>someFakeClass : SomeBase
 +>someFakeClass : any
  
  // Type assertion cannot be a type-predicate type
  /** @type {number | string} */
- var numOrStr;
-->numOrStr : string | number
-+>numOrStr : any
- 
- /** @type {string} */
- var str;
-->str : string
-+>str : any
- 
+@@= skipped -34, +36 lines =@@
  if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
  >(numOrStr === undefined) : boolean
  >numOrStr === undefined : boolean
-->numOrStr : string | number
-+>numOrStr : any
++>numOrStr === undefined : boolean
+ >numOrStr : string | number
  >undefined : undefined
  
- 	str = numOrStr; // Error, no narrowing occurred
-->str = numOrStr : string | number
-->str : string
-->numOrStr : string | number
-+>str = numOrStr : any
-+>str : any
-+>numOrStr : any
- }
- 
- 
- var asConst1 = /** @type {const} */(1);
-->asConst1 : 1
-+>asConst1 : number
+@@= skipped -14, +15 lines =@@
+ >asConst1 : 1
  >(1) : 1
  >1 : 1
++>1 : 1
  
  var asConst2 = /** @type {const} */({
-->asConst2 : { readonly x: 1; }
-->({    x: 1}) : { readonly x: 1; }
-->{    x: 1} : { readonly x: 1; }
-+>asConst2 : { x: number; }
-+>({    x: 1}) : { x: number; }
-+>{    x: 1} : { x: number; }
+ >asConst2 : { readonly x: 1; }
+ >({    x: 1}) : { readonly x: 1; }
+ >{    x: 1} : { readonly x: 1; }
++>{    x: 1} : { readonly x: 1; }
  
      x: 1
-->x : 1
-+>x : number
- >1 : 1
- 
- });
+ >x : 1

@@ -45,15 +45,14 @@
   */
  function jsdocced(x) { arguments; }
 ->jsdocced : (x: number, ...args: any[]) => void
-->x : number
-+>jsdocced : (x: any) => void
-+>x : any
++>jsdocced : (x: number) => void
+ >x : number
  >arguments : IArguments
  
  jsdocced(1);
  >jsdocced(1) : void
 ->jsdocced : (x: number, ...args: any[]) => void
-+>jsdocced : (x: any) => void
++>jsdocced : (x: number) => void
  >1 : 1
  
  function dontDoubleRest(x, ...y) { arguments; }

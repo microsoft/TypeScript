@@ -20,11 +20,11 @@ const obj = {
  * @type {keyof typeof obj}
  */
 let selected = "x";
->selected : string
+>selected : "x" | "y"
 >"x" : "x"
 
 selected = "z"; // should fail
 >selected = "z" : "z"
->selected : string
+>selected : "x" | "y"
 >"z" : "z"
 

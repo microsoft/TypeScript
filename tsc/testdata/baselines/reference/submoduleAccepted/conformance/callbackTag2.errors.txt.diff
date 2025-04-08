@@ -2,11 +2,27 @@
 +++ new.callbackTag2.errors.txt
 @@= skipped -0, +0 lines =@@
 -cb.js(18,29): error TS2304: Cannot find name 'S'.
-+cb.js(19,14): error TS2339: Property 'id' does not exist on type 'SharedClass'.
++cb.js(8,12): error TS2304: Cannot find name 'Id'.
++cb.js(19,14): error TS2339: Property 'id' does not exist on type 'SharedClass<S>'.
++cb.js(22,12): error TS2304: Cannot find name 'SharedId'.
++cb.js(25,12): error TS2304: Cannot find name 'Final'.
  
  
- ==== cb.js (1 errors) ====
-@@= skipped -19, +19 lines =@@
+-==== cb.js (1 errors) ====
++==== cb.js (4 errors) ====
+     /** @template T
+      * @callback Id
+      * @param {T} t
+@@= skipped -9, +12 lines =@@
+     var x = 1
+     
+     /** @type {Id<string>} I actually wanted to write `const "120"` */
++               ~~
++!!! error TS2304: Cannot find name 'Id'.
+     var one_twenty = s => "120";
+     
+     /** @template S
+@@= skipped -10, +12 lines =@@
      class SharedClass {
          constructor() {
              /** @type {SharedId<S>} */
@@ -14,7 +30,17 @@
 -!!! error TS2304: Cannot find name 'S'.
              this.id;
 +                 ~~
-+!!! error TS2339: Property 'id' does not exist on type 'SharedClass'.
++!!! error TS2339: Property 'id' does not exist on type 'SharedClass<S>'.
          }
      }
      /** @type {SharedId<number>} */
++               ~~~~~~~~
++!!! error TS2304: Cannot find name 'SharedId'.
+     var outside = n => n + 1;
+     
+     /** @type {Final<{ fantasy }, { heroes }>} */
++               ~~~~~
++!!! error TS2304: Cannot find name 'Final'.
+     var noreturn = (barts, tidus, noctis) => "cecil"
+     
+     /**

@@ -3,6 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -other.js(5,5): error TS2339: Property 'wat' does not exist on type 'One'.
 -other.js(10,5): error TS2339: Property 'wat' does not exist on type 'Two'.
++other.js(2,11): error TS2503: Cannot find namespace 'Ns'.
++other.js(7,11): error TS2503: Cannot find namespace 'Ns'.
 +prototypePropertyAssignmentMergeAcrossFiles2.js(2,4): error TS2339: Property 'One' does not exist on type '{}'.
 +prototypePropertyAssignmentMergeAcrossFiles2.js(3,4): error TS2339: Property 'Two' does not exist on type '{}'.
 +prototypePropertyAssignmentMergeAcrossFiles2.js(5,4): error TS2339: Property 'One' does not exist on type '{}'.
@@ -29,10 +31,11 @@
 +!!! error TS2339: Property 'Two' does not exist on type '{}'.
      }
      
--==== other.js (2 errors) ====
-+==== other.js (0 errors) ====
+ ==== other.js (2 errors) ====
      /**
       * @type {Ns.One}
++              ~~
++!!! error TS2503: Cannot find namespace 'Ns'.
       */
      var one;
      one.wat;
@@ -40,6 +43,8 @@
 -!!! error TS2339: Property 'wat' does not exist on type 'One'.
      /**
       * @type {Ns.Two}
++              ~~
++!!! error TS2503: Cannot find namespace 'Ns'.
       */
      var two;
      two.wat;

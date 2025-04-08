@@ -19,8 +19,8 @@ export class B {
      * @param {number} _arg
      */
     set x(_arg) {
->x : any
->_arg : any
+>x : number
+>_arg : number
     }
 }
 
@@ -73,14 +73,14 @@ Object.defineProperty(E.prototype, "x", {
 >E : typeof E
 >prototype : E
 >"x" : "x"
->{    /**     * @param {number} _arg     */    set(_arg) {}} : { set: (_arg: any) => void; }
+>{    /**     * @param {number} _arg     */    set(_arg) {}} : { set: (_arg: number) => void; }
 
     /**
      * @param {number} _arg
      */
     set(_arg) {}
->set : (_arg: any) => void
->_arg : any
+>set : (_arg: number) => void
+>_arg : number
 
 });
 
@@ -96,7 +96,7 @@ Object.defineProperty(F.prototype, "x", {
 >F : typeof F
 >prototype : F
 >"x" : "x"
->{    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}} : { get: () => number; set: (_arg: any) => void; }
+>{    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}} : { get: () => number; set: (_arg: number) => void; }
 
     get() {
 >get : () => number
@@ -109,8 +109,8 @@ Object.defineProperty(F.prototype, "x", {
      * @param {number} _arg
      */
     set(_arg) {}
->set : (_arg: any) => void
->_arg : any
+>set : (_arg: number) => void
+>_arg : number
 
 });
 
@@ -126,14 +126,14 @@ Object.defineProperty(G.prototype, "x", {
 >G : typeof G
 >prototype : G
 >"x" : "x"
->{    /**     * @param {number[]} args     */    set(...args) {}} : { set: (v: any) => void; }
+>{    /**     * @param {number[]} args     */    set(...args) {}} : { set: (...args: number[]) => void; }
 
     /**
      * @param {number[]} args
      */
     set(...args) {}
->set : (v: any) => void
->args : [v: any]
+>set : (...args: number[]) => void
+>args : number[]
 
 });
 
@@ -169,15 +169,15 @@ Object.defineProperty(I.prototype, "x", {
 >I : typeof I
 >prototype : I
 >"x" : "x"
->{    /**     * @param {number} v     */    set: (v) => {}} : { set: (v: any) => void; }
+>{    /**     * @param {number} v     */    set: (v) => {}} : { set: (v: number) => void; }
 
     /**
      * @param {number} v
      */
     set: (v) => {}
->set : (v: any) => void
->(v) => {} : (v: any) => void
->v : any
+>set : (v: number) => void
+>(v) => {} : (v: number) => void
+>v : number
 
 });
 
@@ -185,9 +185,9 @@ Object.defineProperty(I.prototype, "x", {
  * @param {number} v
  */
 const jSetter = (v) => {}
->jSetter : (v: any) => void
->(v) => {} : (v: any) => void
->v : any
+>jSetter : (v: number) => void
+>(v) => {} : (v: number) => void
+>v : number
 
 export class J {}
 >J : J
@@ -201,11 +201,11 @@ Object.defineProperty(J.prototype, "x", {
 >J : typeof J
 >prototype : J
 >"x" : "x"
->{    set: jSetter} : { set: (v: any) => void; }
+>{    set: jSetter} : { set: (v: number) => void; }
 
     set: jSetter
->set : (v: any) => void
->jSetter : (v: any) => void
+>set : (v: number) => void
+>jSetter : (v: number) => void
 
 });
 
@@ -213,17 +213,17 @@ Object.defineProperty(J.prototype, "x", {
  * @param {number} v
  */
 const kSetter1 = (v) => {}
->kSetter1 : (v: any) => void
->(v) => {} : (v: any) => void
->v : any
+>kSetter1 : (v: number) => void
+>(v) => {} : (v: number) => void
+>v : number
 
 /**
  * @param {number} v
  */
 const kSetter2 = (v) => {}
->kSetter2 : (v: any) => void
->(v) => {} : (v: any) => void
->v : any
+>kSetter2 : (v: number) => void
+>(v) => {} : (v: number) => void
+>v : number
 
 export class K {}
 >K : K
@@ -237,17 +237,17 @@ Object.defineProperty(K.prototype, "x", {
 >K : typeof K
 >prototype : K
 >"x" : "x"
->{    set: Math.random() ? kSetter1 : kSetter2} : { set: (v: any) => void; }
+>{    set: Math.random() ? kSetter1 : kSetter2} : { set: (v: number) => void; }
 
     set: Math.random() ? kSetter1 : kSetter2
->set : (v: any) => void
->Math.random() ? kSetter1 : kSetter2 : (v: any) => void
+>set : (v: number) => void
+>Math.random() ? kSetter1 : kSetter2 : (v: number) => void
 >Math.random() : number
 >Math.random : () => number
 >Math : Math
 >random : () => number
->kSetter1 : (v: any) => void
->kSetter2 : (v: any) => void
+>kSetter1 : (v: number) => void
+>kSetter2 : (v: number) => void
 
 });
 
@@ -255,17 +255,17 @@ Object.defineProperty(K.prototype, "x", {
  * @param {number} v
  */
 const lSetter1 = (v) => {}
->lSetter1 : (v: any) => void
->(v) => {} : (v: any) => void
->v : any
+>lSetter1 : (v: number) => void
+>(v) => {} : (v: number) => void
+>v : number
 
 /**
  * @param {string} v
  */
 const lSetter2 = (v) => {}
->lSetter2 : (v: any) => void
->(v) => {} : (v: any) => void
->v : any
+>lSetter2 : (v: string) => void
+>(v) => {} : (v: string) => void
+>v : string
 
 export class L {}
 >L : L
@@ -279,17 +279,17 @@ Object.defineProperty(L.prototype, "x", {
 >L : typeof L
 >prototype : L
 >"x" : "x"
->{    set: Math.random() ? lSetter1 : lSetter2} : { set: (v: any) => void; }
+>{    set: Math.random() ? lSetter1 : lSetter2} : { set: ((v: number) => void) | ((v: string) => void); }
 
     set: Math.random() ? lSetter1 : lSetter2
->set : (v: any) => void
->Math.random() ? lSetter1 : lSetter2 : (v: any) => void
+>set : ((v: number) => void) | ((v: string) => void)
+>Math.random() ? lSetter1 : lSetter2 : ((v: number) => void) | ((v: string) => void)
 >Math.random() : number
 >Math.random : () => number
 >Math : Math
 >random : () => number
->lSetter1 : (v: any) => void
->lSetter2 : (v: any) => void
+>lSetter1 : (v: number) => void
+>lSetter2 : (v: string) => void
 
 });
 
@@ -297,17 +297,17 @@ Object.defineProperty(L.prototype, "x", {
  * @param {number | boolean} v
  */
 const mSetter1 = (v) => {}
->mSetter1 : (v: any) => void
->(v) => {} : (v: any) => void
->v : any
+>mSetter1 : (v: number | boolean) => void
+>(v) => {} : (v: number | boolean) => void
+>v : number | boolean
 
 /**
  * @param {string | boolean} v
  */
 const mSetter2 = (v) => {}
->mSetter2 : (v: any) => void
->(v) => {} : (v: any) => void
->v : any
+>mSetter2 : (v: string | boolean) => void
+>(v) => {} : (v: string | boolean) => void
+>v : string | boolean
 
 export class M {}
 >M : M
@@ -321,17 +321,17 @@ Object.defineProperty(M.prototype, "x", {
 >M : typeof M
 >prototype : M
 >"x" : "x"
->{    set: Math.random() ? mSetter1 : mSetter2} : { set: (v: any) => void; }
+>{    set: Math.random() ? mSetter1 : mSetter2} : { set: ((v: number | boolean) => void) | ((v: string | boolean) => void); }
 
     set: Math.random() ? mSetter1 : mSetter2
->set : (v: any) => void
->Math.random() ? mSetter1 : mSetter2 : (v: any) => void
+>set : ((v: number | boolean) => void) | ((v: string | boolean) => void)
+>Math.random() ? mSetter1 : mSetter2 : ((v: number | boolean) => void) | ((v: string | boolean) => void)
 >Math.random() : number
 >Math.random : () => number
 >Math : Math
 >random : () => number
->mSetter1 : (v: any) => void
->mSetter2 : (v: any) => void
+>mSetter1 : (v: number | boolean) => void
+>mSetter2 : (v: string | boolean) => void
 
 });
 

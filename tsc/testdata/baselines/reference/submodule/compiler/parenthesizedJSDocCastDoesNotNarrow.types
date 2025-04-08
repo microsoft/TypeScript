@@ -6,14 +6,15 @@ let value = "";
 >"" : ""
 
 switch (/** @type {"foo" | "bar"} */ (value)) {
->(value) : string
+>(value) : "bar" | "foo"
+>value : "bar" | "foo"
 >value : string
 
   case "bar":
 >"bar" : "bar"
 
     value;
->value : "bar"
+>value : string
 
     break;
 
@@ -21,7 +22,7 @@ switch (/** @type {"foo" | "bar"} */ (value)) {
 >"foo" : "foo"
 
     value;
->value : "foo"
+>value : string
 
     break;
 
@@ -29,7 +30,7 @@ switch (/** @type {"foo" | "bar"} */ (value)) {
 >"invalid" : "invalid"
 
     value;
->value : "invalid"
+>value : string
 
     break;
 }

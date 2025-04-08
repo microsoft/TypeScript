@@ -15,6 +15,6 @@ export default interface Foo {
  * @param { Foo } foo
  */
 export function f(foo) {}
->f : (foo: any) => void
->foo : any
+>f : (foo: Foo) => void
+>foo : Foo
 

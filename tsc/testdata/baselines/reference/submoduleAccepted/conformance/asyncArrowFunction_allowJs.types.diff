@@ -6,7 +6,7 @@
  const a = () => 0
 ->a : () => string
 ->() => 0 : () => string
-+>a : () => number
++>a : function
 +>() => 0 : () => number
  >0 : 0
  
@@ -15,7 +15,7 @@
  const b = async () => 0
 ->b : () => string
 ->async () => 0 : () => string
-+>b : () => Promise<number>
++>b : function
 +>async () => 0 : () => Promise<number>
  >0 : 0
  
@@ -24,7 +24,7 @@
  const c = async () => {
 ->c : () => string
 ->async () => {	return 0} : () => string
-+>c : () => Promise<number>
++>c : function
 +>async () => {	return 0} : () => Promise<number>
  
  	return 0
@@ -35,7 +35,7 @@
  const d = async () => {
 ->d : () => string
 ->async () => {	return ""} : () => string
-+>d : () => Promise<string>
++>d : function
 +>async () => {	return ""} : () => Promise<string>
  
  	return ""
@@ -47,15 +47,16 @@
 ->f : (arg0: () => string) => void
 ->(p) => {} : (p: () => string) => void
 ->p : () => string
-+>f : (p: any) => void
++>f : function
 +>(p) => {} : (p: any) => void
 +>p : any
  
  // Error (good)
  f(async () => {
- >f(async () => {	return 0}) : void
+->f(async () => {	return 0}) : void
 ->f : (arg0: () => string) => void
-+>f : (p: any) => void
++>f(async () => {	return 0}) : any
++>f : function
  >async () => {	return 0} : () => Promise<number>
  
  	return 0

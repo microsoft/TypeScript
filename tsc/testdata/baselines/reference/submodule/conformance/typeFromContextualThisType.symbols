@@ -9,7 +9,9 @@ const o1 = {
 >a : Symbol(a, Decl(bug25926.js, 1, 12))
 
         this.b = n => n;
->this : Symbol((Anonymous type), Decl(bug25926.js, 1, 10))
+>this.b : Symbol(b, Decl(bug25926.js, 0, 23))
+>this : Symbol((Anonymous type), Decl(bug25926.js, 0, 11))
+>b : Symbol(b, Decl(bug25926.js, 0, 23))
 >n : Symbol(n, Decl(bug25926.js, 3, 16))
 >n : Symbol(n, Decl(bug25926.js, 3, 16))
     }
@@ -23,10 +25,16 @@ const o2 = {
 >d : Symbol(d, Decl(bug25926.js, 8, 12))
 
         this.e = this.f = m => this.g || m;
->this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
->this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
+>this.e : Symbol(e, Decl(bug25926.js, 7, 23))
+>this : Symbol((Anonymous type), Decl(bug25926.js, 7, 11))
+>e : Symbol(e, Decl(bug25926.js, 7, 23))
+>this.f : Symbol(f, Decl(bug25926.js, 7, 46))
+>this : Symbol((Anonymous type), Decl(bug25926.js, 7, 11))
+>f : Symbol(f, Decl(bug25926.js, 7, 46))
 >m : Symbol(m, Decl(bug25926.js, 10, 25))
->this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
+>this.g : Symbol(g, Decl(bug25926.js, 7, 69))
+>this : Symbol((Anonymous type), Decl(bug25926.js, 7, 11))
+>g : Symbol(g, Decl(bug25926.js, 7, 69))
 >m : Symbol(m, Decl(bug25926.js, 10, 25))
     }
 };

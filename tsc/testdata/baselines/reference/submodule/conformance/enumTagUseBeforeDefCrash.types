@@ -12,5 +12,5 @@ var foo = { };
  * @type {foo}
  */
 var s;
->s : any
+>s : foo
 

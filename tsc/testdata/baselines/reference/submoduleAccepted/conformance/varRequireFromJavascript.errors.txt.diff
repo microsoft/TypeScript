@@ -4,7 +4,7 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +use.js(1,10): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+use.js(12,12): error TS7006: Parameter 'wrap' implicitly has an 'any' type.
++use.js(10,12): error TS2503: Cannot find namespace 'ex'.
 +
 +
 +==== use.js (2 errors) ====
@@ -20,10 +20,10 @@
 +    // types work
 +    /**
 +     * @param {ex.Crunch} wrap
++               ~~
++!!! error TS2503: Cannot find namespace 'ex'.
 +     */
 +    function f(wrap) {
-+               ~~~~
-+!!! error TS7006: Parameter 'wrap' implicitly has an 'any' type.
 +        wrap.n
 +    }
 +    

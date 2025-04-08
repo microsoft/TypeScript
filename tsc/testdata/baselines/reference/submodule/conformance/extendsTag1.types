@@ -6,6 +6,6 @@
  * @extends {Set<T>} Should prefer this Set<T>, not the Set in the heritage clause
  */
 class My extends Set {}
->My : My
+>My : My<T>
 >Set : Set<any>
 

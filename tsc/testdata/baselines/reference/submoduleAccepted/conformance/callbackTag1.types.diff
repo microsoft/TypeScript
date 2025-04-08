@@ -1,13 +1,11 @@
 --- old.callbackTag1.types
 +++ new.callbackTag1.types
-@@= skipped -10, +10 lines =@@
- 
+@@= skipped -11, +11 lines =@@
  /** @type {Sid} smallId */
  var sid = s => s + "!";
-->sid : Sid
+ >sid : Sid
 ->s => s + "!" : (s: string) => string
 ->s : string
-+>sid : (s: any) => string
 +>s => s + "!" : (s: any) => string
 +>s : any
  >s + "!" : string
@@ -18,10 +16,9 @@
  
  /** @type {NoReturn} */
  var noreturn = obj => void obj.title
-->noreturn : NoReturn
+ >noreturn : NoReturn
 ->obj => void obj.title : (obj: { e: number; m: number; title: string; }) => any
 ->obj : { e: number; m: number; title: string; }
-+>noreturn : (obj: any) => any
 +>obj => void obj.title : (obj: any) => any
 +>obj : any
  >void obj.title : undefined

@@ -42,16 +42,16 @@
 ->f : (greatest: ex.Greatest, wrap: ex.Crunch) => void
 ->greatest : ex.Greatest
 ->wrap : ex.Crunch
-+>f : (greatest: any, wrap: any) => void
-+>greatest : any
-+>wrap : any
++>f : (greatest: Greatest, wrap: Crunch) => void
++>greatest : Greatest
++>wrap : Crunch
  
      greatest.day
 ->greatest.day : 1
 ->greatest : ex.Greatest
 ->day : 1
 +>greatest.day : any
-+>greatest : any
++>greatest : Greatest
 +>day : any
  
      wrap.n
@@ -59,7 +59,7 @@
 ->wrap : ex.Crunch
 ->n : number
 +>wrap.n : any
-+>wrap : any
++>wrap : Crunch
 +>n : any
  }
  

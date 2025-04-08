@@ -10,7 +10,7 @@ class A {
 	 * @param {object} [foo={}]
 	 */
 	constructor(foo = {}) {
->foo : {}
+>foo : object
 >{} : {}
 
 		const key = "bar";
@@ -21,17 +21,17 @@ class A {
 		 * @type object
 		 */
 		this.foo = foo;
->this.foo = foo : {}
+>this.foo = foo : object
 >this.foo : any
 >this : this
 >foo : any
->foo : {}
+>foo : object
 
 		/**
 		 * @type object
 		 */
 		const arguments = this.arguments;
->arguments : { bar: {}; }
+>arguments : object
 >this.arguments : { bar: {}; }
 >this : this
 >arguments : { bar: {}; }
@@ -40,35 +40,35 @@ class A {
 		 * @type object
 		 */
 		this.bar = arguments.bar;
->this.bar = arguments.bar : {}
+>this.bar = arguments.bar : any
 >this.bar : any
 >this : this
 >bar : any
->arguments.bar : {}
->arguments : { bar: {}; }
->bar : {}
+>arguments.bar : any
+>arguments : object
+>bar : any
 
 		/**
 		 * @type object
 		 */
 		this.baz = arguments[key];
->this.baz = arguments[key] : {}
+>this.baz = arguments[key] : any
 >this.baz : any
 >this : this
 >baz : any
->arguments[key] : {}
->arguments : { bar: {}; }
+>arguments[key] : any
+>arguments : object
 >key : "bar"
 
 		/**
 		 * @type object
 		 */
 		this.options = arguments;
->this.options = arguments : { bar: {}; }
+>this.options = arguments : object
 >this.options : any
 >this : this
 >options : any
->arguments : { bar: {}; }
+>arguments : object
 	}
 
 	get arguments() {

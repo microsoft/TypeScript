@@ -1,66 +1,75 @@
 --- old.enumTag.types
 +++ new.enumTag.types
-@@= skipped -77, +77 lines =@@
-  * @param {Fs} f
+@@= skipped -24, +24 lines =@@
+     /** @type {number} */
+     OK_I_GUESS: 2
+ >OK_I_GUESS : number
++>2 : number
+ >2 : 2
+ }
+ /** @enum number */
+@@= skipped -18, +19 lines =@@
+     /** @type {number} */
+     FINE: 2,
+ >FINE : number
++>2 : number
+ >2 : 2
+ }
+ /** @enum {function(number): number} */
+@@= skipped -36, +37 lines =@@
   */
  function consume(t,s,f) {
-->consume : (t: Target, s: Second, f: Fs) => void
+ >consume : (t: Target, s: Second, f: Fs) => void
 ->t : string
 ->s : number
-->f : Fs
-+>consume : (t: any, s: any, f: any) => void
-+>t : any
-+>s : any
-+>f : any
++>t : Target
++>s : Second
+ >f : Fs
  
      /** @type {string} */
      var str = t
-->str : string
+ >str : string
 ->t : string
-+>str : any
-+>t : any
++>t : Target
  
      /** @type {number} */
      var num = s
-->num : number
+ >num : number
 ->s : number
-+>num : any
-+>s : any
++>s : Second
  
      /** @type {(n: number) => number} */
      var fun = f
-->fun : (n: number) => number
-->f : Fs
-+>fun : any
-+>f : any
+@@= skipped -21, +21 lines =@@
  
      /** @type {Target} */
      var v = Target.START
-@@= skipped -48, +48 lines =@@
+->v : string
++>v : Target
+ >Target.START : string
+ >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
+ >START : string
+ 
+     v = Target.UNKNOWN // error, can't find 'UNKNOWN'
+ >v = Target.UNKNOWN : any
+->v : string
++>v : Target
+ >Target.UNKNOWN : any
+ >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
+ >UNKNOWN : any
+ 
+     v = Second.MISTAKE // meh..ok, I guess?
+ >v = Second.MISTAKE : string
+->v : string
++>v : Target
+ >Second.MISTAKE : string
+ >Second : { MISTAKE: string; OK: number; FINE: number; }
+ >MISTAKE : string
+ 
+     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
+ >v = 'something else' : "something else"
+->v : string
++>v : Target
+ >'something else' : "something else"
  }
  /** @param {string} s */
- function ff(s) {
-->ff : (s: string) => any
-->s : string
-+>ff : (s: any) => any
-+>s : any
- 
-     // element access with arbitrary string is an error only with noImplicitAny
-     if (!Target[s]) {
- >!Target[s] : boolean
- >Target[s] : any
- >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
-->s : string
-+>s : any
- 
-         return null
-     }
-@@= skipped -16, +16 lines =@@
-         return Target[s]
- >Target[s] : any
- >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
-->s : string
-+>s : any
-     }
- }
- 

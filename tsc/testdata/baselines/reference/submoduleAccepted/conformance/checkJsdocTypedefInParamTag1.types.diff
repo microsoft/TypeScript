@@ -1,76 +1,38 @@
 --- old.checkJsdocTypedefInParamTag1.types
 +++ new.checkJsdocTypedefInParamTag1.types
-@@= skipped -11, +11 lines =@@
-  * @param {Opts} opts
-  */
- function foo(opts) {
-->foo : (opts: Opts) => void
-->opts : Opts
-+>foo : (opts: any) => void
-+>opts : any
+@@= skipped -15, +15 lines =@@
+ >opts : Opts
  
      opts.x;
 ->opts.x : string
-->opts : Opts
-->x : string
 +>opts.x : any
-+>opts : any
+ >opts : Opts
+->x : string
 +>x : any
  }
  
  foo({x: 'abc'});
- >foo({x: 'abc'}) : void
-->foo : (opts: Opts) => void
-+>foo : (opts: any) => void
- >{x: 'abc'} : { x: string; }
- >x : string
- >'abc' : "abc"
 @@= skipped -24, +24 lines =@@
-  * @param {AnotherOpts} opts
-  */
- function foo1(opts) {
-->foo1 : (opts: AnotherOpts) => void
-->opts : AnotherOpts
-+>foo1 : (opts: any) => void
-+>opts : any
+ >opts : AnotherOpts
  
      opts.anotherX;
 ->opts.anotherX : string
-->opts : AnotherOpts
-->anotherX : string
 +>opts.anotherX : any
-+>opts : any
+ >opts : AnotherOpts
+->anotherX : string
 +>anotherX : any
  }
  
  foo1({anotherX: "world"});
- >foo1({anotherX: "world"}) : void
-->foo1 : (opts: AnotherOpts) => void
-+>foo1 : (opts: any) => void
- >{anotherX: "world"} : { anotherX: string; }
- >anotherX : string
- >"world" : "world"
 @@= skipped -26, +26 lines =@@
-  * @param {Opts1} opts
-  */
- function foo2(opts) {
-->foo2 : (opts: Opts1) => void
-->opts : Opts1
-+>foo2 : (opts: any) => void
-+>opts : any
+ >opts : Opts1
  
      opts.x;
 ->opts.x : string
-->opts : Opts1
-->x : string
 +>opts.x : any
-+>opts : any
+ >opts : Opts1
+->x : string
 +>x : any
  }
  foo2({x: 'abc'});
  >foo2({x: 'abc'}) : void
-->foo2 : (opts: Opts1) => void
-+>foo2 : (opts: any) => void
- >{x: 'abc'} : { x: string; }
- >x : string
- >'abc' : "abc"

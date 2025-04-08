@@ -1,17 +1,29 @@
-index.ts(2,15): error TS2306: File 'mod.js' is not a module.
-index.ts(3,15): error TS2306: File 'mod.js' is not a module.
-index.ts(4,15): error TS2306: File 'mod.js' is not a module.
-index.ts(5,15): error TS2306: File 'mod.js' is not a module.
-index.ts(6,15): error TS2306: File 'mod.js' is not a module.
-index.ts(7,15): error TS2306: File 'mod.js' is not a module.
-index.ts(8,15): error TS2306: File 'mod.js' is not a module.
-index.ts(14,22): error TS2306: File 'mod.js' is not a module.
-index.ts(15,22): error TS2306: File 'mod.js' is not a module.
-index.ts(16,22): error TS2306: File 'mod.js' is not a module.
-index.ts(17,22): error TS2306: File 'mod.js' is not a module.
-index.ts(18,22): error TS2306: File 'mod.js' is not a module.
-index.ts(19,22): error TS2306: File 'mod.js' is not a module.
-index.ts(20,22): error TS2306: File 'mod.js' is not a module.
+index.ts(2,24): error TS2694: Namespace '"mod"' has no exported member 'Thing'.
+index.ts(3,24): error TS2694: Namespace '"mod"' has no exported member 'AnotherThing'.
+index.ts(4,24): error TS2694: Namespace '"mod"' has no exported member 'foo'.
+index.ts(5,24): error TS2694: Namespace '"mod"' has no exported member 'qux'.
+index.ts(6,24): error TS2694: Namespace '"mod"' has no exported member 'baz'.
+index.ts(8,24): error TS2694: Namespace '"mod"' has no exported member 'literal'.
+index.ts(14,31): error TS2694: Namespace '"mod"' has no exported member 'Thing'.
+index.ts(15,31): error TS2694: Namespace '"mod"' has no exported member 'AnotherThing'.
+index.ts(16,31): error TS2694: Namespace '"mod"' has no exported member 'foo'.
+index.ts(17,31): error TS2694: Namespace '"mod"' has no exported member 'qux'.
+index.ts(18,31): error TS2694: Namespace '"mod"' has no exported member 'baz'.
+index.ts(19,31): error TS2694: Namespace '"mod"' has no exported member 'buz'.
+index.ts(20,31): error TS2694: Namespace '"mod"' has no exported member 'literal'.
+main.js(2,28): error TS2694: Namespace '"mod"' has no exported member 'Thing'.
+main.js(3,28): error TS2694: Namespace '"mod"' has no exported member 'AnotherThing'.
+main.js(4,28): error TS2694: Namespace '"mod"' has no exported member 'foo'.
+main.js(5,28): error TS2694: Namespace '"mod"' has no exported member 'qux'.
+main.js(6,28): error TS2694: Namespace '"mod"' has no exported member 'baz'.
+main.js(8,28): error TS2694: Namespace '"mod"' has no exported member 'literal'.
+main.js(15,35): error TS2694: Namespace '"mod"' has no exported member 'Thing'.
+main.js(16,35): error TS2694: Namespace '"mod"' has no exported member 'AnotherThing'.
+main.js(17,35): error TS2694: Namespace '"mod"' has no exported member 'foo'.
+main.js(18,35): error TS2694: Namespace '"mod"' has no exported member 'qux'.
+main.js(19,35): error TS2694: Namespace '"mod"' has no exported member 'baz'.
+main.js(20,35): error TS2694: Namespace '"mod"' has no exported member 'buz'.
+main.js(21,35): error TS2694: Namespace '"mod"' has no exported member 'literal'.
 mod.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
@@ -31,15 +43,27 @@ mod.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install typ
         baz() { return 5 },
         literal: "",
     }
-==== main.js (0 errors) ====
+==== main.js (13 errors) ====
     /**
      * @param {import("./mod").Thing} a
+                               ~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'Thing'.
      * @param {import("./mod").AnotherThing} b
+                               ~~~~~~~~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'AnotherThing'.
      * @param {import("./mod").foo} c
+                               ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'foo'.
      * @param {import("./mod").qux} d
+                               ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'qux'.
      * @param {import("./mod").baz} e
+                               ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'baz'.
      * @param {import("./mod").buz} f
      * @param {import("./mod").literal} g
+                               ~~~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'literal'.
      */
     function jstypes(a, b, c, d, e, f, g) {
         return a.x + b.y + c() + d() + e() + f() + g.length
@@ -47,66 +71,78 @@ mod.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install typ
     
     /**
      * @param {typeof import("./mod").Thing} a
+                                      ~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'Thing'.
      * @param {typeof import("./mod").AnotherThing} b
+                                      ~~~~~~~~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'AnotherThing'.
      * @param {typeof import("./mod").foo} c
+                                      ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'foo'.
      * @param {typeof import("./mod").qux} d
+                                      ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'qux'.
      * @param {typeof import("./mod").baz} e
+                                      ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'baz'.
      * @param {typeof import("./mod").buz} f
+                                      ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'buz'.
      * @param {typeof import("./mod").literal} g
+                                      ~~~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'literal'.
      */
     function jsvalues(a, b, c, d, e, f, g) {
         return a.length + b.length + c() + d() + e() + f() + g.length
     }
     
-==== index.ts (14 errors) ====
+==== index.ts (13 errors) ====
     function types(
         a: import('./mod').Thing,
-                  ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                           ~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'Thing'.
         b: import('./mod').AnotherThing,
-                  ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                           ~~~~~~~~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'AnotherThing'.
         c: import('./mod').foo,
-                  ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                           ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'foo'.
         d: import('./mod').qux,
-                  ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                           ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'qux'.
         e: import('./mod').baz,
-                  ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                           ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'baz'.
         f: import('./mod').buz,
-                  ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
         g: import('./mod').literal,
-                  ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                           ~~~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'literal'.
     ) {
         return a.x + b.y + c() + d() + e() + f() + g.length
     }
     
     function values(
         a: typeof import('./mod').Thing,
-                         ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                                  ~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'Thing'.
         b: typeof import('./mod').AnotherThing,
-                         ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                                  ~~~~~~~~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'AnotherThing'.
         c: typeof import('./mod').foo,
-                         ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                                  ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'foo'.
         d: typeof import('./mod').qux,
-                         ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                                  ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'qux'.
         e: typeof import('./mod').baz,
-                         ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                                  ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'baz'.
         f: typeof import('./mod').buz,
-                         ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                                  ~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'buz'.
         g: typeof import('./mod').literal,
-                         ~~~~~~~
-!!! error TS2306: File 'mod.js' is not a module.
+                                  ~~~~~~~
+!!! error TS2694: Namespace '"mod"' has no exported member 'literal'.
     ) {
         return a.length + b.length + c() + d() + e() + f() + g.length
     }

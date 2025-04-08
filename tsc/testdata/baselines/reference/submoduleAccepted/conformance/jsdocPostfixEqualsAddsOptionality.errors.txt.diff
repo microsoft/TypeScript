@@ -1,10 +1,8 @@
 --- old.jsdocPostfixEqualsAddsOptionality.errors.txt
 +++ new.jsdocPostfixEqualsAddsOptionality.errors.txt
 @@= skipped -0, +0 lines =@@
--a.js(4,5): error TS2322: Type 'null' is not assignable to type 'number | undefined'.
--a.js(8,3): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
-+a.js(2,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
-+a.js(7,1): error TS2554: Expected 1 arguments, but got 0.
+ a.js(4,5): error TS2322: Type 'null' is not assignable to type 'number | undefined'.
+ a.js(8,3): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
 +a.js(13,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
 +a.js(18,1): error TS2554: Expected 1 arguments, but got 0.
  
@@ -13,23 +11,8 @@
 +==== a.js (4 errors) ====
      /** @param {number=} a */
      function f(a) {
-+               ~
-+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
          a = 1
-         a = null // should not be allowed
--        ~
--!!! error TS2322: Type 'null' is not assignable to type 'number | undefined'.
-         a = undefined
-     }
-     f()
-+    ~
-+!!! error TS2554: Expected 1 arguments, but got 0.
-+!!! related TS6210 a.js:2:12: An argument for 'a' was not provided.
-     f(null) // should not be allowed
--      ~~~~
--!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
-     f(undefined)
-     f(1)
+@@= skipped -19, +21 lines =@@
      
      /** @param {???!?number?=} a */
      function g(a) {

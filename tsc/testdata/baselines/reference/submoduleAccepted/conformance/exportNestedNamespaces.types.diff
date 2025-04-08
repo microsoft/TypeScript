@@ -97,18 +97,16 @@
      @param {s.Classic} classic */
  function f(c, classic) {
 ->f : (c: K, classic: s.Classic) => void
-->c : K
++>f : (c: K, classic: Classic) => void
+ >c : K
 ->classic : s.Classic
-+>f : (c: any, classic: any) => void
-+>c : any
-+>classic : any
++>classic : Classic
  
      c.x
 ->c.x : number
-->c : K
-->x : number
 +>c.x : any
-+>c : any
+ >c : K
+->x : number
 +>x : any
  
      classic.p
@@ -116,7 +114,7 @@
 ->classic : s.Classic
 ->p : number
 +>classic.p : any
-+>classic : any
++>classic : Classic
 +>p : any
  }
  

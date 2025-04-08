@@ -1,23 +1,46 @@
 --- old.jsdocIndexSignature.errors.txt
 +++ new.jsdocIndexSignature.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -indices.js(9,5): error TS2322: Type 'number' is not assignable to type 'boolean'.
--
--
++indices.js(1,12): error TS2315: Type 'Object' is not generic.
++indices.js(1,18): error TS8020: JSDoc types can only be used inside documentation comments.
++indices.js(3,12): error TS2315: Type 'Object' is not generic.
++indices.js(3,18): error TS8020: JSDoc types can only be used inside documentation comments.
++indices.js(5,12): error TS2315: Type 'Object' is not generic.
++indices.js(5,18): error TS8020: JSDoc types can only be used inside documentation comments.
++indices.js(7,13): error TS2315: Type 'Object' is not generic.
++indices.js(7,19): error TS8020: JSDoc types can only be used inside documentation comments.
+ 
+ 
 -==== indices.js (1 errors) ====
--    /** @type {Object.<string, number>} */
--    var o1;
--    /** @type {Object.<number, boolean>} */
--    var o2;
--    /** @type {Object.<boolean, string>} */
--    var o3;
--    /** @param {Object.<string, boolean>} o */
--    function f(o) {
--        o.foo = 1; // error
++==== indices.js (8 errors) ====
+     /** @type {Object.<string, number>} */
++               ~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
++                     ~
++!!! error TS8020: JSDoc types can only be used inside documentation comments.
+     var o1;
+     /** @type {Object.<number, boolean>} */
++               ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
++                     ~
++!!! error TS8020: JSDoc types can only be used inside documentation comments.
+     var o2;
+     /** @type {Object.<boolean, string>} */
++               ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
++                     ~
++!!! error TS8020: JSDoc types can only be used inside documentation comments.
+     var o3;
+     /** @param {Object.<string, boolean>} o */
++                ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
++                      ~
++!!! error TS8020: JSDoc types can only be used inside documentation comments.
+     function f(o) {
+         o.foo = 1; // error
 -        ~~~~~
 -!!! error TS2322: Type 'number' is not assignable to type 'boolean'.
--        o.bar = false; // ok
--    }
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
+         o.bar = false; // ok
+     }
+     

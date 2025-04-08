@@ -1,0 +1,50 @@
+file.js(2,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+file.js(6,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+file.js(10,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+file.js(16,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+file.js(21,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+
+
+==== file.js (5 errors) ====
+    // Error (good)
+    /** @type {function(): string} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+    const a = () => 0
+    
+    // Error (good)
+    /** @type {function(): string} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+    const b = async () => 0
+    
+    // No error (bad)
+    /** @type {function(): string} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+    const c = async () => {
+    	return 0
+    }
+    
+    // Error (good)
+    /** @type {function(): string} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+    const d = async () => {
+    	return ""
+    }
+    
+    /** @type {function(function(): string): void} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+    const f = (p) => {}
+    
+    // Error (good)
+    f(async () => {
+    	return 0
+    })

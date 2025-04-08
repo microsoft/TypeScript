@@ -1,0 +1,22 @@
+file.js(3,21): error TS2304: Cannot find name 'T'.
+file.js(4,14): error TS2304: Cannot find name 'T'.
+file.js(4,16): error TS2304: Cannot find name 'K'.
+
+
+==== file.js (3 errors) ====
+    /**
+     * @template T
+     * @template {keyof T} K
+                        ~
+!!! error TS2304: Cannot find name 'T'.
+     * @typedef {T[K]} Foo
+                 ~
+!!! error TS2304: Cannot find name 'T'.
+                   ~
+!!! error TS2304: Cannot find name 'K'.
+     */
+    
+    const x = { a: 1 };
+    
+    /** @type {Foo<typeof x, "a">} */
+    const y = "a";

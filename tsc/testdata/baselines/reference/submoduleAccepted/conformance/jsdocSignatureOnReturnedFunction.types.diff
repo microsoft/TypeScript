@@ -1,105 +1,18 @@
 --- old.jsdocSignatureOnReturnedFunction.types
 +++ new.jsdocSignatureOnReturnedFunction.types
-@@= skipped -1, +1 lines =@@
- 
- === jsdocSignatureOnReturnedFunction.js ===
- function f1() {
-->f1 : () => (a: number, b: number) => number
-+>f1 : () => (a: any, b: any) => any
- 
-     /**
-      * @param {number} a
-@@= skipped -8, +8 lines =@@
-      * @returns {number}
-      */
-     return (a, b) => {
-->(a, b) => {        return a + b;    } : (a: number, b: number) => number
-->a : number
-->b : number
-+>(a, b) => {        return a + b;    } : (a: any, b: any) => any
-+>a : any
-+>b : any
- 
-         return a + b;
-->a + b : number
-->a : number
-->b : number
-+>a + b : any
-+>a : any
-+>b : any
-     }
- }
- 
- function f2() {
-->f2 : () => (a: number, b: number) => number
-+>f2 : () => (a: any, b: any) => any
- 
-     /**
-      * @param {number} a
-@@= skipped -20, +20 lines =@@
-      * @returns {number}
-      */
-     return function (a, b){
-->function (a, b){        return a + b;    } : (a: number, b: number) => number
-->a : number
-->b : number
-+>function (a, b){        return a + b;    } : (a: any, b: any) => any
-+>a : any
-+>b : any
- 
-         return a + b;
-->a + b : number
-->a : number
-->b : number
-+>a + b : any
-+>a : any
-+>b : any
-     }
- }
- 
- function f3() {
-->f3 : () => (a: number, b: number) => number
-+>f3 : () => (a: any, b: any) => any
- 
+@@= skipped -46, +46 lines =@@
      /** @type {(a: number, b: number) => number} */
      return (a, b) => {
-->(a, b) => {        return a + b;    } : (a: number, b: number) => number
-->a : number
-->b : number
-+>(a, b) => {        return a + b;    } : (a: any, b: any) => any
-+>a : any
-+>b : any
+ >(a, b) => {        return a + b;    } : (a: number, b: number) => number
++>(a, b) => {        return a + b;    } : (a: number, b: number) => number
+ >a : number
+ >b : number
  
-         return a + b;
-->a + b : number
-->a : number
-->b : number
-+>a + b : any
-+>a : any
-+>b : any
-     }
- }
- 
- function f4() {
-->f4 : () => (a: number, b: number) => number
-+>f4 : () => (a: any, b: any) => any
- 
+@@= skipped -16, +17 lines =@@
      /** @type {(a: number, b: number) => number} */
      return function (a, b){
-->function (a, b){        return a + b;    } : (a: number, b: number) => number
-->a : number
-->b : number
-+>function (a, b){        return a + b;    } : (a: any, b: any) => any
-+>a : any
-+>b : any
- 
-         return a + b;
-->a + b : number
-->a : number
-->b : number
-+>a + b : any
-+>a : any
-+>b : any
-     }
- }
+ >function (a, b){        return a + b;    } : (a: number, b: number) => number
++>function (a, b){        return a + b;    } : (a: number, b: number) => number
+ >a : number
+ >b : number
  

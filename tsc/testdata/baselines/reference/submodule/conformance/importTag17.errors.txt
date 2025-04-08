@@ -1,0 +1,44 @@
+/a.js(5,15): error TS2304: Cannot find name 'Import'.
+/a.js(12,15): error TS2552: Cannot find name 'Require'. Did you mean 'Required'?
+
+
+==== /node_modules/@types/foo/package.json (0 errors) ====
+    {
+        "name": "@types/foo",
+        "version": "1.0.0",
+        "exports": {
+            ".": {
+                "import": "./index.d.mts",
+                "require": "./index.d.cts"
+            }
+        }
+    }
+    
+==== /node_modules/@types/foo/index.d.mts (0 errors) ====
+    export declare const Import: "module";
+    
+==== /node_modules/@types/foo/index.d.cts (0 errors) ====
+    export declare const Require: "script";
+    
+==== /a.js (2 errors) ====
+    /** @import { Import } from 'foo' with { 'resolution-mode': 'import' } */
+    /** @import { Require } from 'foo' with { 'resolution-mode': 'require' } */
+    
+    /**
+     * @returns { Import }
+                  ~~~~~~
+!!! error TS2304: Cannot find name 'Import'.
+     */
+    export function f1() {
+        return 1;
+    }
+    
+    /**
+     * @returns { Require }
+                  ~~~~~~~
+!!! error TS2552: Cannot find name 'Require'. Did you mean 'Required'?
+     */
+    export function f2() {
+        return 1;
+    }
+    

@@ -1,9 +1,0 @@
---- old.checkJsdocTypeTag3.types
-+++ new.checkJsdocTypeTag3.types
-@@= skipped -2, +2 lines =@@
- === test.js ===
- /** @type {Array<?number>} */
- var nns;
-->nns : number[]
-+>nns : any
- 

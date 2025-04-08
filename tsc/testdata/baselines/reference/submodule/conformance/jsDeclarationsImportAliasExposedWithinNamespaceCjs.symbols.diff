@@ -14,7 +14,7 @@
   */
  const testFnTypes = {
 ->testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 37))
-+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5))
++>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 4))
  
      // SOME PROPS HERE
  };

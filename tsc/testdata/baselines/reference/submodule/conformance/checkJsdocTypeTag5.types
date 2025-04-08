@@ -10,17 +10,17 @@ function h(x) { return x }
 
 /** @type {(x: number) => string} */
 var f = x => x
->f : (x: any) => any
->x => x : (x: any) => any
->x : any
->x : any
+>f : (x: number) => string
+>x => x : (x: number) => number
+>x : number
+>x : number
 
 /** @type {(x: number) => string} */
 var g = function (x) { return x }
->g : (x: any) => any
->function (x) { return x } : (x: any) => any
->x : any
->x : any
+>g : (x: number) => string
+>function (x) { return x } : (x: number) => number
+>x : number
+>x : number
 
 /** @type {{ (x: number): string }} */
 function i(x) { return x }
@@ -30,17 +30,17 @@ function i(x) { return x }
 
 /** @type {{ (x: number): string }} */
 var j = x => x
->j : (x: any) => any
->x => x : (x: any) => any
->x : any
->x : any
+>j : (x: number) => string
+>x => x : (x: number) => number
+>x : number
+>x : number
 
 /** @type {{ (x: number): string }} */
 var k = function (x) { return x }
->k : (x: any) => any
->function (x) { return x } : (x: any) => any
->x : any
->x : any
+>k : (x: number) => string
+>function (x) { return x } : (x: number) => number
+>x : number
+>x : number
 
 
 /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
@@ -55,7 +55,7 @@ function blargle(s) {
 
 /** @type {0 | 1 | 2} - assignment should not error */
 var zeroonetwo = blargle('hi')
->zeroonetwo : number
+>zeroonetwo : 0 | 1 | 2
 >blargle('hi') : number
 >blargle : (s: any) => number
 >'hi' : "hi"
@@ -79,7 +79,7 @@ function monaLisa(sb) {
 
 /** @type {2 | 3} - overloads are not supported, so there will be an error */
 var twothree = monaLisa(false);
->twothree : number
+>twothree : 2 | 3
 >monaLisa(false) : 1 | 2
 >monaLisa : (sb: any) => 1 | 2
 >false : false

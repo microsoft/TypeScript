@@ -11,49 +11,38 @@
  >require : any
  >"./LazySet" : "./LazySet"
  
- /** @type {LazySet} */
- const stringSet = undefined;
-->stringSet : LazySet
-+>stringSet : any
+@@= skipped -11, +11 lines =@@
  >undefined : undefined
  
  stringSet.addAll(stringSet);
 ->stringSet.addAll(stringSet) : void
 ->stringSet.addAll : (iterable: LazySet) => void
-->stringSet : LazySet
-->addAll : (iterable: LazySet) => void
-->stringSet : LazySet
 +>stringSet.addAll(stringSet) : any
 +>stringSet.addAll : any
-+>stringSet : any
+ >stringSet : LazySet
+->addAll : (iterable: LazySet) => void
 +>addAll : any
-+>stringSet : any
+ >stringSet : LazySet
  
  
- === LazySet.js ===
-@@= skipped -30, +30 lines =@@
-      * @param {LazySet} iterable
+@@= skipped -20, +20 lines =@@
       */
      addAll(iterable) {}
-->addAll : (iterable: LazySet) => void
+ >addAll : (iterable: LazySet) => void
 ->iterable : import("LazySet")
-+>addAll : (iterable: any) => void
-+>iterable : any
++>iterable : LazySet
  
      [Symbol.iterator]() {}
  >[Symbol.iterator] : () => void
 @@= skipped -11, +11 lines =@@
- }
  
  module.exports = LazySet;
-->module.exports = LazySet : typeof LazySet
+ >module.exports = LazySet : typeof LazySet
 ->module.exports : typeof LazySet
 ->module : { exports: typeof LazySet; }
 ->exports : typeof LazySet
-->LazySet : typeof LazySet
-+>module.exports = LazySet : any
 +>module.exports : any
 +>module : any
 +>exports : any
-+>LazySet : any
+ >LazySet : typeof LazySet
  

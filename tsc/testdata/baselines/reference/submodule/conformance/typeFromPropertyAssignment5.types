@@ -28,5 +28,5 @@ MC.bar
 
 /** @type {MC.bar} */
 var x
->x : any
+>x : bar
 

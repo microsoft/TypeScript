@@ -113,16 +113,16 @@
 ->f : (c: C, classic: s.Classic) => void
 ->c : C
 ->classic : s.Classic
-+>f : (c: any, classic: any) => void
-+>c : any
-+>classic : any
++>f : (c: K, classic: Classic) => void
++>c : K
++>classic : Classic
  
      c.x
 ->c.x : number
 ->c : C
 ->x : number
 +>c.x : any
-+>c : any
++>c : K
 +>x : any
  
      classic.p
@@ -130,7 +130,7 @@
 ->classic : s.Classic
 ->p : number
 +>classic.p : any
-+>classic : any
++>classic : Classic
 +>p : any
  }
  

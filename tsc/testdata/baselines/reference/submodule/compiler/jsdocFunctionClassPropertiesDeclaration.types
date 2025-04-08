@@ -6,35 +6,35 @@
  * @param {number | undefined} y
  */
 export function Foo(x, y) {
->Foo : (x: any, y: any) => any
->x : any
->y : any
+>Foo : (x: number | undefined, y: number | undefined) => any
+>x : number | undefined
+>y : number | undefined
 
     if (!(this instanceof Foo)) {
 >!(this instanceof Foo) : boolean
 >(this instanceof Foo) : boolean
 >this instanceof Foo : boolean
 >this : any
->Foo : (x: any, y: any) => any
+>Foo : (x: number | undefined, y: number | undefined) => any
 
         return new Foo(x, y);
 >new Foo(x, y) : any
->Foo : (x: any, y: any) => any
->x : any
->y : any
+>Foo : (x: number | undefined, y: number | undefined) => any
+>x : number | undefined
+>y : number | undefined
     }
     this.x = x;
->this.x = x : any
+>this.x = x : number | undefined
 >this.x : any
 >this : any
 >x : any
->x : any
+>x : number | undefined
 
     this.y = y;
->this.y = y : any
+>this.y = y : number | undefined
 >this.y : any
 >this : any
 >y : any
->y : any
+>y : number | undefined
 }
 

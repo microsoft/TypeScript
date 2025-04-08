@@ -164,44 +164,21 @@
  >'hi' : "hi"
  
  /** @type {number | undefined} */
- var n;
-->n : number | undefined
-+>n : any
+@@= skipped -126, +126 lines =@@
  
  // should get any on parameter initialisers
  function f(a = null, b = n, l = []) {
 ->f : (a?: null, b?: number | undefined, l?: any[]) => void
-+>f : (a?: null, b?: any, l?: never[]) => void
++>f : (a?: null, b?: number | undefined, l?: never[]) => void
  >a : null
-->b : number | undefined
-->n : number | undefined
+ >b : number | undefined
+ >n : number | undefined
 ->l : any[]
-+>b : any
-+>n : any
 +>l : never[]
  >[] : never[]
  
      // a should be null in strict mode
-@@= skipped -166, +166 lines =@@
-     // b should be number | undefined, not any
-     b = 1
- >b = 1 : 1
-->b : number | undefined
-+>b : any
- >1 : 1
- 
-     b = undefined
- >b = undefined : undefined
-->b : number | undefined
-+>b : any
- >undefined : undefined
- 
-     b = 'error'
- >b = 'error' : "error"
-->b : number | undefined
-+>b : any
- >'error' : "error"
- 
+@@= skipped -56, +56 lines =@@
      // l should be any[]
      l.push(1)
  >l.push(1) : number
@@ -223,34 +200,4 @@
 +>push : (...items: never[]) => number
  >'ok' : "ok"
  }
- 
-@@= skipped -72, +72 lines =@@
- 
- /** @type {(v: unknown) => v is undefined} */
- const isUndef = v => v === undefined;
-->isUndef : (v: unknown) => v is undefined
-->v => v === undefined : (v: unknown) => v is undefined
-->v : unknown
-+>isUndef : (v: any) => boolean
-+>v => v === undefined : (v: any) => boolean
-+>v : any
- >v === undefined : boolean
-->v : unknown
-+>v : any
- >undefined : undefined
- 
- const e = [1, undefined];
-@@= skipped -15, +15 lines =@@
- 
- // should be undefined[]
- const g = e.filter(isUndef);
-->g : undefined[]
-->e.filter(isUndef) : undefined[]
-+>g : (number | undefined)[]
-+>e.filter(isUndef) : (number | undefined)[]
- >e.filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
- >e : (number | undefined)[]
- >filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
-->isUndef : (v: unknown) => v is undefined
-+>isUndef : (v: any) => boolean
  

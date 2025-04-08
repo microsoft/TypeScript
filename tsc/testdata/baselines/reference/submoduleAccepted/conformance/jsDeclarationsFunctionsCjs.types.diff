@@ -104,7 +104,6 @@
 ->d : (a: number, b: number) => string
 ->a : number
 ->b : number
-->(null) : any
 +>module.exports.d = function d(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
 +>module.exports.d : any
 +>module.exports : any
@@ -115,11 +114,12 @@
 +>d : (a: any, b: any) => any
 +>a : any
 +>b : any
-+>(null) : null
+ >(null) : any
++>null : any
  
  /**
   * @template T,U
-@@= skipped -19, +19 lines =@@
+@@= skipped -19, +20 lines =@@
   * @return {T & U} 
   */
  module.exports.e = function e(a, b) { return /** @type {*} */(null); }
@@ -133,7 +133,6 @@
 ->e : <T, U>(a: T, b: U) => T & U
 ->a : T
 ->b : U
-->(null) : any
 +>module.exports.e = function e(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
 +>module.exports.e : any
 +>module.exports : any
@@ -144,7 +143,8 @@
 +>e : (a: any, b: any) => any
 +>a : any
 +>b : any
-+>(null) : null
+ >(null) : any
++>null : any
  
  /**
   * @template T
@@ -208,28 +208,24 @@
   */
  function g(a, b) {
 ->g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
-->a : { x: string; }
++>g : (a: { x: string; }, b: { y: any; }) => any
+ >a : { x: string; }
 ->b : { y: { (): void; cat: string; }; }
-+>g : (a: any, b: any) => any
-+>a : any
-+>b : any
++>b : { y: any; }
  
      return a.x && b.y();
 ->a.x && b.y() : void
-->a.x : string
-->a : { x: string; }
-->x : string
++>a.x && b.y() : any
+ >a.x : string
+ >a : { x: string; }
+ >x : string
 ->b.y() : void
 ->b.y : { (): void; cat: string; }
 ->b : { y: { (): void; cat: string; }; }
 ->y : { (): void; cat: string; }
-+>a.x && b.y() : any
-+>a.x : any
-+>a : any
-+>x : any
 +>b.y() : any
 +>b.y : any
-+>b : any
++>b : { y: any; }
 +>y : any
  }
  
@@ -241,13 +237,13 @@
 ->exports : typeof module.exports
 ->g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 ->g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
-+>module.exports.g = g : (a: any, b: any) => any
++>module.exports.g = g : (a: { x: string; }, b: { y: any; }) => any
 +>module.exports.g : any
 +>module.exports : any
 +>module : any
 +>exports : any
 +>g : any
-+>g : (a: any, b: any) => any
++>g : (a: { x: string; }, b: { y: any; }) => any
  
  /**
   * @param {{x: string}} a
@@ -255,28 +251,24 @@
   */
  function hh(a, b) {
 ->hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
-->a : { x: string; }
++>hh : (a: { x: string; }, b: { y: any; }) => any
+ >a : { x: string; }
 ->b : { y: { (): void; cat: string; }; }
-+>hh : (a: any, b: any) => any
-+>a : any
-+>b : any
++>b : { y: any; }
  
      return a.x && b.y();
 ->a.x && b.y() : void
-->a.x : string
-->a : { x: string; }
-->x : string
++>a.x && b.y() : any
+ >a.x : string
+ >a : { x: string; }
+ >x : string
 ->b.y() : void
 ->b.y : { (): void; cat: string; }
 ->b : { y: { (): void; cat: string; }; }
 ->y : { (): void; cat: string; }
-+>a.x && b.y() : any
-+>a.x : any
-+>a : any
-+>x : any
 +>b.y() : any
 +>b.y : any
-+>b : any
++>b : { y: any; }
 +>y : any
  }
  
@@ -288,13 +280,13 @@
 ->exports : typeof module.exports
 ->h : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 ->hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
-+>module.exports.h = hh : (a: any, b: any) => any
++>module.exports.h = hh : (a: { x: string; }, b: { y: any; }) => any
 +>module.exports.h : any
 +>module.exports : any
 +>module : any
 +>exports : any
 +>h : any
-+>hh : (a: any, b: any) => any
++>hh : (a: { x: string; }, b: { y: any; }) => any
  
  module.exports.i = function i() {}
  >module.exports.i = function i() {} : () => void

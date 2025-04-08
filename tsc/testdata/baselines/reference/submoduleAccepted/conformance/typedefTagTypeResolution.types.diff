@@ -5,38 +5,16 @@
   */
  function f(x) {
 ->f : <U>(x: U) => T
-->x : U
-+>f : (x: any) => any
-+>x : any
++>f : <U>(x: U) => U
+ >x : U
  
      return x;
-->x : U
-+>x : any
- }
- 
- /** @type T - should be fine, since T will be any */
- const x = 3;
-->x : U
-+>x : 3
- >3 : 3
- 
- /**
-@@= skipped -21, +21 lines =@@
-  * @param {V} vvvvv
-  */
- function g(vvvvv) {
-->g : <V>(vvvvv: V) => void
-->vvvvv : V
-+>g : (vvvvv: any) => void
-+>vvvvv : any
- }
- 
+@@= skipped -28, +28 lines =@@
  /** @type {Cb} */
  const cb = x => {}
-->cb : Cb
+ >cb : Cb
 ->x => {} : (x: V) => any
 ->x : V
-+>cb : (x: any) => void
 +>x => {} : (x: any) => void
 +>x : any
  

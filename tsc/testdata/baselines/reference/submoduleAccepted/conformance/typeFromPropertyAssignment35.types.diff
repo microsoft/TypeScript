@@ -1,20 +1,13 @@
 --- old.typeFromPropertyAssignment35.types
 +++ new.typeFromPropertyAssignment35.types
-@@= skipped -2, +2 lines =@@
- === bug26877.js ===
- /** @param {Emu.D} x */
- function ollKorrect(x) {
-->ollKorrect : (x: D) => void
-->x : D
-+>ollKorrect : (x: any) => void
-+>x : any
+@@= skipped -6, +6 lines =@@
+ >x : D
  
      x._model
 ->x._model : number
-->x : D
-->_model : number
 +>x._model : any
-+>x : any
+ >x : D
+->_model : number
 +>_model : any
  
      const y = new Emu.D()
@@ -54,7 +47,7 @@
  >class {    constructor() {        this._model = 1    }} : typeof D
  
      constructor() {
-@@= skipped -42, +42 lines =@@
+@@= skipped -38, +38 lines =@@
  
  === second.js ===
  var Emu = {}

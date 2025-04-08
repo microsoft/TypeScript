@@ -1,3 +1,4 @@
+main.js(4,12): error TS2503: Cannot find namespace 'Outer'.
 someview.js(10,14): error TS2339: Property 'y' does not exist on type 'Inner'.
 
 
@@ -39,11 +40,13 @@ someview.js(10,14): error TS2339: Property 'y' does not exist on type 'Inner'.
         };
         return Application;
     })();
-==== main.js (0 errors) ====
+==== main.js (1 errors) ====
     var app = new Outer.app.Application();
     var inner = new Outer.app.Inner();
     inner.y;
     /** @type {Outer.app.Inner} */
+               ~~~~~
+!!! error TS2503: Cannot find namespace 'Outer'.
     var x;
     x.y;
     Outer.app.statische(101); // Infinity, duh

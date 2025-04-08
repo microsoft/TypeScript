@@ -59,7 +59,9 @@ function f1(x) {
 >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
 
         x.length;
+>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
     }
     if (!!true) {
         assert2(typeof x === "string");
@@ -67,7 +69,9 @@ function f1(x) {
 >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
 
         x.length;
+>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
     }
     if (!!true) {
         assertIsString(x);

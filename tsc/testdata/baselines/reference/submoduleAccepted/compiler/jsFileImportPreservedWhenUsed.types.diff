@@ -1,51 +1,30 @@
 --- old.jsFileImportPreservedWhenUsed.types
 +++ new.jsFileImportPreservedWhenUsed.types
-@@= skipped -38, +38 lines =@@
-      * @param {object} vm
-      */
-     test(obj, vm) {
-->test : (obj: object, vm: object) => void
-->obj : object
-->vm : object
-+>test : (obj: any, vm: any) => void
-+>obj : any
-+>vm : any
- 
-         let index = 0;
- >index : number
- >0 : 0
+@@= skipped -48, +48 lines =@@
  
          vm.objects = _.mapValues(
-->vm.objects = _.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
+ >vm.objects = _.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
 ->vm.objects : error
-->vm : object
-+>vm.objects = _.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : { [x: string]: any; }
 +>vm.objects : any
-+>vm : any
+ >vm : object
  >objects : any
-->_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
+ >_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
 ->_.mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: (value: T[keyof T], key: string, collection: T) => TResult) => { [P in keyof T]: TResult; }
-+>_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : { [x: string]: any; }
 +>_.mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
  >_ : LoDashStatic
 ->mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: (value: T[keyof T], key: string, collection: T) => TResult) => { [P in keyof T]: TResult; }
 +>mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
  
              obj,
-->obj : object
-+>obj : any
- 
+ >obj : object
+@@= skipped -14, +14 lines =@@
              object => ({ ...object, [INDEX_FIELD]: index++ }),
-->object => ({ ...object, [INDEX_FIELD]: index++ }) : (object: never) => any
-->object : never
+ >object => ({ ...object, [INDEX_FIELD]: index++ }) : (object: never) => any
+ >object : never
 ->({ ...object, [INDEX_FIELD]: index++ }) : error
 ->{ ...object, [INDEX_FIELD]: index++ } : error
-->object : never
-+>object => ({ ...object, [INDEX_FIELD]: index++ }) : (object: any) => any
-+>object : any
 +>({ ...object, [INDEX_FIELD]: index++ }) : any
 +>{ ...object, [INDEX_FIELD]: index++ } : any
-+>object : any
+ >object : never
  >[INDEX_FIELD] : number
  >INDEX_FIELD : "__INDEX"
- >index++ : number

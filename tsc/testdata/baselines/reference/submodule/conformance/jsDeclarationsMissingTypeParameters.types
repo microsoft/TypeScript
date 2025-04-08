@@ -5,7 +5,7 @@
   * @param {Array=} y desc
   */
 function x(y) { }
->x : (y: any) => void
+>x : (y?: any) => void
 >y : any
 
 // @ts-ignore

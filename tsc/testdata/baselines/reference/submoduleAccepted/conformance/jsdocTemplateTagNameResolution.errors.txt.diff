@@ -1,21 +1,29 @@
 --- old.jsdocTemplateTagNameResolution.errors.txt
 +++ new.jsdocTemplateTagNameResolution.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -file.js(10,7): error TS2322: Type 'string' is not assignable to type 'number'.
--
--
++file.js(3,21): error TS2304: Cannot find name 'T'.
++file.js(4,14): error TS2304: Cannot find name 'T'.
++file.js(4,16): error TS2304: Cannot find name 'K'.
+ 
+ 
 -==== file.js (1 errors) ====
--    /**
--     * @template T
--     * @template {keyof T} K
--     * @typedef {T[K]} Foo
--     */
--    
--    const x = { a: 1 };
--    
--    /** @type {Foo<typeof x, "a">} */
--    const y = "a";
++==== file.js (3 errors) ====
+     /**
+      * @template T
+      * @template {keyof T} K
++                        ~
++!!! error TS2304: Cannot find name 'T'.
+      * @typedef {T[K]} Foo
++                 ~
++!!! error TS2304: Cannot find name 'T'.
++                   ~
++!!! error TS2304: Cannot find name 'K'.
+      */
+     
+     const x = { a: 1 };
+     
+     /** @type {Foo<typeof x, "a">} */
+     const y = "a";
 -          ~
 -!!! error TS2322: Type 'string' is not assignable to type 'number'.
-@@= skipped --1, +1 lines =@@
-+<no content>

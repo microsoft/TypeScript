@@ -36,9 +36,7 @@
 ->this.bar : Symbol(A.bar, Decl(a.js, 15, 35))
  >this : Symbol(A, Decl(a.js, 0, 0))
 ->bar : Symbol(A.bar, Decl(a.js, 15, 35))
-+>arguments.bar : Symbol(bar, Decl(a.js, 34, 10))
  >arguments : Symbol(arguments, Decl(a.js, 15, 7))
-+>bar : Symbol(bar, Decl(a.js, 34, 10))
  
  		/**
  		 * @type object
@@ -50,7 +48,7 @@
  >arguments : Symbol(arguments, Decl(a.js, 15, 7))
  >key : Symbol(key, Decl(a.js, 5, 7))
  
-@@= skipped -27, +25 lines =@@
+@@= skipped -27, +23 lines =@@
  		 * @type object
  		 */
  		this.options = arguments;

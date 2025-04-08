@@ -27,29 +27,39 @@ function apply(func, thisArg, ...args) {
 >length : Symbol(length, Decl(_apply.js, 11, 7))
 
         case 0: return func.call(thisArg);
+>func.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 10, 15))
+>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
 
         case 1: return func.call(thisArg, args[0]);
+>func.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 10, 15))
+>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
 >args : Symbol(args, Decl(_apply.js, 10, 29))
 
         case 2: return func.call(thisArg, args[0], args[1]);
+>func.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 10, 15))
+>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
 >args : Symbol(args, Decl(_apply.js, 10, 29))
 >args : Symbol(args, Decl(_apply.js, 10, 29))
 
         case 3: return func.call(thisArg, args[0], args[1], args[2]);
+>func.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 10, 15))
+>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
 >args : Symbol(args, Decl(_apply.js, 10, 29))
 >args : Symbol(args, Decl(_apply.js, 10, 29))
 >args : Symbol(args, Decl(_apply.js, 10, 29))
     }
     return func.apply(thisArg, args);
+>func.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 10, 15))
+>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
 >args : Symbol(args, Decl(_apply.js, 10, 29))
 }

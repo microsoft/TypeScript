@@ -5,8 +5,8 @@
  * @param {Ty} x
  */
 function f(x) {}
->f : (x: any) => void
->x : any
+>f : (x: Ty) => void
+>x : Ty
 
 /**
  * @typedef {CantResolveThis} Ty

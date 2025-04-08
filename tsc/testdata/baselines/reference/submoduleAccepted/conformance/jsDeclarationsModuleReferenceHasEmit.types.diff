@@ -5,7 +5,7 @@
   */
  export let el = null;
 ->el : error
-+>el : any
++>el : module
  
  export default A;
  >A : A

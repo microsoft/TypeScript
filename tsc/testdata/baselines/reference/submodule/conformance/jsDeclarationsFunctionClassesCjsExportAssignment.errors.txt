@@ -1,5 +1,8 @@
+context.js(4,21): error TS2306: File 'timer.js' is not a module.
+context.js(5,14): error TS1340: Module './hook' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./hook')'?
 context.js(34,14): error TS2350: Only a void function can be called with the 'new' keyword.
 context.js(48,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+hook.js(2,20): error TS1340: Module './context' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./context')'?
 hook.js(10,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 timer.js(7,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
@@ -14,9 +17,11 @@ timer.js(7,1): error TS2580: Cannot find name 'module'. Do you need to install t
     module.exports = Timer;
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-==== hook.js (1 errors) ====
+==== hook.js (2 errors) ====
     /**
      * @typedef {(arg: import("./context")) => void} HookHandler
+                       ~~~~~~~~~~~~~~~~~~~
+!!! error TS1340: Module './context' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./context')'?
      */
     /**
      * @param {HookHandler} handle
@@ -28,12 +33,16 @@ timer.js(7,1): error TS2580: Cannot find name 'module'. Do you need to install t
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
-==== context.js (2 errors) ====
+==== context.js (4 errors) ====
     /**
      * Imports
      *
      * @typedef {import("./timer")} Timer
+                        ~~~~~~~~~
+!!! error TS2306: File 'timer.js' is not a module.
      * @typedef {import("./hook")} Hook
+                 ~~~~~~~~~~~~~~~~
+!!! error TS1340: Module './hook' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./hook')'?
      * @typedef {import("./hook").HookHandler} HookHandler
      */
     

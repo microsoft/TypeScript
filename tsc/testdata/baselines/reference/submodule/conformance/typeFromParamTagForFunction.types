@@ -35,10 +35,10 @@ const { A } = require("./a-ext");
 
 /** @param {A} p */
 function a(p) { p.x; }
->a : (p: any) => void
->p : any
+>a : (p: A) => void
+>p : A
 >p.x : any
->p : any
+>p : A
 >x : any
 
 === b-ext.js ===
@@ -68,10 +68,10 @@ const { B } = require("./b-ext");
 
 /** @param {B} p */
 function b(p) { p.x; }
->b : (p: any) => void
->p : any
+>b : (p: B) => void
+>p : B
 >p.x : any
->p : any
+>p : B
 >x : any
 
 === c-ext.js ===
@@ -95,10 +95,10 @@ const { C } = require("./c-ext");
 
 /** @param {C} p */
 function c(p) { p.x; }
->c : (p: any) => void
->p : any
+>c : (p: C) => void
+>p : C
 >p.x : any
->p : any
+>p : C
 >x : any
 
 === d-ext.js ===
@@ -124,10 +124,10 @@ const { D } = require("./d-ext");
 
 /** @param {D} p */
 function d(p) { p.x; }
->d : (p: any) => void
->p : any
+>d : (p: D) => void
+>p : D
 >p.x : any
->p : any
+>p : D
 >x : any
 
 === e-ext.js ===
@@ -153,10 +153,10 @@ const { E } = require("./e-ext");
 
 /** @param {E} p */
 function e(p) { p.x; }
->e : (p: any) => void
->p : any
+>e : (p: E) => void
+>p : E
 >p.x : any
->p : any
+>p : E
 >x : any
 
 === f.js ===
@@ -175,10 +175,10 @@ var F = function () {
 
 /** @param {F} p */
 function f(p) { p.x; }
->f : (p: any) => void
->p : any
+>f : (p: F) => void
+>p : F
 >p.x : any
->p : any
+>p : F
 >x : any
 
 === g.js ===
@@ -195,10 +195,10 @@ function G() {
 
 /** @param {G} p */
 function g(p) { p.x; }
->g : (p: any) => void
->p : any
+>g : (p: G) => void
+>p : G
 >p.x : any
->p : any
+>p : G
 >x : any
 
 === h.js ===
@@ -217,9 +217,9 @@ class H {
 
 /** @param {H} p */
 function h(p) { p.x; }
->h : (p: any) => void
->p : any
+>h : (p: H) => void
+>p : H
 >p.x : any
->p : any
+>p : H
 >x : any
 

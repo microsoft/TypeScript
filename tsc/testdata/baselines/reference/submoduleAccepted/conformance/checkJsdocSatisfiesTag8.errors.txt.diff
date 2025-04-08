@@ -1,19 +1,24 @@
 --- old.checkJsdocSatisfiesTag8.errors.txt
 +++ new.checkJsdocSatisfiesTag8.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(6,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
--
--
++/a.js(1,15): error TS2315: Type 'Object' is not generic.
++/a.js(1,21): error TS8020: JSDoc types can only be used inside documentation comments.
+ 
+ 
 -==== /a.js (1 errors) ====
--    /** @typedef {Object.<string, boolean>} Facts */
--    
--    // Should be able to detect a failure here
--    const x = /** @satisfies {Facts} */ ({
--        m: true,
--        s: "false"
++==== /a.js (2 errors) ====
+     /** @typedef {Object.<string, boolean>} Facts */
++                  ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
++                        ~
++!!! error TS8020: JSDoc types can only be used inside documentation comments.
+     
+     // Should be able to detect a failure here
+     const x = /** @satisfies {Facts} */ ({
+         m: true,
+         s: "false"
 -        ~
 -!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
--    })
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
+     })
+     

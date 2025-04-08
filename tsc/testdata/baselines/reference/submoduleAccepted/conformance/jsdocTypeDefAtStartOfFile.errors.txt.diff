@@ -1,0 +1,22 @@
+--- old.jsdocTypeDefAtStartOfFile.errors.txt
++++ new.jsdocTypeDefAtStartOfFile.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(1,12): error TS2304: Cannot find name 'AnyEffect'.
++index.js(3,12): error TS2304: Cannot find name 'Third'.
++
++
++==== dtsEquivalent.js (0 errors) ====
++    /** @typedef {{[k: string]: any}} AnyEffect */
++    /** @typedef {number} Third */
++==== index.js (2 errors) ====
++    /** @type {AnyEffect} */
++               ~~~~~~~~~
++!!! error TS2304: Cannot find name 'AnyEffect'.
++    let b;
++    /** @type {Third} */
++               ~~~~~
++!!! error TS2304: Cannot find name 'Third'.
++    let c;
++    

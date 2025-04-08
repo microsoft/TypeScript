@@ -1,55 +1,28 @@
 --- old.jsdocTypeCast.types
 +++ new.jsdocTypeCast.types
-@@= skipped -4, +4 lines =@@
-  * @param {string} x
-  */
-  function f(x) {
-->f : (x: string) => void
-->x : string
-+>f : (x: any) => void
-+>x : any
- 
+@@= skipped -10, +10 lines =@@
      /** @type {'a' | 'b'} */
      let a = (x); // Error
-->a : "a" | "b"
+ >a : "a" | "b"
 ->(x) : "a" | "b"
-->x : string
-+>a : any
-+>(x) : any
-+>x : any
++>(x) : string
+ >x : string
  
      a;
-->a : "a" | "b"
-+>a : any
- 
+@@= skipped -9, +9 lines =@@
      /** @type {'a' | 'b'} */
      let b = (((x))); // Error
-->b : "a" | "b"
+ >b : "a" | "b"
 ->(((x))) : "a" | "b"
-->((x)) : string
-->(x) : string
-->x : string
-+>b : any
-+>(((x))) : any
-+>((x)) : any
-+>(x) : any
-+>x : any
- 
-     b;
-->b : "a" | "b"
-+>b : any
- 
-     /** @type {'a' | 'b'} */
++>(((x))) : string
+ >((x)) : string
+ >(x) : string
+ >x : string
+@@= skipped -12, +12 lines =@@
      let c = /** @type {'a' | 'b'} */ (x); // Ok
-->c : "a" | "b"
-->(x) : "a" | "b"
-->x : string
-+>c : any
-+>(x) : any
-+>x : any
+ >c : "a" | "b"
+ >(x) : "a" | "b"
++>x : "a" | "b"
+ >x : string
  
      c;
-->c : "a" | "b"
-+>c : any
- }
- 

@@ -1,0 +1,38 @@
+--- old.assertionTypePredicates2.errors.txt
++++ new.assertionTypePredicates2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++assertionTypePredicates2.js(21,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
++assertionTypePredicates2.js(21,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
++
++
++==== assertionTypePredicates2.js (2 errors) ====
++    /**
++     * @typedef {{ x: number }} A
++     */
++    
++    /**
++     * @typedef { A & { y: number } } B
++     */
++    
++    /**
++     * @param {A} a
++     * @returns { asserts a is B }
++     */
++    const foo = (a) => {
++        if (/** @type { B } */ (a).y !== 0) throw TypeError();
++        return undefined;
++    };
++    
++    export const main = () => {
++        /** @type { A } */
++        const a = { x: 1 };
++        foo(a);
++        ~~~
++!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
++!!! related TS2782 assertionTypePredicates2.js:13:7: 'foo' needs an explicit type annotation.
++        ~~~
++!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
++    };
++    

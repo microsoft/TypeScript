@@ -8,26 +8,26 @@
 
 /** @type {A} */ // ok, default for `T` in `A` is `string`
 const aDefault1 = [""];
->aDefault1 : string[]
->[""] : string[]
+>aDefault1 : [T]
+>[""] : [string]
 >"" : ""
 
 /** @type {A} */ // error: `number` is not assignable to string`
 const aDefault2 = [0];
->aDefault2 : number[]
->[0] : number[]
+>aDefault2 : [T]
+>[0] : [number]
 >0 : 0
 
 /** @type {A<string>} */ // ok, `T` is provided for `A`
 const aString = [""];
->aString : string[]
->[""] : string[]
+>aString : [T]
+>[""] : [string]
 >"" : ""
 
 /** @type {A<number>} */ // ok, `T` is provided for `A`
 const aNumber = [0];
->aNumber : number[]
->[0] : number[]
+>aNumber : [T]
+>[0] : [number]
 >0 : 0
 
 /**
@@ -65,9 +65,9 @@ const aNumber = [0];
  * @param {U} b
  */
 function f1(a, b) {}
->f1 : (a: any, b: any) => void
->a : any
->b : any
+>f1 : <T, U>(a: T, b: U) => void
+>a : T
+>b : U
 
  /**
  * @template {string | number} [T=string]
@@ -76,9 +76,9 @@ function f1(a, b) {}
  * @param {U} b
  */
 function f2(a, b) {}
->f2 : (a: any, b: any) => void
->a : any
->b : any
+>f2 : <T extends string | number, U>(a: T, b: U) => void
+>a : T
+>b : U
 
 /**
  * @template [T=U] - error: Type parameter defaults can only reference previously declared type parameters.
@@ -87,7 +87,7 @@ function f2(a, b) {}
  * @param {U} b
  */
 function f3(a, b) {}
->f3 : (a: any, b: any) => void
->a : any
->b : any
+>f3 : <T, U>(a: T, b: U) => void
+>a : T
+>b : U
 

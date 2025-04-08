@@ -1,6 +1,6 @@
 main.js(1,9): error TS2451: Cannot redeclare block-scoped variable 'K'.
 main.js(1,15): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-main.js(3,12): error TS7006: Parameter 'k' implicitly has an 'any' type.
+main.js(2,13): error TS2749: 'K' refers to a value, but is being used as a type here. Did you mean 'typeof K'?
 mod1.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'K'.
 mod1.js(6,1): error TS2304: Cannot find name 'exports'.
 
@@ -13,9 +13,9 @@ mod1.js(6,1): error TS2304: Cannot find name 'exports'.
                   ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     /** @param {K} k */
+                ~
+!!! error TS2749: 'K' refers to a value, but is being used as a type here. Did you mean 'typeof K'?
     function f(k) {
-               ~
-!!! error TS7006: Parameter 'k' implicitly has an 'any' type.
         k.values()
     }
     

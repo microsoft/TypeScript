@@ -1,8 +1,10 @@
 jsdocTypeReferenceToImport.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 jsdocTypeReferenceToImport.js(2,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+jsdocTypeReferenceToImport.js(3,12): error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
+jsdocTypeReferenceToImport.js(8,12): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
 
 
-==== jsdocTypeReferenceToImport.js (2 errors) ====
+==== jsdocTypeReferenceToImport.js (4 errors) ====
     const C = require('./ex').C;
               ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
@@ -10,11 +12,15 @@ jsdocTypeReferenceToImport.js(2,11): error TS2580: Cannot find name 'require'. D
               ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     /** @type {C} c */
+               ~
+!!! error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
     var c = new C()
     c.start
     c.end
     
     /** @type {D} c */
+               ~
+!!! error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
     var d = new D()
     d.start
     d.end

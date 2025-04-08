@@ -11,6 +11,7 @@
 
 /** @type {Foo} */
 export default {
+>{    a: 'a',    b: 'b'} : Foo
 >{    a: 'a',    b: 'b'} : { a: string; b: string; }
 
     a: 'a',

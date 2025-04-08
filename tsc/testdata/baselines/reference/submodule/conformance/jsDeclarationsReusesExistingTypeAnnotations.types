@@ -6,21 +6,21 @@ class С1 {
 
     /** @type {string=} */
     p1 = undefined;
->p1 : undefined
+>p1 : string | undefined
 >undefined : undefined
 
     /** @type {string | undefined} */
     p2 = undefined;
->p2 : undefined
+>p2 : string | undefined
 >undefined : undefined
 
     /** @type {?string} */
     p3 = null;
->p3 : null
+>p3 : string | null
 
     /** @type {string | null} */
     p4 = null;
->p4 : null
+>p4 : string | null
 }
 
 class С2 {
@@ -63,7 +63,7 @@ class С3 {
 
     /** @type {string=} */
     get p1() {
->p1 : undefined
+>p1 : string | undefined
 
         return undefined;
 >undefined : undefined
@@ -71,20 +71,20 @@ class С3 {
 
     /** @param {string=} value */
     set p1(value) {
->p1 : undefined
->value : undefined
+>p1 : string | undefined
+>value : string | undefined
 
         this.p1 = value;
->this.p1 = value : undefined
->this.p1 : undefined
+>this.p1 = value : string | undefined
+>this.p1 : string | undefined
 >this : this
->p1 : undefined
->value : undefined
+>p1 : string | undefined
+>value : string | undefined
     }
 
     /** @type {string | undefined} */
     get p2() {
->p2 : undefined
+>p2 : string | undefined
 
         return undefined;
 >undefined : undefined
@@ -92,55 +92,55 @@ class С3 {
 
     /** @param {string | undefined} value */
     set p2(value) {
->p2 : undefined
->value : undefined
+>p2 : string | undefined
+>value : string | undefined
 
         this.p2 = value;
->this.p2 = value : undefined
->this.p2 : undefined
+>this.p2 = value : string | undefined
+>this.p2 : string | undefined
 >this : this
->p2 : undefined
->value : undefined
+>p2 : string | undefined
+>value : string | undefined
     }
 
     /** @type {?string} */
     get p3() {
->p3 : null
+>p3 : string | null
 
         return null;
     }
 
     /** @param {?string} value */
     set p3(value) {
->p3 : null
->value : null
+>p3 : string | null
+>value : string | null
 
         this.p3 = value;
->this.p3 = value : null
->this.p3 : null
+>this.p3 = value : string | null
+>this.p3 : string | null
 >this : this
->p3 : null
->value : null
+>p3 : string | null
+>value : string | null
     }
 
     /** @type {string | null} */
     get p4() {
->p4 : null
+>p4 : string | null
 
         return null;
     }
 
     /** @param {string | null} value */
     set p4(value) {
->p4 : null
->value : null
+>p4 : string | null
+>value : string | null
 
         this.p4 = value;
->this.p4 = value : null
->this.p4 : null
+>this.p4 = value : string | null
+>this.p4 : string | null
 >this : this
->p4 : null
->value : null
+>p4 : string | null
+>value : string | null
     }
 }
 
@@ -150,54 +150,54 @@ class С4 {
 
     /** @param {string=} value */
     set p1(value) {
->p1 : any
->value : any
+>p1 : string | undefined
+>value : string | undefined
 
         this.p1 = value;
->this.p1 = value : any
->this.p1 : any
+>this.p1 = value : string | undefined
+>this.p1 : string | undefined
 >this : this
->p1 : any
->value : any
+>p1 : string | undefined
+>value : string | undefined
     }
 
     /** @param {string | undefined} value */
     set p2(value) {
->p2 : any
->value : any
+>p2 : string | undefined
+>value : string | undefined
 
         this.p2 = value;
->this.p2 = value : any
->this.p2 : any
+>this.p2 = value : string | undefined
+>this.p2 : string | undefined
 >this : this
->p2 : any
->value : any
+>p2 : string | undefined
+>value : string | undefined
     }
 
     /** @param {?string} value */
     set p3(value) {
->p3 : any
->value : any
+>p3 : string | null
+>value : string | null
 
         this.p3 = value;
->this.p3 = value : any
->this.p3 : any
+>this.p3 = value : string | null
+>this.p3 : string | null
 >this : this
->p3 : any
->value : any
+>p3 : string | null
+>value : string | null
     }
 
     /** @param {string | null} value */
     set p4(value) {
->p4 : any
->value : any
+>p4 : string | null
+>value : string | null
 
         this.p4 = value;
->this.p4 = value : any
->this.p4 : any
+>this.p4 = value : string | null
+>this.p4 : string | null
 >this : this
->p4 : any
->value : any
+>p4 : string | null
+>value : string | null
     }
 }
 

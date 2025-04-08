@@ -23,16 +23,16 @@ module.exports = x;
 === index.js ===
 /** @type {(typeof import("./folder/mod1"))[]} */
 const items = [{x: 12}];
->items : { x: number; }[]
+>items : typeof import("folder/mod1")[]
 >[{x: 12}] : { x: number; }[]
 >{x: 12} : { x: number; }
 >x : number
 >12 : 12
 
 module.exports = items;
->module.exports = items : { x: number; }[]
+>module.exports = items : typeof import("folder/mod1")[]
 >module.exports : any
 >module : any
 >exports : any
->items : { x: number; }[]
+>items : typeof import("folder/mod1")[]
 

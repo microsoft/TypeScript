@@ -17,12 +17,13 @@ const bar = { c: 1 };
 
 /** @type {Foo} */
 export default bar;
+>bar : Foo
 >bar : { c: number; }
 
 === b.js ===
 import a from "./a";
->a : { c: number; }
+>a : Foo
 
 a;
->a : { c: number; }
+>a : Foo
 

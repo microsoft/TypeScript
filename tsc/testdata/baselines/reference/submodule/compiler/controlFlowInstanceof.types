@@ -276,17 +276,17 @@ function AtTop(val) { this.val = val }
 
 /** @type {*} */
 var v = 1;
->v : number
+>v : any
 >1 : 1
 
 if (v instanceof AtTop) {
 >v instanceof AtTop : boolean
->v : number
+>v : any
 >AtTop : (val: any) => void
 
     v.val
 >v.val : any
->v : number
+>v : {}
 >val : any
 }
 

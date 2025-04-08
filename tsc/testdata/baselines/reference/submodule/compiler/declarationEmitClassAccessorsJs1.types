@@ -21,7 +21,7 @@ export class VFile {
    */
   set path(path) {
 >path : string
->path : string
+>path : string | URL
   }
 }
 

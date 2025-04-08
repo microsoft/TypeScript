@@ -11,21 +11,16 @@
  >require : any
  >"./mod1" : "./mod1"
  
- /** @param {K} k */
- function f(k) {
-->f : (k: K) => void
-->k : K
-+>f : (k: any) => void
-+>k : any
+@@= skipped -11, +11 lines =@@
+ >k : K
  
      k.values()
 ->k.values() : void
 ->k.values : () => void
-->k : K
-->values : () => void
 +>k.values() : any
 +>k.values : any
-+>k : any
+ >k : K
+->values : () => void
 +>values : any
  }
  

@@ -16,7 +16,7 @@
       */
      static readonlyStaticType;
 ->readonlyStaticType : unique symbol
-+>readonlyStaticType : any
++>readonlyStaticType : symbol
  
      /**
       * @type {unique symbol}

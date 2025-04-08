@@ -17,6 +17,6 @@ exports.SomeName;
 
 /** @type {exports.SomeName} */
 const myString = 'str';
->myString : "str"
+>myString : SomeName
 >'str' : "str"
 

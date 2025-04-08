@@ -1,6 +1,6 @@
 --- old.asyncArrowFunction_allowJs.errors.txt
 +++ new.asyncArrowFunction_allowJs.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -file.js(3,17): error TS2322: Type 'number' is not assignable to type 'string'.
 -file.js(6,24): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
 -file.js(7,23): error TS2322: Type 'number' is not assignable to type 'string'.
@@ -9,50 +9,69 @@
 -file.js(16,24): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
 -file.js(25,3): error TS2345: Argument of type '() => Promise<number>' is not assignable to parameter of type '() => string'.
 -  Type 'Promise<number>' is not assignable to type 'string'.
--
--
++file.js(2,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++file.js(6,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++file.js(10,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++file.js(16,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++file.js(21,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+ 
+ 
 -==== file.js (7 errors) ====
--    // Error (good)
--    /** @type {function(): string} */
--    const a = () => 0
++==== file.js (5 errors) ====
+     // Error (good)
+     /** @type {function(): string} */
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const a = () => 0
 -                    ~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
--    
--    // Error (good)
--    /** @type {function(): string} */
+     
+     // Error (good)
+     /** @type {function(): string} */
 -                           ~~~~~~
 -!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
--    const b = async () => 0
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const b = async () => 0
 -                          ~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
--    
--    // No error (bad)
--    /** @type {function(): string} */
+     
+     // No error (bad)
+     /** @type {function(): string} */
 -                           ~~~~~~
 -!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
--    const c = async () => {
--    	return 0
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const c = async () => {
+     	return 0
 -    	~~~~~~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
--    }
--    
--    // Error (good)
--    /** @type {function(): string} */
+     }
+     
+     // Error (good)
+     /** @type {function(): string} */
 -                           ~~~~~~
 -!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
--    const d = async () => {
--    	return ""
--    }
--    
--    /** @type {function(function(): string): void} */
--    const f = (p) => {}
--    
--    // Error (good)
--    f(async () => {
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const d = async () => {
+     	return ""
+     }
+     
+     /** @type {function(function(): string): void} */
++               ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+     const f = (p) => {}
+     
+     // Error (good)
+     f(async () => {
 -      ~~~~~~~~~~~~~
 -!!! error TS2345: Argument of type '() => Promise<number>' is not assignable to parameter of type '() => string'.
 -!!! error TS2345:   Type 'Promise<number>' is not assignable to type 'string'.
--    	return 0
--    })
-@@= skipped --1, +1 lines =@@
-+<no content>
+     	return 0
+     })

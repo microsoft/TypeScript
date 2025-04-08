@@ -12,6 +12,6 @@ module.exports = {}
  * @type {exports}
  */
 var x
->x : any
+>x : exports
 
 

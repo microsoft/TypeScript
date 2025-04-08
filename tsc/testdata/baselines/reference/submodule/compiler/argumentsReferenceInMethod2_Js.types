@@ -8,19 +8,19 @@ class A {
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
->m : (foo?: {}) => void
->foo : {}
+>m : (foo?: object) => void
+>foo : object
 >{} : {}
 
 		/**
 		 * @type object
 		 */
 		this["arguments"] = foo;
->this["arguments"] = foo : {}
+>this["arguments"] = foo : object
 >this["arguments"] : any
 >this : this
 >"arguments" : "arguments"
->foo : {}
+>foo : object
 	}
 }
 

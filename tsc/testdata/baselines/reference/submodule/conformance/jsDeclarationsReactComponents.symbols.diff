@@ -79,9 +79,9 @@
 ->TabbedShowLayout.defaultProps : Symbol(React.StatelessComponent.defaultProps, Decl(react16.d.ts, 410, 46))
 ->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5), Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
 ->defaultProps : Symbol(React.StatelessComponent.defaultProps, Decl(react16.d.ts, 410, 46))
-+>TabbedShowLayout.defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
++>TabbedShowLayout.defaultProps : Symbol(defaultProps, Decl(react16.d.ts, 410, 46))
 +>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5))
-+>defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
++>defaultProps : Symbol(defaultProps, Decl(react16.d.ts, 410, 46))
  
      tabs: "default value"
  >tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents2.jsx, 12, 33))
@@ -117,15 +117,12 @@
  };
  
  TabbedShowLayout.defaultProps = {
-->TabbedShowLayout.defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 2, 11))
+ >TabbedShowLayout.defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 2, 11))
 ->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5), Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
-->defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 2, 11))
-+>TabbedShowLayout.defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
 +>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5))
-+>defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
+ >defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 2, 11))
  
      tabs: "default value"
- >tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents3.jsx, 12, 33))
 @@= skipped -26, +26 lines =@@
  };
  

@@ -29,17 +29,17 @@ declare class Thenable { then(): void; }
  * @returns {string}
  */
 const f1 = async str => {
->f1 : (str: any) => Promise<any>
->async str => {    return str;} : (str: any) => Promise<any>
->str : any
+>f1 : (str: string) => string
+>async str => {    return str;} : (str: string) => string
+>str : string
 
     return str;
->str : any
+>str : string
 }
 
 /** @type {T1} */
 const f2 = async str => {
->f2 : (str: any) => Promise<any>
+>f2 : T1
 >async str => {    return str;} : (str: any) => Promise<any>
 >str : any
 
@@ -52,17 +52,17 @@ const f2 = async str => {
  * @returns {Promise<string>}
  */
 const f3 = async str => {
->f3 : (str: any) => Promise<any>
->async str => {    return str;} : (str: any) => Promise<any>
->str : any
+>f3 : (str: string) => Promise<string>
+>async str => {    return str;} : (str: string) => Promise<string>
+>str : string
 
     return str;
->str : any
+>str : string
 }
 
 /** @type {T2} */
 const f4 = async str => {
->f4 : (str: any) => Promise<any>
+>f4 : T2
 >async str => {    return str;} : (str: any) => Promise<any>
 >str : any
 
@@ -72,7 +72,7 @@ const f4 = async str => {
 
 /** @type {T3} */
 const f5 = async str => {
->f5 : (str: any) => Promise<any>
+>f5 : T3
 >async str => {    return str;} : (str: any) => Promise<any>
 >str : any
 

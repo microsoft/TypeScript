@@ -11,7 +11,7 @@
  * @type {Covariant<unknown>}
  */
 let super_covariant = { x: 1 };
->super_covariant : { x: number; }
+>super_covariant : Covariant<unknown>
 >{ x: 1 } : { x: number; }
 >x : number
 >1 : 1
@@ -20,20 +20,20 @@ let super_covariant = { x: 1 };
  * @type {Covariant<string>}
  */
 let sub_covariant = { x: '' };
->sub_covariant : { x: string; }
+>sub_covariant : Covariant<string>
 >{ x: '' } : { x: string; }
 >x : string
 >'' : ""
 
 super_covariant = sub_covariant;
->super_covariant = sub_covariant : { x: string; }
->super_covariant : { x: number; }
->sub_covariant : { x: string; }
+>super_covariant = sub_covariant : Covariant<string>
+>super_covariant : Covariant<unknown>
+>sub_covariant : Covariant<string>
 
 sub_covariant   = super_covariant; // Error
->sub_covariant   = super_covariant : { x: number; }
->sub_covariant : { x: string; }
->super_covariant : { x: number; }
+>sub_covariant   = super_covariant : Covariant<unknown>
+>sub_covariant : Covariant<string>
+>super_covariant : Covariant<unknown>
 
 /**
  * @template in T
@@ -45,7 +45,7 @@ sub_covariant   = super_covariant; // Error
  * @type {Contravariant<unknown>}
  */
 let super_contravariant = { f: (x) => {} };
->super_contravariant : { f: (x: any) => void; }
+>super_contravariant : Contravariant<unknown>
 >{ f: (x) => {} } : { f: (x: any) => void; }
 >f : (x: any) => void
 >(x) => {} : (x: any) => void
@@ -55,21 +55,21 @@ let super_contravariant = { f: (x) => {} };
  * @type {Contravariant<string>}
  */
 let sub_contravariant = { f: (x) => {} };
->sub_contravariant : { f: (x: any) => void; }
+>sub_contravariant : Contravariant<string>
 >{ f: (x) => {} } : { f: (x: any) => void; }
 >f : (x: any) => void
 >(x) => {} : (x: any) => void
 >x : any
 
 super_contravariant = sub_contravariant;  // Error
->super_contravariant = sub_contravariant : { f: (x: any) => void; }
->super_contravariant : { f: (x: any) => void; }
->sub_contravariant : { f: (x: any) => void; }
+>super_contravariant = sub_contravariant : Contravariant<string>
+>super_contravariant : Contravariant<unknown>
+>sub_contravariant : Contravariant<string>
 
 sub_contravariant = super_contravariant;
->sub_contravariant = super_contravariant : { f: (x: any) => void; }
->sub_contravariant : { f: (x: any) => void; }
->super_contravariant : { f: (x: any) => void; }
+>sub_contravariant = super_contravariant : Contravariant<unknown>
+>sub_contravariant : Contravariant<string>
+>super_contravariant : Contravariant<unknown>
 
 /**
  * @template in out T
@@ -81,7 +81,7 @@ sub_contravariant = super_contravariant;
  * @type {Invariant<unknown>}
  */
 let super_invariant = { f: (x) => {} };
->super_invariant : { f: (x: any) => void; }
+>super_invariant : Invariant<unknown>
 >{ f: (x) => {} } : { f: (x: any) => void; }
 >f : (x: any) => void
 >(x) => {} : (x: any) => void
@@ -91,7 +91,7 @@ let super_invariant = { f: (x) => {} };
  * @type {Invariant<string>}
  */
 let sub_invariant = { f: (x) => { return "" } };
->sub_invariant : { f: (x: any) => string; }
+>sub_invariant : Invariant<string>
 >{ f: (x) => { return "" } } : { f: (x: any) => string; }
 >f : (x: any) => string
 >(x) => { return "" } : (x: any) => string
@@ -99,20 +99,20 @@ let sub_invariant = { f: (x) => { return "" } };
 >"" : ""
 
 super_invariant = sub_invariant;  // Error
->super_invariant = sub_invariant : { f: (x: any) => string; }
->super_invariant : { f: (x: any) => void; }
->sub_invariant : { f: (x: any) => string; }
+>super_invariant = sub_invariant : Invariant<string>
+>super_invariant : Invariant<unknown>
+>sub_invariant : Invariant<string>
 
 sub_invariant = super_invariant;  // Error
->sub_invariant = super_invariant : { f: (x: any) => void; }
->sub_invariant : { f: (x: any) => string; }
->super_invariant : { f: (x: any) => void; }
+>sub_invariant = super_invariant : Invariant<unknown>
+>sub_invariant : Invariant<string>
+>super_invariant : Invariant<unknown>
 
 /**
  * @template in T
  * @param {T} x
  */
 function f(x) {}
->f : (x: any) => void
->x : any
+>f : <T>(x: T) => void
+>x : T
 

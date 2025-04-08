@@ -11,7 +11,7 @@ import { E } from "./a";
 
 /** @type {E} */
 const e = E.A;
->e : E.A
+>e : E
 >E.A : E
 >E : typeof E
 >A : E

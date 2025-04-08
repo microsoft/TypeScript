@@ -3,7 +3,7 @@
 === a.js ===
 /** @type {function(string): void} */
 const f = (value) => {
->f : (value: any) => void
+>f : function
 >(value) => {} : (value: any) => void
 >value : any
 
@@ -20,8 +20,8 @@ function h(s) {
 }
 
 f() // should error
->f() : void
->f : (value: any) => void
+>f() : any
+>f : function
 
 g() // should error
 >g() : void

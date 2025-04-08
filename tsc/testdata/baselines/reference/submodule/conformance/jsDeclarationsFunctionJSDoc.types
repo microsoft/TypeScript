@@ -7,9 +7,9 @@
  * @param {string} b
  */
 export function foo(a, b) {}
->foo : (a: any, b: any) => void
->a : any
->b : any
+>foo : (a: number, b: string) => void
+>a : number
+>b : string
 
 /**
  * Legacy - DO NOT USE
@@ -23,18 +23,18 @@ export class Aleph {
      * @param {null} b
      */
     constructor(a, b) {
->a : any
->b : any
+>a : Aleph
+>b : null
 
         /**
          * Field is always null
          */
         this.field = b;
->this.field = b : any
+>this.field = b : null
 >this.field : any
 >this : this
 >field : any
->b : any
+>b : null
     }
 
     /**

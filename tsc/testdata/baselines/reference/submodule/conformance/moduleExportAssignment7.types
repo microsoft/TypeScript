@@ -59,13 +59,13 @@ module.exports = {
  * @param {import("./mod").literal} g
  */
 function jstypes(a, b, c, d, e, f, g) {
->jstypes : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+>jstypes : (a: any, b: any, c: any, d: any, e: any, f: () => number, g: any) => any
 >a : any
 >b : any
 >c : any
 >d : any
 >e : any
->f : any
+>f : () => number
 >g : any
 
     return a.x + b.y + c() + d() + e() + f() + g.length
@@ -87,8 +87,8 @@ function jstypes(a, b, c, d, e, f, g) {
 >d : any
 >e() : any
 >e : any
->f() : any
->f : any
+>f() : number
+>f : () => number
 >g.length : any
 >g : any
 >length : any
@@ -141,7 +141,7 @@ function jsvalues(a, b, c, d, e, f, g) {
 
 === index.ts ===
 function types(
->types : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+>types : (a: any, b: any, c: any, d: any, e: any, f: () => number, g: any) => any
 
     a: import('./mod').Thing,
 >a : any
@@ -159,7 +159,7 @@ function types(
 >e : any
 
     f: import('./mod').buz,
->f : any
+>f : () => number
 
     g: import('./mod').literal,
 >g : any
@@ -184,8 +184,8 @@ function types(
 >d : any
 >e() : any
 >e : any
->f() : any
->f : any
+>f() : number
+>f : () => number
 >g.length : any
 >g : any
 >length : any

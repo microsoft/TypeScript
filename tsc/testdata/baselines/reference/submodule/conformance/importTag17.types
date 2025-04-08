@@ -16,7 +16,7 @@ export declare const Require: "script";
  * @returns { Import }
  */
 export function f1() {
->f1 : () => number
+>f1 : () => Import
 
     return 1;
 >1 : 1
@@ -26,7 +26,7 @@ export function f1() {
  * @returns { Require }
  */
 export function f2() {
->f2 : () => number
+>f2 : () => Require
 
     return 1;
 >1 : 1

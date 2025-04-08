@@ -1,59 +1,29 @@
 --- old.checkJsdocTypeTag1.types
 +++ new.checkJsdocTypeTag1.types
-@@= skipped -13, +13 lines =@@
+@@= skipped -3, +3 lines =@@
+ // @ts-check
+ /** @type {String} */
+ var S = "hello world";
+->S : string
++>S : String
+ >"hello world" : "hello world"
  
- /** @type {*} */
- var anyT = 2;
-->anyT : any
-+>anyT : number
- >2 : 2
- 
- anyT = "hello";
- >anyT = "hello" : "hello"
-->anyT : any
-+>anyT : number
- >"hello" : "hello"
- 
- /** @type {?} */
- var anyT1 = 2;
-->anyT1 : any
-+>anyT1 : number
- >2 : 2
- 
- anyT1 = "hi";
- >anyT1 = "hi" : "hi"
-->anyT1 : any
-+>anyT1 : number
- >"hi" : "hi"
- 
- /** @type {Function} */
- const x = (a) => a + 1;
-->x : Function
-+>x : (a: any) => any
- >(a) => a + 1 : (a: any) => any
- >a : any
- >a + 1 : any
-@@= skipped -29, +29 lines =@@
- 
- x(1);
- >x(1) : any
-->x : Function
-+>x : (a: any) => any
- >1 : 1
+ /** @type {number} */
+@@= skipped -44, +44 lines =@@
  
  /** @type {function} */
  const y = (a) => a + 1;
 ->y : Function
-+>y : (a: any) => any
++>y : function
  >(a) => a + 1 : (a: any) => any
  >a : any
  >a + 1 : any
-@@= skipped -14, +14 lines =@@
+@@= skipped -9, +9 lines =@@
  
  y(1);
  >y(1) : any
 ->y : Function
-+>y : (a: any) => any
++>y : function
  >1 : 1
  
  /** @type {function (number)} */
@@ -63,7 +33,7 @@
 ->a : number
 ->a + 1 : number
 ->a : number
-+>x1 : (a: any) => any
++>x1 : function
 +>(a) => a + 1 : (a: any) => any
 +>a : any
 +>a + 1 : any
@@ -73,7 +43,7 @@
  x1(0);
  >x1(0) : any
 ->x1 : (arg0: number) => any
-+>x1 : (a: any) => any
++>x1 : function
  >0 : 0
  
  /** @type {function (number): number} */
@@ -83,7 +53,7 @@
 ->a : number
 ->a + 1 : number
 ->a : number
-+>x2 : (a: any) => any
++>x2 : function
 +>(a) => a + 1 : (a: any) => any
 +>a : any
 +>a + 1 : any
@@ -94,7 +64,7 @@
 ->x2(0) : number
 ->x2 : (arg0: number) => number
 +>x2(0) : any
-+>x2 : (a: any) => any
++>x2 : function
  >0 : 0
  
  /**
@@ -102,7 +72,7 @@
   */
  var props = {};
 ->props : any
-+>props : {}
++>props : object
  >{} : {}
  
  /**
@@ -110,6 +80,6 @@
   */
  var props = {};
 ->props : any
-+>props : {}
++>props : object
  >{} : {}
  

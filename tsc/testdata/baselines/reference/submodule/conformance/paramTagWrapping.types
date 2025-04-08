@@ -10,15 +10,15 @@
  * Arg z.
  */
 function good(x, y, z) {
->good : (x: any, y: any, z: any) => void
->x : any
->y : any
->z : any
+>good : (x: number, y: number, z: number) => void
+>x : number
+>y : number
+>z : number
 }
 
 good(1, 2, 3)
 >good(1, 2, 3) : void
->good : (x: any, y: any, z: any) => void
+>good : (x: number, y: number, z: number) => void
 >1 : 1
 >2 : 2
 >3 : 3

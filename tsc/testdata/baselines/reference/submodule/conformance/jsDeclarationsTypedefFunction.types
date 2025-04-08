@@ -16,23 +16,23 @@ let id = 0
  * @returns {Promise<any>}
  */
 const send = handlers => new Promise((resolve, reject) => {
->send : (handlers: any) => Promise<unknown>
->handlers => new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : (handlers: any) => Promise<unknown>
->handlers : any
->new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : Promise<unknown>
+>send : (handlers: { [id: string]: [Function, Function]; }) => Promise<any>
+>handlers => new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : (handlers: { [id: string]: [Function, Function]; }) => Promise<any>
+>handlers : { [id: string]: [Function, Function]; }
+>new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : Promise<any>
 >Promise : PromiseConstructor
->(resolve, reject) => {  handlers[++id] = [resolve, reject]} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
->resolve : (value: unknown) => void
+>(resolve, reject) => {  handlers[++id] = [resolve, reject]} : (resolve: (value: any) => void, reject: (reason?: any) => void) => void
+>resolve : (value: any) => void
 >reject : (reason?: any) => void
 
   handlers[++id] = [resolve, reject]
->handlers[++id] = [resolve, reject] : ((value: unknown) => void)[]
->handlers[++id] : any
->handlers : any
+>handlers[++id] = [resolve, reject] : [(value: any) => void, (reason?: any) => void]
+>handlers[++id] : [Function, Function]
+>handlers : { [id: string]: [Function, Function]; }
 >++id : number
 >id : number
->[resolve, reject] : ((value: unknown) => void)[]
->resolve : (value: unknown) => void
+>[resolve, reject] : [(value: any) => void, (reason?: any) => void]
+>resolve : (value: any) => void
 >reject : (reason?: any) => void
 
 })

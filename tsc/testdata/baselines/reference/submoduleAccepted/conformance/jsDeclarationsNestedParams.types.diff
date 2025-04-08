@@ -7,7 +7,7 @@
 ->cancel : ({ reason, code }: {    reason: string | null;    code: string | null;}) => Promise<any>
 ->reason : string
 ->code : string
-+>cancel : (__0: { code: any; reason: any; }) => Promise<void>
++>cancel : (__0: { code: any; reason: any; }) => Promise<any>
 +>reason : any
 +>code : any
  }
@@ -20,7 +20,7 @@
 ->cancel : ({ reason, suberr }: {    reason: string | null;    suberr: {        reason: string | null;        code: string | null;    };}) => Promise<any>
 ->reason : string
 ->suberr : { reason: string | null; code: string | null; }
-+>cancel : (__0: { reason: any; suberr: any; }) => Promise<void>
++>cancel : (__0: { reason: any; suberr: any; }) => Promise<any>
 +>reason : any
 +>suberr : any
  }

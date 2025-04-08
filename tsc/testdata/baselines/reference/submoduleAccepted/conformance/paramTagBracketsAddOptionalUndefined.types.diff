@@ -5,43 +5,21 @@
   */
  function f(p, q, r) {
 ->f : (p?: number, q?: number | undefined, r?: number) => void
-->p : number | undefined
-->q : number | undefined
-->r : number | undefined
-+>f : (p: any, q: any, r: any) => void
-+>p : any
-+>q : any
-+>r : any
- 
-     p = undefined
- >p = undefined : undefined
-->p : number | undefined
-+>p : any
- >undefined : undefined
- 
-     q = undefined
- >q = undefined : undefined
-->q : number | undefined
-+>q : any
- >undefined : undefined
- 
-     // note that, unlike TS, JSDOC [r=101] retains | undefined because
-     // there's no code emitted to get rid of it.
-     r = undefined
- >r = undefined : undefined
-->r : number | undefined
-+>r : any
- >undefined : undefined
++>f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
+ >p : number | undefined
+ >q : number | undefined
+ >r : number | undefined
+@@= skipped -24, +24 lines =@@
  }
  f()
  >f() : void
 ->f : (p?: number, q?: number | undefined, r?: number) => void
-+>f : (p: any, q: any, r: any) => void
++>f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
  
  f(undefined, undefined, undefined)
  >f(undefined, undefined, undefined) : void
 ->f : (p?: number, q?: number | undefined, r?: number) => void
-+>f : (p: any, q: any, r: any) => void
++>f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
  >undefined : undefined
  >undefined : undefined
  >undefined : undefined
@@ -49,7 +27,7 @@
  f(1, 2, 3)
  >f(1, 2, 3) : void
 ->f : (p?: number, q?: number | undefined, r?: number) => void
-+>f : (p: any, q: any, r: any) => void
++>f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
  >1 : 1
  >2 : 2
  >3 : 3

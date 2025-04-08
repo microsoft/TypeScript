@@ -5,104 +5,46 @@
   */
  function f(t, u, v, w, x) {
 ->f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
-->t : T
-->u : U
-->v : V
-->w : W
-->x : X
-+>f : (t: any, u: any, v: any, w: any, x: any) => any
-+>t : any
-+>u : any
-+>v : any
-+>w : any
-+>x : any
- 
-     if(t.a + t.b.length > u.a - u.b.length && v.c) {
-->t.a + t.b.length > u.a - u.b.length && v.c : boolean
-+>t.a + t.b.length > u.a - u.b.length && v.c : any
- >t.a + t.b.length > u.a - u.b.length : boolean
-->t.a + t.b.length : number
-->t.a : number
-->t : T
-->a : number
-->t.b.length : number
-->t.b : string
-->t : T
-->b : string
-->length : number
-+>t.a + t.b.length : any
-+>t.a : any
-+>t : any
-+>a : any
-+>t.b.length : any
-+>t.b : any
-+>t : any
-+>b : any
-+>length : any
++>f : <T extends { a: number; b: string; }, U extends { a: number; b: string; }, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
+ >t : T
+ >u : U
+ >v : V
+@@= skipped -20, +20 lines =@@
+ >b : string
+ >length : number
  >u.a - u.b.length : number
- >u.a : any
-->u : U
-+>u : any
- >a : any
- >u.b.length : any
- >u.b : any
-->u : U
-+>u : any
- >b : any
- >length : any
-->v.c : boolean
-->v : V
-->c : boolean
-+>v.c : any
-+>v : any
-+>c : any
- 
-         return w;
-->w : W
-+>w : any
-     }
-     return x;
-->x : X
-+>x : any
- }
+->u.a : any
++>u.a : number
+ >u : U
+->a : any
+->u.b.length : any
+->u.b : any
++>a : number
++>u.b.length : number
++>u.b : string
+ >u : U
+->b : any
+->length : any
++>b : string
++>length : number
+ >v.c : boolean
+ >v : V
+ >c : boolean
+@@= skipped -21, +21 lines =@@
  
  f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
-->f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : "nope" | 101
+ >f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : "nope" | 101
 ->f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
-+>f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : any
-+>f : (t: any, u: any, v: any, w: any, x: any) => any
++>f : <T extends { a: number; b: string; }, U extends { a: number; b: string; }, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
  >{ a: 12, b: 'hi', c: null } : { a: number; b: string; c: null; }
  >a : number
  >12 : 12
-@@= skipped -49, +49 lines =@@
- >'hi' : "hi"
- >c : null
- >undefined : undefined
-->{ c: false, d: 12, b: undefined } : { c: false; d: number; b: undefined; }
-->c : false
-+>{ c: false, d: 12, b: undefined } : { c: boolean; d: number; b: undefined; }
-+>c : boolean
- >false : false
- >d : number
- >12 : 12
-@@= skipped -11, +11 lines =@@
- >'nope' : "nope"
+@@= skipped -20, +20 lines =@@
  
  f({ a: 12  }, undefined, undefined, 101, 'nope');
-->f({ a: 12  }, undefined, undefined, 101, 'nope') : "nope" | 101
+ >f({ a: 12  }, undefined, undefined, 101, 'nope') : "nope" | 101
 ->f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
-+>f({ a: 12  }, undefined, undefined, 101, 'nope') : any
-+>f : (t: any, u: any, v: any, w: any, x: any) => any
++>f : <T extends { a: number; b: string; }, U extends { a: number; b: string; }, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
  >{ a: 12  } : { a: number; }
  >a : number
  >12 : 12
-@@= skipped -16, +16 lines =@@
-  * @param {T} x
-  */
- function g(x) { }
-->g : <T>(x: T) => void
-->x : T
-+>g : (x: any) => void
-+>x : any
- 
- 

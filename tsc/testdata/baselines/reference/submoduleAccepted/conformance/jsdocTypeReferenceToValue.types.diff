@@ -6,14 +6,14 @@
  function process(image) {
 ->process : (image: new (width?: number, height?: number) => HTMLImageElement) => HTMLImageElement
 ->image : new (width?: number, height?: number) => HTMLImageElement
-+>process : (image: any) => any
-+>image : any
++>process : (image: Image) => any
++>image : Image
  
      return new image(1, 1)
 ->new image(1, 1) : HTMLImageElement
 ->image : new (width?: number, height?: number) => HTMLImageElement
 +>new image(1, 1) : any
-+>image : any
++>image : Image
  >1 : 1
  >1 : 1
  }

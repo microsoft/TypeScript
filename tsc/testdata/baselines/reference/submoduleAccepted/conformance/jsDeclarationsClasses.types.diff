@@ -1,162 +1,22 @@
 --- old.jsDeclarationsClasses.types
 +++ new.jsDeclarationsClasses.types
-@@= skipped -27, +27 lines =@@
-      * @param {number} b
-      */
-     constructor(a, b) {}
-->a : number
-->b : number
-+>a : any
-+>b : any
- }
- 
- /**
-  * @template T,U
-  */
- export class E {
-->E : E<T, U>
-+>E : E
- 
-     /**
-      * @type {T & U}
-      */
-     field;
-->field : T & U
-+>field : any
- 
-     // @readonly is currently unsupported, it seems - included here just in case that changes
-     /**
-@@= skipped -22, +22 lines =@@
-      * @readonly
-      */
-     readonlyField;
-->readonlyField : T & U
-+>readonlyField : any
- 
-     initializedField = 12;
- >initializedField : number
-@@= skipped -10, +10 lines =@@
-      * @return {U}
-      */
+@@= skipped -61, +61 lines =@@
      get f1() { return /** @type {*} */(null); }
-->f1 : U
-->(null) : any
-+>f1 : any
-+>(null) : null
+ >f1 : U
+ >(null) : any
++>null : any
  
      /**
       * @param {U} _p
-      */
-     set f1(_p) {}
-->f1 : U
-->_p : U
-+>f1 : any
-+>_p : any
- 
-     /**
-      * @return {U}
-      */
+@@= skipped -14, +15 lines =@@
      get f2() { return /** @type {*} */(null); }
-->f2 : U
-->(null) : any
-+>f2 : any
-+>(null) : null
+ >f2 : U
+ >(null) : any
++>null : any
  
      /**
       * @param {U} _p
-      */
-     set f3(_p) {}
-->f3 : U
-->_p : U
-+>f3 : any
-+>_p : any
- 
-     /**
-      * @param {T} a
-      * @param {U} b
-      */
-     constructor(a, b) {}
-->a : T
-->b : U
-+>a : any
-+>b : any
- 
- 
-     /**
-      * @type {string}
-      */
-     static staticField;
-->staticField : string
-+>staticField : any
- 
-     // @readonly is currently unsupported, it seems - included here just in case that changes
-     /**
-@@= skipped -45, +45 lines =@@
-      * @readonly
-      */
-     static staticReadonlyField;
-->staticReadonlyField : string
-+>staticReadonlyField : any
- 
-     static staticInitializedField = 12;
- >staticInitializedField : number
-@@= skipped -31, +31 lines =@@
-      * @param {string} _p
-      */
-     static set s3(_p) {}
-->s3 : string
-->_p : string
-+>s3 : any
-+>_p : any
- }
- 
- /**
-  * @template T,U
-  */
- export class F {
-->F : F<T, U>
-+>F : F
- 
-     /**
-      * @type {T & U}
-      */
-     field;
-->field : T & U
-+>field : any
- 
-     /**
-      * @param {T} a
-      * @param {U} b
-      */
-     constructor(a, b) {}
-->a : T
-->b : U
-+>a : any
-+>b : any
- 
-     /**
-      * @template A,B
-@@= skipped -30, +30 lines =@@
-      * @param {B} b
-      */
-     static create(a, b) { return new F(a, b); }
-->create : <A, B>(a: A, b: B) => F<A, B>
-->a : A
-->b : B
-->new F(a, b) : F<A, B>
-+>create : (a: any, b: any) => F
-+>a : any
-+>b : any
-+>new F(a, b) : F
- >F : typeof F
-->a : A
-->b : B
-+>a : any
-+>b : any
- }
- 
- class G {}
-@@= skipped -57, +57 lines =@@
+@@= skipped -147, +148 lines =@@
      }
  
      method() {
@@ -172,73 +32,29 @@
      }
  }
  
-@@= skipped -31, +31 lines =@@
-  * @template T
-  */
- export class N extends L {
-->N : N<T>
-+>N : N
- >L : L
- 
-     /**
-      * @param {T} param 
-      */
-     constructor(param) {
-->param : T
-+>param : any
- 
-         super();
- >super() : void
- >super : typeof L
- 
-         this.another = param;
-->this.another = param : T
-+>this.another = param : any
- >this.another : any
- >this : this
- >another : any
-->param : T
-+>param : any
-     }
- }
- 
-@@= skipped -27, +27 lines =@@
-  * @extends {N<U>}
+@@= skipped -59, +59 lines =@@
   */
  export class O extends N {
-->O : O<U>
+ >O : O<U>
 ->N : N<U>
-+>O : O
-+>N : N
++>N : typeof N
  
      /**
       * @param {U} param 
-      */
-     constructor(param) {
-->param : U
-+>param : any
+@@= skipped -10, +10 lines =@@
  
          super(param);
  >super(param) : void
- >super : typeof N
-->param : U
-+>param : any
+->super : typeof N
++>super : any
+ >param : U
  
          this.another2 = param;
-->this.another2 = param : U
-+>this.another2 = param : any
- >this.another2 : any
- >this : this
- >another2 : any
-->param : U
-+>param : any
-     }
- }
- 
+@@= skipped -15, +15 lines =@@
  var x = /** @type {*} */(null);
  >x : any
-->(null) : any
-+>(null) : null
+ >(null) : any
++>null : any
  
  export class VariableBase extends x {}
  >VariableBase : VariableBase

@@ -43,7 +43,7 @@ const t3 = /** @satisfies {T1} */ ({});
 
 /** @type {T2} */
 const t4 = /** @satisfies {T2} */ ({ a: "a" });
->t4 : { a: string; }
+>t4 : T2
 >({ a: "a" }) : { a: string; }
 >{ a: "a" } : { a: string; }
 >a : string
@@ -51,14 +51,14 @@ const t4 = /** @satisfies {T2} */ ({ a: "a" });
 
 /** @type {(m: string) => string} */
 const t5 = /** @satisfies {T3} */((m) => m.substring(0));
->t5 : (m: any) => any
->((m) => m.substring(0)) : (m: any) => any
->(m) => m.substring(0) : (m: any) => any
->m : any
->m.substring(0) : any
->m.substring : any
->m : any
->substring : any
+>t5 : (m: string) => string
+>((m) => m.substring(0)) : (m: string) => string
+>(m) => m.substring(0) : (m: string) => string
+>m : string
+>m.substring(0) : string
+>m.substring : (start: number, end?: number) => string
+>m : string
+>substring : (start: number, end?: number) => string
 >0 : 0
 
 const t6 = /** @satisfies {[number, number]} */ ([1, 2]);

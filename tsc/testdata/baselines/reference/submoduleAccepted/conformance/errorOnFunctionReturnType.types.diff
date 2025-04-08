@@ -28,18 +28,16 @@
  
      console.log("test")
  >console.log("test") : void
-@@= skipped -20, +20 lines =@@
- 
+@@= skipped -21, +21 lines =@@
  /** @type {FunctionReturningPromise} */
  var testPromise4 = function() {
-->testPromise4 : FunctionReturningPromise
+ >testPromise4 : FunctionReturningPromise
 ->function() {    console.log("test")} : () => Promise<number>
-+>testPromise4 : () => void
 +>function() {    console.log("test")} : () => void
  
      console.log("test")
  >console.log("test") : void
-@@= skipped -18, +18 lines =@@
+@@= skipped -17, +17 lines =@@
  
  /** @type {FunctionReturningNever} */
  function testNever1() {
@@ -65,13 +63,11 @@
  
      console.log("test")
  >console.log("test") : void
-@@= skipped -26, +26 lines =@@
- 
+@@= skipped -27, +27 lines =@@
  /** @type {FunctionReturningNever} */
  var testNever4 = function() {
-->testNever4 : FunctionReturningNever
+ >testNever4 : FunctionReturningNever
 ->function() {    console.log("test")} : () => never
-+>testNever4 : () => void
 +>function() {    console.log("test")} : () => void
  
      console.log("test")

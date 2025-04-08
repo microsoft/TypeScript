@@ -1,0 +1,36 @@
+--- old.enumTagImported.errors.txt
++++ new.enumTagImported.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++type.js(1,32): error TS2694: Namespace '"mod1"' has no exported member 'TestEnum'.
++type.js(4,29): error TS2694: Namespace '"mod1"' has no exported member 'TestEnum'.
++value.js(2,12): error TS2749: 'TestEnum' refers to a value, but is being used as a type here. Did you mean 'typeof TestEnum'?
++
++
++==== type.js (2 errors) ====
++    /** @typedef {import("./mod1").TestEnum} TE */
++                                   ~~~~~~~~
++!!! error TS2694: Namespace '"mod1"' has no exported member 'TestEnum'.
++    /** @type {TE} */
++    const test = 'add'
++    /** @type {import("./mod1").TestEnum} */
++                                ~~~~~~~~
++!!! error TS2694: Namespace '"mod1"' has no exported member 'TestEnum'.
++    const tost = 'remove'
++    
++==== value.js (1 errors) ====
++    import { TestEnum } from "./mod1"
++    /** @type {TestEnum} */
++               ~~~~~~~~
++!!! error TS2749: 'TestEnum' refers to a value, but is being used as a type here. Did you mean 'typeof TestEnum'?
++    const tist = TestEnum.ADD
++    
++    
++==== mod1.js (0 errors) ====
++    /** @enum {string} */
++    export const TestEnum = {
++        ADD: 'add',
++        REMOVE: 'remove'
++    }
++    

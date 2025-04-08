@@ -6,15 +6,15 @@
  * @param {T} t
  */
 function Cls(t) {
->Cls : (t: any) => void
->t : any
+>Cls : <T extends string>(t: T) => void
+>t : T
 
     this.t = t;
->this.t = t : any
+>this.t = t : T
 >this.t : any
 >this : any
 >t : any
->t : any
+>t : T
 }
 
 /**
@@ -27,7 +27,7 @@ Cls.prototype.topLevelComment = function (t, v) {
 >Cls.prototype.topLevelComment = function (t, v) {    return v} : (t: any, v: any) => any
 >Cls.prototype.topLevelComment : any
 >Cls.prototype : any
->Cls : (t: any) => void
+>Cls : <T extends string>(t: T) => void
 >prototype : any
 >topLevelComment : any
 >function (t, v) {    return v} : (t: any, v: any) => any
@@ -40,10 +40,10 @@ Cls.prototype.topLevelComment = function (t, v) {
 };
 
 Cls.prototype.nestedComment =
->Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : (t: any, u: any) => any
+>Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
 >Cls.prototype.nestedComment : any
 >Cls.prototype : any
->Cls : (t: any) => void
+>Cls : <T extends string>(t: T) => void
 >prototype : any
 >nestedComment : any
 
@@ -54,19 +54,19 @@ Cls.prototype.nestedComment =
      * @return {T}
      */
     function (t, u) {
->function (t, u) {        return t    } : (t: any, u: any) => any
->t : any
->u : any
+>function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
+>t : T
+>u : U
 
         return t
->t : any
+>t : T
 
     };
 
 var c = new Cls('a');
 >c : any
 >new Cls('a') : any
->Cls : (t: any) => void
+>Cls : <T extends string>(t: T) => void
 >'a' : "a"
 
 const s = c.topLevelComment('a', 'b');

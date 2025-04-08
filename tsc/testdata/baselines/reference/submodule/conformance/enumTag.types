@@ -25,6 +25,7 @@ const Target = {
     /** @type {number} */
     OK_I_GUESS: 2
 >OK_I_GUESS : number
+>2 : number
 >2 : 2
 }
 /** @enum number */
@@ -43,6 +44,7 @@ const Second = {
     /** @type {number} */
     FINE: 2,
 >FINE : number
+>2 : number
 >2 : 2
 }
 /** @enum {function(number): number} */
@@ -78,63 +80,63 @@ const Fs = {
  * @param {Fs} f
  */
 function consume(t,s,f) {
->consume : (t: any, s: any, f: any) => void
->t : any
->s : any
->f : any
+>consume : (t: Target, s: Second, f: Fs) => void
+>t : Target
+>s : Second
+>f : Fs
 
     /** @type {string} */
     var str = t
->str : any
->t : any
+>str : string
+>t : Target
 
     /** @type {number} */
     var num = s
->num : any
->s : any
+>num : number
+>s : Second
 
     /** @type {(n: number) => number} */
     var fun = f
->fun : any
->f : any
+>fun : (n: number) => number
+>f : Fs
 
     /** @type {Target} */
     var v = Target.START
->v : string
+>v : Target
 >Target.START : string
 >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
 >START : string
 
     v = Target.UNKNOWN // error, can't find 'UNKNOWN'
 >v = Target.UNKNOWN : any
->v : string
+>v : Target
 >Target.UNKNOWN : any
 >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
 >UNKNOWN : any
 
     v = Second.MISTAKE // meh..ok, I guess?
 >v = Second.MISTAKE : string
->v : string
+>v : Target
 >Second.MISTAKE : string
 >Second : { MISTAKE: string; OK: number; FINE: number; }
 >MISTAKE : string
 
     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
 >v = 'something else' : "something else"
->v : string
+>v : Target
 >'something else' : "something else"
 }
 /** @param {string} s */
 function ff(s) {
->ff : (s: any) => any
->s : any
+>ff : (s: string) => any
+>s : string
 
     // element access with arbitrary string is an error only with noImplicitAny
     if (!Target[s]) {
 >!Target[s] : boolean
 >Target[s] : any
 >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
->s : any
+>s : string
 
         return null
     }
@@ -142,7 +144,7 @@ function ff(s) {
         return Target[s]
 >Target[s] : any
 >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
->s : any
+>s : string
     }
 }
 

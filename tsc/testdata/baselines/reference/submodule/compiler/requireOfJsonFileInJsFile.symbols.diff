@@ -17,9 +17,8 @@
 ->"./json.json" : Symbol("/json", Decl(json.json, 0, 0))
  
  json1.b; // No error (OK since that's the type annotation)
-->json1.b : Symbol(b, Decl(user.js, 3, 12))
- >json1 : Symbol(json1, Decl(user.js, 4, 5))
-->b : Symbol(b, Decl(user.js, 3, 12))
+ >json1.b : Symbol(b, Decl(user.js, 3, 12))
+@@= skipped -10, +8 lines =@@
  
  const js0 = require("./js.js");
  >js0 : Symbol(js0, Decl(user.js, 7, 5))
@@ -28,7 +27,7 @@
  
  json0.b; // Error (good)
  >json0 : Symbol(json0, Decl(user.js, 0, 5))
-@@= skipped -19, +13 lines =@@
+@@= skipped -9, +7 lines =@@
  /** @type {{ b: number }} */
  const js1 = require("./js.js"); // Error (good)
  >js1 : Symbol(js1, Decl(user.js, 11, 5))
@@ -36,9 +35,8 @@
 ->"./js.js" : Symbol("/js", Decl(js.js, 0, 0))
  
  js1.b;
-->js1.b : Symbol(b, Decl(user.js, 10, 12))
- >js1 : Symbol(js1, Decl(user.js, 11, 5))
-->b : Symbol(b, Decl(user.js, 10, 12))
+ >js1.b : Symbol(b, Decl(user.js, 10, 12))
+@@= skipped -10, +8 lines =@@
  
  === /json.json ===
  { "a": 0 }

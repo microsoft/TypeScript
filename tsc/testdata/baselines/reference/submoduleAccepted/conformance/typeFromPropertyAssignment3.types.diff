@@ -35,26 +35,26 @@
  /** @type {Outer} */
  var ja
 ->ja : O
-+>ja : any
++>ja : Outer
  
  ja.y
 ->ja.y : number
 ->ja : O
 ->y : number
 +>ja.y : any
-+>ja : any
++>ja : Outer
 +>y : any
  
  /** @type {Outer.Inner} */
  var da
 ->da : I
-+>da : any
++>da : Inner
  
  da.x
 ->da.x : number
 ->da : I
 ->x : number
 +>da.x : any
-+>da : any
++>da : Inner
 +>x : any
  

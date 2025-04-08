@@ -1,5 +1,4 @@
-/index.js(5,10): error TS2304: Cannot find name 'JSDocType'.
-/index.js(6,10): error TS2304: Cannot find name 'JSDocType'.
+/index.js(5,10): error TS2484: Export declaration conflicts with exported declaration of 'JSDocType'.
 
 
 ==== /node_modules/@types/node/index.d.ts (0 errors) ====
@@ -8,16 +7,14 @@
       export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;
     }
     
-==== /index.js (2 errors) ====
+==== /index.js (1 errors) ====
     import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
     
     /** @typedef {{ x: any }} JSDocType */
     
     export { JSDocType };
              ~~~~~~~~~
-!!! error TS2304: Cannot find name 'JSDocType'.
+!!! error TS2484: Export declaration conflicts with exported declaration of 'JSDocType'.
     export { JSDocType as ThisIsFine };
-             ~~~~~~~~~
-!!! error TS2304: Cannot find name 'JSDocType'.
     export { WriteFileOptions };
     

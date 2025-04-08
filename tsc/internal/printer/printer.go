@@ -807,6 +807,7 @@ func (p *Printer) shouldAllowTrailingComma(node *ast.Node, list *ast.NodeList) b
 		ast.KindGetAccessor,
 		ast.KindSetAccessor,
 		ast.KindTypeAliasDeclaration,
+		ast.KindJSTypeAliasDeclaration,
 		ast.KindFunctionType,
 		ast.KindConstructorType,
 		ast.KindCallSignature,
@@ -1721,6 +1722,10 @@ func (p *Printer) emitClassElement(node *ast.ClassElement) {
 		p.emitIndexSignature(node.AsIndexSignatureDeclaration())
 	case ast.KindSemicolonClassElement:
 		p.emitSemicolonClassElement(node.AsSemicolonClassElement())
+	case ast.KindNotEmittedStatement:
+		p.emitNotEmittedStatement(node.AsNotEmittedStatement())
+	case ast.KindJSTypeAliasDeclaration:
+		p.emitTypeAliasDeclaration(node.AsTypeAliasDeclaration())
 	default:
 		panic(fmt.Sprintf("unexpected ClassElement: %v", node.Kind))
 	}
@@ -3865,7 +3870,7 @@ func (p *Printer) emitStatement(node *ast.Statement) {
 		p.emitClassDeclaration(node.AsClassDeclaration())
 	case ast.KindInterfaceDeclaration:
 		p.emitInterfaceDeclaration(node.AsInterfaceDeclaration())
-	case ast.KindTypeAliasDeclaration:
+	case ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration:
 		p.emitTypeAliasDeclaration(node.AsTypeAliasDeclaration())
 	case ast.KindEnumDeclaration:
 		p.emitEnumDeclaration(node.AsEnumDeclaration())
@@ -4485,7 +4490,7 @@ func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList)
 		case parentNode.ParameterList():
 			originalList = originalParent.ParameterList()
 		}
-	case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration, ast.KindTypeAliasDeclaration:
+	case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration:
 		switch children {
 		case parentNode.TypeParameterList():
 			originalList = originalParent.TypeParameterList()

@@ -40,15 +40,13 @@
  
  /** @type {Outer.Inner} should be instance type, not static type */
  var x;
-->x : Inner
-+>x : any
+ >x : Inner
  
  x.name
 ->x.name : () => string
-->x : Inner
-->name : () => string
 +>x.name : any
-+>x : any
+ >x : Inner
+->name : () => string
 +>name : any
  
  === def.js ===

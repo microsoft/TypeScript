@@ -1,51 +1,26 @@
 --- old.typedefTagNested.types
 +++ new.typedefTagNested.types
-@@= skipped -11, +11 lines =@@
- 
- /** @type {App} */
- const app = {
-->app : App
-+>app : { name: string; icons: { image32: string; image64: string; }; }
- >{    name: 'name',    icons: {        image32: 'x.png',        image64: 'y.png',    }} : { name: string; icons: { image32: string; image64: string; }; }
- 
-     name: 'name',
-@@= skipped -33, +33 lines =@@
- 
- /** @type {Opp} */
- var mistake;
-->mistake : string
-+>mistake : any
- 
- /** @typedef {Object} Upp
-  * @property {string} name
-@@= skipped -10, +10 lines =@@
- 
- /** @type {Upp} */
- var sala = { name: 'uppsala', not: 0, nested: "ok" };
-->sala : Upp
-+>sala : { name: string; not: number; nested: string; }
- >{ name: 'uppsala', not: 0, nested: "ok" } : { name: string; not: number; nested: string; }
- >name : string
- >'uppsala' : "uppsala"
-@@= skipped -11, +11 lines =@@
+@@= skipped -64, +64 lines =@@
+ >"ok" : "ok"
  
  sala.name
- >sala.name : string
-->sala : Upp
-+>sala : { name: string; not: number; nested: string; }
- >name : string
+->sala.name : string
++>sala.name : any
+ >sala : Upp
+->name : string
++>name : any
  
  sala.not
 ->sala.not : Object
-->sala : Upp
++>sala.not : any
+ >sala : Upp
 ->not : Object
-+>sala.not : number
-+>sala : { name: string; not: number; nested: string; }
-+>not : number
++>not : any
  
  sala.nested
- >sala.nested : string
-->sala : Upp
-+>sala : { name: string; not: number; nested: string; }
- >nested : string
+->sala.nested : string
++>sala.nested : any
+ >sala : Upp
+->nested : string
++>nested : any
  

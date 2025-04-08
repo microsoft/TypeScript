@@ -1,0 +1,61 @@
+--- old.checkJsdocTypedefInParamTag1.errors.txt
++++ new.checkJsdocTypedefInParamTag1.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++0.js(15,5): error TS2739: Type '{ x: string; }' is missing the following properties from type 'Opts': y, z, w
++0.js(28,6): error TS2741: Property 'anotherY' is missing in type '{ anotherX: string; }' but required in type 'AnotherOpts'.
++0.js(42,6): error TS2739: Type '{ x: string; }' is missing the following properties from type 'Opts1': y, z, w
++
++
++==== 0.js (3 errors) ====
++    // @ts-check
++    /**
++     * @typedef {Object} Opts
++     * @property {string} x
++     * @property {string=} y
++     * @property {string} [z]
++     * @property {string} [w="hi"]
++     *
++     * @param {Opts} opts
++     */
++    function foo(opts) {
++        opts.x;
++    }
++    
++    foo({x: 'abc'});
++        ~~~~~~~~~~
++!!! error TS2739: Type '{ x: string; }' is missing the following properties from type 'Opts': y, z, w
++    
++    /**
++     * @typedef {Object} AnotherOpts
++     * @property anotherX {string}
++     * @property anotherY {string=}
++     * 
++     * @param {AnotherOpts} opts
++     */
++    function foo1(opts) {
++        opts.anotherX;
++    }
++    
++    foo1({anotherX: "world"});
++         ~~~~~~~~~~~~~~~~~~~
++!!! error TS2741: Property 'anotherY' is missing in type '{ anotherX: string; }' but required in type 'AnotherOpts'.
++!!! related TS2728 0.js:20:14: 'anotherY' is declared here.
++    
++    /**
++     * @typedef {object} Opts1
++     * @property {string} x
++     * @property {string=} y
++     * @property {string} [z]
++     * @property {string} [w="hi"]
++     *
++     * @param {Opts1} opts
++     */
++    function foo2(opts) {
++        opts.x;
++    }
++    foo2({x: 'abc'});
++         ~~~~~~~~~~
++!!! error TS2739: Type '{ x: string; }' is missing the following properties from type 'Opts1': y, z, w
++    

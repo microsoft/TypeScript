@@ -7,7 +7,7 @@
  * @type {Object<string,*>}
  */
 const myTypes = {
->myTypes : Symbol(myTypes, Decl(file.js, 5, 5))
+>myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 4), Decl(file.js, 12, 3), Decl(file.js, 17, 4))
 
     // SOME PROPS HERE
 };
@@ -23,7 +23,7 @@ const myTypes = {
 /** @typedef {myTypes.typeB|Function} myTypes.typeC */
 
 export {myTypes};
->myTypes : Symbol(myTypes, Decl(file.js, 19, 8))
+>myTypes : Symbol(myTypes, Decl(file.js, 9, 4), Decl(file.js, 19, 8))
 
 === file2.js ===
 import {myTypes} from './file.js';
@@ -35,7 +35,7 @@ import {myTypes} from './file.js';
  * @type {Object<string,*>}
  */
 const testFnTypes = {
->testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5))
+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 4))
 
     // SOME PROPS HERE
 };
@@ -65,5 +65,5 @@ function testFn(input) {
 
 export {testFn, testFnTypes};
 >testFn : Symbol(testFn, Decl(file2.js, 27, 8))
->testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 15))
+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 11, 4), Decl(file2.js, 27, 15))
 

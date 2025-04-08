@@ -5,6 +5,6 @@
  /** @type {exports.SomeName} */
  const myString = 'str';
 ->myString : exports.SomeName
-+>myString : "str"
++>myString : SomeName
  >'str' : "str"
  

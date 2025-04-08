@@ -1,0 +1,18 @@
+--- old.callbackTag3.errors.txt
++++ new.callbackTag3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++cb.js(4,12): error TS2304: Cannot find name 'Miracle'.
++
++
++==== cb.js (1 errors) ====
++    /** @callback Miracle
++     * @returns {string} What were you expecting
++     */
++    /** @type {Miracle} smallId */
++               ~~~~~~~
++!!! error TS2304: Cannot find name 'Miracle'.
++    var sid = () => "!";
++    
++    

@@ -7,8 +7,8 @@
  * @param {T} t
  */
 function Cp(t) {
->Cp : { (t: any): void; prototype: { m4: () => any; }; }
->t : any
+>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
+>t : T
 
     /** @type {this} */
     this.dit = this
@@ -19,11 +19,11 @@ function Cp(t) {
 >this : any
 
     this.y = t
->this.y = t : any
+>this.y = t : T
 >this.y : any
 >this : any
 >y : any
->t : any
+>t : T
 
     /** @return {this} */
     this.m3 = () => this
@@ -38,7 +38,7 @@ function Cp(t) {
 Cp.prototype = {
 >Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4: () => any; }
 >Cp.prototype : { m4: () => any; }
->Cp : { (t: any): void; prototype: { m4: () => any; }; }
+>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
 >prototype : { m4: () => any; }
 >{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4: () => any; }
 
@@ -64,22 +64,22 @@ Cp.prototype = {
  * @param {T} t
  */
 function Cpp(t) {
->Cpp : (t: any) => void
->t : any
+>Cpp : <T>(t: T) => void
+>t : T
 
     this.y = t
->this.y = t : any
+>this.y = t : T
 >this.y : any
 >this : any
 >y : any
->t : any
+>t : T
 }
 /** @return {this} */
 Cpp.prototype.m2 = function () {
 >Cpp.prototype.m2 = function () {    this.z = this.y; return this} : () => any
 >Cpp.prototype.m2 : any
 >Cpp.prototype : any
->Cpp : (t: any) => void
+>Cpp : <T>(t: T) => void
 >prototype : any
 >m2 : any
 >function () {    this.z = this.y; return this} : () => any
@@ -98,13 +98,13 @@ Cpp.prototype.m2 = function () {
 var cp = new Cp(1)
 >cp : any
 >new Cp(1) : any
->Cp : { (t: any): void; prototype: { m4: () => any; }; }
+>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
 >1 : 1
 
 var cpp = new Cpp(2)
 >cpp : any
 >new Cpp(2) : any
->Cpp : (t: any) => void
+>Cpp : <T>(t: T) => void
 >2 : 2
 
 cp.dit
@@ -114,7 +114,7 @@ cp.dit
 
 /** @type {Cpp<number>} */
 var cppn = cpp.m2()
->cppn : any
+>cppn : Cpp<number>
 >cpp.m2() : any
 >cpp.m2 : any
 >cpp : any
@@ -122,7 +122,7 @@ var cppn = cpp.m2()
 
 /** @type {Cp<number>} */
 var cpn = cp.m3()
->cpn : any
+>cpn : Cp<number>
 >cp.m3() : any
 >cp.m3 : any
 >cp : any
@@ -130,7 +130,7 @@ var cpn = cp.m3()
 
 /** @type {Cp<number>} */
 var cpn = cp.m4()
->cpn : any
+>cpn : Cp<number>
 >cp.m4() : any
 >cp.m4 : any
 >cp : any

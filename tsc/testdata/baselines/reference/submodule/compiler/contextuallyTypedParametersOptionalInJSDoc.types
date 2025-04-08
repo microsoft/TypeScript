@@ -6,8 +6,8 @@
  * @param {number} num 
  */
 function acceptNum(num) {}
->acceptNum : (num: any) => void
->num : any
+>acceptNum : (num: number) => void
+>num : number
 
 /**
  * @typedef {(a: string, b: number) => void} Fn
@@ -15,30 +15,30 @@ function acceptNum(num) {}
 
 /** @type {Fn} */
 const fn1 =
->fn1 : (a: any, b: any) => void
+>fn1 : (a: string, b: number) => void
 
   /**
    * @param [b]
    */
   function self(a, b) {
->function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: any, b: any) => void
->self : (a: any, b: any) => void
->a : any
->b : any
+>function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number | undefined) => void
+>self : (a: string, b?: number | undefined) => void
+>a : string
+>b : number | undefined
 
     acceptNum(b); // error
 >acceptNum(b) : void
->acceptNum : (num: any) => void
->b : any
+>acceptNum : (num: number) => void
+>b : number | undefined
 
     self("");
 >self("") : void
->self : (a: any, b: any) => void
+>self : (a: string, b?: number | undefined) => void
 >"" : ""
 
     self("", undefined);
 >self("", undefined) : void
->self : (a: any, b: any) => void
+>self : (a: string, b?: number | undefined) => void
 >"" : ""
 >undefined : undefined
 
@@ -46,30 +46,30 @@ const fn1 =
 
 /** @type {Fn} */
 const fn2 =
->fn2 : (a: any, b: any) => void
+>fn2 : (a: string, b: number) => void
 
   /**
    * @param {number} [b]
    */
   function self(a, b) {
->function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: any, b: any) => void
->self : (a: any, b: any) => void
->a : any
->b : any
+>function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number | undefined) => void
+>self : (a: string, b?: number | undefined) => void
+>a : string
+>b : number | undefined
 
     acceptNum(b); // error
 >acceptNum(b) : void
->acceptNum : (num: any) => void
->b : any
+>acceptNum : (num: number) => void
+>b : number | undefined
 
     self("");
 >self("") : void
->self : (a: any, b: any) => void
+>self : (a: string, b?: number | undefined) => void
 >"" : ""
 
     self("", undefined);
 >self("", undefined) : void
->self : (a: any, b: any) => void
+>self : (a: string, b?: number | undefined) => void
 >"" : ""
 >undefined : undefined
 

@@ -1,26 +1,23 @@
 --- old.checkJsdocTypeTagOnExportAssignment2.errors.txt
 +++ new.checkJsdocTypeTagOnExportAssignment2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -b.js(2,18): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
--
--
++b.js(2,16): error TS2739: Type '{ c: boolean; }' is missing the following properties from type 'Foo': a, b
+ 
+ 
 -==== checkJsdocTypeTagOnExportAssignment2.js (0 errors) ====
 -    
--==== a.ts (0 errors) ====
--    export interface Foo {
--        a: number;
--        b: number;
--    }
--    
--==== b.js (1 errors) ====
--    /** @type {import("./a").Foo} */
--    export default { c: false };
+ ==== a.ts (0 errors) ====
+     export interface Foo {
+         a: number;
+@@= skipped -11, +9 lines =@@
+ ==== b.js (1 errors) ====
+     /** @type {import("./a").Foo} */
+     export default { c: false };
 -                     ~
 -!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
--    
--==== c.js (0 errors) ====
--    import b from "./b";
--    b;
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
++                   ~~~~~~~~~~~~
++!!! error TS2739: Type '{ c: boolean; }' is missing the following properties from type 'Foo': a, b
+     
+ ==== c.js (0 errors) ====
+     import b from "./b";

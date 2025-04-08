@@ -1,62 +1,20 @@
 --- old.contextuallyTypedParametersOptionalInJSDoc.types
 +++ new.contextuallyTypedParametersOptionalInJSDoc.types
-@@= skipped -5, +5 lines =@@
-  * @param {number} num 
-  */
- function acceptNum(num) {}
-->acceptNum : (num: number) => void
-->num : number
-+>acceptNum : (num: any) => void
-+>num : any
- 
- /**
-  * @typedef {(a: string, b: number) => void} Fn
-@@= skipped -9, +9 lines =@@
+@@= skipped -14, +14 lines =@@
  
  /** @type {Fn} */
  const fn1 =
 ->fn1 : Fn
-+>fn1 : (a: any, b: any) => void
++>fn1 : (a: string, b: number) => void
  
    /**
     * @param [b]
-    */
-   function self(a, b) {
-->function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number | undefined) => void
-->self : (a: string, b?: number | undefined) => void
-->a : string
-->b : number | undefined
-+>function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: any, b: any) => void
-+>self : (a: any, b: any) => void
-+>a : any
-+>b : any
- 
-     acceptNum(b); // error
- >acceptNum(b) : void
-->acceptNum : (num: number) => void
-->b : number | undefined
-+>acceptNum : (num: any) => void
-+>b : any
- 
-     self("");
- >self("") : void
-->self : (a: string, b?: number | undefined) => void
-+>self : (a: any, b: any) => void
- >"" : ""
- 
-     self("", undefined);
- >self("", undefined) : void
-->self : (a: string, b?: number | undefined) => void
-+>self : (a: any, b: any) => void
- >"" : ""
- >undefined : undefined
- 
 @@= skipped -31, +31 lines =@@
  
  /** @type {Fn} */
  const fn2 =
 ->fn2 : Fn
-+>fn2 : (a: any, b: any) => void
++>fn2 : (a: string, b: number) => void
  
    /**
     * @param {number} [b]
@@ -64,30 +22,23 @@
    function self(a, b) {
 ->function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number) => void
 ->self : (a: string, b?: number) => void
-->a : string
-->b : number | undefined
-+>function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: any, b: any) => void
-+>self : (a: any, b: any) => void
-+>a : any
-+>b : any
++>function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number | undefined) => void
++>self : (a: string, b?: number | undefined) => void
+ >a : string
+ >b : number | undefined
  
-     acceptNum(b); // error
- >acceptNum(b) : void
-->acceptNum : (num: number) => void
-->b : number | undefined
-+>acceptNum : (num: any) => void
-+>b : any
+@@= skipped -18, +18 lines =@@
  
      self("");
  >self("") : void
 ->self : (a: string, b?: number) => void
-+>self : (a: any, b: any) => void
++>self : (a: string, b?: number | undefined) => void
  >"" : ""
  
      self("", undefined);
  >self("", undefined) : void
 ->self : (a: string, b?: number) => void
-+>self : (a: any, b: any) => void
++>self : (a: string, b?: number | undefined) => void
  >"" : ""
  >undefined : undefined
  

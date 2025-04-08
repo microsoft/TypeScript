@@ -11,7 +11,7 @@
 
 /** @type {C} */
 const cb = function (a, b) {
->cb : (a: any, b: any) => boolean
+>cb : C
 >function (a, b) {    this    return true} : (a: any, b: any) => boolean
 >a : any
 >b : any

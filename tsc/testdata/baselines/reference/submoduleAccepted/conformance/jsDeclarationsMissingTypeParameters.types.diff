@@ -6,7 +6,7 @@
  function x(y) { }
 ->x : (y?: any[] | undefined) => void
 ->y : any[]
-+>x : (y: any) => void
++>x : (y?: any) => void
 +>y : any
  
  // @ts-ignore

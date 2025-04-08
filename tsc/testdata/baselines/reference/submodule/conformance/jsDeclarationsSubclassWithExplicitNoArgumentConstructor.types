@@ -9,8 +9,8 @@ export class Super {
      * @param {string} secondArg
      */
     constructor(firstArg, secondArg) { }
->firstArg : any
->secondArg : any
+>firstArg : string
+>secondArg : string
 }
 
 export class Sub extends Super {

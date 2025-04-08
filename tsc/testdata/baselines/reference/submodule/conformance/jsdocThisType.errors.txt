@@ -1,0 +1,50 @@
+/a.js(3,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(13,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(21,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+
+
+==== /types.d.ts (0 errors) ====
+    export interface Foo {
+        foo: () => void;
+    }
+    
+    export type M = (this: Foo) => void;
+    
+==== /a.js (3 errors) ====
+    /** @type {import('./types').M} */
+    export const f1 = function() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {import('./types').M} */
+    export function f2() {
+        this.test();
+    }
+    
+    /** @type {(this: import('./types').Foo) => void} */
+    export const f3 = function() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {(this: import('./types').Foo) => void} */
+    export function f4() {
+        this.test();
+    }
+    
+    /** @type {function(this: import('./types').Foo): void} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+    export const f5 = function() {
+        this.test();
+    }
+    
+    /** @type {function(this: import('./types').Foo): void} */
+    export function f6() {
+        this.test();
+    }
+    

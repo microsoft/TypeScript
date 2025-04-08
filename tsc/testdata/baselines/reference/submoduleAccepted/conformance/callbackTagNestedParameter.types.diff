@@ -1,19 +1,11 @@
 --- old.callbackTagNestedParameter.types
 +++ new.callbackTagNestedParameter.types
-@@= skipped -14, +14 lines =@@
-  * @returns {void}
-  */
- function eachPerson(callback) {
-->eachPerson : (callback: WorksWithPeopleCallback) => void
-->callback : WorksWithPeopleCallback
-+>eachPerson : (callback: any) => void
-+>callback : any
+@@= skipped -18, +18 lines =@@
+ >callback : WorksWithPeopleCallback
  
      callback({ name: "Empty" });
 ->callback({ name: "Empty" }) : void
-->callback : WorksWithPeopleCallback
 +>callback({ name: "Empty" }) : any
-+>callback : any
+ >callback : WorksWithPeopleCallback
  >{ name: "Empty" } : { name: string; }
  >name : string
- >"Empty" : "Empty"

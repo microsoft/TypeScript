@@ -10,8 +10,8 @@
  * @template T
  */
 function Zet(t) {
->Zet : (t: any) => void
->t : any
+>Zet : <T>(t: T) => void
+>t : T
 
     /** @type {T} */
     this.u
@@ -20,11 +20,11 @@ function Zet(t) {
 >u : any
 
     this.t = t
->this.t = t : any
+>this.t = t : T
 >this.t : any
 >this : any
 >t : any
->t : any
+>t : T
 }
 /**
  * @param {T} v
@@ -34,7 +34,7 @@ Zet.prototype.add = function(v, id) {
 >Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
 >Zet.prototype.add : any
 >Zet.prototype : any
->Zet : (t: any) => void
+>Zet : <T>(t: T) => void
 >prototype : any
 >add : any
 >function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
@@ -62,7 +62,7 @@ Zet.prototype.add = function(v, id) {
 var z = new Zet(1)
 >z : any
 >new Zet(1) : any
->Zet : (t: any) => void
+>Zet : <T>(t: T) => void
 >1 : 1
 
 z.t = 2

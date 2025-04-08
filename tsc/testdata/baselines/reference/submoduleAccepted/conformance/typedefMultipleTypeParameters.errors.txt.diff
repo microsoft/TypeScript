@@ -3,31 +3,50 @@
 @@= skipped -0, +0 lines =@@
 -a.js(12,23): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: number; b: string; }'.
 -  Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
--a.js(15,12): error TS2314: Generic type 'Everything' requires 5 type argument(s).
++a.js(6,19): error TS2304: Cannot find name 'T'.
++a.js(6,25): error TS2304: Cannot find name 'U'.
++a.js(6,31): error TS2304: Cannot find name 'V'.
++a.js(6,37): error TS2304: Cannot find name 'W'.
++a.js(6,43): error TS2304: Cannot find name 'X'.
++a.js(12,23): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+ a.js(15,12): error TS2314: Generic type 'Everything' requires 5 type argument(s).
 -test.ts(1,34): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: number; b: string; }'.
 -  Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
 +test.ts(1,23): error TS2304: Cannot find name 'Everything'.
  
  
 -==== a.js (2 errors) ====
-+==== a.js (0 errors) ====
++==== a.js (7 errors) ====
      /**
       * @template {{ a: number, b: string }} T,U A Comment
       * @template {{ c: boolean }} V uh ... are comments even supported??
-@@= skipped -17, +13 lines =@@
-     var tuvwx;
+      * @template W
+      * @template X That last one had no comment
+      * @typedef {{ t: T, u: U, v: V, w: W, x: X }} Everything
++                      ~
++!!! error TS2304: Cannot find name 'T'.
++                            ~
++!!! error TS2304: Cannot find name 'U'.
++                                  ~
++!!! error TS2304: Cannot find name 'V'.
++                                        ~
++!!! error TS2304: Cannot find name 'W'.
++                                              ~
++!!! error TS2304: Cannot find name 'X'.
+      */
+     
+     /** @type {Everything<{ a: number, b: 'hi', c: never }, undefined, { c: true, d: 1 }, number, string>} */
+@@= skipped -18, +31 lines =@@
      
      /** @type {Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>} */
--                          ~~~~~~~~~~~~~~
+                           ~~~~~~~~~~~~~~
 -!!! error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: number; b: string; }'.
 -!!! error TS2344:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
--!!! related TS2728 a.js:2:28: 'b' is declared here.
++!!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+ !!! related TS2728 a.js:2:28: 'b' is declared here.
      var wrong;
      
-     /** @type {Everything<{ a: number  }>} */
--               ~~~~~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS2314: Generic type 'Everything' requires 5 type argument(s).
-     var insufficient;
+@@= skipped -12, +11 lines =@@
      
  ==== test.ts (1 errors) ====
      declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;

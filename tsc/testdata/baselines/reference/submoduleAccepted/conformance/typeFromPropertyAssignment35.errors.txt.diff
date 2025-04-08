@@ -3,6 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
++bug26877.js(1,13): error TS2503: Cannot find namespace 'Emu'.
 +bug26877.js(4,23): error TS2339: Property 'D' does not exist on type '{}'.
 +bug26877.js(5,19): error TS2339: Property 'D' does not exist on type '{}'.
 +bug26877.js(7,5): error TS2339: Property 'D' does not exist on type '{}'.
@@ -10,8 +11,10 @@
 +second.js(3,5): error TS2339: Property 'D' does not exist on type '{}'.
 +
 +
-+==== bug26877.js (4 errors) ====
++==== bug26877.js (5 errors) ====
 +    /** @param {Emu.D} x */
++                ~~~
++!!! error TS2503: Cannot find namespace 'Emu'.
 +    function ollKorrect(x) {
 +        x._model
 +        const y = new Emu.D()

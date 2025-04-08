@@ -27,7 +27,7 @@ class MainThreadTasks {
      */
     constructor(x, y){}
 >x : any
->y : any
+>y : TaskNode
 }
 
 module.exports = MainThreadTasks;

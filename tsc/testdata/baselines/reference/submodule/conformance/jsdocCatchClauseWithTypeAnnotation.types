@@ -22,10 +22,10 @@ function fn() {
 >err : any
 
     try { } catch (/** @type {unknown} */ err) { }                   // should be OK
->err : any
+>err : unknown
 
     try { } catch (/** @type {Unknown} */ err) { }                   // should be OK
->err : any
+>err : unknown
 
     try { } catch (err) { err.foo; }                                 // should be OK
 >err : any
@@ -46,31 +46,31 @@ function fn() {
 >foo : any
 
     try { } catch (/** @type {unknown} */ err) { console.log(err); } // should be OK
->err : any
+>err : unknown
 >console.log(err) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->err : any
+>err : unknown
 
     try { } catch (/** @type {Unknown} */ err) { console.log(err); } // should be OK
->err : any
+>err : unknown
 >console.log(err) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->err : any
+>err : unknown
 
     try { } catch (/** @type {unknown} */ err) { err.foo; }          // error in the body
->err : any
+>err : unknown
 >err.foo : any
->err : any
+>err : unknown
 >foo : any
 
     try { } catch (/** @type {Unknown} */ err) { err.foo; }          // error in the body
->err : any
+>err : unknown
 >err.foo : any
->err : any
+>err : unknown
 >foo : any
 
     try { } catch (/** @type {Error} */ err) { }                     // error in the type
@@ -107,7 +107,7 @@ function fn() {
 
 		/** @type {string} */
 		let err;
->err : any
+>err : string
 	}
 	try { }
 	catch (err) {
@@ -115,7 +115,7 @@ function fn() {
 
 		/** @type {boolean} */
 		var err;
->err : any
+>err : boolean
 	}
 
     try { } catch ({ x }) { }                                        // should be OK

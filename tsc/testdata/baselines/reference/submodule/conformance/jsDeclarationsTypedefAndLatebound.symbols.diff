@@ -41,6 +41,5 @@
 ->module.exports : Symbol(module.exports, Decl(LazySet.js, 0, 0))
 ->module : Symbol(export=, Decl(LazySet.js, 10, 1))
 ->exports : Symbol(export=, Decl(LazySet.js, 10, 1))
-->LazySet : Symbol(LazySet, Decl(LazySet.js, 0, 0))
-+>LazySet : Symbol(LazySet, Decl(index.js, 0, 5))
+ >LazySet : Symbol(LazySet, Decl(LazySet.js, 0, 0))
  

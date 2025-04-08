@@ -2,11 +2,12 @@ index.js(138,14): error TS2339: Property 'p1' does not exist on type 'K'.
 index.js(139,14): error TS2339: Property 'p2' does not exist on type 'K'.
 index.js(143,21): error TS2339: Property 'p1' does not exist on type 'K'.
 index.js(151,14): error TS2339: Property 'prop' does not exist on type 'M'.
-index.js(165,14): error TS2339: Property 'another' does not exist on type 'N'.
-index.js(179,14): error TS2339: Property 'another2' does not exist on type 'O'.
+index.js(165,14): error TS2339: Property 'another' does not exist on type 'N<T>'.
+index.js(173,24): error TS2314: Generic type 'N<T>' requires 1 type argument(s).
+index.js(179,14): error TS2339: Property 'another2' does not exist on type 'O<U>'.
 
 
-==== index.js (6 errors) ====
+==== index.js (7 errors) ====
     export class A {}
     
     export class B {
@@ -181,7 +182,7 @@ index.js(179,14): error TS2339: Property 'another2' does not exist on type 'O'.
             super();
             this.another = param;
                  ~~~~~~~
-!!! error TS2339: Property 'another' does not exist on type 'N'.
+!!! error TS2339: Property 'another' does not exist on type 'N<T>'.
         }
     }
     
@@ -190,6 +191,8 @@ index.js(179,14): error TS2339: Property 'another2' does not exist on type 'O'.
      * @extends {N<U>}
      */
     export class O extends N {
+                           ~
+!!! error TS2314: Generic type 'N<T>' requires 1 type argument(s).
         /**
          * @param {U} param 
          */
@@ -197,7 +200,7 @@ index.js(179,14): error TS2339: Property 'another2' does not exist on type 'O'.
             super(param);
             this.another2 = param;
                  ~~~~~~~~
-!!! error TS2339: Property 'another2' does not exist on type 'O'.
+!!! error TS2339: Property 'another2' does not exist on type 'O<U>'.
         }
     }
     

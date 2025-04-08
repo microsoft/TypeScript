@@ -3,39 +3,39 @@
 === a.js ===
 /** @param {number=} a */
 function f(a) {
->f : (a: any) => void
->a : any
+>f : (a?: number | undefined) => void
+>a : number | undefined
 
     a = 1
 >a = 1 : 1
->a : any
+>a : number | undefined
 >1 : 1
 
     a = null // should not be allowed
 >a = null : null
->a : any
+>a : number | undefined
 
     a = undefined
 >a = undefined : undefined
->a : any
+>a : number | undefined
 >undefined : undefined
 }
 f()
 >f() : void
->f : (a: any) => void
+>f : (a?: number | undefined) => void
 
 f(null) // should not be allowed
 >f(null) : void
->f : (a: any) => void
+>f : (a?: number | undefined) => void
 
 f(undefined)
 >f(undefined) : void
->f : (a: any) => void
+>f : (a?: number | undefined) => void
 >undefined : undefined
 
 f(1)
 >f(1) : void
->f : (a: any) => void
+>f : (a?: number | undefined) => void
 >1 : 1
 
 /** @param {???!?number?=} a */

@@ -5,13 +5,22 @@
  /** @type {TE} */
  const test = 'add'
 ->test : string
-+>test : "add"
++>test : any
  >'add' : "add"
  
  /** @type {import("./mod1").TestEnum} */
  const tost = 'remove'
 ->tost : string
-+>tost : "remove"
++>tost : any
  >'remove' : "remove"
  
  === value.js ===
+@@= skipped -14, +14 lines =@@
+ 
+ /** @type {TestEnum} */
+ const tist = TestEnum.ADD
+->tist : string
++>tist : TestEnum
+ >TestEnum.ADD : string
+ >TestEnum : { ADD: string; REMOVE: string; }
+ >ADD : string

@@ -6,34 +6,34 @@
  * @return {number}
  */
 function f(s) {
->f : (s: any) => any
->s : any
+>f : (s: string) => number
+>s : string
 
     return this.n + s.length
 >this.n + s.length : any
 >this.n : any
 >this : any
 >n : any
->s.length : any
->s : any
->length : any
+>s.length : number
+>s : string
+>length : number
 }
 
 const o = {
->o : { f: (s: any) => any; n: number; }
->{    f,    n: 1} : { f: (s: any) => any; n: number; }
+>o : { f: (s: string) => number; n: number; }
+>{    f,    n: 1} : { f: (s: string) => number; n: number; }
 
     f,
->f : (s: any) => any
+>f : (s: string) => number
 
     n: 1
 >n : number
 >1 : 1
 }
 o.f('hi')
->o.f('hi') : any
->o.f : (s: any) => any
->o : { f: (s: any) => any; n: number; }
->f : (s: any) => any
+>o.f('hi') : number
+>o.f : (s: string) => number
+>o : { f: (s: string) => number; n: number; }
+>f : (s: string) => number
 >'hi' : "hi"
 

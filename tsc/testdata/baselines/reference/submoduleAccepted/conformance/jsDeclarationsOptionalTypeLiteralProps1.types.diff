@@ -8,7 +8,7 @@
 ->a : number
 ->b : number
 ->c : number
-+>foo : (__0: { a: any; b: any; c: any; }) => any
++>foo : (__0: { a: any; b: any; c: any; }) => number
 +>a : any
 +>b : any
 +>c : any

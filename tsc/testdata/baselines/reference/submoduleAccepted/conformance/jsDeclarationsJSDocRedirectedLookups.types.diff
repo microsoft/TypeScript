@@ -5,59 +5,62 @@
  // these are recognized as TS concepts by the checker
  /** @type {String} */const a = "";
 ->a : string
-+>a : ""
++>a : String
  >"" : ""
  
  /** @type {Number} */const b = 0;
 ->b : number
-+>b : 0
++>b : Number
  >0 : 0
  
  /** @type {Boolean} */const c = true;
 ->c : boolean
-+>c : true
++>c : Boolean
  >true : true
  
  /** @type {Void} */const d = undefined;
 ->d : void
-+>d : undefined
++>d : Void
  >undefined : undefined
  
  /** @type {Undefined} */const e = undefined;
-@@= skipped -23, +23 lines =@@
- >f : null
+->e : undefined
++>e : Undefined
+ >undefined : undefined
+ 
+ /** @type {Null} */const f = null;
+->f : null
++>f : Null
  
  /** @type {Function} */const g = () => void 0;
-->g : Function
-+>g : () => undefined
- >() => void 0 : () => undefined
- >void 0 : undefined
+ >g : Function
+@@= skipped -29, +29 lines =@@
  >0 : 0
  
  /** @type {function} */const h = () => void 0;
 ->h : Function
-+>h : () => undefined
++>h : function
  >() => void 0 : () => undefined
  >void 0 : undefined
  >0 : 0
  
  /** @type {array} */const i = [];
 ->i : any[]
-+>i : never[]
++>i : array
  >[] : never[]
  
  /** @type {promise} */const j = Promise.resolve(0);
 ->j : Promise<any>
-+>j : Promise<number>
++>j : promise
  >Promise.resolve(0) : Promise<number>
  >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
  >Promise : PromiseConstructor
-@@= skipped -24, +24 lines =@@
+@@= skipped -18, +18 lines =@@
  >0 : 0
  
  /** @type {Object<string, string>} */const k = {x: "x"};
 ->k : { [x: string]: string; }
-+>k : { x: string; }
++>k : any
  >{x: "x"} : { x: string; }
  >x : string
  >"x" : "x"
@@ -66,36 +69,36 @@
  // @ts-ignore
  /** @type {class} */const l = true;
 ->l : error
-+>l : true
++>l : class
  >true : true
  
  // @ts-ignore
  /** @type {bool} */const m = true;
 ->m : error
-+>m : true
++>m : bool
  >true : true
  
  // @ts-ignore
  /** @type {int} */const n = true;
 ->n : error
-+>n : true
++>n : int
  >true : true
  
  // @ts-ignore
  /** @type {float} */const o = true;
 ->o : error
-+>o : true
++>o : float
  >true : true
  
  // @ts-ignore
  /** @type {integer} */const p = true;
 ->p : error
-+>p : true
++>p : integer
  >true : true
  
  // or, in the case of `event` likely erroneously refers to the type of the global Event object
  /** @type {event} */const q = undefined;
 ->q : Event | undefined
-+>q : undefined
++>q : event
  >undefined : undefined
  

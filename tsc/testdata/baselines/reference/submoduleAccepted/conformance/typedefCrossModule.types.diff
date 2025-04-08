@@ -70,29 +70,25 @@
  /** @type {import('./mod1').Both} */
  var both1 = { type: 'a', x: 1 };
 ->both1 : import("mod1").Both
-->{ type: 'a', x: 1 } : { type: "a"; x: 1; }
-->type : "a"
-+>both1 : { type: string; x: number; }
-+>{ type: 'a', x: 1 } : { type: string; x: number; }
-+>type : string
++>both1 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
+ >{ type: 'a', x: 1 } : { type: "a"; x: 1; }
+ >type : "a"
  >'a' : "a"
-->x : 1
-+>x : number
- >1 : 1
+@@= skipped -9, +9 lines =@@
  
  /** @type {import('./mod2').Both} */
  var both2 = both1;
 ->both2 : import("mod2").Both
 ->both1 : import("mod1").A
-+>both2 : { type: string; x: number; }
-+>both1 : { type: string; x: number; }
++>both2 : Both
++>both1 : { type: "a"; x: 1; }
  
  /** @type {import('./mod3').Both} */
  var both3 = both2;
 ->both3 : import("mod3").Both
 ->both2 : import("mod2").A
-+>both3 : { type: string; x: number; }
-+>both2 : { type: string; x: number; }
++>both3 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
++>both2 : A
  
  
  

@@ -1,37 +1,19 @@
 --- old.checkJsdocSatisfiesTag1.types
 +++ new.checkJsdocSatisfiesTag1.types
-@@= skipped -42, +42 lines =@@
- 
+@@= skipped -43, +43 lines =@@
  /** @type {T2} */
  const t4 = /** @satisfies {T2} */ ({ a: "a" });
-->t4 : T2
+ >t4 : T2
 ->({ a: "a" }) : T2
 ->{ a: "a" } : { a: "a"; }
 ->a : "a"
-+>t4 : { a: string; }
 +>({ a: "a" }) : { a: string; }
 +>{ a: "a" } : { a: string; }
 +>a : string
  >"a" : "a"
  
  /** @type {(m: string) => string} */
- const t5 = /** @satisfies {T3} */((m) => m.substring(0));
-->t5 : (m: string) => string
-->((m) => m.substring(0)) : (m: string) => string
-->(m) => m.substring(0) : (m: string) => string
-->m : string
-->m.substring(0) : string
-->m.substring : (start: number, end?: number) => string
-->m : string
-->substring : (start: number, end?: number) => string
-+>t5 : (m: any) => any
-+>((m) => m.substring(0)) : (m: any) => any
-+>(m) => m.substring(0) : (m: any) => any
-+>m : any
-+>m.substring(0) : any
-+>m.substring : any
-+>m : any
-+>substring : any
+@@= skipped -18, +18 lines =@@
  >0 : 0
  
  const t6 = /** @satisfies {[number, number]} */ ([1, 2]);

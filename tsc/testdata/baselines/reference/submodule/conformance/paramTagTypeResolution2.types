@@ -7,22 +7,22 @@
  * @param {{[K in keyof T]: (value: T[K]) => void }} b
  */
 function f(a, b) {
->f : (a: any, b: any) => void
->a : any
->b : any
+>f : <T>(a: T, b: { [K in keyof T]: (value: T[K]) => void; }) => void
+>a : T
+>b : { [K in keyof T]: (value: T[K]) => void; }
 }
 
 f({ x: 42 }, { x(param) { param.toFixed() } });
 >f({ x: 42 }, { x(param) { param.toFixed() } }) : void
->f : (a: any, b: any) => void
+>f : <T>(a: T, b: { [K in keyof T]: (value: T[K]) => void; }) => void
 >{ x: 42 } : { x: number; }
 >x : number
 >42 : 42
->{ x(param) { param.toFixed() } } : { x: (param: any) => void; }
->x : (param: any) => void
->param : any
+>{ x(param) { param.toFixed() } } : { x: (param: K) => void; }
+>x : (param: K) => void
+>param : K
 >param.toFixed() : any
 >param.toFixed : any
->param : any
+>param : K
 >toFixed : any
 

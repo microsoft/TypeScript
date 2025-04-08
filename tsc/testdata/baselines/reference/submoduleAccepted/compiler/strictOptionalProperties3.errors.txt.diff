@@ -1,37 +1,37 @@
 --- old.strictOptionalProperties3.errors.txt
 +++ new.strictOptionalProperties3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -a.js(7,7): error TS2375: Type '{ value: undefined; }' is not assignable to type 'A' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
--  Types of property 'value' are incompatible.
--    Type 'undefined' is not assignable to type 'number'.
++a.js(14,7): error TS2375: Type '{ value: undefined; }' is not assignable to type '{ value?: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+   Types of property 'value' are incompatible.
+     Type 'undefined' is not assignable to type 'number'.
 -a.js(14,7): error TS2375: Type '{ value: undefined; }' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
 -  Types of property 'value' are incompatible.
 -    Type 'undefined' is not assignable to type 'number'.
--
--
+ 
+ 
 -==== a.js (2 errors) ====
--    /**
--     * @typedef {object} A
--     * @property {number} [value]
--     */
--    
--    /** @type {A} */
--    const a = { value: undefined }; // error
++==== a.js (1 errors) ====
+     /**
+      * @typedef {object} A
+      * @property {number} [value]
+@@= skipped -13, +10 lines =@@
+     
+     /** @type {A} */
+     const a = { value: undefined }; // error
 -          ~
 -!!! error TS2375: Type '{ value: undefined; }' is not assignable to type 'A' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
 -!!! error TS2375:   Types of property 'value' are incompatible.
 -!!! error TS2375:     Type 'undefined' is not assignable to type 'number'.
--    
--    /**
--     * @typedef {{ value?: number }} B
--     */
--    
--    /** @type {B} */
--    const b = { value: undefined }; // error
--          ~
+     
+     /**
+      * @typedef {{ value?: number }} B
+@@= skipped -12, +8 lines =@@
+     /** @type {B} */
+     const b = { value: undefined }; // error
+           ~
 -!!! error TS2375: Type '{ value: undefined; }' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
--!!! error TS2375:   Types of property 'value' are incompatible.
--!!! error TS2375:     Type 'undefined' is not assignable to type 'number'.
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
++!!! error TS2375: Type '{ value: undefined; }' is not assignable to type '{ value?: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+ !!! error TS2375:   Types of property 'value' are incompatible.
+ !!! error TS2375:     Type 'undefined' is not assignable to type 'number'.
+     

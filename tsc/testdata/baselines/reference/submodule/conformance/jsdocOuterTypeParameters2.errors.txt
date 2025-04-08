@@ -1,8 +1,11 @@
+jsdocOuterTypeParameters1.js(1,14): error TS2304: Cannot find name 'T'.
 jsdocOuterTypeParameters1.js(7,35): error TS2339: Property 'foo' does not exist on type 'Bar'.
 
 
-==== jsdocOuterTypeParameters1.js (1 errors) ====
+==== jsdocOuterTypeParameters1.js (2 errors) ====
     /** @return {T} */
+                 ~
+!!! error TS2304: Cannot find name 'T'.
     const dedupingMixin = function(mixin) {};
     
      /** @template T */

@@ -8,28 +8,28 @@ class C {
 
     /** @type {{ foo?: string } | undefined } */
     #a;
->#a : any
+>#a : { foo?: string; }
 
     /** @type {{ foo?: string } | undefined } */
     #b;
->#b : any
+>#b : { foo?: string; }
 
     m() {
 >m : () => void
 
         const a = this.#a || {};
->a : any
->this.#a || {} : any
->this.#a : any
+>a : { foo?: string; }
+>this.#a || {} : { foo?: string; }
+>this.#a : { foo?: string; }
 >this : this
 >{} : {}
 
         this.#b = this.#b || {};
->this.#b = this.#b || {} : any
->this.#b : any
+>this.#b = this.#b || {} : { foo?: string; }
+>this.#b : { foo?: string; }
 >this : this
->this.#b || {} : any
->this.#b : any
+>this.#b || {} : { foo?: string; }
+>this.#b : { foo?: string; }
 >this : this
 >{} : {}
     }

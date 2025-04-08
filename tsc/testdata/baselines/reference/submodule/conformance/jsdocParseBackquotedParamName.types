@@ -6,9 +6,9 @@
  * @param `bwarg` {?number?}
  */
 function f(args, bwarg) {
->f : (args: any, bwarg: any) => void
->args : any
->bwarg : any
+>f : (args: string | undefined, bwarg: number | null) => void
+>args : string | undefined
+>bwarg : number | null
 }
 
 === ts.ts ===

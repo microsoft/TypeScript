@@ -3,16 +3,19 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+a.js(3,12): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
++a.js(3,12): error TS2370: A rest parameter must be of an array type.
++a.js(3,19): error TS1047: A rest parameter cannot be optional.
 +a.js(12,14): error TS7006: Parameter 'f' implicitly has an 'any' type.
 +
 +
-+==== a.js (2 errors) ====
++==== a.js (3 errors) ====
 +    /** @param {...*=} args
 +        @return {*=} */
 +    function f(...args) {
 +               ~~~~~~~
-+!!! error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
++!!! error TS2370: A rest parameter must be of an array type.
++                      
++!!! error TS1047: A rest parameter cannot be optional.
 +        return null
 +    }
 +    

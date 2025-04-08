@@ -5,7 +5,7 @@
  	 */
  	constructor(foo = {}) {
 ->foo : any
-+>foo : {}
++>foo : object
  >{} : {}
  
  		/**
@@ -13,12 +13,12 @@
  		 */
  		this.foo = foo;
 ->this.foo = foo : any
-+>this.foo = foo : {}
++>this.foo = foo : object
  >this.foo : any
  >this : this
  >foo : any
 ->foo : any
-+>foo : {}
++>foo : object
  
  		/**
  		 * @type object

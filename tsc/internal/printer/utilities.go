@@ -449,10 +449,8 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 			return parent.ClassLikeData().TypeParameters
 		case ast.IsInterfaceDeclaration(parent):
 			return parent.AsInterfaceDeclaration().TypeParameters
-		case ast.IsTypeAliasDeclaration(parent):
+		case ast.IsTypeOrJSTypeAliasDeclaration(parent):
 			return parent.AsTypeAliasDeclaration().TypeParameters
-		// case ast.IsJSDocTemplateTag(parent):
-		// 	return parent.AsJSDocTemplateTag().TypeParameters
 		case ast.IsInferTypeNode(parent):
 			break
 		default:

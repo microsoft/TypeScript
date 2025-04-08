@@ -229,15 +229,13 @@
  
  /** @type {Outer.app.Inner} */
  var x;
-->x : Inner
-+>x : any
+ >x : Inner
  
  x.y;
 ->x.y : number
-->x : Inner
-->y : number
 +>x.y : any
-+>x : any
+ >x : Inner
+->y : number
 +>y : any
  
  Outer.app.statische(101); // Infinity, duh

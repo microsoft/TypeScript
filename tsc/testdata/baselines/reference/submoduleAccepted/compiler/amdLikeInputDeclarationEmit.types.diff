@@ -24,8 +24,8 @@
  (BaseClass) => {    
 ->(BaseClass) => {            const ExtendedClass = BaseClass.extends({        f: function() {            return "something";        }    });    // Exports the module in a way tsc recognize class export     const module = {};    module.exports = ExtendedClass    return module.exports;} : (BaseClass: typeof import("deps/BaseClass")) => any
 ->BaseClass : typeof import("deps/BaseClass")
-+>(BaseClass) => {            const ExtendedClass = BaseClass.extends({        f: function() {            return "something";        }    });    // Exports the module in a way tsc recognize class export     const module = {};    module.exports = ExtendedClass    return module.exports;} : (BaseClass: unknown) => any
-+>BaseClass : unknown
++>(BaseClass) => {            const ExtendedClass = BaseClass.extends({        f: function() {            return "something";        }    });    // Exports the module in a way tsc recognize class export     const module = {};    module.exports = ExtendedClass    return module.exports;} : (BaseClass: typeof BaseClass) => any
++>BaseClass : typeof BaseClass
      
      const ExtendedClass = BaseClass.extends({
 ->ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
@@ -33,28 +33,25 @@
 ->BaseClass.extends : <A>(a: A) => new () => A & import("deps/BaseClass")
 ->BaseClass : typeof import("deps/BaseClass")
 ->extends : <A>(a: A) => new () => A & import("deps/BaseClass")
-->{        f: function() {            return "something";        }    } : { f: () => "something"; }
-+>ExtendedClass : any
-+>BaseClass.extends({        f: function() {            return "something";        }    }) : any
-+>BaseClass.extends : any
-+>BaseClass : unknown
-+>extends : any
-+>{        f: function() {            return "something";        }    } : { f: () => string; }
++>ExtendedClass : new () => { f: () => "something"; } & BaseClass
++>BaseClass.extends({        f: function() {            return "something";        }    }) : new () => { f: () => "something"; } & BaseClass
++>BaseClass.extends : <A>(a: A) => new () => A & BaseClass
++>BaseClass : typeof BaseClass
++>extends : <A>(a: A) => new () => A & BaseClass
+ >{        f: function() {            return "something";        }    } : { f: () => "something"; }
  
          f: function() {
-->f : () => "something"
-->function() {            return "something";        } : () => "something"
-+>f : () => string
-+>function() {            return "something";        } : () => string
+@@= skipped -26, +26 lines =@@
+ >{} : {}
  
-             return "something";
- >"something" : "something"
-@@= skipped -30, +30 lines =@@
+     module.exports = ExtendedClass
+->module.exports = ExtendedClass : any
++>module.exports = ExtendedClass : new () => { f: () => "something"; } & BaseClass
  >module.exports : any
  >module : {}
  >exports : any
 ->ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
-+>ExtendedClass : any
++>ExtendedClass : new () => { f: () => "something"; } & BaseClass
  
      return module.exports;
  >module.exports : any

@@ -12,7 +12,7 @@ class X {
       * @returns {Promise.<*>} resolves when the event has been sent.
       */ 
     async cancel({reason, code}) {}
->cancel : (__0: { code: any; reason: any; }) => Promise<void>
+>cancel : (__0: { code: any; reason: any; }) => Promise<any>
 >reason : any
 >code : any
 }
@@ -30,7 +30,7 @@ class Y {
       * @returns {Promise.<*>} resolves when the event has been sent.
       */ 
     async cancel({reason, suberr}) {}
->cancel : (__0: { reason: any; suberr: any; }) => Promise<void>
+>cancel : (__0: { reason: any; suberr: any; }) => Promise<any>
 >reason : any
 >suberr : any
 }

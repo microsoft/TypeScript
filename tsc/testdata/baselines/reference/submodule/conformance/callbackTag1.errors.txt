@@ -1,0 +1,27 @@
+cb.js(7,12): error TS2304: Cannot find name 'Sid'.
+cb.js(11,12): error TS2304: Cannot find name 'NoReturn'.
+
+
+==== cb.js (2 errors) ====
+    /** @callback Sid
+     * @param {string} s
+     * @returns {string} What were you expecting
+     */
+    var x = 1
+    
+    /** @type {Sid} smallId */
+               ~~~
+!!! error TS2304: Cannot find name 'Sid'.
+    var sid = s => s + "!";
+    
+    
+    /** @type {NoReturn} */
+               ~~~~~~~~
+!!! error TS2304: Cannot find name 'NoReturn'.
+    var noreturn = obj => void obj.title
+    
+    /**
+     * @callback NoReturn
+     * @param {{ e: number, m: number, title: string }} s - Knee deep, shores, etc
+     */
+    

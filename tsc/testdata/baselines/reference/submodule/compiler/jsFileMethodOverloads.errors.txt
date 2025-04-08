@@ -1,7 +1,7 @@
-jsFileMethodOverloads.js(9,10): error TS2339: Property 'value' does not exist on type 'Example'.
-jsFileMethodOverloads.js(26,24): error TS2339: Property 'value' does not exist on type 'Example'.
-jsFileMethodOverloads.js(44,25): error TS2339: Property 'value' does not exist on type 'Example'.
-jsFileMethodOverloads.js(44,39): error TS2339: Property 'value' does not exist on type 'Example'.
+jsFileMethodOverloads.js(9,10): error TS2339: Property 'value' does not exist on type 'Example<T>'.
+jsFileMethodOverloads.js(26,24): error TS2339: Property 'value' does not exist on type 'Example<T>'.
+jsFileMethodOverloads.js(44,25): error TS2339: Property 'value' does not exist on type 'Example<T>'.
+jsFileMethodOverloads.js(44,39): error TS2339: Property 'value' does not exist on type 'Example<T>'.
 
 
 ==== jsFileMethodOverloads.js (4 errors) ====
@@ -15,7 +15,7 @@ jsFileMethodOverloads.js(44,39): error TS2339: Property 'value' does not exist o
       constructor(value) {
         this.value = value;
              ~~~~~
-!!! error TS2339: Property 'value' does not exist on type 'Example'.
+!!! error TS2339: Property 'value' does not exist on type 'Example<T>'.
       }
     
       /**
@@ -34,7 +34,7 @@ jsFileMethodOverloads.js(44,39): error TS2339: Property 'value' does not exist o
       getTypeName() {
         return typeof this.value;
                            ~~~~~
-!!! error TS2339: Property 'value' does not exist on type 'Example'.
+!!! error TS2339: Property 'value' does not exist on type 'Example<T>'.
       }
     
       /**
@@ -54,9 +54,9 @@ jsFileMethodOverloads.js(44,39): error TS2339: Property 'value' does not exist o
       transform(fn) {
         return fn ? fn(this.value) : this.value;
                             ~~~~~
-!!! error TS2339: Property 'value' does not exist on type 'Example'.
+!!! error TS2339: Property 'value' does not exist on type 'Example<T>'.
                                           ~~~~~
-!!! error TS2339: Property 'value' does not exist on type 'Example'.
+!!! error TS2339: Property 'value' does not exist on type 'Example<T>'.
       }
     }
     

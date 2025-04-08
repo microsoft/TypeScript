@@ -264,7 +264,6 @@ export class O extends N {
 >param : Symbol(param, Decl(index.js, 176, 16))
 
         super(param);
->super : Symbol(N, Decl(index.js, 152, 1))
 >param : Symbol(param, Decl(index.js, 176, 16))
 
         this.another2 = param;

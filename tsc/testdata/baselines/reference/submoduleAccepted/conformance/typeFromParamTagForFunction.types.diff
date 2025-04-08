@@ -34,17 +34,14 @@
  >require : (id: string) => any
  >"./a-ext" : "./a-ext"
  
- /** @param {A} p */
+@@= skipped -9, +9 lines =@@
  function a(p) { p.x; }
-->a : (p: A) => void
-->p : A
+ >a : (p: A) => void
+ >p : A
 ->p.x : number
-->p : A
-->x : number
-+>a : (p: any) => void
-+>p : any
 +>p.x : any
-+>p : any
+ >p : A
+->x : number
 +>x : any
  
  === b-ext.js ===
@@ -59,7 +56,7 @@
  >class {    constructor() {        this.x = 1;    }} : typeof B
  
      constructor() {
-@@= skipped -33, +33 lines =@@
+@@= skipped -24, +24 lines =@@
  
  === b.js ===
  const { B } = require("./b-ext");
@@ -70,17 +67,14 @@
  >require : (id: string) => any
  >"./b-ext" : "./b-ext"
  
- /** @param {B} p */
+@@= skipped -9, +9 lines =@@
  function b(p) { p.x; }
-->b : (p: B) => void
-->p : B
+ >b : (p: B) => void
+ >p : B
 ->p.x : number
-->p : B
-->x : number
-+>b : (p: any) => void
-+>p : any
 +>p.x : any
-+>p : any
+ >p : B
+->x : number
 +>x : any
  
  === c-ext.js ===
@@ -106,17 +100,14 @@
  >require : (id: string) => any
  >"./c-ext" : "./c-ext"
  
- /** @param {C} p */
+@@= skipped -27, +27 lines =@@
  function c(p) { p.x; }
-->c : (p: C) => void
-->p : C
+ >c : (p: C) => void
+ >p : C
 ->p.x : number
-->p : C
-->x : number
-+>c : (p: any) => void
-+>p : any
 +>p.x : any
-+>p : any
+ >p : C
+->x : number
 +>x : any
  
  === d-ext.js ===
@@ -134,7 +125,7 @@
  >x : any
  >1 : 1
  
-@@= skipped -56, +56 lines =@@
+@@= skipped -20, +20 lines =@@
  
  === d.js ===
  const { D } = require("./d-ext");
@@ -145,22 +136,19 @@
  >require : (id: string) => any
  >"./d-ext" : "./d-ext"
  
- /** @param {D} p */
+@@= skipped -9, +9 lines =@@
  function d(p) { p.x; }
-->d : (p: D) => void
-->p : D
+ >d : (p: D) => void
+ >p : D
 ->p.x : number
-->p : D
-->x : number
-+>d : (p: any) => void
-+>p : any
 +>p.x : any
-+>p : any
+ >p : D
+->x : number
 +>x : any
  
  === e-ext.js ===
  export class E {
-@@= skipped -29, +29 lines =@@
+@@= skipped -20, +20 lines =@@
  
  === e.js ===
  const { E } = require("./e-ext");
@@ -171,17 +159,14 @@
  >require : (id: string) => any
  >"./e-ext" : "./e-ext"
  
- /** @param {E} p */
+@@= skipped -9, +9 lines =@@
  function e(p) { p.x; }
-->e : (p: E) => void
-->p : E
+ >e : (p: E) => void
+ >p : E
 ->p.x : number
-->p : E
-->x : number
-+>e : (p: any) => void
-+>p : any
 +>p.x : any
-+>p : any
+ >p : E
+->x : number
 +>x : any
  
  === f.js ===
@@ -199,19 +184,14 @@
  >x : any
  >1 : 1
  
-@@= skipped -29, +29 lines =@@
- 
- /** @param {F} p */
+@@= skipped -22, +22 lines =@@
  function f(p) { p.x; }
-->f : (p: F) => void
-->p : F
+ >f : (p: F) => void
+ >p : F
 ->p.x : number
-->p : F
-->x : number
-+>f : (p: any) => void
-+>p : any
 +>p.x : any
-+>p : any
+ >p : F
+->x : number
 +>x : any
  
  === g.js ===
@@ -227,34 +207,25 @@
  >x : any
  >1 : 1
  }
- 
- /** @param {G} p */
+@@= skipped -20, +20 lines =@@
  function g(p) { p.x; }
-->g : (p: G) => void
-->p : G
+ >g : (p: G) => void
+ >p : G
 ->p.x : number
-->p : G
-->x : number
-+>g : (p: any) => void
-+>p : any
 +>p.x : any
-+>p : any
+ >p : G
+->x : number
 +>x : any
  
  === h.js ===
  class H {
-@@= skipped -42, +42 lines =@@
- 
- /** @param {H} p */
+@@= skipped -22, +22 lines =@@
  function h(p) { p.x; }
-->h : (p: H) => void
-->p : H
+ >h : (p: H) => void
+ >p : H
 ->p.x : number
-->p : H
-->x : number
-+>h : (p: any) => void
-+>p : any
 +>p.x : any
-+>p : any
+ >p : H
+->x : number
 +>x : any
  

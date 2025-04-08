@@ -1,7 +1,9 @@
 a.js(4,7): error TS2339: Property 'Inner' does not exist on type 'typeof O'.
+a.js(8,12): error TS2749: 'Outer' refers to a value, but is being used as a type here. Did you mean 'typeof Outer'?
+a.js(11,12): error TS2503: Cannot find namespace 'Outer'.
 
 
-==== a.js (1 errors) ====
+==== a.js (3 errors) ====
     var Outer = class O {
         m(x, y) { }
     }
@@ -12,9 +14,13 @@ a.js(4,7): error TS2339: Property 'Inner' does not exist on type 'typeof O'.
     
     }
     /** @type {Outer} */
+               ~~~~~
+!!! error TS2749: 'Outer' refers to a value, but is being used as a type here. Did you mean 'typeof Outer'?
     var si
     si.m
     /** @type {Outer.Inner} */
+               ~~~~~
+!!! error TS2503: Cannot find namespace 'Outer'.
     var oi
     oi.n
     

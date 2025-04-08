@@ -6,7 +6,7 @@
  * @return {function(this: string, number): number}
  */
 function id1(c) {
->id1 : (c: any) => any
+>id1 : (c: any) => function
 >c : any
 
     return c
@@ -14,9 +14,9 @@ function id1(c) {
 }
 
 var x = id1(function (n) { return this.length + n });
->x : any
->id1(function (n) { return this.length + n }) : any
->id1 : (c: any) => any
+>x : function
+>id1(function (n) { return this.length + n }) : function
+>id1 : (c: any) => function
 >function (n) { return this.length + n } : (n: any) => any
 >n : any
 >this.length + n : any
@@ -30,7 +30,7 @@ var x = id1(function (n) { return this.length + n });
  * @return {function(new: { length: number }, number): number}
  */
 function id2(c) {
->id2 : (c: any) => any
+>id2 : (c: any) => function
 >c : any
 
     return c
@@ -42,27 +42,27 @@ class C {
 
     /** @param {number} n */
     constructor(n) {
->n : any
+>n : number
 
         this.length = n;
->this.length = n : any
+>this.length = n : number
 >this.length : any
 >this : this
 >length : any
->n : any
+>n : number
     }
 }
 
 var y = id2(C);
->y : any
->id2(C) : any
->id2 : (c: any) => any
+>y : function
+>id2(C) : function
+>id2 : (c: any) => function
 >C : typeof C
 
 var z = new y(12);
 >z : any
 >new y(12) : any
->y : any
+>y : function
 >12 : 12
 
 z.length;
@@ -72,7 +72,7 @@ z.length;
 
 /** @type {function ("a" | "b", 1 | 2): 3 | 4} */
 var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
->f : (ab: any, onetwo: any) => 3 | 4
+>f : function
 >function (ab, onetwo) { return ab === "a" ? 3 : 4;  } : (ab: any, onetwo: any) => 3 | 4
 >ab : any
 >onetwo : any
@@ -89,27 +89,27 @@ var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
  * @param {number} n
  */
 function D(n) {
->D : (n: any) => void
->n : any
+>D : (n: number) => void
+>n : number
 
   this.length = n;
->this.length = n : any
+>this.length = n : number
 >this.length : any
 >this : any
 >length : any
->n : any
+>n : number
 }
 
 var y2 = id2(D);
->y2 : any
->id2(D) : any
->id2 : (c: any) => any
->D : (n: any) => void
+>y2 : function
+>id2(D) : function
+>id2 : (c: any) => function
+>D : (n: number) => void
 
 var z2 = new y2(33);
 >z2 : any
 >new y2(33) : any
->y2 : any
+>y2 : function
 >33 : 33
 
 z2.length;
@@ -123,22 +123,22 @@ z2.length;
  * @return {D}
  */
 var construct = function(dref) { return new dref(33); }
->construct : (dref: any) => any
->function(dref) { return new dref(33); } : (dref: any) => any
+>construct : (dref: any) => D
+>function(dref) { return new dref(33); } : (dref: any) => D
 >dref : any
 >new dref(33) : any
 >dref : any
 >33 : 33
 
 var z3 = construct(D);
->z3 : any
->construct(D) : any
->construct : (dref: any) => any
->D : (n: any) => void
+>z3 : D
+>construct(D) : D
+>construct : (dref: any) => D
+>D : (n: number) => void
 
 z3.length;
 >z3.length : any
->z3 : any
+>z3 : D
 >length : any
 
 
@@ -147,25 +147,25 @@ z3.length;
  * @param {number} n
  */
 var E = function(n) {
->E : (n: any) => void
->function(n) {  this.not_length_on_purpose = n;} : (n: any) => void
->n : any
+>E : (n: number) => void
+>function(n) {  this.not_length_on_purpose = n;} : (n: number) => void
+>n : number
 
   this.not_length_on_purpose = n;
->this.not_length_on_purpose = n : any
+>this.not_length_on_purpose = n : number
 >this.not_length_on_purpose : any
 >this : any
 >not_length_on_purpose : any
->n : any
+>n : number
 
 };
 
 
 var y3 = id2(E);
->y3 : any
->id2(E) : any
->id2 : (c: any) => any
->E : (n: any) => void
+>y3 : function
+>id2(E) : function
+>id2 : (c: any) => function
+>E : (n: number) => void
 
 // Repro from #39229
 

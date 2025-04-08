@@ -28,9 +28,10 @@ import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
 /** @typedef {{ x: any }} JSDocType */
 
 export { JSDocType };
->JSDocType : Symbol(JSDocType, Decl(index.js, 4, 8))
+>JSDocType : Symbol(JSDocType, Decl(index.js, 2, 4), Decl(index.js, 4, 8))
 
 export { JSDocType as ThisIsFine };
+>JSDocType : Symbol(JSDocType, Decl(index.js, 2, 4), Decl(index.js, 4, 8))
 >ThisIsFine : Symbol(ThisIsFine, Decl(index.js, 5, 8))
 
 export { WriteFileOptions };

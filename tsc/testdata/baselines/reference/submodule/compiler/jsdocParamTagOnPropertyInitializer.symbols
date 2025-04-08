@@ -8,6 +8,8 @@ class Foo {
     m = x => x.toLowerCase();
 >m : Symbol(m, Decl(a.js, 0, 11))
 >x : Symbol(x, Decl(a.js, 2, 7))
+>x.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(a.js, 2, 7))
+>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
 }
 

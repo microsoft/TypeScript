@@ -1,37 +1,10 @@
 --- old.parenthesizedJSDocCastDoesNotNarrow.types
 +++ new.parenthesizedJSDocCastDoesNotNarrow.types
-@@= skipped -5, +5 lines =@@
- >"" : ""
+@@= skipped -6, +6 lines =@@
  
  switch (/** @type {"foo" | "bar"} */ (value)) {
-->(value) : "bar" | "foo"
-+>(value) : string
+ >(value) : "bar" | "foo"
++>value : "bar" | "foo"
  >value : string
  
    case "bar":
- >"bar" : "bar"
- 
-     value;
-->value : string
-+>value : "bar"
- 
-     break;
- 
-@@= skipped -15, +15 lines =@@
- >"foo" : "foo"
- 
-     value;
-->value : string
-+>value : "foo"
- 
-     break;
- 
-@@= skipped -8, +8 lines =@@
- >"invalid" : "invalid"
- 
-     value;
-->value : string
-+>value : "invalid"
- 
-     break;
- }

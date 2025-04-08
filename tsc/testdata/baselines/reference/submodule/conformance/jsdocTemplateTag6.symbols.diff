@@ -1,24 +1,6 @@
 --- old.jsdocTemplateTag6.symbols
 +++ new.jsdocTemplateTag6.symbols
-@@= skipped -88, +88 lines =@@
- 
-     return x[0];
- >x : Symbol(x, Decl(a.js, 40, 12))
-->0 : Symbol(0)
- }
- const t9 = f4([[1, "x"], [2, "y"]]);
- >t9 : Symbol(t9, Decl(a.js, 43, 5))
-@@= skipped -24, +23 lines =@@
- >obj : Symbol(obj, Decl(a.js, 51, 12))
- 
-     return obj.x;
-->obj.x : Symbol(x, Decl(a.js, 48, 12))
- >obj : Symbol(obj, Decl(a.js, 51, 12))
-->x : Symbol(x, Decl(a.js, 48, 12))
- }
- const t11 = f5({ x: [1, "x"], y: [2, "y"] });
- >t11 : Symbol(t11, Decl(a.js, 54, 5))
-@@= skipped -37, +35 lines =@@
+@@= skipped -149, +149 lines =@@
       * @param {U} x
       */
      foo(x) {

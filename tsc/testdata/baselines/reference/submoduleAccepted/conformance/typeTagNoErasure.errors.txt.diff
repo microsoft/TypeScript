@@ -1,19 +1,20 @@
 --- old.typeTagNoErasure.errors.txt
 +++ new.typeTagNoErasure.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -typeTagNoErasure.js(7,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
--
--
--==== typeTagNoErasure.js (1 errors) ====
--    /** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */
--    
--    /** @type {Test<number>} */
--    const test = dibbity => dibbity
--    
--    test(1) // ok, T=1
--    test('hi') // error, T=number
++typeTagNoErasure.js(1,39): error TS2304: Cannot find name 'T'.
+ 
+ 
+ ==== typeTagNoErasure.js (1 errors) ====
+     /** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */
++                                          ~
++!!! error TS2304: Cannot find name 'T'.
+     
+     /** @type {Test<number>} */
+     const test = dibbity => dibbity
+     
+     test(1) // ok, T=1
+     test('hi') // error, T=number
 -         ~~~~
 -!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
+     

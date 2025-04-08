@@ -1,0 +1,21 @@
+b.js(4,12): error TS2304: Cannot find name 'Foo'.
+b.js(5,12): error TS2304: Cannot find name 'I'.
+
+
+==== a.ts (0 errors) ====
+    export default interface Foo {}
+    export interface I {}
+    
+==== b.js (2 errors) ====
+    /** @import Foo, { I } from "./a" */
+    
+    /**
+     * @param {Foo} a
+               ~~~
+!!! error TS2304: Cannot find name 'Foo'.
+     * @param {I} b
+               ~
+!!! error TS2304: Cannot find name 'I'.
+     */
+    export function foo(a, b) {}
+    

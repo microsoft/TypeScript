@@ -3,11 +3,11 @@
 === /a.js ===
 /** @param {...number} a */
 function f(a) {
->f : (a: any) => void
->a : any
+>f : (a: number[]) => void
+>a : number[]
 
     a; // number | undefined
->a : any
+>a : number[]
 
     // Ideally this would be a number. But currently checker.ts has only one `argumentsSymbol`, so it's `any`.
     arguments[0];
@@ -17,20 +17,20 @@ function f(a) {
 }
 f([1, 2]); // Error
 >f([1, 2]) : void
->f : (a: any) => void
+>f : (a: number[]) => void
 >[1, 2] : number[]
 >1 : 1
 >2 : 2
 
 f(1, "2"); // Error
 >f(1, "2") : void
->f : (a: any) => void
+>f : (a: number[]) => void
 >1 : 1
 >"2" : "2"
 
 f(1, 2);
 >f(1, 2) : void
->f : (a: any) => void
+>f : (a: number[]) => void
 >1 : 1
 >2 : 2
 

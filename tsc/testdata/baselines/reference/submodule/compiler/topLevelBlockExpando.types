@@ -56,8 +56,8 @@ interface Person {
  * @param {Human} param used as a validation tool
  */
 function doHumanThings(param) {}
->doHumanThings : (param: any) => void
->param : any
+>doHumanThings : (param: Human) => void
+>param : Human
 
 const dice1 = () => Math.floor(Math.random() * 6);
 >dice1 : { (): number; last: string; }
@@ -115,7 +115,7 @@ dice1.last = 'Calrissian';
   
   doHumanThings(dice2)
 >doHumanThings(dice2) : void
->doHumanThings : (param: any) => void
+>doHumanThings : (param: Human) => void
 >dice2 : { (): number; first: string; last: string; }
 }
 

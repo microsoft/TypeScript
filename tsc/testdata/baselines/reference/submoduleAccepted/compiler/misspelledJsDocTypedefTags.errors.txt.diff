@@ -4,16 +4,19 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +a.js(2,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
++a.js(4,48): error TS2304: Cannot find name 'B'.
 +a.js(5,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 +
 +
-+==== a.js (2 errors) ====
++==== a.js (3 errors) ====
 +    /** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
 +    Animation.AnimationModel.ScreenshotCapture.Request;
 +              ~~~~~~~~~~~~~~
 +!!! error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 +    
 +    /** @typedef {{ endTime: number, screenshots: !B.<string>}} */
++                                                   ~
++!!! error TS2304: Cannot find name 'B'.
 +    Animation.AnimationModel.ScreenshotCapture.Request;
 +              ~~~~~~~~~~~~~~
 +!!! error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.

@@ -4,18 +4,20 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+a.js(17,5): error TS7023: 'get' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-+a.js(17,9): error TS7006: Parameter 'key' implicitly has an 'any' type.
-+a.js(18,21): error TS2339: Property '_map' does not exist on type '{ get: (key: any) => any; }'.
++a.js(14,16): error TS2304: Cannot find name 'K'.
++a.js(15,18): error TS2304: Cannot find name 'V'.
++a.js(18,21): error TS2339: Property '_map' does not exist on type '{ get: (key: K) => V; }'.
 +a.js(30,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+a.js(38,19): error TS7006: Parameter 'key' implicitly has an 'any' type.
++a.js(35,16): error TS2304: Cannot find name 'K'.
++a.js(36,18): error TS2304: Cannot find name 'V'.
 +a.js(50,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
 +a.js(52,10): error TS2339: Property '_map' does not exist on type '{}'.
 +a.js(55,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
-+a.js(60,9): error TS7006: Parameter 'key' implicitly has an 'any' type.
++a.js(57,16): error TS2304: Cannot find name 'K'.
++a.js(58,18): error TS2304: Cannot find name 'V'.
 +
 +
-+==== a.js (10 errors) ====
++==== a.js (12 errors) ====
 +    /**
 +     * Should work for function declarations
 +     * @constructor
@@ -32,16 +34,16 @@
 +    Multimap.prototype = {
 +        /**
 +         * @param {K} key the key ok
++                   ~
++!!! error TS2304: Cannot find name 'K'.
 +         * @returns {V} the value ok
++                     ~
++!!! error TS2304: Cannot find name 'V'.
 +         */
 +        get(key) {
-+        ~~~
-+!!! error TS7023: 'get' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-+            ~~~
-+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
 +            return this._map[key + ''];
 +                        ~~~~
-+!!! error TS2339: Property '_map' does not exist on type '{ get: (key: any) => any; }'.
++!!! error TS2339: Property '_map' does not exist on type '{ get: (key: K) => V; }'.
 +        }
 +    }
 +    
@@ -61,11 +63,13 @@
 +    Multimap2.prototype = {
 +        /**
 +         * @param {K} key the key ok
++                   ~
++!!! error TS2304: Cannot find name 'K'.
 +         * @returns {V} the value ok
++                     ~
++!!! error TS2304: Cannot find name 'V'.
 +         */
 +        get: function(key) {
-+                      ~~~
-+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
 +            return this._map[key + ''];
 +        }
 +    }
@@ -91,11 +95,13 @@
 +!!! error TS2339: Property 'Multimap3' does not exist on type '{}'.
 +        /**
 +         * @param {K} key the key ok
++                   ~
++!!! error TS2304: Cannot find name 'K'.
 +         * @returns {V} the value ok
++                     ~
++!!! error TS2304: Cannot find name 'V'.
 +         */
 +        get(key) {
-+            ~~~
-+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
 +            return this._map[key + ''];
 +        }
 +    }

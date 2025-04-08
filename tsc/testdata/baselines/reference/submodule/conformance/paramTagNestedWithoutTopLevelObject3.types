@@ -6,13 +6,13 @@
  * @param {number} xyz.bar.p
  */
 function g(xyz) {
->g : (xyz: any) => any
->xyz : any
+>g : (xyz: object) => any
+>xyz : object
 
     return xyz.bar.p;
 >xyz.bar.p : any
 >xyz.bar : any
->xyz : any
+>xyz : object
 >bar : any
 >p : any
 }

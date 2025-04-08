@@ -1,22 +1,24 @@
 --- old.jsdocTemplateTag3.symbols
 +++ new.jsdocTemplateTag3.symbols
-@@= skipped -21, +21 lines =@@
- >x : Symbol(x, Decl(a.js, 12, 22))
- 
-     if(t.a + t.b.length > u.a - u.b.length && v.c) {
-->t.a : Symbol(a, Decl(a.js, 1, 15))
+@@= skipped -24, +24 lines =@@
+ >t.a : Symbol(a, Decl(a.js, 1, 15))
  >t : Symbol(t, Decl(a.js, 12, 11))
-->a : Symbol(a, Decl(a.js, 1, 15))
+ >a : Symbol(a, Decl(a.js, 1, 15))
 ->t.b.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
-->t.b : Symbol(b, Decl(a.js, 1, 26))
++>t.b.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >t.b : Symbol(b, Decl(a.js, 1, 26))
  >t : Symbol(t, Decl(a.js, 12, 11))
-->b : Symbol(b, Decl(a.js, 1, 26))
+ >b : Symbol(b, Decl(a.js, 1, 26))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>u.a : Symbol(a, Decl(a.js, 1, 15))
  >u : Symbol(u, Decl(a.js, 12, 13))
++>a : Symbol(a, Decl(a.js, 1, 15))
++>u.b.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>u.b : Symbol(b, Decl(a.js, 1, 26))
  >u : Symbol(u, Decl(a.js, 12, 13))
-->v.c : Symbol(c, Decl(a.js, 2, 15))
++>b : Symbol(b, Decl(a.js, 1, 26))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >v.c : Symbol(c, Decl(a.js, 2, 15))
  >v : Symbol(v, Decl(a.js, 12, 16))
-->c : Symbol(c, Decl(a.js, 2, 15))
- 
-         return w;
- >w : Symbol(w, Decl(a.js, 12, 19))
+ >c : Symbol(c, Decl(a.js, 2, 15))

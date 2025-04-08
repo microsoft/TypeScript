@@ -1,52 +1,6 @@
 --- old.jsdocPostfixEqualsAddsOptionality.types
 +++ new.jsdocPostfixEqualsAddsOptionality.types
-@@= skipped -2, +2 lines =@@
- === a.js ===
- /** @param {number=} a */
- function f(a) {
-->f : (a?: number | undefined) => void
-->a : number | undefined
-+>f : (a: any) => void
-+>a : any
- 
-     a = 1
- >a = 1 : 1
-->a : number | undefined
-+>a : any
- >1 : 1
- 
-     a = null // should not be allowed
- >a = null : null
-->a : number | undefined
-+>a : any
- 
-     a = undefined
- >a = undefined : undefined
-->a : number | undefined
-+>a : any
- >undefined : undefined
- }
- f()
- >f() : void
-->f : (a?: number | undefined) => void
-+>f : (a: any) => void
- 
- f(null) // should not be allowed
- >f(null) : void
-->f : (a?: number | undefined) => void
-+>f : (a: any) => void
- 
- f(undefined)
- >f(undefined) : void
-->f : (a?: number | undefined) => void
-+>f : (a: any) => void
- >undefined : undefined
- 
- f(1)
- >f(1) : void
-->f : (a?: number | undefined) => void
-+>f : (a: any) => void
- >1 : 1
+@@= skipped -39, +39 lines =@@
  
  /** @param {???!?number?=} a */
  function g(a) {

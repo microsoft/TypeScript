@@ -2,8 +2,8 @@
 
 === github17339.js ===
 var obj = {
->obj : { x: (a: any) => any; }
->{	/**	 * @template T	 * @param {T} a	 * @returns {T}	 */	x: function (a) {		return a;	},} : { x: (a: any) => any; }
+>obj : { x: <T>(a: T) => T; }
+>{	/**	 * @template T	 * @param {T} a	 * @returns {T}	 */	x: function (a) {		return a;	},} : { x: <T>(a: T) => T; }
 
 	/**
 	 * @template T
@@ -11,12 +11,12 @@ var obj = {
 	 * @returns {T}
 	 */
 	x: function (a) {
->x : (a: any) => any
->function (a) {		return a;	} : (a: any) => any
->a : any
+>x : <T>(a: T) => T
+>function (a) {		return a;	} : <T>(a: T) => T
+>a : T
 
 		return a;
->a : any
+>a : T
 
 	},
 };

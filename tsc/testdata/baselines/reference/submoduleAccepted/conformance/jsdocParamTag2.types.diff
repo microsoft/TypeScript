@@ -7,14 +7,13 @@
 ->good1 : ({ a, b }: { a: string; b: string; }, x: string) => void
 ->a : string
 ->b : string
-->x : string
-+>good1 : (__0: { a: any; b: any; }, x: any) => void
++>good1 : (__0: { a: any; b: any; }, x: string) => void
 +>a : any
 +>b : any
-+>x : any
+ >x : string
  
  /**
-  * @param {{a: string, b: string}} obj
+@@= skipped -10, +10 lines =@@
   * @param {{c: number, d: number}} OBJECTION
   */
  function good2({a, b}, {c, d}) {}
@@ -31,20 +30,18 @@
  
  /**
   * @param {number} x
-@@= skipped -22, +22 lines =@@
+@@= skipped -12, +12 lines =@@
   * @param {string} y
   */
  function good3(x, {a, b}, y) {}
 ->good3 : (x: number, { a, b }: { a: string; b: string; }, y: string) => void
-->x : number
++>good3 : (x: number, __1: { a: any; b: any; }, y: string) => void
+ >x : number
 ->a : string
 ->b : string
-->y : string
-+>good3 : (x: any, __1: { a: any; b: any; }, y: any) => void
-+>x : any
 +>a : any
 +>b : any
-+>y : any
+ >y : string
  
  /**
   * @param {{a: string, b: string}} obj
@@ -66,14 +63,12 @@
 ->good5 : ({ a, b }: {    a: string;    b: string;}, x: string) => void
 ->a : string
 ->b : string
-->x : string
-+>good5 : (__0: { a: any; b: any; }, x: any) => void
++>good5 : (__0: { a: any; b: any; }, x: string) => void
 +>a : any
 +>b : any
-+>x : any
+ >x : string
  
  /**
-  * @param {Object} obj
 @@= skipped -14, +14 lines =@@
   * @param {string} OBJECTION.d - meh
   */
@@ -96,18 +91,15 @@
   */
  function good7(x, {a, b}, y) {}
 ->good7 : (x: number, { a, b }: {    a: string;    b: string;}, y: string) => void
-->x : number
++>good7 : (x: number, __1: { a: any; b: any; }, y: string) => void
+ >x : number
 ->a : string
 ->b : string
-->y : string
-+>good7 : (x: any, __1: { a: any; b: any; }, y: any) => void
-+>x : any
 +>a : any
 +>b : any
-+>y : any
+ >y : string
  
  /**
-  * @param {Object} obj
 @@= skipped -12, +12 lines =@@
   * @param {string} obj.b
   */
@@ -144,12 +136,10 @@
   */
  function bad1(x, {a, b}) {}
 ->bad1 : (x: string, { a, b }: string) => void
-->x : string
-+>bad1 : (x: any, __1: { a: any; b: any; }) => void
-+>x : any
++>bad1 : (x: string, __1: { a: any; b: any; }) => void
+ >x : string
  >a : any
  >b : any
- 
 @@= skipped -10, +10 lines =@@
   * @param {{a: string, b: string}} obj
   */

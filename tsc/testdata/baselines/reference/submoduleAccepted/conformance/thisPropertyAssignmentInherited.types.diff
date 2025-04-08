@@ -1,0 +1,49 @@
+--- old.thisPropertyAssignmentInherited.types
++++ new.thisPropertyAssignmentInherited.types
+@@= skipped -7, +7 lines =@@
+    * @returns {String}
+    */
+   get textContent() {
+->textContent : string
++>textContent : String
+ 
+     return  ''
+ >'' : ""
+   }
+   set textContent(x) {}
+->textContent : string
+->x : string
++>textContent : String
++>x : String
+ 
+   cloneNode() { return this}
+ >cloneNode : () => this
+@@= skipped -22, +22 lines =@@
+ >HTMLElement : HTMLElement
+ 
+   get innerHTML() { return this.textContent; }
+->innerHTML : string
+->this.textContent : string
++>innerHTML : String
++>this.textContent : String
+ >this : this
+->textContent : string
++>textContent : String
+ 
+   set innerHTML(html) { this.textContent = html; }
+->innerHTML : string
+->html : string
+->this.textContent = html : string
+->this.textContent : string
++>innerHTML : String
++>html : String
++>this.textContent = html : String
++>this.textContent : String
+ >this : this
+->textContent : string
+->html : string
++>textContent : String
++>html : String
+ 
+   toString() {
+ >toString : () => void

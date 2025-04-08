@@ -49,7 +49,7 @@ export const obj2 = {
    */
   set x(a) {},
 >x : string
->a : string
+>a : number
 
 };
 
@@ -71,16 +71,16 @@ export const obj3 = {
 };
 
 export const obj4 = {
->obj4 : { x: any; }
->{  /**   * my awesome setter   * @param {number} a   */  set x(a) {},} : { x: any; }
+>obj4 : { x: number; }
+>{  /**   * my awesome setter   * @param {number} a   */  set x(a) {},} : { x: number; }
 
   /**
    * my awesome setter
    * @param {number} a
    */
   set x(a) {},
->x : any
->a : any
+>x : number
+>a : number
 
 };
 

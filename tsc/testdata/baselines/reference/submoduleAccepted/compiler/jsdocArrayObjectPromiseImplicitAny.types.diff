@@ -5,7 +5,7 @@
  /** @type {Array} */
  var anyArray = [5];
 ->anyArray : any[]
-+>anyArray : number[]
++>anyArray : any
  >[5] : number[]
  >5 : 5
  
@@ -26,7 +26,7 @@
  /** @type {Promise} */
  var anyPromise = Promise.resolve(5);
 ->anyPromise : Promise<any>
-+>anyPromise : Promise<number>
++>anyPromise : any
  >Promise.resolve(5) : Promise<number>
  >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
  >Promise : PromiseConstructor
@@ -47,7 +47,7 @@
  /** @type {Object} */
  var anyObject = {valueOf: 1}; // not an error since assigning to any.
 ->anyObject : any
-+>anyObject : { valueOf: number; }
++>anyObject : Object
  >{valueOf: 1} : { valueOf: number; }
  >valueOf : number
  >1 : 1
@@ -55,7 +55,21 @@
  /** @type {Object<string, number>} */
  var paramedObject = {valueOf: 1};
 ->paramedObject : { [x: string]: number; }
-+>paramedObject : { valueOf: number; }
++>paramedObject : any
  >{valueOf: 1} : { valueOf: number; }
  >valueOf : number
  >1 : 1
+@@= skipped -26, +26 lines =@@
+  * @return {Object}
+  */
+ function returnAnyObject(obj) {
+->returnAnyObject : (obj: any) => any
+->obj : any
++>returnAnyObject : (obj: Object) => Object
++>obj : Object
+ 
+   return obj;
+->obj : any
++>obj : Object
+ }
+ 

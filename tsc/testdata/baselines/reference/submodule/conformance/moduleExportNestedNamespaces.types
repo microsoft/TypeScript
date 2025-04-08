@@ -77,18 +77,18 @@ var classic = new s.Classic()
 /** @param {s.n.K} c
     @param {s.Classic} classic */
 function f(c, classic) {
->f : (c: any, classic: any) => void
->c : any
->classic : any
+>f : (c: K, classic: Classic) => void
+>c : K
+>classic : Classic
 
     c.x
 >c.x : any
->c : any
+>c : K
 >x : any
 
     classic.p
 >classic.p : any
->classic : any
+>classic : Classic
 >p : any
 }
 

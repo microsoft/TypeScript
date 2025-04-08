@@ -1,13 +1,18 @@
+returns.js(6,5): error TS2322: Type 'number' is not assignable to type 'string'.
+returns.js(13,5): error TS2322: Type 'number | boolean' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
 returns.js(13,12): error TS2872: This kind of expression is always truthy.
 
 
-==== returns.js (1 errors) ====
+==== returns.js (3 errors) ====
     // @ts-check
     /**
      * @returns {string} This comment is not currently exposed
      */
     function f() {
         return 5;
+        ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     }
     
     /**
@@ -15,6 +20,9 @@ returns.js(13,12): error TS2872: This kind of expression is always truthy.
      */
     function f1() {
         return 5 || true;
+        ~~~~~~
+!!! error TS2322: Type 'number | boolean' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
                ~
 !!! error TS2872: This kind of expression is always truthy.
     }

@@ -11,33 +11,3 @@
  
    /** 
     * my awesome getter
-@@= skipped -20, +20 lines =@@
-    */
-   set x(a) {},
- >x : string
-->a : number
-+>a : string
- 
- };
- 
-@@= skipped -22, +22 lines =@@
- };
- 
- export const obj4 = {
-->obj4 : { x: number; }
-->{  /**   * my awesome setter   * @param {number} a   */  set x(a) {},} : { x: number; }
-+>obj4 : { x: any; }
-+>{  /**   * my awesome setter   * @param {number} a   */  set x(a) {},} : { x: any; }
- 
-   /**
-    * my awesome setter
-    * @param {number} a
-    */
-   set x(a) {},
-->x : number
-->a : number
-+>x : any
-+>a : any
- 
- };
- 

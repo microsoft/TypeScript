@@ -14,13 +14,13 @@ export = items;
 === index.js ===
 /** @type {typeof import("/some-mod")} */
 const items = [];
->items : any[]
+>items : Item[]
 >[] : undefined[]
 
 module.exports = items;
->module.exports = items : any[]
+>module.exports = items : Item[]
 >module.exports : any
 >module : any
 >exports : any
->items : any[]
+>items : Item[]
 

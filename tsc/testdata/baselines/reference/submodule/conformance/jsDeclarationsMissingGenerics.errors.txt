@@ -1,0 +1,17 @@
+file.js(2,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
+file.js(6,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+
+
+==== file.js (2 errors) ====
+    /**
+     * @param {Array} x
+               ~~~~~
+!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
+     */
+    function x(x) {}
+    /**
+     * @param {Promise} x
+               ~~~~~~~
+!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+     */
+    function y(x) {}

@@ -22,9 +22,9 @@ const x = identity(
      * @returns {number=}
      */
     param => param
->param => param : (param: any) => any
->param : any
->param : any
+>param => param : (param: number) => number | undefined
+>param : number
+>param : number
 
 );
 

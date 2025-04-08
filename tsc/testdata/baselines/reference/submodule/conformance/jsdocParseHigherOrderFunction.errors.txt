@@ -1,9 +1,13 @@
+paren.js(1,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 paren.js(2,10): error TS7006: Parameter 's' implicitly has an 'any' type.
 paren.js(2,13): error TS7006: Parameter 'id' implicitly has an 'any' type.
 
 
-==== paren.js (2 errors) ====
+==== paren.js (3 errors) ====
     /** @type {function((string), function((string)): string): string} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
     var x = (s, id) => id(s)
              ~
 !!! error TS7006: Parameter 's' implicitly has an 'any' type.

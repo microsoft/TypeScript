@@ -19,8 +19,8 @@
  * @param {number} [b]
  */
 export const foo = function (a, b) { }
->foo : (a: any, b: any) => void
->function (a, b) { } : (a: any, b: any) => void
->a : any
->b : any
+>foo : (a: string | number, b?: number) => void
+>function (a, b) { } : (a: string | number, b?: number) => void
+>a : string | number
+>b : number
 

@@ -402,7 +402,7 @@ func (n *Node) TypeParameterList() *NodeList {
 		return n.AsClassExpression().TypeParameters
 	case KindInterfaceDeclaration:
 		return n.AsInterfaceDeclaration().TypeParameters
-	case KindTypeAliasDeclaration:
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
 		return n.AsTypeAliasDeclaration().TypeParameters
 	default:
 		funcLike := n.FunctionLikeData()
@@ -436,7 +436,7 @@ func (n *Node) MemberList() *NodeList {
 	case KindMappedType:
 		return n.AsMappedTypeNode().Members
 	}
-	panic("Unhandled case in Node.MemberList")
+	panic("Unhandled case in Node.MemberList: " + n.Kind.String())
 }
 
 func (n *Node) Members() []*Node {
@@ -487,7 +487,7 @@ func (n *Node) Type() *Node {
 		return n.AsAsExpression().Type
 	case KindSatisfiesExpression:
 		return n.AsSatisfiesExpression().Type
-	case KindTypeAliasDeclaration:
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
 		return n.AsTypeAliasDeclaration().Type
 	case KindNamedTupleMember:
 		return n.AsNamedTupleMember().Type
@@ -499,6 +499,8 @@ func (n *Node) Type() *Node {
 		return n.AsTemplateLiteralTypeSpan().Type
 	case KindJSDocTypeExpression:
 		return n.AsJSDocTypeExpression().Type
+	case KindJSDocPropertyTag:
+		return n.AsJSDocPropertyTag().TypeExpression
 	case KindJSDocNullableType:
 		return n.AsJSDocNullableType().Type
 	case KindJSDocNonNullableType:
@@ -513,7 +515,7 @@ func (n *Node) Type() *Node {
 			return funcLike.Type
 		}
 	}
-	panic("Unhandled case in Node.Type")
+	panic("Unhandled case in Node.Type: " + n.Kind.String())
 }
 
 func (n *Node) Initializer() *Node {
@@ -3380,6 +3382,7 @@ type ClassLikeBase struct {
 	DeclarationBase
 	ExportableBase
 	ModifiersBase
+	LocalsContainerBase
 	compositeNodeBase
 	name            *IdentifierNode // IdentifierNode
 	TypeParameters  *NodeList       // NodeList[*TypeParameterDeclarationNode]. Optional
@@ -3617,13 +3620,17 @@ type TypeAliasDeclaration struct {
 	Type           *TypeNode       // TypeNode
 }
 
-func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *NodeList, typeNode *TypeNode) *Node {
+func (f *NodeFactory) newTypeOrJSTypeAliasDeclaration(kind Kind, modifiers *ModifierList, name *IdentifierNode, typeParameters *NodeList, typeNode *TypeNode) *Node {
 	data := &TypeAliasDeclaration{}
 	data.modifiers = modifiers
 	data.name = name
 	data.TypeParameters = typeParameters
 	data.Type = typeNode
-	return newNode(KindTypeAliasDeclaration, data, f.hooks)
+	return newNode(kind, data, f.hooks)
+}
+
+func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *NodeList, typeNode *TypeNode) *Node {
+	return f.newTypeOrJSTypeAliasDeclaration(KindTypeAliasDeclaration, modifiers, name, typeParameters, typeNode)
 }
 
 func (f *NodeFactory) UpdateTypeAliasDeclaration(node *TypeAliasDeclaration, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, typeNode *TypeNode) *Node {
@@ -3638,6 +3645,9 @@ func (node *TypeAliasDeclaration) ForEachChild(v Visitor) bool {
 }
 
 func (node *TypeAliasDeclaration) VisitEachChild(v *NodeVisitor) *Node {
+	if node.Kind == KindJSTypeAliasDeclaration {
+		return v.Factory.UpdateJSTypeAliasDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitNode(node.Type))
+	}
 	return v.Factory.UpdateTypeAliasDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitNode(node.Type))
 }
 
@@ -3649,6 +3659,25 @@ func (node *TypeAliasDeclaration) Name() *DeclarationName { return node.name }
 
 func IsTypeAliasDeclaration(node *Node) bool {
 	return node.Kind == KindTypeAliasDeclaration
+}
+
+func IsTypeOrJSTypeAliasDeclaration(node *Node) bool {
+	return node.Kind == KindTypeAliasDeclaration || node.Kind == KindJSTypeAliasDeclaration
+}
+
+func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *NodeList, typeNode *TypeNode) *Node {
+	return f.newTypeOrJSTypeAliasDeclaration(KindJSTypeAliasDeclaration, modifiers, name, typeParameters, typeNode)
+}
+
+func (f *NodeFactory) UpdateJSTypeAliasDeclaration(node *TypeAliasDeclaration, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, typeNode *TypeNode) *Node {
+	if modifiers != node.modifiers || name != node.name || typeParameters != node.TypeParameters || typeNode != node.Type {
+		return updateNode(f.NewJSTypeAliasDeclaration(modifiers, name, typeParameters, typeNode), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func IsJSTypeAliasDeclaration(node *Node) bool {
+	return node.Kind == KindJSTypeAliasDeclaration
 }
 
 // EnumMember
@@ -8584,6 +8613,7 @@ func (node *JSDocLinkCode) Name() *DeclarationName {
 
 type JSDocTypeExpression struct {
 	TypeNodeBase
+	Host *Node
 	Type *TypeNode
 }
 
@@ -8865,8 +8895,7 @@ func (node *JSDocTemplateTag) Clone(f *NodeFactory) *Node {
 
 func (node *JSDocTemplateTag) TypeParameters() *TypeParameterList { return node.typeParameters }
 
-// JSDocParameterTag
-
+// JSDocPropertyTag
 type JSDocPropertyTag struct {
 	JSDocTagBase
 	name           *EntityName
@@ -8918,6 +8947,7 @@ func (node *JSDocPropertyTag) Clone(f *NodeFactory) *Node {
 
 func (node *JSDocPropertyTag) Name() *EntityName { return node.name }
 
+// JSDocParameterTag
 type JSDocParameterTag struct {
 	JSDocTagBase
 	name           *EntityName
@@ -9473,20 +9503,20 @@ func (node *JSDocOverloadTag) Clone(f *NodeFactory) *Node {
 type JSDocTypedefTag struct {
 	JSDocTagBase
 	TypeExpression *Node
-	FullName       *Node
+	name           *IdentifierNode
 }
 
-func (f *NodeFactory) NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression *Node, fullName *Node, comment *NodeList) *Node {
+func (f *NodeFactory) NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression *Node, name *IdentifierNode, comment *NodeList) *Node {
 	data := &JSDocTypedefTag{}
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
-	data.FullName = fullName
+	data.name = name
 	data.Comment = comment
 	return newNode(KindJSDocTypedefTag, data, f.hooks)
 }
 
-func (f *NodeFactory) UpdateJSDocTypedefTag(node *JSDocTypedefTag, tagName *IdentifierNode, typeExpression *Node, fullName *Node, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || fullName != node.FullName || comment != node.Comment {
+func (f *NodeFactory) UpdateJSDocTypedefTag(node *JSDocTypedefTag, tagName *IdentifierNode, typeExpression *Node, fullName *IdentifierNode, comment *NodeList) *Node {
+	if tagName != node.TagName || typeExpression != node.TypeExpression || fullName != node.name || comment != node.Comment {
 		return updateNode(f.NewJSDocTypedefTag(tagName, typeExpression, fullName, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
@@ -9494,18 +9524,20 @@ func (f *NodeFactory) UpdateJSDocTypedefTag(node *JSDocTypedefTag, tagName *Iden
 
 func (node *JSDocTypedefTag) ForEachChild(v Visitor) bool {
 	if node.TypeExpression != nil && node.TypeExpression.Kind == KindJSDocTypeLiteral {
-		return visit(v, node.TagName) || visit(v, node.FullName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+		return visit(v, node.TagName) || visit(v, node.name) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
 	}
-	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visit(v, node.FullName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visit(v, node.name) || visitNodeList(v, node.Comment)
 }
 
 func (node *JSDocTypedefTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocTypedefTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNode(node.FullName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocTypedefTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNode(node.name), v.visitNodes(node.Comment))
 }
 
 func (node *JSDocTypedefTag) Clone(f *NodeFactory) *Node {
-	return cloneNode(f.NewJSDocTypedefTag(node.TagName, node.TypeExpression, node.FullName, node.Comment), node.AsNode(), f.hooks)
+	return cloneNode(f.NewJSDocTypedefTag(node.TagName, node.TypeExpression, node.name, node.Comment), node.AsNode(), f.hooks)
 }
+
+func (node *JSDocTypedefTag) Name() *DeclarationName { return node.name }
 
 // JSDocTypeLiteral
 type JSDocTypeLiteral struct {

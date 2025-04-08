@@ -7,15 +7,16 @@
  */
 
 export default /** @type {NumberLike[]} */([ ]);
->([ ]) : undefined[]
+>([ ]) : (string | number)[]
+>[ ] : (string | number)[]
 >[ ] : undefined[]
 
 === b.ts ===
 import A from './a'
->A : any[]
+>A : (string | number)[]
 
 A[0]
->A[0] : any
->A : any[]
+>A[0] : string | number
+>A : (string | number)[]
 >0 : 0
 

@@ -30,7 +30,7 @@ cbThing(type => {
 
     /** @type {LogEntry} */
     const logEntry = {
->logEntry : { time: number; type: any; }
+>logEntry : LogEntry
 >{        time: Date.now(),        type,    } : { time: number; type: any; }
 
         time: Date.now(),

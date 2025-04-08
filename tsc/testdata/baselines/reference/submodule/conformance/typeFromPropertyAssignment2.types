@@ -30,19 +30,19 @@ Outer.Inner = class I {
 }
 /** @type {Outer} */
 var ok
->ok : any
+>ok : Outer
 
 ok.y
 >ok.y : any
->ok : any
+>ok : Outer
 >y : any
 
 /** @type {Outer.Inner} */
 var oc
->oc : any
+>oc : Inner
 
 oc.x
 >oc.x : any
->oc : any
+>oc : Inner
 >x : any
 

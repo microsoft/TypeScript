@@ -5,18 +5,19 @@
  
  /** @type {NumberLike[]} */export default ([ ]);
 ->([ ]) : NumberLike[]
++>([ ]) : (string | number)[]
 +>([ ]) : undefined[]
  >[ ] : undefined[]
  
  === b.ts ===
  import A from './a'
 ->A : import("a").NumberLike[]
-+>A : any[]
++>A : (string | number)[]
  
  A[0]
 ->A[0] : import("a").NumberLike
 ->A : import("a").NumberLike[]
-+>A[0] : any
-+>A : any[]
++>A[0] : string | number
++>A : (string | number)[]
  >0 : 0
  

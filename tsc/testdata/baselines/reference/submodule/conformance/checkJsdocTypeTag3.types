@@ -3,5 +3,5 @@
 === test.js ===
 /** @type {Array<?number>} */
 var nns;
->nns : any
+>nns : number[]
 

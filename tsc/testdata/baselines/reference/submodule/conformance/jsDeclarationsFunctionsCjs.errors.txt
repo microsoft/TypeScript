@@ -8,7 +8,9 @@ index.js(22,1): error TS2580: Cannot find name 'module'. Do you need to install 
 index.js(28,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 index.js(31,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 index.js(31,25): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(35,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 index.js(41,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(45,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 index.js(51,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 index.js(53,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 index.js(54,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
@@ -18,7 +20,7 @@ index.js(57,21): error TS2580: Cannot find name 'module'. Do you need to install
 index.js(58,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
-==== index.js (18 errors) ====
+==== index.js (20 errors) ====
     module.exports.a = function a() {}
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
@@ -74,6 +76,8 @@ index.js(58,1): error TS2580: Cannot find name 'module'. Do you need to install 
     /**
      * @param {{x: string}} a
      * @param {{y: typeof module.exports.b}} b
+                          ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
      */
     function g(a, b) {
         return a.x && b.y();
@@ -86,6 +90,8 @@ index.js(58,1): error TS2580: Cannot find name 'module'. Do you need to install 
     /**
      * @param {{x: string}} a
      * @param {{y: typeof module.exports.b}} b
+                          ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
      */
     function hh(a, b) {
         return a.x && b.y();

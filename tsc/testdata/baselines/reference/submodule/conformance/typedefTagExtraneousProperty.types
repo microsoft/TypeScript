@@ -7,25 +7,25 @@
 
 /** @type {Mmap} */
 var y = { bye: "no" };
->y : { bye: string; }
+>y : any
 >{ bye: "no" } : { bye: string; }
 >bye : string
 >"no" : "no"
 
 y
->y : { bye: string; }
+>y : any
 
 y.ignoreMe = "ok but just because of the index signature"
 >y.ignoreMe = "ok but just because of the index signature" : "ok but just because of the index signature"
 >y.ignoreMe : any
->y : { bye: string; }
+>y : any
 >ignoreMe : any
 >"ok but just because of the index signature" : "ok but just because of the index signature"
 
 y['hi'] = "yes"
 >y['hi'] = "yes" : "yes"
 >y['hi'] : any
->y : { bye: string; }
+>y : any
 >'hi' : "hi"
 >"yes" : "yes"
 

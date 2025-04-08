@@ -13,7 +13,7 @@ class A {}
  * @type {module:A}
  */
 export let el = null;
->el : any
+>el : module
 
 export default A;
 >A : A

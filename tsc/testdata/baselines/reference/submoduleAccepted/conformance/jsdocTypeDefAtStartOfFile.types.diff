@@ -1,14 +1,9 @@
 --- old.jsdocTypeDefAtStartOfFile.types
 +++ new.jsdocTypeDefAtStartOfFile.types
-@@= skipped -6, +6 lines =@@
- === index.js ===
- /** @type {AnyEffect} */
- let b;
-->b : AnyEffect
-+>b : any
+@@= skipped -10, +10 lines =@@
  
  /** @type {Third} */
  let c;
 ->c : number
-+>c : any
++>c : Third
  

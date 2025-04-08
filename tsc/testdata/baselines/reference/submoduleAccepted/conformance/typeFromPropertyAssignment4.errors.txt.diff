@@ -5,14 +5,16 @@
 @@= skipped --1, +1 lines =@@
 +a.js(1,7): error TS2339: Property 'Inner' does not exist on type '{}'.
 +a.js(4,14): error TS2339: Property 'y' does not exist on type 'Inner'.
++a.js(8,12): error TS2503: Cannot find namespace 'Outer'.
 +a.js(11,23): error TS2339: Property 'Inner' does not exist on type '{}'.
++b.js(1,12): error TS2503: Cannot find namespace 'Outer'.
 +b.js(4,19): error TS2339: Property 'Inner' does not exist on type '{}'.
 +
 +
 +==== def.js (0 errors) ====
 +    var Outer = {};
 +    
-+==== a.js (3 errors) ====
++==== a.js (4 errors) ====
 +    Outer.Inner = class {
 +          ~~~~~
 +!!! error TS2339: Property 'Inner' does not exist on type '{}'.
@@ -25,6 +27,8 @@
 +    }
 +    
 +    /** @type {Outer.Inner} */
++               ~~~~~
++!!! error TS2503: Cannot find namespace 'Outer'.
 +    var local
 +    local.y
 +    var inner = new Outer.Inner()
@@ -32,8 +36,10 @@
 +!!! error TS2339: Property 'Inner' does not exist on type '{}'.
 +    inner.y
 +    
-+==== b.js (1 errors) ====
++==== b.js (2 errors) ====
 +    /** @type {Outer.Inner} */
++               ~~~~~
++!!! error TS2503: Cannot find namespace 'Outer'.
 +    var x
 +    x.y
 +    var z = new Outer.Inner()

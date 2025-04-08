@@ -1,15 +1,12 @@
-a.js(5,12): error TS7006: Parameter 's' implicitly has an 'any' type.
 a.js(6,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== a.js (2 errors) ====
+==== a.js (1 errors) ====
     /** @this {{ n: number }} Mount Holyoke Preparatory School
      * @param {string} s
      * @return {number}
      */
     function f(s) {
-               ~
-!!! error TS7006: Parameter 's' implicitly has an 'any' type.
         return this.n + s.length
                ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.

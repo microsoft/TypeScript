@@ -1,13 +1,16 @@
+input.js(5,48): error TS2304: Cannot find name 'P'.
 input.js(48,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 input.js(52,24): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
-==== input.js (2 errors) ====
+==== input.js (3 errors) ====
     /** @typedef {{ color: "red" | "blue" }} MyComponentProps */
     
     /**
      * @template P 
      * @typedef {{ (): any; defaultProps?: Partial<P> }} StatelessComponent */
+                                                   ~
+!!! error TS2304: Cannot find name 'P'.
     
      /**
       * @type {StatelessComponent<MyComponentProps>}

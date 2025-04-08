@@ -63,7 +63,9 @@ function flatMap(array, iterable = identity) {
   for (let i = 0; i < array.length; i += 1) {
 >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
 >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
+>array.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(templateInsideCallback.js, 46, 17))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
 
     result.push(.../** @type {unknown[]} */(iterable(array[i])));

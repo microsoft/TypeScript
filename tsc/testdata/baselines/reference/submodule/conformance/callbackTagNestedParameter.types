@@ -15,12 +15,12 @@
  * @returns {void}
  */
 function eachPerson(callback) {
->eachPerson : (callback: any) => void
->callback : any
+>eachPerson : (callback: WorksWithPeopleCallback) => void
+>callback : WorksWithPeopleCallback
 
     callback({ name: "Empty" });
 >callback({ name: "Empty" }) : any
->callback : any
+>callback : WorksWithPeopleCallback
 >{ name: "Empty" } : { name: string; }
 >name : string
 >"Empty" : "Empty"

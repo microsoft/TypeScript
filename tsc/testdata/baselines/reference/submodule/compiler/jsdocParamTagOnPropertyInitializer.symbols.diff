@@ -8,7 +8,9 @@
 +>m : Symbol(m, Decl(a.js, 0, 11))
  >x : Symbol(x, Decl(a.js, 2, 7))
 ->x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>x.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(a.js, 2, 7))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
  }
  

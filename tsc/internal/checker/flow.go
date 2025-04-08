@@ -1713,7 +1713,7 @@ func (c *Checker) tryGetNameFromEntityNameExpression(node *ast.Node) (string, bo
 	if declaration == nil {
 		return "", false
 	}
-	t := c.tryGetTypeFromEffectiveTypeNode(declaration)
+	t := c.tryGetTypeFromTypeNode(declaration)
 	if t != nil {
 		if name, ok := tryGetNameFromType(t); ok {
 			return name, true
@@ -2686,6 +2686,7 @@ func (c *Checker) markNodeAssignmentsWorker(node *ast.Node) bool {
 		return false
 	case ast.KindInterfaceDeclaration,
 		ast.KindTypeAliasDeclaration,
+		ast.KindJSTypeAliasDeclaration,
 		ast.KindEnumDeclaration:
 		return false
 	}

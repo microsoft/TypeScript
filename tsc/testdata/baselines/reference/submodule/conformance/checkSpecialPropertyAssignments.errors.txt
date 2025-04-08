@@ -1,7 +1,9 @@
 bug24252.js(2,3): error TS2339: Property 'B' does not exist on type '{}'.
+bug24252.js(8,9): error TS2322: Type 'string[]' is not assignable to type 'number[]'.
+  Type 'string' is not assignable to type 'number'.
 
 
-==== bug24252.js (1 errors) ====
+==== bug24252.js (2 errors) ====
     var A = {};
     A.B = class {
       ~
@@ -12,6 +14,9 @@ bug24252.js(2,3): error TS2339: Property 'B' does not exist on type '{}'.
             /** @type {number[]} */
             var y;
             y = x;
+            ~
+!!! error TS2322: Type 'string[]' is not assignable to type 'number[]'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
         }
     };
     

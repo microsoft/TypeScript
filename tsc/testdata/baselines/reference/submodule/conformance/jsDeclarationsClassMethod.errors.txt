@@ -4,8 +4,6 @@ jsDeclarationsClassMethod.js(19,33): error TS7006: Parameter 'x' implicitly has 
 jsDeclarationsClassMethod.js(19,36): error TS7006: Parameter 'y' implicitly has an 'any' type.
 jsDeclarationsClassMethod.js(29,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
 jsDeclarationsClassMethod.js(29,30): error TS7006: Parameter 'y' implicitly has an 'any' type.
-jsDeclarationsClassMethod.js(40,13): error TS7006: Parameter 'x' implicitly has an 'any' type.
-jsDeclarationsClassMethod.js(40,16): error TS7006: Parameter 'y' implicitly has an 'any' type.
 jsDeclarationsClassMethod.js(51,14): error TS2551: Property 'method2' does not exist on type 'C2'. Did you mean 'method1'?
 jsDeclarationsClassMethod.js(51,34): error TS7006: Parameter 'x' implicitly has an 'any' type.
 jsDeclarationsClassMethod.js(51,37): error TS7006: Parameter 'y' implicitly has an 'any' type.
@@ -14,7 +12,7 @@ jsDeclarationsClassMethod.js(61,27): error TS7006: Parameter 'x' implicitly has 
 jsDeclarationsClassMethod.js(61,30): error TS7006: Parameter 'y' implicitly has an 'any' type.
 
 
-==== jsDeclarationsClassMethod.js (14 errors) ====
+==== jsDeclarationsClassMethod.js (12 errors) ====
     function C1() {
         /**
          * A comment prop
@@ -67,10 +65,6 @@ jsDeclarationsClassMethod.js(61,30): error TS7006: Parameter 'y' implicitly has 
          * @returns {number}
          */
         method1(x, y) {
-                ~
-!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
-                   ~
-!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
             return x + y;
         }
     }

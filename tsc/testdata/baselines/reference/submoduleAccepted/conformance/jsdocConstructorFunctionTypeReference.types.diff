@@ -35,16 +35,16 @@
 ->validateRegExpFlags : (state: Validator) => string
 ->function(state) {    return state.flags} : (state: Validator) => string
 ->state : VFunc
-+>validateRegExpFlags : (state: any) => any
-+>function(state) {    return state.flags} : (state: any) => any
-+>state : any
++>validateRegExpFlags : (state: Validator) => any
++>function(state) {    return state.flags} : (state: Validator) => any
++>state : Validator
  
      return state.flags
 ->state.flags : string
 ->state : VFunc
 ->flags : string
 +>state.flags : any
-+>state : any
++>state : Validator
 +>flags : any
  
  };

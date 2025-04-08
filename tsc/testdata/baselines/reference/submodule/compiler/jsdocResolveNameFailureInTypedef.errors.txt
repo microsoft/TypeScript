@@ -1,0 +1,15 @@
+/a.js(2,12): error TS2304: Cannot find name 'Ty'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @param {Ty} x
+               ~~
+!!! error TS2304: Cannot find name 'Ty'.
+     */
+    function f(x) {}
+    
+    /**
+     * @typedef {CantResolveThis} Ty
+     */
+    

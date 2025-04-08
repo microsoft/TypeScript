@@ -6,18 +6,12 @@
  const assert = check => {
 ->assert : AssertFunc
 ->check => {    if (!check) throw new Error();} : (check: boolean) => asserts check
-->check : boolean
-+>assert : (check: any) => void
-+>check => {    if (!check) throw new Error();} : (check: any) => void
-+>check : any
++>assert : (check: boolean) => asserts check
++>check => {    if (!check) throw new Error();} : (check: boolean) => void
+ >check : boolean
  
      if (!check) throw new Error();
- >!check : boolean
-->check : boolean
-+>check : any
- >new Error() : Error
- >Error : ErrorConstructor
- }
+@@= skipped -13, +13 lines =@@
  
  /** @type {(x: unknown) => asserts x is string } */
  function assertIsString(x) {
@@ -36,74 +30,16 @@
  >"string" : "string"
  >new Error() : Error
  >Error : ErrorConstructor
-@@= skipped -32, +32 lines =@@
-  * @returns {asserts check}
- */
- function assert2(check) {
-->assert2 : (check: boolean) => asserts check
-->check : boolean
-+>assert2 : (check: any) => void
-+>check : any
- 
-     if (!check) throw new Error();
- >!check : boolean
-->check : boolean
-+>check : any
- >new Error() : Error
- >Error : ErrorConstructor
- }
-@@= skipped -14, +14 lines =@@
-  * @returns {never}
-  */
- function fail() {
-->fail : () => never
-+>fail : () => void
- 
-     throw new Error();
- >new Error() : Error
-@@= skipped -21, +21 lines =@@
+@@= skipped -54, +54 lines =@@
  
          assert(typeof x === "string");
  >assert(typeof x === "string") : void
 ->assert : AssertFunc
-+>assert : (check: any) => void
++>assert : (check: boolean) => asserts check
  >typeof x === "string" : boolean
  >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >x : any
- >"string" : "string"
- 
-         x.length;
-->x.length : number
-->x : string
-->length : number
-+>x.length : any
-+>x : any
-+>length : any
-     }
-     if (!!true) {
- >!!true : boolean
-@@= skipped -18, +18 lines =@@
- 
-         assert2(typeof x === "string");
- >assert2(typeof x === "string") : void
-->assert2 : (check: boolean) => asserts check
-+>assert2 : (check: any) => void
- >typeof x === "string" : boolean
- >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : any
- >"string" : "string"
- 
-         x.length;
-->x.length : number
-->x : string
-->length : number
-+>x.length : any
-+>x : any
-+>length : any
-     }
-     if (!!true) {
- >!!true : boolean
-@@= skipped -18, +18 lines =@@
+@@= skipped -36, +36 lines =@@
  
          assertIsString(x);
  >assertIsString(x) : void
@@ -121,37 +57,3 @@
      }
      if (!!true) {
  >!!true : boolean
-@@= skipped -14, +14 lines =@@
- >true : true
- 
-         fail();
-->fail() : never
-->fail : () => never
-+>fail() : void
-+>fail : () => void
- 
-         x;  // Unreachable
- >x : any
-@@= skipped -12, +12 lines =@@
-  * @param {boolean} b 
-  */
- function f2(b) {
-->f2 : (b: boolean) => 0 | 1
-->b : boolean
-+>f2 : (b: any) => 0 | 1
-+>b : any
- 
-     switch (b) {
-->b : boolean
-+>b : any
- 
-         case true: return 1;
- >true : true
-@@= skipped -15, +15 lines =@@
- >0 : 0
-     }
-     b;  // Unreachable
-->b : never
-+>b : any
- }
- 

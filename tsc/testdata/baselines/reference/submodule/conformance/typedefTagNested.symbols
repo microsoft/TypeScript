@@ -55,17 +55,17 @@ var sala = { name: 'uppsala', not: 0, nested: "ok" };
 >nested : Symbol(nested, Decl(a.js, 35, 37))
 
 sala.name
->sala.name : Symbol(name, Decl(a.js, 35, 12))
+>sala.name : Symbol(name, Decl(a.js, 29, 3))
 >sala : Symbol(sala, Decl(a.js, 35, 3))
->name : Symbol(name, Decl(a.js, 35, 12))
+>name : Symbol(name, Decl(a.js, 29, 3))
 
 sala.not
->sala.not : Symbol(not, Decl(a.js, 35, 29))
+>sala.not : Symbol(not, Decl(a.js, 30, 3))
 >sala : Symbol(sala, Decl(a.js, 35, 3))
->not : Symbol(not, Decl(a.js, 35, 29))
+>not : Symbol(not, Decl(a.js, 30, 3))
 
 sala.nested
->sala.nested : Symbol(nested, Decl(a.js, 35, 37))
+>sala.nested : Symbol(nested, Decl(a.js, 31, 3))
 >sala : Symbol(sala, Decl(a.js, 35, 3))
->nested : Symbol(nested, Decl(a.js, 35, 37))
+>nested : Symbol(nested, Decl(a.js, 31, 3))
 

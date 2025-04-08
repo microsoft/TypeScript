@@ -1,0 +1,28 @@
+--- old.jsDeclarationsUniqueSymbolUsage.errors.txt
++++ new.jsDeclarationsUniqueSymbolUsage.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++b.js(2,28): error TS2694: Namespace '"a"' has no exported member 'WithSymbol'.
++b.js(3,26): error TS2694: Namespace '"a"' has no exported member 'WithSymbol'.
++
++
++==== a.js (0 errors) ====
++    export const kSymbol = Symbol("my-symbol");
++    
++    /**
++     * @typedef {{[kSymbol]: true}} WithSymbol
++     */
++==== b.js (2 errors) ====
++    /**
++     * @returns {import('./a').WithSymbol} 
++                               ~~~~~~~~~~
++!!! error TS2694: Namespace '"a"' has no exported member 'WithSymbol'.
++     * @param {import('./a').WithSymbol} value 
++                             ~~~~~~~~~~
++!!! error TS2694: Namespace '"a"' has no exported member 'WithSymbol'.
++     */
++    export function b(value) {
++        return value;
++    }
++    

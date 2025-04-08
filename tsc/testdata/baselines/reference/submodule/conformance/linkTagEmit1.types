@@ -19,12 +19,12 @@ declare namespace NS {
  * @param {number} integer {@link Z}
  */
 function computeCommonSourceDirectoryOfFilenames(integer) {
->computeCommonSourceDirectoryOfFilenames : (integer: any) => any
->integer : any
+>computeCommonSourceDirectoryOfFilenames : (integer: number) => number
+>integer : number
 
     return integer + 1 // pls pls pls
->integer + 1 : any
->integer : any
+>integer + 1 : number
+>integer : number
 >1 : 1
 }
 

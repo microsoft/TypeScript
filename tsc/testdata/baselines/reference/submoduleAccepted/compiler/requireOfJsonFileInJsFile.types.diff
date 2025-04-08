@@ -19,20 +19,14 @@
  
  /** @type {{ b: number }} */
  const json1 = require("./json.json"); // No error (bad)
-->json1 : { b: number; }
+ >json1 : { b: number; }
 ->require("./json.json") : { a: number; }
-+>json1 : any
 +>require("./json.json") : any
  >require : any
  >"./json.json" : "./json.json"
  
- json1.b; // No error (OK since that's the type annotation)
-->json1.b : number
-->json1 : { b: number; }
-->b : number
-+>json1.b : any
-+>json1 : any
-+>b : any
+@@= skipped -23, +23 lines =@@
+ >b : number
  
  const js0 = require("./js.js");
 ->js0 : { a: number; }
@@ -50,24 +44,13 @@
  
  /** @type {{ b: number }} */
  const js1 = require("./js.js"); // Error (good)
-->js1 : { b: number; }
+ >js1 : { b: number; }
 ->require("./js.js") : { a: number; }
-+>js1 : any
 +>require("./js.js") : any
  >require : any
  >"./js.js" : "./js.js"
  
- js1.b;
-->js1.b : number
-->js1 : { b: number; }
-->b : number
-+>js1.b : any
-+>js1 : any
-+>b : any
- 
- === /json.json ===
- { "a": 0 }
-@@= skipped -51, +51 lines =@@
+@@= skipped -28, +28 lines =@@
  >"a" : number
  >0 : 0
  

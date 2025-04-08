@@ -1,0 +1,61 @@
+thisTypeOfConstructorFunctions.js(15,18): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeOfConstructorFunctions.js(38,12): error TS2749: 'Cpp' refers to a value, but is being used as a type here. Did you mean 'typeof Cpp'?
+thisTypeOfConstructorFunctions.js(41,12): error TS2749: 'Cp' refers to a value, but is being used as a type here. Did you mean 'typeof Cp'?
+thisTypeOfConstructorFunctions.js(43,12): error TS2749: 'Cp' refers to a value, but is being used as a type here. Did you mean 'typeof Cp'?
+
+
+==== thisTypeOfConstructorFunctions.js (4 errors) ====
+    /**
+     * @class
+     * @template T
+     * @param {T} t
+     */
+    function Cp(t) {
+        /** @type {this} */
+        this.dit = this
+        this.y = t
+        /** @return {this} */
+        this.m3 = () => this
+    }
+    
+    Cp.prototype = {
+        /** @return {this} */
+                     ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+        m4() {
+            this.z = this.y; return this
+        }
+    }
+    
+    /**
+     * @class
+     * @template T
+     * @param {T} t
+     */
+    function Cpp(t) {
+        this.y = t
+    }
+    /** @return {this} */
+    Cpp.prototype.m2 = function () {
+        this.z = this.y; return this
+    }
+    
+    var cp = new Cp(1)
+    var cpp = new Cpp(2)
+    cp.dit
+    
+    /** @type {Cpp<number>} */
+               ~~~
+!!! error TS2749: 'Cpp' refers to a value, but is being used as a type here. Did you mean 'typeof Cpp'?
+    var cppn = cpp.m2()
+    
+    /** @type {Cp<number>} */
+               ~~
+!!! error TS2749: 'Cp' refers to a value, but is being used as a type here. Did you mean 'typeof Cp'?
+    var cpn = cp.m3()
+    /** @type {Cp<number>} */
+               ~~
+!!! error TS2749: 'Cp' refers to a value, but is being used as a type here. Did you mean 'typeof Cp'?
+    var cpn = cp.m4()
+    
+    

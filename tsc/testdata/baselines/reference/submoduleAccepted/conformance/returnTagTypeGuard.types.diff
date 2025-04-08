@@ -1,58 +1,32 @@
 --- old.returnTagTypeGuard.types
 +++ new.returnTagTypeGuard.types
-@@= skipped -16, +16 lines =@@
-      * @return {this is Entry}
-      */
-     isInit(x) {
-->isInit : (x: any) => this is Entry
-+>isInit : (x: any) => boolean
- >x : any
- 
-         return true
-@@= skipped -23, +23 lines =@@
-      * @return {false}
-      */
-     isInit(x) {
-->isInit : (x: any) => false
-+>isInit : (x: any) => boolean
- >x : any
- 
-         return false
-@@= skipped -9, +9 lines =@@
+@@= skipped -48, +48 lines =@@
  }
  /** @param {Entry | Group} chunk */
  function f(chunk) {
 ->f : (chunk: Entry | Group) => string | number
-->chunk : Entry | Group
-+>f : (chunk: any) => any
-+>chunk : any
++>f : (chunk: Entry | Group) => any
+ >chunk : Entry | Group
  
      let x = chunk.isInit(chunk) ? chunk.c : chunk.d
 ->x : string | number
 ->chunk.isInit(chunk) ? chunk.c : chunk.d : string | number
-->chunk.isInit(chunk) : boolean
-->chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
-->chunk : Entry | Group
-->isInit : ((x: any) => this is Entry) | ((x: any) => false)
-->chunk : Entry | Group
-->chunk.c : number
-->chunk : Entry
-->c : number
-->chunk.d : string
-->chunk : Group
-->d : string
 +>x : any
 +>chunk.isInit(chunk) ? chunk.c : chunk.d : any
-+>chunk.isInit(chunk) : any
-+>chunk.isInit : any
-+>chunk : any
-+>isInit : any
-+>chunk : any
+ >chunk.isInit(chunk) : boolean
+ >chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
+ >chunk : Entry | Group
+ >isInit : ((x: any) => this is Entry) | ((x: any) => false)
+ >chunk : Entry | Group
+->chunk.c : number
 +>chunk.c : any
-+>chunk : any
+ >chunk : Entry
+->c : number
+->chunk.d : string
 +>c : any
 +>chunk.d : any
-+>chunk : any
+ >chunk : Group
+->d : string
 +>d : any
  
      return x
@@ -66,18 +40,10 @@
  /** @param {boolean | number} val */
  function foo(val) {
 ->foo : (val: boolean | number) => void
-->val : number | boolean
-+>foo : (val: any) => void
-+>val : any
++>foo : (val: number | boolean) => void
+ >val : number | boolean
  
      if (isBoolean(val)) {
- >isBoolean(val) : boolean
- >isBoolean : (value: any) => value is boolean
-->val : number | boolean
-+>val : any
- 
-         val;
- >val : boolean
 @@= skipped -21, +21 lines =@@
  
  /** @type {Cb} */
@@ -93,18 +59,12 @@
  >"number" : "number"
  
  /** @param {unknown} x */
- function g(x) {
-->g : (x: unknown) => void
-->x : unknown
-+>g : (x: any) => void
-+>x : any
+@@= skipped -14, +14 lines =@@
  
      if (isNumber(x)) {
  >isNumber(x) : boolean
 ->isNumber : (x: unknown) => x is number
-->x : unknown
 +>isNumber : (x: any) => x is number
-+>x : any
+ >x : unknown
  
          x * 2;
- >x * 2 : number

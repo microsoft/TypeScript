@@ -7,12 +7,12 @@
  * @returns {(b: T) => T}
  */
 const seq = a => b => b;
->seq : (a: any) => (b: any) => any
->a => b => b : (a: any) => (b: any) => any
->a : any
->b => b : (b: any) => any
->b : any
->b : any
+>seq : <T>(a: T) => (b: T) => T
+>a => b => b : <T>(a: T) => (b: T) => T
+>a : T
+>b => b : (b: T) => T
+>b : T
+>b : T
 
 const text1 = "hello";
 >text1 : "hello"
@@ -24,10 +24,10 @@ const text2 = "world";
 
 /** @type {string} */
 var text3 = seq(text1)(text2);
->text3 : any
->seq(text1)(text2) : any
->seq(text1) : (b: any) => any
->seq : (a: any) => (b: any) => any
+>text3 : string
+>seq(text1)(text2) : string
+>seq(text1) : (b: string) => string
+>seq : <T>(a: T) => (b: T) => T
 >text1 : "hello"
 >text2 : "world"
 

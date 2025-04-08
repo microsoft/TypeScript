@@ -20,13 +20,13 @@ module.exports = function MC() {
 
     /** @type {any} */
     var x = {}
->x : {}
+>x : any
 >{} : {}
 
     return new MW(x);
 >new MW(x) : any
 >MW : any
->x : {}
+>x : any
 
 };
 

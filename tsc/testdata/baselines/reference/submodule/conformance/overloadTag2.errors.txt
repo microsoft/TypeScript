@@ -1,11 +1,10 @@
-overloadTag2.js(25,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
 overloadTag2.js(25,20): error TS7006: Parameter 'b' implicitly has an 'any' type.
 overloadTag2.js(30,9): error TS2554: Expected 2 arguments, but got 0.
 overloadTag2.js(31,9): error TS2554: Expected 2 arguments, but got 1.
 overloadTag2.js(32,9): error TS2554: Expected 2 arguments, but got 1.
 
 
-==== overloadTag2.js (5 errors) ====
+==== overloadTag2.js (4 errors) ====
     export class Foo {
         #a = true ? 1 : "1"
         #b
@@ -31,8 +30,6 @@ overloadTag2.js(32,9): error TS2554: Expected 2 arguments, but got 1.
          * @param {number | string} a
          */
         constructor(a, b) {
-                    ~
-!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
                        ~
 !!! error TS7006: Parameter 'b' implicitly has an 'any' type.
             this.#a = a

@@ -6,48 +6,48 @@
  * @param {number} y
  */
 export function Point(x, y) {
->Point : (x: any, y: any) => any
->x : any
->y : any
+>Point : (x: number, y: number) => any
+>x : number
+>y : number
 
     if (!(this instanceof Point)) {
 >!(this instanceof Point) : boolean
 >(this instanceof Point) : boolean
 >this instanceof Point : boolean
 >this : any
->Point : (x: any, y: any) => any
+>Point : (x: number, y: number) => any
 
         return new Point(x, y);
 >new Point(x, y) : any
->Point : (x: any, y: any) => any
->x : any
->y : any
+>Point : (x: number, y: number) => any
+>x : number
+>y : number
     }
     this.x = x;
->this.x = x : any
+>this.x = x : number
 >this.x : any
 >this : any
 >x : any
->x : any
+>x : number
 
     this.y = y;
->this.y = y : any
+>this.y = y : number
 >this.y : any
 >this : any
 >y : any
->y : any
+>y : number
 }
 
 === referencer.js ===
 import {Point} from "./source";
->Point : (x: any, y: any) => any
+>Point : (x: number, y: number) => any
 
 /**
  * @param {Point} p
  */
 export function magnitude(p) {
->magnitude : (p: any) => number
->p : any
+>magnitude : (p: Point) => number
+>p : Point
 
     return Math.sqrt(p.x ** 2 + p.y ** 2);
 >Math.sqrt(p.x ** 2 + p.y ** 2) : number
@@ -57,12 +57,12 @@ export function magnitude(p) {
 >p.x ** 2 + p.y ** 2 : number
 >p.x ** 2 : number
 >p.x : any
->p : any
+>p : Point
 >x : any
 >2 : 2
 >p.y ** 2 : number
 >p.y : any
->p : any
+>p : Point
 >y : any
 >2 : 2
 }

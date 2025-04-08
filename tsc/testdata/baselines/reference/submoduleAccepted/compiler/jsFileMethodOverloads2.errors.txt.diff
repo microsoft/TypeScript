@@ -3,10 +3,10 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+jsFileMethodOverloads2.js(10,10): error TS2339: Property 'value' does not exist on type 'Example'.
-+jsFileMethodOverloads2.js(25,24): error TS2339: Property 'value' does not exist on type 'Example'.
-+jsFileMethodOverloads2.js(41,25): error TS2339: Property 'value' does not exist on type 'Example'.
-+jsFileMethodOverloads2.js(41,39): error TS2339: Property 'value' does not exist on type 'Example'.
++jsFileMethodOverloads2.js(10,10): error TS2339: Property 'value' does not exist on type 'Example<T>'.
++jsFileMethodOverloads2.js(25,24): error TS2339: Property 'value' does not exist on type 'Example<T>'.
++jsFileMethodOverloads2.js(41,25): error TS2339: Property 'value' does not exist on type 'Example<T>'.
++jsFileMethodOverloads2.js(41,39): error TS2339: Property 'value' does not exist on type 'Example<T>'.
 +
 +
 +==== jsFileMethodOverloads2.js (4 errors) ====
@@ -21,7 +21,7 @@
 +      constructor(value) {
 +        this.value = value;
 +             ~~~~~
-+!!! error TS2339: Property 'value' does not exist on type 'Example'.
++!!! error TS2339: Property 'value' does not exist on type 'Example<T>'.
 +      }
 +    
 +      /**
@@ -38,7 +38,7 @@
 +      getTypeName() {
 +        return typeof this.value;
 +                           ~~~~~
-+!!! error TS2339: Property 'value' does not exist on type 'Example'.
++!!! error TS2339: Property 'value' does not exist on type 'Example<T>'.
 +      }
 +    
 +      /**
@@ -56,9 +56,9 @@
 +      transform(fn) {
 +        return fn ? fn(this.value) : this.value;
 +                            ~~~~~
-+!!! error TS2339: Property 'value' does not exist on type 'Example'.
++!!! error TS2339: Property 'value' does not exist on type 'Example<T>'.
 +                                          ~~~~~
-+!!! error TS2339: Property 'value' does not exist on type 'Example'.
++!!! error TS2339: Property 'value' does not exist on type 'Example<T>'.
 +      }
 +    }
 +    

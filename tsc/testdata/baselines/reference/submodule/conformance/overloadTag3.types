@@ -5,7 +5,7 @@
  * @template T
  */
 export class Foo {
->Foo : Foo
+>Foo : Foo<T>
 
     /**
      * @constructor
@@ -17,17 +17,17 @@ export class Foo {
      * @param {T} value
      */
     bar(value) { }
->bar : (value: any) => void
->value : any
+>bar : (value: T) => void
+>value : T
 }
 
 /** @type {Foo<number>} */
 let foo;
->foo : any
+>foo : Foo<number>
 
 foo = new Foo();
->foo = new Foo() : Foo
->foo : any
->new Foo() : Foo
+>foo = new Foo() : Foo<number>
+>foo : Foo<number>
+>new Foo() : Foo<number>
 >Foo : typeof Foo
 

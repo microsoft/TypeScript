@@ -7,7 +7,7 @@
 ->f : (a: types.A, b: types.B) => void
 ->a : types.A
 ->b : types.B
-+>f : (a: any, b: any) => void
-+>a : any
-+>b : any
++>f : (a: A, b: B) => void
++>a : A
++>b : B
  

@@ -5,62 +5,56 @@
  /** @type {String} */
  var S;
 ->S : string
-+>S : any
++>S : String
  
  /** @type {string} */
  var s;
-->s : string
-+>s : any
+@@= skipped -8, +8 lines =@@
  
  /** @type {Number} */
  var N;
 ->N : number
-+>N : any
++>N : Number
  
  /** @type {number} */
  var n;
-->n : number
-+>n : any
+@@= skipped -8, +8 lines =@@
  
  /** @type {Boolean} */
  var B;
 ->B : boolean
-+>B : any
++>B : Boolean
  
  /** @type {boolean} */
  var b;
-->b : boolean
-+>b : any
+@@= skipped -8, +8 lines =@@
  
  /** @type {Void} */
  var V;
 ->V : void
-+>V : any
++>V : Void
  
  /** @type {void} */
  var v;
-->v : void
-+>v : any
+@@= skipped -8, +8 lines =@@
  
  /** @type {Undefined} */
  var U;
 ->U : undefined
-+>U : any
++>U : Undefined
  
  /** @type {undefined} */
  var u;
-->u : undefined
-+>u : any
+@@= skipped -8, +8 lines =@@
  
  /** @type {Null} */
  var Nl;
 ->Nl : null
-+>Nl : any
++>Nl : Null
  
  /** @type {null} */
  var nl;
-->nl : null
-+>nl : any
+@@= skipped -8, +8 lines =@@
  
  /** @type {Array} */
  var A;
@@ -70,7 +64,7 @@
  /** @type {array} */
  var a;
 ->a : any[]
-+>a : any
++>a : array
  
  /** @type {Promise} */
  var P;
@@ -80,80 +74,68 @@
  /** @type {promise} */
  var p;
 ->p : Promise<any>
-+>p : any
++>p : promise
  
  /** @type {?number} */
  var nullable;
-->nullable : number | null
-+>nullable : any
+@@= skipped -20, +20 lines =@@
  
  /** @type {Object} */
  var Obj;
-@@= skipped -76, +76 lines =@@
+->Obj : any
++>Obj : Object
+ 
+ /** @type {object} */
+ var obj;
+->obj : any
++>obj : object
  
  /** @type {Function} */
  var Func;
-->Func : Function
-+>Func : any
- 
- /** @type {(s: string) => number} */
- var f;
-->f : (s: string) => number
-+>f : any
- 
- /** @type {new (s: string) => { s: string }} */
- var ctor;
-->ctor : new (s: string) => { s: string; }
-+>ctor : any
+@@= skipped -20, +20 lines =@@
  
  === b.ts ===
  var S: string;
 ->S : string
-+>S : any
++>S : String
  
  var s: string;
-->s : string
-+>s : any
+ >s : string
  
  var N: number;
 ->N : number
-+>N : any
++>N : Number
  
  var n: number
-->n : number
-+>n : any
+ >n : number
  
  var B: boolean;
 ->B : boolean
-+>B : any
++>B : Boolean
  
  var b: boolean;
-->b : boolean
-+>b : any
+ >b : boolean
  
  var V :void;
 ->V : void
-+>V : any
++>V : Void
  
  var v: void;
-->v : void
-+>v : any
+ >v : void
  
  var U: undefined;
 ->U : undefined
-+>U : any
++>U : Undefined
  
  var u: undefined;
-->u : undefined
-+>u : any
+ >u : undefined
  
  var Nl: null;
 ->Nl : null
-+>Nl : any
++>Nl : Null
  
  var nl: null;
-->nl : null
-+>nl : any
+ >nl : null
  
  var A: any[];
 ->A : any[]
@@ -161,7 +143,7 @@
  
  var a: any[];
 ->a : any[]
-+>a : any
++>a : array
  
  var P: Promise<any>;
 ->P : Promise<any>
@@ -169,29 +151,18 @@
  
  var p: Promise<any>;
 ->p : Promise<any>
-+>p : any
++>p : promise
  
  var nullable: number | null;
-->nullable : number | null
-+>nullable : any
+ >nullable : number | null
  
  var Obj: any;
- >Obj : any
-@@= skipped -69, +69 lines =@@
- >obj : any
+->Obj : any
++>Obj : Object
+ 
+ var obj: any;
+->obj : any
++>obj : object
  
  var Func: Function;
-->Func : Function
-+>Func : any
- 
- var f: (s: string) => number;
-->f : (s: string) => number
-+>f : any
- >s : string
- 
- var ctor: new (s: string) => { s: string };
-->ctor : new (s: string) => { s: string; }
-+>ctor : any
- >s : string
- >s : string
- 
+ >Func : Function

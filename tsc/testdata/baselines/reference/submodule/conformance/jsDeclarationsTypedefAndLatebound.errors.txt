@@ -1,31 +1,26 @@
-LazySet.js(5,7): error TS2451: Cannot redeclare block-scoped variable 'LazySet'.
 LazySet.js(13,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-index.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'LazySet'.
 index.js(1,17): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(3,12): error TS2749: 'LazySet' refers to a value, but is being used as a type here. Did you mean 'typeof LazySet'?
 
 
 ==== index.js (2 errors) ====
     const LazySet = require("./LazySet");
-          ~~~~~~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'LazySet'.
-!!! related TS6203 LazySet.js:5:7: 'LazySet' was also declared here.
                     ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
     /** @type {LazySet} */
+               ~~~~~~~
+!!! error TS2749: 'LazySet' refers to a value, but is being used as a type here. Did you mean 'typeof LazySet'?
     const stringSet = undefined;
     stringSet.addAll(stringSet);
     
     
-==== LazySet.js (2 errors) ====
+==== LazySet.js (1 errors) ====
     // Comment out this JSDoc, and note that the errors index.js go away.
     /**
      * @typedef {Object} SomeObject
      */
     class LazySet {
-          ~~~~~~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'LazySet'.
-!!! related TS6203 index.js:1:7: 'LazySet' was also declared here.
         /**
          * @param {LazySet} iterable
          */

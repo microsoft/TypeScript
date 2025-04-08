@@ -5,41 +5,11 @@
   */
  export function overloaded(a,b) {
 ->overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
-->a : string | number
-->b : string | number
-+>overloaded : (a: any, b: any) => string | number
-+>a : any
-+>b : any
++>overloaded : (a: string | number, b: string | number) => string | number
+ >a : string | number
+ >b : string | number
  
-   if (typeof a === "string" && typeof b === "string") {
- >typeof a === "string" && typeof b === "string" : boolean
- >typeof a === "string" : boolean
- >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-->a : string | number
-+>a : any
- >"string" : "string"
- >typeof b === "string" : boolean
- >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-->b : string | number
-+>b : any
- >"string" : "string"
- 
-     return a + b;
-@@= skipped -24, +24 lines =@@
- >typeof a === "number" && typeof b === "number" : boolean
- >typeof a === "number" : boolean
- >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-->a : string | number
-+>a : any
- >"number" : "number"
- >typeof b === "number" : boolean
- >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-->b : string | number
-+>b : any
- >"number" : "number"
- 
-     return a + b;
-@@= skipped -18, +18 lines =@@
+@@= skipped -42, +42 lines =@@
  >"Invalid arguments" : "Invalid arguments"
  }
  var o1 = overloaded(1,2)
@@ -48,7 +18,7 @@
 ->overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 +>o1 : string | number
 +>overloaded(1,2) : string | number
-+>overloaded : (a: any, b: any) => string | number
++>overloaded : (a: string | number, b: string | number) => string | number
  >1 : 1
  >2 : 2
  
@@ -58,7 +28,7 @@
 ->overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 +>o2 : string | number
 +>overloaded("zero", "one") : string | number
-+>overloaded : (a: any, b: any) => string | number
++>overloaded : (a: string | number, b: string | number) => string | number
  >"zero" : "zero"
  >"one" : "one"
  
@@ -68,7 +38,7 @@
 ->overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 +>o3 : string | number
 +>overloaded("a",false) : string | number
-+>overloaded : (a: any, b: any) => string | number
++>overloaded : (a: string | number, b: string | number) => string | number
  >"a" : "a"
  >false : false
  

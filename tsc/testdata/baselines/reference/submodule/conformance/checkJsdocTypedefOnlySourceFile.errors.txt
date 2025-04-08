@@ -1,10 +1,14 @@
+0.js(3,5): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 0.js(8,9): error TS2339: Property 'SomeName' does not exist on type '{}'.
+0.js(10,12): error TS2503: Cannot find namespace 'exports'.
 
 
-==== 0.js (1 errors) ====
+==== 0.js (3 errors) ====
     // @ts-check
     
     var exports = {};
+        ~~~~~~~
+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
     
     /**
      * @typedef {string}
@@ -14,5 +18,7 @@
 !!! error TS2339: Property 'SomeName' does not exist on type '{}'.
     
     /** @type {exports.SomeName} */
+               ~~~~~~~
+!!! error TS2503: Cannot find namespace 'exports'.
     const myString = 'str';
     

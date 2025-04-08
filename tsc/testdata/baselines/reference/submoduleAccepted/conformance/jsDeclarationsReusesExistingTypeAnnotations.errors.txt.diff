@@ -3,17 +3,11 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+index.js(83,9): error TS7032: Property 'p1' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-+index.js(83,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
-+index.js(88,9): error TS7032: Property 'p2' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-+index.js(88,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
-+index.js(93,9): error TS7032: Property 'p3' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-+index.js(93,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
-+index.js(98,9): error TS7032: Property 'p4' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-+index.js(98,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
++index.js(45,17): error TS1051: A 'set' accessor cannot have an optional parameter.
++index.js(83,17): error TS1051: A 'set' accessor cannot have an optional parameter.
 +
 +
-+==== index.js (8 errors) ====
++==== index.js (2 errors) ====
 +    class С1 {
 +        /** @type {string=} */
 +        p1 = undefined;
@@ -59,6 +53,8 @@
 +    
 +        /** @param {string=} value */
 +        set p1(value) {
++                    
++!!! error TS1051: A 'set' accessor cannot have an optional parameter.
 +            this.p1 = value;
 +        }
 +    
@@ -97,37 +93,23 @@
 +    class С4 {
 +        /** @param {string=} value */
 +        set p1(value) {
-+            ~~
-+!!! error TS7032: Property 'p1' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-+               ~~~~~
-+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
++                    
++!!! error TS1051: A 'set' accessor cannot have an optional parameter.
 +            this.p1 = value;
 +        }
 +    
 +        /** @param {string | undefined} value */
 +        set p2(value) {
-+            ~~
-+!!! error TS7032: Property 'p2' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-+               ~~~~~
-+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
 +            this.p2 = value;
 +        }
 +    
 +        /** @param {?string} value */
 +        set p3(value) {
-+            ~~
-+!!! error TS7032: Property 'p3' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-+               ~~~~~
-+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
 +            this.p3 = value;
 +        }
 +    
 +        /** @param {string | null} value */
 +        set p4(value) {
-+            ~~
-+!!! error TS7032: Property 'p4' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-+               ~~~~~
-+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
 +            this.p4 = value;
 +        }
 +    }

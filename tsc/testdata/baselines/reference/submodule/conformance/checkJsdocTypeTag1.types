@@ -4,7 +4,7 @@
 // @ts-check
 /** @type {String} */
 var S = "hello world";
->S : string
+>S : String
 >"hello world" : "hello world"
 
 /** @type {number} */
@@ -14,27 +14,27 @@ var n = 10;
 
 /** @type {*} */
 var anyT = 2;
->anyT : number
+>anyT : any
 >2 : 2
 
 anyT = "hello";
 >anyT = "hello" : "hello"
->anyT : number
+>anyT : any
 >"hello" : "hello"
 
 /** @type {?} */
 var anyT1 = 2;
->anyT1 : number
+>anyT1 : any
 >2 : 2
 
 anyT1 = "hi";
 >anyT1 = "hi" : "hi"
->anyT1 : number
+>anyT1 : any
 >"hi" : "hi"
 
 /** @type {Function} */
 const x = (a) => a + 1;
->x : (a: any) => any
+>x : Function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -43,12 +43,12 @@ const x = (a) => a + 1;
 
 x(1);
 >x(1) : any
->x : (a: any) => any
+>x : Function
 >1 : 1
 
 /** @type {function} */
 const y = (a) => a + 1;
->y : (a: any) => any
+>y : function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -57,12 +57,12 @@ const y = (a) => a + 1;
 
 y(1);
 >y(1) : any
->y : (a: any) => any
+>y : function
 >1 : 1
 
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
->x1 : (a: any) => any
+>x1 : function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -71,12 +71,12 @@ const x1 = (a) => a + 1;
 
 x1(0);
 >x1(0) : any
->x1 : (a: any) => any
+>x1 : function
 >0 : 0
 
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
->x2 : (a: any) => any
+>x2 : function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -85,20 +85,20 @@ const x2 = (a) => a + 1;
 
 x2(0);
 >x2(0) : any
->x2 : (a: any) => any
+>x2 : function
 >0 : 0
 
 /**
  * @type {object}
  */
 var props = {};
->props : {}
+>props : object
 >{} : {}
 
 /**
  * @type {Object}
  */
 var props = {};
->props : {}
+>props : object
 >{} : {}
 

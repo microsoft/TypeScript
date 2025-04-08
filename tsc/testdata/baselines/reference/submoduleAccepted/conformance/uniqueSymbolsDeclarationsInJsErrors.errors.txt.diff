@@ -1,30 +1,22 @@
 --- old.uniqueSymbolsDeclarationsInJsErrors.errors.txt
 +++ new.uniqueSymbolsDeclarationsInJsErrors.errors.txt
-@@= skipped -0, +-1 lines =@@
--uniqueSymbolsDeclarationsInJsErrors.js(5,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
--uniqueSymbolsDeclarationsInJsErrors.js(14,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
--
--
+@@= skipped -0, +0 lines =@@
+ uniqueSymbolsDeclarationsInJsErrors.js(5,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
++uniqueSymbolsDeclarationsInJsErrors.js(10,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+ uniqueSymbolsDeclarationsInJsErrors.js(14,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+ 
+ 
 -==== uniqueSymbolsDeclarationsInJsErrors.js (2 errors) ====
--    class C {
--        /**
--         * @type {unique symbol}
--         */
--        static readwriteStaticType;
--               ~~~~~~~~~~~~~~~~~~~
--!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
--        /**
--         * @type {unique symbol}
--         * @readonly
--         */
--        static readonlyType;
--        /**
--         * @type {unique symbol}
--         */
--        static readwriteType;
--               ~~~~~~~~~~~~~
--!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
--    }
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
++==== uniqueSymbolsDeclarationsInJsErrors.js (3 errors) ====
+     class C {
+         /**
+          * @type {unique symbol}
+@@= skipped -14, +15 lines =@@
+          * @readonly
+          */
+         static readonlyType;
++               ~~~~~~~~~~~~
++!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+         /**
+          * @type {unique symbol}
+          */

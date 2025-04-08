@@ -31,17 +31,17 @@ Outer.Inner.prototype = {
 
 /** @type {Outer.Inner} */
 var inner
->inner : any
+>inner : Inner
 
 inner.x
 >inner.x : any
->inner : any
+>inner : Inner
 >x : any
 
 inner.m()
 >inner.m() : any
 >inner.m : any
->inner : any
+>inner : Inner
 >m : any
 
 var inno = new Outer.Inner()

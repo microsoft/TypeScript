@@ -5,36 +5,37 @@
  * @param {string} x
  */
  function f(x) {
->f : (x: any) => void
->x : any
+>f : (x: string) => void
+>x : string
 
     /** @type {'a' | 'b'} */
     let a = (x); // Error
->a : any
->(x) : any
->x : any
+>a : "a" | "b"
+>(x) : string
+>x : string
 
     a;
->a : any
+>a : "a" | "b"
 
     /** @type {'a' | 'b'} */
     let b = (((x))); // Error
->b : any
->(((x))) : any
->((x)) : any
->(x) : any
->x : any
+>b : "a" | "b"
+>(((x))) : string
+>((x)) : string
+>(x) : string
+>x : string
 
     b;
->b : any
+>b : "a" | "b"
 
     /** @type {'a' | 'b'} */
     let c = /** @type {'a' | 'b'} */ (x); // Ok
->c : any
->(x) : any
->x : any
+>c : "a" | "b"
+>(x) : "a" | "b"
+>x : "a" | "b"
+>x : string
 
     c;
->c : any
+>c : "a" | "b"
 }
 

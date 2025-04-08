@@ -23,7 +23,7 @@ function g(callback) {
  * @inner
  */
 var stringFromCharCode = String.fromCharCode;
->stringFromCharCode : (...codes: number[]) => string
+>stringFromCharCode : function
 >String.fromCharCode : (...codes: number[]) => string
 >String : StringConstructor
 >fromCharCode : (...codes: number[]) => string

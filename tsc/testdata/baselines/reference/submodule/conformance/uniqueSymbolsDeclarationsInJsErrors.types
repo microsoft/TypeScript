@@ -8,19 +8,19 @@ class C {
      * @type {unique symbol}
      */
     static readwriteStaticType;
->readwriteStaticType : any
+>readwriteStaticType : symbol
 
     /**
      * @type {unique symbol}
      * @readonly
      */
     static readonlyType;
->readonlyType : any
+>readonlyType : symbol
 
     /**
      * @type {unique symbol}
      */
     static readwriteType;
->readwriteType : any
+>readwriteType : symbol
 }
 

@@ -5,7 +5,7 @@
       */
      static a() {
 ->a : <T>(this: T) => T
-+>a : () => typeof C
++>a : <T>() => T
  
          return this;
 ->this : T
@@ -18,7 +18,7 @@
       */
      b() {
 ->b : <T>(this: T) => T
-+>b : () => this
++>b : <T>() => T
  
          return this;
 ->this : T
@@ -27,25 +27,37 @@
  }
  
  const a = C.a();
- >a : typeof C
- >C.a() : typeof C
+->a : typeof C
+->C.a() : typeof C
 ->C.a : <T>(this: T) => T
-+>C.a : () => typeof C
++>a : unknown
++>C.a() : unknown
++>C.a : <T>() => T
  >C : typeof C
 ->a : <T>(this: T) => T
-+>a : () => typeof C
++>a : <T>() => T
  
  a; // typeof C
- >a : typeof C
-@@= skipped -25, +25 lines =@@
+->a : typeof C
++>a : unknown
+ 
+ const c = new C();
+ >c : C
+@@= skipped -23, +23 lines =@@
+ >C : typeof C
+ 
  const b = c.b();
- >b : C
- >c.b() : C
+->b : C
+->c.b() : C
 ->c.b : <T>(this: T) => T
-+>c.b : () => C
++>b : unknown
++>c.b() : unknown
++>c.b : <T>() => T
  >c : C
 ->b : <T>(this: T) => T
-+>b : () => C
++>b : <T>() => T
  
  b; // C
- >b : C
+->b : C
++>b : unknown
+ 

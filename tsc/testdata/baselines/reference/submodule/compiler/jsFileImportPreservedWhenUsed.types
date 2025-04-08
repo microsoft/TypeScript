@@ -39,33 +39,33 @@ export class Test {
      * @param {object} vm
      */
     test(obj, vm) {
->test : (obj: any, vm: any) => void
->obj : any
->vm : any
+>test : (obj: object, vm: object) => void
+>obj : object
+>vm : object
 
         let index = 0;
 >index : number
 >0 : 0
 
         vm.objects = _.mapValues(
->vm.objects = _.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : { [x: string]: any; }
+>vm.objects = _.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
 >vm.objects : any
->vm : any
+>vm : object
 >objects : any
->_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : { [x: string]: any; }
+>_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
 >_.mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
 >_ : LoDashStatic
 >mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
 
             obj,
->obj : any
+>obj : object
 
             object => ({ ...object, [INDEX_FIELD]: index++ }),
->object => ({ ...object, [INDEX_FIELD]: index++ }) : (object: any) => any
->object : any
+>object => ({ ...object, [INDEX_FIELD]: index++ }) : (object: never) => any
+>object : never
 >({ ...object, [INDEX_FIELD]: index++ }) : any
 >{ ...object, [INDEX_FIELD]: index++ } : any
->object : any
+>object : never
 >[INDEX_FIELD] : number
 >INDEX_FIELD : "__INDEX"
 >index++ : number

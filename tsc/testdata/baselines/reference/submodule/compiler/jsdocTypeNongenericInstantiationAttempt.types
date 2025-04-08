@@ -5,13 +5,13 @@
  * @param {<T>(m: Boolean<T>) => string} somebody
  */
 function sayHello(somebody) {
->sayHello : (somebody: any) => string
->somebody : any
+>sayHello : (somebody: <T>(m: any) => string) => string
+>somebody : <T>(m: any) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : any
+>somebody : <T>(m: any) => string
 }
 
 === index2.js ===
@@ -19,13 +19,13 @@ function sayHello(somebody) {
  * @param {<T>(m: Void<T>) => string} somebody
  */
 function sayHello2(somebody) {
->sayHello2 : (somebody: any) => string
->somebody : any
+>sayHello2 : (somebody: <T>(m: Void<T>) => string) => string
+>somebody : <T>(m: Void<T>) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : any
+>somebody : <T>(m: Void<T>) => string
 }
 
 
@@ -34,13 +34,13 @@ function sayHello2(somebody) {
  * @param {<T>(m: Undefined<T>) => string} somebody
  */
 function sayHello3(somebody) {
->sayHello3 : (somebody: any) => string
->somebody : any
+>sayHello3 : (somebody: <T>(m: Undefined<T>) => string) => string
+>somebody : <T>(m: Undefined<T>) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : any
+>somebody : <T>(m: Undefined<T>) => string
 }
 
 
@@ -49,13 +49,13 @@ function sayHello3(somebody) {
  * @param {<T>(m: Function<T>) => string} somebody
  */
 function sayHello4(somebody) {
->sayHello4 : (somebody: any) => string
->somebody : any
+>sayHello4 : (somebody: <T>(m: any) => string) => string
+>somebody : <T>(m: any) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : any
+>somebody : <T>(m: any) => string
 }
 
 
@@ -64,13 +64,13 @@ function sayHello4(somebody) {
  * @param {<T>(m: String<T>) => string} somebody
  */
 function sayHello5(somebody) {
->sayHello5 : (somebody: any) => string
->somebody : any
+>sayHello5 : (somebody: <T>(m: any) => string) => string
+>somebody : <T>(m: any) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : any
+>somebody : <T>(m: any) => string
 }
 
 
@@ -79,13 +79,13 @@ function sayHello5(somebody) {
  * @param {<T>(m: Number<T>) => string} somebody
  */
 function sayHello6(somebody) {
->sayHello6 : (somebody: any) => string
->somebody : any
+>sayHello6 : (somebody: <T>(m: any) => string) => string
+>somebody : <T>(m: any) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : any
+>somebody : <T>(m: any) => string
 }
 
 
@@ -94,13 +94,13 @@ function sayHello6(somebody) {
  * @param {<T>(m: Object<T>) => string} somebody
  */
 function sayHello7(somebody) {
->sayHello7 : (somebody: any) => string
->somebody : any
+>sayHello7 : (somebody: <T>(m: any) => string) => string
+>somebody : <T>(m: any) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : any
+>somebody : <T>(m: any) => string
 }
 
 === index8.js ===
@@ -111,6 +111,6 @@ function fn() {}
  * @param {fn<T>} somebody
  */
 function sayHello8(somebody) { }
->sayHello8 : (somebody: any) => void
->somebody : any
+>sayHello8 : (somebody: fn<T>) => void
+>somebody : fn<T>
 

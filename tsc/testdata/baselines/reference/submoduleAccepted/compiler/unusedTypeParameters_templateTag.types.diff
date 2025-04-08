@@ -1,9 +1,0 @@
---- old.unusedTypeParameters_templateTag.types
-+++ new.unusedTypeParameters_templateTag.types
-@@= skipped -2, +2 lines =@@
- === /a.js ===
- /** @template T */
- function f() {}
-->f : <T>() => void
-+>f : () => void
- 

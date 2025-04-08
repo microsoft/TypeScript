@@ -6,21 +6,21 @@
  * @param {number} numberOxen
  */
 function Wagon(numberOxen) {
->Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
->numberOxen : any
+>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
+>numberOxen : number
 
     this.numberOxen = numberOxen
->this.numberOxen = numberOxen : any
+>this.numberOxen = numberOxen : number
 >this.numberOxen : any
 >this : any
 >numberOxen : any
->numberOxen : any
+>numberOxen : number
 }
 /** @param {Wagon[]=} wagons */
 Wagon.circle = function (wagons) {
 >Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons: any) => any
 >Wagon.circle : (wagons: any) => any
->Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
 >circle : (wagons: any) => any
 >function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons: any) => any
 >wagons : any
@@ -38,7 +38,7 @@ Wagon.prototype.load = function (supplies) {
 >Wagon.prototype.load = function (supplies) {} : (supplies: any) => void
 >Wagon.prototype.load : any
 >Wagon.prototype : any
->Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
 >prototype : any
 >load : any
 >function (supplies) {} : (supplies: any) => void
@@ -49,7 +49,7 @@ Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
 >Wagon.prototype.weight = supplies => supplies ? supplies.length : -1 : (supplies: any) => any
 >Wagon.prototype.weight : any
 >Wagon.prototype : any
->Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
 >prototype : any
 >weight : any
 >supplies => supplies ? supplies.length : -1 : (supplies: any) => any
@@ -66,7 +66,7 @@ Wagon.prototype.speed = function () {
 >Wagon.prototype.speed = function () {    return this.numberOxen / this.weight()} : () => number
 >Wagon.prototype.speed : any
 >Wagon.prototype : any
->Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
 >prototype : any
 >speed : any
 >function () {    return this.numberOxen / this.weight()} : () => number
@@ -84,7 +84,7 @@ Wagon.prototype.speed = function () {
 // ok
 class Sql extends Wagon {
 >Sql : Sql
->Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
 
     constructor() {
         super(); // error: not enough arguments
@@ -104,13 +104,13 @@ class Sql extends Wagon {
      * This is not assignable, so should have a type error
      */
     load(files, format) {
->load : (files: any, format: any) => void
->files : any
->format : any
+>load : (files: string[], format: "csv" | "json" | "xmlolololol") => void
+>files : string[]
+>format : "csv" | "json" | "xmlolololol"
 
         if (format === "xmlolololol") {
 >format === "xmlolololol" : boolean
->format : any
+>format : "csv" | "json" | "xmlolololol"
 >"xmlolololol" : "xmlolololol"
 
             throw new Error("please do not use XML. It was a joke.");
@@ -188,7 +188,7 @@ class Firedrake extends Dragon {
 // ok
 class Conestoga extends Wagon {
 >Conestoga : Conestoga
->Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
 
     constructor(public drunkOO: true) {
 >drunkOO : true
@@ -202,13 +202,13 @@ class Conestoga extends Wagon {
     }
     // should error since others is not optional
     static circle(others: (typeof Wagon)[]) {
->circle : (others: { (numberOxen: any): void; circle: (wagons: any) => any; }[]) => number
->others : { (numberOxen: any): void; circle: (wagons: any) => any; }[]
->Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>circle : (others: { (numberOxen: number): void; circle: (wagons: any) => any; }[]) => number
+>others : { (numberOxen: number): void; circle: (wagons: any) => any; }[]
+>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
 
         return others.length
 >others.length : number
->others : { (numberOxen: any): void; circle: (wagons: any) => any; }[]
+>others : { (numberOxen: number): void; circle: (wagons: any) => any; }[]
 >length : number
     }
 }
@@ -234,20 +234,20 @@ c.numberOxen
  * @param {T} flavour
  */
 function Soup(flavour) {
->Soup : (flavour: any) => void
->flavour : any
+>Soup : <T>(flavour: T) => void
+>flavour : T
 
     this.flavour = flavour
->this.flavour = flavour : any
+>this.flavour = flavour : T
 >this.flavour : any
 >this : any
 >flavour : any
->flavour : any
+>flavour : T
 }
 /** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
 class Chowder extends Soup {
 >Chowder : Chowder
->Soup : (flavour: any) => void
+>Soup : <T>(flavour: T) => void
 
     log() {
 >log : () => any
@@ -262,7 +262,7 @@ class Chowder extends Soup {
 var soup = new Soup(1);
 >soup : any
 >new Soup(1) : any
->Soup : (flavour: any) => void
+>Soup : <T>(flavour: T) => void
 >1 : 1
 
 soup.flavour

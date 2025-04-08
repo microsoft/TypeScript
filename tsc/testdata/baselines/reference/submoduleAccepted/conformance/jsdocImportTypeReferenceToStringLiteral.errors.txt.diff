@@ -1,0 +1,17 @@
+--- old.jsdocImportTypeReferenceToStringLiteral.errors.txt
++++ new.jsdocImportTypeReferenceToStringLiteral.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(1,26): error TS2694: Namespace '"b"' has no exported member 'FOO'.
++
++
++==== b.js (0 errors) ====
++    export const FOO = "foo";
++    
++==== a.js (1 errors) ====
++    /** @type {import('./b').FOO} */
++                             ~~~
++!!! error TS2694: Namespace '"b"' has no exported member 'FOO'.
++    let x;
++    

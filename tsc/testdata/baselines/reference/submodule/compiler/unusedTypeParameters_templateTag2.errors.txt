@@ -1,36 +1,49 @@
-/a.js(8,14): error TS2339: Property 'p' does not exist on type 'C1'.
-/a.js(25,14): error TS2339: Property 'p' does not exist on type 'C3'.
+/a.js(2,3): error TS6205: All type parameters are unused.
+/a.js(8,14): error TS2339: Property 'p' does not exist on type 'C1<T, V>'.
+/a.js(13,3): error TS6205: All type parameters are unused.
+/a.js(20,3): error TS6205: All type parameters are unused.
+/a.js(25,14): error TS2339: Property 'p' does not exist on type 'C3<T, V, X>'.
 
 
-==== /a.js (2 errors) ====
+==== /a.js (5 errors) ====
     /**
      * @template T
+      ~~~~~~~~~~~~
      * @template V
+    ~~~~~~~~~~~~~~
      */
+    ~~
+!!! error TS6205: All type parameters are unused.
     class C1 {
         constructor() {
             /** @type {T} */
             this.p;
                  ~
-!!! error TS2339: Property 'p' does not exist on type 'C1'.
+!!! error TS2339: Property 'p' does not exist on type 'C1<T, V>'.
         }
     }
     
     /**
      * @template T,V
+      ~~~~~~~~~~~~~~
      */
+    ~~
+!!! error TS6205: All type parameters are unused.
     class C2 {
         constructor() { }
     }
     
     /**
      * @template T,V,X
+      ~~~~~~~~~~~~~~~~
      */
+    ~~
+!!! error TS6205: All type parameters are unused.
     class C3 {
         constructor() {
             /** @type {T} */
             this.p;
                  ~
-!!! error TS2339: Property 'p' does not exist on type 'C3'.
+!!! error TS2339: Property 'p' does not exist on type 'C3<T, V, X>'.
         }
     }

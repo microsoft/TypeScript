@@ -1,4 +1,5 @@
 conn.js(11,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+usage.js(2,14): error TS1340: Module './conn' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./conn')'?
 usage.js(10,14): error TS2339: Property 'connItem' does not exist on type 'Wrap'.
 usage.js(12,14): error TS2339: Property 'another' does not exist on type 'Wrap'.
 usage.js(16,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
@@ -19,9 +20,11 @@ usage.js(16,1): error TS2580: Cannot find name 'module'. Do you need to install 
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
-==== usage.js (3 errors) ====
+==== usage.js (4 errors) ====
     /**
      * @typedef {import("./conn")} Conn
+                 ~~~~~~~~~~~~~~~~
+!!! error TS1340: Module './conn' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./conn')'?
      */
     
     class Wrap {

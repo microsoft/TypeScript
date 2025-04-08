@@ -1,8 +1,13 @@
-typedefTagExtraneousProperty.js(8,3): error TS2339: Property 'ignoreMe' does not exist on type '{ bye: string; }'.
+typedefTagExtraneousProperty.js(1,15): error TS2315: Type 'Object' is not generic.
+typedefTagExtraneousProperty.js(1,21): error TS8020: JSDoc types can only be used inside documentation comments.
 
 
-==== typedefTagExtraneousProperty.js (1 errors) ====
+==== typedefTagExtraneousProperty.js (2 errors) ====
     /** @typedef {Object.<string,string>} Mmap
+                  ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
+                        ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
      * @property {string} ignoreMe - should be ignored
      */
     
@@ -10,7 +15,5 @@ typedefTagExtraneousProperty.js(8,3): error TS2339: Property 'ignoreMe' does not
     var y = { bye: "no" };
     y
     y.ignoreMe = "ok but just because of the index signature"
-      ~~~~~~~~
-!!! error TS2339: Property 'ignoreMe' does not exist on type '{ bye: string; }'.
     y['hi'] = "yes"
     

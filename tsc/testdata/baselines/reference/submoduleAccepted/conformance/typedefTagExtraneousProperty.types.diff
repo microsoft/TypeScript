@@ -5,14 +5,14 @@
  /** @type {Mmap} */
  var y = { bye: "no" };
 ->y : { [x: string]: string; }
-+>y : { bye: string; }
++>y : any
  >{ bye: "no" } : { bye: string; }
  >bye : string
  >"no" : "no"
  
  y
 ->y : { [x: string]: string; }
-+>y : { bye: string; }
++>y : any
  
  y.ignoreMe = "ok but just because of the index signature"
  >y.ignoreMe = "ok but just because of the index signature" : "ok but just because of the index signature"
@@ -20,7 +20,7 @@
 ->y : { [x: string]: string; }
 ->ignoreMe : string
 +>y.ignoreMe : any
-+>y : { bye: string; }
++>y : any
 +>ignoreMe : any
  >"ok but just because of the index signature" : "ok but just because of the index signature"
  
@@ -29,7 +29,7 @@
 ->y['hi'] : string
 ->y : { [x: string]: string; }
 +>y['hi'] : any
-+>y : { bye: string; }
++>y : any
  >'hi' : "hi"
  >"yes" : "yes"
  

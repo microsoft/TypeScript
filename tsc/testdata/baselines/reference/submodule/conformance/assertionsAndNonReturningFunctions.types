@@ -5,13 +5,13 @@
 
 /** @type {AssertFunc} */
 const assert = check => {
->assert : (check: any) => void
->check => {    if (!check) throw new Error();} : (check: any) => void
->check : any
+>assert : (check: boolean) => asserts check
+>check => {    if (!check) throw new Error();} : (check: boolean) => void
+>check : boolean
 
     if (!check) throw new Error();
 >!check : boolean
->check : any
+>check : boolean
 >new Error() : Error
 >Error : ErrorConstructor
 }
@@ -37,12 +37,12 @@ function assertIsString(x) {
  * @returns {asserts check}
 */
 function assert2(check) {
->assert2 : (check: any) => void
->check : any
+>assert2 : (check: boolean) => asserts check
+>check : boolean
 
     if (!check) throw new Error();
 >!check : boolean
->check : any
+>check : boolean
 >new Error() : Error
 >Error : ErrorConstructor
 }
@@ -51,7 +51,7 @@ function assert2(check) {
  * @returns {never}
  */
 function fail() {
->fail : () => void
+>fail : () => never
 
     throw new Error();
 >new Error() : Error
@@ -72,16 +72,16 @@ function f1(x) {
 
         assert(typeof x === "string");
 >assert(typeof x === "string") : void
->assert : (check: any) => void
+>assert : (check: boolean) => asserts check
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : any
 >"string" : "string"
 
         x.length;
->x.length : any
->x : any
->length : any
+>x.length : number
+>x : string
+>length : number
     }
     if (!!true) {
 >!!true : boolean
@@ -90,16 +90,16 @@ function f1(x) {
 
         assert2(typeof x === "string");
 >assert2(typeof x === "string") : void
->assert2 : (check: any) => void
+>assert2 : (check: boolean) => asserts check
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : any
 >"string" : "string"
 
         x.length;
->x.length : any
->x : any
->length : any
+>x.length : number
+>x : string
+>length : number
     }
     if (!!true) {
 >!!true : boolean
@@ -122,8 +122,8 @@ function f1(x) {
 >true : true
 
         fail();
->fail() : void
->fail : () => void
+>fail() : never
+>fail : () => never
 
         x;  // Unreachable
 >x : any
@@ -134,11 +134,11 @@ function f1(x) {
  * @param {boolean} b 
  */
 function f2(b) {
->f2 : (b: any) => 0 | 1
->b : any
+>f2 : (b: boolean) => 0 | 1
+>b : boolean
 
     switch (b) {
->b : any
+>b : boolean
 
         case true: return 1;
 >true : true
@@ -149,6 +149,6 @@ function f2(b) {
 >0 : 0
     }
     b;  // Unreachable
->b : any
+>b : never
 }
 

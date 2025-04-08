@@ -17,19 +17,19 @@ class A {
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
->m : (foo?: {}) => void
->foo : {}
+>m : (foo?: object) => void
+>foo : object
 >{} : {}
 
 		/**
 		 * @type object
 		 */
 		this.foo = foo;
->this.foo = foo : {}
+>this.foo = foo : object
 >this.foo : any
 >this : this
 >foo : any
->foo : {}
+>foo : object
 
 		/**
 		 * @type object

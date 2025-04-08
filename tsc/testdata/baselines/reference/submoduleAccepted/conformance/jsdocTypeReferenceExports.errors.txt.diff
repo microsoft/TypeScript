@@ -4,14 +4,17 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +bug27342.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++bug27342.js(3,11): error TS2304: Cannot find name 'exports'.
 +
 +
-+==== bug27342.js (1 errors) ====
++==== bug27342.js (2 errors) ====
 +    module.exports = {}
 +    ~~~~~~
 +!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +    /**
 +     * @type {exports}
++              ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
 +     */
 +    var x
 +    

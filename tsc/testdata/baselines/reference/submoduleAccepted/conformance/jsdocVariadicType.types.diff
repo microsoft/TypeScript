@@ -8,7 +8,7 @@
 ->function (a, b, ...r) { } : (a: boolean, b: string, ...r: any[]) => void
 ->a : boolean
 ->b : string
-+>foo : (a: any, b: any, ...r: any[]) => void
++>foo : function
 +>function (a, b, ...r) { } : (a: any, b: any, ...r: any[]) => void
 +>a : any
 +>b : any
@@ -16,9 +16,10 @@
  
  === b.ts ===
  foo(false, '');
- >foo(false, '') : void
+->foo(false, '') : void
 ->foo : (arg0: boolean, arg1: string, ...arg2: any[]) => void
-+>foo : (a: any, b: any, ...r: any[]) => void
++>foo(false, '') : any
++>foo : function
  >false : false
  >'' : ""
  

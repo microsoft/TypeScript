@@ -17,23 +17,7 @@
  
      /**
       * @param {number} p
-      */
-     constructor(p) {
-->p : number
-+>p : any
- 
-         this.t = 12 + p;
-->this.t = 12 + p : number
-+>this.t = 12 + p : any
- >this.t : any
- >this : this
- >t : any
-->12 + p : number
-+>12 + p : any
- >12 : 12
-->p : number
-+>p : any
-     }
+@@= skipped -24, +24 lines =@@
  }
  module.exports.Sub = class {
  >module.exports.Sub = class {    constructor() {        this.instance = new module.exports(10);    }} : typeof Sub

@@ -27,7 +27,7 @@
  * @param b {AlsoNotADuplicate}
  */
 function makeSureTypedefsAreStillRecognized(a, b) {}
->makeSureTypedefsAreStillRecognized : (a: any, b: any) => void
->a : any
->b : any
+>makeSureTypedefsAreStillRecognized : (a: number, b: number) => void
+>a : number
+>b : number
 

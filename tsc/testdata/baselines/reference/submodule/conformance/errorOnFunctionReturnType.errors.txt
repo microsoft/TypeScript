@@ -1,0 +1,56 @@
+foo.js(20,12): error TS2304: Cannot find name 'FunctionReturningPromise'.
+foo.js(44,12): error TS2304: Cannot find name 'FunctionReturningNever'.
+
+
+==== foo.js (2 errors) ====
+    /**
+     * @callback FunctionReturningPromise
+     * @returns {Promise<number>}
+     */
+    
+    /** @type {FunctionReturningPromise} */
+    function testPromise1() {
+        console.log("Nope");
+    }
+    
+    /** @type {FunctionReturningPromise} */
+    async function testPromise2() {
+        return "asd";
+    }
+    
+    var testPromise3 = /** @type {FunctionReturningPromise} */ function() {
+        console.log("test")
+    }
+    
+    /** @type {FunctionReturningPromise} */
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'FunctionReturningPromise'.
+    var testPromise4 = function() {
+        console.log("test")
+    }
+    
+    /**
+     * @callback FunctionReturningNever
+     * @returns {never}
+     */
+    
+    /** @type {FunctionReturningNever} */
+    function testNever1() {
+    
+    }
+    
+    /** @type {FunctionReturningNever} */
+    async function testNever2() {
+        return "asd";
+    }
+    
+    var testNever3 = /** @type {FunctionReturningNever} */ function() {
+        console.log("test")
+    }
+    
+    /** @type {FunctionReturningNever} */
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'FunctionReturningNever'.
+    var testNever4 = function() {
+        console.log("test")
+    }

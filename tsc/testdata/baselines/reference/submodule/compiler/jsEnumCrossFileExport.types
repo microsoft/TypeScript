@@ -74,21 +74,21 @@ Other.Cls = class {
      * @param {!Host.UserMetrics.Action} p
      */
     method(p) {}
->method : (p: any) => void
->p : any
+>method : (p: Action) => void
+>p : Action
 
     usage() {
 >usage : () => void
 
         this.method(Host.UserMetrics.Action.WindowDocked);
 >this.method(Host.UserMetrics.Action.WindowDocked) : void
->this.method : (p: any) => void
+>this.method : (p: Action) => void
 >this : this
->method : (p: any) => void
+>method : (p: Action) => void
 >Host.UserMetrics.Action.WindowDocked : any
 >Host.UserMetrics.Action : any
 >Host.UserMetrics : any
->Host : {}
+>Host : any
 >UserMetrics : any
 >Action : any
 >WindowDocked : any
@@ -99,13 +99,13 @@ Other.Cls = class {
  * @type {Host.UserMetrics.Bargh}
  */
 var x = "ok";
->x : string
+>x : Bargh
 >"ok" : "ok"
 
 /**
  * @type {Host.UserMetrics.Blah}
  */
 var y = "ok";
->y : string
+>y : Blah
 >"ok" : "ok"
 

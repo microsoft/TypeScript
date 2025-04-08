@@ -4,14 +4,13 @@
 -bug26885.js(11,16): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
 -  No index signature with a parameter of type 'string' was found on type '{}'.
 +bug26885.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+bug26885.js(10,5): error TS7023: 'get' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-+bug26885.js(10,9): error TS7006: Parameter 'key' implicitly has an 'any' type.
-+bug26885.js(11,21): error TS2339: Property '_map' does not exist on type '{ get: (key: any) => any; }'.
++bug26885.js(11,21): error TS2339: Property '_map' does not exist on type '{ get: (key: string) => number; }'.
++bug26885.js(15,12): error TS2749: 'Multimap3' refers to a value, but is being used as a type here. Did you mean 'typeof Multimap3'?
 +bug26885.js(16,13): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
  
  
 -==== bug26885.js (1 errors) ====
-+==== bug26885.js (5 errors) ====
++==== bug26885.js (4 errors) ====
      function Multimap3() {
          this._map = {};
 +        ~~~~
@@ -19,24 +18,21 @@
      };
      
      Multimap3.prototype = {
-@@= skipped -12, +17 lines =@@
-          * @returns {number} the value ok
+@@= skipped -13, +17 lines =@@
           */
          get(key) {
-+        ~~~
-+!!! error TS7023: 'get' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-+            ~~~
-+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
              return this._map[key + ''];
 -                   ~~~~~~~~~~~~~~~~~~~
 -!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
 -!!! error TS7053:   No index signature with a parameter of type 'string' was found on type '{}'.
 +                        ~~~~
-+!!! error TS2339: Property '_map' does not exist on type '{ get: (key: any) => any; }'.
++!!! error TS2339: Property '_map' does not exist on type '{ get: (key: string) => number; }'.
          }
      }
      
      /** @type {Multimap3} */
++               ~~~~~~~~~
++!!! error TS2749: 'Multimap3' refers to a value, but is being used as a type here. Did you mean 'typeof Multimap3'?
      const map = new Multimap3();
 +                ~~~~~~~~~~~~~~~
 +!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.

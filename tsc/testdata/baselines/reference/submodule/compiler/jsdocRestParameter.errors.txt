@@ -1,13 +1,10 @@
-/a.js(2,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
 /a.js(8,6): error TS2554: Expected 1 arguments, but got 2.
 /a.js(9,6): error TS2554: Expected 1 arguments, but got 2.
 
 
-==== /a.js (3 errors) ====
+==== /a.js (2 errors) ====
     /** @param {...number} a */
     function f(a) {
-               ~
-!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
         a; // number | undefined
         // Ideally this would be a number. But currently checker.ts has only one `argumentsSymbol`, so it's `any`.
         arguments[0];

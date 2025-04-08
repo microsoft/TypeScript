@@ -1,0 +1,67 @@
+/a.js(21,14): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
+/a.js(27,12): error TS2304: Cannot find name 'T1'.
+/a.js(40,12): error TS2304: Cannot find name 'T2'.
+/a.js(45,12): error TS2304: Cannot find name 'T3'.
+
+
+==== /types.d.ts (0 errors) ====
+    declare class Thenable { then(): void; }
+    
+==== /a.js (4 errors) ====
+    /**
+     * @callback T1
+     * @param {string} str
+     * @returns {string}
+     */
+    
+    /**
+     * @callback T2
+     * @param {string} str
+     * @returns {Promise<string>}
+     */
+    
+    /**
+     * @callback T3
+     * @param {string} str
+     * @returns {Thenable}
+     */
+    
+    /**
+     * @param {string} str
+     * @returns {string}
+                 ~~~~~~
+!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
+     */
+    const f1 = async str => {
+        return str;
+    }
+    
+    /** @type {T1} */
+               ~~
+!!! error TS2304: Cannot find name 'T1'.
+    const f2 = async str => {
+        return str;
+    }
+    
+    /**
+     * @param {string} str
+     * @returns {Promise<string>}
+     */
+    const f3 = async str => {
+        return str;
+    }
+    
+    /** @type {T2} */
+               ~~
+!!! error TS2304: Cannot find name 'T2'.
+    const f4 = async str => {
+        return str;
+    }
+    
+    /** @type {T3} */
+               ~~
+!!! error TS2304: Cannot find name 'T3'.
+    const f5 = async str => {
+        return str;
+    }
+    

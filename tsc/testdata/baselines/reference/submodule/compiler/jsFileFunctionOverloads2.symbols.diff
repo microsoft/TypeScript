@@ -5,8 +5,10 @@
  >i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
  >i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
 ->array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>array.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >array : Symbol(array, Decl(jsFileFunctionOverloads2.js, 44, 17))
 ->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
  
      result.push(.../** @type {unknown[]} */(iterable(array[i])));

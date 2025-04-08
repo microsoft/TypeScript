@@ -33,7 +33,7 @@ class X extends Test {
      * @param {Options} options
      */
     constructor(options) {
->options : any
+>options : Options
 
         super();
 >super() : void
@@ -41,7 +41,7 @@ class X extends Test {
 
         if (options.test) {
 >options.test : any
->options : any
+>options : Options
 >test : any
 
             this.test = new options.test();
@@ -51,7 +51,7 @@ class X extends Test {
 >test : any
 >new options.test() : any
 >options.test : any
->options : any
+>options : Options
 >test : any
         }
     }

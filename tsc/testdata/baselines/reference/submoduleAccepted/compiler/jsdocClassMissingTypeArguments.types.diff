@@ -1,11 +1,6 @@
 --- old.jsdocClassMissingTypeArguments.types
 +++ new.jsdocClassMissingTypeArguments.types
-@@= skipped -2, +2 lines =@@
- === /a.js ===
- /** @template T */
- class C {}
-->C : C<T>
-+>C : C
+@@= skipped -6, +6 lines =@@
  
  /** @param {C} p */
  function f(p) {}

@@ -19,34 +19,34 @@ const D = require('./ex')?.C;
 
 /** @type {C} c */
 var c = new C()
->c : any
+>c : C
 >new C() : any
 >C : any
 
 c.start
 >c.start : any
->c : any
+>c : C
 >start : any
 
 c.end
 >c.end : any
->c : any
+>c : C
 >end : any
 
 /** @type {D} c */
 var d = new D()
->d : any
+>d : D
 >new D() : any
 >D : any
 
 d.start
 >d.start : any
->d : any
+>d : D
 >start : any
 
 d.end
 >d.end : any
->d : any
+>d : D
 >end : any
 
 === ex.d.ts ===

@@ -3,8 +3,8 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+index.js(9,10): error TS7006: Parameter 'obj' implicitly has an 'any' type.
-+index.js(9,15): error TS7006: Parameter 'vm' implicitly has an 'any' type.
++index.js(11,12): error TS2339: Property 'objects' does not exist on type 'object'.
++index.js(13,26): error TS2698: Spread types may only be created from object types.
 +
 +
 +==== dash.d.ts (0 errors) ====
@@ -27,14 +27,14 @@
 +         * @param {object} vm
 +         */
 +        test(obj, vm) {
-+             ~~~
-+!!! error TS7006: Parameter 'obj' implicitly has an 'any' type.
-+                  ~~
-+!!! error TS7006: Parameter 'vm' implicitly has an 'any' type.
 +            let index = 0;
 +            vm.objects = _.mapValues(
++               ~~~~~~~
++!!! error TS2339: Property 'objects' does not exist on type 'object'.
 +                obj,
 +                object => ({ ...object, [INDEX_FIELD]: index++ }),
++                             ~~~~~~~~~
++!!! error TS2698: Spread types may only be created from object types.
 +            );
 +        }
 +    }

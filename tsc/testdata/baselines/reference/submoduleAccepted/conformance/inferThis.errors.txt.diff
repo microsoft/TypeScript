@@ -1,0 +1,45 @@
+--- old.inferThis.errors.txt
++++ new.inferThis.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.js(8,9): error TS2322: Type 'typeof C' is not assignable to type 'T'.
++  'T' could be instantiated with an arbitrary type which could be unrelated to 'typeof C'.
++/a.js(17,9): error TS2322: Type 'this' is not assignable to type 'T'.
++  'T' could be instantiated with an arbitrary type which could be unrelated to 'this'.
++
++
++==== /a.js (2 errors) ====
++    export class C {
++        /**
++         * @template T
++         * @this {T}
++         * @return {T}
++         */
++        static a() {
++            return this;
++            ~~~~~~
++!!! error TS2322: Type 'typeof C' is not assignable to type 'T'.
++!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'typeof C'.
++        }
++    
++        /**
++         * @template T
++         * @this {T}
++         * @return {T}
++         */
++        b() {
++            return this;
++            ~~~~~~
++!!! error TS2322: Type 'this' is not assignable to type 'T'.
++!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'this'.
++        }
++    }
++    
++    const a = C.a();
++    a; // typeof C
++    
++    const c = new C();
++    const b = c.b();
++    b; // C
++    

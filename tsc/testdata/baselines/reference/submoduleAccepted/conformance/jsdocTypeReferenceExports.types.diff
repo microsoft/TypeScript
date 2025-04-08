@@ -19,6 +19,6 @@
   */
  var x
 ->x : typeof import("bug27342")
-+>x : any
++>x : exports
  
  

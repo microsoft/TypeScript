@@ -3,7 +3,7 @@
 === jsdocArrayObjectPromiseNoImplicitAny.js ===
 /** @type {Array} */
 var notAnyArray = [5];
->notAnyArray : number[]
+>notAnyArray : any
 >[5] : number[]
 >5 : 5
 
@@ -27,7 +27,7 @@ function returnNotAnyArray(arr) {
 
 /** @type {Promise} */
 var notAnyPromise = Promise.resolve(5);
->notAnyPromise : Promise<number>
+>notAnyPromise : any
 >Promise.resolve(5) : Promise<number>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
@@ -57,14 +57,14 @@ function returnNotAnyPromise(pr) {
 
 /** @type {Object} */
 var notAnyObject = {valueOf: 1}; // error since assigning to Object, not any.
->notAnyObject : { valueOf: number; }
+>notAnyObject : Object
 >{valueOf: 1} : { valueOf: number; }
 >valueOf : number
 >1 : 1
 
 /** @type {Object<string, number>} */
 var paramedObject = {valueOf: 1};
->paramedObject : { valueOf: number; }
+>paramedObject : any
 >{valueOf: 1} : { valueOf: number; }
 >valueOf : number
 >1 : 1
@@ -74,10 +74,10 @@ var paramedObject = {valueOf: 1};
  * @return {Object}
  */
 function returnNotAnyObject(obj) {
->returnNotAnyObject : (obj: any) => any
->obj : any
+>returnNotAnyObject : (obj: Object) => Object
+>obj : Object
 
   return obj;
->obj : any
+>obj : Object
 }
 

@@ -7,9 +7,9 @@
 === index.js ===
 /** @type {AnyEffect} */
 let b;
->b : any
+>b : AnyEffect
 
 /** @type {Third} */
 let c;
->c : any
+>c : Third
 

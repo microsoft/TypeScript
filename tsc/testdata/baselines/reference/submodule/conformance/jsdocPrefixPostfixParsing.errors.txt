@@ -1,21 +1,15 @@
 prefixPostfix.js(18,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
-prefixPostfix.js(18,15): error TS7006: Parameter 'y' implicitly has an 'any' type.
 prefixPostfix.js(18,18): error TS7006: Parameter 'z' implicitly has an 'any' type.
 prefixPostfix.js(18,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
-prefixPostfix.js(18,24): error TS7006: Parameter 'b' implicitly has an 'any' type.
 prefixPostfix.js(18,27): error TS7006: Parameter 'c' implicitly has an 'any' type.
-prefixPostfix.js(18,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
 prefixPostfix.js(18,33): error TS7006: Parameter 'f' implicitly has an 'any' type.
 prefixPostfix.js(18,36): error TS7006: Parameter 'g' implicitly has an 'any' type.
 prefixPostfix.js(18,39): error TS7006: Parameter 'h' implicitly has an 'any' type.
-prefixPostfix.js(18,42): error TS7006: Parameter 'i' implicitly has an 'any' type.
 prefixPostfix.js(18,45): error TS7006: Parameter 'j' implicitly has an 'any' type.
 prefixPostfix.js(18,48): error TS7006: Parameter 'k' implicitly has an 'any' type.
-prefixPostfix.js(18,51): error TS7006: Parameter 'l' implicitly has an 'any' type.
-prefixPostfix.js(18,54): error TS7006: Parameter 'm' implicitly has an 'any' type.
 
 
-==== prefixPostfix.js (15 errors) ====
+==== prefixPostfix.js (9 errors) ====
     /**
      * @param {number![]} x - number[]
      * @param {!number[]} y - number[]
@@ -36,33 +30,21 @@ prefixPostfix.js(18,54): error TS7006: Parameter 'm' implicitly has an 'any' typ
     function f(x, y, z, a, b, c, e, f, g, h, i, j, k, l, m) {
                ~
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
-                  ~
-!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
                      ~
 !!! error TS7006: Parameter 'z' implicitly has an 'any' type.
                         ~
 !!! error TS7006: Parameter 'a' implicitly has an 'any' type.
-                           ~
-!!! error TS7006: Parameter 'b' implicitly has an 'any' type.
                               ~
 !!! error TS7006: Parameter 'c' implicitly has an 'any' type.
-                                 ~
-!!! error TS7006: Parameter 'e' implicitly has an 'any' type.
                                     ~
 !!! error TS7006: Parameter 'f' implicitly has an 'any' type.
                                        ~
 !!! error TS7006: Parameter 'g' implicitly has an 'any' type.
                                           ~
 !!! error TS7006: Parameter 'h' implicitly has an 'any' type.
-                                             ~
-!!! error TS7006: Parameter 'i' implicitly has an 'any' type.
                                                 ~
 !!! error TS7006: Parameter 'j' implicitly has an 'any' type.
                                                    ~
 !!! error TS7006: Parameter 'k' implicitly has an 'any' type.
-                                                      ~
-!!! error TS7006: Parameter 'l' implicitly has an 'any' type.
-                                                         ~
-!!! error TS7006: Parameter 'm' implicitly has an 'any' type.
     }
     

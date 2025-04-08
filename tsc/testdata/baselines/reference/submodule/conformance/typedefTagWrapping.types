@@ -14,14 +14,14 @@
  * @returns {boolean} The return.
  */
 function callIt(func, arg) {
->callIt : (func: any, arg: any) => any
->func : any
->arg : any
+>callIt : (func: Type1, arg: string) => boolean
+>func : Type1
+>arg : string
 
   return func(arg);
 >func(arg) : any
->func : any
->arg : any
+>func : Type1
+>arg : string
 }
 
 === mod2.js ===
@@ -39,20 +39,20 @@ function callIt(func, arg) {
  * @returns {string|number} The return.
  */
 function check(obj) {
->check : (obj: any) => any
->obj : any
+>check : (obj: Type2) => string | number
+>obj : Type2
 
   return obj.boo ? obj.num : obj.str;
->obj.boo ? obj.num : obj.str : any
->obj.boo : any
->obj : any
->boo : any
->obj.num : any
->obj : any
->num : any
->obj.str : any
->obj : any
->str : any
+>obj.boo ? obj.num : obj.str : string | number
+>obj.boo : boolean
+>obj : Type2
+>boo : boolean
+>obj.num : number
+>obj : Type2
+>num : number
+>obj.str : string
+>obj : Type2
+>str : string
 }
 
 === mod3.js ===
@@ -72,18 +72,18 @@ function check(obj) {
  * @returns {string|number} The return.
  */
 function use1(func, bool, str, num) {
->use1 : (func: any, bool: any, str: any, num: any) => any
->func : any
->bool : any
->str : any
->num : any
+>use1 : (func: StringOrNumber1, bool: boolean, str: string, num: number) => string | number
+>func : StringOrNumber1
+>bool : boolean
+>str : string
+>num : number
 
   return func(bool, str, num)
 >func(bool, str, num) : any
->func : any
->bool : any
->str : any
->num : any
+>func : StringOrNumber1
+>bool : boolean
+>str : string
+>num : number
 }
 
 === mod4.js ===
@@ -104,18 +104,18 @@ function use1(func, bool, str, num) {
  * @returns {string|number} The return.
  */
 function use2(func, bool, str, num) {
->use2 : (func: any, bool: any, str: any, num: any) => any
->func : any
->bool : any
->str : any
->num : any
+>use2 : (func: StringOrNumber2, bool: boolean, str: string, num: number) => string | number
+>func : StringOrNumber2
+>bool : boolean
+>str : string
+>num : number
 
   return func(bool, str, num)
 >func(bool, str, num) : any
->func : any
->bool : any
->str : any
->num : any
+>func : StringOrNumber2
+>bool : boolean
+>str : string
+>num : number
 }
 
 === mod5.js ===
@@ -136,20 +136,20 @@ function use2(func, bool, str, num) {
  * @returns {string|number} The return.
  */
 function check5(obj) {
->check5 : (obj: any) => any
->obj : any
+>check5 : (obj: Type5) => string | number
+>obj : Type5
 
   return obj.boo ? obj.num : obj.str;
->obj.boo ? obj.num : obj.str : any
->obj.boo : any
->obj : any
->boo : any
->obj.num : any
->obj : any
->num : any
->obj.str : any
->obj : any
->str : any
+>obj.boo ? obj.num : obj.str : string | number
+>obj.boo : boolean
+>obj : Type5
+>boo : boolean
+>obj.num : number
+>obj : Type5
+>num : number
+>obj.str : string
+>obj : Type5
+>str : string
 }
 
 === mod6.js ===
@@ -168,12 +168,12 @@ function check5(obj) {
  * @returns {*} The return.
  */
 function check6(obj) {
->check6 : (obj: any) => any
->obj : any
+>check6 : (obj: Type6) => any
+>obj : Type6
 
   return obj.foo;
 >obj.foo : any
->obj : any
+>obj : Type6
 >foo : any
 }
 

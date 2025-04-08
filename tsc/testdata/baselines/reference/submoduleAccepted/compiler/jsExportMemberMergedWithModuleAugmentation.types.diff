@@ -1,11 +1,6 @@
 --- old.jsExportMemberMergedWithModuleAugmentation.types
 +++ new.jsExportMemberMergedWithModuleAugmentation.types
-@@= skipped -5, +5 lines =@@
- 
-   /** @type {string} */
-   x;
-->x : string
-+>x : any
+@@= skipped -9, +9 lines =@@
  }
  
  module.exports = {
@@ -20,7 +15,7 @@
  >{  Abcde} : { Abcde: typeof Abcde; }
  
    Abcde
-@@= skipped -17, +17 lines =@@
+@@= skipped -13, +13 lines =@@
  
  === /index.ts ===
  import { Abcde } from "./test";

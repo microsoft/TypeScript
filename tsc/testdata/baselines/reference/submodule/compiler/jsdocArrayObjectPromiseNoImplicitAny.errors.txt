@@ -1,10 +1,17 @@
-jsdocArrayObjectPromiseNoImplicitAny.js(11,28): error TS7006: Parameter 'arr' implicitly has an 'any' type.
-jsdocArrayObjectPromiseNoImplicitAny.js(25,30): error TS7006: Parameter 'pr' implicitly has an 'any' type.
-jsdocArrayObjectPromiseNoImplicitAny.js(39,29): error TS7006: Parameter 'obj' implicitly has an 'any' type.
+jsdocArrayObjectPromiseNoImplicitAny.js(1,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(8,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(9,13): error TS2314: Generic type 'T[]' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(15,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(22,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(23,13): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(30,21): error TS2322: Type 'number' is not assignable to type '() => Object'.
+jsdocArrayObjectPromiseNoImplicitAny.js(32,12): error TS2315: Type 'Object' is not generic.
 
 
-==== jsdocArrayObjectPromiseNoImplicitAny.js (3 errors) ====
+==== jsdocArrayObjectPromiseNoImplicitAny.js (8 errors) ====
     /** @type {Array} */
+               ~~~~~
+!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
     var notAnyArray = [5];
     
     /** @type {Array<number>} */
@@ -12,15 +19,19 @@ jsdocArrayObjectPromiseNoImplicitAny.js(39,29): error TS7006: Parameter 'obj' im
     
     /**
      * @param {Array} arr
+               ~~~~~
+!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
      * @return {Array}
+                ~~~~~
+!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
      */
     function returnNotAnyArray(arr) {
-                               ~~~
-!!! error TS7006: Parameter 'arr' implicitly has an 'any' type.
       return arr;
     }
     
     /** @type {Promise} */
+               ~~~~~~~
+!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
     var notAnyPromise = Promise.resolve(5);
     
     /** @type {Promise<number>} */
@@ -28,18 +39,24 @@ jsdocArrayObjectPromiseNoImplicitAny.js(39,29): error TS7006: Parameter 'obj' im
     
     /**
      * @param {Promise} pr
+               ~~~~~~~
+!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
      * @return {Promise}
+                ~~~~~~~
+!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
      */
     function returnNotAnyPromise(pr) {
-                                 ~~
-!!! error TS7006: Parameter 'pr' implicitly has an 'any' type.
       return pr;
     }
     
     /** @type {Object} */
     var notAnyObject = {valueOf: 1}; // error since assigning to Object, not any.
+                        ~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type '() => Object'.
     
     /** @type {Object<string, number>} */
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
     var paramedObject = {valueOf: 1};
     
     /**
@@ -47,8 +64,6 @@ jsdocArrayObjectPromiseNoImplicitAny.js(39,29): error TS7006: Parameter 'obj' im
      * @return {Object}
      */
     function returnNotAnyObject(obj) {
-                                ~~~
-!!! error TS7006: Parameter 'obj' implicitly has an 'any' type.
       return obj;
     }
     

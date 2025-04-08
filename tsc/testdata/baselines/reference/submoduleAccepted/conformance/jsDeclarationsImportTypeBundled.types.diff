@@ -25,7 +25,7 @@
  /** @type {(typeof import("./folder/mod1"))[]} */
  const items = [{x: 12}];
 ->items : import("folder/mod1").Item[]
-+>items : { x: number; }[]
++>items : typeof import("folder/mod1")[]
  >[{x: 12}] : { x: number; }[]
  >{x: 12} : { x: number; }
  >x : number
@@ -37,9 +37,9 @@
 ->module : { exports: import("folder/mod1").Item[]; }
 ->exports : import("folder/mod1").Item[]
 ->items : import("folder/mod1").Item[]
-+>module.exports = items : { x: number; }[]
++>module.exports = items : typeof import("folder/mod1")[]
 +>module.exports : any
 +>module : any
 +>exports : any
-+>items : { x: number; }[]
++>items : typeof import("folder/mod1")[]
  

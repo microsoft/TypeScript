@@ -18,7 +18,9 @@ const foo = (a) => {
 >a : Symbol(a, Decl(assertionTypePredicates2.js, 12, 13))
 
     if (/** @type { B } */ (a).y !== 0) throw TypeError();
+>(a).y : Symbol(y, Decl(assertionTypePredicates2.js, 5, 19))
 >a : Symbol(a, Decl(assertionTypePredicates2.js, 12, 13))
+>y : Symbol(y, Decl(assertionTypePredicates2.js, 5, 19))
 >TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     return undefined;

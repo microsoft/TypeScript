@@ -1,33 +1,33 @@
 --- old.typeFromContextualThisType.symbols
 +++ new.typeFromContextualThisType.symbols
-@@= skipped -8, +8 lines =@@
- >a : Symbol(a, Decl(bug25926.js, 1, 12))
+@@= skipped -9, +9 lines =@@
  
          this.b = n => n;
-->this.b : Symbol(b, Decl(bug25926.js, 0, 23))
+ >this.b : Symbol(b, Decl(bug25926.js, 0, 23))
 ->this : Symbol(__type, Decl(bug25926.js, 0, 11))
 ->b : Symbol(b, Decl(bug25926.js, 2, 9))
-+>this : Symbol((Anonymous type), Decl(bug25926.js, 1, 10))
++>this : Symbol((Anonymous type), Decl(bug25926.js, 0, 11))
++>b : Symbol(b, Decl(bug25926.js, 0, 23))
  >n : Symbol(n, Decl(bug25926.js, 3, 16))
  >n : Symbol(n, Decl(bug25926.js, 3, 16))
      }
-@@= skipped -16, +14 lines =@@
- >d : Symbol(d, Decl(bug25926.js, 8, 12))
+@@= skipped -16, +16 lines =@@
  
          this.e = this.f = m => this.g || m;
-->this.e : Symbol(e, Decl(bug25926.js, 7, 23))
+ >this.e : Symbol(e, Decl(bug25926.js, 7, 23))
 ->this : Symbol(__type, Decl(bug25926.js, 7, 11))
 ->e : Symbol(e, Decl(bug25926.js, 9, 9))
-->this.f : Symbol(f, Decl(bug25926.js, 7, 46))
++>this : Symbol((Anonymous type), Decl(bug25926.js, 7, 11))
++>e : Symbol(e, Decl(bug25926.js, 7, 23))
+ >this.f : Symbol(f, Decl(bug25926.js, 7, 46))
 ->this : Symbol(__type, Decl(bug25926.js, 7, 11))
 ->f : Symbol(f, Decl(bug25926.js, 10, 16))
-+>this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
-+>this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
++>this : Symbol((Anonymous type), Decl(bug25926.js, 7, 11))
++>f : Symbol(f, Decl(bug25926.js, 7, 46))
  >m : Symbol(m, Decl(bug25926.js, 10, 25))
-->this.g : Symbol(g, Decl(bug25926.js, 7, 69))
+ >this.g : Symbol(g, Decl(bug25926.js, 7, 69))
 ->this : Symbol(__type, Decl(bug25926.js, 7, 11))
-->g : Symbol(g, Decl(bug25926.js, 7, 69))
-+>this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
++>this : Symbol((Anonymous type), Decl(bug25926.js, 7, 11))
+ >g : Symbol(g, Decl(bug25926.js, 7, 69))
  >m : Symbol(m, Decl(bug25926.js, 10, 25))
      }
- };

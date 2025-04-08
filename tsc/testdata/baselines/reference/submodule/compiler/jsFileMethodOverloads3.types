@@ -16,22 +16,22 @@
  * @returns {string | number}
  */
 function id(x) {
->id : (x: any) => any
->x : any
+>id : (x: string | number) => string | number
+>x : string | number
 
     return x;
->x : any
+>x : string | number
 }
 
 export let a = id(123);
->a : any
->id(123) : any
->id : (x: any) => any
+>a : string | number
+>id(123) : string | number
+>id : (x: string | number) => string | number
 >123 : 123
 
 export let b = id("hello");
->b : any
->id("hello") : any
->id : (x: any) => any
+>b : string | number
+>id("hello") : string | number
+>id : (x: string | number) => string | number
 >"hello" : "hello"
 

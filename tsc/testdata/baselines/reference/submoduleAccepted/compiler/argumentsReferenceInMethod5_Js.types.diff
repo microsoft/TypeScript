@@ -1,13 +1,11 @@
 --- old.argumentsReferenceInMethod5_Js.types
 +++ new.argumentsReferenceInMethod5_Js.types
-@@= skipped -16, +16 lines =@@
- 	 * @param {object} [foo={}]
+@@= skipped -17, +17 lines =@@
  	 */
  	m(foo = {}) {
-->m : (foo?: object) => void
+ >m : (foo?: object) => void
 ->foo : any
-+>m : (foo?: {}) => void
-+>foo : {}
++>foo : object
  >{} : {}
  
  		/**
@@ -15,12 +13,12 @@
  		 */
  		this.foo = foo;
 ->this.foo = foo : any
-+>this.foo = foo : {}
++>this.foo = foo : object
  >this.foo : any
  >this : this
  >foo : any
 ->foo : any
-+>foo : {}
++>foo : object
  
  		/**
  		 * @type object

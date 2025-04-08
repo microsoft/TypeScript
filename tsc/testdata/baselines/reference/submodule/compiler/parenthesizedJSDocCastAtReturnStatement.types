@@ -3,7 +3,7 @@
 === index.js ===
 /** @type {Map<string, string | Set<string>>} */
 const cache = new Map()
->cache : Map<any, any>
+>cache : Map<string, string | Set<string>>
 >new Map() : Map<any, any>
 >Map : MapConstructor
 
@@ -12,20 +12,21 @@ const cache = new Map()
  * @returns {() => string}
  */
 const getStringGetter = (key) => {
->getStringGetter : (key: any) => () => any
->(key) => {  return () => {    return /** @type {string} */ (cache.get(key))  }} : (key: any) => () => any
->key : any
+>getStringGetter : (key: string) => () => string
+>(key) => {  return () => {    return /** @type {string} */ (cache.get(key))  }} : (key: string) => () => string
+>key : string
 
   return () => {
->() => {    return /** @type {string} */ (cache.get(key))  } : () => any
+>() => {    return /** @type {string} */ (cache.get(key))  } : () => string
 
     return /** @type {string} */ (cache.get(key))
->(cache.get(key)) : any
->cache.get(key) : any
->cache.get : (key: any) => any
->cache : Map<any, any>
->get : (key: any) => any
->key : any
+>(cache.get(key)) : string
+>cache.get(key) : string
+>cache.get(key) : string | Set<string> | undefined
+>cache.get : (key: string) => string | Set<string> | undefined
+>cache : Map<string, string | Set<string>>
+>get : (key: string) => string | Set<string> | undefined
+>key : string
   }
 }
 

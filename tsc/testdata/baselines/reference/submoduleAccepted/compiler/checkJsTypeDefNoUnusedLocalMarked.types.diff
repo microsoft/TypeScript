@@ -9,11 +9,12 @@
 ->module : { exports: (foo: Foo) => string; }
 ->exports : (foo: Foo) => string
 ->(void 0) : FooFun
-+>module.exports = /** @type {FooFun} */(void 0) : undefined
++>module.exports = /** @type {FooFun} */(void 0) : (foo: typeof Foo) => string
 +>module.exports : any
 +>module : any
 +>exports : any
-+>(void 0) : undefined
++>(void 0) : (foo: typeof Foo) => string
++>void 0 : (foo: typeof Foo) => string
  >void 0 : undefined
  >0 : 0
  

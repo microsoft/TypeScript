@@ -1,8 +1,11 @@
 file2.js(1,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+file2.js(6,11): error TS2315: Type 'Object' is not generic.
+file2.js(12,23): error TS2503: Cannot find namespace 'myTypes'.
+file2.js(17,12): error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
 file2.js(28,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
-==== file2.js (2 errors) ====
+==== file2.js (5 errors) ====
     const {myTypes} = require('./file.js');
                       ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
@@ -11,17 +14,23 @@ file2.js(28,1): error TS2580: Cannot find name 'module'. Do you need to install 
      * @namespace testFnTypes
      * @global
      * @type {Object<string,*>}
+              ~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
      */
     const testFnTypes = {
         // SOME PROPS HERE
     };
     
     /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
+                          ~~~~~~~
+!!! error TS2503: Cannot find namespace 'myTypes'.
     
     /**
      * @function testFn
      * @description A test function.
      * @param {testFnTypes.input} input - Input.
+               ~~~~~~~~~~~
+!!! error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
      * @returns {number|null} Result.
      */
     function testFn(input) {

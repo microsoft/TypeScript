@@ -1,9 +1,0 @@
---- old.jsFileCompilationSyntaxError.types
-+++ new.jsFileCompilationSyntaxError.types
-@@= skipped -5, +5 lines =@@
-   * @type {string}
-   */
- var v;
-->v : number
-+>v : any
- 

@@ -1,21 +1,20 @@
 --- old.checkJsdocSatisfiesTag3.errors.txt
 +++ new.checkJsdocSatisfiesTag3.errors.txt
 @@= skipped -0, +0 lines =@@
- /a.js(3,7): error TS7006: Parameter 's' implicitly has an 'any' type.
+-/a.js(3,7): error TS7006: Parameter 's' implicitly has an 'any' type.
 +/a.js(4,7): error TS7006: Parameter 's' implicitly has an 'any' type.
 +/a.js(8,49): error TS7006: Parameter 'x' implicitly has an 'any' type.
  
  
 -==== /a.js (1 errors) ====
-+==== /a.js (3 errors) ====
++==== /a.js (2 errors) ====
      /** @type {{ f(s: string): void } & Record<string, unknown> }} */
      let obj = /** @satisfies {{ g(s: string): void } & Record<string, unknown>} */ ({
          f(s) { }, // "incorrect" implicit any on 's'
++        g(s) { }
            ~
  !!! error TS7006: Parameter 's' implicitly has an 'any' type.
-         g(s) { }
-+          ~
-+!!! error TS7006: Parameter 's' implicitly has an 'any' type.
+-        g(s) { }
      });
      
      // This needs to not crash (outer node is not expression)

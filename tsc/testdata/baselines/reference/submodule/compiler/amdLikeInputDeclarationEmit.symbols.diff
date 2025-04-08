@@ -14,12 +14,14 @@
      const ExtendedClass = BaseClass.extends({
  >ExtendedClass : Symbol(ExtendedClass, Decl(ExtendedClass.js, 8, 9))
 ->BaseClass.extends : Symbol(BaseClass.extends, Decl(BaseClass.d.ts, 1, 21))
++>BaseClass.extends : Symbol(extends, Decl(BaseClass.d.ts, 1, 21))
  >BaseClass : Symbol(BaseClass, Decl(ExtendedClass.js, 6, 1))
 ->extends : Symbol(BaseClass.extends, Decl(BaseClass.d.ts, 1, 21))
++>extends : Symbol(extends, Decl(BaseClass.d.ts, 1, 21))
  
          f: function() {
  >f : Symbol(f, Decl(ExtendedClass.js, 8, 45))
-@@= skipped -16, +14 lines =@@
+@@= skipped -16, +16 lines =@@
  >module : Symbol(module, Decl(ExtendedClass.js, 15, 9))
  
      module.exports = ExtendedClass

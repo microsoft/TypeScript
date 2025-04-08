@@ -1,0 +1,38 @@
+--- old.jsdocImportType.errors.txt
++++ new.jsdocImportType.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++use.js(2,22): error TS2307: Cannot find module './mod1' or its corresponding type declarations.
++use.js(8,12): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
++
++
++==== use.js (2 errors) ====
++    /// <reference path='./types.d.ts'/>
++    /** @typedef {import("./mod1")} C
++                         ~~~~~~~~
++!!! error TS2307: Cannot find module './mod1' or its corresponding type declarations.
++     * @type {C} */
++    var c;
++    c.chunk;
++    
++    const D = require("./mod1");
++    /** @type {D} */
++               ~
++!!! error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
++    var d;
++    d.chunk;
++    
++==== types.d.ts (0 errors) ====
++    declare function require(name: string): any;
++    declare var exports: any;
++    declare var module: { exports: any };
++==== mod1.js (0 errors) ====
++    /// <reference path='./types.d.ts'/>
++    class Chunk {
++        constructor() {
++            this.chunk = 1;
++        }
++    }
++    module.exports = Chunk;
++    

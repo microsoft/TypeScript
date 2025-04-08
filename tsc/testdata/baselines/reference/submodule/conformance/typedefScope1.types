@@ -23,6 +23,6 @@ function B2() {
 
 /** @type {B} */
 var notOK = 0;
->notOK : number
+>notOK : B
 >0 : 0
 

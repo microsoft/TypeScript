@@ -1,0 +1,16 @@
+38572.js(4,39): error TS2304: Cannot find name 'K'.
+
+
+==== 38572.js (1 errors) ====
+    /**
+     * @template T
+     * @param {T} a
+     * @param {{[K in keyof T]: (value: T[K]) => void }} b
+                                          ~
+!!! error TS2304: Cannot find name 'K'.
+     */
+    function f(a, b) {
+    }
+    
+    f({ x: 42 }, { x(param) { param.toFixed() } });
+    

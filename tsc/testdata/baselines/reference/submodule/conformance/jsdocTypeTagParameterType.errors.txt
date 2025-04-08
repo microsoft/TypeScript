@@ -1,9 +1,13 @@
+a.js(1,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 a.js(2,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
 a.js(6,12): error TS7006: Parameter 's' implicitly has an 'any' type.
 
 
-==== a.js (2 errors) ====
+==== a.js (3 errors) ====
     /** @type {function(string): void} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
     const f = (value) => {
                ~~~~~
 !!! error TS7006: Parameter 'value' implicitly has an 'any' type.

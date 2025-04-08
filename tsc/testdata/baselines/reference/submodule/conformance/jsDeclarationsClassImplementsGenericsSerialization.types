@@ -12,14 +12,14 @@ export interface Encoder<T> {
  * @implements {IEncoder<T>}
  */
 export class Encoder {
->Encoder : Encoder
+>Encoder : Encoder<T>
 
     /**
      * @param {T} value 
      */
     encode(value) {
->encode : (value: any) => Uint8Array<ArrayBuffer>
->value : any
+>encode : (value: T) => Uint8Array<ArrayBuffer>
+>value : T
 
         return new Uint8Array(0)
 >new Uint8Array(0) : Uint8Array<ArrayBuffer>

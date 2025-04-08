@@ -6,20 +6,20 @@
  * @template T
  */
  class Example {
->Example : Example
+>Example : Example<T>
 
   /**
    * @param {T} value 
    */
   constructor(value) {
->value : any
+>value : T
 
     this.value = value;
->this.value = value : any
+>this.value = value : T
 >this.value : any
 >this : this
 >value : any
->value : any
+>value : T
   }
 
   /**
@@ -34,7 +34,7 @@
    * @returns {string}
    */
   getTypeName() {
->getTypeName : () => "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>getTypeName : () => string
 
     return typeof this.value;
 >typeof this.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -56,14 +56,14 @@
    * @returns {unknown}
    */
   transform(fn) {
->transform : (fn: any) => any
->fn : any
+>transform : <U>(fn?: (y: T) => unknown) => unknown
+>fn : (y: T) => unknown
 
     return fn ? fn(this.value) : this.value;
 >fn ? fn(this.value) : this.value : any
->fn : any
->fn(this.value) : any
->fn : any
+>fn : (y: T) => unknown
+>fn(this.value) : unknown
+>fn : (y: T) => unknown
 >this.value : any
 >this : this
 >value : any

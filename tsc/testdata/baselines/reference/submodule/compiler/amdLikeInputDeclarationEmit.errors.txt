@@ -1,4 +1,3 @@
-ExtendedClass.js(9,37): error TS2339: Property 'extends' does not exist on type 'unknown'.
 ExtendedClass.js(17,12): error TS2339: Property 'exports' does not exist on type '{}'.
 ExtendedClass.js(18,19): error TS2339: Property 'exports' does not exist on type '{}'.
 
@@ -12,7 +11,7 @@ ExtendedClass.js(18,19): error TS2339: Property 'exports' does not exist on type
         }
         export = BaseClass;
     }
-==== ExtendedClass.js (3 errors) ====
+==== ExtendedClass.js (2 errors) ====
     define("lib/ExtendedClass", ["deps/BaseClass"], 
     /**
      * {typeof import("deps/BaseClass")}
@@ -22,8 +21,6 @@ ExtendedClass.js(18,19): error TS2339: Property 'exports' does not exist on type
     (BaseClass) => {    
         
         const ExtendedClass = BaseClass.extends({
-                                        ~~~~~~~
-!!! error TS2339: Property 'extends' does not exist on type 'unknown'.
             f: function() {
                 return "something";
             }

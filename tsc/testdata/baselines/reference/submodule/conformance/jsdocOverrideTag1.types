@@ -10,13 +10,13 @@ class A {
      * @returns {boolean}
      */
     foo (a) {
->foo : (a: any) => a is string
->a : any
+>foo : (a: string | number) => boolean
+>a : string | number
 
         return typeof a === 'string'
 >typeof a === 'string' : boolean
 >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->a : any
+>a : string | number
 >'string' : "string"
     }
     bar () {
@@ -36,15 +36,15 @@ class B extends A {
      * @returns {boolean}
      */
     foo (a) {
->foo : (a: any) => a is string
->a : any
+>foo : (a: string | number) => boolean
+>a : string | number
 
         return super.foo(a)
 >super.foo(a) : boolean
->super.foo : (a: any) => a is string
+>super.foo : (a: string | number) => boolean
 >super : A
->foo : (a: any) => a is string
->a : any
+>foo : (a: string | number) => boolean
+>a : string | number
     }
 
     bar () {

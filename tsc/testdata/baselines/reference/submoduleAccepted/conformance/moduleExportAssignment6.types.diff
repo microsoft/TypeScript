@@ -1,38 +1,12 @@
 --- old.moduleExportAssignment6.types
 +++ new.moduleExportAssignment6.types
-@@= skipped -5, +5 lines =@@
- 
-     /** @param {number} x */
-     constructor(x) {
-->x : number
-+>x : any
- 
-         this.x = x
-->this.x = x : number
-+>this.x = x : any
- >this.x : any
- >this : this
- >x : any
-->x : number
-+>x : any
- 
-         this.exports = [x]
-->this.exports = [x] : number[]
-+>this.exports = [x] : any[]
- >this.exports : any
- >this : this
- >exports : any
-->[x] : number[]
-->x : number
-+>[x] : any[]
-+>x : any
+@@= skipped -24, +24 lines =@@
      }
      /** @param {number} y */
      m(y) {
 ->m : (y: number) => number
-->y : number
-+>m : (y: any) => any
-+>y : any
++>m : (y: number) => any
+ >y : number
  
          return this.x + y
 ->this.x + y : number
@@ -41,9 +15,8 @@
 +>this.x : any
  >this : this
 ->x : number
-->y : number
 +>x : any
-+>y : any
+ >y : number
      }
  }
  function exec() {
@@ -52,7 +25,7 @@
  
      const module = new C(12);
  >module : C
-@@= skipped -40, +40 lines =@@
+@@= skipped -21, +21 lines =@@
  >12 : 12
  
      return module.exports; // should be fine because `module` is defined locally

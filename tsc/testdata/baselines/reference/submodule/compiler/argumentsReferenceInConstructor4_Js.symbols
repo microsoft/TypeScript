@@ -36,9 +36,7 @@ class A {
 		 */
 		this.bar = arguments.bar;
 >this : Symbol(A, Decl(a.js, 0, 0))
->arguments.bar : Symbol(bar, Decl(a.js, 36, 10))
 >arguments : Symbol(arguments, Decl(a.js, 17, 7))
->bar : Symbol(bar, Decl(a.js, 36, 10))
 
 		/**
 		 * @type object

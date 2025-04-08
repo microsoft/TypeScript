@@ -1,0 +1,60 @@
+/a.js(26,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+/a.js(34,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+/a.js(39,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+/a.js(44,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+
+
+==== /a.js (4 errors) ====
+    /**
+     * @typedef {{
+    *     a: number | string;
+    *     b: boolean | string[];
+    * }} Foo
+    */
+    
+    /**
+    * @template {Foo} T
+    */
+    class A {
+       /**
+        * @param {T} a
+        */
+       constructor(a) {
+           return a
+       }
+    }
+    
+    /**
+    * @extends {A<{
+    *     a: string,
+    *     b: string[]
+    * }>}
+    */
+    class B extends A {}
+                    ~
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+    
+    /**
+     * @extends {A<{
+     *     a: string,
+     *     b: string
+     * }>}
+     */
+    class C extends A {}
+                    ~
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+    
+    /**
+     * @extends {A<{a: string, b: string[]}>}
+     */
+    class D extends A {}
+                    ~
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+    
+    /**
+     * @extends {A<{a: string, b: string}>}
+     */
+    class E extends A {}
+                    ~
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+    

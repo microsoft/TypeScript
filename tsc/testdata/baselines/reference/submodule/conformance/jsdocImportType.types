@@ -20,11 +20,11 @@ const D = require("./mod1");
 
 /** @type {D} */
 var d;
->d : any
+>d : D
 
 d.chunk;
 >d.chunk : any
->d : any
+>d : D
 >chunk : any
 
 === types.d.ts ===

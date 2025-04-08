@@ -1,4 +1,5 @@
 base.js(11,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+file.js(1,22): error TS2306: File 'base.js' is not a module.
 
 
 ==== base.js (1 errors) ====
@@ -16,8 +17,10 @@ base.js(11,1): error TS2580: Cannot find name 'module'. Do you need to install t
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
-==== file.js (0 errors) ====
+==== file.js (1 errors) ====
     /** @typedef {import('./base')} BaseFactory */
+                         ~~~~~~~~
+!!! error TS2306: File 'base.js' is not a module.
     /**
      * @callback BaseFactoryFactory
      * @param {import('./base')} factory

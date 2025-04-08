@@ -6,7 +6,7 @@
  const MyComponent = () => /* @type {any} */(null);
 ->MyComponent : StatelessComponent<MyComponentProps>
 ->() => /* @type {any} */(null) : { (): any; defaultProps: Partial<MyComponentProps>; }
-+>MyComponent : { (): any; defaultProps: { color: string; }; }
++>MyComponent : { (): any; defaultProps?: P; }
 +>() => /* @type {any} */(null) : { (): any; defaultProps: { color: string; }; }
  >(null) : null
  
@@ -17,9 +17,9 @@
 ->defaultProps : Partial<MyComponentProps>
 ->{    color: "red"} : { color: "red"; }
 +>MyComponent.defaultProps = {    color: "red"} : { color: string; }
-+>MyComponent.defaultProps : { color: string; }
-+>MyComponent : { (): any; defaultProps: { color: string; }; }
-+>defaultProps : { color: string; }
++>MyComponent.defaultProps : P
++>MyComponent : { (): any; defaultProps?: P; }
++>defaultProps : P
 +>{    color: "red"} : { color: string; }
  
      color: "red"
@@ -62,7 +62,7 @@
  const check = MyComponent2;
 ->check : StatelessComponent<MyComponentProps>
 ->MyComponent2 : { (): any; defaultProps: MyComponentProps; }
-+>check : { (): any; defaultProps: { color: string; }; }
++>check : { (): any; defaultProps?: P; }
 +>MyComponent2 : { (): any; defaultProps: { color: string; }; }
  
  /**
@@ -72,8 +72,8 @@
  function expectLiteral(p) {}
 ->expectLiteral : (p: { props: MyComponentProps; }) => void
 ->p : { props: MyComponentProps; }
-+>expectLiteral : (p: any) => void
-+>p : any
++>expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
++>p : { props: { color: "blue" | "red"; }; }
  
  function foo() {
 ->foo : typeof foo
@@ -101,7 +101,7 @@
  >expectLiteral(this) : void
 ->expectLiteral : (p: { props: MyComponentProps; }) => void
 ->this : this
-+>expectLiteral : (p: any) => void
++>expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
 +>this : any
  }
  
@@ -134,7 +134,7 @@
 ->module.exports : MyComponentProps
 ->module : { exports: MyComponentProps; }
 ->exports : MyComponentProps
-+>expectLiteral : (p: any) => void
++>expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
 +>{ props: module.exports } : { props: any; }
 +>props : any
 +>module.exports : any

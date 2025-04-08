@@ -4,12 +4,12 @@
 /** @typedef {import("./mod1").TestEnum} TE */
 /** @type {TE} */
 const test = 'add'
->test : "add"
+>test : any
 >'add' : "add"
 
 /** @type {import("./mod1").TestEnum} */
 const tost = 'remove'
->tost : "remove"
+>tost : any
 >'remove' : "remove"
 
 === value.js ===
@@ -18,7 +18,7 @@ import { TestEnum } from "./mod1"
 
 /** @type {TestEnum} */
 const tist = TestEnum.ADD
->tist : string
+>tist : TestEnum
 >TestEnum.ADD : string
 >TestEnum : { ADD: string; REMOVE: string; }
 >ADD : string

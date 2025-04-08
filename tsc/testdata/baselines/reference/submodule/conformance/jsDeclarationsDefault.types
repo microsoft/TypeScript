@@ -24,8 +24,9 @@ export default class Foo {
 >Foo : default
 
     a = /** @type {Foo} */(null);
->a : any
->(null) : null
+>a : default
+>(null) : default
+>null : default
 
 };
 export const X = Foo;
@@ -45,8 +46,9 @@ class Bar extends Fab {
 >Fab : default
 
     x = /** @type {Bar} */(null);
->x : any
->(null) : null
+>x : Bar
+>(null) : Bar
+>null : Bar
 }
 export default Bar;
 >Bar : Bar

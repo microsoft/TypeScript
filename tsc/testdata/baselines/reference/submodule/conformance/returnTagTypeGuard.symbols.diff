@@ -36,13 +36,9 @@
  >x : Symbol(x, Decl(bug25127.js, 20, 11))
  
          return false
-@@= skipped -22, +20 lines =@@
- 
-     let x = chunk.isInit(chunk) ? chunk.c : chunk.d
- >x : Symbol(x, Decl(bug25127.js, 26, 7))
-->chunk.isInit : Symbol(isInit, Decl(bug25127.js, 3, 5), Decl(bug25127.js, 15, 5))
+@@= skipped -26, +24 lines =@@
  >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
-->isInit : Symbol(isInit, Decl(bug25127.js, 3, 5), Decl(bug25127.js, 15, 5))
+ >isInit : Symbol(isInit, Decl(bug25127.js, 3, 5), Decl(bug25127.js, 15, 5))
  >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
 ->chunk.c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
  >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))

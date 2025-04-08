@@ -41,8 +41,8 @@
  function f(wrap) {
 ->f : (wrap: ex.Crunch) => void
 ->wrap : ex.Crunch
-+>f : (wrap: any) => void
-+>wrap : any
++>f : (wrap: Crunch) => void
++>wrap : Crunch
  
      wrap.n
 ->wrap.n : number
@@ -63,7 +63,7 @@
 ->this.n : any
 ->this : this
 +>wrap.n : any
-+>wrap : any
++>wrap : Crunch
  >n : any
 ->n : number
 -    }

@@ -1,19 +1,23 @@
 --- old.callbackTag2.types
 +++ new.callbackTag2.types
-@@= skipped -11, +11 lines =@@
- 
+@@= skipped -12, +12 lines =@@
  /** @type {Id<string>} I actually wanted to write `const "120"` */
  var one_twenty = s => "120";
-->one_twenty : Id<string>
+ >one_twenty : Id<string>
 ->s => "120" : (s: string) => string
 ->s : string
-+>one_twenty : (s: any) => string
 +>s => "120" : (s: any) => string
 +>s : any
  >"120" : "120"
  
  /** @template S
-@@= skipped -16, +16 lines =@@
+@@= skipped -10, +10 lines =@@
+  * @return {S}
+  */
+ class SharedClass {
+->SharedClass : SharedClass
++>SharedClass : SharedClass<S>
+ 
      constructor() {
          /** @type {SharedId<S>} */
          this.id;
@@ -26,12 +30,11 @@
  }
  /** @type {SharedId<number>} */
  var outside = n => n + 1;
-->outside : SharedId<number>
+ >outside : SharedId<number>
 ->n => n + 1 : (n: number) => number
 ->n : number
 ->n + 1 : number
 ->n : number
-+>outside : (n: any) => any
 +>n => n + 1 : (n: any) => any
 +>n : any
 +>n + 1 : any
@@ -40,12 +43,11 @@
  
  /** @type {Final<{ fantasy }, { heroes }>} */
  var noreturn = (barts, tidus, noctis) => "cecil"
-->noreturn : Final<{ fantasy: any; }, { heroes: any; }>
+ >noreturn : Final<{ fantasy: any; }, { heroes: any; }>
 ->(barts, tidus, noctis) => "cecil" : (barts: { fantasy: any; }, tidus: { heroes: any; }, noctis: { heroes: any; } & { fantasy: any; }) => "cecil" | "zidane"
 ->barts : { fantasy: any; }
 ->tidus : { heroes: any; }
 ->noctis : { heroes: any; } & { fantasy: any; }
-+>noreturn : (barts: any, tidus: any, noctis: any) => string
 +>(barts, tidus, noctis) => "cecil" : (barts: any, tidus: any, noctis: any) => string
 +>barts : any
 +>tidus : any

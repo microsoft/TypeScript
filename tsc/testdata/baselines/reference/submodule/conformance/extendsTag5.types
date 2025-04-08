@@ -12,16 +12,16 @@
 * @template {Foo} T
 */
 class A {
->A : A
+>A : A<T>
 
    /**
     * @param {T} a
     */
    constructor(a) {
->a : any
+>a : T
 
        return a
->a : any
+>a : T
    }
 }
 
@@ -33,7 +33,7 @@ class A {
 */
 class B extends A {}
 >B : B
->A : A
+>A : typeof A
 
 /**
  * @extends {A<{
@@ -43,19 +43,19 @@ class B extends A {}
  */
 class C extends A {}
 >C : C
->A : A
+>A : typeof A
 
 /**
  * @extends {A<{a: string, b: string[]}>}
  */
 class D extends A {}
 >D : D
->A : A
+>A : typeof A
 
 /**
  * @extends {A<{a: string, b: string}>}
  */
 class E extends A {}
 >E : E
->A : A
+>A : typeof A
 

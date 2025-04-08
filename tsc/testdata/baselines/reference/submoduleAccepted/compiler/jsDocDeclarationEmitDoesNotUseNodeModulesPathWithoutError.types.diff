@@ -15,8 +15,8 @@
      case5_unexpectedlyResolvesPathToNodeModules(init) {}
 ->case5_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
 ->init : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit | undefined
-+>case5_unexpectedlyResolvesPathToNodeModules : (init: any) => void
-+>init : any
++>case5_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit | undefined) => void
++>init : LionRequestInit | undefined
  }
  
  /**

@@ -6,7 +6,7 @@
  * @template V
  */
 class C1 {
->C1 : C1
+>C1 : C1<T, V>
 
     constructor() {
         /** @type {T} */
@@ -21,7 +21,7 @@ class C1 {
  * @template T,V
  */
 class C2 {
->C2 : C2
+>C2 : C2<T, V>
 
     constructor() { }
 }
@@ -30,7 +30,7 @@ class C2 {
  * @template T,V,X
  */
 class C3 {
->C3 : C3
+>C3 : C3<T, V, X>
 
     constructor() {
         /** @type {T} */

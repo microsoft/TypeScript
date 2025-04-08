@@ -55,12 +55,8 @@ loop:
 					// - Type parameters of a function are in scope in the entire function declaration, including the parameter
 					//   list and return type. However, local types are only in scope in the function body.
 					// - parameters are only in the scope of function body
-					// This restriction does not apply to JSDoc comment types because they are parented
-					// at a higher level than type parameters would normally be
-					if meaning&result.Flags&ast.SymbolFlagsType != 0 && lastLocation.Kind != ast.KindJSDoc {
-						useResult = result.Flags&ast.SymbolFlagsTypeParameter != 0 && (lastLocation.Flags&ast.NodeFlagsSynthesized != 0 ||
-							lastLocation == location.Type() ||
-							ast.IsParameterLikeOrReturnTag(lastLocation))
+					if meaning&result.Flags&ast.SymbolFlagsType != 0 {
+						useResult = result.Flags&ast.SymbolFlagsTypeParameter != 0 && (lastLocation == location.Type() || ast.IsParameterLike(lastLocation))
 					}
 					if meaning&result.Flags&ast.SymbolFlagsVariable != 0 {
 						// expression inside parameter will lookup as normal variable scope when targeting es2015+
@@ -290,19 +286,11 @@ loop:
 		if isSelfReferenceLocation(location, lastLocation) {
 			lastSelfReferenceLocation = location
 		}
-		lastLocation = location
-		switch {
-		// case isJSDocTemplateTag(location):
-		// 	location = getEffectiveContainerForJSDocTemplateTag(location.(*JSDocTemplateTag))
-		// 	if location == nil {
-		// 		location = location.parent
-		// 	}
-		// case isJSDocParameterTag(location) || isJSDocReturnTag(location):
-		// 	location = getHostSignatureFromJSDoc(location)
-		// 	if location == nil {
-		// 		location = location.parent
-		// 	}
-		default:
+		if location.Kind == ast.KindJSDocTypeExpression && location.AsJSDocTypeExpression().Host != nil {
+			lastLocation = location.AsJSDocTypeExpression().Host.Type()
+			location = location.AsJSDocTypeExpression().Host
+		} else {
+			lastLocation = location
 			location = location.Parent
 		}
 	}
@@ -491,7 +479,7 @@ func isSelfReferenceLocation(node *ast.Node, lastLocation *ast.Node) bool {
 	case ast.KindParameter:
 		return lastLocation != nil && lastLocation == node.Name()
 	case ast.KindFunctionDeclaration, ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration,
-		ast.KindTypeAliasDeclaration, ast.KindModuleDeclaration: // For `namespace N { N; }`
+		ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindModuleDeclaration: // For `namespace N { N; }`
 		return true
 	}
 	return false

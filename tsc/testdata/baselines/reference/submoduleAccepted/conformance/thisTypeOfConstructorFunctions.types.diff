@@ -5,9 +5,8 @@
   */
  function Cp(t) {
 ->Cp : typeof Cp
-->t : T
-+>Cp : { (t: any): void; prototype: { m4: () => any; }; }
-+>t : any
++>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
+ >t : T
  
      /** @type {this} */
      this.dit = this
@@ -23,14 +22,12 @@
 +>this : any
  
      this.y = t
-->this.y = t : T
-+>this.y = t : any
+ >this.y = t : T
  >this.y : any
 ->this : this
 +>this : any
  >y : any
-->t : T
-+>t : any
+ >t : T
  
      /** @return {this} */
      this.m3 = () => this
@@ -54,7 +51,7 @@
 ->{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
 +>Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4: () => any; }
 +>Cp.prototype : { m4: () => any; }
-+>Cp : { (t: any): void; prototype: { m4: () => any; }; }
++>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
 +>prototype : { m4: () => any; }
 +>{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4: () => any; }
  
@@ -88,19 +85,16 @@
   */
  function Cpp(t) {
 ->Cpp : typeof Cpp
-->t : T
-+>Cpp : (t: any) => void
-+>t : any
++>Cpp : <T>(t: T) => void
+ >t : T
  
      this.y = t
-->this.y = t : T
-+>this.y = t : any
+ >this.y = t : T
  >this.y : any
 ->this : this
 +>this : any
  >y : any
-->t : T
-+>t : any
+ >t : T
  }
  /** @return {this} */
  Cpp.prototype.m2 = function () {
@@ -109,7 +103,7 @@
  >Cpp.prototype.m2 : any
  >Cpp.prototype : any
 ->Cpp : typeof Cpp
-+>Cpp : (t: any) => void
++>Cpp : <T>(t: T) => void
  >prototype : any
  >m2 : any
 ->function () {    this.z = this.y; return this} : () => this
@@ -140,7 +134,7 @@
 ->Cp : typeof Cp
 +>cp : any
 +>new Cp(1) : any
-+>Cp : { (t: any): void; prototype: { m4: () => any; }; }
++>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
  >1 : 1
  
  var cpp = new Cpp(2)
@@ -149,7 +143,7 @@
 ->Cpp : typeof Cpp
 +>cpp : any
 +>new Cpp(2) : any
-+>Cpp : (t: any) => void
++>Cpp : <T>(t: T) => void
  >2 : 2
  
  cp.dit
@@ -162,12 +156,11 @@
  
  /** @type {Cpp<number>} */
  var cppn = cpp.m2()
-->cppn : Cpp<number>
+ >cppn : Cpp<number>
 ->cpp.m2() : Cpp<number>
 ->cpp.m2 : () => Cpp<number>
 ->cpp : Cpp<number>
 ->m2 : () => Cpp<number>
-+>cppn : any
 +>cpp.m2() : any
 +>cpp.m2 : any
 +>cpp : any
@@ -175,12 +168,11 @@
  
  /** @type {Cp<number>} */
  var cpn = cp.m3()
-->cpn : Cp<number>
+ >cpn : Cp<number>
 ->cp.m3() : Cp<number>
 ->cp.m3 : () => Cp<number>
 ->cp : Cp<number>
 ->m3 : () => Cp<number>
-+>cpn : any
 +>cp.m3() : any
 +>cp.m3 : any
 +>cp : any
@@ -188,12 +180,11 @@
  
  /** @type {Cp<number>} */
  var cpn = cp.m4()
-->cpn : Cp<number>
+ >cpn : Cp<number>
 ->cp.m4() : Cp<number>
 ->cp.m4 : () => Cp<number>
 ->cp : Cp<number>
 ->m4 : () => Cp<number>
-+>cpn : any
 +>cp.m4() : any
 +>cp.m4 : any
 +>cp : any

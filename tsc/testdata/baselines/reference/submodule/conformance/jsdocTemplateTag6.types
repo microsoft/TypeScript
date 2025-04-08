@@ -7,44 +7,44 @@
  * @returns {T}
  */
 function f1(x) {
->f1 : (x: any) => any
->x : any
+>f1 : <T>(x: T) => T
+>x : T
 
     return x;
->x : any
+>x : T
 }
 const t1 = f1("a");
->t1 : any
->f1("a") : any
->f1 : (x: any) => any
+>t1 : "a"
+>f1("a") : "a"
+>f1 : <T>(x: T) => T
 >"a" : "a"
 
 const t2 = f1(["a", ["b", "c"]]);
->t2 : any
->f1(["a", ["b", "c"]]) : any
->f1 : (x: any) => any
->["a", ["b", "c"]] : (string | string[])[]
+>t2 : readonly ["a", readonly ["b", "c"]]
+>f1(["a", ["b", "c"]]) : readonly ["a", readonly ["b", "c"]]
+>f1 : <T>(x: T) => T
+>["a", ["b", "c"]] : ["a", ["b", "c"]]
 >"a" : "a"
->["b", "c"] : string[]
+>["b", "c"] : ["b", "c"]
 >"b" : "b"
 >"c" : "c"
 
 const t3 = f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
->t3 : any
->f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : any
->f1 : (x: any) => any
->{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: number; b: string; d: (string | number | boolean | { f: string; })[]; }
->a : number
+>t3 : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
+>f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
+>f1 : <T>(x: T) => T
+>{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: 1; b: "c"; d: ["e", 2, true, { f: "g"; }]; }
+>a : 1
 >1 : 1
->b : string
+>b : "c"
 >"c" : "c"
->d : (string | number | boolean | { f: string; })[]
->["e", 2, true, { f: "g" }] : (string | number | boolean | { f: string; })[]
+>d : ["e", 2, true, { f: "g"; }]
+>["e", 2, true, { f: "g" }] : ["e", 2, true, { f: "g"; }]
 >"e" : "e"
 >2 : 2
 >true : true
->{ f: "g" } : { f: string; }
->f : string
+>{ f: "g" } : { f: "g"; }
+>f : "g"
 >"g" : "g"
 
 /**
@@ -53,45 +53,45 @@ const t3 = f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
  * @returns {T}
  */
 function f2(x) {
->f2 : (x: any) => any
->x : any
+>f2 : <T, U>(x: T) => T
+>x : T
 
     return x;
->x : any
+>x : T
 
 };
 const t4 = f2('a');
->t4 : any
->f2('a') : any
->f2 : (x: any) => any
+>t4 : "a"
+>f2('a') : "a"
+>f2 : <T, U>(x: T) => T
 >'a' : "a"
 
 const t5 = f2(['a', ['b', 'c']]);
->t5 : any
->f2(['a', ['b', 'c']]) : any
->f2 : (x: any) => any
->['a', ['b', 'c']] : (string | string[])[]
+>t5 : readonly ["a", readonly ["b", "c"]]
+>f2(['a', ['b', 'c']]) : readonly ["a", readonly ["b", "c"]]
+>f2 : <T, U>(x: T) => T
+>['a', ['b', 'c']] : ["a", ["b", "c"]]
 >'a' : "a"
->['b', 'c'] : string[]
+>['b', 'c'] : ["b", "c"]
 >'b' : "b"
 >'c' : "c"
 
 const t6 = f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
->t6 : any
->f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : any
->f2 : (x: any) => any
->{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: number; b: string; d: (string | number | boolean | { f: string; })[]; }
->a : number
+>t6 : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
+>f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
+>f2 : <T, U>(x: T) => T
+>{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: 1; b: "c"; d: ["e", 2, true, { f: "g"; }]; }
+>a : 1
 >1 : 1
->b : string
+>b : "c"
 >"c" : "c"
->d : (string | number | boolean | { f: string; })[]
->["e", 2, true, { f: "g" }] : (string | number | boolean | { f: string; })[]
+>d : ["e", 2, true, { f: "g"; }]
+>["e", 2, true, { f: "g" }] : ["e", 2, true, { f: "g"; }]
 >"e" : "e"
 >2 : 2
 >true : true
->{ f: "g" } : { f: string; }
->f : string
+>{ f: "g" } : { f: "g"; }
+>f : "g"
 >"g" : "g"
 
 /**
@@ -100,23 +100,23 @@ const t6 = f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
  * @returns {T[]}
  */
 function f3(x) {
->f3 : (x: any) => any[]
->x : any
+>f3 : <T>(x: T) => T[]
+>x : T
 
     return [x];
->[x] : any[]
->x : any
+>[x] : T[]
+>x : T
 }
 const t7 = f3("hello");
->t7 : any[]
->f3("hello") : any[]
->f3 : (x: any) => any[]
+>t7 : "hello"[]
+>f3("hello") : "hello"[]
+>f3 : <T>(x: T) => T[]
 >"hello" : "hello"
 
 const t8 = f3("hello");
->t8 : any[]
->f3("hello") : any[]
->f3 : (x: any) => any[]
+>t8 : "hello"[]
+>f3("hello") : "hello"[]
+>f3 : <T>(x: T) => T[]
 >"hello" : "hello"
 
 /**
@@ -125,40 +125,40 @@ const t8 = f3("hello");
  * @returns {T}
  */
 function f4(x) {
->f4 : (x: any) => any
->x : any
+>f4 : <T>(x: [T, T]) => T
+>x : [T, T]
 
     return x[0];
->x[0] : any
->x : any
+>x[0] : T
+>x : [T, T]
 >0 : 0
 }
 const t9 = f4([[1, "x"], [2, "y"]]);
->t9 : any
->f4([[1, "x"], [2, "y"]]) : any
->f4 : (x: any) => any
->[[1, "x"], [2, "y"]] : (string | number)[][]
->[1, "x"] : (string | number)[]
+>t9 : readonly [1, "x"] | readonly [2, "y"]
+>f4([[1, "x"], [2, "y"]]) : readonly [1, "x"] | readonly [2, "y"]
+>f4 : <T>(x: [T, T]) => T
+>[[1, "x"], [2, "y"]] : [[1, "x"], [2, "y"]]
+>[1, "x"] : [1, "x"]
 >1 : 1
 >"x" : "x"
->[2, "y"] : (string | number)[]
+>[2, "y"] : [2, "y"]
 >2 : 2
 >"y" : "y"
 
 const t10 = f4([{ a: 1, b: "x" }, { a: 2, b: "y" }]);
->t10 : any
->f4([{ a: 1, b: "x" }, { a: 2, b: "y" }]) : any
->f4 : (x: any) => any
->[{ a: 1, b: "x" }, { a: 2, b: "y" }] : { a: number; b: string; }[]
->{ a: 1, b: "x" } : { a: number; b: string; }
->a : number
+>t10 : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
+>f4([{ a: 1, b: "x" }, { a: 2, b: "y" }]) : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
+>f4 : <T>(x: [T, T]) => T
+>[{ a: 1, b: "x" }, { a: 2, b: "y" }] : [{ a: 1; b: "x"; }, { a: 2; b: "y"; }]
+>{ a: 1, b: "x" } : { a: 1; b: "x"; }
+>a : 1
 >1 : 1
->b : string
+>b : "x"
 >"x" : "x"
->{ a: 2, b: "y" } : { a: number; b: string; }
->a : number
+>{ a: 2, b: "y" } : { a: 2; b: "y"; }
+>a : 2
 >2 : 2
->b : string
+>b : "y"
 >"y" : "y"
 
 /**
@@ -167,98 +167,98 @@ const t10 = f4([{ a: 1, b: "x" }, { a: 2, b: "y" }]);
  * @returns {T}
  */
 function f5(obj) {
->f5 : (obj: any) => any
->obj : any
+>f5 : <T>(obj: { x: T; y: T; }) => T
+>obj : { x: T; y: T; }
 
     return obj.x;
->obj.x : any
->obj : any
->x : any
+>obj.x : T
+>obj : { x: T; y: T; }
+>x : T
 }
 const t11 = f5({ x: [1, "x"], y: [2, "y"] });
->t11 : any
->f5({ x: [1, "x"], y: [2, "y"] }) : any
->f5 : (obj: any) => any
->{ x: [1, "x"], y: [2, "y"] } : { x: (string | number)[]; y: (string | number)[]; }
->x : (string | number)[]
->[1, "x"] : (string | number)[]
+>t11 : readonly [1, "x"] | readonly [2, "y"]
+>f5({ x: [1, "x"], y: [2, "y"] }) : readonly [1, "x"] | readonly [2, "y"]
+>f5 : <T>(obj: { x: T; y: T; }) => T
+>{ x: [1, "x"], y: [2, "y"] } : { x: [1, "x"]; y: [2, "y"]; }
+>x : [1, "x"]
+>[1, "x"] : [1, "x"]
 >1 : 1
 >"x" : "x"
->y : (string | number)[]
->[2, "y"] : (string | number)[]
+>y : [2, "y"]
+>[2, "y"] : [2, "y"]
 >2 : 2
 >"y" : "y"
 
 const t12 = f5({ x: { a: 1, b: "x" }, y: { a: 2, b: "y" } });
->t12 : any
->f5({ x: { a: 1, b: "x" }, y: { a: 2, b: "y" } }) : any
->f5 : (obj: any) => any
->{ x: { a: 1, b: "x" }, y: { a: 2, b: "y" } } : { x: { a: number; b: string; }; y: { a: number; b: string; }; }
->x : { a: number; b: string; }
->{ a: 1, b: "x" } : { a: number; b: string; }
->a : number
+>t12 : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
+>f5({ x: { a: 1, b: "x" }, y: { a: 2, b: "y" } }) : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
+>f5 : <T>(obj: { x: T; y: T; }) => T
+>{ x: { a: 1, b: "x" }, y: { a: 2, b: "y" } } : { x: { a: 1; b: "x"; }; y: { a: 2; b: "y"; }; }
+>x : { a: 1; b: "x"; }
+>{ a: 1, b: "x" } : { a: 1; b: "x"; }
+>a : 1
 >1 : 1
->b : string
+>b : "x"
 >"x" : "x"
->y : { a: number; b: string; }
->{ a: 2, b: "y" } : { a: number; b: string; }
->a : number
+>y : { a: 2; b: "y"; }
+>{ a: 2, b: "y" } : { a: 2; b: "y"; }
+>a : 2
 >2 : 2
->b : string
+>b : "y"
 >"y" : "y"
 
 /**
  * @template const T
  */
 class C {
->C : C
+>C : C<T>
 
     /**
      * @param {T} x
      */
     constructor(x) {}
->x : any
+>x : T
 
     /**
      * @template const U
      * @param {U} x
      */
     foo(x) {
->foo : (x: any) => any
->x : any
+>foo : <U>(x: U) => U
+>x : U
 
         return x;
->x : any
+>x : U
     }
 }
 
 const t13 = new C({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
->t13 : C
->new C({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : C
+>t13 : C<{ readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }>
+>new C({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : C<{ readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }>
 >C : typeof C
->{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: number; b: string; d: (string | number | boolean | { f: string; })[]; }
->a : number
+>{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: 1; b: "c"; d: ["e", 2, true, { f: "g"; }]; }
+>a : 1
 >1 : 1
->b : string
+>b : "c"
 >"c" : "c"
->d : (string | number | boolean | { f: string; })[]
->["e", 2, true, { f: "g" }] : (string | number | boolean | { f: string; })[]
+>d : ["e", 2, true, { f: "g"; }]
+>["e", 2, true, { f: "g" }] : ["e", 2, true, { f: "g"; }]
 >"e" : "e"
 >2 : 2
 >true : true
->{ f: "g" } : { f: string; }
->f : string
+>{ f: "g" } : { f: "g"; }
+>f : "g"
 >"g" : "g"
 
 const t14 = t13.foo(["a", ["b", "c"]]);
->t14 : any
->t13.foo(["a", ["b", "c"]]) : any
->t13.foo : (x: any) => any
->t13 : C
->foo : (x: any) => any
->["a", ["b", "c"]] : (string | string[])[]
+>t14 : readonly ["a", readonly ["b", "c"]]
+>t13.foo(["a", ["b", "c"]]) : readonly ["a", readonly ["b", "c"]]
+>t13.foo : <U>(x: U) => U
+>t13 : C<{ readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }>
+>foo : <U>(x: U) => U
+>["a", ["b", "c"]] : ["a", ["b", "c"]]
 >"a" : "a"
->["b", "c"] : string[]
+>["b", "c"] : ["b", "c"]
 >"b" : "b"
 >"c" : "c"
 
@@ -268,21 +268,21 @@ const t14 = t13.foo(["a", ["b", "c"]]);
  * @returns {T}
  */
 function f6(...args) {
->f6 : (...args: any[]) => any[]
->args : any[]
+>f6 : <T extends readonly unknown[]>(...args: T) => T
+>args : T
 
     return args;
->args : any[]
+>args : T
 }
 const t15 = f6(1, 'b', { a: 1, b: 'x' });
->t15 : any[]
->f6(1, 'b', { a: 1, b: 'x' }) : any[]
->f6 : (...args: any[]) => any[]
+>t15 : readonly [1, "b", { readonly a: 1; readonly b: "x"; }]
+>f6(1, 'b', { a: 1, b: 'x' }) : readonly [1, "b", { readonly a: 1; readonly b: "x"; }]
+>f6 : <T extends readonly unknown[]>(...args: T) => T
 >1 : 1
 >'b' : "b"
->{ a: 1, b: 'x' } : { a: number; b: string; }
->a : number
+>{ a: 1, b: 'x' } : { a: 1; b: "x"; }
+>a : 1
 >1 : 1
->b : string
+>b : "x"
 >'x' : "x"
 

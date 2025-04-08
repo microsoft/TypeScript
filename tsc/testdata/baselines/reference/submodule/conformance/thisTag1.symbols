@@ -10,7 +10,9 @@ function f(s) {
 >s : Symbol(s, Decl(a.js, 4, 11))
 
     return this.n + s.length
+>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(a.js, 4, 11))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 }
 
 const o = {

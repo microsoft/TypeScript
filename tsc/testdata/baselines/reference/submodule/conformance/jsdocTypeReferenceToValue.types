@@ -3,12 +3,12 @@
 === foo.js ===
 /** @param {Image} image */
 function process(image) {
->process : (image: any) => any
->image : any
+>process : (image: Image) => any
+>image : Image
 
     return new image(1, 1)
 >new image(1, 1) : any
->image : any
+>image : Image
 >1 : 1
 >1 : 1
 }

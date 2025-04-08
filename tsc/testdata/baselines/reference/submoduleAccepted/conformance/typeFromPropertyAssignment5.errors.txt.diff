@@ -1,0 +1,23 @@
+--- old.typeFromPropertyAssignment5.errors.txt
++++ new.typeFromPropertyAssignment5.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++b.js(3,12): error TS2503: Cannot find namespace 'MC'.
++
++
++==== a.js (0 errors) ====
++    export default function MyClass() {
++    }
++    MyClass.bar = class C {
++    }
++    MyClass.bar
++    
++==== b.js (1 errors) ====
++    import MC from './a'
++    MC.bar
++    /** @type {MC.bar} */
++               ~~
++!!! error TS2503: Cannot find namespace 'MC'.
++    var x
++    

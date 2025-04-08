@@ -7,7 +7,7 @@
  * @type {Object<string,*>}
  */
 const myTypes = {
->myTypes : {}
+>myTypes : any
 >{    // SOME PROPS HERE} : {}
 
     // SOME PROPS HERE
@@ -24,11 +24,11 @@ const myTypes = {
 /** @typedef {myTypes.typeB|Function} myTypes.typeC */
 
 export {myTypes};
->myTypes : {}
+>myTypes : any
 
 === file2.js ===
 import {myTypes} from './file.js';
->myTypes : {}
+>myTypes : any
 
 /**
  * @namespace testFnTypes
@@ -36,7 +36,7 @@ import {myTypes} from './file.js';
  * @type {Object<string,*>}
  */
 const testFnTypes = {
->testFnTypes : {}
+>testFnTypes : any
 >{    // SOME PROPS HERE} : {}
 
     // SOME PROPS HERE
@@ -51,13 +51,13 @@ const testFnTypes = {
  * @returns {number|null} Result.
  */
 function testFn(input) {
->testFn : (input: any) => number
->input : any
+>testFn : (input: input) => number
+>input : input
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
 >typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->input : any
+>input : input
 >'number' : "number"
 
         return 2 * input;
@@ -71,6 +71,6 @@ function testFn(input) {
 }
 
 export {testFn, testFnTypes};
->testFn : (input: any) => number
->testFnTypes : {}
+>testFn : (input: input) => number
+>testFnTypes : any
 

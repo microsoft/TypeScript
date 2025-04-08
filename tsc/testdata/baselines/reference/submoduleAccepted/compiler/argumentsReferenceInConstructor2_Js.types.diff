@@ -5,7 +5,7 @@
  	 */
  	constructor(foo = {}) {
 ->foo : any
-+>foo : {}
++>foo : object
  >{} : {}
  
  		/**
@@ -13,12 +13,12 @@
  		 */
  		this["arguments"] = foo;
 ->this["arguments"] = foo : any
-+>this["arguments"] = foo : {}
++>this["arguments"] = foo : object
  >this["arguments"] : any
  >this : this
  >"arguments" : "arguments"
 ->foo : any
-+>foo : {}
++>foo : object
  	}
  }
  

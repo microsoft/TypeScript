@@ -6,10 +6,8 @@
  export const foo = function (a, b) { }
 ->foo : { (a: string): void; (a: number, b?: number): void; }
 ->function (a, b) { } : { (a: string): void; (a: number, b?: number): void; }
-->a : string | number
-->b : number
-+>foo : (a: any, b: any) => void
-+>function (a, b) { } : (a: any, b: any) => void
-+>a : any
-+>b : any
++>foo : (a: string | number, b?: number) => void
++>function (a, b) { } : (a: string | number, b?: number) => void
+ >a : string | number
+ >b : number
  

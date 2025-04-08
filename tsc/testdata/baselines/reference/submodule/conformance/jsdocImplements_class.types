@@ -6,7 +6,7 @@ class A {
 
     /** @return {number} */
     method() { throw new Error(); }
->method : () => void
+>method : () => number
 >new Error() : Error
 >Error : ErrorConstructor
 }

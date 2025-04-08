@@ -28,21 +28,21 @@ export class D {
      * @param {number} b
      */
     constructor(a, b) {}
->a : any
->b : any
+>a : number
+>b : number
 }
 
 /**
  * @template T,U
  */
 export class E {
->E : E
+>E : E<T, U>
 
     /**
      * @type {T & U}
      */
     field;
->field : any
+>field : T & U
 
     // @readonly is currently unsupported, it seems - included here just in case that changes
     /**
@@ -50,7 +50,7 @@ export class E {
      * @readonly
      */
     readonlyField;
->readonlyField : any
+>readonlyField : T & U
 
     initializedField = 12;
 >initializedField : number
@@ -60,44 +60,46 @@ export class E {
      * @return {U}
      */
     get f1() { return /** @type {*} */(null); }
->f1 : any
->(null) : null
+>f1 : U
+>(null) : any
+>null : any
 
     /**
      * @param {U} _p
      */
     set f1(_p) {}
->f1 : any
->_p : any
+>f1 : U
+>_p : U
 
     /**
      * @return {U}
      */
     get f2() { return /** @type {*} */(null); }
->f2 : any
->(null) : null
+>f2 : U
+>(null) : any
+>null : any
 
     /**
      * @param {U} _p
      */
     set f3(_p) {}
->f3 : any
->_p : any
+>f3 : U
+>_p : U
 
     /**
      * @param {T} a
      * @param {U} b
      */
     constructor(a, b) {}
->a : any
->b : any
+>a : T
+>b : U
 
 
     /**
      * @type {string}
      */
     static staticField;
->staticField : any
+>staticField : string
 
     // @readonly is currently unsupported, it seems - included here just in case that changes
     /**
@@ -105,7 +107,7 @@ export class E {
      * @readonly
      */
     static staticReadonlyField;
->staticReadonlyField : any
+>staticReadonlyField : string
 
     static staticInitializedField = 12;
 >staticInitializedField : number
@@ -136,29 +138,29 @@ export class E {
      * @param {string} _p
      */
     static set s3(_p) {}
->s3 : any
->_p : any
+>s3 : string
+>_p : string
 }
 
 /**
  * @template T,U
  */
 export class F {
->F : F
+>F : F<T, U>
 
     /**
      * @type {T & U}
      */
     field;
->field : any
+>field : T & U
 
     /**
      * @param {T} a
      * @param {U} b
      */
     constructor(a, b) {}
->a : any
->b : any
+>a : T
+>b : U
 
     /**
      * @template A,B
@@ -166,13 +168,13 @@ export class F {
      * @param {B} b
      */
     static create(a, b) { return new F(a, b); }
->create : (a: any, b: any) => F
->a : any
->b : any
->new F(a, b) : F
+>create : <A, B>(a: A, b: B) => F<A, B>
+>a : A
+>b : B
+>new F(a, b) : F<A, B>
 >F : typeof F
->a : any
->b : any
+>a : A
+>b : B
 }
 
 class G {}
@@ -254,25 +256,25 @@ export class M extends null {
  * @template T
  */
 export class N extends L {
->N : N
+>N : N<T>
 >L : L
 
     /**
      * @param {T} param 
      */
     constructor(param) {
->param : any
+>param : T
 
         super();
 >super() : void
 >super : typeof L
 
         this.another = param;
->this.another = param : any
+>this.another = param : T
 >this.another : any
 >this : this
 >another : any
->param : any
+>param : T
     }
 }
 
@@ -281,32 +283,33 @@ export class N extends L {
  * @extends {N<U>}
  */
 export class O extends N {
->O : O
->N : N
+>O : O<U>
+>N : typeof N
 
     /**
      * @param {U} param 
      */
     constructor(param) {
->param : any
+>param : U
 
         super(param);
 >super(param) : void
->super : typeof N
->param : any
+>super : any
+>param : U
 
         this.another2 = param;
->this.another2 = param : any
+>this.another2 = param : U
 >this.another2 : any
 >this : this
 >another2 : any
->param : any
+>param : U
     }
 }
 
 var x = /** @type {*} */(null);
 >x : any
->(null) : null
+>(null) : any
+>null : any
 
 export class VariableBase extends x {}
 >VariableBase : VariableBase

@@ -5,11 +5,7 @@
   */
  function foo(a, b, c) {}
 ->foo : (a: number, b?: number, c: number) => void
-->a : number
-->b : number
-->c : number
-+>foo : (a: any, b: any, c: any) => void
-+>a : any
-+>b : any
-+>c : any
- 
++>foo : (a: number, b: number, c: number) => void
+ >a : number
+ >b : number
+ >c : number

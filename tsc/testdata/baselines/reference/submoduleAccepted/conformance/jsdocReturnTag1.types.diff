@@ -1,29 +1,11 @@
 --- old.jsdocReturnTag1.types
 +++ new.jsdocReturnTag1.types
-@@= skipped -4, +4 lines =@@
-  * @returns {string} This comment is not currently exposed
-  */
- function f() {
-->f : () => string
-+>f : () => number
- 
-     return 5;
- >5 : 5
-@@= skipped -10, +10 lines =@@
+@@= skipped -14, +14 lines =@@
   * @returns {string=} This comment is not currently exposed
   */
  function f1() {
 ->f1 : () => string | undefined
-+>f1 : () => number
++>f1 : () => string
  
      return 5;
  >5 : 5
-@@= skipped -10, +10 lines =@@
-  * @returns {string|number} This comment is not currently exposed
-  */
- function f2() {
-->f2 : () => string | number
-+>f2 : () => "hello" | 5
- 
-     return 5 || "hello";
- >5 || "hello" : "hello" | 5

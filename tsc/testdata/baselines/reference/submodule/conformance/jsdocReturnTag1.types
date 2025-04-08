@@ -5,7 +5,7 @@
  * @returns {string} This comment is not currently exposed
  */
 function f() {
->f : () => number
+>f : () => string
 
     return 5;
 >5 : 5
@@ -15,7 +15,7 @@ function f() {
  * @returns {string=} This comment is not currently exposed
  */
 function f1() {
->f1 : () => number
+>f1 : () => string
 
     return 5;
 >5 : 5
@@ -25,7 +25,7 @@ function f1() {
  * @returns {string|number} This comment is not currently exposed
  */
 function f2() {
->f2 : () => "hello" | 5
+>f2 : () => string | number
 
     return 5 || "hello";
 >5 || "hello" : "hello" | 5

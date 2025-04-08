@@ -3,7 +3,7 @@
 === /a.js ===
 /** @template T */
 class C {}
->C : C
+>C : C<T>
 
 /** @param {C} p */
 function f(p) {}

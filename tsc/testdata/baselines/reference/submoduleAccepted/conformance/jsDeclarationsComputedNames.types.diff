@@ -17,12 +17,3 @@
  
      [TopLevelSym](x = 12) {
  >[TopLevelSym] : (x?: number) => number
-@@= skipped -62, +62 lines =@@
-      * @param {typeof TopLevelSym | typeof InnerSym} _p
-      */
-     constructor(_p = InnerSym) {
-->_p : unique symbol | unique symbol
-+>_p : symbol
- >InnerSym : unique symbol
- 
-         // switch on _p

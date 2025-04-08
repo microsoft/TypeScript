@@ -1,21 +1,18 @@
 --- old.jsdocImportTypeNodeNamespace.errors.txt
 +++ new.jsdocImportTypeNodeNamespace.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -Main.js(2,21): error TS2352: Conversion of type 'string' to type 'typeof _default' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--
--
--==== GeometryType.d.ts (0 errors) ====
--    declare namespace _default {
--      export const POINT: string;
--    }
--    export default _default;
--    
--==== Main.js (1 errors) ====
--    export default function () {
--      return /** @type {import('./GeometryType.js').default} */ ('Point');
++Main.js(2,49): error TS2694: Namespace '"GeometryType"' has no exported member 'default'.
+ 
+ 
+ ==== GeometryType.d.ts (0 errors) ====
+@@= skipped -9, +9 lines =@@
+ ==== Main.js (1 errors) ====
+     export default function () {
+       return /** @type {import('./GeometryType.js').default} */ ('Point');
 -                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2352: Conversion of type 'string' to type 'typeof _default' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--    }
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
++                                                    ~~~~~~~
++!!! error TS2694: Namespace '"GeometryType"' has no exported member 'default'.
+     }
+     

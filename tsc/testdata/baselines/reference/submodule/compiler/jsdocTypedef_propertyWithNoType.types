@@ -8,7 +8,7 @@
 
 /** @type {Foo} */
 const x = { foo: 0 };
->x : { foo: number; }
+>x : Foo
 >{ foo: 0 } : { foo: number; }
 >foo : number
 >0 : 0

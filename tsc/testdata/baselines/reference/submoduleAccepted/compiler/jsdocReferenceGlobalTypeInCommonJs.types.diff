@@ -14,7 +14,7 @@
  /** @type {Puppeteer.Keyboard} */
  var ppk;
 ->ppk : Puppeteer.Keyboard
-+>ppk : any
++>ppk : Keyboard
  
  Puppeteer.connect;
  >Puppeteer.connect : (name: string) => void

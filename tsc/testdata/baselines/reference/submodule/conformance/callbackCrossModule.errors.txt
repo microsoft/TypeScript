@@ -1,4 +1,5 @@
 mod1.js(5,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+use.js(1,20): error TS2306: File 'mod1.js' is not a module.
 
 
 ==== mod1.js (1 errors) ====
@@ -13,8 +14,10 @@ mod1.js(5,1): error TS2580: Cannot find name 'module'. Do you need to install ty
         this.p = 1
     }
     
-==== use.js (0 errors) ====
+==== use.js (1 errors) ====
     /** @param {import('./mod1').Con} k */
+                       ~~~~~~~~
+!!! error TS2306: File 'mod1.js' is not a module.
     function f(k) {
         if (1 === 2 - 1) {
             // I guess basic math works!

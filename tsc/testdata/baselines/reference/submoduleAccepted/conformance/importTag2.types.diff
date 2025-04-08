@@ -6,6 +6,6 @@
  export function f(foo) {}
 ->f : (foo: types.Foo) => void
 ->foo : types.Foo
-+>f : (foo: any) => void
-+>foo : any
++>f : (foo: Foo) => void
++>foo : Foo
  

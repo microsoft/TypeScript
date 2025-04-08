@@ -7,10 +7,10 @@
  * @param {string} x
  */
 function good1({a, b}, x) {}
->good1 : (__0: { a: any; b: any; }, x: any) => void
+>good1 : (__0: { a: any; b: any; }, x: string) => void
 >a : any
 >b : any
->x : any
+>x : string
 
 /**
  * @param {{a: string, b: string}} obj
@@ -29,11 +29,11 @@ function good2({a, b}, {c, d}) {}
  * @param {string} y
  */
 function good3(x, {a, b}, y) {}
->good3 : (x: any, __1: { a: any; b: any; }, y: any) => void
->x : any
+>good3 : (x: number, __1: { a: any; b: any; }, y: string) => void
+>x : number
 >a : any
 >b : any
->y : any
+>y : string
 
 /**
  * @param {{a: string, b: string}} obj
@@ -51,10 +51,10 @@ function good4({a, b}) {}
  * @param {string} x
  */
 function good5({a, b}, x) {}
->good5 : (__0: { a: any; b: any; }, x: any) => void
+>good5 : (__0: { a: any; b: any; }, x: string) => void
 >a : any
 >b : any
->x : any
+>x : string
 
 /**
  * @param {Object} obj
@@ -79,11 +79,11 @@ function good6({a, b}, {c, d}) {}
  * @param {string} y
  */
 function good7(x, {a, b}, y) {}
->good7 : (x: any, __1: { a: any; b: any; }, y: any) => void
->x : any
+>good7 : (x: number, __1: { a: any; b: any; }, y: string) => void
+>x : number
 >a : any
 >b : any
->y : any
+>y : string
 
 /**
  * @param {Object} obj
@@ -118,8 +118,8 @@ function good9({ a }) {
  * @param {string} x
  */
 function bad1(x, {a, b}) {}
->bad1 : (x: any, __1: { a: any; b: any; }) => void
->x : any
+>bad1 : (x: string, __1: { a: any; b: any; }) => void
+>x : string
 >a : any
 >b : any
 

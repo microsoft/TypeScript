@@ -1,4 +1,4 @@
-jsdocConstructorFunctionTypeReference.js(10,36): error TS7006: Parameter 'state' implicitly has an 'any' type.
+jsdocConstructorFunctionTypeReference.js(8,12): error TS2749: 'Validator' refers to a value, but is being used as a type here. Did you mean 'typeof Validator'?
 
 
 ==== jsdocConstructorFunctionTypeReference.js (1 errors) ====
@@ -10,10 +10,10 @@ jsdocConstructorFunctionTypeReference.js(10,36): error TS7006: Parameter 'state'
     
     /**
      * @param {Validator} state
+               ~~~~~~~~~
+!!! error TS2749: 'Validator' refers to a value, but is being used as a type here. Did you mean 'typeof Validator'?
      */
     var validateRegExpFlags = function(state) {
-                                       ~~~~~
-!!! error TS7006: Parameter 'state' implicitly has an 'any' type.
         return state.flags
     };
     

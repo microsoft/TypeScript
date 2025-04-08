@@ -26,11 +26,11 @@ Outer.Inner = class {
 
 /** @type {Outer.Inner} */
 var local
->local : any
+>local : Inner
 
 local.y
 >local.y : any
->local : any
+>local : Inner
 >y : any
 
 var inner = new Outer.Inner()
@@ -48,11 +48,11 @@ inner.y
 === b.js ===
 /** @type {Outer.Inner} */
 var x
->x : any
+>x : Inner
 
 x.y
 >x.y : any
->x : any
+>x : Inner
 >y : any
 
 var z = new Outer.Inner()

@@ -35,14 +35,14 @@ export class Foo {
      * @param {number | string} a
      */
     constructor(a, b) {
->a : any
+>a : string | number
 >b : any
 
         this.#a = a
->this.#a = a : any
+>this.#a = a : string | number
 >this.#a : string | number
 >this : this
->a : any
+>a : string | number
 
         this.#b = b
 >this.#b = b : any

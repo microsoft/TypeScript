@@ -15,6 +15,6 @@ export interface Foo {}
  * @param {Foo} a
  */
 export function foo(a) {}
->foo : (a: any) => void
->a : any
+>foo : (a: Foo) => void
+>a : Foo
 

@@ -27,33 +27,19 @@
  >Cls : typeof Cls
  >class {} : typeof Cls
  
-@@= skipped -25, +25 lines =@@
-  * @return {string} 
-  */
- export function d(a, b) { return /** @type {*} */(null); }
-->d : (a: number, b: number) => string
-->a : number
-->b : number
-->(null) : any
-+>d : (a: any, b: any) => any
-+>a : any
-+>b : any
-+>(null) : null
+@@= skipped -29, +29 lines =@@
+ >a : number
+ >b : number
+ >(null) : any
++>null : any
  
  /**
   * @template T,U
-@@= skipped -12, +12 lines =@@
-  * @return {T & U} 
-  */
- export function e(a, b) { return /** @type {*} */(null); }
-->e : <T, U>(a: T, b: U) => T & U
-->a : T
-->b : U
-->(null) : any
-+>e : (a: any, b: any) => any
-+>a : any
-+>b : any
-+>(null) : null
+@@= skipped -12, +13 lines =@@
+ >a : T
+ >b : U
+ >(null) : any
++>null : any
  
  /**
   * @template T
@@ -61,13 +47,11 @@
   */
  export function f(a) {
 ->f : typeof f
-->a : T
-+>f : { (a: any): any; self: ???; }
-+>a : any
++>f : { <T>(a: T): T; self: ???; }
+ >a : T
  
      return a;
-->a : T
-+>a : any
+ >a : T
  }
  f.self = f;
 ->f.self = f : typeof f
@@ -75,11 +59,11 @@
 ->f : typeof f
 ->self : typeof f
 ->f : typeof f
-+>f.self = f : { (a: any): any; self: ???; }
-+>f.self : { (a: any): any; self: ???; }
-+>f : { (a: any): any; self: ???; }
-+>self : { (a: any): any; self: ???; }
-+>f : { (a: any): any; self: ???; }
++>f.self = f : { <T>(a: T): T; self: ???; }
++>f.self : { <T>(a: T): T; self: ???; }
++>f : { <T>(a: T): T; self: ???; }
++>self : { <T>(a: T): T; self: ???; }
++>f : { <T>(a: T): T; self: ???; }
  
  /**
   * @param {{x: string}} a
@@ -87,34 +71,30 @@
   */
  function g(a, b) {
 ->g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
-->a : { x: string; }
++>g : (a: { x: string; }, b: { y: ???; }) => any
+ >a : { x: string; }
 ->b : { y: typeof import("index").b; }
-+>g : (a: any, b: any) => any
-+>a : any
-+>b : any
++>b : { y: ???; }
  
      return a.x && b.y();
 ->a.x && b.y() : void
-->a.x : string
-->a : { x: string; }
-->x : string
++>a.x && b.y() : any
+ >a.x : string
+ >a : { x: string; }
+ >x : string
 ->b.y() : void
 ->b.y : typeof import("index").b
 ->b : { y: typeof import("index").b; }
 ->y : typeof import("index").b
-+>a.x && b.y() : any
-+>a.x : any
-+>a : any
-+>x : any
 +>b.y() : any
-+>b.y : any
-+>b : any
-+>y : any
++>b.y : { y: ???; }
++>b : { y: ???; }
++>y : { y: ???; }
  }
  
  export { g };
 ->g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
-+>g : (a: any, b: any) => any
++>g : (a: { x: string; }, b: { y: ???; }) => any
  
  /**
   * @param {{x: string}} a
@@ -122,36 +102,32 @@
   */
  function hh(a, b) {
 ->hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
-->a : { x: string; }
++>hh : (a: { x: string; }, b: { y: ???; }) => any
+ >a : { x: string; }
 ->b : { y: typeof import("index").b; }
-+>hh : (a: any, b: any) => any
-+>a : any
-+>b : any
++>b : { y: ???; }
  
      return a.x && b.y();
 ->a.x && b.y() : void
-->a.x : string
-->a : { x: string; }
-->x : string
++>a.x && b.y() : any
+ >a.x : string
+ >a : { x: string; }
+ >x : string
 ->b.y() : void
 ->b.y : typeof import("index").b
 ->b : { y: typeof import("index").b; }
 ->y : typeof import("index").b
-+>a.x && b.y() : any
-+>a.x : any
-+>a : any
-+>x : any
 +>b.y() : any
-+>b.y : any
-+>b : any
-+>y : any
++>b.y : { y: ???; }
++>b : { y: ???; }
++>y : { y: ???; }
  }
  
  export { hh as h };
 ->hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
 ->h : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
-+>hh : (a: any, b: any) => any
-+>h : (a: any, b: any) => any
++>hh : (a: { x: string; }, b: { y: ???; }) => any
++>h : (a: { x: string; }, b: { y: ???; }) => any
  
  export function i() {}
  >i : () => void

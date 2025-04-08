@@ -1,26 +1,24 @@
-b.js(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'W' must be of type 'string', but here has type 'number'.
-b.js(4,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'W' must be of type 'string', but here has type 'number'.
-b.js(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
-b.js(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 's' must be of type 'any', but here has type 'string'.
+b.js(4,31): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 b.js(17,14): error TS2339: Property 'p' does not exist on type 'SomeBase'.
 b.js(23,14): error TS2339: Property 'x' does not exist on type 'SomeDerived'.
 b.js(28,14): error TS2339: Property 'q' does not exist on type 'SomeOther'.
+b.js(66,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+b.js(66,38): error TS2454: Variable 'numOrStr' is used before being assigned.
+b.js(67,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
 
 
 ==== a.ts (0 errors) ====
     var W: string;
     
-==== b.js (7 errors) ====
+==== b.js (8 errors) ====
     // @ts-check
     var W = /** @type {string} */(/** @type {*} */ (4));
-        ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'W' must be of type 'string', but here has type 'number'.
-!!! related TS6203 a.ts:1:5: 'W' was also declared here.
     
     var W = /** @type {string} */(4); // Error
-        ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'W' must be of type 'string', but here has type 'number'.
-!!! related TS6203 a.ts:1:5: 'W' was also declared here.
+                                  ~
+!!! error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     
     /** @type {*} */
     var a;
@@ -29,13 +27,7 @@ b.js(28,14): error TS2339: Property 'q' does not exist on type 'SomeOther'.
     var s;
     
     var a = /** @type {*} */("" + 4);
-        ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
-!!! related TS6203 b.js:7:5: 'a' was also declared here.
     var s = "" + /** @type {*} */(4);
-        ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 's' must be of type 'any', but here has type 'string'.
-!!! related TS6203 b.js:10:5: 's' was also declared here.
     
     class SomeBase {
         constructor() {
@@ -95,7 +87,16 @@ b.js(28,14): error TS2339: Property 'q' does not exist on type 'SomeOther'.
     /** @type {string} */
     var str;
     if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+                                         ~~~~~~~~
+!!! error TS2454: Variable 'numOrStr' is used before being assigned.
     	str = numOrStr; // Error, no narrowing occurred
+    	~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    	      ~~~~~~~~
+!!! error TS2454: Variable 'numOrStr' is used before being assigned.
     }
     
     

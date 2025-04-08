@@ -1,22 +1,26 @@
-a.js(17,1): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: number; }'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-a.js(18,1): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: string; }'.
-  Types of property 'x' are incompatible.
-    Type 'number' is not assignable to type 'string'.
+a.js(2,14): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+a.js(18,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
+  Type 'unknown' is not assignable to type 'string'.
+a.js(21,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
 a.js(29,33): error TS7006: Parameter 'x' implicitly has an 'any' type.
 a.js(34,31): error TS7006: Parameter 'x' implicitly has an 'any' type.
+a.js(36,1): error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
+  Type 'unknown' is not assignable to type 'string'.
+a.js(40,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
 a.js(48,29): error TS7006: Parameter 'x' implicitly has an 'any' type.
 a.js(53,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
-a.js(56,1): error TS2322: Type '{ f: (x: any) => void; }' is not assignable to type '{ f: (x: any) => string; }'.
-  The types returned by 'f(...)' are incompatible between these types.
-    Type 'void' is not assignable to type 'string'.
-a.js(62,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+a.js(55,1): error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
+  Type 'unknown' is not assignable to type 'string'.
+a.js(56,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
+  Type 'unknown' is not assignable to type 'string'.
+a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
 
 
-==== a.js (8 errors) ====
+==== a.js (12 errors) ====
     /**
      * @template out T
+                 ~~~
+!!! error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Covariant
      * @property {T} x
      */
@@ -32,18 +36,15 @@ a.js(62,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
     let sub_covariant = { x: '' };
     
     super_covariant = sub_covariant;
-    ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: number; }'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     sub_covariant   = super_covariant; // Error
     ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type '{ x: string; }'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
     
     /**
      * @template in T
+                 ~~
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Contravariant
      * @property {(x: T) => void} f
      */
@@ -63,10 +64,15 @@ a.js(62,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     
     super_contravariant = sub_contravariant;  // Error
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
     sub_contravariant = super_contravariant;
     
     /**
      * @template in out T
+                 ~~
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Invariant
      * @property {(x: T) => T} f
      */
@@ -86,17 +92,19 @@ a.js(62,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     
     super_invariant = sub_invariant;  // Error
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
     sub_invariant = super_invariant;  // Error
     ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ f: (x: any) => void; }' is not assignable to type '{ f: (x: any) => string; }'.
-!!! error TS2322:   The types returned by 'f(...)' are incompatible between these types.
-!!! error TS2322:     Type 'void' is not assignable to type 'string'.
+!!! error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
     
     /**
      * @template in T
+                 ~~
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
      * @param {T} x
      */
     function f(x) {}
-               ~
-!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     

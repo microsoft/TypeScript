@@ -1,0 +1,33 @@
+file.js(7,26): error TS8020: JSDoc types can only be used inside documentation comments.
+file.js(20,26): error TS8020: JSDoc types can only be used inside documentation comments.
+
+
+==== file.js (2 errors) ====
+    class X {
+        /**
+          * Cancels the request, sending a cancellation to the other party
+          * @param {Object} error __auto_generated__
+          * @param {string?} error.reason the error reason to send the cancellation with
+          * @param {string?} error.code the error code to send the cancellation with
+          * @returns {Promise.<*>} resolves when the event has been sent.
+                             ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+          */ 
+        async cancel({reason, code}) {}
+    }
+    
+    class Y {
+        /**
+          * Cancels the request, sending a cancellation to the other party
+          * @param {Object} error __auto_generated__
+          * @param {string?} error.reason the error reason to send the cancellation with
+          * @param {Object} error.suberr
+          * @param {string?} error.suberr.reason the error reason to send the cancellation with
+          * @param {string?} error.suberr.code the error code to send the cancellation with
+          * @returns {Promise.<*>} resolves when the event has been sent.
+                             ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+          */ 
+        async cancel({reason, suberr}) {}
+    }
+    

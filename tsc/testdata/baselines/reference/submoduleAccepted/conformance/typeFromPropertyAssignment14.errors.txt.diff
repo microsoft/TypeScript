@@ -3,6 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
++use.js(1,12): error TS2503: Cannot find namespace 'Outer'.
 +use.js(5,22): error TS2339: Property 'Inner' does not exist on type '{}'.
 +work.js(1,7): error TS2339: Property 'Inner' does not exist on type '{}'.
 +work.js(2,7): error TS2339: Property 'Inner' does not exist on type '{}'.
@@ -22,8 +23,10 @@
 +        m() { }
 +    }
 +    
-+==== use.js (1 errors) ====
++==== use.js (2 errors) ====
 +    /** @type {Outer.Inner} */
++               ~~~~~
++!!! error TS2503: Cannot find namespace 'Outer'.
 +    var inner
 +    inner.x
 +    inner.m()

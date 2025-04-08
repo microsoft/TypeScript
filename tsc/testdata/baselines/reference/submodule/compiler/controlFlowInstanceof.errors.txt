@@ -1,5 +1,4 @@
-uglify.js(5,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
-uglify.js(6,7): error TS2339: Property 'val' does not exist on type 'number'.
+uglify.js(6,7): error TS2339: Property 'val' does not exist on type '{}'.
 
 
 ==== controlFlowInstanceof.ts (0 errors) ====
@@ -111,16 +110,14 @@ uglify.js(6,7): error TS2339: Property 'val' does not exist on type 'number'.
     }
     
     // Repro from #27550 (based on uglify code)
-==== uglify.js (2 errors) ====
+==== uglify.js (1 errors) ====
     /** @constructor */
     function AtTop(val) { this.val = val }
     /** @type {*} */
     var v = 1;
     if (v instanceof AtTop) {
-        ~
-!!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
         v.val
           ~~~
-!!! error TS2339: Property 'val' does not exist on type 'number'.
+!!! error TS2339: Property 'val' does not exist on type '{}'.
     }
     

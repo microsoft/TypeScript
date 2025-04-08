@@ -1,20 +1,11 @@
 --- old.strictOptionalProperties3.types
 +++ new.strictOptionalProperties3.types
-@@= skipped -7, +7 lines =@@
- 
- /** @type {A} */
- const a = { value: undefined }; // error
-->a : A
-+>a : { value: undefined; }
- >{ value: undefined } : { value: undefined; }
- >value : undefined
- >undefined : undefined
-@@= skipped -11, +11 lines =@@
+@@= skipped -18, +18 lines =@@
  
  /** @type {B} */
  const b = { value: undefined }; // error
 ->b : B
-+>b : { value: undefined; }
++>b : { value?: number; }
  >{ value: undefined } : { value: undefined; }
  >value : undefined
  >undefined : undefined

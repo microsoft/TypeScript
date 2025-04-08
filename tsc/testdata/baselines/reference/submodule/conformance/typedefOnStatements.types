@@ -93,81 +93,81 @@ catch (e) {
  * @param {Q} q
  */
 function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
->proof : (a: any, b: any, c: any, d: any, e: any, f: any, g: any, h: any, i: any, j: any, k: any, l: any, m: any, n: any, o: any, p: any, q: any) => void
->a : any
->b : any
->c : any
->d : any
->e : any
->f : any
->g : any
->h : any
->i : any
->j : any
->k : any
->l : any
->m : any
->n : any
->o : any
->p : any
->q : any
+>proof : (a: { a: string; }, b: { b: string; }, c: { c: string; }, d: { d: string; }, e: { e: string; }, f: { f: string; }, g: { g: string; }, h: { h: string; }, i: { i: string; }, j: { j: string; }, k: { k: string; }, l: { l: string; }, m: { m: string; }, n: { n: string; }, o: { o: string; }, p: { p: string; }, q: { q: string; }) => void
+>a : { a: string; }
+>b : { b: string; }
+>c : { c: string; }
+>d : { d: string; }
+>e : { e: string; }
+>f : { f: string; }
+>g : { g: string; }
+>h : { h: string; }
+>i : { i: string; }
+>j : { j: string; }
+>k : { k: string; }
+>l : { l: string; }
+>m : { m: string; }
+>n : { n: string; }
+>o : { o: string; }
+>p : { p: string; }
+>q : { q: string; }
 
     console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q)
 >console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->a.a : any
->a : any
->a : any
->b.b : any
->b : any
->b : any
->c.c : any
->c : any
->c : any
->d.d : any
->d : any
->d : any
->e.e : any
->e : any
->e : any
->f.f : any
->f : any
->f : any
->g.g : any
->g : any
->g : any
->h.h : any
->h : any
->h : any
->i.i : any
->i : any
->i : any
->j.j : any
->j : any
->j : any
->k.k : any
->k : any
->k : any
->l.l : any
->l : any
->l : any
->m.m : any
->m : any
->m : any
->n.n : any
->n : any
->n : any
->o.o : any
->o : any
->o : any
->p.p : any
->p : any
->p : any
->q.q : any
->q : any
->q : any
+>a.a : string
+>a : { a: string; }
+>a : string
+>b.b : string
+>b : { b: string; }
+>b : string
+>c.c : string
+>c : { c: string; }
+>c : string
+>d.d : string
+>d : { d: string; }
+>d : string
+>e.e : string
+>e : { e: string; }
+>e : string
+>f.f : string
+>f : { f: string; }
+>f : string
+>g.g : string
+>g : { g: string; }
+>g : string
+>h.h : string
+>h : { h: string; }
+>h : string
+>i.i : string
+>i : { i: string; }
+>i : string
+>j.j : string
+>j : { j: string; }
+>j : string
+>k.k : string
+>k : { k: string; }
+>k : string
+>l.l : string
+>l : { l: string; }
+>l : string
+>m.m : string
+>m : { m: string; }
+>m : string
+>n.n : string
+>n : { n: string; }
+>n : string
+>o.o : string
+>o : { o: string; }
+>o : string
+>p.p : string
+>p : { p: string; }
+>p : string
+>q.q : string
+>q : { q: string; }
+>q : string
 
     /** @type {Alpha} */
     var alpha = { alpha: "aleph" }

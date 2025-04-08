@@ -1,20 +1,24 @@
+functions.js(3,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(5,14): error TS7006: Parameter 'c' implicitly has an 'any' type.
 functions.js(9,23): error TS7006: Parameter 'n' implicitly has an 'any' type.
+functions.js(13,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(15,14): error TS7006: Parameter 'c' implicitly has an 'any' type.
-functions.js(21,17): error TS7006: Parameter 'n' implicitly has an 'any' type.
 functions.js(22,14): error TS2339: Property 'length' does not exist on type 'C'.
+functions.js(30,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(31,19): error TS7006: Parameter 'ab' implicitly has an 'any' type.
 functions.js(31,23): error TS7006: Parameter 'onetwo' implicitly has an 'any' type.
-functions.js(38,12): error TS7006: Parameter 'n' implicitly has an 'any' type.
+functions.js(49,13): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
 functions.js(51,26): error TS7006: Parameter 'dref' implicitly has an 'any' type.
-functions.js(60,18): error TS7006: Parameter 'n' implicitly has an 'any' type.
 functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
 
 
-==== functions.js (11 errors) ====
+==== functions.js (12 errors) ====
     /**
      * @param {function(this: string, number): number} c is just passing on through
      * @return {function(this: string, number): number}
+                ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
      */
     function id1(c) {
                  ~
@@ -29,6 +33,9 @@ functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[
     /**
      * @param {function(new: { length: number }, number): number} c is just passing on through
      * @return {function(new: { length: number }, number): number}
+                ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
      */
     function id2(c) {
                  ~
@@ -39,8 +46,6 @@ functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[
     class C {
         /** @param {number} n */
         constructor(n) {
-                    ~
-!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
             this.length = n;
                  ~~~~~~
 !!! error TS2339: Property 'length' does not exist on type 'C'.
@@ -52,6 +57,9 @@ functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[
     z.length;
     
     /** @type {function ("a" | "b", 1 | 2): 3 | 4} */
+               ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
     var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
                       ~~
 !!! error TS7006: Parameter 'ab' implicitly has an 'any' type.
@@ -64,8 +72,6 @@ functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[
      * @param {number} n
      */
     function D(n) {
-               ~
-!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
       this.length = n;
     }
     
@@ -77,6 +83,8 @@ functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[
     /** 
      * @param {function(new: D, number)} dref
      * @return {D}
+                ~
+!!! error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
      */
     var construct = function(dref) { return new dref(33); }
                              ~~~~
@@ -90,8 +98,6 @@ functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[
      * @param {number} n
      */
     var E = function(n) {
-                     ~
-!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
       this.not_length_on_purpose = n;
     };
     

@@ -11,23 +11,23 @@ export const b = null;
 
 /** @type {string?} */
 export const c = null;
->c : any
+>c : string
 
 /** @type {string=} */
 export const d = null;
->d : any
+>d : string
 
 /** @type {string!} */
 export const e = null;
->e : any
+>e : string
 
 /** @type {function(string, number): object} */
 export const f = null;
->f : any
+>f : function
 
 /** @type {function(new: object, string, number)} */
 export const g = null;
->g : any
+>g : function
 
 /** @type {Object.<string, number>} */
 export const h = null;

@@ -7,12 +7,12 @@ var Workspace = {}
 
 /** @type {Workspace.Project} */
 var p;
->p : any
+>p : Project
 
 p.isServiceProject()
 >p.isServiceProject() : any
 >p.isServiceProject : any
->p : any
+>p : Project
 >isServiceProject : any
 
 Workspace.Project = function wp() { }

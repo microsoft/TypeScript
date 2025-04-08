@@ -1,4 +1,4 @@
-/a.js(5,12): error TS7006: Parameter 'p' implicitly has an 'any' type.
+/a.js(4,13): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 
 
 ==== /a.js (1 errors) ====
@@ -6,7 +6,7 @@
     class C {}
     
     /** @param {C} p */
+                ~
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
     function f(p) {}
-               ~
-!!! error TS7006: Parameter 'p' implicitly has an 'any' type.
     

@@ -1,13 +1,18 @@
 --- old.checkJsdocTypeTagOnExportAssignment7.types
 +++ new.checkJsdocTypeTagOnExportAssignment7.types
-@@= skipped -24, +24 lines =@@
+@@= skipped -20, +20 lines =@@
+ 
+ /** @type {Foo} */
+ export default abc;
++>abc : Foo
+ >abc : { a: number; b: number; c: number; }
  
  === b.js ===
  import a from "./a";
 ->a : import("a").Foo
-+>a : { a: number; b: number; c: number; }
++>a : Foo
  
  a;
 ->a : import("a").Foo
-+>a : { a: number; b: number; c: number; }
++>a : Foo
  

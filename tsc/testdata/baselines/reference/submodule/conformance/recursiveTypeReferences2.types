@@ -26,6 +26,6 @@
 
 /** @type {XMLObject<{foo:string}>} */
 const p = {};
->p : {}
+>p : { $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; } & { [x: string]: string | { $A: { [x: string]: (??? & ???)[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & (??? | ??? & ???); }; $$?: Record<string, string>; } & ???; }
 >{} : {}
 

@@ -22,19 +22,19 @@ class B extends A {
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
->m : (foo?: {}) => void
->foo : {}
+>m : (foo?: object) => void
+>foo : object
 >{} : {}
 
 		/**
 		 * @type object
 		 */
 		this.x = foo;
->this.x = foo : {}
+>this.x = foo : object
 >this.x : any
 >this : this
 >x : any
->foo : {}
+>foo : object
 
 		/**
 		 * @type object

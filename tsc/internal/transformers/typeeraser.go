@@ -96,6 +96,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		return nil
 
 	case ast.KindTypeAliasDeclaration,
+		ast.KindJSTypeAliasDeclaration,
 		ast.KindInterfaceDeclaration:
 		// TypeScript type-only declarations are elided.
 		return tx.elide(node)

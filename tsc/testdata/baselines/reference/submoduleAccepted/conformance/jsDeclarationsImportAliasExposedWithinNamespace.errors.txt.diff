@@ -1,60 +1,76 @@
 --- old.jsDeclarationsImportAliasExposedWithinNamespace.errors.txt
 +++ new.jsDeclarationsImportAliasExposedWithinNamespace.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -file2.js(1,9): error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
--
--
++file.js(4,11): error TS2315: Type 'Object' is not generic.
++file.js(10,51): error TS2300: Duplicate identifier 'myTypes'.
++file.js(13,13): error TS2300: Duplicate identifier 'myTypes'.
++file.js(18,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
++file.js(18,39): error TS2300: Duplicate identifier 'myTypes'.
++file2.js(6,11): error TS2315: Type 'Object' is not generic.
++file2.js(12,23): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
++file2.js(17,12): error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
+ 
+ 
 -==== file.js (0 errors) ====
--    /**
--     * @namespace myTypes
--     * @global
--     * @type {Object<string,*>}
--     */
--    const myTypes = {
--        // SOME PROPS HERE
--    };
--    
--    /** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
--    
--    /**
--     * @typedef myTypes.typeB
--     * @property {myTypes.typeA}    prop1 - Prop 1.
--     * @property {string}           prop2 - Prop 2.
--     */
--    
--    /** @typedef {myTypes.typeB|Function} myTypes.typeC */
--    
--    export {myTypes};
++==== file.js (5 errors) ====
+     /**
+      * @namespace myTypes
+      * @global
+      * @type {Object<string,*>}
++              ~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
+      */
+     const myTypes = {
+         // SOME PROPS HERE
+     };
+     
+     /** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
++                                                      ~~~~~~~
++!!! error TS2300: Duplicate identifier 'myTypes'.
+     
+     /**
+      * @typedef myTypes.typeB
++                ~~~~~~~
++!!! error TS2300: Duplicate identifier 'myTypes'.
+      * @property {myTypes.typeA}    prop1 - Prop 1.
+      * @property {string}           prop2 - Prop 2.
+      */
+     
+     /** @typedef {myTypes.typeB|Function} myTypes.typeC */
++                  ~~~~~~~
++!!! error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
++                                          ~~~~~~~
++!!! error TS2300: Duplicate identifier 'myTypes'.
+     
+     export {myTypes};
 -==== file2.js (1 errors) ====
--    import {myTypes} from './file.js';
++==== file2.js (3 errors) ====
+     import {myTypes} from './file.js';
 -            ~~~~~~~
 -!!! error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
--    
--    /**
--     * @namespace testFnTypes
--     * @global
--     * @type {Object<string,*>}
--     */
--    const testFnTypes = {
--        // SOME PROPS HERE
--    };
--    
--    /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
--    
--    /**
--     * @function testFn
--     * @description A test function.
--     * @param {testFnTypes.input} input - Input.
--     * @returns {number|null} Result.
--     */
--    function testFn(input) {
--        if (typeof input === 'number') {
--            return 2 * input;
--        } else {
--            return null;
--        }
--    }
--    
--    export {testFn, testFnTypes};
-@@= skipped --1, +1 lines =@@
-+<no content>
+     
+     /**
+      * @namespace testFnTypes
+      * @global
+      * @type {Object<string,*>}
++              ~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
+      */
+     const testFnTypes = {
+         // SOME PROPS HERE
+     };
+     
+     /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
++                          ~~~~~~~
++!!! error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
+     
+     /**
+      * @function testFn
+      * @description A test function.
+      * @param {testFnTypes.input} input - Input.
++               ~~~~~~~~~~~
++!!! error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
+      * @returns {number|null} Result.
+      */
+     function testFn(input) {

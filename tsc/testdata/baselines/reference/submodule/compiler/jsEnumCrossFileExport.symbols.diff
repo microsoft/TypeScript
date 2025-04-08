@@ -5,13 +5,13 @@
  === enumDef.js ===
  var Host = {};
 ->Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
-+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
++>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 10, 3))
  
  Host.UserMetrics = {};
 ->Host.UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
 ->Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
 ->UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
-+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
++>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 10, 3))
  
  /** @enum {number} */
  Host.UserMetrics.Action = {
@@ -20,7 +20,7 @@
 ->Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
 ->UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
 ->Action : Symbol(Host.UserMetrics.Action, Decl(enumDef.js, 1, 22), Decl(enumDef.js, 3, 17), Decl(enumDef.js, 2, 4))
-+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
++>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 10, 3))
  
      WindowDocked: 1,
  >WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
@@ -33,7 +33,7 @@
 ->Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
 ->UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
 ->Blah : Symbol(Host.UserMetrics.Blah, Decl(enumDef.js, 8, 2), Decl(enumDef.js, 15, 17), Decl(enumDef.js, 13, 3))
-+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
++>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 10, 3))
  
      x: 12
  >x : Symbol(x, Decl(enumDef.js, 15, 25))
@@ -74,7 +74,6 @@
 ->Action : Symbol(Host.UserMetrics.Action, Decl(enumDef.js, 1, 22), Decl(enumDef.js, 3, 17), Decl(enumDef.js, 2, 4))
 ->WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
 +>method : Symbol(method, Decl(index.js, 1, 19))
-+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
      }
  }
  

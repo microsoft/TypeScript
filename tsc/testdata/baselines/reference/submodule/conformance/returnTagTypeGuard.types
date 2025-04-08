@@ -17,7 +17,7 @@ class Entry {
      * @return {this is Entry}
      */
     isInit(x) {
->isInit : (x: any) => boolean
+>isInit : (x: any) => this is Entry
 >x : any
 
         return true
@@ -40,7 +40,7 @@ class Group {
      * @return {false}
      */
     isInit(x) {
->isInit : (x: any) => boolean
+>isInit : (x: any) => false
 >x : any
 
         return false
@@ -49,22 +49,22 @@ class Group {
 }
 /** @param {Entry | Group} chunk */
 function f(chunk) {
->f : (chunk: any) => any
->chunk : any
+>f : (chunk: Entry | Group) => any
+>chunk : Entry | Group
 
     let x = chunk.isInit(chunk) ? chunk.c : chunk.d
 >x : any
 >chunk.isInit(chunk) ? chunk.c : chunk.d : any
->chunk.isInit(chunk) : any
->chunk.isInit : any
->chunk : any
->isInit : any
->chunk : any
+>chunk.isInit(chunk) : boolean
+>chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
+>chunk : Entry | Group
+>isInit : ((x: any) => this is Entry) | ((x: any) => false)
+>chunk : Entry | Group
 >chunk.c : any
->chunk : any
+>chunk : Entry
 >c : any
 >chunk.d : any
->chunk : any
+>chunk : Group
 >d : any
 
     return x
@@ -88,13 +88,13 @@ function isBoolean(value) {
 
 /** @param {boolean | number} val */
 function foo(val) {
->foo : (val: any) => void
->val : any
+>foo : (val: number | boolean) => void
+>val : number | boolean
 
     if (isBoolean(val)) {
 >isBoolean(val) : boolean
 >isBoolean : (value: any) => value is boolean
->val : any
+>val : number | boolean
 
         val;
 >val : boolean
@@ -118,13 +118,13 @@ function isNumber(x) { return typeof x === "number" }
 
 /** @param {unknown} x */
 function g(x) {
->g : (x: any) => void
->x : any
+>g : (x: unknown) => void
+>x : unknown
 
     if (isNumber(x)) {
 >isNumber(x) : boolean
 >isNumber : (x: any) => x is number
->x : any
+>x : unknown
 
         x * 2;
 >x * 2 : number

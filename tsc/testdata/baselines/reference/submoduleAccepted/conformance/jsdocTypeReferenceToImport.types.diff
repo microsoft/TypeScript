@@ -29,27 +29,24 @@
  
  /** @type {C} c */
  var c = new C()
-->c : C
+ >c : C
 ->new C() : C
 ->C : typeof C
-+>c : any
 +>new C() : any
 +>C : any
  
  c.start
 ->c.start : number
-->c : C
-->start : number
 +>c.start : any
-+>c : any
+ >c : C
+->start : number
 +>start : any
  
  c.end
 ->c.end : number
-->c : C
-->end : number
 +>c.end : any
-+>c : any
+ >c : C
+->end : number
 +>end : any
  
  /** @type {D} c */
@@ -57,7 +54,7 @@
 ->d : C
 ->new D() : C
 ->D : typeof C
-+>d : any
++>d : D
 +>new D() : any
 +>D : any
  
@@ -66,7 +63,7 @@
 ->d : C
 ->start : number
 +>d.start : any
-+>d : any
++>d : D
 +>start : any
  
  d.end
@@ -74,7 +71,7 @@
 ->d : C
 ->end : number
 +>d.end : any
-+>d : any
++>d : D
 +>end : any
  
  === ex.d.ts ===

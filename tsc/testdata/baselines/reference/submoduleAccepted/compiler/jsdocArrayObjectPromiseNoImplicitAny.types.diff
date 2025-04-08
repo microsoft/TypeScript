@@ -5,7 +5,7 @@
  /** @type {Array} */
  var notAnyArray = [5];
 ->notAnyArray : any[]
-+>notAnyArray : number[]
++>notAnyArray : any
  >[5] : number[]
  >5 : 5
  
@@ -26,7 +26,7 @@
  /** @type {Promise} */
  var notAnyPromise = Promise.resolve(5);
 ->notAnyPromise : Promise<any>
-+>notAnyPromise : Promise<number>
++>notAnyPromise : any
  >Promise.resolve(5) : Promise<number>
  >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
  >Promise : PromiseConstructor
@@ -45,31 +45,12 @@
  }
  
  /** @type {Object} */
- var notAnyObject = {valueOf: 1}; // error since assigning to Object, not any.
-->notAnyObject : Object
-+>notAnyObject : { valueOf: number; }
- >{valueOf: 1} : { valueOf: number; }
- >valueOf : number
- >1 : 1
+@@= skipped -16, +16 lines =@@
  
  /** @type {Object<string, number>} */
  var paramedObject = {valueOf: 1};
 ->paramedObject : { [x: string]: number; }
-+>paramedObject : { valueOf: number; }
++>paramedObject : any
  >{valueOf: 1} : { valueOf: number; }
  >valueOf : number
  >1 : 1
-@@= skipped -26, +26 lines =@@
-  * @return {Object}
-  */
- function returnNotAnyObject(obj) {
-->returnNotAnyObject : (obj: Object) => Object
-->obj : Object
-+>returnNotAnyObject : (obj: any) => any
-+>obj : any
- 
-   return obj;
-->obj : Object
-+>obj : any
- }
- 

@@ -67,29 +67,3 @@
  >{} : {}
  }
  
-@@= skipped -13, +13 lines =@@
-  * @type {Ns.One}
-  */
- var one;
-->one : One
-+>one : any
- 
- one.wat;
- >one.wat : any
-->one : One
-+>one : any
- >wat : any
- 
- /**
-  * @type {Ns.Two}
-  */
- var two;
-->two : Two
-+>two : any
- 
- two.wat;
- >two.wat : any
-->two : Two
-+>two : any
- >wat : any
- 

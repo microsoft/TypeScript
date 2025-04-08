@@ -14,30 +14,31 @@
  * @returns {[A, B]}
  */
 function foo(fns) {
->foo : (fns: any) => null
->fns : any
+>foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
+>fns : Funcs<A, B>
 
   return /** @type {any} */ (null);
->(null) : null
+>(null) : any
+>null : any
 }
 
 const result = foo({
->result : null
->foo({  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },}) : null
->foo : (fns: any) => null
->{  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },} : { bar: { fn: (a: any) => void; thing: string; }; }
+>result : [string, { bar: string; }]
+>foo({  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },}) : [string, { bar: string; }]
+>foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
+>{  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },} : { bar: { fn: (a: string) => void; thing: string; }; }
 
   bar: {
->bar : { fn: (a: any) => void; thing: string; }
->{    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  } : { fn: (a: any) => void; thing: string; }
+>bar : { fn: (a: string) => void; thing: string; }
+>{    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  } : { fn: (a: string) => void; thing: string; }
 
     fn:
->fn : (a: any) => void
+>fn : (a: string) => void
 
       /** @param {string} a */
       (a) => {},
->(a) => {} : (a: any) => void
->a : any
+>(a) => {} : (a: string) => void
+>a : string
 
     thing: "asd",
 >thing : string

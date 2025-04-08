@@ -1,0 +1,34 @@
+--- old.importTag9.errors.txt
++++ new.importTag9.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/foo.js(8,13): error TS2503: Cannot find namespace 'types'.
++/foo.js(9,13): error TS2503: Cannot find namespace 'types'.
++
++
++==== /types.ts (0 errors) ====
++    export interface A {
++        a: number;
++    }
++    export interface B {
++        a: number;
++    }
++    
++==== /foo.js (2 errors) ====
++    /**
++     * @import
++     * * as types
++     * from "./types"
++     */
++    
++    /**
++     * @param { types.A } a
++                ~~~~~
++!!! error TS2503: Cannot find namespace 'types'.
++     * @param { types.B } b
++                ~~~~~
++!!! error TS2503: Cannot find namespace 'types'.
++     */
++    function f(a, b) {}
++    

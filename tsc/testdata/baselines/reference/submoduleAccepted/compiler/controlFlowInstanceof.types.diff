@@ -14,23 +14,17 @@
  >val : any
  >val : any
  
- /** @type {*} */
- var v = 1;
-->v : any
-+>v : number
- >1 : 1
- 
+@@= skipped -16, +16 lines =@@
  if (v instanceof AtTop) {
  >v instanceof AtTop : boolean
-->v : any
+ >v : any
 ->AtTop : typeof AtTop
-+>v : number
 +>AtTop : (val: any) => void
  
      v.val
  >v.val : any
 ->v : AtTop
-+>v : number
++>v : {}
  >val : any
  }
  

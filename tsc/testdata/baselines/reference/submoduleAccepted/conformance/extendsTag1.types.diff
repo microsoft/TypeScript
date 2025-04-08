@@ -1,11 +1,9 @@
 --- old.extendsTag1.types
 +++ new.extendsTag1.types
-@@= skipped -5, +5 lines =@@
-  * @extends {Set<T>} Should prefer this Set<T>, not the Set in the heritage clause
+@@= skipped -6, +6 lines =@@
   */
  class My extends Set {}
-->My : My<T>
+ >My : My<T>
 ->Set : Set<T>
-+>My : My
 +>Set : Set<any>
  

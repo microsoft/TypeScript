@@ -13,15 +13,15 @@ module.exports = class Thing {
      * @param {number} p
      */
     constructor(p) {
->p : any
+>p : number
 
         this.t = 12 + p;
->this.t = 12 + p : any
+>this.t = 12 + p : number
 >this.t : any
 >this : this
 >t : any
->12 + p : any
+>12 + p : number
 >12 : 12
->p : any
+>p : number
     }
 }

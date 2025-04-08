@@ -1,9 +1,10 @@
 def.js(2,7): error TS2339: Property 'Inner' does not exist on type '{}'.
 usage.js(2,7): error TS2339: Property 'Inner' does not exist on type '{}'.
 usage.js(5,19): error TS2339: Property 'Inner' does not exist on type '{}'.
+usage.js(7,12): error TS2503: Cannot find namespace 'Outer'.
 
 
-==== usage.js (2 errors) ====
+==== usage.js (3 errors) ====
     // note that usage is first in the compilation
     Outer.Inner.Message = function() {
           ~~~~~
@@ -15,6 +16,8 @@ usage.js(5,19): error TS2339: Property 'Inner' does not exist on type '{}'.
 !!! error TS2339: Property 'Inner' does not exist on type '{}'.
     y.name
     /** @type {Outer.Inner} should be instance type, not static type */
+               ~~~~~
+!!! error TS2503: Cannot find namespace 'Outer'.
     var x;
     x.name
     

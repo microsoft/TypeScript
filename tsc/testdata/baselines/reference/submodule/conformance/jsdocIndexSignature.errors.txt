@@ -1,0 +1,39 @@
+indices.js(1,12): error TS2315: Type 'Object' is not generic.
+indices.js(1,18): error TS8020: JSDoc types can only be used inside documentation comments.
+indices.js(3,12): error TS2315: Type 'Object' is not generic.
+indices.js(3,18): error TS8020: JSDoc types can only be used inside documentation comments.
+indices.js(5,12): error TS2315: Type 'Object' is not generic.
+indices.js(5,18): error TS8020: JSDoc types can only be used inside documentation comments.
+indices.js(7,13): error TS2315: Type 'Object' is not generic.
+indices.js(7,19): error TS8020: JSDoc types can only be used inside documentation comments.
+
+
+==== indices.js (8 errors) ====
+    /** @type {Object.<string, number>} */
+               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
+                     ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var o1;
+    /** @type {Object.<number, boolean>} */
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
+                     ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var o2;
+    /** @type {Object.<boolean, string>} */
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
+                     ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var o3;
+    /** @param {Object.<string, boolean>} o */
+                ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
+                      ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    function f(o) {
+        o.foo = 1; // error
+        o.bar = false; // ok
+    }
+    

@@ -8,9 +8,9 @@
  * @param {V} iv
  */
 function Multimap(ik, iv) {
->Multimap : (ik: any, iv: any) => void
->ik : any
->iv : any
+>Multimap : <K extends string, V>(ik: string, iv: V) => void
+>ik : string
+>iv : V
 
     /** @type {{ [s: string]: V }} */
     this._map = {};
@@ -22,22 +22,22 @@ function Multimap(ik, iv) {
 
     // without type annotation
     this._map2 = { [ik]: iv };
->this._map2 = { [ik]: iv } : { [x: number]: any; }
+>this._map2 = { [ik]: iv } : { [x: string]: V; }
 >this._map2 : any
 >this : any
 >_map2 : any
->{ [ik]: iv } : { [x: number]: any; }
->[ik] : any
->ik : any
->iv : any
+>{ [ik]: iv } : { [x: string]: V; }
+>[ik] : V
+>ik : string
+>iv : V
 
 };
 
 /** @type {Multimap<"a" | "b", number>} with type annotation */
 const map = new Multimap("a", 1);
->map : any
+>map : Multimap<"a" | "b", number>
 >new Multimap("a", 1) : any
->Multimap : (ik: any, iv: any) => void
+>Multimap : <K extends string, V>(ik: string, iv: V) => void
 >"a" : "a"
 >1 : 1
 
@@ -45,31 +45,31 @@ const map = new Multimap("a", 1);
 const map2 = new Multimap("m", 2);
 >map2 : any
 >new Multimap("m", 2) : any
->Multimap : (ik: any, iv: any) => void
+>Multimap : <K extends string, V>(ik: string, iv: V) => void
 >"m" : "m"
 >2 : 2
 
 /** @type {number} */
 var n = map._map['hi']
->n : any
+>n : number
 >map._map['hi'] : any
 >map._map : any
->map : any
+>map : Multimap<"a" | "b", number>
 >_map : any
 >'hi' : "hi"
 
 /** @type {number} */
 var n = map._map2['hi']
->n : any
+>n : number
 >map._map2['hi'] : any
 >map._map2 : any
->map : any
+>map : Multimap<"a" | "b", number>
 >_map2 : any
 >'hi' : "hi"
 
 /** @type {number} */
 var n = map2._map['hi']
->n : any
+>n : number
 >map2._map['hi'] : any
 >map2._map : any
 >map2 : any
@@ -78,10 +78,10 @@ var n = map2._map['hi']
 
 /** @type {number} */
 var n = map._map2['hi']
->n : any
+>n : number
 >map._map2['hi'] : any
 >map._map2 : any
->map : any
+>map : Multimap<"a" | "b", number>
 >_map2 : any
 >'hi' : "hi"
 
@@ -91,8 +91,8 @@ var n = map._map2['hi']
  * @param {T} t
  */
 function Cp(t) {
->Cp : { (t: any): void; prototype: { m1: () => any; m2: () => any; }; }
->t : any
+>Cp : { <T>(t: T): void; prototype: { m1: () => any; m2: () => any; }; }
+>t : T
 
     this.x = 1
 >this.x = 1 : 1
@@ -102,16 +102,16 @@ function Cp(t) {
 >1 : 1
 
     this.y = t
->this.y = t : any
+>this.y = t : T
 >this.y : any
 >this : any
 >y : any
->t : any
+>t : T
 }
 Cp.prototype = {
 >Cp.prototype = {    m1() { return this.x },    m2() { this.z = this.x + 1; return this.y }} : { m1: () => any; m2: () => any; }
 >Cp.prototype : { m1: () => any; m2: () => any; }
->Cp : { (t: any): void; prototype: { m1: () => any; m2: () => any; }; }
+>Cp : { <T>(t: T): void; prototype: { m1: () => any; m2: () => any; }; }
 >prototype : { m1: () => any; m2: () => any; }
 >{    m1() { return this.x },    m2() { this.z = this.x + 1; return this.y }} : { m1: () => any; m2: () => any; }
 
@@ -139,26 +139,26 @@ Cp.prototype = {
 var cp = new Cp(1)
 >cp : any
 >new Cp(1) : any
->Cp : { (t: any): void; prototype: { m1: () => any; m2: () => any; }; }
+>Cp : { <T>(t: T): void; prototype: { m1: () => any; m2: () => any; }; }
 >1 : 1
 
 /** @type {number} */
 var n = cp.x
->n : any
+>n : number
 >cp.x : any
 >cp : any
 >x : any
 
 /** @type {number} */
 var n = cp.y
->n : any
+>n : number
 >cp.y : any
 >cp : any
 >y : any
 
 /** @type {number} */
 var n = cp.m1()
->n : any
+>n : number
 >cp.m1() : any
 >cp.m1 : any
 >cp : any
@@ -166,7 +166,7 @@ var n = cp.m1()
 
 /** @type {number} */
 var n = cp.m2()
->n : any
+>n : number
 >cp.m2() : any
 >cp.m2 : any
 >cp : any

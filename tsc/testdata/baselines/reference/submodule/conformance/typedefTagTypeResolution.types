@@ -9,16 +9,16 @@
  * @return {T}
  */
 function f(x) {
->f : (x: any) => any
->x : any
+>f : <U>(x: U) => U
+>x : U
 
     return x;
->x : any
+>x : U
 }
 
 /** @type T - should be fine, since T will be any */
 const x = 3;
->x : 3
+>x : U
 >3 : 3
 
 /**
@@ -30,13 +30,13 @@ const x = 3;
  * @param {V} vvvvv
  */
 function g(vvvvv) {
->g : (vvvvv: any) => void
->vvvvv : any
+>g : <V>(vvvvv: V) => void
+>vvvvv : V
 }
 
 /** @type {Cb} */
 const cb = x => {}
->cb : (x: any) => void
+>cb : Cb
 >x => {} : (x: any) => void
 >x : any
 

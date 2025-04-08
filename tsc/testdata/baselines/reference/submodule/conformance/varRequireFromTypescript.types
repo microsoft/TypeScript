@@ -28,18 +28,18 @@ crunch.n
  * @param {ex.Crunch} wrap
  */
 function f(greatest, wrap) {
->f : (greatest: any, wrap: any) => void
->greatest : any
->wrap : any
+>f : (greatest: Greatest, wrap: Crunch) => void
+>greatest : Greatest
+>wrap : Crunch
 
     greatest.day
 >greatest.day : any
->greatest : any
+>greatest : Greatest
 >day : any
 
     wrap.n
 >wrap.n : any
->wrap : any
+>wrap : Crunch
 >n : any
 }
 

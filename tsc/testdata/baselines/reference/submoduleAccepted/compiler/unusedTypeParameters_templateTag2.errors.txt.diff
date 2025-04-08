@@ -5,37 +5,46 @@
 -/a.js(13,4): error TS6205: All type parameters are unused.
 -/a.js(20,16): error TS6133: 'V' is declared but its value is never read.
 -/a.js(20,18): error TS6133: 'X' is declared but its value is never read.
-+/a.js(8,14): error TS2339: Property 'p' does not exist on type 'C1'.
-+/a.js(25,14): error TS2339: Property 'p' does not exist on type 'C3'.
++/a.js(2,3): error TS6205: All type parameters are unused.
++/a.js(8,14): error TS2339: Property 'p' does not exist on type 'C1<T, V>'.
++/a.js(13,3): error TS6205: All type parameters are unused.
++/a.js(20,3): error TS6205: All type parameters are unused.
++/a.js(25,14): error TS2339: Property 'p' does not exist on type 'C3<T, V, X>'.
  
  
 -==== /a.js (4 errors) ====
-+==== /a.js (2 errors) ====
++==== /a.js (5 errors) ====
      /**
       * @template T
++      ~~~~~~~~~~~~
       * @template V
 -       ~~~~~~~~~~~
++    ~~~~~~~~~~~~~~
       */
 -    ~
 -!!! error TS6133: 'V' is declared but its value is never read.
++    ~~
++!!! error TS6205: All type parameters are unused.
      class C1 {
          constructor() {
              /** @type {T} */
              this.p;
 +                 ~
-+!!! error TS2339: Property 'p' does not exist on type 'C1'.
++!!! error TS2339: Property 'p' does not exist on type 'C1<T, V>'.
          }
      }
      
      /**
       * @template T,V
 -       ~~~~~~~~~~~~~
++      ~~~~~~~~~~~~~~
       */
 -    ~
--!!! error TS6205: All type parameters are unused.
++    ~~
+ !!! error TS6205: All type parameters are unused.
      class C2 {
          constructor() { }
-     }
+@@= skipped -30, +34 lines =@@
      
      /**
       * @template T,V,X
@@ -43,12 +52,15 @@
 -!!! error TS6133: 'V' is declared but its value is never read.
 -                     ~
 -!!! error TS6133: 'X' is declared but its value is never read.
++      ~~~~~~~~~~~~~~~~
       */
++    ~~
++!!! error TS6205: All type parameters are unused.
      class C3 {
          constructor() {
              /** @type {T} */
              this.p;
 +                 ~
-+!!! error TS2339: Property 'p' does not exist on type 'C3'.
++!!! error TS2339: Property 'p' does not exist on type 'C3<T, V, X>'.
          }
      }

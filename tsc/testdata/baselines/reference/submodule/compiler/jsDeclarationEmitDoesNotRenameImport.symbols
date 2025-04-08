@@ -39,11 +39,15 @@ class X extends Test {
 >super : Symbol(Test, Decl(Test.js, 0, 0))
 
         if (options.test) {
+>options.test : Symbol(test, Decl(index.js, 4, 3))
 >options : Symbol(options, Decl(index.js, 11, 16))
+>test : Symbol(test, Decl(index.js, 4, 3))
 
             this.test = new options.test();
 >this : Symbol(X, Decl(index.js, 0, 33))
+>options.test : Symbol(test, Decl(index.js, 4, 3))
 >options : Symbol(options, Decl(index.js, 11, 16))
+>test : Symbol(test, Decl(index.js, 4, 3))
         }
     }
 }

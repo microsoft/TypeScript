@@ -6,32 +6,26 @@
  function f(x, y, z, a, b, c, e, f, g, h, i, j, k, l, m) {
 ->f : (x: number[], y: number[], z: (number[]), a: any, b: number[] | null, c: (number[]) | null, e: (number | null)[], f: (number | null)[], g: (number | null)[], h: any, i: number[][], j: (number[] | null)[], k: any, l: number extends number ? true : false, m: [number, number?]) => void
 ->x : number[]
-->y : number[]
-->z : number[]
-+>f : (x: any, y: any, z: any, a: any, b: any, c: any, e: any, f: any, g: any, h: any, i: any, j: any, k: any, l: any, m: any) => void
++>f : (x: any, y: number[], z: any, a: any, b: number[] | null, c: any, e: (number | null)[], f: any, g: any, h: any, i: number[][], j: any, k: any, l: true, m: [number, (number | undefined)?]) => void
 +>x : any
-+>y : any
+ >y : number[]
+->z : number[]
 +>z : any
  >a : any
-->b : number[] | null
+ >b : number[] | null
 ->c : number[] | null
 ->e : number | null | undefined
 ->f : number | null | undefined
 ->g : number | null | undefined
-+>b : any
 +>c : any
-+>e : any
++>e : (number | null)[]
 +>f : any
 +>g : any
  >h : any
 ->i : number[] | undefined
 ->j : number[] | null | undefined
-+>i : any
++>i : number[][]
 +>j : any
  >k : any
-->l : true
-->m : [number, (number | undefined)?]
-+>l : any
-+>m : any
- }
- 
+ >l : true
+ >m : [number, (number | undefined)?]

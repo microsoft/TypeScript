@@ -3,7 +3,7 @@
 === paren.js ===
 /** @type {function((string)): string} */
 var x = s => s.toString()
->x : (s: any) => any
+>x : function
 >s => s.toString() : (s: any) => any
 >s : any
 >s.toString() : any

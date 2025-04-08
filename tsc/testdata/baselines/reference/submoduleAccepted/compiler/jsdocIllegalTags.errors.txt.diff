@@ -1,23 +1,16 @@
 --- old.jsdocIllegalTags.errors.txt
 +++ new.jsdocIllegalTags.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(2,19): error TS1092: Type parameters cannot appear on a constructor declaration.
--/a.js(6,18): error TS1093: Type annotation cannot appear on a constructor declaration.
--
--
--==== /a.js (2 errors) ====
--    class C {
--        /** @template T */
++/a.js(2,9): error TS1092: Type parameters cannot appear on a constructor declaration.
+ /a.js(6,18): error TS1093: Type annotation cannot appear on a constructor declaration.
+ 
+ 
+ ==== /a.js (2 errors) ====
+     class C {
+         /** @template T */
 -                      ~
--!!! error TS1092: Type parameters cannot appear on a constructor declaration.
--        constructor() { }
--    }
--    class D {
--        /** @return {number} */
--                     ~~~~~~
--!!! error TS1093: Type annotation cannot appear on a constructor declaration.
--        constructor() {}
--    }
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
++            ~~~~~~~~~~~~
+ !!! error TS1092: Type parameters cannot appear on a constructor declaration.
+         constructor() { }
+     }

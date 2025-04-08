@@ -2,7 +2,7 @@
 
 === jsdocSignatureOnReturnedFunction.js ===
 function f1() {
->f1 : () => (a: any, b: any) => any
+>f1 : () => (a: number, b: number) => number
 
     /**
      * @param {number} a
@@ -10,19 +10,19 @@ function f1() {
      * @returns {number}
      */
     return (a, b) => {
->(a, b) => {        return a + b;    } : (a: any, b: any) => any
->a : any
->b : any
+>(a, b) => {        return a + b;    } : (a: number, b: number) => number
+>a : number
+>b : number
 
         return a + b;
->a + b : any
->a : any
->b : any
+>a + b : number
+>a : number
+>b : number
     }
 }
 
 function f2() {
->f2 : () => (a: any, b: any) => any
+>f2 : () => (a: number, b: number) => number
 
     /**
      * @param {number} a
@@ -30,46 +30,48 @@ function f2() {
      * @returns {number}
      */
     return function (a, b){
->function (a, b){        return a + b;    } : (a: any, b: any) => any
->a : any
->b : any
+>function (a, b){        return a + b;    } : (a: number, b: number) => number
+>a : number
+>b : number
 
         return a + b;
->a + b : any
->a : any
->b : any
+>a + b : number
+>a : number
+>b : number
     }
 }
 
 function f3() {
->f3 : () => (a: any, b: any) => any
+>f3 : () => (a: number, b: number) => number
 
     /** @type {(a: number, b: number) => number} */
     return (a, b) => {
->(a, b) => {        return a + b;    } : (a: any, b: any) => any
->a : any
->b : any
+>(a, b) => {        return a + b;    } : (a: number, b: number) => number
+>(a, b) => {        return a + b;    } : (a: number, b: number) => number
+>a : number
+>b : number
 
         return a + b;
->a + b : any
->a : any
->b : any
+>a + b : number
+>a : number
+>b : number
     }
 }
 
 function f4() {
->f4 : () => (a: any, b: any) => any
+>f4 : () => (a: number, b: number) => number
 
     /** @type {(a: number, b: number) => number} */
     return function (a, b){
->function (a, b){        return a + b;    } : (a: any, b: any) => any
->a : any
->b : any
+>function (a, b){        return a + b;    } : (a: number, b: number) => number
+>function (a, b){        return a + b;    } : (a: number, b: number) => number
+>a : number
+>b : number
 
         return a + b;
->a + b : any
->a : any
->b : any
+>a + b : number
+>a : number
+>b : number
     }
 }
 

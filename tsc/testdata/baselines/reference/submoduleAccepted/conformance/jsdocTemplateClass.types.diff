@@ -1,84 +1,39 @@
 --- old.jsdocTemplateClass.types
 +++ new.jsdocTemplateClass.types
-@@= skipped -6, +6 lines =@@
-  */
- /** @template T */
- class Foo {
-->Foo : Foo<T>
-+>Foo : Foo
- 
-     /** @typedef {(t: T) => T} Id2 */
-     /** @param {T} x */
-     constructor (x) {
-->x : T
-+>x : any
- 
-         this.a = x
-->this.a = x : T
-+>this.a = x : any
- >this.a : any
- >this : this
- >a : any
-->x : T
-+>x : any
-     }
-     /**
-      * 
-@@= skipped -22, +22 lines =@@
+@@= skipped -28, +28 lines =@@
       * @return {T}
       */
      foo(x, y, alpha) {
 ->foo : (x: T, y: Id<T>, alpha: (t: T) => T) => T
-->x : T
++>foo : (x: T, y: (t: T) => T, alpha: (t: T) => T) => T
+ >x : T
 ->y : Id<T>
-->alpha : (t: T) => T
-+>foo : (x: any, y: any, alpha: any) => any
-+>x : any
-+>y : any
-+>alpha : any
++>y : (t: T) => T
+ >alpha : (t: T) => T
  
          return alpha(y(x))
-->alpha(y(x)) : T
-->alpha : (t: T) => T
-->y(x) : T
+ >alpha(y(x)) : T
+ >alpha : (t: T) => T
+ >y(x) : T
 ->y : Id<T>
-->x : T
-+>alpha(y(x)) : any
-+>alpha : any
-+>y(x) : any
-+>y : any
-+>x : any
++>y : (t: T) => T
+ >x : T
      }
  }
- var f = new Foo(1)
-->f : Foo<number>
-->new Foo(1) : Foo<number>
-+>f : Foo
-+>new Foo(1) : Foo
- >Foo : typeof Foo
- >1 : 1
- 
- var g = new Foo(false)
-->g : Foo<boolean>
-->new Foo(false) : Foo<boolean>
-+>g : Foo
-+>new Foo(false) : Foo
- >Foo : typeof Foo
+@@= skipped -26, +26 lines =@@
  >false : false
  
  f.a = g.a
 ->f.a = g.a : boolean
 ->f.a : number
-->f : Foo<number>
-->a : number
-->g.a : boolean
-->g : Foo<boolean>
-->a : boolean
 +>f.a = g.a : any
 +>f.a : any
-+>f : Foo
+ >f : Foo<number>
+->a : number
+->g.a : boolean
 +>a : any
 +>g.a : any
-+>g : Foo
+ >g : Foo<boolean>
+->a : boolean
 +>a : any
  

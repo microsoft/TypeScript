@@ -6,5 +6,5 @@
  * @type {function(@foo)}
  */
 let x;
->x : any
+>x : function
 

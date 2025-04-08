@@ -1,14 +1,15 @@
 --- old.unusedTypeParameters_templateTag.errors.txt
 +++ new.unusedTypeParameters_templateTag.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(1,5): error TS6133: 'T' is declared but its value is never read.
--
--
--==== /a.js (1 errors) ====
--    /** @template T */
++/a.js(1,15): error TS6196: 'T' is declared but never used.
+ 
+ 
+ ==== /a.js (1 errors) ====
+     /** @template T */
 -        ~~~~~~~~~~~~
 -!!! error TS6133: 'T' is declared but its value is never read.
--    function f() {}
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
++                  ~
++!!! error TS6196: 'T' is declared but never used.
+     function f() {}
+     

@@ -3,51 +3,51 @@
 === a.js ===
 /** @type {String} */
 var S;
->S : any
+>S : String
 
 /** @type {string} */
 var s;
->s : any
+>s : string
 
 /** @type {Number} */
 var N;
->N : any
+>N : Number
 
 /** @type {number} */
 var n;
->n : any
+>n : number
 
 /** @type {Boolean} */
 var B;
->B : any
+>B : Boolean
 
 /** @type {boolean} */
 var b;
->b : any
+>b : boolean
 
 /** @type {Void} */
 var V;
->V : any
+>V : Void
 
 /** @type {void} */
 var v;
->v : any
+>v : void
 
 /** @type {Undefined} */
 var U;
->U : any
+>U : Undefined
 
 /** @type {undefined} */
 var u;
->u : any
+>u : undefined
 
 /** @type {Null} */
 var Nl;
->Nl : any
+>Nl : Null
 
 /** @type {null} */
 var nl;
->nl : any
+>nl : null
 
 /** @type {Array} */
 var A;
@@ -55,7 +55,7 @@ var A;
 
 /** @type {array} */
 var a;
->a : any
+>a : array
 
 /** @type {Promise} */
 var P;
@@ -63,99 +63,99 @@ var P;
 
 /** @type {promise} */
 var p;
->p : any
+>p : promise
 
 /** @type {?number} */
 var nullable;
->nullable : any
+>nullable : number | null
 
 /** @type {Object} */
 var Obj;
->Obj : any
+>Obj : Object
 
 /** @type {object} */
 var obj;
->obj : any
+>obj : object
 
 /** @type {Function} */
 var Func;
->Func : any
+>Func : Function
 
 /** @type {(s: string) => number} */
 var f;
->f : any
+>f : (s: string) => number
 
 /** @type {new (s: string) => { s: string }} */
 var ctor;
->ctor : any
+>ctor : new (s: string) => { s: string; }
 
 === b.ts ===
 var S: string;
->S : any
+>S : String
 
 var s: string;
->s : any
+>s : string
 
 var N: number;
->N : any
+>N : Number
 
 var n: number
->n : any
+>n : number
 
 var B: boolean;
->B : any
+>B : Boolean
 
 var b: boolean;
->b : any
+>b : boolean
 
 var V :void;
->V : any
+>V : Void
 
 var v: void;
->v : any
+>v : void
 
 var U: undefined;
->U : any
+>U : Undefined
 
 var u: undefined;
->u : any
+>u : undefined
 
 var Nl: null;
->Nl : any
+>Nl : Null
 
 var nl: null;
->nl : any
+>nl : null
 
 var A: any[];
 >A : any
 
 var a: any[];
->a : any
+>a : array
 
 var P: Promise<any>;
 >P : any
 
 var p: Promise<any>;
->p : any
+>p : promise
 
 var nullable: number | null;
->nullable : any
+>nullable : number | null
 
 var Obj: any;
->Obj : any
+>Obj : Object
 
 var obj: any;
->obj : any
+>obj : object
 
 var Func: Function;
->Func : any
+>Func : Function
 
 var f: (s: string) => number;
->f : any
+>f : (s: string) => number
 >s : string
 
 var ctor: new (s: string) => { s: string };
->ctor : any
+>ctor : new (s: string) => { s: string; }
 >s : string
 >s : string
 

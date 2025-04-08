@@ -1,68 +1,77 @@
 --- old.jsDeclarationsEnumTag.types
 +++ new.jsDeclarationsEnumTag.types
-@@= skipped -70, +70 lines =@@
-  * @param {Fs} f
+@@= skipped -20, +20 lines =@@
+     /** @type {number} */
+     OK_I_GUESS: 2
+ >OK_I_GUESS : number
++>2 : number
+ >2 : 2
+ }
+ /** @enum number */
+@@= skipped -14, +15 lines =@@
+     /** @type {number} */
+     FINE: 2,
+ >FINE : number
++>2 : number
+ >2 : 2
+ }
+ /** @enum {function(number): number} */
+@@= skipped -37, +38 lines =@@
   */
  export function consume(t,s,f) {
-->consume : (t: Target, s: Second, f: Fs) => void
+ >consume : (t: Target, s: Second, f: Fs) => void
 ->t : string
 ->s : number
-->f : Fs
-+>consume : (t: any, s: any, f: any) => void
-+>t : any
-+>s : any
-+>f : any
++>t : Target
++>s : Second
+ >f : Fs
  
      /** @type {string} */
      var str = t
-->str : string
+ >str : string
 ->t : string
-+>str : any
-+>t : any
++>t : Target
  
      /** @type {number} */
      var num = s
-->num : number
+ >num : number
 ->s : number
-+>num : any
-+>s : any
++>s : Second
  
      /** @type {(n: number) => number} */
      var fun = f
-->fun : (n: number) => number
-->f : Fs
-+>fun : any
-+>f : any
+@@= skipped -21, +21 lines =@@
  
      /** @type {Target} */
      var v = Target.START
-@@= skipped -34, +34 lines =@@
+->v : string
++>v : Target
+ >Target.START : string
+ >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+ >START : string
+ 
+     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
+ >v = 'something else' : "something else"
+->v : string
++>v : Target
+ >'something else' : "something else"
  }
  /** @param {string} s */
- export function ff(s) {
-->ff : (s: string) => any
-->s : string
-+>ff : (s: any) => any
-+>s : any
- 
+@@= skipped -18, +18 lines =@@
      // element access with arbitrary string is an error only with noImplicitAny
      if (!Target[s]) {
  >!Target[s] : boolean
 ->Target[s] : error
 +>Target[s] : any
  >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
-->s : string
-+>s : any
+ >s : string
  
-         return null
+@@= skipped -8, +8 lines =@@
      }
      else {
          return Target[s]
 ->Target[s] : error
 +>Target[s] : any
  >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
-->s : string
-+>s : any
+ >s : string
      }
- }
- 

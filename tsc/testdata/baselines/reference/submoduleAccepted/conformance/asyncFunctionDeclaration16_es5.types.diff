@@ -1,27 +1,11 @@
 --- old.asyncFunctionDeclaration16_es5.types
 +++ new.asyncFunctionDeclaration16_es5.types
-@@= skipped -28, +28 lines =@@
-  * @returns {string}
-  */
- const f1 = async str => {
-->f1 : (str: string) => string
-->async str => {    return str;} : (str: string) => string
-->str : string
-+>f1 : (str: any) => Promise<any>
-+>async str => {    return str;} : (str: any) => Promise<any>
-+>str : any
- 
-     return str;
-->str : string
-+>str : any
- }
- 
+@@= skipped -39, +39 lines =@@
  /** @type {T1} */
  const f2 = async str => {
-->f2 : T1
+ >f2 : T1
 ->async str => {    return str;} : (str: string) => string
 ->str : string
-+>f2 : (str: any) => Promise<any>
 +>async str => {    return str;} : (str: any) => Promise<any>
 +>str : any
  
@@ -32,27 +16,11 @@
  
  /**
 @@= skipped -23, +23 lines =@@
-  * @returns {Promise<string>}
-  */
- const f3 = async str => {
-->f3 : (str: string) => Promise<string>
-->async str => {    return str;} : (str: string) => Promise<string>
-->str : string
-+>f3 : (str: any) => Promise<any>
-+>async str => {    return str;} : (str: any) => Promise<any>
-+>str : any
- 
-     return str;
-->str : string
-+>str : any
- }
- 
  /** @type {T2} */
  const f4 = async str => {
-->f4 : T2
+ >f4 : T2
 ->async str => {    return str;} : (str: string) => Promise<string>
 ->str : string
-+>f4 : (str: any) => Promise<any>
 +>async str => {    return str;} : (str: any) => Promise<any>
 +>str : any
  
@@ -63,10 +31,9 @@
  
  /** @type {T3} */
  const f5 = async str => {
-->f5 : T3
+ >f5 : T3
 ->async str => {    return str;} : (str: string) => Thenable
 ->str : string
-+>f5 : (str: any) => Promise<any>
 +>async str => {    return str;} : (str: any) => Promise<any>
 +>str : any
  

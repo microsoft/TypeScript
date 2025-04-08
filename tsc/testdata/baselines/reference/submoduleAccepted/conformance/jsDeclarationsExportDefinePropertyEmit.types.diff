@@ -58,18 +58,11 @@
  >"cat" : "cat"
  >{ value: "cat" } : { value: string; }
  >value : string
-@@= skipped -20, +20 lines =@@
-  * @return {string} 
-  */
- function d(a, b) { return /** @type {*} */(null); }
-->d : (a: number, b: number) => string
-->a : number
-->b : number
-->(null) : any
-+>d : (a: any, b: any) => any
-+>a : any
-+>b : any
-+>(null) : null
+@@= skipped -24, +24 lines =@@
+ >a : number
+ >b : number
+ >(null) : any
++>null : any
  
  Object.defineProperty(module.exports, "d", { value: d });
 ->Object.defineProperty(module.exports, "d", { value: d }) : typeof module.exports
@@ -84,27 +77,13 @@
 +>module : any
 +>exports : any
  >"d" : "d"
-->{ value: d } : { value: (a: number, b: number) => string; }
-->value : (a: number, b: number) => string
-->d : (a: number, b: number) => string
-+>{ value: d } : { value: (a: any, b: any) => any; }
-+>value : (a: any, b: any) => any
-+>d : (a: any, b: any) => any
- 
- 
- /**
-@@= skipped -26, +26 lines =@@
-  * @return {T & U} 
-  */
- function e(a, b) { return /** @type {*} */(null); }
-->e : <T, U>(a: T, b: U) => T & U
-->a : T
-->b : U
-->(null) : any
-+>e : (a: any, b: any) => any
-+>a : any
-+>b : any
-+>(null) : null
+ >{ value: d } : { value: (a: number, b: number) => string; }
+ >value : (a: number, b: number) => string
+@@= skipped -26, +27 lines =@@
+ >a : T
+ >b : U
+ >(null) : any
++>null : any
  
  Object.defineProperty(module.exports, "e", { value: e });
 ->Object.defineProperty(module.exports, "e", { value: e }) : typeof module.exports
@@ -119,26 +98,10 @@
 +>module : any
 +>exports : any
  >"e" : "e"
-->{ value: e } : { value: <T, U>(a: T, b: U) => T & U; }
-->value : <T, U>(a: T, b: U) => T & U
-->e : <T, U>(a: T, b: U) => T & U
-+>{ value: e } : { value: (a: any, b: any) => any; }
-+>value : (a: any, b: any) => any
-+>e : (a: any, b: any) => any
- 
- /**
-  * @template T
-  * @param {T} a
-  */
- function f(a) {
-->f : <T>(a: T) => T
-->a : T
-+>f : (a: any) => any
-+>a : any
- 
-     return a;
-->a : T
-+>a : any
+ >{ value: e } : { value: <T, U>(a: T, b: U) => T & U; }
+ >value : <T, U>(a: T, b: U) => T & U
+@@= skipped -26, +27 lines =@@
+ >a : T
  }
  Object.defineProperty(module.exports, "f", { value: f });
 ->Object.defineProperty(module.exports, "f", { value: f }) : typeof module.exports
@@ -153,12 +116,9 @@
 +>module : any
 +>exports : any
  >"f" : "f"
-->{ value: f } : { value: <T>(a: T) => T; }
-->value : <T>(a: T) => T
-->f : <T>(a: T) => T
-+>{ value: f } : { value: (a: any) => any; }
-+>value : (a: any) => any
-+>f : (a: any) => any
+ >{ value: f } : { value: <T>(a: T) => T; }
+ >value : <T>(a: T) => T
+ >f : <T>(a: T) => T
  
  Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
 ->Object.defineProperty(module.exports.f, "self", { value: module.exports.f }) : <T>(a: T) => T
@@ -198,28 +158,24 @@
   */
  function g(a, b) {
 ->g : (a: { x: string; }, b: { y: () => void; }) => void
-->a : { x: string; }
++>g : (a: { x: string; }, b: { y: any; }) => any
+ >a : { x: string; }
 ->b : { y: () => void; }
-+>g : (a: any, b: any) => any
-+>a : any
-+>b : any
++>b : { y: any; }
  
      return a.x && b.y();
 ->a.x && b.y() : void
-->a.x : string
-->a : { x: string; }
-->x : string
++>a.x && b.y() : any
+ >a.x : string
+ >a : { x: string; }
+ >x : string
 ->b.y() : void
 ->b.y : () => void
 ->b : { y: () => void; }
 ->y : () => void
-+>a.x && b.y() : any
-+>a.x : any
-+>a : any
-+>x : any
 +>b.y() : any
 +>b.y : any
-+>b : any
++>b : { y: any; }
 +>y : any
  }
  Object.defineProperty(module.exports, "g", { value: g });
@@ -238,39 +194,35 @@
 ->{ value: g } : { value: (a: { x: string; }, b: { y: () => void; }) => void; }
 ->value : (a: { x: string; }, b: { y: () => void; }) => void
 ->g : (a: { x: string; }, b: { y: () => void; }) => void
-+>{ value: g } : { value: (a: any, b: any) => any; }
-+>value : (a: any, b: any) => any
-+>g : (a: any, b: any) => any
++>{ value: g } : { value: (a: { x: string; }, b: { y: any; }) => any; }
++>value : (a: { x: string; }, b: { y: any; }) => any
++>g : (a: { x: string; }, b: { y: any; }) => any
  
  
  /**
-@@= skipped -99, +99 lines =@@
+@@= skipped -69, +69 lines =@@
   * @param {{y: typeof module.exports.b}} b
   */
  function hh(a, b) {
 ->hh : (a: { x: string; }, b: { y: () => void; }) => void
-->a : { x: string; }
++>hh : (a: { x: string; }, b: { y: any; }) => any
+ >a : { x: string; }
 ->b : { y: () => void; }
-+>hh : (a: any, b: any) => any
-+>a : any
-+>b : any
++>b : { y: any; }
  
      return a.x && b.y();
 ->a.x && b.y() : void
-->a.x : string
-->a : { x: string; }
-->x : string
++>a.x && b.y() : any
+ >a.x : string
+ >a : { x: string; }
+ >x : string
 ->b.y() : void
 ->b.y : () => void
 ->b : { y: () => void; }
 ->y : () => void
-+>a.x && b.y() : any
-+>a.x : any
-+>a : any
-+>x : any
 +>b.y() : any
 +>b.y : any
-+>b : any
++>b : { y: any; }
 +>y : any
  }
  Object.defineProperty(module.exports, "h", { value: hh });
@@ -289,9 +241,9 @@
 ->{ value: hh } : { value: (a: { x: string; }, b: { y: () => void; }) => void; }
 ->value : (a: { x: string; }, b: { y: () => void; }) => void
 ->hh : (a: { x: string; }, b: { y: () => void; }) => void
-+>{ value: hh } : { value: (a: any, b: any) => any; }
-+>value : (a: any, b: any) => any
-+>hh : (a: any, b: any) => any
++>{ value: hh } : { value: (a: { x: string; }, b: { y: any; }) => any; }
++>value : (a: { x: string; }, b: { y: any; }) => any
++>hh : (a: { x: string; }, b: { y: any; }) => any
  
  Object.defineProperty(module.exports, "i", { value: function i(){} });
 ->Object.defineProperty(module.exports, "i", { value: function i(){} }) : typeof module.exports

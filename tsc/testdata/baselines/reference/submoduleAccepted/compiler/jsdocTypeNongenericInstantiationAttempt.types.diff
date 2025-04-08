@@ -6,14 +6,14 @@
  function sayHello(somebody) {
 ->sayHello : (somebody: <T>(m: boolean) => string) => string
 ->somebody : <T>(m: boolean) => string
-+>sayHello : (somebody: any) => string
-+>somebody : any
++>sayHello : (somebody: <T>(m: any) => string) => string
++>somebody : <T>(m: any) => string
  
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: boolean) => string
-+>somebody : any
++>somebody : <T>(m: any) => string
  }
  
  === index2.js ===
@@ -23,14 +23,14 @@
  function sayHello2(somebody) {
 ->sayHello2 : (somebody: <T>(m: void) => string) => string
 ->somebody : <T>(m: void) => string
-+>sayHello2 : (somebody: any) => string
-+>somebody : any
++>sayHello2 : (somebody: <T>(m: Void<T>) => string) => string
++>somebody : <T>(m: Void<T>) => string
  
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: void) => string
-+>somebody : any
++>somebody : <T>(m: Void<T>) => string
  }
  
  
@@ -40,14 +40,14 @@
  function sayHello3(somebody) {
 ->sayHello3 : (somebody: <T>(m: undefined) => string) => string
 ->somebody : <T>(m: undefined) => string
-+>sayHello3 : (somebody: any) => string
-+>somebody : any
++>sayHello3 : (somebody: <T>(m: Undefined<T>) => string) => string
++>somebody : <T>(m: Undefined<T>) => string
  
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: undefined) => string
-+>somebody : any
++>somebody : <T>(m: Undefined<T>) => string
  }
  
  
@@ -57,14 +57,14 @@
  function sayHello4(somebody) {
 ->sayHello4 : (somebody: <T>(m: Function) => string) => string
 ->somebody : <T>(m: Function) => string
-+>sayHello4 : (somebody: any) => string
-+>somebody : any
++>sayHello4 : (somebody: <T>(m: any) => string) => string
++>somebody : <T>(m: any) => string
  
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: Function) => string
-+>somebody : any
++>somebody : <T>(m: any) => string
  }
  
  
@@ -74,14 +74,14 @@
  function sayHello5(somebody) {
 ->sayHello5 : (somebody: <T>(m: string) => string) => string
 ->somebody : <T>(m: string) => string
-+>sayHello5 : (somebody: any) => string
-+>somebody : any
++>sayHello5 : (somebody: <T>(m: any) => string) => string
++>somebody : <T>(m: any) => string
  
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: string) => string
-+>somebody : any
++>somebody : <T>(m: any) => string
  }
  
  
@@ -91,40 +91,23 @@
  function sayHello6(somebody) {
 ->sayHello6 : (somebody: <T>(m: number) => string) => string
 ->somebody : <T>(m: number) => string
-+>sayHello6 : (somebody: any) => string
-+>somebody : any
++>sayHello6 : (somebody: <T>(m: any) => string) => string
++>somebody : <T>(m: any) => string
  
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: number) => string
-+>somebody : any
++>somebody : <T>(m: any) => string
  }
  
  
-@@= skipped -15, +15 lines =@@
-  * @param {<T>(m: Object<T>) => string} somebody
-  */
- function sayHello7(somebody) {
-->sayHello7 : (somebody: <T>(m: any) => string) => string
-->somebody : <T>(m: any) => string
-+>sayHello7 : (somebody: any) => string
-+>somebody : any
- 
-     return 'Hello ' + somebody;
- >'Hello ' + somebody : string
- >'Hello ' : "Hello "
-->somebody : <T>(m: any) => string
-+>somebody : any
- }
- 
- === index8.js ===
-@@= skipped -17, +17 lines =@@
+@@= skipped -32, +32 lines =@@
   * @param {fn<T>} somebody
   */
  function sayHello8(somebody) { }
 ->sayHello8 : (somebody: () => void) => void
 ->somebody : () => void
-+>sayHello8 : (somebody: any) => void
-+>somebody : any
++>sayHello8 : (somebody: fn<T>) => void
++>somebody : fn<T>
  

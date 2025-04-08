@@ -17,17 +17,17 @@ A.B = class {
 
         /** @type {string[]} */
         var x = [];
->x : any[]
+>x : string[]
 >[] : undefined[]
 
         /** @type {number[]} */
         var y;
->y : any
+>y : number[]
 
         y = x;
->y = x : any[]
->y : any
->x : any[]
+>y = x : string[]
+>y : number[]
+>x : string[]
     }
 };
 

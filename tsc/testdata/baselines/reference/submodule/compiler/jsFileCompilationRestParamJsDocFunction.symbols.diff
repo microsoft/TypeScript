@@ -15,29 +15,37 @@
  
          case 0: return func.call(thisArg);
 ->func.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>func.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >func : Symbol(func, Decl(_apply.js, 10, 15))
 ->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
  
          case 1: return func.call(thisArg, args[0]);
 ->func.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>func.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >func : Symbol(func, Decl(_apply.js, 10, 15))
 ->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
  >args : Symbol(args, Decl(_apply.js, 10, 29))
  
          case 2: return func.call(thisArg, args[0], args[1]);
 ->func.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>func.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >func : Symbol(func, Decl(_apply.js, 10, 15))
 ->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
  >args : Symbol(args, Decl(_apply.js, 10, 29))
  >args : Symbol(args, Decl(_apply.js, 10, 29))
  
          case 3: return func.call(thisArg, args[0], args[1], args[2]);
 ->func.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>func.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >func : Symbol(func, Decl(_apply.js, 10, 15))
 ->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
  >args : Symbol(args, Decl(_apply.js, 10, 29))
  >args : Symbol(args, Decl(_apply.js, 10, 29))
@@ -45,8 +53,10 @@
      }
      return func.apply(thisArg, args);
 ->func.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>func.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
  >func : Symbol(func, Decl(_apply.js, 10, 15))
 ->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
  >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
  >args : Symbol(args, Decl(_apply.js, 10, 29))
  }

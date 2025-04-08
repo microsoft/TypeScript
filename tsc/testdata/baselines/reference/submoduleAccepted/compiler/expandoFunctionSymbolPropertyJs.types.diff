@@ -5,7 +5,7 @@
   */
  export function test() {
 ->test : () => import("./types").TestSymb
-+>test : () => { (): void; inner[symb]: boolean; }
++>test : () => TestSymb
  
    function inner() {}
 ->inner : { (): void; [symb]: boolean; }

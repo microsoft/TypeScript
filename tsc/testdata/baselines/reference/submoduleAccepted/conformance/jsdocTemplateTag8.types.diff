@@ -1,52 +1,13 @@
 --- old.jsdocTemplateTag8.types
 +++ new.jsdocTemplateTag8.types
-@@= skipped -10, +10 lines =@@
-  * @type {Covariant<unknown>}
-  */
- let super_covariant = { x: 1 };
-->super_covariant : Covariant<unknown>
-+>super_covariant : { x: number; }
- >{ x: 1 } : { x: number; }
- >x : number
- >1 : 1
-@@= skipped -9, +9 lines =@@
-  * @type {Covariant<string>}
-  */
- let sub_covariant = { x: '' };
-->sub_covariant : Covariant<string>
-+>sub_covariant : { x: string; }
- >{ x: '' } : { x: string; }
- >x : string
- >'' : ""
- 
- super_covariant = sub_covariant;
-->super_covariant = sub_covariant : Covariant<string>
-->super_covariant : Covariant<unknown>
-->sub_covariant : Covariant<string>
-+>super_covariant = sub_covariant : { x: string; }
-+>super_covariant : { x: number; }
-+>sub_covariant : { x: string; }
- 
- sub_covariant   = super_covariant; // Error
-->sub_covariant   = super_covariant : Covariant<unknown>
-->sub_covariant : Covariant<string>
-->super_covariant : Covariant<unknown>
-+>sub_covariant   = super_covariant : { x: number; }
-+>sub_covariant : { x: string; }
-+>super_covariant : { x: number; }
- 
- /**
-  * @template in T
-@@= skipped -25, +25 lines =@@
-  * @type {Contravariant<unknown>}
+@@= skipped -45, +45 lines =@@
   */
  let super_contravariant = { f: (x) => {} };
-->super_contravariant : Contravariant<unknown>
+ >super_contravariant : Contravariant<unknown>
 ->{ f: (x) => {} } : { f: (x: unknown) => void; }
 ->f : (x: unknown) => void
 ->(x) => {} : (x: unknown) => void
 ->x : unknown
-+>super_contravariant : { f: (x: any) => void; }
 +>{ f: (x) => {} } : { f: (x: any) => void; }
 +>f : (x: any) => void
 +>(x) => {} : (x: any) => void
@@ -56,45 +17,26 @@
   * @type {Contravariant<string>}
   */
  let sub_contravariant = { f: (x) => {} };
-->sub_contravariant : Contravariant<string>
+ >sub_contravariant : Contravariant<string>
 ->{ f: (x) => {} } : { f: (x: string) => void; }
 ->f : (x: string) => void
 ->(x) => {} : (x: string) => void
 ->x : string
-+>sub_contravariant : { f: (x: any) => void; }
 +>{ f: (x) => {} } : { f: (x: any) => void; }
 +>f : (x: any) => void
 +>(x) => {} : (x: any) => void
 +>x : any
  
  super_contravariant = sub_contravariant;  // Error
-->super_contravariant = sub_contravariant : Contravariant<string>
-->super_contravariant : Contravariant<unknown>
-->sub_contravariant : Contravariant<string>
-+>super_contravariant = sub_contravariant : { f: (x: any) => void; }
-+>super_contravariant : { f: (x: any) => void; }
-+>sub_contravariant : { f: (x: any) => void; }
- 
- sub_contravariant = super_contravariant;
-->sub_contravariant = super_contravariant : Contravariant<unknown>
-->sub_contravariant : Contravariant<string>
-->super_contravariant : Contravariant<unknown>
-+>sub_contravariant = super_contravariant : { f: (x: any) => void; }
-+>sub_contravariant : { f: (x: any) => void; }
-+>super_contravariant : { f: (x: any) => void; }
- 
- /**
-  * @template in out T
+ >super_contravariant = sub_contravariant : Contravariant<string>
 @@= skipped -36, +36 lines =@@
-  * @type {Invariant<unknown>}
   */
  let super_invariant = { f: (x) => {} };
-->super_invariant : Invariant<unknown>
+ >super_invariant : Invariant<unknown>
 ->{ f: (x) => {} } : { f: (x: unknown) => void; }
 ->f : (x: unknown) => void
 ->(x) => {} : (x: unknown) => void
 ->x : unknown
-+>super_invariant : { f: (x: any) => void; }
 +>{ f: (x) => {} } : { f: (x: any) => void; }
 +>f : (x: any) => void
 +>(x) => {} : (x: any) => void
@@ -104,12 +46,11 @@
   * @type {Invariant<string>}
   */
  let sub_invariant = { f: (x) => { return "" } };
-->sub_invariant : Invariant<string>
+ >sub_invariant : Invariant<string>
 ->{ f: (x) => { return "" } } : { f: (x: string) => string; }
 ->f : (x: string) => string
 ->(x) => { return "" } : (x: string) => string
 ->x : string
-+>sub_invariant : { f: (x: any) => string; }
 +>{ f: (x) => { return "" } } : { f: (x: any) => string; }
 +>f : (x: any) => string
 +>(x) => { return "" } : (x: any) => string
@@ -117,28 +58,11 @@
  >"" : ""
  
  super_invariant = sub_invariant;  // Error
-->super_invariant = sub_invariant : Invariant<string>
-->super_invariant : Invariant<unknown>
-->sub_invariant : Invariant<string>
-+>super_invariant = sub_invariant : { f: (x: any) => string; }
-+>super_invariant : { f: (x: any) => void; }
-+>sub_invariant : { f: (x: any) => string; }
- 
- sub_invariant = super_invariant;  // Error
-->sub_invariant = super_invariant : Invariant<unknown>
-->sub_invariant : Invariant<string>
-->super_invariant : Invariant<unknown>
-+>sub_invariant = super_invariant : { f: (x: any) => void; }
-+>sub_invariant : { f: (x: any) => string; }
-+>super_invariant : { f: (x: any) => void; }
- 
- /**
-  * @template in T
+@@= skipped -31, +31 lines =@@
   * @param {T} x
   */
  function f(x) {}
 ->f : <in T>(x: T) => void
-->x : T
-+>f : (x: any) => void
-+>x : any
++>f : <T>(x: T) => void
+ >x : T
  

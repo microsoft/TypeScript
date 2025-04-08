@@ -1,0 +1,16 @@
+/a.js(1,15): error TS2315: Type 'Object' is not generic.
+/a.js(1,21): error TS8020: JSDoc types can only be used inside documentation comments.
+
+
+==== /a.js (2 errors) ====
+    /** @typedef {Object.<string, (n: number) => boolean>} Predicates */
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Object' is not generic.
+                        ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    
+    const p = /** @satisfies {Predicates} */ ({
+        isEven: n => n % 2 === 0,
+        isOdd: n => n % 2 === 1
+    });
+    

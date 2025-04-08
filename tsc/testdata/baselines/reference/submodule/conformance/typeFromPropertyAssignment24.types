@@ -27,11 +27,11 @@ y.name
 
 /** @type {Outer.Inner} should be instance type, not static type */
 var x;
->x : any
+>x : Inner
 
 x.name
 >x.name : any
->x : any
+>x : Inner
 >name : any
 
 === def.js ===

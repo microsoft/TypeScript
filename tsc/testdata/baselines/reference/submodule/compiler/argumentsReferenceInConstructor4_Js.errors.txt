@@ -1,11 +1,12 @@
 /a.js(13,8): error TS2339: Property 'foo' does not exist on type 'A'.
 /a.js(18,9): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 /a.js(23,8): error TS2339: Property 'bar' does not exist on type 'A'.
+/a.js(23,24): error TS2339: Property 'bar' does not exist on type 'object'.
 /a.js(28,8): error TS2339: Property 'baz' does not exist on type 'A'.
 /a.js(33,8): error TS2339: Property 'options' does not exist on type 'A'.
 
 
-==== /a.js (5 errors) ====
+==== /a.js (6 errors) ====
     class A {
     	/**
     	 * Constructor
@@ -35,6 +36,8 @@
     		this.bar = arguments.bar;
     		     ~~~
 !!! error TS2339: Property 'bar' does not exist on type 'A'.
+    		                     ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'object'.
     
     		/**
     		 * @type object

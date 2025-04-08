@@ -23,22 +23,19 @@
  >require : (name: string) => any
  >"./mod1" : "./mod1"
  
- /** @type {D} */
- var d;
-->d : D
-+>d : any
+@@= skipped -18, +18 lines =@@
+ >d : D
  
  d.chunk;
 ->d.chunk : number
-->d : D
-->chunk : number
 +>d.chunk : any
-+>d : any
+ >d : D
+->chunk : number
 +>chunk : any
  
  === types.d.ts ===
  declare function require(name: string): any;
-@@= skipped -34, +34 lines =@@
+@@= skipped -16, +16 lines =@@
  >module : { exports: any; }
  >exports : any
  

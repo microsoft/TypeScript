@@ -1,8 +1,7 @@
-0.js(19,1): error TS2322: Type '"string"' is not assignable to type 'undefined'.
-0.js(21,1): error TS2322: Type 'undefined' is not assignable to type 'string'.
+0.js(16,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 
 
-==== 0.js (2 errors) ====
+==== 0.js (1 errors) ====
     // @ts-check
     var lol = "hello Lol"
     const obj = {
@@ -19,15 +18,14 @@
       /** @type {number} */
       ['b' + 'ar1']: 42,
       /** @type {function(number): number} */
+                 ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
       arrowFunc: (num) => num + 42
     }
     obj.foo = 'string'
-    ~~~~~~~
-!!! error TS2322: Type '"string"' is not assignable to type 'undefined'.
     obj.lol
     obj.bar = undefined;
-    ~~~~~~~
-!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
     var k = obj.method1(0);
     obj.bar1 = "42";
     obj.arrowFunc(0);

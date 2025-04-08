@@ -12,9 +12,9 @@ type A<T extends string> = { a: T }
  */
 /** @type {A<number>} */
 var a;
->a : any
+>a : A<number>
 
 /** @type {B<number>} */
 var b;
->b : any
+>b : { b: U; }
 

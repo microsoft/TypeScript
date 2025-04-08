@@ -76,8 +76,8 @@
      method(p) {}
 ->method : (p: Host.UserMetrics.Action) => void
 ->p : number
-+>method : (p: any) => void
-+>p : any
++>method : (p: Action) => void
++>p : Action
  
      usage() {
  >usage : () => void
@@ -85,7 +85,7 @@
          this.method(Host.UserMetrics.Action.WindowDocked);
  >this.method(Host.UserMetrics.Action.WindowDocked) : void
 ->this.method : (p: Host.UserMetrics.Action) => void
-+>this.method : (p: any) => void
++>this.method : (p: Action) => void
  >this : this
 ->method : (p: Host.UserMetrics.Action) => void
 ->Host.UserMetrics.Action.WindowDocked : number
@@ -95,14 +95,30 @@
 ->UserMetrics : typeof Host.UserMetrics
 ->Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
 ->WindowDocked : number
-+>method : (p: any) => void
++>method : (p: Action) => void
 +>Host.UserMetrics.Action.WindowDocked : any
 +>Host.UserMetrics.Action : any
 +>Host.UserMetrics : any
-+>Host : {}
++>Host : any
 +>UserMetrics : any
 +>Action : any
 +>WindowDocked : any
      }
  }
+ 
+@@= skipped -39, +39 lines =@@
+  * @type {Host.UserMetrics.Bargh}
+  */
+ var x = "ok";
+->x : string
++>x : Bargh
+ >"ok" : "ok"
+ 
+ /**
+  * @type {Host.UserMetrics.Blah}
+  */
+ var y = "ok";
+->y : string
++>y : Blah
+ >"ok" : "ok"
  

@@ -65,15 +65,7 @@
  }
  
  === index.ts ===
-@@= skipped -36, +30 lines =@@
- 
-     f: import('./mod').buz,
- >f : Symbol(f, Decl(index.ts, 5, 27))
-->buz : Symbol(buz, Decl(mod.js, 4, 4))
- 
-     g: import('./mod').literal,
- >g : Symbol(g, Decl(index.ts, 6, 27))
-@@= skipped -21, +20 lines =@@
+@@= skipped -57, +51 lines =@@
  
      a: typeof import('./mod').Thing,
  >a : Symbol(a, Decl(index.ts, 12, 16))

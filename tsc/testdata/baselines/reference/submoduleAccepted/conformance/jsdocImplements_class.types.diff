@@ -1,15 +1,6 @@
 --- old.jsdocImplements_class.types
 +++ new.jsdocImplements_class.types
-@@= skipped -5, +5 lines =@@
- 
-     /** @return {number} */
-     method() { throw new Error(); }
-->method : () => number
-+>method : () => void
- >new Error() : Error
- >Error : ErrorConstructor
- }
-@@= skipped -30, +30 lines =@@
+@@= skipped -35, +35 lines =@@
  
  
  var Ns = {};

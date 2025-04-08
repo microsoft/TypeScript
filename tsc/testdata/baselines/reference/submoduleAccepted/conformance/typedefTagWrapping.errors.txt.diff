@@ -1,141 +1,101 @@
 --- old.typedefTagWrapping.errors.txt
 +++ new.typedefTagWrapping.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -mod7.js(5,7): error TS1110: Type expected.
 -mod7.js(8,4): error TS1110: Type expected.
--
--
++mod1.js(2,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++mod1.js(9,12): error TS2304: Cannot find name 'Type1'.
++mod3.js(4,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++mod3.js(10,12): error TS2304: Cannot find name 'StringOrNumber1'.
++mod4.js(4,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++mod4.js(11,12): error TS2304: Cannot find name 'StringOrNumber2'.
+ 
+ 
 -==== mod1.js (0 errors) ====
--    /** 
--     * @typedef {function(string): boolean}
--     * Type1
--     */
--    
--    /**
--     * Tries to use a type whose name is on a different
--     * line than the typedef tag.
--     * @param {Type1} func The function to call.
--     * @param {string} arg The argument to call it with.
--     * @returns {boolean} The return.
--     */
--    function callIt(func, arg) {
--      return func(arg);
--    }
--    
--==== mod2.js (0 errors) ====
--    /** 
--     * @typedef {{
--     *   num: number,
--     *   str: string,
--     *   boo: boolean
--     * }} Type2
--     */
--    
--    /**
--     * Makes use of a type with a multiline type expression.
--     * @param {Type2} obj The object.
--     * @returns {string|number} The return.
--     */
--    function check(obj) {
--      return obj.boo ? obj.num : obj.str;
--    }
--    
++==== mod1.js (2 errors) ====
+     /** 
+      * @typedef {function(string): boolean}
++                 ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+      * Type1
+      */
+     
+@@= skipped -11, +18 lines =@@
+      * Tries to use a type whose name is on a different
+      * line than the typedef tag.
+      * @param {Type1} func The function to call.
++               ~~~~~
++!!! error TS2304: Cannot find name 'Type1'.
+      * @param {string} arg The argument to call it with.
+      * @returns {boolean} The return.
+      */
+@@= skipped -25, +27 lines =@@
+       return obj.boo ? obj.num : obj.str;
+     }
+     
 -==== mod3.js (0 errors) ====
--    /**
--     * A function whose signature is very long.
--     *
--     * @typedef {function(boolean, string, number):
--     *     (string|number)} StringOrNumber1
--     */
--    
--    /**
--     * Makes use of a function type with a long signature.
--     * @param {StringOrNumber1} func The function.
--     * @param {boolean} bool The condition.
--     * @param {string} str The string.
--     * @param {number} num The number.
--     * @returns {string|number} The return.
--     */
--    function use1(func, bool, str, num) {
--      return func(bool, str, num)
--    }
--    
++==== mod3.js (2 errors) ====
+     /**
+      * A function whose signature is very long.
+      *
+      * @typedef {function(boolean, string, number):
++                 ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+      *     (string|number)} StringOrNumber1
+      */
+     
+     /**
+      * Makes use of a function type with a long signature.
+      * @param {StringOrNumber1} func The function.
++               ~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'StringOrNumber1'.
+      * @param {boolean} bool The condition.
+      * @param {string} str The string.
+      * @param {number} num The number.
+@@= skipped -20, +25 lines =@@
+       return func(bool, str, num)
+     }
+     
 -==== mod4.js (0 errors) ====
--    /**
--     * A function whose signature is very long.
--     *
--     * @typedef {function(boolean, string,
--     *    number):
--     *    (string|number)} StringOrNumber2
--     */
--    
--    /**
--     * Makes use of a function type with a long signature.
--     * @param {StringOrNumber2} func The function.
--     * @param {boolean} bool The condition.
--     * @param {string} str The string.
--     * @param {number} num The number.
--     * @returns {string|number} The return.
--     */
--    function use2(func, bool, str, num) {
--      return func(bool, str, num)
--    }
--    
--==== mod5.js (0 errors) ====
--    /** 
--     * @typedef {{
--     *   num:
--     *   number,
--     *   str:
--     *   string,
--     *   boo:
--     *   boolean
--     * }} Type5
--     */
--    
--    /**
--     * Makes use of a type with a multiline type expression.
--     * @param {Type5} obj The object.
--     * @returns {string|number} The return.
--     */
--    function check5(obj) {
--      return obj.boo ? obj.num : obj.str;
--    }
--    
--==== mod6.js (0 errors) ====
--    /** 
--     * @typedef {{
--     *   foo:
--     *   *,
--     *   bar:
--     *   *
--     * }} Type6
--     */
--    
--    /**
--     * Makes use of a type with a multiline type expression.
--     * @param {Type6} obj The object.
--     * @returns {*} The return.
--     */
--    function check6(obj) {
--      return obj.foo;
--    }
--    
--    
++==== mod4.js (2 errors) ====
+     /**
+      * A function whose signature is very long.
+      *
+      * @typedef {function(boolean, string,
++                 ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+      *    number):
+      *    (string|number)} StringOrNumber2
+      */
+@@= skipped -12, +15 lines =@@
+     /**
+      * Makes use of a function type with a long signature.
+      * @param {StringOrNumber2} func The function.
++               ~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'StringOrNumber2'.
+      * @param {boolean} bool The condition.
+      * @param {string} str The string.
+      * @param {number} num The number.
+@@= skipped -50, +52 lines =@@
+     }
+     
+     
 -==== mod7.js (2 errors) ====
--    /** 
--       Multiline type expressions in comments without leading * are not supported.
--       @typedef {{
--         foo:
--         *,
++==== mod7.js (0 errors) ====
+     /** 
+        Multiline type expressions in comments without leading * are not supported.
+        @typedef {{
+          foo:
+          *,
 -          ~
 -!!! error TS1110: Type expected.
--         bar:
--         *
--       }} Type7
+          bar:
+          *
+        }} Type7
 -       ~
 -!!! error TS1110: Type expected.
--     */
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
+      */
+     

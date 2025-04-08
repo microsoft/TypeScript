@@ -176,11 +176,11 @@ var c6_v1 = new C6();
  * @param {number} num
  */
 function C7(num) {}
->C7 : (num: any) => void
->num : any
+>C7 : (num: number) => void
+>num : number
 
 var c7_v1 = new C7();
 >c7_v1 : any
 >new C7() : any
->C7 : (num: any) => void
+>C7 : (num: number) => void
 

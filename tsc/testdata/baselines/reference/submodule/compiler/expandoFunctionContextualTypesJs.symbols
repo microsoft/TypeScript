@@ -14,9 +14,9 @@ const MyComponent = () => /* @type {any} */(null);
 >MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5))
 
 MyComponent.defaultProps = {
->MyComponent.defaultProps : Symbol(defaultProps, Decl(input.js, 9, 50))
+>MyComponent.defaultProps : Symbol(defaultProps, Decl(input.js, 4, 23))
 >MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5))
->defaultProps : Symbol(defaultProps, Decl(input.js, 9, 50))
+>defaultProps : Symbol(defaultProps, Decl(input.js, 4, 23))
 
     color: "red"
 >color : Symbol(color, Decl(input.js, 11, 28))

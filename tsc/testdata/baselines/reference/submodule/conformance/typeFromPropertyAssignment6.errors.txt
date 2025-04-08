@@ -1,6 +1,7 @@
 a.js(1,7): error TS2339: Property 'Inner' does not exist on type 'typeof Outer'.
 a.js(5,7): error TS2339: Property 'i' does not exist on type 'typeof Outer'.
 b.js(1,18): error TS2339: Property 'i' does not exist on type 'typeof Outer'.
+b.js(3,13): error TS2702: 'Outer' only refers to a type, but is being used as a namespace here.
 
 
 ==== def.js (0 errors) ====
@@ -17,12 +18,14 @@ b.js(1,18): error TS2339: Property 'i' does not exist on type 'typeof Outer'.
           ~
 !!! error TS2339: Property 'i' does not exist on type 'typeof Outer'.
     
-==== b.js (1 errors) ====
+==== b.js (2 errors) ====
     var msgs = Outer.i.messages()
                      ~
 !!! error TS2339: Property 'i' does not exist on type 'typeof Outer'.
     
     /** @param {Outer.Inner} inner */
+                ~~~~~
+!!! error TS2702: 'Outer' only refers to a type, but is being used as a namespace here.
     function x(inner) {
     }
     
