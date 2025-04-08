@@ -11,9 +11,9 @@ declare module "*.foo" {
 
 === testA.ts ===
 import { everywhere, onlyInA, alsoOnlyInA } from "a.foo";
->everywhere : any
->onlyInA : any
->alsoOnlyInA : any
+>everywhere : string
+>onlyInA : number
+>alsoOnlyInA : number
 
 declare module "a.foo" {
 >"a.foo" : typeof import("a.foo")
@@ -24,7 +24,7 @@ declare module "a.foo" {
 
 === testB.ts ===
 import { everywhere, onlyInA, alsoOnlyInA } from "b.foo"; // Error
->everywhere : any
+>everywhere : string
 >onlyInA : any
 >alsoOnlyInA : any
 

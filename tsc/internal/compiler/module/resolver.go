@@ -1775,7 +1775,7 @@ func matchPatternOrExact(patterns *parsedPatterns, candidate string) core.Patter
 	if len(patterns.patterns) == 0 {
 		return core.Pattern{}
 	}
-	return core.FindBestPatternMatch(patterns.patterns, candidate)
+	return core.FindBestPatternMatch(patterns.patterns, core.Identity, candidate)
 }
 
 // If you import from "." inside a containing directory "/foo", the result of `tspath.NormalizePath`

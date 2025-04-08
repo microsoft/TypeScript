@@ -15,7 +15,7 @@ import { everywhere, onlyInA } from "a.foo";
 >onlyInA : Symbol(onlyInA, Decl(testA.ts, 0, 20))
 
 declare module "a.foo" {
->"a.foo" : Symbol("a.foo", Decl(testA.ts, 0, 44))
+>"a.foo" : Symbol("a.foo", Decl(testA.ts, 0, 44), Decl(types.ts, 0, 0))
 
   let onlyInA: number;
 >onlyInA : Symbol(onlyInA, Decl(testA.ts, 2, 5))

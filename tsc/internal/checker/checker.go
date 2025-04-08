@@ -703,7 +703,7 @@ type Checker struct {
 	resolvingSignature                         *Signature
 	silentNeverSignature                       *Signature
 	enumNumberIndexInfo                        *IndexInfo
-	patternAmbientModules                      []ast.PatternAmbientModule
+	patternAmbientModules                      []*ast.PatternAmbientModule
 	patternAmbientModuleAugmentations          ast.SymbolTable
 	globalObjectType                           *Type
 	globalFunctionType                         *Type
@@ -1299,7 +1299,7 @@ func (c *Checker) mergeModuleAugmentation(moduleName *ast.Node) {
 			// the pattern ('*.foo'), so that 'getMergedSymbol()' on a.foo gives you
 			// all the exports both from the pattern and from the augmentation, but
 			// 'getMergedSymbol()' on *.foo only gives you exports from *.foo.
-			if core.Some(c.patternAmbientModules, func(module ast.PatternAmbientModule) bool {
+			if core.Some(c.patternAmbientModules, func(module *ast.PatternAmbientModule) bool {
 				return mainModule == module.Symbol
 			}) {
 				merged := c.mergeSymbol(moduleAugmentation.Symbol, mainModule, true /*unidirectional*/)
@@ -14208,6 +14208,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 	// !!! The following only implements simple module resolution
 	sourceFile := c.program.GetResolvedModule(ast.GetSourceFileOfNode(location), moduleReference)
 	if sourceFile != nil {
+		// !!!
 		if sourceFile.Symbol != nil {
 			return c.getMergedSymbol(sourceFile.Symbol)
 		}
@@ -14216,9 +14217,29 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 		}
 		return nil
 	}
-	if errorNode != nil && moduleNotFoundError != nil {
+
+	if len(c.patternAmbientModules) != 0 {
+		pattern := core.FindBestPatternMatch(c.patternAmbientModules, func(v *ast.PatternAmbientModule) core.Pattern { return v.Pattern }, moduleReference)
+		if pattern != nil {
+			augmentation := c.patternAmbientModuleAugmentations[moduleReference]
+			if augmentation != nil {
+				return c.getMergedSymbol(augmentation)
+			}
+			return c.getMergedSymbol(pattern.Symbol)
+		}
+	}
+
+	if errorNode == nil {
+		return nil
+	}
+
+	// !!!
+
+	if moduleNotFoundError != nil {
+		// !!!
 		c.error(errorNode, moduleNotFoundError, moduleReference)
 	}
+
 	return nil
 }
 

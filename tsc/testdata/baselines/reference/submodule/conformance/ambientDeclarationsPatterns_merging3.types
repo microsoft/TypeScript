@@ -10,7 +10,7 @@ declare module "*.foo" {
 
 === test.ts ===
 declare module "a.foo" {
->"a.foo" : any
+>"a.foo" : typeof import("a.foo")
 
   export interface OhNo { a: string }
 >a : string

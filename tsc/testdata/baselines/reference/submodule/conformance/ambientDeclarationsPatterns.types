@@ -3,30 +3,30 @@
 === user.ts ===
 ///<reference path="declarations.d.ts" />
 import {foo, baz} from "foobarbaz";
->foo : any
->baz : any
+>foo : (s: string) => void
+>baz : string
 
 foo(baz);
->foo(baz) : any
->foo : any
->baz : any
+>foo(baz) : void
+>foo : (s: string) => void
+>baz : string
 
 import {foos} from "foosball";
->foos : any
+>foos : string
 
 foo(foos);
->foo(foos) : any
->foo : any
->foos : any
+>foo(foos) : void
+>foo : (s: string) => void
+>foos : string
 
 // Works with relative file name
 import fileText from "./file!text";
->fileText : any
+>fileText : string
 
 foo(fileText);
->foo(fileText) : any
->foo : any
->fileText : any
+>foo(fileText) : void
+>foo : (s: string) => void
+>fileText : string
 
 === declarations.d.ts ===
 declare module "foo*baz" {

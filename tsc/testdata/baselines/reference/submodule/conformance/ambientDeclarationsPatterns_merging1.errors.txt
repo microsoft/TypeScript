@@ -1,6 +1,4 @@
-testA.ts(1,37): error TS2307: Cannot find module 'a.foo' or its corresponding type declarations.
-testA.ts(2,16): error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
-testB.ts(1,37): error TS2307: Cannot find module 'b.foo' or its corresponding type declarations.
+testB.ts(1,22): error TS2305: Module '"*.foo"' has no exported member 'onlyInA'.
 
 
 ==== types.ts (0 errors) ====
@@ -9,18 +7,14 @@ testB.ts(1,37): error TS2307: Cannot find module 'b.foo' or its corresponding ty
     }
     
     
-==== testA.ts (2 errors) ====
+==== testA.ts (0 errors) ====
     import { everywhere, onlyInA } from "a.foo";
-                                        ~~~~~~~
-!!! error TS2307: Cannot find module 'a.foo' or its corresponding type declarations.
     declare module "a.foo" {
-                   ~~~~~~~
-!!! error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
       let onlyInA: number;
     }
     
 ==== testB.ts (1 errors) ====
     import { everywhere, onlyInA } from "b.foo"; // Error
-                                        ~~~~~~~
-!!! error TS2307: Cannot find module 'b.foo' or its corresponding type declarations.
+                         ~~~~~~~
+!!! error TS2305: Module '"*.foo"' has no exported member 'onlyInA'.
     

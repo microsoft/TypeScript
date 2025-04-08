@@ -9689,7 +9689,7 @@ type SourceFile struct {
 	EndFlowNode               *FlowNode
 	SymbolCount               int
 	ClassifiableNames         core.Set[string]
-	PatternAmbientModules     []PatternAmbientModule
+	PatternAmbientModules     []*PatternAmbientModule
 
 	// Fields set by LineMap
 

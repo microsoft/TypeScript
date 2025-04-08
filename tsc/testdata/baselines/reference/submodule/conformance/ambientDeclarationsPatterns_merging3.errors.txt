@@ -1,5 +1,4 @@
-test.ts(1,16): error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
-test.ts(4,22): error TS2307: Cannot find module 'b.foo' or its corresponding type declarations.
+test.ts(6,6): error TS2339: Property 'a' does not exist on type 'OhNo'.
 
 
 ==== types.ts (0 errors) ====
@@ -7,15 +6,13 @@ test.ts(4,22): error TS2307: Cannot find module 'b.foo' or its corresponding typ
       export interface OhNo { star: string }
     }
     
-==== test.ts (2 errors) ====
+==== test.ts (1 errors) ====
     declare module "a.foo" {
-                   ~~~~~~~
-!!! error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
       export interface OhNo { a: string }
     }
     import { OhNo } from "b.foo"
-                         ~~~~~~~
-!!! error TS2307: Cannot find module 'b.foo' or its corresponding type declarations.
     declare let ohno: OhNo;
     ohno.a // oh no
+         ~
+!!! error TS2339: Property 'a' does not exist on type 'OhNo'.
     
