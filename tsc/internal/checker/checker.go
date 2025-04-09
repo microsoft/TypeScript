@@ -824,6 +824,8 @@ type Checker struct {
 }
 
 func NewChecker(program Program) *Checker {
+	program.BindSourceFiles()
+
 	c := &Checker{}
 	c.id = nextCheckerID.Add(1)
 	c.program = program
@@ -1198,7 +1200,6 @@ func (c *Checker) initializeIterationResolvers() {
 }
 
 func (c *Checker) initializeChecker() {
-	c.program.BindSourceFiles()
 	// Initialize global symbol table
 	augmentations := make([][]*ast.Node, 0, len(c.files))
 	for _, file := range c.files {
@@ -13214,7 +13215,9 @@ func (c *Checker) mergeSymbolTable(target ast.SymbolTable, source ast.SymbolTabl
 			// When merging the module augmentation into a.ts, the symbol for `A` will itself be merged, so its parent
 			// should be the merged module symbol. But the symbol for `B` has only one declaration, so its parent should
 			// be the module augmentation symbol, which contains its only declaration.
-			merged.Parent = mergedParent
+			if merged.Flags&ast.SymbolFlagsTransient != 0 {
+				merged.Parent = mergedParent
+			}
 		}
 		target[id] = merged
 	}

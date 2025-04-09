@@ -215,9 +215,13 @@ func (p *Program) CheckSourceFiles() {
 func (p *Program) createCheckers() {
 	p.checkersOnce.Do(func() {
 		p.checkers = make([]*checker.Checker, core.IfElse(p.programOptions.SingleThreaded, 1, 4))
+		wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
 		for i := range p.checkers {
-			p.checkers[i] = checker.NewChecker(p)
+			wg.Queue(func() {
+				p.checkers[i] = checker.NewChecker(p)
+			})
 		}
+		wg.RunAndWait()
 		p.checkersByFile = make(map[*ast.SourceFile]*checker.Checker)
 		for i, file := range p.files {
 			p.checkersByFile[file] = p.checkers[i%len(p.checkers)]
