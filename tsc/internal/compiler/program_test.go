@@ -1,12 +1,16 @@
 package compiler
 
 import (
+	"path/filepath"
 	"slices"
 	"strings"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -241,4 +245,54 @@ func TestProgram(t *testing.T) {
 			assert.DeepEqual(t, testCase.expectedFiles, actualFiles)
 		})
 	}
+}
+
+func BenchmarkNewProgram(b *testing.B) {
+	if !bundled.Embedded {
+		// Without embedding, we'd need to read all of the lib files out from disk into the MapFS.
+		// Just skip this for now.
+		b.Skip("bundled files are not embedded")
+	}
+
+	for _, testCase := range programTestCases {
+		b.Run(testCase.testName, func(b *testing.B) {
+			fs := vfstest.FromMap[any](nil, false /*useCaseSensitiveFileNames*/)
+			fs = bundled.WrapFS(fs)
+
+			for _, testFile := range testCase.files {
+				_ = fs.WriteFile(testFile.fileName, testFile.contents, false)
+			}
+
+			opts := core.CompilerOptions{Target: testCase.target}
+			programOpts := ProgramOptions{
+				RootFiles:      []string{"c:/dev/src/index.ts"},
+				Host:           NewCompilerHost(&opts, "c:/dev/src", fs, bundled.LibPath()),
+				Options:        &opts,
+				SingleThreaded: false,
+			}
+
+			for b.Loop() {
+				NewProgram(programOpts)
+			}
+		})
+	}
+
+	b.Run("compiler", func(b *testing.B) {
+		repo.SkipIfNoTypeScriptSubmodule(b)
+
+		compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler"))
+
+		fs := osvfs.FS()
+		fs = bundled.WrapFS(fs)
+
+		opts := ProgramOptions{
+			ConfigFileName: tspath.CombinePaths(compilerDir, "tsconfig.json"),
+			Host:           NewCompilerHost(nil, compilerDir, fs, bundled.LibPath()),
+			SingleThreaded: false,
+		}
+
+		for b.Loop() {
+			NewProgram(opts)
+		}
+	})
 }

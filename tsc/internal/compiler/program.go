@@ -41,15 +41,13 @@ type Program struct {
 	currentDirectory             string
 	configFileParsingDiagnostics []*ast.Diagnostic
 
-	resolver        *module.Resolver
-	resolvedModules map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
+	resolver *module.Resolver
 
 	comparePathsOptions tspath.ComparePathsOptions
 
-	files       []*ast.SourceFile
-	filesByPath map[tspath.Path]*ast.SourceFile
+	processedFiles
 
-	sourceFileMetaDatas map[tspath.Path]*ast.SourceFileMetaData
+	filesByPath map[tspath.Path]*ast.SourceFile
 
 	// The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
 	// This works as imported modules are discovered recursively in a depth first manner, specifically:
@@ -75,7 +73,6 @@ func NewProgram(options ProgramOptions) *Program {
 	p.programOptions = options
 	p.compilerOptions = options.Options
 	p.configFileParsingDiagnostics = slices.Clip(options.ConfigFileParsingDiagnostics)
-	p.sourceFileMetaDatas = make(map[tspath.Path]*ast.SourceFileMetaData)
 	if p.compilerOptions == nil {
 		p.compilerOptions = &core.CompilerOptions{}
 	}
@@ -153,7 +150,7 @@ func NewProgram(options ProgramOptions) *Program {
 		}
 	}
 
-	p.files, p.resolvedModules, p.sourceFileMetaDatas = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
+	p.processedFiles = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
 	p.filesByPath = make(map[tspath.Path]*ast.SourceFile, len(p.files))
 	for _, file := range p.files {
 		p.filesByPath[file.Path()] = file

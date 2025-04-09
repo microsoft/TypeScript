@@ -5,9 +5,10 @@ import (
 	"iter"
 	"slices"
 	"strings"
-	"sync"
+	"sync/atomic"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler/module"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -15,25 +16,26 @@ import (
 )
 
 type fileLoader struct {
-	host            CompilerHost
-	programOptions  ProgramOptions
-	compilerOptions *core.CompilerOptions
+	host                CompilerHost
+	programOptions      ProgramOptions
+	compilerOptions     *core.CompilerOptions
+	resolver            *module.Resolver
+	defaultLibraryPath  string
+	comparePathsOptions tspath.ComparePathsOptions
+	wg                  core.WorkGroup
+	supportedExtensions []string
 
-	resolver             *module.Resolver
-	resolvedModulesMutex sync.Mutex
-	resolvedModules      map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
+	tasksByFileName collections.SyncMap[string, *parseTask]
+	rootTasks       []*parseTask
 
-	sourceFileMetaDatasMutex sync.RWMutex
-	sourceFileMetaDatas      map[tspath.Path]*ast.SourceFileMetaData
+	totalFileCount atomic.Int32
+	libFileCount   atomic.Int32
+}
 
-	mu                      sync.Mutex
-	wg                      core.WorkGroup
-	tasksByFileName         map[string]*parseTask
-	currentNodeModulesDepth int
-	defaultLibraryPath      string
-	comparePathsOptions     tspath.ComparePathsOptions
-	rootTasks               []*parseTask
-	supportedExtensions     []string
+type processedFiles struct {
+	files               []*ast.SourceFile
+	resolvedModules     map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
+	sourceFileMetaDatas map[tspath.Path]*ast.SourceFileMetaData
 }
 
 func processAllProgramFiles(
@@ -43,14 +45,13 @@ func processAllProgramFiles(
 	resolver *module.Resolver,
 	rootFiles []string,
 	libs []string,
-) (files []*ast.SourceFile, resolvedModules map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule], sourceFileMetaDatas map[tspath.Path]*ast.SourceFileMetaData) {
+) processedFiles {
 	supportedExtensions := tsoptions.GetSupportedExtensions(compilerOptions, nil /*extraFileExtensions*/)
 	loader := fileLoader{
 		host:               host,
 		programOptions:     programOptions,
 		compilerOptions:    compilerOptions,
 		resolver:           resolver,
-		tasksByFileName:    make(map[string]*parseTask),
 		defaultLibraryPath: tspath.GetNormalizedAbsolutePath(host.DefaultLibraryPath(), host.GetCurrentDirectory()),
 		comparePathsOptions: tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
@@ -69,17 +70,35 @@ func processAllProgramFiles(
 
 	loader.wg.RunAndWait()
 
-	files, libFiles := []*ast.SourceFile{}, []*ast.SourceFile{}
+	totalFileCount := int(loader.totalFileCount.Load())
+	libFileCount := int(loader.libFileCount.Load())
+
+	files := make([]*ast.SourceFile, 0, totalFileCount-libFileCount)
+	libFiles := make([]*ast.SourceFile, 0, totalFileCount) // totalFileCount here since we append files to it later to construct the final list
+
+	resolvedModules := make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule], totalFileCount)
+	sourceFileMetaDatas := make(map[tspath.Path]*ast.SourceFileMetaData, totalFileCount)
+
 	for task := range loader.collectTasks(loader.rootTasks) {
+		file := task.file
 		if task.isLib {
-			libFiles = append(libFiles, task.file)
+			libFiles = append(libFiles, file)
 		} else {
-			files = append(files, task.file)
+			files = append(files, file)
 		}
+		path := file.Path()
+		resolvedModules[path] = task.resolutionsInFile
+		sourceFileMetaDatas[path] = task.metadata
 	}
 	loader.sortLibs(libFiles)
 
-	return append(libFiles, files...), loader.resolvedModules, loader.sourceFileMetaDatas
+	allFiles := append(libFiles, files...)
+
+	return processedFiles{
+		files:               allFiles,
+		resolvedModules:     resolvedModules,
+		sourceFileMetaDatas: sourceFileMetaDatas,
+	}
 }
 
 func (p *fileLoader) addRootTasks(files []string, isLib bool) {
@@ -111,15 +130,13 @@ func (p *fileLoader) addAutomaticTypeDirectiveTasks() {
 
 func (p *fileLoader) startTasks(tasks []*parseTask) {
 	if len(tasks) > 0 {
-		p.mu.Lock()
-		defer p.mu.Unlock()
 		for i, task := range tasks {
-			// dedup tasks to ensure correct file order, regardless of which task would be started first
-			if existingTask, ok := p.tasksByFileName[task.normalizedFilePath]; ok {
-				tasks[i] = existingTask
+			loadedTask, loaded := p.tasksByFileName.LoadOrStore(task.normalizedFilePath, task)
+			if loaded {
+				// dedup tasks to ensure correct file order, regardless of which task would be started first
+				tasks[i] = loadedTask
 			} else {
-				p.tasksByFileName[task.normalizedFilePath] = task
-				task.start(p)
+				loadedTask.start(p)
 			}
 		}
 	}
@@ -127,26 +144,27 @@ func (p *fileLoader) startTasks(tasks []*parseTask) {
 
 func (p *fileLoader) collectTasks(tasks []*parseTask) iter.Seq[*parseTask] {
 	return func(yield func(*parseTask) bool) {
-		p.collectTasksWorker(tasks, yield)
+		p.collectTasksWorker(tasks, core.Set[*parseTask]{}, yield)
 	}
 }
 
-func (p *fileLoader) collectTasksWorker(tasks []*parseTask, yield func(*parseTask) bool) bool {
+func (p *fileLoader) collectTasksWorker(tasks []*parseTask, seen core.Set[*parseTask], yield func(*parseTask) bool) bool {
 	for _, task := range tasks {
-		if _, ok := p.tasksByFileName[task.normalizedFilePath]; ok {
-			// ensure we only walk each task once
-			delete(p.tasksByFileName, task.normalizedFilePath)
+		// ensure we only walk each task once
+		if seen.Has(task) {
+			continue
+		}
+		seen.Add(task)
 
-			if len(task.subTasks) > 0 {
-				if !p.collectTasksWorker(task.subTasks, yield) {
-					return false
-				}
+		if len(task.subTasks) > 0 {
+			if !p.collectTasksWorker(task.subTasks, seen, yield) {
+				return false
 			}
+		}
 
-			if task.file != nil {
-				if !yield(task) {
-					return false
-				}
+		if task.file != nil {
+			if !yield(task) {
+				return false
 			}
 		}
 	}
@@ -184,11 +202,23 @@ type parseTask struct {
 	file               *ast.SourceFile
 	isLib              bool
 	subTasks           []*parseTask
+
+	metadata          *ast.SourceFileMetaData
+	resolutionsInFile module.ModeAwareCache[*module.ResolvedModule]
 }
 
 func (t *parseTask) start(loader *fileLoader) {
+	loader.totalFileCount.Add(1)
+	if t.isLib {
+		loader.libFileCount.Add(1)
+	}
+
 	loader.wg.Queue(func() {
 		file := loader.parseSourceFile(t.normalizedFilePath)
+		t.file = file
+		loader.wg.Queue(func() {
+			t.metadata = loader.loadSourceFileMetaData(file.Path())
+		})
 
 		// !!! if noResolve, skip all of this
 		t.subTasks = make([]*parseTask, 0, len(file.ReferencedFiles)+len(file.Imports)+len(file.ModuleAugmentations))
@@ -215,42 +245,29 @@ func (t *parseTask) start(loader *fileLoader) {
 			}
 		}
 
-		for _, imp := range loader.resolveImportsAndModuleAugmentations(file) {
+		importsAndAugmentations, resolutionsInFile := loader.resolveImportsAndModuleAugmentations(file)
+		for _, imp := range importsAndAugmentations {
 			t.addSubTask(imp, false)
 		}
 
-		t.file = file
+		t.resolutionsInFile = resolutionsInFile
+
 		loader.startTasks(t.subTasks)
 	})
 }
 
-func (p *fileLoader) loadSourceFileMetaData(path tspath.Path) {
-	p.sourceFileMetaDatasMutex.RLock()
-	_, ok := p.sourceFileMetaDatas[path]
-	p.sourceFileMetaDatasMutex.RUnlock()
-	if ok {
-		return
-	}
-
+func (p *fileLoader) loadSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
 	packageJsonType := p.resolver.GetPackageJsonTypeIfApplicable(string(path))
 	impliedNodeFormat := ast.GetImpliedNodeFormatForFile(string(path), packageJsonType)
-	metadata := &ast.SourceFileMetaData{
+	return &ast.SourceFileMetaData{
 		PackageJsonType:   packageJsonType,
 		ImpliedNodeFormat: impliedNodeFormat,
 	}
-
-	p.sourceFileMetaDatasMutex.Lock()
-	defer p.sourceFileMetaDatasMutex.Unlock()
-	if p.sourceFileMetaDatas == nil {
-		p.sourceFileMetaDatas = make(map[tspath.Path]*ast.SourceFileMetaData)
-	}
-	p.sourceFileMetaDatas[path] = metadata
 }
 
 func (p *fileLoader) parseSourceFile(fileName string) *ast.SourceFile {
 	path := tspath.ToPath(fileName, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
 	sourceFile := p.host.GetSourceFile(fileName, path, p.compilerOptions.GetEmitScriptTarget())
-	p.loadSourceFileMetaData(path)
 	return sourceFile
 }
 
@@ -269,20 +286,13 @@ func (p *fileLoader) resolveTripleslashPathReference(moduleName string, containi
 	return tspath.NormalizePath(referencedFileName)
 }
 
-func (p *fileLoader) resolveImportsAndModuleAugmentations(file *ast.SourceFile) []string {
-	toParse := make([]string, 0, len(file.Imports))
+func (p *fileLoader) resolveImportsAndModuleAugmentations(file *ast.SourceFile) ([]string, module.ModeAwareCache[*module.ResolvedModule]) {
 	if len(file.Imports) > 0 || len(file.ModuleAugmentations) > 0 {
+		toParse := make([]string, 0, len(file.Imports))
 		moduleNames := getModuleNames(file)
 		resolutions := p.resolveModuleNames(moduleNames, file)
 
 		resolutionsInFile := make(module.ModeAwareCache[*module.ResolvedModule], len(resolutions))
-
-		p.resolvedModulesMutex.Lock()
-		defer p.resolvedModulesMutex.Unlock()
-		if p.resolvedModules == nil {
-			p.resolvedModules = make(map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule])
-		}
-		p.resolvedModules[file.Path()] = resolutionsInFile
 
 		for i, resolution := range resolutions {
 			resolvedFileName := resolution.ResolvedFileName
@@ -315,8 +325,10 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(file *ast.SourceFile) 
 				toParse = append(toParse, resolvedFileName)
 			}
 		}
+
+		return toParse, resolutionsInFile
 	}
-	return toParse
+	return nil, nil
 }
 
 func (p *fileLoader) resolveModuleNames(entries []*ast.Node, file *ast.SourceFile) []*module.ResolvedModule {
