@@ -2807,7 +2807,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // When merging the module augmentation into a.ts, the symbol for `A` will itself be merged, so its parent
                 // should be the merged module symbol. But the symbol for `B` has only one declaration, so its parent should
                 // be the module augmentation symbol, which contains its only declaration.
-                merged.parent = mergedParent;
+                if (merged.flags & SymbolFlags.Transient) {
+                    merged.parent = mergedParent;
+                }
             }
             target.set(id, merged);
         });
