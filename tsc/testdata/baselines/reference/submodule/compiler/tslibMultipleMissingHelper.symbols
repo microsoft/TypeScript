@@ -34,3 +34,11 @@ async function foo(): Promise<void> {}
 >foo : Symbol(foo, Decl(index.ts, 0, 10))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
+=== /package1/node_modules/tslib/tslib.d.ts ===
+export const notAHelper: any;
+>notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, 0, 12))
+
+=== /package2/node_modules/tslib/tslib.d.ts ===
+export const notAHelper: any;
+>notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, 0, 12))
+

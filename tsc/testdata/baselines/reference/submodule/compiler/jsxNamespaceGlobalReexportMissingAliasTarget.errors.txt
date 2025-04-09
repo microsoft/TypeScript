@@ -1,5 +1,4 @@
 /index.tsx(1,27): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-/index.tsx(1,27): error TS2875: This JSX tag requires the module path 'preact/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 /index.tsx(1,32): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
@@ -101,11 +100,9 @@
         // @ts-ignore
         export import JSX = NotFound;
     }
-==== /index.tsx (3 errors) ====
+==== /index.tsx (2 errors) ====
     export const Comp = () => <div></div>;
                               ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-                              ~~~~~~~~~~~
-!!! error TS2875: This JSX tag requires the module path 'preact/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
                                    ~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.

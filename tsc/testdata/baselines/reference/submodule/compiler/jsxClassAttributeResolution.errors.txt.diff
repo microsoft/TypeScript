@@ -2,17 +2,13 @@
 +++ new.jsxClassAttributeResolution.errors.txt
 @@= skipped -0, +0 lines =@@
 -file.tsx(2,19): error TS2741: Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
-+file.tsx(2,18): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 +file.tsx(2,19): error TS2322: Type '{}' is not assignable to type 'IntrinsicClassAttributes<T>'.
 +  Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
  
  
--==== file.tsx (1 errors) ====
-+==== file.tsx (2 errors) ====
+ ==== file.tsx (1 errors) ====
      class App {}
      export const a = <App></App>;
-+                     ~~~~~~~~~~~
-+!!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
                        ~~~
 -!!! error TS2741: Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
 +!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicClassAttributes<T>'.

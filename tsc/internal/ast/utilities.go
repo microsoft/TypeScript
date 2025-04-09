@@ -1184,6 +1184,10 @@ func WalkUpBindingElementsAndPatterns(binding *Node) *Node {
 	return node.Parent
 }
 
+func IsSourceFileJS(file *SourceFile) bool {
+	return file.ScriptKind == core.ScriptKindJS || file.ScriptKind == core.ScriptKindJSX
+}
+
 func IsInJSFile(node *Node) bool {
 	return node != nil && node.Flags&NodeFlagsJavaScriptFile != 0
 }
@@ -2584,4 +2588,54 @@ func IsRequireCall(node *Node, requireStringLiteralLikeArgument bool) bool {
 
 func IsUnterminatedLiteral(node *Node) bool {
 	return node.LiteralLikeData().TokenFlags&TokenFlagsUnterminated != 0
+}
+
+func GetJSXImplicitImportBase(compilerOptions *core.CompilerOptions, file *SourceFile) string {
+	jsxImportSourcePragma := getPragmaFromSourceFile(file, "jsximportsource")
+	jsxRuntimePragma := getPragmaFromSourceFile(file, "jsxruntime")
+	if getPragmaArgument(jsxRuntimePragma, "factory") == "classic" {
+		return ""
+	}
+	if compilerOptions.Jsx == core.JsxEmitReactJSX ||
+		compilerOptions.Jsx == core.JsxEmitReactJSXDev ||
+		compilerOptions.JsxImportSource != "" ||
+		jsxImportSourcePragma != nil ||
+		getPragmaArgument(jsxRuntimePragma, "factory") == "automatic" {
+		result := getPragmaArgument(jsxImportSourcePragma, "factory")
+		if result == "" {
+			result = compilerOptions.JsxImportSource
+		}
+		if result == "" {
+			result = "react"
+		}
+		return result
+	}
+	return ""
+}
+
+func GetJSXRuntimeImport(base string, options *core.CompilerOptions) string {
+	if base == "" {
+		return base
+	}
+	return base + "/" + core.IfElse(options.Jsx == core.JsxEmitReactJSXDev, "jsx-dev-runtime", "jsx-runtime")
+}
+
+func getPragmaFromSourceFile(file *SourceFile, name string) *Pragma {
+	if file != nil {
+		for i := range file.Pragmas {
+			if file.Pragmas[i].Name == name {
+				return &file.Pragmas[i]
+			}
+		}
+	}
+	return nil
+}
+
+func getPragmaArgument(pragma *Pragma, name string) string {
+	if pragma != nil {
+		if arg, ok := pragma.Args[name]; ok {
+			return arg.Value
+		}
+	}
+	return ""
 }

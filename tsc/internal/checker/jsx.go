@@ -1246,13 +1246,13 @@ func (c *Checker) getJsxNamespaceContainerForImplicitImport(location *ast.Node) 
 	if links != nil && links.jsxImplicitImportContainer != nil {
 		return core.IfElse(links.jsxImplicitImportContainer == c.unknownSymbol, nil, links.jsxImplicitImportContainer)
 	}
-	runtimeImportSpecifier := getJSXRuntimeImport(getJSXImplicitImportBase(c.compilerOptions, file), c.compilerOptions)
-	if runtimeImportSpecifier == "" {
+
+	moduleReference, specifier := c.getJSXRuntimeImportSpecifier(file)
+	if moduleReference == "" {
 		return nil
 	}
 	errorMessage := diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_for_the_appropriate_package_installed
-	specifier := c.getJSXRuntimeImportSpecifier(file, runtimeImportSpecifier)
-	mod := c.resolveExternalModule(core.OrElse(specifier, location), runtimeImportSpecifier, errorMessage, location, false)
+	mod := c.resolveExternalModule(core.OrElse(specifier, location), moduleReference, errorMessage, location, false)
 	var result *ast.Symbol
 	if mod != nil && mod != c.unknownSymbol {
 		result = c.getMergedSymbol(c.resolveSymbol(mod))
@@ -1263,45 +1263,8 @@ func (c *Checker) getJsxNamespaceContainerForImplicitImport(location *ast.Node) 
 	return result
 }
 
-func (c *Checker) getJSXRuntimeImportSpecifier(file *ast.SourceFile, specifierText string) *ast.Node {
-	// Synthesized JSX import is either first or after tslib
-	jsxImportIndex := core.IfElse(c.compilerOptions.ImportHelpers.IsTrue(), 1, 0)
-	if jsxImportIndex >= len(file.Imports) {
-		return nil
-	}
-	specifier := file.Imports[jsxImportIndex]
-	// Debug.assert(nodeIsSynthesized(specifier) && specifier.Text == specifierText, __TEMPLATE__("Expected sourceFile.imports[", jsxImportIndex, "] to be the synthesized JSX runtime import"))
-	return specifier
-}
-
-func getJSXImplicitImportBase(compilerOptions *core.CompilerOptions, file *ast.SourceFile) string {
-	jsxImportSourcePragma := getPragmaFromSourceFile(file, "jsximportsource")
-	jsxRuntimePragma := getPragmaFromSourceFile(file, "jsxruntime")
-	if getPragmaArgument(jsxRuntimePragma, "factory") == "classic" {
-		return ""
-	}
-	if compilerOptions.Jsx == core.JsxEmitReactJSX ||
-		compilerOptions.Jsx == core.JsxEmitReactJSXDev ||
-		compilerOptions.JsxImportSource != "" ||
-		jsxImportSourcePragma != nil ||
-		getPragmaArgument(jsxRuntimePragma, "factory") == "automatic" {
-		result := getPragmaArgument(jsxImportSourcePragma, "factory")
-		if result == "" {
-			result = compilerOptions.JsxImportSource
-		}
-		if result == "" {
-			result = "react"
-		}
-		return result
-	}
-	return ""
-}
-
-func getJSXRuntimeImport(base string, options *core.CompilerOptions) string {
-	if base == "" {
-		return base
-	}
-	return base + "/" + core.IfElse(options.Jsx == core.JsxEmitReactJSXDev, "jsx-dev-runtime", "jsx-runtime")
+func (c *Checker) getJSXRuntimeImportSpecifier(file *ast.SourceFile) (moduleReference string, specifier *ast.Node) {
+	return c.program.GetJSXRuntimeImportSpecifier(file.Path())
 }
 
 func getPragmaFromSourceFile(file *ast.SourceFile, name string) *ast.Pragma {

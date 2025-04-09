@@ -58,6 +58,14 @@ func (p *fakeProgram) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMet
 	return nil
 }
 
+func (p *fakeProgram) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node {
+	return nil
+}
+
+func (p *fakeProgram) GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node) {
+	return "", nil
+}
+
 func TestImportElision(t *testing.T) {
 	t.Parallel()
 	data := []struct {

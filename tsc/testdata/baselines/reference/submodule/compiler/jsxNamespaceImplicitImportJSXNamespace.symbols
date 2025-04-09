@@ -295,4 +295,6 @@ export import JSX = JSXInternal;
 === /index.tsx ===
 export const Comp = () => <div></div>;
 >Comp : Symbol(Comp, Decl(index.tsx, 0, 12))
+>div : Symbol(div, Decl(index.d.ts, 32, 33))
+>div : Symbol(div, Decl(index.d.ts, 32, 33))
 

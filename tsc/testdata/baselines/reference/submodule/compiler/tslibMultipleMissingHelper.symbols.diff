@@ -1,14 +1,14 @@
 --- old.tslibMultipleMissingHelper.symbols
 +++ new.tslibMultipleMissingHelper.symbols
-@@= skipped -33, +33 lines =@@
- >foo : Symbol(foo, Decl(index.ts, 0, 10))
- >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+@@= skipped -35, +35 lines =@@
  
--=== /package1/node_modules/tslib/tslib.d.ts ===
--export const notAHelper: any;
+ === /package1/node_modules/tslib/tslib.d.ts ===
+ export const notAHelper: any;
 ->notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, --, --))
--
--=== /package2/node_modules/tslib/tslib.d.ts ===
--export const notAHelper: any;
++>notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, 0, 12))
+ 
+ === /package2/node_modules/tslib/tslib.d.ts ===
+ export const notAHelper: any;
 ->notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, --, --))
--
++>notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, 0, 12))
+ 

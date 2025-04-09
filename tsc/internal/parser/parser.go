@@ -345,7 +345,7 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	result.Pragmas = getCommentPragmas(&p.factory, p.sourceText)
 	processPragmasIntoFields(result)
 	result.SetDiagnostics(attachFileToDiagnostics(p.diagnostics, result))
-	result.ExternalModuleIndicator = isFileProbablyExternalModule(result)
+	result.ExternalModuleIndicator = isFileProbablyExternalModule(result) // !!!
 	result.IsDeclarationFile = isDeclarationFile
 	result.LanguageVersion = p.languageVersion
 	result.LanguageVariant = p.languageVariant

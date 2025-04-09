@@ -1,7 +1,7 @@
---- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=system,moduledetection=auto).errors.txt
-+++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=system,moduledetection=auto).errors.txt
+--- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=force).errors.txt
++++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=force).errors.txt
 @@= skipped -0, +-1 lines =@@
--commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2792: Cannot find module 'react/jsx-dev-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 -
 -
 -==== commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
@@ -37,7 +37,7 @@
 -    ~~~~~~~~~~~~~~~~~~~~~~~~
 -            </div>;
 -    ~~~~~~~~~~~~~~
--!!! error TS2792: Cannot find module 'react/jsx-dev-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-!!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 -        }
 -    }
 @@= skipped --1, +1 lines =@@

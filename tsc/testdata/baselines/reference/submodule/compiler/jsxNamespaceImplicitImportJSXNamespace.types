@@ -204,9 +204,9 @@ export import JSX = JSXInternal;
 
 === /index.tsx ===
 export const Comp = () => <div></div>;
->Comp : () => any
->() => <div></div> : () => any
-><div></div> : any
+>Comp : () => Element
+>() => <div></div> : () => Element
+><div></div> : Element
 >div : any
 >div : any
 

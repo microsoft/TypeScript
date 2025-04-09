@@ -9,15 +9,3 @@
  >a : number
  >rest : { b: number; }
  >a : number
-@@= skipped -18, +18 lines =@@
- async function foo(): Promise<void> {}
- >foo : () => Promise<void>
- 
--=== /package1/node_modules/tslib/tslib.d.ts ===
--export const notAHelper: any;
-->notAHelper : any
--
--=== /package2/node_modules/tslib/tslib.d.ts ===
--export const notAHelper: any;
-->notAHelper : any
--
