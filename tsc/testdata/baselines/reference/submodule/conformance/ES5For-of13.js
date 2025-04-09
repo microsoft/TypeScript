@@ -9,3 +9,4 @@ for (let v of ['a', 'b', 'c']) {
 for (let v of ['a', 'b', 'c']) {
     var x = v;
 }
+//# sourceMappingURL=ES5For-of13.js.map

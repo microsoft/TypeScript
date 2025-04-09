@@ -57,3 +57,4 @@ foo3(robotA);
 foo3([2, "trimmer", "trimming"]);
 foo4(robotA);
 foo4([2, "trimmer", "trimming"]);
+//# sourceMappingURL=sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.js.map

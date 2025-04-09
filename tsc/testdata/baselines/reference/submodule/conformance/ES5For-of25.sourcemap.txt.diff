@@ -1,0 +1,128 @@
+--- old.ES5For-of25.sourcemap.txt
++++ new.ES5For-of25.sourcemap.txt
+@@= skipped -20, +20 lines =@@
+ 10>               ^
+ 11>                ^
+ 12>                 ^
+-13>                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++13>                  ^->
+ 1 >
+ 2 >var 
+ 3 >    a
+@@= skipped -26, +26 lines =@@
+ 11>Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+ 12>Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+ ---
+->>>for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
++>>>for (var v of a) {
+ 1->
+ 2 >^^^^^
+-3 >     ^^^^^^^^^^
+-4 >               ^^
+-5 >                 ^^^^^^^
+-6 >                        ^^
+-7 >                          ^^^^^^^^^^^^^^^
+-8 >                                         ^^
+-9 >                                           ^^^^
+-10>                                               ^^
+-11>                                                 ^
++3 >     ^^^^
++4 >         ^
++5 >          ^^^^
++6 >              ^
++7 >               ^^
++8 >                 ^
+ 1->
+   >
+-2 >for (var v of 
+-3 >     a
+-4 >               
+-5 >                 a
+-6 >                        
+-7 >                          a
+-8 >                                         
+-9 >                                           a
+-10>                                               ) 
+-11>                                                 {
++2 >for (
++3 >     var 
++4 >         v
++5 >           of 
++6 >              a
++7 >               ) 
++8 >                 {
+ 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+-2 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
+-3 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+-4 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
+-5 >Emitted(2, 25) Source(2, 16) + SourceIndex(0)
+-6 >Emitted(2, 27) Source(2, 15) + SourceIndex(0)
+-7 >Emitted(2, 42) Source(2, 16) + SourceIndex(0)
+-8 >Emitted(2, 44) Source(2, 15) + SourceIndex(0)
+-9 >Emitted(2, 48) Source(2, 16) + SourceIndex(0)
+-10>Emitted(2, 50) Source(2, 18) + SourceIndex(0)
+-11>Emitted(2, 51) Source(2, 19) + SourceIndex(0)
++2 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
++3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
++4 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
++5 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
++6 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
++7 >Emitted(2, 18) Source(2, 18) + SourceIndex(0)
++8 >Emitted(2, 19) Source(2, 19) + SourceIndex(0)
+ ---
+->>>    var v = a_1[_i];
+-1 >^^^^
+-2 >    ^^^^
+-3 >        ^
+-4 >         ^^^^^^^^^^
+-1 >
+-2 >    var 
+-3 >        v
+-4 >         
+-1 >Emitted(3, 5) Source(2, 6) + SourceIndex(0)
+-2 >Emitted(3, 9) Source(2, 10) + SourceIndex(0)
+-3 >Emitted(3, 10) Source(2, 11) + SourceIndex(0)
+-4 >Emitted(3, 20) Source(2, 11) + SourceIndex(0)
+----
+ >>>    v;
+ 1 >^^^^
+ 2 >    ^
+ 3 >     ^
+ 4 >      ^->
+-1 > of a) {
++1 >
+   >    
+ 2 >    v
+ 3 >     ;
+-1 >Emitted(4, 5) Source(3, 5) + SourceIndex(0)
+-2 >Emitted(4, 6) Source(3, 6) + SourceIndex(0)
+-3 >Emitted(4, 7) Source(3, 7) + SourceIndex(0)
++1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
++2 >Emitted(3, 6) Source(3, 6) + SourceIndex(0)
++3 >Emitted(3, 7) Source(3, 7) + SourceIndex(0)
+ ---
+ >>>    a;
+ 1->^^^^
+@@= skipped -71, +48 lines =@@
+   >    
+ 2 >    a
+ 3 >     ;
+-1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+-2 >Emitted(5, 6) Source(4, 6) + SourceIndex(0)
+-3 >Emitted(5, 7) Source(4, 7) + SourceIndex(0)
++1->Emitted(4, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
++3 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
+ ---
+ >>>}
+ 1 >
+@@= skipped -11, +11 lines =@@
+ 1 >
+   >
+ 2 >}
+-1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
+-2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
++1 >Emitted(5, 1) Source(5, 1) + SourceIndex(0)
++2 >Emitted(5, 2) Source(5, 2) + SourceIndex(0)
+ ---
+ >>>//# sourceMappingURL=ES5For-of25.js.map

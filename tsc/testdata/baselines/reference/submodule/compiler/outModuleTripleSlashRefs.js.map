@@ -1,0 +1,6 @@
+//// [b.js.map]
+{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":";;;AAAA,+BAA0B;AAC1B,OAAe,SAAQ,KAAC;CAAI"}
+//// [a.js.map]
+{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":";;;AAAA,+BAA+B;AAC/B;IACC,MAAM,CAAmB;CACzB"}
+//// [b.js.map]
+{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,iCAAiC;AACjC,MAAM,GAAG;IACR,MAAM,CAAM;CACZ"}

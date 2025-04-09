@@ -1,7 +1,0 @@
---- old.sourceMapValidationSwitch.js
-+++ new.sourceMapValidationSwitch.js
-@@= skipped -57, +57 lines =@@
-             x = x * 10;
-         }
- }
--//# sourceMappingURL=sourceMapValidationSwitch.js.map

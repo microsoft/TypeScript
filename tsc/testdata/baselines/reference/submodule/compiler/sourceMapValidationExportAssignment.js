@@ -12,3 +12,4 @@ class a {
     c;
 }
 module.exports = a;
+//# sourceMappingURL=sourceMapValidationExportAssignment.js.map

@@ -329,7 +329,7 @@ func forEachASTNode(node *ast.Node) []*ast.Node {
 }
 
 func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk bool) *typeWriterResult {
-	actualPos := scanner.SkipTrivia(walker.currentSourceFile.Text, node.Pos())
+	actualPos := scanner.SkipTrivia(walker.currentSourceFile.Text(), node.Pos())
 	line, _ := scanner.GetLineAndCharacterOfPosition(walker.currentSourceFile, actualPos)
 	sourceText := scanner.GetSourceTextOfNodeFromSourceFile(walker.currentSourceFile, node, false /*includeTrivia*/)
 	fileChecker := walker.getTypeCheckerForCurrentFile()

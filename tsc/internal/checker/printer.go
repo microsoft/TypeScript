@@ -647,7 +647,7 @@ func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
 	var typesPrinted bool
 	lineStarts := scanner.GetLineStarts(sourceFile)
 	printLinesBefore := func(node *ast.Node) {
-		line := scanner.ComputeLineOfPosition(lineStarts, scanner.SkipTrivia(sourceFile.Text, node.Pos()))
+		line := scanner.ComputeLineOfPosition(lineStarts, scanner.SkipTrivia(sourceFile.Text(), node.Pos()))
 		var nextLineStart int
 		if line+1 < len(lineStarts) {
 			nextLineStart = int(lineStarts[line+1])
@@ -658,7 +658,7 @@ func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
 			if typesPrinted {
 				p.print("\n")
 			}
-			p.print(sourceFile.Text[pos:nextLineStart])
+			p.print(sourceFile.Text()[pos:nextLineStart])
 			pos = nextLineStart
 			typesPrinted = false
 		}
@@ -681,7 +681,7 @@ func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
 		return node.ForEachChild(visit)
 	}
 	visit(sourceFile.AsNode())
-	p.print(sourceFile.Text[pos:sourceFile.End()])
+	p.print(sourceFile.Text()[pos:sourceFile.End()])
 }
 
 func (c *Checker) getTextAndTypeOfNode(node *ast.Node) (string, *Type, bool) {

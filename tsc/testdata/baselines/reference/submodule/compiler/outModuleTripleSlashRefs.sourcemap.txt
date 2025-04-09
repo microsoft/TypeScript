@@ -1,0 +1,142 @@
+===================================================================
+JsFile: b.js
+mapUrl: b.js.map
+sourceRoot: 
+sources: b.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:ref/b.js
+sourceFile:b.ts
+-------------------------------------------------------------------
+>>>/// <reference path="./c.d.ts" />
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >/// <reference path="./c.d.ts" />
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 34) Source(1, 34) + SourceIndex(0)
+---
+>>>class Foo {
+1 >
+2 >^^^^^^
+3 >      ^^^
+4 >         ^^^->
+1 >
+  >
+2 >class 
+3 >      Foo
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+---
+>>>    member;
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+1-> {
+  >	
+2 >    member
+3 >          : Bar;
+1->Emitted(3, 5) Source(3, 2) + SourceIndex(0)
+2 >Emitted(3, 11) Source(3, 8) + SourceIndex(0)
+3 >Emitted(3, 12) Source(3, 14) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=b.js.map===================================================================
+JsFile: a.js
+mapUrl: a.js.map
+sourceRoot: 
+sources: a.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:ref/a.js
+sourceFile:a.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.A = void 0;
+>>>/// <reference path="./b.ts" />
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >/// <reference path="./b.ts" />
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(4, 32) Source(1, 32) + SourceIndex(0)
+---
+>>>class A {
+1 >
+2 >^^^^^^^^^^^^->
+1 >
+  >
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+---
+>>>    member;
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+1->export class A {
+  >	
+2 >    member
+3 >          : typeof GlobalFoo;
+1->Emitted(6, 5) Source(3, 2) + SourceIndex(0)
+2 >Emitted(6, 11) Source(3, 8) + SourceIndex(0)
+3 >Emitted(6, 12) Source(3, 27) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(7, 2) Source(4, 2) + SourceIndex(0)
+---
+>>>exports.A = A;
+>>>//# sourceMappingURL=a.js.map===================================================================
+JsFile: b.js
+mapUrl: b.js.map
+sourceRoot: 
+sources: b.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:b.js
+sourceFile:b.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.B = void 0;
+>>>const a_1 = require("./ref/a");
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >import {A} from "./ref/a";
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(4, 32) Source(1, 27) + SourceIndex(0)
+---
+>>>class B extends a_1.A {
+1 >
+2 >^^^^^^^
+3 >       ^^^^^^^^^
+4 >                ^^^^^
+1 >
+  >
+2 >export class B 
+3 >       extends 
+4 >                A
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 8) Source(2, 16) + SourceIndex(0)
+3 >Emitted(5, 17) Source(2, 24) + SourceIndex(0)
+4 >Emitted(5, 22) Source(2, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^->
+1 > { }
+1 >Emitted(6, 2) Source(2, 29) + SourceIndex(0)
+---
+>>>exports.B = B;
+>>>//# sourceMappingURL=b.js.map

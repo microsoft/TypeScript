@@ -37,3 +37,4 @@ if (nameB == nameB) {
 else {
     console.log(nameC);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.js.map

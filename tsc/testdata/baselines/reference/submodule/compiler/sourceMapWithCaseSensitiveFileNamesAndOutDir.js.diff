@@ -9,15 +9,15 @@
 -    }
 -    return c;
 -}());
--//# sourceMappingURL=app.js.map
 +class c {
 +}
+ //# sourceMappingURL=app.js.map
  //// [app2.js]
 -var d = /** @class */ (function () {
 -    function d() {
 -    }
 -    return d;
 -}());
--//# sourceMappingURL=app2.js.map
 +class d {
 +}
+ //# sourceMappingURL=app2.js.map

@@ -1,0 +1,96 @@
+===================================================================
+JsFile: ternaryExpressionSourceMap.js
+mapUrl: ternaryExpressionSourceMap.js.map
+sourceRoot: 
+sources: ternaryExpressionSourceMap.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:ternaryExpressionSourceMap.js
+sourceFile:ternaryExpressionSourceMap.ts
+-------------------------------------------------------------------
+>>>var x = 1;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >var 
+3 >    x
+4 >      = 
+5 >        1
+6 >         ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>var foo = x ? () => 0 : () => 0;
+1->
+2 >^^^^
+3 >    ^^^
+4 >       ^^^
+5 >          ^
+6 >           ^
+7 >            ^
+8 >             ^
+9 >              ^^^
+10>                 ^^
+11>                   ^
+12>                    ^
+13>                     ^
+14>                      ^
+15>                       ^
+16>                        ^^^
+17>                           ^^
+18>                             ^
+19>                              ^
+20>                               ^
+21>                                ^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    foo
+4 >        = 
+5 >          x
+6 >            
+7 >            ?
+8 >              
+9 >              () 
+10>                 =>
+11>                    
+12>                    0
+13>                      
+14>                      :
+15>                        
+16>                        () 
+17>                           =>
+18>                              
+19>                              0
+20>                               ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
+5 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+6 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+7 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+8 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+9 >Emitted(2, 18) Source(2, 18) + SourceIndex(0)
+10>Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+11>Emitted(2, 21) Source(2, 21) + SourceIndex(0)
+12>Emitted(2, 22) Source(2, 22) + SourceIndex(0)
+13>Emitted(2, 23) Source(2, 23) + SourceIndex(0)
+14>Emitted(2, 24) Source(2, 24) + SourceIndex(0)
+15>Emitted(2, 25) Source(2, 25) + SourceIndex(0)
+16>Emitted(2, 28) Source(2, 28) + SourceIndex(0)
+17>Emitted(2, 30) Source(2, 30) + SourceIndex(0)
+18>Emitted(2, 31) Source(2, 31) + SourceIndex(0)
+19>Emitted(2, 32) Source(2, 32) + SourceIndex(0)
+20>Emitted(2, 33) Source(2, 33) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=ternaryExpressionSourceMap.js.map

@@ -11,3 +11,4 @@ class Greeter {
     a = 10;
     nameA = "Ten";
 }
+//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructor.js.map

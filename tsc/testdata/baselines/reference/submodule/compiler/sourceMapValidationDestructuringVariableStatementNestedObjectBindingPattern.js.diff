@@ -13,7 +13,3 @@
  if (nameB == nameB) {
      console.log(nameC);
  }
- else {
-     console.log(nameC);
- }
--//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.js.map

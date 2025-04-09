@@ -1,7 +1,0 @@
---- old.optionsSourcemapInlineSourcesSourceRoot.js
-+++ new.optionsSourcemapInlineSourcesSourceRoot.js
-@@= skipped -4, +4 lines =@@
- 
- //// [optionsSourcemapInlineSourcesSourceRoot.js]
- var a = 10;
--//# sourceMappingURL=optionsSourcemapInlineSourcesSourceRoot.js.map

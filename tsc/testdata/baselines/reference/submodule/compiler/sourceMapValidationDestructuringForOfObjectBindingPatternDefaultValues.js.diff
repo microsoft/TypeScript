@@ -79,4 +79,4 @@
 +    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
      console.log(nameA);
  }
--//# sourceMappingURL=sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.js.map
+ //# sourceMappingURL=sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.js.map

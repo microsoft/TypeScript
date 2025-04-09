@@ -19,3 +19,4 @@ var v = {
         return 0;
     }
 };
+//# sourceMappingURL=computedPropertyNamesSourceMap2_ES6.js.map

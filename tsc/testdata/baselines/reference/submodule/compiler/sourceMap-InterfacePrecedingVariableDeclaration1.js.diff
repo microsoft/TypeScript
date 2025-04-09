@@ -1,7 +1,0 @@
---- old.sourceMap-InterfacePrecedingVariableDeclaration1.js
-+++ new.sourceMap-InterfacePrecedingVariableDeclaration1.js
-@@= skipped -5, +5 lines =@@
- 
- //// [sourceMap-InterfacePrecedingVariableDeclaration1.js]
- var x = 0;
--//# sourceMappingURL=sourceMap-InterfacePrecedingVariableDeclaration1.js.map

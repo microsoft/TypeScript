@@ -359,3 +359,4 @@ Point.prototype = {
     }
 };
 var x = {};
+//# sourceMappingURL=contextualTyping.js.map

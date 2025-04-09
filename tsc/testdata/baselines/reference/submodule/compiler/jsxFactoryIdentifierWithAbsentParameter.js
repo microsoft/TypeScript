@@ -24,3 +24,4 @@ class AppComponent {
     }
 }
 exports.AppComponent = AppComponent;
+//# sourceMappingURL=test.js.map

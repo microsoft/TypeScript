@@ -1,0 +1,50 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js
+mapUrl: sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js
+sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts
+-------------------------------------------------------------------
+>>>var { x } = { x: 20 };
+1 >
+2 >^^^^
+3 >    ^^
+4 >      ^
+5 >       ^^
+6 >         ^^^
+7 >            ^^
+8 >              ^
+9 >               ^^
+10>                 ^^
+11>                   ^^
+12>                     ^
+13>                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >var 
+3 >    {
+4 >      x
+5 >       }
+6 >          = 
+7 >            { 
+8 >              x
+9 >               : 
+10>                 20
+11>                    }
+12>                     ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 7) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 8) Source(1, 7) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 8) + SourceIndex(0)
+6 >Emitted(1, 13) Source(1, 11) + SourceIndex(0)
+7 >Emitted(1, 15) Source(1, 13) + SourceIndex(0)
+8 >Emitted(1, 16) Source(1, 14) + SourceIndex(0)
+9 >Emitted(1, 18) Source(1, 16) + SourceIndex(0)
+10>Emitted(1, 20) Source(1, 18) + SourceIndex(0)
+11>Emitted(1, 22) Source(1, 20) + SourceIndex(0)
+12>Emitted(1, 23) Source(1, 21) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map

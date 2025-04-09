@@ -1,7 +1,0 @@
---- old.sourceMap-NewLine1.js
-+++ new.sourceMap-NewLine1.js
-@@= skipped -3, +3 lines =@@
- 
- 
- //// [sourceMap-NewLine1.js]
--//# sourceMappingURL=sourceMap-NewLine1.js.map

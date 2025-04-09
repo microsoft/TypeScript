@@ -9,3 +9,4 @@ for (var v of ['a', 'b', 'c']) {
 for (var v of ['a', 'b', 'c']) {
     console.log(v);
 }
+//# sourceMappingURL=ES5For-of33.js.map

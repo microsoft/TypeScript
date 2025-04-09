@@ -1,0 +1,115 @@
+===================================================================
+JsFile: properties.js
+mapUrl: properties.js.map
+sourceRoot: 
+sources: properties.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:properties.js
+sourceFile:properties.ts
+-------------------------------------------------------------------
+>>>class MyClass {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^->
+1 >
+2 >class 
+3 >      MyClass
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+---
+>>>    get Count() {
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^
+4 >             ^^^
+5 >                ^^^->
+1->
+  >{
+  >    
+2 >    public get 
+3 >        Count
+4 >             (): number
+  >                 
+1->Emitted(2, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(2, 9) Source(3, 16) + SourceIndex(0)
+3 >Emitted(2, 14) Source(3, 21) + SourceIndex(0)
+4 >Emitted(2, 17) Source(4, 5) + SourceIndex(0)
+---
+>>>        return 42;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
+1->{
+  >        
+2 >        return 
+3 >               42
+4 >                 ;
+1->Emitted(3, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(3, 16) Source(5, 16) + SourceIndex(0)
+3 >Emitted(3, 18) Source(5, 18) + SourceIndex(0)
+4 >Emitted(3, 19) Source(5, 19) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    
+  >        }
+1 >Emitted(4, 5) Source(5, 19) + SourceIndex(0)
+2 >Emitted(4, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    set Count(value) {
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^
+4 >             ^
+5 >              ^^^^^
+6 >                   ^^
+1->
+  >
+  >    
+2 >    public set 
+3 >        Count
+4 >             (
+5 >              value: number
+6 >                   )
+  >                       
+1->Emitted(5, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(5, 9) Source(8, 16) + SourceIndex(0)
+3 >Emitted(5, 14) Source(8, 21) + SourceIndex(0)
+4 >Emitted(5, 15) Source(8, 22) + SourceIndex(0)
+5 >Emitted(5, 20) Source(8, 35) + SourceIndex(0)
+6 >Emitted(5, 22) Source(9, 5) + SourceIndex(0)
+---
+>>>        //
+1 >^^^^^^^^
+2 >        ^^
+1 >{
+  >        
+2 >        //
+1 >Emitted(6, 9) Source(10, 9) + SourceIndex(0)
+2 >Emitted(6, 11) Source(10, 11) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+2 >    
+  >            //
+  >        }
+1 >Emitted(7, 5) Source(9, 6) + SourceIndex(0)
+2 >Emitted(7, 6) Source(11, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(8, 2) Source(12, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=properties.js.map

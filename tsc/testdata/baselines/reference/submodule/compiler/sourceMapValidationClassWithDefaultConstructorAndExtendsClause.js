@@ -16,3 +16,4 @@ class Greeter extends AbstractGreeter {
     a = 10;
     nameA = "Ten";
 }
+//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js.map

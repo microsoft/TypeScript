@@ -1,0 +1,84 @@
+--- old.sourceMapWithMultipleFilesWithCopyright.sourcemap.txt
++++ new.sourceMapWithMultipleFilesWithCopyright.sourcemap.txt
+@@= skipped -1, +1 lines =@@
+ JsFile: a.js
+ mapUrl: a.js.map
+ sourceRoot: 
+-sources: a.ts,b.ts
++sources: a.ts
+ ===================================================================
+ -------------------------------------------------------------------
+ emittedFile:a.js
+@@= skipped -71, +71 lines =@@
+ >>>};
+ 1 >^
+ 2 > ^
+-3 >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++3 >  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+   >}
+ 2 > ;
+ 1 >Emitted(7, 2) Source(8, 2) + SourceIndex(0)
+ 2 >Emitted(7, 3) Source(8, 3) + SourceIndex(0)
+ ---
++>>>//# sourceMappingURL=a.js.map===================================================================
++JsFile: b.js
++mapUrl: b.js.map
++sourceRoot: 
++sources: b.ts
++===================================================================
+ -------------------------------------------------------------------
+-emittedFile:a.js
++emittedFile:b.js
+ sourceFile:b.ts
+ -------------------------------------------------------------------
+ >>>/*--------------------------------------------------------------------------
+-1->
++1 >
+ 2 >^^^^^^^^^^->
+-1->
+-1->Emitted(8, 1) Source(1, 1) + SourceIndex(1)
++1 >
++1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+ ---
+ >>>Copyright
+ >>>---------------------------------------------------------------------------*/
+@@= skipped -23, +29 lines =@@
+ 1->/*--------------------------------------------------------------------------
+   >Copyright 
+   >---------------------------------------------------------------------------*/
+-1->Emitted(10, 78) Source(3, 78) + SourceIndex(1)
++1->Emitted(3, 78) Source(3, 78) + SourceIndex(0)
+ ---
+ >>>///<reference path="a.ts"/>
+ 1 >
+@@= skipped -9, +9 lines =@@
+   >
+   >
+ 2 >///<reference path="a.ts"/>
+-1 >Emitted(11, 1) Source(5, 1) + SourceIndex(1)
+-2 >Emitted(11, 28) Source(5, 28) + SourceIndex(1)
++1 >Emitted(4, 1) Source(5, 1) + SourceIndex(0)
++2 >Emitted(4, 28) Source(5, 28) + SourceIndex(0)
+ ---
+ >>>var y = x;
+ 1 >
+@@= skipped -18, +18 lines =@@
+ 4 >      = 
+ 5 >        x
+ 6 >         ;
+-1 >Emitted(12, 1) Source(6, 1) + SourceIndex(1)
+-2 >Emitted(12, 5) Source(6, 5) + SourceIndex(1)
+-3 >Emitted(12, 6) Source(6, 6) + SourceIndex(1)
+-4 >Emitted(12, 9) Source(6, 9) + SourceIndex(1)
+-5 >Emitted(12, 10) Source(6, 10) + SourceIndex(1)
+-6 >Emitted(12, 11) Source(6, 11) + SourceIndex(1)
++1 >Emitted(5, 1) Source(6, 1) + SourceIndex(0)
++2 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
++3 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
++4 >Emitted(5, 9) Source(6, 9) + SourceIndex(0)
++5 >Emitted(5, 10) Source(6, 10) + SourceIndex(0)
++6 >Emitted(5, 11) Source(6, 11) + SourceIndex(0)
+ ---
+->>>//# sourceMappingURL=a.js.map
++>>>//# sourceMappingURL=b.js.map

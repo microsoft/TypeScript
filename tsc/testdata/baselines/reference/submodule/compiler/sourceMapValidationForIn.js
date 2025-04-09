@@ -29,3 +29,4 @@ for (var x2 in String) {
 for (x in String) {
     WScript.Echo(x);
 }
+//# sourceMappingURL=sourceMapValidationForIn.js.map

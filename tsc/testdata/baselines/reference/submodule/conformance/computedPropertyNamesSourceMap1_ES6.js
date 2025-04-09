@@ -19,3 +19,4 @@ class C {
         return 0;
     }
 }
+//# sourceMappingURL=computedPropertyNamesSourceMap1_ES6.js.map

@@ -329,3 +329,4 @@ for ({
     i = 0; i < 1; i++) {
     console.log(primaryA);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.js.map

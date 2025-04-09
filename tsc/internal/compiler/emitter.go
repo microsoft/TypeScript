@@ -1,11 +1,16 @@
 package compiler
 
 import (
+	"encoding/base64"
+	"strings"
+
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/sourcemap"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -25,7 +30,7 @@ type emitter struct {
 	emittedFilesList   []string
 	emitterDiagnostics ast.DiagnosticsCollection
 	emitSkipped        bool
-	sourceMapDataList  []*sourceMapEmitResult
+	sourceMapDataList  []*SourceMapEmitResult
 	writer             printer.EmitTextWriter
 	paths              *outputPaths
 	sourceFile         *ast.SourceFile
@@ -110,9 +115,12 @@ func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 	}
 
 	printerOptions := printer.PrinterOptions{
-		NewLine:        options.NewLine,
-		NoEmitHelpers:  options.NoEmitHelpers.IsTrue(),
-		RemoveComments: options.RemoveComments.IsTrue(),
+		RemoveComments:  options.RemoveComments.IsTrue(),
+		NewLine:         options.NewLine,
+		NoEmitHelpers:   options.NoEmitHelpers.IsTrue(),
+		SourceMap:       options.SourceMap.IsTrue(),
+		InlineSourceMap: options.InlineSourceMap.IsTrue(),
+		InlineSources:   options.InlineSources.IsTrue(),
 		// !!!
 	}
 
@@ -141,20 +149,67 @@ func (e *emitter) emitBuildInfo(buildInfoPath string) {
 
 func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, sourceFile *ast.SourceFile, printer *printer.Printer) bool {
 	// !!! sourceMapGenerator
+	options := e.host.Options()
+	var sourceMapGenerator *sourcemap.Generator
+	if shouldEmitSourceMaps(options, sourceFile) {
+		sourceMapGenerator = sourcemap.NewGenerator(
+			tspath.GetBaseFileName(tspath.NormalizeSlashes(jsFilePath)),
+			getSourceRoot(options),
+			e.getSourceMapDirectory(options, jsFilePath, sourceFile),
+			tspath.ComparePathsOptions{
+				UseCaseSensitiveFileNames: e.host.UseCaseSensitiveFileNames(),
+				CurrentDirectory:          e.host.GetCurrentDirectory(),
+			},
+		)
+	}
+
 	// !!! bundles not implemented, may be deprecated
 	sourceFiles := []*ast.SourceFile{sourceFile}
 
-	printer.Write(sourceFile.AsNode(), sourceFile, e.writer /*, sourceMapGenerator*/)
+	printer.Write(sourceFile.AsNode(), sourceFile, e.writer, sourceMapGenerator)
 
-	// !!! add sourceMapGenerator to sourceMapDataList
-	// !!! append sourceMappingURL to output
-	// !!! write the source map
-	e.writer.WriteLine()
+	sourceMapUrlPos := -1
+	if sourceMapGenerator != nil {
+		if options.SourceMap.IsTrue() || options.InlineSourceMap.IsTrue() || options.GetAreDeclarationMapsEnabled() {
+			e.sourceMapDataList = append(e.sourceMapDataList, &SourceMapEmitResult{
+				InputSourceFileNames: sourceMapGenerator.Sources(),
+				SourceMap:            sourceMapGenerator.RawSourceMap(),
+				GeneratedFile:        jsFilePath,
+			})
+		}
+
+		sourceMappingURL := e.getSourceMappingURL(
+			options,
+			sourceMapGenerator,
+			jsFilePath,
+			sourceMapFilePath,
+			sourceFile,
+		)
+
+		if len(sourceMappingURL) > 0 {
+			if !e.writer.IsAtStartOfLine() {
+				e.writer.RawWrite(core.IfElse(options.NewLine == core.NewLineKindCRLF, "\r\n", "\n"))
+			}
+			sourceMapUrlPos = e.writer.GetTextPos()
+			e.writer.WriteComment("//# sourceMappingURL=" + sourceMappingURL)
+		}
+
+		// Write the source map
+		if len(sourceMapFilePath) > 0 {
+			sourceMap := sourceMapGenerator.String()
+			err := e.host.WriteFile(sourceMapFilePath, sourceMap, false /*writeByteOrderMark*/, sourceFiles, nil /*data*/)
+			if err != nil {
+				e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
+			}
+		}
+	} else {
+		e.writer.WriteLine()
+	}
 
 	// Write the output file
 	text := e.writer.String()
-	data := &WriteFileData{} // !!!
-	err := e.host.WriteFile(jsFilePath, text, e.host.Options().EmitBOM == core.TSTrue, sourceFiles, data)
+	data := &WriteFileData{SourceMapUrlPos: sourceMapUrlPos} // !!! transform diagnostics
+	err := e.host.WriteFile(jsFilePath, text, e.host.Options().EmitBOM.IsTrue(), sourceFiles, data)
 	if err != nil {
 		e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
 	}
@@ -196,8 +251,94 @@ func getOwnEmitOutputFilePath(fileName string, host EmitHost, extension string) 
 }
 
 func getSourceMapFilePath(jsFilePath string, options *core.CompilerOptions) string {
-	// !!!
+	if options.SourceMap.IsTrue() && !options.InlineSourceMap.IsTrue() {
+		return jsFilePath + ".map"
+	}
 	return ""
+}
+
+func shouldEmitSourceMaps(mapOptions *core.CompilerOptions, sourceFile *ast.SourceFile) bool {
+	return (mapOptions.SourceMap.IsTrue() || mapOptions.InlineSourceMap.IsTrue()) &&
+		!tspath.FileExtensionIs(sourceFile.FileName(), tspath.ExtensionJson)
+}
+
+func getSourceRoot(mapOptions *core.CompilerOptions) string {
+	// Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
+	// relative paths of the sources list in the sourcemap
+	sourceRoot := tspath.NormalizeSlashes(mapOptions.SourceRoot)
+	if len(sourceRoot) > 0 {
+		sourceRoot = tspath.EnsureTrailingDirectorySeparator(sourceRoot)
+	}
+	return sourceRoot
+}
+
+func (e *emitter) getSourceMapDirectory(mapOptions *core.CompilerOptions, filePath string, sourceFile *ast.SourceFile) string {
+	if len(mapOptions.SourceRoot) > 0 {
+		return e.host.CommonSourceDirectory()
+	}
+	if len(mapOptions.MapRoot) > 0 {
+		sourceMapDir := tspath.NormalizeSlashes(mapOptions.MapRoot)
+		if sourceFile != nil {
+			// For modules or multiple emit files the mapRoot will have directory structure like the sources
+			// So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
+			sourceMapDir = tspath.GetDirectoryPath(getSourceFilePathInNewDir(
+				sourceFile.FileName(),
+				sourceMapDir,
+				e.host.GetCurrentDirectory(),
+				e.host.CommonSourceDirectory(),
+				e.host.UseCaseSensitiveFileNames(),
+			))
+		}
+		if tspath.GetRootLength(sourceMapDir) == 0 {
+			// The relative paths are relative to the common directory
+			sourceMapDir = tspath.CombinePaths(e.host.CommonSourceDirectory(), sourceMapDir)
+		}
+		return sourceMapDir
+	}
+	return tspath.GetDirectoryPath(tspath.NormalizePath(filePath))
+}
+
+func (e *emitter) getSourceMappingURL(mapOptions *core.CompilerOptions, sourceMapGenerator *sourcemap.Generator, filePath string, sourceMapFilePath string, sourceFile *ast.SourceFile) string {
+	if mapOptions.InlineSourceMap.IsTrue() {
+		// Encode the sourceMap into the sourceMap url
+		sourceMapText := sourceMapGenerator.String()
+		base64SourceMapText := base64.StdEncoding.EncodeToString([]byte(sourceMapText))
+		return "data:application/json;base64," + base64SourceMapText
+	}
+
+	sourceMapFile := tspath.GetBaseFileName(tspath.NormalizeSlashes(sourceMapFilePath))
+	if len(mapOptions.MapRoot) > 0 {
+		sourceMapDir := tspath.NormalizeSlashes(mapOptions.MapRoot)
+		if sourceFile != nil {
+			// For modules or multiple emit files the mapRoot will have directory structure like the sources
+			// So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
+			sourceMapDir = tspath.GetDirectoryPath(getSourceFilePathInNewDir(
+				sourceFile.FileName(),
+				sourceMapDir,
+				e.host.GetCurrentDirectory(),
+				e.host.CommonSourceDirectory(),
+				e.host.UseCaseSensitiveFileNames(),
+			))
+		}
+		if tspath.GetRootLength(sourceMapDir) == 0 {
+			// The relative paths are relative to the common directory
+			sourceMapDir = tspath.CombinePaths(e.host.CommonSourceDirectory(), sourceMapDir)
+			return stringutil.EncodeURI(
+				tspath.GetRelativePathToDirectoryOrUrl(
+					tspath.GetDirectoryPath(tspath.NormalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
+					tspath.CombinePaths(sourceMapDir, sourceMapFile),        // this is where user expects to see sourceMap
+					/*isAbsolutePathAnUrl*/ true,
+					tspath.ComparePathsOptions{
+						UseCaseSensitiveFileNames: e.host.UseCaseSensitiveFileNames(),
+						CurrentDirectory:          e.host.GetCurrentDirectory(),
+					},
+				),
+			)
+		} else {
+			return stringutil.EncodeURI(tspath.CombinePaths(sourceMapDir, sourceMapFile))
+		}
+	}
+	return stringutil.EncodeURI(sourceMapFile)
 }
 
 func getDeclarationEmitOutputFilePath(file string, host EmitHost) string {
@@ -258,7 +399,12 @@ func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host EmitHost, forceDtsE
 		return false
 	}
 
-	// !!! Source file from node_modules are not emitted
+	// !!! Source file from node_modules are not emitted. In Strada, this depends on module resolution and uses
+	// `sourceFilesFoundSearchingNodeModules` in `createProgram`. For now, we will just check for `/node_modules/` in
+	// the file name.
+	if strings.Contains(sourceFile.FileName(), "/node_modules/") {
+		return false
+	}
 
 	// forcing dts emit => file needs to be emitted
 	if forceDtsEmit {

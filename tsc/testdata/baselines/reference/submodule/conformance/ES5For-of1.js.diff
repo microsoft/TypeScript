@@ -9,4 +9,4 @@
 +for (var v of ['a', 'b', 'c']) {
      console.log(v);
  }
--//# sourceMappingURL=ES5For-of1.js.map
+ //# sourceMappingURL=ES5For-of1.js.map

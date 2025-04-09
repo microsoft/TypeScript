@@ -41,3 +41,4 @@ class Greeter {
         this.greeting = greetings;
     }
 }
+//# sourceMappingURL=sourceMapValidationClass.js.map

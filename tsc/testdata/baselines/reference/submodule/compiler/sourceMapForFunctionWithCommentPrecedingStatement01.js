@@ -11,3 +11,4 @@ function P() {
     // Test this
     var a = 1;
 }
+//# sourceMappingURL=sourceMapForFunctionWithCommentPrecedingStatement01.js.map

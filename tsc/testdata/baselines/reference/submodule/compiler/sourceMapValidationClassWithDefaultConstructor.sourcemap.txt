@@ -1,0 +1,66 @@
+===================================================================
+JsFile: sourceMapValidationClassWithDefaultConstructor.js
+mapUrl: sourceMapValidationClassWithDefaultConstructor.js.map
+sourceRoot: 
+sources: sourceMapValidationClassWithDefaultConstructor.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:sourceMapValidationClassWithDefaultConstructor.js
+sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
+-------------------------------------------------------------------
+>>>class Greeter {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+1 >
+2 >class 
+3 >      Greeter
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+---
+>>>    a = 10;
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^
+5 >          ^
+6 >           ^^^^^^^^->
+1 > {
+  >    public 
+2 >    a
+3 >      = 
+4 >        10
+5 >          ;
+1 >Emitted(2, 5) Source(2, 12) + SourceIndex(0)
+2 >Emitted(2, 6) Source(2, 13) + SourceIndex(0)
+3 >Emitted(2, 9) Source(2, 16) + SourceIndex(0)
+4 >Emitted(2, 11) Source(2, 18) + SourceIndex(0)
+5 >Emitted(2, 12) Source(2, 19) + SourceIndex(0)
+---
+>>>    nameA = "Ten";
+1->^^^^
+2 >    ^^^^^
+3 >         ^^^
+4 >            ^^^^^
+5 >                 ^
+1->
+  >    public 
+2 >    nameA
+3 >          = 
+4 >            "Ten"
+5 >                 ;
+1->Emitted(3, 5) Source(3, 12) + SourceIndex(0)
+2 >Emitted(3, 10) Source(3, 17) + SourceIndex(0)
+3 >Emitted(3, 13) Source(3, 20) + SourceIndex(0)
+4 >Emitted(3, 18) Source(3, 25) + SourceIndex(0)
+5 >Emitted(3, 19) Source(3, 26) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructor.js.map

@@ -64,3 +64,4 @@ class D extends C {
             return null;
     }
 }
+//# sourceMappingURL=derivedClassConstructorWithExplicitReturns01.js.map

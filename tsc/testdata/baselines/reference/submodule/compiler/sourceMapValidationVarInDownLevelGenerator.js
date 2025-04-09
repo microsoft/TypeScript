@@ -9,3 +9,4 @@ function * f() {
 function* f() {
     var x = 1, y;
 }
+//# sourceMappingURL=sourceMapValidationVarInDownLevelGenerator.js.map

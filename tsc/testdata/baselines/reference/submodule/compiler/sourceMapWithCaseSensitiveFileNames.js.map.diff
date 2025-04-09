@@ -1,0 +1,10 @@
+--- old.sourceMapWithCaseSensitiveFileNames.js.map
++++ new.sourceMapWithCaseSensitiveFileNames.js.map
+@@= skipped -0, +-1 lines =@@
+-//// [fooResult.js.map]
+-{"version":3,"file":"fooResult.js","sourceRoot":"","sources":["../testFiles/app.ts","../testFiles/app2.ts"],"names":[],"mappings":"AAAA,gFAAgF;AAChF,wIAAwI;AACxI;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC;ACHD;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}
+@@= skipped --1, +1 lines =@@
++//// [app.js.map]
++{"version":3,"file":"app.js","sourceRoot":"","sources":["app.ts"],"names":[],"mappings":"AAAA,gFAAgF;AAChF,wIAAwI;AACxI,MAAM,CAAC;CACN"}
++//// [app2.js.map]
++{"version":3,"file":"app2.js","sourceRoot":"","sources":["app2.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC;CACN"}

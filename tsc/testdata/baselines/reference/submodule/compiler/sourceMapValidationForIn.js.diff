@@ -1,7 +1,0 @@
---- old.sourceMapValidationForIn.js
-+++ new.sourceMapValidationForIn.js
-@@= skipped -28, +28 lines =@@
- for (x in String) {
-     WScript.Echo(x);
- }
--//# sourceMappingURL=sourceMapValidationForIn.js.map

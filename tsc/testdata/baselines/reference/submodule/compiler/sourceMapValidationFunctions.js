@@ -28,3 +28,4 @@ function greet2(greeting, n = 10, x, ...restParams) {
 function foo(greeting, n = 10, x, ...restParams) {
     return;
 }
+//# sourceMappingURL=sourceMapValidationFunctions.js.map

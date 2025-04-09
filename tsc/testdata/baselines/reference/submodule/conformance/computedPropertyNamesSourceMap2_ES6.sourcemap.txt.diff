@@ -1,0 +1,93 @@
+--- old.computedPropertyNamesSourceMap2_ES6.sourcemap.txt
++++ new.computedPropertyNamesSourceMap2_ES6.sourcemap.txt
+@@= skipped -27, +27 lines =@@
+ 2 >    ^
+ 3 >     ^^^^^^^
+ 4 >            ^
+-5 >             ^^^^^->
++5 >             ^^^
++6 >                ^^->
+ 1->{
+   >    
+ 2 >    [
+ 3 >     "hello"
+ 4 >            ]
++5 >             () 
+ 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+ 2 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+ 3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+ 4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
++5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+ ---
+ >>>        debugger;
+ 1->^^^^^^^^
+-2 >        ^^^^^^^^
+-3 >                ^
+-1->() {
++2 >        ^^^^^^^^^
++1->{
+   >        
+-2 >        debugger
+-3 >                ;
++2 >        debugger;
+ 1->Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+-2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0)
+-3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0)
++2 >Emitted(3, 18) Source(3, 18) + SourceIndex(0)
+ ---
+ >>>    },
+ 1 >^^^^
+ 2 >    ^
+ 3 >     ^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >	
+-2 >    }
+-1 >Emitted(4, 5) Source(4, 2) + SourceIndex(0)
++2 >    
++  >    	}
++1 >Emitted(4, 5) Source(3, 18) + SourceIndex(0)
+ 2 >Emitted(4, 6) Source(4, 3) + SourceIndex(0)
+ ---
+ >>>    get ["goodbye"]() {
+@@= skipped -39, +39 lines =@@
+ 3 >        ^
+ 4 >         ^^^^^^^^^
+ 5 >                  ^
++6 >                   ^^^
+ 1->,
+   >	
+ 2 >    get 
+ 3 >        [
+ 4 >         "goodbye"
+ 5 >                  ]
++6 >                   () 
+ 1->Emitted(5, 5) Source(5, 2) + SourceIndex(0)
+ 2 >Emitted(5, 9) Source(5, 6) + SourceIndex(0)
+ 3 >Emitted(5, 10) Source(5, 7) + SourceIndex(0)
+ 4 >Emitted(5, 19) Source(5, 16) + SourceIndex(0)
+ 5 >Emitted(5, 20) Source(5, 17) + SourceIndex(0)
++6 >Emitted(5, 23) Source(5, 20) + SourceIndex(0)
+ ---
+ >>>        return 0;
+ 1 >^^^^^^^^
+ 2 >        ^^^^^^^
+ 3 >               ^
+ 4 >                ^
+-1 >() {
++1 >{
+   >		
+ 2 >        return 
+ 3 >               0
+@@= skipped -31, +34 lines =@@
+ 1 >^^^^
+ 2 >    ^
+ 1 >
+-  >	
+-2 >    }
+-1 >Emitted(7, 5) Source(7, 2) + SourceIndex(0)
++2 >    
++  >    	}
++1 >Emitted(7, 5) Source(6, 12) + SourceIndex(0)
+ 2 >Emitted(7, 6) Source(7, 3) + SourceIndex(0)
+ ---
+ >>>};

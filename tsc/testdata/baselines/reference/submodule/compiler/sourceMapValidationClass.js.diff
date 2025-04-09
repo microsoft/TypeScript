@@ -39,7 +39,6 @@
 -    });
 -    return Greeter;
 -}());
--//# sourceMappingURL=sourceMapValidationClass.js.map
 +    }
 +    get greetings() {
 +        return this.greeting;
@@ -48,3 +47,4 @@
 +        this.greeting = greetings;
 +    }
 +}
+ //# sourceMappingURL=sourceMapValidationClass.js.map

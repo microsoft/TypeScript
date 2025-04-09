@@ -1,7 +1,0 @@
---- old.sourceMapValidationTryCatchFinally.js
-+++ new.sourceMapValidationTryCatchFinally.js
-@@= skipped -43, +43 lines =@@
- finally {
-     x = x * 10;
- }
--//# sourceMappingURL=sourceMapValidationTryCatchFinally.js.map

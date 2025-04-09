@@ -16,3 +16,4 @@ var Q;
         var a = 1;
     }
 })(Q || (Q = {}));
+//# sourceMappingURL=sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js.map

@@ -96,3 +96,4 @@ function getRobotB() {
 function getMultiRobotB() {
     return multiRobotB;
 }
+//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues3.js.map

@@ -1,0 +1,83 @@
+===================================================================
+JsFile: test.js
+mapUrl: test.js.map
+sourceRoot: 
+sources: test.tsx
+===================================================================
+-------------------------------------------------------------------
+emittedFile:test.js
+sourceFile:test.tsx
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.AppComponent = void 0;
+>>>class AppComponent {
+1 >
+2 >^^^^^^^^^^^^^^^->
+1 >declare module JSX {
+  >    interface IntrinsicElements {
+  >        [s: string]: any;
+  >    }
+  >}
+  >
+  >
+1 >Emitted(4, 1) Source(7, 1) + SourceIndex(0)
+---
+>>>    render() {
+1->^^^^
+2 >    ^^^^^^
+3 >          ^^^
+4 >             ^^^^^^^^^^^->
+1->export class AppComponent {
+  >    
+2 >    render
+3 >          () 
+1->Emitted(5, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(5, 11) Source(8, 11) + SourceIndex(0)
+3 >Emitted(5, 14) Source(8, 14) + SourceIndex(0)
+---
+>>>        return <div />;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^
+4 >                ^^^
+5 >                   ^
+6 >                    
+7 >                    ^^
+8 >                      ^
+1->{
+  >        
+2 >        return 
+3 >               <
+4 >                div
+5 >                    
+6 >                    
+7 >                     />
+8 >                      ;
+1->Emitted(6, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(6, 16) Source(9, 16) + SourceIndex(0)
+3 >Emitted(6, 17) Source(9, 17) + SourceIndex(0)
+4 >Emitted(6, 20) Source(9, 20) + SourceIndex(0)
+5 >Emitted(6, 21) Source(9, 21) + SourceIndex(0)
+6 >Emitted(6, 21) Source(9, 20) + SourceIndex(0)
+7 >Emitted(6, 23) Source(9, 23) + SourceIndex(0)
+8 >Emitted(6, 24) Source(9, 24) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+2 >    
+  >        }
+1 >Emitted(7, 5) Source(9, 24) + SourceIndex(0)
+2 >Emitted(7, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(8, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.AppComponent = AppComponent;
+>>>//# sourceMappingURL=test.js.map

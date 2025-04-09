@@ -1,0 +1,447 @@
+===================================================================
+JsFile: derivedClassConstructorWithExplicitReturns01.js
+mapUrl: derivedClassConstructorWithExplicitReturns01.js.map
+sourceRoot: 
+sources: derivedClassConstructorWithExplicitReturns01.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:derivedClassConstructorWithExplicitReturns01.js
+sourceFile:derivedClassConstructorWithExplicitReturns01.ts
+-------------------------------------------------------------------
+>>>class C {
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^->
+1 >
+2 >class 
+3 >      C
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+---
+>>>    cProp = 10;
+1->^^^^
+2 >    ^^^^^
+3 >         ^^^
+4 >            ^^
+5 >              ^
+6 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >    
+2 >    cProp
+3 >          = 
+4 >            10
+5 >              ;
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+5 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+---
+>>>    foo() { return "this never gets used."; }
+1->^^^^
+2 >    ^^^
+3 >       ^^^
+4 >          ^^
+5 >            ^^^^^^^
+6 >                   ^^^^^^^^^^^^^^^^^^^^^^^
+7 >                                          ^
+8 >                                           ^
+9 >                                            ^
+1->
+  >
+  >    
+2 >    foo
+3 >       () 
+4 >          { 
+5 >            return 
+6 >                   "this never gets used."
+7 >                                          ;
+8 >                                           
+9 >                                             }
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(3, 8) Source(4, 8) + SourceIndex(0)
+3 >Emitted(3, 11) Source(4, 11) + SourceIndex(0)
+4 >Emitted(3, 13) Source(4, 13) + SourceIndex(0)
+5 >Emitted(3, 20) Source(4, 20) + SourceIndex(0)
+6 >Emitted(3, 43) Source(4, 43) + SourceIndex(0)
+7 >Emitted(3, 44) Source(4, 44) + SourceIndex(0)
+8 >Emitted(3, 45) Source(4, 44) + SourceIndex(0)
+9 >Emitted(3, 46) Source(4, 46) + SourceIndex(0)
+---
+>>>    constructor(value) {
+1 >^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^
+4 >                     ^^
+1 >
+  >
+  >    
+2 >    constructor(
+3 >                value: number
+4 >                     ) 
+1 >Emitted(4, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(4, 17) Source(6, 17) + SourceIndex(0)
+3 >Emitted(4, 22) Source(6, 30) + SourceIndex(0)
+4 >Emitted(4, 24) Source(6, 32) + SourceIndex(0)
+---
+>>>        return {
+1 >^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^^^^^^^^->
+1 >{
+  >        
+2 >        return 
+1 >Emitted(5, 9) Source(7, 9) + SourceIndex(0)
+2 >Emitted(5, 16) Source(7, 16) + SourceIndex(0)
+---
+>>>            cProp: value,
+1->^^^^^^^^^^^^
+2 >            ^^^^^
+3 >                 ^^
+4 >                   ^^^^^
+1->{
+  >            
+2 >            cProp
+3 >                 : 
+4 >                   value
+1->Emitted(6, 13) Source(8, 13) + SourceIndex(0)
+2 >Emitted(6, 18) Source(8, 18) + SourceIndex(0)
+3 >Emitted(6, 20) Source(8, 20) + SourceIndex(0)
+4 >Emitted(6, 25) Source(8, 25) + SourceIndex(0)
+---
+>>>            foo() {
+1 >^^^^^^^^^^^^
+2 >            ^^^
+3 >               ^^^
+4 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >,
+  >            
+2 >            foo
+3 >               () 
+1 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+2 >Emitted(7, 16) Source(9, 16) + SourceIndex(0)
+3 >Emitted(7, 19) Source(9, 19) + SourceIndex(0)
+---
+>>>                return "well this looks kinda C-ish.";
+1->^^^^^^^^^^^^^^^^
+2 >                ^^^^^^^
+3 >                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                     ^
+1->{
+  >                
+2 >                return 
+3 >                       "well this looks kinda C-ish."
+4 >                                                     ;
+1->Emitted(8, 17) Source(10, 17) + SourceIndex(0)
+2 >Emitted(8, 24) Source(10, 24) + SourceIndex(0)
+3 >Emitted(8, 54) Source(10, 54) + SourceIndex(0)
+4 >Emitted(8, 55) Source(10, 55) + SourceIndex(0)
+---
+>>>            }
+1 >^^^^^^^^^^^^
+2 >            ^
+1 >
+2 >            
+  >                        }
+1 >Emitted(9, 13) Source(10, 55) + SourceIndex(0)
+2 >Emitted(9, 14) Source(11, 14) + SourceIndex(0)
+---
+>>>        };
+1 >^^^^^^^^^
+2 >         ^
+1 >
+  >        }
+2 >         
+1 >Emitted(10, 10) Source(12, 10) + SourceIndex(0)
+2 >Emitted(10, 11) Source(12, 10) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+2 >    
+  >        }
+1 >Emitted(11, 5) Source(12, 10) + SourceIndex(0)
+2 >Emitted(11, 6) Source(13, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(12, 2) Source(14, 2) + SourceIndex(0)
+---
+>>>class D extends C {
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^
+5 >                ^
+6 >                 ^^^^^^^->
+1->
+  >
+  >
+2 >class 
+3 >      D 
+4 >       extends 
+5 >                C
+1->Emitted(13, 1) Source(16, 1) + SourceIndex(0)
+2 >Emitted(13, 7) Source(16, 7) + SourceIndex(0)
+3 >Emitted(13, 8) Source(16, 9) + SourceIndex(0)
+4 >Emitted(13, 17) Source(16, 17) + SourceIndex(0)
+5 >Emitted(13, 18) Source(16, 18) + SourceIndex(0)
+---
+>>>    dProp = () => this;
+1->^^^^
+2 >    ^^^^^
+3 >         ^^^
+4 >            ^^^
+5 >               ^^
+6 >                 ^
+7 >                  ^^^^
+8 >                      ^
+9 >                       ^^^^->
+1-> {
+  >    
+2 >    dProp
+3 >          = 
+4 >            () 
+5 >               =>
+6 >                  
+7 >                  this
+8 >                      ;
+1->Emitted(14, 5) Source(17, 5) + SourceIndex(0)
+2 >Emitted(14, 10) Source(17, 10) + SourceIndex(0)
+3 >Emitted(14, 13) Source(17, 13) + SourceIndex(0)
+4 >Emitted(14, 16) Source(17, 16) + SourceIndex(0)
+5 >Emitted(14, 18) Source(17, 18) + SourceIndex(0)
+6 >Emitted(14, 19) Source(17, 19) + SourceIndex(0)
+7 >Emitted(14, 23) Source(17, 23) + SourceIndex(0)
+8 >Emitted(14, 24) Source(17, 24) + SourceIndex(0)
+---
+>>>    constructor(a = 100) {
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^
+4 >                 ^^^
+5 >                    ^^^
+6 >                       ^^
+1->
+  >
+  >    
+2 >    constructor(
+3 >                a
+4 >                  = 
+5 >                    100
+6 >                       ) 
+1->Emitted(15, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(15, 17) Source(19, 17) + SourceIndex(0)
+3 >Emitted(15, 18) Source(19, 18) + SourceIndex(0)
+4 >Emitted(15, 21) Source(19, 21) + SourceIndex(0)
+5 >Emitted(15, 24) Source(19, 24) + SourceIndex(0)
+6 >Emitted(15, 26) Source(19, 26) + SourceIndex(0)
+---
+>>>        super(a);
+1 >^^^^^^^^
+2 >        ^^^^^
+3 >             ^
+4 >              ^
+5 >               ^
+6 >                ^
+7 >                 ^^^^^^^^^^^^^^^^^^->
+1 >{
+  >        
+2 >        super
+3 >             (
+4 >              a
+5 >               )
+6 >                ;
+1 >Emitted(16, 9) Source(20, 9) + SourceIndex(0)
+2 >Emitted(16, 14) Source(20, 14) + SourceIndex(0)
+3 >Emitted(16, 15) Source(20, 15) + SourceIndex(0)
+4 >Emitted(16, 16) Source(20, 16) + SourceIndex(0)
+5 >Emitted(16, 17) Source(20, 17) + SourceIndex(0)
+6 >Emitted(16, 18) Source(20, 18) + SourceIndex(0)
+---
+>>>        if (Math.random() < 0.5) {
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^^^^
+4 >                ^
+5 >                 ^^^^^^
+6 >                       ^^
+7 >                         ^^^
+8 >                            ^^^
+9 >                               ^^
+10>                                 ^
+1->
+  >
+  >        
+2 >        if (
+3 >            Math
+4 >                .
+5 >                 random
+6 >                       ()
+7 >                          < 
+8 >                            0.5
+9 >                               ) 
+10>                                 {
+1->Emitted(17, 9) Source(22, 9) + SourceIndex(0)
+2 >Emitted(17, 13) Source(22, 13) + SourceIndex(0)
+3 >Emitted(17, 17) Source(22, 17) + SourceIndex(0)
+4 >Emitted(17, 18) Source(22, 18) + SourceIndex(0)
+5 >Emitted(17, 24) Source(22, 24) + SourceIndex(0)
+6 >Emitted(17, 26) Source(22, 26) + SourceIndex(0)
+7 >Emitted(17, 29) Source(22, 29) + SourceIndex(0)
+8 >Emitted(17, 32) Source(22, 32) + SourceIndex(0)
+9 >Emitted(17, 34) Source(22, 34) + SourceIndex(0)
+10>Emitted(17, 35) Source(22, 35) + SourceIndex(0)
+---
+>>>            "You win!";
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^^^
+3 >                      ^
+1 >
+  >            
+2 >            "You win!"
+3 >                      
+1 >Emitted(18, 13) Source(23, 13) + SourceIndex(0)
+2 >Emitted(18, 23) Source(23, 23) + SourceIndex(0)
+3 >Emitted(18, 24) Source(23, 23) + SourceIndex(0)
+---
+>>>            return {
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^^^^^^->
+1 >
+  >            
+2 >            return 
+1 >Emitted(19, 13) Source(24, 13) + SourceIndex(0)
+2 >Emitted(19, 20) Source(24, 20) + SourceIndex(0)
+---
+>>>                cProp: 1,
+1->^^^^^^^^^^^^^^^^
+2 >                ^^^^^
+3 >                     ^^
+4 >                       ^
+5 >                        ^^^^^^^^^^^->
+1->{
+  >                
+2 >                cProp
+3 >                     : 
+4 >                       1
+1->Emitted(20, 17) Source(25, 17) + SourceIndex(0)
+2 >Emitted(20, 22) Source(25, 22) + SourceIndex(0)
+3 >Emitted(20, 24) Source(25, 24) + SourceIndex(0)
+4 >Emitted(20, 25) Source(25, 25) + SourceIndex(0)
+---
+>>>                dProp: () => this,
+1->^^^^^^^^^^^^^^^^
+2 >                ^^^^^
+3 >                     ^^
+4 >                       ^^^
+5 >                          ^^
+6 >                            ^
+7 >                             ^^^^
+8 >                                 ^^^^^^^^^^^^^^^^->
+1->,
+  >                
+2 >                dProp
+3 >                     : 
+4 >                       () 
+5 >                          =>
+6 >                             
+7 >                             this
+1->Emitted(21, 17) Source(26, 17) + SourceIndex(0)
+2 >Emitted(21, 22) Source(26, 22) + SourceIndex(0)
+3 >Emitted(21, 24) Source(26, 24) + SourceIndex(0)
+4 >Emitted(21, 27) Source(26, 27) + SourceIndex(0)
+5 >Emitted(21, 29) Source(26, 29) + SourceIndex(0)
+6 >Emitted(21, 30) Source(26, 30) + SourceIndex(0)
+7 >Emitted(21, 34) Source(26, 34) + SourceIndex(0)
+---
+>>>                foo() { return "You win!!!!!"; }
+1->^^^^^^^^^^^^^^^^
+2 >                ^^^
+3 >                   ^^^
+4 >                      ^^
+5 >                        ^^^^^^^
+6 >                               ^^^^^^^^^^^^^^
+7 >                                             ^
+8 >                                              ^
+9 >                                               ^
+1->,
+  >                
+2 >                foo
+3 >                   () 
+4 >                      { 
+5 >                        return 
+6 >                               "You win!!!!!"
+7 >                                             
+8 >                                              
+9 >                                                }
+1->Emitted(22, 17) Source(27, 17) + SourceIndex(0)
+2 >Emitted(22, 20) Source(27, 20) + SourceIndex(0)
+3 >Emitted(22, 23) Source(27, 23) + SourceIndex(0)
+4 >Emitted(22, 25) Source(27, 25) + SourceIndex(0)
+5 >Emitted(22, 32) Source(27, 32) + SourceIndex(0)
+6 >Emitted(22, 46) Source(27, 46) + SourceIndex(0)
+7 >Emitted(22, 47) Source(27, 46) + SourceIndex(0)
+8 >Emitted(22, 48) Source(27, 46) + SourceIndex(0)
+9 >Emitted(22, 49) Source(27, 48) + SourceIndex(0)
+---
+>>>            };
+1 >^^^^^^^^^^^^^
+2 >             ^
+1 >
+  >            }
+2 >             ;
+1 >Emitted(23, 14) Source(28, 14) + SourceIndex(0)
+2 >Emitted(23, 15) Source(28, 15) + SourceIndex(0)
+---
+>>>        }
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^->
+1 >
+  >        
+2 >        }
+1 >Emitted(24, 9) Source(29, 9) + SourceIndex(0)
+2 >Emitted(24, 10) Source(29, 10) + SourceIndex(0)
+---
+>>>        else
+>>>            return null;
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^^^
+4 >                       ^
+1->
+  >        else
+  >            
+2 >            return 
+3 >                   null
+4 >                       ;
+1->Emitted(26, 13) Source(31, 13) + SourceIndex(0)
+2 >Emitted(26, 20) Source(31, 20) + SourceIndex(0)
+3 >Emitted(26, 24) Source(31, 24) + SourceIndex(0)
+4 >Emitted(26, 25) Source(31, 25) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+2 >    
+  >        }
+1 >Emitted(27, 5) Source(31, 25) + SourceIndex(0)
+2 >Emitted(27, 6) Source(32, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(28, 2) Source(33, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=derivedClassConstructorWithExplicitReturns01.js.map

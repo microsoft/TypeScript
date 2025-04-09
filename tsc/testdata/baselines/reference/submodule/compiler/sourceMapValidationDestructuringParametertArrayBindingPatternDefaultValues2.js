@@ -48,3 +48,4 @@ foo2(robotA);
 foo2(["roomba", ["vacuum", "mopping"]]);
 foo3(robotA);
 foo3(["roomba", ["vacuum", "mopping"]]);
+//# sourceMappingURL=sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.js.map

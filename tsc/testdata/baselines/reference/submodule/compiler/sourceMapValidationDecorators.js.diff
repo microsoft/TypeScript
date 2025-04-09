@@ -86,7 +86,6 @@
 -    ], Greeter);
 -    return Greeter;
 -}());
--//# sourceMappingURL=sourceMapValidationDecorators.js.map
 +    }
 +    @PropertyDecorator1
 +    @PropertyDecorator2(80)
@@ -97,3 +96,4 @@
 +        this.greeting = greetings;
 +    }
 +}
+ //# sourceMappingURL=sourceMapValidationDecorators.js.map

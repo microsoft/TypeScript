@@ -26,8 +26,3 @@
      Shapes.Point = Point;
      // Variable comment after class
      var a = 10;
-@@= skipped -26, +27 lines =@@
- /** Local Variable */
- var p = new Shapes.Point(3, 4);
- var dist = p.getDist();
--//# sourceMappingURL=sourceMap-FileWithComments.js.map

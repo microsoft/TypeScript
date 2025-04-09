@@ -1,0 +1,295 @@
+--- old.sourceMapValidationModule.sourcemap.txt
++++ new.sourceMapValidationModule.sourcemap.txt
+@@= skipped -11, +11 lines =@@
+ 1 >
+ 2 >^^^^
+ 3 >    ^^
+-4 >      ^
+-5 >       ^^^^^^^^^^->
++4 >      ^^^^^^^^^^^->
+ 1 >
+ 2 >module 
+-3 >    m2
+-4 >       {
+-  >          var a = 10;
+-  >          a++;
+-  >      }
++3 >    m2 {
++  >        var a = 10;
++  >        a++;
++  >    }
+ 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(1, 5) Source(1, 8) + SourceIndex(0)
+-3 >Emitted(1, 7) Source(1, 10) + SourceIndex(0)
+-4 >Emitted(1, 8) Source(4, 2) + SourceIndex(0)
++3 >Emitted(1, 7) Source(4, 2) + SourceIndex(0)
+ ---
+ >>>(function (m2) {
+ 1->
+ 2 >^^^^^^^^^^^
+ 3 >           ^^
+-4 >             ^^^->
++4 >             ^^
++5 >               ^->
+ 1->
+ 2 >module 
+ 3 >           m2
++4 >              
+ 1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
+ 3 >Emitted(2, 14) Source(1, 10) + SourceIndex(0)
++4 >Emitted(2, 16) Source(1, 11) + SourceIndex(0)
+ ---
+ >>>    var a = 10;
+ 1->^^^^
+@@= skipped -33, +33 lines =@@
+ 4 >         ^^^
+ 5 >            ^^
+ 6 >              ^
+-1-> {
++1->{
+   >    
+ 2 >    var 
+ 3 >        a
+@@= skipped -39, +39 lines =@@
+ 6 >          ^^
+ 7 >            ^^^^^^^^
+ 1->
+-  >
+-2 >}
++2 >
++  >}
+ 3 > 
+ 4 >   m2
+ 5 >     
+@@= skipped -10, +10 lines =@@
+   >                var a = 10;
+   >                a++;
+   >            }
+-1->Emitted(5, 1) Source(4, 1) + SourceIndex(0)
++1->Emitted(5, 1) Source(3, 9) + SourceIndex(0)
+ 2 >Emitted(5, 2) Source(4, 2) + SourceIndex(0)
+ 3 >Emitted(5, 4) Source(1, 8) + SourceIndex(0)
+ 4 >Emitted(5, 6) Source(1, 10) + SourceIndex(0)
+@@= skipped -12, +12 lines =@@
+ 1 >
+ 2 >^^^^
+ 3 >    ^^
+-4 >      ^
+-5 >       ^^^^^^^^^^->
++4 >      ^^^^^^^^^^^->
+ 1 >
+   >
+ 2 >module 
+-3 >    m3
+-4 >       {
+-  >          module m4 {
+-  >              export var x = 30;
+-  >          }
+-  >      
+-  >          export function foo() {
+-  >              return m4.x;
+-  >          }
+-  >      }
++3 >    m3 {
++  >        module m4 {
++  >            export var x = 30;
++  >        }
++  >    
++  >        export function foo() {
++  >            return m4.x;
++  >        }
++  >    }
+ 1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
+ 2 >Emitted(6, 5) Source(5, 8) + SourceIndex(0)
+-3 >Emitted(6, 7) Source(5, 10) + SourceIndex(0)
+-4 >Emitted(6, 8) Source(13, 2) + SourceIndex(0)
++3 >Emitted(6, 7) Source(13, 2) + SourceIndex(0)
+ ---
+ >>>(function (m3) {
+ 1->
+ 2 >^^^^^^^^^^^
+ 3 >           ^^
++4 >             ^^
+ 1->
+ 2 >module 
+ 3 >           m3
++4 >              
+ 1->Emitted(7, 1) Source(5, 1) + SourceIndex(0)
+ 2 >Emitted(7, 12) Source(5, 8) + SourceIndex(0)
+ 3 >Emitted(7, 14) Source(5, 10) + SourceIndex(0)
++4 >Emitted(7, 16) Source(5, 11) + SourceIndex(0)
+ ---
+->>>    var m4;
++>>>    let m4;
+ 1 >^^^^
+ 2 >    ^^^^
+ 3 >        ^^
+-4 >          ^
+-5 >           ^^^^^^^^^^->
+-1 > {
++4 >          ^^^^^^^^^^^->
++1 >{
+   >    
+ 2 >    module 
+-3 >        m4
+-4 >           {
+-  >                  export var x = 30;
+-  >              }
++3 >        m4 {
++  >                export var x = 30;
++  >            }
+ 1 >Emitted(8, 5) Source(6, 5) + SourceIndex(0)
+ 2 >Emitted(8, 9) Source(6, 12) + SourceIndex(0)
+-3 >Emitted(8, 11) Source(6, 14) + SourceIndex(0)
+-4 >Emitted(8, 12) Source(8, 6) + SourceIndex(0)
++3 >Emitted(8, 11) Source(8, 6) + SourceIndex(0)
+ ---
+ >>>    (function (m4) {
+ 1->^^^^
+ 2 >    ^^^^^^^^^^^
+ 3 >               ^^
+-4 >                 ^^->
++4 >                 ^^
+ 1->
+ 2 >    module 
+ 3 >               m4
++4 >                  
+ 1->Emitted(9, 5) Source(6, 5) + SourceIndex(0)
+ 2 >Emitted(9, 16) Source(6, 12) + SourceIndex(0)
+ 3 >Emitted(9, 18) Source(6, 14) + SourceIndex(0)
++4 >Emitted(9, 20) Source(6, 15) + SourceIndex(0)
+ ---
+ >>>        m4.x = 30;
+-1->^^^^^^^^
++1 >^^^^^^^^
+ 2 >        ^^^^
+ 3 >            ^^^
+ 4 >               ^^
+ 5 >                 ^
+ 6 >                  ^^^^^^^->
+-1-> {
++1 >{
+   >        export var 
+ 2 >        x
+ 3 >             = 
+ 4 >               30
+ 5 >                 ;
+-1->Emitted(10, 9) Source(7, 20) + SourceIndex(0)
++1 >Emitted(10, 9) Source(7, 20) + SourceIndex(0)
+ 2 >Emitted(10, 13) Source(7, 21) + SourceIndex(0)
+ 3 >Emitted(10, 16) Source(7, 24) + SourceIndex(0)
+ 4 >Emitted(10, 18) Source(7, 26) + SourceIndex(0)
+@@= skipped -89, +88 lines =@@
+ 6 >              ^^
+ 7 >                ^^^^^^^^
+ 1->
+-  >    
+-2 >    }
++2 >    
++  >        }
+ 3 >     
+ 4 >       m4
+ 5 >         
+@@= skipped -9, +9 lines =@@
+ 7 >                 {
+   >                        export var x = 30;
+   >                    }
+-1->Emitted(11, 5) Source(8, 5) + SourceIndex(0)
++1->Emitted(11, 5) Source(7, 27) + SourceIndex(0)
+ 2 >Emitted(11, 6) Source(8, 6) + SourceIndex(0)
+ 3 >Emitted(11, 8) Source(6, 12) + SourceIndex(0)
+ 4 >Emitted(11, 10) Source(6, 14) + SourceIndex(0)
+@@= skipped -12, +12 lines =@@
+ 1 >^^^^
+ 2 >    ^^^^^^^^^
+ 3 >             ^^^
+-4 >                ^^^^^->
++4 >                ^^^
++5 >                   ^^->
+ 1 >
+   >
+   >    
+ 2 >    export function 
+ 3 >             foo
++4 >                () 
+ 1 >Emitted(12, 5) Source(10, 5) + SourceIndex(0)
+ 2 >Emitted(12, 14) Source(10, 21) + SourceIndex(0)
+ 3 >Emitted(12, 17) Source(10, 24) + SourceIndex(0)
++4 >Emitted(12, 20) Source(10, 27) + SourceIndex(0)
+ ---
+ >>>        return m4.x;
+ 1->^^^^^^^^
+@@= skipped -17, +20 lines =@@
+ 4 >                 ^
+ 5 >                  ^
+ 6 >                   ^
+-1->() {
++1->{
+   >        
+ 2 >        return 
+ 3 >               m4
+@@= skipped -19, +19 lines =@@
+ 2 >    ^
+ 3 >     ^^^^^^^^^^^^^->
+ 1 >
+-  >    
+-2 >    }
+-1 >Emitted(14, 5) Source(12, 5) + SourceIndex(0)
++2 >    
++  >        }
++1 >Emitted(14, 5) Source(11, 21) + SourceIndex(0)
+ 2 >Emitted(14, 6) Source(12, 6) + SourceIndex(0)
+ ---
+ >>>    m3.foo = foo;
+ 1->^^^^
+-2 >    ^^^^^^
+-3 >          ^^^^^^
+-4 >                ^
+-5 >                 ^^^^->
++2 >    ^^^
++3 >       ^^^
++4 >          ^^^^^^
++5 >                ^
++6 >                 ^^^^->
+ 1->
+-2 >    foo
+-3 >          () {
++2 >    
++3 >       foo
++4 >          () {
+   >                  return m4.x;
+   >              }
+-4 >                
++5 >                
+ 1->Emitted(15, 5) Source(10, 21) + SourceIndex(0)
+-2 >Emitted(15, 11) Source(10, 24) + SourceIndex(0)
+-3 >Emitted(15, 17) Source(12, 6) + SourceIndex(0)
+-4 >Emitted(15, 18) Source(12, 6) + SourceIndex(0)
++2 >Emitted(15, 8) Source(10, 21) + SourceIndex(0)
++3 >Emitted(15, 11) Source(10, 24) + SourceIndex(0)
++4 >Emitted(15, 17) Source(12, 6) + SourceIndex(0)
++5 >Emitted(15, 18) Source(12, 6) + SourceIndex(0)
+ ---
+ >>>})(m3 || (m3 = {}));
+ 1->
+@@= skipped -32, +35 lines =@@
+ 7 >            ^^^^^^^^
+ 8 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1->
+-  >
+-2 >}
++2 >
++  >}
+ 3 > 
+ 4 >   m3
+ 5 >     
+@@= skipped -15, +15 lines =@@
+   >                    return m4.x;
+   >                }
+   >            }
+-1->Emitted(16, 1) Source(13, 1) + SourceIndex(0)
++1->Emitted(16, 1) Source(12, 6) + SourceIndex(0)
+ 2 >Emitted(16, 2) Source(13, 2) + SourceIndex(0)
+ 3 >Emitted(16, 4) Source(5, 8) + SourceIndex(0)
+ 4 >Emitted(16, 6) Source(5, 10) + SourceIndex(0)

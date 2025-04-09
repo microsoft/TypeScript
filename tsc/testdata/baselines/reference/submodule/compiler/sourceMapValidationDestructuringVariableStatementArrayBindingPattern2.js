@@ -33,3 +33,4 @@ let [...multiRobotAInfo] = multiRobotA;
 if (nameMB == nameMA) {
     console.log(skillA[0] + skillA[1]);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.js.map

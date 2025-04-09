@@ -74,3 +74,4 @@ var Foo;
         }
     })(Bar = Foo.Bar || (Foo.Bar = {}));
 })(Foo || (Foo = {}));
+//# sourceMappingURL=sourceMapValidationClasses.js.map

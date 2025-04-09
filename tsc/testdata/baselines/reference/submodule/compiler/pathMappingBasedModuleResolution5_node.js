@@ -36,11 +36,6 @@ exports.x = 1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
-//// [file4.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z1 = void 0;
-exports.z1 = 1;
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

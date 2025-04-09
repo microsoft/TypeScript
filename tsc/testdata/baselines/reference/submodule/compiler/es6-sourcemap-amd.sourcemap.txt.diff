@@ -1,0 +1,73 @@
+--- old.es6-sourcemap-amd.sourcemap.txt
++++ new.es6-sourcemap-amd.sourcemap.txt
+@@= skipped -21, +21 lines =@@
+ ---
+ >>>    constructor() {
+ 1->^^^^
+-2 >    ^^->
++2 >    ^^^^^^^^^^^^^^
+ 1->
+   >{
+   >    
++2 >    constructor ()
++  >        
+ 1->Emitted(2, 5) Source(3, 5) + SourceIndex(0)
++2 >Emitted(2, 19) Source(4, 5) + SourceIndex(0)
+ ---
+ >>>    }
+-1->^^^^
++1 >^^^^
+ 2 >    ^
+ 3 >     ^^^^^->
+-1->constructor ()
+-  >    {
+-  >
++1 >{
++2 >    
+   >    
+-2 >    }
+-1->Emitted(3, 5) Source(6, 5) + SourceIndex(0)
++  >        }
++1 >Emitted(3, 5) Source(4, 6) + SourceIndex(0)
+ 2 >Emitted(3, 6) Source(6, 6) + SourceIndex(0)
+ ---
+ >>>    B() {
+ 1->^^^^
+ 2 >    ^
+-3 >     ^^^^^^^^^^^^^^->
++3 >     ^^^
++4 >        ^^^^^^^^^^^->
+ 1->
+   >
+   >    public 
+ 2 >    B
++3 >     ()
++  >         
+ 1->Emitted(4, 5) Source(8, 12) + SourceIndex(0)
+ 2 >Emitted(4, 6) Source(8, 13) + SourceIndex(0)
++3 >Emitted(4, 9) Source(9, 5) + SourceIndex(0)
+ ---
+ >>>        return 42;
+ 1->^^^^^^^^
+ 2 >        ^^^^^^^
+ 3 >               ^^
+ 4 >                 ^
+-1->()
+-  >    {
++1->{
+   >        
+ 2 >        return 
+ 3 >               42
+@@= skipped -49, +54 lines =@@
+ 1 >^^^^
+ 2 >    ^
+ 1 >
+-  >    
+-2 >    }
+-1 >Emitted(6, 5) Source(11, 5) + SourceIndex(0)
++2 >    
++  >        }
++1 >Emitted(6, 5) Source(10, 19) + SourceIndex(0)
+ 2 >Emitted(6, 6) Source(11, 6) + SourceIndex(0)
+ ---
+ >>>}

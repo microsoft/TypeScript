@@ -189,6 +189,8 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.ExtendedDiagnostics = parseTristate(value)
 	case "emitDecoratorMetadata":
 		allOptions.EmitDecoratorMetadata = parseTristate(value)
+	case "emitBOM":
+		allOptions.EmitBOM = parseTristate(value)
 	case "esModuleInterop":
 		allOptions.ESModuleInterop = parseTristate(value)
 	case "exactOptionalPropertyTypes":

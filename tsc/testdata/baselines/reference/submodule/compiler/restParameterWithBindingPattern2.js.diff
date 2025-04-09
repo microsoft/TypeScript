@@ -11,5 +11,5 @@
 -    }
 -    var a = _a[0], b = _a[1];
 -}
--//# sourceMappingURL=restParameterWithBindingPattern2.js.map
 +function a(...[a, b]) { }
+ //# sourceMappingURL=restParameterWithBindingPattern2.js.map

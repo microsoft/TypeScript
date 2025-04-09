@@ -34,3 +34,4 @@ let [numberA3, ...robotAInfo] = robotA;
 if (nameA == nameA2) {
     console.log(skillA2);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern.js.map

@@ -363,7 +363,7 @@ func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*a
 				break
 			}
 			// Stop searching backwards when we encounter a line that isn't blank or a comment.
-			if !isCommentOrBlankLine(sourceFile.Text, int(lineStarts[line])) {
+			if !isCommentOrBlankLine(sourceFile.Text(), int(lineStarts[line])) {
 				break
 			}
 		}
@@ -575,12 +575,13 @@ type EmitResult struct {
 	EmitSkipped  bool
 	Diagnostics  []*ast.Diagnostic      // Contains declaration emit diagnostics
 	EmittedFiles []string               // Array of files the compiler wrote to disk
-	sourceMaps   []*sourceMapEmitResult // Array of sourceMapData if compiler emitted sourcemaps
+	SourceMaps   []*SourceMapEmitResult // Array of sourceMapData if compiler emitted sourcemaps
 }
 
-type sourceMapEmitResult struct {
-	inputSourceFileNames []string // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMap.sources list
-	sourceMap            *sourcemap.RawSourceMap
+type SourceMapEmitResult struct {
+	InputSourceFileNames []string // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMap.sources list
+	SourceMap            *sourcemap.RawSourceMap
+	GeneratedFile        string
 }
 
 func (p *Program) Emit(options EmitOptions) *EmitResult {
@@ -637,7 +638,7 @@ func (p *Program) Emit(options EmitOptions) *EmitResult {
 			result.EmittedFiles = append(result.EmittedFiles, emitter.emittedFilesList...)
 		}
 		if emitter.sourceMapDataList != nil {
-			result.sourceMaps = append(result.sourceMaps, emitter.sourceMapDataList...)
+			result.SourceMaps = append(result.SourceMaps, emitter.sourceMapDataList...)
 		}
 	}
 	return result

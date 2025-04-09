@@ -176,3 +176,4 @@ for (let [...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
 for (let [...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
     console.log(multiRobotAInfo);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringForArrayBindingPattern.js.map

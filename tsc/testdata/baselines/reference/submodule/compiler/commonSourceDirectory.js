@@ -15,15 +15,11 @@ import { y } from "bar";
 x + y;
 
 
-//// [/app/bin/node_modules/foo/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 0;
-//// [/app/bin/app/index.js]
+//// [/app/bin/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="../types/bar.d.ts" preserve="true" />
 const foo_1 = require("foo");
 const bar_1 = require("bar");
 foo_1.x + bar_1.y;
+//# sourceMappingURL=../myMapRoot/index.js.map

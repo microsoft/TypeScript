@@ -1,0 +1,268 @@
+===================================================================
+JsFile: a.js
+mapUrl: a.js.map
+sourceRoot: 
+sources: a.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:a.js
+sourceFile:a.ts
+-------------------------------------------------------------------
+>>>class Foo {
+1 >
+2 >^^^^^^
+3 >      ^^^
+4 >         ^^^^^^^^->
+1 >
+2 >class 
+3 >      Foo
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+---
+>>>    doThing(x) {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^
+5 >             ^^
+6 >               ^^^^^^^^^^^^->
+1-> {
+  >    
+2 >    doThing
+3 >           (
+4 >            x: {a: number}
+5 >             ) 
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 27) + SourceIndex(0)
+5 >Emitted(2, 16) Source(2, 29) + SourceIndex(0)
+---
+>>>        return { b: x.a };
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
+5 >                  ^^
+6 >                    ^
+7 >                     ^
+8 >                      ^
+9 >                       ^^
+10>                         ^
+1->{
+  >        
+2 >        return 
+3 >               {
+4 >                 b
+5 >                  : 
+6 >                    x
+7 >                     .
+8 >                      a
+9 >                       }
+10>                         ;
+1->Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(3, 16) Source(3, 16) + SourceIndex(0)
+3 >Emitted(3, 18) Source(3, 17) + SourceIndex(0)
+4 >Emitted(3, 19) Source(3, 18) + SourceIndex(0)
+5 >Emitted(3, 21) Source(3, 20) + SourceIndex(0)
+6 >Emitted(3, 22) Source(3, 21) + SourceIndex(0)
+7 >Emitted(3, 23) Source(3, 22) + SourceIndex(0)
+8 >Emitted(3, 24) Source(3, 23) + SourceIndex(0)
+9 >Emitted(3, 26) Source(3, 24) + SourceIndex(0)
+10>Emitted(3, 27) Source(3, 25) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^->
+1 >
+2 >    
+  >        }
+1 >Emitted(4, 5) Source(3, 25) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
+---
+>>>    static make() {
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^
+5 >               ^^^
+6 >                  ^^^^^^^^->
+1->
+  >    
+2 >    static
+3 >           
+4 >           make
+5 >               () 
+1->Emitted(5, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(5, 11) Source(5, 11) + SourceIndex(0)
+3 >Emitted(5, 12) Source(5, 12) + SourceIndex(0)
+4 >Emitted(5, 16) Source(5, 16) + SourceIndex(0)
+5 >Emitted(5, 19) Source(5, 19) + SourceIndex(0)
+---
+>>>        return new Foo();
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^^^
+5 >                      ^^
+6 >                        ^
+1->{
+  >        
+2 >        return 
+3 >               new 
+4 >                   Foo
+5 >                      ()
+6 >                        ;
+1->Emitted(6, 9) Source(6, 9) + SourceIndex(0)
+2 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
+3 >Emitted(6, 20) Source(6, 20) + SourceIndex(0)
+4 >Emitted(6, 23) Source(6, 23) + SourceIndex(0)
+5 >Emitted(6, 25) Source(6, 25) + SourceIndex(0)
+6 >Emitted(6, 26) Source(6, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+2 >    
+  >        }
+1 >Emitted(7, 5) Source(6, 26) + SourceIndex(0)
+2 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=a.js.map===================================================================
+JsFile: index.js
+mapUrl: index.js.map
+sourceRoot: 
+sources: index.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:index.js
+sourceFile:index.ts
+-------------------------------------------------------------------
+>>>const c = new Foo();
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^
+5 >          ^^^^
+6 >              ^^^
+7 >                 ^^
+8 >                   ^
+9 >                    ^^->
+1 >
+2 >const 
+3 >      c
+4 >        = 
+5 >          new 
+6 >              Foo
+7 >                 ()
+8 >                   ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+5 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+6 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+7 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+8 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+---
+>>>c.doThing({ a: 42 });
+1->
+2 >^
+3 > ^
+4 >  ^^^^^^^
+5 >         ^
+6 >          ^^
+7 >            ^
+8 >             ^^
+9 >               ^^
+10>                 ^^
+11>                   ^
+12>                    ^
+13>                     ^^^^^^^^^->
+1->
+  >
+2 >c
+3 > .
+4 >  doThing
+5 >         (
+6 >          {
+7 >            a
+8 >             : 
+9 >               42
+10>                 }
+11>                   )
+12>                    ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+3 >Emitted(2, 3) Source(2, 3) + SourceIndex(0)
+4 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+5 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
+6 >Emitted(2, 13) Source(2, 12) + SourceIndex(0)
+7 >Emitted(2, 14) Source(2, 13) + SourceIndex(0)
+8 >Emitted(2, 16) Source(2, 15) + SourceIndex(0)
+9 >Emitted(2, 18) Source(2, 17) + SourceIndex(0)
+10>Emitted(2, 20) Source(2, 18) + SourceIndex(0)
+11>Emitted(2, 21) Source(2, 19) + SourceIndex(0)
+12>Emitted(2, 22) Source(2, 20) + SourceIndex(0)
+---
+>>>let x = c.doThing({ a: 12 });
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^^^^^^^
+8 >                 ^
+9 >                  ^^
+10>                    ^
+11>                     ^^
+12>                       ^^
+13>                         ^^
+14>                           ^
+15>                            ^
+16>                             ^^^->
+1->
+  >
+  >
+2 >let 
+3 >    x
+4 >      = 
+5 >        c
+6 >         .
+7 >          doThing
+8 >                 (
+9 >                  {
+10>                    a
+11>                     : 
+12>                       12
+13>                         }
+14>                           )
+15>                            ;
+1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+3 >Emitted(3, 6) Source(4, 6) + SourceIndex(0)
+4 >Emitted(3, 9) Source(4, 9) + SourceIndex(0)
+5 >Emitted(3, 10) Source(4, 10) + SourceIndex(0)
+6 >Emitted(3, 11) Source(4, 11) + SourceIndex(0)
+7 >Emitted(3, 18) Source(4, 18) + SourceIndex(0)
+8 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
+9 >Emitted(3, 21) Source(4, 20) + SourceIndex(0)
+10>Emitted(3, 22) Source(4, 21) + SourceIndex(0)
+11>Emitted(3, 24) Source(4, 23) + SourceIndex(0)
+12>Emitted(3, 26) Source(4, 25) + SourceIndex(0)
+13>Emitted(3, 28) Source(4, 26) + SourceIndex(0)
+14>Emitted(3, 29) Source(4, 27) + SourceIndex(0)
+15>Emitted(3, 30) Source(4, 28) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=index.js.map

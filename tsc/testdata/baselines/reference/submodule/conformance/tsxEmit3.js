@@ -78,3 +78,4 @@ var M;
     // Emit M_1.Foo
     Foo, <Foo />;
 })(M || (M = {}));
+//# sourceMappingURL=file.jsx.map

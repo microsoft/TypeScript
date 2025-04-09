@@ -1,0 +1,76 @@
+===================================================================
+JsFile: app.js
+mapUrl: app.js.map
+sourceRoot: 
+sources: app.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:testFiles/app.js
+sourceFile:app.ts
+-------------------------------------------------------------------
+>>>// Note in the out result we are using same folder name only different in casing
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >// Note in the out result we are using same folder name only different in casing
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 81) Source(1, 81) + SourceIndex(0)
+---
+>>>// Since this is case sensitive, the folders are different and hence the relative paths in sourcemap shouldn't be just app.ts or app2.ts
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >// Since this is case sensitive, the folders are different and hence the relative paths in sourcemap shouldn't be just app.ts or app2.ts
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 137) Source(2, 137) + SourceIndex(0)
+---
+>>>class c {
+1 >
+2 >^^^^^^
+3 >      ^
+1 >
+  >
+2 >class 
+3 >      c
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 7) Source(3, 7) + SourceIndex(0)
+3 >Emitted(3, 8) Source(3, 8) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 > {
+  >}
+1 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=app.js.map===================================================================
+JsFile: app2.js
+mapUrl: app2.js.map
+sourceRoot: 
+sources: app2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:testFiles/app2.js
+sourceFile:app2.ts
+-------------------------------------------------------------------
+>>>class d {
+1 >
+2 >^^^^^^
+3 >      ^
+1 >
+2 >class 
+3 >      d
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 > {
+  >}
+1 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=app2.js.map

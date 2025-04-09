@@ -1,0 +1,109 @@
+--- old.jsxFactoryQualifiedNameResolutionError.sourcemap.txt
++++ new.jsxFactoryQualifiedNameResolutionError.sourcemap.txt
+@@= skipped -12, +12 lines =@@
+ >>>exports.AppComponent = void 0;
+ >>>class AppComponent {
+ 1 >
+-2 >^^^^^^
+-3 >      ^^^^^^^^^^^^
+-4 >                  ^^^^^^^^^^->
++2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >declare module JSX {
+   >    interface IntrinsicElements {
+   >        [s: string]: any;
+@@= skipped -10, +8 lines =@@
+   >}
+   >
+   >
+-2 >export class 
+-3 >      AppComponent
+ 1 >Emitted(4, 1) Source(7, 1) + SourceIndex(0)
+-2 >Emitted(4, 7) Source(7, 14) + SourceIndex(0)
+-3 >Emitted(4, 19) Source(7, 26) + SourceIndex(0)
+ ---
+ >>>    render(createElement) {
+ 1->^^^^
+ 2 >    ^^^^^^
+ 3 >          ^
+ 4 >           ^^^^^^^^^^^^^
+-5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1-> {
++5 >                        ^^
++1->export class AppComponent {
+   >    
+ 2 >    render
+ 3 >          (
+ 4 >           createElement
++5 >                        ) 
+ 1->Emitted(5, 5) Source(8, 5) + SourceIndex(0)
+ 2 >Emitted(5, 11) Source(8, 11) + SourceIndex(0)
+ 3 >Emitted(5, 12) Source(8, 12) + SourceIndex(0)
+ 4 >Emitted(5, 25) Source(8, 25) + SourceIndex(0)
++5 >Emitted(5, 27) Source(8, 27) + SourceIndex(0)
+ ---
+->>>        return MyElement.createElement("div", null);
+-1->^^^^^^^^
++>>>        return <div />;
++1 >^^^^^^^^
+ 2 >        ^^^^^^^
+-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-4 >                                                   ^
+-1->) {
++3 >               ^
++4 >                ^^^
++5 >                   ^
++6 >                    
++7 >                    ^^
++8 >                      ^
++1 >{
+   >        
+ 2 >        return 
+-3 >               <div />
+-4 >                                                   ;
+-1->Emitted(6, 9) Source(9, 9) + SourceIndex(0)
++3 >               <
++4 >                div
++5 >                    
++6 >                    
++7 >                     />
++8 >                      ;
++1 >Emitted(6, 9) Source(9, 9) + SourceIndex(0)
+ 2 >Emitted(6, 16) Source(9, 16) + SourceIndex(0)
+-3 >Emitted(6, 52) Source(9, 23) + SourceIndex(0)
+-4 >Emitted(6, 53) Source(9, 24) + SourceIndex(0)
++3 >Emitted(6, 17) Source(9, 17) + SourceIndex(0)
++4 >Emitted(6, 20) Source(9, 20) + SourceIndex(0)
++5 >Emitted(6, 21) Source(9, 21) + SourceIndex(0)
++6 >Emitted(6, 21) Source(9, 20) + SourceIndex(0)
++7 >Emitted(6, 23) Source(9, 23) + SourceIndex(0)
++8 >Emitted(6, 24) Source(9, 24) + SourceIndex(0)
+ ---
+ >>>    }
+ 1 >^^^^
+ 2 >    ^
+ 1 >
+-  >    
+-2 >    }
+-1 >Emitted(7, 5) Source(10, 5) + SourceIndex(0)
++2 >    
++  >        }
++1 >Emitted(7, 5) Source(9, 24) + SourceIndex(0)
+ 2 >Emitted(7, 6) Source(10, 6) + SourceIndex(0)
+ ---
+ >>>}
+@@= skipped -54, +64 lines =@@
+ 1 >Emitted(8, 2) Source(11, 2) + SourceIndex(0)
+ ---
+ >>>exports.AppComponent = AppComponent;
+-1->
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1->
+-2 >export class AppComponent {
+-  >    render(createElement) {
+-  >        return <div />;
+-  >    }
+-  >}
+-1->Emitted(9, 1) Source(7, 1) + SourceIndex(0)
+-2 >Emitted(9, 37) Source(11, 2) + SourceIndex(0)
+----
+ >>>//# sourceMappingURL=test.js.map

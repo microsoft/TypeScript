@@ -1,0 +1,4 @@
+//// [b.js.map]
+{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,CAAC,EAAC,MAAM,SAAS,CAAC;AAC1B,MAAM,OAAO,CAAE,SAAQ,CAAC;CAAI"}
+//// [a.js.map]
+{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,CAAC;CAAI"}

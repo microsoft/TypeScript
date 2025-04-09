@@ -1,7 +1,0 @@
---- old.emptyFile-souremap.js
-+++ new.emptyFile-souremap.js
-@@= skipped -3, +3 lines =@@
- 
- 
- //// [emptyFile-souremap.js]
--//# sourceMappingURL=emptyFile-souremap.js.map

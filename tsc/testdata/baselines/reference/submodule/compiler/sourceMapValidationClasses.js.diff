@@ -38,8 +38,3 @@
              var greeters = []; /* inline block comment */
              greeters[0] = new Greeter(greeting);
              for (var i = 0; i < restGreetings.length; i++) {
-@@= skipped -36, +33 lines =@@
-         }
-     })(Bar = Foo.Bar || (Foo.Bar = {}));
- })(Foo || (Foo = {}));
--//# sourceMappingURL=sourceMapValidationClasses.js.map

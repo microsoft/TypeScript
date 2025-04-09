@@ -1,7 +1,0 @@
---- old.sourceMapValidationLabeled.js
-+++ new.sourceMapValidationLabeled.js
-@@= skipped -5, +5 lines =@@
- 
- //// [sourceMapValidationLabeled.js]
- x: var b = 10;
--//# sourceMappingURL=sourceMapValidationLabeled.js.map

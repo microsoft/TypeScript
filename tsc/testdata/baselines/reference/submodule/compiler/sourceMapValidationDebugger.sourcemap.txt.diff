@@ -1,0 +1,21 @@
+--- old.sourceMapValidationDebugger.sourcemap.txt
++++ new.sourceMapValidationDebugger.sourcemap.txt
+@@= skipped -9, +9 lines =@@
+ -------------------------------------------------------------------
+ >>>debugger;
+ 1 >
+-2 >^^^^^^^^
+-3 >        ^
+-4 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++2 >^^^^^^^^^
++3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-2 >debugger
+-3 >        ;
++2 >debugger;
+ 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+-2 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+-3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
++2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+ ---
+ >>>//# sourceMappingURL=sourceMapValidationDebugger.js.map

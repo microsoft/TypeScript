@@ -41,3 +41,4 @@ class DebugClass {
         return true;
     }
 }
+//# sourceMappingURL=sourceMapValidationWithComments.js.map

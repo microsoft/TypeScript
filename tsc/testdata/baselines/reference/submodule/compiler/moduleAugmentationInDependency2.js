@@ -8,9 +8,6 @@ export {};
 //// [app.ts]
 import "A"
 
-//// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

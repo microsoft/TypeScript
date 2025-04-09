@@ -142,4 +142,4 @@
 +for (let [...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
      console.log(multiRobotAInfo);
  }
--//# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPattern.js.map
+ //# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPattern.js.map

@@ -30,3 +30,4 @@ let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"
 if (nameMB == nameMA) {
     console.log(skillA[0] + skillA[1]);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.js.map

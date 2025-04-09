@@ -251,3 +251,4 @@ var TopLevelModule2;
         SubModule3.ClassA = ClassA;
     })(SubModule3 = TopLevelModule2.SubModule3 || (TopLevelModule2.SubModule3 = {}));
 })(TopLevelModule2 || (TopLevelModule2 = {}));
+//# sourceMappingURL=typeResolution.js.map

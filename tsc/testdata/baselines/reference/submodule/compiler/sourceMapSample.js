@@ -72,3 +72,4 @@ var Foo;
         }
     })(Bar = Foo.Bar || (Foo.Bar = {}));
 })(Foo || (Foo = {}));
+//# sourceMappingURL=sourceMapSample.js.map

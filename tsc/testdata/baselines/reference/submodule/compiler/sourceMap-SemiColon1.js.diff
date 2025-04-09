@@ -1,7 +1,0 @@
---- old.sourceMap-SemiColon1.js
-+++ new.sourceMap-SemiColon1.js
-@@= skipped -5, +5 lines =@@
- 
- //// [sourceMap-SemiColon1.js]
- ;
--//# sourceMappingURL=sourceMap-SemiColon1.js.map

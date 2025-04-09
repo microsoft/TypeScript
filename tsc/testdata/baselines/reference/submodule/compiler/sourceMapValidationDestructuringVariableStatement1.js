@@ -48,3 +48,4 @@ if (nameA == nameB) {
 else {
     console.log(nameC);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringVariableStatement1.js.map

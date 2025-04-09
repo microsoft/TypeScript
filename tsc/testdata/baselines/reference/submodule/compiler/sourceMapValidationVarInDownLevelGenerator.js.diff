@@ -13,4 +13,4 @@
 +function* f() {
 +    var x = 1, y;
  }
--//# sourceMappingURL=sourceMapValidationVarInDownLevelGenerator.js.map
+ //# sourceMappingURL=sourceMapValidationVarInDownLevelGenerator.js.map

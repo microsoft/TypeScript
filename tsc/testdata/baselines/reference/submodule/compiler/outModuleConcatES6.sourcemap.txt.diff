@@ -1,0 +1,99 @@
+--- old.outModuleConcatES6.sourcemap.txt
++++ new.outModuleConcatES6.sourcemap.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++===================================================================
++JsFile: a.js
++mapUrl: a.js.map
++sourceRoot: 
++sources: a.ts
++===================================================================
++-------------------------------------------------------------------
++emittedFile:ref/a.js
++sourceFile:a.ts
++-------------------------------------------------------------------
++>>>export class A {
++1 >
++2 >^^^^^^
++3 >      ^^^^^^^
++4 >             ^
++1 >
++2 >export
++3 >       class 
++4 >             A
++1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
++2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
++3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
++4 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 > { }
++1 >Emitted(2, 2) Source(1, 19) + SourceIndex(0)
++---
++>>>//# sourceMappingURL=a.js.map===================================================================
++JsFile: b.js
++mapUrl: b.js.map
++sourceRoot: 
++sources: b.ts
++===================================================================
++-------------------------------------------------------------------
++emittedFile:b.js
++sourceFile:b.ts
++-------------------------------------------------------------------
++>>>import { A } from "./ref/a";
++1 >
++2 >^^^^^^^
++3 >       ^^
++4 >         ^
++5 >          ^^
++6 >            ^^^^^^
++7 >                  ^^^^^^^^^
++8 >                           ^
++1 >
++2 >import 
++3 >       {
++4 >         A
++5 >          }
++6 >             from 
++7 >                  "./ref/a"
++8 >                           ;
++1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
++2 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
++3 >Emitted(1, 10) Source(1, 9) + SourceIndex(0)
++4 >Emitted(1, 11) Source(1, 10) + SourceIndex(0)
++5 >Emitted(1, 13) Source(1, 11) + SourceIndex(0)
++6 >Emitted(1, 19) Source(1, 17) + SourceIndex(0)
++7 >Emitted(1, 28) Source(1, 26) + SourceIndex(0)
++8 >Emitted(1, 29) Source(1, 27) + SourceIndex(0)
++---
++>>>export class B extends A {
++1 >
++2 >^^^^^^
++3 >      ^^^^^^^
++4 >             ^
++5 >              ^^^^^^^^^
++6 >                       ^
++1 >
++  >
++2 >export
++3 >       class 
++4 >             B 
++5 >              extends 
++6 >                       A
++1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
++2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
++3 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
++4 >Emitted(2, 15) Source(2, 16) + SourceIndex(0)
++5 >Emitted(2, 24) Source(2, 24) + SourceIndex(0)
++6 >Emitted(2, 25) Source(2, 25) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 > { }
++1 >Emitted(3, 2) Source(2, 29) + SourceIndex(0)
++---
++>>>//# sourceMappingURL=b.js.map

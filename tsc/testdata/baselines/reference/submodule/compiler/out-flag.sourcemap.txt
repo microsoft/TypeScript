@@ -1,0 +1,138 @@
+===================================================================
+JsFile: out-flag.js
+mapUrl: out-flag.js.map
+sourceRoot: 
+sources: out-flag.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:out-flag.js
+sourceFile:out-flag.ts
+-------------------------------------------------------------------
+>>>//// @outFile: bin\
+1 >
+2 >^^^^^^^^^^^^^^^^^^^
+3 >                   ^^->
+1 >
+2 >//// @outFile: bin\
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+---
+>>>// my class comments
+1->
+2 >^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+  >
+2 >// my class comments
+1->Emitted(2, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(2, 21) Source(3, 21) + SourceIndex(0)
+---
+>>>class MyClass {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >class 
+3 >      MyClass
+1 >Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 7) Source(4, 7) + SourceIndex(0)
+3 >Emitted(3, 14) Source(4, 14) + SourceIndex(0)
+---
+>>>    // my function comments
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >{
+  >    
+2 >    // my function comments
+1->Emitted(4, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(4, 28) Source(6, 28) + SourceIndex(0)
+---
+>>>    Count() {
+1 >^^^^
+2 >    ^^^^^
+3 >         ^^^
+4 >            ^^^^^^^->
+1 >
+  >    public 
+2 >    Count
+3 >         (): number
+  >             
+1 >Emitted(5, 5) Source(7, 12) + SourceIndex(0)
+2 >Emitted(5, 10) Source(7, 17) + SourceIndex(0)
+3 >Emitted(5, 13) Source(8, 5) + SourceIndex(0)
+---
+>>>        return 42;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
+1->{
+  >        
+2 >        return 
+3 >               42
+4 >                 ;
+1->Emitted(6, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(6, 16) Source(9, 16) + SourceIndex(0)
+3 >Emitted(6, 18) Source(9, 18) + SourceIndex(0)
+4 >Emitted(6, 19) Source(9, 19) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^->
+1 >
+2 >    
+  >        }
+1 >Emitted(7, 5) Source(9, 19) + SourceIndex(0)
+2 >Emitted(7, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    SetCount(value) {
+1->^^^^
+2 >    ^^^^^^^^
+3 >            ^
+4 >             ^^^^^
+5 >                  ^^
+1->
+  >
+  >    public 
+2 >    SetCount
+3 >            (
+4 >             value: number
+5 >                  )
+  >                      
+1->Emitted(8, 5) Source(12, 12) + SourceIndex(0)
+2 >Emitted(8, 13) Source(12, 20) + SourceIndex(0)
+3 >Emitted(8, 14) Source(12, 21) + SourceIndex(0)
+4 >Emitted(8, 19) Source(12, 34) + SourceIndex(0)
+5 >Emitted(8, 21) Source(13, 5) + SourceIndex(0)
+---
+>>>        //
+1 >^^^^^^^^
+2 >        ^^
+1 >{
+  >        
+2 >        //
+1 >Emitted(9, 9) Source(14, 9) + SourceIndex(0)
+2 >Emitted(9, 11) Source(14, 11) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+2 >    
+  >            //
+  >        }
+1 >Emitted(10, 5) Source(13, 6) + SourceIndex(0)
+2 >Emitted(10, 6) Source(15, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(11, 2) Source(16, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=out-flag.js.map

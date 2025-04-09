@@ -151,6 +151,3 @@
                  PlainText.Mode = Mode;
              })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
          })(Languages = Thing.Languages || (Thing.Languages = {}));
-     })(Thing = Sample.Thing || (Sample.Thing = {}));
- })(Sample || (Sample = {}));
--//# sourceMappingURL=recursiveClassReferenceTest.js.map

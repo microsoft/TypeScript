@@ -23,4 +23,4 @@
 +function foo(greeting, n = 10, x, ...restParams) {
      return;
  }
--//# sourceMappingURL=sourceMapValidationFunctions.js.map
+ //# sourceMappingURL=sourceMapValidationFunctions.js.map

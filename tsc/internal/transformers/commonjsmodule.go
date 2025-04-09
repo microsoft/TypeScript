@@ -324,10 +324,12 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 						ast.NodeFlagsNone,
 					)
 				} else {
+					name := nextId.Clone(tx.factory)
+					tx.emitContext.SetEmitFlags(name, printer.EFNoSourceMap) // TODO: Strada emits comments here, but shouldn't
 					left = tx.factory.NewPropertyAccessExpression(
 						tx.factory.NewIdentifier("exports"),
 						nil, /*questionDotToken*/
-						nextId.Clone(tx.factory),
+						name,
 						ast.NodeFlagsNone,
 					)
 				}
@@ -1942,10 +1944,12 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 						ast.NodeFlagsNone,
 					)
 				} else {
+					referenceName := name.Clone(tx.factory)
+					tx.emitContext.AddEmitFlags(referenceName, printer.EFNoSourceMap|printer.EFNoComments)
 					reference = tx.factory.NewPropertyAccessExpression(
 						target,
 						nil, /*questionDotToken*/
-						name.Clone(tx.factory),
+						referenceName,
 						ast.NodeFlagsNone,
 					)
 				}

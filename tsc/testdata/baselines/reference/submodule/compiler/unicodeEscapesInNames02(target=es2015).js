@@ -51,5 +51,7 @@ class Foo {
 }
 export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
 _\u{102A7} += "!";
+//# sourceMappingURL=extendedEscapesForAstralsInVarsAndClasses.js.map
 //// [astralAsSurrogatePair.js]
 export {};
+//# sourceMappingURL=astralAsSurrogatePair.js.map

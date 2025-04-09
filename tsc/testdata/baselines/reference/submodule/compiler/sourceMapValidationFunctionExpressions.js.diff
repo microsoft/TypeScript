@@ -11,5 +11,5 @@
  };
  greet("Hello");
 -var incrGreetings = function () { return greetings++; };
--//# sourceMappingURL=sourceMapValidationFunctionExpressions.js.map
 +var incrGreetings = () => greetings++;
+ //# sourceMappingURL=sourceMapValidationFunctionExpressions.js.map

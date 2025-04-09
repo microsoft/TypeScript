@@ -1,0 +1,64 @@
+--- old.sourceMapValidationEnums.sourcemap.txt
++++ new.sourceMapValidationEnums.sourcemap.txt
+@@= skipped -82, +82 lines =@@
+ 6 >         ^
+ 7 >          ^^^^^^^^
+ 1 >
++2 >
+   >
+-2 >}
+ 3 > 
+ 4 >   e
+ 5 >    
+@@= skipped -11, +11 lines =@@
+   >              y,
+   >              x
+   >          }
+-1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
+-2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
++1 >Emitted(6, 1) Source(4, 6) + SourceIndex(0)
++2 >Emitted(6, 2) Source(5, 1) + SourceIndex(0)
+ 3 >Emitted(6, 4) Source(1, 6) + SourceIndex(0)
+ 4 >Emitted(6, 5) Source(1, 7) + SourceIndex(0)
+ 5 >Emitted(6, 10) Source(1, 6) + SourceIndex(0)
+@@= skipped -98, +98 lines =@@
+ 6 >          ^^
+ 7 >            ^^^^^^^^
+ 1 >
++2 >
+   >
+-2 >}
+ 3 > 
+ 4 >   e2
+ 5 >     
+@@= skipped -12, +12 lines =@@
+   >                z,
+   >                x2
+   >            }
+-1 >Emitted(13, 1) Source(11, 1) + SourceIndex(0)
+-2 >Emitted(13, 2) Source(11, 2) + SourceIndex(0)
++1 >Emitted(13, 1) Source(10, 7) + SourceIndex(0)
++2 >Emitted(13, 2) Source(11, 1) + SourceIndex(0)
+ 3 >Emitted(13, 4) Source(6, 6) + SourceIndex(0)
+ 4 >Emitted(13, 6) Source(6, 8) + SourceIndex(0)
+ 5 >Emitted(13, 11) Source(6, 6) + SourceIndex(0)
+@@= skipped -44, +44 lines =@@
+ 7 >            ^^^^^^^^
+ 8 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1-> {
++2 >
+   >
+-2 >}
+ 3 > 
+ 4 >   e3
+ 5 >     
+ 6 >          e3
+ 7 >             {
+   >            }
+-1->Emitted(16, 1) Source(13, 1) + SourceIndex(0)
+-2 >Emitted(16, 2) Source(13, 2) + SourceIndex(0)
++1->Emitted(16, 1) Source(12, 10) + SourceIndex(0)
++2 >Emitted(16, 2) Source(13, 1) + SourceIndex(0)
+ 3 >Emitted(16, 4) Source(12, 6) + SourceIndex(0)
+ 4 >Emitted(16, 6) Source(12, 8) + SourceIndex(0)
+ 5 >Emitted(16, 11) Source(12, 6) + SourceIndex(0)

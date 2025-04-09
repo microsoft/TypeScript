@@ -687,7 +687,7 @@ func (c *Checker) checkGrammarForDisallowedTrailingComma(list *ast.NodeList, dia
 func (c *Checker) checkGrammarTypeParameterList(typeParameters *ast.NodeList, file *ast.SourceFile) bool {
 	if typeParameters != nil && len(typeParameters.Nodes) == 0 {
 		start := typeParameters.Pos() - len("<")
-		end := scanner.SkipTrivia(file.Text, typeParameters.End()) + len(">")
+		end := scanner.SkipTrivia(file.Text(), typeParameters.End()) + len(">")
 		return c.grammarErrorAtPos(file.AsNode(), start, end-start, diagnostics.Type_parameter_list_cannot_be_empty)
 	}
 	return false
@@ -857,7 +857,7 @@ func (c *Checker) checkGrammarForAtLeastOneTypeArgument(node *ast.Node, typeArgu
 	if typeArguments != nil && len(typeArguments.Nodes) == 0 {
 		sourceFile := ast.GetSourceFileOfNode(node)
 		start := typeArguments.Pos() - len("<")
-		end := scanner.SkipTrivia(sourceFile.Text, typeArguments.End()) + len(">")
+		end := scanner.SkipTrivia(sourceFile.Text(), typeArguments.End()) + len(">")
 		return c.grammarErrorAtPos(sourceFile.AsNode(), start, end-start, diagnostics.Type_argument_list_cannot_be_empty)
 	}
 	return false
@@ -1855,7 +1855,7 @@ func (c *Checker) checkGrammarConstructorTypeParameters(node *ast.ConstructorDec
 		if range_.Pos() == range_.End() {
 			pos = range_.Pos()
 		} else {
-			pos = scanner.SkipTrivia(ast.GetSourceFileOfNode(node.AsNode()).Text, range_.Pos())
+			pos = scanner.SkipTrivia(ast.GetSourceFileOfNode(node.AsNode()).Text(), range_.Pos())
 		}
 		return c.grammarErrorAtPos(node.AsNode(), pos, range_.End()-pos, diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration)
 	}

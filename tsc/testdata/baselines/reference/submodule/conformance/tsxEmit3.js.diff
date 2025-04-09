@@ -54,4 +54,4 @@
 -    M_1.Foo, <M_1.Foo />;
 +    Foo, <Foo />;
  })(M || (M = {}));
--//# sourceMappingURL=file.jsx.map
+ //# sourceMappingURL=file.jsx.map

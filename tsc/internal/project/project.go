@@ -355,7 +355,7 @@ func (p *Project) print(writeFileNames bool, writeFileExplanation bool, writeFil
 			for _, sourceFile := range sourceFiles {
 				builder.WriteString("\t\t" + sourceFile.FileName())
 				if writeFileVersionAndText {
-					builder.WriteString(fmt.Sprintf(" %d %s", sourceFile.Version, sourceFile.Text))
+					builder.WriteString(fmt.Sprintf(" %d %s", sourceFile.Version, sourceFile.Text()))
 				}
 				builder.WriteRune('\n')
 			}

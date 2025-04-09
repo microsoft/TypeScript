@@ -2,6 +2,7 @@
 package stringutil
 
 import (
+	"net/url"
 	"strings"
 	"unicode/utf8"
 )
@@ -135,4 +136,72 @@ func GuessIndentation(lines []string) int {
 		return 0
 	}
 	return indentation
+}
+
+// https://tc39.es/ecma262/multipage/global-object.html#sec-encodeuri-uri
+func EncodeURI(s string) string {
+	var builder strings.Builder
+	start := 0
+	pos := indexAny(s, ";/?:@&=+$,#", 0)
+	for pos >= 0 {
+		builder.WriteString(url.QueryEscape(s[start:pos]))
+		builder.WriteString(s[pos : pos+1])
+		start = pos + 1
+		pos = indexAny(s, ";/?:@&=+$,#", start)
+	}
+	if start < len(s) {
+		builder.WriteString(url.QueryEscape(s[start:]))
+	}
+	return builder.String()
+}
+
+func indexAny(s, chars string, start int) int {
+	if start < 0 || start >= len(s) {
+		return -1
+	}
+	index := strings.IndexAny(s[start:], chars)
+	if index < 0 {
+		return -1
+	}
+	return start + index
+}
+
+func getByteOrderMarkLength(text string) int {
+	if len(text) >= 1 {
+		ch0 := text[0]
+		if ch0 == 0xfe {
+			if len(text) >= 2 && text[1] == 0xff {
+				return 2 // utf16be
+			}
+			return 0
+		}
+		if ch0 == 0xff {
+			if len(text) >= 2 && text[1] == 0xfe {
+				return 2 // utf16le
+			}
+			return 0
+		}
+		if ch0 == 0xef {
+			if len(text) >= 3 && text[1] == 0xbb && text[2] == 0xbf {
+				return 3 // utf8
+			}
+			return 0
+		}
+	}
+	return 0
+}
+
+func RemoveByteOrderMark(text string) string {
+	length := getByteOrderMarkLength(text)
+	if length > 0 {
+		return text[length:]
+	}
+	return text
+}
+
+func AddUTF8ByteOrderMark(text string) string {
+	if getByteOrderMarkLength(text) == 0 {
+		return "\xEF\xBB\xBF" + text
+	}
+	return text
 }

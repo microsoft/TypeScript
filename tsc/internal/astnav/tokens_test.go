@@ -261,7 +261,7 @@ func writeRangeDiff(output *strings.Builder, file *ast.SourceFile, diff tokenDif
 			line = skipTo
 		}
 		output.WriteString(fmt.Sprintf("%*d │", digits, line+1))
-		end := len(file.Text) + 1
+		end := len(file.Text()) + 1
 		if line < len(lines)-1 {
 			end = int(lines[line+1])
 		}
@@ -286,8 +286,8 @@ func writeRangeDiff(output *strings.Builder, file *ast.SourceFile, diff tokenDif
 				output.WriteString("〚")
 			}
 
-			if pos < len(file.Text) {
-				output.WriteByte(file.Text[pos])
+			if pos < len(file.Text()) {
+				output.WriteByte(file.Text()[pos])
 			}
 		}
 	}

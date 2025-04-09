@@ -7,3 +7,4 @@
 
 //// [sourceMapValidationLambdaSpanningMultipleLines.js]
 ((item) => item);
+//# sourceMappingURL=sourceMapValidationLambdaSpanningMultipleLines.js.map

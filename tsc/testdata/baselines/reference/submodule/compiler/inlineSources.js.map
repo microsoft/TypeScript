@@ -1,0 +1,4 @@
+//// [a.js.map]
+{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,CAAC,CAAC;AACV,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC","sourcesContent":["var a = 0;\nconsole.log(a);\n"]}
+//// [b.js.map]
+{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,CAAC,CAAC;AACV,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC","sourcesContent":["var b = 0;\nconsole.log(b);\n"]}

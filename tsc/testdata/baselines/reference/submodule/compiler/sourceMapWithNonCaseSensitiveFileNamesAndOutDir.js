@@ -15,6 +15,8 @@ class d {
 // Since this is non case sensitive, the relative paths should be just app.ts and app2.ts in the sourcemap
 class c {
 }
+//# sourceMappingURL=app.js.map
 //// [app2.js]
 class d {
 }
+//# sourceMappingURL=app2.js.map

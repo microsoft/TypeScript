@@ -28,3 +28,4 @@
 -    SetCount(value: number): void;
 +    }
  }
++//# sourceMappingURL=out-flag.js.map

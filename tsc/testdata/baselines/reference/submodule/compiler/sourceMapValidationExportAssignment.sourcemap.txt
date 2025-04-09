@@ -1,0 +1,58 @@
+===================================================================
+JsFile: sourceMapValidationExportAssignment.js
+mapUrl: sourceMapValidationExportAssignment.js.map
+sourceRoot: 
+sources: sourceMapValidationExportAssignment.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:sourceMapValidationExportAssignment.js
+sourceFile:sourceMapValidationExportAssignment.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>class a {
+1 >
+2 >^^^^^^
+3 >      ^
+1 >
+2 >class 
+3 >      a
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(2, 8) Source(1, 8) + SourceIndex(0)
+---
+>>>    c;
+1 >^^^^
+2 >    ^
+3 >     ^
+1 > {
+  >    public 
+2 >    c
+3 >     ;
+1 >Emitted(3, 5) Source(2, 12) + SourceIndex(0)
+2 >Emitted(3, 6) Source(2, 13) + SourceIndex(0)
+3 >Emitted(3, 7) Source(2, 14) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(4, 2) Source(3, 2) + SourceIndex(0)
+---
+>>>module.exports = a;
+1->
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^
+4 >                  ^
+5 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >export = 
+3 >                 a
+4 >                  ;
+1->Emitted(5, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 18) Source(4, 10) + SourceIndex(0)
+3 >Emitted(5, 19) Source(4, 11) + SourceIndex(0)
+4 >Emitted(5, 20) Source(4, 12) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationExportAssignment.js.map

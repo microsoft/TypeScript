@@ -1,0 +1,83 @@
+--- old.sourceMap-LineBreaks.sourcemap.txt
++++ new.sourceMap-LineBreaks.sourcemap.txt
+@@= skipped -77, +77 lines =@@
+ 5 >                       ^
+ 6 >                        ^
+ 7 >                         ^^^^^^^^^^^^^^^->
+-1->
+-2 >var 
+-3 >    endsWithLineFeed
+-4 >                     = 
+-5 >                       1
+-6 >                        ;
++1->�
++2 >�var
++3 >     endsWithLineFee
++4 >                    d =
++5 >                        
++6 >                        1
+ 1->Emitted(4, 1) Source(3, 27) + SourceIndex(0)
+ 2 >Emitted(4, 5) Source(3, 31) + SourceIndex(0)
+ 3 >Emitted(4, 21) Source(3, 47) + SourceIndex(0)
+@@= skipped -20, +20 lines =@@
+ 4 >                                  ^^^
+ 5 >                                     ^
+ 6 >                                      ^
+-1->
++1->;
+   >
+ 2 >var 
+ 3 >    endsWithCarriageReturnLineFeed
+@@= skipped -146, +146 lines =@@
+ >>>line 2";
+ 1 >^^^^^^^
+ 2 >       ^
+-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >"line 1\  >line 2"
+ 2 >       ;
+ 1 >Emitted(14, 8) Source(15, 8) + SourceIndex(0)
+@@= skipped -24, +24 lines =@@
+ >>>line 2";
+ 1 >^^^^^^^
+ 2 >       ^
+-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >"line 1\   >line 2"
+ 2 >       ;
+ 1 >Emitted(16, 8) Source(18, 8) + SourceIndex(0)
+@@= skipped -22, +22 lines =@@
+ >>>line 2";
+ 1 >^^^^^^^
+ 2 >       ^
+-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >"line 1\   >line 2"
+ 2 >       ;
+ 1 >Emitted(18, 8) Source(20, 8) + SourceIndex(0)
+@@= skipped -11, +11 lines =@@
+ 2 >^^^^
+ 3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 4 >                             ^^^
+-5 >                                ^^^^^^^^^^^^^^^^
+-6 >                                                ^
++5 >                                ^^^^^^^^^^^^^^^^^
++6 >                                                 ^
+ 1->   >
+ 2 >var 
+ 3 >    stringLiteralWithNextLine
+ 4 >                              = 
+-5 >                                "line 1\line 2"
+-6 >                                                ;
++5 >                                "line 1\line 2
++6 >                                                 "
+ 1->Emitted(19, 1) Source(21, 1) + SourceIndex(0)
+ 2 >Emitted(19, 5) Source(21, 5) + SourceIndex(0)
+ 3 >Emitted(19, 30) Source(21, 30) + SourceIndex(0)
+ 4 >Emitted(19, 33) Source(21, 33) + SourceIndex(0)
+-5 >Emitted(19, 49) Source(21, 49) + SourceIndex(0)
+-6 >Emitted(19, 50) Source(21, 50) + SourceIndex(0)
++5 >Emitted(19, 50) Source(21, 49) + SourceIndex(0)
++6 >Emitted(19, 51) Source(21, 50) + SourceIndex(0)
+ ---
+ >>>//# sourceMappingURL=sourceMap-LineBreaks.js.map

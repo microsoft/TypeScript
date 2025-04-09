@@ -22,3 +22,4 @@ class A {
         return 42;
     }
 }
+//# sourceMappingURL=es6-sourcemap-amd.js.map

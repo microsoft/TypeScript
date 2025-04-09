@@ -1,0 +1,165 @@
+--- old.classStaticBlock25(target=es2022).sourcemap.txt
++++ new.classStaticBlock25(target=es2022).sourcemap.txt
+@@= skipped -65, +65 lines =@@
+ ---
+ >>>    static {
+ 1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^->
++2 >    ^^^^^^^
++3 >           ^^^^^^^^^^^->
+ 1-> {
+   >    
++2 >    static 
+ 1->Emitted(4, 5) Source(5, 5) + SourceIndex(0)
++2 >Emitted(4, 12) Source(5, 12) + SourceIndex(0)
+ ---
+ >>>        const a = 11;
+ 1->^^^^^^^^
+@@= skipped -12, +15 lines =@@
+ 4 >               ^^^
+ 5 >                  ^^
+ 6 >                    ^
+-1->static {
++1->{
+   >        
+ 2 >        const 
+ 3 >              a
+@@= skipped -45, +45 lines =@@
+ 2 >    ^
+ 3 >     ^^^^^^^^->
+ 1 >
+-  >    
+-2 >    }
+-1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
++2 >    
++  >        }
++1 >Emitted(8, 5) Source(9, 11) + SourceIndex(0)
+ 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+ ---
+ >>>    static {
+ 1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^->
++2 >    ^^^^^^^
++3 >           ^^^^^^^^^^^->
+ 1->
+   >
+   >    
++2 >    static 
+ 1->Emitted(9, 5) Source(12, 5) + SourceIndex(0)
++2 >Emitted(9, 12) Source(12, 12) + SourceIndex(0)
+ ---
+ >>>        const a = 11;
+ 1->^^^^^^^^
+@@= skipped -20, +23 lines =@@
+ 4 >               ^^^
+ 5 >                  ^^
+ 6 >                    ^
+-1->static {
++1->{
+   >        
+ 2 >        const 
+ 3 >              a
+@@= skipped -44, +44 lines =@@
+ 1 >^^^^
+ 2 >    ^
+ 1 >
+-  >    
+-2 >    }
+-1 >Emitted(13, 5) Source(17, 5) + SourceIndex(0)
++2 >    
++  >        }
++1 >Emitted(13, 5) Source(16, 11) + SourceIndex(0)
+ 2 >Emitted(13, 6) Source(17, 6) + SourceIndex(0)
+ ---
+ >>>}
+@@= skipped -12, +12 lines =@@
+   >}
+ 1 >Emitted(14, 2) Source(18, 2) + SourceIndex(0)
+ ---
+->>>//# sourceMappingURL=classStaticBlock25.js.map===================================================================
+-JsFile: classStaticBlock25.d.ts
+-mapUrl: classStaticBlock25.d.ts.map
+-sourceRoot: 
+-sources: classStaticBlock25.ts
+-===================================================================
+--------------------------------------------------------------------
+-emittedFile:classStaticBlock25.d.ts
+-sourceFile:classStaticBlock25.ts
+--------------------------------------------------------------------
+->>>declare const a = 1;
+-1 >
+-2 >^^^^^^^^
+-3 >        ^^^^^^
+-4 >              ^
+-5 >               ^^^^
+-6 >                   ^
+-7 >                    ^->
+-1 >
+-2 >
+-3 >        const 
+-4 >              a
+-5 >                = 1
+-6 >                   ;
+-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+-2 >Emitted(1, 9) Source(1, 1) + SourceIndex(0)
+-3 >Emitted(1, 15) Source(1, 7) + SourceIndex(0)
+-4 >Emitted(1, 16) Source(1, 8) + SourceIndex(0)
+-5 >Emitted(1, 20) Source(1, 12) + SourceIndex(0)
+-6 >Emitted(1, 21) Source(1, 13) + SourceIndex(0)
+----
+->>>declare const b = 2;
+-1->
+-2 >^^^^^^^^
+-3 >        ^^^^^^
+-4 >              ^
+-5 >               ^^^^
+-6 >                   ^
+-1->
+-  >
+-2 >
+-3 >        const 
+-4 >              b
+-5 >                = 2
+-6 >                   ;
+-1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+-2 >Emitted(2, 9) Source(2, 1) + SourceIndex(0)
+-3 >Emitted(2, 15) Source(2, 7) + SourceIndex(0)
+-4 >Emitted(2, 16) Source(2, 8) + SourceIndex(0)
+-5 >Emitted(2, 20) Source(2, 12) + SourceIndex(0)
+-6 >Emitted(2, 21) Source(2, 13) + SourceIndex(0)
+----
+->>>declare class C {
+-1 >
+-2 >^^^^^^^^^^^^^^
+-3 >              ^
+-1 >
+-  >
+-  >
+-2 >class 
+-3 >              C
+-1 >Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+-2 >Emitted(3, 15) Source(4, 7) + SourceIndex(0)
+-3 >Emitted(3, 16) Source(4, 8) + SourceIndex(0)
+----
+->>>}
+-1 >^
+-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 > {
+-  >    static {
+-  >        const a = 11;
+-  >
+-  >        a;
+-  >        b;
+-  >    }
+-  >
+-  >    static {
+-  >        const a = 11;
+-  >
+-  >        a;
+-  >        b;
+-  >    }
+-  >}
+-1 >Emitted(4, 2) Source(18, 2) + SourceIndex(0)
+----
+->>>//# sourceMappingURL=classStaticBlock25.d.ts.map
++>>>//# sourceMappingURL=classStaticBlock25.js.map

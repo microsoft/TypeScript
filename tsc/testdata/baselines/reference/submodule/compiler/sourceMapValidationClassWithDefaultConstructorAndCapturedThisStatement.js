@@ -11,3 +11,4 @@ class Greeter {
     a = 10;
     returnA = () => this.a;
 }
+//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js.map

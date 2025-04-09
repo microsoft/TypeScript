@@ -21,9 +21,9 @@
 -    });
 -    return C;
 -}());
--//# sourceMappingURL=computedPropertyNamesSourceMap1_ES5.js.map
 +    }
 +    get ["goodbye"]() {
 +        return 0;
 +    }
 +}
+ //# sourceMappingURL=computedPropertyNamesSourceMap1_ES5.js.map

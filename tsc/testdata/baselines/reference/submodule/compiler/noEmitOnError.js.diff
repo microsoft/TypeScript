@@ -14,4 +14,4 @@
 -!!!! File noEmitOnError.js missing from original emit, but present in noCheck emit
  //// [noEmitOnError.js]
  var x = "";
--//# sourceMappingURL=noEmitOnError.js.map
+ //# sourceMappingURL=noEmitOnError.js.map

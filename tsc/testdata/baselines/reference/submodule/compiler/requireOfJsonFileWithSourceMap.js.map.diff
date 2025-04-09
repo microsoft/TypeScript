@@ -1,0 +1,6 @@
+--- old.requireOfJsonFileWithSourceMap.js.map
++++ new.requireOfJsonFileWithSourceMap.js.map
+@@= skipped -0, +0 lines =@@
+ //// [out/file1.js.map]
+-{"version":3,"file":"file1.js","sourceRoot":"","sources":["../file1.ts"],"names":[],"mappings":";;AAAA,6BAAgC;AAChC,IAAI,CAAC,GAAG,EAAE,CAAC,CAAC,CAAC;AACb,6BAAgC;AAChC,IAAI,CAAC,EAAE,CAAC;IACJ,IAAI,CAAC,GAAG,EAAE,CAAC,CAAC,CAAC;IACb,CAAC,GAAG,CAAC,EAAE,CAAC,CAAC,KAAK,CAAC,CAAC,CAAC;AACrB,CAAC"}
++{"version":3,"file":"file1.js","sourceRoot":"","sources":["../file1.ts"],"names":[],"mappings":";;AAAA,MAAO,EAAE,uBAAuB;AAChC,IAAI,CAAC,GAAG,EAAE,CAAC,CAAC,CAAC;AACb,MAAO,EAAE,uBAAuB;AAChC,IAAI,CAAC,EAAE,CAAC;IACJ,IAAI,CAAC,GAAG,EAAE,CAAC,CAAC,CAAC;IACb,CAAC,GAAG,CAAC,EAAE,CAAC,CAAC,KAAK,CAAC,CAAC,CAAC;AACrB,CAAC"}

@@ -5,3 +5,4 @@ var {x = 500} = { x: 20 };
 
 //// [sourceMapValidationDestructuringVariableStatementObjectBindingPattern3.js]
 var { x = 500 } = { x: 20 };
+//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern3.js.map

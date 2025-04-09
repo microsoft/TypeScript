@@ -5,5 +5,5 @@
  
  //// [sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js]
 -var x = { x: 20 }.x;
--//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map
 +var { x } = { x: 20 };
+ //# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map

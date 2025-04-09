@@ -25,8 +25,3 @@
      console.log(multiRobotAInfo);
  }
  foo1(robotA);
-@@= skipped -24, +20 lines =@@
- foo3(["roomba", ["vacuum", "mopping"]]);
- foo4(robotA);
- foo4(["roomba", ["vacuum", "mopping"]]);
--//# sourceMappingURL=sourceMapValidationDestructuringParametertArrayBindingPattern2.js.map

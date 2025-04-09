@@ -144,3 +144,4 @@ for (let { name: nameA = "noName", skills: { primary: primaryA = "primary", seco
 for (let { name: nameA = "noName", skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } = { primary: "none", secondary: "none" } } = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringForObjectBindingPatternDefaultValues.js.map

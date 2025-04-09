@@ -185,3 +185,4 @@ class AbstractMode {
         })(Languages = Thing.Languages || (Thing.Languages = {}));
     })(Thing = Sample.Thing || (Sample.Thing = {}));
 })(Sample || (Sample = {}));
+//# sourceMappingURL=recursiveClassReferenceTest.js.map

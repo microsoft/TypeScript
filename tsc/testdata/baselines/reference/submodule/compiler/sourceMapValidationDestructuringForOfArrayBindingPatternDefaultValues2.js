@@ -209,3 +209,4 @@ for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
 for ([numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
     console.log(numberA3);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues2.js.map

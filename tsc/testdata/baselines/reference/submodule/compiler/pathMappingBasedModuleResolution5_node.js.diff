@@ -1,14 +1,6 @@
 --- old.pathMappingBasedModuleResolution5_node.js
 +++ new.pathMappingBasedModuleResolution5_node.js
-@@= skipped -35, +35 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.y = void 0;
- exports.y = 1;
-+//// [file4.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.z1 = void 0;
-+exports.z1 = 1;
+@@= skipped -38, +38 lines =@@
  //// [file1.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

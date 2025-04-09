@@ -13,3 +13,4 @@ for (var v of a) {
     v;
     a;
 }
+//# sourceMappingURL=ES5For-of25.js.map

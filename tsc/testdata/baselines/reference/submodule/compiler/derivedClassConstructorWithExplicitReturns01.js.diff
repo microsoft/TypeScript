@@ -63,5 +63,5 @@
      }
 -    return D;
 -}(C));
--//# sourceMappingURL=derivedClassConstructorWithExplicitReturns01.js.map
 +}
+ //# sourceMappingURL=derivedClassConstructorWithExplicitReturns01.js.map

@@ -36,3 +36,4 @@ class C {
         b;
     }
 }
+//# sourceMappingURL=classStaticBlock25.js.map

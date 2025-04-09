@@ -1,0 +1,121 @@
+===================================================================
+JsFile: a.js
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbInZhciBhID0gMDtcbmNvbnNvbGUubG9nKGEpO1xuIl19
+sourceRoot: 
+sources: a.ts
+sourcesContent: ["var a = 0;\nconsole.log(a);\n"]
+===================================================================
+-------------------------------------------------------------------
+emittedFile:a.js
+sourceFile:a.ts
+-------------------------------------------------------------------
+>>>var a = 0;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^^^^^^->
+1 >
+2 >var 
+3 >    a
+4 >      = 
+5 >        0
+6 >         ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>console.log(a);
+1->
+2 >^^^^^^^
+3 >       ^
+4 >        ^^^
+5 >           ^
+6 >            ^
+7 >             ^
+8 >              ^
+9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >console
+3 >       .
+4 >        log
+5 >           (
+6 >            a
+7 >             )
+8 >              ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+3 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
+4 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+5 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+6 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+7 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+8 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbInZhciBhID0gMDtcbmNvbnNvbGUubG9nKGEpO1xuIl19===================================================================
+JsFile: b.js
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpO1xuIl19
+sourceRoot: 
+sources: b.ts
+sourcesContent: ["var b = 0;\nconsole.log(b);\n"]
+===================================================================
+-------------------------------------------------------------------
+emittedFile:b.js
+sourceFile:b.ts
+-------------------------------------------------------------------
+>>>var b = 0;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^^^^^^->
+1 >
+2 >var 
+3 >    b
+4 >      = 
+5 >        0
+6 >         ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>console.log(b);
+1->
+2 >^^^^^^^
+3 >       ^
+4 >        ^^^
+5 >           ^
+6 >            ^
+7 >             ^
+8 >              ^
+9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >console
+3 >       .
+4 >        log
+5 >           (
+6 >            b
+7 >             )
+8 >              ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+3 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
+4 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+5 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+6 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+7 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+8 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpO1xuIl19

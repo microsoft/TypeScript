@@ -1,7 +1,0 @@
---- old.sourceMap-Comments2.js
-+++ new.sourceMap-Comments2.js
-@@= skipped -37, +37 lines =@@
- function qat(str, num) {
-     return;
- }
--//# sourceMappingURL=sourceMap-Comments2.js.map

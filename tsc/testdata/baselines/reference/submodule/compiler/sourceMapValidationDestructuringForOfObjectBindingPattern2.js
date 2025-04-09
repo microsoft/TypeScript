@@ -199,3 +199,4 @@ for ({ name, skills: { primary, secondary } } of [{ name: "mower", skills: { pri
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
     console.log(nameA);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringForOfObjectBindingPattern2.js.map

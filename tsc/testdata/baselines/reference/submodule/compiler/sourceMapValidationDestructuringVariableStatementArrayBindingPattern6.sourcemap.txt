@@ -1,0 +1,56 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js
+mapUrl: sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js
+sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts
+-------------------------------------------------------------------
+>>>var [x = 20] = [1, 2];
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^^^
+6 >         ^^
+7 >           ^
+8 >            ^^^
+9 >               ^
+10>                ^
+11>                 ^^
+12>                   ^
+13>                    ^
+14>                     ^
+15>                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >var 
+3 >    [
+4 >     x
+5 >       = 
+6 >         20
+7 >           ]
+8 >             = 
+9 >               [
+10>                1
+11>                 , 
+12>                   2
+13>                    ]
+14>                     ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+7 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+8 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+9 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+10>Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+11>Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+12>Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+13>Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+14>Emitted(1, 23) Source(1, 23) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js.map

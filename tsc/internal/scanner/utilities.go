@@ -16,7 +16,7 @@ func IdentifierToKeywordKind(node *ast.Identifier) ast.Kind {
 }
 
 func GetSourceTextOfNodeFromSourceFile(sourceFile *ast.SourceFile, node *ast.Node, includeTrivia bool) string {
-	return GetTextOfNodeFromSourceText(sourceFile.Text, node, includeTrivia)
+	return GetTextOfNodeFromSourceText(sourceFile.Text(), node, includeTrivia)
 }
 
 func GetTextOfNodeFromSourceText(sourceText string, node *ast.Node, includeTrivia bool) string {

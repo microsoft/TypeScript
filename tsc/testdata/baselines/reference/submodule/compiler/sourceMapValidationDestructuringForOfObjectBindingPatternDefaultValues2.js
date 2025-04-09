@@ -310,3 +310,4 @@ for ({
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
     console.log(nameA);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.js.map

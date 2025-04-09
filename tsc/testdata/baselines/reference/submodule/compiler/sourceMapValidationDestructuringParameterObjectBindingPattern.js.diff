@@ -20,8 +20,3 @@
      console.log(name);
  }
  foo1(robotA);
-@@= skipped -18, +15 lines =@@
- foo2({ name: "Edger", skill: "cutting edges" });
- foo3(robotA);
- foo3({ name: "Edger", skill: "cutting edges" });
--//# sourceMappingURL=sourceMapValidationDestructuringParameterObjectBindingPattern.js.map

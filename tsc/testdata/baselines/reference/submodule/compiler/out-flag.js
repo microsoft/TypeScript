@@ -31,3 +31,4 @@ class MyClass {
         //
     }
 }
+//# sourceMappingURL=out-flag.js.map

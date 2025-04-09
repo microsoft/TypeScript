@@ -13,9 +13,9 @@
 -    }());
 -    return a;
 -});
--//# sourceMappingURL=sourceMapValidationExportAssignment.js.map
 +"use strict";
 +class a {
 +    c;
 +}
 +module.exports = a;
+ //# sourceMappingURL=sourceMapValidationExportAssignment.js.map

@@ -69,3 +69,4 @@ var Shapes;
 /** Local Variable */
 var p = new Shapes.Point(3, 4);
 var dist = p.getDist();
+//# sourceMappingURL=sourceMap-FileWithComments.js.map

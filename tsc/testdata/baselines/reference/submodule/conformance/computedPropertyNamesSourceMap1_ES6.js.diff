@@ -1,7 +1,0 @@
---- old.computedPropertyNamesSourceMap1_ES6.js
-+++ new.computedPropertyNamesSourceMap1_ES6.js
-@@= skipped -18, +18 lines =@@
-         return 0;
-     }
- }
--//# sourceMappingURL=computedPropertyNamesSourceMap1_ES6.js.map

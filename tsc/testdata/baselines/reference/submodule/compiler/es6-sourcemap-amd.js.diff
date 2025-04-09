@@ -1,7 +1,0 @@
---- old.es6-sourcemap-amd.js
-+++ new.es6-sourcemap-amd.js
-@@= skipped -21, +21 lines =@@
-         return 42;
-     }
- }
--//# sourceMappingURL=es6-sourcemap-amd.js.map

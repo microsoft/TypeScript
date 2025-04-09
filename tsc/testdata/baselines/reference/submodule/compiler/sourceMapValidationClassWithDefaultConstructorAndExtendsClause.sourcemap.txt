@@ -1,0 +1,92 @@
+===================================================================
+JsFile: sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
+mapUrl: sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js.map
+sourceRoot: 
+sources: sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
+sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
+-------------------------------------------------------------------
+>>>class AbstractGreeter {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^^^^^^^^^
+1 >
+2 >class 
+3 >      AbstractGreeter
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 > {
+  >}
+1 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+---
+>>>class Greeter extends AbstractGreeter {
+1->
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^
+5 >                      ^^^^^^^^^^^^^^^
+1->
+  >
+  >
+2 >class 
+3 >      Greeter 
+4 >             extends 
+5 >                      AbstractGreeter
+1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 7) Source(4, 7) + SourceIndex(0)
+3 >Emitted(3, 14) Source(4, 15) + SourceIndex(0)
+4 >Emitted(3, 23) Source(4, 23) + SourceIndex(0)
+5 >Emitted(3, 38) Source(4, 38) + SourceIndex(0)
+---
+>>>    a = 10;
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^
+5 >          ^
+6 >           ^^^^^^^^->
+1 > {
+  >    public 
+2 >    a
+3 >      = 
+4 >        10
+5 >          ;
+1 >Emitted(4, 5) Source(5, 12) + SourceIndex(0)
+2 >Emitted(4, 6) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 9) Source(5, 16) + SourceIndex(0)
+4 >Emitted(4, 11) Source(5, 18) + SourceIndex(0)
+5 >Emitted(4, 12) Source(5, 19) + SourceIndex(0)
+---
+>>>    nameA = "Ten";
+1->^^^^
+2 >    ^^^^^
+3 >         ^^^
+4 >            ^^^^^
+5 >                 ^
+1->
+  >    public 
+2 >    nameA
+3 >          = 
+4 >            "Ten"
+5 >                 ;
+1->Emitted(5, 5) Source(6, 12) + SourceIndex(0)
+2 >Emitted(5, 10) Source(6, 17) + SourceIndex(0)
+3 >Emitted(5, 13) Source(6, 20) + SourceIndex(0)
+4 >Emitted(5, 18) Source(6, 25) + SourceIndex(0)
+5 >Emitted(5, 19) Source(6, 26) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(6, 2) Source(7, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js.map

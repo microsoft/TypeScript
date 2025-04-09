@@ -22,3 +22,4 @@ class A {
         return 42;
     }
 }
+//# sourceMappingURL=es5-souremap-amd.js.map

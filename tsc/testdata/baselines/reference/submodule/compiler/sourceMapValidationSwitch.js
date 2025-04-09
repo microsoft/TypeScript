@@ -58,3 +58,4 @@ switch (x) {
             x = x * 10;
         }
 }
+//# sourceMappingURL=sourceMapValidationSwitch.js.map

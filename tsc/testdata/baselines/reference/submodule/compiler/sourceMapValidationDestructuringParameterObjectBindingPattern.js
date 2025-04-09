@@ -49,3 +49,4 @@ foo2(robotA);
 foo2({ name: "Edger", skill: "cutting edges" });
 foo3(robotA);
 foo3({ name: "Edger", skill: "cutting edges" });
+//# sourceMappingURL=sourceMapValidationDestructuringParameterObjectBindingPattern.js.map

@@ -183,3 +183,4 @@ for (let [numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
     console.log(numberA3);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringForArrayBindingPatternDefaultValues.js.map

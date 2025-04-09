@@ -83,5 +83,7 @@ u;
     A7;
 }
 "!";
+//# sourceMappingURL=extendedEscapesForAstralsInVarsAndClasses.js.map
 //// [astralAsSurrogatePair.js]
 export {};
+//# sourceMappingURL=astralAsSurrogatePair.js.map

@@ -1,7 +1,0 @@
---- old.sourceMapValidationVariables.js
-+++ new.sourceMapValidationVariables.js
-@@= skipped -10, +10 lines =@@
- var b;
- var c = 10, d, e;
- var c2, d2 = 10;
--//# sourceMappingURL=sourceMapValidationVariables.js.map

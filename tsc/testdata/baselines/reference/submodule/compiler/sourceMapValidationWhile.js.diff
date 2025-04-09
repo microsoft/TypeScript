@@ -1,7 +1,0 @@
---- old.sourceMapValidationWhile.js
-+++ new.sourceMapValidationWhile.js
-@@= skipped -17, +17 lines =@@
- while (a == 10) {
-     a++;
- }
--//# sourceMappingURL=sourceMapValidationWhile.js.map

@@ -1,0 +1,1080 @@
+--- old.sourceMapValidationClasses.sourcemap.txt
++++ new.sourceMapValidationClasses.sourcemap.txt
+@@= skipped -11, +11 lines =@@
+ 1 >
+ 2 >^^^^
+ 3 >    ^^^
+-4 >       ^
+-5 >        ^^^^^^^^^^->
++4 >       ^^^^^^^^^^^->
+ 1 >
+ 2 >module 
+-3 >    Foo
+-4 >       .Bar {
+-  >           "use strict";
+-  >       
+-  >           class Greeter {
+-  >               constructor(public greeting: string) {
+-  >               }
+-  >       
+-  >               greet() {
+-  >                   return "<h1>" + this.greeting + "</h1>";
+-  >               }
+-  >           }
+-  >       
+-  >       
+-  >           function foo(greeting: string): Greeter {
+-  >               return new Greeter(greeting);
+-  >           }
+-  >       
+-  >           var greeter = new Greeter("Hello, world!");
+-  >           var str = greeter.greet();
+-  >       
+-  >           function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+-  >               var greeters: Greeter[] = []; /* inline block comment */
+-  >               greeters[0] = new Greeter(greeting);
+-  >               for (var i = 0; i < restGreetings.length; i++) {
+-  >                   greeters.push(new Greeter(restGreetings[i]));
+-  >               }
+-  >       
+-  >               return greeters;
+-  >           }
+-  >       
+-  >           var b = foo2("Hello", "World", "!");
+-  >           // This is simple signle line comment
+-  >           for (var j = 0; j < b.length; j++) {
+-  >               b[j].greet();
+-  >           }
+-  >       }
++3 >    Foo.Bar {
++  >        "use strict";
++  >    
++  >        class Greeter {
++  >            constructor(public greeting: string) {
++  >            }
++  >    
++  >            greet() {
++  >                return "<h1>" + this.greeting + "</h1>";
++  >            }
++  >        }
++  >    
++  >    
++  >        function foo(greeting: string): Greeter {
++  >            return new Greeter(greeting);
++  >        }
++  >    
++  >        var greeter = new Greeter("Hello, world!");
++  >        var str = greeter.greet();
++  >    
++  >        function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
++  >            var greeters: Greeter[] = []; /* inline block comment */
++  >            greeters[0] = new Greeter(greeting);
++  >            for (var i = 0; i < restGreetings.length; i++) {
++  >                greeters.push(new Greeter(restGreetings[i]));
++  >            }
++  >    
++  >            return greeters;
++  >        }
++  >    
++  >        var b = foo2("Hello", "World", "!");
++  >        // This is simple signle line comment
++  >        for (var j = 0; j < b.length; j++) {
++  >            b[j].greet();
++  >        }
++  >    }
+ 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(1, 5) Source(1, 8) + SourceIndex(0)
+-3 >Emitted(1, 8) Source(1, 11) + SourceIndex(0)
+-4 >Emitted(1, 9) Source(36, 2) + SourceIndex(0)
++3 >Emitted(1, 8) Source(36, 2) + SourceIndex(0)
+ ---
+ >>>(function (Foo) {
+ 1->
+ 2 >^^^^^^^^^^^
+ 3 >           ^^^
++4 >              ^^
+ 1->
+ 2 >module 
+ 3 >           Foo
++4 >              
+ 1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
+ 3 >Emitted(2, 15) Source(1, 11) + SourceIndex(0)
++4 >Emitted(2, 17) Source(1, 1) + SourceIndex(0)
+ ---
+->>>    var Bar;
++>>>    let Bar;
+ 1 >^^^^
+ 2 >    ^^^^
+ 3 >        ^^^
+-4 >           ^
+-5 >            ^^^^^^^^^^->
+-1 >.
++4 >           ^^^^^^^^^^^->
++1 >module Foo.
+ 2 >    
+-3 >        Bar
+-4 >            {
+-  >               "use strict";
+-  >           
+-  >               class Greeter {
+-  >                   constructor(public greeting: string) {
+-  >                   }
+-  >           
+-  >                   greet() {
+-  >                       return "<h1>" + this.greeting + "</h1>";
+-  >                   }
+-  >               }
+-  >           
+-  >           
+-  >               function foo(greeting: string): Greeter {
+-  >                   return new Greeter(greeting);
+-  >               }
+-  >           
+-  >               var greeter = new Greeter("Hello, world!");
+-  >               var str = greeter.greet();
+-  >           
+-  >               function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+-  >                   var greeters: Greeter[] = []; /* inline block comment */
+-  >                   greeters[0] = new Greeter(greeting);
+-  >                   for (var i = 0; i < restGreetings.length; i++) {
+-  >                       greeters.push(new Greeter(restGreetings[i]));
+-  >                   }
+-  >           
+-  >                   return greeters;
+-  >               }
+-  >           
+-  >               var b = foo2("Hello", "World", "!");
+-  >               // This is simple signle line comment
+-  >               for (var j = 0; j < b.length; j++) {
+-  >                   b[j].greet();
+-  >               }
+-  >           }
++3 >        Bar {
++  >            "use strict";
++  >        
++  >            class Greeter {
++  >                constructor(public greeting: string) {
++  >                }
++  >        
++  >                greet() {
++  >                    return "<h1>" + this.greeting + "</h1>";
++  >                }
++  >            }
++  >        
++  >        
++  >            function foo(greeting: string): Greeter {
++  >                return new Greeter(greeting);
++  >            }
++  >        
++  >            var greeter = new Greeter("Hello, world!");
++  >            var str = greeter.greet();
++  >        
++  >            function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
++  >                var greeters: Greeter[] = []; /* inline block comment */
++  >                greeters[0] = new Greeter(greeting);
++  >                for (var i = 0; i < restGreetings.length; i++) {
++  >                    greeters.push(new Greeter(restGreetings[i]));
++  >                }
++  >        
++  >                return greeters;
++  >            }
++  >        
++  >            var b = foo2("Hello", "World", "!");
++  >            // This is simple signle line comment
++  >            for (var j = 0; j < b.length; j++) {
++  >                b[j].greet();
++  >            }
++  >        }
+ 1 >Emitted(3, 5) Source(1, 12) + SourceIndex(0)
+ 2 >Emitted(3, 9) Source(1, 12) + SourceIndex(0)
+-3 >Emitted(3, 12) Source(1, 15) + SourceIndex(0)
+-4 >Emitted(3, 13) Source(36, 2) + SourceIndex(0)
++3 >Emitted(3, 12) Source(36, 2) + SourceIndex(0)
+ ---
+ >>>    (function (Bar) {
+ 1->^^^^
+ 2 >    ^^^^^^^^^^^
+ 3 >               ^^^
+-4 >                  ^^^^->
++4 >                  ^^
++5 >                    ^^->
+ 1->
+ 2 >    
+ 3 >               Bar
++4 >                   
+ 1->Emitted(4, 5) Source(1, 12) + SourceIndex(0)
+ 2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
+ 3 >Emitted(4, 19) Source(1, 15) + SourceIndex(0)
++4 >Emitted(4, 21) Source(1, 16) + SourceIndex(0)
+ ---
+ >>>        "use strict";
+ 1->^^^^^^^^
+ 2 >        ^^^^^^^^^^^^
+ 3 >                    ^
+-4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1-> {
++4 >                     ^->
++1->{
+   >    
+ 2 >        "use strict"
+ 3 >                    ;
+@@= skipped -132, +132 lines =@@
+ 2 >Emitted(5, 21) Source(2, 17) + SourceIndex(0)
+ 3 >Emitted(5, 22) Source(2, 18) + SourceIndex(0)
+ ---
+->>>        var Greeter = /** @class */ (function () {
++>>>        "use strict";
+ 1->^^^^^^^^
+-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++2 >        ^^^^^^^^^^^^
++3 >                    ^
++4 >                     ^^^->
+ 1->
++2 >        "use strict"
++3 >                    ;
++1->Emitted(6, 9) Source(2, 5) + SourceIndex(0)
++2 >Emitted(6, 21) Source(2, 17) + SourceIndex(0)
++3 >Emitted(6, 22) Source(2, 18) + SourceIndex(0)
++---
++>>>        class Greeter {
++1->^^^^^^^^
++2 >        ^^^^^^
++3 >              ^^^^^^^
++4 >                     ^->
++1->
+   >
+   >    
+-1->Emitted(6, 9) Source(4, 5) + SourceIndex(0)
++2 >        class 
++3 >              Greeter
++1->Emitted(7, 9) Source(4, 5) + SourceIndex(0)
++2 >Emitted(7, 15) Source(4, 11) + SourceIndex(0)
++3 >Emitted(7, 22) Source(4, 18) + SourceIndex(0)
+ ---
+->>>            function Greeter(greeting) {
++>>>            greeting;
+ 1->^^^^^^^^^^^^
+-2 >            ^^^^^^^^^^^^^^^^^
+-3 >                             ^^^^^^^^
+-4 >                                     ^^^^^->
+-1->class Greeter {
+-  >        
++2 >            ^^^^^^^^
++3 >                    ^^^^^^^^^^^^^^^^->
++1-> {
++  >        constructor(public 
++2 >            greeting
++1->Emitted(8, 13) Source(5, 28) + SourceIndex(0)
++2 >Emitted(8, 21) Source(5, 36) + SourceIndex(0)
++---
++>>>            constructor(greeting) {
++1->^^^^^^^^^^^^
++2 >            ^^^^^^^^^^^^
++3 >                        ^^^^^^^^
++4 >                                ^^
++5 >                                  ^^^^^^^^->
++1->
+ 2 >            constructor(public 
+-3 >                             greeting: string
+-1->Emitted(7, 13) Source(5, 9) + SourceIndex(0)
+-2 >Emitted(7, 30) Source(5, 28) + SourceIndex(0)
+-3 >Emitted(7, 38) Source(5, 44) + SourceIndex(0)
++3 >                        greeting: string
++4 >                                ) 
++1->Emitted(9, 13) Source(5, 9) + SourceIndex(0)
++2 >Emitted(9, 25) Source(5, 28) + SourceIndex(0)
++3 >Emitted(9, 33) Source(5, 44) + SourceIndex(0)
++4 >Emitted(9, 35) Source(5, 46) + SourceIndex(0)
+ ---
+ >>>                this.greeting = greeting;
+-1->^^^^^^^^^^^^^^^^
+-2 >                ^^^^^^^^^^^^^
+-3 >                             ^^^
+-4 >                                ^^^^^^^^
+-5 >                                        ^
++1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++2 >                                ^^^^^^^^
+ 1->
+-2 >                greeting
+-3 >                             
+-4 >                                greeting
+-5 >                                        : string
+-1->Emitted(8, 17) Source(5, 28) + SourceIndex(0)
+-2 >Emitted(8, 30) Source(5, 36) + SourceIndex(0)
+-3 >Emitted(8, 33) Source(5, 28) + SourceIndex(0)
+-4 >Emitted(8, 41) Source(5, 36) + SourceIndex(0)
+-5 >Emitted(8, 42) Source(5, 44) + SourceIndex(0)
++2 >                                greeting
++1->Emitted(10, 33) Source(5, 28) + SourceIndex(0)
++2 >Emitted(10, 41) Source(5, 36) + SourceIndex(0)
+ ---
+ >>>            }
+ 1 >^^^^^^^^^^^^
+ 2 >            ^
+-3 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >) {
+-  >        
+-2 >            }
+-1 >Emitted(9, 13) Source(6, 9) + SourceIndex(0)
+-2 >Emitted(9, 14) Source(6, 10) + SourceIndex(0)
++3 >             ^^^^^^^^^->
++1 >: string) {
++2 >            
++  >                    }
++1 >Emitted(11, 13) Source(5, 47) + SourceIndex(0)
++2 >Emitted(11, 14) Source(6, 10) + SourceIndex(0)
+ ---
+->>>            Greeter.prototype.greet = function () {
++>>>            greet() {
+ 1->^^^^^^^^^^^^
+-2 >            ^^^^^^^^^^^^^^^^^^^^^^^
+-3 >                                   ^^^
+-4 >                                      ^^^^^^^^^^^^^^^^^^^->
++2 >            ^^^^^
++3 >                 ^^^
++4 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1->
+   >
+   >        
+ 2 >            greet
+-3 >                                   
+-1->Emitted(10, 13) Source(8, 9) + SourceIndex(0)
+-2 >Emitted(10, 36) Source(8, 14) + SourceIndex(0)
+-3 >Emitted(10, 39) Source(8, 9) + SourceIndex(0)
++3 >                 () 
++1->Emitted(12, 13) Source(8, 9) + SourceIndex(0)
++2 >Emitted(12, 18) Source(8, 14) + SourceIndex(0)
++3 >Emitted(12, 21) Source(8, 17) + SourceIndex(0)
+ ---
+ >>>                return "<h1>" + this.greeting + "</h1>";
+ 1->^^^^^^^^^^^^^^^^
+@@= skipped -73, +94 lines =@@
+ 8 >                                             ^^^
+ 9 >                                                ^^^^^^^
+ 10>                                                       ^
+-1->greet() {
++1->{
+   >            
+ 2 >                return 
+ 3 >                       "<h1>"
+@@= skipped -11, +11 lines =@@
+ 8 >                                              + 
+ 9 >                                                "</h1>"
+ 10>                                                       ;
+-1->Emitted(11, 17) Source(9, 13) + SourceIndex(0)
+-2 >Emitted(11, 24) Source(9, 20) + SourceIndex(0)
+-3 >Emitted(11, 30) Source(9, 26) + SourceIndex(0)
+-4 >Emitted(11, 33) Source(9, 29) + SourceIndex(0)
+-5 >Emitted(11, 37) Source(9, 33) + SourceIndex(0)
+-6 >Emitted(11, 38) Source(9, 34) + SourceIndex(0)
+-7 >Emitted(11, 46) Source(9, 42) + SourceIndex(0)
+-8 >Emitted(11, 49) Source(9, 45) + SourceIndex(0)
+-9 >Emitted(11, 56) Source(9, 52) + SourceIndex(0)
+-10>Emitted(11, 57) Source(9, 53) + SourceIndex(0)
++1->Emitted(13, 17) Source(9, 13) + SourceIndex(0)
++2 >Emitted(13, 24) Source(9, 20) + SourceIndex(0)
++3 >Emitted(13, 30) Source(9, 26) + SourceIndex(0)
++4 >Emitted(13, 33) Source(9, 29) + SourceIndex(0)
++5 >Emitted(13, 37) Source(9, 33) + SourceIndex(0)
++6 >Emitted(13, 38) Source(9, 34) + SourceIndex(0)
++7 >Emitted(13, 46) Source(9, 42) + SourceIndex(0)
++8 >Emitted(13, 49) Source(9, 45) + SourceIndex(0)
++9 >Emitted(13, 56) Source(9, 52) + SourceIndex(0)
++10>Emitted(13, 57) Source(9, 53) + SourceIndex(0)
+ ---
+->>>            };
++>>>            }
+ 1 >^^^^^^^^^^^^
+ 2 >            ^
+-3 >             ^^^^^^^^^^^^^^^->
+ 1 >
+-  >        
+-2 >            }
+-1 >Emitted(12, 13) Source(10, 9) + SourceIndex(0)
+-2 >Emitted(12, 14) Source(10, 10) + SourceIndex(0)
++2 >            
++  >                    }
++1 >Emitted(14, 13) Source(9, 53) + SourceIndex(0)
++2 >Emitted(14, 14) Source(10, 10) + SourceIndex(0)
+ ---
+->>>            return Greeter;
+-1->^^^^^^^^^^^^
+-2 >            ^^^^^^^^^^^^^^
+-1->
+-  >    
+-2 >            }
+-1->Emitted(13, 13) Source(11, 5) + SourceIndex(0)
+-2 >Emitted(13, 27) Source(11, 6) + SourceIndex(0)
+----
+->>>        }());
+-1 >^^^^^^^^
+-2 >        ^
+-3 >         
+-4 >         ^^^^
+-5 >             ^^^^^^^^^^^^^^^^^^^^->
++>>>        }
++1 >^^^^^^^^^
++2 >         ^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-2 >        }
+-3 >         
+-4 >         class Greeter {
+-  >                 constructor(public greeting: string) {
+-  >                 }
+-  >         
+-  >                 greet() {
+-  >                     return "<h1>" + this.greeting + "</h1>";
+-  >                 }
+-  >             }
+-1 >Emitted(14, 9) Source(11, 5) + SourceIndex(0)
+-2 >Emitted(14, 10) Source(11, 6) + SourceIndex(0)
+-3 >Emitted(14, 10) Source(4, 5) + SourceIndex(0)
+-4 >Emitted(14, 14) Source(11, 6) + SourceIndex(0)
++  >    }
++1 >Emitted(15, 10) Source(11, 6) + SourceIndex(0)
+ ---
+ >>>        function foo(greeting) {
+ 1->^^^^^^^^
+@@= skipped -58, +33 lines =@@
+ 3 >                 ^^^
+ 4 >                    ^
+ 5 >                     ^^^^^^^^
+-6 >                             ^^^^^^^^^^^^^->
++6 >                             ^^
++7 >                               ^^^^^^^^^^^->
+ 1->
+   >
+   >
+@@= skipped -9, +10 lines =@@
+ 3 >                 foo
+ 4 >                    (
+ 5 >                     greeting: string
+-1->Emitted(15, 9) Source(14, 5) + SourceIndex(0)
+-2 >Emitted(15, 18) Source(14, 14) + SourceIndex(0)
+-3 >Emitted(15, 21) Source(14, 17) + SourceIndex(0)
+-4 >Emitted(15, 22) Source(14, 18) + SourceIndex(0)
+-5 >Emitted(15, 30) Source(14, 34) + SourceIndex(0)
++6 >                             ): Greeter 
++1->Emitted(16, 9) Source(14, 5) + SourceIndex(0)
++2 >Emitted(16, 18) Source(14, 14) + SourceIndex(0)
++3 >Emitted(16, 21) Source(14, 17) + SourceIndex(0)
++4 >Emitted(16, 22) Source(14, 18) + SourceIndex(0)
++5 >Emitted(16, 30) Source(14, 34) + SourceIndex(0)
++6 >Emitted(16, 32) Source(14, 45) + SourceIndex(0)
+ ---
+ >>>            return new Greeter(greeting);
+ 1->^^^^^^^^^^^^
+@@= skipped -15, +17 lines =@@
+ 6 >                               ^^^^^^^^
+ 7 >                                       ^
+ 8 >                                        ^
+-1->): Greeter {
++1->{
+   >        
+ 2 >            return 
+ 3 >                   new 
+@@= skipped -9, +9 lines =@@
+ 6 >                               greeting
+ 7 >                                       )
+ 8 >                                        ;
+-1->Emitted(16, 13) Source(15, 9) + SourceIndex(0)
+-2 >Emitted(16, 20) Source(15, 16) + SourceIndex(0)
+-3 >Emitted(16, 24) Source(15, 20) + SourceIndex(0)
+-4 >Emitted(16, 31) Source(15, 27) + SourceIndex(0)
+-5 >Emitted(16, 32) Source(15, 28) + SourceIndex(0)
+-6 >Emitted(16, 40) Source(15, 36) + SourceIndex(0)
+-7 >Emitted(16, 41) Source(15, 37) + SourceIndex(0)
+-8 >Emitted(16, 42) Source(15, 38) + SourceIndex(0)
++1->Emitted(17, 13) Source(15, 9) + SourceIndex(0)
++2 >Emitted(17, 20) Source(15, 16) + SourceIndex(0)
++3 >Emitted(17, 24) Source(15, 20) + SourceIndex(0)
++4 >Emitted(17, 31) Source(15, 27) + SourceIndex(0)
++5 >Emitted(17, 32) Source(15, 28) + SourceIndex(0)
++6 >Emitted(17, 40) Source(15, 36) + SourceIndex(0)
++7 >Emitted(17, 41) Source(15, 37) + SourceIndex(0)
++8 >Emitted(17, 42) Source(15, 38) + SourceIndex(0)
+ ---
+ >>>        }
+ 1 >^^^^^^^^
+ 2 >        ^
+ 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >    
+-2 >        }
+-1 >Emitted(17, 9) Source(16, 5) + SourceIndex(0)
+-2 >Emitted(17, 10) Source(16, 6) + SourceIndex(0)
++2 >        
++  >            }
++1 >Emitted(18, 9) Source(15, 38) + SourceIndex(0)
++2 >Emitted(18, 10) Source(16, 6) + SourceIndex(0)
+ ---
+ >>>        var greeter = new Greeter("Hello, world!");
+ 1->^^^^^^^^
+@@= skipped -42, +42 lines =@@
+ 8 >                                  "Hello, world!"
+ 9 >                                                 )
+ 10>                                                  ;
+-1->Emitted(18, 9) Source(18, 5) + SourceIndex(0)
+-2 >Emitted(18, 13) Source(18, 9) + SourceIndex(0)
+-3 >Emitted(18, 20) Source(18, 16) + SourceIndex(0)
+-4 >Emitted(18, 23) Source(18, 19) + SourceIndex(0)
+-5 >Emitted(18, 27) Source(18, 23) + SourceIndex(0)
+-6 >Emitted(18, 34) Source(18, 30) + SourceIndex(0)
+-7 >Emitted(18, 35) Source(18, 31) + SourceIndex(0)
+-8 >Emitted(18, 50) Source(18, 46) + SourceIndex(0)
+-9 >Emitted(18, 51) Source(18, 47) + SourceIndex(0)
+-10>Emitted(18, 52) Source(18, 48) + SourceIndex(0)
++1->Emitted(19, 9) Source(18, 5) + SourceIndex(0)
++2 >Emitted(19, 13) Source(18, 9) + SourceIndex(0)
++3 >Emitted(19, 20) Source(18, 16) + SourceIndex(0)
++4 >Emitted(19, 23) Source(18, 19) + SourceIndex(0)
++5 >Emitted(19, 27) Source(18, 23) + SourceIndex(0)
++6 >Emitted(19, 34) Source(18, 30) + SourceIndex(0)
++7 >Emitted(19, 35) Source(18, 31) + SourceIndex(0)
++8 >Emitted(19, 50) Source(18, 46) + SourceIndex(0)
++9 >Emitted(19, 51) Source(18, 47) + SourceIndex(0)
++10>Emitted(19, 52) Source(18, 48) + SourceIndex(0)
+ ---
+ >>>        var str = greeter.greet();
+ 1 >^^^^^^^^
+@@= skipped -21, +21 lines =@@
+ 7 >                          ^^^^^
+ 8 >                               ^^
+ 9 >                                 ^
++10>                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+   >    
+ 2 >        var 
+@@= skipped -10, +11 lines =@@
+ 7 >                          greet
+ 8 >                               ()
+ 9 >                                 ;
+-1 >Emitted(19, 9) Source(19, 5) + SourceIndex(0)
+-2 >Emitted(19, 13) Source(19, 9) + SourceIndex(0)
+-3 >Emitted(19, 16) Source(19, 12) + SourceIndex(0)
+-4 >Emitted(19, 19) Source(19, 15) + SourceIndex(0)
+-5 >Emitted(19, 26) Source(19, 22) + SourceIndex(0)
+-6 >Emitted(19, 27) Source(19, 23) + SourceIndex(0)
+-7 >Emitted(19, 32) Source(19, 28) + SourceIndex(0)
+-8 >Emitted(19, 34) Source(19, 30) + SourceIndex(0)
+-9 >Emitted(19, 35) Source(19, 31) + SourceIndex(0)
++1 >Emitted(20, 9) Source(19, 5) + SourceIndex(0)
++2 >Emitted(20, 13) Source(19, 9) + SourceIndex(0)
++3 >Emitted(20, 16) Source(19, 12) + SourceIndex(0)
++4 >Emitted(20, 19) Source(19, 15) + SourceIndex(0)
++5 >Emitted(20, 26) Source(19, 22) + SourceIndex(0)
++6 >Emitted(20, 27) Source(19, 23) + SourceIndex(0)
++7 >Emitted(20, 32) Source(19, 28) + SourceIndex(0)
++8 >Emitted(20, 34) Source(19, 30) + SourceIndex(0)
++9 >Emitted(20, 35) Source(19, 31) + SourceIndex(0)
+ ---
+->>>        function foo2(greeting) {
+-1 >^^^^^^^^
++>>>        function foo2(greeting, ...restGreetings /* more greeting */) {
++1->^^^^^^^^
+ 2 >        ^^^^^^^^^
+ 3 >                 ^^^^
+ 4 >                     ^
+ 5 >                      ^^^^^^^^
+-6 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
++6 >                              ^^
++7 >                                ^^^
++8 >                                   ^^^^^^^^^^^^^
++9 >                                                ^
++10>                                                 ^^^^^^^^^^^^^^^^^^^
++11>                                                                    ^^
++1->
+   >
+   >    
+ 2 >        function 
+ 3 >                 foo2
+ 4 >                     (
+ 5 >                      greeting: string
+-1 >Emitted(20, 9) Source(21, 5) + SourceIndex(0)
+-2 >Emitted(20, 18) Source(21, 14) + SourceIndex(0)
+-3 >Emitted(20, 22) Source(21, 18) + SourceIndex(0)
+-4 >Emitted(20, 23) Source(21, 19) + SourceIndex(0)
+-5 >Emitted(20, 31) Source(21, 35) + SourceIndex(0)
++6 >                              , 
++7 >                                ...
++8 >                                   restGreetings
++9 >                                                 
++10>                                                 /* more greeting */: string[]
++11>                                                                    ) 
++1->Emitted(21, 9) Source(21, 5) + SourceIndex(0)
++2 >Emitted(21, 18) Source(21, 14) + SourceIndex(0)
++3 >Emitted(21, 22) Source(21, 18) + SourceIndex(0)
++4 >Emitted(21, 23) Source(21, 19) + SourceIndex(0)
++5 >Emitted(21, 31) Source(21, 35) + SourceIndex(0)
++6 >Emitted(21, 33) Source(21, 37) + SourceIndex(0)
++7 >Emitted(21, 36) Source(21, 40) + SourceIndex(0)
++8 >Emitted(21, 49) Source(21, 53) + SourceIndex(0)
++9 >Emitted(21, 50) Source(21, 54) + SourceIndex(0)
++10>Emitted(21, 69) Source(21, 83) + SourceIndex(0)
++11>Emitted(21, 71) Source(21, 85) + SourceIndex(0)
+ ---
+->>>            var restGreetings /* more greeting */ = [];
+-1->^^^^^^^^^^^^
+-2 >            ^^^^^^^^^^^^^^^^^^
+-3 >                              ^^^^^^^^^^^^^^^^^^^
+-4 >                                                 ^^^^^^
+-5 >                                                       ^^^^^->
+-1->, 
+-2 >            ...restGreetings 
+-3 >                              /* more greeting */
+-4 >                                                 : string[]
+-1->Emitted(21, 13) Source(21, 37) + SourceIndex(0)
+-2 >Emitted(21, 31) Source(21, 54) + SourceIndex(0)
+-3 >Emitted(21, 50) Source(21, 73) + SourceIndex(0)
+-4 >Emitted(21, 56) Source(21, 83) + SourceIndex(0)
+----
+->>>            for (var _i = 1; _i < arguments.length; _i++) {
+-1->^^^^^^^^^^^^^^^^^
+-2 >                 ^^^^^^^^^^
+-3 >                           ^^
+-4 >                             ^^^^^^^^^^^^^^^^^^^^^
+-5 >                                                  ^^
+-6 >                                                    ^^^^
+-1->
+-2 >                 ...restGreetings /* more greeting */: string[]
+-3 >                           
+-4 >                             ...restGreetings /* more greeting */: string[]
+-5 >                                                  
+-6 >                                                    ...restGreetings /* more greeting */: string[]
+-1->Emitted(22, 18) Source(21, 37) + SourceIndex(0)
+-2 >Emitted(22, 28) Source(21, 83) + SourceIndex(0)
+-3 >Emitted(22, 30) Source(21, 37) + SourceIndex(0)
+-4 >Emitted(22, 51) Source(21, 83) + SourceIndex(0)
+-5 >Emitted(22, 53) Source(21, 37) + SourceIndex(0)
+-6 >Emitted(22, 57) Source(21, 83) + SourceIndex(0)
+----
+->>>                restGreetings[_i - 1] = arguments[_i];
+-1 >^^^^^^^^^^^^^^^^
+-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1 >
+-2 >                ...restGreetings /* more greeting */: string[]
+-1 >Emitted(23, 17) Source(21, 37) + SourceIndex(0)
+-2 >Emitted(23, 55) Source(21, 83) + SourceIndex(0)
+----
+->>>            }
+ >>>            var greeters = []; /* inline block comment */
+ 1 >^^^^^^^^^^^^
+ 2 >            ^^^^
+@@= skipped -83, +56 lines =@@
+ 6 >                             ^
+ 7 >                              ^
+ 8 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1 >) {
++1 >{
+   >        
+ 2 >            var 
+ 3 >                greeters
+@@= skipped -9, +9 lines =@@
+ 6 >                             ;
+ 7 >                               
+ 8 >                               /* inline block comment */
+-1 >Emitted(25, 13) Source(22, 9) + SourceIndex(0)
+-2 >Emitted(25, 17) Source(22, 13) + SourceIndex(0)
+-3 >Emitted(25, 25) Source(22, 21) + SourceIndex(0)
+-4 >Emitted(25, 28) Source(22, 35) + SourceIndex(0)
+-5 >Emitted(25, 30) Source(22, 37) + SourceIndex(0)
+-6 >Emitted(25, 31) Source(22, 38) + SourceIndex(0)
+-7 >Emitted(25, 32) Source(22, 39) + SourceIndex(0)
+-8 >Emitted(25, 58) Source(22, 65) + SourceIndex(0)
++1 >Emitted(22, 13) Source(22, 9) + SourceIndex(0)
++2 >Emitted(22, 17) Source(22, 13) + SourceIndex(0)
++3 >Emitted(22, 25) Source(22, 21) + SourceIndex(0)
++4 >Emitted(22, 28) Source(22, 35) + SourceIndex(0)
++5 >Emitted(22, 30) Source(22, 37) + SourceIndex(0)
++6 >Emitted(22, 31) Source(22, 38) + SourceIndex(0)
++7 >Emitted(22, 32) Source(22, 39) + SourceIndex(0)
++8 >Emitted(22, 58) Source(22, 65) + SourceIndex(0)
+ ---
+ >>>            greeters[0] = new Greeter(greeting);
+ 1 >^^^^^^^^^^^^
+@@= skipped -36, +36 lines =@@
+ 10>                                      greeting
+ 11>                                              )
+ 12>                                               ;
+-1 >Emitted(26, 13) Source(23, 9) + SourceIndex(0)
+-2 >Emitted(26, 21) Source(23, 17) + SourceIndex(0)
+-3 >Emitted(26, 22) Source(23, 18) + SourceIndex(0)
+-4 >Emitted(26, 23) Source(23, 19) + SourceIndex(0)
+-5 >Emitted(26, 24) Source(23, 20) + SourceIndex(0)
+-6 >Emitted(26, 27) Source(23, 23) + SourceIndex(0)
+-7 >Emitted(26, 31) Source(23, 27) + SourceIndex(0)
+-8 >Emitted(26, 38) Source(23, 34) + SourceIndex(0)
+-9 >Emitted(26, 39) Source(23, 35) + SourceIndex(0)
+-10>Emitted(26, 47) Source(23, 43) + SourceIndex(0)
+-11>Emitted(26, 48) Source(23, 44) + SourceIndex(0)
+-12>Emitted(26, 49) Source(23, 45) + SourceIndex(0)
++1 >Emitted(23, 13) Source(23, 9) + SourceIndex(0)
++2 >Emitted(23, 21) Source(23, 17) + SourceIndex(0)
++3 >Emitted(23, 22) Source(23, 18) + SourceIndex(0)
++4 >Emitted(23, 23) Source(23, 19) + SourceIndex(0)
++5 >Emitted(23, 24) Source(23, 20) + SourceIndex(0)
++6 >Emitted(23, 27) Source(23, 23) + SourceIndex(0)
++7 >Emitted(23, 31) Source(23, 27) + SourceIndex(0)
++8 >Emitted(23, 38) Source(23, 34) + SourceIndex(0)
++9 >Emitted(23, 39) Source(23, 35) + SourceIndex(0)
++10>Emitted(23, 47) Source(23, 43) + SourceIndex(0)
++11>Emitted(23, 48) Source(23, 44) + SourceIndex(0)
++12>Emitted(23, 49) Source(23, 45) + SourceIndex(0)
+ ---
+ >>>            for (var i = 0; i < restGreetings.length; i++) {
+ 1->^^^^^^^^^^^^
+@@= skipped -50, +50 lines =@@
+ 15>                                                       ++
+ 16>                                                         ) 
+ 17>                                                           {
+-1->Emitted(27, 13) Source(24, 9) + SourceIndex(0)
+-2 >Emitted(27, 18) Source(24, 14) + SourceIndex(0)
+-3 >Emitted(27, 22) Source(24, 18) + SourceIndex(0)
+-4 >Emitted(27, 23) Source(24, 19) + SourceIndex(0)
+-5 >Emitted(27, 26) Source(24, 22) + SourceIndex(0)
+-6 >Emitted(27, 27) Source(24, 23) + SourceIndex(0)
+-7 >Emitted(27, 29) Source(24, 25) + SourceIndex(0)
+-8 >Emitted(27, 30) Source(24, 26) + SourceIndex(0)
+-9 >Emitted(27, 33) Source(24, 29) + SourceIndex(0)
+-10>Emitted(27, 46) Source(24, 42) + SourceIndex(0)
+-11>Emitted(27, 47) Source(24, 43) + SourceIndex(0)
+-12>Emitted(27, 53) Source(24, 49) + SourceIndex(0)
+-13>Emitted(27, 55) Source(24, 51) + SourceIndex(0)
+-14>Emitted(27, 56) Source(24, 52) + SourceIndex(0)
+-15>Emitted(27, 58) Source(24, 54) + SourceIndex(0)
+-16>Emitted(27, 60) Source(24, 56) + SourceIndex(0)
+-17>Emitted(27, 61) Source(24, 57) + SourceIndex(0)
++1->Emitted(24, 13) Source(24, 9) + SourceIndex(0)
++2 >Emitted(24, 18) Source(24, 14) + SourceIndex(0)
++3 >Emitted(24, 22) Source(24, 18) + SourceIndex(0)
++4 >Emitted(24, 23) Source(24, 19) + SourceIndex(0)
++5 >Emitted(24, 26) Source(24, 22) + SourceIndex(0)
++6 >Emitted(24, 27) Source(24, 23) + SourceIndex(0)
++7 >Emitted(24, 29) Source(24, 25) + SourceIndex(0)
++8 >Emitted(24, 30) Source(24, 26) + SourceIndex(0)
++9 >Emitted(24, 33) Source(24, 29) + SourceIndex(0)
++10>Emitted(24, 46) Source(24, 42) + SourceIndex(0)
++11>Emitted(24, 47) Source(24, 43) + SourceIndex(0)
++12>Emitted(24, 53) Source(24, 49) + SourceIndex(0)
++13>Emitted(24, 55) Source(24, 51) + SourceIndex(0)
++14>Emitted(24, 56) Source(24, 52) + SourceIndex(0)
++15>Emitted(24, 58) Source(24, 54) + SourceIndex(0)
++16>Emitted(24, 60) Source(24, 56) + SourceIndex(0)
++17>Emitted(24, 61) Source(24, 57) + SourceIndex(0)
+ ---
+ >>>                greeters.push(new Greeter(restGreetings[i]));
+ 1->^^^^^^^^^^^^^^^^
+@@= skipped -50, +50 lines =@@
+ 13>                                                          )
+ 14>                                                           )
+ 15>                                                            ;
+-1->Emitted(28, 17) Source(25, 13) + SourceIndex(0)
+-2 >Emitted(28, 25) Source(25, 21) + SourceIndex(0)
+-3 >Emitted(28, 26) Source(25, 22) + SourceIndex(0)
+-4 >Emitted(28, 30) Source(25, 26) + SourceIndex(0)
+-5 >Emitted(28, 31) Source(25, 27) + SourceIndex(0)
+-6 >Emitted(28, 35) Source(25, 31) + SourceIndex(0)
+-7 >Emitted(28, 42) Source(25, 38) + SourceIndex(0)
+-8 >Emitted(28, 43) Source(25, 39) + SourceIndex(0)
+-9 >Emitted(28, 56) Source(25, 52) + SourceIndex(0)
+-10>Emitted(28, 57) Source(25, 53) + SourceIndex(0)
+-11>Emitted(28, 58) Source(25, 54) + SourceIndex(0)
+-12>Emitted(28, 59) Source(25, 55) + SourceIndex(0)
+-13>Emitted(28, 60) Source(25, 56) + SourceIndex(0)
+-14>Emitted(28, 61) Source(25, 57) + SourceIndex(0)
+-15>Emitted(28, 62) Source(25, 58) + SourceIndex(0)
++1->Emitted(25, 17) Source(25, 13) + SourceIndex(0)
++2 >Emitted(25, 25) Source(25, 21) + SourceIndex(0)
++3 >Emitted(25, 26) Source(25, 22) + SourceIndex(0)
++4 >Emitted(25, 30) Source(25, 26) + SourceIndex(0)
++5 >Emitted(25, 31) Source(25, 27) + SourceIndex(0)
++6 >Emitted(25, 35) Source(25, 31) + SourceIndex(0)
++7 >Emitted(25, 42) Source(25, 38) + SourceIndex(0)
++8 >Emitted(25, 43) Source(25, 39) + SourceIndex(0)
++9 >Emitted(25, 56) Source(25, 52) + SourceIndex(0)
++10>Emitted(25, 57) Source(25, 53) + SourceIndex(0)
++11>Emitted(25, 58) Source(25, 54) + SourceIndex(0)
++12>Emitted(25, 59) Source(25, 55) + SourceIndex(0)
++13>Emitted(25, 60) Source(25, 56) + SourceIndex(0)
++14>Emitted(25, 61) Source(25, 57) + SourceIndex(0)
++15>Emitted(25, 62) Source(25, 58) + SourceIndex(0)
+ ---
+ >>>            }
+ 1 >^^^^^^^^^^^^
+@@= skipped -23, +23 lines =@@
+ 1 >
+   >        
+ 2 >            }
+-1 >Emitted(29, 13) Source(26, 9) + SourceIndex(0)
+-2 >Emitted(29, 14) Source(26, 10) + SourceIndex(0)
++1 >Emitted(26, 13) Source(26, 9) + SourceIndex(0)
++2 >Emitted(26, 14) Source(26, 10) + SourceIndex(0)
+ ---
+ >>>            return greeters;
+ 1->^^^^^^^^^^^^
+@@= skipped -14, +14 lines =@@
+ 2 >            return 
+ 3 >                   greeters
+ 4 >                           ;
+-1->Emitted(30, 13) Source(28, 9) + SourceIndex(0)
+-2 >Emitted(30, 20) Source(28, 16) + SourceIndex(0)
+-3 >Emitted(30, 28) Source(28, 24) + SourceIndex(0)
+-4 >Emitted(30, 29) Source(28, 25) + SourceIndex(0)
++1->Emitted(27, 13) Source(28, 9) + SourceIndex(0)
++2 >Emitted(27, 20) Source(28, 16) + SourceIndex(0)
++3 >Emitted(27, 28) Source(28, 24) + SourceIndex(0)
++4 >Emitted(27, 29) Source(28, 25) + SourceIndex(0)
+ ---
+ >>>        }
+ 1 >^^^^^^^^
+ 2 >        ^
+ 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >    
+-2 >        }
+-1 >Emitted(31, 9) Source(29, 5) + SourceIndex(0)
+-2 >Emitted(31, 10) Source(29, 6) + SourceIndex(0)
++2 >        
++  >            }
++1 >Emitted(28, 9) Source(28, 25) + SourceIndex(0)
++2 >Emitted(28, 10) Source(29, 6) + SourceIndex(0)
+ ---
+ >>>        var b = foo2("Hello", "World", "!");
+ 1->^^^^^^^^
+@@= skipped -45, +45 lines =@@
+ 11>                                       "!"
+ 12>                                          )
+ 13>                                           ;
+-1->Emitted(32, 9) Source(31, 5) + SourceIndex(0)
+-2 >Emitted(32, 13) Source(31, 9) + SourceIndex(0)
+-3 >Emitted(32, 14) Source(31, 10) + SourceIndex(0)
+-4 >Emitted(32, 17) Source(31, 13) + SourceIndex(0)
+-5 >Emitted(32, 21) Source(31, 17) + SourceIndex(0)
+-6 >Emitted(32, 22) Source(31, 18) + SourceIndex(0)
+-7 >Emitted(32, 29) Source(31, 25) + SourceIndex(0)
+-8 >Emitted(32, 31) Source(31, 27) + SourceIndex(0)
+-9 >Emitted(32, 38) Source(31, 34) + SourceIndex(0)
+-10>Emitted(32, 40) Source(31, 36) + SourceIndex(0)
+-11>Emitted(32, 43) Source(31, 39) + SourceIndex(0)
+-12>Emitted(32, 44) Source(31, 40) + SourceIndex(0)
+-13>Emitted(32, 45) Source(31, 41) + SourceIndex(0)
++1->Emitted(29, 9) Source(31, 5) + SourceIndex(0)
++2 >Emitted(29, 13) Source(31, 9) + SourceIndex(0)
++3 >Emitted(29, 14) Source(31, 10) + SourceIndex(0)
++4 >Emitted(29, 17) Source(31, 13) + SourceIndex(0)
++5 >Emitted(29, 21) Source(31, 17) + SourceIndex(0)
++6 >Emitted(29, 22) Source(31, 18) + SourceIndex(0)
++7 >Emitted(29, 29) Source(31, 25) + SourceIndex(0)
++8 >Emitted(29, 31) Source(31, 27) + SourceIndex(0)
++9 >Emitted(29, 38) Source(31, 34) + SourceIndex(0)
++10>Emitted(29, 40) Source(31, 36) + SourceIndex(0)
++11>Emitted(29, 43) Source(31, 39) + SourceIndex(0)
++12>Emitted(29, 44) Source(31, 40) + SourceIndex(0)
++13>Emitted(29, 45) Source(31, 41) + SourceIndex(0)
+ ---
+ >>>        // This is simple signle line comment
+ 1->^^^^^^^^
+@@= skipped -20, +20 lines =@@
+ 1->
+   >    
+ 2 >        // This is simple signle line comment
+-1->Emitted(33, 9) Source(32, 5) + SourceIndex(0)
+-2 >Emitted(33, 46) Source(32, 42) + SourceIndex(0)
++1->Emitted(30, 9) Source(32, 5) + SourceIndex(0)
++2 >Emitted(30, 46) Source(32, 42) + SourceIndex(0)
+ ---
+ >>>        for (var j = 0; j < b.length; j++) {
+ 1 >^^^^^^^^
+@@= skipped -39, +39 lines =@@
+ 15>                                       ++
+ 16>                                         ) 
+ 17>                                           {
+-1 >Emitted(34, 9) Source(33, 5) + SourceIndex(0)
+-2 >Emitted(34, 14) Source(33, 10) + SourceIndex(0)
+-3 >Emitted(34, 18) Source(33, 14) + SourceIndex(0)
+-4 >Emitted(34, 19) Source(33, 15) + SourceIndex(0)
+-5 >Emitted(34, 22) Source(33, 18) + SourceIndex(0)
+-6 >Emitted(34, 23) Source(33, 19) + SourceIndex(0)
+-7 >Emitted(34, 25) Source(33, 21) + SourceIndex(0)
+-8 >Emitted(34, 26) Source(33, 22) + SourceIndex(0)
+-9 >Emitted(34, 29) Source(33, 25) + SourceIndex(0)
+-10>Emitted(34, 30) Source(33, 26) + SourceIndex(0)
+-11>Emitted(34, 31) Source(33, 27) + SourceIndex(0)
+-12>Emitted(34, 37) Source(33, 33) + SourceIndex(0)
+-13>Emitted(34, 39) Source(33, 35) + SourceIndex(0)
+-14>Emitted(34, 40) Source(33, 36) + SourceIndex(0)
+-15>Emitted(34, 42) Source(33, 38) + SourceIndex(0)
+-16>Emitted(34, 44) Source(33, 40) + SourceIndex(0)
+-17>Emitted(34, 45) Source(33, 41) + SourceIndex(0)
++1 >Emitted(31, 9) Source(33, 5) + SourceIndex(0)
++2 >Emitted(31, 14) Source(33, 10) + SourceIndex(0)
++3 >Emitted(31, 18) Source(33, 14) + SourceIndex(0)
++4 >Emitted(31, 19) Source(33, 15) + SourceIndex(0)
++5 >Emitted(31, 22) Source(33, 18) + SourceIndex(0)
++6 >Emitted(31, 23) Source(33, 19) + SourceIndex(0)
++7 >Emitted(31, 25) Source(33, 21) + SourceIndex(0)
++8 >Emitted(31, 26) Source(33, 22) + SourceIndex(0)
++9 >Emitted(31, 29) Source(33, 25) + SourceIndex(0)
++10>Emitted(31, 30) Source(33, 26) + SourceIndex(0)
++11>Emitted(31, 31) Source(33, 27) + SourceIndex(0)
++12>Emitted(31, 37) Source(33, 33) + SourceIndex(0)
++13>Emitted(31, 39) Source(33, 35) + SourceIndex(0)
++14>Emitted(31, 40) Source(33, 36) + SourceIndex(0)
++15>Emitted(31, 42) Source(33, 38) + SourceIndex(0)
++16>Emitted(31, 44) Source(33, 40) + SourceIndex(0)
++17>Emitted(31, 45) Source(33, 41) + SourceIndex(0)
+ ---
+ >>>            b[j].greet();
+ 1 >^^^^^^^^^^^^
+@@= skipped -38, +38 lines =@@
+ 7 >                 greet
+ 8 >                      ()
+ 9 >                        ;
+-1 >Emitted(35, 13) Source(34, 9) + SourceIndex(0)
+-2 >Emitted(35, 14) Source(34, 10) + SourceIndex(0)
+-3 >Emitted(35, 15) Source(34, 11) + SourceIndex(0)
+-4 >Emitted(35, 16) Source(34, 12) + SourceIndex(0)
+-5 >Emitted(35, 17) Source(34, 13) + SourceIndex(0)
+-6 >Emitted(35, 18) Source(34, 14) + SourceIndex(0)
+-7 >Emitted(35, 23) Source(34, 19) + SourceIndex(0)
+-8 >Emitted(35, 25) Source(34, 21) + SourceIndex(0)
+-9 >Emitted(35, 26) Source(34, 22) + SourceIndex(0)
++1 >Emitted(32, 13) Source(34, 9) + SourceIndex(0)
++2 >Emitted(32, 14) Source(34, 10) + SourceIndex(0)
++3 >Emitted(32, 15) Source(34, 11) + SourceIndex(0)
++4 >Emitted(32, 16) Source(34, 12) + SourceIndex(0)
++5 >Emitted(32, 17) Source(34, 13) + SourceIndex(0)
++6 >Emitted(32, 18) Source(34, 14) + SourceIndex(0)
++7 >Emitted(32, 23) Source(34, 19) + SourceIndex(0)
++8 >Emitted(32, 25) Source(34, 21) + SourceIndex(0)
++9 >Emitted(32, 26) Source(34, 22) + SourceIndex(0)
+ ---
+ >>>        }
+ 1 >^^^^^^^^
+@@= skipped -17, +17 lines =@@
+ 1 >
+   >    
+ 2 >        }
+-1 >Emitted(36, 9) Source(35, 5) + SourceIndex(0)
+-2 >Emitted(36, 10) Source(35, 6) + SourceIndex(0)
++1 >Emitted(33, 9) Source(35, 5) + SourceIndex(0)
++2 >Emitted(33, 10) Source(35, 6) + SourceIndex(0)
+ ---
+ >>>    })(Bar = Foo.Bar || (Foo.Bar = {}));
+ 1->^^^^
+@@= skipped -9, +9 lines =@@
+ 3 >     ^^
+ 4 >       ^^^
+ 5 >          ^^^
+-6 >             ^^^^^^^
+-7 >                    ^^^^^
+-8 >                         ^^^^^^^
+-9 >                                ^^^^^^^^
++6 >             ^^^^
++7 >                 ^^^
++8 >                    ^^^^^
++9 >                         ^^^^
++10>                             ^^^
++11>                                ^^^^^^^^
+ 1->
+-  >
+-2 >    }
++2 >    
++  >    }
+ 3 >     
+ 4 >       Bar
+ 5 >          
+-6 >             Bar
+-7 >                    
+-8 >                         Bar
+-9 >                                 {
++6 >             
++7 >                 Bar
++8 >                    
++9 >                         
++10>                             Bar
++11>                                 {
+   >                                    "use strict";
+   >                                
+   >                                    class Greeter {
+@@= skipped -49, +53 lines =@@
+   >                                        b[j].greet();
+   >                                    }
+   >                                }
+-1->Emitted(37, 5) Source(36, 1) + SourceIndex(0)
+-2 >Emitted(37, 6) Source(36, 2) + SourceIndex(0)
+-3 >Emitted(37, 8) Source(1, 12) + SourceIndex(0)
+-4 >Emitted(37, 11) Source(1, 15) + SourceIndex(0)
+-5 >Emitted(37, 14) Source(1, 12) + SourceIndex(0)
+-6 >Emitted(37, 21) Source(1, 15) + SourceIndex(0)
+-7 >Emitted(37, 26) Source(1, 12) + SourceIndex(0)
+-8 >Emitted(37, 33) Source(1, 15) + SourceIndex(0)
+-9 >Emitted(37, 41) Source(36, 2) + SourceIndex(0)
++1->Emitted(34, 5) Source(35, 6) + SourceIndex(0)
++2 >Emitted(34, 6) Source(36, 2) + SourceIndex(0)
++3 >Emitted(34, 8) Source(1, 12) + SourceIndex(0)
++4 >Emitted(34, 11) Source(1, 15) + SourceIndex(0)
++5 >Emitted(34, 14) Source(1, 12) + SourceIndex(0)
++6 >Emitted(34, 18) Source(1, 12) + SourceIndex(0)
++7 >Emitted(34, 21) Source(1, 15) + SourceIndex(0)
++8 >Emitted(34, 26) Source(1, 12) + SourceIndex(0)
++9 >Emitted(34, 30) Source(1, 12) + SourceIndex(0)
++10>Emitted(34, 33) Source(1, 15) + SourceIndex(0)
++11>Emitted(34, 41) Source(36, 2) + SourceIndex(0)
+ ---
+ >>>})(Foo || (Foo = {}));
+ 1 >
+ 2 >^
+-3 > ^^
+-4 >   ^^^
+-5 >      ^^^^^
+-6 >           ^^^
+-7 >              ^^^^^^^^
+-8 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++3 > 
++4 > ^^
++5 >   ^^^
++6 >      ^^^^^
++7 >           ^^^
++8 >              ^^^^^^^^
++9 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-2 >}
++2 >
++  >
+ 3 > 
+-4 >   Foo
+-5 >      
+-6 >           Foo
+-7 >              .Bar {
++4 > module 
++5 >   Foo
++6 >      
++7 >           Foo
++8 >              .Bar {
+   >                  "use strict";
+   >              
+   >                  class Greeter {
+@@= skipped -61, +66 lines =@@
+   >                      b[j].greet();
+   >                  }
+   >              }
+-1 >Emitted(38, 1) Source(36, 1) + SourceIndex(0)
+-2 >Emitted(38, 2) Source(36, 2) + SourceIndex(0)
+-3 >Emitted(38, 4) Source(1, 8) + SourceIndex(0)
+-4 >Emitted(38, 7) Source(1, 11) + SourceIndex(0)
+-5 >Emitted(38, 12) Source(1, 8) + SourceIndex(0)
+-6 >Emitted(38, 15) Source(1, 11) + SourceIndex(0)
+-7 >Emitted(38, 23) Source(36, 2) + SourceIndex(0)
++1 >Emitted(35, 1) Source(35, 6) + SourceIndex(0)
++2 >Emitted(35, 2) Source(36, 1) + SourceIndex(0)
++3 >Emitted(35, 2) Source(1, 1) + SourceIndex(0)
++4 >Emitted(35, 4) Source(1, 8) + SourceIndex(0)
++5 >Emitted(35, 7) Source(1, 11) + SourceIndex(0)
++6 >Emitted(35, 12) Source(1, 8) + SourceIndex(0)
++7 >Emitted(35, 15) Source(1, 11) + SourceIndex(0)
++8 >Emitted(35, 23) Source(36, 2) + SourceIndex(0)
+ ---
+ >>>//# sourceMappingURL=sourceMapValidationClasses.js.map

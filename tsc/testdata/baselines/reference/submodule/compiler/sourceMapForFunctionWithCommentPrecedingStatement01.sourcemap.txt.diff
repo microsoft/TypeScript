@@ -1,0 +1,39 @@
+--- old.sourceMapForFunctionWithCommentPrecedingStatement01.sourcemap.txt
++++ new.sourceMapForFunctionWithCommentPrecedingStatement01.sourcemap.txt
+@@= skipped -11, +11 lines =@@
+ 1 >
+ 2 >^^^^^^^^^
+ 3 >         ^
+-4 >          ^^^^^^^->
++4 >          ^^^
++5 >             ^^^^->
+ 1 >
+ 2 >function 
+ 3 >         P
++4 >          () 
+ 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+ 3 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
++4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+ ---
+ >>>    // Test this
+ 1->^^^^
+ 2 >    ^^^^^^^^^^^^
+-1->() {
++1->{
+   >    
+ 2 >    // Test this
+ 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+@@= skipped -43, +46 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(4, 1) Source(3, 15) + SourceIndex(0)
+ 2 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
+ ---
+ >>>//# sourceMappingURL=sourceMapForFunctionWithCommentPrecedingStatement01.js.map

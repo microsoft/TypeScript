@@ -11,8 +11,6 @@ export declare var y;
 //// [b.ts]
 import y = require("a");
 
-//// [ref.js]
-var x = 1;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

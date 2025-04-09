@@ -1,0 +1,105 @@
+--- old.jsFileCompilationWithMapFileAsJsWithInlineSourceMap.sourcemap.txt
++++ new.jsFileCompilationWithMapFileAsJsWithInlineSourceMap.sourcemap.txt
+@@= skipped -0, +0 lines =@@
+ ===================================================================
+ JsFile: a.js
+-mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFBQTtJQUNBLENBQUM7SUFBRCxRQUFDO0FBQUQsQ0FBQyxBQURELElBQ0MifQ==
++mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxDQUFDO0NBQ04ifQ==
+ sourceRoot: 
+ sources: a.ts
+ ===================================================================
+@@= skipped -7, +7 lines =@@
+ emittedFile:a.js
+ sourceFile:a.ts
+ -------------------------------------------------------------------
+->>>var c = /** @class */ (function () {
++>>>class c {
+ 1 >
+-2 >^^^^^^^^^^^^^^^^^^^->
++2 >^^^^^^
++3 >      ^
+ 1 >
++2 >class 
++3 >      c
+ 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
++2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
++3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+ ---
+->>>    function c() {
+-1->^^^^
+-2 >    ^^->
+-1->
+-1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 > {
++  >}
++1 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+ ---
+->>>    }
+-1->^^^^
+-2 >    ^
+-3 >     ^^^^^^^^^->
+-1->class c {
+-  >
+-2 >    }
+-1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
+-2 >Emitted(3, 6) Source(2, 2) + SourceIndex(0)
++>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxDQUFDO0NBQ04ifQ=====================================================================
++JsFile: b.js
++mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImIuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsU0FBUyxHQUFHLEdBQUc7QUFBQyxDQUNmIn0=
++sourceRoot: 
++sources: b.js
++===================================================================
++-------------------------------------------------------------------
++emittedFile:b.js
++sourceFile:b.js
++-------------------------------------------------------------------
++>>>function bar() {
++1 >
++2 >^^^^^^^^^
++3 >         ^^^
++4 >            ^^^
++1 >
++2 >function 
++3 >         bar
++4 >            () 
++1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
++2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
++3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
++4 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+ ---
+->>>    return c;
+-1->^^^^
+-2 >    ^^^^^^^^
+-1->
+-2 >    }
+-1->Emitted(4, 5) Source(2, 1) + SourceIndex(0)
+-2 >Emitted(4, 13) Source(2, 2) + SourceIndex(0)
+----
+->>>}());
++>>>}
+ 1 >
+ 2 >^
+-3 > 
+-4 > ^^^^
+-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
+-2 >}
+-3 > 
+-4 > class c {
+-  > }
+-1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+-2 >Emitted(5, 2) Source(2, 2) + SourceIndex(0)
+-3 >Emitted(5, 2) Source(1, 1) + SourceIndex(0)
+-4 >Emitted(5, 6) Source(2, 2) + SourceIndex(0)
++3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >{
++2 >
++  >}
++1 >Emitted(2, 1) Source(1, 17) + SourceIndex(0)
++2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+ ---
+->>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFBQTtJQUNBLENBQUM7SUFBRCxRQUFDO0FBQUQsQ0FBQyxBQURELElBQ0MifQ==
++>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImIuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsU0FBUyxHQUFHLEdBQUc7QUFBQyxDQUNmIn0=

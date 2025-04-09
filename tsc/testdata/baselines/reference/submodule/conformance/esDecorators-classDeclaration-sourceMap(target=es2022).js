@@ -83,3 +83,4 @@ class C {
     @dec
     static accessor #z = 1;
 }
+//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map

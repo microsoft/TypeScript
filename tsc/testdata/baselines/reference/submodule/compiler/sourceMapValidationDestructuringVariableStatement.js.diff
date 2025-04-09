@@ -13,7 +13,3 @@
  if (nameA == nameB) {
      console.log(skillB);
  }
- else {
-     console.log(nameC);
- }
--//# sourceMappingURL=sourceMapValidationDestructuringVariableStatement.js.map

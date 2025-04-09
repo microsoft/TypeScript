@@ -358,7 +358,7 @@ func getStartPositionOfRange(r core.TextRange, sourceFile *ast.SourceFile, inclu
 	if ast.PositionIsSynthesized(r.Pos()) {
 		return -1
 	}
-	return scanner.SkipTriviaEx(sourceFile.Text, r.Pos(), &scanner.SkipTriviaOptions{StopAtComments: includeComments})
+	return scanner.SkipTriviaEx(sourceFile.Text(), r.Pos(), &scanner.SkipTriviaOptions{StopAtComments: includeComments})
 }
 
 func positionsAreOnSameLine(pos1 int, pos2 int, sourceFile *ast.SourceFile) bool {
@@ -388,19 +388,19 @@ func getLinesBetweenRangeEndAndRangeStart(range1 core.TextRange, range2 core.Tex
 }
 
 func getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos int, stopPos int, sourceFile *ast.SourceFile, includeComments bool) int {
-	startPos := scanner.SkipTriviaEx(sourceFile.Text, pos, &scanner.SkipTriviaOptions{StopAtComments: includeComments})
+	startPos := scanner.SkipTriviaEx(sourceFile.Text(), pos, &scanner.SkipTriviaOptions{StopAtComments: includeComments})
 	prevPos := getPreviousNonWhitespacePosition(startPos, stopPos, sourceFile)
 	return getLinesBetweenPositions(sourceFile, core.IfElse(prevPos >= 0, prevPos, stopPos), startPos)
 }
 
 func getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos int, stopPos int, sourceFile *ast.SourceFile, includeComments bool) int {
-	nextPos := scanner.SkipTriviaEx(sourceFile.Text, pos, &scanner.SkipTriviaOptions{StopAtComments: includeComments})
+	nextPos := scanner.SkipTriviaEx(sourceFile.Text(), pos, &scanner.SkipTriviaOptions{StopAtComments: includeComments})
 	return getLinesBetweenPositions(sourceFile, pos, core.IfElse(stopPos < nextPos, stopPos, nextPos))
 }
 
 func getPreviousNonWhitespacePosition(pos int, stopPos int, sourceFile *ast.SourceFile) int {
 	for ; pos >= stopPos; pos-- {
-		if !stringutil.IsWhiteSpaceLike(rune(sourceFile.Text[pos])) {
+		if !stringutil.IsWhiteSpaceLike(rune(sourceFile.Text()[pos])) {
 			return pos
 		}
 	}

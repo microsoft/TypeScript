@@ -1,7 +1,0 @@
---- old.sourceMapForFunctionWithCommentPrecedingStatement01.js
-+++ new.sourceMapForFunctionWithCommentPrecedingStatement01.js
-@@= skipped -10, +10 lines =@@
-     // Test this
-     var a = 1;
- }
--//# sourceMappingURL=sourceMapForFunctionWithCommentPrecedingStatement01.js.map

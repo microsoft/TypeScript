@@ -20,6 +20,6 @@
 -    };
 -    return DebugClass;
 -}());
--//# sourceMappingURL=sourceMapValidationWithComments.js.map
 +    }
 +}
+ //# sourceMappingURL=sourceMapValidationWithComments.js.map

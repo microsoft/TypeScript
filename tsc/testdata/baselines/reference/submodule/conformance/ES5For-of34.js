@@ -15,3 +15,4 @@ function foo() {
 for (foo().x of ['a', 'b', 'c']) {
     var p = foo().x;
 }
+//# sourceMappingURL=ES5For-of34.js.map

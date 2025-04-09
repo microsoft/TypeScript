@@ -1,0 +1,1364 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js
+mapUrl: sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js
+sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts
+-------------------------------------------------------------------
+>>>var robotA = [1, "mower", "mowing"];
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^
+9 >                        ^^
+10>                          ^^^^^^^^
+11>                                  ^
+12>                                   ^
+13>                                    ^^^^^->
+1 >declare var console: {
+  >    log(msg: any): void;
+  >}
+  >type Robot = [number, string, string];
+  >type MultiSkilledRobot = [string, [string, string]];
+  >
+  >
+2 >var 
+3 >    robotA
+4 >          : Robot = 
+5 >             [
+6 >              1
+7 >               , 
+8 >                 "mower"
+9 >                        , 
+10>                          "mowing"
+11>                                  ]
+12>                                   ;
+1 >Emitted(1, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(7, 5) + SourceIndex(0)
+3 >Emitted(1, 11) Source(7, 11) + SourceIndex(0)
+4 >Emitted(1, 14) Source(7, 21) + SourceIndex(0)
+5 >Emitted(1, 15) Source(7, 22) + SourceIndex(0)
+6 >Emitted(1, 16) Source(7, 23) + SourceIndex(0)
+7 >Emitted(1, 18) Source(7, 25) + SourceIndex(0)
+8 >Emitted(1, 25) Source(7, 32) + SourceIndex(0)
+9 >Emitted(1, 27) Source(7, 34) + SourceIndex(0)
+10>Emitted(1, 35) Source(7, 42) + SourceIndex(0)
+11>Emitted(1, 36) Source(7, 43) + SourceIndex(0)
+12>Emitted(1, 37) Source(7, 44) + SourceIndex(0)
+---
+>>>var robotB = [2, "trimmer", "trimming"];
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^^^
+9 >                          ^^
+10>                            ^^^^^^^^^^
+11>                                      ^
+12>                                       ^
+13>                                        ^^^^^->
+1->
+  >
+2 >var 
+3 >    robotB
+4 >          : Robot = 
+5 >             [
+6 >              2
+7 >               , 
+8 >                 "trimmer"
+9 >                          , 
+10>                            "trimming"
+11>                                      ]
+12>                                       ;
+1->Emitted(2, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(8, 5) + SourceIndex(0)
+3 >Emitted(2, 11) Source(8, 11) + SourceIndex(0)
+4 >Emitted(2, 14) Source(8, 21) + SourceIndex(0)
+5 >Emitted(2, 15) Source(8, 22) + SourceIndex(0)
+6 >Emitted(2, 16) Source(8, 23) + SourceIndex(0)
+7 >Emitted(2, 18) Source(8, 25) + SourceIndex(0)
+8 >Emitted(2, 27) Source(8, 34) + SourceIndex(0)
+9 >Emitted(2, 29) Source(8, 36) + SourceIndex(0)
+10>Emitted(2, 39) Source(8, 46) + SourceIndex(0)
+11>Emitted(2, 40) Source(8, 47) + SourceIndex(0)
+12>Emitted(2, 41) Source(8, 48) + SourceIndex(0)
+---
+>>>var multiRobotA = ["mower", ["mowing", ""]];
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^
+6 >                   ^^^^^^^
+7 >                          ^^
+8 >                            ^
+9 >                             ^^^^^^^^
+10>                                     ^^
+11>                                       ^^
+12>                                         ^
+13>                                          ^
+14>                                           ^
+15>                                            ^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    multiRobotA
+4 >               : MultiSkilledRobot = 
+5 >                  [
+6 >                   "mower"
+7 >                          , 
+8 >                            [
+9 >                             "mowing"
+10>                                     , 
+11>                                       ""
+12>                                         ]
+13>                                          ]
+14>                                           ;
+1->Emitted(3, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(9, 5) + SourceIndex(0)
+3 >Emitted(3, 16) Source(9, 16) + SourceIndex(0)
+4 >Emitted(3, 19) Source(9, 38) + SourceIndex(0)
+5 >Emitted(3, 20) Source(9, 39) + SourceIndex(0)
+6 >Emitted(3, 27) Source(9, 46) + SourceIndex(0)
+7 >Emitted(3, 29) Source(9, 48) + SourceIndex(0)
+8 >Emitted(3, 30) Source(9, 49) + SourceIndex(0)
+9 >Emitted(3, 38) Source(9, 57) + SourceIndex(0)
+10>Emitted(3, 40) Source(9, 59) + SourceIndex(0)
+11>Emitted(3, 42) Source(9, 61) + SourceIndex(0)
+12>Emitted(3, 43) Source(9, 62) + SourceIndex(0)
+13>Emitted(3, 44) Source(9, 63) + SourceIndex(0)
+14>Emitted(3, 45) Source(9, 64) + SourceIndex(0)
+---
+>>>var multiRobotB = ["trimmer", ["trimming", "edging"]];
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^
+6 >                   ^^^^^^^^^
+7 >                            ^^
+8 >                              ^
+9 >                               ^^^^^^^^^^
+10>                                         ^^
+11>                                           ^^^^^^^^
+12>                                                   ^
+13>                                                    ^
+14>                                                     ^
+1->
+  >
+2 >var 
+3 >    multiRobotB
+4 >               : MultiSkilledRobot = 
+5 >                  [
+6 >                   "trimmer"
+7 >                            , 
+8 >                              [
+9 >                               "trimming"
+10>                                         , 
+11>                                           "edging"
+12>                                                   ]
+13>                                                    ]
+14>                                                     ;
+1->Emitted(4, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(10, 5) + SourceIndex(0)
+3 >Emitted(4, 16) Source(10, 16) + SourceIndex(0)
+4 >Emitted(4, 19) Source(10, 38) + SourceIndex(0)
+5 >Emitted(4, 20) Source(10, 39) + SourceIndex(0)
+6 >Emitted(4, 29) Source(10, 48) + SourceIndex(0)
+7 >Emitted(4, 31) Source(10, 50) + SourceIndex(0)
+8 >Emitted(4, 32) Source(10, 51) + SourceIndex(0)
+9 >Emitted(4, 42) Source(10, 61) + SourceIndex(0)
+10>Emitted(4, 44) Source(10, 63) + SourceIndex(0)
+11>Emitted(4, 52) Source(10, 71) + SourceIndex(0)
+12>Emitted(4, 53) Source(10, 72) + SourceIndex(0)
+13>Emitted(4, 54) Source(10, 73) + SourceIndex(0)
+14>Emitted(4, 55) Source(10, 74) + SourceIndex(0)
+---
+>>>let nameA, numberB, nameB, skillB;
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^
+5 >           ^^^^^^^
+6 >                  ^^
+7 >                    ^^^^^
+8 >                         ^^
+9 >                           ^^^^^^
+10>                                 ^
+1 >
+  >
+  >
+2 >let 
+3 >    nameA: string
+4 >         , 
+5 >           numberB: number
+6 >                  , 
+7 >                    nameB: string
+8 >                         , 
+9 >                           skillB: string
+10>                                 ;
+1 >Emitted(5, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(5, 5) Source(12, 5) + SourceIndex(0)
+3 >Emitted(5, 10) Source(12, 18) + SourceIndex(0)
+4 >Emitted(5, 12) Source(12, 20) + SourceIndex(0)
+5 >Emitted(5, 19) Source(12, 35) + SourceIndex(0)
+6 >Emitted(5, 21) Source(12, 37) + SourceIndex(0)
+7 >Emitted(5, 26) Source(12, 50) + SourceIndex(0)
+8 >Emitted(5, 28) Source(12, 52) + SourceIndex(0)
+9 >Emitted(5, 34) Source(12, 66) + SourceIndex(0)
+10>Emitted(5, 35) Source(12, 67) + SourceIndex(0)
+---
+>>>let robotAInfo;
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^
+4 >              ^
+5 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >let 
+3 >    robotAInfo: (number | string)[]
+4 >              ;
+1 >Emitted(6, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(6, 5) Source(13, 5) + SourceIndex(0)
+3 >Emitted(6, 15) Source(13, 36) + SourceIndex(0)
+4 >Emitted(6, 16) Source(13, 37) + SourceIndex(0)
+---
+>>>let multiSkillB, nameMB, primarySkillB, secondarySkillB;
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^
+7 >                         ^^^^^^^^^^^^^
+8 >                                      ^^
+9 >                                        ^^^^^^^^^^^^^^^
+10>                                                       ^
+1->
+  >
+  >
+2 >let 
+3 >    multiSkillB: [string, string]
+4 >               , 
+5 >                 nameMB: string
+6 >                       , 
+7 >                         primarySkillB: string
+8 >                                      , 
+9 >                                        secondarySkillB: string
+10>                                                       ;
+1->Emitted(7, 1) Source(15, 1) + SourceIndex(0)
+2 >Emitted(7, 5) Source(15, 5) + SourceIndex(0)
+3 >Emitted(7, 16) Source(15, 34) + SourceIndex(0)
+4 >Emitted(7, 18) Source(15, 36) + SourceIndex(0)
+5 >Emitted(7, 24) Source(15, 50) + SourceIndex(0)
+6 >Emitted(7, 26) Source(15, 52) + SourceIndex(0)
+7 >Emitted(7, 39) Source(15, 73) + SourceIndex(0)
+8 >Emitted(7, 41) Source(15, 75) + SourceIndex(0)
+9 >Emitted(7, 56) Source(15, 98) + SourceIndex(0)
+10>Emitted(7, 57) Source(15, 99) + SourceIndex(0)
+---
+>>>let multiRobotAInfo;
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^
+4 >                   ^
+1 >
+  >
+2 >let 
+3 >    multiRobotAInfo: (string | [string, string])[]
+4 >                   ;
+1 >Emitted(8, 1) Source(16, 1) + SourceIndex(0)
+2 >Emitted(8, 5) Source(16, 5) + SourceIndex(0)
+3 >Emitted(8, 20) Source(16, 51) + SourceIndex(0)
+4 >Emitted(8, 21) Source(16, 52) + SourceIndex(0)
+---
+>>>[, nameA] = robotA;
+1 >
+2 >^
+3 > ^^
+4 >   ^^^^^
+5 >        ^
+6 >         ^^^
+7 >            ^^^^^^
+8 >                  ^
+9 >                   ^^^^^^->
+1 >
+  >
+  >
+2 >[
+3 > , 
+4 >   nameA
+5 >        ]
+6 >          = 
+7 >            robotA
+8 >                  ;
+1 >Emitted(9, 1) Source(18, 1) + SourceIndex(0)
+2 >Emitted(9, 2) Source(18, 2) + SourceIndex(0)
+3 >Emitted(9, 4) Source(18, 4) + SourceIndex(0)
+4 >Emitted(9, 9) Source(18, 9) + SourceIndex(0)
+5 >Emitted(9, 10) Source(18, 10) + SourceIndex(0)
+6 >Emitted(9, 13) Source(18, 13) + SourceIndex(0)
+7 >Emitted(9, 19) Source(18, 19) + SourceIndex(0)
+8 >Emitted(9, 20) Source(18, 20) + SourceIndex(0)
+---
+>>>[, nameB] = getRobotB();
+1->
+2 >^
+3 > ^^
+4 >   ^^^^^
+5 >        ^
+6 >         ^^^
+7 >            ^^^^^^^^^
+8 >                     ^^
+9 >                       ^
+10>                        ^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >[
+3 > , 
+4 >   nameB
+5 >        ]
+6 >          = 
+7 >            getRobotB
+8 >                     ()
+9 >                       ;
+1->Emitted(10, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(19, 2) + SourceIndex(0)
+3 >Emitted(10, 4) Source(19, 4) + SourceIndex(0)
+4 >Emitted(10, 9) Source(19, 9) + SourceIndex(0)
+5 >Emitted(10, 10) Source(19, 10) + SourceIndex(0)
+6 >Emitted(10, 13) Source(19, 13) + SourceIndex(0)
+7 >Emitted(10, 22) Source(19, 22) + SourceIndex(0)
+8 >Emitted(10, 24) Source(19, 24) + SourceIndex(0)
+9 >Emitted(10, 25) Source(19, 25) + SourceIndex(0)
+---
+>>>[, nameB] = [2, "trimmer", "trimming"];
+1->
+2 >^
+3 > ^^
+4 >   ^^^^^
+5 >        ^
+6 >         ^^^
+7 >            ^
+8 >             ^
+9 >              ^^
+10>                ^^^^^^^^^
+11>                         ^^
+12>                           ^^^^^^^^^^
+13>                                     ^
+14>                                      ^
+1->
+  >
+2 >[
+3 > , 
+4 >   nameB
+5 >        ]
+6 >          = 
+7 >            [
+8 >             2
+9 >              , 
+10>                "trimmer"
+11>                         , 
+12>                           "trimming"
+13>                                     ]
+14>                                      ;
+1->Emitted(11, 1) Source(20, 1) + SourceIndex(0)
+2 >Emitted(11, 2) Source(20, 2) + SourceIndex(0)
+3 >Emitted(11, 4) Source(20, 4) + SourceIndex(0)
+4 >Emitted(11, 9) Source(20, 9) + SourceIndex(0)
+5 >Emitted(11, 10) Source(20, 10) + SourceIndex(0)
+6 >Emitted(11, 13) Source(20, 13) + SourceIndex(0)
+7 >Emitted(11, 14) Source(20, 14) + SourceIndex(0)
+8 >Emitted(11, 15) Source(20, 15) + SourceIndex(0)
+9 >Emitted(11, 17) Source(20, 17) + SourceIndex(0)
+10>Emitted(11, 26) Source(20, 26) + SourceIndex(0)
+11>Emitted(11, 28) Source(20, 28) + SourceIndex(0)
+12>Emitted(11, 38) Source(20, 38) + SourceIndex(0)
+13>Emitted(11, 39) Source(20, 39) + SourceIndex(0)
+14>Emitted(11, 40) Source(20, 40) + SourceIndex(0)
+---
+>>>[, multiSkillB] = multiRobotB;
+1 >
+2 >^
+3 > ^^
+4 >   ^^^^^^^^^^^
+5 >              ^
+6 >               ^^^
+7 >                  ^^^^^^^^^^^
+8 >                             ^
+9 >                              ^^^^^^->
+1 >
+  >
+2 >[
+3 > , 
+4 >   multiSkillB
+5 >              ]
+6 >                = 
+7 >                  multiRobotB
+8 >                             ;
+1 >Emitted(12, 1) Source(21, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(21, 2) + SourceIndex(0)
+3 >Emitted(12, 4) Source(21, 4) + SourceIndex(0)
+4 >Emitted(12, 15) Source(21, 15) + SourceIndex(0)
+5 >Emitted(12, 16) Source(21, 16) + SourceIndex(0)
+6 >Emitted(12, 19) Source(21, 19) + SourceIndex(0)
+7 >Emitted(12, 30) Source(21, 30) + SourceIndex(0)
+8 >Emitted(12, 31) Source(21, 31) + SourceIndex(0)
+---
+>>>[, multiSkillB] = getMultiRobotB();
+1->
+2 >^
+3 > ^^
+4 >   ^^^^^^^^^^^
+5 >              ^
+6 >               ^^^
+7 >                  ^^^^^^^^^^^^^^
+8 >                                ^^
+9 >                                  ^
+10>                                   ^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >[
+3 > , 
+4 >   multiSkillB
+5 >              ]
+6 >                = 
+7 >                  getMultiRobotB
+8 >                                ()
+9 >                                  ;
+1->Emitted(13, 1) Source(22, 1) + SourceIndex(0)
+2 >Emitted(13, 2) Source(22, 2) + SourceIndex(0)
+3 >Emitted(13, 4) Source(22, 4) + SourceIndex(0)
+4 >Emitted(13, 15) Source(22, 15) + SourceIndex(0)
+5 >Emitted(13, 16) Source(22, 16) + SourceIndex(0)
+6 >Emitted(13, 19) Source(22, 19) + SourceIndex(0)
+7 >Emitted(13, 33) Source(22, 33) + SourceIndex(0)
+8 >Emitted(13, 35) Source(22, 35) + SourceIndex(0)
+9 >Emitted(13, 36) Source(22, 36) + SourceIndex(0)
+---
+>>>[, multiSkillB] = ["roomba", ["vacuum", "mopping"]];
+1->
+2 >^
+3 > ^^
+4 >   ^^^^^^^^^^^
+5 >              ^
+6 >               ^^^
+7 >                  ^
+8 >                   ^^^^^^^^
+9 >                           ^^
+10>                             ^
+11>                              ^^^^^^^^
+12>                                      ^^
+13>                                        ^^^^^^^^^
+14>                                                 ^
+15>                                                  ^
+16>                                                   ^
+1->
+  >
+2 >[
+3 > , 
+4 >   multiSkillB
+5 >              ]
+6 >                = 
+7 >                  [
+8 >                   "roomba"
+9 >                           , 
+10>                             [
+11>                              "vacuum"
+12>                                      , 
+13>                                        "mopping"
+14>                                                 ]
+15>                                                  ]
+16>                                                   ;
+1->Emitted(14, 1) Source(23, 1) + SourceIndex(0)
+2 >Emitted(14, 2) Source(23, 2) + SourceIndex(0)
+3 >Emitted(14, 4) Source(23, 4) + SourceIndex(0)
+4 >Emitted(14, 15) Source(23, 15) + SourceIndex(0)
+5 >Emitted(14, 16) Source(23, 16) + SourceIndex(0)
+6 >Emitted(14, 19) Source(23, 19) + SourceIndex(0)
+7 >Emitted(14, 20) Source(23, 20) + SourceIndex(0)
+8 >Emitted(14, 28) Source(23, 28) + SourceIndex(0)
+9 >Emitted(14, 30) Source(23, 30) + SourceIndex(0)
+10>Emitted(14, 31) Source(23, 31) + SourceIndex(0)
+11>Emitted(14, 39) Source(23, 39) + SourceIndex(0)
+12>Emitted(14, 41) Source(23, 41) + SourceIndex(0)
+13>Emitted(14, 50) Source(23, 50) + SourceIndex(0)
+14>Emitted(14, 51) Source(23, 51) + SourceIndex(0)
+15>Emitted(14, 52) Source(23, 52) + SourceIndex(0)
+16>Emitted(14, 53) Source(23, 53) + SourceIndex(0)
+---
+>>>[numberB] = robotB;
+1 >
+2 >^
+3 > ^^^^^^^
+4 >        ^
+5 >         ^^^
+6 >            ^^^^^^
+7 >                  ^
+8 >                   ^^^^^^->
+1 >
+  >
+  >
+2 >[
+3 > numberB
+4 >        ]
+5 >          = 
+6 >            robotB
+7 >                  ;
+1 >Emitted(15, 1) Source(25, 1) + SourceIndex(0)
+2 >Emitted(15, 2) Source(25, 2) + SourceIndex(0)
+3 >Emitted(15, 9) Source(25, 9) + SourceIndex(0)
+4 >Emitted(15, 10) Source(25, 10) + SourceIndex(0)
+5 >Emitted(15, 13) Source(25, 13) + SourceIndex(0)
+6 >Emitted(15, 19) Source(25, 19) + SourceIndex(0)
+7 >Emitted(15, 20) Source(25, 20) + SourceIndex(0)
+---
+>>>[numberB] = getRobotB();
+1->
+2 >^
+3 > ^^^^^^^
+4 >        ^
+5 >         ^^^
+6 >            ^^^^^^^^^
+7 >                     ^^
+8 >                       ^
+9 >                        ^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >[
+3 > numberB
+4 >        ]
+5 >          = 
+6 >            getRobotB
+7 >                     ()
+8 >                       ;
+1->Emitted(16, 1) Source(26, 1) + SourceIndex(0)
+2 >Emitted(16, 2) Source(26, 2) + SourceIndex(0)
+3 >Emitted(16, 9) Source(26, 9) + SourceIndex(0)
+4 >Emitted(16, 10) Source(26, 10) + SourceIndex(0)
+5 >Emitted(16, 13) Source(26, 13) + SourceIndex(0)
+6 >Emitted(16, 22) Source(26, 22) + SourceIndex(0)
+7 >Emitted(16, 24) Source(26, 24) + SourceIndex(0)
+8 >Emitted(16, 25) Source(26, 25) + SourceIndex(0)
+---
+>>>[numberB] = [2, "trimmer", "trimming"];
+1->
+2 >^
+3 > ^^^^^^^
+4 >        ^
+5 >         ^^^
+6 >            ^
+7 >             ^
+8 >              ^^
+9 >                ^^^^^^^^^
+10>                         ^^
+11>                           ^^^^^^^^^^
+12>                                     ^
+13>                                      ^
+1->
+  >
+2 >[
+3 > numberB
+4 >        ]
+5 >          = 
+6 >            [
+7 >             2
+8 >              , 
+9 >                "trimmer"
+10>                         , 
+11>                           "trimming"
+12>                                     ]
+13>                                      ;
+1->Emitted(17, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(17, 2) Source(27, 2) + SourceIndex(0)
+3 >Emitted(17, 9) Source(27, 9) + SourceIndex(0)
+4 >Emitted(17, 10) Source(27, 10) + SourceIndex(0)
+5 >Emitted(17, 13) Source(27, 13) + SourceIndex(0)
+6 >Emitted(17, 14) Source(27, 14) + SourceIndex(0)
+7 >Emitted(17, 15) Source(27, 15) + SourceIndex(0)
+8 >Emitted(17, 17) Source(27, 17) + SourceIndex(0)
+9 >Emitted(17, 26) Source(27, 26) + SourceIndex(0)
+10>Emitted(17, 28) Source(27, 28) + SourceIndex(0)
+11>Emitted(17, 38) Source(27, 38) + SourceIndex(0)
+12>Emitted(17, 39) Source(27, 39) + SourceIndex(0)
+13>Emitted(17, 40) Source(27, 40) + SourceIndex(0)
+---
+>>>[nameMB] = multiRobotB;
+1 >
+2 >^
+3 > ^^^^^^
+4 >       ^
+5 >        ^^^
+6 >           ^^^^^^^^^^^
+7 >                      ^
+8 >                       ^^^^^^->
+1 >
+  >
+2 >[
+3 > nameMB
+4 >       ]
+5 >         = 
+6 >           multiRobotB
+7 >                      ;
+1 >Emitted(18, 1) Source(28, 1) + SourceIndex(0)
+2 >Emitted(18, 2) Source(28, 2) + SourceIndex(0)
+3 >Emitted(18, 8) Source(28, 8) + SourceIndex(0)
+4 >Emitted(18, 9) Source(28, 9) + SourceIndex(0)
+5 >Emitted(18, 12) Source(28, 12) + SourceIndex(0)
+6 >Emitted(18, 23) Source(28, 23) + SourceIndex(0)
+7 >Emitted(18, 24) Source(28, 24) + SourceIndex(0)
+---
+>>>[nameMB] = getMultiRobotB();
+1->
+2 >^
+3 > ^^^^^^
+4 >       ^
+5 >        ^^^
+6 >           ^^^^^^^^^^^^^^
+7 >                         ^^
+8 >                           ^
+9 >                            ^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >[
+3 > nameMB
+4 >       ]
+5 >         = 
+6 >           getMultiRobotB
+7 >                         ()
+8 >                           ;
+1->Emitted(19, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(19, 2) Source(29, 2) + SourceIndex(0)
+3 >Emitted(19, 8) Source(29, 8) + SourceIndex(0)
+4 >Emitted(19, 9) Source(29, 9) + SourceIndex(0)
+5 >Emitted(19, 12) Source(29, 12) + SourceIndex(0)
+6 >Emitted(19, 26) Source(29, 26) + SourceIndex(0)
+7 >Emitted(19, 28) Source(29, 28) + SourceIndex(0)
+8 >Emitted(19, 29) Source(29, 29) + SourceIndex(0)
+---
+>>>[nameMB] = ["trimmer", ["trimming", "edging"]];
+1->
+2 >^
+3 > ^^^^^^
+4 >       ^
+5 >        ^^^
+6 >           ^
+7 >            ^^^^^^^^^
+8 >                     ^^
+9 >                       ^
+10>                        ^^^^^^^^^^
+11>                                  ^^
+12>                                    ^^^^^^^^
+13>                                            ^
+14>                                             ^
+15>                                              ^
+1->
+  >
+2 >[
+3 > nameMB
+4 >       ]
+5 >         = 
+6 >           [
+7 >            "trimmer"
+8 >                     , 
+9 >                       [
+10>                        "trimming"
+11>                                  , 
+12>                                    "edging"
+13>                                            ]
+14>                                             ]
+15>                                              ;
+1->Emitted(20, 1) Source(30, 1) + SourceIndex(0)
+2 >Emitted(20, 2) Source(30, 2) + SourceIndex(0)
+3 >Emitted(20, 8) Source(30, 8) + SourceIndex(0)
+4 >Emitted(20, 9) Source(30, 9) + SourceIndex(0)
+5 >Emitted(20, 12) Source(30, 12) + SourceIndex(0)
+6 >Emitted(20, 13) Source(30, 13) + SourceIndex(0)
+7 >Emitted(20, 22) Source(30, 22) + SourceIndex(0)
+8 >Emitted(20, 24) Source(30, 24) + SourceIndex(0)
+9 >Emitted(20, 25) Source(30, 25) + SourceIndex(0)
+10>Emitted(20, 35) Source(30, 35) + SourceIndex(0)
+11>Emitted(20, 37) Source(30, 37) + SourceIndex(0)
+12>Emitted(20, 45) Source(30, 45) + SourceIndex(0)
+13>Emitted(20, 46) Source(30, 46) + SourceIndex(0)
+14>Emitted(20, 47) Source(30, 47) + SourceIndex(0)
+15>Emitted(20, 48) Source(30, 48) + SourceIndex(0)
+---
+>>>[numberB, nameB, skillB] = robotB;
+1 >
+2 >^
+3 > ^^^^^^^
+4 >        ^^
+5 >          ^^^^^
+6 >               ^^
+7 >                 ^^^^^^
+8 >                       ^
+9 >                        ^^^
+10>                           ^^^^^^
+11>                                 ^
+12>                                  ^^^^^^->
+1 >
+  >
+  >
+2 >[
+3 > numberB
+4 >        , 
+5 >          nameB
+6 >               , 
+7 >                 skillB
+8 >                       ]
+9 >                         = 
+10>                           robotB
+11>                                 ;
+1 >Emitted(21, 1) Source(32, 1) + SourceIndex(0)
+2 >Emitted(21, 2) Source(32, 2) + SourceIndex(0)
+3 >Emitted(21, 9) Source(32, 9) + SourceIndex(0)
+4 >Emitted(21, 11) Source(32, 11) + SourceIndex(0)
+5 >Emitted(21, 16) Source(32, 16) + SourceIndex(0)
+6 >Emitted(21, 18) Source(32, 18) + SourceIndex(0)
+7 >Emitted(21, 24) Source(32, 24) + SourceIndex(0)
+8 >Emitted(21, 25) Source(32, 25) + SourceIndex(0)
+9 >Emitted(21, 28) Source(32, 28) + SourceIndex(0)
+10>Emitted(21, 34) Source(32, 34) + SourceIndex(0)
+11>Emitted(21, 35) Source(32, 35) + SourceIndex(0)
+---
+>>>[numberB, nameB, skillB] = getRobotB();
+1->
+2 >^
+3 > ^^^^^^^
+4 >        ^^
+5 >          ^^^^^
+6 >               ^^
+7 >                 ^^^^^^
+8 >                       ^
+9 >                        ^^^
+10>                           ^^^^^^^^^
+11>                                    ^^
+12>                                      ^
+13>                                       ^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >[
+3 > numberB
+4 >        , 
+5 >          nameB
+6 >               , 
+7 >                 skillB
+8 >                       ]
+9 >                         = 
+10>                           getRobotB
+11>                                    ()
+12>                                      ;
+1->Emitted(22, 1) Source(33, 1) + SourceIndex(0)
+2 >Emitted(22, 2) Source(33, 2) + SourceIndex(0)
+3 >Emitted(22, 9) Source(33, 9) + SourceIndex(0)
+4 >Emitted(22, 11) Source(33, 11) + SourceIndex(0)
+5 >Emitted(22, 16) Source(33, 16) + SourceIndex(0)
+6 >Emitted(22, 18) Source(33, 18) + SourceIndex(0)
+7 >Emitted(22, 24) Source(33, 24) + SourceIndex(0)
+8 >Emitted(22, 25) Source(33, 25) + SourceIndex(0)
+9 >Emitted(22, 28) Source(33, 28) + SourceIndex(0)
+10>Emitted(22, 37) Source(33, 37) + SourceIndex(0)
+11>Emitted(22, 39) Source(33, 39) + SourceIndex(0)
+12>Emitted(22, 40) Source(33, 40) + SourceIndex(0)
+---
+>>>[numberB, nameB, skillB] = [2, "trimmer", "trimming"];
+1->
+2 >^
+3 > ^^^^^^^
+4 >        ^^
+5 >          ^^^^^
+6 >               ^^
+7 >                 ^^^^^^
+8 >                       ^
+9 >                        ^^^
+10>                           ^
+11>                            ^
+12>                             ^^
+13>                               ^^^^^^^^^
+14>                                        ^^
+15>                                          ^^^^^^^^^^
+16>                                                    ^
+17>                                                     ^
+18>                                                      ^^^^->
+1->
+  >
+2 >[
+3 > numberB
+4 >        , 
+5 >          nameB
+6 >               , 
+7 >                 skillB
+8 >                       ]
+9 >                         = 
+10>                           [
+11>                            2
+12>                             , 
+13>                               "trimmer"
+14>                                        , 
+15>                                          "trimming"
+16>                                                    ]
+17>                                                     ;
+1->Emitted(23, 1) Source(34, 1) + SourceIndex(0)
+2 >Emitted(23, 2) Source(34, 2) + SourceIndex(0)
+3 >Emitted(23, 9) Source(34, 9) + SourceIndex(0)
+4 >Emitted(23, 11) Source(34, 11) + SourceIndex(0)
+5 >Emitted(23, 16) Source(34, 16) + SourceIndex(0)
+6 >Emitted(23, 18) Source(34, 18) + SourceIndex(0)
+7 >Emitted(23, 24) Source(34, 24) + SourceIndex(0)
+8 >Emitted(23, 25) Source(34, 25) + SourceIndex(0)
+9 >Emitted(23, 28) Source(34, 28) + SourceIndex(0)
+10>Emitted(23, 29) Source(34, 29) + SourceIndex(0)
+11>Emitted(23, 30) Source(34, 30) + SourceIndex(0)
+12>Emitted(23, 32) Source(34, 32) + SourceIndex(0)
+13>Emitted(23, 41) Source(34, 41) + SourceIndex(0)
+14>Emitted(23, 43) Source(34, 43) + SourceIndex(0)
+15>Emitted(23, 53) Source(34, 53) + SourceIndex(0)
+16>Emitted(23, 54) Source(34, 54) + SourceIndex(0)
+17>Emitted(23, 55) Source(34, 55) + SourceIndex(0)
+---
+>>>[nameMB, [primarySkillB, secondarySkillB]] = multiRobotB;
+1->
+2 >^
+3 > ^^^^^^
+4 >       ^^
+5 >         ^
+6 >          ^^^^^^^^^^^^^
+7 >                       ^^
+8 >                         ^^^^^^^^^^^^^^^
+9 >                                        ^
+10>                                         ^
+11>                                          ^^^
+12>                                             ^^^^^^^^^^^
+13>                                                        ^
+14>                                                         ^^^^^^->
+1->
+  >
+2 >[
+3 > nameMB
+4 >       , 
+5 >         [
+6 >          primarySkillB
+7 >                       , 
+8 >                         secondarySkillB
+9 >                                        ]
+10>                                         ]
+11>                                           = 
+12>                                             multiRobotB
+13>                                                        ;
+1->Emitted(24, 1) Source(35, 1) + SourceIndex(0)
+2 >Emitted(24, 2) Source(35, 2) + SourceIndex(0)
+3 >Emitted(24, 8) Source(35, 8) + SourceIndex(0)
+4 >Emitted(24, 10) Source(35, 10) + SourceIndex(0)
+5 >Emitted(24, 11) Source(35, 11) + SourceIndex(0)
+6 >Emitted(24, 24) Source(35, 24) + SourceIndex(0)
+7 >Emitted(24, 26) Source(35, 26) + SourceIndex(0)
+8 >Emitted(24, 41) Source(35, 41) + SourceIndex(0)
+9 >Emitted(24, 42) Source(35, 42) + SourceIndex(0)
+10>Emitted(24, 43) Source(35, 43) + SourceIndex(0)
+11>Emitted(24, 46) Source(35, 46) + SourceIndex(0)
+12>Emitted(24, 57) Source(35, 57) + SourceIndex(0)
+13>Emitted(24, 58) Source(35, 58) + SourceIndex(0)
+---
+>>>[nameMB, [primarySkillB, secondarySkillB]] = getMultiRobotB();
+1->
+2 >^
+3 > ^^^^^^
+4 >       ^^
+5 >         ^
+6 >          ^^^^^^^^^^^^^
+7 >                       ^^
+8 >                         ^^^^^^^^^^^^^^^
+9 >                                        ^
+10>                                         ^
+11>                                          ^^^
+12>                                             ^^^^^^^^^^^^^^
+13>                                                           ^^
+14>                                                             ^
+15>                                                              ^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >[
+3 > nameMB
+4 >       , 
+5 >         [
+6 >          primarySkillB
+7 >                       , 
+8 >                         secondarySkillB
+9 >                                        ]
+10>                                         ]
+11>                                           = 
+12>                                             getMultiRobotB
+13>                                                           ()
+14>                                                             ;
+1->Emitted(25, 1) Source(36, 1) + SourceIndex(0)
+2 >Emitted(25, 2) Source(36, 2) + SourceIndex(0)
+3 >Emitted(25, 8) Source(36, 8) + SourceIndex(0)
+4 >Emitted(25, 10) Source(36, 10) + SourceIndex(0)
+5 >Emitted(25, 11) Source(36, 11) + SourceIndex(0)
+6 >Emitted(25, 24) Source(36, 24) + SourceIndex(0)
+7 >Emitted(25, 26) Source(36, 26) + SourceIndex(0)
+8 >Emitted(25, 41) Source(36, 41) + SourceIndex(0)
+9 >Emitted(25, 42) Source(36, 42) + SourceIndex(0)
+10>Emitted(25, 43) Source(36, 43) + SourceIndex(0)
+11>Emitted(25, 46) Source(36, 46) + SourceIndex(0)
+12>Emitted(25, 60) Source(36, 60) + SourceIndex(0)
+13>Emitted(25, 62) Source(36, 62) + SourceIndex(0)
+14>Emitted(25, 63) Source(36, 63) + SourceIndex(0)
+---
+>>>[nameMB, [primarySkillB, secondarySkillB]] = ["trimmer", ["trimming", "edging"]];
+1->
+2 >^
+3 > ^^^^^^
+4 >       ^^
+5 >         ^
+6 >          ^^^^^^^^^^^^^
+7 >                       ^^
+8 >                         ^^^^^^^^^^^^^^^
+9 >                                        ^
+10>                                         ^
+11>                                          ^^^
+12>                                             ^
+13>                                              ^^^^^^^^^
+14>                                                       ^^
+15>                                                         ^
+16>                                                          ^^^^^^^^^^
+17>                                                                    ^^
+18>                                                                      ^^^^^^^^
+19>                                                                              ^
+20>                                                                               ^
+21>                                                                                ^
+1->
+  >
+2 >[
+3 > nameMB
+4 >       , 
+5 >         [
+6 >          primarySkillB
+7 >                       , 
+8 >                         secondarySkillB
+9 >                                        ]
+10>                                         ]
+11>                                           = 
+12>                                             [
+13>                                              "trimmer"
+14>                                                       , 
+15>                                                         [
+16>                                                          "trimming"
+17>                                                                    , 
+18>                                                                      "edging"
+19>                                                                              ]
+20>                                                                               ]
+21>                                                                                ;
+1->Emitted(26, 1) Source(37, 1) + SourceIndex(0)
+2 >Emitted(26, 2) Source(37, 2) + SourceIndex(0)
+3 >Emitted(26, 8) Source(37, 8) + SourceIndex(0)
+4 >Emitted(26, 10) Source(37, 10) + SourceIndex(0)
+5 >Emitted(26, 11) Source(37, 11) + SourceIndex(0)
+6 >Emitted(26, 24) Source(37, 24) + SourceIndex(0)
+7 >Emitted(26, 26) Source(37, 26) + SourceIndex(0)
+8 >Emitted(26, 41) Source(37, 41) + SourceIndex(0)
+9 >Emitted(26, 42) Source(37, 42) + SourceIndex(0)
+10>Emitted(26, 43) Source(37, 43) + SourceIndex(0)
+11>Emitted(26, 46) Source(37, 46) + SourceIndex(0)
+12>Emitted(26, 47) Source(37, 47) + SourceIndex(0)
+13>Emitted(26, 56) Source(37, 56) + SourceIndex(0)
+14>Emitted(26, 58) Source(37, 58) + SourceIndex(0)
+15>Emitted(26, 59) Source(37, 59) + SourceIndex(0)
+16>Emitted(26, 69) Source(37, 69) + SourceIndex(0)
+17>Emitted(26, 71) Source(37, 71) + SourceIndex(0)
+18>Emitted(26, 79) Source(37, 79) + SourceIndex(0)
+19>Emitted(26, 80) Source(37, 80) + SourceIndex(0)
+20>Emitted(26, 81) Source(37, 81) + SourceIndex(0)
+21>Emitted(26, 82) Source(37, 82) + SourceIndex(0)
+---
+>>>[numberB, ...robotAInfo] = robotB;
+1 >
+2 >^
+3 > ^^^^^^^
+4 >        ^^
+5 >          ^^^
+6 >             ^^^^^^^^^^
+7 >                       ^
+8 >                        ^^^
+9 >                           ^^^^^^
+10>                                 ^
+11>                                  ^^^^^^->
+1 >
+  >
+  >
+2 >[
+3 > numberB
+4 >        , 
+5 >          ...
+6 >             robotAInfo
+7 >                       ]
+8 >                         = 
+9 >                           robotB
+10>                                 ;
+1 >Emitted(27, 1) Source(39, 1) + SourceIndex(0)
+2 >Emitted(27, 2) Source(39, 2) + SourceIndex(0)
+3 >Emitted(27, 9) Source(39, 9) + SourceIndex(0)
+4 >Emitted(27, 11) Source(39, 11) + SourceIndex(0)
+5 >Emitted(27, 14) Source(39, 14) + SourceIndex(0)
+6 >Emitted(27, 24) Source(39, 24) + SourceIndex(0)
+7 >Emitted(27, 25) Source(39, 25) + SourceIndex(0)
+8 >Emitted(27, 28) Source(39, 28) + SourceIndex(0)
+9 >Emitted(27, 34) Source(39, 34) + SourceIndex(0)
+10>Emitted(27, 35) Source(39, 35) + SourceIndex(0)
+---
+>>>[numberB, ...robotAInfo] = getRobotB();
+1->
+2 >^
+3 > ^^^^^^^
+4 >        ^^
+5 >          ^^^
+6 >             ^^^^^^^^^^
+7 >                       ^
+8 >                        ^^^
+9 >                           ^^^^^^^^^
+10>                                    ^^
+11>                                      ^
+12>                                       ^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >[
+3 > numberB
+4 >        , 
+5 >          ...
+6 >             robotAInfo
+7 >                       ]
+8 >                         = 
+9 >                           getRobotB
+10>                                    ()
+11>                                      ;
+1->Emitted(28, 1) Source(40, 1) + SourceIndex(0)
+2 >Emitted(28, 2) Source(40, 2) + SourceIndex(0)
+3 >Emitted(28, 9) Source(40, 9) + SourceIndex(0)
+4 >Emitted(28, 11) Source(40, 11) + SourceIndex(0)
+5 >Emitted(28, 14) Source(40, 14) + SourceIndex(0)
+6 >Emitted(28, 24) Source(40, 24) + SourceIndex(0)
+7 >Emitted(28, 25) Source(40, 25) + SourceIndex(0)
+8 >Emitted(28, 28) Source(40, 28) + SourceIndex(0)
+9 >Emitted(28, 37) Source(40, 37) + SourceIndex(0)
+10>Emitted(28, 39) Source(40, 39) + SourceIndex(0)
+11>Emitted(28, 40) Source(40, 40) + SourceIndex(0)
+---
+>>>[numberB, ...robotAInfo] = [2, "trimmer", "trimming"];
+1->
+2 >^
+3 > ^^^^^^^
+4 >        ^^
+5 >          ^^^
+6 >             ^^^^^^^^^^
+7 >                       ^
+8 >                        ^^^
+9 >                           ^
+10>                            ^
+11>                             ^^
+12>                               ^^^^^^^^^
+13>                                        ^^
+14>                                          ^^^^^^^^^^
+15>                                                    ^
+16>                                                     ^
+1->
+  >
+2 >[
+3 > numberB
+4 >        , 
+5 >          ...
+6 >             robotAInfo
+7 >                       ]
+8 >                         = <Robot>
+9 >                           [
+10>                            2
+11>                             , 
+12>                               "trimmer"
+13>                                        , 
+14>                                          "trimming"
+15>                                                    ]
+16>                                                     ;
+1->Emitted(29, 1) Source(41, 1) + SourceIndex(0)
+2 >Emitted(29, 2) Source(41, 2) + SourceIndex(0)
+3 >Emitted(29, 9) Source(41, 9) + SourceIndex(0)
+4 >Emitted(29, 11) Source(41, 11) + SourceIndex(0)
+5 >Emitted(29, 14) Source(41, 14) + SourceIndex(0)
+6 >Emitted(29, 24) Source(41, 24) + SourceIndex(0)
+7 >Emitted(29, 25) Source(41, 25) + SourceIndex(0)
+8 >Emitted(29, 28) Source(41, 35) + SourceIndex(0)
+9 >Emitted(29, 29) Source(41, 36) + SourceIndex(0)
+10>Emitted(29, 30) Source(41, 37) + SourceIndex(0)
+11>Emitted(29, 32) Source(41, 39) + SourceIndex(0)
+12>Emitted(29, 41) Source(41, 48) + SourceIndex(0)
+13>Emitted(29, 43) Source(41, 50) + SourceIndex(0)
+14>Emitted(29, 53) Source(41, 60) + SourceIndex(0)
+15>Emitted(29, 54) Source(41, 61) + SourceIndex(0)
+16>Emitted(29, 55) Source(41, 62) + SourceIndex(0)
+---
+>>>[...multiRobotAInfo] = multiRobotA;
+1 >
+2 >^
+3 > ^^^
+4 >    ^^^^^^^^^^^^^^^
+5 >                   ^
+6 >                    ^^^
+7 >                       ^^^^^^^^^^^
+8 >                                  ^
+9 >                                   ^^^^^^->
+1 >
+  >
+2 >[
+3 > ...
+4 >    multiRobotAInfo
+5 >                   ]
+6 >                     = 
+7 >                       multiRobotA
+8 >                                  ;
+1 >Emitted(30, 1) Source(42, 1) + SourceIndex(0)
+2 >Emitted(30, 2) Source(42, 2) + SourceIndex(0)
+3 >Emitted(30, 5) Source(42, 5) + SourceIndex(0)
+4 >Emitted(30, 20) Source(42, 20) + SourceIndex(0)
+5 >Emitted(30, 21) Source(42, 21) + SourceIndex(0)
+6 >Emitted(30, 24) Source(42, 24) + SourceIndex(0)
+7 >Emitted(30, 35) Source(42, 35) + SourceIndex(0)
+8 >Emitted(30, 36) Source(42, 36) + SourceIndex(0)
+---
+>>>[...multiRobotAInfo] = getMultiRobotB();
+1->
+2 >^
+3 > ^^^
+4 >    ^^^^^^^^^^^^^^^
+5 >                   ^
+6 >                    ^^^
+7 >                       ^^^^^^^^^^^^^^
+8 >                                     ^^
+9 >                                       ^
+10>                                        ^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >[
+3 > ...
+4 >    multiRobotAInfo
+5 >                   ]
+6 >                     = 
+7 >                       getMultiRobotB
+8 >                                     ()
+9 >                                       ;
+1->Emitted(31, 1) Source(43, 1) + SourceIndex(0)
+2 >Emitted(31, 2) Source(43, 2) + SourceIndex(0)
+3 >Emitted(31, 5) Source(43, 5) + SourceIndex(0)
+4 >Emitted(31, 20) Source(43, 20) + SourceIndex(0)
+5 >Emitted(31, 21) Source(43, 21) + SourceIndex(0)
+6 >Emitted(31, 24) Source(43, 24) + SourceIndex(0)
+7 >Emitted(31, 38) Source(43, 38) + SourceIndex(0)
+8 >Emitted(31, 40) Source(43, 40) + SourceIndex(0)
+9 >Emitted(31, 41) Source(43, 41) + SourceIndex(0)
+---
+>>>[...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]];
+1->
+2 >^
+3 > ^^^
+4 >    ^^^^^^^^^^^^^^^
+5 >                   ^
+6 >                    ^^^
+7 >                       ^
+8 >                        ^^^^^^^^^
+9 >                                 ^^
+10>                                   ^
+11>                                    ^^^^^^^^^^
+12>                                              ^^
+13>                                                ^^^^^^^^
+14>                                                        ^
+15>                                                         ^
+16>                                                          ^
+1->
+  >
+2 >[
+3 > ...
+4 >    multiRobotAInfo
+5 >                   ]
+6 >                     = 
+7 >                       [
+8 >                        "trimmer"
+9 >                                 , 
+10>                                   [
+11>                                    "trimming"
+12>                                              , 
+13>                                                "edging"
+14>                                                        ]
+15>                                                         ]
+16>                                                          ;
+1->Emitted(32, 1) Source(44, 1) + SourceIndex(0)
+2 >Emitted(32, 2) Source(44, 2) + SourceIndex(0)
+3 >Emitted(32, 5) Source(44, 5) + SourceIndex(0)
+4 >Emitted(32, 20) Source(44, 20) + SourceIndex(0)
+5 >Emitted(32, 21) Source(44, 21) + SourceIndex(0)
+6 >Emitted(32, 24) Source(44, 24) + SourceIndex(0)
+7 >Emitted(32, 25) Source(44, 25) + SourceIndex(0)
+8 >Emitted(32, 34) Source(44, 34) + SourceIndex(0)
+9 >Emitted(32, 36) Source(44, 36) + SourceIndex(0)
+10>Emitted(32, 37) Source(44, 37) + SourceIndex(0)
+11>Emitted(32, 47) Source(44, 47) + SourceIndex(0)
+12>Emitted(32, 49) Source(44, 49) + SourceIndex(0)
+13>Emitted(32, 57) Source(44, 57) + SourceIndex(0)
+14>Emitted(32, 58) Source(44, 58) + SourceIndex(0)
+15>Emitted(32, 59) Source(44, 59) + SourceIndex(0)
+16>Emitted(32, 60) Source(44, 60) + SourceIndex(0)
+---
+>>>if (nameA == nameB) {
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^^
+5 >             ^^^^^
+6 >                  ^^
+7 >                    ^
+8 >                     ^^^^->
+1 >
+  >
+  >
+2 >if (
+3 >    nameA
+4 >          == 
+5 >             nameB
+6 >                  ) 
+7 >                    {
+1 >Emitted(33, 1) Source(46, 1) + SourceIndex(0)
+2 >Emitted(33, 5) Source(46, 5) + SourceIndex(0)
+3 >Emitted(33, 10) Source(46, 10) + SourceIndex(0)
+4 >Emitted(33, 14) Source(46, 14) + SourceIndex(0)
+5 >Emitted(33, 19) Source(46, 19) + SourceIndex(0)
+6 >Emitted(33, 21) Source(46, 21) + SourceIndex(0)
+7 >Emitted(33, 22) Source(46, 22) + SourceIndex(0)
+---
+>>>    console.log(skillB);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1->
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                skillB
+7 >                      )
+8 >                       ;
+1->Emitted(34, 5) Source(47, 5) + SourceIndex(0)
+2 >Emitted(34, 12) Source(47, 12) + SourceIndex(0)
+3 >Emitted(34, 13) Source(47, 13) + SourceIndex(0)
+4 >Emitted(34, 16) Source(47, 16) + SourceIndex(0)
+5 >Emitted(34, 17) Source(47, 17) + SourceIndex(0)
+6 >Emitted(34, 23) Source(47, 23) + SourceIndex(0)
+7 >Emitted(34, 24) Source(47, 24) + SourceIndex(0)
+8 >Emitted(34, 25) Source(47, 25) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(35, 1) Source(48, 1) + SourceIndex(0)
+2 >Emitted(35, 2) Source(48, 2) + SourceIndex(0)
+---
+>>>function getRobotB() {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^
+4 >                  ^^^
+1->
+  >
+  >
+2 >function 
+3 >         getRobotB
+4 >                  () 
+1->Emitted(36, 1) Source(50, 1) + SourceIndex(0)
+2 >Emitted(36, 10) Source(50, 10) + SourceIndex(0)
+3 >Emitted(36, 19) Source(50, 19) + SourceIndex(0)
+4 >Emitted(36, 22) Source(50, 22) + SourceIndex(0)
+---
+>>>    return robotB;
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^
+4 >                 ^
+1 >{
+  >    
+2 >    return 
+3 >           robotB
+4 >                 ;
+1 >Emitted(37, 5) Source(51, 5) + SourceIndex(0)
+2 >Emitted(37, 12) Source(51, 12) + SourceIndex(0)
+3 >Emitted(37, 18) Source(51, 18) + SourceIndex(0)
+4 >Emitted(37, 19) Source(51, 19) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >
+  >}
+1 >Emitted(38, 1) Source(51, 19) + SourceIndex(0)
+2 >Emitted(38, 2) Source(52, 2) + SourceIndex(0)
+---
+>>>function getMultiRobotB() {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^
+4 >                       ^^^
+1->
+  >
+  >
+2 >function 
+3 >         getMultiRobotB
+4 >                       () 
+1->Emitted(39, 1) Source(54, 1) + SourceIndex(0)
+2 >Emitted(39, 10) Source(54, 10) + SourceIndex(0)
+3 >Emitted(39, 24) Source(54, 24) + SourceIndex(0)
+4 >Emitted(39, 27) Source(54, 27) + SourceIndex(0)
+---
+>>>    return multiRobotB;
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^
+4 >                      ^
+1 >{
+  >    
+2 >    return 
+3 >           multiRobotB
+4 >                      ;
+1 >Emitted(40, 5) Source(55, 5) + SourceIndex(0)
+2 >Emitted(40, 12) Source(55, 12) + SourceIndex(0)
+3 >Emitted(40, 23) Source(55, 23) + SourceIndex(0)
+4 >Emitted(40, 24) Source(55, 24) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >
+  >}
+1 >Emitted(41, 1) Source(55, 24) + SourceIndex(0)
+2 >Emitted(41, 2) Source(56, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js.map

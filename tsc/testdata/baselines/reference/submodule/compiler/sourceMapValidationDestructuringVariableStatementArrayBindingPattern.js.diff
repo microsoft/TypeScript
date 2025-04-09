@@ -19,4 +19,3 @@
  if (nameA == nameA2) {
      console.log(skillA2);
  }
--//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern.js.map

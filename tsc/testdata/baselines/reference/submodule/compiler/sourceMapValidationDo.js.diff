@@ -1,7 +1,0 @@
---- old.sourceMapValidationDo.js
-+++ new.sourceMapValidationDo.js
-@@= skipped -17, +17 lines =@@
- do {
-     i++;
- } while (i < 20);
--//# sourceMappingURL=sourceMapValidationDo.js.map

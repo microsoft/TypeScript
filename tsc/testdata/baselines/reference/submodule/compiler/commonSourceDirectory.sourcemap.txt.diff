@@ -1,0 +1,34 @@
+--- old.commonSourceDirectory.sourcemap.txt
++++ new.commonSourceDirectory.sourcemap.txt
+@@= skipped -17, +17 lines =@@
+ 1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(3, 59) Source(1, 59) + SourceIndex(0)
+ ---
+->>>var foo_1 = require("foo");
++>>>const foo_1 = require("foo");
+ 1 >
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-3 >                           ^->
++2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++3 >                             ^->
+ 1 >
+   >
+ 2 >import { x } from "foo";
+ 1 >Emitted(4, 1) Source(2, 1) + SourceIndex(0)
+-2 >Emitted(4, 28) Source(2, 25) + SourceIndex(0)
++2 >Emitted(4, 30) Source(2, 25) + SourceIndex(0)
+ ---
+->>>var bar_1 = require("bar");
++>>>const bar_1 = require("bar");
+ 1->
+-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
++2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 1->
+   >
+ 2 >import { y } from "bar";
+ 1->Emitted(5, 1) Source(3, 1) + SourceIndex(0)
+-2 >Emitted(5, 28) Source(3, 25) + SourceIndex(0)
++2 >Emitted(5, 30) Source(3, 25) + SourceIndex(0)
+ ---
+ >>>foo_1.x + bar_1.y;
+ 1 >

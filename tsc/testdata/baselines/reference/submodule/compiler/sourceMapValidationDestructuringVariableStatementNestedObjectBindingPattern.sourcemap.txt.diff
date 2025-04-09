@@ -1,0 +1,435 @@
+--- old.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.sourcemap.txt
++++ new.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.sourcemap.txt
+@@= skipped -155, +155 lines =@@
+ 21>Emitted(2, 87) Source(12, 94) + SourceIndex(0)
+ 22>Emitted(2, 88) Source(12, 95) + SourceIndex(0)
+ ---
+->>>var _a = robotA.skills, primaryA = _a.primary, secondaryA = _a.secondary;
++>>>var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
+ 1 >
+ 2 >^^^^
+-3 >    ^^^^^
+-4 >         ^^^^^^
+-5 >               ^^^^^^^
+-6 >                      ^^
+-7 >                        ^^^^^^^^
+-8 >                                ^^^^^^^^^^^^^
+-9 >                                             ^^
+-10>                                               ^^^^^^^^^^
+-11>                                                         ^^^^^^^^^^^^^^^
+-12>                                                                        ^
+-13>                                                                         ^^^^^^^^^^^^^^^^^^^^^^->
++3 >    ^^
++4 >      ^^^^^^
++5 >            ^^
++6 >              ^^
++7 >                ^^^^^^^
++8 >                       ^^
++9 >                         ^^^^^^^^
++10>                                 ^^
++11>                                   ^^^^^^^^^
++12>                                            ^^
++13>                                              ^^^^^^^^^^
++14>                                                        ^^
++15>                                                          ^^
++16>                                                            ^^^
++17>                                                               ^^^^^^
++18>                                                                     ^
++19>                                                                      ^^^^^^^^^^^^^^->
+ 1 >
+   >
+-  >var { 
+-2 >
+-3 >    skills: { primary: primaryA, secondary: secondaryA } } = 
+-4 >         robotA
+-5 >               
+-6 >                      
+-7 >                        primaryA
+-8 >                                
+-9 >                                             , secondary: 
+-10>                                               secondaryA
+-11>                                                          }
+-12>                                                                         } = robotA;
+-1 >Emitted(3, 1) Source(14, 7) + SourceIndex(0)
+-2 >Emitted(3, 5) Source(14, 7) + SourceIndex(0)
+-3 >Emitted(3, 10) Source(14, 64) + SourceIndex(0)
+-4 >Emitted(3, 16) Source(14, 70) + SourceIndex(0)
+-5 >Emitted(3, 23) Source(14, 59) + SourceIndex(0)
+-6 >Emitted(3, 25) Source(14, 26) + SourceIndex(0)
+-7 >Emitted(3, 33) Source(14, 34) + SourceIndex(0)
+-8 >Emitted(3, 46) Source(14, 34) + SourceIndex(0)
+-9 >Emitted(3, 48) Source(14, 47) + SourceIndex(0)
+-10>Emitted(3, 58) Source(14, 57) + SourceIndex(0)
+-11>Emitted(3, 73) Source(14, 59) + SourceIndex(0)
+-12>Emitted(3, 74) Source(14, 71) + SourceIndex(0)
++  >
++2 >var 
++3 >    { 
++4 >      skills
++5 >            : 
++6 >              { 
++7 >                primary
++8 >                       : 
++9 >                         primaryA
++10>                                 , 
++11>                                   secondary
++12>                                            : 
++13>                                              secondaryA
++14>                                                         }
++15>                                                           }
++16>                                                             = 
++17>                                                               robotA
++18>                                                                     ;
++1 >Emitted(3, 1) Source(14, 1) + SourceIndex(0)
++2 >Emitted(3, 5) Source(14, 5) + SourceIndex(0)
++3 >Emitted(3, 7) Source(14, 7) + SourceIndex(0)
++4 >Emitted(3, 13) Source(14, 13) + SourceIndex(0)
++5 >Emitted(3, 15) Source(14, 15) + SourceIndex(0)
++6 >Emitted(3, 17) Source(14, 17) + SourceIndex(0)
++7 >Emitted(3, 24) Source(14, 24) + SourceIndex(0)
++8 >Emitted(3, 26) Source(14, 26) + SourceIndex(0)
++9 >Emitted(3, 34) Source(14, 34) + SourceIndex(0)
++10>Emitted(3, 36) Source(14, 36) + SourceIndex(0)
++11>Emitted(3, 45) Source(14, 45) + SourceIndex(0)
++12>Emitted(3, 47) Source(14, 47) + SourceIndex(0)
++13>Emitted(3, 57) Source(14, 57) + SourceIndex(0)
++14>Emitted(3, 59) Source(14, 59) + SourceIndex(0)
++15>Emitted(3, 61) Source(14, 61) + SourceIndex(0)
++16>Emitted(3, 64) Source(14, 64) + SourceIndex(0)
++17>Emitted(3, 70) Source(14, 70) + SourceIndex(0)
++18>Emitted(3, 71) Source(14, 71) + SourceIndex(0)
+ ---
+->>>var nameB = robotB.name, _b = robotB.skills, primaryB = _b.primary, secondaryB = _b.secondary;
++>>>var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB;
+ 1->
+ 2 >^^^^
+-3 >    ^^^^^
+-4 >         ^^^
+-5 >            ^^^^^^
+-6 >                  ^^^^^
+-7 >                       ^^
+-8 >                         ^^^^^
+-9 >                              ^^^^^^
+-10>                                    ^^^^^^^
+-11>                                           ^^
+-12>                                             ^^^^^^^^
+-13>                                                     ^^^^^^^^^^^^^
+-14>                                                                  ^^
+-15>                                                                    ^^^^^^^^^^
+-16>                                                                              ^^^^^^^^^^^^^^^
+-17>                                                                                             ^
+-18>                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++3 >    ^^
++4 >      ^^^^
++5 >          ^^
++6 >            ^^^^^
++7 >                 ^^
++8 >                   ^^^^^^
++9 >                         ^^
++10>                           ^^
++11>                             ^^^^^^^
++12>                                    ^^
++13>                                      ^^^^^^^^
++14>                                              ^^
++15>                                                ^^^^^^^^^
++16>                                                         ^^
++17>                                                           ^^^^^^^^^^
++18>                                                                     ^^
++19>                                                                       ^^
++20>                                                                         ^^^
++21>                                                                            ^^^^^^
++22>                                                                                  ^
++23>                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1->
+-  >var { 
+-2 >name: 
+-3 >    nameB
+-4 >         , skills: { primary: primaryB, secondary: secondaryB } } = 
+-5 >            robotB
+-6 >                  
+-7 >                       , 
+-8 >                         skills: { primary: primaryB, secondary: secondaryB } } = 
+-9 >                              robotB
+-10>                                    
+-11>                                           
+-12>                                             primaryB
+-13>                                                     
+-14>                                                                  , secondary: 
+-15>                                                                    secondaryB
+-16>                                                                               }
+-17>                                                                                              } = robotB;
+-1->Emitted(4, 1) Source(15, 7) + SourceIndex(0)
+-2 >Emitted(4, 5) Source(15, 13) + SourceIndex(0)
+-3 >Emitted(4, 10) Source(15, 18) + SourceIndex(0)
+-4 >Emitted(4, 13) Source(15, 77) + SourceIndex(0)
+-5 >Emitted(4, 19) Source(15, 83) + SourceIndex(0)
+-6 >Emitted(4, 24) Source(15, 18) + SourceIndex(0)
+-7 >Emitted(4, 26) Source(15, 20) + SourceIndex(0)
+-8 >Emitted(4, 31) Source(15, 77) + SourceIndex(0)
+-9 >Emitted(4, 37) Source(15, 83) + SourceIndex(0)
+-10>Emitted(4, 44) Source(15, 72) + SourceIndex(0)
+-11>Emitted(4, 46) Source(15, 39) + SourceIndex(0)
+-12>Emitted(4, 54) Source(15, 47) + SourceIndex(0)
+-13>Emitted(4, 67) Source(15, 47) + SourceIndex(0)
+-14>Emitted(4, 69) Source(15, 60) + SourceIndex(0)
+-15>Emitted(4, 79) Source(15, 70) + SourceIndex(0)
+-16>Emitted(4, 94) Source(15, 72) + SourceIndex(0)
+-17>Emitted(4, 95) Source(15, 84) + SourceIndex(0)
++  >
++2 >var 
++3 >    { 
++4 >      name
++5 >          : 
++6 >            nameB
++7 >                 , 
++8 >                   skills
++9 >                         : 
++10>                           { 
++11>                             primary
++12>                                    : 
++13>                                      primaryB
++14>                                              , 
++15>                                                secondary
++16>                                                         : 
++17>                                                           secondaryB
++18>                                                                      }
++19>                                                                        }
++20>                                                                          = 
++21>                                                                            robotB
++22>                                                                                  ;
++1->Emitted(4, 1) Source(15, 1) + SourceIndex(0)
++2 >Emitted(4, 5) Source(15, 5) + SourceIndex(0)
++3 >Emitted(4, 7) Source(15, 7) + SourceIndex(0)
++4 >Emitted(4, 11) Source(15, 11) + SourceIndex(0)
++5 >Emitted(4, 13) Source(15, 13) + SourceIndex(0)
++6 >Emitted(4, 18) Source(15, 18) + SourceIndex(0)
++7 >Emitted(4, 20) Source(15, 20) + SourceIndex(0)
++8 >Emitted(4, 26) Source(15, 26) + SourceIndex(0)
++9 >Emitted(4, 28) Source(15, 28) + SourceIndex(0)
++10>Emitted(4, 30) Source(15, 30) + SourceIndex(0)
++11>Emitted(4, 37) Source(15, 37) + SourceIndex(0)
++12>Emitted(4, 39) Source(15, 39) + SourceIndex(0)
++13>Emitted(4, 47) Source(15, 47) + SourceIndex(0)
++14>Emitted(4, 49) Source(15, 49) + SourceIndex(0)
++15>Emitted(4, 58) Source(15, 58) + SourceIndex(0)
++16>Emitted(4, 60) Source(15, 60) + SourceIndex(0)
++17>Emitted(4, 70) Source(15, 70) + SourceIndex(0)
++18>Emitted(4, 72) Source(15, 72) + SourceIndex(0)
++19>Emitted(4, 74) Source(15, 74) + SourceIndex(0)
++20>Emitted(4, 77) Source(15, 77) + SourceIndex(0)
++21>Emitted(4, 83) Source(15, 83) + SourceIndex(0)
++22>Emitted(4, 84) Source(15, 84) + SourceIndex(0)
+ ---
+->>>var _c = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }, nameC = _c.name, _d = _c.skills, primaryB = _d.primary, secondaryB = _d.secondary;
++>>>var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
+ 1->
+ 2 >^^^^
+-3 >    ^^^^^
+-4 >         ^^
+-5 >           ^^^^
+-6 >               ^^
+-7 >                 ^^^^^^^
+-8 >                        ^^
+-9 >                          ^^^^^^
+-10>                                ^^
+-11>                                  ^^
+-12>                                    ^^^^^^^
+-13>                                           ^^
+-14>                                             ^^^^^^^^
+-15>                                                     ^^
+-16>                                                       ^^^^^^^^^
+-17>                                                                ^^
+-18>                                                                  ^^^^^^^^^^^^^^^^^
+-19>                                                                                   ^^
+-20>                                                                                     ^^
+-21>                                                                                       ^^
+-22>                                                                                         ^^^^^
+-23>                                                                                              ^^^^^^^^^^
+-24>                                                                                                        ^^
+-25>                                                                                                          ^^^^^^^^^^^^^^
+-26>                                                                                                                        ^^
+-27>                                                                                                                          ^^^^^^^^
+-28>                                                                                                                                  ^^^^^^^^^^^^^
+-29>                                                                                                                                               ^^
+-30>                                                                                                                                                 ^^^^^^^^^^
+-31>                                                                                                                                                           ^^^^^^^^^^^^^^^
+-32>                                                                                                                                                                          ^
++3 >    ^^
++4 >      ^^^^
++5 >          ^^
++6 >            ^^^^^
++7 >                 ^^
++8 >                   ^^^^^^
++9 >                         ^^
++10>                           ^^
++11>                             ^^^^^^^
++12>                                    ^^
++13>                                      ^^^^^^^^
++14>                                              ^^
++15>                                                ^^^^^^^^^
++16>                                                         ^^
++17>                                                           ^^^^^^^^^^
++18>                                                                     ^^
++19>                                                                       ^^
++20>                                                                         ^^^
++21>                                                                            ^^
++22>                                                                              ^^^^
++23>                                                                                  ^^
++24>                                                                                    ^^^^^^^
++25>                                                                                           ^^
++26>                                                                                             ^^^^^^
++27>                                                                                                   ^^
++28>                                                                                                     ^^
++29>                                                                                                       ^^^^^^^
++30>                                                                                                              ^^
++31>                                                                                                                ^^^^^^^^
++32>                                                                                                                        ^^
++33>                                                                                                                          ^^^^^^^^^
++34>                                                                                                                                   ^^
++35>                                                                                                                                     ^^^^^^^^^^^^^^^^^
++36>                                                                                                                                                      ^^
++37>                                                                                                                                                        ^^
++38>                                                                                                                                                          ^
+ 1->
+-  >var 
+-2 >
+-3 >    { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = 
+-4 >         { 
+-5 >           name
+-6 >               : 
+-7 >                 "Edger"
+-8 >                        , 
+-9 >                          skills
+-10>                                : 
+-11>                                  { 
+-12>                                    primary
+-13>                                           : 
+-14>                                             "edging"
+-15>                                                     , 
+-16>                                                       secondary
+-17>                                                                : 
+-18>                                                                  "branch trimming"
+-19>                                                                                    }
+-20>                                                                                      }
+-21>                                                                                       
+-22>                                                                                         nameC
+-23>                                                                                              
+-24>                                                                                                        , 
+-25>                                                                                                          skills: { primary: primaryB, secondary: secondaryB }
+-26>                                                                                                                        
+-27>                                                                                                                          primaryB
+-28>                                                                                                                                  
+-29>                                                                                                                                               , secondary: 
+-30>                                                                                                                                                 secondaryB
+-31>                                                                                                                                                            } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }
+-32>                                                                                                                                                                          ;
+-1->Emitted(5, 1) Source(16, 5) + SourceIndex(0)
++  >
++2 >var 
++3 >    { 
++4 >      name
++5 >          : 
++6 >            nameC
++7 >                 , 
++8 >                   skills
++9 >                         : 
++10>                           { 
++11>                             primary
++12>                                    : 
++13>                                      primaryB
++14>                                              , 
++15>                                                secondary
++16>                                                         : 
++17>                                                           secondaryB
++18>                                                                      }
++19>                                                                        }
++20>                                                                          = 
++21>                                                                            { 
++22>                                                                              name
++23>                                                                                  : 
++24>                                                                                    "Edger"
++25>                                                                                           , 
++26>                                                                                             skills
++27>                                                                                                   : 
++28>                                                                                                     { 
++29>                                                                                                       primary
++30>                                                                                                              : 
++31>                                                                                                                "edging"
++32>                                                                                                                        , 
++33>                                                                                                                          secondary
++34>                                                                                                                                   : 
++35>                                                                                                                                     "branch trimming"
++36>                                                                                                                                                       }
++37>                                                                                                                                                         }
++38>                                                                                                                                                          ;
++1->Emitted(5, 1) Source(16, 1) + SourceIndex(0)
+ 2 >Emitted(5, 5) Source(16, 5) + SourceIndex(0)
+-3 >Emitted(5, 10) Source(16, 77) + SourceIndex(0)
+-4 >Emitted(5, 12) Source(16, 79) + SourceIndex(0)
+-5 >Emitted(5, 16) Source(16, 83) + SourceIndex(0)
+-6 >Emitted(5, 18) Source(16, 85) + SourceIndex(0)
+-7 >Emitted(5, 25) Source(16, 92) + SourceIndex(0)
+-8 >Emitted(5, 27) Source(16, 94) + SourceIndex(0)
+-9 >Emitted(5, 33) Source(16, 100) + SourceIndex(0)
+-10>Emitted(5, 35) Source(16, 102) + SourceIndex(0)
+-11>Emitted(5, 37) Source(16, 104) + SourceIndex(0)
+-12>Emitted(5, 44) Source(16, 111) + SourceIndex(0)
+-13>Emitted(5, 46) Source(16, 113) + SourceIndex(0)
+-14>Emitted(5, 54) Source(16, 121) + SourceIndex(0)
+-15>Emitted(5, 56) Source(16, 123) + SourceIndex(0)
+-16>Emitted(5, 65) Source(16, 132) + SourceIndex(0)
+-17>Emitted(5, 67) Source(16, 134) + SourceIndex(0)
+-18>Emitted(5, 84) Source(16, 151) + SourceIndex(0)
+-19>Emitted(5, 86) Source(16, 153) + SourceIndex(0)
+-20>Emitted(5, 88) Source(16, 155) + SourceIndex(0)
+-21>Emitted(5, 90) Source(16, 13) + SourceIndex(0)
+-22>Emitted(5, 95) Source(16, 18) + SourceIndex(0)
+-23>Emitted(5, 105) Source(16, 18) + SourceIndex(0)
+-24>Emitted(5, 107) Source(16, 20) + SourceIndex(0)
+-25>Emitted(5, 121) Source(16, 72) + SourceIndex(0)
+-26>Emitted(5, 123) Source(16, 39) + SourceIndex(0)
+-27>Emitted(5, 131) Source(16, 47) + SourceIndex(0)
+-28>Emitted(5, 144) Source(16, 47) + SourceIndex(0)
+-29>Emitted(5, 146) Source(16, 60) + SourceIndex(0)
+-30>Emitted(5, 156) Source(16, 70) + SourceIndex(0)
+-31>Emitted(5, 171) Source(16, 155) + SourceIndex(0)
+-32>Emitted(5, 172) Source(16, 156) + SourceIndex(0)
++3 >Emitted(5, 7) Source(16, 7) + SourceIndex(0)
++4 >Emitted(5, 11) Source(16, 11) + SourceIndex(0)
++5 >Emitted(5, 13) Source(16, 13) + SourceIndex(0)
++6 >Emitted(5, 18) Source(16, 18) + SourceIndex(0)
++7 >Emitted(5, 20) Source(16, 20) + SourceIndex(0)
++8 >Emitted(5, 26) Source(16, 26) + SourceIndex(0)
++9 >Emitted(5, 28) Source(16, 28) + SourceIndex(0)
++10>Emitted(5, 30) Source(16, 30) + SourceIndex(0)
++11>Emitted(5, 37) Source(16, 37) + SourceIndex(0)
++12>Emitted(5, 39) Source(16, 39) + SourceIndex(0)
++13>Emitted(5, 47) Source(16, 47) + SourceIndex(0)
++14>Emitted(5, 49) Source(16, 49) + SourceIndex(0)
++15>Emitted(5, 58) Source(16, 58) + SourceIndex(0)
++16>Emitted(5, 60) Source(16, 60) + SourceIndex(0)
++17>Emitted(5, 70) Source(16, 70) + SourceIndex(0)
++18>Emitted(5, 72) Source(16, 72) + SourceIndex(0)
++19>Emitted(5, 74) Source(16, 74) + SourceIndex(0)
++20>Emitted(5, 77) Source(16, 77) + SourceIndex(0)
++21>Emitted(5, 79) Source(16, 79) + SourceIndex(0)
++22>Emitted(5, 83) Source(16, 83) + SourceIndex(0)
++23>Emitted(5, 85) Source(16, 85) + SourceIndex(0)
++24>Emitted(5, 92) Source(16, 92) + SourceIndex(0)
++25>Emitted(5, 94) Source(16, 94) + SourceIndex(0)
++26>Emitted(5, 100) Source(16, 100) + SourceIndex(0)
++27>Emitted(5, 102) Source(16, 102) + SourceIndex(0)
++28>Emitted(5, 104) Source(16, 104) + SourceIndex(0)
++29>Emitted(5, 111) Source(16, 111) + SourceIndex(0)
++30>Emitted(5, 113) Source(16, 113) + SourceIndex(0)
++31>Emitted(5, 121) Source(16, 121) + SourceIndex(0)
++32>Emitted(5, 123) Source(16, 123) + SourceIndex(0)
++33>Emitted(5, 132) Source(16, 132) + SourceIndex(0)
++34>Emitted(5, 134) Source(16, 134) + SourceIndex(0)
++35>Emitted(5, 151) Source(16, 151) + SourceIndex(0)
++36>Emitted(5, 153) Source(16, 153) + SourceIndex(0)
++37>Emitted(5, 155) Source(16, 155) + SourceIndex(0)
++38>Emitted(5, 156) Source(16, 156) + SourceIndex(0)
+ ---
+ >>>if (nameB == nameB) {
+ 1 >

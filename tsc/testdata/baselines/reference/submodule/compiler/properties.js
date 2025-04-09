@@ -23,3 +23,4 @@ class MyClass {
         //
     }
 }
+//# sourceMappingURL=properties.js.map

@@ -50,3 +50,4 @@ foo2(robotA);
 foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
 foo3(robotA);
 foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
+//# sourceMappingURL=sourceMapValidationDestructuringParameterNestedObjectBindingPattern.js.map

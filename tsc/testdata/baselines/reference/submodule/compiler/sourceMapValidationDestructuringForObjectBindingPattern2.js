@@ -203,3 +203,4 @@ for ({ name, skills: { primary, secondary } } =
     i = 0; i < 1; i++) {
     console.log(primaryA);
 }
+//# sourceMappingURL=sourceMapValidationDestructuringForObjectBindingPattern2.js.map

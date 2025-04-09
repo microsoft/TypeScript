@@ -23,3 +23,4 @@ var Foo;
 isn't this a lot of fun";
     var z = window.document;
 })(Foo || (Foo = {}));
+//# sourceMappingURL=sourceMap-StringLiteralWithNewLine.js.map

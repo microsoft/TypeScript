@@ -68,6 +68,7 @@ exports.createElement = Element.createElement;
 function toCamelCase(text) {
     return text[0].toLowerCase() + text.substring(1);
 }
+//# sourceMappingURL=Element.js.map
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -81,3 +82,4 @@ class A {
         ];
     }
 }
+//# sourceMappingURL=test.js.map

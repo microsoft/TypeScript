@@ -100,3 +100,4 @@ function getRobotB() {
 function getMultiRobotB() {
     return multiRobotB;
 }
+//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js.map

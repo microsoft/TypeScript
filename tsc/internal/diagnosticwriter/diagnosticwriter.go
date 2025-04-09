@@ -87,7 +87,7 @@ func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, l
 		lastLineChar++ // When length is zero, squiggle the character right after the start position.
 	}
 
-	lastLineOfFile, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, len(sourceFile.Text))
+	lastLineOfFile, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, len(sourceFile.Text()))
 
 	hasMoreThanFiveLines := lastLine-firstLine >= 4
 	gutterWidth := len(strconv.Itoa(lastLine + 1))
@@ -118,8 +118,8 @@ func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, l
 			lineEnd = sourceFile.Loc.End()
 		}
 
-		lineContent := strings.TrimRightFunc(sourceFile.Text[lineStart:lineEnd], unicode.IsSpace) // trim from end
-		lineContent = strings.ReplaceAll(lineContent, "\t", " ")                                  // convert tabs to single spaces
+		lineContent := strings.TrimRightFunc(sourceFile.Text()[lineStart:lineEnd], unicode.IsSpace) // trim from end
+		lineContent = strings.ReplaceAll(lineContent, "\t", " ")                                    // convert tabs to single spaces
 
 		// Output the gutter and the actual contents of the line.
 		fmt.Fprint(writer, indent)

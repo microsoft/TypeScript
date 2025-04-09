@@ -1,0 +1,4 @@
+//// [a.js.map]
+{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,IAAO,CAEN;AAFD,WAAO,CAAC,EAAC;IACM,GAAC,GAAG,CAAC,CAAC;AAAA,CACpB,EAFM,CAAC,KAAD,CAAC,QAEP"}
+//// [b.js.map]
+{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,IAAO,EAGN;AAHD,WAAO,EAAE,EAAC;IACN,MAAa,EAAE;KACd;IADY,GAAA,EAAE,KACd,CAAA;AAAA,CACJ,EAHM,EAAE,KAAF,EAAE,QAGR"}

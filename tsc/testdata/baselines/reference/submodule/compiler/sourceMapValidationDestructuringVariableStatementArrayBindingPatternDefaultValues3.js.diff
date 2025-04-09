@@ -63,8 +63,3 @@
  if (nameA == nameB) {
      console.log(skillB);
  }
-@@= skipped -39, +39 lines =@@
- function getMultiRobotB() {
-     return multiRobotB;
- }
--//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues3.js.map

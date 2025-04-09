@@ -19,8 +19,8 @@
 -        configurable: true
 -    }),
 -    _a);
--//# sourceMappingURL=computedPropertyNamesSourceMap2_ES5.js.map
 +    get ["goodbye"]() {
 +        return 0;
 +    }
 +};
+ //# sourceMappingURL=computedPropertyNamesSourceMap2_ES5.js.map

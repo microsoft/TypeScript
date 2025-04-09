@@ -1,0 +1,75 @@
+--- old.outModuleConcatCommonjs.sourcemap.txt
++++ new.outModuleConcatCommonjs.sourcemap.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++===================================================================
++JsFile: a.js
++mapUrl: a.js.map
++sourceRoot: 
++sources: a.ts
++===================================================================
++-------------------------------------------------------------------
++emittedFile:ref/a.js
++sourceFile:a.ts
++-------------------------------------------------------------------
++>>>"use strict";
++>>>Object.defineProperty(exports, "__esModule", { value: true });
++>>>exports.A = void 0;
++>>>class A {
++1 >
++2 >^^->
++1 >
++1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
++---
++>>>}
++1->^
++2 > ^^^^^^^^^^^^^^->
++1->export class A { }
++1->Emitted(5, 2) Source(1, 19) + SourceIndex(0)
++---
++>>>exports.A = A;
++>>>//# sourceMappingURL=a.js.map===================================================================
++JsFile: b.js
++mapUrl: b.js.map
++sourceRoot: 
++sources: b.ts
++===================================================================
++-------------------------------------------------------------------
++emittedFile:b.js
++sourceFile:b.ts
++-------------------------------------------------------------------
++>>>"use strict";
++>>>Object.defineProperty(exports, "__esModule", { value: true });
++>>>exports.B = void 0;
++>>>const a_1 = require("./ref/a");
++1 >
++2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++1 >
++2 >import {A} from "./ref/a";
++1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
++2 >Emitted(4, 32) Source(1, 27) + SourceIndex(0)
++---
++>>>class B extends a_1.A {
++1 >
++2 >^^^^^^^
++3 >       ^^^^^^^^^
++4 >                ^^^^^
++1 >
++  >
++2 >export class B 
++3 >       extends 
++4 >                A
++1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
++2 >Emitted(5, 8) Source(2, 16) + SourceIndex(0)
++3 >Emitted(5, 17) Source(2, 24) + SourceIndex(0)
++4 >Emitted(5, 22) Source(2, 25) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^->
++1 > { }
++1 >Emitted(6, 2) Source(2, 29) + SourceIndex(0)
++---
++>>>exports.B = B;
++>>>//# sourceMappingURL=b.js.map

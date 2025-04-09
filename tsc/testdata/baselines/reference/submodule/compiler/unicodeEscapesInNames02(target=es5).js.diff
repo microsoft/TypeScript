@@ -34,11 +34,3 @@
  }
  export var _;
  new Foo().;
-@@= skipped -17, +18 lines =@@
-     A7;
- }
- "!";
--//# sourceMappingURL=extendedEscapesForAstralsInVarsAndClasses.js.map
- //// [astralAsSurrogatePair.js]
- export {};
--//# sourceMappingURL=astralAsSurrogatePair.js.map

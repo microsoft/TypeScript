@@ -1,0 +1,315 @@
+===================================================================
+JsFile: sourceMapValidationClass.js
+mapUrl: sourceMapValidationClass.js.map
+sourceRoot: 
+sources: sourceMapValidationClass.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:sourceMapValidationClass.js
+sourceFile:sourceMapValidationClass.ts
+-------------------------------------------------------------------
+>>>class Greeter {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^->
+1 >
+2 >class 
+3 >      Greeter
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+---
+>>>    greeting;
+1->^^^^
+2 >    ^^^^^^^^
+3 >            ^^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >    constructor(public 
+2 >    greeting
+1->Emitted(2, 5) Source(2, 24) + SourceIndex(0)
+2 >Emitted(2, 13) Source(2, 32) + SourceIndex(0)
+---
+>>>    constructor(greeting, ...b) {
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^
+4 >                        ^^
+5 >                          ^^^
+6 >                             ^
+7 >                              ^^
+8 >                                ^^->
+1->
+2 >    constructor(public 
+3 >                greeting: string
+4 >                        , 
+5 >                          ...
+6 >                             b: string[]
+7 >                              ) 
+1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 17) Source(2, 24) + SourceIndex(0)
+3 >Emitted(3, 25) Source(2, 40) + SourceIndex(0)
+4 >Emitted(3, 27) Source(2, 42) + SourceIndex(0)
+5 >Emitted(3, 30) Source(2, 45) + SourceIndex(0)
+6 >Emitted(3, 31) Source(2, 56) + SourceIndex(0)
+7 >Emitted(3, 33) Source(2, 58) + SourceIndex(0)
+---
+>>>        this.greeting = greeting;
+1->^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                        ^^^^^^^^
+1->
+2 >                        greeting
+1->Emitted(4, 25) Source(2, 24) + SourceIndex(0)
+2 >Emitted(4, 33) Source(2, 32) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^->
+1 >: string, ...b: string[]) {
+2 >    
+  >        }
+1 >Emitted(5, 5) Source(2, 59) + SourceIndex(0)
+2 >Emitted(5, 6) Source(3, 6) + SourceIndex(0)
+---
+>>>    greet() {
+1->^^^^
+2 >    ^^^^^
+3 >         ^^^
+4 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >    
+2 >    greet
+3 >         () 
+1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(6, 10) Source(4, 10) + SourceIndex(0)
+3 >Emitted(6, 13) Source(4, 13) + SourceIndex(0)
+---
+>>>        return "<h1>" + this.greeting + "</h1>";
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^^^
+4 >                     ^^^
+5 >                        ^^^^
+6 >                            ^
+7 >                             ^^^^^^^^
+8 >                                     ^^^
+9 >                                        ^^^^^^^
+10>                                               ^
+1->{
+  >        
+2 >        return 
+3 >               "<h1>"
+4 >                      + 
+5 >                        this
+6 >                            .
+7 >                             greeting
+8 >                                      + 
+9 >                                        "</h1>"
+10>                                               ;
+1->Emitted(7, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(7, 16) Source(5, 16) + SourceIndex(0)
+3 >Emitted(7, 22) Source(5, 22) + SourceIndex(0)
+4 >Emitted(7, 25) Source(5, 25) + SourceIndex(0)
+5 >Emitted(7, 29) Source(5, 29) + SourceIndex(0)
+6 >Emitted(7, 30) Source(5, 30) + SourceIndex(0)
+7 >Emitted(7, 38) Source(5, 38) + SourceIndex(0)
+8 >Emitted(7, 41) Source(5, 41) + SourceIndex(0)
+9 >Emitted(7, 48) Source(5, 48) + SourceIndex(0)
+10>Emitted(7, 49) Source(5, 49) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^->
+1 >
+2 >    
+  >        }
+1 >Emitted(8, 5) Source(5, 49) + SourceIndex(0)
+2 >Emitted(8, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    x;
+1->^^^^
+2 >    ^
+3 >     ^
+4 >      ^^^^^^^->
+1->
+  >    private 
+2 >    x
+3 >     : string;
+1->Emitted(9, 5) Source(7, 13) + SourceIndex(0)
+2 >Emitted(9, 6) Source(7, 14) + SourceIndex(0)
+3 >Emitted(9, 7) Source(7, 23) + SourceIndex(0)
+---
+>>>    x1 = 10;
+1->^^^^
+2 >    ^^
+3 >      ^^^
+4 >         ^^
+5 >           ^
+1->
+  >    private 
+2 >    x1
+3 >      : number = 
+4 >         10
+5 >           ;
+1->Emitted(10, 5) Source(8, 13) + SourceIndex(0)
+2 >Emitted(10, 7) Source(8, 15) + SourceIndex(0)
+3 >Emitted(10, 10) Source(8, 26) + SourceIndex(0)
+4 >Emitted(10, 12) Source(8, 28) + SourceIndex(0)
+5 >Emitted(10, 13) Source(8, 29) + SourceIndex(0)
+---
+>>>    fn() {
+1 >^^^^
+2 >    ^^
+3 >      ^^^
+4 >         ^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    private 
+2 >    fn
+3 >      () 
+1 >Emitted(11, 5) Source(9, 13) + SourceIndex(0)
+2 >Emitted(11, 7) Source(9, 15) + SourceIndex(0)
+3 >Emitted(11, 10) Source(9, 18) + SourceIndex(0)
+---
+>>>        return this.greeting;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^
+5 >                    ^^^^^^^^
+6 >                            ^
+1->{
+  >        
+2 >        return 
+3 >               this
+4 >                   .
+5 >                    greeting
+6 >                            ;
+1->Emitted(12, 9) Source(10, 9) + SourceIndex(0)
+2 >Emitted(12, 16) Source(10, 16) + SourceIndex(0)
+3 >Emitted(12, 20) Source(10, 20) + SourceIndex(0)
+4 >Emitted(12, 21) Source(10, 21) + SourceIndex(0)
+5 >Emitted(12, 29) Source(10, 29) + SourceIndex(0)
+6 >Emitted(12, 30) Source(10, 30) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^->
+1 >
+2 >    
+  >        }
+1 >Emitted(13, 5) Source(10, 30) + SourceIndex(0)
+2 >Emitted(13, 6) Source(11, 6) + SourceIndex(0)
+---
+>>>    get greetings() {
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^
+4 >                 ^^^
+5 >                    ^^^^^^^^^^->
+1->
+  >    
+2 >    get 
+3 >        greetings
+4 >                 () 
+1->Emitted(14, 5) Source(12, 5) + SourceIndex(0)
+2 >Emitted(14, 9) Source(12, 9) + SourceIndex(0)
+3 >Emitted(14, 18) Source(12, 18) + SourceIndex(0)
+4 >Emitted(14, 21) Source(12, 21) + SourceIndex(0)
+---
+>>>        return this.greeting;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^
+5 >                    ^^^^^^^^
+6 >                            ^
+1->{
+  >        
+2 >        return 
+3 >               this
+4 >                   .
+5 >                    greeting
+6 >                            ;
+1->Emitted(15, 9) Source(13, 9) + SourceIndex(0)
+2 >Emitted(15, 16) Source(13, 16) + SourceIndex(0)
+3 >Emitted(15, 20) Source(13, 20) + SourceIndex(0)
+4 >Emitted(15, 21) Source(13, 21) + SourceIndex(0)
+5 >Emitted(15, 29) Source(13, 29) + SourceIndex(0)
+6 >Emitted(15, 30) Source(13, 30) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    
+  >        }
+1 >Emitted(16, 5) Source(13, 30) + SourceIndex(0)
+2 >Emitted(16, 6) Source(14, 6) + SourceIndex(0)
+---
+>>>    set greetings(greetings) {
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^
+4 >                 ^
+5 >                  ^^^^^^^^^
+6 >                           ^^
+7 >                             ^^^^^^->
+1->
+  >    
+2 >    set 
+3 >        greetings
+4 >                 (
+5 >                  greetings: string
+6 >                           ) 
+1->Emitted(17, 5) Source(15, 5) + SourceIndex(0)
+2 >Emitted(17, 9) Source(15, 9) + SourceIndex(0)
+3 >Emitted(17, 18) Source(15, 18) + SourceIndex(0)
+4 >Emitted(17, 19) Source(15, 19) + SourceIndex(0)
+5 >Emitted(17, 28) Source(15, 36) + SourceIndex(0)
+6 >Emitted(17, 30) Source(15, 38) + SourceIndex(0)
+---
+>>>        this.greeting = greetings;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^^
+5 >                     ^^^
+6 >                        ^^^^^^^^^
+7 >                                 ^
+1->{
+  >        
+2 >        this
+3 >            .
+4 >             greeting
+5 >                      = 
+6 >                        greetings
+7 >                                 ;
+1->Emitted(18, 9) Source(16, 9) + SourceIndex(0)
+2 >Emitted(18, 13) Source(16, 13) + SourceIndex(0)
+3 >Emitted(18, 14) Source(16, 14) + SourceIndex(0)
+4 >Emitted(18, 22) Source(16, 22) + SourceIndex(0)
+5 >Emitted(18, 25) Source(16, 25) + SourceIndex(0)
+6 >Emitted(18, 34) Source(16, 34) + SourceIndex(0)
+7 >Emitted(18, 35) Source(16, 35) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+2 >    
+  >        }
+1 >Emitted(19, 5) Source(16, 35) + SourceIndex(0)
+2 >Emitted(19, 6) Source(17, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(20, 2) Source(18, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationClass.js.map

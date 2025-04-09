@@ -21,3 +21,4 @@ var m1;
 (function (m1) {
     var b = new m1.c();
 })(m1 || (m1 = {}));
+//# sourceMappingURL=sourcemapValidationDuplicateNames.js.map
