@@ -414,6 +414,12 @@ const (
 	//
 	TypePrecedenceConditional TypePrecedence = iota
 
+	// JSDoc precedence (optional and variadic types)
+	//
+	//    JSDocType:
+	//      `...`? Type `=`?
+	TypePrecedenceJSDoc
+
 	// Function precedence
 	//
 	//   Type[Extends]:
@@ -651,6 +657,8 @@ func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
 	switch n.Kind {
 	case KindConditionalType:
 		return TypePrecedenceConditional
+	case KindJSDocOptionalType, KindJSDocVariadicType:
+		return TypePrecedenceJSDoc
 	case KindFunctionType, KindConstructorType:
 		return TypePrecedenceFunction
 	case KindUnionType:
@@ -684,6 +692,9 @@ func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
 		KindObjectKeyword,
 		KindIntrinsicKeyword,
 		KindVoidKeyword,
+		KindJSDocAllType,
+		KindJSDocNullableType,
+		KindJSDocNonNullableType,
 		KindLiteralType,
 		KindTypePredicate,
 		KindTypeReference,

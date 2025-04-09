@@ -2258,13 +2258,16 @@ func (p *Printer) emitTypeNode(node *ast.TypeNode, precedence ast.TypePrecedence
 		// !!! Should this actually be considered a type?
 		p.emitExpressionWithTypeArguments(node.AsExpressionWithTypeArguments())
 
-	case ast.KindJSDocAllType,
-		ast.KindJSDocNullableType,
-		ast.KindJSDocNonNullableType,
-		ast.KindJSDocOptionalType,
-		ast.KindJSDocVariadicType:
-		// TODO
-		panic("not implemented")
+	case ast.KindJSDocAllType:
+		p.emitJSDocAllType(node)
+	case ast.KindJSDocNonNullableType:
+		p.emitJSDocNonNullableType(node.AsJSDocNonNullableType())
+	case ast.KindJSDocNullableType:
+		p.emitJSDocNullableType(node.AsJSDocNullableType())
+	case ast.KindJSDocOptionalType:
+		p.emitJSDocOptionalType(node.AsJSDocOptionalType())
+	case ast.KindJSDocVariadicType:
+		p.emitJSDocVariadicType(node.AsJSDocVariadicType())
 
 	default:
 		panic(fmt.Sprintf("unhandled TypeNode: %v", node.Kind))
@@ -2315,6 +2318,38 @@ func (p *Printer) emitBindingElement(node *ast.BindingElement) {
 
 func (p *Printer) emitBindingElementNode(node *ast.BindingElementNode) {
 	p.emitBindingElement(node.AsBindingElement())
+}
+
+func (p *Printer) emitJSDocAllType(node *ast.Node) {
+	p.emitKeywordNode(node)
+}
+
+func (p *Printer) emitJSDocNonNullableType(node *ast.JSDocNonNullableType) {
+	state := p.enterNode(node.AsNode())
+	p.writePunctuation("!")
+	p.emitTypeNode(node.Type, ast.TypePrecedenceNonArray)
+	p.exitNode(node.AsNode(), state)
+}
+
+func (p *Printer) emitJSDocNullableType(node *ast.JSDocNullableType) {
+	state := p.enterNode(node.AsNode())
+	p.writePunctuation("?")
+	p.emitTypeNode(node.Type, ast.TypePrecedenceNonArray)
+	p.exitNode(node.AsNode(), state)
+}
+
+func (p *Printer) emitJSDocOptionalType(node *ast.JSDocOptionalType) {
+	state := p.enterNode(node.AsNode())
+	p.emitTypeNode(node.Type, ast.TypePrecedenceJSDoc)
+	p.writePunctuation("=")
+	p.exitNode(node.AsNode(), state)
+}
+
+func (p *Printer) emitJSDocVariadicType(node *ast.JSDocVariadicType) {
+	state := p.enterNode(node.AsNode())
+	p.writePunctuation("...")
+	p.emitTypeNode(node.Type, ast.TypePrecedenceJSDoc)
+	p.exitNode(node.AsNode(), state)
 }
 
 //
