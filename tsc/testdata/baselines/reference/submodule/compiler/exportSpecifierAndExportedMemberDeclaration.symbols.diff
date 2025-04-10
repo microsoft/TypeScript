@@ -5,7 +5,7 @@
  >Z : Symbol(Z, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 22))
  >X : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
 ->I : Symbol(X.I, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 1, 21))
-+>I : Symbol(I)
++>I : Symbol(I, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 1, 21))
  }
  
  declare module "m2" {
@@ -14,5 +14,5 @@
  >Z2 : Symbol(Z2, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 9, 21))
  >X : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
 ->I : Symbol(X.I, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 1, 21))
-+>I : Symbol(I)
++>I : Symbol(I, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 1, 21))
  }

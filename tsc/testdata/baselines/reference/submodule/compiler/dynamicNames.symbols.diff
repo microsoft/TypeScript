@@ -258,7 +258,7 @@
      [rI.x]: "b";
 ->[rI.x] : Symbol(RI[rI.x], Decl(main.ts, 119, 9))
 ->rI.x : Symbol(RI.x, Decl(main.ts, 118, 35))
-+>[rI.x] : Symbol([rI.x], Decl(main.ts, 119, 9))
++>[rI.x] : Symbol(a, Decl(main.ts, 119, 9))
 +>rI.x : Symbol(x, Decl(main.ts, 118, 35))
  >rI : Symbol(rI, Decl(main.ts, 116, 13))
 ->x : Symbol(RI.x, Decl(main.ts, 118, 35))
@@ -288,7 +288,7 @@
      [rC.x]: "b";
 ->[rC.x] : Symbol(RC[rC.x], Decl(main.ts, 126, 9))
 ->rC.x : Symbol(RC.x, Decl(main.ts, 125, 39))
-+>[rC.x] : Symbol([rC.x], Decl(main.ts, 126, 9))
++>[rC.x] : Symbol(a, Decl(main.ts, 126, 9))
 +>rC.x : Symbol(x, Decl(main.ts, 125, 39))
  >rC : Symbol(rC, Decl(main.ts, 123, 13))
 ->x : Symbol(RC.x, Decl(main.ts, 125, 39))

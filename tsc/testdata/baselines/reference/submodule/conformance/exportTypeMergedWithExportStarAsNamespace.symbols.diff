@@ -1,15 +1,6 @@
 --- old.exportTypeMergedWithExportStarAsNamespace.symbols
 +++ new.exportTypeMergedWithExportStarAsNamespace.symbols
-@@= skipped -13, +13 lines =@@
- export type MyType = Something.SubType<string>
- >MyType : Symbol(MyType, Decl(usage.ts, 1, 61))
- >Something : Symbol(Something, Decl(usage.ts, 0, 8))
-->SubType : Symbol(SubType, Decl(Something.ts, 0, 39))
-+>SubType : Symbol(SubType)
- 
- === Something.ts ===
- export type Something<A> = { value: A }
-@@= skipped -34, +34 lines =@@
+@@= skipped -47, +47 lines =@@
  >Something : Symbol(Something, Decl(prelude.ts, 1, 6), Decl(prelude.ts, 1, 40))
  >A : Symbol(A, Decl(prelude.ts, 2, 22))
  >S : Symbol(S, Decl(prelude.ts, 0, 6))

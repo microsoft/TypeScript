@@ -343,7 +343,7 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool) {
 	result.CommentDirectives = p.scanner.CommentDirectives()
 	result.Pragmas = getCommentPragmas(&p.factory, p.sourceText)
-	processPragmasIntoFields(result)
+	p.processPragmasIntoFields(result)
 	result.SetDiagnostics(attachFileToDiagnostics(p.diagnostics, result))
 	result.ExternalModuleIndicator = isFileProbablyExternalModule(result) // !!!
 	result.IsDeclarationFile = isDeclarationFile
@@ -6434,16 +6434,16 @@ func extractPragmas(commentRange ast.CommentRange, text string) []ast.Pragma {
 				}
 				argName := extractName(text, pos)
 				if argName == "" {
-					return nil
+					break
 				}
 				pos = skipBlanks(text, pos+len(argName))
 				if !match(text, pos, "=") {
-					return nil
+					break
 				}
 				pos = skipBlanks(text, pos+1)
 				value, ok := extractQuotedString(text, pos)
 				if !ok {
-					return nil
+					break
 				}
 				args[argName] = ast.PragmaArgument{
 					Name:      argName,
@@ -6483,6 +6483,9 @@ func extractPragmas(commentRange ast.CommentRange, text string) []ast.Pragma {
 			}
 			start := skipBlanks(text, pos+len(pragmaName)+1)
 			pos = skipNonBlanks(text, start)
+			if pos == start {
+				break
+			}
 			args := make(map[string]ast.PragmaArgument, 1)
 			args["factory"] = ast.PragmaArgument{
 				Name:      "factory",
@@ -6553,7 +6556,7 @@ func extractQuotedString(text string, pos int) (string, bool) {
 	return text[start:pos], true
 }
 
-func processPragmasIntoFields(context *ast.SourceFile /* !!! reportDiagnostic func(*ast.Diagnostic)*/) {
+func (p *Parser) processPragmasIntoFields(context *ast.SourceFile) {
 	context.CheckJsDirective = nil
 	context.ReferencedFiles = nil
 	context.TypeReferenceDirectives = nil
@@ -6569,10 +6572,10 @@ func processPragmasIntoFields(context *ast.SourceFile /* !!! reportDiagnostic fu
 			resolutionMode, resolutionModeOk := pragma.Args["resolution-mode"]
 			preserve, preserveOk := pragma.Args["preserve"]
 			noDefaultLib, noDefaultLibOk := pragma.Args["no-default-lib"]
-
-			if noDefaultLibOk && noDefaultLib.Value == "true" {
+			switch {
+			case noDefaultLibOk && noDefaultLib.Value == "true":
 				context.HasNoDefaultLib = true
-			} else if typesOk {
+			case typesOk:
 				var parsed core.ResolutionMode
 				if resolutionModeOk {
 					parsed = parseResolutionMode(resolutionMode.Value, types.Pos(), types.End() /*, reportDiagnostic*/)
@@ -6583,20 +6586,20 @@ func processPragmasIntoFields(context *ast.SourceFile /* !!! reportDiagnostic fu
 					ResolutionMode: parsed,
 					Preserve:       preserveOk && preserve.Value == "true",
 				})
-			} else if libOk {
+			case libOk:
 				context.LibReferenceDirectives = append(context.LibReferenceDirectives, &ast.FileReference{
 					TextRange: types.TextRange,
 					FileName:  lib.Value,
 					Preserve:  preserveOk && preserve.Value == "true",
 				})
-			} else if pathOk {
+			case pathOk:
 				context.ReferencedFiles = append(context.ReferencedFiles, &ast.FileReference{
 					TextRange: types.TextRange,
 					FileName:  path.Value,
 					Preserve:  preserveOk && preserve.Value == "true",
 				})
-			} else {
-				// reportDiagnostic(argMap.Pos, argMap.End-argMap.Pos, "Invalid reference directive syntax")
+			default:
+				p.parseErrorAtRange(pragma.TextRange, diagnostics.Invalid_reference_directive_syntax)
 			}
 		case "ts-check", "ts-nocheck":
 			// _last_ of either nocheck or check in a file is the "winner"
@@ -6610,7 +6613,7 @@ func processPragmasIntoFields(context *ast.SourceFile /* !!! reportDiagnostic fu
 			}
 
 		case "jsx", "jsxfrag", "jsximportsource", "jsxruntime":
-			// !!!
+			// Nothing to do here
 		default:
 			panic("Unhandled pragma kind: " + pragma.Name)
 		}

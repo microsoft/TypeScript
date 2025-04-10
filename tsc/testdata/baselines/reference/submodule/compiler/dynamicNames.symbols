@@ -506,7 +506,7 @@ interface RI<T extends "a" | "b"> {
 >T : Symbol(T, Decl(main.ts, 118, 13))
 
     [rI.x]: "b";
->[rI.x] : Symbol([rI.x], Decl(main.ts, 119, 9))
+>[rI.x] : Symbol(a, Decl(main.ts, 119, 9))
 >rI.x : Symbol(x, Decl(main.ts, 118, 35))
 >rI : Symbol(rI, Decl(main.ts, 116, 13))
 >x : Symbol(x, Decl(main.ts, 118, 35))
@@ -530,7 +530,7 @@ declare class RC<T extends "a" | "b"> {
 >T : Symbol(T, Decl(main.ts, 125, 17))
 
     [rC.x]: "b";
->[rC.x] : Symbol([rC.x], Decl(main.ts, 126, 9))
+>[rC.x] : Symbol(a, Decl(main.ts, 126, 9))
 >rC.x : Symbol(x, Decl(main.ts, 125, 39))
 >rC : Symbol(rC, Decl(main.ts, 123, 13))
 >x : Symbol(x, Decl(main.ts, 125, 39))

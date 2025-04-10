@@ -154,9 +154,9 @@ const Component = <T extends Animations>({
     },
   }}
   style={(anim) => {
->style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
->(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
->anim : StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>
+>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
+>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
+>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>
 
     return "";
 >"" : ""
@@ -203,9 +203,9 @@ const Component = <T extends Animations>({
     },
   }}
   style={(anim) => {
->style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
->(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
->anim : StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>
+>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
+>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
+>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>
 
     return "";
 >"" : ""

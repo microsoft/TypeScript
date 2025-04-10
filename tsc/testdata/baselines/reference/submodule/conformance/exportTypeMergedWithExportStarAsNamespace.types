@@ -13,7 +13,7 @@ export const myValue: Something<string> = Something.of("abc")
 >"abc" : "abc"
 
 export type MyType = Something.SubType<string>
->MyType : SubType<string>
+>MyType : MyType
 >Something : any
 
 === Something.ts ===

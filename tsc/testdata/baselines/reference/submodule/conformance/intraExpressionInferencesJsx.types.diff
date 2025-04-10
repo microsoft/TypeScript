@@ -56,9 +56,9 @@
 ->style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>) => string
 ->(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>) => string
 ->anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>
-+>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
-+>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
-+>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>
++>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
++>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
++>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>
  
      return "";
  >"" : ""
@@ -73,20 +73,7 @@
  
    animations={{
  >animations : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
-@@= skipped -39, +39 lines =@@
-     },
-   }}
-   style={(anim) => {
-->style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
-->(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
-->anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>
-+>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
-+>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
-+>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>
- 
-     return "";
- >"" : ""
-@@= skipped -23, +23 lines =@@
+@@= skipped -62, +62 lines =@@
  }
  
  function Foo<T>(props: Props<T>) {

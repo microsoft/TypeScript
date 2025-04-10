@@ -14,7 +14,7 @@ export const myValue: Something<string> = Something.of("abc")
 export type MyType = Something.SubType<string>
 >MyType : Symbol(MyType, Decl(usage.ts, 1, 61))
 >Something : Symbol(Something, Decl(usage.ts, 0, 8))
->SubType : Symbol(SubType)
+>SubType : Symbol(SubType, Decl(Something.ts, 0, 39))
 
 === Something.ts ===
 export type Something<A> = { value: A }
