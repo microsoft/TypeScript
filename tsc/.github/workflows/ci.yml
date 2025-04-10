@@ -187,6 +187,9 @@ jobs:
 
       - run: npx hereby generate
 
+      - run: node ./internal/lsp/lsproto/_generate/fetchModel.mjs
+      - run: node ./internal/lsp/lsproto/_generate/generate.mjs
+
       - run: git add .
       - run: git diff --staged --exit-code --stat
 
