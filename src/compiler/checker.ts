@@ -1836,6 +1836,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getNullType: () => nullType,
         getESSymbolType: () => esSymbolType,
         getNeverType: () => neverType,
+        getNonPrimitiveType: () => nonPrimitiveType,
         getOptionalType: () => optionalType,
         getPromiseType: () => getGlobalPromiseType(/*reportErrors*/ false),
         getPromiseLikeType: () => getGlobalPromiseLikeType(/*reportErrors*/ false),
