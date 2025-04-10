@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "module": "nodenext",
+        "strict": true,
+        "noEmit": true,
+        "verbatimModuleSyntax": true,
+        "allowImportingTsExtensions": true
+    }
+}

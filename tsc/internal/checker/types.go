@@ -538,6 +538,14 @@ type Type struct {
 	data        TypeData // Type specific data
 }
 
+func (t *Type) Id() TypeId {
+	return t.id
+}
+
+func (t *Type) Flags() TypeFlags {
+	return t.flags
+}
+
 // Casts for concrete struct types
 
 func (t *Type) AsIntrinsicType() *IntrinsicType             { return t.data.(*IntrinsicType) }

@@ -1,0 +1,30 @@
+KindSourceFile [0, 89), i=1, next=0
+  NodeList [0, 89), i=2, next=0
+    KindImportDeclaration [0, 26), i=3, next=10
+      KindImportClause [6, 14), i=4, next=9
+        KindNamedImports [6, 14), i=5, next=0
+          NodeList [8, 12), i=6, next=0
+            KindImportSpecifier [8, 12), i=7, next=0
+              KindIdentifier "bar" [8, 12), i=8, next=0
+      KindStringLiteral "bar" [19, 25), i=9, next=0
+    KindFunctionDeclaration [26, 82), i=10, next=28
+      NodeList [26, 33), i=11, next=13
+        KindExportKeyword [26, 33), i=12, next=0
+      KindIdentifier "foo" [42, 46), i=13, next=14
+      NodeList [47, 51), i=14, next=19
+        KindTypeParameter [47, 48), i=15, next=17
+          KindIdentifier "T" [47, 48), i=16, next=0
+        KindTypeParameter [49, 51), i=17, next=0
+          KindIdentifier "U" [49, 51), i=18, next=0
+      NodeList [53, 73), i=19, next=26
+        KindParameter [53, 62), i=20, next=23
+          KindIdentifier "a" [53, 54), i=21, next=22
+          KindStringKeyword [55, 62), i=22, next=0
+        KindParameter [63, 73), i=23, next=0
+          KindIdentifier "b" [63, 65), i=24, next=25
+          KindStringKeyword [66, 73), i=25, next=0
+      KindAnyKeyword [75, 79), i=26, next=27
+      KindBlock [79, 82), i=27, next=0
+    KindExpressionStatement [82, 89), i=28, next=0
+      KindCallExpression [82, 88), i=29, next=0
+        KindIdentifier "foo" [82, 86), i=30, next=0

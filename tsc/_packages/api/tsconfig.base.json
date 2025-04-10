@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "composite": true,
+        "forceConsistentCasingInFileNames": true,
+        "rewriteRelativeImportExtensions": true,
+        "verbatimModuleSyntax": true
+    }
+}

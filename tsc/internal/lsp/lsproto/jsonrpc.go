@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type JSONRPCVersion struct{}
@@ -43,6 +44,13 @@ func (id *ID) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &id.int)
 }
 
+func (id *ID) MustInt() int32 {
+	if id.str != "" {
+		panic("ID is not an integer")
+	}
+	return id.int
+}
+
 // TODO(jakebailey): NotificationMessage? Use RequestMessage without ID?
 
 type RequestMessage struct {
@@ -67,6 +75,11 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 	r.Method = raw.Method
 	if r.Method == MethodShutdown || r.Method == MethodExit {
 		// These methods have no params.
+		return nil
+	}
+
+	if strings.HasPrefix(string(r.Method), "@ts/") {
+		r.Params = raw.Params
 		return nil
 	}
 

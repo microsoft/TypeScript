@@ -1,0 +1,39 @@
+{
+    "private": true,
+    "name": "@typescript/ast",
+    "version": "1.0.0",
+    "description": "TypeScript AST definitions",
+    "type": "module",
+    "imports": {
+        "#syntaxKind": {
+            "@typescript/source": {
+                "types": "./src/syntaxKind.enum.ts",
+                "default": "./src/syntaxKind.ts"
+            },
+            "types": "./dist/syntaxKind.enum.d.ts",
+            "default": "./dist/syntaxKind.js"
+        },
+        "#tokenFlags": {
+            "@typescript/source": {
+                "types": "./src/tokenFlags.enum.ts",
+                "default": "./src/tokenFlags.ts"
+            },
+            "types": "./dist/tokenFlags.enum.d.ts",
+            "default": "./dist/tokenFlags.js"
+        }
+    },
+    "exports": {
+        ".": {
+            "@typescript/source": "./src/index.ts",
+            "default": "./dist/index.js"
+        },
+        "./is": {
+            "@typescript/source": "./src/is.ts",
+            "default": "./dist/is.js"
+        },
+        "./utils": {
+            "@typescript/source": "./src/utils.ts",
+            "default": "./dist/utils.js"
+        }
+    }
+}

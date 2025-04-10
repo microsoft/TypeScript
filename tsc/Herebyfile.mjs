@@ -314,18 +314,37 @@ async function runTestTools() {
     await $test({ cwd: path.join(__dirname, "_tools") })`${gotestsum("tools")} ./...`;
 }
 
+async function runTestAPI() {
+    await $`npm run -w @typescript/api test`;
+}
+
 export const testTools = task({
     name: "test:tools",
     run: runTestTools,
 });
 
+export const buildAPITests = task({
+    name: "build:api:test",
+    run: async () => {
+        await $`npm run -w @typescript/api build:test`;
+    },
+});
+
+export const testAPI = task({
+    name: "test:api",
+    dependencies: [tsgo, buildAPITests],
+    run: runTestAPI,
+});
+
 export const testAll = task({
     name: "test:all",
+    dependencies: [tsgo, buildAPITests],
     run: async () => {
         // Prevent interleaving by running these directly instead of in parallel.
         await runTests();
         await runTestBenchmarks();
         await runTestTools();
+        await runTestAPI();
     },
 });
 

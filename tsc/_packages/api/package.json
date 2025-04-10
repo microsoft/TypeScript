@@ -1,0 +1,51 @@
+{
+    "private": true,
+    "name": "@typescript/api",
+    "version": "1.0.0",
+    "type": "module",
+    "imports": {
+        "#symbolFlags": {
+            "@typescript/source": {
+                "types": "./src/symbolFlags.enum.ts",
+                "default": "./src/symbolFlags.ts"
+            },
+            "types": "./dist/symbolFlags.enum.d.ts",
+            "default": "./dist/symbolFlags.js"
+        },
+        "#typeFlags": {
+            "@typescript/source": {
+                "types": "./src/typeFlags.enum.ts",
+                "default": "./src/typeFlags.ts"
+            },
+            "types": "./dist/typeFlags.enum.d.ts",
+            "default": "./dist/typeFlags.js"
+        }
+    },
+    "exports": {
+        ".": {
+            "@typescript/source": "./src/api.ts",
+            "default": "./dist/api.js"
+        },
+        "./fs": {
+            "@typescript/source": "./src/fs.ts",
+            "default": "./dist/fs.js"
+        },
+        "./proto": {
+            "@typescript/source": "./src/proto.ts",
+            "default": "./dist/proto.js"
+        }
+    },
+    "scripts": {
+        "build": "tsc -b",
+        "build:test": "tsc -b test",
+        "bench": "node --experimental-strip-types --no-warnings --conditions @typescript/source test/api.bench.ts",
+        "test": "node --test --experimental-strip-types --no-warnings --conditions @typescript/source ./test/**/*.test.ts"
+    },
+    "devDependencies": {
+        "tinybench": "^3.1.1"
+    },
+    "dependencies": {
+        "@typescript/ast": "1.0.0",
+        "libsyncrpc": "github:microsoft/libsyncrpc#bb02d84"
+    }
+}

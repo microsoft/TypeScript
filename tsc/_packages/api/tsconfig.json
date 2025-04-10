@@ -1,0 +1,16 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "module": "node16",
+        "isolatedDeclarations": true,
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        "rootDir": "src",
+        "outDir": "dist"
+    },
+    "include": ["src"],
+    "references": [
+        { "path": "../ast" }
+    ]
+}

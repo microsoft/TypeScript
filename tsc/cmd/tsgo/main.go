@@ -133,6 +133,8 @@ func runMain() int {
 			return int(execute.CommandLine(newSystem(), nil, args[1:]))
 		case "lsp":
 			return runLSP(args[1:])
+		case "api":
+			return runAPI(args[1:])
 		}
 	}
 	opts := parseArgs()

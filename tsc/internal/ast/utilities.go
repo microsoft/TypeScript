@@ -908,6 +908,17 @@ func FindAncestor(node *Node, callback func(*Node) bool) *Node {
 	return nil
 }
 
+// Walks up the parents of a node to find the ancestor that matches the kind
+func FindAncestorKind(node *Node, kind Kind) *Node {
+	for node != nil {
+		if node.Kind == kind {
+			return node
+		}
+		node = node.Parent
+	}
+	return nil
+}
+
 type FindAncestorResult int32
 
 const (

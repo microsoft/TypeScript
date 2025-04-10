@@ -37,11 +37,14 @@
         "build": "hereby build",
         "build:watch": "hereby build:watch",
         "test": "hereby test",
+        "api:build": "npm run -w @typescript/api build",
         "extension:build": "npm run -w typescript-lsp build",
-        "extension:watch": "npm run -w typescript-lsp watch"
+        "extension:watch": "npm run -w typescript-lsp watch",
+        "node": "node --no-warnings --conditions @typescript/source"
     },
     "workspaces": [
-        "./_extension"
+        "./_extension",
+        "./_packages/*"
     ],
     "packageManager": "npm@8.19.4",
     "volta": {
