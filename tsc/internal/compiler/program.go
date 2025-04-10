@@ -41,6 +41,9 @@ type Program struct {
 	currentDirectory             string
 	configFileParsingDiagnostics []*ast.Diagnostic
 
+	sourceAffectingCompilerOptionsOnce sync.Once
+	sourceAffectingCompilerOptions     *core.SourceFileAffectingCompilerOptions
+
 	resolver *module.Resolver
 
 	comparePathsOptions tspath.ComparePathsOptions
@@ -184,12 +187,19 @@ func (p *Program) GetConfigFileParsingDiagnostics() []*ast.Diagnostic {
 	return slices.Clip(p.configFileParsingDiagnostics)
 }
 
+func (p *Program) getSourceAffectingCompilerOptions() *core.SourceFileAffectingCompilerOptions {
+	p.sourceAffectingCompilerOptionsOnce.Do(func() {
+		p.sourceAffectingCompilerOptions = p.compilerOptions.SourceFileAffecting()
+	})
+	return p.sourceAffectingCompilerOptions
+}
+
 func (p *Program) BindSourceFiles() {
 	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
-				binder.BindSourceFile(file, p.compilerOptions)
+				binder.BindSourceFile(file, p.getSourceAffectingCompilerOptions())
 			})
 		}
 	}
@@ -388,7 +398,7 @@ func SortAndDeduplicateDiagnostics(diagnostics []*ast.Diagnostic) []*ast.Diagnos
 func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, ensureChecked bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
 	if sourceFile != nil {
 		if ensureBound {
-			binder.BindSourceFile(sourceFile, p.compilerOptions)
+			binder.BindSourceFile(sourceFile, p.getSourceAffectingCompilerOptions())
 		}
 		return SortAndDeduplicateDiagnostics(getDiagnostics(sourceFile))
 	}

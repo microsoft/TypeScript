@@ -19,7 +19,7 @@ type registryKey struct {
 
 func newRegistryKey(options *core.CompilerOptions, path tspath.Path, scriptKind core.ScriptKind) registryKey {
 	return registryKey{
-		SourceFileAffectingCompilerOptions: options.SourceFileAffecting(),
+		SourceFileAffectingCompilerOptions: *options.SourceFileAffecting(),
 		path:                               path,
 		scriptKind:                         scriptKind,
 	}

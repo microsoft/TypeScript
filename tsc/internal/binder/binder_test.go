@@ -28,6 +28,7 @@ func BenchmarkBind(b *testing.B) {
 			}
 
 			compilerOptions := &core.CompilerOptions{Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext}
+			sourceAffecting := compilerOptions.SourceFileAffecting()
 
 			// The above parses do a lot of work; ensure GC is finished before we start collecting performance data.
 			// GC must be called twice to allow things to settle.
@@ -36,7 +37,7 @@ func BenchmarkBind(b *testing.B) {
 
 			b.ResetTimer()
 			for i := range b.N {
-				BindSourceFile(sourceFiles[i], compilerOptions)
+				BindSourceFile(sourceFiles[i], sourceAffecting)
 			}
 		})
 	}

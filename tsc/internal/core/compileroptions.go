@@ -269,34 +269,25 @@ func (options *CompilerOptions) HasJsonModuleEmitEnabled() bool {
 	return true
 }
 
-// SourceFileAffectingCompilerOptions are the CompilerOptions values that when
-// changed require a new SourceFile be created.
+// SourceFileAffectingCompilerOptions are the precomputed CompilerOptions values which
+// affect the parse and bind of a source file.
 type SourceFileAffectingCompilerOptions struct {
-	// !!! generate this
-	Target               ScriptTarget
-	Jsx                  JsxEmit
-	JsxImportSource      string
-	ImportHelpers        Tristate
-	AlwaysStrict         Tristate
-	ModuleDetection      ModuleDetectionKind
-	AllowUnreachableCode Tristate
-	AllowUnusedLabels    Tristate
-	PreserveConstEnums   Tristate
-	IsolatedModules      Tristate
+	AllowUnreachableCode       Tristate
+	AllowUnusedLabels          Tristate
+	BindInStrictMode           bool
+	EmitScriptTarget           ScriptTarget
+	NoFallthroughCasesInSwitch Tristate
+	ShouldPreserveConstEnums   bool
 }
 
-func (options *CompilerOptions) SourceFileAffecting() SourceFileAffectingCompilerOptions {
-	return SourceFileAffectingCompilerOptions{
-		Target:               options.Target,
-		Jsx:                  options.Jsx,
-		JsxImportSource:      options.JsxImportSource,
-		ImportHelpers:        options.ImportHelpers,
-		AlwaysStrict:         options.AlwaysStrict,
-		ModuleDetection:      options.ModuleDetection,
-		AllowUnreachableCode: options.AllowUnreachableCode,
-		AllowUnusedLabels:    options.AllowUnusedLabels,
-		PreserveConstEnums:   options.PreserveConstEnums,
-		IsolatedModules:      options.IsolatedModules,
+func (options *CompilerOptions) SourceFileAffecting() *SourceFileAffectingCompilerOptions {
+	return &SourceFileAffectingCompilerOptions{
+		AllowUnreachableCode:       options.AllowUnreachableCode,
+		AllowUnusedLabels:          options.AllowUnusedLabels,
+		BindInStrictMode:           options.AlwaysStrict.IsTrue() || options.Strict.IsTrue(),
+		EmitScriptTarget:           options.GetEmitScriptTarget(),
+		NoFallthroughCasesInSwitch: options.NoFallthroughCasesInSwitch,
+		ShouldPreserveConstEnums:   options.ShouldPreserveConstEnums(),
 	}
 }
 

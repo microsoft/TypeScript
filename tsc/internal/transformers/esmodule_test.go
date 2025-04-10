@@ -220,15 +220,16 @@ var __rewriteRelativeImportExtension;`,
 			t.Parallel()
 
 			compilerOptions := rec.options
+			sourceFileAffecting := compilerOptions.SourceFileAffecting()
 			file := parsetestutil.ParseTypeScript(rec.input, rec.jsx)
 			parsetestutil.CheckDiagnostics(t, file)
-			binder.BindSourceFile(file, &compilerOptions)
+			binder.BindSourceFile(file, sourceFileAffecting)
 
 			var other *ast.SourceFile
 			if len(rec.other) > 0 {
 				other = parsetestutil.ParseTypeScript(rec.other, rec.jsx)
 				parsetestutil.CheckDiagnostics(t, other)
-				binder.BindSourceFile(other, &compilerOptions)
+				binder.BindSourceFile(other, sourceFileAffecting)
 			}
 
 			emitContext := printer.NewEmitContext()

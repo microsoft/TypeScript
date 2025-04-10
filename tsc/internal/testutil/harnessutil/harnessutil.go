@@ -444,7 +444,7 @@ func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, la
 	text, _ := h.FS().ReadFile(fileName)
 
 	key := sourceFileCacheKey{
-		SourceFileAffectingCompilerOptions: h.options.SourceFileAffecting(),
+		SourceFileAffectingCompilerOptions: *h.options.SourceFileAffecting(),
 		fileName:                           fileName,
 		path:                               path,
 		languageVersion:                    languageVersion,
