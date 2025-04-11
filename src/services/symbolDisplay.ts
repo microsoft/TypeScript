@@ -279,8 +279,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
-    const typeWriterOut: WriterContextOut = { couldUnfoldMore: false, truncated: false };
-    let hasUnfoldedSymbol = false;
+    const typeWriterOut: WriterContextOut = { canIncreaseExpansionDepth: false, truncated: false };
+    let symbolWasExpanded = false;
 
     if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
         return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -454,7 +454,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             pushSymbolKind(ScriptElementKind.localClassElement);
             displayParts.push(spacePart());
         }
-        if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
+        if (!tryExpandSymbol(symbol, semanticMeaning)) {
             if (!classExpression) {
                 // Class declaration has name which is not local.
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
@@ -466,7 +466,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
     if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
-        if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
+        if (!tryExpandSymbol(symbol, semanticMeaning)) {
             displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
@@ -496,7 +496,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
-        if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
+        if (!tryExpandSymbol(symbol, semanticMeaning)) {
             if (some(symbol.declarations, d => isEnumDeclaration(d) && isEnumConst(d))) {
                 displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
                 displayParts.push(spacePart());
@@ -508,7 +508,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
     if (symbolFlags & SymbolFlags.Module && !isThisExpression) {
         prefixNextMeaning();
-        if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
+        if (!tryExpandSymbol(symbol, semanticMeaning)) {
             const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
             const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
             displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
@@ -603,7 +603,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     documentationFromAlias = resolvedInfo.documentation;
                     tagsFromAlias = resolvedInfo.tags;
                     if (typeWriterOut && resolvedInfo.canIncreaseVerbosityLevel) {
-                        typeWriterOut.couldUnfoldMore = true;
+                        typeWriterOut.canIncreaseExpansionDepth = true;
                     }
                 }
                 else {
@@ -798,7 +798,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         tags = tagsFromAlias;
     }
 
-    const canIncreaseVerbosityLevel = !typeWriterOut.truncated && typeWriterOut.couldUnfoldMore;
+    const canIncreaseVerbosityLevel = !typeWriterOut.truncated && typeWriterOut.canIncreaseExpansionDepth;
     return {
         displayParts,
         documentation,
@@ -831,7 +831,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(spacePart());
     }
 
-    function canUnfoldSymbol(symbol: Symbol, out: WriterContextOut | undefined): boolean {
+    function canExpandSymbol(symbol: Symbol, out: WriterContextOut | undefined): boolean {
         if (verbosityLevel === undefined) {
             return false;
         }
@@ -845,12 +845,12 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             return true;
         }
         if (out) {
-            out.couldUnfoldMore = true;
+            out.canIncreaseExpansionDepth = true;
         }
         return false;
     }
 
-    function getSymbolMeaning(meaning: SemanticMeaning): SymbolFlags {
+    function semanticToSymbolMeaning(meaning: SemanticMeaning): SymbolFlags {
         let symbolMeaning = SymbolFlags.None;
         if (meaning & SemanticMeaning.Value) {
             symbolMeaning |= SymbolFlags.Value;
@@ -864,12 +864,20 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         return symbolMeaning;
     }
 
-    function tryUnfoldSymbol(symbol: Symbol, meaning: SemanticMeaning): boolean {
-        if (hasUnfoldedSymbol) {
+    /**
+     * Attempts to expand the hover for a symbol, returning true if it succeeded.
+     * e.g. Given a symbol `Foo` corresponding to `class Foo { prop1: number }`,
+     * we will expand the hover to contain a full declaration of the class.
+     */
+    function tryExpandSymbol(symbol: Symbol, meaning: SemanticMeaning): boolean {
+        // It's possible we call this function multiple times for the same symbol, if the symbol represents more than one kind of thing.
+        // For instance, we'll call this function twice for a symbol that is both a function and a namespace.
+        // In this case, `symbolWasExpanded` will be true the second time we call this function, and we don't need to expand it again.
+        if (symbolWasExpanded) {
             return true;
         }
-        if (canUnfoldSymbol(symbol, typeWriterOut)) {
-            const symbolMeaning = getSymbolMeaning(meaning);
+        if (canExpandSymbol(symbol, typeWriterOut)) {
+            const symbolMeaning = semanticToSymbolMeaning(meaning);
             const expandedDisplayParts = mapToDisplayParts(writer => {
                 const nodes = typeChecker.getEmitResolver().symbolToDeclarations(
                     symbol,
@@ -885,7 +893,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                 });
             });
             addRange(displayParts, expandedDisplayParts);
-            hasUnfoldedSymbol = true;
+            symbolWasExpanded = true;
             return true;
         }
         return false;

@@ -5052,8 +5052,8 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
 
 /** @internal */
 export interface WriterContextOut {
-    /** Whether we found a type alias that we could unfold but didn't. */
-    couldUnfoldMore: boolean;
+    /** Whether increasing the expansion depth will cause us to expand more types. */
+    canIncreaseExpansionDepth: boolean;
     truncated: boolean;
 }
 

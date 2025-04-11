@@ -6460,7 +6460,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 flags: flags || NodeBuilderFlags.None,
                 internalFlags: internalFlags || InternalNodeBuilderFlags.None,
                 tracker: undefined!,
-                unfoldDepth: verbosityLevel ?? -1,
+                maxExpansionDepth: verbosityLevel ?? -1,
                 encounteredError: false,
                 suppressReportInferenceFallback: false,
                 reportedDiagnostic: false,
@@ -6486,7 +6486,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 depth: 0,
                 typeStack: [],
                 out: {
-                    couldUnfoldMore: false,
+                    canIncreaseExpansionDepth: false,
                     truncated: false,
                 },
             };
@@ -6496,7 +6496,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 context.tracker.reportTruncationError();
             }
             if (out) {
-                out.couldUnfoldMore = context.out.couldUnfoldMore;
+                out.canIncreaseExpansionDepth = context.out.canIncreaseExpansionDepth;
                 out.truncated = context.out.truncated;
             }
             return context.encounteredError ? undefined : resultingNode;
@@ -6530,8 +6530,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function checkUnfoldingTruncationLength(context: NodeBuilderContext): boolean {
-            return context.unfoldDepth >= 0 && checkTruncationLength(context);
+        function checkTruncationLengthIfExpanding(context: NodeBuilderContext): boolean {
+            return context.maxExpansionDepth >= 0 && checkTruncationLength(context);
         }
 
         function checkTruncationLength(context: NodeBuilderContext): boolean {
@@ -6539,19 +6539,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return context.truncating = context.approximateLength > ((context.flags & NodeBuilderFlags.NoTruncation) ? noTruncationMaximumTruncationLength : defaultMaximumTruncationLength);
         }
 
-        function couldUnfoldType(type: Type, context: NodeBuilderContext): boolean {
+        /**
+         * Returns true if it's possible the type or one of its components can be expanded.
+         */
+        function canPossiblyExpandType(type: Type, context: NodeBuilderContext): boolean {
             for (let i = 0; i < context.typeStack.length - 1; i++) {
                 if (context.typeStack[i] === type.id) {
                     return false;
                 }
             }
-            return context.depth < context.unfoldDepth || context.depth === context.unfoldDepth && !context.out.couldUnfoldMore;
+            return context.depth < context.maxExpansionDepth ||
+                context.depth === context.maxExpansionDepth && !context.out.canIncreaseExpansionDepth;
         }
 
-        /** Determines if a type can be unfolded, based on how many layers of type aliases we're allowed to unfold.
-         * @param isAlias - Whether we're unfolding a type alias or not.
+        /**
+         * Determines if the input type should be expanded, based on how many layers of names we're allowed to expand.
+         * @param isAlias - Whether we're expanding a type alias or not.
          */
-        function canUnfoldType(type: Type, context: NodeBuilderContext, isAlias = false): boolean {
+        function shouldExpandType(type: Type, context: NodeBuilderContext, isAlias = false): boolean {
             if (!isAlias && isLibType(type)) {
                 return false;
             }
@@ -6560,9 +6565,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return false;
                 }
             }
-            const result = context.depth < context.unfoldDepth;
+            const result = context.depth < context.maxExpansionDepth;
             if (!result) {
-                context.out.couldUnfoldMore = true;
+                // This type would have been expanded if `maxExpansionDepth` was increased.
+                context.out.canIncreaseExpansionDepth = true;
             }
             return result;
         }
@@ -6651,7 +6657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return Debug.fail("Unhandled type node kind returned from `symbolToTypeNode`.");
                     }
                 }
-                if (!canUnfoldType(type, context)) {
+                if (!shouldExpandType(type, context)) {
                     return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
                 }
                 else {
@@ -6724,7 +6730,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                if (!canUnfoldType(type, context, /*isAlias*/ true)) {
+                if (!shouldExpandType(type, context, /*isAlias*/ true)) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
@@ -6739,7 +6745,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (objectFlags & ObjectFlags.Reference) {
                 Debug.assert(!!(type.flags & TypeFlags.Object));
-                if (canUnfoldType(type, context)) {
+                if (shouldExpandType(type, context)) {
                     context.depth += 1;
                     return createAnonymousTypeNode(type as TypeReference, /*forceClassExpansion*/ true, /*forceExpansion*/ true);
                 }
@@ -6771,7 +6777,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.approximateLength += idText(name).length;
                     return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
                 }
-                if (objectFlags & ObjectFlags.ClassOrInterface && canUnfoldType(type, context)) {
+                if (objectFlags & ObjectFlags.ClassOrInterface && shouldExpandType(type, context)) {
                     context.depth += 1;
                     return createAnonymousTypeNode(type as InterfaceType, /*forceClassExpansion*/ true, /*forceExpansion*/ true);
                 }
@@ -7027,7 +7033,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             || symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)
                             || shouldWriteTypeOfFunctionSymbol())
                     ) {
-                        if (canUnfoldType(type, context)) {
+                        if (shouldExpandType(type, context)) {
                             context.depth += 1;
                         }
                         else {
@@ -7083,8 +7089,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.symbolDepth = new Map();
                 }
 
-                // Don't rely on type cache if we're unfolding a type, because we need to compute `couldUnfoldMore`.
-                const links = context.unfoldDepth >= 0 ? undefined : context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
+                // Don't rely on type cache if we're expand a type, because we need to compute `canIncreaseExpansionDepth`.
+                const links = context.maxExpansionDepth >= 0 ? undefined : context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
                 const key = `${getTypeId(type)}|${context.flags}|${context.internalFlags}`;
                 if (links) {
                     links.serializedTypes ||= new Map();
@@ -7471,7 +7477,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 let i = 0;
                 for (const propertySymbol of properties) {
-                    if (isUnfolding(context) && propertySymbol.flags & SymbolFlags.Prototype) {
+                    if (isExpanding(context) && propertySymbol.flags & SymbolFlags.Prototype) {
                         continue;
                     }
                     i++;
@@ -8120,7 +8126,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function typeToTypeNodeHelperWithPossibleReusableTypeNode(type: Type, typeNode: TypeNode | undefined, context: NodeBuilderContext) {
-            return !couldUnfoldType(type, context) && typeNode && getTypeFromTypeNode(context, typeNode) === type && syntacticNodeBuilder.tryReuseExistingTypeNode(context, typeNode)
+            return !canPossiblyExpandType(type, context) && typeNode && getTypeFromTypeNode(context, typeNode) === type && syntacticNodeBuilder.tryReuseExistingTypeNode(context, typeNode)
                 || typeToTypeNodeHelper(type, context);
         }
 
@@ -8870,7 +8876,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result;
             const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration, context.enclosingDeclaration);
             const decl = declaration ?? symbol.valueDeclaration ?? getDeclarationWithTypeAnnotation(symbol) ?? symbol.declarations?.[0];
-            if (!couldUnfoldType(type, context) && decl) {
+            if (!canPossiblyExpandType(type, context) && decl) {
                 const restore = addSymbolTypeToContext(context, symbol, type);
                 if (isAccessor(decl)) {
                     result = syntacticNodeBuilder.serializeTypeOfAccessor(decl, symbol, context);
@@ -8920,7 +8926,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const returnType = getReturnTypeOfSignature(signature);
             if (!(suppressAny && isTypeAny(returnType))) {
-                if (signature.declaration && !nodeIsSynthesized(signature.declaration) && !couldUnfoldType(returnType, context)) {
+                if (signature.declaration && !nodeIsSynthesized(signature.declaration) && !canPossiblyExpandType(returnType, context)) {
                     const declarationSymbol = getSymbolOfDeclaration(signature.declaration);
                     const restore = addSymbolTypeToContext(context, declarationSymbol, returnType);
                     returnTypeNode = syntacticNodeBuilder.serializeReturnTypeForSignature(signature.declaration, declarationSymbol, context);
@@ -9353,7 +9359,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const symbols = Array.from(symbolTable.values());
                 for (const symbol of symbols) {
                     i++;
-                    if (checkUnfoldingTruncationLength(context) && (i + 2 < symbolTable.size - 1)) {
+                    if (checkTruncationLengthIfExpanding(context) && (i + 2 < symbolTable.size - 1)) {
                         context.out.truncated = true;
                         results.push(createTruncationStatement(`... (${symbolTable.size - i} more ...)`));
                         serializeSymbol(symbols[symbols.length - 1], /*isPrivate*/ false, !!propertyAsAlias);
@@ -9728,7 +9734,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let i = 0;
                 for (const prop of props) {
                     i++;
-                    if (checkUnfoldingTruncationLength(context) && (i + 2 < props.length - 1)) {
+                    if (checkTruncationLengthIfExpanding(context) && (i + 2 < props.length - 1)) {
                         context.out.truncated = true;
                         const placeholder = createTruncationProperty(`... ${props.length - i} more ... `, isClass);
                         elements.push(placeholder);
@@ -9799,17 +9805,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
                 const members = getNamespaceMembersForSerialization(symbol);
-                const unfolding = isUnfolding(context);
+                const expanding = isExpanding(context);
                 // Split NS members up by declaration - members whose parent symbol is the ns symbol vs those whose is not (but were added in later via merging)
-                const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol || unfolding ? "real" : "merged");
+                const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol || expanding ? "real" : "merged");
                 const realMembers = locationMap.get("real") || emptyArray;
                 const mergedMembers = locationMap.get("merged") || emptyArray;
                 // TODO: `suppressNewPrivateContext` is questionable -we need to simply be emitting privates in whatever scope they were declared in, rather
                 // than whatever scope we traverse to them in. That's a bit of a complex rewrite, since we're not _actually_ tracking privates at all in advance,
                 // so we don't even have placeholders to fill in.
-                if (length(realMembers) || unfolding) {
+                if (length(realMembers) || expanding) {
                     let localName: ModuleName;
-                    if (unfolding) {
+                    if (expanding) {
                         // Use the same name as symbol display.
                         const oldFlags = context.flags;
                         context.flags |= NodeBuilderFlags.WriteTypeParametersInQualifiedName | SymbolFormatFlags.UseOnlyExternalAliasing;
@@ -9863,7 +9869,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let i = 0;
                 for (const p of memberProps) {
                     i++;
-                    if (checkUnfoldingTruncationLength(context) && (i + 2 < memberProps.length - 1)) {
+                    if (checkTruncationLengthIfExpanding(context) && (i + 2 < memberProps.length - 1)) {
                         context.out.truncated = true;
                         members.push(factory.createEnumMember(` ... ${memberProps.length - i} more ... `));
                         const last = memberProps[memberProps.length - 1];
@@ -9888,7 +9894,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         undefined;
                     let initializer: Expression | undefined;
                     let initializerLength: number;
-                    if (isUnfolding(context) && memberDecl && memberDecl.initializer) {
+                    if (isExpanding(context) && memberDecl && memberDecl.initializer) {
                         initializer = visitNode(memberDecl.initializer, factory.cloneNode, isExpression);
                         initializerLength = memberDecl.initializer.end - memberDecl.initializer.pos;
                     }
@@ -9955,10 +9961,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: ModuleName, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
                 const nodeFlags = isIdentifier(localName) ? NodeFlags.Namespace : NodeFlags.None;
-                const unfolding = isUnfolding(context);
+                const expanding = isExpanding(context);
                 if (length(props)) {
                     context.approximateLength += 14; // "namespace { }"
-                    const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) || some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) || unfolding ? "local" : "remote");
+                    const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) || some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) || expanding ? "local" : "remote");
                     const localProps = localVsRemoteMap.get("local") || emptyArray;
                     // handle remote props first - we need to make an `import` declaration that points at the module containing each remote
                     // prop in the outermost scope (TODO: a namespace within a namespace would need to be appropriately handled by this)
@@ -10011,7 +10017,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                     addResult(fakespace, modifierFlags); // namespaces can never be default exported
                 }
-                else if (unfolding) {
+                else if (expanding) {
                     context.approximateLength += 14; // "namespace { }"
                     addResult(
                         factory.createModuleDeclaration(
@@ -10091,7 +10097,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const hasPrivateIdentifier = some(symbolProps, isHashPrivate);
                 // Boil down all private properties into a single one.
                 const privateProperties = hasPrivateIdentifier ?
-                    isUnfolding(context) ?
+                    isExpanding(context) ?
                         serializePropertySymbolsForClassOrInterface(filter(symbolProps, isHashPrivate), /*isClass*/ true, baseTypes[0], /*isStatic*/ false) :
                         [factory.createPropertyDeclaration(
                             /*modifiers*/ undefined,
@@ -10101,7 +10107,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             /*initializer*/ undefined,
                         )] :
                     emptyArray;
-                if (hasPrivateIdentifier && !isUnfolding(context)) {
+                if (hasPrivateIdentifier && !isExpanding(context)) {
                     context.approximateLength += 9; // `#private;`
                 }
                 const publicProperties = serializePropertySymbolsForClassOrInterface(publicSymbolProps, /*isClass*/ true, baseTypes[0], /*isStatic*/ false);
@@ -10582,7 +10588,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => T | AccessorDeclaration | (T | AccessorDeclaration)[] {
                 return function serializePropertySymbol(p: Symbol, isStatic: boolean, baseType: Type | undefined): T | AccessorDeclaration | (T | AccessorDeclaration)[] {
                     const modifierFlags = getDeclarationModifierFlagsFromSymbol(p);
-                    const omitType = !!(modifierFlags & ModifierFlags.Private) && !isUnfolding(context);
+                    const omitType = !!(modifierFlags & ModifierFlags.Private) && !isExpanding(context);
                     if (isStatic && (p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias))) {
                         // Only value-only-meaning symbols can be correctly encoded as class statics, type/namespace/alias meaning symbols
                         // need to be merged namespace members
@@ -10908,8 +10914,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function isUnfolding(context: NodeBuilderContext) {
-            return context.unfoldDepth !== -1;
+        function isExpanding(context: NodeBuilderContext) {
+            return context.maxExpansionDepth !== -1;
         }
 
         function isHashPrivate(s: Symbol): boolean {
@@ -10928,7 +10934,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /** Returns true if a type is declared in a lib file. */
-    // Don't unfold types like `Array` or `Promise`, instead treating them as opaque.
+    // Don't expand types like `Array` or `Promise`, instead treating them as opaque.
     function isLibType(type: Type): boolean {
         const symbol = (getObjectFlags(type) & ObjectFlags.Reference) !== 0 ? (type as TypeReference).target.symbol : type.symbol;
         return isTupleType(type) || !!(symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))));
@@ -51004,7 +51010,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             symbolToDeclarations: (symbol, meaning, flags, verbosityLevel, out) => {
                 return nodeBuilder.symbolToDeclarations(symbol, meaning, flags, verbosityLevel, out);
-            }
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
@@ -53339,8 +53345,8 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     flags: NodeBuilderFlags;
     internalFlags: InternalNodeBuilderFlags;
     tracker: SymbolTrackerImpl;
-    /* Maximum depth we're allowed to unfold aliases. */
-    readonly unfoldDepth: number;
+    /* Maximum depth we're allowed to expand names. */
+    readonly maxExpansionDepth: number;
 
     // State
     encounteredError: boolean;
@@ -53364,7 +53370,7 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     reverseMappedStack: ReverseMappedSymbol[] | undefined;
     bundled: boolean;
     mapper: TypeMapper | undefined;
-    /* How many levels of nested aliases we have unfolded so far. */
+    /* How many levels of nested names we have expanded so far. */
     depth: number;
     suppressReportInferenceFallback: boolean;
     typeStack: number[];
