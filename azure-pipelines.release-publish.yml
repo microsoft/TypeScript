@@ -76,12 +76,12 @@ extends:
             steps:
               - checkout: none
               - task: CmdLine@2
-                displayName: Rename versioned drop to typescript.tgz
+                displayName: Copy versioned drop to typescript.tgz
                 inputs:
                   script: |
                     pushd $(Pipeline.Workspace)/tgz
                     ls -lhR
-                    mv typescript-*.tgz typescript.tgz
+                    cp typescript-*.tgz typescript.tgz
               - task: Npm@1
                 displayName: npm publish tarball
                 inputs:
@@ -89,7 +89,7 @@ extends:
                   workingDir: $(Pipeline.Workspace)/tgz
                   verbose: false
                   customCommand: publish $(Pipeline.Workspace)/tgz/typescript.tgz --tag $(PUBLISH_TAG)
-                  # This must match the service connection.
+                  # This must match the service connection name.
                   customEndpoint: Typescript NPM
                   publishEndpoint: Typescript NPM
 
@@ -111,7 +111,7 @@ extends:
               - task: GitHubRelease@1
                 displayName: GitHub release (create)
                 inputs:
-                  # This must match the service connection.
+                  # This must match the service connection name.
                   gitHubConnection: typescript-bot connection
                   repositoryName: microsoft/TypeScript
                   tagSource: userSpecifiedTag
