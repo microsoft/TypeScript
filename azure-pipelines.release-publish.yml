@@ -22,8 +22,6 @@ parameters:
     default: v0.0.0-SetMe
 
 variables:
-  - name: _REMINDER
-    value: ${{ parameters._REMINDER }}
   - name: PUBLISH_TAG
     value: ${{ parameters.PUBLISH_TAG }}
   - name: RELEASE_TITLE_NAME
