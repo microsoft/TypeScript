@@ -8127,8 +8127,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
             const constraintNode = constraint && typeToTypeNodeHelperWithPossibleReusableTypeNode(constraint, getConstraintDeclaration(type), context);
-            const typeParam = typeParameterToDeclarationWithConstraint(type, context, constraintNode);
-            return typeParam;
+            return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
         }
 
         function typePredicateToTypePredicateNodeHelper(typePredicate: TypePredicate, context: NodeBuilderContext): TypePredicateNode {
@@ -9878,12 +9877,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
                     // other way to get the possible const value of an enum member that I'm aware of, as the value is cached
                     // _on the declaration_, not on the declaration's symbol...
-                    const initializedValue = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) ? getConstantValue(p.declarations[0]) : undefined;
-                    const initializer = initializedValue === undefined ? undefined :
-                        typeof initializedValue === "string" ? factory.createStringLiteral(initializedValue) :
-                        factory.createNumericLiteral(initializedValue);
+                    const memberDecl = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) ?
+                        p.declarations[0] :
+                        undefined;
+                    let initializer: Expression | undefined;
+                    let initializerLength: number;
+                    if (isUnfolding(context) && memberDecl && memberDecl.initializer) {
+                        initializer = visitNode(memberDecl.initializer, factory.cloneNode, isExpression);
+                        initializerLength = memberDecl.initializer.end - memberDecl.initializer.pos;
+                    }
+                    else {
+                        const initializedValue = memberDecl && getConstantValue(memberDecl);
+                        initializer = initializedValue === undefined ? undefined :
+                            typeof initializedValue === "string" ? factory.createStringLiteral(initializedValue) :
+                            factory.createNumericLiteral(initializedValue);
+                        initializerLength = (initializer as StringLiteral | NumericLiteral | undefined)?.text.length ?? 0
+                    }
                     const memberName = unescapeLeadingUnderscores(p.escapedName);
-                    context.approximateLength += 4 + memberName.length + (initializer?.text.length ?? 0); // `member = initializer,`
+                    context.approximateLength += 4 + memberName.length + initializerLength; // `member = initializer,`
                     const member = factory.createEnumMember(
                         memberName,
                         initializer,

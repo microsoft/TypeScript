@@ -58,6 +58,27 @@
 // | const y: Direction
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
+// enum Flags {
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | enum Flags {
+// |     None = 0,
+// |     IsDirectory = 1 << 0,
+// |     IsFile = 1 << 1,
+// |     IsSymlink = 1 << 2
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | enum Flags
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     None = 0,
+//     IsDirectory = 1 << 0,
+//     IsFile = 1 << 1,
+//     IsSymlink = 1 << 2,
+// }
 
 [
   {
@@ -645,6 +666,258 @@
         {
           "text": "Down",
           "kind": "text"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
+      "position": 161,
+      "name": "f"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 156,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Flags",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
+      "position": 161,
+      "name": "f"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 156,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Flags",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "None",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "IsDirectory",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<<",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "IsFile",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<<",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "IsSymlink",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<<",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "2",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
         }
       ],
       "documentation": [],
