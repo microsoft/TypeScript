@@ -1935,7 +1935,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getSymbolFlags,
         getTypeArgumentsForResolvedSignature,
         isLibType,
-        symbolToDeclarations: nodeBuilder.symbolToDeclarations,
     };
 
     function getTypeArgumentsForResolvedSignature(signature: Signature) {
@@ -51003,6 +51002,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             },
+            symbolToDeclarations: (symbol, meaning, flags, verbosityLevel, out) => {
+                return nodeBuilder.symbolToDeclarations(symbol, meaning, flags, verbosityLevel, out);
+            }
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {

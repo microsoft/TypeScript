@@ -835,7 +835,9 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         if (verbosityLevel === undefined) {
             return false;
         }
-        const type = getTypeOfSymbol(symbol);
+        const type = symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ?
+            typeChecker.getDeclaredTypeOfSymbol(symbol) :
+            typeChecker.getTypeOfSymbolAtLocation(symbol, location);
         if (!type || typeChecker.isLibType(type)) {
             return false;
         }
@@ -846,13 +848,6 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             out.couldUnfoldMore = true;
         }
         return false;
-    }
-
-    function getTypeOfSymbol(symbol: Symbol) {
-        if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-            return typeChecker.getDeclaredTypeOfSymbol(symbol);
-        }
-        return typeChecker.getTypeOfSymbolAtLocation(symbol, location);
     }
 
     function getSymbolMeaning(meaning: SemanticMeaning): SymbolFlags {
@@ -876,7 +871,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         if (canUnfoldSymbol(symbol, typeWriterOut)) {
             const symbolMeaning = getSymbolMeaning(meaning);
             const expandedDisplayParts = mapToDisplayParts(writer => {
-                const nodes = typeChecker.symbolToDeclarations(
+                const nodes = typeChecker.getEmitResolver().symbolToDeclarations(
                     symbol,
                     symbolMeaning,
                     TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
