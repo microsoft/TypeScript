@@ -9731,20 +9731,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     i++;
                     if (checkUnfoldingTruncationLength(context) && (i + 2 < props.length - 1)) {
                         context.out.truncated = true;
-                        const placeholder = isClass ?
-                            factory.createPropertyDeclaration(
-                                /*modifiers*/ undefined,
-                                `... ${props.length - i} more ... `,
-                                /*questionOrExclamationToken*/ undefined,
-                                /*type*/ undefined,
-                                /*initializer*/ undefined,
-                            ) :
-                            factory.createPropertySignature(
-                                /*modifiers*/ undefined,
-                                `... ${props.length - i} more ... `,
-                                /*questionToken*/ undefined,
-                                /*type*/ undefined,
-                            );
+                        const placeholder = createTruncationProperty(`... ${props.length - i} more ... `, isClass);
                         elements.push(placeholder);
                         const result = isClass ?
                             serializePropertySymbolForClass(props[props.length - 1], isStatic!, baseType) :
@@ -9770,6 +9757,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 return elements;
+            }
+
+            function createTruncationProperty(dotDotDotText: string, isClass: boolean): TypeElement | ClassElement {
+                if (context.flags & NodeBuilderFlags.NoTruncation) {
+                    return addSyntheticLeadingComment(factory.createNotEmittedTypeElement(), SyntaxKind.MultiLineCommentTrivia, dotDotDotText);
+                }
+                return isClass ?
+                    factory.createPropertyDeclaration(
+                        /*modifiers*/ undefined,
+                        dotDotDotText,
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        /*initializer*/ undefined,
+                    ) :
+                    factory.createPropertySignature(
+                        /*modifiers*/ undefined,
+                        dotDotDotText,
+                        /*questionToken*/ undefined,
+                        /*type*/ undefined,
+                    );
             }
 
             function getNamespaceMembersForSerialization(symbol: Symbol) {
@@ -9891,7 +9898,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         initializer = initializedValue === undefined ? undefined :
                             typeof initializedValue === "string" ? factory.createStringLiteral(initializedValue) :
                             factory.createNumericLiteral(initializedValue);
-                        initializerLength = (initializer as StringLiteral | NumericLiteral | undefined)?.text.length ?? 0
+                        initializerLength = (initializer as StringLiteral | NumericLiteral | undefined)?.text.length ?? 0;
                     }
                     const memberName = unescapeLeadingUnderscores(p.escapedName);
                     context.approximateLength += 4 + memberName.length + initializerLength; // `member = initializer,`
@@ -9928,6 +9935,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function createTruncationStatement(dotDotDotText: string): Statement {
+                if (context.flags & NodeBuilderFlags.NoTruncation) {
+                    return addSyntheticLeadingComment(factory.createEmptyStatement(), SyntaxKind.MultiLineCommentTrivia, dotDotDotText);
+                }
                 return factory.createExpressionStatement(factory.createIdentifier(dotDotDotText));
             }
 
