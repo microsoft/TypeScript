@@ -10929,7 +10929,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /** Returns true if a type is declared in a lib file. */
-    // Don't unfold types like `Array` or `Promise`, instead treating them as transparent.
+    // Don't unfold types like `Array` or `Promise`, instead treating them as opaque.
     function isLibType(type: Type): boolean {
         const symbol = (getObjectFlags(type) & ObjectFlags.Reference) !== 0 ? (type as TypeReference).target.symbol : type.symbol;
         return isTupleType(type) || !!(symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))));
@@ -53337,6 +53337,7 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     flags: NodeBuilderFlags;
     internalFlags: InternalNodeBuilderFlags;
     tracker: SymbolTrackerImpl;
+    /* Maximum depth we're allowed to unfold aliases. */
     readonly unfoldDepth: number;
 
     // State
@@ -53361,7 +53362,8 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     reverseMappedStack: ReverseMappedSymbol[] | undefined;
     bundled: boolean;
     mapper: TypeMapper | undefined;
-    depth: number; // How many levels of nested type aliases we have unfolded so far
+    /* How many levels of nested aliases we have unfolded so far. */
+    depth: number;
     suppressReportInferenceFallback: boolean;
     typeStack: number[];
 
