@@ -2745,8 +2745,14 @@ export function getCompletionEntriesFromSymbols(
             }
             // Filter out variables from their own initializers
             // `const a = /* no 'a' here */`
-            if (tryCast(closestSymbolDeclaration, isVariableDeclaration) && symbol.valueDeclaration === closestSymbolDeclaration) {
-                return false;
+            if (closestSymbolDeclaration && tryCast(closestSymbolDeclaration, isVariableDeclaration)) {
+                if (symbol.valueDeclaration === closestSymbolDeclaration) {
+                    return false;
+                }
+                // const { a } = /* no 'a' here */;
+                if (isBindingPattern(closestSymbolDeclaration.name) && closestSymbolDeclaration.name.elements.some(e => e === symbol.valueDeclaration)) {
+                    return false;
+                }
             }
 
             // Filter out current and latter parameters from defaults

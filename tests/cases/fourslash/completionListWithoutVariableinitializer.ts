@@ -9,6 +9,10 @@
 //// const fn = (p = /*7*/) => {}
 //// const { g, h = /*8*/ } = { ... }
 //// const [ g1, h1 = /*9*/ ] = [ ... ]
+//// const { a1 } = a/*10*/;
+//// const { a2 } = fn({a: a/*11*/});
+//// const [ a3 ] = a/*12*/;
+//// const [ a4 ] = fn([a/*13*/]);
 
 verify.completions({
     marker: ["1"],
@@ -57,4 +61,27 @@ verify.completions({
 verify.completions({
     marker: ["9"],
     includes: ["a", "b", "c", "d", "e", "fn"],
+});
+
+verify.completions({
+    marker: ["10"],
+    excludes: ["a1"],
+    isNewIdentifierLocation: true,
+});
+
+verify.completions({
+    marker: ["11"],
+    excludes: ["a2"],
+});
+
+verify.completions({
+    marker: ["12"],
+    excludes: ["a3"],
+    isNewIdentifierLocation: true,
+});
+
+verify.completions({
+    marker: ["13"],
+    excludes: ["a4"],
+    isNewIdentifierLocation: true,
 });
