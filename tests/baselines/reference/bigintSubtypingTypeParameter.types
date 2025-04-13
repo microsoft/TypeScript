@@ -1,0 +1,179 @@
+//// [tests/cases/compiler/bigintSubtypingTypeParameter.ts] ////
+
+=== bigintSubtypingTypeParameter.ts ===
+function bigintSubtypeAdder<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeAdder : <T extends bigint>(a: T, b: T) => bigint
+>                   : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^      
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	const sum = a + b;
+>sum : bigint
+>    : ^^^^^^
+>a + b : bigint
+>      : ^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	return sum;
+>sum : bigint
+>    : ^^^^^^
+}
+
+function bigintSubtypeDifference<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeDifference : <T extends bigint>(a: T, b: T) => bigint
+>                        : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^      
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	const difference = a - b;
+>difference : bigint
+>           : ^^^^^^
+>a - b : bigint
+>      : ^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	return difference;
+>difference : bigint
+>           : ^^^^^^
+}
+
+function bigintSubtypeArithmeticNegation<T extends bigint>(a: T): bigint {
+>bigintSubtypeArithmeticNegation : <T extends bigint>(a: T) => bigint
+>                                : ^ ^^^^^^^^^      ^^ ^^ ^^^^^      
+>a : T
+>  : ^
+
+	const negation = -a;
+>negation : bigint
+>         : ^^^^^^
+>-a : bigint
+>   : ^^^^^^
+>a : T
+>  : ^
+
+	return negation;
+>negation : bigint
+>         : ^^^^^^
+}
+
+function bigintSubtypeBitInverse<T extends bigint>(a: T): bigint {
+>bigintSubtypeBitInverse : <T extends bigint>(a: T) => bigint
+>                        : ^ ^^^^^^^^^      ^^ ^^ ^^^^^      
+>a : T
+>  : ^
+
+	const bitInverse = ~a;
+>bitInverse : bigint
+>           : ^^^^^^
+>~a : bigint
+>   : ^^^^^^
+>a : T
+>  : ^
+
+	return bitInverse;
+>bitInverse : bigint
+>           : ^^^^^^
+}
+
+function bigintSubtypeBitand<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeBitand : <T extends bigint>(a: T, b: T) => bigint
+>                    : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^      
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	const bitand = a & b;
+>bitand : bigint
+>       : ^^^^^^
+>a & b : bigint
+>      : ^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	return bitand;
+>bitand : bigint
+>       : ^^^^^^
+}
+
+function bigintSubtypeBitor<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeBitor : <T extends bigint>(a: T, b: T) => bigint
+>                   : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^      
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	const bitor = a | b;
+>bitor : bigint
+>      : ^^^^^^
+>a | b : bigint
+>      : ^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	return bitor;
+>bitor : bigint
+>      : ^^^^^^
+}
+
+function bigintSubtypeLeftshift<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeLeftshift : <T extends bigint>(a: T, b: T) => bigint
+>                       : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^      
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	const leftshift = a << b;
+>leftshift : bigint
+>          : ^^^^^^
+>a << b : bigint
+>       : ^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	return leftshift;
+>leftshift : bigint
+>          : ^^^^^^
+}
+
+function bigintSubtypeRightshift<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeRightshift : <T extends bigint>(a: T, b: T) => bigint
+>                        : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^      
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	const rightshift = a >> b;
+>rightshift : bigint
+>           : ^^^^^^
+>a >> b : bigint
+>       : ^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+	return rightshift;
+>rightshift : bigint
+>           : ^^^^^^
+}
+
