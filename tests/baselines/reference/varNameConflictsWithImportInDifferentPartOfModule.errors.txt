@@ -1,7 +1,7 @@
-tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts(6,5): error TS2440: Import declaration conflicts with local declaration of 'q'.
+varNameConflictsWithImportInDifferentPartOfModule.ts(6,5): error TS2440: Import declaration conflicts with local declaration of 'q'.
 
 
-==== tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts (1 errors) ====
+==== varNameConflictsWithImportInDifferentPartOfModule.ts (1 errors) ====
     module M1 {
         export var q = 5;
         export var s = '';

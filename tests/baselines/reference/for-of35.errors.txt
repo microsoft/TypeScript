@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/for-ofStatements/for-of35.ts(2,5): error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-tests/cases/conformance/es6/for-ofStatements/for-of35.ts(14,10): error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+for-of35.ts(2,5): error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+for-of35.ts(14,10): error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 
 
-==== tests/cases/conformance/es6/for-ofStatements/for-of35.ts (2 errors) ====
-    class StringIterator {
+==== for-of35.ts (2 errors) ====
+    class MyStringIterator {
         next() {
         ~~~~
 !!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
@@ -18,6 +18,6 @@ tests/cases/conformance/es6/for-ofStatements/for-of35.ts(14,10): error TS7022: '
         }
     }
     
-    for (var v of new StringIterator) { }
+    for (var v of new MyStringIterator) { }
              ~
 !!! error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.

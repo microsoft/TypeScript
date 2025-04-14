@@ -1,31 +1,43 @@
-=== tests/cases/compiler/expandoFunctionContextualTypes.ts ===
+//// [tests/cases/compiler/expandoFunctionContextualTypes.ts] ////
+
+=== expandoFunctionContextualTypes.ts ===
 interface MyComponentProps {
     color: "red" | "blue"
 >color : "red" | "blue"
+>      : ^^^^^^^^^^^^^^
 }
 
 interface StatelessComponent<P> {
     (): any;
     defaultProps?: Partial<P>;
 >defaultProps : Partial<P>
+>             : ^^^^^^^^^^
 }
 
 const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
 >MyComponent : StatelessComponent<MyComponentProps>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => null as any : { (): any; defaultProps: Partial<MyComponentProps>; }
+>                  : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
 
 MyComponent.defaultProps = {
 >MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
+>                                              : ^^^^^^^^^^^^^^^^^
 >MyComponent.defaultProps : Partial<MyComponentProps>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyComponent : StatelessComponent<MyComponentProps>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultProps : Partial<MyComponentProps>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    color: "red"} : { color: "red"; }
+>                   : ^^^^^^^^^^^^^^^^^
 
     color: "red"
 >color : "red"
+>      : ^^^^^
 >"red" : "red"
+>      : ^^^^^
 
 };
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunction.ts ===
+//// [tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunction.ts] ////
+
+=== emitDefaultParametersFunction.ts ===
 function foo(x: string, y = 10) { }
 >foo : Symbol(foo, Decl(emitDefaultParametersFunction.ts, 0, 0))
 >x : Symbol(x, Decl(emitDefaultParametersFunction.ts, 0, 13))

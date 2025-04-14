@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conflictingMemberTypesInBases.ts ===
+//// [tests/cases/compiler/conflictingMemberTypesInBases.ts] ////
+
+=== conflictingMemberTypesInBases.ts ===
 interface A {
 >A : Symbol(A, Decl(conflictingMemberTypesInBases.ts, 0, 0))
 

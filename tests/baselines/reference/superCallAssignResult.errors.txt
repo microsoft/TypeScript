@@ -1,7 +1,7 @@
-tests/cases/compiler/superCallAssignResult.ts(8,9): error TS2322: Type 'number' is not assignable to type 'void'.
+superCallAssignResult.ts(8,9): error TS2322: Type 'number' is not assignable to type 'void'.
 
 
-==== tests/cases/compiler/superCallAssignResult.ts (1 errors) ====
+==== superCallAssignResult.ts (1 errors) ====
     class E {
         constructor(arg: any) { }
     }

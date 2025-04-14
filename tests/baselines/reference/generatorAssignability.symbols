@@ -1,4 +1,6 @@
-=== tests/cases/conformance/generators/generatorAssignability.ts ===
+//// [tests/cases/conformance/generators/generatorAssignability.ts] ////
+
+=== generatorAssignability.ts ===
 declare let _: any;
 >_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
 

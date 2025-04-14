@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts ===
+//// [tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts] ////
+
+=== conditionalTypeAssignabilityWhenDeferred.ts ===
 export type FilterPropsByType<T, TT> = {
 >FilterPropsByType : Symbol(FilterPropsByType, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 0, 0))
 >T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 0, 30))

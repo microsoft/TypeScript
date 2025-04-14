@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion.ts] ////
+
 //// [truthinessCallExpressionCoercion.ts]
 function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
     if (required) { // error

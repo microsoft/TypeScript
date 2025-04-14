@@ -1,47 +1,81 @@
-=== tests/cases/compiler/fallbackToBindingPatternForTypeInference.ts ===
+//// [tests/cases/compiler/fallbackToBindingPatternForTypeInference.ts] ////
+
+=== fallbackToBindingPatternForTypeInference.ts ===
 declare function trans<T>(f: (x: T) => string): number;
 >trans : <T>(f: (x: T) => string) => number
+>      : ^ ^^ ^^                ^^^^^      
 >f : (x: T) => string
+>  : ^ ^^ ^^^^^      
 >x : T
+>  : ^
 
 trans(({a}) => a);
 >trans(({a}) => a) : number
+>                  : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
+>      : ^ ^^ ^^                ^^^^^      
 >({a}) => a : ({ a }: { a: any; }) => any
+>           : ^     ^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
 
 trans(([b,c]) => 'foo');
 >trans(([b,c]) => 'foo') : number
+>                        : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
+>      : ^ ^^ ^^                ^^^^^      
 >([b,c]) => 'foo' : ([b, c]: [any, any]) => string
+>                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 trans(({d: [e,f]}) => 'foo');
 >trans(({d: [e,f]}) => 'foo') : number
+>                             : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
+>      : ^ ^^ ^^                ^^^^^      
 >({d: [e,f]}) => 'foo' : ({ d: [e, f] }: { d: [any, any]; }) => string
+>                      : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 >f : any
+>  : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 trans(([{g},{h}]) => 'foo');
 >trans(([{g},{h}]) => 'foo') : number
+>                            : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
+>      : ^ ^^ ^^                ^^^^^      
 >([{g},{h}]) => 'foo' : ([{ g }, { h }]: [{ g: any; }, { h: any; }]) => string
+>                     : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : any
+>  : ^^^
 >h : any
+>  : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 trans(({a, b = 10}) => a);
 >trans(({a, b = 10}) => a) : number
+>                          : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
+>      : ^ ^^ ^^                ^^^^^      
 >({a, b = 10}) => a : ({ a, b }: { a: any; b?: number; }) => any
+>                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >a : any
 

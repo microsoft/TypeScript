@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/a.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsUniqueSymbolUsage.ts] ////
+
+=== a.js ===
 export const kSymbol = Symbol("my-symbol");
 >kSymbol : Symbol(kSymbol, Decl(a.js, 0, 12))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -6,7 +8,7 @@ export const kSymbol = Symbol("my-symbol");
 /**
  * @typedef {{[kSymbol]: true}} WithSymbol
  */
-=== tests/cases/conformance/jsdoc/declarations/b.js ===
+=== b.js ===
 /**
  * @returns {import('./a').WithSymbol} 
  * @param {import('./a').WithSymbol} value 

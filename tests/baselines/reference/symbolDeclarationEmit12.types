@@ -1,45 +1,73 @@
-=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts] ////
+
+=== symbolDeclarationEmit12.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     interface I { }
     export class C {
 >C : C
+>  : ^
 
         [Symbol.iterator]: I;
 >[Symbol.iterator] : I
+>                  : ^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         [Symbol.toPrimitive](x: I) { }
->[Symbol.toPrimitive] : (x: I) => void
+>[Symbol.toPrimitive] : I
+>                     : ^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >x : I
+>  : ^
 
         [Symbol.isConcatSpreadable](): I {
 >[Symbol.isConcatSpreadable] : () => I
+>                            : ^^^^^^ 
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 
             return undefined
 >undefined : undefined
+>          : ^^^^^^^^^
         }
         get [Symbol.toPrimitive]() { return undefined; }
->[Symbol.toPrimitive] : any
+>[Symbol.toPrimitive] : I
+>                     : ^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         set [Symbol.toPrimitive](x: I) { }
 >[Symbol.toPrimitive] : I
+>                     : ^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >x : I
+>  : ^
     }
 }

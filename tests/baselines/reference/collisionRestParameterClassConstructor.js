@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionRestParameterClassConstructor.ts] ////
+
 //// [collisionRestParameterClassConstructor.ts]
 // Constructors
 class c1 {

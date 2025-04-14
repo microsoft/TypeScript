@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/literalTypesAndTypeAssertions.ts] ////
+
 //// [literalTypesAndTypeAssertions.ts]
 const obj = {
     a: "foo" as "foo",

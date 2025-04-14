@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts] ////
+
 //// [controlFlowTypeofObject.ts]
 declare function obj(x: object): void;
 

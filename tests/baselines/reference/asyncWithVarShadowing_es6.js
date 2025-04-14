@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncWithVarShadowing_es6.ts] ////
+
 //// [asyncWithVarShadowing_es6.ts]
 // https://github.com/Microsoft/TypeScript/issues/20461
 declare const y: any;
@@ -224,13 +226,13 @@ async function fn40(x) {
 
 //// [asyncWithVarShadowing_es6.js]
 function fn1(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
     });
 }
 function fn2(x) {
-    var x, z;
     return __awaiter(this, void 0, void 0, function* () {
+        var x, z;
     });
 }
 function fn3(x) {
@@ -239,116 +241,116 @@ function fn3(x) {
     });
 }
 function fn4(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         x = y;
     });
 }
 function fn5(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         ({ x } = y);
     });
 }
 function fn6(x) {
-    var x, z;
     return __awaiter(this, void 0, void 0, function* () {
+        var x, z;
         ({ x, z } = y);
     });
 }
 function fn7(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         ({ x = y } = y);
     });
 }
 function fn8(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         ({ z: x } = y);
     });
 }
 function fn9(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         ({ z: { x } } = y);
     });
 }
 function fn10(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         ({ z: { x } = y } = y);
     });
 }
 function fn11(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         x = __rest(y, []);
     });
 }
 function fn12(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         [x] = y;
     });
 }
 function fn13(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         [x = y] = y;
     });
 }
 function fn14(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         [, x] = y;
     });
 }
 function fn15(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         [...x] = y;
     });
 }
 function fn16(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         [[x]] = y;
     });
 }
 function fn17(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         [[x] = y] = y;
     });
 }
-function fn18({ x }) {
-    var x;
-    return __awaiter(this, void 0, void 0, function* () {
+function fn18(_a) {
+    return __awaiter(this, arguments, void 0, function* ({ x }) {
+        var x;
     });
 }
-function fn19([x]) {
-    var x;
-    return __awaiter(this, void 0, void 0, function* () {
+function fn19(_a) {
+    return __awaiter(this, arguments, void 0, function* ([x]) {
+        var x;
     });
 }
 function fn20(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         {
         }
     });
 }
 function fn21(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         if (y) {
         }
     });
 }
 function fn22(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         if (y) {
         }
         else {
@@ -356,8 +358,8 @@ function fn22(x) {
     });
 }
 function fn23(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         try {
         }
         catch (e) {
@@ -365,8 +367,8 @@ function fn23(x) {
     });
 }
 function fn24(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         try {
         }
         catch (e) {
@@ -392,8 +394,8 @@ function fn26(x) {
     });
 }
 function fn27(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         try {
         }
         finally {
@@ -401,94 +403,94 @@ function fn27(x) {
     });
 }
 function fn28(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         while (y) {
         }
     });
 }
 function fn29(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         do {
         } while (y);
     });
 }
 function fn30(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         for (x = y;;) {
         }
     });
 }
 function fn31(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         for ({ x } = y;;) {
         }
     });
 }
 function fn32(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         for (;;) {
         }
     });
 }
 function fn33(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         for (x in y) {
         }
     });
 }
 function fn34(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         for (var z in y) {
         }
     });
 }
 function fn35(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         for (x of y) {
         }
     });
 }
 function fn36(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         for ({ x } of y) {
         }
     });
 }
 function fn37(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         for (var z of y) {
         }
     });
 }
 function fn38(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         switch (y) {
             case y:
         }
     });
 }
 function fn39(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         foo: {
             break foo;
         }
     });
 }
 function fn40(x) {
-    var x;
     return __awaiter(this, void 0, void 0, function* () {
+        var x;
         try {
         }
         catch (_a) {

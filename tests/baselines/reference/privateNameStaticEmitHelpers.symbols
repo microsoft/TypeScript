@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/main.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticEmitHelpers.ts] ////
+
+=== main.ts ===
 export class S {
 >S : Symbol(S, Decl(main.ts, 0, 0))
 
@@ -16,7 +18,7 @@ export class S {
 >S : Symbol(S, Decl(main.ts, 0, 0))
 }
 
-=== tests/cases/conformance/classes/members/privateNames/tslib.d.ts ===
+=== tslib.d.ts ===
 // these are pre-TS4.3 versions of emit helpers, which only supported private instance fields
 export declare function __classPrivateFieldGet<T extends object, V>(receiver: T, state: any): V;
 >__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(tslib.d.ts, --, --))

@@ -1,51 +1,76 @@
-=== tests/cases/conformance/classes/members/privateNames/a.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-2.ts] ////
+
+=== a.ts ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
     #x;
 >#x : any
+>   : ^^^
 
     copy(other: import("./b").Foo) {
 >copy : (other: import("./b").Foo) => void
->other : import("tests/cases/conformance/classes/members/privateNames/b").Foo
+>     : ^     ^^                 ^^^^^^^^^
+>other : import("b").Foo
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
         other.#x; // error
 >other.#x : any
->other : import("tests/cases/conformance/classes/members/privateNames/b").Foo
+>         : ^^^
+>other : import("b").Foo
+>      : ^^^^^^^^^^^^^^^^^^^^^
     }
 }
     
-=== tests/cases/conformance/classes/members/privateNames/b.ts ===
+=== b.ts ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
     #x;
 >#x : any
+>   : ^^^
 }
 
-=== tests/cases/conformance/classes/members/privateNames/main.ts ===
+=== main.ts ===
 import { Foo as A } from "./a";
 >Foo : typeof A
+>    : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 import { Foo as B } from "./b";
 >Foo : typeof B
+>    : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 const a = new A();
 >a : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 const b = new B();
 >b : B
+>  : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 a.copy(b); // error
 >a.copy(b) : void
->a.copy : (other: B) => void
+>          : ^^^^
+>a.copy : (other: import("b").Foo) => void
+>       : ^     ^^                     ^^^^^^^^^
 >a : A
->copy : (other: B) => void
+>  : ^
+>copy : (other: import("b").Foo) => void
+>     : ^     ^^                     ^^^^^^^^^
 >b : B
+>  : ^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInLambda1.ts] ////
+
 //// [unusedTypeParameterInLambda1.ts]
 class A {
     public f1() {

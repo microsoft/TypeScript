@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/inferStringLiteralUnionForBindingElement.ts] ////
+
+=== inferStringLiteralUnionForBindingElement.ts ===
+declare function func<T extends string>(arg: { keys: T[] }): { readonly keys: T[]; readonly firstKey: T; };
+>func : Symbol(func, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 0))
+>T : Symbol(T, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 22))
+>arg : Symbol(arg, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 40))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 46))
+>T : Symbol(T, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 22))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 62))
+>T : Symbol(T, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 22))
+>firstKey : Symbol(firstKey, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 82))
+>T : Symbol(T, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 22))
+
+function func1() {
+>func1 : Symbol(func1, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 107))
+
+    const { firstKey } = func({keys: ["aa", "bb"]})
+>firstKey : Symbol(firstKey, Decl(inferStringLiteralUnionForBindingElement.ts, 3, 11))
+>func : Symbol(func, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 0))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 3, 31))
+
+    const a: "aa" | "bb" = firstKey;
+>a : Symbol(a, Decl(inferStringLiteralUnionForBindingElement.ts, 4, 9))
+>firstKey : Symbol(firstKey, Decl(inferStringLiteralUnionForBindingElement.ts, 3, 11))
+
+    const { keys } = func({keys: ["aa", "bb"]})
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 6, 11))
+>func : Symbol(func, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 0))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 6, 27))
+
+    const b: ("aa" | "bb")[] = keys;
+>b : Symbol(b, Decl(inferStringLiteralUnionForBindingElement.ts, 7, 9))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 6, 11))
+}
+  
+function func2() {
+>func2 : Symbol(func2, Decl(inferStringLiteralUnionForBindingElement.ts, 8, 1))
+
+    const { keys, firstKey } = func({keys: ["aa", "bb"]})
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 11, 11))
+>firstKey : Symbol(firstKey, Decl(inferStringLiteralUnionForBindingElement.ts, 11, 17))
+>func : Symbol(func, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 0))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 11, 37))
+
+    const a: "aa" | "bb" = firstKey;
+>a : Symbol(a, Decl(inferStringLiteralUnionForBindingElement.ts, 12, 9))
+>firstKey : Symbol(firstKey, Decl(inferStringLiteralUnionForBindingElement.ts, 11, 17))
+
+    const b: ("aa" | "bb")[] = keys;
+>b : Symbol(b, Decl(inferStringLiteralUnionForBindingElement.ts, 13, 9))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 11, 11))
+}
+
+function func3() {
+>func3 : Symbol(func3, Decl(inferStringLiteralUnionForBindingElement.ts, 14, 1))
+
+    const x = func({keys: ["aa", "bb"]})
+>x : Symbol(x, Decl(inferStringLiteralUnionForBindingElement.ts, 17, 9))
+>func : Symbol(func, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 0))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 17, 20))
+
+    const a: "aa" | "bb" = x.firstKey;
+>a : Symbol(a, Decl(inferStringLiteralUnionForBindingElement.ts, 18, 9))
+>x.firstKey : Symbol(firstKey, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 82))
+>x : Symbol(x, Decl(inferStringLiteralUnionForBindingElement.ts, 17, 9))
+>firstKey : Symbol(firstKey, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 82))
+
+    const b: ("aa" | "bb")[] = x.keys;
+>b : Symbol(b, Decl(inferStringLiteralUnionForBindingElement.ts, 19, 9))
+>x.keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 62))
+>x : Symbol(x, Decl(inferStringLiteralUnionForBindingElement.ts, 17, 9))
+>keys : Symbol(keys, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 62))
+}
+

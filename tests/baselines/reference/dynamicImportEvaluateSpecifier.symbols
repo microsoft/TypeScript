@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/dynamicImportEvaluateSpecifier.ts] ////
+
+=== dynamicImportEvaluateSpecifier.ts ===
+// https://github.com/microsoft/TypeScript/issues/48285
+let i = 0;
+>i : Symbol(i, Decl(dynamicImportEvaluateSpecifier.ts, 1, 3))
+
+import(String(i++));
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 3 more)
+>i : Symbol(i, Decl(dynamicImportEvaluateSpecifier.ts, 1, 3))
+
+import(String(i++));
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 3 more)
+>i : Symbol(i, Decl(dynamicImportEvaluateSpecifier.ts, 1, 3))
+
+const getPath = async () => {
+>getPath : Symbol(getPath, Decl(dynamicImportEvaluateSpecifier.ts, 6, 5))
+
+	/* in reality this would do some async FS operation, or a web request */
+	return "/root/my/cool/path";
+};
+
+const someFunction = async () => {
+>someFunction : Symbol(someFunction, Decl(dynamicImportEvaluateSpecifier.ts, 11, 5))
+
+	const result = await import(await getPath());
+>result : Symbol(result, Decl(dynamicImportEvaluateSpecifier.ts, 12, 6))
+>getPath : Symbol(getPath, Decl(dynamicImportEvaluateSpecifier.ts, 6, 5))
+
+};
+

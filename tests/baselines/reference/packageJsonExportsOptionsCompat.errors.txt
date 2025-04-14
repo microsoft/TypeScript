@@ -1,0 +1,24 @@
+/tsconfig.json(4,5): error TS5098: Option 'customConditions' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
+/tsconfig.json(5,5): error TS5098: Option 'resolvePackageJsonExports' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
+/tsconfig.json(6,5): error TS5098: Option 'resolvePackageJsonImports' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
+
+
+==== /tsconfig.json (3 errors) ====
+    {
+      "compilerOptions": {
+        "moduleResolution": "classic",
+        "customConditions": ["webpack", "browser"],
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS5098: Option 'customConditions' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
+        "resolvePackageJsonExports": true,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5098: Option 'resolvePackageJsonExports' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
+        "resolvePackageJsonImports": true,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5098: Option 'resolvePackageJsonImports' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
+        "noEmit": true
+      }
+    }
+    
+==== /index.ts (0 errors) ====
+    

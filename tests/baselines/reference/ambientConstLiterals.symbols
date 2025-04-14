@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientConstLiterals.ts ===
+//// [tests/cases/compiler/ambientConstLiterals.ts] ////
+
+=== ambientConstLiterals.ts ===
 function f<T>(x: T): T {
 >f : Symbol(f, Decl(ambientConstLiterals.ts, 0, 0))
 >T : Symbol(T, Decl(ambientConstLiterals.ts, 0, 11))

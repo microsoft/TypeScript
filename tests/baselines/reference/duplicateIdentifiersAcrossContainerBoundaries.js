@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts] ////
+
 //// [duplicateIdentifiersAcrossContainerBoundaries.ts]
 module M {
     export interface I { }

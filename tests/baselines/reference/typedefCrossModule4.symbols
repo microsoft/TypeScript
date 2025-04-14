@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/mod3.js ===
+//// [tests/cases/conformance/jsdoc/typedefCrossModule4.ts] ////
+
+=== mod3.js ===
 /** @typedef {number} Foo */
 class Bar { }
 >Bar : Symbol(Bar, Decl(mod3.js, 0, 0))

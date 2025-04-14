@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeFromArrayLiteral.ts] ////
+
 //// [unionTypeFromArrayLiteral.ts]
 // The resulting type an array literal expression is determined as follows:
 // If the array literal is empty, the resulting type is an array type with the element type Undefined.

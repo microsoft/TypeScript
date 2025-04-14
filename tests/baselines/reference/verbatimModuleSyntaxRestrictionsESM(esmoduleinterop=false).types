@@ -1,0 +1,62 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxRestrictionsESM.ts] ////
+
+=== /decl.d.ts ===
+declare class CJSy {}
+>CJSy : CJSy
+>     : ^^^^
+
+export = CJSy;
+>CJSy : CJSy
+>     : ^^^^
+
+=== /ambient.d.ts ===
+declare module "ambient" {
+>"ambient" : typeof import("ambient")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const _export: number;
+>_export : number
+>        : ^^^^^^
+
+    export = _export;
+>_export : number
+>        : ^^^^^^
+}
+
+=== /types.ts ===
+interface Typey {}
+export type { Typey };
+>Typey : Typey
+>      : ^^^^^
+
+=== /main.ts ===
+import CJSy = require("./decl"); // error
+>CJSy : typeof CJSy
+>     : ^^^^^^^^^^^
+
+import type CJSy2 = require("./decl"); // ok I guess?
+>CJSy2 : typeof CJSy
+>      : ^^^^^^^^^^^
+
+import CJSy3 from "./decl"; // ok in esModuleInterop
+>CJSy3 : any
+>      : ^^^
+
+import * as types from "./types"; // ok
+>types : typeof types
+>      : ^^^^^^^^^^^^
+
+CJSy;
+>CJSy : typeof CJSy
+>     : ^^^^^^^^^^^
+
+=== /ns.ts ===
+export namespace ns {
+>ns : typeof ns
+>   : ^^^^^^^^^
+
+    export enum A {}
+>A : A
+>  : ^
+}
+

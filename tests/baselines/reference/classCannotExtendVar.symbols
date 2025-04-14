@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classCannotExtendVar.ts ===
+//// [tests/cases/compiler/classCannotExtendVar.ts] ////
+
+=== classCannotExtendVar.ts ===
 var Markup;
 >Markup : Symbol(Markup, Decl(classCannotExtendVar.ts, 0, 3))
 

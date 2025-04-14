@@ -26,6 +26,7 @@ verify.completions({
             name: "foo",
             sortText: completion.SortText.LocationPriority,
             insertText: "override foo(a: string): void {\n}",
+            filterText: "foo"
         }
     ],
 });

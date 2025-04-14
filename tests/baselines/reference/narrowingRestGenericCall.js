@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingRestGenericCall.ts] ////
+
 //// [narrowingRestGenericCall.ts]
 interface Slugs {
   foo: string;

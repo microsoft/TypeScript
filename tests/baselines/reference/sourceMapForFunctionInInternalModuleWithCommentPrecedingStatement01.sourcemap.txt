@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js
+emittedFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js
 sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts
 -------------------------------------------------------------------
 >>>var Q;

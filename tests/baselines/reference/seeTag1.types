@@ -1,28 +1,38 @@
-=== tests/cases/conformance/jsdoc/seeTag1.ts ===
+//// [tests/cases/conformance/jsdoc/seeTag1.ts] ////
+
+=== seeTag1.ts ===
 interface Foo {
     foo: string
 >foo : string
+>    : ^^^^^^
 }
 
 namespace NS {
     export interface Bar {
         baz: Foo
 >baz : Foo
+>    : ^^^
     }
 }
 
 /** @see {Foo} foooo*/
 const a = ""
 >a : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 /** @see {NS.Bar} ns.bar*/
 const b = ""
 >b : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 /** @see {b} b */
 const c = ""
 >c : ""
+>  : ^^
 >"" : ""
+>   : ^^
 

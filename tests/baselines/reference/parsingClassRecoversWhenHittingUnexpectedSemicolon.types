@@ -1,9 +1,13 @@
-=== tests/cases/compiler/parsingClassRecoversWhenHittingUnexpectedSemicolon.ts ===
+//// [tests/cases/compiler/parsingClassRecoversWhenHittingUnexpectedSemicolon.ts] ////
+
+=== parsingClassRecoversWhenHittingUnexpectedSemicolon.ts ===
 class C {
 >C : C
+>  : ^
 
     public f() { };
 >f : () => void
+>  : ^^^^^^^^^^
 
     private m;
 >m : any

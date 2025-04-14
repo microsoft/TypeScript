@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ModuleWithoutModuleGenTarget.ts] ////
+
 //// [es5ModuleWithoutModuleGenTarget.ts]
 export class A
 {

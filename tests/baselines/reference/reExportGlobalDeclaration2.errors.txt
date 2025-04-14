@@ -1,12 +1,12 @@
-tests/cases/compiler/file2.ts(1,9): error TS2661: Cannot export 'I1'. Only local declarations can be exported from a module.
-tests/cases/compiler/file2.ts(1,13): error TS2661: Cannot export 'I1'. Only local declarations can be exported from a module.
-tests/cases/compiler/file2.ts(2,9): error TS2661: Cannot export 'I2'. Only local declarations can be exported from a module.
-tests/cases/compiler/file2.ts(2,13): error TS2661: Cannot export 'I2'. Only local declarations can be exported from a module.
-tests/cases/compiler/file2.ts(3,9): error TS2661: Cannot export 'I1'. Only local declarations can be exported from a module.
-tests/cases/compiler/file2.ts(4,9): error TS2661: Cannot export 'I2'. Only local declarations can be exported from a module.
+file2.ts(1,9): error TS2661: Cannot export 'I1'. Only local declarations can be exported from a module.
+file2.ts(1,13): error TS2661: Cannot export 'I1'. Only local declarations can be exported from a module.
+file2.ts(2,9): error TS2661: Cannot export 'I2'. Only local declarations can be exported from a module.
+file2.ts(2,13): error TS2661: Cannot export 'I2'. Only local declarations can be exported from a module.
+file2.ts(3,9): error TS2661: Cannot export 'I1'. Only local declarations can be exported from a module.
+file2.ts(4,9): error TS2661: Cannot export 'I2'. Only local declarations can be exported from a module.
 
 
-==== tests/cases/compiler/file1.d.ts (0 errors) ====
+==== file1.d.ts (0 errors) ====
     declare interface I1 {
         x: number
     }
@@ -15,7 +15,7 @@ tests/cases/compiler/file2.ts(4,9): error TS2661: Cannot export 'I2'. Only local
         x: number
     }
     
-==== tests/cases/compiler/file2.ts (6 errors) ====
+==== file2.ts (6 errors) ====
     export {I1, I1 as II1};
             ~~
 !!! error TS2661: Cannot export 'I1'. Only local declarations can be exported from a module.

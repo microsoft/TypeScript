@@ -1,0 +1,165 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts ===
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}Base|] = class { };|>
+// class C extends [|Base|] { }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts ===
+  // /*FIND ALL REFS*/<|var [|Base|] = class { };|>
+  // class C extends Base { }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var Base: typeof Base",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts ===
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Base|] = class { };|>
+// class C extends [|Base|] { }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts ===
+  // <|var /*FIND ALL REFS*/[|Base|] = class { };|>
+  // class C extends Base { }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var Base: typeof Base",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts ===
+// <|var [|{| isWriteAccess: true |}Base|] = class { };|>
+// class C extends /*FIND ALL REFS*/[|Base|] { }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts ===
+  // <|var [|Base|] = class { };|>
+  // class C extends /*FIND ALL REFS*/Base { }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var Base: typeof Base",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "className"
+     }
+    ]
+   }
+  ]

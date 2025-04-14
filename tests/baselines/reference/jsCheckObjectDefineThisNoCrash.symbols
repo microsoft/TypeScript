@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsCheckObjectDefineThisNoCrash.js ===
+//// [tests/cases/compiler/jsCheckObjectDefineThisNoCrash.ts] ////
+
+=== jsCheckObjectDefineThisNoCrash.js ===
 class C {
 >C : Symbol(C, Decl(jsCheckObjectDefineThisNoCrash.js, 0, 0))
 

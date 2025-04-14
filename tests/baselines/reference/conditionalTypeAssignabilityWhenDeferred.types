@@ -1,203 +1,302 @@
-=== tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts ===
+//// [tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts] ////
+
+=== conditionalTypeAssignabilityWhenDeferred.ts ===
 export type FilterPropsByType<T, TT> = {
 >FilterPropsByType : FilterPropsByType<T, TT>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof T]: T[K] extends TT ? K : never
 }[keyof T];
 
 function select<
 >select : <T extends string | number, TList extends object, TValueProp extends FilterPropsByType<TList, T>>(property: T, list: TList[], valueProp: TValueProp) => void
+>       : ^ ^^^^^^^^^               ^^     ^^^^^^^^^      ^^          ^^^^^^^^^                           ^^        ^^ ^^    ^^       ^^         ^^          ^^^^^^^^^
 
   T extends string | number,
   TList extends object,
   TValueProp extends FilterPropsByType<TList, T>
 >(property: T, list: TList[], valueProp: TValueProp) {}
 >property : T
+>         : ^
 >list : TList[]
+>     : ^^^^^^^
 >valueProp : TValueProp
+>          : ^^^^^^^^^^
 
 export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
->func : <XX extends string>(x: XX, tipos: {    value: XX;}[]) => void
+>func : <XX extends string>(x: XX, tipos: { value: XX; }[]) => void
+>     : ^  ^^^^^^^^^      ^^ ^^  ^^     ^^                ^^^^^^^^^
 >x : XX
+>  : ^^
 >tipos : { value: XX; }[]
+>      : ^^^^^^^^^  ^^^^^
 >value : XX
+>      : ^^
 
   select(x, tipos, "value");
 >select(x, tipos, "value") : void
+>                          : ^^^^
 >select : <T extends string | number, TList extends object, TValueProp extends FilterPropsByType<TList, T>>(property: T, list: TList[], valueProp: TValueProp) => void
+>       : ^ ^^^^^^^^^               ^^     ^^^^^^^^^      ^^          ^^^^^^^^^                           ^^        ^^ ^^    ^^       ^^         ^^          ^^^^^^^^^
 >x : XX
+>  : ^^
 >tipos : { value: XX; }[]
+>      : ^^^^^^^^^  ^^^^^
 >"value" : "value"
+>        : ^^^^^^^
 }
 
 declare function onlyNullablePlease<T extends null extends T ? any : never>(
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
->null : null
+>                   : ^ ^^^^^^^^^                            ^^     ^^ ^^^^^    
 
   value: T
 >value : T
+>      : ^
 
 ): void;
 
 declare function onlyNullablePlease2<
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
+>                    : ^ ^^^^^^^^^                                ^^     ^^ ^^^^^    
 
   T extends [null] extends [T] ? any : never
->null : null
-
 >(value: T): void;
 >value : T
+>      : ^
 
 declare var z: string | null;
 >z : string | null
->null : null
+>  : ^^^^^^^^^^^^^
 
 onlyNullablePlease(z); // works as expected
 >onlyNullablePlease(z) : void
+>                      : ^^^^
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
+>                   : ^ ^^^^^^^^^                            ^^     ^^ ^^^^^    
 >z : string | null
+>  : ^^^^^^^^^^^^^
 
 onlyNullablePlease2(z); // works as expected
 >onlyNullablePlease2(z) : void
+>                       : ^^^^
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
+>                    : ^ ^^^^^^^^^                                ^^     ^^ ^^^^^    
 >z : string | null
+>  : ^^^^^^^^^^^^^
 
 declare var y: string;
 >y : string
+>  : ^^^^^^
 
 onlyNullablePlease(y); // error as expected
 >onlyNullablePlease(y) : void
+>                      : ^^^^
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
+>                   : ^ ^^^^^^^^^                            ^^     ^^ ^^^^^    
 >y : string
+>  : ^^^^^^
 
 onlyNullablePlease2(y); // error as expected
 >onlyNullablePlease2(y) : void
+>                       : ^^^^
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
+>                    : ^ ^^^^^^^^^                                ^^     ^^ ^^^^^    
 >y : string
+>  : ^^^^^^
 
 function f<T>(t: T) {
 >f : <T>(t: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 
   var x: T | null = Math.random() > 0.5 ? null : t;
 >x : T | null
->null : null
+>  : ^^^^^^^^
 >Math.random() > 0.5 ? null : t : T | null
+>                               : ^^^^^^^^
 >Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >0.5 : 0.5
->null : null
+>    : ^^^
 >t : T
+>  : ^
 
   onlyNullablePlease(x); // should work
 >onlyNullablePlease(x) : void
->onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
+>                      : ^^^^
+>onlyNullablePlease : <T_1 extends null extends T_1 ? any : never>(value: T_1) => void
+>                   : ^^^^^^^^^^^^^                              ^^     ^^   ^^^^^    
 >x : T | null
+>  : ^^^^^^^^
 
   onlyNullablePlease2(x); // should work
 >onlyNullablePlease2(x) : void
->onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
+>                       : ^^^^
+>onlyNullablePlease2 : <T_1 extends [null] extends [T_1] ? any : never>(value: T_1) => void
+>                    : ^^^^^^^^^^^^^                                  ^^     ^^   ^^^^^    
 >x : T | null
+>  : ^^^^^^^^
 }
 
 function f2<T>(t1: { x: T; y: T }, t2: T extends T ? { x: T; y: T } : never) {
->f2 : <T>(t1: {    x: T;    y: T;}, t2: T extends T ? {    x: T;    y: T;} : never) => void
+>f2 : <T>(t1: { x: T; y: T; }, t2: T extends T ? { x: T; y: T; } : never) => void
+>   : ^ ^^  ^^               ^^  ^^                                     ^^^^^^^^^
 >t1 : { x: T; y: T; }
+>   : ^^^^^ ^^^^^ ^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 >t2 : T extends T ? { x: T; y: T; } : never
+>   : ^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 
   t1 = t2; // OK
 >t1 = t2 : T extends T ? { x: T; y: T; } : never
+>        : ^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^
 >t1 : { x: T; y: T; }
+>   : ^^^^^ ^^^^^ ^^^
 >t2 : T extends T ? { x: T; y: T; } : never
+>   : ^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^
 
   t2 = t1; // should fail
 >t2 = t1 : { x: T; y: T; }
+>        : ^^^^^ ^^^^^ ^^^
 >t2 : T extends T ? { x: T; y: T; } : never
+>   : ^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^
 >t1 : { x: T; y: T; }
+>   : ^^^^^ ^^^^^ ^^^
 }
 
 type Foo<T> = T extends true ? string : "a";
 >Foo : Foo<T>
+>    : ^^^^^^
 >true : true
+>     : ^^^^
 
 function test<T>(x: Foo<T>, s: string) {
 >test : <T>(x: Foo<T>, s: string) => void
+>     : ^ ^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : Foo<T>
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
   x = "a"; // Currently an error, should be ok
 >x = "a" : "a"
+>        : ^^^
 >x : Foo<T>
+>  : ^^^^^^
 >"a" : "a"
+>    : ^^^
 
   x = s; // Error
 >x = s : string
+>      : ^^^^^^
 >x : Foo<T>
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 }
 
 // #26933
 type Distributive<T> = T extends { a: number } ? { a: number } : { b: number };
 >Distributive : Distributive<T>
+>             : ^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 function testAssignabilityToConditionalType<T>() {
 >testAssignabilityToConditionalType : <T>() => void
+>                                   : ^ ^^^^^^^^^^^
 
   const o = { a: 1, b: 2 };
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 2 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
   const x: [T] extends [string]
 >x : [T] extends [string] ? { y: number; } : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 
     ? { y: number }
 >y : number
+>  : ^^^^^^
 
     : { a: number; b: number } = undefined!;
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >undefined! : never
+>           : ^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   // Simple case: OK
   const o1: [T] extends [number] ? { a: number } : { b: number } = o;
 >o1 : [T] extends [number] ? { a: number; } : { b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // Simple case where source happens to be a conditional type: also OK
   const x1: [T] extends [number]
 >x1 : [T] extends [number] ? [T] extends [string] ? { y: number; } : { a: number; } : [T] extends [string] ? { y: number; } : { b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
 
     ? ([T] extends [string] ? { y: number } : { a: number })
 >y : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
     : ([T] extends [string] ? { y: number } : { b: number }) = x;
 >y : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x : [T] extends [string] ? { y: number; } : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 
   // Infer type parameters: no good
   const o2: [T] extends [[infer U]] ? U : { b: number } = o;
 >o2 : [T] extends [[infer U]] ? U : { b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // The next 4 are arguable - if you choose to ignore the `never` distribution case,
   // then they're all good. The `never` case _is_ a bit of an outlier - we say distributive types
@@ -209,105 +308,148 @@ function testAssignabilityToConditionalType<T>() {
   // Distributive where T might instantiate to never: no good
   const o3: Distributive<T> = o;
 >o3 : Distributive<T>
+>   : ^^^^^^^^^^^^^^^
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // Distributive where T & string might instantiate to never: also no good
   const o4: Distributive<T & string> = o;
 >o4 : Distributive<T & string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // Distributive where {a: T} cannot instantiate to never: OK
   const o5: Distributive<{ a: T }> = o;
 >o5 : Distributive<{ a: T; }>
+>   : ^^^^^^^^^^^^^^^^^^ ^^^^
 >a : T
+>  : ^
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
   const o6: Distributive<[T] extends [never] ? { a: number } : never> = o;
 >o6 : Distributive<[T] extends [never] ? { a: number; } : never>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type Wrapped<T> = { ___secret: T };
 >Wrapped : Wrapped<T>
+>        : ^^^^^^^^^^
 >___secret : T
+>          : ^
 
 type Unwrap<T> = T extends Wrapped<infer U> ? U : T;
 >Unwrap : Unwrap<T>
+>       : ^^^^^^^^^
 
 declare function set<T, K extends keyof T>(
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^            ^^^^^            
 
   obj: T,
 >obj : T
+>    : ^
 
   key: K,
 >key : K
+>    : ^
 
   value: Unwrap<T[K]>
 >value : Unwrap<T[K]>
+>      : ^^^^^^^^^^^^
 
 ): Unwrap<T[K]>;
 
 class Foo2 {
 >Foo2 : Foo2
+>     : ^^^^
 
   prop!: Wrapped<string>;
 >prop : Wrapped<string>
+>     : ^^^^^^^^^^^^^^^
 
   method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
     set(this, "prop", "hi"); // <-- type error
 >set(this, "prop", "hi") : Unwrap<this["prop"]>
+>                        : ^^^^^^^^^^^^^^^^^^^^
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^            ^^^^^            
 >this : this
+>     : ^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
   }
 }
 
 set(new Foo2(), "prop", "hi"); // <-- typechecks
 >set(new Foo2(), "prop", "hi") : string
+>                              : ^^^^^^
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^            ^^^^^            
 >new Foo2() : Foo2
+>           : ^^^^
 >Foo2 : typeof Foo2
+>     : ^^^^^^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
 type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any]
 >InferBecauseWhyNot : InferBecauseWhyNot<T>
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 >p : P1
+>  : ^^
 
   ? P1 | T
   : never;
 
 function f3<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
 >f3 : <Q extends (arg: any) => any>(x: Q) => InferBecauseWhyNot<Q>
+>   : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^                     
 >arg : any
+>    : ^^^
 >x : Q
+>  : ^
 
   return x;
 >x : Q
+>  : ^
 }
 
 type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any
 >InferBecauseWhyNotDistributive : InferBecauseWhyNotDistributive<T>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : P1
+>  : ^^
 
   ? P1 | T
   : never;
 
 function f4<Q extends (arg: any) => any>(
 >f4 : <Q extends (arg: any) => any>(x: Q) => InferBecauseWhyNotDistributive<Q>
+>   : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^                                 
 >arg : any
+>    : ^^^
 
   x: Q
 >x : Q
+>  : ^
 
 ): InferBecauseWhyNotDistributive<Q> {
   return x; // should fail
 >x : Q
+>  : ^
 }
 

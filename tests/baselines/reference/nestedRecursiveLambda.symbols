@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedRecursiveLambda.ts ===
+//// [tests/cases/compiler/nestedRecursiveLambda.ts] ////
+
+=== nestedRecursiveLambda.ts ===
 function f(a:any) {
 >f : Symbol(f, Decl(nestedRecursiveLambda.ts, 0, 0))
 >a : Symbol(a, Decl(nestedRecursiveLambda.ts, 0, 11))

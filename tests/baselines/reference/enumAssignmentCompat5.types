@@ -1,83 +1,131 @@
-=== tests/cases/compiler/enumAssignmentCompat5.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat5.ts] ////
+
+=== enumAssignmentCompat5.ts ===
 enum E {
 >E : E
+>  : ^
 
     A, B, C
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 >C : E.C
+>  : ^^^
 }
 enum Computed {
 >Computed : Computed
+>         : ^^^^^^^^
 
     A = 1 << 1,
->A : Computed
+>A : Computed.A
+>  : ^^^^^^^^^^
 >1 << 1 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
     B = 1 << 2,
->B : Computed
+>B : Computed.B
+>  : ^^^^^^^^^^
 >1 << 2 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     C = 1 << 3,
->C : Computed
+>C : Computed.C
+>  : ^^^^^^^^^^
 >1 << 3 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >3 : 3
+>  : ^
 }
 let n: number;
 >n : number
+>  : ^^^^^^
 
 let e: E = n; // ok because it's too inconvenient otherwise
 >e : E
+>  : ^
 >n : number
+>  : ^^^^^^
 
 e = 0; // ok, in range
 >e = 0 : 0
+>      : ^
 >e : E
+>  : ^
 >0 : 0
+>  : ^
 
 e = 4; // ok, out of range, but allowed computed enums don't have all members
 >e = 4 : 4
+>      : ^
 >e : E
+>  : ^
 >4 : 4
+>  : ^
 
 let a: E.A = 0; // ok, A === 0
 >a : E.A
+>  : ^^^
 >E : any
+>  : ^^^
 >0 : 0
+>  : ^
 
 a = 2; // error, 2 !== 0
 >a = 2 : 2
+>      : ^
 >a : E.A
+>  : ^^^
 >2 : 2
+>  : ^
 
 a = n; // ok
 >a = n : number
+>      : ^^^^^^
 >a : E.A
+>  : ^^^
 >n : number
+>  : ^^^^^^
 
 let c: Computed = n; // ok
 >c : Computed
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 c = n; // ok
 >c = n : number
+>      : ^^^^^^
 >c : Computed
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 c = 4; // ok
 >c = 4 : 4
+>      : ^
 >c : Computed
+>  : ^^^^^^^^
 >4 : 4
+>  : ^
 
 let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Computed has no enum literals
->ca : Computed
+>ca : Computed.A
+>   : ^^^^^^^^^^
 >Computed : any
+>         : ^^^
 >1 : 1
+>  : ^
 
 
 

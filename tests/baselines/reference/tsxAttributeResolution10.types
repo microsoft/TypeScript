@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution10.tsx] ////
+
+=== react.d.ts ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -6,41 +8,56 @@ declare module JSX {
 	interface ElementAttributesProperty {
 		props;
 >props : any
+>      : ^^^
 	}
 }
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 export class MyComponent {  
 >MyComponent : MyComponent
+>            : ^^^^^^^^^^^
 
   render() {
 >render : () => void
+>       : ^^^^^^^^^^
   }
 
   props: {
 >props : { [s: string]: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   	[s: string]: boolean;
 >s : string
+>  : ^^^^^^
   }
 }
 
 // Should be an error
 <MyComponent bar='world' />;
 ><MyComponent bar='world' /> : JSX.Element
+>                            : ^^^^^^^^^^^
 >MyComponent : typeof MyComponent
+>            : ^^^^^^^^^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 
 // Should be OK
 <MyComponent bar={true} />;
 ><MyComponent bar={true} /> : JSX.Element
+>                           : ^^^^^^^^^^^
 >MyComponent : typeof MyComponent
+>            : ^^^^^^^^^^^^^^^^^^
 >bar : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 
 // Should be ok
 <MyComponent data-bar='hello' />;
 ><MyComponent data-bar='hello' /> : JSX.Element
+>                                 : ^^^^^^^^^^^
 >MyComponent : typeof MyComponent
+>            : ^^^^^^^^^^^^^^^^^^
 >data-bar : string
+>         : ^^^^^^
 

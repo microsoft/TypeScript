@@ -9,7 +9,7 @@ void def;
 
 //// [code.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var C = /** @class */ (function () {
     function C() {
     }
@@ -17,9 +17,9 @@ var C = /** @class */ (function () {
     return C;
 }());
 ;
-exports["default"] = C.x;
+exports.default = C.x;
 //// [usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var code_1 = require("./code");
-void code_1["default"];
+void code_1.default;

@@ -1,29 +1,44 @@
-=== tests/cases/compiler/lateBoundMethodNameAssigmentJS.js ===
+//// [tests/cases/compiler/lateBoundMethodNameAssigmentJS.ts] ////
+
+=== lateBoundMethodNameAssigmentJS.js ===
 const _symbol = Symbol("_sym");
 >_symbol : unique symbol
+>        : ^^^^^^^^^^^^^
 >Symbol("_sym") : unique symbol
+>               : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"_sym" : "_sym"
+>       : ^^^^^^
 
 export class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
     constructor() {
         this[_symbol] = this[_symbol].bind(this);
 >this[_symbol] = this[_symbol].bind(this) : error
 >this[_symbol] : error
 >this : this
+>     : ^^^^
 >_symbol : unique symbol
+>        : ^^^^^^^^^^^^^
 >this[_symbol].bind(this) : error
 >this[_symbol].bind : error
 >this[_symbol] : any
+>              : ^^^
 >this : this
+>     : ^^^^
 >_symbol : unique symbol
+>        : ^^^^^^^^^^^^^
 >bind : any
+>     : ^^^
 >this : this
+>     : ^^^^
     }
 
     async [_symbol]() { }
 >[_symbol] : error
 >_symbol : unique symbol
+>        : ^^^^^^^^^^^^^
 }

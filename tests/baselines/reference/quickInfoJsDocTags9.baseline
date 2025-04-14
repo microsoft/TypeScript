@@ -1,3 +1,21 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTags9.js ===
+// /**
+//  * @typedef {{ [x: string]: any, y: number }} Foo
+//  */
+// 
+// /**
+//  * @type {(t: T) => number}
+//  * @template {Foo} T Comment Text
+//  */
+// const foo = t => t.y;
+//       ^^^
+// | ----------------------------------------------------------------------
+// | const foo: (t: T) => number
+// | @type {(t: T) => number}
+// | @template {Foo} T Comment Text
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +23,7 @@
       "position": 135,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {

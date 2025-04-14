@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImportsWithUnderscores4.ts] ////
+
+=== m1.ts ===
 declare var console: any;
 >console : Symbol(console, Decl(m1.ts, 0, 11))
 
@@ -45,7 +47,7 @@ export function ___hello(){
 >console : Symbol(console, Decl(m1.ts, 0, 11))
 }
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import {_, __, ___hello, __esmodule, __proto, _hi}  from "./m1";
 >_ : Symbol(_, Decl(m2.ts, 0, 8))
 >__ : Symbol(__, Decl(m2.ts, 0, 10))

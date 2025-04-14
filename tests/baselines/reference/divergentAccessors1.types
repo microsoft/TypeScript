@@ -1,63 +1,90 @@
-=== tests/cases/compiler/divergentAccessors1.ts ===
+//// [tests/cases/compiler/divergentAccessors1.ts] ////
+
+=== divergentAccessors1.ts ===
 // Accessors in interfaces/types
 
 {
     interface IHasGetSet {
         get foo(): number;
 >foo : number
+>    : ^^^^^^
 
         set foo(v: number | string);
 >foo : number
+>    : ^^^^^^
 >v : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     
     const ihgs: IHasGetSet = null as any;
 >ihgs : IHasGetSet
+>     : ^^^^^^^^^^
 >null as any : any
->null : null
 
     ihgs.foo = "32";
 >ihgs.foo = "32" : "32"
+>                : ^^^^
 >ihgs.foo : string | number
+>         : ^^^^^^^^^^^^^^^
 >ihgs : IHasGetSet
+>     : ^^^^^^^^^^
 >foo : string | number
+>    : ^^^^^^^^^^^^^^^
 >"32" : "32"
+>     : ^^^^
 
     let r_ihgs_foo: number = ihgs.foo;
 >r_ihgs_foo : number
+>           : ^^^^^^
 >ihgs.foo : number
+>         : ^^^^^^
 >ihgs : IHasGetSet
+>     : ^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 }
 
 {
     type T_HasGetSet = {
->T_HasGetSet : { foo: number; }
+>T_HasGetSet : { get foo(): number; set foo(v: number | string); }
+>            : ^^^^^^^^^^^^^      ^^^^^^^^^^ ^^               ^^^^
 
         get foo(): number;
 >foo : number
+>    : ^^^^^^
 
         set foo(v: number | string);
 >foo : number
+>    : ^^^^^^
 >v : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     
     const t_hgs: T_HasGetSet = null as any;
->t_hgs : { foo: number; }
+>t_hgs : { get foo(): number; set foo(v: number | string); }
+>      : ^^^^^^^^^^^^^      ^^^^^^^^^^ ^^               ^^^^
 >null as any : any
->null : null
 
     t_hgs.foo = "32";
 >t_hgs.foo = "32" : "32"
+>                 : ^^^^
 >t_hgs.foo : string | number
->t_hgs : { foo: number; }
+>          : ^^^^^^^^^^^^^^^
+>t_hgs : { get foo(): number; set foo(v: number | string); }
+>      : ^^^^^^^^^^^^^      ^^^^^^^^^^ ^^               ^^^^
 >foo : string | number
+>    : ^^^^^^^^^^^^^^^
 >"32" : "32"
+>     : ^^^^
 
     let r_t_hgs_foo: number = t_hgs.foo;
 >r_t_hgs_foo : number
+>            : ^^^^^^
 >t_hgs.foo : number
->t_hgs : { foo: number; }
+>          : ^^^^^^
+>t_hgs : { get foo(): number; set foo(v: number | string); }
+>      : ^^^^^^^^^^^^^      ^^^^^^^^^^ ^^               ^^^^
 >foo : number
+>    : ^^^^^^
 }
 

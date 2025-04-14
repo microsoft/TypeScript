@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts] ////
+
 //// [inheritanceMemberAccessorOverridingProperty.ts]
 class a {
     x: string;

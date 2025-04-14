@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingAssignmentReadonlyRespectsAssertion.ts] ////
+
 //// [narrowingAssignmentReadonlyRespectsAssertion.ts]
 // https://github.com/microsoft/TypeScript/issues/41984
 

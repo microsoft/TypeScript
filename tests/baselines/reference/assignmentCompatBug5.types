@@ -1,42 +1,70 @@
-=== tests/cases/compiler/assignmentCompatBug5.ts ===
+//// [tests/cases/compiler/assignmentCompatBug5.ts] ////
+
+=== assignmentCompatBug5.ts ===
 function foo1(x: { a: number; }) { }
->foo1 : (x: {    a: number;}) => void
+>foo1 : (x: { a: number; }) => void
+>     : ^ ^^              ^^^^^^^^^
 >x : { a: number; }
+>  : ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 foo1({ b: 5 });
 >foo1({ b: 5 }) : void
+>               : ^^^^
 >foo1 : (x: { a: number; }) => void
+>     : ^ ^^              ^^^^^^^^^
 >{ b: 5 } : { b: number; }
+>         : ^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
 function foo2(x: number[]) { }
 >foo2 : (x: number[]) => void
+>     : ^ ^^        ^^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 
 foo2(["s", "t"]);
 >foo2(["s", "t"]) : void
+>                 : ^^^^
 >foo2 : (x: number[]) => void
+>     : ^ ^^        ^^^^^^^^^
 >["s", "t"] : string[]
+>           : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 >"t" : "t"
+>    : ^^^
 
 function foo3(x: (n: number) =>number) { };
 >foo3 : (x: (n: number) => number) => void
+>     : ^ ^^                     ^^^^^^^^^
 >x : (n: number) => number
+>  : ^ ^^      ^^^^^      
 >n : number
+>  : ^^^^^^
 
 foo3((s:string) => { });
 >foo3((s:string) => { }) : void
+>                        : ^^^^
 >foo3 : (x: (n: number) => number) => void
+>     : ^ ^^                     ^^^^^^^^^
 >(s:string) => { } : (s: string) => void
+>                  : ^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 foo3((n) => { return; });
 >foo3((n) => { return; }) : void
+>                         : ^^^^
 >foo3 : (x: (n: number) => number) => void
+>     : ^ ^^                     ^^^^^^^^^
 >(n) => { return; } : (n: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInClasses.ts] ////
+
 //// [thisTypeInClasses.ts]
 class C1 {
     x: this;

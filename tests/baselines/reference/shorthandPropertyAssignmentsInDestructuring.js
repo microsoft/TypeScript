@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts] ////
+
 //// [shorthandPropertyAssignmentsInDestructuring.ts]
 (function() {
 	var s0;

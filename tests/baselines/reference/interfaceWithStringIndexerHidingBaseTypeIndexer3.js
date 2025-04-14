@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer3.ts] ////
+
 //// [interfaceWithStringIndexerHidingBaseTypeIndexer3.ts]
 interface Base {
     [x: number]: { a: number }

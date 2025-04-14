@@ -1,37 +1,53 @@
-=== tests/cases/compiler/functionOverloads7.ts ===
+//// [tests/cases/compiler/functionOverloads7.ts] ////
+
+=== functionOverloads7.ts ===
 class foo { 
 >foo : foo
+>    : ^^^
 
    private bar();
 >bar : { (): any; (foo: string): any; }
+>    : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 
    private bar(foo: string);
 >bar : { (): any; (foo: string): any; }
+>    : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
    private bar(foo?: any){ return "foo" }
 >bar : { (): any; (foo: string): any; }
+>    : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >foo : any
 >"foo" : "foo"
+>      : ^^^^^
 
    public n() {
 >n : () => void
+>  : ^^^^^^^^^^
 
      var foo = this.bar();
 >foo : any
 >this.bar() : any
 >this.bar : { (): any; (foo: string): any; }
+>         : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >this : this
+>     : ^^^^
 >bar : { (): any; (foo: string): any; }
+>    : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 
      foo = this.bar("test");
 >foo = this.bar("test") : any
 >foo : any
 >this.bar("test") : any
 >this.bar : { (): any; (foo: string): any; }
+>         : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >this : this
+>     : ^^^^
 >bar : { (): any; (foo: string): any; }
+>    : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >"test" : "test"
+>       : ^^^^^^
    }
 }
 

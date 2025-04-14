@@ -1,34 +1,47 @@
-=== tests/cases/compiler/genericPrototypeProperty.ts ===
+//// [tests/cases/compiler/genericPrototypeProperty.ts] ////
+
+=== genericPrototypeProperty.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     x: T;
 >x : T
+>  : ^
 
     foo(x: T): T { return null; }
 >foo : (x: T) => T
+>    : ^ ^^ ^^^^^ 
 >x : T
->null : null
+>  : ^
 }
 
 var r = C.prototype;
 >r : C<any>
+>  : ^^^^^^
 >C.prototype : C<any>
+>            : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : C<any>
+>          : ^^^^^^
 
 // should be any
 var r2 = r.x
 >r2 : any
 >r.x : any
 >r : C<any>
+>  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r3 = r.foo(null);
 >r3 : any
 >r.foo(null) : any
 >r.foo : (x: any) => any
+>      : ^ ^^^^^^^^^^^^^
 >r : C<any>
+>  : ^^^^^^
 >foo : (x: any) => any
->null : null
+>    : ^ ^^^^^^^^^^^^^
 

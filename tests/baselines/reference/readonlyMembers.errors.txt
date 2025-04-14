@@ -1,21 +1,22 @@
-tests/cases/compiler/readonlyMembers.ts(6,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(7,3): error TS2540: Cannot assign to 'b' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(16,14): error TS2540: Cannot assign to 'c' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(18,18): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(19,18): error TS2540: Cannot assign to 'b' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(20,18): error TS2540: Cannot assign to 'c' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(24,14): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(25,14): error TS2540: Cannot assign to 'b' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(26,14): error TS2540: Cannot assign to 'c' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(35,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(39,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(48,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(55,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/readonlyMembers.ts(61,1): error TS2542: Index signature in type '{ readonly [x: string]: string; }' only permits reading.
-tests/cases/compiler/readonlyMembers.ts(64,1): error TS2542: Index signature in type '{ readonly [x: number]: string; [x: string]: string; }' only permits reading.
+readonlyMembers.ts(6,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
+readonlyMembers.ts(7,3): error TS2540: Cannot assign to 'b' because it is a read-only property.
+readonlyMembers.ts(16,14): error TS2540: Cannot assign to 'c' because it is a read-only property.
+readonlyMembers.ts(18,18): error TS2540: Cannot assign to 'a' because it is a read-only property.
+readonlyMembers.ts(19,18): error TS2540: Cannot assign to 'b' because it is a read-only property.
+readonlyMembers.ts(20,18): error TS2540: Cannot assign to 'c' because it is a read-only property.
+readonlyMembers.ts(25,18): error TS2540: Cannot assign to 'c' because it is a read-only property.
+readonlyMembers.ts(29,14): error TS2540: Cannot assign to 'a' because it is a read-only property.
+readonlyMembers.ts(30,14): error TS2540: Cannot assign to 'b' because it is a read-only property.
+readonlyMembers.ts(31,14): error TS2540: Cannot assign to 'c' because it is a read-only property.
+readonlyMembers.ts(40,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
+readonlyMembers.ts(44,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
+readonlyMembers.ts(53,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
+readonlyMembers.ts(60,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
+readonlyMembers.ts(66,1): error TS2542: Index signature in type '{ readonly [x: string]: string; }' only permits reading.
+readonlyMembers.ts(69,1): error TS2542: Index signature in type '{ readonly [x: number]: string; [x: string]: string; }' only permits reading.
 
 
-==== tests/cases/compiler/readonlyMembers.ts (15 errors) ====
+==== readonlyMembers.ts (16 errors) ====
     interface X {
         readonly a: number;
         readonly b?: number;
@@ -48,7 +49,14 @@ tests/cases/compiler/readonlyMembers.ts(64,1): error TS2542: Index signature in 
                 this.c = 1;  // Error
                      ~
 !!! error TS2540: Cannot assign to 'c' because it is a read-only property.
-            }
+            };
+            (() => {
+                this.a = 1;  // Ok
+                this.b = 1;  // Ok
+                this.c = 1;  // Error
+                     ~
+!!! error TS2540: Cannot assign to 'c' because it is a read-only property.
+            })();
         }
         foo() {
             this.a = 1;  // Error

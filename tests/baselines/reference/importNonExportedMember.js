@@ -11,8 +11,9 @@ import { foo, bar } from "./a";
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
-exports.baz = exports.foo = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = foo;
+exports.baz = bar;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

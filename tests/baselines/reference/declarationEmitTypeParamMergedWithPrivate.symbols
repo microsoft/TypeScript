@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitTypeParamMergedWithPrivate.ts ===
+//// [tests/cases/compiler/declarationEmitTypeParamMergedWithPrivate.ts] ////
+
+=== declarationEmitTypeParamMergedWithPrivate.ts ===
 export class Test<T> {
 >Test : Symbol(Test, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 0))
 >T : Symbol(T, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 18), Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 22))

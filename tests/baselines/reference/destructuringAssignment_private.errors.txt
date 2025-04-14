@@ -1,10 +1,10 @@
-tests/cases/compiler/destructuringAssignment_private.ts(6,10): error TS2341: Property 'x' is private and only accessible within class 'C'.
-tests/cases/compiler/destructuringAssignment_private.ts(7,4): error TS2341: Property 'o' is private and only accessible within class 'C'.
-tests/cases/compiler/destructuringAssignment_private.ts(10,10): error TS2341: Property 'x' is private and only accessible within class 'C'.
-tests/cases/compiler/destructuringAssignment_private.ts(13,4): error TS2341: Property 'o' is private and only accessible within class 'C'.
+destructuringAssignment_private.ts(6,10): error TS2341: Property 'x' is private and only accessible within class 'C'.
+destructuringAssignment_private.ts(7,4): error TS2341: Property 'o' is private and only accessible within class 'C'.
+destructuringAssignment_private.ts(10,10): error TS2341: Property 'x' is private and only accessible within class 'C'.
+destructuringAssignment_private.ts(13,4): error TS2341: Property 'o' is private and only accessible within class 'C'.
 
 
-==== tests/cases/compiler/destructuringAssignment_private.ts (4 errors) ====
+==== destructuringAssignment_private.ts (4 errors) ====
     class C {
         private x = 0;
         private o = [{ a: 1 }];

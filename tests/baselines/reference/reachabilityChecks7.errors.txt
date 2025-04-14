@@ -1,8 +1,8 @@
-tests/cases/compiler/reachabilityChecks7.ts(13,16): error TS7030: Not all code paths return a value.
-tests/cases/compiler/reachabilityChecks7.ts(17,22): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+reachabilityChecks7.ts(13,16): error TS7030: Not all code paths return a value.
+reachabilityChecks7.ts(17,22): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 
 
-==== tests/cases/compiler/reachabilityChecks7.ts (2 errors) ====
+==== reachabilityChecks7.ts (2 errors) ====
     // async function without return type annotation - error
     async function f1() {    
     }
@@ -23,7 +23,7 @@ tests/cases/compiler/reachabilityChecks7.ts(17,22): error TS2355: A function who
     
     async function f4(): Promise<number> {
                          ~~~~~~~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         
     }
     

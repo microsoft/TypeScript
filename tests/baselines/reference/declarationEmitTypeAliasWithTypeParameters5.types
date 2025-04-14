@@ -1,19 +1,27 @@
-=== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters5.ts ===
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters5.ts] ////
+
+=== declarationEmitTypeAliasWithTypeParameters5.ts ===
 type Foo<T, Y> = {
 >Foo : Foo<T, Y>
+>    : ^^^^^^^^^
 
     foo<U, J>(): Foo<U, J>
 >foo : <U, J>() => Foo<U, J>
+>    : ^ ^^ ^^^^^^^         
 
 };
 export type SubFoo<R> = Foo<string, R>;
 >SubFoo : SubFoo<R>
+>       : ^^^^^^^^^
 
 function foo() {
 >foo : () => SubFoo<number>
+>    : ^^^^^^              
 
     return {} as SubFoo<number>;
 >{} as SubFoo<number> : SubFoo<number>
+>                     : ^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 }
 

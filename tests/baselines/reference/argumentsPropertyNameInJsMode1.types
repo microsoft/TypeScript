@@ -1,33 +1,55 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/argumentsPropertyNameInJsMode1.ts] ////
+
+=== a.js ===
 const foo = {
 >foo : { f1: (params: any) => void; }
+>    : ^^^^^^^      ^^^^^^^^^^^^^^^^^
 >{   f1: (params) => { }} : { f1: (params: any) => void; }
+>                         : ^^^^^^^      ^^^^^^^^^^^^^^^^^
 
    f1: (params) => { }
 >f1 : (params: any) => void
+>   : ^      ^^^^^^^^^^^^^^
 >(params) => { } : (params: any) => void
+>                : ^      ^^^^^^^^^^^^^^
 >params : any
+>       : ^^^
 }
 
 function f2(x) {
 >f2 : (x: any) => void
+>   : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
   foo.f1({ x, arguments: [] });
 >foo.f1({ x, arguments: [] }) : void
+>                             : ^^^^
 >foo.f1 : (params: any) => void
+>       : ^      ^^^^^^^^^^^^^^
 >foo : { f1: (params: any) => void; }
+>    : ^^^^^^^      ^^^^^^^^^^^^^^^^^
 >f1 : (params: any) => void
+>   : ^      ^^^^^^^^^^^^^^
 >{ x, arguments: [] } : { x: any; arguments: undefined[]; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >arguments : undefined[]
+>          : ^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 }
 
 f2(1, 2, 3);
 >f2(1, 2, 3) : void
+>            : ^^^^
 >f2 : (x: any) => void
+>   : ^ ^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

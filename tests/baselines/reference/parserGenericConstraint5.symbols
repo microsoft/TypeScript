@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint5.ts] ////
+
+=== parserGenericConstraint5.ts ===
 class C<T extends List<List<T>> > {
 >C : Symbol(C, Decl(parserGenericConstraint5.ts, 0, 0))
 >T : Symbol(T, Decl(parserGenericConstraint5.ts, 0, 8))

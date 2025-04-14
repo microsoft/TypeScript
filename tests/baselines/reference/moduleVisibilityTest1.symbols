@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleVisibilityTest1.ts ===
+//// [tests/cases/compiler/moduleVisibilityTest1.ts] ////
+
+=== moduleVisibilityTest1.ts ===
 module OuterMod {
 >OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
 

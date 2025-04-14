@@ -1,112 +1,153 @@
-=== tests/cases/compiler/interfaceDeclaration3.ts ===
+//// [tests/cases/compiler/interfaceDeclaration3.ts] ////
+
+=== interfaceDeclaration3.ts ===
 interface I1 { item:number; }
 >item : number
+>     : ^^^^^^
 
 module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     interface I1 { item:string; }  
 >item : string
+>     : ^^^^^^
 
     interface I2 { item:number; }   
 >item : number
+>     : ^^^^^^
 
     class C1 implements I1 {
 >C1 : C1
+>   : ^^
 
         public item:number;
 >item : number
+>     : ^^^^^^
     }
     class C2 implements I1 {
 >C2 : C2
+>   : ^^
 
         public item:string;
 >item : string
+>     : ^^^^^^
     }
     class C3 implements I2 {
 >C3 : C3
+>   : ^^
 
         public item:number;
 >item : number
+>     : ^^^^^^
     }
     
     class C4 implements M2.I1 { 
 >C4 : C4
+>   : ^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
         public item:string;
 >item : string
+>     : ^^^^^^
     }
 
     class C5 implements M2.M3.I1 {
 >C5 : C5
+>   : ^^
 >M2.M3 : any
+>      : ^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 >M3 : any
+>   : ^^^
 
         public item:string;
 >item : string
+>     : ^^^^^^
     }
 }
 
 export module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export interface I1 { item:string; }
 >item : string
+>     : ^^^^^^
 
     export interface I2 { item:string; }
 >item : string
+>     : ^^^^^^
 
     export module M3 {
         export interface I1 { item:string; }
 >item : string
+>     : ^^^^^^
     }
     class C1 implements I1 {
 >C1 : C1
+>   : ^^
 
         public item:number;    
 >item : number
+>     : ^^^^^^
     }
     class C2 implements I1 {
 >C2 : C2
+>   : ^^
 
         public item:string;    
 >item : string
+>     : ^^^^^^
     }
     class C3 implements I2 {
 >C3 : C3
+>   : ^^
 
         public item:string;    
 >item : string
+>     : ^^^^^^
     }
 }
 
 class C1 implements I1 {
 >C1 : C1
+>   : ^^
 
     public item:number;
 >item : number
+>     : ^^^^^^
 }
 
 class C2 implements M2.I1 { 
 >C2 : C2
+>   : ^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     public item:string;
 >item : string
+>     : ^^^^^^
 }
 
 class C3 implements M2.M3.I1 {
 >C3 : C3
+>   : ^^
 >M2.M3 : any
+>      : ^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 >M3 : any
+>   : ^^^
 
     public item:string;
 >item : string
+>     : ^^^^^^
 }
 
 interface I2 extends I1 { item:string; }
 >item : string
+>     : ^^^^^^
 

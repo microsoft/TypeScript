@@ -1,49 +1,76 @@
-=== tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts] ////
+
+=== compoundAdditionAssignmentLHSCannotBeAssigned.ts ===
 // string can add every type, and result string cannot be assigned to below types
 enum E { a, b, c }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 
 var x1: boolean;
 >x1 : boolean
+>   : ^^^^^^^
 
 x1 += '';
 >x1 += '' : string
+>         : ^^^^^^
 >x1 : boolean
+>   : ^^^^^^^
 >'' : ""
+>   : ^^
 
 var x2: number;
 >x2 : number
+>   : ^^^^^^
 
 x2 += '';
 >x2 += '' : string
+>         : ^^^^^^
 >x2 : number
+>   : ^^^^^^
 >'' : ""
+>   : ^^
 
 var x3: E;
 >x3 : E
+>   : ^
 
 x3 += '';
 >x3 += '' : string
+>         : ^^^^^^
 >x3 : E
+>   : ^
 >'' : ""
+>   : ^^
 
 var x4: {a: string};
 >x4 : { a: string; }
+>   : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 x4 += '';
 >x4 += '' : string
+>         : ^^^^^^
 >x4 : { a: string; }
+>   : ^^^^^      ^^^
 >'' : ""
+>   : ^^
 
 var x5: void;
 >x5 : void
+>   : ^^^^
 
 x5 += '';
 >x5 += '' : string
+>         : ^^^^^^
 >x5 : void
+>   : ^^^^
 >'' : ""
+>   : ^^
 

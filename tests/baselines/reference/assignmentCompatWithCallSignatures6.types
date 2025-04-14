@@ -1,208 +1,343 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts] ////
+
+=== assignmentCompatWithCallSignatures6.ts ===
 // checking assignment compatibility relations for function types. All valid
 
 class Base { foo: string; }
 >Base : Base
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 
 class Derived extends Base { bar: string; }
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 >bar : string
+>    : ^^^^^^
 
 class Derived2 extends Derived { baz: string; }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Derived : Derived
+>        : ^^^^^^^
 >baz : string
+>    : ^^^^^^
 
 class OtherDerived extends Base { bing: string; }
 >OtherDerived : OtherDerived
+>             : ^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 >bing : string
+>     : ^^^^^^
 
 interface A {
     a: <T>(x: T) => T[];
 >a : <T>(x: T) => T[]
+>  : ^ ^^ ^^ ^^^^^   
 >x : T
+>  : ^
 
     a2: <T>(x: T) => string[];
 >a2 : <T>(x: T) => string[]
+>   : ^ ^^ ^^ ^^^^^        
 >x : T
+>  : ^
 
     a3: <T>(x: T) => void;
 >a3 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^    
 >x : T
+>  : ^
 
     a4: <T,U>(x: T, y: U) => string;
 >a4 : <T, U>(x: T, y: U) => string
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     a5: <T,U>(x: (arg: T) => U) => T;
 >a5 : <T, U>(x: (arg: T) => U) => T
+>   : ^ ^^ ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
+>  : ^   ^^ ^^^^^ 
 >arg : T
+>    : ^
 
     a6: <T extends Base>(x: (arg: T) => Derived) => T;
 >a6 : <T extends Base>(x: (arg: T) => Derived) => T
+>   : ^ ^^^^^^^^^    ^^ ^^                   ^^^^^ 
 >x : (arg: T) => Derived
+>  : ^   ^^ ^^^^^       
 >arg : T
+>    : ^
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
 >a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>    : ^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : { foo: T; }
+>  : ^^^^^^^ ^^^
 >foo : T
+>    : ^
 >y : { foo: T; bar: T; }
+>  : ^^^^^^^ ^^^^^^^ ^^^
 >foo : T
+>    : ^
 >bar : T
+>    : ^
 
     a15: <T>(x: { a: T; b: T }) => T[];
 >a15 : <T>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
+>  : ^^^^^ ^^^^^ ^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
 >a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
+>  : ^^^^^ ^^^^^ ^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 }
 
 var x: A;
 >x : A
+>  : ^
 
 var b: <T>(x: T) => T[]; 
 >b : <T>(x: T) => T[]
+>  : ^ ^^ ^^ ^^^^^   
 >x : T
+>  : ^
 
 x.a = b;
 >x.a = b : <T>(x: T) => T[]
+>        : ^ ^^ ^^ ^^^^^   
 >x.a : <T>(x: T) => T[]
+>    : ^ ^^ ^^ ^^^^^   
 >x : A
+>  : ^
 >a : <T>(x: T) => T[]
+>  : ^ ^^ ^^ ^^^^^   
 >b : <T>(x: T) => T[]
+>  : ^ ^^ ^^ ^^^^^   
 
 b = x.a;
 >b = x.a : <T>(x: T) => T[]
+>        : ^ ^^ ^^ ^^^^^   
 >b : <T>(x: T) => T[]
+>  : ^ ^^ ^^ ^^^^^   
 >x.a : <T>(x: T) => T[]
+>    : ^ ^^ ^^ ^^^^^   
 >x : A
+>  : ^
 >a : <T>(x: T) => T[]
+>  : ^ ^^ ^^ ^^^^^   
 
 var b2: <T>(x: T) => string[]; 
 >b2 : <T>(x: T) => string[]
+>   : ^ ^^ ^^ ^^^^^        
 >x : T
+>  : ^
 
 x.a2 = b2;
 >x.a2 = b2 : <T>(x: T) => string[]
+>          : ^ ^^ ^^ ^^^^^        
 >x.a2 : <T>(x: T) => string[]
+>     : ^ ^^ ^^ ^^^^^        
 >x : A
+>  : ^
 >a2 : <T>(x: T) => string[]
+>   : ^ ^^ ^^ ^^^^^        
 >b2 : <T>(x: T) => string[]
+>   : ^ ^^ ^^ ^^^^^        
 
 b2 = x.a2;
 >b2 = x.a2 : <T>(x: T) => string[]
+>          : ^ ^^ ^^ ^^^^^        
 >b2 : <T>(x: T) => string[]
+>   : ^ ^^ ^^ ^^^^^        
 >x.a2 : <T>(x: T) => string[]
+>     : ^ ^^ ^^ ^^^^^        
 >x : A
+>  : ^
 >a2 : <T>(x: T) => string[]
+>   : ^ ^^ ^^ ^^^^^        
 
 var b3: <T>(x: T) => T;
 >b3 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 x.a3 = b3;
 >x.a3 = b3 : <T>(x: T) => T
+>          : ^ ^^ ^^ ^^^^^ 
 >x.a3 : <T>(x: T) => void
+>     : ^ ^^ ^^ ^^^^^    
 >x : A
+>  : ^
 >a3 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^    
 >b3 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 
 b3 = x.a3;
 >b3 = x.a3 : <T>(x: T) => void
+>          : ^ ^^ ^^ ^^^^^    
 >b3 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x.a3 : <T>(x: T) => void
+>     : ^ ^^ ^^ ^^^^^    
 >x : A
+>  : ^
 >a3 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^    
 
 var b4: <T, U>(x: T, y: U) => string; 
 >b4 : <T, U>(x: T, y: U) => string
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
+>  : ^
 
 x.a4 = b4;
 >x.a4 = b4 : <T, U>(x: T, y: U) => string
+>          : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x.a4 : <T, U>(x: T, y: U) => string
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : A
+>  : ^
 >a4 : <T, U>(x: T, y: U) => string
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >b4 : <T, U>(x: T, y: U) => string
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 
 b4 = x.a4;
 >b4 = x.a4 : <T, U>(x: T, y: U) => string
+>          : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >b4 : <T, U>(x: T, y: U) => string
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x.a4 : <T, U>(x: T, y: U) => string
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : A
+>  : ^
 >a4 : <T, U>(x: T, y: U) => string
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 
 var b5: <T, U>(x: (arg: T) => U) => T; 
 >b5 : <T, U>(x: (arg: T) => U) => T
+>   : ^ ^^ ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
+>  : ^   ^^ ^^^^^ 
 >arg : T
+>    : ^
 
 x.a5 = b5;
 >x.a5 = b5 : <T, U>(x: (arg: T) => U) => T
+>          : ^ ^^ ^^ ^^             ^^^^^ 
 >x.a5 : <T, U>(x: (arg: T) => U) => T
+>     : ^ ^^ ^^ ^^             ^^^^^ 
 >x : A
+>  : ^
 >a5 : <T, U>(x: (arg: T) => U) => T
+>   : ^ ^^ ^^ ^^             ^^^^^ 
 >b5 : <T, U>(x: (arg: T) => U) => T
+>   : ^ ^^ ^^ ^^             ^^^^^ 
 
 b5 = x.a5;
 >b5 = x.a5 : <T, U>(x: (arg: T) => U) => T
+>          : ^ ^^ ^^ ^^             ^^^^^ 
 >b5 : <T, U>(x: (arg: T) => U) => T
+>   : ^ ^^ ^^ ^^             ^^^^^ 
 >x.a5 : <T, U>(x: (arg: T) => U) => T
+>     : ^ ^^ ^^ ^^             ^^^^^ 
 >x : A
+>  : ^
 >a5 : <T, U>(x: (arg: T) => U) => T
+>   : ^ ^^ ^^ ^^             ^^^^^ 
 
 var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
 >b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>    : ^ ^^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : { foo: T; }
+>  : ^^^^^^^ ^^^
 >foo : T
+>    : ^
 >y : { foo: U; bar: U; }
+>  : ^^^^^^^ ^^^^^^^ ^^^
 >foo : U
+>    : ^
 >bar : U
+>    : ^
 
 x.a11 = b11;
 >x.a11 = b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>            : ^ ^^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x.a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>      : ^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : A
+>  : ^
 >a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>    : ^ ^^ ^^           ^^ ^^                   ^^^^^    
 >b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>    : ^ ^^ ^^ ^^           ^^ ^^                   ^^^^^    
 
 b11 = x.a11;
 >b11 = x.a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>            : ^ ^^ ^^           ^^ ^^                   ^^^^^    
 >b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>    : ^ ^^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x.a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>      : ^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : A
+>  : ^
 >a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>    : ^ ^^ ^^           ^^ ^^                   ^^^^^    
 
 var b16: <T>(x: { a: T; b: T }) => T[]; 
 >b16 : <T>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
+>  : ^^^^^ ^^^^^ ^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
 x.a16 = b16;
 >x.a16 = b16 : <T>(x: { a: T; b: T; }) => T[]
+>            : ^ ^^ ^^               ^^^^^   
 >x.a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>      : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >x : A
+>  : ^
 >a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >b16 : <T>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^ ^^               ^^^^^   
 
 b16 = x.a16;
 >b16 = x.a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>            : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >b16 : <T>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^ ^^               ^^^^^   
 >x.a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>      : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >x : A
+>  : ^
 >a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 

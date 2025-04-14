@@ -1,10 +1,10 @@
-tests/cases/compiler/funduleSplitAcrossFiles_module.ts(1,8): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+funduleSplitAcrossFiles_module.ts(1,8): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 
 
-==== tests/cases/compiler/funduleSplitAcrossFiles_function.ts (0 errors) ====
+==== funduleSplitAcrossFiles_function.ts (0 errors) ====
     function D() { }
     
-==== tests/cases/compiler/funduleSplitAcrossFiles_module.ts (1 errors) ====
+==== funduleSplitAcrossFiles_module.ts (1 errors) ====
     module D {
            ~
 !!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.

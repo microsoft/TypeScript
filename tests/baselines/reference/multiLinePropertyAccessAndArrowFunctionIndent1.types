@@ -1,35 +1,63 @@
-=== tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts ===
+//// [tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts] ////
+
+=== multiLinePropertyAccessAndArrowFunctionIndent1.ts ===
 return this.edit(role)
 >this.edit(role)    .then((role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data)) : any
+>                                                                                                                                                    : ^^^
 >this.edit(role)    .then : any
+>                         : ^^^
 >this.edit(role) : any
+>                : ^^^
 >this.edit : any
+>          : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >edit : any
+>     : ^^^
 >role : any
+>     : ^^^
 
     .then((role: Role) =>
 >then : any
+>     : ^^^
 >(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: Role) => any
+>                                                                                                                          : ^    ^^    ^^^^^^^^
 >role : Role
+>     : ^^^^
 
         this.roleService.add(role)
 >this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : any
+>                                                                                                   : ^^^
 >this.roleService.add(role)            .then : any
+>                                            : ^^^
 >this.roleService.add(role) : any
+>                           : ^^^
 >this.roleService.add : any
+>                     : ^^^
 >this.roleService : any
+>                 : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >roleService : any
+>            : ^^^
 >add : any
+>    : ^^^
 >role : Role
+>     : ^^^^
 
             .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
 >then : any
+>     : ^^^
 >(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: ng.IHttpPromiseCallbackArg<Role>) => any
+>                                                      : ^    ^^                                ^^^^^^^^
 >data : ng.IHttpPromiseCallbackArg<Role>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ng : any
+>   : ^^^
 >data.data : any
+>          : ^^^
 >data : ng.IHttpPromiseCallbackArg<Role>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : any
+>     : ^^^
 

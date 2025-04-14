@@ -1,7 +1,7 @@
-tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts(2,11): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+emptyTuplesTypeAssertion01.ts(2,11): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 
 
-==== tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts (1 errors) ====
+==== emptyTuplesTypeAssertion01.ts (1 errors) ====
     let x = <[]>[];
     let y = x[0];
               ~

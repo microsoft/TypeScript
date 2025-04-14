@@ -88,7 +88,7 @@ function f0<T extends unknown[]>(t: [string, ...T], n: number) {
 
 function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
     const a = t[0];  // string
-    const b = t[1];  // [string, ...T, number][1]
+    const b = t[1];  // number | T[number]
     const c = t[2];  // [string, ...T, number][2]
     const d = t[n];  // [string, ...T, number][number]
 }
@@ -104,7 +104,7 @@ function f2<T extends unknown[]>(t: [string, ...T]) {
 function f3<T extends unknown[]>(t: [string, ...T, number]) {
     let [...ax] = t;  // [string, ...T, number]
     let [b1, ...bx] = t;  // string, [...T, number]
-    let [c1, c2, ...cx] = t;  // string, [string, ...T, number][1], (number | T[number])[]
+    let [c1, c2, ...cx] = t;  // string, number | T[number], (number | T[number])[]
 }
 
 // Mapped types applied to variadic tuple types
@@ -204,6 +204,20 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
     k3 = '0';
     k3 = '1';
     k3 = '2';  // Error
+}
+
+// Constraints of variadic tuple types
+
+function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
+}
+
+function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
+}
+
+function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
 }
 
 // Inference between variadic tuple types
@@ -402,3 +416,10 @@ const data: Unbounded = [false, false];  // Error
 type U1 = [string, ...Numbers, boolean];
 type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
+
+// Repro from #53563
+
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+
+type AnyArr = [...any];

@@ -1,44 +1,71 @@
-=== tests/cases/compiler/instantiateContextuallyTypedGenericThis.ts ===
+//// [tests/cases/compiler/instantiateContextuallyTypedGenericThis.ts] ////
+
+=== instantiateContextuallyTypedGenericThis.ts ===
 interface JQuery {
     each<T>(
 >each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
+>     : ^ ^^          ^^   ^^        ^^                      ^^^^^   
 
         collection: T[], callback: (this: T, dit: T) => T
 >collection : T[]
+>           : ^^^
 >callback : (this: T, dit: T) => T
+>         : ^    ^^ ^^   ^^ ^^^^^ 
 >this : T
+>     : ^
 >dit : T
+>    : ^
 
     ): T[];
 }
 
 let $: JQuery;
 >$ : JQuery
+>  : ^^^^^^
 
 let lines: string[];
 >lines : string[]
+>      : ^^^^^^^^
 
 $.each(lines, function(dit) {
 >$.each(lines, function(dit) {    return dit.charAt(0) + this.charAt(1);}) : string[]
+>                                                                          : ^^^^^^^^
 >$.each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
+>       : ^ ^^          ^^   ^^        ^^                      ^^^^^   
 >$ : JQuery
+>  : ^^^^^^
 >each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
+>     : ^ ^^          ^^   ^^        ^^                      ^^^^^   
 >lines : string[]
+>      : ^^^^^^^^
 >function(dit) {    return dit.charAt(0) + this.charAt(1);} : (this: string, dit: string) => string
+>                                                           : ^    ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >dit : string
+>    : ^^^^^^
 
     return dit.charAt(0) + this.charAt(1);
 >dit.charAt(0) + this.charAt(1) : string
+>                               : ^^^^^^
 >dit.charAt(0) : string
+>              : ^^^^^^
 >dit.charAt : (pos: number) => string
+>           : ^   ^^      ^^^^^      
 >dit : string
+>    : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 >this.charAt(1) : string
+>               : ^^^^^^
 >this.charAt : (pos: number) => string
+>            : ^   ^^      ^^^^^      
 >this : string
+>     : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >1 : 1
+>  : ^
 
 });
 

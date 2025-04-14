@@ -1,24 +1,39 @@
-=== tests/cases/compiler/compositeGenericFunction.ts ===
+//// [tests/cases/compiler/compositeGenericFunction.ts] ////
+
+=== compositeGenericFunction.ts ===
 function f<T>(value: T) { return value; };
 >f : <T>(value: T) => T
+>  : ^ ^^     ^^ ^^^^^^
 >value : T
+>      : ^
 >value : T
+>      : ^
 
 function h<R>(func: (x: number) => R): R { return null; }
 >h : <R>(func: (x: number) => R) => R
+>  : ^ ^^    ^^                ^^^^^ 
 >func : (x: number) => R
+>     : ^ ^^      ^^^^^ 
 >x : number
->null : null
+>  : ^^^^^^
 
 var z: number = h<number>(f);
 >z : number
+>  : ^^^^^^
 >h<number>(f) : number
+>             : ^^^^^^
 >h : <R>(func: (x: number) => R) => R
+>  : ^ ^^    ^^                ^^^^^ 
 >f : <T>(value: T) => T
+>  : ^ ^^     ^^ ^^^^^^
 
 var z: number = h(f);
 >z : number
+>  : ^^^^^^
 >h(f) : number
+>     : ^^^^^^
 >h : <R>(func: (x: number) => R) => R
+>  : ^ ^^    ^^                ^^^^^ 
 >f : <T>(value: T) => T
+>  : ^ ^^     ^^ ^^^^^^
 

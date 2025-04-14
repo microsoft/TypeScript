@@ -1,17 +1,28 @@
-=== tests/cases/conformance/salsa/mixedPropertyElementAccessAssignmentDeclaration.ts ===
+//// [tests/cases/conformance/salsa/mixedPropertyElementAccessAssignmentDeclaration.ts] ////
+
+=== mixedPropertyElementAccessAssignmentDeclaration.ts ===
 // Should not crash: #34642
 var arr = [];
 >arr : any[]
+>    : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 arr[0].prop[2] = {};
 >arr[0].prop[2] = {} : {}
+>                    : ^^
 >arr[0].prop[2] : any
 >arr[0].prop : any
 >arr[0] : any
+>       : ^^^
 >arr : any[]
+>    : ^^^^^
 >0 : 0
+>  : ^
 >prop : any
+>     : ^^^
 >2 : 2
+>  : ^
 >{} : {}
+>   : ^^
 

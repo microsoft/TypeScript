@@ -1,6 +1,9 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/dynamicRequire.ts] ////
+
+=== a.js ===
 function foo(name) {
 >foo : (name: any) => void
+>    : ^    ^^^^^^^^^^^^^^
 >name : any
 
     var s = require("t/" + name)
@@ -8,6 +11,9 @@ function foo(name) {
 >require("t/" + name) : any
 >require : any
 >"t/" + name : string
+>            : ^^^^^^
 >"t/" : "t/"
+>     : ^^^^
 >name : any
 }
+

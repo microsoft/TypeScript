@@ -1,50 +1,73 @@
-=== tests/cases/conformance/jsx/tsxCorrectlyParseLessThanComparison1.tsx ===
+//// [tests/cases/conformance/jsx/tsxCorrectlyParseLessThanComparison1.tsx] ////
+
+=== tsxCorrectlyParseLessThanComparison1.tsx ===
 declare module JSX {
     interface Element {
         div: string;
 >div : string
+>    : ^^^^^^
     }
 }
 declare namespace React {
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
     class Component<P, S> {
 >Component : Component<P, S>
+>          : ^^^^^^^^^^^^^^^
 
         constructor(props?: P, context?: any);
 >props : P
+>      : ^
 >context : any
 
         props: P;
 >props : P
+>      : ^
     }
 }
 
 export class ShortDetails extends React.Component<{ id: number }, {}> {
 >ShortDetails : ShortDetails
+>             : ^^^^^^^^^^^^
 >React.Component : React.Component<{ id: number; }, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 
     public render(): JSX.Element {
 >render : () => JSX.Element
+>       : ^^^^^^           
 >JSX : any
+>    : ^^^
 
         if (this.props.id < 1) {
 >this.props.id < 1 : boolean
+>                  : ^^^^^^^
 >this.props.id : number
+>              : ^^^^^^
 >this.props : { id: number; }
+>           : ^^^^^^      ^^^
 >this : this
+>     : ^^^^
 >props : { id: number; }
+>      : ^^^^^^      ^^^
 >id : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
             return (<div></div>);
 >(<div></div>) : error
 ><div></div> : error
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
         }
     }
 }

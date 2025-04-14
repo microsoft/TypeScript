@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts] ////
+
 //// [doYouNeedToChangeYourTargetLibraryES2016Plus.ts]
 // es2016
 const testIncludes = ["hello"].includes("world");
@@ -60,7 +62,7 @@ var testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
 var testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
 var testSharedArrayBuffer = new SharedArrayBuffer(5);
 // es2018
-var testPromiseFinally = new Promise(function () { })["finally"]();
+var testPromiseFinally = new Promise(function () { }).finally();
 var testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
 var testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
 var testRegExpDotAll = /foo/g.dotAll;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts] ////
+
 //// [ES5For-of30.ts]
 var a: string, b: number;
 var tuple: [number, string] = [2, "3"];

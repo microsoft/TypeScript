@@ -1,80 +1,136 @@
-=== tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
+//// [tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface MyProps {
     x: number;
 >x : number
+>  : ^^^^^^
 }
 
 function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {
 >MyComp4 : (props: MyProps, context: any, bad: any, verybad: any) => JSX.Element
+>        : ^     ^^       ^^       ^^   ^^   ^^   ^^       ^^   ^^^^^^^^^^^^^^^^
 >props : MyProps
+>      : ^^^^^^^
 >context : any
+>        : ^^^
 >bad : any
+>    : ^^^
 >verybad : any
+>        : ^^^
 
     return <div></div>;
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 }
 function MyComp3(props: MyProps, context: any, bad: any) {
 >MyComp3 : (props: MyProps, context: any, bad: any) => JSX.Element
+>        : ^     ^^       ^^       ^^   ^^   ^^   ^^^^^^^^^^^^^^^^
 >props : MyProps
+>      : ^^^^^^^
 >context : any
+>        : ^^^
 >bad : any
+>    : ^^^
 
     return <div></div>;
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 }
 function MyComp2(props: MyProps, context: any) {
 >MyComp2 : (props: MyProps, context: any) => JSX.Element
+>        : ^     ^^       ^^       ^^   ^^^^^^^^^^^^^^^^
 >props : MyProps
+>      : ^^^^^^^
 >context : any
+>        : ^^^
 
     return <div></div>
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 }
 
 const a = <MyComp4 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><MyComp4 x={2}/> : JSX.Element
+>                 : ^^^^^^^^^^^
 >MyComp4 : (props: MyProps, context: any, bad: any, verybad: any) => JSX.Element
+>        : ^     ^^       ^^       ^^   ^^   ^^   ^^       ^^   ^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 const b = <MyComp3 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
 >b : JSX.Element
+>  : ^^^^^^^^^^^
 ><MyComp3 x={2}/> : JSX.Element
+>                 : ^^^^^^^^^^^
 >MyComp3 : (props: MyProps, context: any, bad: any) => JSX.Element
+>        : ^     ^^       ^^       ^^   ^^   ^^   ^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 const c  = <MyComp2 x={2}/>; // Should be OK, `context` is allowed, per react rules
 >c : JSX.Element
+>  : ^^^^^^^^^^^
 ><MyComp2 x={2}/> : JSX.Element
+>                 : ^^^^^^^^^^^
 >MyComp2 : (props: MyProps, context: any) => JSX.Element
+>        : ^     ^^       ^^       ^^   ^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 declare function MyTagWithOptionalNonJSXBits(props: MyProps, context: any, nonReactArg?: string): JSX.Element;
 >MyTagWithOptionalNonJSXBits : (props: MyProps, context: any, nonReactArg?: string) => JSX.Element
+>                            : ^     ^^       ^^       ^^   ^^           ^^^      ^^^^^           
 >props : MyProps
+>      : ^^^^^^^
 >context : any
+>        : ^^^
 >nonReactArg : string
+>            : ^^^^^^
 >JSX : any
+>    : ^^^
 
 const d = <MyTagWithOptionalNonJSXBits x={2} />; // Technically OK, but probably questionable
 >d : JSX.Element
+>  : ^^^^^^^^^^^
 ><MyTagWithOptionalNonJSXBits x={2} /> : JSX.Element
+>                                      : ^^^^^^^^^^^
 >MyTagWithOptionalNonJSXBits : (props: MyProps, context: any, nonReactArg?: string) => JSX.Element
+>                            : ^     ^^       ^^       ^^   ^^           ^^^      ^^^^^           
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 

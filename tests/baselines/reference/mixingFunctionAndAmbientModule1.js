@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mixingFunctionAndAmbientModule1.ts] ////
+
 //// [mixingFunctionAndAmbientModule1.ts]
 module A {
     declare module My {

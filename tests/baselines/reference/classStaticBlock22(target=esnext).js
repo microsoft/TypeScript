@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts] ////
+
 //// [classStaticBlock22.ts]
 let await: "any";
 class C {

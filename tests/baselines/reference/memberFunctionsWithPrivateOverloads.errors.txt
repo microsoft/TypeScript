@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts(43,11): error TS2341: Property 'foo' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts(46,12): error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts(48,12): error TS2341: Property 'foo' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts(49,12): error TS2341: Property 'bar' is private and only accessible within class 'D<T>'.
+memberFunctionsWithPrivateOverloads.ts(43,11): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+memberFunctionsWithPrivateOverloads.ts(46,12): error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.
+memberFunctionsWithPrivateOverloads.ts(48,12): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+memberFunctionsWithPrivateOverloads.ts(49,12): error TS2341: Property 'bar' is private and only accessible within class 'D<T>'.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts (4 errors) ====
+==== memberFunctionsWithPrivateOverloads.ts (4 errors) ====
     class C {
         private foo(x: number);
         private foo(x: number, y: string);

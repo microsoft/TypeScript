@@ -1,20 +1,27 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocParseBackquotedParamName.ts] ////
+
+=== a.js ===
 /**
  * @param {string=} `args`
  * @param `bwarg` {?number?}
  */
 function f(args, bwarg) {
 >f : (args?: string | undefined, bwarg: (number | null) | null) => void
+>  : ^    ^^^         ^^^^^^^^^^^     ^^^         ^^^^^   ^^^^^^^^^^^^^
 >args : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >bwarg : number | null
+>      : ^^^^^^^^^^^^^
 }
 
-=== tests/cases/conformance/jsdoc/ts.ts ===
+=== ts.ts ===
 /**
  * @param `arg` - this is fine
  */
 function g(arg: string) {
 >g : (arg: string) => void
+>  : ^   ^^      ^^^^^^^^^
 >arg : string
+>    : ^^^^^^
 }
 

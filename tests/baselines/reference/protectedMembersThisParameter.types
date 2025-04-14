@@ -1,337 +1,534 @@
-=== tests/cases/compiler/protectedMembersThisParameter.ts ===
+//// [tests/cases/compiler/protectedMembersThisParameter.ts] ////
+
+=== protectedMembersThisParameter.ts ===
 class Message {
 >Message : Message
+>        : ^^^^^^^
 
   protected secret(): void {}
 >secret : () => void
+>       : ^^^^^^    
 }
 class MessageWrapper {
 >MessageWrapper : MessageWrapper
+>               : ^^^^^^^^^^^^^^
 
   message: Message = new Message();
 >message : Message
+>        : ^^^^^^^
 >new Message() : Message
+>              : ^^^^^^^
 >Message : typeof Message
+>        : ^^^^^^^^^^^^^^
 
   wrap<T>() {
 >wrap : <T>() => void
+>     : ^ ^^^^^^^^^^^
 
     let m = this.message;
 >m : Message
+>  : ^^^^^^^
 >this.message : Message
+>             : ^^^^^^^
 >this : this
+>     : ^^^^
 >message : Message
+>        : ^^^^^^^
 
     let f = function(this: T) {
 >f : (this: T) => void
+>  : ^    ^^ ^^^^^^^^^
 >function(this: T) {      m.secret(); // should error    } : (this: T) => void
+>                                                          : ^    ^^ ^^^^^^^^^
 >this : T
+>     : ^
 
       m.secret(); // should error
 >m.secret() : void
+>           : ^^^^
 >m.secret : () => void
+>         : ^^^^^^    
 >m : Message
+>  : ^^^^^^^
 >secret : () => void
+>       : ^^^^^^    
     }
   }
 }
 
 class A {
 >A : A
+>  : ^
 
   protected a() {}
 >a : () => void
+>  : ^^^^^^^^^^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
   protected b() {}
 >b : () => void
+>  : ^^^^^^^^^^
 }
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
   protected c() {}
 >c : () => void
+>  : ^^^^^^^^^^
 }
 class Z {
 >Z : Z
+>  : ^
 
   protected z() {}
 >z : () => void
+>  : ^^^^^^^^^^
 }
 
 function bA<T extends A>(this: T, arg: B) {
 >bA : <T extends A>(this: T, arg: B) => void
+>   : ^ ^^^^^^^^^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
+>     : ^
 >arg : B
+>    : ^
 
   this.a();
 >this.a() : void
+>         : ^^^^
 >this.a : () => void
+>       : ^^^^^^^^^^
 >this : T
+>     : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   arg.a();
 >arg.a() : void
+>        : ^^^^
 >arg.a : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   arg.b(); // should error to avoid cross-hierarchy protected access https://www.typescriptlang.org/docs/handbook/2/classes.html#cross-hierarchy-protected-access
 >arg.b() : void
+>        : ^^^^
 >arg.b : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >b : () => void
+>  : ^^^^^^^^^^
 }
 function bB<T extends B>(this: T, arg: B) {
 >bB : <T extends B>(this: T, arg: B) => void
+>   : ^ ^^^^^^^^^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
+>     : ^
 >arg : B
+>    : ^
 
   this.a();
 >this.a() : void
+>         : ^^^^
 >this.a : () => void
+>       : ^^^^^^^^^^
 >this : T
+>     : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   this.b();
 >this.b() : void
+>         : ^^^^
 >this.b : () => void
+>       : ^^^^^^^^^^
 >this : T
+>     : ^
 >b : () => void
+>  : ^^^^^^^^^^
 
   arg.a();
 >arg.a() : void
+>        : ^^^^
 >arg.a : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   arg.b();
 >arg.b() : void
+>        : ^^^^
 >arg.b : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >b : () => void
+>  : ^^^^^^^^^^
 }
 function bC<T extends C>(this: T, arg: B) {
 >bC : <T extends C>(this: T, arg: B) => void
+>   : ^ ^^^^^^^^^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
+>     : ^
 >arg : B
+>    : ^
 
   this.a();
 >this.a() : void
+>         : ^^^^
 >this.a : () => void
+>       : ^^^^^^^^^^
 >this : T
+>     : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   this.c();
 >this.c() : void
+>         : ^^^^
 >this.c : () => void
+>       : ^^^^^^^^^^
 >this : T
+>     : ^
 >c : () => void
+>  : ^^^^^^^^^^
 
   arg.a(); // should error
 >arg.a() : void
+>        : ^^^^
 >arg.a : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   arg.b(); // should error
 >arg.b() : void
+>        : ^^^^
 >arg.b : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >b : () => void
+>  : ^^^^^^^^^^
 }
 function bZ<T extends Z>(this: T, arg: B) {
 >bZ : <T extends Z>(this: T, arg: B) => void
+>   : ^ ^^^^^^^^^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
+>     : ^
 >arg : B
+>    : ^
 
   this.z();
 >this.z() : void
+>         : ^^^^
 >this.z : () => void
+>       : ^^^^^^^^^^
 >this : T
+>     : ^
 >z : () => void
+>  : ^^^^^^^^^^
 
   arg.a(); // should error
 >arg.a() : void
+>        : ^^^^
 >arg.a : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   arg.b(); // should error
 >arg.b() : void
+>        : ^^^^
 >arg.b : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >b : () => void
+>  : ^^^^^^^^^^
 }
 function bString<T extends string>(this: T, arg: B) {
 >bString : <T extends string>(this: T, arg: B) => void
+>        : ^ ^^^^^^^^^      ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
+>     : ^
 >arg : B
+>    : ^
 
   this.toLowerCase();
 >this.toLowerCase() : string
+>                   : ^^^^^^
 >this.toLowerCase : () => string
+>                 : ^^^^^^      
 >this : T
+>     : ^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
   arg.a(); // should error
 >arg.a() : void
+>        : ^^^^
 >arg.a : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   arg.b(); // should error
 >arg.b() : void
+>        : ^^^^
 >arg.b : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >b : () => void
+>  : ^^^^^^^^^^
 }
 function bAny<T>(this: T, arg: B) {
 >bAny : <T>(this: T, arg: B) => void
+>     : ^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
+>     : ^
 >arg : B
+>    : ^
 
   arg.a(); // should error
 >arg.a() : void
+>        : ^^^^
 >arg.a : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >a : () => void
+>  : ^^^^^^^^^^
 
   arg.b(); // should error
 >arg.b() : void
+>        : ^^^^
 >arg.b : () => void
+>      : ^^^^^^^^^^
 >arg : B
+>    : ^
 >b : () => void
+>  : ^^^^^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
   protected d() {}
 >d : () => void
+>  : ^^^^^^^^^^
 
   derived1(arg: D1) {
 >derived1 : (arg: D1) => void
+>         : ^   ^^  ^^^^^^^^^
 >arg : D1
+>    : ^^
 
     arg.d();
 >arg.d() : void
+>        : ^^^^
 >arg.d : () => void
+>      : ^^^^^^^^^^
 >arg : D1
+>    : ^^
 >d : () => void
+>  : ^^^^^^^^^^
 
     arg.d1(); // should error
 >arg.d1() : void
+>         : ^^^^
 >arg.d1 : () => void
+>       : ^^^^^^^^^^
 >arg : D1
+>    : ^^
 >d1 : () => void
+>   : ^^^^^^^^^^
   }
   derived1ThisD(this: D, arg: D1) {
 >derived1ThisD : (this: D, arg: D1) => void
+>              : ^    ^^ ^^   ^^  ^^^^^^^^^
 >this : D
+>     : ^
 >arg : D1
+>    : ^^
 
     arg.d();
 >arg.d() : void
+>        : ^^^^
 >arg.d : () => void
+>      : ^^^^^^^^^^
 >arg : D1
+>    : ^^
 >d : () => void
+>  : ^^^^^^^^^^
 
     arg.d1(); // should error
 >arg.d1() : void
+>         : ^^^^
 >arg.d1 : () => void
+>       : ^^^^^^^^^^
 >arg : D1
+>    : ^^
 >d1 : () => void
+>   : ^^^^^^^^^^
   }
   derived1ThisD1(this: D1, arg: D1) {
 >derived1ThisD1 : (this: D1, arg: D1) => void
+>               : ^    ^^  ^^   ^^  ^^^^^^^^^
 >this : D1
+>     : ^^
 >arg : D1
+>    : ^^
 
     arg.d();
 >arg.d() : void
+>        : ^^^^
 >arg.d : () => void
+>      : ^^^^^^^^^^
 >arg : D1
+>    : ^^
 >d : () => void
+>  : ^^^^^^^^^^
 
     arg.d1();
 >arg.d1() : void
+>         : ^^^^
 >arg.d1 : () => void
+>       : ^^^^^^^^^^
 >arg : D1
+>    : ^^
 >d1 : () => void
+>   : ^^^^^^^^^^
   }
 
   derived2(arg: D2) {
 >derived2 : (arg: D2) => void
+>         : ^   ^^  ^^^^^^^^^
 >arg : D2
+>    : ^^
 
     arg.d(); // should error because of overridden method in D2
 >arg.d() : void
+>        : ^^^^
 >arg.d : () => void
+>      : ^^^^^^^^^^
 >arg : D2
+>    : ^^
 >d : () => void
+>  : ^^^^^^^^^^
 
     arg.d2(); // should error
 >arg.d2() : void
+>         : ^^^^
 >arg.d2 : () => void
+>       : ^^^^^^^^^^
 >arg : D2
+>    : ^^
 >d2 : () => void
+>   : ^^^^^^^^^^
   }
   derived2ThisD(this: D, arg: D2) {
 >derived2ThisD : (this: D, arg: D2) => void
+>              : ^    ^^ ^^   ^^  ^^^^^^^^^
 >this : D
+>     : ^
 >arg : D2
+>    : ^^
 
     arg.d(); // should error because of overridden method in D2
 >arg.d() : void
+>        : ^^^^
 >arg.d : () => void
+>      : ^^^^^^^^^^
 >arg : D2
+>    : ^^
 >d : () => void
+>  : ^^^^^^^^^^
 
     arg.d2(); // should error
 >arg.d2() : void
+>         : ^^^^
 >arg.d2 : () => void
+>       : ^^^^^^^^^^
 >arg : D2
+>    : ^^
 >d2 : () => void
+>   : ^^^^^^^^^^
   }
   derived2ThisD2(this: D2, arg: D2) {
 >derived2ThisD2 : (this: D2, arg: D2) => void
+>               : ^    ^^  ^^   ^^  ^^^^^^^^^
 >this : D2
+>     : ^^
 >arg : D2
+>    : ^^
 
     arg.d();
 >arg.d() : void
+>        : ^^^^
 >arg.d : () => void
+>      : ^^^^^^^^^^
 >arg : D2
+>    : ^^
 >d : () => void
+>  : ^^^^^^^^^^
 
     arg.d2();
 >arg.d2() : void
+>         : ^^^^
 >arg.d2 : () => void
+>       : ^^^^^^^^^^
 >arg : D2
+>    : ^^
 >d2 : () => void
+>   : ^^^^^^^^^^
   }
 }
 class D1 extends D {
 >D1 : D1
+>   : ^^
 >D : D
+>  : ^
 
   protected d1() {}
 >d1 : () => void
+>   : ^^^^^^^^^^
 }
 class D2 extends D {
 >D2 : D2
+>   : ^^
 >D : D
+>  : ^
 
   protected d() {}
 >d : () => void
+>  : ^^^^^^^^^^
 
   protected d2() {}
 >d2 : () => void
+>   : ^^^^^^^^^^
 }
 
 

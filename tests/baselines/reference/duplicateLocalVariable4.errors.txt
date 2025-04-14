@@ -1,7 +1,7 @@
-tests/cases/compiler/duplicateLocalVariable4.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type 'E'.
+duplicateLocalVariable4.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type 'E'.
 
 
-==== tests/cases/compiler/duplicateLocalVariable4.ts (1 errors) ====
+==== duplicateLocalVariable4.ts (1 errors) ====
     enum E{
     a
     }
@@ -10,4 +10,4 @@ tests/cases/compiler/duplicateLocalVariable4.ts(6,5): error TS2403: Subsequent v
     var x = E.a;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type 'E'.
-!!! related TS6203 tests/cases/compiler/duplicateLocalVariable4.ts:5:5: 'x' was also declared here.
+!!! related TS6203 duplicateLocalVariable4.ts:5:5: 'x' was also declared here.

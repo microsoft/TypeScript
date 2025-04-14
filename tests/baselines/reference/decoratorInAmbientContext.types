@@ -1,25 +1,38 @@
-=== tests/cases/conformance/decorators/decoratorInAmbientContext.ts ===
+//// [tests/cases/conformance/decorators/decoratorInAmbientContext.ts] ////
+
+=== decoratorInAmbientContext.ts ===
 declare function decorator(target: any, key: any): any;
 >decorator : (target: any, key: any) => any
+>          : ^      ^^   ^^   ^^   ^^^^^   
 >target : any
 >key : any
 
 const b = Symbol('b');
 >b : unique symbol
+>  : ^^^^^^^^^^^^^
 >Symbol('b') : unique symbol
+>            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'b' : "b"
+>    : ^^^
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     @decorator declare a: number;
 >decorator : (target: any, key: any) => any
+>          : ^      ^^   ^^   ^^   ^^^^^   
 >a : number
+>  : ^^^^^^
 
     @decorator declare [b]: number;
 >decorator : (target: any, key: any) => any
+>          : ^      ^^   ^^   ^^   ^^^^^   
 >[b] : number
+>    : ^^^^^^
 >b : unique symbol
+>  : ^^^^^^^^^^^^^
 }
 

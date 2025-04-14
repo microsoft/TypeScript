@@ -1,62 +1,102 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts] ////
+
+=== emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts ===
 var object = {
 >object : { _0: number; 0: number; }
+>       : ^^^^^^^^^^^^^^^^^      ^^^
 >{    _0: 2,    get 0() {        return this._0;    },    set 0(x: number) {        this._0 = x;    },} : { _0: number; 0: number; }
+>                                                                                                       : ^^^^^^^^^^^^^^^^^      ^^^
 
     _0: 2,
 >_0 : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 
     get 0() {
 >0 : number
+>  : ^^^^^^
 
         return this._0;
 >this._0 : any
 >this : any
+>     : ^^^
 >_0 : any
+>   : ^^^
 
     },
     set 0(x: number) {
 >0 : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
         this._0 = x;
 >this._0 = x : number
+>            : ^^^^^^
 >this._0 : any
 >this : any
+>     : ^^^
 >_0 : any
+>   : ^^^
 >x : number
+>  : ^^^^^^
 
     },
 }
 object[0] **= object[0];
 >object[0] **= object[0] : number
+>                        : ^^^^^^
 >object[0] : number
+>          : ^^^^^^
 >object : { _0: number; 0: number; }
+>       : ^^^^^^^^^^^^^^^^^      ^^^
 >0 : 0
+>  : ^
 >object[0] : number
+>          : ^^^^^^
 >object : { _0: number; 0: number; }
+>       : ^^^^^^^^^^^^^^^^^      ^^^
 >0 : 0
+>  : ^
 
 object[0] **= object[0] **= 2;
 >object[0] **= object[0] **= 2 : number
+>                              : ^^^^^^
 >object[0] : number
+>          : ^^^^^^
 >object : { _0: number; 0: number; }
+>       : ^^^^^^^^^^^^^^^^^      ^^^
 >0 : 0
+>  : ^
 >object[0] **= 2 : number
+>                : ^^^^^^
 >object[0] : number
+>          : ^^^^^^
 >object : { _0: number; 0: number; }
+>       : ^^^^^^^^^^^^^^^^^      ^^^
 >0 : 0
+>  : ^
 >2 : 2
+>  : ^
 
 object[0] **= object[0] ** 2;
 >object[0] **= object[0] ** 2 : number
+>                             : ^^^^^^
 >object[0] : number
+>          : ^^^^^^
 >object : { _0: number; 0: number; }
+>       : ^^^^^^^^^^^^^^^^^      ^^^
 >0 : 0
+>  : ^
 >object[0] ** 2 : number
+>               : ^^^^^^
 >object[0] : number
+>          : ^^^^^^
 >object : { _0: number; 0: number; }
+>       : ^^^^^^^^^^^^^^^^^      ^^^
 >0 : 0
+>  : ^
 >2 : 2
+>  : ^
 

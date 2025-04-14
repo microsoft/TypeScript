@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrowFunctionsMissingTokens.ts ===
+//// [tests/cases/compiler/arrowFunctionsMissingTokens.ts] ////
+
+=== arrowFunctionsMissingTokens.ts ===
 module missingArrowsWithCurly {
 >missingArrowsWithCurly : Symbol(missingArrowsWithCurly, Decl(arrowFunctionsMissingTokens.ts, 0, 0))
 

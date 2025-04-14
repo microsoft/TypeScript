@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInInterfaces.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInInterfaces.ts] ////
+
+=== thisTypeInInterfaces.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(thisTypeInInterfaces.ts, 0, 0))
 

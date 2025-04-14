@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_WatchWithDefaults.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_WatchWithDefaults.ts]
@@ -61,7 +62,7 @@ watchMain();
  * Note: This test is a public API sample. This uses default sys interface without having to pass anything
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("typescript");
 function watchMain() {
     var configPath = ts.findConfigFile(/*searchPath*/ "./", ts.sys.fileExists, "tsconfig.json");

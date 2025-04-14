@@ -1,71 +1,103 @@
-=== tests/cases/compiler/BaseClass.ts ===
+//// [tests/cases/compiler/exportClassExtendingIntersection.ts] ////
+
+=== BaseClass.ts ===
 export type Constructor<T> = new (...args: any[]) => T;
 >Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 export class MyBaseClass<T> {
 >MyBaseClass : MyBaseClass<T>
+>            : ^^^^^^^^^^^^^^
 
     baseProperty: string;
 >baseProperty : string
+>             : ^^^^^^
 
     constructor(value: T) {}
 >value : T
+>      : ^
 }
-=== tests/cases/compiler/MixinClass.ts ===
+=== MixinClass.ts ===
 import { Constructor, MyBaseClass } from './BaseClass';
 >Constructor : any
+>            : ^^^
 >MyBaseClass : typeof MyBaseClass
+>            : ^^^^^^^^^^^^^^^^^^
 
 export interface MyMixin {
     mixinProperty: string;
 >mixinProperty : string
+>              : ^^^^^^
 }
 
 export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin> {
 >MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
+>        : ^ ^^^^^^^^^                             ^^    ^^ ^^^^^                        
 >base : T
+>     : ^
 
     return class extends base {
 >class extends base {        mixinProperty: string;    } : { new (...args: any[]): (Anonymous class); prototype: MyMixin<any>.(Anonymous class); } & T
+>                                                        : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >base : MyBaseClass<any>
+>     : ^^^^^^^^^^^^^^^^
 
         mixinProperty: string;
 >mixinProperty : string
+>              : ^^^^^^
     }
 }
-=== tests/cases/compiler/FinalClass.ts ===
+=== FinalClass.ts ===
 import { MyBaseClass } from './BaseClass';
 >MyBaseClass : typeof MyBaseClass
+>            : ^^^^^^^^^^^^^^^^^^
 
 import { MyMixin } from './MixinClass';
->MyMixin : <T extends import("tests/cases/compiler/BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("tests/cases/compiler/BaseClass").Constructor<MyMixin>
+>MyMixin : <T extends import("BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
+>        : ^ ^^^^^^^^^       ^^^^^^^^^^^  ^^^^^^^^^^^                  ^^    ^^ ^^^^^           ^^^^^^^^^^^  ^^^^^^^^^^^         
 
 export class MyExtendedClass extends MyMixin(MyBaseClass)<string> {
 >MyExtendedClass : MyExtendedClass
+>                : ^^^^^^^^^^^^^^^
 >MyMixin(MyBaseClass) : MyBaseClass<string> & MyMixin
->MyMixin : <T extends import("tests/cases/compiler/BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("tests/cases/compiler/BaseClass").Constructor<MyMixin>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MyMixin : <T extends import("BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
+>        : ^ ^^^^^^^^^       ^^^^^^^^^^^  ^^^^^^^^^^^                  ^^    ^^ ^^^^^           ^^^^^^^^^^^  ^^^^^^^^^^^         
 >MyBaseClass : typeof MyBaseClass
+>            : ^^^^^^^^^^^^^^^^^^
 
     extendedClassProperty: number;
 >extendedClassProperty : number
+>                      : ^^^^^^
 }
-=== tests/cases/compiler/Main.ts ===
+=== Main.ts ===
 import { MyExtendedClass } from './FinalClass';
 >MyExtendedClass : typeof MyExtendedClass
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
 import { MyMixin } from './MixinClass';
->MyMixin : <T extends import("tests/cases/compiler/BaseClass").Constructor<import("tests/cases/compiler/BaseClass").MyBaseClass<any>>>(base: T) => T & import("tests/cases/compiler/BaseClass").Constructor<MyMixin>
+>MyMixin : <T extends import("BaseClass").Constructor<import("BaseClass").MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
+>        : ^ ^^^^^^^^^       ^^^^^^^^^^^  ^^^^^^^^^^^        ^^^^^^^^^^^  ^^^^^^^^^^^      ^^    ^^ ^^^^^           ^^^^^^^^^^^  ^^^^^^^^^^^         
 
 const myExtendedClass = new MyExtendedClass('string');
 >myExtendedClass : MyExtendedClass
+>                : ^^^^^^^^^^^^^^^
 >new MyExtendedClass('string') : MyExtendedClass
+>                              : ^^^^^^^^^^^^^^^
 >MyExtendedClass : typeof MyExtendedClass
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
 const AnotherMixedClass = MyMixin(MyExtendedClass);
->AnotherMixedClass : typeof MyExtendedClass & import("tests/cases/compiler/BaseClass").Constructor<MyMixin>
->MyMixin(MyExtendedClass) : typeof MyExtendedClass & import("tests/cases/compiler/BaseClass").Constructor<MyMixin>
->MyMixin : <T extends import("tests/cases/compiler/BaseClass").Constructor<import("tests/cases/compiler/BaseClass").MyBaseClass<any>>>(base: T) => T & import("tests/cases/compiler/BaseClass").Constructor<MyMixin>
+>AnotherMixedClass : typeof MyExtendedClass & import("BaseClass").Constructor<MyMixin>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MyMixin(MyExtendedClass) : typeof MyExtendedClass & import("BaseClass").Constructor<MyMixin>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MyMixin : <T extends import("BaseClass").Constructor<import("BaseClass").MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
+>        : ^ ^^^^^^^^^       ^^^^^^^^^^^  ^^^^^^^^^^^        ^^^^^^^^^^^  ^^^^^^^^^^^      ^^    ^^ ^^^^^           ^^^^^^^^^^^  ^^^^^^^^^^^         
 >MyExtendedClass : typeof MyExtendedClass
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 

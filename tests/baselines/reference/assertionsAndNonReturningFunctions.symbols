@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/assertionsAndNonReturningFunctions.js ===
+//// [tests/cases/conformance/jsdoc/assertionsAndNonReturningFunctions.ts] ////
+
+=== assertionsAndNonReturningFunctions.js ===
 /** @typedef {(check: boolean) => asserts check} AssertFunc */
 
 /** @type {AssertFunc} */

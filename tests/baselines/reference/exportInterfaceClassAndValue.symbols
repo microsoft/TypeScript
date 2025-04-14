@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportInterfaceClassAndValue.ts ===
+//// [tests/cases/compiler/exportInterfaceClassAndValue.ts] ////
+
+=== exportInterfaceClassAndValue.ts ===
 export const foo = 1
 >foo : Symbol(foo, Decl(exportInterfaceClassAndValue.ts, 0, 12), Decl(exportInterfaceClassAndValue.ts, 1, 27))
 

@@ -1,57 +1,87 @@
-=== tests/cases/compiler/literals1.ts ===
+//// [tests/cases/compiler/literals1.ts] ////
+
+=== literals1.ts ===
 var a = 42;
 >a : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 var b = 0xFA34;
 >b : number
+>  : ^^^^^^
 >0xFA34 : 64052
+>       : ^^^^^
 
 var c = 0.1715;
 >c : number
+>  : ^^^^^^
 >0.1715 : 0.1715
+>       : ^^^^^^
 
 var d = 3.14E5;
 >d : number
+>  : ^^^^^^
 >3.14E5 : 314000
+>       : ^^^^^^
 
 var e = 8.14e-5;
 >e : number
+>  : ^^^^^^
 >8.14e-5 : 0.0000814
+>        : ^^^^^^^^^
 
 var f = true;
 >f : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 var g = false;
 >g : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var h = "";
 >h : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 var i = "hi";
 >i : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
 var j = '';
 >j : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var k = 'q\tq';
 >k : string
+>  : ^^^^^^
 >'q\tq' : "q\tq"
+>       : ^^^^^^
 
 var m = /q/;
 >m : RegExp
+>  : ^^^^^^
 >/q/ : RegExp
+>    : ^^^^^^
 
 var n = /\d+/g;
 >n : RegExp
+>  : ^^^^^^
 >/\d+/g : RegExp
+>       : ^^^^^^
 
 var o = /[3-5]+/i;
 >o : RegExp
+>  : ^^^^^^
 >/[3-5]+/i : RegExp
+>          : ^^^^^^
 

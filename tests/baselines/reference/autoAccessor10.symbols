@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor10.ts] ////
+
+=== autoAccessor10.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(autoAccessor10.ts, 0, 0))
+
+    accessor a0 = 1;
+>a0 : Symbol(C1.a0, Decl(autoAccessor10.ts, 0, 10))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(autoAccessor10.ts, 2, 1))
+
+    #a1_accessor_storage = 1;
+>#a1_accessor_storage : Symbol(C2.#a1_accessor_storage, Decl(autoAccessor10.ts, 4, 10))
+
+    accessor a1 = 2;
+>a1 : Symbol(C2.a1, Decl(autoAccessor10.ts, 5, 29))
+}
+
+class C3 {
+>C3 : Symbol(C3, Decl(autoAccessor10.ts, 7, 1))
+
+    static #a2_accessor_storage = 1;
+>#a2_accessor_storage : Symbol(C3.#a2_accessor_storage, Decl(autoAccessor10.ts, 9, 10))
+
+    static {
+        class C3_Inner {
+>C3_Inner : Symbol(C3_Inner, Decl(autoAccessor10.ts, 11, 12))
+
+            accessor a2 = 2;
+>a2 : Symbol(C3_Inner.a2, Decl(autoAccessor10.ts, 12, 24))
+
+            static {
+                #a2_accessor_storage in C3;
+>#a2_accessor_storage : Symbol(C3.#a2_accessor_storage, Decl(autoAccessor10.ts, 9, 10))
+>C3 : Symbol(C3, Decl(autoAccessor10.ts, 7, 1))
+            }
+        }
+    }
+}
+
+class C4_1 {
+>C4_1 : Symbol(C4_1, Decl(autoAccessor10.ts, 19, 1))
+
+    static accessor a3 = 1;
+>a3 : Symbol(C4_1.a3, Decl(autoAccessor10.ts, 21, 12))
+}
+
+class C4_2 {
+>C4_2 : Symbol(C4_2, Decl(autoAccessor10.ts, 23, 1))
+
+    static accessor a3 = 1;
+>a3 : Symbol(C4_2.a3, Decl(autoAccessor10.ts, 25, 12))
+}

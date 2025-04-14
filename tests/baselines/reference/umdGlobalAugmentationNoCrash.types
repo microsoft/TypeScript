@@ -1,36 +1,53 @@
-=== tests/cases/compiler/global.d.ts ===
+//// [tests/cases/compiler/umdGlobalAugmentationNoCrash.ts] ////
+
+=== global.d.ts ===
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     const React: typeof import("./module");
->React : typeof import("tests/cases/compiler/module")
+>React : typeof import("module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 export {};
 
-=== tests/cases/compiler/module.d.ts ===
+=== module.d.ts ===
 export as namespace React;
->React : typeof import("tests/cases/compiler/module")
+>React : typeof import("module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export function foo(): string;
 >foo : () => string
+>    : ^^^^^^      
 
-=== tests/cases/compiler/some_module.ts ===
+=== some_module.ts ===
 export {}
 React.foo;
 >React.foo : () => string
->React : typeof import("tests/cases/compiler/module")
+>          : ^^^^^^      
+>React : typeof import("module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
-=== tests/cases/compiler/emits.ts ===
+=== emits.ts ===
 console.log("hello");
 >console.log("hello") : void
+>                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hello" : "hello"
+>        : ^^^^^^^
 
 React.foo;
 >React.foo : () => string
->React : typeof import("tests/cases/compiler/module")
+>          : ^^^^^^      
+>React : typeof import("module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 

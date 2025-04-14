@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameSetterExprReturnValue.ts] ////
+
 //// [privateNameSetterExprReturnValue.ts]
 class C {
     set #foo(a: number) {}

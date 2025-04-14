@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmit3.tsx] ////
+
+=== test.tsx ===
 declare module JSX { interface Element { } }
 >JSX : Symbol(JSX, Decl(test.tsx, 0, 0))
 >Element : Symbol(Element, Decl(test.tsx, 0, 20))

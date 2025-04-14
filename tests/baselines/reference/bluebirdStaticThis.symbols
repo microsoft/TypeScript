@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bluebirdStaticThis.ts ===
+//// [tests/cases/compiler/bluebirdStaticThis.ts] ////
+
+=== bluebirdStaticThis.ts ===
 // This version is reduced from the full d.ts by removing almost all the tests
 // and all the comments.
 // Then it adds explicit `this` arguments to the static members.

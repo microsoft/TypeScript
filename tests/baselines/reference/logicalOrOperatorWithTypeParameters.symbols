@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithTypeParameters.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithTypeParameters.ts] ////
+
+=== logicalOrOperatorWithTypeParameters.ts ===
 function fn1<T, U>(t: T, u: U) {
 >fn1 : Symbol(fn1, Decl(logicalOrOperatorWithTypeParameters.ts, 0, 0))
 >T : Symbol(T, Decl(logicalOrOperatorWithTypeParameters.ts, 0, 13))

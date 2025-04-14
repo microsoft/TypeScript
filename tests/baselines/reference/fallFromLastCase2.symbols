@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fallFromLastCase2.ts ===
+//// [tests/cases/compiler/fallFromLastCase2.ts] ////
+
+=== fallFromLastCase2.ts ===
 declare function use(a: string);
 >use : Symbol(use, Decl(fallFromLastCase2.ts, 0, 0))
 >a : Symbol(a, Decl(fallFromLastCase2.ts, 0, 21))

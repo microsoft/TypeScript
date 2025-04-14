@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayReferenceWithoutTypeArgs.ts] ////
+
 //// [arrayReferenceWithoutTypeArgs.ts]
 class X {
     public f(a: Array) { }

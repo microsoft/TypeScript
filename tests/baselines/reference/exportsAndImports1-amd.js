@@ -37,11 +37,11 @@ export { v, f, C, I, E, D, M, N, T, a };
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
+    exports.a = exports.M = exports.E = exports.C = exports.v = void 0;
+    exports.f = f;
     var v = 1;
     exports.v = v;
     function f() { }
-    exports.f = f;
     var C = /** @class */ (function () {
         function C() {
         }
@@ -53,12 +53,10 @@ define(["require", "exports"], function (require, exports) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
-    })(E || (E = {}));
-    exports.E = E;
+    })(E || (exports.E = E = {}));
     var M;
     (function (M) {
-    })(M || (M = {}));
-    exports.M = M;
+    })(M || (exports.M = M = {}));
     var a = M.x;
     exports.a = a;
 });

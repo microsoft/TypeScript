@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithTemplateStringInvalidES6.ts] ////
+
 //// [exponentiationOperatorWithTemplateStringInvalidES6.ts]
 var a = 1 ** `${ 3 }`;
 var b = 1 ** `2${ 3 }`;

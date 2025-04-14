@@ -1,0 +1,72 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionTypeofThis.ts ===
+// function f(<|[|this|]: number|>) {
+//     type X = typeof /*GOTO DEF*/this;
+// }
+// class C {
+//     constructor() { type X = typeof this; }
+//     get self(this: number) { type X = typeof this; }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "this",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionTypeofThis.ts ===
+// function f(this: number) {
+//     type X = typeof this;
+// }
+// <|class [|C|] {
+//     constructor() { type X = typeof /*GOTO DEF*/this; }
+//     get self(this: number) { type X = typeof this; }
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "C",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionTypeofThis.ts ===
+// function f(this: number) {
+//     type X = typeof this;
+// }
+// class C {
+//     constructor() { type X = typeof this; }
+//     get self(<|[|this|]: number|>) { type X = typeof /*GOTO DEF*/this; }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "this",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

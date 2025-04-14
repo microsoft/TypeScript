@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/moduleAugmentationsImports3.ts] ////
+
+=== main.ts ===
 /// <reference path="d.d.ts"/>
 import {A} from "./a";
 >A : Symbol(A, Decl(main.ts, 1, 8))
@@ -30,16 +32,16 @@ let c = a.getCls().y.toLowerCase();
 >y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
 >toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 export class A {}
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export class B {x: number;}
 >B : Symbol(B, Decl(b.ts, 0, 0))
 >x : Symbol(B.x, Decl(b.ts, 0, 16))
 
-=== tests/cases/compiler/c.d.ts ===
+=== c.d.ts ===
 declare module "C" {
 >"C" : Symbol("C", Decl(c.d.ts, 0, 0))
 
@@ -48,7 +50,7 @@ declare module "C" {
 >y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
 }
 
-=== tests/cases/compiler/d.d.ts ===
+=== d.d.ts ===
 declare module "D" {
 >"D" : Symbol("D", Decl(d.d.ts, 0, 0))
 
@@ -59,7 +61,7 @@ declare module "D" {
 >B : Symbol(B, Decl(d.d.ts, 2, 12))
 
     module "a" {
->"a" : Symbol("tests/cases/compiler/a", Decl(a.ts, 0, 0), Decl(d.d.ts, 2, 24), Decl(e.ts, 4, 54))
+>"a" : Symbol("a", Decl(a.ts, 0, 0), Decl(d.d.ts, 2, 24), Decl(e.ts, 4, 54))
 
         interface A {
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))
@@ -71,8 +73,8 @@ declare module "D" {
     }
 }
 
-=== tests/cases/compiler/e.ts ===
-/// <reference path="c.d.ts"/>
+=== e.ts ===
+/// <reference path="c.d.ts" preserve="true"/>
 import {A} from "./a";
 >A : Symbol(A, Decl(e.ts, 1, 8))
 
@@ -88,7 +90,7 @@ A.prototype.getCls = function () { return undefined; }
 >undefined : Symbol(undefined)
 
 declare module "./a" {
->"./a" : Symbol("tests/cases/compiler/a", Decl(a.ts, 0, 0), Decl(d.d.ts, 2, 24), Decl(e.ts, 4, 54))
+>"./a" : Symbol("a", Decl(a.ts, 0, 0), Decl(d.d.ts, 2, 24), Decl(e.ts, 4, 54))
 
     interface A {
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))

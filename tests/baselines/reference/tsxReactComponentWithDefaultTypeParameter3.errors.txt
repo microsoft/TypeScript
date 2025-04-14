@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(13,11): error TS2739: Type '{}' is missing the following properties from type 'Prop': a, b
-tests/cases/conformance/jsx/file.tsx(19,18): error TS2322: Type 'string' is not assignable to type 'number'.
+file.tsx(13,11): error TS2739: Type '{}' is missing the following properties from type 'Prop': a, b
+file.tsx(19,18): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+==== file.tsx (2 errors) ====
     import React = require('react');
     
     interface Prop {
@@ -26,4 +26,4 @@ tests/cases/conformance/jsx/file.tsx(19,18): error TS2322: Type 'string' is not 
     let x2 = <MyComp a="hi"/>
                      ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:4:5: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'

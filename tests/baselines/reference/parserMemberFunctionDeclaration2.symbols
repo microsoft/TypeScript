@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration2.ts] ////
+
+=== parserMemberFunctionDeclaration2.ts ===
 class C {
 >C : Symbol(C, Decl(parserMemberFunctionDeclaration2.ts, 0, 0))
 

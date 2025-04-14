@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads7.ts] ////
+
 //// [constructorOverloads7.ts]
 declare class Point
 {

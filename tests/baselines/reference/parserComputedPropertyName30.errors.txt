@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts(3,5): error TS1164: Computed property names are not allowed in enums.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts(3,11): error TS2304: Cannot find name 'id'.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts(4,5): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts(4,5): error TS1164: Computed property names are not allowed in enums.
+parserComputedPropertyName30.ts(3,5): error TS1164: Computed property names are not allowed in enums.
+parserComputedPropertyName30.ts(3,11): error TS2304: Cannot find name 'id'.
+parserComputedPropertyName30.ts(4,5): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+parserComputedPropertyName30.ts(4,5): error TS1164: Computed property names are not allowed in enums.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts (4 errors) ====
+==== parserComputedPropertyName30.ts (4 errors) ====
     enum E {
         // no ASI, comma expected
         [e] = id++

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constantEnumAssert.ts] ////
+
 //// [constantEnumAssert.ts]
 enum E1 {
     a,

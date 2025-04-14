@@ -1,10 +1,10 @@
-tests/cases/conformance/jsdoc/use.js(2,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/use.js(3,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/use.js(4,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/jsdoc/use.js(5,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+use.js(2,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+use.js(3,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+use.js(4,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+use.js(5,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
-==== tests/cases/conformance/jsdoc/use.js (4 errors) ====
+==== use.js (4 errors) ====
     var mod = require('./mod');
     mod.f('no')
           ~~~~
@@ -19,7 +19,7 @@ tests/cases/conformance/jsdoc/use.js(5,7): error TS2345: Argument of type 'numbe
           ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     
-==== tests/cases/conformance/jsdoc/mod.js (0 errors) ====
+==== mod.js (0 errors) ====
     /** @param {number} n */
     exports.f = exports.g = function fg(n) {
         return n + 1

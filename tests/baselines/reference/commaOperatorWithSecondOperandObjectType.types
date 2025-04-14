@@ -1,178 +1,282 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandObjectType.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandObjectType.ts] ////
+
+=== commaOperatorWithSecondOperandObjectType.ts ===
 var ANY: any;
 >ANY : any
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var NUMBER: number;
 >NUMBER : number
+>       : ^^^^^^
 
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var OBJECT: Object;
 >OBJECT : Object
+>       : ^^^^^^
 
 class CLASS {
 >CLASS : CLASS
+>      : ^^^^^
 
     num: number;
 >num : number
+>    : ^^^^^^
 }
 
 //The second operand type is Object
 ANY, OBJECT;
 >ANY, OBJECT : Object
+>            : ^^^^^^
 >ANY : any
 >OBJECT : Object
+>       : ^^^^^^
 
 BOOLEAN, OBJECT;
 >BOOLEAN, OBJECT : Object
+>                : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 NUMBER, OBJECT;
 >NUMBER, OBJECT : Object
+>               : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 STRING, OBJECT;
 >STRING, OBJECT : Object
+>               : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 OBJECT, OBJECT;
 >OBJECT, OBJECT : Object
+>               : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 //Return type is Object
 var resultIsObject1 = (ANY, OBJECT);
 >resultIsObject1 : Object
+>                : ^^^^^^
 >(ANY, OBJECT) : Object
+>              : ^^^^^^
 >ANY, OBJECT : Object
+>            : ^^^^^^
 >ANY : any
 >OBJECT : Object
+>       : ^^^^^^
 
 var resultIsObject2 = (BOOLEAN, OBJECT);
 >resultIsObject2 : Object
+>                : ^^^^^^
 >(BOOLEAN, OBJECT) : Object
+>                  : ^^^^^^
 >BOOLEAN, OBJECT : Object
+>                : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 var resultIsObject3 = (NUMBER, OBJECT);
 >resultIsObject3 : Object
+>                : ^^^^^^
 >(NUMBER, OBJECT) : Object
+>                 : ^^^^^^
 >NUMBER, OBJECT : Object
+>               : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 var resultIsObject4 = (STRING, OBJECT);
 >resultIsObject4 : Object
+>                : ^^^^^^
 >(STRING, OBJECT) : Object
+>                 : ^^^^^^
 >STRING, OBJECT : Object
+>               : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 var resultIsObject5 = (OBJECT, OBJECT);
 >resultIsObject5 : Object
+>                : ^^^^^^
 >(OBJECT, OBJECT) : Object
+>                 : ^^^^^^
 >OBJECT, OBJECT : Object
+>               : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 //Literal and expression
 null, OBJECT
 >null, OBJECT : Object
->null : null
+>             : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 ANY = null, OBJECT
 >ANY = null, OBJECT : Object
+>                   : ^^^^^^
 >ANY = null : null
+>           : ^^^^
 >ANY : any
->null : null
 >OBJECT : Object
+>       : ^^^^^^
 
 true, {}
 >true, {} : {}
+>         : ^^
 >true : true
+>     : ^^^^
 >{} : {}
+>   : ^^
 
 !BOOLEAN, []
 >!BOOLEAN, [] : undefined[]
+>             : ^^^^^^^^^^^
 >!BOOLEAN : boolean
+>         : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 "string", new Date()
 >"string", new Date() : Date
+>                     : ^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
 STRING.toLowerCase(), new CLASS()
 >STRING.toLowerCase(), new CLASS() : CLASS
+>                                  : ^^^^^
 >STRING.toLowerCase() : string
+>                     : ^^^^^^
 >STRING.toLowerCase : () => string
+>                   : ^^^^^^      
 >STRING : string
+>       : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 >new CLASS() : CLASS
+>            : ^^^^^
 >CLASS : typeof CLASS
+>      : ^^^^^^^^^^^^
 
 var resultIsObject6 = (null, OBJECT);
 >resultIsObject6 : Object
+>                : ^^^^^^
 >(null, OBJECT) : Object
+>               : ^^^^^^
 >null, OBJECT : Object
->null : null
+>             : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 var resultIsObject7 = (ANY = null, OBJECT);
 >resultIsObject7 : Object
+>                : ^^^^^^
 >(ANY = null, OBJECT) : Object
+>                     : ^^^^^^
 >ANY = null, OBJECT : Object
+>                   : ^^^^^^
 >ANY = null : null
+>           : ^^^^
 >ANY : any
->null : null
 >OBJECT : Object
+>       : ^^^^^^
 
 var resultIsObject8 = (true, {});
 >resultIsObject8 : {}
+>                : ^^
 >(true, {}) : {}
+>           : ^^
 >true, {} : {}
+>         : ^^
 >true : true
+>     : ^^^^
 >{} : {}
+>   : ^^
 
 var resultIsObject9 = (!BOOLEAN, { a: 1, b: "s" });
 >resultIsObject9 : { a: number; b: string; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(!BOOLEAN, { a: 1, b: "s" }) : { a: number; b: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >!BOOLEAN, { a: 1, b: "s" } : { a: number; b: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >!BOOLEAN : boolean
+>         : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >{ a: 1, b: "s" } : { a: number; b: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >"s" : "s"
+>    : ^^^
 
 var resultIsObject10 = ("string", new Date());
 >resultIsObject10 : Date
+>                 : ^^^^
 >("string", new Date()) : Date
+>                       : ^^^^
 >"string", new Date() : Date
+>                     : ^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
 var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
 >resultIsObject11 : CLASS
+>                 : ^^^^^
 >(STRING.toLowerCase(), new CLASS()) : CLASS
+>                                    : ^^^^^
 >STRING.toLowerCase(), new CLASS() : CLASS
+>                                  : ^^^^^
 >STRING.toLowerCase() : string
+>                     : ^^^^^^
 >STRING.toLowerCase : () => string
+>                   : ^^^^^^      
 >STRING : string
+>       : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 >new CLASS() : CLASS
+>            : ^^^^^
 >CLASS : typeof CLASS
+>      : ^^^^^^^^^^^^
 

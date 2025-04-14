@@ -1,40 +1,69 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts] ////
+
+=== parserMissingLambdaOpenBrace1.ts ===
 class C {
 >C : C
+>  : ^
 
     where(filter: Iterator<T, boolean>): Query<T> {
 >where : (filter: Iterator<T, boolean>) => Query<T>
+>      : ^      ^^                    ^^^^^        
 >filter : Iterator<T, boolean>
+>       : ^^^^^^^^^^^^^^^^^^^^
 
         return fromDoWhile(test =>
 >fromDoWhile(test =>            var index = 0;            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);        }) : any
+>                                                                                                                                                   : ^^^
 >fromDoWhile : any
+>            : ^^^
 >test =>            var index = 0;            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);        } : (test: any) => any
+>                                                                                                                                      : ^    ^^^^^^^^^^^^^
 >test : any
+>     : ^^^
 
             var index = 0;
 >index : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
             return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);
 >this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true) : any
+>                                                                        : ^^^
 >this.doWhile : any
+>             : ^^^
 >this : this
+>     : ^^^^
 >doWhile : any
+>        : ^^^
 >(item, i) => filter(item, i) ? test(item, index++) : true : (item: any, i: any) => any
+>                                                          : ^    ^^^^^^^ ^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >i : any
+>  : ^^^
 >filter(item, i) ? test(item, index++) : true : any
+>                                             : ^^^
 >filter(item, i) : any
+>                : ^^^
 >filter : Iterator<T, boolean>
+>       : ^^^^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >i : any
+>  : ^^^
 >test(item, index++) : any
+>                    : ^^^
 >test : any
+>     : ^^^
 >item : any
+>     : ^^^
 >index++ : number
+>        : ^^^^^^
 >index : number
+>      : ^^^^^^
 >true : true
+>     : ^^^^
 
         });
     }

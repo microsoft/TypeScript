@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts] ////
+
 //// [thisInArrowFunctionInStaticInitializer1.ts]
 function log(a) { }
 

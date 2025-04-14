@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty1.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty1.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty1.ts ===
 interface Square {
 >Square : Symbol(Square, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 0))
 

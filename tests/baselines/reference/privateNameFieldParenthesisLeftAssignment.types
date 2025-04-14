@@ -1,0 +1,115 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldParenthesisLeftAssignment.ts] ////
+
+=== privateNameFieldParenthesisLeftAssignment.ts ===
+class Foo {
+>Foo : Foo
+>    : ^^^
+
+    #p: number;
+>#p : number
+>   : ^^^^^^
+
+    constructor(value: number) {
+>value : number
+>      : ^^^^^^
+
+        this.#p = value;
+>this.#p = value : number
+>                : ^^^^^^
+>this.#p : number
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>value : number
+>      : ^^^^^^
+    }
+
+    t1(p: number) {
+>t1 : (p: number) => void
+>   : ^ ^^      ^^^^^^^^^
+>p : number
+>  : ^^^^^^
+
+        (this.#p as number) = p;
+>(this.#p as number) = p : number
+>                        : ^^^^^^
+>(this.#p as number) : number
+>                    : ^^^^^^
+>this.#p as number : number
+>                  : ^^^^^^
+>this.#p : number
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>p : number
+>  : ^^^^^^
+    }
+
+    t2(p: number) {
+>t2 : (p: number) => void
+>   : ^ ^^      ^^^^^^^^^
+>p : number
+>  : ^^^^^^
+
+        (((this.#p as number))) = p;
+>(((this.#p as number))) = p : number
+>                            : ^^^^^^
+>(((this.#p as number))) : number
+>                        : ^^^^^^
+>((this.#p as number)) : number
+>                      : ^^^^^^
+>(this.#p as number) : number
+>                    : ^^^^^^
+>this.#p as number : number
+>                  : ^^^^^^
+>this.#p : number
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>p : number
+>  : ^^^^^^
+    }
+
+    t3(p: number) {
+>t3 : (p: number) => void
+>   : ^ ^^      ^^^^^^^^^
+>p : number
+>  : ^^^^^^
+
+        (this.#p) = p;
+>(this.#p) = p : number
+>              : ^^^^^^
+>(this.#p) : number
+>          : ^^^^^^
+>this.#p : number
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>p : number
+>  : ^^^^^^
+    }
+
+    t4(p: number) {
+>t4 : (p: number) => void
+>   : ^ ^^      ^^^^^^^^^
+>p : number
+>  : ^^^^^^
+
+        (((this.#p))) = p;
+>(((this.#p))) = p : number
+>                  : ^^^^^^
+>(((this.#p))) : number
+>              : ^^^^^^
+>((this.#p)) : number
+>            : ^^^^^^
+>(this.#p) : number
+>          : ^^^^^^
+>this.#p : number
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>p : number
+>  : ^^^^^^
+    }
+}
+

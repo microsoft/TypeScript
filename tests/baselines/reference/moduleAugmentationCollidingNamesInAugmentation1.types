@@ -1,65 +1,91 @@
-=== tests/cases/compiler/map1.ts ===
+//// [tests/cases/compiler/moduleAugmentationCollidingNamesInAugmentation1.ts] ////
+
+=== map1.ts ===
 import { Observable } from "./observable"
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
 (<any>Observable.prototype).map = function() { }
 >(<any>Observable.prototype).map = function() { } : () => void
+>                                                 : ^^^^^^^^^^
 >(<any>Observable.prototype).map : any
 >(<any>Observable.prototype) : any
+>                            : ^^^
 ><any>Observable.prototype : any
 >Observable.prototype : Observable<any>
+>                     : ^^^^^^^^^^^^^^^
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 >prototype : Observable<any>
+>          : ^^^^^^^^^^^^^^^
 >map : any
+>    : ^^^
 >function() { } : () => void
+>               : ^^^^^^^^^^
 
 declare module "./observable" {
->"./observable" : typeof import("tests/cases/compiler/observable")
+>"./observable" : typeof import("observable")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface I {x0}
 >x0 : any
 }
 
-=== tests/cases/compiler/map2.ts ===
+=== map2.ts ===
 import { Observable } from "./observable"
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
 (<any>Observable.prototype).map = function() { }
 >(<any>Observable.prototype).map = function() { } : () => void
+>                                                 : ^^^^^^^^^^
 >(<any>Observable.prototype).map : any
 >(<any>Observable.prototype) : any
+>                            : ^^^
 ><any>Observable.prototype : any
 >Observable.prototype : Observable<any>
+>                     : ^^^^^^^^^^^^^^^
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 >prototype : Observable<any>
+>          : ^^^^^^^^^^^^^^^
 >map : any
+>    : ^^^
 >function() { } : () => void
+>               : ^^^^^^^^^^
 
 declare module "./observable" {
->"./observable" : typeof import("tests/cases/compiler/observable")
+>"./observable" : typeof import("observable")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface I {x1}
 >x1 : any
 }
 
 
-=== tests/cases/compiler/observable.ts ===
+=== observable.ts ===
 export declare class Observable<T> {
 >Observable : Observable<T>
+>           : ^^^^^^^^^^^^^
 
     filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
+>       : ^    ^^                 ^^^^^             
 >pred : (e: T) => boolean
+>     : ^ ^^ ^^^^^       
 >e : T
+>  : ^
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { Observable } from "./observable"
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
 import "./map1";
 import "./map2";
 
 let x: Observable<number>;
 >x : Observable<number>
+>  : ^^^^^^^^^^^^^^^^^^
 

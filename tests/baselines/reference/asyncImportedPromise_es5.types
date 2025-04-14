@@ -1,15 +1,22 @@
-=== tests/cases/conformance/async/es5/task.ts ===
+//// [tests/cases/conformance/async/es5/asyncImportedPromise_es5.ts] ////
+
+=== task.ts ===
 export class Task<T> extends Promise<T> { }
 >Task : Task<T>
+>     : ^^^^^^^
 >Promise : Promise<T>
+>        : ^^^^^^^^^^
 
-=== tests/cases/conformance/async/es5/test.ts ===
+=== test.ts ===
 import { Task } from "./task";
 >Task : typeof Task
+>     : ^^^^^^^^^^^
 
 class Test {
 >Test : Test
+>     : ^^^^
 
     async example<T>(): Task<T> { return; }
 >example : <T>() => Task<T>
+>        : ^ ^^^^^^^       
 }

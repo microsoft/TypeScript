@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asiAmbientFunctionDeclaration.ts ===
+//// [tests/cases/compiler/asiAmbientFunctionDeclaration.ts] ////
+
+=== asiAmbientFunctionDeclaration.ts ===
 declare function foo()
 >foo : Symbol(foo, Decl(asiAmbientFunctionDeclaration.ts, 0, 0))
 

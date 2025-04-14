@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorsAreNotContextuallyTyped.ts] ////
+
 //// [accessorsAreNotContextuallyTyped.ts]
 // accessors are not contextually typed
 

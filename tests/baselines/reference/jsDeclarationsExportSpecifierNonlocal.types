@@ -1,13 +1,20 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportSpecifierNonlocal.ts] ////
+
+=== source.js ===
 export class Thing {}
 >Thing : Thing
+>      : ^^^^^
 
 export class OtherThing {}
 >OtherThing : OtherThing
+>           : ^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 export { Thing, OtherThing as default } from "./source";
->Thing : typeof import("tests/cases/conformance/jsdoc/declarations/source").Thing
->OtherThing : typeof import("tests/cases/conformance/jsdoc/declarations/source").OtherThing
->default : typeof import("tests/cases/conformance/jsdoc/declarations/source").OtherThing
+>Thing : typeof import("source").Thing
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>OtherThing : typeof import("source").OtherThing
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>default : typeof import("source").OtherThing
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

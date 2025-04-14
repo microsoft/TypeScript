@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/mixedPropertyElementAccessAssignmentDeclaration.ts] ////
+
 //// [mixedPropertyElementAccessAssignmentDeclaration.ts]
 // Should not crash: #34642
 var arr = [];

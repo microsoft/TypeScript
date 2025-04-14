@@ -1,25 +1,34 @@
-=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment2.js ===
+//// [tests/cases/compiler/checkJsdocTypeTagOnExportAssignment2.ts] ////
 
-No type information for this code.=== tests/cases/compiler/a.ts ===
+=== checkJsdocTypeTagOnExportAssignment2.js ===
+
+=== a.ts ===
 export interface Foo {
     a: number;
 >a : number
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 /** @type {import("./a").Foo} */
 export default { c: false };
 >{ c: false } : { c: boolean; }
+>             : ^^^^^^^^^^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
-=== tests/cases/compiler/c.js ===
+=== c.js ===
 import b from "./b";
->b : import("tests/cases/compiler/a").Foo
+>b : import("a").Foo
+>  : ^^^^^^^^^^^^^^^
 
 b;
->b : import("tests/cases/compiler/a").Foo
+>b : import("a").Foo
+>  : ^^^^^^^^^^^^^^^
 

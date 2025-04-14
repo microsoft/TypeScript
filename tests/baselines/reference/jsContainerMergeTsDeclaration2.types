@@ -1,22 +1,36 @@
-=== tests/cases/conformance/salsa/a.d.ts ===
+//// [tests/cases/conformance/salsa/jsContainerMergeTsDeclaration2.ts] ////
+
+=== a.d.ts ===
 declare namespace C {
 >C : typeof C
+>  : ^^^^^^^^
 
     function bar(): void
 >bar : () => void
+>    : ^^^^^^    
 }
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 C.prototype = {};
 >C.prototype = {} : {}
+>                 : ^^
 >C.prototype : {}
+>            : ^^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : {}
+>          : ^^
 >{} : {}
+>   : ^^
 
 C.bar = 2;
 >C.bar = 2 : 2
+>          : ^
 >C.bar : () => void
+>      : ^^^^^^    
 >C : typeof C
+>  : ^^^^^^^^
 >bar : () => void
+>    : ^^^^^^    
 >2 : 2
+>  : ^
 

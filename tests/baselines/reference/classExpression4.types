@@ -1,22 +1,36 @@
-=== tests/cases/conformance/classes/classExpressions/classExpression4.ts ===
+//// [tests/cases/conformance/classes/classExpressions/classExpression4.ts] ////
+
+=== classExpression4.ts ===
 let C = class {
 >C : typeof C
+>  : ^^^^^^^^
 >class {    foo() {        return new C();    }} : typeof C
+>                                                : ^^^^^^^^
 
     foo() {
 >foo : () => C
+>    : ^^^^^^^
 
         return new C();
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
     }
 };
 let x = (new C).foo();
 >x : C
+>  : ^
 >(new C).foo() : C
+>              : ^
 >(new C).foo : () => C
+>            : ^^^^^^^
 >(new C) : C
+>        : ^
 >new C : C
+>      : ^
 >C : typeof C
+>  : ^^^^^^^^
 >foo : () => C
+>    : ^^^^^^^
 

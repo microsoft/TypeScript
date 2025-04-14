@@ -4,8 +4,9 @@ error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMa
 
 !!! error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 !!! error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
-==== tests/cases/compiler/inlineSourceMap2.ts (0 errors) ====
+==== inlineSourceMap2.ts (0 errors) ====
     // configuration errors
     
     var x = 0;
     console.log(x);
+    

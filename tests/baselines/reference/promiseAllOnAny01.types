@@ -1,21 +1,33 @@
-=== tests/cases/compiler/promiseAllOnAny01.ts ===
+//// [tests/cases/compiler/promiseAllOnAny01.ts] ////
+
+=== promiseAllOnAny01.ts ===
 async function foo(x: any) {
 >foo : (x: any) => Promise<any[]>
+>    : ^ ^^   ^^^^^^^^^^^^^^^^^^^
 >x : any
 
     let abc = await Promise.all(x);
 >abc : any[]
+>    : ^^^^^
 >await Promise.all(x) : any[]
+>                     : ^^^^^
 >Promise.all(x) : Promise<any[]>
+>               : ^^^^^^^^^^^^^^
 >Promise.all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>            : ^ ^^^^^^^^^                       ^^      ^^ ^^^^^                                                     
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>    : ^ ^^^^^^^^^                       ^^      ^^ ^^^^^                                                     
 >x : any
 
     let result: any[] = abc;
 >result : any[]
+>       : ^^^^^
 >abc : any[]
+>    : ^^^^^
 
     return result;
 >result : any[]
+>       : ^^^^^
 }

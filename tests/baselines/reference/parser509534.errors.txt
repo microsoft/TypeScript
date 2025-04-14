@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts(2,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parser509534.ts(2,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parser509534.ts(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts (2 errors) ====
+==== parser509534.ts (2 errors) ====
     "use strict";
     var config = require("../config");
                  ~~~~~~~

@@ -1,68 +1,95 @@
-=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts] ////
+
+=== mergedInterfacesWithInheritedPrivates2.ts ===
 class C {
 >C : C
+>  : ^
 
     private x: number;
 >x : number
+>  : ^^^^^^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     private w: number;
 >w : number
+>  : ^^^^^^
 }
 
 interface A extends C {
     y: string;
 >y : string
+>  : ^^^^^^
 }
 
 interface A extends C2 {
     z: string;
 >z : string
+>  : ^^^^^^
 }
 
 class D extends C implements A { // error
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     private w: number;
 >w : number
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 
     z: string;
 >z : string
+>  : ^^^^^^
 }
 
 class E extends C2 implements A { // error
 >E : E
+>  : ^
 >C2 : C2
+>   : ^^
 
     w: number;
 >w : number
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 
     z: string;
 >z : string
+>  : ^^^^^^
 }
 
 var a: A;
 >a : A
+>  : ^
 
 var r = a.x; // error
 >r : number
+>  : ^^^^^^
 >a.x : number
+>    : ^^^^^^
 >a : A
+>  : ^
 >x : number
+>  : ^^^^^^
 
 var r2 = a.w; // error
 >r2 : number
+>   : ^^^^^^
 >a.w : number
+>    : ^^^^^^
 >a : A
+>  : ^
 >w : number
+>  : ^^^^^^
 

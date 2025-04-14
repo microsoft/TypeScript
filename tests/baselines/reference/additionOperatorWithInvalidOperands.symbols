@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts] ////
+
+=== additionOperatorWithInvalidOperands.ts ===
 function foo() { }
 >foo : Symbol(foo, Decl(additionOperatorWithInvalidOperands.ts, 0, 0))
 

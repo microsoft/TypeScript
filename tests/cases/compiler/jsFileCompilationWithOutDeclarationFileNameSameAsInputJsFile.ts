@@ -1,8 +1,8 @@
 // @declaration: true
-// @out: tests/cases/compiler/b.js
-// @filename: a.ts
+// @outFile: /b.js
+// @filename: /a.ts
 class c {
 }
 
-// @filename: b.d.ts
+// @filename: /b.d.ts
 declare function foo(): boolean;

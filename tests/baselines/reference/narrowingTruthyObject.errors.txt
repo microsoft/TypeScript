@@ -1,12 +1,12 @@
-tests/cases/compiler/narrowingTruthyObject.ts(3,9): error TS2531: Object is possibly 'null'.
+narrowingTruthyObject.ts(3,9): error TS18047: 'x' is possibly 'null'.
 
 
-==== tests/cases/compiler/narrowingTruthyObject.ts (1 errors) ====
+==== narrowingTruthyObject.ts (1 errors) ====
     function foo(x: unknown, b: boolean) {
         if (typeof x === 'object') {
             x.toString();
             ~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18047: 'x' is possibly 'null'.
         }
         if (typeof x === 'object' && x) {
             x.toString();

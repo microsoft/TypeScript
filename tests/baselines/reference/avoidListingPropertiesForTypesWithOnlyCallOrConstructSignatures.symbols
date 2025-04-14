@@ -1,4 +1,6 @@
-=== tests/cases/compiler/avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts ===
+//// [tests/cases/compiler/avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts] ////
+
+=== avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts ===
 interface Dog {
 >Dog : Symbol(Dog, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 0, 0))
 

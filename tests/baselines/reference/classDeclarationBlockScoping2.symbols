@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classDeclarationBlockScoping2.ts ===
+//// [tests/cases/compiler/classDeclarationBlockScoping2.ts] ////
+
+=== classDeclarationBlockScoping2.ts ===
 function f() {
 >f : Symbol(f, Decl(classDeclarationBlockScoping2.ts, 0, 0))
 

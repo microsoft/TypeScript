@@ -1,19 +1,19 @@
-tests/cases/compiler/aliasAssignments_1.ts(3,1): error TS2322: Type 'number' is not assignable to type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")'.
-tests/cases/compiler/aliasAssignments_1.ts(5,1): error TS2322: Type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")' is not assignable to type 'number'.
+aliasAssignments_1.ts(3,1): error TS2322: Type 'number' is not assignable to type 'typeof import("aliasAssignments_moduleA")'.
+aliasAssignments_1.ts(5,1): error TS2322: Type 'typeof import("aliasAssignments_moduleA")' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/aliasAssignments_1.ts (2 errors) ====
+==== aliasAssignments_1.ts (2 errors) ====
     import moduleA = require("./aliasAssignments_moduleA");
     var x = moduleA;
     x = 1; // Should be error
     ~
-!!! error TS2322: Type 'number' is not assignable to type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")'.
+!!! error TS2322: Type 'number' is not assignable to type 'typeof import("aliasAssignments_moduleA")'.
     var y = 1;
     y = moduleA; // should be error
     ~
-!!! error TS2322: Type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")' is not assignable to type 'number'.
+!!! error TS2322: Type 'typeof import("aliasAssignments_moduleA")' is not assignable to type 'number'.
     
-==== tests/cases/compiler/aliasAssignments_moduleA.ts (0 errors) ====
+==== aliasAssignments_moduleA.ts (0 errors) ====
     export class someClass {
         public someData: string;
     }

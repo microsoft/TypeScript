@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareIdentifierAsBeginningOfStatementExpression01.ts] ////
+
 //// [declareIdentifierAsBeginningOfStatementExpression01.ts]
 class C {
 }

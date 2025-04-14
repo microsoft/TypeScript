@@ -1,14 +1,15 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsWriteAccess.ts ===
 // interface Obj {
-//     [`/*FIND ALL REFS*/[|num|]`]: number;
+//     <|[`/*FIND ALL REFS*/[|{| isDefinition: true |}num|]`]: number;|>
 // }
 // 
 // let o: Obj = {
-//     [`[|num|]`]: 0
+//     <|[`[|{| isWriteAccess: true |}num|]`]: 0|>
 // };
 // 
 // o = {
-//     ['[|num|]']: 1
+//     <|['[|{| isWriteAccess: true |}num|]']: 1|>
 // };
 // 
 // o['[|num|]'] = 2;
@@ -17,145 +18,67 @@
 // o['[|num|]'];
 // o[`[|num|]`];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsWriteAccess.ts",
-      "kind": "property",
-      "name": "(property) Obj[`num`]: number",
-      "textSpan": {
-        "start": 22,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Obj",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "`num`",
-          "kind": "propertyName"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 20,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWriteAccess.ts",
-        "contextSpan": {
-          "start": 20,
-          "length": 16
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWriteAccess.ts",
-        "contextSpan": {
-          "start": 59,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWriteAccess.ts",
-        "contextSpan": {
-          "start": 84,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWriteAccess.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 116,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWriteAccess.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 131,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWriteAccess.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsWriteAccess.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsWriteAccess.ts ===
+  // interface Obj {
+  //     <|[`/*FIND ALL REFS*/[|num|]`]: number;|>
+  // }
+  // 
+  // let o: Obj = {
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Obj[`num`]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Obj",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "`num`",
+      "kind": "propertyName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

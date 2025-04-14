@@ -1,7 +1,11 @@
-=== tests/cases/compiler/modulePrologueSystem.ts ===
+//// [tests/cases/compiler/modulePrologueSystem.ts] ////
+
+=== modulePrologueSystem.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 export class Foo {}
 >Foo : Foo
+>    : ^^^
 

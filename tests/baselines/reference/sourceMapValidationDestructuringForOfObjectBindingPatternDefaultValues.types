@@ -1,420 +1,708 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts] ////
+
+=== sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 
     log(msg: any): void;
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >msg : any
 }
 interface Robot {
     name: string;
 >name : string
+>     : ^^^^^^
 
     skill: string;
 >skill : string
+>      : ^^^^^^
 }
 
 interface MultiRobot {
     name: string;
 >name : string
+>     : ^^^^^^
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
+>       : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 
         primary?: string;
 >primary : string
+>        : ^^^^^^
 
         secondary?: string;
 >secondary : string
+>          : ^^^^^^
 
     };
 }
 
 let robots: Robot[] = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 >robots : Robot[]
+>       : ^^^^^^^
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >skill : string
+>      : ^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >skill : string
+>      : ^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
 let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 >multiRobots : MultiRobot[]
+>            : ^^^^^^^^^^^^
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >skills : { primary: string; secondary: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >skills : { primary: string; secondary: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 
 function getRobots() {
 >getRobots : () => Robot[]
+>          : ^^^^^^^^^^^^^
 
     return robots;
 >robots : Robot[]
+>       : ^^^^^^^
 }
 
 function getMultiRobots() {
 >getMultiRobots : () => MultiRobot[]
+>               : ^^^^^^^^^^^^^^^^^^
 
     return multiRobots;
 >multiRobots : MultiRobot[]
+>            : ^^^^^^^^^^^^
 }
 
 for (let {name: nameA = "noName" } of robots) {
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >robots : Robot[]
+>       : ^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA = "noName" } of getRobots()) {
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >getRobots() : Robot[]
+>            : ^^^^^^^
 >getRobots : () => Robot[]
+>          : ^^^^^^^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >skill : string
+>      : ^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >skill : string
+>      : ^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
 >skills : any
+>       : ^^^
 >primary : any
+>        : ^^^
 >primaryA : string
+>         : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 >secondary : any
+>          : ^^^
 >secondaryA : string
+>           : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
     { primary: "nosKill", secondary: "noSkill" } } of multiRobots) {
 >{ primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"nosKill" : "nosKill"
+>          : ^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >multiRobots : MultiRobot[]
+>            : ^^^^^^^^^^^^
 
     console.log(primaryA);
 >console.log(primaryA) : void
+>                      : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >primaryA : string
+>         : ^^^^^^
 }
 for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
 >skills : any
+>       : ^^^
 >primary : any
+>        : ^^^
 >primaryA : string
+>         : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 >secondary : any
+>          : ^^^
 >secondaryA : string
+>           : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
     { primary: "nosKill", secondary: "noSkill" } } of getMultiRobots()) {
 >{ primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"nosKill" : "nosKill"
+>          : ^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >getMultiRobots() : MultiRobot[]
+>                 : ^^^^^^^^^^^^
 >getMultiRobots : () => MultiRobot[]
+>               : ^^^^^^^^^^^^^^^^^^
 
     console.log(primaryA);
 >console.log(primaryA) : void
+>                      : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >primaryA : string
+>         : ^^^^^^
 }
 for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
 >skills : any
+>       : ^^^
 >primary : any
+>        : ^^^
 >primaryA : string
+>         : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 >secondary : any
+>          : ^^^
 >secondaryA : string
+>           : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
     { primary: "nosKill", secondary: "noSkill" } } of
 >{ primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"nosKill" : "nosKill"
+>          : ^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 
     <MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 ><MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : MultiRobot[]
+>                                                                                                                                                                  : ^^^^^^^^^^^^
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >skills : { primary: string; secondary: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >skills : { primary: string; secondary: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 
     console.log(primaryA);
 >console.log(primaryA) : void
+>                      : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >primaryA : string
+>         : ^^^^^^
 }
 
 for (let {name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >skill : any
+>      : ^^^
 >skillA : string
+>       : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >robots : Robot[]
+>       : ^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >skill : any
+>      : ^^^
 >skillA : string
+>       : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >getRobots() : Robot[]
+>            : ^^^^^^^
 >getRobots : () => Robot[]
+>          : ^^^^^^^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >skill : any
+>      : ^^^
 >skillA : string
+>       : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >skill : string
+>      : ^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >skill : string
+>      : ^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let {
     name: nameA = "noName",
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 
     skills: {
 >skills : any
+>       : ^^^
 
         primary: primaryA = "primary",
 >primary : any
+>        : ^^^
 >primaryA : string
+>         : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
         secondary: secondaryA = "secondary"
 >secondary : any
+>          : ^^^
 >secondaryA : string
+>           : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 
 } of multiRobots) {
 >multiRobots : MultiRobot[]
+>            : ^^^^^^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let {
     name: nameA = "noName",
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 
     skills: {
 >skills : any
+>       : ^^^
 
         primary: primaryA = "primary",
 >primary : any
+>        : ^^^
 >primaryA : string
+>         : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
         secondary: secondaryA = "secondary"
 >secondary : any
+>          : ^^^
 >secondaryA : string
+>           : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 
 } of getMultiRobots()) {
 >getMultiRobots() : MultiRobot[]
+>                 : ^^^^^^^^^^^^
 >getMultiRobots : () => MultiRobot[]
+>               : ^^^^^^^^^^^^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let {
     name: nameA = "noName",
 >name : any
+>     : ^^^
 >nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 
     skills: {
 >skills : any
+>       : ^^^
 
         primary: primaryA = "primary",
 >primary : any
+>        : ^^^
 >primaryA : string
+>         : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
         secondary: secondaryA = "secondary"
 >secondary : any
+>          : ^^^
 >secondaryA : string
+>           : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 
 } of <MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 ><MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : MultiRobot[]
+>                                                                                                                                                                  : ^^^^^^^^^^^^
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >skills : { primary: string; secondary: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >skills : { primary: string; secondary: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
+>        : ^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >secondary : string
+>          : ^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }

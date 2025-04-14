@@ -1,306 +1,479 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts] ////
+
+=== assignmentCompatWithObjectMembersStringNumericNames.ts ===
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // string named numeric properties work correctly, errors below unless otherwise noted
 
 module JustStrings {
 >JustStrings : typeof JustStrings
+>            : ^^^^^^^^^^^^^^^^^^
 
     class S { '1': string; }
 >S : S
+>  : ^
 >'1' : string
+>    : ^^^^^^
 
     class T { '1.': string; }
 >T : T
+>  : ^
 >'1.' : string
+>     : ^^^^^^
 
     var s: S;
 >s : S
+>  : ^
 
     var t: T;
 >t : T
+>  : ^
 
     interface S2 { '1': string; bar?: string }
 >'1' : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
     interface T2 { '1.0': string; baz?: string }
 >'1.0' : string
+>      : ^^^^^^
 >baz : string
+>    : ^^^^^^
 
     var s2: S2;
 >s2 : S2
+>   : ^^
 
     var t2: T2;
 >t2 : T2
+>   : ^^
 
     var a: { '1.': string; bar?: string }
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >'1.' : string
+>     : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
     var b: { '1.0': string; baz?: string }
 >b : { '1.0': string; baz?: string; }
+>  : ^^^^^^^^^      ^^^^^^^^      ^^^
 >'1.0' : string
+>      : ^^^^^^
 >baz : string
+>    : ^^^^^^
 
     var a2 = { '1.0': '' };
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >{ '1.0': '' } : { '1.0': string; }
+>              : ^^^^^^^^^^^^^^^^^^
 >'1.0' : string
+>      : ^^^^^^
 >'' : ""
+>   : ^^
 
     var b2 = { '1': '' };
 >b2 : { '1': string; }
+>   : ^^^^^^^^^^^^^^^^
 >{ '1': '' } : { '1': string; }
+>            : ^^^^^^^^^^^^^^^^
 >'1' : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
     s = t;
 >s = t : T
+>      : ^
 >s : S
+>  : ^
 >t : T
+>  : ^
 
     t = s;
 >t = s : S
+>      : ^
 >t : T
+>  : ^
 >s : S
+>  : ^
 
     s = s2; // ok
 >s = s2 : S2
+>       : ^^
 >s : S
+>  : ^
 >s2 : S2
+>   : ^^
 
     s = a2;
 >s = a2 : { '1.0': string; }
+>       : ^^^^^^^^^^^^^^^^^^
 >s : S
+>  : ^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 
     s2 = t2;
 >s2 = t2 : T2
+>        : ^^
 >s2 : S2
+>   : ^^
 >t2 : T2
+>   : ^^
 
     t2 = s2;
 >t2 = s2 : S2
+>        : ^^
 >t2 : T2
+>   : ^^
 >s2 : S2
+>   : ^^
 
     s2 = t;
 >s2 = t : T
+>       : ^
 >s2 : S2
+>   : ^^
 >t : T
+>  : ^
 
     s2 = b;
 >s2 = b : { '1.0': string; baz?: string; }
+>       : ^^^^^^^^^      ^^^^^^^^      ^^^
 >s2 : S2
+>   : ^^
 >b : { '1.0': string; baz?: string; }
+>  : ^^^^^^^^^      ^^^^^^^^      ^^^
 
     s2 = a2;
 >s2 = a2 : { '1.0': string; }
+>        : ^^^^^^^^^^^^^^^^^^
 >s2 : S2
+>   : ^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 
     a = b;
 >a = b : { '1.0': string; baz?: string; }
+>      : ^^^^^^^^^      ^^^^^^^^      ^^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >b : { '1.0': string; baz?: string; }
+>  : ^^^^^^^^^      ^^^^^^^^      ^^^
 
     b = a;
 >b = a : { '1.': string; bar?: string; }
+>      : ^^^^^^^^      ^^^^^^^^      ^^^
 >b : { '1.0': string; baz?: string; }
+>  : ^^^^^^^^^      ^^^^^^^^      ^^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 
     a = s;
 >a = s : S
+>      : ^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >s : S
+>  : ^
 
     a = s2;
 >a = s2 : S2
+>       : ^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >s2 : S2
+>   : ^^
 
     a = a2;
 >a = a2 : { '1.0': string; }
+>       : ^^^^^^^^^^^^^^^^^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 
     a2 = b2;
 >a2 = b2 : { '1': string; }
+>        : ^^^^^^^^^^^^^^^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >b2 : { '1': string; }
+>   : ^^^^^^^^^^^^^^^^
 
     b2 = a2;
 >b2 = a2 : { '1.0': string; }
+>        : ^^^^^^^^^^^^^^^^^^
 >b2 : { '1': string; }
+>   : ^^^^^^^^^^^^^^^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 
     a2 = b; // ok
 >a2 = b : { '1.0': string; baz?: string; }
+>       : ^^^^^^^^^      ^^^^^^^^      ^^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >b : { '1.0': string; baz?: string; }
+>  : ^^^^^^^^^      ^^^^^^^^      ^^^
 
     a2 = t2; // ok
 >a2 = t2 : T2
+>        : ^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >t2 : T2
+>   : ^^
 
     a2 = t;
 >a2 = t : T
+>       : ^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 }
 
 module NumbersAndStrings {
 >NumbersAndStrings : typeof NumbersAndStrings
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     class S { '1': string; }
 >S : S
+>  : ^
 >'1' : string
+>    : ^^^^^^
 
     class T { 1: string; }
 >T : T
+>  : ^
 >1 : string
+>  : ^^^^^^
 
     var s: S;
 >s : S
+>  : ^
 
     var t: T;
 >t : T
+>  : ^
 
     interface S2 { '1': string; bar?: string }
 >'1' : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
     interface T2 { 1.0: string; baz?: string }
 >1.0 : string
+>    : ^^^^^^
 >baz : string
+>    : ^^^^^^
 
     var s2: S2;
 >s2 : S2
+>   : ^^
 
     var t2: T2;
 >t2 : T2
+>   : ^^
 
     var a: { '1.': string; bar?: string }
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >'1.' : string
+>     : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
     var b: { 1.0: string; baz?: string }
 >b : { 1: string; baz?: string; }
+>  : ^^^^^      ^^^^^^^^      ^^^
 >1.0 : string
+>    : ^^^^^^
 >baz : string
+>    : ^^^^^^
 
     var a2 = { '1.0': '' };
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >{ '1.0': '' } : { '1.0': string; }
+>              : ^^^^^^^^^^^^^^^^^^
 >'1.0' : string
+>      : ^^^^^^
 >'' : ""
+>   : ^^
 
     var b2 = { 1.: '' };
 >b2 : { 1: string; }
+>   : ^^^^^^^^^^^^^^
 >{ 1.: '' } : { 1: string; }
+>           : ^^^^^^^^^^^^^^
 >1. : string
+>   : ^^^^^^
 >'' : ""
+>   : ^^
 
     s = t; // ok
 >s = t : T
+>      : ^
 >s : S
+>  : ^
 >t : T
+>  : ^
 
     t = s; // ok
 >t = s : S
+>      : ^
 >t : T
+>  : ^
 >s : S
+>  : ^
 
     s = s2; // ok
 >s = s2 : S2
+>       : ^^
 >s : S
+>  : ^
 >s2 : S2
+>   : ^^
 
     s = a2; // error
 >s = a2 : { '1.0': string; }
+>       : ^^^^^^^^^^^^^^^^^^
 >s : S
+>  : ^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 
     s2 = t2; // ok
 >s2 = t2 : T2
+>        : ^^
 >s2 : S2
+>   : ^^
 >t2 : T2
+>   : ^^
 
     t2 = s2; // ok
 >t2 = s2 : S2
+>        : ^^
 >t2 : T2
+>   : ^^
 >s2 : S2
+>   : ^^
 
     s2 = t;  // ok
 >s2 = t : T
+>       : ^
 >s2 : S2
+>   : ^^
 >t : T
+>  : ^
 
     s2 = b; // ok
 >s2 = b : { 1: string; baz?: string; }
+>       : ^^^^^      ^^^^^^^^      ^^^
 >s2 : S2
+>   : ^^
 >b : { 1: string; baz?: string; }
+>  : ^^^^^      ^^^^^^^^      ^^^
 
     s2 = a2; // error
 >s2 = a2 : { '1.0': string; }
+>        : ^^^^^^^^^^^^^^^^^^
 >s2 : S2
+>   : ^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 
     a = b; // error
 >a = b : { 1: string; baz?: string; }
+>      : ^^^^^      ^^^^^^^^      ^^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >b : { 1: string; baz?: string; }
+>  : ^^^^^      ^^^^^^^^      ^^^
 
     b = a; // error
 >b = a : { '1.': string; bar?: string; }
+>      : ^^^^^^^^      ^^^^^^^^      ^^^
 >b : { 1: string; baz?: string; }
+>  : ^^^^^      ^^^^^^^^      ^^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 
     a = s; // error
 >a = s : S
+>      : ^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >s : S
+>  : ^
 
     a = s2; // error
 >a = s2 : S2
+>       : ^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >s2 : S2
+>   : ^^
 
     a = a2; // error
 >a = a2 : { '1.0': string; }
+>       : ^^^^^^^^^^^^^^^^^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 
     a = b2; // error
 >a = b2 : { 1: string; }
+>       : ^^^^^^^^^^^^^^
 >a : { '1.': string; bar?: string; }
+>  : ^^^^^^^^      ^^^^^^^^      ^^^
 >b2 : { 1: string; }
+>   : ^^^^^^^^^^^^^^
 
     a2 = b2; // error
 >a2 = b2 : { 1: string; }
+>        : ^^^^^^^^^^^^^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >b2 : { 1: string; }
+>   : ^^^^^^^^^^^^^^
 
     b2 = a2; // error
 >b2 = a2 : { '1.0': string; }
+>        : ^^^^^^^^^^^^^^^^^^
 >b2 : { 1: string; }
+>   : ^^^^^^^^^^^^^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 
     a2 = b; // error
 >a2 = b : { 1: string; baz?: string; }
+>       : ^^^^^      ^^^^^^^^      ^^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >b : { 1: string; baz?: string; }
+>  : ^^^^^      ^^^^^^^^      ^^^
 
     a2 = t2; // error
 >a2 = t2 : T2
+>        : ^^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >t2 : T2
+>   : ^^
 
     a2 = t; // error
 >a2 = t : T
+>       : ^
 >a2 : { '1.0': string; }
+>   : ^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 }

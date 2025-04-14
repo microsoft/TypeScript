@@ -1,0 +1,12 @@
+awaitUsingDeclarations.2.ts(2,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+
+
+==== awaitUsingDeclarations.2.ts (1 errors) ====
+    {
+        await using d1 = { async [Symbol.asyncDispose]() {} },
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+                    d2 = { async [Symbol.asyncDispose]() {} };
+    }
+    
+    export {};

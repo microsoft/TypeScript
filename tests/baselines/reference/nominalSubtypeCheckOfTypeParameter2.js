@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/nominalSubtypeCheckOfTypeParameter2.ts] ////
+
 //// [nominalSubtypeCheckOfTypeParameter2.ts]
 interface B<T> {
     bar: T;

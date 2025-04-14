@@ -1,0 +1,86 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//         <|[|div|]: {
+//             name?: string;
+//             isOpen?: boolean;
+//         };|>
+//         span: { n: string; };
+//     }
+// }
+// var x = <di/*GOTO DEF*/v />;
+// var y = <span />;
+// var z = <div name='hello' />;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "div",
+    "containerName": "JSX.IntrinsicElements",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 4) skipped ---
+//             name?: string;
+//             isOpen?: boolean;
+//         };
+//         <|[|span|]: { n: string; };|>
+//     }
+// }
+// var x = <div />;
+// var y = <s/*GOTO DEF*/pan />;
+// var z = <div name='hello' />;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "span",
+    "containerName": "JSX.IntrinsicElements",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//         div: {
+//             <|[|name|]?: string;|>
+//             isOpen?: boolean;
+//         };
+//         span: { n: string; };
+//     }
+// }
+// var x = <div />;
+// var y = <span />;
+// var z = <div na/*GOTO DEF*/me='hello' />;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "name",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]

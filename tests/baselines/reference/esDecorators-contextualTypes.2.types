@@ -1,0 +1,191 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-contextualTypes.2.ts] ////
+
+=== esDecorators-contextualTypes.2.ts ===
+class C {
+>C : C
+>  : ^
+
+    @boundMethodLogger("Yadda", /*bound*/ true)
+>boundMethodLogger("Yadda", /*bound*/ true) : (target: (this: C) => void, context: ClassMethodDecoratorContext<C, (this: C) => void>) => (this: C) => void
+>                                           : ^      ^^^    ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
+>boundMethodLogger : <This, Args extends any[], Return>(source: string, bound?: boolean) => (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
+>                  : ^    ^^    ^^^^^^^^^     ^^      ^^      ^^      ^^     ^^^^^^^^^^^^^^^^                                             ^^                                                                                 ^^^^^                                       
+>"Yadda" : "Yadda"
+>        : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+        this.fooHelper();
+>this.fooHelper() : void
+>                 : ^^^^
+>this.fooHelper : () => void
+>               : ^^^^^^^^^^
+>this : this
+>     : ^^^^
+>fooHelper : () => void
+>          : ^^^^^^^^^^
+    }
+
+    fooHelper() {
+>fooHelper : () => void
+>          : ^^^^^^^^^^
+
+        console.log("Behold! The actual method implementation!")
+>console.log("Behold! The actual method implementation!") : void
+>                                                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"Behold! The actual method implementation!" : "Behold! The actual method implementation!"
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+};
+export { C };
+>C : typeof C
+>  : ^^^^^^^^
+
+function boundMethodLogger<This, Args extends any[], Return>(source: string, bound = true) {
+>boundMethodLogger : <This, Args extends any[], Return>(source: string, bound?: boolean) => (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
+>                  : ^    ^^    ^^^^^^^^^     ^^      ^^      ^^      ^^     ^^^^^^^^^^^^^^^^                                             ^^                                                                                 ^^^^^                                       
+>source : string
+>       : ^^^^^^
+>bound : boolean
+>      : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    return function loggedDecorator(
+>function loggedDecorator(        target: (this: This, ...args: Args) => Return,        context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>    ): ((this: This, ...args: Args) => Return) {        if (bound) {            context.addInitializer(function () {                (this as any)[context.name] = (this as any)[context.name].bind(this);            });        }        return function (this, ...args) {            console.log(`<${source}>: I'm logging stuff from ${context.name.toString()}!`);            return target.apply(this, args);        }    } : (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        : ^      ^^                                     ^^       ^^                                                                        ^^^^^                                       
+>loggedDecorator : (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
+>                : ^      ^^                                     ^^       ^^                                                                        ^^^^^                                       
+
+        target: (this: This, ...args: Args) => Return,
+>target : (this: This, ...args: Args) => Return
+>       : ^    ^^    ^^^^^    ^^    ^^^^^      
+>this : This
+>     : ^^^^
+>args : Args
+>     : ^^^^
+
+        context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+>context : ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^    ^^    ^^^^^      ^
+>this : This
+>     : ^^^^
+>args : Args
+>     : ^^^^
+
+    ): ((this: This, ...args: Args) => Return) {
+>this : This
+>     : ^^^^
+>args : Args
+>     : ^^^^
+
+        if (bound) {
+>bound : boolean
+>      : ^^^^^^^
+
+            context.addInitializer(function () {
+>context.addInitializer(function () {                (this as any)[context.name] = (this as any)[context.name].bind(this);            }) : void
+>                                                                                                                                        : ^^^^
+>context.addInitializer : (initializer: (this: This) => void) => void
+>                       : ^           ^^^    ^^^^^^^^^^^    ^^^^^    
+>context : ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^    ^^    ^^^^^      ^
+>addInitializer : (initializer: (this: This) => void) => void
+>               : ^           ^^^    ^^^^^^^^^^^    ^^^^^    
+>function () {                (this as any)[context.name] = (this as any)[context.name].bind(this);            } : (this: This) => void
+>                                                                                                                : ^    ^^^^^^^^^^^^^^^
+
+                (this as any)[context.name] = (this as any)[context.name].bind(this);
+>(this as any)[context.name] = (this as any)[context.name].bind(this) : any
+>(this as any)[context.name] : any
+>(this as any) : any
+>this as any : any
+>this : This
+>     : ^^^^
+>context.name : string | symbol
+>             : ^^^^^^^^^^^^^^^
+>context : ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^    ^^    ^^^^^      ^
+>name : string | symbol
+>     : ^^^^^^^^^^^^^^^
+>(this as any)[context.name].bind(this) : any
+>(this as any)[context.name].bind : any
+>(this as any)[context.name] : any
+>                            : ^^^
+>(this as any) : any
+>this as any : any
+>this : This
+>     : ^^^^
+>context.name : string | symbol
+>             : ^^^^^^^^^^^^^^^
+>context : ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^    ^^    ^^^^^      ^
+>name : string | symbol
+>     : ^^^^^^^^^^^^^^^
+>bind : any
+>     : ^^^
+>this : This
+>     : ^^^^
+
+            });
+        }
+
+        return function (this, ...args) {
+>function (this, ...args) {            console.log(`<${source}>: I'm logging stuff from ${context.name.toString()}!`);            return target.apply(this, args);        } : (this: This, ...args: Args) => any
+>                                                                                                                                                                           : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^
+>this : This
+>     : ^^^^
+>args : Args
+>     : ^^^^
+
+            console.log(`<${source}>: I'm logging stuff from ${context.name.toString()}!`);
+>console.log(`<${source}>: I'm logging stuff from ${context.name.toString()}!`) : void
+>                                                                               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>`<${source}>: I'm logging stuff from ${context.name.toString()}!` : string
+>                                                                  : ^^^^^^
+>source : string
+>       : ^^^^^^
+>context.name.toString() : string
+>                        : ^^^^^^
+>context.name.toString : (() => string) | (() => string)
+>                      : ^^^^^^^      ^^^^^^^^^^^      ^
+>context.name : string | symbol
+>             : ^^^^^^^^^^^^^^^
+>context : ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^    ^^    ^^^^^      ^
+>name : string | symbol
+>     : ^^^^^^^^^^^^^^^
+>toString : (() => string) | (() => string)
+>         : ^^^^^^^      ^^^^^^^^^^^      ^
+
+            return target.apply(this, args);
+>target.apply(this, args) : any
+>target.apply : (this: Function, thisArg: any, argArray?: any) => any
+>             : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>target : (this: This, ...args: Args) => Return
+>       : ^    ^^    ^^^^^    ^^    ^^^^^      
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>this : This
+>     : ^^^^
+>args : Args
+>     : ^^^^
+        }
+    }
+}

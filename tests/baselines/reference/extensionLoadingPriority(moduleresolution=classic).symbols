@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/moduleResolution/extensionLoadingPriority.ts] ////
+
+=== /project/a.js ===
+
+export default "a.js";
+
+=== /project/a.js.js ===
+
+export default "a.js.js";
+
+=== /project/dir/index.ts ===
+
+export default "dir/index.ts";
+
+=== /project/dir.js ===
+
+export default "dir.js";
+
+=== /project/b.ts ===
+import a from "./a.js";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+import dir from "./dir";
+>dir : Symbol(dir, Decl(b.ts, 1, 6))
+

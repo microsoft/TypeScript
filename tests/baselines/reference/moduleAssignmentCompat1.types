@@ -1,35 +1,50 @@
-=== tests/cases/compiler/moduleAssignmentCompat1.ts ===
+//// [tests/cases/compiler/moduleAssignmentCompat1.ts] ////
+
+=== moduleAssignmentCompat1.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class C { }
 >C : C
+>  : ^
 }
 module B {
 >B : typeof B
+>  : ^^^^^^^^
 
     export class C { }
 >C : C
+>  : ^
 
     class D { }
 >D : D
+>  : ^
 }
 
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 // no error
 a = b;
 >a = b : B
+>      : ^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 b = a;
 >b = a : A
+>      : ^
 >b : B
+>  : ^
 >a : A
+>  : ^
 
 

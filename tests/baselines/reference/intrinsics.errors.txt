@@ -1,14 +1,11 @@
-tests/cases/compiler/intrinsics.ts(1,21): error TS2749: 'hasOwnProperty' refers to a value, but is being used as a type here. Did you mean 'typeof hasOwnProperty'?
-tests/cases/compiler/intrinsics.ts(1,21): error TS4025: Exported variable 'hasOwnProperty' has or is using private name 'hasOwnProperty'.
-tests/cases/compiler/intrinsics.ts(10,1): error TS2304: Cannot find name '__proto__'.
+intrinsics.ts(1,21): error TS2749: 'hasOwnProperty' refers to a value, but is being used as a type here. Did you mean 'typeof hasOwnProperty'?
+intrinsics.ts(10,1): error TS2304: Cannot find name '__proto__'.
 
 
-==== tests/cases/compiler/intrinsics.ts (3 errors) ====
+==== intrinsics.ts (2 errors) ====
     var hasOwnProperty: hasOwnProperty; // Error
                         ~~~~~~~~~~~~~~
 !!! error TS2749: 'hasOwnProperty' refers to a value, but is being used as a type here. Did you mean 'typeof hasOwnProperty'?
-                        ~~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'hasOwnProperty' has or is using private name 'hasOwnProperty'.
     
     module m1 {
         export var __proto__;

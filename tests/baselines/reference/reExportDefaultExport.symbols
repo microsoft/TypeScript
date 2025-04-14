@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/reExportDefaultExport.ts] ////
+
+=== m1.ts ===
 export default function f() {
 >f : Symbol(f, Decl(m1.ts, 0, 0))
 }
@@ -6,7 +8,7 @@ export {f};
 >f : Symbol(f, Decl(m1.ts, 2, 8))
 
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import foo from "./m1";
 >foo : Symbol(foo, Decl(m2.ts, 0, 6))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts] ////
+
 //// [performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts]
 export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<infer U> ? U : T;
 
@@ -105,7 +107,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {

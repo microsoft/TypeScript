@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution6.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
@@ -6,10 +8,14 @@ declare module JSX {
 
 var div: any;
 >div : any
+>    : ^^^
 
 // Still an error
 <div n='x' />;
 ><div n='x' /> : JSX.Element
+>              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >n : string
+>  : ^^^^^^
 

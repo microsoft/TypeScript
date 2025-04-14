@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override10.ts] ////
+
 //// [override10.ts]
 abstract class Base {
     abstract foo(): unknown;

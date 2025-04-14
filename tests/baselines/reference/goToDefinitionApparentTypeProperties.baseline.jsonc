@@ -1,0 +1,47 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionApparentTypeProperties.ts ===
+// interface Number {
+//     <|[|myObjectMethod|](): number;|>
+// }
+// 
+// var o = 0;
+// o./*GOTO DEF*/myObjectMethod();
+// o["myObjectMethod"]();
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "myObjectMethod",
+    "containerName": "Number",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionApparentTypeProperties.ts ===
+// interface Number {
+//     <|[|myObjectMethod|](): number;|>
+// }
+// 
+// var o = 0;
+// o.myObjectMethod();
+// o["/*GOTO DEF*/myObjectMethod"]();
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "myObjectMethod",
+    "containerName": "Number",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renamePrivateFields1.ts ===
+// class Foo {
+//    /*RENAME*/<|[|#fooRENAME|] = 1;|>
+// 
+//    getFoo() {
+//        return this.[|#fooRENAME|];
+//    }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renamePrivateFields1.ts ===
+// class Foo {
+//    <|[|#fooRENAME|] = 1;|>
+// 
+//    getFoo() {
+//        return this./*RENAME*/[|#fooRENAME|];
+//    }
+// }

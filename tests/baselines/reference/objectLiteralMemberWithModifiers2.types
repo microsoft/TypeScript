@@ -1,6 +1,11 @@
-=== tests/cases/compiler/objectLiteralMemberWithModifiers2.ts ===
+//// [tests/cases/compiler/objectLiteralMemberWithModifiers2.ts] ////
+
+=== objectLiteralMemberWithModifiers2.ts ===
 var v = { public get foo() { } }
 >v : { readonly foo: void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ public get foo() { } } : { readonly foo: void; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : void
+>    : ^^^^
 

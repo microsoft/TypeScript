@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentOnSimpleArrowFunctionBody1.ts ===
+//// [tests/cases/compiler/commentOnSimpleArrowFunctionBody1.ts] ////
+
+=== commentOnSimpleArrowFunctionBody1.ts ===
 function Foo(x: any)
 >Foo : Symbol(Foo, Decl(commentOnSimpleArrowFunctionBody1.ts, 0, 0))
 >x : Symbol(x, Decl(commentOnSimpleArrowFunctionBody1.ts, 0, 13))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType02.ts ===
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType02.ts] ////
+
+=== errorForUsingPropertyOfTypeAsType02.ts ===
 namespace Test1 {
 >Test1 : Symbol(Test1, Decl(errorForUsingPropertyOfTypeAsType02.ts, 0, 0))
 

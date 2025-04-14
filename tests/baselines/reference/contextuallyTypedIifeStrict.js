@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functions/contextuallyTypedIifeStrict.ts] ////
+
 //// [contextuallyTypedIifeStrict.ts]
 // arrow
 (jake => { })("build");
@@ -14,7 +16,7 @@
 // optional parameters
 ((j?) => j + 1)(12);
 ((k?) => k + 1)();
-((l, o?) => l + o)(12); // o should be any
+((l, o?) => l + o)(12);
 // rest parameters
 ((...numbers) => numbers.every(n => n > 0))(5,6,7);
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
@@ -55,7 +57,7 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 // optional parameters
 (function (j) { return j + 1; })(12);
 (function (k) { return k + 1; })();
-(function (l, o) { return l + o; })(12); // o should be any
+(function (l, o) { return l + o; })(12);
 // rest parameters
 (function () {
     var numbers = [];

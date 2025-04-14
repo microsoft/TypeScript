@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends2.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionInExtends2.ts] ////
+
+=== declarationEmitExpressionInExtends2.ts ===
 class C<T, U> {
 >C : Symbol(C, Decl(declarationEmitExpressionInExtends2.ts, 0, 0))
 >T : Symbol(T, Decl(declarationEmitExpressionInExtends2.ts, 0, 8))

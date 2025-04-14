@@ -1,6 +1,8 @@
-=== tests/cases/conformance/es6/templates/templateStringMultiline1_ES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringMultiline1_ES6.ts] ////
+
+=== templateStringMultiline1_ES6.ts ===
+
 // newlines are <CR><LF>
-No type information for this code.`
-No type information for this code.\
-No type information for this code.`
-No type information for this code.
+`
+\
+`

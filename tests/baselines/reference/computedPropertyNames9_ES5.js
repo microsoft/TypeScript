@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames9_ES5.ts] ////
+
 //// [computedPropertyNames9_ES5.ts]
 function f(s: string): string;
 function f(n: number): number;

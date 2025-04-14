@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/typeRelationships.ts] ////
+
 //// [typeRelationships.ts]
 class C {
     self = this;

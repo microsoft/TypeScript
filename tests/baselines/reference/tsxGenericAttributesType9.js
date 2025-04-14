@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxGenericAttributesType9.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 
@@ -30,8 +32,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
-exports.makeP = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.makeP = makeP;
 var React = require("react");
 function makeP(Ctor) {
     return /** @class */ (function (_super) {
@@ -45,4 +47,3 @@ function makeP(Ctor) {
         return class_1;
     }(React.PureComponent));
 }
-exports.makeP = makeP;

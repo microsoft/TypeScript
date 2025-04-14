@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumBasics1.ts ===
+//// [tests/cases/compiler/enumBasics1.ts] ////
+
+=== enumBasics1.ts ===
 enum E {
 >E : Symbol(E, Decl(enumBasics1.ts, 0, 0))
 

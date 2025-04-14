@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerTypeArgumentInference.ts] ////
+
 //// [innerTypeArgumentInference.ts]
 interface Generator<T> { (): T; }
 function Generate<U>(func: Generator<U>): U {

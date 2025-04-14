@@ -1,8 +1,10 @@
-=== tests/cases/conformance/salsa/def.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment6.ts] ////
+
+=== def.js ===
 class Outer {}
 >Outer : Symbol(Outer, Decl(def.js, 0, 0), Decl(a.js, 0, 0), Decl(a.js, 2, 1))
 
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 Outer.Inner = class I {
 >Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 0))
 >Outer : Symbol(Outer, Decl(def.js, 0, 0), Decl(a.js, 0, 0), Decl(a.js, 2, 1))
@@ -18,7 +20,7 @@ Outer.i
 >Outer : Symbol(Outer, Decl(def.js, 0, 0), Decl(a.js, 0, 0), Decl(a.js, 2, 1))
 >i : Symbol(Outer.i, Decl(a.js, 2, 1))
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 var msgs = Outer.i.messages()
 >msgs : Symbol(msgs, Decl(b.js, 0, 3))
 >Outer.i.messages : Symbol(I.messages, Decl(a.js, 0, 23))

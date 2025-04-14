@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx ===
+//// [tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx] ////
+
+=== contextuallyTypedStringLiteralsInJsxAttributes01.tsx ===
 namespace JSX {
 >JSX : Symbol(JSX, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 0, 0))
 

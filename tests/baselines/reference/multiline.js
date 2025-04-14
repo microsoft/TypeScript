@@ -55,7 +55,7 @@ let x = (
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.texts = void 0;
 exports.texts = [];
 /**
@@ -69,13 +69,12 @@ exports.texts.push(100);
 exports.texts.push("100");
 //// [b.js]
 "use strict";
-exports.__esModule = true;
-exports.MyComponent = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyComponent = MyComponent;
 var React = require("react");
 function MyComponent(props) {
     return React.createElement("div", null);
 }
-exports.MyComponent = MyComponent;
 var x = (React.createElement("div", null,
     React.createElement(MyComponent, { foo: 100 }),
     React.createElement(MyComponent, { foo: 100 }),

@@ -1,24 +1,24 @@
-tests/cases/compiler/typeofExternalModules_core.ts(5,1): error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")'.
-tests/cases/compiler/typeofExternalModules_core.ts(7,1): error TS2741: Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")' but required in type 'typeof D'.
+typeofExternalModules_core.ts(5,1): error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("typeofExternalModules_external")'.
+typeofExternalModules_core.ts(7,1): error TS2741: Property 'prototype' is missing in type 'typeof import("typeofExternalModules_external")' but required in type 'typeof D'.
 
 
-==== tests/cases/compiler/typeofExternalModules_core.ts (2 errors) ====
+==== typeofExternalModules_core.ts (2 errors) ====
     import ext = require('./typeofExternalModules_external');
     import exp = require('./typeofExternalModules_exportAssign');
     
     var y1: typeof ext = ext;
     y1 = exp;
     ~~
-!!! error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")'.
-!!! related TS2728 /.src/tests/cases/compiler/typeofExternalModules_external.ts:1:14: 'C' is declared here.
+!!! error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("typeofExternalModules_external")'.
+!!! related TS2728 typeofExternalModules_external.ts:1:14: 'C' is declared here.
     var y2: typeof exp = exp;
     y2 = ext;
     ~~
-!!! error TS2741: Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")' but required in type 'typeof D'.
-==== tests/cases/compiler/typeofExternalModules_external.ts (0 errors) ====
+!!! error TS2741: Property 'prototype' is missing in type 'typeof import("typeofExternalModules_external")' but required in type 'typeof D'.
+==== typeofExternalModules_external.ts (0 errors) ====
     export class C { }
     
-==== tests/cases/compiler/typeofExternalModules_exportAssign.ts (0 errors) ====
+==== typeofExternalModules_exportAssign.ts (0 errors) ====
     class D { }
     export = D;
     

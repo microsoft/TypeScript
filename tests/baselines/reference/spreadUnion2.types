@@ -1,68 +1,108 @@
-=== tests/cases/conformance/types/spread/spreadUnion2.ts ===
+//// [tests/cases/conformance/types/spread/spreadUnion2.ts] ////
+
+=== spreadUnion2.ts ===
 declare const undefinedUnion: { a: number } | undefined;
 >undefinedUnion : { a: number; } | undefined
+>               : ^^^^^      ^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 declare const nullUnion: { b: number } | null;
 >nullUnion : { b: number; } | null
+>          : ^^^^^      ^^^^^^^^^^
 >b : number
->null : null
+>  : ^^^^^^
 
 var o1: {} | { a: number };
 >o1 : {} | { a: number; }
+>   : ^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 var o1 = { ...undefinedUnion };
 >o1 : {} | { a: number; }
+>   : ^^^^^^^^^^      ^^^
 >{ ...undefinedUnion } : { a?: number | undefined; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefinedUnion : { a: number; } | undefined
+>               : ^^^^^      ^^^^^^^^^^^^^^^
 
 var o2: {} | { b: number };
 >o2 : {} | { b: number; }
+>   : ^^^^^^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 
 var o2 = { ...nullUnion };
 >o2 : {} | { b: number; }
+>   : ^^^^^^^^^^      ^^^
 >{ ...nullUnion } : { b?: number | undefined; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nullUnion : { b: number; } | null
+>          : ^^^^^      ^^^^^^^^^^
 
 var o3: {} | { a: number } | { b: number } | { a: number, b: number };
 >o3 : {} | { a: number; } | { b: number; } | { a: number; b: number; }
+>   : ^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var o3 = { ...undefinedUnion, ...nullUnion };
 >o3 : {} | { a: number; } | { b: number; } | { a: number; b: number; }
+>   : ^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >{ ...undefinedUnion, ...nullUnion } : { b?: number | undefined; a?: number | undefined; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefinedUnion : { a: number; } | undefined
+>               : ^^^^^      ^^^^^^^^^^^^^^^
 >nullUnion : { b: number; } | null
+>          : ^^^^^      ^^^^^^^^^^
 
 var o3 = { ...nullUnion, ...undefinedUnion };
 >o3 : {} | { a: number; } | { b: number; } | { a: number; b: number; }
+>   : ^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >{ ...nullUnion, ...undefinedUnion } : { a?: number | undefined; b?: number | undefined; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nullUnion : { b: number; } | null
+>          : ^^^^^      ^^^^^^^^^^
 >undefinedUnion : { a: number; } | undefined
+>               : ^^^^^      ^^^^^^^^^^^^^^^
 
 var o4: {} | { a: number };
 >o4 : {} | { a: number; }
+>   : ^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 var o4 = { ...undefinedUnion, ...undefinedUnion };
 >o4 : {} | { a: number; }
+>   : ^^^^^^^^^^      ^^^
 >{ ...undefinedUnion, ...undefinedUnion } : { a?: number | undefined; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefinedUnion : { a: number; } | undefined
+>               : ^^^^^      ^^^^^^^^^^^^^^^
 >undefinedUnion : { a: number; } | undefined
+>               : ^^^^^      ^^^^^^^^^^^^^^^
 
 var o5: {} | { b: number };
 >o5 : {} | { b: number; }
+>   : ^^^^^^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 
 var o5 = { ...nullUnion, ...nullUnion };
 >o5 : {} | { b: number; }
+>   : ^^^^^^^^^^      ^^^
 >{ ...nullUnion, ...nullUnion } : { b?: number | undefined; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nullUnion : { b: number; } | null
+>          : ^^^^^      ^^^^^^^^^^
 >nullUnion : { b: number; } | null
+>          : ^^^^^      ^^^^^^^^^^
 
 

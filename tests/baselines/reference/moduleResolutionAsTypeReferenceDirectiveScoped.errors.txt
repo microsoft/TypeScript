@@ -1,0 +1,41 @@
+/a.ts(2,30): error TS2307: Cannot find module '@mangled/typescache' or its corresponding type declarations.
+/a.ts(4,36): error TS2307: Cannot find module '@mangled/nodemodulescache' or its corresponding type declarations.
+/a.ts(5,30): error TS2307: Cannot find module '@scoped/attypescache' or its corresponding type declarations.
+
+
+==== /a.ts (3 errors) ====
+    import { typesCache } from "@scoped/typescache";
+    import { mangledTypes } from "@mangled/typescache";
+                                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@mangled/typescache' or its corresponding type declarations.
+    import { nodeModulesCache } from "@scoped/nodemodulescache";
+    import { mangledNodeModules } from "@mangled/nodemodulescache";
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@mangled/nodemodulescache' or its corresponding type declarations.
+    import { atTypesCache } from "@scoped/attypescache";
+                                 ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@scoped/attypescache' or its corresponding type declarations.
+    import { mangledAtTypesCache } from "@mangled/attypescache";
+    
+==== /a/types/dummy/index.d.ts (0 errors) ====
+    export const dummy: number;
+    
+==== /a/types/@scoped/typescache/index.d.ts (0 errors) ====
+    export const typesCache: number;
+    
+==== /a/types/mangled__typescache/index.d.ts (0 errors) ====
+    export const mangledTypes: number;
+    
+==== /a/node_modules/@scoped/nodemodulescache/index.d.ts (0 errors) ====
+    export const nodeModulesCache: number;
+    
+==== /a/node_modules/mangled__nodemodulescache/index.d.ts (0 errors) ====
+    export const mangledNodeModules: number;
+    
+==== /a/node_modules/@types/@scoped/attypescache/index.d.ts (0 errors) ====
+    export const atTypesCache: number;
+    
+==== /a/node_modules/@types/mangled__attypescache/index.d.ts (0 errors) ====
+    export const mangledAtTypesCache: number;
+    
+    

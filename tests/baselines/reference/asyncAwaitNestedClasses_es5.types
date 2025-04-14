@@ -1,39 +1,60 @@
-=== tests/cases/conformance/async/es5/asyncAwaitNestedClasses_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncAwaitNestedClasses_es5.ts] ////
+
+=== asyncAwaitNestedClasses_es5.ts ===
 // https://github.com/Microsoft/TypeScript/issues/20744
 class A {
 >A : A
+>  : ^
 
     static B = class B {
 >B : typeof B
+>  : ^^^^^^^^
 >class B {        static func2(): Promise<void> {            return new Promise((resolve) => { resolve(null); });        }        static C = class C {            static async func() {                await B.func2();            }        }    } : typeof B
+>                                                                                                                                                                                                                                                  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
         static func2(): Promise<void> {
 >func2 : () => Promise<void>
+>      : ^^^^^^             
 
             return new Promise((resolve) => { resolve(null); });
 >new Promise((resolve) => { resolve(null); }) : Promise<void>
+>                                             : ^^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >(resolve) => { resolve(null); } : (resolve: (value: void | PromiseLike<void>) => void) => void
+>                                : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >resolve : (value: void | PromiseLike<void>) => void
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >resolve(null) : void
+>              : ^^^^
 >resolve : (value: void | PromiseLike<void>) => void
->null : null
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
         }
         static C = class C {
 >C : typeof C
+>  : ^^^^^^^^
 >class C {            static async func() {                await B.func2();            }        } : typeof C
+>                                                                                                 : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
             static async func() {
 >func : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 
                 await B.func2();
 >await B.func2() : void
+>                : ^^^^
 >B.func2() : Promise<void>
+>          : ^^^^^^^^^^^^^
 >B.func2 : () => Promise<void>
+>        : ^^^^^^             
 >B : typeof B
+>  : ^^^^^^^^
 >func2 : () => Promise<void>
+>      : ^^^^^^             
             }
         }
     }
@@ -41,11 +62,19 @@ class A {
 
 A.B.C.func();
 >A.B.C.func() : Promise<void>
+>             : ^^^^^^^^^^^^^
 >A.B.C.func : () => Promise<void>
+>           : ^^^^^^^^^^^^^^^^^^^
 >A.B.C : typeof C
+>      : ^^^^^^^^
 >A.B : typeof B
+>    : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >func : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 

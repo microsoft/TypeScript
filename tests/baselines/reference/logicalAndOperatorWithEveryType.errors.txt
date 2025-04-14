@@ -1,16 +1,36 @@
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(19,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(30,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(41,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(52,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(63,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(74,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(85,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(96,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(107,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(118,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(19,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(23,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(24,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(30,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(34,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(35,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(41,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(45,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(46,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(52,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(56,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(57,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(63,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(67,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(68,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(74,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(78,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(79,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(85,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(89,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(90,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(96,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(100,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(101,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(107,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(111,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(112,12): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(118,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(122,11): error TS2873: This kind of expression is always falsy.
+logicalAndOperatorWithEveryType.ts(123,12): error TS2873: This kind of expression is always falsy.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts (10 errors) ====
+==== logicalAndOperatorWithEveryType.ts (30 errors) ====
     // The && operator permits the operands to be of any type and produces a result of the same
     // type as the second operand.
     
@@ -36,7 +56,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var ra7 = a7 && a1;
     var ra8 = a8 && a1;
     var ra9 = null && a1;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var ra10 = undefined && a1;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rb1 = a1 && a2;
     var rb2 = a2 && a2;
@@ -49,7 +73,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rb7 = a7 && a2;
     var rb8 = a8 && a2;
     var rb9 = null && a2;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rb10 = undefined && a2;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rc1 = a1 && a3;
     var rc2 = a2 && a3;
@@ -62,7 +90,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rc7 = a7 && a3;
     var rc8 = a8 && a3;
     var rc9 = null && a3;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rc10 = undefined && a3;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rd1 = a1 && a4;
     var rd2 = a2 && a4;
@@ -75,7 +107,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rd7 = a7 && a4;
     var rd8 = a8 && a4;
     var rd9 = null && a4;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rd10 = undefined && a4;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var re1 = a1 && a5;
     var re2 = a2 && a5;
@@ -88,7 +124,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var re7 = a7 && a5;
     var re8 = a8 && a5;
     var re9 = null && a5;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var re10 = undefined && a5;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rf1 = a1 && a6;
     var rf2 = a2 && a6;
@@ -101,7 +141,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rf7 = a7 && a6;
     var rf8 = a8 && a6;
     var rf9 = null && a6;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rf10 = undefined && a6;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rg1 = a1 && a7;
     var rg2 = a2 && a7;
@@ -114,7 +158,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rg7 = a7 && a7;
     var rg8 = a8 && a7;
     var rg9 = null && a7;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rg10 = undefined && a7;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rh1 = a1 && a8;
     var rh2 = a2 && a8;
@@ -127,7 +175,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rh7 = a7 && a8;
     var rh8 = a8 && a8;
     var rh9 = null && a8;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rh10 = undefined && a8;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var ri1 = a1 && null;
     var ri2 = a2 && null;
@@ -140,7 +192,11 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var ri7 = a7 && null;
     var ri8 = a8 && null;
     var ri9 = null && null;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var ri10 = undefined && null;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rj1 = a1 && undefined;
     var rj2 = a2 && undefined;
@@ -153,4 +209,8 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rj7 = a7 && undefined;
     var rj8 = a8 && undefined;
     var rj9 = null && undefined;
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rj10 = undefined && undefined;
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.

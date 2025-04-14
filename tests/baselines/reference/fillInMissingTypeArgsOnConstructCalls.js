@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fillInMissingTypeArgsOnConstructCalls.ts] ////
+
 //// [fillInMissingTypeArgsOnConstructCalls.ts]
 class A<T extends Object>{
       list: T ;

@@ -1,50 +1,77 @@
-=== tests/cases/compiler/sourceMapValidationIfElse.ts ===
+//// [tests/cases/compiler/sourceMapValidationIfElse.ts] ////
+
+=== sourceMapValidationIfElse.ts ===
 var i = 10;
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 if (i == 10) {
 >i == 10 : boolean
+>        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     i++;
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
 } else
 {
 }
 if (i == 10)
 >i == 10 : boolean
+>        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 {
     i++;
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 }
 else if (i == 20) {
 >i == 20 : boolean
+>        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     i--;
 >i-- : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
 } else if (i == 30) {
 >i == 30 : boolean
+>        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >30 : 30
+>   : ^^
 
     i += 70;
 >i += 70 : number
+>        : ^^^^^^
 >i : number
+>  : ^^^^^^
 >70 : 70
+>   : ^^
 
 } else {
     i--;
 >i-- : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 }

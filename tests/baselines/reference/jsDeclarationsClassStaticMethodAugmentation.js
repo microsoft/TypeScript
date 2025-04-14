@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStaticMethodAugmentation.ts] ////
+
 //// [source.js]
 export class Clazz {
     static method() { }
@@ -25,6 +27,6 @@ export class Clazz {
 export namespace Clazz {
     function method(): void;
     namespace method {
-        const prop: number;
+        let prop: number;
     }
 }

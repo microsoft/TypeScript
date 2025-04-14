@@ -14,6 +14,6 @@ verify.quickInfos({
 
 verify.completions({ marker: "3", includes: { name: "__proto__", text: "var __proto__: M.__proto__" } });
 edit.insert("__proto__");
-verify.goToDefinitionIs("2");
+verify.baselineGetDefinitionAtPosition(edit.caretPosition());
 
 verify.quickInfoAt("4", "var fun: (__proto__: any) => boolean");

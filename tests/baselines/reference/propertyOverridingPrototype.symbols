@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyOverridingPrototype.ts ===
+//// [tests/cases/compiler/propertyOverridingPrototype.ts] ////
+
+=== propertyOverridingPrototype.ts ===
 class Base {
 >Base : Symbol(Base, Decl(propertyOverridingPrototype.ts, 0, 0))
 

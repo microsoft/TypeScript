@@ -1,0 +1,109 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoInheritDoc3.ts ===
+// function getBaseClass() {
+//     return class Base {
+//         /**
+//          * Base.prop
+//          */
+//         prop: string | undefined;
+//     }
+// }
+// class SubClass extends getBaseClass() {
+//     /**
+//      * @inheritdoc
+//      * SubClass.prop
+//      */
+//     prop: string | undefined;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) SubClass.prop: string
+// | Base.prop
+// | SubClass.prop
+// | @inheritdoc SubClass.prop
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoInheritDoc3.ts",
+      "position": 237,
+      "name": "1"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 237,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "SubClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "prop",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Base.prop",
+          "kind": "text"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "SubClass.prop",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "inheritdoc",
+          "text": [
+            {
+              "text": "SubClass.prop",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

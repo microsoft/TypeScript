@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/widenedTypes/strictNullChecksNoWidening.ts ===
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/strictNullChecksNoWidening.ts] ////
+
+=== strictNullChecksNoWidening.ts ===
 var a1 = null;
 >a1 : Symbol(a1, Decl(strictNullChecksNoWidening.ts, 0, 3))
 

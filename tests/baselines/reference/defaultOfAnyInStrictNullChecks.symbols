@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultOfAnyInStrictNullChecks.ts ===
+//// [tests/cases/compiler/defaultOfAnyInStrictNullChecks.ts] ////
+
+=== defaultOfAnyInStrictNullChecks.ts ===
 // Regression test for #8295
 
 function foo() {

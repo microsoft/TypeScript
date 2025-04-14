@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumWithNegativeInfinityProperty.ts ===
+//// [tests/cases/compiler/enumWithNegativeInfinityProperty.ts] ////
+
+=== enumWithNegativeInfinityProperty.ts ===
 enum A {
 >A : Symbol(A, Decl(enumWithNegativeInfinityProperty.ts, 0, 0))
 

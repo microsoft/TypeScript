@@ -1,79 +1,123 @@
-=== tests/cases/conformance/types/primitives/string/invalidStringAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/string/invalidStringAssignments.ts] ////
+
+=== invalidStringAssignments.ts ===
 var x = '';
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var a: boolean = x;
 >a : boolean
+>  : ^^^^^^^
 >x : string
+>  : ^^^^^^
 
 var b: number = x;
 >b : number
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 var c: void = x;
 >c : void
+>  : ^^^^
 >x : string
+>  : ^^^^^^
 
 var d: typeof undefined = x;
 >d : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 class C { foo: string; }
 >C : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 var e: C = x;
 >e : C
+>  : ^
 >x : string
+>  : ^^^^^^
 
 interface I { bar: string; }
 >bar : string
+>    : ^^^^^^
 
 var f: I = x;
 >f : I
+>  : ^
 >x : string
+>  : ^^^^^^
 
 var g: { baz: string } = 1;
 >g : { baz: string; }
+>  : ^^^^^^^      ^^^
 >baz : string
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 var g2: { 0: number } = 1;
 >g2 : { 0: number; }
+>   : ^^^^^      ^^^
 >0 : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 module M { export var x = 1; }
 >M : typeof M
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 M = x;
 >M = x : string
+>      : ^^^^^^
 >M : any
+>  : ^^^
 >x : string
+>  : ^^^^^^
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
     a = x;
 >a = x : string
+>      : ^^^^^^
 >a : T
+>  : ^
 >x : string
+>  : ^^^^^^
 }
 i = x;
 >i = x : string
+>      : ^^^^^^
 >i : any
+>  : ^^^
 >x : string
+>  : ^^^^^^
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 var j: E = x;
 >j : E
+>  : ^
 >x : string
+>  : ^^^^^^
 

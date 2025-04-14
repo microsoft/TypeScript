@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dynamicNamesErrors.ts ===
+//// [tests/cases/compiler/dynamicNamesErrors.ts] ////
+
+=== dynamicNamesErrors.ts ===
 const c0 = "1";
 >c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
 
@@ -9,11 +11,11 @@ interface T0 {
 >T0 : Symbol(T0, Decl(dynamicNamesErrors.ts, 1, 13))
 
     [c0]: number;
->[c0] : Symbol(T0[c0], Decl(dynamicNamesErrors.ts, 3, 14))
+>[c0] : Symbol(T0[1], Decl(dynamicNamesErrors.ts, 4, 17), Decl(dynamicNamesErrors.ts, 3, 14))
 >c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
 
     1: number;
->1 : Symbol(T0[1], Decl(dynamicNamesErrors.ts, 4, 17))
+>1 : Symbol(T0[1], Decl(dynamicNamesErrors.ts, 4, 17), Decl(dynamicNamesErrors.ts, 3, 14))
 }
 
 interface T1 {

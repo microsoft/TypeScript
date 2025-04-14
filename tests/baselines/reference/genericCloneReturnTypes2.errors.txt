@@ -1,8 +1,8 @@
-tests/cases/compiler/genericCloneReturnTypes2.ts(15,5): error TS2322: Type 'MyList<string>' is not assignable to type 'MyList<number>'.
+genericCloneReturnTypes2.ts(15,5): error TS2322: Type 'MyList<string>' is not assignable to type 'MyList<number>'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/genericCloneReturnTypes2.ts (1 errors) ====
+==== genericCloneReturnTypes2.ts (1 errors) ====
     class MyList<T> {
         public size: number;
         public data: T[];

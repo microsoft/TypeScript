@@ -1,8 +1,8 @@
-tests/cases/compiler/jsdocTypeCast.js(6,9): error TS2322: Type 'string' is not assignable to type '"a" | "b"'.
-tests/cases/compiler/jsdocTypeCast.js(10,9): error TS2322: Type 'string' is not assignable to type '"a" | "b"'.
+jsdocTypeCast.js(6,9): error TS2322: Type 'string' is not assignable to type '"a" | "b"'.
+jsdocTypeCast.js(10,9): error TS2322: Type 'string' is not assignable to type '"a" | "b"'.
 
 
-==== tests/cases/compiler/jsdocTypeCast.js (2 errors) ====
+==== jsdocTypeCast.js (2 errors) ====
     /**
      * @param {string} x
      */

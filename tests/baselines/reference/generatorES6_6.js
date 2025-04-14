@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generatorES6_6.ts] ////
+
 //// [generatorES6_6.ts]
 class C {
   *[Symbol.iterator]() {

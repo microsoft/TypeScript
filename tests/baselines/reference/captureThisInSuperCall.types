@@ -1,6 +1,9 @@
-=== tests/cases/compiler/captureThisInSuperCall.ts ===
+//// [tests/cases/compiler/captureThisInSuperCall.ts] ////
+
+=== captureThisInSuperCall.ts ===
 class A {
 >A : A
+>  : ^
 
     constructor(p:any) {}
 >p : any
@@ -8,19 +11,31 @@ class A {
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     constructor() { super({ test: () => this.someMethod()}); } 
 >super({ test: () => this.someMethod()}) : void
+>                                        : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
 >{ test: () => this.someMethod()} : { test: () => void; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^
 >test : () => void
+>     : ^^^^^^^^^^
 >() => this.someMethod() : () => void
+>                        : ^^^^^^^^^^
 >this.someMethod() : void
+>                  : ^^^^
 >this.someMethod : () => void
+>                : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >someMethod : () => void
+>           : ^^^^^^^^^^
 
     someMethod() {}
 >someMethod : () => void
+>           : ^^^^^^^^^^
 }

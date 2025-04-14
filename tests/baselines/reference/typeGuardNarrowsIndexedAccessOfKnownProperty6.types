@@ -1,81 +1,133 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty6.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty6.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty6.ts ===
 declare const aIndex: "key";
 >aIndex : "key"
+>       : ^^^^^
 
 const a: { key?: { x?: number } } = {};
->a : { key?: { x?: number | undefined; } | undefined; }
->key : { x?: number | undefined; } | undefined
+>a : { key?: { x?: number; }; }
+>  : ^^^^^^^^               ^^^
+>key : { x?: number; } | undefined
+>    : ^^^^^^      ^^^^^^^^^^^^^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 if (a[aIndex] && a[aIndex].x) {
 >a[aIndex] && a[aIndex].x : number | undefined
->a[aIndex] : { x?: number | undefined; } | undefined
->a : { key?: { x?: number | undefined; } | undefined; }
+>                         : ^^^^^^^^^^^^^^^^^^
+>a[aIndex] : { x?: number; } | undefined
+>          : ^^^^^^      ^^^^^^^^^^^^^^^
+>a : { key?: { x?: number; }; }
+>  : ^^^^^^^^               ^^^
 >aIndex : "key"
+>       : ^^^^^
 >a[aIndex].x : number | undefined
->a[aIndex] : { x?: number | undefined; }
->a : { key?: { x?: number | undefined; } | undefined; }
+>            : ^^^^^^^^^^^^^^^^^^
+>a[aIndex] : { x?: number; }
+>          : ^^^^^^      ^^^
+>a : { key?: { x?: number; }; }
+>  : ^^^^^^^^               ^^^
 >aIndex : "key"
+>       : ^^^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a[aIndex].x // number
 >a[aIndex].x : number
->a[aIndex] : { x?: number | undefined; }
->a : { key?: { x?: number | undefined; } | undefined; }
+>            : ^^^^^^
+>a[aIndex] : { x?: number; }
+>          : ^^^^^^      ^^^
+>a : { key?: { x?: number; }; }
+>  : ^^^^^^^^               ^^^
 >aIndex : "key"
+>       : ^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 declare const bIndex: "key";
 >bIndex : "key"
+>       : ^^^^^
 
 const b: { key: { x?: number } } = { key: {} };
->b : { key: {    x?: number;}; }
->key : { x?: number | undefined; }
+>b : { key: { x?: number; }; }
+>  : ^^^^^^^               ^^^
+>key : { x?: number; }
+>    : ^^^^^^      ^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{ key: {} } : { key: {}; }
+>            : ^^^^^^^^^^^^
 >key : {}
+>    : ^^
 >{} : {}
+>   : ^^
 
 if (b[bIndex].x) {
 >b[bIndex].x : number | undefined
->b[bIndex] : { x?: number | undefined; }
->b : { key: { x?: number | undefined; }; }
+>            : ^^^^^^^^^^^^^^^^^^
+>b[bIndex] : { x?: number; }
+>          : ^^^^^^      ^^^
+>b : { key: { x?: number; }; }
+>  : ^^^^^^^               ^^^
 >bIndex : "key"
+>       : ^^^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     b[bIndex].x // number
 >b[bIndex].x : number
->b[bIndex] : { x?: number | undefined; }
->b : { key: { x?: number | undefined; }; }
+>            : ^^^^^^
+>b[bIndex] : { x?: number; }
+>          : ^^^^^^      ^^^
+>b : { key: { x?: number; }; }
+>  : ^^^^^^^               ^^^
 >bIndex : "key"
+>       : ^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 declare const cIndex: 1;
 >cIndex : 1
+>       : ^
 
 interface Foo {
     x: number | undefined;
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 const c: Foo[] = [];
 >c : Foo[]
+>  : ^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
 if (c[cIndex].x) {
 >c[cIndex].x : number | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 >c[cIndex] : Foo
+>          : ^^^
 >c : Foo[]
+>  : ^^^^^
 >cIndex : 1
+>       : ^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     c[cIndex].x // number
 >c[cIndex].x : number
+>            : ^^^^^^
 >c[cIndex] : Foo
+>          : ^^^
 >c : Foo[]
+>  : ^^^^^
 >cIndex : 1
+>       : ^
 >x : number
+>  : ^^^^^^
 }
 

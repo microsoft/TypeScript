@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminatedUnionErrorMessage.ts] ////
+
 //// [discriminatedUnionErrorMessage.ts]
 type Square = { kind: "sq", size: number }
 type Rectangle = { kind: "rt", x: number, y: number }
@@ -17,5 +19,5 @@ let shape: Shape = {
 var shape = {
     kind: "sq",
     x: 12,
-    y: 13
+    y: 13,
 };

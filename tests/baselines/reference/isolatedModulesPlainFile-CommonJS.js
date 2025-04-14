@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesPlainFile-CommonJS.ts] ////
+
 //// [isolatedModulesPlainFile-CommonJS.ts]
 declare function run(a: number): void;
 run(1);

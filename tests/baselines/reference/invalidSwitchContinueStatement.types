@@ -1,11 +1,15 @@
-=== tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts ===
+//// [tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts] ////
+
+=== invalidSwitchContinueStatement.ts ===
 // continue is not allowed in a switch statement
 
 switch (12) {
 >12 : 12
+>   : ^^
 
     case 5:
 >5 : 5
+>  : ^
 
         continue;
 }

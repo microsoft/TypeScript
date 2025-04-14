@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mutuallyRecursiveInterfaceDeclaration.ts] ////
+
 //// [mutuallyRecursiveInterfaceDeclaration.ts]
 interface A {
     b: B
@@ -10,7 +12,7 @@ export {A, B}
 
 //// [mutuallyRecursiveInterfaceDeclaration.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [mutuallyRecursiveInterfaceDeclaration.d.ts]

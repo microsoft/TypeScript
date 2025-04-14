@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letDeclarations2.ts ===
+//// [tests/cases/compiler/letDeclarations2.ts] ////
+
+=== letDeclarations2.ts ===
 module M {
 >M : Symbol(M, Decl(letDeclarations2.ts, 0, 0))
 

@@ -1,17 +1,24 @@
-=== tests/cases/compiler/include.d.ts ===
+//// [tests/cases/compiler/importExportInternalComments.ts] ////
+
+=== include.d.ts ===
 declare module "foo";
 >"foo" : any
 
-=== tests/cases/compiler/default.ts ===
+=== default.ts ===
 /*1*/ export /*2*/ default /*3*/ Array /*4*/;
 >Array : T[]
+>      : ^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 /*1*/ import /*2*/ D /*3*/, /*4*/ { /*5*/ A /*6*/, /*7*/ B /*8*/ as /*9*/ C /*10*/ } /*11*/ from /*12*/ "foo";
 >D : any
+>  : ^^^
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 >C : any
+>  : ^^^
 
 /*1*/ import /*2*/ * /*3*/ as /*4*/ foo /*5*/ from /*6*/ "foo";
 >foo : any
@@ -21,6 +28,7 @@ void D, A, C, foo; // Use the variables to prevent ellision
 >void D, A, C : any
 >void D, A : any
 >void D : undefined
+>       : ^^^^^^^^^
 >D : any
 >A : any
 >C : any
@@ -28,7 +36,10 @@ void D, A, C, foo; // Use the variables to prevent ellision
 
 /*1*/ export /*2*/ { /*3*/ A /*4*/, /*5*/ B /*6*/ as /*7*/ C /*8*/ } /*9*/ from /*10*/ "foo";
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 >C : any
+>  : ^^^
 
 /*1*/ export /*2*/ * /*3*/ from /*4*/ "foo"

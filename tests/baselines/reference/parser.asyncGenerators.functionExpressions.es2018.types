@@ -1,196 +1,277 @@
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/functionExpressionIsOk.ts ===
+//// [tests/cases/conformance/parser/ecmascript2018/asyncGenerators/parser.asyncGenerators.functionExpressions.es2018.ts] ////
+
+=== functionExpressionIsOk.ts ===
 const f1 = async function * f() {
 >f1 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * f() {} : () => AsyncGenerator<never, void, unknown>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : () => AsyncGenerator<never, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts ===
+=== awaitNameIsError.ts ===
 const f2 = async function * await() {
 >f2 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * await() {} : () => AsyncGenerator<never, void, unknown>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await : () => AsyncGenerator<never, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts ===
+=== yieldNameIsError.ts ===
 const f3 = async function * yield() {
 >f3 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * yield() {} : () => AsyncGenerator<never, void, unknown>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield : () => AsyncGenerator<never, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts ===
+=== awaitParameterIsError.ts ===
 const f4 = async function * (await) {
 >f4 : (await: any) => AsyncGenerator<never, void, unknown>
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * (await) {} : (await: any) => AsyncGenerator<never, void, unknown>
+>                            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await : any
+>      : ^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts ===
+=== yieldParameterIsError.ts ===
 const f5 = async function * (yield) {
 >f5 : (yield: any) => AsyncGenerator<never, void, unknown>
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * (yield) {} : (yield: any) => AsyncGenerator<never, void, unknown>
+>                            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield : any
+>      : ^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts ===
+=== awaitInParameterInitializerIsError.ts ===
 const f6 = async function * (a = await 1) {
 >f6 : (a?: number) => AsyncGenerator<never, void, unknown>
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * (a = await 1) {} : (a?: number) => AsyncGenerator<never, void, unknown>
+>                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInParameterInitializerIsError.ts ===
+=== yieldInParameterInitializerIsError.ts ===
 const f7 = async function * (a = yield) {
 >f7 : (a?: any) => AsyncGenerator<never, void, unknown>
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * (a = yield) {} : (a?: any) => AsyncGenerator<never, void, unknown>
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >yield : any
+>      : ^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedAsyncGeneratorIsOk.ts ===
+=== nestedAsyncGeneratorIsOk.ts ===
 const f8 = async function * () {
 >f8 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    async function * g() {    }} : () => AsyncGenerator<never, void, unknown>
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async function * g() {
 >g : () => AsyncGenerator<never, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts ===
+=== nestedFunctionDeclarationNamedYieldIsError.ts ===
 const f9 = async function * () {
 >f9 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    function yield() {    }} : () => AsyncGenerator<never, void, unknown>
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function yield() {
 >yield : () => void
+>      : ^^^^^^^^^^
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
+=== nestedFunctionExpressionNamedYieldIsError.ts ===
 const f10 = async function * () {
 >f10 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    const x = function yield() {    };} : () => AsyncGenerator<never, void, unknown>
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = function yield() {
 >x : () => void
+>  : ^^^^^^^^^^
 >function yield() {    } : () => void
+>                        : ^^^^^^^^^^
 >yield : () => void
+>      : ^^^^^^^^^^
 
     };
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts ===
+=== nestedFunctionDeclarationNamedAwaitIsError.ts ===
 const f11 = async function * () {
 >f11 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    function await() {    }} : () => AsyncGenerator<never, void, unknown>
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function await() {
 >await : () => void
+>      : ^^^^^^^^^^
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
+=== nestedFunctionExpressionNamedAwaitIsError.ts ===
 const f12 = async function * () {
 >f12 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    const x = function await() {    };} : () => AsyncGenerator<never, void, unknown>
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = function await() {
 >x : () => void
+>  : ^^^^^^^^^^
 >function await() {    } : () => void
+>                        : ^^^^^^^^^^
 >await : () => void
+>      : ^^^^^^^^^^
 
     };
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldIsOk.ts ===
+=== yieldIsOk.ts ===
 const f13 = async function * () {
 >f13 : () => AsyncGenerator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    yield;} : () => AsyncGenerator<any, void, unknown>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
 >yield : any
+>      : ^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldWithValueIsOk.ts ===
+=== yieldWithValueIsOk.ts ===
 const f14 = async function * () {
 >f14 : () => AsyncGenerator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    yield 1;} : () => AsyncGenerator<number, void, unknown>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 1;
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingValueIsError.ts ===
+=== yieldStarMissingValueIsError.ts ===
 const f15 = async function * () {
 >f15 : () => AsyncGenerator<any, void, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    yield *;} : () => AsyncGenerator<any, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield *;
 >yield * : any
+>        : ^^^
 > : any
+> : ^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarWithValueIsOk.ts ===
+=== yieldStarWithValueIsOk.ts ===
 const f16 = async function * () {
->f16 : () => AsyncGenerator<any, void, undefined>
->async function * () {    yield * [];} : () => AsyncGenerator<any, void, undefined>
+>f16 : () => AsyncGenerator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield * [];} : () => AsyncGenerator<any, void, unknown>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield * [];
 >yield * [] : any
+>           : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitWithValueIsOk.ts ===
+=== awaitWithValueIsOk.ts ===
 const f17 = async function * () {
 >f17 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    await 1;} : () => AsyncGenerator<never, void, unknown>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMissingValueIsError.ts ===
+=== awaitMissingValueIsError.ts ===
 const f18 = async function * () {
 >f18 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    await;} : () => AsyncGenerator<never, void, unknown>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     await;
 >await : any
+>      : ^^^
 > : any
+> : ^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitAsTypeIsOk.ts ===
+=== awaitAsTypeIsOk.ts ===
 interface await {}
 const f19 = async function * () {
 >f19 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    let x: await;} : () => AsyncGenerator<never, void, unknown>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let x: await;
 >x : await
+>  : ^^^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldAsTypeIsOk.ts ===
+=== yieldAsTypeIsOk.ts ===
 interface yield {}
 const f20 = async function * () {
 >f20 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    let x: yield;} : () => AsyncGenerator<never, void, unknown>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let x: yield;
 >x : yield
+>  : ^^^^^
 
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
+=== yieldInNestedComputedPropertyIsOk.ts ===
 const f21 = async function *() {
 >f21 : () => AsyncGenerator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function *() {    const x = { [yield]: 1 };} : () => AsyncGenerator<any, void, unknown>
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = { [yield]: 1 };
 >x : { [x: number]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ [yield]: 1 } : { [x: number]: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[yield] : number
+>        : ^^^^^^
 >yield : any
+>      : ^^^
 >1 : 1
+>  : ^
 
 };
 

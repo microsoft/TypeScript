@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts ===
+//// [tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts] ////
+
+=== circularlySimplifyingConditionalTypesNoCrash.ts ===
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Symbol(Omit, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 0))
 >T : Symbol(T, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 10))

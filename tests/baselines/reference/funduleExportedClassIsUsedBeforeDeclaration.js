@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/funduleExportedClassIsUsedBeforeDeclaration.ts] ////
+
 //// [funduleExportedClassIsUsedBeforeDeclaration.ts]
 interface A {   // interface before module declaration
     (): B.C;    // uses defined below class in module

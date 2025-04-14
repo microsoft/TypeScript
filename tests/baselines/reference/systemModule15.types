@@ -1,66 +1,97 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/systemModule15.ts] ////
+
+=== file1.ts ===
 import * as moduleB from "./file2"
 >moduleB : typeof moduleB
+>        : ^^^^^^^^^^^^^^
 
 declare function use(v: any): void;
 >use : (v: any) => void
+>    : ^ ^^   ^^^^^    
 >v : any
 
 use(moduleB.value);
 >use(moduleB.value) : void
+>                   : ^^^^
 >use : (v: any) => void
+>    : ^ ^^   ^^^^^    
 >moduleB.value : string
+>              : ^^^^^^
 >moduleB : typeof moduleB
+>        : ^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 
 use(moduleB.moduleC);
 >use(moduleB.moduleC) : void
+>                     : ^^^^
 >use : (v: any) => void
+>    : ^ ^^   ^^^^^    
 >moduleB.moduleC : string
+>                : ^^^^^^
 >moduleB : typeof moduleB
+>        : ^^^^^^^^^^^^^^
 >moduleC : string
+>        : ^^^^^^
 
 use(moduleB.moduleCStar);
 >use(moduleB.moduleCStar) : void
+>                         : ^^^^
 >use : (v: any) => void
+>    : ^ ^^   ^^^^^    
 >moduleB.moduleCStar : typeof moduleB.moduleCStar
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >moduleB : typeof moduleB
+>        : ^^^^^^^^^^^^^^
 >moduleCStar : typeof moduleB.moduleCStar
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import * as moduleCStar from "./file3"
 >moduleCStar : typeof moduleCStar
+>            : ^^^^^^^^^^^^^^^^^^
 
 import {value2} from "./file4"
 >value2 : string
+>       : ^^^^^^
 
 import moduleC from "./file3"
 >moduleC : string
+>        : ^^^^^^
 
 import {value} from "./file3"
 >value : string
+>      : ^^^^^^
 
 export {
     moduleCStar,
 >moduleCStar : typeof moduleCStar
+>            : ^^^^^^^^^^^^^^^^^^
 
     moduleC,
 >moduleC : string
+>        : ^^^^^^
 
     value
 >value : string
+>      : ^^^^^^
 }
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 export var value = "youpi";
 >value : string
+>      : ^^^^^^
 >"youpi" : "youpi"
+>        : ^^^^^^^
 
 export default value;
 >value : string
+>      : ^^^^^^
 
-=== tests/cases/compiler/file4.ts ===
+=== file4.ts ===
 export var value2 = "v";
 >value2 : string
+>       : ^^^^^^
 >"v" : "v"
+>    : ^^^
 

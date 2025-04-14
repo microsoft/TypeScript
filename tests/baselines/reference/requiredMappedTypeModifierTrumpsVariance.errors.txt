@@ -1,18 +1,18 @@
-tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(5,1): error TS2741: Property 'a' is missing in type 'Required<{ b?: 1; x: 1; }>' but required in type 'Required<{ a?: 1; x: 1; }>'.
-tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(6,1): error TS2741: Property 'b' is missing in type 'Required<{ a?: 1; x: 1; }>' but required in type 'Required<{ b?: 1; x: 1; }>'.
-tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(8,3): error TS2339: Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
-tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(9,3): error TS2339: Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
-tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(18,1): error TS2322: Type 'Foo<{ b?: 1; x: 1; }>' is not assignable to type 'Foo<{ a?: 1; x: 1; }>'.
+requiredMappedTypeModifierTrumpsVariance.ts(5,1): error TS2741: Property 'a' is missing in type 'Required<{ b?: 1; x: 1; }>' but required in type 'Required<{ a?: 1; x: 1; }>'.
+requiredMappedTypeModifierTrumpsVariance.ts(6,1): error TS2741: Property 'b' is missing in type 'Required<{ a?: 1; x: 1; }>' but required in type 'Required<{ b?: 1; x: 1; }>'.
+requiredMappedTypeModifierTrumpsVariance.ts(8,3): error TS2339: Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
+requiredMappedTypeModifierTrumpsVariance.ts(9,3): error TS2339: Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
+requiredMappedTypeModifierTrumpsVariance.ts(18,1): error TS2322: Type 'Foo<{ b?: 1; x: 1; }>' is not assignable to type 'Foo<{ a?: 1; x: 1; }>'.
   Types of property 'a' are incompatible.
     Property 'a' is missing in type 'Required<{ b?: 1; x: 1; }>' but required in type 'Required<{ a?: 1; x: 1; }>'.
-tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(19,1): error TS2322: Type 'Foo<{ a?: 1; x: 1; }>' is not assignable to type 'Foo<{ b?: 1; x: 1; }>'.
+requiredMappedTypeModifierTrumpsVariance.ts(19,1): error TS2322: Type 'Foo<{ a?: 1; x: 1; }>' is not assignable to type 'Foo<{ b?: 1; x: 1; }>'.
   Types of property 'a' are incompatible.
     Property 'b' is missing in type 'Required<{ a?: 1; x: 1; }>' but required in type 'Required<{ b?: 1; x: 1; }>'.
-tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(21,6): error TS2339: Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
-tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(22,6): error TS2339: Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
+requiredMappedTypeModifierTrumpsVariance.ts(21,6): error TS2339: Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
+requiredMappedTypeModifierTrumpsVariance.ts(22,6): error TS2339: Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
 
 
-==== tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts (8 errors) ====
+==== requiredMappedTypeModifierTrumpsVariance.ts (8 errors) ====
     const a: Required<{ a?: 1; x: 1 }> = { a: 1, x: 1 };
     const b: Required<{ b?: 1; x: 1 }> = { b: 1, x: 1 };
     export let A = a;
@@ -20,11 +20,11 @@ tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(22,6): error TS
     A = b; // Should Error
     ~
 !!! error TS2741: Property 'a' is missing in type 'Required<{ b?: 1; x: 1; }>' but required in type 'Required<{ a?: 1; x: 1; }>'.
-!!! related TS2728 tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts:1:21: 'a' is declared here.
+!!! related TS2728 requiredMappedTypeModifierTrumpsVariance.ts:1:21: 'a' is declared here.
     B = a; // Should Error
     ~
 !!! error TS2741: Property 'b' is missing in type 'Required<{ a?: 1; x: 1; }>' but required in type 'Required<{ b?: 1; x: 1; }>'.
-!!! related TS2728 tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts:2:21: 'b' is declared here.
+!!! related TS2728 requiredMappedTypeModifierTrumpsVariance.ts:2:21: 'b' is declared here.
     
     a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
       ~
@@ -45,13 +45,13 @@ tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts(22,6): error TS
 !!! error TS2322: Type 'Foo<{ b?: 1; x: 1; }>' is not assignable to type 'Foo<{ a?: 1; x: 1; }>'.
 !!! error TS2322:   Types of property 'a' are incompatible.
 !!! error TS2322:     Property 'a' is missing in type 'Required<{ b?: 1; x: 1; }>' but required in type 'Required<{ a?: 1; x: 1; }>'.
-!!! related TS2728 tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts:14:17: 'a' is declared here.
+!!! related TS2728 requiredMappedTypeModifierTrumpsVariance.ts:14:17: 'a' is declared here.
     BB = aa; // Should Error
     ~~
 !!! error TS2322: Type 'Foo<{ a?: 1; x: 1; }>' is not assignable to type 'Foo<{ b?: 1; x: 1; }>'.
 !!! error TS2322:   Types of property 'a' are incompatible.
 !!! error TS2322:     Property 'b' is missing in type 'Required<{ a?: 1; x: 1; }>' but required in type 'Required<{ b?: 1; x: 1; }>'.
-!!! related TS2728 tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts:15:17: 'b' is declared here.
+!!! related TS2728 requiredMappedTypeModifierTrumpsVariance.ts:15:17: 'b' is declared here.
     
     aa.a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
          ~

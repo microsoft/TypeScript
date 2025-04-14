@@ -1,46 +1,61 @@
-=== tests/cases/compiler/ref/a.ts ===
+//// [tests/cases/compiler/outModuleTripleSlashRefs.ts] ////
+
+=== ref/a.ts ===
 /// <reference path="./b.ts" />
 export class A {
 >A : A
+>  : ^
 
 	member: typeof GlobalFoo;
 >member : Foo
+>       : ^^^
 >GlobalFoo : Foo
+>          : ^^^
 }
 
-=== tests/cases/compiler/ref/b.ts ===
+=== ref/b.ts ===
 /// <reference path="./c.d.ts" />
 class Foo {
 >Foo : Foo
+>    : ^^^
 
 	member: Bar;
 >member : Bar
+>       : ^^^
 }
 declare var GlobalFoo: Foo;
 >GlobalFoo : Foo
+>          : ^^^
 
-=== tests/cases/compiler/ref/c.d.ts ===
+=== ref/c.d.ts ===
 /// <reference path="./d.d.ts" />
 declare class Bar {
 >Bar : Bar
+>    : ^^^
 
 	member: Baz;
 >member : Baz
+>       : ^^^
 }
 
-=== tests/cases/compiler/ref/d.d.ts ===
+=== ref/d.d.ts ===
 declare class Baz {
 >Baz : Baz
+>    : ^^^
 
 	member: number;
 >member : number
+>       : ^^^^^^
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import {A} from "./ref/a";
 >A : typeof A
+>  : ^^^^^^^^
 
 export class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 

@@ -1,25 +1,27 @@
-tests/cases/compiler/arrowFunctionErrorSpan.ts(4,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(4,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(7,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(7,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(12,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(12,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(17,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(17,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(18,5): error TS1200: Line terminator not permitted before arrow.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(21,3): error TS2345: Argument of type '(a: any, b: any, c: any, d: any) => void' is not assignable to parameter of type '() => number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(28,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(18,5): error TS1200: Line terminator not permitted before arrow.
+arrowFunctionErrorSpan.ts(21,3): error TS2345: Argument of type '(a: any, b: any, c: any, d: any) => void' is not assignable to parameter of type '() => number'.
+  Target signature provides too few arguments. Expected 4 or more, but got 0.
+arrowFunctionErrorSpan.ts(28,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(32,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(32,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(36,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(36,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(43,5): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(43,5): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/arrowFunctionErrorSpan.ts(52,3): error TS2345: Argument of type '(_: any) => number' is not assignable to parameter of type '() => number'.
+arrowFunctionErrorSpan.ts(52,3): error TS2345: Argument of type '(_: any) => number' is not assignable to parameter of type '() => number'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
 
 
-==== tests/cases/compiler/arrowFunctionErrorSpan.ts (11 errors) ====
+==== arrowFunctionErrorSpan.ts (11 errors) ====
     function f(a: () => number) { }
     
     // oneliner
@@ -64,6 +66,7 @@ tests/cases/compiler/arrowFunctionErrorSpan.ts(52,3): error TS2345: Argument of 
         d) => { });
     ~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a: any, b: any, c: any, d: any) => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Target signature provides too few arguments. Expected 4 or more, but got 0.
     
     // single line with a comment
     f(/*
@@ -108,4 +111,5 @@ tests/cases/compiler/arrowFunctionErrorSpan.ts(52,3): error TS2345: Argument of 
         2);
     ~~~~~
 !!! error TS2345: Argument of type '(_: any) => number' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Target signature provides too few arguments. Expected 1 or more, but got 0.
     

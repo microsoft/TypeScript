@@ -1,8 +1,8 @@
-tests/cases/compiler/capturedLetConstInLoop5.ts(174,13): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop5.ts(229,13): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+capturedLetConstInLoop5.ts(174,13): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop5.ts(229,13): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
 
 
-==== tests/cases/compiler/capturedLetConstInLoop5.ts (2 errors) ====
+==== capturedLetConstInLoop5.ts (2 errors) ====
     declare function use(a: any);
     
     //====let
@@ -178,7 +178,7 @@ tests/cases/compiler/capturedLetConstInLoop5.ts(229,13): error TS2367: This cond
             (() => x + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
                 return;
             }
         }
@@ -235,7 +235,7 @@ tests/cases/compiler/capturedLetConstInLoop5.ts(229,13): error TS2367: This cond
             (() => x + y + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
                 return;
             }
         }

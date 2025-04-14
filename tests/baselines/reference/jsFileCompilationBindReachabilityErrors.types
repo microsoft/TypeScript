@@ -1,45 +1,64 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationBindReachabilityErrors.ts] ////
+
+=== a.js ===
 function foo(a, b) {
 >foo : (a: any, b: any) => any
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     switch (a) {
 >a : any
+>  : ^^^
 
         case 10:
 >10 : 10
+>   : ^^
 
             if (b) {
 >b : any
+>  : ^^^
 
                 return b;
 >b : any
+>  : ^^^
             }
         case 20:
 >20 : 20
+>   : ^^
 
             return a;
 >a : any
+>  : ^^^
     }
 }
 
 function bar() {
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
     return x;
 >x : number
+>  : ^^^^^^
 
     function bar2() {
 >bar2 : () => void
+>     : ^^^^^^^^^^
     }
     var x = 10; // error
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 label1:  var x2 = 10;
 >label1 : any
+>       : ^^^
 >x2 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 

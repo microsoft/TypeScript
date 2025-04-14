@@ -1,17 +1,25 @@
-=== tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
+//// [tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts] ////
+
+=== getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
 declare function _<T>(value: Array<T>): _<T>;
 >_ : typeof _
+>  : ^^^^^^^^
 >value : T[]
+>      : ^^^
 
 declare function _<T>(value: T): _<T>;
 >_ : typeof _
+>  : ^^^^^^^^
 >value : T
+>      : ^
 
 declare module _ {
 >_ : typeof _
+>  : ^^^^^^^^
 
     export function each<T>(
 >each : <T>(context?: any) => void
+>     : ^ ^^       ^^^   ^^^^^    
 
         //list: List<T>,
         //iterator: ListIterator<T, void>,
@@ -21,26 +29,35 @@ declare module _ {
     interface ListIterator<T, TResult> {
         (value: T, index: number, list: T[]): TResult;
 >value : T
+>      : ^
 >index : number
+>      : ^^^^^^
 >list : T[]
+>     : ^^^
     }
 }
 
 declare class _<T> {
 >_ : _<T>
+>  : ^^^^
 
     each(iterator: _.ListIterator<T, void>, context?: any): void;
 >each : (iterator: _.ListIterator<T, void>, context?: any) => void
+>     : ^        ^^                       ^^       ^^^   ^^^^^    
 >iterator : _.ListIterator<T, void>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >_ : any
+>  : ^^^
 >context : any
 }
 
 module MyModule { 
 >MyModule : typeof MyModule
+>         : ^^^^^^^^^^^^^^^
 
     export class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
         public get myGetter() {
 >myGetter : any
@@ -48,6 +65,7 @@ module MyModule {
             var obj:any = {};
 >obj : any
 >{} : {}
+>   : ^^
             
             return obj;
 >obj : any

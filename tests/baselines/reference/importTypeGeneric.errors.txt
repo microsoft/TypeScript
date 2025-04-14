@@ -1,16 +1,16 @@
-tests/cases/conformance/types/import/usage.ts(1,67): error TS1141: String literal expected.
-tests/cases/conformance/types/import/usage.ts(5,72): error TS1141: String literal expected.
+usage.ts(1,67): error TS1141: String literal expected.
+usage.ts(5,72): error TS1141: String literal expected.
 
 
-==== tests/cases/conformance/types/import/a.d.ts (0 errors) ====
+==== a.d.ts (0 errors) ====
     export interface Foo {
         a: string;
     }
-==== tests/cases/conformance/types/import/b.d.ts (0 errors) ====
+==== b.d.ts (0 errors) ====
     export interface Foo {
         a: number;
     }
-==== tests/cases/conformance/types/import/usage.ts (2 errors) ====
+==== usage.ts (2 errors) ====
     export function getFooFrom<T extends "./a" | "./b">(v: T): import(T).Foo {
                                                                       ~
 !!! error TS1141: String literal expected.

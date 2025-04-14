@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxNoTypeAnnotatedSFC.tsx] ////
+
 //// [tsxNoTypeAnnotatedSFC.tsx]
 // not _actually_ making react available in this test to regression test #22948
 import * as React from 'react';
@@ -10,7 +12,7 @@ function testComponent(props) {
 
 //// [tsxNoTypeAnnotatedSFC.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // not _actually_ making react available in this test to regression test #22948
 var React = require("react");
 var Test123 = function () { return <div />; };

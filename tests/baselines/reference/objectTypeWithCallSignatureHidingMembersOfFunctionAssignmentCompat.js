@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts] ////
+
 //// [objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts]
 interface I {
     (): void;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstConstraintChecks1.ts ===
+//// [tests/cases/compiler/overloadOnConstConstraintChecks1.ts] ////
+
+=== overloadOnConstConstraintChecks1.ts ===
 class Base { foo() { } }
 >Base : Symbol(Base, Decl(overloadOnConstConstraintChecks1.ts, 0, 0))
 >foo : Symbol(Base.foo, Decl(overloadOnConstConstraintChecks1.ts, 0, 12))

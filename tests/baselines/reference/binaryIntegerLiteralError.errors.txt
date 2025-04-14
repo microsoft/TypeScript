@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(2,17): error TS1005: ',' expected.
-tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(3,17): error TS1005: ',' expected.
+binaryIntegerLiteralError.ts(2,17): error TS1005: ',' expected.
+binaryIntegerLiteralError.ts(3,17): error TS1005: ',' expected.
 
 
-==== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts (2 errors) ====
+==== binaryIntegerLiteralError.ts (2 errors) ====
     // error
     var bin1 = 0B1102110;
                     ~~~~

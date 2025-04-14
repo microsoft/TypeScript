@@ -1,57 +1,99 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty15.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 const Tag = (x: {}) => <div></div>;
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >(x: {}) => <div></div> : (x: {}) => JSX.Element
+>                       : ^ ^^  ^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 // OK
 const k1 = <Tag />;
 >k1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Tag /> : JSX.Element
+>        : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 
 const k2 = <Tag></Tag>;
 >k2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Tag></Tag> : JSX.Element
+>            : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 
 // Not OK (excess children)
 const k3 = <Tag children={<div></div>} />;
 >k3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Tag children={<div></div>} /> : JSX.Element
+>                               : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >children : JSX.Element
+>         : ^^^^^^^^^^^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 const k4 = <Tag key="1"><div></div></Tag>;
 >k4 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Tag key="1"><div></div></Tag> : JSX.Element
+>                               : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 
 const k5 = <Tag key="1"><div></div><div></div></Tag>;
 >k5 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Tag key="1"><div></div><div></div></Tag> : JSX.Element
+>                                          : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 >Tag : (x: {}) => JSX.Element
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 

@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/decoratorMetadataElidedImport.ts] ////
+
+=== observable.d.ts ===
+export declare class Observable<T> {}
+>Observable : Symbol(Observable, Decl(observable.d.ts, 0, 0))
+>T : Symbol(T, Decl(observable.d.ts, 0, 32))
+
+=== index.ts ===
+import { Observable } from './observable';
+>Observable : Symbol(Observable, Decl(index.ts, 0, 8))
+
+function whatever(a: any, b: any, c: any) {}
+>whatever : Symbol(whatever, Decl(index.ts, 0, 42))
+>a : Symbol(a, Decl(index.ts, 2, 18))
+>b : Symbol(b, Decl(index.ts, 2, 25))
+>c : Symbol(c, Decl(index.ts, 2, 33))
+
+class Test {
+>Test : Symbol(Test, Decl(index.ts, 2, 44))
+
+    foo(
+>foo : Symbol(Test.foo, Decl(index.ts, 4, 12))
+
+        @whatever arg1: string,
+>whatever : Symbol(whatever, Decl(index.ts, 0, 42))
+>arg1 : Symbol(arg1, Decl(index.ts, 5, 8))
+
+        @whatever arg2: number
+>whatever : Symbol(whatever, Decl(index.ts, 0, 42))
+>arg2 : Symbol(arg2, Decl(index.ts, 6, 31))
+
+    ): Observable<string> {
+>Observable : Symbol(Observable, Decl(index.ts, 0, 8))
+
+        return null!;
+    }
+}
+

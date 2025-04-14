@@ -1,0 +1,94 @@
+// === QuickInfo ===
+=== /a.js ===
+// /** @template T */
+// class A {
+//     /** Method documentation. */
+//     method() {}
+// }
+// 
+// /** @extends {A<number>} */
+// const B = class extends A {
+//     method() {}
+// }
+// 
+// const b = new B();
+// b.method;
+//   ^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) B.method(): void
+// | Method documentation.
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/a.js",
+      "position": 183,
+      "name": ""
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 177,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "B",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Method documentation.",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

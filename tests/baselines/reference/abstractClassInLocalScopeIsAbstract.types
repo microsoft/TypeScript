@@ -1,23 +1,35 @@
-=== tests/cases/compiler/abstractClassInLocalScopeIsAbstract.ts ===
+//// [tests/cases/compiler/abstractClassInLocalScopeIsAbstract.ts] ////
+
+=== abstractClassInLocalScopeIsAbstract.ts ===
 (() => {
 >(() => {    abstract class A {}    class B extends A {}    new A();    new B();})() : void
+>                                                                                    : ^^^^
 >(() => {    abstract class A {}    class B extends A {}    new A();    new B();}) : () => void
+>                                                                                  : ^^^^^^^^^^
 >() => {    abstract class A {}    class B extends A {}    new A();    new B();} : () => void
+>                                                                                : ^^^^^^^^^^
 
     abstract class A {}
 >A : A
+>  : ^
 
     class B extends A {}
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     new A();
 >new A() : any
+>        : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 
     new B();
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 })()
 

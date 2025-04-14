@@ -1,8 +1,8 @@
-tests/cases/compiler/functionOverloadImplementationOfWrongName2.ts(2,10): error TS2389: Function implementation name must be 'foo'.
-tests/cases/compiler/functionOverloadImplementationOfWrongName2.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+functionOverloadImplementationOfWrongName2.ts(2,10): error TS2389: Function implementation name must be 'foo'.
+functionOverloadImplementationOfWrongName2.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== tests/cases/compiler/functionOverloadImplementationOfWrongName2.ts (2 errors) ====
+==== functionOverloadImplementationOfWrongName2.ts (2 errors) ====
     function foo(x);
     function bar() { }
              ~~~

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitThisInObjectLiteralGetter.ts] ////
+
 //// [emitThisInObjectLiteralGetter.ts]
 const example = {
     get foo() {

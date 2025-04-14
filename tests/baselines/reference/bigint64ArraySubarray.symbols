@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bigint64ArraySubarray.ts ===
+//// [tests/cases/compiler/bigint64ArraySubarray.ts] ////
+
+=== bigint64ArraySubarray.ts ===
 function bigInt64ArraySubarray() {
 >bigInt64ArraySubarray : Symbol(bigInt64ArraySubarray, Decl(bigint64ArraySubarray.ts, 0, 0))
 

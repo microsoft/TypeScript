@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualSigInstantiationRestParams.ts ===
+//// [tests/cases/compiler/contextualSigInstantiationRestParams.ts] ////
+
+=== contextualSigInstantiationRestParams.ts ===
 declare function toInstantiate<A, B>(a?: A, b?: B): B;
 >toInstantiate : Symbol(toInstantiate, Decl(contextualSigInstantiationRestParams.ts, 0, 0))
 >A : Symbol(A, Decl(contextualSigInstantiationRestParams.ts, 0, 31))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsBindsToFunctionScopeArgumentList.ts] ////
+
 //// [argumentsBindsToFunctionScopeArgumentList.ts]
 var arguments = 10;
 function foo(a) {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads2.ts] ////
+
 //// [twoMergedInterfacesWithDifferingOverloads2.ts]
 interface A {
     (): string;

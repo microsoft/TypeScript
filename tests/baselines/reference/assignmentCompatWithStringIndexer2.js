@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts] ////
+
 //// [assignmentCompatWithStringIndexer2.ts]
 // index signatures must be compatible in assignments
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticPrototypePropertyOnClass.ts] ////
+
 //// [staticPrototypePropertyOnClass.ts]
 class c1 {
 }

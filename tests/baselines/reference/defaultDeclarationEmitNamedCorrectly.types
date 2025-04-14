@@ -1,19 +1,25 @@
-=== tests/cases/compiler/defaultDeclarationEmitNamedCorrectly.ts ===
+//// [tests/cases/compiler/defaultDeclarationEmitNamedCorrectly.ts] ////
+
+=== defaultDeclarationEmitNamedCorrectly.ts ===
 export interface Things<P, T> {
     p: P;
 >p : P
+>  : ^
 
     t: T;
 >t : T
+>  : ^
 }
 export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
->make : <P, CTor>(x: {    new (): CTor & {        props: P;    };}) => Things<P, CTor>
->x : new () => CTor & {    props: P;}
+>make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
+>     : ^ ^^    ^^ ^^                                 ^^^^^               
+>x : new () => CTor & { props: P; }
+>  : ^^^^^^^^^^                    
 >props : P
+>      : ^
 
     return null as any;
 >null as any : any
->null : null
 }
 
 export interface Props {
@@ -21,13 +27,19 @@ export interface Props {
 
 export default class MyComponent {
 >MyComponent : MyComponent
+>            : ^^^^^^^^^^^
 
     props: Props;
 >props : Props
+>      : ^^^^^
 
     static create = make(MyComponent);
 >create : Things<Props, MyComponent>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >make(MyComponent) : Things<Props, MyComponent>
->make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
+>     : ^ ^^    ^^ ^^                                 ^^^^^               
 >MyComponent : typeof MyComponent
+>            : ^^^^^^^^^^^^^^^^^^
 }

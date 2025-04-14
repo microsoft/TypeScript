@@ -1,0 +1,64 @@
+//// [tests/cases/conformance/jsdoc/jsdocThisType.ts] ////
+
+=== /types.d.ts ===
+export interface Foo {
+>Foo : Symbol(Foo, Decl(types.d.ts, 0, 0))
+
+    foo: () => void;
+>foo : Symbol(Foo.foo, Decl(types.d.ts, 0, 22))
+}
+
+export type M = (this: Foo) => void;
+>M : Symbol(M, Decl(types.d.ts, 2, 1))
+>this : Symbol(this, Decl(types.d.ts, 4, 17))
+>Foo : Symbol(Foo, Decl(types.d.ts, 0, 0))
+
+=== /a.js ===
+/** @type {import('./types').M} */
+export const f1 = function() {
+>f1 : Symbol(f1, Decl(a.js, 1, 12))
+
+    this.test();
+>this : Symbol(this, Decl(types.d.ts, 4, 17))
+}
+
+/** @type {import('./types').M} */
+export function f2() {
+>f2 : Symbol(f2, Decl(a.js, 3, 1))
+
+    this.test();
+>this : Symbol(Foo, Decl(types.d.ts, 0, 0))
+}
+
+/** @type {(this: import('./types').Foo) => void} */
+export const f3 = function() {
+>f3 : Symbol(f3, Decl(a.js, 11, 12))
+
+    this.test();
+>this : Symbol(this, Decl(a.js, 10, 12))
+}
+
+/** @type {(this: import('./types').Foo) => void} */
+export function f4() {
+>f4 : Symbol(f4, Decl(a.js, 13, 1))
+
+    this.test();
+>this : Symbol(Foo, Decl(types.d.ts, 0, 0))
+}
+
+/** @type {function(this: import('./types').Foo): void} */
+export const f5 = function() {
+>f5 : Symbol(f5, Decl(a.js, 21, 12))
+
+    this.test();
+>this : Symbol(this, Decl(a.js, 20, 20))
+}
+
+/** @type {function(this: import('./types').Foo): void} */
+export function f6() {
+>f6 : Symbol(f6, Decl(a.js, 23, 1))
+
+    this.test();
+>this : Symbol(Foo, Decl(types.d.ts, 0, 0))
+}
+

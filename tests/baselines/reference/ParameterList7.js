@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ParameterList7.ts] ////
+
 //// [ParameterList7.ts]
 class C1 {
  constructor(public p1:string); // ERROR

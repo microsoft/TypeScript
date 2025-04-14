@@ -1,23 +1,32 @@
-=== tests/cases/compiler/inheritanceMemberFuncOverridingMethod.ts ===
+//// [tests/cases/compiler/inheritanceMemberFuncOverridingMethod.ts] ////
+
+=== inheritanceMemberFuncOverridingMethod.ts ===
 class a {
 >a : a
+>  : ^
 
     x() {
 >x : () => string
+>  : ^^^^^^^^^^^^
 
         return "10";
 >"10" : "10"
+>     : ^^^^
     }
 }
 
 class b extends a {
 >b : b
+>  : ^
 >a : a
+>  : ^
 
     x() {
 >x : () => string
+>  : ^^^^^^^^^^^^
 
         return "20";
 >"20" : "20"
+>     : ^^^^
     }
 }

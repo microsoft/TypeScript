@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncAwaitWithCapturedBlockScopeVar.ts] ////
+
 //// [asyncAwaitWithCapturedBlockScopeVar.ts]
 async function fn1() {
     let ar = [];

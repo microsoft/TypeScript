@@ -1,0 +1,95 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionPrivateName.ts ===
+// class A {
+//     #method() { }
+//     <|[|#foo|] = 3;|>
+//     get #prop() { return ""; }
+//     set #prop(value: string) {  }
+//     constructor() {
+//         this./*GOTO DEF*/#foo
+//         this.#method
+//         this.#prop
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "#foo",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionPrivateName.ts ===
+// class A {
+//     <|[|#method|]() { }|>
+//     #foo = 3;
+//     get #prop() { return ""; }
+//     set #prop(value: string) {  }
+//     constructor() {
+//         this.#foo
+//         this./*GOTO DEF*/#method
+//         this.#prop
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "#method",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionPrivateName.ts ===
+// class A {
+//     #method() { }
+//     #foo = 3;
+//     <|get [|{| defId: 0 |}#prop|]() { return ""; }|>
+//     <|set [|{| defId: 1 |}#prop|](value: string) {  }|>
+//     constructor() {
+//         this.#foo
+//         this.#method
+//         this./*GOTO DEF*/#prop
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "getter",
+    "name": "#prop",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "getter",
+    "name": "#prop",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

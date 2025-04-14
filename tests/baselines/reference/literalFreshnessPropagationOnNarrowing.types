@@ -1,15 +1,23 @@
-=== tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts ===
+//// [tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts] ////
+
+=== literalFreshnessPropagationOnNarrowing.ts ===
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let b = true;
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
     let obj = { b };
 >obj : { b: boolean; }
+>    : ^^^^^^^^^^^^^^^
 >{ b } : { b: boolean; }
+>      : ^^^^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
     // Desired: OK
     // 3.0: OK
@@ -17,124 +25,184 @@ function f1() {
     // 3.1 minus widening propagation: error
     obj.b = false;
 >obj.b = false : false
+>              : ^^^^^
 >obj.b : boolean
+>      : ^^^^^^^
 >obj : { b: boolean; }
+>    : ^^^^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     type Element = (string | false);
 >Element : string | false
+>        : ^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     type ElementOrArray = Element | Element[]; 
 >ElementOrArray : (string | false) | (string | false)[]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let el: Element = null as any;
 >el : string | false
+>   : ^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
     let arr: Element[] = null as any;
 >arr : (string | false)[]
+>    : ^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
     let elOrA: ElementOrArray = null as any;
 >elOrA : (string | false) | (string | false)[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
     // Desired/actual: All OK
     let a1: ElementOrArray = el;
 >a1 : (string | false) | (string | false)[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >el : string | false
+>   : ^^^^^^^^^^^^^^
 
     let a2: ElementOrArray = arr;
 >a2 : (string | false) | (string | false)[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arr : (string | false)[]
+>    : ^^^^^^^^^^^^^^^^^^
 
     let a3: ElementOrArray = [el];
 >a3 : (string | false) | (string | false)[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[el] : (string | false)[]
+>     : ^^^^^^^^^^^^^^^^^^
 >el : string | false
+>   : ^^^^^^^^^^^^^^
 
     let a4: ElementOrArray = Array.isArray(elOrA) ? elOrA : [elOrA];
 >a4 : (string | false) | (string | false)[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
+>                                       : ^^^^^^^^^^^^^^^^^^
 >Array.isArray(elOrA) : boolean
+>                     : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >elOrA : (string | false) | (string | false)[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >elOrA : (string | false)[]
+>      : ^^^^^^^^^^^^^^^^^^
 >[elOrA] : (string | false)[]
+>        : ^^^^^^^^^^^^^^^^^^
 >elOrA : string | false
+>      : ^^^^^^^^^^^^^^
 
     // Desired: OK
     // 3.0: Error
     // 3.1: OK
     let a5: ElementOrArray = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
 >a5 : (string | false) | (string | false)[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[...Array.isArray(elOrA) ? elOrA : [elOrA]] : (string | false)[]
+>                                            : ^^^^^^^^^^^^^^^^^^
 >...Array.isArray(elOrA) ? elOrA : [elOrA] : string | false
+>                                          : ^^^^^^^^^^^^^^
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
+>                                       : ^^^^^^^^^^^^^^^^^^
 >Array.isArray(elOrA) : boolean
+>                     : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >elOrA : (string | false) | (string | false)[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >elOrA : (string | false)[]
+>      : ^^^^^^^^^^^^^^^^^^
 >[elOrA] : (string | false)[]
+>        : ^^^^^^^^^^^^^^^^^^
 >elOrA : string | false
+>      : ^^^^^^^^^^^^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     type XY = 'x' | 'y';
 >XY : "x" | "y"
+>   : ^^^^^^^^^
 
     const x: XY = 'x';
 >x : "x" | "y"
+>  : ^^^^^^^^^
 >'x' : "x"
+>    : ^^^
 
     let x2 = x;
 >x2 : "x"
+>   : ^^^
 >x : "x"
+>  : ^^^
 
     // Desired: OK (up for debate?)
     // 3.0: Error
     // 3.1 as-is: OK
     x2 = 'y';
 >x2 = 'y' : "y"
+>         : ^^^
 >x2 : "x"
+>   : ^^^
 >'y' : "y"
+>    : ^^^
 
     // Desired/actual: All OK
     let x3: XY = x;
 >x3 : "x" | "y"
+>   : ^^^^^^^^^
 >x : "x"
+>  : ^^^
 
     x3 = 'y';
 >x3 = 'y' : "y"
+>         : ^^^
 >x3 : "x" | "y"
+>   : ^^^^^^^^^
 >'y' : "y"
+>    : ^^^
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     const x: boolean = true;
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
     let x1 = x;
 >x1 : boolean
+>   : ^^^^^^^
 >x : true
+>  : ^^^^
 
     // Desired: OK
     // 3.0: OK
@@ -142,34 +210,52 @@ function f4() {
     // 3.1 minus widening propagation: error
     x1 = false;
 >x1 = false : false
+>           : ^^^^^
 >x1 : boolean
+>   : ^^^^^^^
 >false : false
+>      : ^^^^^
 }
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     type XY = 'x' | 'y';
 >XY : "x" | "y"
+>   : ^^^^^^^^^
 
     let arr: XY[] = ['x'];
 >arr : ("x" | "y")[]
+>    : ^^^^^^^^^^^^^
 >['x'] : "x"[]
+>      : ^^^^^
 >'x' : "x"
+>    : ^^^
 
     arr = ['y'];
 >arr = ['y'] : "y"[]
+>            : ^^^^^
 >arr : ("x" | "y")[]
+>    : ^^^^^^^^^^^^^
 >['y'] : "y"[]
+>      : ^^^^^
 >'y' : "y"
+>    : ^^^
 
     // Desired: OK
     // Error in all extant branches
     arr = [...['y']];
 >arr = [...['y']] : string[]
+>                 : ^^^^^^^^
 >arr : ("x" | "y")[]
+>    : ^^^^^^^^^^^^^
 >[...['y']] : string[]
+>           : ^^^^^^^^
 >...['y'] : string
+>         : ^^^^^^
 >['y'] : string[]
+>      : ^^^^^^^^
 >'y' : "y"
+>    : ^^^
 }

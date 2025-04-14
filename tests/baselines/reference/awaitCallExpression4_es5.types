@@ -1,60 +1,97 @@
-=== tests/cases/conformance/async/es5/awaitCallExpression/awaitCallExpression4_es5.ts ===
+//// [tests/cases/conformance/async/es5/awaitCallExpression/awaitCallExpression4_es5.ts] ////
+
+=== awaitCallExpression4_es5.ts ===
 declare var a: boolean;
 >a : boolean
+>  : ^^^^^^^
 
 declare var p: Promise<boolean>;
 >p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
 
 declare function fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>   : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >arg0 : boolean
+>     : ^^^^^^^
 >arg1 : boolean
+>     : ^^^^^^^
 >arg2 : boolean
+>     : ^^^^^^^
 
 declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
 >o : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
+>  : ^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^    ^^^
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>   : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >arg0 : boolean
+>     : ^^^^^^^
 >arg1 : boolean
+>     : ^^^^^^^
 >arg2 : boolean
+>     : ^^^^^^^
 
 declare var pfn: Promise<{ (arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 >pfn : Promise<(arg0: boolean, arg1: boolean, arg2: boolean) => void>
+>    : ^^^^^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^^^    ^
 >arg0 : boolean
+>     : ^^^^^^^
 >arg1 : boolean
+>     : ^^^^^^^
 >arg2 : boolean
+>     : ^^^^^^^
 
 declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 >po : Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>
+>   : ^^^^^^^^^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^    ^^^^
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>   : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >arg0 : boolean
+>     : ^^^^^^^
 >arg1 : boolean
+>     : ^^^^^^^
 >arg2 : boolean
+>     : ^^^^^^^
 
 declare function before(): void;
 >before : () => void
+>       : ^^^^^^    
 
 declare function after(): void;
 >after : () => void
+>      : ^^^^^^    
 
 async function func(): Promise<void> {
 >func : () => Promise<void>
+>     : ^^^^^^             
 
     before();
 >before() : void
+>         : ^^^^
 >before : () => void
+>       : ^^^^^^    
 
     var b = (await pfn)(a, a, a);
 >b : void
+>  : ^^^^
 >(await pfn)(a, a, a) : void
+>                     : ^^^^
 >(await pfn) : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>            : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >await pfn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>          : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >pfn : Promise<(arg0: boolean, arg1: boolean, arg2: boolean) => void>
+>    : ^^^^^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^^^    ^
 >a : boolean
+>  : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
     after();
 >after() : void
+>        : ^^^^
 >after : () => void
+>      : ^^^^^^    
 }

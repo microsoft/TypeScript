@@ -1,9 +1,9 @@
-tests/cases/compiler/staticPrototypeProperty.ts(2,11): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/compiler/staticPrototypeProperty.ts(2,11): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C'.
-tests/cases/compiler/staticPrototypeProperty.ts(6,11): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C2'.
+staticPrototypeProperty.ts(2,11): error TS2300: Duplicate identifier 'prototype'.
+staticPrototypeProperty.ts(2,11): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C'.
+staticPrototypeProperty.ts(6,11): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C2'.
 
 
-==== tests/cases/compiler/staticPrototypeProperty.ts (3 errors) ====
+==== staticPrototypeProperty.ts (3 errors) ====
     class C {
        static prototype() { }
               ~~~~~~~~~

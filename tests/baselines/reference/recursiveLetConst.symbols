@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveLetConst.ts ===
+//// [tests/cases/compiler/recursiveLetConst.ts] ////
+
+=== recursiveLetConst.ts ===
 'use strict'
 let x = x + 1;
 >x : Symbol(x, Decl(recursiveLetConst.ts, 1, 3))

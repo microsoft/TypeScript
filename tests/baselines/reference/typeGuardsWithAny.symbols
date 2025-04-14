@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts] ////
+
+=== typeGuardsWithAny.ts ===
 var x: any = { p: 0 };
 >x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
 >p : Symbol(p, Decl(typeGuardsWithAny.ts, 0, 14))

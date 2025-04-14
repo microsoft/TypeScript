@@ -1,126 +1,164 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxAndJsxFragPragma.tsx] ////
+
+=== renderer.d.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     namespace JSX {
         interface IntrinsicElements {
             [e: string]: any;
 >e : string
+>  : ^^^^^^
         }
     }
 }
 export function h(): void;
 >h : () => void
+>  : ^^^^^^    
 
 export function jsx(): void;
 >jsx : () => void
+>    : ^^^^^^    
 
 export function Fragment(): void;
 >Fragment : () => void
+>         : ^^^^^^    
 
-=== tests/cases/conformance/jsx/inline/preacty.tsx ===
+=== preacty.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
+>  : ^^^^^^    
 >Fragment : () => void
+>         : ^^^^^^    
 
 <><div></div></>
 ><><div></div></> : any
+>                 : ^^^
 ><div></div> : any
+>            : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/inline/snabbdomy.tsx ===
+=== snabbdomy.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
+>    : ^^^^^^    
 
 <><span></span></>
 ><><span></span></> : any
+>                   : ^^^
 ><span></span> : any
+>              : ^^^
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 
-=== tests/cases/conformance/jsx/inline/preacty-only-fragment.tsx ===
+=== preacty-only-fragment.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
+>  : ^^^^^^    
 >Fragment : () => void
+>         : ^^^^^^    
 
 <></>
 ><></> : any
+>      : ^^^
 
-=== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment.tsx ===
+=== snabbdomy-only-fragment.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
+>    : ^^^^^^    
 
 <></>
 ><></> : any
+>      : ^^^
 
-=== tests/cases/conformance/jsx/inline/preacty-only-fragment-no-jsx.tsx ===
+=== preacty-only-fragment-no-jsx.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
  */
 import {Fragment} from "./renderer";
 >Fragment : () => void
+>         : ^^^^^^    
 
 <></>
 ><></> : any
+>      : ^^^
 
-=== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx ===
+=== snabbdomy-only-fragment-no-jsx.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {} from "./renderer";
 <></>
 ><></> : any
+>      : ^^^
 
-=== tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx ===
+=== preacty-no-fragment.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
+>  : ^^^^^^    
 >Fragment : () => void
+>         : ^^^^^^    
 
 <div></div>
 ><div></div> : any
+>            : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/inline/snabbdomy-no-fragment.tsx ===
+=== snabbdomy-no-fragment.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
+>    : ^^^^^^    
 
 <div></div>
 ><div></div> : any
+>            : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/inline/preacty-only-component.tsx ===
+=== preacty-only-component.tsx ===
 /**
  * @jsx h
  */
 import {h} from "./renderer";
 >h : () => void
+>  : ^^^^^^    
 
 function Component() { return null; }
 >Component : () => any
->null : null
+>          : ^^^^^^^^^
 
 <Component />
 ><Component /> : any
+>              : ^^^
 >Component : () => any
+>          : ^^^^^^^^^
 

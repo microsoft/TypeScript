@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts] ////
+
 //// [parenthesizedContexualTyping2.ts]
 // These tests ensure that in cases where it may *appear* that a value has a type,
 // they actually are properly being contextually typed. The way we test this is

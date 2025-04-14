@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression17.ts] ////
+
+=== fileJs.js ===
+a ? b : (c) : d => e // Not legal JS; "Unexpected token ':'" at last colon
+>a ? b : (c) : d => e : any
+>                     : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>(c) : d => e : (c: any) => d
+>             : ^ ^^^^^^^^^^ 
+>c : any
+>  : ^^^
+>e : any
+>  : ^^^
+
+=== fileTs.ts ===
+a ? b : (c) : d => e
+>a ? b : (c) : d => e : any
+>                     : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>(c) : d => e : (c: any) => d
+>             : ^ ^^^^^^^^^^ 
+>c : any
+>  : ^^^
+>e : any
+>  : ^^^
+

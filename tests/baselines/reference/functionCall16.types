@@ -1,41 +1,69 @@
-=== tests/cases/compiler/functionCall16.ts ===
+//// [tests/cases/compiler/functionCall16.ts] ////
+
+=== functionCall16.ts ===
 function foo(a:string, b?:string, ...c:number[]){}
 >foo : (a: string, b?: string, ...c: number[]) => void
+>    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : number[]
+>  : ^^^^^^^^
 
 foo('foo', 1); 
 >foo('foo', 1) : void
+>              : ^^^^
 >foo : (a: string, b?: string, ...c: number[]) => void
+>    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 foo('foo'); 
 >foo('foo') : void
+>           : ^^^^
 >foo : (a: string, b?: string, ...c: number[]) => void
+>    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 foo('foo', 'bar'); 
 >foo('foo', 'bar') : void
+>                  : ^^^^
 >foo : (a: string, b?: string, ...c: number[]) => void
+>    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 
 foo();
 >foo() : void
+>      : ^^^^
 >foo : (a: string, b?: string, ...c: number[]) => void
+>    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 
 foo(1, 'bar');
 >foo(1, 'bar') : void
+>              : ^^^^
 >foo : (a: string, b?: string, ...c: number[]) => void
+>    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >'bar' : "bar"
+>      : ^^^^^
 
 foo('foo', 'bar', 3);
 >foo('foo', 'bar', 3) : void
+>                     : ^^^^
 >foo : (a: string, b?: string, ...c: number[]) => void
+>    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 >3 : 3
+>  : ^
 

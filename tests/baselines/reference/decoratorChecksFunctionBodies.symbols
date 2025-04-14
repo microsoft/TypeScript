@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts ===
+//// [tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts] ////
+
+=== decoratorChecksFunctionBodies.ts ===
 // from #2971
 function func(s: string): void {
 >func : Symbol(func, Decl(decoratorChecksFunctionBodies.ts, 0, 0))
@@ -8,9 +10,10 @@ function func(s: string): void {
 class A {
 >A : Symbol(A, Decl(decoratorChecksFunctionBodies.ts, 2, 1))
 
-    @((x, p) => {
+    @((x, p, d) => {
 >x : Symbol(x, Decl(decoratorChecksFunctionBodies.ts, 5, 7))
 >p : Symbol(p, Decl(decoratorChecksFunctionBodies.ts, 5, 9))
+>d : Symbol(d, Decl(decoratorChecksFunctionBodies.ts, 5, 12))
 
         var a = 3;
 >a : Symbol(a, Decl(decoratorChecksFunctionBodies.ts, 6, 11))
@@ -19,8 +22,8 @@ class A {
 >func : Symbol(func, Decl(decoratorChecksFunctionBodies.ts, 0, 0))
 >a : Symbol(a, Decl(decoratorChecksFunctionBodies.ts, 6, 11))
 
-        return x; 
->x : Symbol(x, Decl(decoratorChecksFunctionBodies.ts, 5, 7))
+        return d;
+>d : Symbol(d, Decl(decoratorChecksFunctionBodies.ts, 5, 12))
 
     })
     m() {

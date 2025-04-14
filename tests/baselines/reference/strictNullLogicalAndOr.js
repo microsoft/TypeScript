@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictNullLogicalAndOr.ts] ////
+
 //// [strictNullLogicalAndOr.ts]
 // Repro from #9113
 

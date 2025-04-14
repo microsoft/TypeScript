@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx ===
+//// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
+
+=== jsxComplexSignatureHasApplicabilityError.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";

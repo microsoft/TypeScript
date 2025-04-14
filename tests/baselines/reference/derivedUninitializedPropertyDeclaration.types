@@ -1,196 +1,280 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts] ////
+
+=== derivedUninitializedPropertyDeclaration.ts ===
 class A {
 >A : A
+>  : ^
 
     property = 'x';
 >property : string
+>         : ^^^^^^
 >'x' : "x"
+>    : ^^^
 
     m() { return 1 }
 >m : () => number
+>  : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     property: any; // error
 >property : any
+>         : ^^^
 }
 class BD extends A {
 >BD : BD
+>   : ^^
 >A : A
+>  : ^
 
     declare property: any; // ok because it's implicitly initialised
 >property : any
+>         : ^^^
 }
 class BDBang extends A {
 >BDBang : BDBang
+>       : ^^^^^^
 >A : A
+>  : ^
 
     declare property!: any; // ! is not allowed, this is an ambient declaration
 >property : any
+>         : ^^^
 }
 class BOther extends A {
 >BOther : BOther
+>       : ^^^^^^
 >A : A
+>  : ^
 
     declare m() { return 2 } // not allowed on methods
 >m : () => number
+>  : ^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
     declare nonce: any; // ok, even though it's not in the base
 >nonce : any
+>      : ^^^
 
     declare property = 'y' // initialiser not allowed with declare
 >property : string
+>         : ^^^^^^
 >'y' : "y"
+>    : ^^^
 }
 class U {
 >U : U
+>  : ^
 
     declare nonce: any; // ok, even though there's no base
 >nonce : any
+>      : ^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     p: string;
 >p : string
+>  : ^^^^^^
 }
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     p: 'hi'; // error
 >p : "hi"
+>  : ^^^^
 }
 class DD extends C {
 >DD : DD
+>   : ^^
 >C : C
+>  : ^
 
     declare p: 'bye'; // ok
 >p : "bye"
+>  : ^^^^^
 }
 
 
 declare class E {
 >E : E
+>  : ^
 
     p1: string
 >p1 : string
+>   : ^^^^^^
 
     p2: string
 >p2 : string
+>   : ^^^^^^
 }
 class F extends E {
 >F : F
+>  : ^
 >E : E
+>  : ^
 
     p1!: 'z'
 >p1 : "z"
+>   : ^^^
 
     declare p2: 'alpha'
 >p2 : "alpha"
+>   : ^^^^^^^
 }
 
 class G extends E {
 >G : G
+>  : ^
 >E : E
+>  : ^
 
     p1: 'z'
 >p1 : "z"
+>   : ^^^
 
     constructor() {
         super()
 >super() : void
+>        : ^^^^
 >super : typeof E
+>      : ^^^^^^^^
 
         this.p1 = 'z'
 >this.p1 = 'z' : "z"
+>              : ^^^
 >this.p1 : "z"
+>        : ^^^
 >this : this
+>     : ^^^^
 >p1 : "z"
+>   : ^^^
 >'z' : "z"
+>    : ^^^
     }
 }
 
 abstract class H extends E {
 >H : H
+>  : ^
 >E : E
+>  : ^
 
     abstract p1: 'a' | 'b' | 'c'
 >p1 : "a" | "b" | "c"
+>   : ^^^^^^^^^^^^^^^
 
     declare abstract p2: 'a' | 'b' | 'c'
 >p2 : "a" | "b" | "c"
+>   : ^^^^^^^^^^^^^^^
 }
 
 interface I {
     q: number
 >q : number
+>  : ^^^^^^
 }
 interface J extends I { }
 class J {
 >J : J
+>  : ^
 
     r = 5
 >r : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 }
 class K extends J {
 >K : K
+>  : ^
 >J : J
+>  : ^
 
     q!: 1 | 2 | 3 // ok, extends a property from an interface
 >q : 1 | 2 | 3
+>  : ^^^^^^^^^
 
     r!: 4 | 5 // error, from class
 >r : 5 | 4
+>  : ^^^^^
 }
 
 // #35327
 class L {
 >L : L
+>  : ^
 
     a: any;
 >a : any
+>  : ^^^
 
     constructor(arg: any) {
 >arg : any
+>    : ^^^
 
         this.a = arg;
 >this.a = arg : any
+>             : ^^^
 >this.a : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >a : any
+>  : ^^^
 >arg : any
+>    : ^^^
     }
 }
 class M extends L {
 >M : M
+>  : ^
 >L : L
+>  : ^
 
     declare a: number;
 >a : number
+>  : ^^^^^^
 
     constructor(arg: number) {
 >arg : number
+>    : ^^^^^^
 
         super(arg);
 >super(arg) : void
+>           : ^^^^
 >super : typeof L
+>      : ^^^^^^^^
 >arg : number
+>    : ^^^^^^
 
         console.log(this.a);  // should be OK, M.a is ambient
 >console.log(this.a) : void
+>                    : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
     }
 }
 

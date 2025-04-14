@@ -1,19 +1,30 @@
-=== tests/cases/compiler/untypedArgumentInLambdaExpression.ts ===
+//// [tests/cases/compiler/untypedArgumentInLambdaExpression.ts] ////
+
+=== untypedArgumentInLambdaExpression.ts ===
 declare function f(fn: (a: string) => string);
 >f : (fn: (a: string) => string) => any
+>  : ^  ^^                     ^^^^^^^^
 >fn : (a: string) => string
+>   : ^ ^^      ^^^^^      
 >a : string
+>  : ^^^^^^
  
 f((input): string => {
 >f((input): string => {    return "." + input;}) : any
 >f : (fn: (a: string) => string) => any
+>  : ^  ^^                     ^^^^^^^^
 >(input): string => {    return "." + input;} : (input: string) => string
+>                                             : ^     ^^^^^^^^^^^^^      
 >input : string
+>      : ^^^^^^
 
     return "." + input;
 >"." + input : string
+>            : ^^^^^^
 >"." : "."
+>    : ^^^
 >input : string
+>      : ^^^^^^
 
 });
  

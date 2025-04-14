@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5andes6module.ts ===
+//// [tests/cases/compiler/es5andes6module.ts] ////
+
+=== es5andes6module.ts ===
 export default class A
 >A : Symbol(A, Decl(es5andes6module.ts, 0, 0))
 {

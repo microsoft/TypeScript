@@ -1,0 +1,97 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts] ////
+
+=== weakTypesAndLiterals01.ts ===
+type WeakTypes =
+>WeakTypes : Symbol(WeakTypes, Decl(weakTypesAndLiterals01.ts, 0, 0))
+
+    | { optional?: true; }
+>optional : Symbol(optional, Decl(weakTypesAndLiterals01.ts, 1, 7))
+
+    | { toLowerCase?(): string }
+>toLowerCase : Symbol(toLowerCase, Decl(weakTypesAndLiterals01.ts, 2, 7))
+
+    | { toUpperCase?(): string, otherOptionalProp?: number };
+>toUpperCase : Symbol(toUpperCase, Decl(weakTypesAndLiterals01.ts, 3, 7))
+>otherOptionalProp : Symbol(otherOptionalProp, Decl(weakTypesAndLiterals01.ts, 3, 31))
+
+type LiteralsOrWeakTypes =
+>LiteralsOrWeakTypes : Symbol(LiteralsOrWeakTypes, Decl(weakTypesAndLiterals01.ts, 3, 61))
+
+    | "A"
+    | "B"
+    | WeakTypes;
+>WeakTypes : Symbol(WeakTypes, Decl(weakTypesAndLiterals01.ts, 0, 0))
+
+declare let aOrB: "A" | "B";
+>aOrB : Symbol(aOrB, Decl(weakTypesAndLiterals01.ts, 10, 11))
+
+const f = (arg: LiteralsOrWeakTypes) => {
+>f : Symbol(f, Decl(weakTypesAndLiterals01.ts, 12, 5))
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 12, 11))
+>LiteralsOrWeakTypes : Symbol(LiteralsOrWeakTypes, Decl(weakTypesAndLiterals01.ts, 3, 61))
+
+    if (arg === "A") {
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 12, 11))
+
+        return arg;
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 12, 11))
+    }
+    else {
+        return arg;
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 12, 11))
+    }
+}
+
+const g = (arg: WeakTypes) => {
+>g : Symbol(g, Decl(weakTypesAndLiterals01.ts, 21, 5))
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 21, 11))
+>WeakTypes : Symbol(WeakTypes, Decl(weakTypesAndLiterals01.ts, 0, 0))
+
+    if (arg === "A") {
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 21, 11))
+
+        return arg;
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 21, 11))
+    }
+    else {
+        return arg;
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 21, 11))
+    }
+}
+
+const h = (arg: LiteralsOrWeakTypes) => {
+>h : Symbol(h, Decl(weakTypesAndLiterals01.ts, 30, 5))
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 30, 11))
+>LiteralsOrWeakTypes : Symbol(LiteralsOrWeakTypes, Decl(weakTypesAndLiterals01.ts, 3, 61))
+
+    if (arg === aOrB) {
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 30, 11))
+>aOrB : Symbol(aOrB, Decl(weakTypesAndLiterals01.ts, 10, 11))
+
+        return arg;
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 30, 11))
+    }
+    else {
+        return arg;
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 30, 11))
+    }
+}
+
+const i = (arg: WeakTypes) => {
+>i : Symbol(i, Decl(weakTypesAndLiterals01.ts, 39, 5))
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 39, 11))
+>WeakTypes : Symbol(WeakTypes, Decl(weakTypesAndLiterals01.ts, 0, 0))
+
+    if (arg === aOrB) {
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 39, 11))
+>aOrB : Symbol(aOrB, Decl(weakTypesAndLiterals01.ts, 10, 11))
+
+        return arg;
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 39, 11))
+    }
+    else {
+        return arg;
+>arg : Symbol(arg, Decl(weakTypesAndLiterals01.ts, 39, 11))
+    }
+}
+

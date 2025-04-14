@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements3.ts ===
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements3.ts] ////
+
+=== functionWithDefaultParameterWithNoStatements3.ts ===
 function foo(a = "") { }
 >foo : Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements3.ts, 0, 0))
 >a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements3.ts, 0, 13))

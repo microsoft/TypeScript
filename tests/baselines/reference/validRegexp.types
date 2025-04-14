@@ -1,14 +1,23 @@
-=== tests/cases/compiler/validRegexp.ts ===
+//// [tests/cases/compiler/validRegexp.ts] ////
+
+=== validRegexp.ts ===
 var x = / [a - z /]$ / i;
 >x : RegExp
+>  : ^^^^^^
 >/ [a - z /]$ / : RegExp
+>               : ^^^^^^
 >i : any
+>  : ^^^
 
 var x1 = /[a-z/]$/i;
 >x1 : RegExp
+>   : ^^^^^^
 >/[a-z/]$/i : RegExp
+>           : ^^^^^^
 
 var x2 = /[a-z/]$ /i;
 >x2 : RegExp
+>   : ^^^^^^
 >/[a-z/]$ /i : RegExp
+>            : ^^^^^^
 

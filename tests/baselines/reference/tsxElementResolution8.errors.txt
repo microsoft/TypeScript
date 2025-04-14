@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(8,2): error TS2604: JSX element type 'Div' does not have any construct or call signatures.
-tests/cases/conformance/jsx/file.tsx(34,2): error TS2604: JSX element type 'Obj3' does not have any construct or call signatures.
+file.tsx(8,2): error TS2604: JSX element type 'Div' does not have any construct or call signatures.
+file.tsx(34,2): error TS2604: JSX element type 'Obj3' does not have any construct or call signatures.
 
 
-==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+==== file.tsx (2 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements { }

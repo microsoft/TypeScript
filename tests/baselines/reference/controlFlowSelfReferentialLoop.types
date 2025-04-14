@@ -1,1313 +1,2423 @@
-=== tests/cases/compiler/controlFlowSelfReferentialLoop.ts ===
+//// [tests/cases/compiler/controlFlowSelfReferentialLoop.ts] ////
+
+=== controlFlowSelfReferentialLoop.ts ===
 // Repro from #12319
 
 function md5(string:string): void {
 >md5 : (string: string) => void
+>    : ^      ^^      ^^^^^    
 >string : string
+>       : ^^^^^^
 
     function FF(a,b,c,d,x,s,ac) {
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >x : any
+>  : ^^^
 >s : any
+>  : ^^^
 >ac : any
+>   : ^^^
 
         return 0;
 >0 : 0
+>  : ^
 
     };
 
     function GG(a,b,c,d,x,s,ac) {
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >x : any
+>  : ^^^
 >s : any
+>  : ^^^
 >ac : any
+>   : ^^^
 
         return 0;
 >0 : 0
+>  : ^
 
     };
 
     function HH(a,b,c,d,x,s,ac) {
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >x : any
+>  : ^^^
 >s : any
+>  : ^^^
 >ac : any
+>   : ^^^
 
         return 0;
 >0 : 0
+>  : ^
 
     };
 
     function II(a,b,c,d,x,s,ac) {
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >x : any
+>  : ^^^
 >s : any
+>  : ^^^
 >ac : any
+>   : ^^^
 
         return 0;
 >0 : 0
+>  : ^
 
     };
 
     var x=Array();
 >x : any[]
+>  : ^^^^^
 >Array() : any[]
+>        : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
     var k,AA,BB,CC,DD,a,b,c,d;
 >k : any
+>  : ^^^
 >AA : any
+>   : ^^^
 >BB : any
+>   : ^^^
 >CC : any
+>   : ^^^
 >DD : any
+>   : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
     var S11=7, S12=12, S13=17, S14=22;
 >S11 : number
+>    : ^^^^^^
 >7 : 7
+>  : ^
 >S12 : number
+>    : ^^^^^^
 >12 : 12
+>   : ^^
 >S13 : number
+>    : ^^^^^^
 >17 : 17
+>   : ^^
 >S14 : number
+>    : ^^^^^^
 >22 : 22
+>   : ^^
 
     var S21=5, S22=9 , S23=14, S24=20;
 >S21 : number
+>    : ^^^^^^
 >5 : 5
+>  : ^
 >S22 : number
+>    : ^^^^^^
 >9 : 9
+>  : ^
 >S23 : number
+>    : ^^^^^^
 >14 : 14
+>   : ^^
 >S24 : number
+>    : ^^^^^^
 >20 : 20
+>   : ^^
 
     var S31=4, S32=11, S33=16, S34=23;
 >S31 : number
+>    : ^^^^^^
 >4 : 4
+>  : ^
 >S32 : number
+>    : ^^^^^^
 >11 : 11
+>   : ^^
 >S33 : number
+>    : ^^^^^^
 >16 : 16
+>   : ^^
 >S34 : number
+>    : ^^^^^^
 >23 : 23
+>   : ^^
 
     var S41=6, S42=10, S43=15, S44=21;
 >S41 : number
+>    : ^^^^^^
 >6 : 6
+>  : ^
 >S42 : number
+>    : ^^^^^^
 >10 : 10
+>   : ^^
 >S43 : number
+>    : ^^^^^^
 >15 : 15
+>   : ^^
 >S44 : number
+>    : ^^^^^^
 >21 : 21
+>   : ^^
 
     x = [1];
 >x = [1] : number[]
+>        : ^^^^^^^^
 >x : any[]
+>  : ^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     a = 0x67452301; b = 0xEFCDAB89; c = 0x98BADCFE; d = 0x10325476;
 >a = 0x67452301 : 1732584193
+>               : ^^^^^^^^^^
 >a : any
+>  : ^^^
 >0x67452301 : 1732584193
+>           : ^^^^^^^^^^
 >b = 0xEFCDAB89 : 4023233417
+>               : ^^^^^^^^^^
 >b : any
+>  : ^^^
 >0xEFCDAB89 : 4023233417
+>           : ^^^^^^^^^^
 >c = 0x98BADCFE : 2562383102
+>               : ^^^^^^^^^^
 >c : any
+>  : ^^^
 >0x98BADCFE : 2562383102
+>           : ^^^^^^^^^^
 >d = 0x10325476 : 271733878
+>               : ^^^^^^^^^
 >d : any
+>  : ^^^
 >0x10325476 : 271733878
+>           : ^^^^^^^^^
 
     for (k=0;k<x.length;k+=16) {
 >k=0 : 0
+>    : ^
 >k : any
+>  : ^^^
 >0 : 0
+>  : ^
 >k<x.length : boolean
+>           : ^^^^^^^
 >k : number
+>  : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : any[]
+>  : ^^^^^
 >length : number
+>       : ^^^^^^
 >k+=16 : number
+>      : ^^^^^^
 >k : number
+>  : ^^^^^^
 >16 : 16
+>   : ^^
 
         AA=a; BB=b; CC=c; DD=d;
 >AA=a : number
+>     : ^^^^^^
 >AA : any
+>   : ^^^
 >a : number
+>  : ^^^^^^
 >BB=b : number
+>     : ^^^^^^
 >BB : any
+>   : ^^^
 >b : number
+>  : ^^^^^^
 >CC=c : number
+>     : ^^^^^^
 >CC : any
+>   : ^^^
 >c : number
+>  : ^^^^^^
 >DD=d : number
+>     : ^^^^^^
 >DD : any
+>   : ^^^
 >d : number
+>  : ^^^^^^
 
         a=FF(a,b,c,d,x[k+0], S11,0xD76AA478);
 >a=FF(a,b,c,d,x[k+0], S11,0xD76AA478) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >FF(a,b,c,d,x[k+0], S11,0xD76AA478) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+0] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+0 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >S11 : number
+>    : ^^^^^^
 >0xD76AA478 : 3614090360
+>           : ^^^^^^^^^^
 
         d=FF(d,a,b,c,x[k+1], S12,0xE8C7B756);
 >d=FF(d,a,b,c,x[k+1], S12,0xE8C7B756) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >FF(d,a,b,c,x[k+1], S12,0xE8C7B756) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+1] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+1 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >S12 : number
+>    : ^^^^^^
 >0xE8C7B756 : 3905402710
+>           : ^^^^^^^^^^
 
         c=FF(c,d,a,b,x[k+2], S13,0x242070DB);
 >c=FF(c,d,a,b,x[k+2], S13,0x242070DB) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >FF(c,d,a,b,x[k+2], S13,0x242070DB) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+2] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+2 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >S13 : number
+>    : ^^^^^^
 >0x242070DB : 606105819
+>           : ^^^^^^^^^
 
         b=FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE);
 >b=FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+3] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+3 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >S14 : number
+>    : ^^^^^^
 >0xC1BDCEEE : 3250441966
+>           : ^^^^^^^^^^
 
         a=FF(a,b,c,d,x[k+4], S11,0xF57C0FAF);
 >a=FF(a,b,c,d,x[k+4], S11,0xF57C0FAF) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >FF(a,b,c,d,x[k+4], S11,0xF57C0FAF) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+4] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+4 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >S11 : number
+>    : ^^^^^^
 >0xF57C0FAF : 4118548399
+>           : ^^^^^^^^^^
 
         d=FF(d,a,b,c,x[k+5], S12,0x4787C62A);
 >d=FF(d,a,b,c,x[k+5], S12,0x4787C62A) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >FF(d,a,b,c,x[k+5], S12,0x4787C62A) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+5] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+5 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >S12 : number
+>    : ^^^^^^
 >0x4787C62A : 1200080426
+>           : ^^^^^^^^^^
 
         c=FF(c,d,a,b,x[k+6], S13,0xA8304613);
 >c=FF(c,d,a,b,x[k+6], S13,0xA8304613) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >FF(c,d,a,b,x[k+6], S13,0xA8304613) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+6] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+6 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 >S13 : number
+>    : ^^^^^^
 >0xA8304613 : 2821735955
+>           : ^^^^^^^^^^
 
         b=FF(b,c,d,a,x[k+7], S14,0xFD469501);
 >b=FF(b,c,d,a,x[k+7], S14,0xFD469501) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >FF(b,c,d,a,x[k+7], S14,0xFD469501) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+7] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+7 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >7 : 7
+>  : ^
 >S14 : number
+>    : ^^^^^^
 >0xFD469501 : 4249261313
+>           : ^^^^^^^^^^
 
         a=FF(a,b,c,d,x[k+8], S11,0x698098D8);
 >a=FF(a,b,c,d,x[k+8], S11,0x698098D8) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >FF(a,b,c,d,x[k+8], S11,0x698098D8) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+8] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+8 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >8 : 8
+>  : ^
 >S11 : number
+>    : ^^^^^^
 >0x698098D8 : 1770035416
+>           : ^^^^^^^^^^
 
         d=FF(d,a,b,c,x[k+9], S12,0x8B44F7AF);
 >d=FF(d,a,b,c,x[k+9], S12,0x8B44F7AF) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >FF(d,a,b,c,x[k+9], S12,0x8B44F7AF) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+9] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+9 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >9 : 9
+>  : ^
 >S12 : number
+>    : ^^^^^^
 >0x8B44F7AF : 2336552879
+>           : ^^^^^^^^^^
 
         c=FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1);
 >c=FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+10] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+10 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >S13 : number
+>    : ^^^^^^
 >0xFFFF5BB1 : 4294925233
+>           : ^^^^^^^^^^
 
         b=FF(b,c,d,a,x[k+11],S14,0x895CD7BE);
 >b=FF(b,c,d,a,x[k+11],S14,0x895CD7BE) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >FF(b,c,d,a,x[k+11],S14,0x895CD7BE) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+11] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+11 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >11 : 11
+>   : ^^
 >S14 : number
+>    : ^^^^^^
 >0x895CD7BE : 2304563134
+>           : ^^^^^^^^^^
 
         a=FF(a,b,c,d,x[k+12],S11,0x6B901122);
 >a=FF(a,b,c,d,x[k+12],S11,0x6B901122) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >FF(a,b,c,d,x[k+12],S11,0x6B901122) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+12] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+12 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >S11 : number
+>    : ^^^^^^
 >0x6B901122 : 1804603682
+>           : ^^^^^^^^^^
 
         d=FF(d,a,b,c,x[k+13],S12,0xFD987193);
 >d=FF(d,a,b,c,x[k+13],S12,0xFD987193) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >FF(d,a,b,c,x[k+13],S12,0xFD987193) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+13] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+13 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 >S12 : number
+>    : ^^^^^^
 >0xFD987193 : 4254626195
+>           : ^^^^^^^^^^
 
         c=FF(c,d,a,b,x[k+14],S13,0xA679438E);
 >c=FF(c,d,a,b,x[k+14],S13,0xA679438E) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >FF(c,d,a,b,x[k+14],S13,0xA679438E) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+14] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+14 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >14 : 14
+>   : ^^
 >S13 : number
+>    : ^^^^^^
 >0xA679438E : 2792965006
+>           : ^^^^^^^^^^
 
         b=FF(b,c,d,a,x[k+15],S14,0x49B40821);
 >b=FF(b,c,d,a,x[k+15],S14,0x49B40821) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >FF(b,c,d,a,x[k+15],S14,0x49B40821) : number
+>                                   : ^^^^^^
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+15] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+15 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >15 : 15
+>   : ^^
 >S14 : number
+>    : ^^^^^^
 >0x49B40821 : 1236535329
+>           : ^^^^^^^^^^
 
         a=GG(a,b,c,d,x[k+1], S21,0xF61E2562);
 >a=GG(a,b,c,d,x[k+1], S21,0xF61E2562) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >GG(a,b,c,d,x[k+1], S21,0xF61E2562) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+1] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+1 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >S21 : number
+>    : ^^^^^^
 >0xF61E2562 : 4129170786
+>           : ^^^^^^^^^^
 
         d=GG(d,a,b,c,x[k+6], S22,0xC040B340);
 >d=GG(d,a,b,c,x[k+6], S22,0xC040B340) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >GG(d,a,b,c,x[k+6], S22,0xC040B340) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+6] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+6 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 >S22 : number
+>    : ^^^^^^
 >0xC040B340 : 3225465664
+>           : ^^^^^^^^^^
 
         c=GG(c,d,a,b,x[k+11],S23,0x265E5A51);
 >c=GG(c,d,a,b,x[k+11],S23,0x265E5A51) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >GG(c,d,a,b,x[k+11],S23,0x265E5A51) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+11] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+11 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >11 : 11
+>   : ^^
 >S23 : number
+>    : ^^^^^^
 >0x265E5A51 : 643717713
+>           : ^^^^^^^^^
 
         b=GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA);
 >b=GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+0] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+0 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >S24 : number
+>    : ^^^^^^
 >0xE9B6C7AA : 3921069994
+>           : ^^^^^^^^^^
 
         a=GG(a,b,c,d,x[k+5], S21,0xD62F105D);
 >a=GG(a,b,c,d,x[k+5], S21,0xD62F105D) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >GG(a,b,c,d,x[k+5], S21,0xD62F105D) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+5] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+5 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >S21 : number
+>    : ^^^^^^
 >0xD62F105D : 3593408605
+>           : ^^^^^^^^^^
 
         d=GG(d,a,b,c,x[k+10],S22,0x2441453);
 >d=GG(d,a,b,c,x[k+10],S22,0x2441453) : number
+>                                    : ^^^^^^
 >d : any
+>  : ^^^
 >GG(d,a,b,c,x[k+10],S22,0x2441453) : number
+>                                  : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+10] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+10 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >S22 : number
+>    : ^^^^^^
 >0x2441453 : 38016083
+>          : ^^^^^^^^
 
         c=GG(c,d,a,b,x[k+15],S23,0xD8A1E681);
 >c=GG(c,d,a,b,x[k+15],S23,0xD8A1E681) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >GG(c,d,a,b,x[k+15],S23,0xD8A1E681) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+15] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+15 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >15 : 15
+>   : ^^
 >S23 : number
+>    : ^^^^^^
 >0xD8A1E681 : 3634488961
+>           : ^^^^^^^^^^
 
         b=GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8);
 >b=GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+4] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+4 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >S24 : number
+>    : ^^^^^^
 >0xE7D3FBC8 : 3889429448
+>           : ^^^^^^^^^^
 
         a=GG(a,b,c,d,x[k+9], S21,0x21E1CDE6);
 >a=GG(a,b,c,d,x[k+9], S21,0x21E1CDE6) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >GG(a,b,c,d,x[k+9], S21,0x21E1CDE6) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+9] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+9 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >9 : 9
+>  : ^
 >S21 : number
+>    : ^^^^^^
 >0x21E1CDE6 : 568446438
+>           : ^^^^^^^^^
 
         d=GG(d,a,b,c,x[k+14],S22,0xC33707D6);
 >d=GG(d,a,b,c,x[k+14],S22,0xC33707D6) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >GG(d,a,b,c,x[k+14],S22,0xC33707D6) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+14] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+14 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >14 : 14
+>   : ^^
 >S22 : number
+>    : ^^^^^^
 >0xC33707D6 : 3275163606
+>           : ^^^^^^^^^^
 
         c=GG(c,d,a,b,x[k+3], S23,0xF4D50D87);
 >c=GG(c,d,a,b,x[k+3], S23,0xF4D50D87) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >GG(c,d,a,b,x[k+3], S23,0xF4D50D87) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+3] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+3 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >S23 : number
+>    : ^^^^^^
 >0xF4D50D87 : 4107603335
+>           : ^^^^^^^^^^
 
         b=GG(b,c,d,a,x[k+8], S24,0x455A14ED);
 >b=GG(b,c,d,a,x[k+8], S24,0x455A14ED) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >GG(b,c,d,a,x[k+8], S24,0x455A14ED) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+8] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+8 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >8 : 8
+>  : ^
 >S24 : number
+>    : ^^^^^^
 >0x455A14ED : 1163531501
+>           : ^^^^^^^^^^
 
         a=GG(a,b,c,d,x[k+13],S21,0xA9E3E905);
 >a=GG(a,b,c,d,x[k+13],S21,0xA9E3E905) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >GG(a,b,c,d,x[k+13],S21,0xA9E3E905) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+13] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+13 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 >S21 : number
+>    : ^^^^^^
 >0xA9E3E905 : 2850285829
+>           : ^^^^^^^^^^
 
         d=GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8);
 >d=GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+2] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+2 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >S22 : number
+>    : ^^^^^^
 >0xFCEFA3F8 : 4243563512
+>           : ^^^^^^^^^^
 
         c=GG(c,d,a,b,x[k+7], S23,0x676F02D9);
 >c=GG(c,d,a,b,x[k+7], S23,0x676F02D9) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >GG(c,d,a,b,x[k+7], S23,0x676F02D9) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+7] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+7 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >7 : 7
+>  : ^
 >S23 : number
+>    : ^^^^^^
 >0x676F02D9 : 1735328473
+>           : ^^^^^^^^^^
 
         b=GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A);
 >b=GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A) : number
+>                                   : ^^^^^^
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+12] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+12 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >S24 : number
+>    : ^^^^^^
 >0x8D2A4C8A : 2368359562
+>           : ^^^^^^^^^^
 
         a=HH(a,b,c,d,x[k+5], S31,0xFFFA3942);
 >a=HH(a,b,c,d,x[k+5], S31,0xFFFA3942) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >HH(a,b,c,d,x[k+5], S31,0xFFFA3942) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+5] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+5 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >S31 : number
+>    : ^^^^^^
 >0xFFFA3942 : 4294588738
+>           : ^^^^^^^^^^
 
         d=HH(d,a,b,c,x[k+8], S32,0x8771F681);
 >d=HH(d,a,b,c,x[k+8], S32,0x8771F681) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >HH(d,a,b,c,x[k+8], S32,0x8771F681) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+8] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+8 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >8 : 8
+>  : ^
 >S32 : number
+>    : ^^^^^^
 >0x8771F681 : 2272392833
+>           : ^^^^^^^^^^
 
         c=HH(c,d,a,b,x[k+11],S33,0x6D9D6122);
 >c=HH(c,d,a,b,x[k+11],S33,0x6D9D6122) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >HH(c,d,a,b,x[k+11],S33,0x6D9D6122) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+11] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+11 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >11 : 11
+>   : ^^
 >S33 : number
+>    : ^^^^^^
 >0x6D9D6122 : 1839030562
+>           : ^^^^^^^^^^
 
         b=HH(b,c,d,a,x[k+14],S34,0xFDE5380C);
 >b=HH(b,c,d,a,x[k+14],S34,0xFDE5380C) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >HH(b,c,d,a,x[k+14],S34,0xFDE5380C) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+14] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+14 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >14 : 14
+>   : ^^
 >S34 : number
+>    : ^^^^^^
 >0xFDE5380C : 4259657740
+>           : ^^^^^^^^^^
 
         a=HH(a,b,c,d,x[k+1], S31,0xA4BEEA44);
 >a=HH(a,b,c,d,x[k+1], S31,0xA4BEEA44) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >HH(a,b,c,d,x[k+1], S31,0xA4BEEA44) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+1] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+1 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >S31 : number
+>    : ^^^^^^
 >0xA4BEEA44 : 2763975236
+>           : ^^^^^^^^^^
 
         d=HH(d,a,b,c,x[k+4], S32,0x4BDECFA9);
 >d=HH(d,a,b,c,x[k+4], S32,0x4BDECFA9) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >HH(d,a,b,c,x[k+4], S32,0x4BDECFA9) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+4] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+4 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >S32 : number
+>    : ^^^^^^
 >0x4BDECFA9 : 1272893353
+>           : ^^^^^^^^^^
 
         c=HH(c,d,a,b,x[k+7], S33,0xF6BB4B60);
 >c=HH(c,d,a,b,x[k+7], S33,0xF6BB4B60) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >HH(c,d,a,b,x[k+7], S33,0xF6BB4B60) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+7] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+7 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >7 : 7
+>  : ^
 >S33 : number
+>    : ^^^^^^
 >0xF6BB4B60 : 4139469664
+>           : ^^^^^^^^^^
 
         b=HH(b,c,d,a,x[k+10],S34,0xBEBFBC70);
 >b=HH(b,c,d,a,x[k+10],S34,0xBEBFBC70) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >HH(b,c,d,a,x[k+10],S34,0xBEBFBC70) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+10] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+10 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >S34 : number
+>    : ^^^^^^
 >0xBEBFBC70 : 3200236656
+>           : ^^^^^^^^^^
 
         a=HH(a,b,c,d,x[k+13],S31,0x289B7EC6);
 >a=HH(a,b,c,d,x[k+13],S31,0x289B7EC6) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >HH(a,b,c,d,x[k+13],S31,0x289B7EC6) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+13] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+13 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 >S31 : number
+>    : ^^^^^^
 >0x289B7EC6 : 681279174
+>           : ^^^^^^^^^
 
         d=HH(d,a,b,c,x[k+0], S32,0xEAA127FA);
 >d=HH(d,a,b,c,x[k+0], S32,0xEAA127FA) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >HH(d,a,b,c,x[k+0], S32,0xEAA127FA) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+0] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+0 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >S32 : number
+>    : ^^^^^^
 >0xEAA127FA : 3936430074
+>           : ^^^^^^^^^^
 
         c=HH(c,d,a,b,x[k+3], S33,0xD4EF3085);
 >c=HH(c,d,a,b,x[k+3], S33,0xD4EF3085) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >HH(c,d,a,b,x[k+3], S33,0xD4EF3085) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+3] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+3 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >S33 : number
+>    : ^^^^^^
 >0xD4EF3085 : 3572445317
+>           : ^^^^^^^^^^
 
         b=HH(b,c,d,a,x[k+6], S34,0x4881D05);
 >b=HH(b,c,d,a,x[k+6], S34,0x4881D05) : number
+>                                    : ^^^^^^
 >b : any
+>  : ^^^
 >HH(b,c,d,a,x[k+6], S34,0x4881D05) : number
+>                                  : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+6] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+6 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 >S34 : number
+>    : ^^^^^^
 >0x4881D05 : 76029189
+>          : ^^^^^^^^
 
         a=HH(a,b,c,d,x[k+9], S31,0xD9D4D039);
 >a=HH(a,b,c,d,x[k+9], S31,0xD9D4D039) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >HH(a,b,c,d,x[k+9], S31,0xD9D4D039) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+9] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+9 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >9 : 9
+>  : ^
 >S31 : number
+>    : ^^^^^^
 >0xD9D4D039 : 3654602809
+>           : ^^^^^^^^^^
 
         d=HH(d,a,b,c,x[k+12],S32,0xE6DB99E5);
 >d=HH(d,a,b,c,x[k+12],S32,0xE6DB99E5) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >HH(d,a,b,c,x[k+12],S32,0xE6DB99E5) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+12] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+12 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >S32 : number
+>    : ^^^^^^
 >0xE6DB99E5 : 3873151461
+>           : ^^^^^^^^^^
 
         c=HH(c,d,a,b,x[k+15],S33,0x1FA27CF8);
 >c=HH(c,d,a,b,x[k+15],S33,0x1FA27CF8) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >HH(c,d,a,b,x[k+15],S33,0x1FA27CF8) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+15] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+15 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >15 : 15
+>   : ^^
 >S33 : number
+>    : ^^^^^^
 >0x1FA27CF8 : 530742520
+>           : ^^^^^^^^^
 
         b=HH(b,c,d,a,x[k+2], S34,0xC4AC5665);
 >b=HH(b,c,d,a,x[k+2], S34,0xC4AC5665) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >HH(b,c,d,a,x[k+2], S34,0xC4AC5665) : number
+>                                   : ^^^^^^
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+2] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+2 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >S34 : number
+>    : ^^^^^^
 >0xC4AC5665 : 3299628645
+>           : ^^^^^^^^^^
 
         a=II(a,b,c,d,x[k+0], S41,0xF4292244);
 >a=II(a,b,c,d,x[k+0], S41,0xF4292244) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >II(a,b,c,d,x[k+0], S41,0xF4292244) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+0] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+0 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >S41 : number
+>    : ^^^^^^
 >0xF4292244 : 4096336452
+>           : ^^^^^^^^^^
 
         d=II(d,a,b,c,x[k+7], S42,0x432AFF97);
 >d=II(d,a,b,c,x[k+7], S42,0x432AFF97) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >II(d,a,b,c,x[k+7], S42,0x432AFF97) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+7] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+7 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >7 : 7
+>  : ^
 >S42 : number
+>    : ^^^^^^
 >0x432AFF97 : 1126891415
+>           : ^^^^^^^^^^
 
         c=II(c,d,a,b,x[k+14],S43,0xAB9423A7);
 >c=II(c,d,a,b,x[k+14],S43,0xAB9423A7) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >II(c,d,a,b,x[k+14],S43,0xAB9423A7) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+14] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+14 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >14 : 14
+>   : ^^
 >S43 : number
+>    : ^^^^^^
 >0xAB9423A7 : 2878612391
+>           : ^^^^^^^^^^
 
         b=II(b,c,d,a,x[k+5], S44,0xFC93A039);
 >b=II(b,c,d,a,x[k+5], S44,0xFC93A039) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >II(b,c,d,a,x[k+5], S44,0xFC93A039) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+5] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+5 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >S44 : number
+>    : ^^^^^^
 >0xFC93A039 : 4237533241
+>           : ^^^^^^^^^^
 
         a=II(a,b,c,d,x[k+12],S41,0x655B59C3);
 >a=II(a,b,c,d,x[k+12],S41,0x655B59C3) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >II(a,b,c,d,x[k+12],S41,0x655B59C3) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+12] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+12 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >S41 : number
+>    : ^^^^^^
 >0x655B59C3 : 1700485571
+>           : ^^^^^^^^^^
 
         d=II(d,a,b,c,x[k+3], S42,0x8F0CCC92);
 >d=II(d,a,b,c,x[k+3], S42,0x8F0CCC92) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >II(d,a,b,c,x[k+3], S42,0x8F0CCC92) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+3] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+3 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >S42 : number
+>    : ^^^^^^
 >0x8F0CCC92 : 2399980690
+>           : ^^^^^^^^^^
 
         c=II(c,d,a,b,x[k+10],S43,0xFFEFF47D);
 >c=II(c,d,a,b,x[k+10],S43,0xFFEFF47D) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >II(c,d,a,b,x[k+10],S43,0xFFEFF47D) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+10] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+10 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >S43 : number
+>    : ^^^^^^
 >0xFFEFF47D : 4293915773
+>           : ^^^^^^^^^^
 
         b=II(b,c,d,a,x[k+1], S44,0x85845DD1);
 >b=II(b,c,d,a,x[k+1], S44,0x85845DD1) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >II(b,c,d,a,x[k+1], S44,0x85845DD1) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+1] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+1 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >S44 : number
+>    : ^^^^^^
 >0x85845DD1 : 2240044497
+>           : ^^^^^^^^^^
 
         a=II(a,b,c,d,x[k+8], S41,0x6FA87E4F);
 >a=II(a,b,c,d,x[k+8], S41,0x6FA87E4F) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >II(a,b,c,d,x[k+8], S41,0x6FA87E4F) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+8] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+8 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >8 : 8
+>  : ^
 >S41 : number
+>    : ^^^^^^
 >0x6FA87E4F : 1873313359
+>           : ^^^^^^^^^^
 
         d=II(d,a,b,c,x[k+15],S42,0xFE2CE6E0);
 >d=II(d,a,b,c,x[k+15],S42,0xFE2CE6E0) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >II(d,a,b,c,x[k+15],S42,0xFE2CE6E0) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+15] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+15 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >15 : 15
+>   : ^^
 >S42 : number
+>    : ^^^^^^
 >0xFE2CE6E0 : 4264355552
+>           : ^^^^^^^^^^
 
         c=II(c,d,a,b,x[k+6], S43,0xA3014314);
 >c=II(c,d,a,b,x[k+6], S43,0xA3014314) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >II(c,d,a,b,x[k+6], S43,0xA3014314) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+6] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+6 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 >S43 : number
+>    : ^^^^^^
 >0xA3014314 : 2734768916
+>           : ^^^^^^^^^^
 
         b=II(b,c,d,a,x[k+13],S44,0x4E0811A1);
 >b=II(b,c,d,a,x[k+13],S44,0x4E0811A1) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >II(b,c,d,a,x[k+13],S44,0x4E0811A1) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+13] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+13 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 >S44 : number
+>    : ^^^^^^
 >0x4E0811A1 : 1309151649
+>           : ^^^^^^^^^^
 
         a=II(a,b,c,d,x[k+4], S41,0xF7537E82);
 >a=II(a,b,c,d,x[k+4], S41,0xF7537E82) : number
+>                                     : ^^^^^^
 >a : any
+>  : ^^^
 >II(a,b,c,d,x[k+4], S41,0xF7537E82) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >x[k+4] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+4 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >S41 : number
+>    : ^^^^^^
 >0xF7537E82 : 4149444226
+>           : ^^^^^^^^^^
 
         d=II(d,a,b,c,x[k+11],S42,0xBD3AF235);
 >d=II(d,a,b,c,x[k+11],S42,0xBD3AF235) : number
+>                                     : ^^^^^^
 >d : any
+>  : ^^^
 >II(d,a,b,c,x[k+11],S42,0xBD3AF235) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x[k+11] : any
+>        : ^^^
 >x : any[]
+>  : ^^^^^
 >k+11 : number
+>     : ^^^^^^
 >k : number
+>  : ^^^^^^
 >11 : 11
+>   : ^^
 >S42 : number
+>    : ^^^^^^
 >0xBD3AF235 : 3174756917
+>           : ^^^^^^^^^^
 
         c=II(c,d,a,b,x[k+2], S43,0x2AD7D2BB);
 >c=II(c,d,a,b,x[k+2], S43,0x2AD7D2BB) : number
+>                                     : ^^^^^^
 >c : any
+>  : ^^^
 >II(c,d,a,b,x[k+2], S43,0x2AD7D2BB) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >x[k+2] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+2 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >S43 : number
+>    : ^^^^^^
 >0x2AD7D2BB : 718787259
+>           : ^^^^^^^^^
 
         b=II(b,c,d,a,x[k+9], S44,0xEB86D391);
 >b=II(b,c,d,a,x[k+9], S44,0xEB86D391) : number
+>                                     : ^^^^^^
 >b : any
+>  : ^^^
 >II(b,c,d,a,x[k+9], S44,0xEB86D391) : number
+>                                   : ^^^^^^
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
+>   : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >x[k+9] : any
+>       : ^^^
 >x : any[]
+>  : ^^^^^
 >k+9 : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 >9 : 9
+>  : ^
 >S44 : number
+>    : ^^^^^^
 >0xEB86D391 : 3951481745
+>           : ^^^^^^^^^^
     }
 }
 export default md5;
 >md5 : (string: string) => void
+>    : ^      ^^      ^^^^^    
 
 // Repro from #26655
 
 interface DataShape {
   message: { id: string }
 >message : { id: string; }
+>        : ^^^^^^      ^^^
 >id : string
+>   : ^^^^^^
 }
 
 function getObject(id: string | number) {
 >getObject : (id: string | number) => any
+>          : ^  ^^               ^^^^^   
 >id : string | number
+>   : ^^^^^^^^^^^^^^^
 
   return {} as any
 >{} as any : any
+>          : ^^^
 >{} : {}
+>   : ^^
 }
 
 ;(() => {
 >(() => {  let id: string | number = 'a'  while (1) {    const data = getObject(id) as DataShape    const message = data.message    id = message.id  }})() : void
+>                                                                                                                                                          : ^^^^
 >(() => {  let id: string | number = 'a'  while (1) {    const data = getObject(id) as DataShape    const message = data.message    id = message.id  }}) : () => void
+>                                                                                                                                                        : ^^^^^^^^^^
 >() => {  let id: string | number = 'a'  while (1) {    const data = getObject(id) as DataShape    const message = data.message    id = message.id  }} : () => void
+>                                                                                                                                                      : ^^^^^^^^^^
 
   let id: string | number = 'a'
 >id : string | number
+>   : ^^^^^^^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
   while (1) {
 >1 : 1
+>  : ^
 
     const data = getObject(id) as DataShape
 >data : DataShape
+>     : ^^^^^^^^^
 >getObject(id) as DataShape : DataShape
+>                           : ^^^^^^^^^
 >getObject(id) : any
+>              : ^^^
 >getObject : (id: string | number) => any
+>          : ^  ^^               ^^^^^   
 >id : string
+>   : ^^^^^^
 
     const message = data.message
 >message : { id: string; }
+>        : ^^^^^^      ^^^
 >data.message : { id: string; }
+>             : ^^^^^^      ^^^
 >data : DataShape
+>     : ^^^^^^^^^
 >message : { id: string; }
+>        : ^^^^^^      ^^^
 
     id = message.id
 >id = message.id : string
+>                : ^^^^^^
 >id : string | number
+>   : ^^^^^^^^^^^^^^^
 >message.id : string
+>           : ^^^^^^
 >message : { id: string; }
+>        : ^^^^^^      ^^^
 >id : string
+>   : ^^^^^^
   }
 })()
 

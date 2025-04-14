@@ -1,6 +1,9 @@
-=== tests/cases/compiler/unusedInterfaceinNamespace5.ts ===
+//// [tests/cases/compiler/unusedInterfaceinNamespace5.ts] ////
+
+=== unusedInterfaceinNamespace5.ts ===
 namespace Validation {
 >Validation : typeof Validation
+>           : ^^^^^^^^^^^^^^^^^
 
     interface i1 {
 
@@ -16,6 +19,7 @@ namespace Validation {
 
     export class c1 implements i3 {
 >c1 : c1
+>   : ^^
 
     }
 
@@ -25,4 +29,5 @@ namespace Validation {
 
     export let c2:i4;
 >c2 : i4
+>   : ^^
 }

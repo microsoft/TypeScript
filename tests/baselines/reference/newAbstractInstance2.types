@@ -1,11 +1,17 @@
+//// [tests/cases/compiler/newAbstractInstance2.ts] ////
+
 === /a.ts ===
+
 export default abstract class {}
-No type information for this code.
-No type information for this code.=== /b.ts ===
+
+=== /b.ts ===
 import A from "./a";
 >A : typeof A
+>  : ^^^^^^^^
 
 new A();
 >new A() : any
+>        : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 

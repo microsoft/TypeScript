@@ -1,9 +1,9 @@
-tests/cases/compiler/propertySignatures.ts(2,13): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/propertySignatures.ts(2,23): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/propertySignatures.ts(14,12): error TS2552: Cannot find name 'foo'. Did you mean 'foo1'?
+propertySignatures.ts(2,13): error TS2300: Duplicate identifier 'a'.
+propertySignatures.ts(2,23): error TS2300: Duplicate identifier 'a'.
+propertySignatures.ts(14,12): error TS2552: Cannot find name 'foo'. Did you mean 'foo1'?
 
 
-==== tests/cases/compiler/propertySignatures.ts (3 errors) ====
+==== propertySignatures.ts (3 errors) ====
     // Should be error - duplicate identifiers
     var foo1: { a:string; a: string; };
                 ~
@@ -24,7 +24,7 @@ tests/cases/compiler/propertySignatures.ts(14,12): error TS2552: Cannot find nam
     var test = foo();
                ~~~
 !!! error TS2552: Cannot find name 'foo'. Did you mean 'foo1'?
-!!! related TS2728 tests/cases/compiler/propertySignatures.ts:2:5: 'foo1' is declared here.
+!!! related TS2728 propertySignatures.ts:2:5: 'foo1' is declared here.
     
     // Should be OK
     var foo5: {();};

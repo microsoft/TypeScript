@@ -1,41 +1,63 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentTopLevelEnumdule.ts] ////
+
+=== foo_1.ts ===
 import foo = require("./foo_0");
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 var color: foo;
 >color : foo
+>      : ^^^
 
 if(color === foo.green){
 >color === foo.green : boolean
+>                    : ^^^^^^^
 >color : foo
+>      : ^^^
 >foo.green : foo.green
+>          : ^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >green : foo.green
+>      : ^^^^^^^^^
 
 	color = foo.answer;
 >color = foo.answer : number
+>                   : ^^^^^^
 >color : foo
+>      : ^^^
 >foo.answer : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >answer : number
+>       : ^^^^^^
 }
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 enum foo {
 >foo : foo
+>    : ^^^
 
 	red, green, blue
 >red : foo.red
+>    : ^^^^^^^
 >green : foo.green
+>      : ^^^^^^^^^
 >blue : foo.blue
+>     : ^^^^^^^^
 }
 module foo {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 	export var answer = 42;
 >answer : number
+>       : ^^^^^^
 >42 : 42
+>   : ^^
 }
 export = foo;
 >foo : foo
+>    : ^^^
 

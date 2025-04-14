@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplateStringsWithWhitespaceEscapesES6.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsWithWhitespaceEscapesES6.ts] ////
+
+=== taggedTemplateStringsWithWhitespaceEscapesES6.ts ===
 function f(...args: any[]) {
 >f : Symbol(f, Decl(taggedTemplateStringsWithWhitespaceEscapesES6.ts, 0, 0))
 >args : Symbol(args, Decl(taggedTemplateStringsWithWhitespaceEscapesES6.ts, 0, 11))

@@ -1,13 +1,18 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithOptionalParameters.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithOptionalParameters.ts] ////
+
+=== constructorOverloadsWithOptionalParameters.ts ===
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     constructor(x?, y?: any[]); 
 >x : any
 >y : any[]
+>  : ^^^^^
 
     constructor() {
     }
@@ -15,13 +20,16 @@ class C {
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     constructor(x?, y?: any[]); 
 >x : any
 >y : any[]
+>  : ^^^^^
 
     constructor() {
     }

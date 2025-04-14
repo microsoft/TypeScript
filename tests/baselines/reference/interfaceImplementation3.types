@@ -1,29 +1,39 @@
-=== tests/cases/compiler/interfaceImplementation3.ts ===
+//// [tests/cases/compiler/interfaceImplementation3.ts] ////
+
+=== interfaceImplementation3.ts ===
 interface I1 {
     iObj:{ };
 >iObj : {}
+>     : ^^
 
     iNum:number;
 >iNum : number
+>     : ^^^^^^
 
     iAny:any;
 >iAny : any
+>     : ^^^
 
     iFn():void;
 >iFn : () => void
+>    : ^^^^^^    
 }
 
 class C4 implements I1 {
 >C4 : C4
+>   : ^^
 
     public iObj:{ };
 >iObj : {}
+>     : ^^
 
     public iNum:number;
 >iNum : number
+>     : ^^^^^^
 
     public iFn() { }
 >iFn : () => void
+>    : ^^^^^^^^^^
 }
 
 

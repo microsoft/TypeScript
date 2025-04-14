@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newOperator.ts] ////
+
 //// [newOperator.ts]
 interface ifc { }
 // Attempting to 'new' an interface yields poor error

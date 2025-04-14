@@ -1,10 +1,8 @@
-tests/cases/compiler/objectLitStructuralTypeMismatch.ts(2,27): error TS2322: Type '{ b: number; }' is not assignable to type '{ a: number; }'.
-  Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
+objectLitStructuralTypeMismatch.ts(2,27): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
 
 
-==== tests/cases/compiler/objectLitStructuralTypeMismatch.ts (1 errors) ====
+==== objectLitStructuralTypeMismatch.ts (1 errors) ====
     // Shouldn't compile
     var x: { a: number; } = { b: 5 };
-                              ~~~~
-!!! error TS2322: Type '{ b: number; }' is not assignable to type '{ a: number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
+                              ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.

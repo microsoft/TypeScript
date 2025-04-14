@@ -16,7 +16,7 @@ let x2: string = f;
 
 //// [user.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var demoModule_1 = require("demoModule");
 // Assign an incorrect type here to see the type of 'f'.
 var x1 = demoNS.f;

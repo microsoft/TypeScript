@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowIfStatement.ts] ////
+
+=== controlFlowIfStatement.ts ===
 let x: string | number | boolean | RegExp;
 >x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
 >RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

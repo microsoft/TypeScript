@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/circular4.ts] ////
+
 === /a.ts ===
 import type { ns2 } from './b';
 >ns2 : Symbol(ns2, Decl(a.ts, 0, 13))

@@ -1,71 +1,104 @@
-=== tests/cases/compiler/fallFromLastCase2.ts ===
+//// [tests/cases/compiler/fallFromLastCase2.ts] ////
+
+=== fallFromLastCase2.ts ===
 declare function use(a: string);
 >use : (a: string) => any
+>    : ^ ^^      ^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 function foo1(a: number) {
 >foo1 : (a: number) => void
+>     : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     switch (a) {
 >a : number
+>  : ^^^^^^
 
         case 1:
 >1 : 1
+>  : ^
 
             use("1");
 >use("1") : any
+>         : ^^^
 >use : (a: string) => any
+>    : ^ ^^      ^^^^^^^^
 >"1" : "1"
+>    : ^^^
 
             break;
         case 2:
 >2 : 2
+>  : ^
 
             use("2");
 >use("2") : any
+>         : ^^^
 >use : (a: string) => any
+>    : ^ ^^      ^^^^^^^^
 >"2" : "2"
+>    : ^^^
 
         case 3:
 >3 : 3
+>  : ^
 
             use("3");
 >use("3") : any
+>         : ^^^
 >use : (a: string) => any
+>    : ^ ^^      ^^^^^^^^
 >"3" : "3"
+>    : ^^^
     }
 }
 
 
 function foo2(a: number) {
 >foo2 : (a: number) => void
+>     : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     switch (a) {
 >a : number
+>  : ^^^^^^
 
         case 1:
 >1 : 1
+>  : ^
 
             use("1");
 >use("1") : any
+>         : ^^^
 >use : (a: string) => any
+>    : ^ ^^      ^^^^^^^^
 >"1" : "1"
+>    : ^^^
 
             break;
         default:
             use("2");
 >use("2") : any
+>         : ^^^
 >use : (a: string) => any
+>    : ^ ^^      ^^^^^^^^
 >"2" : "2"
+>    : ^^^
 
         case 2:
 >2 : 2
+>  : ^
 
             use("3");
 >use("3") : any
+>         : ^^^
 >use : (a: string) => any
+>    : ^ ^^      ^^^^^^^^
 >"3" : "3"
+>    : ^^^
     }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxAndJsxFragPragma.tsx] ////
+
+=== renderer.d.ts ===
 declare global {
 >global : Symbol(global, Decl(renderer.d.ts, 0, 0))
 
@@ -22,7 +24,7 @@ export function jsx(): void;
 export function Fragment(): void;
 >Fragment : Symbol(Fragment, Decl(renderer.d.ts, 8, 28))
 
-=== tests/cases/conformance/jsx/inline/preacty.tsx ===
+=== preacty.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
@@ -32,20 +34,20 @@ import {h, Fragment} from "./renderer";
 >Fragment : Symbol(Fragment, Decl(preacty.tsx, 4, 10))
 
 <><div></div></>
->div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 
-=== tests/cases/conformance/jsx/inline/snabbdomy.tsx ===
+=== snabbdomy.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : Symbol(jsx, Decl(snabbdomy.tsx, 2, 8))
 
 <><span></span></>
->span : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->span : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>span : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>span : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 
-=== tests/cases/conformance/jsx/inline/preacty-only-fragment.tsx ===
+=== preacty-only-fragment.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
@@ -56,7 +58,7 @@ import {h, Fragment} from "./renderer";
 
 <></>
 
-=== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment.tsx ===
+=== snabbdomy-only-fragment.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
@@ -64,7 +66,7 @@ import {jsx} from "./renderer";
 
 <></>
 
-=== tests/cases/conformance/jsx/inline/preacty-only-fragment-no-jsx.tsx ===
+=== preacty-only-fragment-no-jsx.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
@@ -74,13 +76,14 @@ import {Fragment} from "./renderer";
 
 <></>
 
-=== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx ===
+=== snabbdomy-only-fragment-no-jsx.tsx ===
+
 /* @jsx jsx */
-No type information for this code./* @jsxfrag null */
-No type information for this code.import {} from "./renderer";
-No type information for this code.<></>
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx ===
+/* @jsxfrag null */
+import {} from "./renderer";
+<></>
+
+=== preacty-no-fragment.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
@@ -90,20 +93,20 @@ import {h, Fragment} from "./renderer";
 >Fragment : Symbol(Fragment, Decl(preacty-no-fragment.tsx, 4, 10))
 
 <div></div>
->div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 
-=== tests/cases/conformance/jsx/inline/snabbdomy-no-fragment.tsx ===
+=== snabbdomy-no-fragment.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : Symbol(jsx, Decl(snabbdomy-no-fragment.tsx, 2, 8))
 
 <div></div>
->div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 
-=== tests/cases/conformance/jsx/inline/preacty-only-component.tsx ===
+=== preacty-only-component.tsx ===
 /**
  * @jsx h
  */

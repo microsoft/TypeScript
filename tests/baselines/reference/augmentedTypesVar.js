@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesVar.ts] ////
+
 //// [augmentedTypesVar.ts]
 // var then var
 var x1 = 1;

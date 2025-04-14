@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/namedTypes/genericInstantiationEquivalentToObjectLiteral.ts ===
+//// [tests/cases/conformance/types/namedTypes/genericInstantiationEquivalentToObjectLiteral.ts] ////
+
+=== genericInstantiationEquivalentToObjectLiteral.ts ===
 interface Pair<T1, T2> { first: T1; second: T2; }
 >Pair : Symbol(Pair, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 0))
 >T1 : Symbol(T1, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 15))

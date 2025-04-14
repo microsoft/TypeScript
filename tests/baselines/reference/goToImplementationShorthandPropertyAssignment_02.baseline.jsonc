@@ -1,0 +1,61 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationShorthandPropertyAssignment_02.ts ===
+// --- (line: 6) skipped ---
+//          hello
+//     };
+// 
+//     <|function [|hello|]() {}|>
+// }
+// 
+// function whatever(x: Foo) {
+//      x.h/*GOTO IMPL*/ello();
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local function",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "hello",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "local function"
+   }
+  ]

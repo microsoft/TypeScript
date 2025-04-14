@@ -1,10 +1,12 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/doNotEmitTripleSlashCommentsOnNotEmittedNode.ts] ////
+
+=== file1.ts ===
 /// <reference path="file0.ts" />
 interface F { }
 >F : Symbol(F, Decl(file1.ts, 0, 0))
 
 
-=== tests/cases/compiler/file0.ts ===
+=== file0.ts ===
 /// <reference path="file1.ts" />
 declare var OData: any;
 >OData : Symbol(OData, Decl(file0.ts, 1, 11))

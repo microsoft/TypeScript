@@ -1,216 +1,367 @@
-=== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithIdenticalBCT.ts ===
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithIdenticalBCT.ts] ////
+
+=== conditionalOperatorWithIdenticalBCT.ts ===
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
 class X { propertyX: any; propertyX1: number; propertyX2: string };
 >X : X
+>  : ^
 >propertyX : any
 >propertyX1 : number
+>           : ^^^^^^
 >propertyX2 : string
+>           : ^^^^^^
 
 class A extends X { propertyA: number };
 >A : A
+>  : ^
 >X : X
+>  : ^
 >propertyA : number
+>          : ^^^^^^
 
 class B extends X { propertyB: string };
 >B : B
+>  : ^
 >X : X
+>  : ^
 >propertyB : string
+>          : ^^^^^^
 
 var x: X;
 >x : X
+>  : ^
 
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 //Cond ? Expr1 : Expr2,  Expr1 is supertype
 //Be Not contextually typed
 true ? x : a;
 >true ? x : a : X
+>             : ^
 >true : true
+>     : ^^^^
 >x : X
+>  : ^
 >a : A
+>  : ^
 
 var result1 = true ? x : a;
 >result1 : X
+>        : ^
 >true ? x : a : X
+>             : ^
 >true : true
+>     : ^^^^
 >x : X
+>  : ^
 >a : A
+>  : ^
 
 //Expr1 and Expr2 are literals
 true ? {} : 1;
 >true ? {} : 1 : 1 | {}
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >{} : {}
+>   : ^^
 >1 : 1
+>  : ^
 
 true ? { a: 1 } : { a: 2, b: 'string' };
 >true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >{ a: 2, b: 'string' } : { a: number; b: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >b : string
+>  : ^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
 var result2 = true ? {} : 1;
 >result2 : {}
+>        : ^^
 >true ? {} : 1 : 1 | {}
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >{} : {}
+>   : ^^
 >1 : 1
+>  : ^
 
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
 >result3 : { a: number; b?: undefined; } | { a: number; b: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >{ a: 2, b: 'string' } : { a: number; b: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >b : string
+>  : ^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
 //Contextually typed
 var resultIsX1: X = true ? x : a;
 >resultIsX1 : X
+>           : ^
 >true ? x : a : X
+>             : ^
 >true : true
+>     : ^^^^
 >x : X
+>  : ^
 >a : A
+>  : ^
 
 var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 >result4 : (t: A) => any
+>        : ^ ^^ ^^^^^   
 >t : A
+>  : ^
 >true ? (m) => m.propertyX : (n) => n.propertyA : (m: A) => any
+>                                               : ^ ^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >(m) => m.propertyX : (m: A) => any
+>                   : ^ ^^^^^^^^^^^
 >m : A
+>  : ^
 >m.propertyX : any
 >m : A
+>  : ^
 >propertyX : any
+>          : ^^^
 >(n) => n.propertyA : (n: A) => number
+>                   : ^ ^^^^^^^^^^^^^^
 >n : A
+>  : ^
 >n.propertyA : number
+>            : ^^^^^^
 >n : A
+>  : ^
 >propertyA : number
+>          : ^^^^^^
 
 //Cond ? Expr1 : Expr2,  Expr2 is supertype
 //Be Not contextually typed
 true ? a : x;
 >true ? a : x : X
+>             : ^
 >true : true
+>     : ^^^^
 >a : A
+>  : ^
 >x : X
+>  : ^
 
 var result5 = true ? a : x;
 >result5 : X
+>        : ^
 >true ? a : x : X
+>             : ^
 >true : true
+>     : ^^^^
 >a : A
+>  : ^
 >x : X
+>  : ^
 
 //Expr1 and Expr2 are literals
 true ? 1 : {};
 >true ? 1 : {} : 1 | {}
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 >{} : {}
+>   : ^^
 
 true ? { a: 2, b: 'string' } : { a: 1 };
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >{ a: 2, b: 'string' } : { a: number; b: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >b : string
+>  : ^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var result6 = true ? 1 : {};
 >result6 : {}
+>        : ^^
 >true ? 1 : {} : 1 | {}
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 >{} : {}
+>   : ^^
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
 >result7 : { a: number; b: string; } | { a: number; b?: undefined; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >{ a: 2, b: 'string' } : { a: number; b: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >b : string
+>  : ^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 //Contextually typed
 var resultIsX2: X = true ? x : a;
 >resultIsX2 : X
+>           : ^
 >true ? x : a : X
+>             : ^
 >true : true
+>     : ^^^^
 >x : X
+>  : ^
 >a : A
+>  : ^
 
 var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 >result8 : (t: A) => any
+>        : ^ ^^ ^^^^^   
 >t : A
+>  : ^
 >true ? (m) => m.propertyA : (n) => n.propertyX : (n: A) => any
+>                                               : ^ ^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >(m) => m.propertyA : (m: A) => number
+>                   : ^ ^^^^^^^^^^^^^^
 >m : A
+>  : ^
 >m.propertyA : number
+>            : ^^^^^^
 >m : A
+>  : ^
 >propertyA : number
+>          : ^^^^^^
 >(n) => n.propertyX : (n: A) => any
+>                   : ^ ^^^^^^^^^^^
 >n : A
+>  : ^
 >n.propertyX : any
 >n : A
+>  : ^
 >propertyX : any
+>          : ^^^
 
 //Result = Cond ? Expr1 : Expr2,  Result is supertype
 //Contextually typed
 var resultIsX3: X = true ? a : b;
 >resultIsX3 : X
+>           : ^
 >true ? a : b : A | B
+>             : ^^^^^
 >true : true
+>     : ^^^^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 >result10 : (t: X) => any
+>         : ^ ^^ ^^^^^   
 >t : X
+>  : ^
 >true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
+>                                                 : ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >(m) => m.propertyX1 : (m: X) => number
+>                    : ^ ^^^^^^^^^^^^^^
 >m : X
+>  : ^
 >m.propertyX1 : number
+>             : ^^^^^^
 >m : X
+>  : ^
 >propertyX1 : number
+>           : ^^^^^^
 >(n) => n.propertyX2 : (n: X) => string
+>                    : ^ ^^^^^^^^^^^^^^
 >n : X
+>  : ^
 >n.propertyX2 : string
+>             : ^^^^^^
 >n : X
+>  : ^
 >propertyX2 : string
+>           : ^^^^^^
 
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
 >result11 : any
 >true ? 1 : 'string' : "string" | 1
+>                    : ^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 >'string' : "string"
+>         : ^^^^^^^^
 

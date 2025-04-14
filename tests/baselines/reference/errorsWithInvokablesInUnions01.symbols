@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorsWithInvokablesInUnions01.ts ===
+//// [tests/cases/compiler/errorsWithInvokablesInUnions01.ts] ////
+
+=== errorsWithInvokablesInUnions01.ts ===
 interface ConstructableA {
 >ConstructableA : Symbol(ConstructableA, Decl(errorsWithInvokablesInUnions01.ts, 0, 0))
 

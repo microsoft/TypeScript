@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/tsxUnionSpread.tsx] ////
+
+=== index.tsx ===
 namespace JSX {
 >JSX : Symbol(JSX, Decl(index.tsx, 0, 0))
 

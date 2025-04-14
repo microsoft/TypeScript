@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingAssignmentReadonlyRespectsAssertion.ts ===
+//// [tests/cases/compiler/narrowingAssignmentReadonlyRespectsAssertion.ts] ////
+
+=== narrowingAssignmentReadonlyRespectsAssertion.ts ===
 // https://github.com/microsoft/TypeScript/issues/41984
 
 interface TestCase<T extends string | number> {

@@ -1,31 +1,56 @@
-=== tests/cases/compiler/tsxInvokeComponentType.tsx ===
+//// [tests/cases/compiler/tsxInvokeComponentType.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== tsxInvokeComponentType.tsx ===
 /// <reference path="react16.d.ts" />
 import React, { ComponentType } from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >ComponentType : any
+>              : ^^^
 
 declare const Elem: ComponentType<{ someKey: string }>;
 >Elem : React.ComponentType<{ someKey: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >someKey : string
+>        : ^^^^^^
 
 const bad = <Elem />;
 >bad : JSX.Element
+>    : ^^^^^^^^^^^
 ><Elem /> : JSX.Element
+>         : ^^^^^^^^^^^
 >Elem : React.ComponentType<{ someKey: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 
 const good = <Elem someKey="ok" />;
 >good : JSX.Element
+>     : ^^^^^^^^^^^
 ><Elem someKey="ok" /> : JSX.Element
+>                      : ^^^^^^^^^^^
 >Elem : React.ComponentType<{ someKey: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >someKey : string
+>        : ^^^^^^
 
 declare const Elem2: ComponentType<{ opt?: number }>;
->Elem2 : React.ComponentType<{ opt?: number | undefined; }>
+>Elem2 : React.ComponentType<{ opt?: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >opt : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
 const alsoOk = <Elem2>text</Elem2>;
 >alsoOk : JSX.Element
+>       : ^^^^^^^^^^^
 ><Elem2>text</Elem2> : JSX.Element
->Elem2 : React.ComponentType<{ opt?: number | undefined; }>
->Elem2 : React.ComponentType<{ opt?: number | undefined; }>
+>                    : ^^^^^^^^^^^
+>Elem2 : React.ComponentType<{ opt?: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>Elem2 : React.ComponentType<{ opt?: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 

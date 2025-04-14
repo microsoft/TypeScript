@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternWithReservedWord.ts] ////
+
+=== declarationEmitBindingPatternWithReservedWord.ts ===
+type LocaleData = Record<string, never>
+>LocaleData : LocaleData
+>           : ^^^^^^^^^^
+
+type ConvertLocaleConfig<T extends LocaleData = LocaleData> = Record<
+>ConvertLocaleConfig : ConvertLocaleConfig<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+
+  string,
+  T
+>;
+type LocaleConfig<T extends LocaleData = LocaleData> = Record<string, Partial<T>>;
+>LocaleConfig : LocaleConfig<T>
+>             : ^^^^^^^^^^^^^^^
+
+export interface GetLocalesOptions<T extends LocaleData> {
+    app: unknown;
+>app : unknown
+>    : ^^^^^^^
+
+    default: ConvertLocaleConfig<T>;
+>default : ConvertLocaleConfig<T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    config?: LocaleConfig<T> | undefined;
+>config : LocaleConfig<T>
+>       : ^^^^^^^^^^^^^^^
+
+    name?: string;
+>name : string
+>     : ^^^^^^
+}
+
+export const getLocales = <T extends LocaleData>({
+>getLocales : <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config: userLocalesConfig, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
+>           : ^ ^^^^^^^^^          ^^                                                                        ^^                    ^^^^^                      
+><T extends LocaleData>({    app,    name,    default: defaultLocalesConfig,    config: userLocalesConfig = {},}: GetLocalesOptions<T>): ConvertLocaleConfig<T> => {    return defaultLocalesConfig;} : <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config: userLocalesConfig, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
+>                                                                                                                                                                                                     : ^ ^^^^^^^^^          ^^                                                                        ^^                    ^^^^^                      
+
+    app,
+>app : unknown
+>    : ^^^^^^^
+
+    name,
+>name : string
+>     : ^^^^^^
+
+    default: defaultLocalesConfig,
+>default : any
+>        : ^^^
+>defaultLocalesConfig : ConvertLocaleConfig<T>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
+
+    config: userLocalesConfig = {},
+>config : any
+>       : ^^^
+>userLocalesConfig : LocaleConfig<T>
+>                  : ^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+}: GetLocalesOptions<T>): ConvertLocaleConfig<T> => {
+    return defaultLocalesConfig;
+>defaultLocalesConfig : ConvertLocaleConfig<T>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
+
+};
+

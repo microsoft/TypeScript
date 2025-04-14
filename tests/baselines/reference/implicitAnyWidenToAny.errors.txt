@@ -1,7 +1,7 @@
-tests/cases/compiler/implicitAnyWidenToAny.ts(4,5): error TS7005: Variable 'widenArray' implicitly has an 'any[]' type.
+implicitAnyWidenToAny.ts(4,5): error TS7005: Variable 'widenArray' implicitly has an 'any[]' type.
 
 
-==== tests/cases/compiler/implicitAnyWidenToAny.ts (1 errors) ====
+==== implicitAnyWidenToAny.ts (1 errors) ====
     // these should be errors
     var x = null;                        // error at "x"
     var x1 = undefined;		             // error at "x1"

@@ -1,222 +1,367 @@
-=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts] ////
+
+=== decrementOperatorWithUnsupportedBooleanType.ts ===
 // -- operator on boolean type
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 function foo(): boolean { return true; }
 >foo : () => boolean
+>    : ^^^^^^       
 >true : true
+>     : ^^^^
 
 class A {
 >A : A
+>  : ^
 
     public a: boolean;
 >a : boolean
+>  : ^^^^^^^
 
     static foo() { return true; }
 >foo : () => boolean
+>    : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var n: boolean;
 >n : boolean
+>  : ^^^^^^^
 }
 
 var objA = new A();
 >objA : A
+>     : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 // boolean type var
 var ResultIsNumber1 = --BOOLEAN;
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >--BOOLEAN : number
+>          : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var ResultIsNumber2 = BOOLEAN--;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >BOOLEAN-- : number
+>          : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 // boolean type literal
 var ResultIsNumber3 = --true;
 >ResultIsNumber3 : number
+>                : ^^^^^^
 >--true : number
+>       : ^^^^^^
 >true : true
+>     : ^^^^
 
 var ResultIsNumber4 = --{ x: true, y: false };
 >ResultIsNumber4 : number
+>                : ^^^^^^
 >--{ x: true, y: false } : number
+>                        : ^^^^^^
 >{ x: true, y: false } : { x: boolean; y: boolean; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >y : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var ResultIsNumber5 = --{ x: true, y: (n: boolean) => { return n; } };
 >ResultIsNumber5 : number
+>                : ^^^^^^
 >--{ x: true, y: (n: boolean) => { return n; } } : number
+>                                                : ^^^^^^
 >{ x: true, y: (n: boolean) => { return n; } } : { x: boolean; y: (n: boolean) => boolean; }
+>                                              : ^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >y : (n: boolean) => boolean
+>  : ^ ^^       ^^^^^^^^^^^^
 >(n: boolean) => { return n; } : (n: boolean) => boolean
+>                              : ^ ^^       ^^^^^^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 
 var ResultIsNumber6 = true--;
 >ResultIsNumber6 : number
+>                : ^^^^^^
 >true-- : number
+>       : ^^^^^^
 >true : true
+>     : ^^^^
 
 var ResultIsNumber7 = { x: true, y: false }--;
 >ResultIsNumber7 : number
+>                : ^^^^^^
 >{ x: true, y: false }-- : number
+>                        : ^^^^^^
 >{ x: true, y: false } : { x: boolean; y: boolean; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >y : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var ResultIsNumber8 = { x: true, y: (n: boolean) => { return n; } }--;
 >ResultIsNumber8 : number
+>                : ^^^^^^
 >{ x: true, y: (n: boolean) => { return n; } }-- : number
+>                                                : ^^^^^^
 >{ x: true, y: (n: boolean) => { return n; } } : { x: boolean; y: (n: boolean) => boolean; }
+>                                              : ^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >y : (n: boolean) => boolean
+>  : ^ ^^       ^^^^^^^^^^^^
 >(n: boolean) => { return n; } : (n: boolean) => boolean
+>                              : ^ ^^       ^^^^^^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 
 // boolean type expressions
 var ResultIsNumber9 = --objA.a;
 >ResultIsNumber9 : number
+>                : ^^^^^^
 >--objA.a : number
+>         : ^^^^^^
 >objA.a : boolean
+>       : ^^^^^^^
 >objA : A
+>     : ^
 >a : boolean
+>  : ^^^^^^^
 
 var ResultIsNumber10 = --M.n;
 >ResultIsNumber10 : number
+>                 : ^^^^^^
 >--M.n : number
+>      : ^^^^^^
 >M.n : boolean
+>    : ^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 
 var ResultIsNumber11 = --foo();
 >ResultIsNumber11 : number
+>                 : ^^^^^^
 >--foo() : number
+>        : ^^^^^^
 >foo() : boolean
+>      : ^^^^^^^
 >foo : () => boolean
+>    : ^^^^^^       
 
 var ResultIsNumber12 = --A.foo();
 >ResultIsNumber12 : number
+>                 : ^^^^^^
 >--A.foo() : number
+>          : ^^^^^^
 >A.foo() : boolean
+>        : ^^^^^^^
 >A.foo : () => boolean
+>      : ^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => boolean
+>    : ^^^^^^^^^^^^^
 
 var ResultIsNumber13 = foo()--;
 >ResultIsNumber13 : number
+>                 : ^^^^^^
 >foo()-- : number
+>        : ^^^^^^
 >foo() : boolean
+>      : ^^^^^^^
 >foo : () => boolean
+>    : ^^^^^^       
 
 var ResultIsNumber14 = A.foo()--;
 >ResultIsNumber14 : number
+>                 : ^^^^^^
 >A.foo()-- : number
+>          : ^^^^^^
 >A.foo() : boolean
+>        : ^^^^^^^
 >A.foo : () => boolean
+>      : ^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => boolean
+>    : ^^^^^^^^^^^^^
 
 var ResultIsNumber15 = objA.a--;
 >ResultIsNumber15 : number
+>                 : ^^^^^^
 >objA.a-- : number
+>         : ^^^^^^
 >objA.a : boolean
+>       : ^^^^^^^
 >objA : A
+>     : ^
 >a : boolean
+>  : ^^^^^^^
 
 var ResultIsNumber16 = M.n--;
 >ResultIsNumber16 : number
+>                 : ^^^^^^
 >M.n-- : number
+>      : ^^^^^^
 >M.n : boolean
+>    : ^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 
 // miss assignment operators
 --true;
 >--true : number
+>       : ^^^^^^
 >true : true
+>     : ^^^^
 
 --BOOLEAN;
 >--BOOLEAN : number
+>          : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 --foo();
 >--foo() : number
+>        : ^^^^^^
 >foo() : boolean
+>      : ^^^^^^^
 >foo : () => boolean
+>    : ^^^^^^       
 
 --objA.a;
 >--objA.a : number
+>         : ^^^^^^
 >objA.a : boolean
+>       : ^^^^^^^
 >objA : A
+>     : ^
 >a : boolean
+>  : ^^^^^^^
 
 --M.n;
 >--M.n : number
+>      : ^^^^^^
 >M.n : boolean
+>    : ^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 
 --objA.a, M.n;
 >--objA.a, M.n : boolean
+>              : ^^^^^^^
 >--objA.a : number
+>         : ^^^^^^
 >objA.a : boolean
+>       : ^^^^^^^
 >objA : A
+>     : ^
 >a : boolean
+>  : ^^^^^^^
 >M.n : boolean
+>    : ^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 
 true--;
 >true-- : number
+>       : ^^^^^^
 >true : true
+>     : ^^^^
 
 BOOLEAN--;
 >BOOLEAN-- : number
+>          : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 foo()--;
 >foo()-- : number
+>        : ^^^^^^
 >foo() : boolean
+>      : ^^^^^^^
 >foo : () => boolean
+>    : ^^^^^^       
 
 objA.a--;
 >objA.a-- : number
+>         : ^^^^^^
 >objA.a : boolean
+>       : ^^^^^^^
 >objA : A
+>     : ^
 >a : boolean
+>  : ^^^^^^^
 
 M.n--;
 >M.n-- : number
+>      : ^^^^^^
 >M.n : boolean
+>    : ^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 
 objA.a--, M.n--;
 >objA.a--, M.n-- : number
+>                : ^^^^^^
 >objA.a-- : number
+>         : ^^^^^^
 >objA.a : boolean
+>       : ^^^^^^^
 >objA : A
+>     : ^
 >a : boolean
+>  : ^^^^^^^
 >M.n-- : number
+>      : ^^^^^^
 >M.n : boolean
+>    : ^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : boolean
+>  : ^^^^^^^
 

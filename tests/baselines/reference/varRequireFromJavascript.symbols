@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/varRequireFromJavascript.ts] ////
+
+=== use.js ===
 var ex = require('./ex')
 >ex : Symbol(ex, Decl(use.js, 0, 3))
 >require : Symbol(require)
@@ -31,7 +33,7 @@ function f(wrap) {
 >n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
 }
 
-=== tests/cases/conformance/salsa/ex.js ===
+=== ex.js ===
 export class Crunch {
 >Crunch : Symbol(Crunch, Decl(ex.js, 0, 0))
 

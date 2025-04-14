@@ -1,7 +1,7 @@
-tests/cases/compiler/incompatibleExports2.ts(4,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
+incompatibleExports2.ts(4,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-==== tests/cases/compiler/incompatibleExports2.ts (1 errors) ====
+==== incompatibleExports2.ts (1 errors) ====
     declare module "foo" { 
         export interface x { a: string } 
         interface y { a: Date }

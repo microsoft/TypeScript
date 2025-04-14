@@ -1,12 +1,20 @@
-=== tests/cases/conformance/jsdoc/bug27327.js ===
+//// [tests/cases/conformance/jsdoc/typeTagPrototypeAssignment.ts] ////
+
+=== bug27327.js ===
 function C() {
 >C : typeof C
+>  : ^^^^^^^^
 }
 /** @type {string} */
 C.prototype = 12
 >C.prototype = 12 : 12
+>                 : ^^
 >C.prototype : string
+>            : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : string
+>          : ^^^^^^
 >12 : 12
+>   : ^^
 

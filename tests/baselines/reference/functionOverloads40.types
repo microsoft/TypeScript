@@ -1,26 +1,45 @@
-=== tests/cases/compiler/functionOverloads40.ts ===
+//// [tests/cases/compiler/functionOverloads40.ts] ////
+
+=== functionOverloads40.ts ===
 function foo(bar:{a:number;}[]):string;
->foo : { (bar: {    a: number;}[]): string; (bar: { a: boolean; }[]): number; }
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>    : ^^^   ^^                ^^^      ^^^   ^^                 ^^^      ^^^
 >bar : { a: number; }[]
+>    : ^^^^^      ^^^^^
 >a : number
+>  : ^^^^^^
 
 function foo(bar:{a:boolean;}[]):number;
->foo : { (bar: { a: number; }[]): string; (bar: {    a: boolean;}[]): number; }
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>    : ^^^   ^^                ^^^      ^^^   ^^                 ^^^      ^^^
 >bar : { a: boolean; }[]
+>    : ^^^^^       ^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 function foo(bar:{a:any;}[]):any{ return bar }
 >foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>    : ^^^   ^^                ^^^      ^^^   ^^                 ^^^      ^^^
 >bar : { a: any; }[]
+>    : ^^^^^   ^^^^^
 >a : any
+>  : ^^^
 >bar : { a: any; }[]
+>    : ^^^^^   ^^^^^
 
 var x = foo([{a:'bar'}]);
 >x : never
+>  : ^^^^^
 >foo([{a:'bar'}]) : never
+>                 : ^^^^^
 >foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>    : ^^^   ^^                ^^^      ^^^   ^^                 ^^^      ^^^
 >[{a:'bar'}] : { a: string; }[]
+>            : ^^^^^^^^^^^^^^^^
 >{a:'bar'} : { a: string; }
+>          : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 

@@ -1,34 +1,54 @@
-=== tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts ===
+//// [tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts] ////
+
+=== reverseMappedTypeContextualTypeNotCircular.ts ===
 type Selector<S, R> = (state: S) => R;
 >Selector : Selector<S, R>
+>         : ^^^^^^^^^^^^^^
 >state : S
+>      : ^
 
 declare function createStructuredSelector<S, T>(
 >createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
+>                         : ^ ^^ ^^         ^^                                      ^^^^^              
 
   selectors: {[K in keyof T]: Selector<S, T[K]>},
 >selectors : { [K in keyof T]: Selector<S, T[K]>; }
+>          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ): Selector<S, T>;
 
 const editable = () => ({});
 >editable : () => {}
+>         : ^^^^^^^^
 >() => ({}) : () => {}
+>           : ^^^^^^^^
 >({}) : {}
+>     : ^^
 >{} : {}
+>   : ^^
 
 const mapStateToProps = createStructuredSelector({
 >mapStateToProps : Selector<unknown, { editable: {}; }>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createStructuredSelector({  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error}) : Selector<unknown, { editable: {}; }>
+>                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
+>                         : ^ ^^ ^^         ^^                                      ^^^^^              
 >{  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error} : { editable: (state: any, props: any) => {}; }
+>                                                                                                                                                                                     : ^^^^^^^^^^^^^     ^^   ^^     ^^   ^^^^^^^^^^
 
   editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
 >editable : (state: any, props: any) => {}
+>         : ^     ^^   ^^     ^^   ^^^^^^^
 >(state: any, props: any) => editable() : (state: any, props: any) => {}
+>                                       : ^     ^^   ^^     ^^   ^^^^^^^
 >state : any
+>      : ^^^
 >props : any
+>      : ^^^
 >editable() : {}
+>           : ^^
 >editable : () => {}
+>         : ^^^^^^^^
 
 });

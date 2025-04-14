@@ -1,32 +1,44 @@
-=== tests/cases/compiler/errorsWithInvokablesInUnions01.ts ===
+//// [tests/cases/compiler/errorsWithInvokablesInUnions01.ts] ////
+
+=== errorsWithInvokablesInUnions01.ts ===
 interface ConstructableA {
   new(): { somePropA: any };
 >somePropA : any
+>          : ^^^
 }
 
 interface IDirectiveLinkFn<TScope> {
     (scope: TScope): void;
 >scope : TScope
+>      : ^^^^^^
 }
 
 interface IDirectivePrePost<TScope> {
     pre?: IDirectiveLinkFn<TScope>;
 >pre : IDirectiveLinkFn<TScope>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     post?: IDirectiveLinkFn<TScope>;
 >post : IDirectiveLinkFn<TScope>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export let blah: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = (x: string) => {}
 >blah : ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x: string) => {} : (x: string) => void
+>                  : ^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = class {
 >ctor : ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >class {    someUnaccountedProp: any;} : typeof ctor
+>                                      : ^^^^^^^^^^^
 
     someUnaccountedProp: any;
 >someUnaccountedProp : any
+>                    : ^^^
 }
 

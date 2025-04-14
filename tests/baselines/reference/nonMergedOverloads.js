@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonMergedOverloads.ts] ////
+
 //// [nonMergedOverloads.ts]
 var f = 10;
 
@@ -7,9 +9,8 @@ export function f() {
 
 //// [nonMergedOverloads.js]
 "use strict";
-exports.__esModule = true;
-exports.f = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = f;
 var f = 10;
 function f() {
 }
-exports.f = f;

@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js(1,1): error TS2304: Cannot find name 'exports'.
-tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js(1,9): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js(3,13): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js(6,3): error TS2339: Property '#foo' does not exist on type 'typeof B'.
-tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js(11,14): error TS2339: Property '#foo' does not exist on type 'C'.
+privateNameJsBadAssignment.js(1,1): error TS2304: Cannot find name 'exports'.
+privateNameJsBadAssignment.js(1,9): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsBadAssignment.js(3,13): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsBadAssignment.js(6,3): error TS2339: Property '#foo' does not exist on type 'typeof B'.
+privateNameJsBadAssignment.js(11,14): error TS2339: Property '#foo' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js (5 errors) ====
+==== privateNameJsBadAssignment.js (5 errors) ====
     exports.#nope = 1;           // Error (outside class body)
     ~~~~~~~
 !!! error TS2304: Cannot find name 'exports'.

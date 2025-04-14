@@ -1,4 +1,6 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInUMD2.ts] ////
+
+=== 0.ts ===
 export class B {
 >B : Symbol(B, Decl(0.ts, 0, 0))
 
@@ -6,7 +8,7 @@ export class B {
 >print : Symbol(B.print, Decl(0.ts, 0, 16))
 }
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 // We use Promise<any> for now as there is no way to specify shape of module object
 function foo(x: Promise<any>) {
 >foo : Symbol(foo, Decl(2.ts, 0, 0))
@@ -31,5 +33,5 @@ function foo(x: Promise<any>) {
 
 foo(import("./0"));
 >foo : Symbol(foo, Decl(2.ts, 0, 0))
->"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 

@@ -1,54 +1,80 @@
-=== tests/cases/compiler/errorElaboration.ts ===
+//// [tests/cases/compiler/errorElaboration.ts] ////
+
+=== errorElaboration.ts ===
 // Repro for #5712
 
 interface Ref<T> {
     prop: T;
 >prop : T
+>     : ^
 }
 interface Container<T> {
     m1: Container<Ref<T>>;
 >m1 : Container<Ref<T>>
+>   : ^^^^^^^^^^^^^^^^^
 
     m2: T;
 >m2 : T
+>   : ^
 }
 declare function foo(x: () => Container<Ref<number>>): void;
 >foo : (x: () => Container<Ref<number>>) => void
+>    : ^ ^^                            ^^^^^    
 >x : () => Container<Ref<number>>
+>  : ^^^^^^                      
 
 let a: () => Container<Ref<string>>;
 >a : () => Container<Ref<string>>
+>  : ^^^^^^                      
 
 foo(a);
 >foo(a) : void
+>       : ^^^^
 >foo : (x: () => Container<Ref<number>>) => void
+>    : ^ ^^                            ^^^^^    
 >a : () => Container<Ref<string>>
+>  : ^^^^^^                      
 
 // Repro for #25498
 
 function test(): {[A in "foo"]: A} {
->test : () => { foo: "foo"; }
+>test : () => { [A in "foo"]: A; }
+>     : ^^^^^^                    
 
   return {foo: "bar"};
 >{foo: "bar"} : { foo: "bar"; }
+>             : ^^^^^^^^^^^^^^^
 >foo : "bar"
+>    : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 }
 
 // Repro for #32358
 
 const foo = { bar: 'a' };
 >foo : { bar: string; }
+>    : ^^^^^^^^^^^^^^^^
 >{ bar: 'a' } : { bar: string; }
+>             : ^^^^^^^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
 const x = ({ [foo.bar]: c }) => undefined;
 >x : ({ [foo.bar]: c }: {}) => any
+>  : ^                ^^^^^^^^^^^^
 >({ [foo.bar]: c }) => undefined : ({ [foo.bar]: c }: {}) => any
+>                                : ^                ^^^^^^^^^^^^
 >foo.bar : any
+>        : ^^^
 >foo : (x: () => Container<Ref<number>>) => void
+>    : ^ ^^                            ^^^^^    
 >bar : any
+>    : ^^^
 >c : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

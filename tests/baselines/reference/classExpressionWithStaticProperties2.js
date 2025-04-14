@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExpressionWithStaticProperties2.ts] ////
+
 //// [classExpressionWithStaticProperties2.ts]
 var v = class C {
     static a = 1;

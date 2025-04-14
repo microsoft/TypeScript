@@ -1,0 +1,46 @@
+/foo/tsconfig.json(3,19): error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
+/foo/tsconfig.json(4,9): error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+/foo/tsconfig.json(5,9): error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
+/foo/tsconfig.json(6,9): error TS5102: Option 'suppressExcessPropertyErrors' has been removed. Please remove it from your configuration.
+/foo/tsconfig.json(7,9): error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
+/foo/tsconfig.json(8,9): error TS5102: Option 'noStrictGenericChecks' has been removed. Please remove it from your configuration.
+/foo/tsconfig.json(9,9): error TS5102: Option 'charset' has been removed. Please remove it from your configuration.
+/foo/tsconfig.json(10,9): error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+  Use 'outFile' instead.
+
+
+==== /foo/tsconfig.json (8 errors) ====
+    {
+        "compilerOptions": {
+            "target": "ES3",
+                      ~~~~~
+!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
+            "noImplicitUseStrict": true,
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+            "keyofStringsOnly": true,
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
+            "suppressExcessPropertyErrors": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Option 'suppressExcessPropertyErrors' has been removed. Please remove it from your configuration.
+            "suppressImplicitAnyIndexErrors": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
+            "noStrictGenericChecks": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Option 'noStrictGenericChecks' has been removed. Please remove it from your configuration.
+            "charset": "utf8",
+            ~~~~~~~~~
+!!! error TS5102: Option 'charset' has been removed. Please remove it from your configuration.
+            "out": "dist.js",
+            ~~~~~
+!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'outFile' instead.
+            "ignoreDeprecations": "5.0"
+        }
+    }
+    
+==== /foo/a.ts (0 errors) ====
+    const a = 1;
+    

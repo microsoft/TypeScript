@@ -1,90 +1,138 @@
-=== tests/cases/compiler/discriminantsAndTypePredicates.ts ===
+//// [tests/cases/compiler/discriminantsAndTypePredicates.ts] ////
+
+=== discriminantsAndTypePredicates.ts ===
 // Repro from #10145
 
 interface A { type: 'A' }
 >type : "A"
+>     : ^^^
 
 interface B { type: 'B' }
 >type : "B"
+>     : ^^^
 
 function isA(x: A | B): x is A { return x.type === 'A'; }
 >isA : (x: A | B) => x is A
+>    : ^ ^^     ^^^^^      
 >x : A | B
+>  : ^^^^^
 >x.type === 'A' : boolean
+>               : ^^^^^^^
 >x.type : "A" | "B"
+>       : ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 >type : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
 function isB(x: A | B): x is B { return x.type === 'B'; }
 >isB : (x: A | B) => x is B
+>    : ^ ^^     ^^^^^      
 >x : A | B
+>  : ^^^^^
 >x.type === 'B' : boolean
+>               : ^^^^^^^
 >x.type : "A" | "B"
+>       : ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 >type : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
 function foo1(x: A | B): any {
 >foo1 : (x: A | B) => any
+>     : ^ ^^     ^^^^^   
 >x : A | B
+>  : ^^^^^
 
     x;  // A | B
 >x : A | B
+>  : ^^^^^
 
     if (isA(x)) {
 >isA(x) : boolean
+>       : ^^^^^^^
 >isA : (x: A | B) => x is A
+>    : ^ ^^     ^^^^^      
 >x : A | B
+>  : ^^^^^
 
         return x;  // A
 >x : A
+>  : ^
     }
     x;  // B
 >x : B
+>  : ^
 
     if (isB(x)) {
 >isB(x) : boolean
+>       : ^^^^^^^
 >isB : (x: A | B) => x is B
+>    : ^ ^^     ^^^^^      
 >x : B
+>  : ^
 
         return x;  // B
 >x : B
+>  : ^
     }
     x;  // never
 >x : never
+>  : ^^^^^
 }
 
 function foo2(x: A | B): any {
 >foo2 : (x: A | B) => any
+>     : ^ ^^     ^^^^^   
 >x : A | B
+>  : ^^^^^
 
     x;  // A | B
 >x : A | B
+>  : ^^^^^
 
     if (x.type === 'A') {
 >x.type === 'A' : boolean
+>               : ^^^^^^^
 >x.type : "A" | "B"
+>       : ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 >type : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
         return x;  // A
 >x : A
+>  : ^
     }
     x;  // B
 >x : B
+>  : ^
 
     if (x.type === 'B') {
 >x.type === 'B' : boolean
+>               : ^^^^^^^
 >x.type : "B"
+>       : ^^^
 >x : B
+>  : ^
 >type : "B"
+>     : ^^^
 >'B' : "B"
+>    : ^^^
 
         return x;  // B
 >x : B
+>  : ^
     }
     x;  // never
 >x : never
+>  : ^^^^^
 }

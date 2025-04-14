@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conflictMarkerTrivia1.ts] ////
+
 //// [conflictMarkerTrivia1.ts]
 class C {
 <<<<<<< HEAD

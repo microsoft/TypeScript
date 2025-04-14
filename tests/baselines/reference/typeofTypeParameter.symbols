@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts] ////
+
+=== typeofTypeParameter.ts ===
 function f<T>(x: T): T {
 >f : Symbol(f, Decl(typeofTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(typeofTypeParameter.ts, 0, 11))

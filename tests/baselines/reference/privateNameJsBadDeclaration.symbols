@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameJsBadDeclaration.ts] ////
+
+=== privateNameJsPrototype.js ===
 function A() { }
 >A : Symbol(A, Decl(privateNameJsPrototype.js, 0, 0), Decl(privateNameJsPrototype.js, 0, 16))
 

@@ -1,15 +1,23 @@
+//// [tests/cases/compiler/compositeWithNodeModulesSourceFile.ts] ////
+
 === /foo/test.ts ===
 import myModule = require("myModule");
 >myModule : typeof myModule
+>         : ^^^^^^^^^^^^^^^
 
 new myModule.c();
 >new myModule.c() : myModule.c
+>                 : ^^^^^^^^^^
 >myModule.c : typeof myModule.c
+>           : ^^^^^^^^^^^^^^^^^
 >myModule : typeof myModule
+>         : ^^^^^^^^^^^^^^^
 >c : typeof myModule.c
+>  : ^^^^^^^^^^^^^^^^^
 
 
 === /foo/node_modules/myModule/index.ts ===
 export class c { }
 >c : c
+>  : ^
 

@@ -1,56 +1,88 @@
-=== tests/cases/compiler/enumBasics3.ts ===
+//// [tests/cases/compiler/enumBasics3.ts] ////
+
+=== enumBasics3.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
   export namespace N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export enum E1 {
 >E1 : E1
+>   : ^^
 
       a = 1,
->a : E1
+>a : E1.a
+>  : ^^^^
 >1 : 1
+>  : ^
 
       b = a.a, // should error
->b : E1
+>b : E1.b
+>  : ^^^^
 >a.a : any
->a : E1
+>    : ^^^
+>a : E1.a
+>  : ^^^^
 >a : any
+>  : ^^^
     }
   }
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
   export namespace N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export enum E2 {
 >E2 : E2
+>   : ^^
 
       b = M.N.E1.a,
->b : E2
->M.N.E1.a : E1
+>b : E2.b
+>  : ^^^^
+>M.N.E1.a : E1.a
+>         : ^^^^
 >M.N.E1 : typeof E1
+>       : ^^^^^^^^^
 >M.N : typeof N
+>    : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >E1 : typeof E1
->a : E1
+>   : ^^^^^^^^^
+>a : E1.a
+>  : ^^^^
 
       c = M.N.E1.a.a, // should error
->c : E2
+>c : E2.c
+>  : ^^^^
 >M.N.E1.a.a : any
->M.N.E1.a : E1
+>           : ^^^
+>M.N.E1.a : E1.a
+>         : ^^^^
 >M.N.E1 : typeof E1
+>       : ^^^^^^^^^
 >M.N : typeof N
+>    : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >E1 : typeof E1
->a : E1
+>   : ^^^^^^^^^
+>a : E1.a
+>  : ^^^^
 >a : any
+>  : ^^^
     }
   }
 }

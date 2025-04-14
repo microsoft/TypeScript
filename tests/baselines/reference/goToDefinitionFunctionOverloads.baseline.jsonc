@@ -1,0 +1,95 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionOverloads.ts ===
+// <|function [|functionOverload|](value: number);|>
+// function functionOverload(value: string);
+// function functionOverload() {}
+// 
+// /*GOTO DEF*/functionOverload(123);
+// functionOverload("123");
+// functionOverload({});
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "functionOverload",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionOverloads.ts ===
+// function functionOverload(value: number);
+// <|function [|functionOverload|](value: string);|>
+// function functionOverload() {}
+// 
+// functionOverload(123);
+// /*GOTO DEF*/functionOverload("123");
+// functionOverload({});
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "functionOverload",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionOverloads.ts ===
+// <|function [|functionOverload|](value: number);|>
+// function functionOverload(value: string);
+// function functionOverload() {}
+// 
+// functionOverload(123);
+// functionOverload("123");
+// /*GOTO DEF*/functionOverload({});
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "functionOverload",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionOverloads.ts ===
+// function /*GOTO DEF*/functionOverload(value: number);
+// function functionOverload(value: string);
+// <|function [|functionOverload|]() {}|>
+// 
+// functionOverload(123);
+// functionOverload("123");
+// functionOverload({});
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "functionOverload",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]

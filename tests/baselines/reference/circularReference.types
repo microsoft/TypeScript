@@ -1,124 +1,203 @@
-=== tests/cases/conformance/externalModules/foo2.ts ===
+//// [tests/cases/conformance/externalModules/circularReference.ts] ////
+
+=== foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 
 export module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
 	export class C1 {
 >C1 : C1
+>   : ^^
 
 		m1: foo1.M1.C1;
 >m1 : foo1.M1.C1
+>   : ^^^^^^^^^^
 >foo1 : any
+>     : ^^^
 >M1 : any
+>   : ^^^
 
 		y: number
 >y : number
+>  : ^^^^^^
 
 		constructor(){
 			this.m1 = new foo1.M1.C1();
 >this.m1 = new foo1.M1.C1() : foo1.M1.C1
+>                           : ^^^^^^^^^^
 >this.m1 : foo1.M1.C1
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m1 : foo1.M1.C1
+>   : ^^^^^^^^^^
 >new foo1.M1.C1() : foo1.M1.C1
+>                 : ^^^^^^^^^^
 >foo1.M1.C1 : typeof foo1.M1.C1
+>           : ^^^^^^^^^^^^^^^^^
 >foo1.M1 : typeof foo1.M1
+>        : ^^^^^^^^^^^^^^
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 >M1 : typeof foo1.M1
+>   : ^^^^^^^^^^^^^^
 >C1 : typeof foo1.M1.C1
+>   : ^^^^^^^^^^^^^^^^^
 
 			this.m1.y = 10; // Error
 >this.m1.y = 10 : 10
+>               : ^^
 >this.m1.y : any
+>          : ^^^
 >this.m1 : foo1.M1.C1
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m1 : foo1.M1.C1
+>   : ^^^^^^^^^^
 >y : any
+>  : ^^^
 >10 : 10
+>   : ^^
 
 			this.m1.x = 20; // OK
 >this.m1.x = 20 : 20
+>               : ^^
 >this.m1.x : number
+>          : ^^^^^^
 >this.m1 : foo1.M1.C1
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m1 : foo1.M1.C1
+>   : ^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
 			var tmp = new M1.C1();
 >tmp : C1
+>    : ^^
 >new M1.C1() : C1
+>            : ^^
 >M1.C1 : typeof C1
+>      : ^^^^^^^^^
 >M1 : typeof M1
+>   : ^^^^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
 			tmp.y = 10; // OK
 >tmp.y = 10 : 10
+>           : ^^
 >tmp.y : number
+>      : ^^^^^^
 >tmp : C1
+>    : ^^
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 			tmp.x = 20; // Error			
 >tmp.x = 20 : 20
+>           : ^^
 >tmp.x : any
+>      : ^^^
 >tmp : C1
+>    : ^^
 >x : any
+>  : ^^^
 >20 : 20
+>   : ^^
 		}
 	}
 }
 
-=== tests/cases/conformance/externalModules/foo1.ts ===
+=== foo1.ts ===
 import foo2 = require('./foo2');
 >foo2 : typeof foo2
+>     : ^^^^^^^^^^^
 
 export module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
 	export class C1 {
 >C1 : C1
+>   : ^^
 
 		m1: foo2.M1.C1;
 >m1 : foo2.M1.C1
+>   : ^^^^^^^^^^
 >foo2 : any
+>     : ^^^
 >M1 : any
+>   : ^^^
 
 		x: number;
 >x : number
+>  : ^^^^^^
 
 		constructor(){
 			this.m1 = new foo2.M1.C1();
 >this.m1 = new foo2.M1.C1() : foo2.M1.C1
+>                           : ^^^^^^^^^^
 >this.m1 : foo2.M1.C1
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m1 : foo2.M1.C1
+>   : ^^^^^^^^^^
 >new foo2.M1.C1() : foo2.M1.C1
+>                 : ^^^^^^^^^^
 >foo2.M1.C1 : typeof foo2.M1.C1
+>           : ^^^^^^^^^^^^^^^^^
 >foo2.M1 : typeof foo2.M1
+>        : ^^^^^^^^^^^^^^
 >foo2 : typeof foo2
+>     : ^^^^^^^^^^^
 >M1 : typeof foo2.M1
+>   : ^^^^^^^^^^^^^^
 >C1 : typeof foo2.M1.C1
+>   : ^^^^^^^^^^^^^^^^^
 
 			this.m1.y = 10; // OK
 >this.m1.y = 10 : 10
+>               : ^^
 >this.m1.y : number
+>          : ^^^^^^
 >this.m1 : foo2.M1.C1
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m1 : foo2.M1.C1
+>   : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 			this.m1.x = 20; // Error
 >this.m1.x = 20 : 20
+>               : ^^
 >this.m1.x : any
+>          : ^^^
 >this.m1 : foo2.M1.C1
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m1 : foo2.M1.C1
+>   : ^^^^^^^^^^
 >x : any
+>  : ^^^
 >20 : 20
+>   : ^^
 		}
 	}
 }

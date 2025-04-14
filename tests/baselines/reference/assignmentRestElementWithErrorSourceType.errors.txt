@@ -1,12 +1,12 @@
-tests/cases/compiler/assignmentRestElementWithErrorSourceType.ts(2,5): error TS2304: Cannot find name 'c'.
-tests/cases/compiler/assignmentRestElementWithErrorSourceType.ts(2,10): error TS2552: Cannot find name 'tupel'. Did you mean 'tuple'?
+assignmentRestElementWithErrorSourceType.ts(2,5): error TS2304: Cannot find name 'c'.
+assignmentRestElementWithErrorSourceType.ts(2,10): error TS2552: Cannot find name 'tupel'. Did you mean 'tuple'?
 
 
-==== tests/cases/compiler/assignmentRestElementWithErrorSourceType.ts (2 errors) ====
+==== assignmentRestElementWithErrorSourceType.ts (2 errors) ====
     var tuple: [string, number];
     [...c] = tupel; // intentionally misspelled
         ~
 !!! error TS2304: Cannot find name 'c'.
              ~~~~~
 !!! error TS2552: Cannot find name 'tupel'. Did you mean 'tuple'?
-!!! related TS2728 tests/cases/compiler/assignmentRestElementWithErrorSourceType.ts:1:5: 'tuple' is declared here.
+!!! related TS2728 assignmentRestElementWithErrorSourceType.ts:1:5: 'tuple' is declared here.

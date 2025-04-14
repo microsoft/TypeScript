@@ -1,9 +1,9 @@
-tests/cases/compiler/typecheckCommaExpression.ts(1,2): error TS2304: Cannot find name 'a'.
-tests/cases/compiler/typecheckCommaExpression.ts(1,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/typecheckCommaExpression.ts(1,5): error TS2304: Cannot find name 'b'.
+typecheckCommaExpression.ts(1,2): error TS2304: Cannot find name 'a'.
+typecheckCommaExpression.ts(1,2): error TS2695: Left side of comma operator is unused and has no side effects.
+typecheckCommaExpression.ts(1,5): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/compiler/typecheckCommaExpression.ts (3 errors) ====
+==== typecheckCommaExpression.ts (3 errors) ====
     (a, b)
      ~
 !!! error TS2304: Cannot find name 'a'.

@@ -1,79 +1,118 @@
-=== tests/cases/compiler/class.ts ===
+//// [tests/cases/compiler/declarationEmitStringEnumUsedInNonlocalSpread.ts] ////
+
+=== class.ts ===
 export const enum TestEnum {
 >TestEnum : TestEnum
+>         : ^^^^^^^^
 
     Test1 = '123123',
 >Test1 : TestEnum.Test1
+>      : ^^^^^^^^^^^^^^
 >'123123' : "123123"
+>         : ^^^^^^^^
 
     Test2 = '12312312312',
 >Test2 : TestEnum.Test2
+>      : ^^^^^^^^^^^^^^
 >'12312312312' : "12312312312"
+>              : ^^^^^^^^^^^^^
 }
 
 export interface ITest {
     [TestEnum.Test1]: string;
 >[TestEnum.Test1] : string
+>                 : ^^^^^^
 >TestEnum.Test1 : TestEnum.Test1
+>               : ^^^^^^^^^^^^^^
 >TestEnum : typeof TestEnum
+>         : ^^^^^^^^^^^^^^^
 >Test1 : TestEnum.Test1
+>      : ^^^^^^^^^^^^^^
 
     [TestEnum.Test2]: string;
 >[TestEnum.Test2] : string
+>                 : ^^^^^^
 >TestEnum.Test2 : TestEnum.Test2
+>               : ^^^^^^^^^^^^^^
 >TestEnum : typeof TestEnum
+>         : ^^^^^^^^^^^^^^^
 >Test2 : TestEnum.Test2
+>      : ^^^^^^^^^^^^^^
 }
 
 export class A {
 >A : A
+>  : ^
 
     getA(): ITest {
 >getA : () => ITest
+>     : ^^^^^^     
 
         return {
->{            [TestEnum.Test1]: '123',            [TestEnum.Test2]: '123',        } : { 123123: string; 12312312312: string; }
+>{            [TestEnum.Test1]: '123',            [TestEnum.Test2]: '123',        } : { "123123": string; "12312312312": string; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             [TestEnum.Test1]: '123',
 >[TestEnum.Test1] : string
+>                 : ^^^^^^
 >TestEnum.Test1 : TestEnum.Test1
+>               : ^^^^^^^^^^^^^^
 >TestEnum : typeof TestEnum
+>         : ^^^^^^^^^^^^^^^
 >Test1 : TestEnum.Test1
+>      : ^^^^^^^^^^^^^^
 >'123' : "123"
+>      : ^^^^^
 
             [TestEnum.Test2]: '123',
 >[TestEnum.Test2] : string
+>                 : ^^^^^^
 >TestEnum.Test2 : TestEnum.Test2
+>               : ^^^^^^^^^^^^^^
 >TestEnum : typeof TestEnum
+>         : ^^^^^^^^^^^^^^^
 >Test2 : TestEnum.Test2
+>      : ^^^^^^^^^^^^^^
 >'123' : "123"
+>      : ^^^^^
 
         };
     }
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { A } from './class';
 >A : typeof A
+>  : ^^^^^^^^
 
 export class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     getA() { // TS4053 error
->getA : () => { a: string; 123123: string; 12312312312: string; }
+>getA : () => { a: string; "123123": string; "12312312312": string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^
 
         return {
->{            ...super.getA(),            a: '123',        } : { a: string; 123123: string; 12312312312: string; }
+>{            ...super.getA(),            a: '123',        } : { a: string; "123123": string; "12312312312": string; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^
 
             ...super.getA(),
->super.getA() : import("tests/cases/compiler/class").ITest
->super.getA : () => import("tests/cases/compiler/class").ITest
+>super.getA() : import("class").ITest
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>super.getA : () => import("class").ITest
+>           : ^^^^^^       ^^^^^^^  ^^^^^
 >super : A
->getA : () => import("tests/cases/compiler/class").ITest
+>      : ^
+>getA : () => import("class").ITest
+>     : ^^^^^^       ^^^^^^^  ^^^^^
 
             a: '123',
 >a : string
+>  : ^^^^^^
 >'123' : "123"
+>      : ^^^^^
 
         };
     }

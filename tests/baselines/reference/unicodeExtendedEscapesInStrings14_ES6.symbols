@@ -1,5 +1,0 @@
-=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings14_ES6.ts ===
-// Shouldn't work, negatives are not allowed.
-var x = "\u{-DDDD}";
->x : Symbol(x, Decl(unicodeExtendedEscapesInStrings14_ES6.ts, 1, 3))
-

@@ -1,17 +1,33 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts] ////
+
+=== parserCommaInTypeMemberList2.ts ===
 var s = $.extend< { workItem: any }, { workItem: any, width: string }>({ workItem: this._workItem }, {});
 >s : any
+>  : ^^^
 >$.extend< { workItem: any }, { workItem: any, width: string }>({ workItem: this._workItem }, {}) : any
+>                                                                                                 : ^^^
 >$.extend : any
+>         : ^^^
 >$ : any
+>  : ^^^
 >extend : any
+>       : ^^^
 >workItem : any
+>         : ^^^
 >workItem : any
+>         : ^^^
 >width : string
+>      : ^^^^^^
 >{ workItem: this._workItem } : { workItem: any; }
+>                             : ^^^^^^^^^^^^^^^^^^
 >workItem : any
+>         : ^^^
 >this._workItem : any
+>               : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >_workItem : any
+>          : ^^^
 >{} : {}
+>   : ^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/requiredInitializedParameter2.ts ===
+//// [tests/cases/compiler/requiredInitializedParameter2.ts] ////
+
+=== requiredInitializedParameter2.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(requiredInitializedParameter2.ts, 0, 0))
 

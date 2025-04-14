@@ -16,8 +16,8 @@ import("./a");
 define("b", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    function foo() { new a_1.default(); }
     exports.default = foo;
+    function foo() { new a_1.default(); }
     // https://github.com/microsoft/TypeScript/issues/37429
     new Promise((resolve_1, reject_1) => { require(["a"], resolve_1, reject_1); });
 });

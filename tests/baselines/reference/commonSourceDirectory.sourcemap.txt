@@ -9,14 +9,14 @@ emittedFile:/app/bin/index.js
 sourceFile:index.ts
 -------------------------------------------------------------------
 >>>"use strict";
->>>exports.__esModule = true;
->>>/// <reference path="../types/bar.d.ts"/>
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>/// <reference path="../types/bar.d.ts" preserve="true" />
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >/// <reference path="../types/bar.d.ts"/>
+2 >/// <reference path="../types/bar.d.ts" preserve="true" />
 1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(3, 42) Source(1, 42) + SourceIndex(0)
+2 >Emitted(3, 59) Source(1, 59) + SourceIndex(0)
 ---
 >>>var foo_1 = require("foo");
 1 >

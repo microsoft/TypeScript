@@ -1,144 +1,212 @@
-=== tests/cases/compiler/indexTypeCheck.ts ===
+//// [tests/cases/compiler/indexTypeCheck.ts] ////
+
+=== indexTypeCheck.ts ===
 interface Red {
 	[n:number]; // ok
 >n : number
+>  : ^^^^^^
 
 	[s:string]; // ok
 >s : string
+>  : ^^^^^^
 }
 
 interface Blue {
 	[n:number]: any; // ok
 >n : number
+>  : ^^^^^^
 
 	[s:string]: any; // ok
 >s : string
+>  : ^^^^^^
 }
 
 interface Yellow {
 	[n:number]: Red; // ok
 >n : number
+>  : ^^^^^^
 
 	[s:string]: Red; // ok
 >s : string
+>  : ^^^^^^
 }
 
 interface Orange {
 	[n:number]: number; // ok
 >n : number
+>  : ^^^^^^
 
 	[s:string]: string; // error
 >s : string
+>  : ^^^^^^
 }
 
 interface Green {
 	[n:number]: Orange; // error
 >n : number
+>  : ^^^^^^
 
 	[s:string]: Yellow; // ok
 >s : string
+>  : ^^^^^^
 }
 
 interface Cyan {
 	[n:number]: number; // error
 >n : number
+>  : ^^^^^^
 
 	[s:string]: string; // ok
 >s : string
+>  : ^^^^^^
 }
 
 interface Purple {
 	[n:number, s:string]; // error
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 }
 
 interface Magenta {
 	[p:Purple]; // error
 >p : Purple
+>  : ^^^^^^
 }
 
 var yellow: Yellow;
 >yellow : Yellow
+>       : ^^^^^^
 
 var blue: Blue;
 >blue : Blue
+>     : ^^^^
 
 var s = "some string";
 >s : string
+>  : ^^^^^^
 >"some string" : "some string"
+>              : ^^^^^^^^^^^^^
 
 yellow[5]; // ok
 >yellow[5] : Red
+>          : ^^^
 >yellow : Yellow
+>       : ^^^^^^
 >5 : 5
+>  : ^
 
 yellow["hue"]; // ok
 >yellow["hue"] : Red
+>              : ^^^
 >yellow : Yellow
+>       : ^^^^^^
 >"hue" : "hue"
+>      : ^^^^^
 
 yellow[<any>{}]; // ok
 >yellow[<any>{}] : Red
+>                : ^^^
 >yellow : Yellow
+>       : ^^^^^^
 ><any>{} : any
+>        : ^^^
 >{} : {}
+>   : ^^
 
 s[0]; // error
 >s[0] : string
+>     : ^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 s["s"]; // ok
 >s["s"] : any
+>       : ^^^
 >s : string
+>  : ^^^^^^
 >"s" : "s"
+>    : ^^^
 
 s[<any>{}]; // ok
 >s[<any>{}] : string
+>           : ^^^^^^
 >s : string
+>  : ^^^^^^
 ><any>{} : any
+>        : ^^^
 >{} : {}
+>   : ^^
 
 yellow[blue]; // error
 >yellow[blue] : any
+>             : ^^^
 >yellow : Yellow
+>       : ^^^^^^
 >blue : Blue
+>     : ^^^^
 
 var x:number[];
 >x : number[]
+>  : ^^^^^^^^
 
 x[0];
 >x[0] : number
+>     : ^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 
 class Benchmark {
 >Benchmark : Benchmark
+>          : ^^^^^^^^^
 
     public results: { [x:string]: any; } = <{ [x:string]: any; }>{};
 >results : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 ><{ [x:string]: any; }>{} : { [x: string]: any; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
     public addTimingFor(name: string, timing: number) {
 >addTimingFor : (name: string, timing: number) => void
+>             : ^    ^^      ^^      ^^      ^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >timing : number
+>       : ^^^^^^
 
         this.results[name] = this.results[name];
 >this.results[name] = this.results[name] : any
+>                                        : ^^^
 >this.results[name] : any
+>                   : ^^^
 >this.results : { [x: string]: any; }
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >results : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >this.results[name] : any
+>                   : ^^^
 >this.results : { [x: string]: any; }
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >results : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
     }
 }

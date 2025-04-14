@@ -1,5 +1,9 @@
-=== tests/cases/compiler/noImplicitUseStrict_umd.ts ===
+//// [tests/cases/compiler/noImplicitUseStrict_umd.ts] ////
+
+=== noImplicitUseStrict_umd.ts ===
 export var x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 

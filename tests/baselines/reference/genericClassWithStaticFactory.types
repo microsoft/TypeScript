@@ -1,557 +1,904 @@
-=== tests/cases/compiler/genericClassWithStaticFactory.ts ===
+//// [tests/cases/compiler/genericClassWithStaticFactory.ts] ////
+
+=== genericClassWithStaticFactory.ts ===
 module Editor {
 >Editor : typeof Editor
+>       : ^^^^^^^^^^^^^
 
     export class List<T> {
 >List : List<T>
+>     : ^^^^^^^
 
         public next: List<T>;
 >next : List<T>
+>     : ^^^^^^^
 
         public prev: List<T>;
 >prev : List<T>
+>     : ^^^^^^^
 
         private listFactory: ListFactory<T>;
 >listFactory : ListFactory<T>
+>            : ^^^^^^^^^^^^^^
 
         constructor(public isHead: boolean, public data: T) {
 >isHead : boolean
+>       : ^^^^^^^
 >data : T
+>     : ^
 
             this.listFactory = new ListFactory<T>();
 >this.listFactory = new ListFactory<T>() : ListFactory<T>
+>                                        : ^^^^^^^^^^^^^^
 >this.listFactory : ListFactory<T>
+>                 : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >listFactory : ListFactory<T>
+>            : ^^^^^^^^^^^^^^
 >new ListFactory<T>() : ListFactory<T>
+>                     : ^^^^^^^^^^^^^^
 >ListFactory : typeof ListFactory
+>            : ^^^^^^^^^^^^^^^^^^
            
         }
 
         public add(data: T): List<T> {
 >add : (data: T) => List<T>
+>    : ^    ^^ ^^^^^       
 >data : T
+>     : ^
 
             var entry = this.listFactory.MakeEntry(data);
 >entry : List<T>
+>      : ^^^^^^^
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>                                 : ^^^^^^^
+>this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
+>                           : ^^^^^^    ^^   ^^^^^         
 >this.listFactory : ListFactory<T>
+>                 : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >listFactory : ListFactory<T>
->MakeEntry : <T>(data: T) => List<T>
+>            : ^^^^^^^^^^^^^^
+>MakeEntry : <T_1>(data: T_1) => List<T_1>
+>          : ^^^^^^    ^^   ^^^^^         
 >data : T
+>     : ^
             
             this.prev.next = entry;
 >this.prev.next = entry : List<T>
+>                       : ^^^^^^^
 >this.prev.next : List<T>
+>               : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next = this;
 >entry.next = this : this
+>                  : ^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >this : this
+>     : ^^^^
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
+>                       : ^^^^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 
             this.prev = entry;
 >this.prev = entry : List<T>
+>                  : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             return entry;
 >entry : List<T>
+>      : ^^^^^^^
         }
 
         public count(): number {
 >count : () => number
+>      : ^^^^^^      
 
             var entry: List<T>;
 >entry : List<T>
+>      : ^^^^^^^
 
             var i: number;
 >i : number
+>  : ^^^^^^
 
             entry = this.next;
 >entry = this.next : List<T>
+>                  : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 
             for (i = 0; !(entry.isHead); i++) {
 >i = 0 : 0
+>      : ^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >!(entry.isHead) : boolean
+>                : ^^^^^^^
 >(entry.isHead) : boolean
+>               : ^^^^^^^
 >entry.isHead : boolean
+>             : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >isHead : boolean
+>       : ^^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
                 entry = entry.next;
 >entry = entry.next : List<T>
+>                   : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
             }
 
             return (i);
 >(i) : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
         }
 
         public isEmpty(): boolean {
 >isEmpty : () => boolean
+>        : ^^^^^^       
 
             return (this.next == this);
 >(this.next == this) : boolean
+>                    : ^^^^^^^
 >this.next == this : boolean
+>                  : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 >this : this
+>     : ^^^^
         }
 
         public first(): T {
 >first : () => T
+>      : ^^^^^^ 
 
             if (this.isEmpty())
 >this.isEmpty() : boolean
+>               : ^^^^^^^
 >this.isEmpty : () => boolean
+>             : ^^^^^^       
 >this : this
+>     : ^^^^
 >isEmpty : () => boolean
+>        : ^^^^^^       
             {
                 return this.next.data;
 >this.next.data : T
+>               : ^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 >data : T
+>     : ^
             }
             else {
                 return null;
->null : null
             }
         }
 
         public pushEntry(entry: List<T>): void {
 >pushEntry : (entry: List<T>) => void
+>          : ^     ^^       ^^^^^    
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.isHead = false;
 >entry.isHead = false : false
+>                     : ^^^^^
 >entry.isHead : boolean
+>             : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >isHead : boolean
+>       : ^^^^^^^
 >false : false
+>      : ^^^^^
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
+>                       : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 
             entry.prev = this;
 >entry.prev = this : this
+>                  : ^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >this : this
+>     : ^^^^
 
             this.next = entry;
 >this.next = entry : List<T>
+>                  : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
+>                        : ^^^^^^^
 >entry.next.prev : List<T>
+>                : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
         }
 
         public push(data: T): void {
 >push : (data: T) => void
+>     : ^    ^^ ^^^^^    
 >data : T
+>     : ^
 
             var entry = this.listFactory.MakeEntry(data);
 >entry : List<T>
+>      : ^^^^^^^
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>                                 : ^^^^^^^
+>this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
+>                           : ^^^^^^    ^^   ^^^^^         
 >this.listFactory : ListFactory<T>
+>                 : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >listFactory : ListFactory<T>
->MakeEntry : <T>(data: T) => List<T>
+>            : ^^^^^^^^^^^^^^
+>MakeEntry : <T_1>(data: T_1) => List<T_1>
+>          : ^^^^^^    ^^   ^^^^^         
 >data : T
+>     : ^
 
             entry.data = data;
 >entry.data = data : T
+>                  : ^
 >entry.data : T
+>           : ^
 >entry : List<T>
+>      : ^^^^^^^
 >data : T
+>     : ^
 >data : T
+>     : ^
 
             entry.isHead = false;
 >entry.isHead = false : false
+>                     : ^^^^^
 >entry.isHead : boolean
+>             : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >isHead : boolean
+>       : ^^^^^^^
 >false : false
+>      : ^^^^^
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
+>                       : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 
             entry.prev = this;
 >entry.prev = this : this
+>                  : ^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >this : this
+>     : ^^^^
 
             this.next = entry;
 >this.next = entry : List<T>
+>                  : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next.prev = entry;  // entry.next.prev does not show intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
+>                        : ^^^^^^^
 >entry.next.prev : List<T>
+>                : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
         }
 
         public popEntry(head: List<T>): List<T> {
 >popEntry : (head: List<T>) => List<T>
+>         : ^    ^^       ^^^^^       
 >head : List<T>
+>     : ^^^^^^^
 
             if (this.next.isHead) {
 >this.next.isHead : boolean
+>                 : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 >isHead : boolean
+>       : ^^^^^^^
 
                 return null;
->null : null
             }
             else {
                 return this.listFactory.RemoveEntry(this.next);
 >this.listFactory.RemoveEntry(this.next) : List<T>
->this.listFactory.RemoveEntry : <T>(entry: List<T>) => List<T>
+>                                        : ^^^^^^^
+>this.listFactory.RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
+>                             : ^^^^^^     ^^         ^^^^^         
 >this.listFactory : ListFactory<T>
+>                 : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >listFactory : ListFactory<T>
->RemoveEntry : <T>(entry: List<T>) => List<T>
+>            : ^^^^^^^^^^^^^^
+>RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
+>            : ^^^^^^     ^^         ^^^^^         
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
             }
         }
 
         public insertEntry(entry: List<T>): List<T> {
 >insertEntry : (entry: List<T>) => List<T>
+>            : ^     ^^       ^^^^^       
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.isHead = false;
 >entry.isHead = false : false
+>                     : ^^^^^
 >entry.isHead : boolean
+>             : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >isHead : boolean
+>       : ^^^^^^^
 >false : false
+>      : ^^^^^
 
             this.prev.next = entry;
 >this.prev.next = entry : List<T>
+>                       : ^^^^^^^
 >this.prev.next : List<T>
+>               : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next = this;
 >entry.next = this : this
+>                  : ^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >this : this
+>     : ^^^^
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
+>                       : ^^^^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 
             this.prev = entry;
 >this.prev = entry : List<T>
+>                  : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             return entry;
 >entry : List<T>
+>      : ^^^^^^^
         }
 
         public insertAfter(data: T): List<T> {
 >insertAfter : (data: T) => List<T>
+>            : ^    ^^ ^^^^^       
 >data : T
+>     : ^
 
             var entry: List<T> = this.listFactory.MakeEntry(data);
 >entry : List<T>
+>      : ^^^^^^^
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>                                 : ^^^^^^^
+>this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
+>                           : ^^^^^^    ^^   ^^^^^         
 >this.listFactory : ListFactory<T>
+>                 : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >listFactory : ListFactory<T>
->MakeEntry : <T>(data: T) => List<T>
+>            : ^^^^^^^^^^^^^^
+>MakeEntry : <T_1>(data: T_1) => List<T_1>
+>          : ^^^^^^    ^^   ^^^^^         
 >data : T
+>     : ^
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
+>                       : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 
             entry.prev = this;
 >entry.prev = this : this
+>                  : ^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >this : this
+>     : ^^^^
 
             this.next = entry;
 >this.next = entry : List<T>
+>                  : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next.prev = entry;// entry.next.prev does not show intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
+>                        : ^^^^^^^
 >entry.next.prev : List<T>
+>                : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             return entry;
 >entry : List<T>
+>      : ^^^^^^^
         }
 
         public insertEntryBefore(entry: List<T>): List<T> {
 >insertEntryBefore : (entry: List<T>) => List<T>
+>                  : ^     ^^       ^^^^^       
 >entry : List<T>
+>      : ^^^^^^^
 
             this.prev.next = entry;
 >this.prev.next = entry : List<T>
+>                       : ^^^^^^^
 >this.prev.next : List<T>
+>               : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next = this;
 >entry.next = this : this
+>                  : ^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >this : this
+>     : ^^^^
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
+>                       : ^^^^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 
             this.prev = entry;
 >this.prev = entry : List<T>
+>                  : ^^^^^^^
 >this.prev : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             return entry;
 >entry : List<T>
+>      : ^^^^^^^
         }
 
         public insertBefore(data: T): List<T> {
 >insertBefore : (data: T) => List<T>
+>             : ^    ^^ ^^^^^       
 >data : T
+>     : ^
 
             var entry = this.listFactory.MakeEntry(data);
 >entry : List<T>
+>      : ^^^^^^^
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>                                 : ^^^^^^^
+>this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
+>                           : ^^^^^^    ^^   ^^^^^         
 >this.listFactory : ListFactory<T>
+>                 : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >listFactory : ListFactory<T>
->MakeEntry : <T>(data: T) => List<T>
+>            : ^^^^^^^^^^^^^^
+>MakeEntry : <T_1>(data: T_1) => List<T_1>
+>          : ^^^^^^    ^^   ^^^^^         
 >data : T
+>     : ^
 
             return this.insertEntryBefore(entry);
 >this.insertEntryBefore(entry) : List<T>
+>                              : ^^^^^^^
 >this.insertEntryBefore : (entry: List<T>) => List<T>
+>                       : ^     ^^       ^^^^^       
 >this : this
+>     : ^^^^
 >insertEntryBefore : (entry: List<T>) => List<T>
+>                  : ^     ^^       ^^^^^       
 >entry : List<T>
+>      : ^^^^^^^
         }
     }
 
     export class ListFactory<T> {
 >ListFactory : ListFactory<T>
+>            : ^^^^^^^^^^^^^^
 
         public MakeHead<T>(): List<T> {
 >MakeHead : <T>() => List<T>
+>         : ^ ^^^^^^^       
 
             var entry: List<T> = new List<T>(true, null);
 >entry : List<T>
+>      : ^^^^^^^
 >new List<T>(true, null) : List<T>
+>                        : ^^^^^^^
 >List : typeof List
+>     : ^^^^^^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
             entry.prev = entry;
 >entry.prev = entry : List<T>
+>                   : ^^^^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next = entry;
 >entry.next = entry : List<T>
+>                   : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             return entry;
 >entry : List<T>
+>      : ^^^^^^^
         }
 
         public MakeEntry<T>(data: T): List<T> {
 >MakeEntry : <T>(data: T) => List<T>
+>          : ^ ^^    ^^ ^^^^^       
 >data : T
+>     : ^
 
             var entry: List<T> = new List<T>(false, data);
 >entry : List<T>
+>      : ^^^^^^^
 >new List<T>(false, data) : List<T>
+>                         : ^^^^^^^
 >List : typeof List
+>     : ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >data : T
+>     : ^
 
             entry.prev = entry;
 >entry.prev = entry : List<T>
+>                   : ^^^^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next = entry;
 >entry.next = entry : List<T>
+>                   : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             return entry;
 >entry : List<T>
+>      : ^^^^^^^
         }
 
         public RemoveEntry<T>(entry: List<T>): List<T> {
 >RemoveEntry : <T>(entry: List<T>) => List<T>
+>            : ^ ^^     ^^       ^^^^^       
 >entry : List<T>
+>      : ^^^^^^^
 
             if (entry == null) {
 >entry == null : boolean
+>              : ^^^^^^^
 >entry : List<T>
->null : null
+>      : ^^^^^^^
 
                 return null;
->null : null
             }
             else if (entry.isHead) {
 >entry.isHead : boolean
+>             : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >isHead : boolean
+>       : ^^^^^^^
 
             // Can't remove the head of a list!
                 return null;
->null : null
             }
             else {
                 entry.next.prev = entry.prev;
 >entry.next.prev = entry.prev : List<T>
+>                             : ^^^^^^^
 >entry.next.prev : List<T>
+>                : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 
                 entry.prev.next = entry.next;
 >entry.prev.next = entry.next : List<T>
+>                             : ^^^^^^^
 >entry.prev.next : List<T>
+>                : ^^^^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 
                 return entry;
 >entry : List<T>
+>      : ^^^^^^^
             }
         }
     }

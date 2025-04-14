@@ -1,102 +1,170 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint.ts] ////
+
+=== typeParameterAsTypeParameterConstraint.ts ===
 // using a type parameter as a constraint for a type parameter is valid
 // no errors expected except illegal constraints
 
 function foo<T, U extends T>(x: T, y: U): U { return y; }
 >foo : <T, U extends T>(x: T, y: U) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : U
+>  : ^
 >y : U
+>  : ^
 
 var r = foo(1, 2);
 >r : number
+>  : ^^^^^^
 >foo(1, 2) : 2
+>          : ^
 >foo : <T, U extends T>(x: T, y: U) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 var r = foo({}, 1);
 >r : number
+>  : ^^^^^^
 >foo({}, 1) : 1
+>           : ^
 >foo : <T, U extends T>(x: T, y: U) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >{} : {}
+>   : ^^
 >1 : 1
+>  : ^
 
 interface A {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 interface B extends A {
     bar: number;
 >bar : number
+>    : ^^^^^^
 }
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 var r2 = foo(a, b);
 >r2 : B
+>   : ^
 >foo(a, b) : B
+>          : ^
 >foo : <T, U extends T>(x: T, y: U) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 var r3 = foo({ x: 1 }, { x: 2, y: 3 });
 >r3 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo({ x: 1 }, { x: 2, y: 3 }) : { x: number; y: number; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U extends T>(x: T, y: U) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >{ x: 2, y: 3 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >y : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 function foo2<T, U extends { length: T }>(x: T, y: U) { return y; }
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
+>     : ^ ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^
 >length : T
+>       : ^
 >x : T
+>  : ^
 >y : U
+>  : ^
 >y : U
+>  : ^
 
 foo2(1, '');
 >foo2(1, '') : ""
+>            : ^^
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
+>     : ^ ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
 foo2({}, { length: 2 }); 
 >foo2({}, { length: 2 }) : { length: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
+>     : ^ ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^
 >{} : {}
+>   : ^^
 >{ length: 2 } : { length: number; }
+>              : ^^^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >2 : 2
+>  : ^
 
 foo2(1, { width: 3, length: 2 }); 
 >foo2(1, { width: 3, length: 2 }) : { width: number; length: number; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
+>     : ^ ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 >{ width: 3, length: 2 } : { width: number; length: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 >length : number
+>       : ^^^^^^
 >2 : 2
+>  : ^
 
 foo2(1, []);
 >foo2(1, []) : any[]
+>            : ^^^^^
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
+>     : ^ ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 foo2(1, ['']);
 >foo2(1, ['']) : string[]
+>              : ^^^^^^^^
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
+>     : ^ ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 >[''] : string[]
+>     : ^^^^^^^^
 >'' : ""
+>   : ^^
 

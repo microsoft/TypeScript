@@ -1,44 +1,65 @@
-=== tests/cases/compiler/constantOverloadFunction.ts ===
+//// [tests/cases/compiler/constantOverloadFunction.ts] ////
+
+=== constantOverloadFunction.ts ===
 class Base { foo() { } }
 >Base : Base
+>     : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 class Derived1 extends Base { bar() { } }
 >Derived1 : Derived1
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 
 class Derived2 extends Base { baz() { } }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >baz : () => void
+>    : ^^^^^^^^^^
 
 class Derived3 extends Base { biz() { } }
 >Derived3 : Derived3
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >biz : () => void
+>    : ^^^^^^^^^^
 
 function foo(tagName: 'canvas'): Derived1;
->foo : { (tagName: 'canvas'): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>foo : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>    : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "canvas"
+>        : ^^^^^^^^
 
 function foo(tagName:  'div'): Derived2;
->foo : { (tagName: "canvas"): Derived1; (tagName: 'div'): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>foo : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>    : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "div"
+>        : ^^^^^
 
 function foo(tagName: 'span'): Derived3;
->foo : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }
+>foo : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>    : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "span"
+>        : ^^^^^^
 
 function foo(tagName: string): Base;
 >foo : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>    : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : string
+>        : ^^^^^^
 
 function foo(tagName: any): Base {
 >foo : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>    : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : any
 
     return null;
->null : null
 }
 

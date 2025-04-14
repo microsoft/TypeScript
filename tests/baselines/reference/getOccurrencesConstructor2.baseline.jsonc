@@ -1,0 +1,9 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConstructor2.ts ===
+// --- (line: 11) skipped ---
+// }
+// 
+// class D {
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|](public x: number, public y: number) {
+//     }|>
+// }

@@ -1,57 +1,93 @@
-=== tests/cases/compiler/nestedLoopTypeGuards.ts ===
+//// [tests/cases/compiler/nestedLoopTypeGuards.ts] ////
+
+=== nestedLoopTypeGuards.ts ===
 // Repros from #10378
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     var a: boolean | number | string;
 >a : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof a !== 'boolean') {
 >typeof a !== 'boolean' : boolean
+>                       : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
         // a is narrowed to "number | string"
         for (var i = 0; i < 1; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
             for (var j = 0; j < 1; j++) {}
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j < 1 : boolean
+>      : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >j++ : number
+>    : ^^^^^^
 >j : number
+>  : ^^^^^^
 
             if (typeof a === 'string') {
 >typeof a === 'string' : boolean
+>                      : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
                 // a is narrowed to "string'
                 for (var j = 0; j < 1; j++) {
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j < 1 : boolean
+>      : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >j++ : number
+>    : ^^^^^^
 >j : number
+>  : ^^^^^^
 
                     a.length; // Should not error here
 >a.length : number
+>         : ^^^^^^
 >a : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
                 }
             }
         }
@@ -60,35 +96,51 @@ function f1() {
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     var a: string | number;
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof a === 'string') {
 >typeof a === 'string' : boolean
+>                      : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
         while (1) {
 >1 : 1
+>  : ^
 
             while (1) {}
 >1 : 1
+>  : ^
 
             if (typeof a === 'string') {
 >typeof a === 'string' : boolean
+>                      : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
                 while (1) {
 >1 : 1
+>  : ^
 
                     a.length; // Should not error here
 >a.length : number
+>         : ^^^^^^
 >a : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
                 }
             }
         }

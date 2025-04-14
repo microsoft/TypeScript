@@ -1,10 +1,13 @@
-=== tests/cases/conformance/dynamicImport/something.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInExportEqualsUMD.ts] ////
+
+=== something.ts ===
+
 export = 42;
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/dynamicImport/index.ts ===
+
+=== index.ts ===
 export = async function() {
     const something = await import("./something");
 >something : Symbol(something, Decl(index.ts, 1, 9))
->"./something" : Symbol("tests/cases/conformance/dynamicImport/something", Decl(something.ts, 0, 0))
+>"./something" : Symbol("something", Decl(something.ts, 0, 0))
 
 };

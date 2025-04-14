@@ -1,35 +1,57 @@
-=== tests/cases/conformance/jsdoc/declarations/reexport.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCommonjsRelativePath.ts] ////
+
+=== reexport.js ===
 'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 
 const Thing = require('./thing').Thing
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 >require('./thing').Thing : typeof Thing
->require('./thing') : typeof import("tests/cases/conformance/jsdoc/declarations/thing")
+>                         : ^^^^^^^^^^^^
+>require('./thing') : typeof import("thing")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./thing' : "./thing"
+>          : ^^^^^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 
 module.exports = { Thing }
 >module.exports = { Thing } : typeof module.exports
+>                           : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{ Thing } : { Thing: typeof Thing; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/thing.js ===
+=== thing.js ===
 'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 
 class Thing {}
 >Thing : Thing
+>      : ^^^^^
 
 module.exports = { Thing }
 >module.exports = { Thing } : typeof module.exports
+>                           : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{ Thing } : { Thing: typeof Thing; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 

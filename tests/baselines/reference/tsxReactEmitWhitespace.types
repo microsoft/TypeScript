@@ -1,9 +1,12 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 declare var React: any;
@@ -14,78 +17,109 @@ declare var React: any;
 
 var p = 0;
 >p : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 // Emit "   "
 <div>   </div>;
 ><div>   </div> : JSX.Element
+>               : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 // Emit "  ", p, "   "
 <div>  {p}    </div>;
 ><div>  {p}    </div> : JSX.Element
+>                     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >p : number
+>  : ^^^^^^
 >div : any
+>    : ^^^
 
 // Emit only p
 <div>  
 ><div>        {p}          </div> : JSX.Element
+>                                 : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
       {p}    
 >p : number
+>  : ^^^^^^
 
       </div>;
 >div : any
+>    : ^^^
 
 // Emit only p
 <div>
 ><div>  {p}    </div> : JSX.Element
+>                     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
   {p}
 >p : number
+>  : ^^^^^^
 
     </div>;
 >div : any
+>    : ^^^
 
 // Emit "  3"
 <div>  3  
 ><div>  3    </div> : JSX.Element
+>                   : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
   </div>;
 >div : any
+>    : ^^^
 
 // Emit "  3  "
 <div>  3  </div>;
 ><div>  3  </div> : JSX.Element
+>                 : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 // Emit "3"
 <div>   
 ><div>      3       </div> : JSX.Element
+>                          : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
    3    
    </div>;
 >div : any
+>    : ^^^
 
 // Emit no args
 <div>   
 ><div>      </div> : JSX.Element
+>                  : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
    </div>;
 >div : any
+>    : ^^^
 
 // Emit "foo bar"
 <div>  
 ><div>     foo bar     </div> : JSX.Element
+>                             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
    foo
 
@@ -93,24 +127,31 @@ var p = 0;
 
   </div>;
 >div : any
+>    : ^^^
 
 // Emit "hello\\ world"
 <div>
 ><div>    hello\world</div> : JSX.Element
+>                           : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     hello\
 
 world
 </div>;
 >div : any
+>    : ^^^
 
 // Emit "  a b  c d  "
 <div>  a
 ><div>  a    b  c    d  </div> : JSX.Element
+>                              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     b  c
     d  </div>;
 >div : any
+>    : ^^^
 

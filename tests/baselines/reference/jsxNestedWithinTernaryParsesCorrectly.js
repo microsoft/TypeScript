@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNestedWithinTernaryParsesCorrectly.tsx] ////
+
 //// [jsxNestedWithinTernaryParsesCorrectly.tsx]
 const emptyMessage = null as any;
 const a = (

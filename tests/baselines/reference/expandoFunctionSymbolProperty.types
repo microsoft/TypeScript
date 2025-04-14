@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/expandoFunctionSymbolProperty.ts] ////
+
+=== expandoFunctionSymbolProperty.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54220
+
+const symb = Symbol();
+>symb : unique symbol
+>     : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+interface TestSymb {
+  (): void;
+  readonly [symb]: boolean;
+>[symb] : boolean
+>       : ^^^^^^^
+>symb : unique symbol
+>     : ^^^^^^^^^^^^^
+}
+
+export function test(): TestSymb {
+>test : () => TestSymb
+>     : ^^^^^^        
+
+  function inner() {}
+>inner : { (): void; [symb]: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  inner[symb] = true;
+>inner[symb] = true : true
+>                   : ^^^^
+>inner[symb] : boolean
+>            : ^^^^^^^
+>inner : { (): void; [symb]: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>symb : unique symbol
+>     : ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+  return inner;
+>inner : { (): void; [symb]: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

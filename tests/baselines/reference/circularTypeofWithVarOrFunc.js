@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts] ////
+
 //// [circularTypeofWithVarOrFunc.ts]
 type typeAlias1 = typeof varOfAliasedType1;
 var varOfAliasedType1: typeAlias1;

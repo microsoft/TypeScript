@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportingContainingVisibleType.ts] ////
+
 //// [exportingContainingVisibleType.ts]
 class Foo {
     public get foo() {
@@ -13,7 +15,7 @@ export var x = 5;
 //// [exportingContainingVisibleType.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     var Foo = /** @class */ (function () {
         function Foo() {

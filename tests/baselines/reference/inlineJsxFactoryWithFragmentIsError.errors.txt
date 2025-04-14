@@ -1,9 +1,10 @@
-tests/cases/conformance/jsx/inline/index.tsx(3,1): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/inline/index.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
-tests/cases/conformance/jsx/inline/reacty.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
+index.tsx(3,1): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+index.tsx(3,1): error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
+index.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
+reacty.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
 
 
-==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
+==== renderer.d.ts (0 errors) ====
     declare global {
         namespace JSX {
             interface IntrinsicElements {
@@ -13,17 +14,19 @@ tests/cases/conformance/jsx/inline/reacty.tsx(3,1): error TS17017: An @jsxFrag p
     }
     export function dom(): void;
     export function createElement(): void;
-==== tests/cases/conformance/jsx/inline/reacty.tsx (1 errors) ====
+==== reacty.tsx (1 errors) ====
     /** @jsx React.createElement */
     import * as React from "./renderer";
     <><h></h></>
     ~~~~~~~~~~~~
 !!! error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
-==== tests/cases/conformance/jsx/inline/index.tsx (2 errors) ====
+==== index.tsx (3 errors) ====
     /** @jsx dom */
     import { dom } from "./renderer";
     <><h></h></>
     ~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+    ~~
+!!! error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
     ~~~~~~~~~~~~
 !!! error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.

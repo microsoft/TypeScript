@@ -1,46 +1,70 @@
-=== tests/cases/compiler/nestedRecursiveLambda.ts ===
+//// [tests/cases/compiler/nestedRecursiveLambda.ts] ////
+
+=== nestedRecursiveLambda.ts ===
 function f(a:any) {
 >f : (a: any) => void
+>  : ^ ^^   ^^^^^^^^^
 >a : any
 
 void (r =>(r => r));
 >void (r =>(r => r)) : undefined
+>                    : ^^^^^^^^^
 >(r =>(r => r)) : (r: any) => (r: any) => any
+>               : ^ ^^^^^^^^^^^   ^^^^^^^^^^^
 >r =>(r => r) : (r: any) => (r: any) => any
+>             : ^ ^^^^^^^^^^^   ^^^^^^^^^^^
 >r : any
 >(r => r) : (r: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >r => r : (r: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >r : any
 >r : any
 }
 f((r =>(r => r)));
 >f((r =>(r => r))) : void
+>                  : ^^^^
 >f : (a: any) => void
+>  : ^ ^^   ^^^^^^^^^
 >(r =>(r => r)) : (r: any) => (r: any) => any
+>               : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^
 >r =>(r => r) : (r: any) => (r: any) => any
+>             : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^
 >r : any
 >(r => r) : (r: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >r => r : (r: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >r : any
 >r : any
 
 void(r =>(r => r));
 >void(r =>(r => r)) : undefined
+>                   : ^^^^^^^^^
 >(r =>(r => r)) : (r: any) => (r: any) => any
+>               : ^ ^^^^^^^^^^^   ^^^^^^^^^^^
 >r =>(r => r) : (r: any) => (r: any) => any
+>             : ^ ^^^^^^^^^^^   ^^^^^^^^^^^
 >r : any
 >(r => r) : (r: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >r => r : (r: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >r : any
 >r : any
 
 [(r =>(r => r))]
 >[(r =>(r => r))] : ((r: any) => (r: any) => any)[]
+>                 : ^^ ^^^^^^^^^^^   ^^^^^^^^^^^^^^
 >(r =>(r => r)) : (r: any) => (r: any) => any
+>               : ^ ^^^^^^^^^^^   ^^^^^^^^^^^
 >r =>(r => r) : (r: any) => (r: any) => any
+>             : ^ ^^^^^^^^^^^   ^^^^^^^^^^^
 >r : any
 >(r => r) : (r: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >r => r : (r: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >r : any
 >r : any
 

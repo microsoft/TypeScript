@@ -1,0 +1,322 @@
+// === Completions ===
+=== /foo.ts ===
+// export class Observable<T> {
+//     pipe(): Observable<T>;
+//     pipe<A>(): Observable<A>;
+//     pipe<A, B>(): Observable<B>;
+//     pipe<A, B, C>(): Observable<C>;
+//     pipe<A, B, C, D>(): Observable<D>;
+//     pipe<A, B, C, D, E>(): Observable<E>;
+//     pipe<A, B, C, D, E, F>(): Observable<F>;
+//     pipe<A, B, C, D, E, F, G>(): Observable<G>;
+//     pipe<A, B, C, D, E, F, G, H>(): Observable<H>;
+//     pipe<A, B, C, D, E, F, G, H, I>(): Observable<I>;
+//     pipe<A, B, C, D, E, F, G, H, I>(): Observable<unknown>;
+// }
+// export class Foo extends Observable<any> {
+//     
+//     ^
+// | ----------------------------------------------------------------------
+// | (method) Observable<any>.pipe(): Observable<any> (+10 overloads)
+// | abstract
+// | accessor
+// | async
+// | constructor
+// | declare
+// | get
+// | override
+// | private
+// | protected
+// | public
+// | readonly
+// | set
+// | static
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/foo.ts",
+      "position": 543,
+      "name": ""
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": true,
+      "entries": [
+        {
+          "name": "pipe",
+          "kind": "method",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "pipe(): Observable<any>;\npipe<A>(): Observable<A>;\npipe<A, B>(): Observable<B>;\npipe<A, B, C>(): Observable<C>;\npipe<A, B, C, D>(): Observable<D>;\npipe<A, B, C, D, E>(): Observable<E>;\npipe<A, B, C, D, E, F>(): Observable<F>;\npipe<A, B, C, D, E, F, G>(): Observable<G>;\npipe<A, B, C, D, E, F, G, H>(): Observable<H>;\npipe<A, B, C, D, E, F, G, H, I>(): Observable<I>;\npipe<A, B, C, D, E, F, G, H, I>(): Observable<unknown>;\npipe(): Observable<any> | Observable<A> | Observable<B> | Observable<C> | Observable<D> | Observable<E> | Observable<F> | Observable<G> | Observable<H> | Observable<I> | Observable<unknown> {\n    $0\n}",
+          "filterText": "pipe",
+          "isSnippet": true,
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Observable",
+              "kind": "className"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "pipe",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Observable",
+              "kind": "className"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "+",
+              "kind": "operator"
+            },
+            {
+              "text": "10",
+              "kind": "numericLiteral"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "overloads",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "abstract",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "accessor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "accessor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "async",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "constructor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "declare",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "declare",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "get",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "get",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "override",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "private",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "protected",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "public",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "readonly",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "set",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "set",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "static",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ],
+      "defaultCommitCharacters": []
+    }
+  }
+]

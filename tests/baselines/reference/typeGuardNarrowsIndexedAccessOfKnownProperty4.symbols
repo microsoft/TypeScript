@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty4.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty4.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty4.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 0))
 

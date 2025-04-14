@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts] ////
+
+=== parserES5SymbolProperty9.ts ===
 var x: {
 >x : Symbol(x, Decl(parserES5SymbolProperty9.ts, 0, 3))
 

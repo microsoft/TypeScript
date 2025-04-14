@@ -1,0 +1,41 @@
+/a.ts(2,10): error TS1282: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+/b.ts(1,1): error TS1484: 'I' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+/d.ts(3,10): error TS1283: An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but 'J' resolves to a type-only declaration.
+
+
+==== /a.ts (1 errors) ====
+    interface I {}
+    export = I;
+             ~
+!!! error TS1282: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+    
+==== /b.ts (1 errors) ====
+    import I = require("./a");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1484: 'I' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+    
+==== /c.ts (0 errors) ====
+    interface I {}
+    namespace I {
+        export const x = 1;
+    }
+    export = I;
+    
+==== /d.ts (1 errors) ====
+    import I = require("./c");
+    import type J = require("./c");
+    export = J;
+             ~
+!!! error TS1283: An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but 'J' resolves to a type-only declaration.
+    
+==== /e.d.ts (0 errors) ====
+    interface I {}
+    export = I;
+    
+==== /f.ts (0 errors) ====
+    import type I = require("./e");
+    const I = {};
+    export = I;
+    
+==== /z.ts (0 errors) ====
+    // test harness is weird if the last file includs a require >:(

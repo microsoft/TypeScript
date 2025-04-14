@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts] ////
+
 //// [derivedClassFunctionOverridesBaseClassAccessor.ts]
 class Base {
     get x() {

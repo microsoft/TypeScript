@@ -1,18 +1,27 @@
-=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts ===
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts] ////
+
+=== declarationEmitIdentifierPredicatesWithPrivateName01.ts ===
 interface I {
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 export function f(x: any): x is I {
 >f : (x: any) => x is I
+>  : ^ ^^   ^^^^^      
 >x : any
 
     return typeof x.a === "number";
 >typeof x.a === "number" : boolean
+>                        : ^^^^^^^
 >typeof x.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.a : any
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >"number" : "number"
+>         : ^^^^^^^^
 }

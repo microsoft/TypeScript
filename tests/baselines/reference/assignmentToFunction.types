@@ -1,25 +1,36 @@
-=== tests/cases/compiler/assignmentToFunction.ts ===
+//// [tests/cases/compiler/assignmentToFunction.ts] ////
+
+=== assignmentToFunction.ts ===
 function fn() { }
 >fn : () => void
+>   : ^^^^^^^^^^
 
 fn = () => 3;
 >fn = () => 3 : () => number
+>             : ^^^^^^^^^^^^
 >fn : any
+>   : ^^^
 >() => 3 : () => number
+>        : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
 module foo {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
     function xyz() {
 >xyz : () => void
+>    : ^^^^^^^^^^
 
         function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
         }
         bar = null;
 >bar = null : null
+>           : ^^^^
 >bar : any
->null : null
+>    : ^^^
     }
 }

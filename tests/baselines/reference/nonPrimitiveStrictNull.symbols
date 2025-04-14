@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts] ////
+
+=== nonPrimitiveStrictNull.ts ===
 var a: object
 >a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
 

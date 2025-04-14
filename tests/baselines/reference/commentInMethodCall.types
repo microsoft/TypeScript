@@ -1,14 +1,22 @@
-=== tests/cases/compiler/commentInMethodCall.ts ===
+//// [tests/cases/compiler/commentInMethodCall.ts] ////
+
+=== commentInMethodCall.ts ===
 //commment here
 var s: string[];
 >s : string[]
+>  : ^^^^^^^^
 
 s.map(// do something
 >s.map(// do something    function () { }) : void[]
+>                                          : ^^^^^^
 >s.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>      : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >s : string[]
+>  : ^^^^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 
     function () { });
 >function () { } : () => void
+>                : ^^^^^^^^^^
 

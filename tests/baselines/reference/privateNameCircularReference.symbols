@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts] ////
+
+=== privateNameCircularReference.ts ===
 class A {
 >A : Symbol(A, Decl(privateNameCircularReference.ts, 0, 0))
 

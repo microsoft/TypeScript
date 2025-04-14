@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/mappedTypeRecursiveInference2.ts] ////
+
+=== mappedTypeRecursiveInference2.ts ===
+type MorphTuple = [string, "|>", any]
+>MorphTuple : Symbol(MorphTuple, Decl(mappedTypeRecursiveInference2.ts, 0, 0))
+
+type validateMorph<def extends MorphTuple> = def[1] extends "|>"
+>validateMorph : Symbol(validateMorph, Decl(mappedTypeRecursiveInference2.ts, 0, 37))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 2, 19))
+>MorphTuple : Symbol(MorphTuple, Decl(mappedTypeRecursiveInference2.ts, 0, 0))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 2, 19))
+
+    ? [validateDefinition<def[0]>, "|>", (In: def[0]) => unknown]
+>validateDefinition : Symbol(validateDefinition, Decl(mappedTypeRecursiveInference2.ts, 4, 9))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 2, 19))
+>In : Symbol(In, Decl(mappedTypeRecursiveInference2.ts, 3, 42))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 2, 19))
+
+    : def
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 2, 19))
+
+type validateDefinition<def> = def extends MorphTuple
+>validateDefinition : Symbol(validateDefinition, Decl(mappedTypeRecursiveInference2.ts, 4, 9))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 6, 24))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 6, 24))
+>MorphTuple : Symbol(MorphTuple, Decl(mappedTypeRecursiveInference2.ts, 0, 0))
+
+    ? validateMorph<def>
+>validateMorph : Symbol(validateMorph, Decl(mappedTypeRecursiveInference2.ts, 0, 37))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 6, 24))
+
+    : {
+          [k in keyof def]: validateDefinition<def[k]>
+>k : Symbol(k, Decl(mappedTypeRecursiveInference2.ts, 9, 11))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 6, 24))
+>validateDefinition : Symbol(validateDefinition, Decl(mappedTypeRecursiveInference2.ts, 4, 9))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 6, 24))
+>k : Symbol(k, Decl(mappedTypeRecursiveInference2.ts, 9, 11))
+      }
+
+declare function type<def>(def: validateDefinition<def>): def
+>type : Symbol(type, Decl(mappedTypeRecursiveInference2.ts, 10, 7))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 12, 22), Decl(mappedTypeRecursiveInference2.ts, 12, 27))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 12, 22), Decl(mappedTypeRecursiveInference2.ts, 12, 27))
+>validateDefinition : Symbol(validateDefinition, Decl(mappedTypeRecursiveInference2.ts, 4, 9))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 12, 22), Decl(mappedTypeRecursiveInference2.ts, 12, 27))
+>def : Symbol(def, Decl(mappedTypeRecursiveInference2.ts, 12, 22), Decl(mappedTypeRecursiveInference2.ts, 12, 27))
+
+const shallow = type(["ark", "|>", (x) => x.length])
+>shallow : Symbol(shallow, Decl(mappedTypeRecursiveInference2.ts, 14, 5))
+>type : Symbol(type, Decl(mappedTypeRecursiveInference2.ts, 10, 7))
+>x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 14, 36))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 14, 36))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const objectLiteral = type({ a: ["ark", "|>", (x) => x.length] })
+>objectLiteral : Symbol(objectLiteral, Decl(mappedTypeRecursiveInference2.ts, 15, 5))
+>type : Symbol(type, Decl(mappedTypeRecursiveInference2.ts, 10, 7))
+>a : Symbol(a, Decl(mappedTypeRecursiveInference2.ts, 15, 28))
+>x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 15, 47))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 15, 47))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const nestedTuple = type([["ark", "|>", (x) => x.length]])
+>nestedTuple : Symbol(nestedTuple, Decl(mappedTypeRecursiveInference2.ts, 16, 5))
+>type : Symbol(type, Decl(mappedTypeRecursiveInference2.ts, 10, 7))
+>x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 16, 41))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 16, 41))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

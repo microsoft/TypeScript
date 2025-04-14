@@ -1,21 +1,33 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck21.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck21.ts] ////
+
+=== generatorTypeCheck21.ts ===
 class Foo { x: number }
 >Foo : Foo
+>    : ^^^
 >x : number
+>  : ^^^^^^
 
 class Bar extends Foo { y: string }
 >Bar : Bar
+>    : ^^^
 >Foo : Foo
+>    : ^^^
 >y : string
+>  : ^^^^^^
 
 function* g(): IterableIterator<Foo> {
 >g : () => IterableIterator<Foo>
+>  : ^^^^^^                     
 
     yield;
->yield : undefined
+>yield : any
+>      : ^^^
 
     yield * new Bar;
 >yield * new Bar : any
+>                : ^^^
 >new Bar : Bar
+>        : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 }

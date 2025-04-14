@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserRealSource1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource1.ts] ////
+
+=== parserRealSource1.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
@@ -6,74 +8,105 @@
 
 module TypeScript {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 
     export module CompilerDiagnostics {
 >CompilerDiagnostics : typeof CompilerDiagnostics
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         export var debug = false;
 >debug : boolean
+>      : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         export interface IDiagnosticWriter {
             Alert(output: string): void;
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^    
 >output : string
+>       : ^^^^^^
         }
 
         export var diagnosticWriter: IDiagnosticWriter = null;
 >diagnosticWriter : IDiagnosticWriter
->null : null
+>                 : ^^^^^^^^^^^^^^^^^
 
         export var analysisPass: number = 0;
 >analysisPass : number
+>             : ^^^^^^
 >0 : 0
+>  : ^
 
         export function Alert(output: string) {
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^^^^^
 >output : string
+>       : ^^^^^^
 
             if (diagnosticWriter) {
 >diagnosticWriter : IDiagnosticWriter
+>                 : ^^^^^^^^^^^^^^^^^
 
                 diagnosticWriter.Alert(output);
 >diagnosticWriter.Alert(output) : void
+>                               : ^^^^
 >diagnosticWriter.Alert : (output: string) => void
+>                       : ^      ^^      ^^^^^    
 >diagnosticWriter : IDiagnosticWriter
+>                 : ^^^^^^^^^^^^^^^^^
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^    
 >output : string
+>       : ^^^^^^
             }
         }
 
         export function debugPrint(s: string) {
 >debugPrint : (s: string) => void
+>           : ^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
             if (debug) {
 >debug : boolean
+>      : ^^^^^^^
 
                 Alert(s);
 >Alert(s) : void
+>         : ^^^^
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
             }
         }
 
         export function assert(condition: boolean, s: string) {
 >assert : (condition: boolean, s: string) => void
+>       : ^         ^^       ^^ ^^      ^^^^^^^^^
 >condition : boolean
+>          : ^^^^^^^
 >s : string
+>  : ^^^^^^
 
             if (debug) {
 >debug : boolean
+>      : ^^^^^^^
 
                 if (!condition) {
 >!condition : boolean
+>           : ^^^^^^^
 >condition : boolean
+>          : ^^^^^^^
 
                     Alert(s);
 >Alert(s) : void
+>         : ^^^^
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
                 }
             }
         }
@@ -83,450 +116,719 @@ module TypeScript {
     export interface ILogger {
         information(): boolean;
 >information : () => boolean
+>            : ^^^^^^       
 
         debug(): boolean;
 >debug : () => boolean
+>      : ^^^^^^       
 
         warning(): boolean;
 >warning : () => boolean
+>        : ^^^^^^       
 
         error(): boolean;
 >error : () => boolean
+>      : ^^^^^^       
 
         fatal(): boolean;
 >fatal : () => boolean
+>      : ^^^^^^       
 
         log(s: string): void;
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
     }
 
     export class NullLogger implements ILogger {
 >NullLogger : NullLogger
+>           : ^^^^^^^^^^
 
         public information(): boolean { return false; }
 >information : () => boolean
+>            : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public debug(): boolean { return false; }
 >debug : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public warning(): boolean { return false; }
 >warning : () => boolean
+>        : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public error(): boolean { return false; }
 >error : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public fatal(): boolean { return false; }
 >fatal : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public log(s: string): void {
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
         }
     }
 
     export class LoggerAdapter implements ILogger {
 >LoggerAdapter : LoggerAdapter
+>              : ^^^^^^^^^^^^^
 
         private _information: boolean;
 >_information : boolean
+>             : ^^^^^^^
 
         private _debug: boolean;
 >_debug : boolean
+>       : ^^^^^^^
 
         private _warning: boolean;
 >_warning : boolean
+>         : ^^^^^^^
 
         private _error: boolean;
 >_error : boolean
+>       : ^^^^^^^
 
         private _fatal: boolean;
 >_fatal : boolean
+>       : ^^^^^^^
 
         constructor (public logger: ILogger) { 
 >logger : ILogger
+>       : ^^^^^^^
 
             this._information = this.logger.information();
 >this._information = this.logger.information() : boolean
+>                                              : ^^^^^^^
 >this._information : boolean
+>                  : ^^^^^^^
 >this : this
+>     : ^^^^
 >_information : boolean
+>             : ^^^^^^^
 >this.logger.information() : boolean
+>                          : ^^^^^^^
 >this.logger.information : () => boolean
+>                        : ^^^^^^       
 >this.logger : ILogger
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >logger : ILogger
+>       : ^^^^^^^
 >information : () => boolean
+>            : ^^^^^^       
 
             this._debug = this.logger.debug();
 >this._debug = this.logger.debug() : boolean
+>                                  : ^^^^^^^
 >this._debug : boolean
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >_debug : boolean
+>       : ^^^^^^^
 >this.logger.debug() : boolean
+>                    : ^^^^^^^
 >this.logger.debug : () => boolean
+>                  : ^^^^^^       
 >this.logger : ILogger
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >logger : ILogger
+>       : ^^^^^^^
 >debug : () => boolean
+>      : ^^^^^^       
 
             this._warning = this.logger.warning();
 >this._warning = this.logger.warning() : boolean
+>                                      : ^^^^^^^
 >this._warning : boolean
+>              : ^^^^^^^
 >this : this
+>     : ^^^^
 >_warning : boolean
+>         : ^^^^^^^
 >this.logger.warning() : boolean
+>                      : ^^^^^^^
 >this.logger.warning : () => boolean
+>                    : ^^^^^^       
 >this.logger : ILogger
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >logger : ILogger
+>       : ^^^^^^^
 >warning : () => boolean
+>        : ^^^^^^       
 
             this._error = this.logger.error();
 >this._error = this.logger.error() : boolean
+>                                  : ^^^^^^^
 >this._error : boolean
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >_error : boolean
+>       : ^^^^^^^
 >this.logger.error() : boolean
+>                    : ^^^^^^^
 >this.logger.error : () => boolean
+>                  : ^^^^^^       
 >this.logger : ILogger
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >logger : ILogger
+>       : ^^^^^^^
 >error : () => boolean
+>      : ^^^^^^       
 
             this._fatal = this.logger.fatal();
 >this._fatal = this.logger.fatal() : boolean
+>                                  : ^^^^^^^
 >this._fatal : boolean
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >_fatal : boolean
+>       : ^^^^^^^
 >this.logger.fatal() : boolean
+>                    : ^^^^^^^
 >this.logger.fatal : () => boolean
+>                  : ^^^^^^       
 >this.logger : ILogger
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >logger : ILogger
+>       : ^^^^^^^
 >fatal : () => boolean
+>      : ^^^^^^       
         }
 
 
         public information(): boolean { return this._information; }
 >information : () => boolean
+>            : ^^^^^^       
 >this._information : boolean
+>                  : ^^^^^^^
 >this : this
+>     : ^^^^
 >_information : boolean
+>             : ^^^^^^^
 
         public debug(): boolean { return this._debug; }
 >debug : () => boolean
+>      : ^^^^^^       
 >this._debug : boolean
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >_debug : boolean
+>       : ^^^^^^^
 
         public warning(): boolean { return this._warning; }
 >warning : () => boolean
+>        : ^^^^^^       
 >this._warning : boolean
+>              : ^^^^^^^
 >this : this
+>     : ^^^^
 >_warning : boolean
+>         : ^^^^^^^
 
         public error(): boolean { return this._error; }
 >error : () => boolean
+>      : ^^^^^^       
 >this._error : boolean
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >_error : boolean
+>       : ^^^^^^^
 
         public fatal(): boolean { return this._fatal; }
 >fatal : () => boolean
+>      : ^^^^^^       
 >this._fatal : boolean
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >_fatal : boolean
+>       : ^^^^^^^
 
         public log(s: string): void {
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
 
             this.logger.log(s);
 >this.logger.log(s) : void
+>                   : ^^^^
 >this.logger.log : (s: string) => void
+>                : ^ ^^      ^^^^^    
 >this.logger : ILogger
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >logger : ILogger
+>       : ^^^^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
         }
     }
 
     export class BufferedLogger implements ILogger {
 >BufferedLogger : BufferedLogger
+>               : ^^^^^^^^^^^^^^
 
         public logContents = [];
 >logContents : any[]
+>            : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         public information(): boolean { return false; }
 >information : () => boolean
+>            : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public debug(): boolean { return false; }
 >debug : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public warning(): boolean { return false; }
 >warning : () => boolean
+>        : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public error(): boolean { return false; }
 >error : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public fatal(): boolean { return false; }
 >fatal : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public log(s: string): void {
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
 
             this.logContents.push(s);
 >this.logContents.push(s) : number
+>                         : ^^^^^^
 >this.logContents.push : (...items: any[]) => number
+>                      : ^^^^     ^^^^^^^^^^^^      
 >this.logContents : any[]
+>                 : ^^^^^
 >this : this
+>     : ^^^^
 >logContents : any[]
+>            : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >s : string
+>  : ^^^^^^
         }
     }
 
     export function timeFunction(logger: ILogger, funcDescription: string, func: () =>any): any {
 >timeFunction : (logger: ILogger, funcDescription: string, func: () => any) => any
+>             : ^      ^^       ^^               ^^      ^^    ^^         ^^^^^   
 >logger : ILogger
+>       : ^^^^^^^
 >funcDescription : string
+>                : ^^^^^^
 >func : () => any
+>     : ^^^^^^   
 
         var start = +new Date();
 >start : number
+>      : ^^^^^^
 >+new Date() : number
+>            : ^^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
         var result = func();
 >result : any
+>       : ^^^
 >func() : any
+>       : ^^^
 >func : () => any
+>     : ^^^^^^   
 
         var end = +new Date();
 >end : number
+>    : ^^^^^^
 >+new Date() : number
+>            : ^^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
         logger.log(funcDescription + " completed in " + (end - start) + " msec");
 >logger.log(funcDescription + " completed in " + (end - start) + " msec") : void
+>                                                                         : ^^^^
 >logger.log : (s: string) => void
+>           : ^ ^^      ^^^^^    
 >logger : ILogger
+>       : ^^^^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >funcDescription + " completed in " + (end - start) + " msec" : string
+>                                                             : ^^^^^^
 >funcDescription + " completed in " + (end - start) : string
+>                                                   : ^^^^^^
 >funcDescription + " completed in " : string
+>                                   : ^^^^^^
 >funcDescription : string
+>                : ^^^^^^
 >" completed in " : " completed in "
+>                 : ^^^^^^^^^^^^^^^^
 >(end - start) : number
+>              : ^^^^^^
 >end - start : number
+>            : ^^^^^^
 >end : number
+>    : ^^^^^^
 >start : number
+>      : ^^^^^^
 >" msec" : " msec"
+>        : ^^^^^^^
 
         return result;
 >result : any
+>       : ^^^
     }
 
     export function stringToLiteral(value: string, length: number): string {
 >stringToLiteral : (value: string, length: number) => string
+>                : ^     ^^      ^^      ^^      ^^^^^      
 >value : string
+>      : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         var result = "";
 >result : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 
         var addChar = (index: number) => {
 >addChar : (index: number) => void
+>        : ^     ^^      ^^^^^^^^^
 >(index: number) => {            var ch = value.charCodeAt(index);            switch (ch) {                case 0x09: // tab                    result += "\\t";                    break;                case 0x0a: // line feed                    result += "\\n";                    break;                case 0x0b: // vertical tab                    result += "\\v";                    break;                case 0x0c: // form feed                    result += "\\f";                    break;                case 0x0d: // carriage return                    result += "\\r";                    break;                case 0x22:  // double quote                    result += "\\\"";                    break;                case 0x27: // single quote                    result += "\\\'";                    break;                case 0x5c: // Backslash                    result += "\\";                    break;                default:                    result += value.charAt(index);            }        } : (index: number) => void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^     ^^      ^^^^^^^^^
 >index : number
+>      : ^^^^^^
 
             var ch = value.charCodeAt(index);
 >ch : number
+>   : ^^^^^^
 >value.charCodeAt(index) : number
+>                        : ^^^^^^
 >value.charCodeAt : (index: number) => number
+>                 : ^     ^^      ^^^^^      
 >value : string
+>      : ^^^^^^
 >charCodeAt : (index: number) => number
+>           : ^     ^^      ^^^^^      
 >index : number
+>      : ^^^^^^
 
             switch (ch) {
 >ch : number
+>   : ^^^^^^
 
                 case 0x09: // tab
 >0x09 : 9
+>     : ^
 
                     result += "\\t";
 >result += "\\t" : string
+>                : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"\\t" : "\\t"
+>      : ^^^^^
 
                     break;
                 case 0x0a: // line feed
 >0x0a : 10
+>     : ^^
 
                     result += "\\n";
 >result += "\\n" : string
+>                : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"\\n" : "\\n"
+>      : ^^^^^
 
                     break;
                 case 0x0b: // vertical tab
 >0x0b : 11
+>     : ^^
 
                     result += "\\v";
 >result += "\\v" : string
+>                : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"\\v" : "\\v"
+>      : ^^^^^
 
                     break;
                 case 0x0c: // form feed
 >0x0c : 12
+>     : ^^
 
                     result += "\\f";
 >result += "\\f" : string
+>                : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"\\f" : "\\f"
+>      : ^^^^^
 
                     break;
                 case 0x0d: // carriage return
 >0x0d : 13
+>     : ^^
 
                     result += "\\r";
 >result += "\\r" : string
+>                : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"\\r" : "\\r"
+>      : ^^^^^
 
                     break;
                 case 0x22:  // double quote
 >0x22 : 34
+>     : ^^
 
                     result += "\\\"";
 >result += "\\\"" : string
+>                 : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"\\\"" : "\\\""
+>       : ^^^^^^
 
                     break;
                 case 0x27: // single quote
 >0x27 : 39
+>     : ^^
 
                     result += "\\\'";
 >result += "\\\'" : string
+>                 : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"\\\'" : "\\'"
+>       : ^^^^^
 
                     break;
                 case 0x5c: // Backslash
 >0x5c : 92
+>     : ^^
 
                     result += "\\";
 >result += "\\" : string
+>               : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"\\" : "\\"
+>     : ^^^^
 
                     break;
                 default:
                     result += value.charAt(index);
 >result += value.charAt(index) : string
+>                              : ^^^^^^
 >result : string
+>       : ^^^^^^
 >value.charAt(index) : string
+>                    : ^^^^^^
 >value.charAt : (pos: number) => string
+>             : ^   ^^      ^^^^^      
 >value : string
+>      : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >index : number
+>      : ^^^^^^
             }
         }
 
         var tooLong = (value.length > length);
 >tooLong : boolean
+>        : ^^^^^^^
 >(value.length > length) : boolean
+>                        : ^^^^^^^
 >value.length > length : boolean
+>                      : ^^^^^^^
 >value.length : number
+>             : ^^^^^^
 >value : string
+>      : ^^^^^^
 >length : number
+>       : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         if (tooLong) {
 >tooLong : boolean
+>        : ^^^^^^^
 
             var mid = length >> 1;
 >mid : number
+>    : ^^^^^^
 >length >> 1 : number
+>            : ^^^^^^
 >length : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
             for (var i = 0; i < mid; i++) addChar(i);
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < mid : boolean
+>        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >mid : number
+>    : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >addChar(i) : void
+>           : ^^^^
 >addChar : (index: number) => void
+>        : ^     ^^      ^^^^^^^^^
 >i : number
+>  : ^^^^^^
 
             result += "(...)";
 >result += "(...)" : string
+>                  : ^^^^^^
 >result : string
+>       : ^^^^^^
 >"(...)" : "(...)"
+>        : ^^^^^^^
 
             for (var i = value.length - mid; i < value.length; i++) addChar(i);
 >i : number
+>  : ^^^^^^
 >value.length - mid : number
+>                   : ^^^^^^
 >value.length : number
+>             : ^^^^^^
 >value : string
+>      : ^^^^^^
 >length : number
+>       : ^^^^^^
 >mid : number
+>    : ^^^^^^
 >i < value.length : boolean
+>                 : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >value.length : number
+>             : ^^^^^^
 >value : string
+>      : ^^^^^^
 >length : number
+>       : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >addChar(i) : void
+>           : ^^^^
 >addChar : (index: number) => void
+>        : ^     ^^      ^^^^^^^^^
 >i : number
+>  : ^^^^^^
         }
         else {
             length = value.length;
 >length = value.length : number
+>                      : ^^^^^^
 >length : number
+>       : ^^^^^^
 >value.length : number
+>             : ^^^^^^
 >value : string
+>      : ^^^^^^
 >length : number
+>       : ^^^^^^
 
             for (var i = 0; i < length; i++) addChar(i);
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < length : boolean
+>           : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >addChar(i) : void
+>           : ^^^^
 >addChar : (index: number) => void
+>        : ^     ^^      ^^^^^^^^^
 >i : number
+>  : ^^^^^^
         }
         return result;
 >result : string
+>       : ^^^^^^
     }
 }
 

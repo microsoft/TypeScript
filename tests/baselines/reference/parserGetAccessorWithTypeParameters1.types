@@ -1,7 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts] ////
+
+=== parserGetAccessorWithTypeParameters1.ts ===
 class C {
 >C : C
+>  : ^
 
   get foo<T>() { }
 >foo : void
+>    : ^^^^
 }

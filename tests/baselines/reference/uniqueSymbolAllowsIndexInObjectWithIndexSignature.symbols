@@ -1,4 +1,6 @@
-=== tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts ===
+//// [tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts] ////
+
+=== uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts ===
 // https://github.com/Microsoft/TypeScript/issues/21962
 export const SYM = Symbol('a unique symbol');
 >SYM : Symbol(SYM, Decl(uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts, 1, 12))

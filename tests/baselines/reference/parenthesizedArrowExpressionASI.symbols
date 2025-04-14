@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parenthesizedArrowExpressionASI.ts ===
+//// [tests/cases/compiler/parenthesizedArrowExpressionASI.ts] ////
+
+=== parenthesizedArrowExpressionASI.ts ===
 const x = (a: any[]) => (
 >x : Symbol(x, Decl(parenthesizedArrowExpressionASI.ts, 0, 5))
 >a : Symbol(a, Decl(parenthesizedArrowExpressionASI.ts, 0, 11))

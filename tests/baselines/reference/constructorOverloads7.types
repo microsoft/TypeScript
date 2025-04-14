@@ -1,24 +1,35 @@
-=== tests/cases/compiler/constructorOverloads7.ts ===
+//// [tests/cases/compiler/constructorOverloads7.ts] ////
+
+=== constructorOverloads7.ts ===
 declare class Point
 >Point : Point
+>      : ^^^^^
 {
     x: number;
 >x : number
+>  : ^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     constructor(x: number, y: number);
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
      add(dx: number, dy: number): Point;
 >add : (dx: number, dy: number) => Point
+>    : ^  ^^      ^^  ^^      ^^^^^     
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
      origin: Point;
 >origin : Point
+>       : ^^^^^
 
 }
 
@@ -27,37 +38,60 @@ declare class Point
 // to be Point and return type is inferred to be void
 function Point(x, y) {
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     this.x = x;
 >this.x = x : any
+>           : ^^^
 >this.x : any
+>       : ^^^
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     this.y = y;
 >this.y = y : any
+>           : ^^^
 >this.y : any
+>       : ^^^
 >this : any
+>     : ^^^
 >y : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     return this;
 >this : any
+>     : ^^^
 }
 
 declare function EF1(a:number, b:number):number;
 >EF1 : (a: number, b: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 function EF1(a,b) { return a+b; }
 >EF1 : (a: number, b: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >a+b : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

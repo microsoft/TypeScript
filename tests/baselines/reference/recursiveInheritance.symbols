@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveInheritance.ts ===
+//// [tests/cases/compiler/recursiveInheritance.ts] ////
+
+=== recursiveInheritance.ts ===
 interface I5 extends I5 { // error
 >I5 : Symbol(I5, Decl(recursiveInheritance.ts, 0, 0))
 >I5 : Symbol(I5, Decl(recursiveInheritance.ts, 0, 0))

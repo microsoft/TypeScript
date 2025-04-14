@@ -1,4 +1,6 @@
-=== tests/cases/compiler/Uppercased_Dir/src/index.ts ===
+//// [tests/cases/compiler/caseInsensitiveFileSystemWithCapsImportTypeDeclarations.ts] ////
+
+=== Uppercased_Dir/src/index.ts ===
 import { TypeB } from './type-b';
 >TypeB : Symbol(TypeB, Decl(index.ts, 0, 8))
 
@@ -12,7 +14,7 @@ export class Broken {
 >TypeB : Symbol(TypeB, Decl(index.ts, 0, 8))
     }
 }
-=== tests/cases/compiler/Uppercased_Dir/src/type-b.ts ===
+=== Uppercased_Dir/src/type-b.ts ===
 import { Merge } from './types';
 >Merge : Symbol(Merge, Decl(type-b.ts, 0, 8))
 
@@ -28,14 +30,14 @@ export type TypeB = Merge<TypeA, {
 >b : Symbol(b, Decl(type-b.ts, 3, 34))
 
 }>;
-=== tests/cases/compiler/Uppercased_Dir/src/type-a.ts ===
+=== Uppercased_Dir/src/type-a.ts ===
 export type TypeA = {
 >TypeA : Symbol(TypeA, Decl(type-a.ts, 0, 0))
 
     a: string;
 >a : Symbol(a, Decl(type-a.ts, 0, 21))
 }
-=== tests/cases/compiler/Uppercased_Dir/src/types.ts ===
+=== Uppercased_Dir/src/types.ts ===
 export type Merge<T, U> = T & U;
 >Merge : Symbol(Merge, Decl(types.ts, 0, 0))
 >T : Symbol(T, Decl(types.ts, 0, 18))

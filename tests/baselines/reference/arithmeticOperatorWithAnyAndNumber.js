@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithAnyAndNumber.ts] ////
+
 //// [arithmeticOperatorWithAnyAndNumber.ts]
 var a: any;
 var b: number;

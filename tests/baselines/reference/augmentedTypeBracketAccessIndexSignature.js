@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/augmentedTypeBracketAccessIndexSignature.ts] ////
+
 //// [augmentedTypeBracketAccessIndexSignature.ts]
 interface Foo { a }
 interface Bar { b }

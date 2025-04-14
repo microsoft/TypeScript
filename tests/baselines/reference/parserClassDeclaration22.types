@@ -1,10 +1,15 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration22.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration22.ts] ////
+
+=== parserClassDeclaration22.ts ===
 class C {
 >C : C
+>  : ^
 
     "foo"();
 >"foo" : () => any
+>      : ^^^^^^^^^
 
     "bar"() { }
 >"bar" : () => void
+>      : ^^^^^^^^^^
 }

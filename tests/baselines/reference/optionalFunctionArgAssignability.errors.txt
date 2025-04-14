@@ -1,10 +1,10 @@
-tests/cases/compiler/optionalFunctionArgAssignability.ts(7,1): error TS2322: Type '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>' is not assignable to type '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>'.
+optionalFunctionArgAssignability.ts(7,1): error TS2322: Type '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>' is not assignable to type '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>'.
   Types of parameters 'onFulFill' and 'onFulfill' are incompatible.
     Types of parameters 'value' and 'value' are incompatible.
       Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/optionalFunctionArgAssignability.ts (1 errors) ====
+==== optionalFunctionArgAssignability.ts (1 errors) ====
     interface Promise<T> {
         then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
     }

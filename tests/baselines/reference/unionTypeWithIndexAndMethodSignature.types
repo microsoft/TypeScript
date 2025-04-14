@@ -1,23 +1,35 @@
-=== tests/cases/compiler/unionTypeWithIndexAndMethodSignature.ts ===
+//// [tests/cases/compiler/unionTypeWithIndexAndMethodSignature.ts] ////
+
+=== unionTypeWithIndexAndMethodSignature.ts ===
 interface Options {
     m(x: number): void;
 >m : (x: number) => void
+>  : ^ ^^      ^^^^^    
 >x : number
+>  : ^^^^^^
 
     [key: string]: unknown;
 >key : string
+>    : ^^^^^^
 }
 declare function f(options: number | Options): void;
 >f : (options: number | Options) => void
+>  : ^       ^^                ^^^^^    
 >options : number | Options
+>        : ^^^^^^^^^^^^^^^^
 
 f({
 >f({    m(x) { },}) : void
+>                   : ^^^^
 >f : (options: number | Options) => void
+>  : ^       ^^                ^^^^^    
 >{    m(x) { },} : { m(x: number): void; }
+>                : ^^^^ ^^^^^^^^^^^^^^^^^^
 
     m(x) { },
 >m : (x: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 });

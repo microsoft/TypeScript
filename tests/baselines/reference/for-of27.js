@@ -1,12 +1,14 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of27.ts] ////
+
 //// [for-of27.ts]
-class StringIterator {
+class MyStringIterator {
     [Symbol.iterator]: any;
 }
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }
 
 //// [for-of27.js]
-class StringIterator {
+class MyStringIterator {
 }
 Symbol.iterator;
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }

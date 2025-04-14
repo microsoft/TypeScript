@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationStatements.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationStatements.js
+emittedFile:sourceMapValidationStatements.js
 sourceFile:sourceMapValidationStatements.ts
 -------------------------------------------------------------------
 >>>function f() {
@@ -73,6 +73,7 @@ sourceFile:sourceMapValidationStatements.ts
 12>                            ^
 13>                             ^^
 14>                               ^^
+15>                                 ^
 1->
   >    
 2 >    for (
@@ -88,6 +89,7 @@ sourceFile:sourceMapValidationStatements.ts
 12>                            i
 13>                             ++
 14>                               ) 
+15>                                 {
 1->Emitted(4, 5) Source(4, 5) + SourceIndex(0)
 2 >Emitted(4, 10) Source(4, 10) + SourceIndex(0)
 3 >Emitted(4, 14) Source(4, 14) + SourceIndex(0)
@@ -102,6 +104,7 @@ sourceFile:sourceMapValidationStatements.ts
 12>Emitted(4, 30) Source(4, 30) + SourceIndex(0)
 13>Emitted(4, 32) Source(4, 32) + SourceIndex(0)
 14>Emitted(4, 34) Source(4, 34) + SourceIndex(0)
+15>Emitted(4, 35) Source(4, 35) + SourceIndex(0)
 ---
 >>>        x += i;
 1 >^^^^^^^^
@@ -110,7 +113,7 @@ sourceFile:sourceMapValidationStatements.ts
 4 >             ^
 5 >              ^
 6 >               ^->
-1 >{
+1 >
   >        
 2 >        x
 3 >          += 
@@ -141,11 +144,14 @@ sourceFile:sourceMapValidationStatements.ts
 5 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
 ---
 >>>    if (x > 17) {
 1->^^^^
@@ -154,6 +160,7 @@ sourceFile:sourceMapValidationStatements.ts
 4 >         ^^^
 5 >            ^^
 6 >              ^^
+7 >                ^
 1->
   >    
 2 >    if (
@@ -161,12 +168,14 @@ sourceFile:sourceMapValidationStatements.ts
 4 >          > 
 5 >            17
 6 >              ) 
+7 >                {
 1->Emitted(8, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(8, 9) Source(8, 9) + SourceIndex(0)
 3 >Emitted(8, 10) Source(8, 10) + SourceIndex(0)
 4 >Emitted(8, 13) Source(8, 13) + SourceIndex(0)
 5 >Emitted(8, 15) Source(8, 15) + SourceIndex(0)
 6 >Emitted(8, 17) Source(8, 17) + SourceIndex(0)
+7 >Emitted(8, 18) Source(8, 18) + SourceIndex(0)
 ---
 >>>        x /= 9;
 1 >^^^^^^^^
@@ -174,7 +183,7 @@ sourceFile:sourceMapValidationStatements.ts
 3 >         ^^^^
 4 >             ^
 5 >              ^
-1 >{
+1 >
   >        
 2 >        x
 3 >          /= 
@@ -187,17 +196,23 @@ sourceFile:sourceMapValidationStatements.ts
 5 >Emitted(9, 16) Source(9, 16) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^->
 1 >
-  >    }
-1 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>    else {
 1->^^^^^^^^^
-2 >         ^^^^^^^^->
+2 >         ^
+3 >          ^^^^^^^->
 1-> else 
+2 >         {
 1->Emitted(11, 10) Source(10, 12) + SourceIndex(0)
+2 >Emitted(11, 11) Source(10, 13) + SourceIndex(0)
 ---
 >>>        x += 10;
 1->^^^^^^^^
@@ -205,7 +220,7 @@ sourceFile:sourceMapValidationStatements.ts
 3 >         ^^^^
 4 >             ^^
 5 >               ^
-1->{
+1->
   >        
 2 >        x
 3 >          += 
@@ -233,11 +248,14 @@ sourceFile:sourceMapValidationStatements.ts
 4 >Emitted(13, 13) Source(12, 13) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(14, 6) Source(13, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(14, 5) Source(13, 5) + SourceIndex(0)
+2 >Emitted(14, 6) Source(13, 6) + SourceIndex(0)
 ---
 >>>    var a = [
 1->^^^^
@@ -357,7 +375,7 @@ sourceFile:sourceMapValidationStatements.ts
 5 >              ^^^^
 6 >                  ^
 7 >                   ^^
-8 >                     ^->
+8 >                     ^
 1->
   >    
 2 >    for (
@@ -366,6 +384,7 @@ sourceFile:sourceMapValidationStatements.ts
 5 >               in 
 6 >                  a
 7 >                   ) 
+8 >                     {
 1->Emitted(24, 5) Source(23, 5) + SourceIndex(0)
 2 >Emitted(24, 10) Source(23, 10) + SourceIndex(0)
 3 >Emitted(24, 14) Source(23, 14) + SourceIndex(0)
@@ -373,9 +392,10 @@ sourceFile:sourceMapValidationStatements.ts
 5 >Emitted(24, 19) Source(23, 19) + SourceIndex(0)
 6 >Emitted(24, 20) Source(23, 20) + SourceIndex(0)
 7 >Emitted(24, 22) Source(23, 22) + SourceIndex(0)
+8 >Emitted(24, 23) Source(23, 23) + SourceIndex(0)
 ---
 >>>        obj.z = a[j];
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^
 3 >           ^
 4 >            ^
@@ -385,7 +405,7 @@ sourceFile:sourceMapValidationStatements.ts
 8 >                  ^
 9 >                   ^
 10>                    ^
-1->{
+1 >
   >        
 2 >        obj
 3 >           .
@@ -396,7 +416,7 @@ sourceFile:sourceMapValidationStatements.ts
 8 >                  j
 9 >                   ]
 10>                    ;
-1->Emitted(25, 9) Source(24, 9) + SourceIndex(0)
+1 >Emitted(25, 9) Source(24, 9) + SourceIndex(0)
 2 >Emitted(25, 12) Source(24, 12) + SourceIndex(0)
 3 >Emitted(25, 13) Source(24, 13) + SourceIndex(0)
 4 >Emitted(25, 14) Source(24, 14) + SourceIndex(0)
@@ -429,21 +449,27 @@ sourceFile:sourceMapValidationStatements.ts
 6 >Emitted(26, 20) Source(25, 20) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^->
 1 >
-  >    }
-1 >Emitted(27, 6) Source(26, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(27, 5) Source(26, 5) + SourceIndex(0)
+2 >Emitted(27, 6) Source(26, 6) + SourceIndex(0)
 ---
 >>>    try {
 1->^^^^
 2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^->
+3 >        ^
+4 >         ^^^^^^^^^^^^^^^->
 1->
   >    
 2 >    try 
+3 >        {
 1->Emitted(28, 5) Source(27, 5) + SourceIndex(0)
 2 >Emitted(28, 9) Source(27, 9) + SourceIndex(0)
+3 >Emitted(28, 10) Source(27, 10) + SourceIndex(0)
 ---
 >>>        obj.q = "ohhh";
 1->^^^^^^^^
@@ -453,7 +479,7 @@ sourceFile:sourceMapValidationStatements.ts
 5 >             ^^^
 6 >                ^^^^^^
 7 >                      ^
-1->{
+1->
   >        
 2 >        obj
 3 >           .
@@ -470,26 +496,32 @@ sourceFile:sourceMapValidationStatements.ts
 7 >Emitted(29, 24) Source(28, 24) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(30, 6) Source(29, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(30, 5) Source(29, 5) + SourceIndex(0)
+2 >Emitted(30, 6) Source(29, 6) + SourceIndex(0)
 ---
 >>>    catch (e) {
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^
 4 >            ^^
-5 >              ^^^^^^^^^^^^->
+5 >              ^
+6 >               ^^^^^^^^^^^->
 1-> 
 2 >    catch (
 3 >           e
 4 >            ) 
+5 >              {
 1->Emitted(31, 5) Source(29, 7) + SourceIndex(0)
 2 >Emitted(31, 12) Source(29, 14) + SourceIndex(0)
 3 >Emitted(31, 13) Source(29, 15) + SourceIndex(0)
 4 >Emitted(31, 15) Source(29, 17) + SourceIndex(0)
+5 >Emitted(31, 16) Source(29, 18) + SourceIndex(0)
 ---
 >>>        if (obj.z < 10) {
 1->^^^^^^^^
@@ -500,7 +532,8 @@ sourceFile:sourceMapValidationStatements.ts
 6 >                 ^^^
 7 >                    ^^
 8 >                      ^^
-1->{
+9 >                        ^
+1->
   >        
 2 >        if (
 3 >            obj
@@ -509,6 +542,7 @@ sourceFile:sourceMapValidationStatements.ts
 6 >                  < 
 7 >                    10
 8 >                      ) 
+9 >                        {
 1->Emitted(32, 9) Source(30, 9) + SourceIndex(0)
 2 >Emitted(32, 13) Source(30, 13) + SourceIndex(0)
 3 >Emitted(32, 16) Source(30, 16) + SourceIndex(0)
@@ -517,6 +551,7 @@ sourceFile:sourceMapValidationStatements.ts
 6 >Emitted(32, 21) Source(30, 21) + SourceIndex(0)
 7 >Emitted(32, 23) Source(30, 23) + SourceIndex(0)
 8 >Emitted(32, 25) Source(30, 25) + SourceIndex(0)
+9 >Emitted(32, 26) Source(30, 26) + SourceIndex(0)
 ---
 >>>            obj.z = 12;
 1 >^^^^^^^^^^^^
@@ -526,7 +561,7 @@ sourceFile:sourceMapValidationStatements.ts
 5 >                 ^^^
 6 >                    ^^
 7 >                      ^
-1 >{
+1 >
   >            
 2 >            obj
 3 >               .
@@ -543,17 +578,23 @@ sourceFile:sourceMapValidationStatements.ts
 7 >Emitted(33, 24) Source(31, 24) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^^
-2 >         ^^^^^^->
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^->
 1 >
-  >        }
-1 >Emitted(34, 10) Source(32, 10) + SourceIndex(0)
+  >        
+2 >        }
+1 >Emitted(34, 9) Source(32, 9) + SourceIndex(0)
+2 >Emitted(34, 10) Source(32, 10) + SourceIndex(0)
 ---
 >>>        else {
 1->^^^^^^^^^^^^^
-2 >             ^^^^^^^^^^^^^^->
+2 >             ^
+3 >              ^^^^^^^^^^^^^->
 1-> else 
+2 >             {
 1->Emitted(35, 14) Source(32, 16) + SourceIndex(0)
+2 >Emitted(35, 15) Source(32, 17) + SourceIndex(0)
 ---
 >>>            obj.q = "hmm";
 1->^^^^^^^^^^^^
@@ -563,7 +604,7 @@ sourceFile:sourceMapValidationStatements.ts
 5 >                 ^^^
 6 >                    ^^^^^
 7 >                         ^
-1->{
+1->
   >            
 2 >            obj
 3 >               .
@@ -580,27 +621,36 @@ sourceFile:sourceMapValidationStatements.ts
 7 >Emitted(36, 27) Source(33, 27) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^^
+1 >^^^^^^^^
+2 >        ^
 1 >
-  >        }
-1 >Emitted(37, 10) Source(34, 10) + SourceIndex(0)
+  >        
+2 >        }
+1 >Emitted(37, 9) Source(34, 9) + SourceIndex(0)
+2 >Emitted(37, 10) Source(34, 10) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^->
 1 >
-  >    }
-1 >Emitted(38, 6) Source(35, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(38, 5) Source(35, 5) + SourceIndex(0)
+2 >Emitted(38, 6) Source(35, 6) + SourceIndex(0)
 ---
 >>>    try {
 1->^^^^
 2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^->
+3 >        ^
+4 >         ^^^^^^^^^^^^^^^^^^->
 1->
   >    
 2 >    try 
+3 >        {
 1->Emitted(39, 5) Source(36, 5) + SourceIndex(0)
 2 >Emitted(39, 9) Source(36, 9) + SourceIndex(0)
+3 >Emitted(39, 10) Source(36, 10) + SourceIndex(0)
 ---
 >>>        throw new Error();
 1->^^^^^^^^
@@ -609,7 +659,7 @@ sourceFile:sourceMapValidationStatements.ts
 4 >                  ^^^^^
 5 >                       ^^
 6 >                         ^
-1->{
+1->
   >        
 2 >        throw 
 3 >              new 
@@ -624,26 +674,32 @@ sourceFile:sourceMapValidationStatements.ts
 6 >Emitted(40, 27) Source(37, 27) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(41, 6) Source(38, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(41, 5) Source(38, 5) + SourceIndex(0)
+2 >Emitted(41, 6) Source(38, 6) + SourceIndex(0)
 ---
 >>>    catch (e1) {
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^
 4 >             ^^
-5 >               ^^^^^->
+5 >               ^
+6 >                ^^^^->
 1-> 
 2 >    catch (
 3 >           e1
 4 >             ) 
+5 >               {
 1->Emitted(42, 5) Source(38, 7) + SourceIndex(0)
 2 >Emitted(42, 12) Source(38, 14) + SourceIndex(0)
 3 >Emitted(42, 14) Source(38, 16) + SourceIndex(0)
 4 >Emitted(42, 16) Source(38, 18) + SourceIndex(0)
+5 >Emitted(42, 17) Source(38, 19) + SourceIndex(0)
 ---
 >>>        var b = e1;
 1->^^^^^^^^
@@ -652,7 +708,7 @@ sourceFile:sourceMapValidationStatements.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->{
+1->
   >        
 2 >        var 
 3 >            b
@@ -667,17 +723,23 @@ sourceFile:sourceMapValidationStatements.ts
 6 >Emitted(43, 20) Source(39, 20) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(44, 6) Source(40, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(44, 5) Source(40, 5) + SourceIndex(0)
+2 >Emitted(44, 6) Source(40, 6) + SourceIndex(0)
 ---
 >>>    finally {
 1->^^^^^^^^^^^^
-2 >            ^^^^->
+2 >            ^
+3 >             ^^^->
 1-> finally 
+2 >            {
 1->Emitted(45, 13) Source(40, 15) + SourceIndex(0)
+2 >Emitted(45, 14) Source(40, 16) + SourceIndex(0)
 ---
 >>>        y = 70;
 1->^^^^^^^^
@@ -685,7 +747,7 @@ sourceFile:sourceMapValidationStatements.ts
 3 >         ^^^
 4 >            ^^
 5 >              ^
-1->{
+1->
   >        
 2 >        y
 3 >          = 
@@ -698,26 +760,32 @@ sourceFile:sourceMapValidationStatements.ts
 5 >Emitted(46, 16) Source(41, 16) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(47, 6) Source(42, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(47, 5) Source(42, 5) + SourceIndex(0)
+2 >Emitted(47, 6) Source(42, 6) + SourceIndex(0)
 ---
 >>>    with (obj) {
 1->^^^^
 2 >    ^^^^^^
 3 >          ^^^
 4 >             ^^
+5 >               ^
 1->
   >    
 2 >    with (
 3 >          obj
 4 >             ) 
+5 >               {
 1->Emitted(48, 5) Source(43, 5) + SourceIndex(0)
 2 >Emitted(48, 11) Source(43, 11) + SourceIndex(0)
 3 >Emitted(48, 14) Source(43, 14) + SourceIndex(0)
 4 >Emitted(48, 16) Source(43, 16) + SourceIndex(0)
+5 >Emitted(48, 17) Source(43, 17) + SourceIndex(0)
 ---
 >>>        i = 2;
 1 >^^^^^^^^
@@ -726,7 +794,7 @@ sourceFile:sourceMapValidationStatements.ts
 4 >            ^
 5 >             ^
 6 >              ^^->
-1 >{
+1 >
   >        
 2 >        i
 3 >          = 
@@ -757,11 +825,14 @@ sourceFile:sourceMapValidationStatements.ts
 5 >Emitted(50, 16) Source(45, 16) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(51, 6) Source(46, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(51, 5) Source(46, 5) + SourceIndex(0)
+2 >Emitted(51, 6) Source(46, 6) + SourceIndex(0)
 ---
 >>>    switch (obj.z) {
 1->^^^^
@@ -770,6 +841,7 @@ sourceFile:sourceMapValidationStatements.ts
 4 >               ^
 5 >                ^
 6 >                 ^^
+7 >                   ^
 1->
   >    
 2 >    switch (
@@ -777,12 +849,14 @@ sourceFile:sourceMapValidationStatements.ts
 4 >               .
 5 >                z
 6 >                 ) 
+7 >                   {
 1->Emitted(52, 5) Source(47, 5) + SourceIndex(0)
 2 >Emitted(52, 13) Source(47, 13) + SourceIndex(0)
 3 >Emitted(52, 16) Source(47, 16) + SourceIndex(0)
 4 >Emitted(52, 17) Source(47, 17) + SourceIndex(0)
 5 >Emitted(52, 18) Source(47, 18) + SourceIndex(0)
 6 >Emitted(52, 20) Source(47, 20) + SourceIndex(0)
+7 >Emitted(52, 21) Source(47, 21) + SourceIndex(0)
 ---
 >>>        case 0: {
 1 >^^^^^^^^
@@ -790,31 +864,33 @@ sourceFile:sourceMapValidationStatements.ts
 3 >             ^
 4 >              ^
 5 >               ^
-6 >                ^->
-1 >{
+6 >                ^
+1 >
   >        
 2 >        case 
 3 >             0
 4 >              :
 5 >                
+6 >                {
 1 >Emitted(53, 9) Source(48, 9) + SourceIndex(0)
 2 >Emitted(53, 14) Source(48, 14) + SourceIndex(0)
 3 >Emitted(53, 15) Source(48, 15) + SourceIndex(0)
 4 >Emitted(53, 16) Source(48, 16) + SourceIndex(0)
 5 >Emitted(53, 17) Source(48, 17) + SourceIndex(0)
+6 >Emitted(53, 18) Source(48, 18) + SourceIndex(0)
 ---
 >>>            x++;
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^
 4 >               ^
 5 >                ^^^->
-1->{
+1 >
   >            
 2 >            x
 3 >             ++
 4 >               ;
-1->Emitted(54, 13) Source(49, 13) + SourceIndex(0)
+1 >Emitted(54, 13) Source(49, 13) + SourceIndex(0)
 2 >Emitted(54, 14) Source(49, 14) + SourceIndex(0)
 3 >Emitted(54, 16) Source(49, 16) + SourceIndex(0)
 4 >Emitted(54, 17) Source(49, 17) + SourceIndex(0)
@@ -829,12 +905,15 @@ sourceFile:sourceMapValidationStatements.ts
 2 >Emitted(55, 19) Source(50, 19) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^^
-2 >         ^^^^^^^^^->
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^->
 1 >
   >
-  >        }
-1 >Emitted(56, 10) Source(52, 10) + SourceIndex(0)
+  >        
+2 >        }
+1 >Emitted(56, 9) Source(52, 9) + SourceIndex(0)
+2 >Emitted(56, 10) Source(52, 10) + SourceIndex(0)
 ---
 >>>        case 1: {
 1->^^^^^^^^
@@ -842,31 +921,33 @@ sourceFile:sourceMapValidationStatements.ts
 3 >             ^
 4 >              ^
 5 >               ^
-6 >                ^->
+6 >                ^
 1->
   >        
 2 >        case 
 3 >             1
 4 >              :
 5 >                
+6 >                {
 1->Emitted(57, 9) Source(53, 9) + SourceIndex(0)
 2 >Emitted(57, 14) Source(53, 14) + SourceIndex(0)
 3 >Emitted(57, 15) Source(53, 15) + SourceIndex(0)
 4 >Emitted(57, 16) Source(53, 16) + SourceIndex(0)
 5 >Emitted(57, 17) Source(53, 17) + SourceIndex(0)
+6 >Emitted(57, 18) Source(53, 18) + SourceIndex(0)
 ---
 >>>            x--;
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^
 4 >               ^
 5 >                ^^^->
-1->{
+1 >
   >            
 2 >            x
 3 >             --
 4 >               ;
-1->Emitted(58, 13) Source(54, 13) + SourceIndex(0)
+1 >Emitted(58, 13) Source(54, 13) + SourceIndex(0)
 2 >Emitted(58, 14) Source(54, 14) + SourceIndex(0)
 3 >Emitted(58, 16) Source(54, 16) + SourceIndex(0)
 4 >Emitted(58, 17) Source(54, 17) + SourceIndex(0)
@@ -881,28 +962,34 @@ sourceFile:sourceMapValidationStatements.ts
 2 >Emitted(59, 19) Source(55, 19) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^^
-2 >         ^^^^^^^^^^->
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^->
 1 >
   >
-  >        }
-1 >Emitted(60, 10) Source(57, 10) + SourceIndex(0)
+  >        
+2 >        }
+1 >Emitted(60, 9) Source(57, 9) + SourceIndex(0)
+2 >Emitted(60, 10) Source(57, 10) + SourceIndex(0)
 ---
 >>>        default: {
 1->^^^^^^^^
 2 >        ^^^^^^^
 3 >               ^
 4 >                ^
-5 >                 ^^^->
+5 >                 ^
+6 >                  ^^->
 1->
   >        
 2 >        default
 3 >               :
 4 >                 
+5 >                 {
 1->Emitted(61, 9) Source(58, 9) + SourceIndex(0)
 2 >Emitted(61, 16) Source(58, 16) + SourceIndex(0)
 3 >Emitted(61, 17) Source(58, 17) + SourceIndex(0)
 4 >Emitted(61, 18) Source(58, 18) + SourceIndex(0)
+5 >Emitted(61, 19) Source(58, 19) + SourceIndex(0)
 ---
 >>>            x *= 2;
 1->^^^^^^^^^^^^
@@ -911,7 +998,7 @@ sourceFile:sourceMapValidationStatements.ts
 4 >                 ^
 5 >                  ^
 6 >                   ^->
-1->{
+1->
   >            
 2 >            x
 3 >              *= 
@@ -951,18 +1038,24 @@ sourceFile:sourceMapValidationStatements.ts
 2 >Emitted(64, 19) Source(61, 19) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^^
+1 >^^^^^^^^
+2 >        ^
 1 >
   >
-  >        }
-1 >Emitted(65, 10) Source(63, 10) + SourceIndex(0)
+  >        
+2 >        }
+1 >Emitted(65, 9) Source(63, 9) + SourceIndex(0)
+2 >Emitted(65, 10) Source(63, 10) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(66, 6) Source(64, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(66, 5) Source(64, 5) + SourceIndex(0)
+2 >Emitted(66, 6) Source(64, 6) + SourceIndex(0)
 ---
 >>>    while (x < 10) {
 1->^^^^
@@ -971,6 +1064,7 @@ sourceFile:sourceMapValidationStatements.ts
 4 >            ^^^
 5 >               ^^
 6 >                 ^^
+7 >                   ^
 1->
   >    
 2 >    while (
@@ -978,19 +1072,21 @@ sourceFile:sourceMapValidationStatements.ts
 4 >             < 
 5 >               10
 6 >                 ) 
+7 >                   {
 1->Emitted(67, 5) Source(65, 5) + SourceIndex(0)
 2 >Emitted(67, 12) Source(65, 12) + SourceIndex(0)
 3 >Emitted(67, 13) Source(65, 13) + SourceIndex(0)
 4 >Emitted(67, 16) Source(65, 16) + SourceIndex(0)
 5 >Emitted(67, 18) Source(65, 18) + SourceIndex(0)
 6 >Emitted(67, 20) Source(65, 20) + SourceIndex(0)
+7 >Emitted(67, 21) Source(65, 21) + SourceIndex(0)
 ---
 >>>        x++;
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^
 4 >           ^
-1 >{
+1 >
   >        
 2 >        x
 3 >         ++
@@ -1001,21 +1097,27 @@ sourceFile:sourceMapValidationStatements.ts
 4 >Emitted(68, 13) Source(66, 13) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^->
 1 >
-  >    }
-1 >Emitted(69, 6) Source(67, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(69, 5) Source(67, 5) + SourceIndex(0)
+2 >Emitted(69, 6) Source(67, 6) + SourceIndex(0)
 ---
 >>>    do {
 1->^^^^
 2 >    ^^^
-3 >       ^^^^^^->
+3 >       ^
+4 >        ^^^^^->
 1->
   >    
 2 >    do 
+3 >       {
 1->Emitted(70, 5) Source(68, 5) + SourceIndex(0)
 2 >Emitted(70, 8) Source(68, 8) + SourceIndex(0)
+3 >Emitted(70, 9) Source(68, 9) + SourceIndex(0)
 ---
 >>>        x--;
 1->^^^^^^^^
@@ -1023,7 +1125,7 @@ sourceFile:sourceMapValidationStatements.ts
 3 >         ^^
 4 >           ^
 5 >            ^^^^^^^^^->
-1->{
+1->
   >        
 2 >        x
 3 >         --
@@ -1034,25 +1136,28 @@ sourceFile:sourceMapValidationStatements.ts
 4 >Emitted(71, 13) Source(69, 13) + SourceIndex(0)
 ---
 >>>    } while (x > 4);
-1->^^^^^
-2 >     ^^^^^^^^
-3 >             ^
-4 >              ^^^
-5 >                 ^
-6 >                  ^^
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^^
+4 >             ^
+5 >              ^^^
+6 >                 ^
+7 >                  ^^
 1->
-  >    }
-2 >      while (
-3 >             x
-4 >               > 
-5 >                 4
-6 >                  )
-1->Emitted(72, 6) Source(70, 6) + SourceIndex(0)
-2 >Emitted(72, 14) Source(70, 14) + SourceIndex(0)
-3 >Emitted(72, 15) Source(70, 15) + SourceIndex(0)
-4 >Emitted(72, 18) Source(70, 18) + SourceIndex(0)
-5 >Emitted(72, 19) Source(70, 19) + SourceIndex(0)
-6 >Emitted(72, 21) Source(70, 20) + SourceIndex(0)
+  >    
+2 >    }
+3 >      while (
+4 >             x
+5 >               > 
+6 >                 4
+7 >                  )
+1->Emitted(72, 5) Source(70, 5) + SourceIndex(0)
+2 >Emitted(72, 6) Source(70, 6) + SourceIndex(0)
+3 >Emitted(72, 14) Source(70, 14) + SourceIndex(0)
+4 >Emitted(72, 15) Source(70, 15) + SourceIndex(0)
+5 >Emitted(72, 18) Source(70, 18) + SourceIndex(0)
+6 >Emitted(72, 19) Source(70, 19) + SourceIndex(0)
+7 >Emitted(72, 21) Source(70, 20) + SourceIndex(0)
 ---
 >>>    x = y;
 1 >^^^^

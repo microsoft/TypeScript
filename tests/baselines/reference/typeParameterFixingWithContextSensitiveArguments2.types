@@ -1,38 +1,67 @@
-=== tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts ===
+//// [tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts] ////
+
+=== typeParameterFixingWithContextSensitiveArguments2.ts ===
 function f<T, U>(y: T, y1: U, p: (z: U) => T, p1: (x: T) => U): [T, U] { return [y, p1(y)]; }
 >f : <T, U>(y: T, y1: U, p: (z: U) => T, p1: (x: T) => U) => [T, U]
+>  : ^ ^^ ^^ ^^ ^^  ^^ ^^ ^^           ^^  ^^           ^^^^^      
 >y : T
+>  : ^
 >y1 : U
+>   : ^
 >p : (z: U) => T
+>  : ^ ^^ ^^^^^ 
 >z : U
+>  : ^
 >p1 : (x: T) => U
+>   : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >[y, p1(y)] : [T, U]
+>           : ^^^^^^
 >y : T
+>  : ^
 >p1(y) : U
+>      : ^
 >p1 : (x: T) => U
+>   : ^ ^^ ^^^^^ 
 >y : T
+>  : ^
 
 interface A { a: A; }
 >a : A
+>  : ^
 
 interface B extends A { b; }
 >b : any
+>  : ^^^
 
 var a: A, b: B;
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 var d = f(a, b, x => x, x => x); // A => A not assignable to A => B
 >d : [A, B]
+>  : ^^^^^^
 >f(a, b, x => x, x => x) : [A, B]
+>                        : ^^^^^^
 >f : <T, U>(y: T, y1: U, p: (z: U) => T, p1: (x: T) => U) => [T, U]
+>  : ^ ^^ ^^ ^^ ^^  ^^ ^^ ^^           ^^  ^^           ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 >x => x : (x: B) => B
+>       : ^ ^^^^^^^^^
 >x : B
+>  : ^
 >x : B
+>  : ^
 >x => x : (x: A) => A
+>       : ^ ^^^^^^^^^
 >x : A
+>  : ^
 >x : A
+>  : ^
 

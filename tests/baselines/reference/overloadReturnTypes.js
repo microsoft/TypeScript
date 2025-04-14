@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadReturnTypes.ts] ////
+
 //// [overloadReturnTypes.ts]
 class Accessor {}
 

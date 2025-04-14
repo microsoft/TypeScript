@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorAccidentalCallDiagnostic.ts] ////
+
 //// [accessorAccidentalCallDiagnostic.ts]
 // https://github.com/microsoft/TypeScript/issues/24554
 class Test24554 {

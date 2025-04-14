@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionCodeGenModuleWithModuleChildren.ts] ////
+
 //// [collisionCodeGenModuleWithModuleChildren.ts]
 module M {
     export var x = 3;

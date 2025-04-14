@@ -1,25 +1,37 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends2.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionInExtends2.ts] ////
+
+=== declarationEmitExpressionInExtends2.ts ===
 class C<T, U> {
 >C : C<T, U>
+>  : ^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     y: U;
 >y : U
+>  : ^
 }
 
 function getClass<T>(c: T) {
 >getClass : <T>(c: T) => typeof C
+>         : ^ ^^ ^^ ^^^^^^^^^^^^^
 >c : T
+>  : ^
 
     return C;
 >C : typeof C
+>  : ^^^^^^^^
 }
 
 class MyClass extends getClass(2) <string, number> {
 >MyClass : MyClass
+>        : ^^^^^^^
 >getClass(2) : C<string, number>
+>            : ^^^^^^^^^^^^^^^^^
 >getClass : <T>(c: T) => typeof C
+>         : ^ ^^ ^^ ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 }

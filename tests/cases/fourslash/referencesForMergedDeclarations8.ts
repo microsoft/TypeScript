@@ -3,11 +3,11 @@
 ////interface Foo { }
 ////module Foo {
 ////    export interface Bar { }
-////    [|export module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Bar|] { export interface Baz { } }|]
+////    /*1*/export module /*2*/Bar { export interface Baz { } }
 ////    export function Bar() { }
 ////}
 ////
 ////// module
-////import a3 = Foo.[|Bar|].Baz;
+////import a3 = Foo./*3*/Bar.Baz;
 
-verify.singleReferenceGroup("namespace Foo.Bar", "Bar");
+verify.baselineFindAllReferences('1', '2', '3');

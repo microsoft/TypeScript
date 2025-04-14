@@ -1,54 +1,77 @@
-=== tests/cases/compiler/aliasUsageInIndexerOfClass_main.ts ===
+//// [tests/cases/compiler/aliasUsageInIndexerOfClass.ts] ////
+
+=== aliasUsageInIndexerOfClass_main.ts ===
 import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 import moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 >Backbone.Model : typeof Backbone.Model
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 }
 class N {
 >N : N
+>  : ^
 
     [idx: string]: IHasVisualizationModel
 >idx : string
+>    : ^^^^^^
 
     x = moduleA;
 >x : typeof moduleA
+>  : ^^^^^^^^^^^^^^
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 }
 class N2 {
 >N2 : N2
+>   : ^^
 
     [idx: string]: typeof moduleA
 >idx : string
+>    : ^^^^^^
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 
     x: IHasVisualizationModel;
 >x : IHasVisualizationModel
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 }
-=== tests/cases/compiler/aliasUsageInIndexerOfClass_backbone.ts ===
+=== aliasUsageInIndexerOfClass_backbone.ts ===
 export class Model {
 >Model : Model
+>      : ^^^^^
 
     public someData: string;
 >someData : string
+>         : ^^^^^^
 }
 
-=== tests/cases/compiler/aliasUsageInIndexerOfClass_moduleA.ts ===
+=== aliasUsageInIndexerOfClass_moduleA.ts ===
 import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
+>                   : ^^^^^^^^^^^^^^^^^^
 >Backbone.Model : Backbone.Model
+>               : ^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     // interesting stuff here
 }

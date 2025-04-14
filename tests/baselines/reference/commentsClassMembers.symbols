@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsClassMembers.ts ===
+//// [tests/cases/compiler/commentsClassMembers.ts] ////
+
+=== commentsClassMembers.ts ===
 /** This is comment for c1*/
 class c1 {
 >c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))

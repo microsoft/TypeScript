@@ -1,8 +1,10 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/declarationEmitDefaultExportWithStaticAssignment.ts] ////
+
+=== foo.ts ===
 export class Foo {}
 >Foo : Symbol(Foo, Decl(foo.ts, 0, 0))
 
-=== tests/cases/compiler/index1.ts ===
+=== index1.ts ===
 import {Foo} from './foo';
 >Foo : Symbol(Foo, Decl(index1.ts, 0, 8))
 
@@ -15,7 +17,7 @@ Example.Foo = Foo
 >Foo : Symbol(Example.Foo, Decl(index1.ts, 1, 36))
 >Foo : Symbol(Foo, Decl(index1.ts, 0, 8))
 
-=== tests/cases/compiler/index2.ts ===
+=== index2.ts ===
 import {Foo} from './foo';
 >Foo : Symbol(Foo, Decl(index2.ts, 0, 8))
 
@@ -31,7 +33,7 @@ Example.Foo = Foo
 >Foo : Symbol(Example.Foo, Decl(index2.ts, 2, 36))
 >Foo : Symbol(Foo, Decl(index2.ts, 0, 8))
 
-=== tests/cases/compiler/index3.ts ===
+=== index3.ts ===
 export class Bar {}
 >Bar : Symbol(Bar, Decl(index3.ts, 0, 0))
 
@@ -44,7 +46,7 @@ Example.Bar = Bar
 >Bar : Symbol(Example.Bar, Decl(index3.ts, 1, 36))
 >Bar : Symbol(Bar, Decl(index3.ts, 0, 0))
 
-=== tests/cases/compiler/index4.ts ===
+=== index4.ts ===
 function A() {  }
 >A : Symbol(A, Decl(index4.ts, 0, 0))
 

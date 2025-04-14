@@ -1,32 +1,45 @@
-=== tests/cases/compiler/intTypeCheck.ts ===
+//// [tests/cases/compiler/intTypeCheck.ts] ////
+
+=== intTypeCheck.ts ===
 interface i1 {
     //Property Signatures
     p;
 >p : any
+>  : ^^^
 
     p1?;
 >p1 : any
+>   : ^^^
 
     p2?: string;
 >p2 : string
+>   : ^^^^^^
 
     p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
     p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
     p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
     p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
     p7? (pa1, pa2): void;
 >p7 : (pa1: any, pa2: any) => void
+>   : ^   ^^^^^^^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 }
 interface i2 {
     //Call Signatures
@@ -34,23 +47,31 @@ interface i2 {
     (): number;
     (p);
 >p : any
+>  : ^^^
 
     (p1: string);
 >p1 : string
+>   : ^^^^^^
 
     (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
     (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
     (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 }
 interface i3 {
     //Construct Signatures
@@ -58,34 +79,46 @@ interface i3 {
     new (): number;
     new (p: string);
 >p : string
+>  : ^^^^^^
 
     new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
     new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
     new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 }
 interface i4 {
     // Used to be indexer, now it is a computed property
     [p];
 >[p] : any
+>    : ^^^
 >p : any
+>  : ^^^
 
     //Index Signatures
     [p1: string];
 >p1 : string
+>   : ^^^^^^
 
     [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 }
 interface i5 extends i1 { }
 interface i6 extends i2 { }
@@ -95,7 +128,9 @@ interface i9 { }
 
 class Base { foo() { } }
 >Base : Base
+>     : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 interface i11 {
     //Call Signatures
@@ -103,23 +138,31 @@ interface i11 {
     (): number;
     (p);
 >p : any
+>  : ^^^
 
     (p1: string);
 >p1 : string
+>   : ^^^^^^
 
     (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
     (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
     (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
     //(p8?: string, ...p9: any[]);
     //(p10:string, p8?: string, ...p9: any[]);
@@ -129,517 +172,774 @@ interface i11 {
     new (): number;
     new (p: string);
 >p : string
+>  : ^^^^^^
 
     new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
     new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
     new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
     
     // Used to be indexer, now it is a computed property
     [p];
 >[p] : any
+>    : ^^^
 >p : any
+>  : ^^^
 
     //Index Signatures
     [p1: string];
 >p1 : string
+>   : ^^^^^^
 
     [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
     //Property Signatures
     p;
 >p : any
+>  : ^^^
 
     p1?;
 >p1 : any
+>   : ^^^
 
     p2?: string;
 >p2 : string
+>   : ^^^^^^
 
     p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
     p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
     p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
     p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
     p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
     p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 }
 
 var anyVar: any;
 >anyVar : any
+>       : ^^^
 
 //
 // Property signatures
 //
 var obj0: i1;
 >obj0 : i1
+>     : ^^
 
 var obj1: i1 = {
 >obj1 : i1
+>     : ^^
 >{    p: null,    p3: function ():any { return 0; },    p6: function (pa1):any { return 0; },    p7: function (pa1, pa2):any { return 0; }} : { p: null; p3: () => any; p6: (pa1: any) => any; p7: (pa1: any, pa2: any) => any; }
+>                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^^^   ^^^^^^^   ^^^^^^^   ^^^^^^^^^^   ^^^
 
     p: null,
 >p : null
->null : null
+>  : ^^^^
 
     p3: function ():any { return 0; },
 >p3 : () => any
+>   : ^^^^^^   
 >function ():any { return 0; } : () => any
+>                              : ^^^^^^   
 >0 : 0
+>  : ^
 
     p6: function (pa1):any { return 0; },
 >p6 : (pa1: any) => any
+>   : ^   ^^^^^^^^^^   
 >function (pa1):any { return 0; } : (pa1: any) => any
+>                                 : ^   ^^^^^^^^^^   
 >pa1 : any
+>    : ^^^
 >0 : 0
+>  : ^
 
     p7: function (pa1, pa2):any { return 0; }
 >p7 : (pa1: any, pa2: any) => any
+>   : ^   ^^^^^^^   ^^^^^^^^^^   
 >function (pa1, pa2):any { return 0; } : (pa1: any, pa2: any) => any
+>                                      : ^   ^^^^^^^   ^^^^^^^^^^   
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 >0 : 0
+>  : ^
 
 };
 var obj2: i1 = new Object();
 >obj2 : i1
+>     : ^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj3: i1 = new obj0;
 >obj3 : i1
+>     : ^^
 >new obj0 : any
+>         : ^^^
 >obj0 : i1
+>     : ^^
 
 var obj4: i1 = new Base;
 >obj4 : i1
+>     : ^^
 >new Base : Base
+>         : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 var obj5: i1 = null;
 >obj5 : i1
->null : null
+>     : ^^
 
 var obj6: i1 = function () { };
 >obj6 : i1
+>     : ^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 //var obj7: i1 = function foo() { };
 var obj8: i1 = <i1> anyVar;
 >obj8 : i1
+>     : ^^
 ><i1> anyVar : i1
+>            : ^^
 >anyVar : any
+>       : ^^^
 
 var obj9: i1 = new <i1> anyVar;
 >obj9 : i1
+>     : ^^
 >new <i1> anyVar : boolean
+>                : ^^^^^^^
 >new <i1 : boolean
+>        : ^^^^^^^
 >new : any
+>    : ^^^
 > : any
+> : ^^^
 >i1 : any
+>   : ^^^
 >anyVar : any
+>       : ^^^
 
 var obj10: i1 = new {};
 >obj10 : i1
+>      : ^^
 >new {} : any
+>       : ^^^
 >{} : {}
+>   : ^^
 
 //
 // Call signatures
 //
 var obj11: i2;
 >obj11 : i2
+>      : ^^
 
 var obj12: i2 = {};
 >obj12 : i2
+>      : ^^
 >{} : {}
+>   : ^^
 
 var obj13: i2 = new Object();
 >obj13 : i2
+>      : ^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj14: i2 = new obj11;
 >obj14 : i2
+>      : ^^
 >new obj11 : any
+>          : ^^^
 >obj11 : i2
+>      : ^^
 
 var obj15: i2 = new Base;
 >obj15 : i2
+>      : ^^
 >new Base : Base
+>         : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 var obj16: i2 = null;
 >obj16 : i2
->null : null
+>      : ^^
 
 var obj17: i2 = function ():any { return 0; };
 >obj17 : i2
+>      : ^^
 >function ():any { return 0; } : () => any
+>                              : ^^^^^^   
 >0 : 0
+>  : ^
 
 //var obj18: i2 = function foo() { };
 var obj19: i2 = <i2> anyVar;
 >obj19 : i2
+>      : ^^
 ><i2> anyVar : i2
+>            : ^^
 >anyVar : any
+>       : ^^^
 
 var obj20: i2 = new <i2> anyVar;
 >obj20 : i2
+>      : ^^
 >new <i2> anyVar : boolean
+>                : ^^^^^^^
 >new <i2 : boolean
+>        : ^^^^^^^
 >new : any
+>    : ^^^
 > : any
+> : ^^^
 >i2 : any
+>   : ^^^
 >anyVar : any
+>       : ^^^
 
 var obj21: i2 = new {};
 >obj21 : i2
+>      : ^^
 >new {} : any
+>       : ^^^
 >{} : {}
+>   : ^^
 
 //
 // Construct Signatures
 //
 var obj22: i3;
 >obj22 : i3
+>      : ^^
 
 var obj23: i3 = {};
 >obj23 : i3
+>      : ^^
 >{} : {}
+>   : ^^
 
 var obj24: i3 = new Object();
 >obj24 : i3
+>      : ^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj25: i3 = new obj22;
 >obj25 : i3
+>      : ^^
 >new obj22 : any
+>          : ^^^
 >obj22 : i3
+>      : ^^
 
 var obj26: i3 = new Base;
 >obj26 : i3
+>      : ^^
 >new Base : Base
+>         : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 var obj27: i3 = null;
 >obj27 : i3
->null : null
+>      : ^^
 
 var obj28: i3 = function () { };
 >obj28 : i3
+>      : ^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 //var obj29: i3 = function foo() { };
 var obj30: i3 = <i3> anyVar;
 >obj30 : i3
+>      : ^^
 ><i3> anyVar : i3
+>            : ^^
 >anyVar : any
+>       : ^^^
 
 var obj31: i3 = new <i3> anyVar;
 >obj31 : i3
+>      : ^^
 >new <i3> anyVar : boolean
+>                : ^^^^^^^
 >new <i3 : boolean
+>        : ^^^^^^^
 >new : any
+>    : ^^^
 > : any
+> : ^^^
 >i3 : any
+>   : ^^^
 >anyVar : any
+>       : ^^^
 
 var obj32: i3 = new {};
 >obj32 : i3
+>      : ^^
 >new {} : any
+>       : ^^^
 >{} : {}
+>   : ^^
 
 //
 // Index Signatures
 //
 var obj33: i4;
 >obj33 : i4
+>      : ^^
 
 var obj34: i4 = {};
 >obj34 : i4
+>      : ^^
 >{} : {}
+>   : ^^
 
 var obj35: i4 = new Object();
 >obj35 : i4
+>      : ^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj36: i4 = new obj33;
 >obj36 : i4
+>      : ^^
 >new obj33 : any
+>          : ^^^
 >obj33 : i4
+>      : ^^
 
 var obj37: i4 = new Base;
 >obj37 : i4
+>      : ^^
 >new Base : Base
+>         : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 var obj38: i4 = null;
 >obj38 : i4
->null : null
+>      : ^^
 
 var obj39: i4 = function () { };
 >obj39 : i4
+>      : ^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 //var obj40: i4 = function foo() { };
 var obj41: i4 = <i4> anyVar;
 >obj41 : i4
+>      : ^^
 ><i4> anyVar : i4
+>            : ^^
 >anyVar : any
+>       : ^^^
 
 var obj42: i4 = new <i4> anyVar;
 >obj42 : i4
+>      : ^^
 >new <i4> anyVar : boolean
+>                : ^^^^^^^
 >new <i4 : boolean
+>        : ^^^^^^^
 >new : any
+>    : ^^^
 > : any
+> : ^^^
 >i4 : any
+>   : ^^^
 >anyVar : any
+>       : ^^^
 
 var obj43: i4 = new {};
 >obj43 : i4
+>      : ^^
 >new {} : any
+>       : ^^^
 >{} : {}
+>   : ^^
 
 //
 // Interface Derived I1
 //
 var obj44: i5;
 >obj44 : i5
+>      : ^^
 
 var obj45: i5 = {};
 >obj45 : i5
+>      : ^^
 >{} : {}
+>   : ^^
 
 var obj46: i5 = new Object();
 >obj46 : i5
+>      : ^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj47: i5 = new obj44;
 >obj47 : i5
+>      : ^^
 >new obj44 : any
+>          : ^^^
 >obj44 : i5
+>      : ^^
 
 var obj48: i5 = new Base;
 >obj48 : i5
+>      : ^^
 >new Base : Base
+>         : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 var obj49: i5 = null;
 >obj49 : i5
->null : null
+>      : ^^
 
 var obj50: i5 = function () { };
 >obj50 : i5
+>      : ^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 //var obj51: i5 = function foo() { };
 var obj52: i5 = <i5> anyVar;
 >obj52 : i5
+>      : ^^
 ><i5> anyVar : i5
+>            : ^^
 >anyVar : any
+>       : ^^^
 
 var obj53: i5 = new <i5> anyVar;
 >obj53 : i5
+>      : ^^
 >new <i5> anyVar : boolean
+>                : ^^^^^^^
 >new <i5 : boolean
+>        : ^^^^^^^
 >new : any
+>    : ^^^
 > : any
+> : ^^^
 >i5 : any
+>   : ^^^
 >anyVar : any
+>       : ^^^
 
 var obj54: i5 = new {};
 >obj54 : i5
+>      : ^^
 >new {} : any
+>       : ^^^
 >{} : {}
+>   : ^^
 
 //
 // Interface Derived I2
 //
 var obj55: i6;
 >obj55 : i6
+>      : ^^
 
 var obj56: i6 = {};
 >obj56 : i6
+>      : ^^
 >{} : {}
+>   : ^^
 
 var obj57: i6 = new Object();
 >obj57 : i6
+>      : ^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj58: i6 = new obj55;
 >obj58 : i6
+>      : ^^
 >new obj55 : any
+>          : ^^^
 >obj55 : i6
+>      : ^^
 
 var obj59: i6 = new Base;
 >obj59 : i6
+>      : ^^
 >new Base : Base
+>         : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 var obj60: i6 = null;
 >obj60 : i6
->null : null
+>      : ^^
 
 var obj61: i6 = function () { };
 >obj61 : i6
+>      : ^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 //var obj62: i6 = function foo() { };
 var obj63: i6 = <i6> anyVar;
 >obj63 : i6
+>      : ^^
 ><i6> anyVar : i6
+>            : ^^
 >anyVar : any
+>       : ^^^
 
 var obj64: i6 = new <i6> anyVar;
 >obj64 : i6
+>      : ^^
 >new <i6> anyVar : boolean
+>                : ^^^^^^^
 >new <i6 : boolean
+>        : ^^^^^^^
 >new : any
+>    : ^^^
 > : any
+> : ^^^
 >i6 : any
+>   : ^^^
 >anyVar : any
+>       : ^^^
 
 var obj65: i6 = new {};
 >obj65 : i6
+>      : ^^
 >new {} : any
+>       : ^^^
 >{} : {}
+>   : ^^
 
 //
 // Interface Derived I3
 //
 var obj66: i7;
 >obj66 : i7
+>      : ^^
 
 var obj67: i7 = {};
 >obj67 : i7
+>      : ^^
 >{} : {}
+>   : ^^
 
 var obj68: i7 = new Object();
 >obj68 : i7
+>      : ^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj69: i7 = new obj66;
 >obj69 : i7
+>      : ^^
 >new obj66 : any
+>          : ^^^
 >obj66 : i7
+>      : ^^
 
 var obj70: i7 = <i7>new Base;
 >obj70 : i7
+>      : ^^
 ><i7>new Base : i7
+>             : ^^
 >new Base : Base
+>         : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 var obj71: i7 = null;
 >obj71 : i7
->null : null
+>      : ^^
 
 var obj72: i7 = function () { };
 >obj72 : i7
+>      : ^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 //var obj73: i7 = function foo() { };
 var obj74: i7 = <i7> anyVar;
 >obj74 : i7
+>      : ^^
 ><i7> anyVar : i7
+>            : ^^
 >anyVar : any
+>       : ^^^
 
 var obj75: i7 = new <i7> anyVar;
 >obj75 : i7
+>      : ^^
 >new <i7> anyVar : boolean
+>                : ^^^^^^^
 >new <i7 : boolean
+>        : ^^^^^^^
 >new : any
+>    : ^^^
 > : any
+> : ^^^
 >i7 : any
+>   : ^^^
 >anyVar : any
+>       : ^^^
 
 var obj76: i7 = new {};
 >obj76 : i7
+>      : ^^
 >new {} : any
+>       : ^^^
 >{} : {}
+>   : ^^
 
 //
 // Interface Derived I4
 //
 var obj77: i8;
 >obj77 : i8
+>      : ^^
 
 var obj78: i8 = {};
 >obj78 : i8
+>      : ^^
 >{} : {}
+>   : ^^
 
 var obj79: i8 = new Object();
 >obj79 : i8
+>      : ^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj80: i8 = new obj77;
 >obj80 : i8
+>      : ^^
 >new obj77 : any
+>          : ^^^
 >obj77 : i8
+>      : ^^
 
 var obj81: i8 = new Base;
 >obj81 : i8
+>      : ^^
 >new Base : Base
+>         : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 var obj82: i8 = null;
 >obj82 : i8
->null : null
+>      : ^^
 
 var obj83: i8 = function () { };
 >obj83 : i8
+>      : ^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 //var obj84: i8 = function foo() { };
 var obj85: i8 = <i8> anyVar;
 >obj85 : i8
+>      : ^^
 ><i8> anyVar : i8
+>            : ^^
 >anyVar : any
+>       : ^^^
 
 var obj86: i8 = new <i8> anyVar;
 >obj86 : i8
+>      : ^^
 >new <i8> anyVar : boolean
+>                : ^^^^^^^
 >new <i8 : boolean
+>        : ^^^^^^^
 >new : any
+>    : ^^^
 > : any
+> : ^^^
 >i8 : any
+>   : ^^^
 >anyVar : any
+>       : ^^^
 
 var obj87: i8 = new {};
 >obj87 : i8
+>      : ^^
 >new {} : any
+>       : ^^^
 >{} : {}
+>   : ^^
 

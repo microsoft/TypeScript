@@ -1,16 +1,22 @@
-=== tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts ===
+//// [tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts] ////
+
+=== inferredFunctionReturnTypeIsEmptyType.ts ===
 function foo() {
 >foo : () => 42 | "42"
+>    : ^^^^^^^^^^^^^^^
 
     if (true) {
 >true : true
+>     : ^^^^
 
         return 42;
 >42 : 42
+>   : ^^
     }
     else {
         return "42";
 >"42" : "42"
+>     : ^^^^
     }
 };
 

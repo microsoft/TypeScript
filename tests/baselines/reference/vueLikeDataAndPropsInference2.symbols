@@ -1,4 +1,6 @@
-=== tests/cases/compiler/vueLikeDataAndPropsInference2.ts ===
+//// [tests/cases/compiler/vueLikeDataAndPropsInference2.ts] ////
+
+=== vueLikeDataAndPropsInference2.ts ===
 interface Instance {
 >Instance : Symbol(Instance, Decl(vueLikeDataAndPropsInference2.ts, 0, 0))
 

@@ -1,19 +1,29 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/defaultIsNotVisibleInLocalScope.ts] ////
+
+=== a.ts ===
 export default function () {
     return true;
 >true : true
+>     : ^^^^
 }
 export type X = typeof default;  // expect error
 >X : any
+>  : ^^^
 >default : any
+>        : ^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export default { a: true }
 >{ a: true } : { a: boolean; }
+>            : ^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 export type X = typeof default; // expect error
 >X : any
+>  : ^^^
 >default : any
+>        : ^^^
 

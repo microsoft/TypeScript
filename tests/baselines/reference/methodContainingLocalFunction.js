@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/methodContainingLocalFunction.ts] ////
+
 //// [methodContainingLocalFunction.ts]
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 class BugExhibition<T> {

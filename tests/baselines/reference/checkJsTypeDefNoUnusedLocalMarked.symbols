@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.ts ===
+//// [tests/cases/compiler/checkJsTypeDefNoUnusedLocalMarked.ts] ////
+
+=== file.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(file.ts, 0, 0))
 
@@ -16,7 +18,7 @@ declare global {
 export = Foo;
 >Foo : Symbol(Foo, Decl(file.ts, 0, 0))
 
-=== tests/cases/compiler/something.js ===
+=== something.js ===
 /** @typedef {typeof import("./file")} Foo */
 
 /** @typedef {(foo: Foo) => string} FooFun */

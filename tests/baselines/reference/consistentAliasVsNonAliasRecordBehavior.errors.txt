@@ -1,10 +1,10 @@
-tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts(18,5): error TS2741: Property 'a' is missing in type 'Record<string, string>' but required in type 'Record2<"a", string>'.
-tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts(22,5): error TS2741: Property 'a' is missing in type 'Record2<string, string>' but required in type 'Record<"a", string>'.
-tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts(34,5): error TS2741: Property 'a' is missing in type 'Record<string, T>' but required in type 'Record2<"a", T>'.
-tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts(38,5): error TS2741: Property 'a' is missing in type 'Record2<string, T>' but required in type 'Record<"a", T>'.
+consistentAliasVsNonAliasRecordBehavior.ts(18,5): error TS2741: Property 'a' is missing in type 'Record<string, string>' but required in type 'Record2<"a", string>'.
+consistentAliasVsNonAliasRecordBehavior.ts(22,5): error TS2741: Property 'a' is missing in type 'Record2<string, string>' but required in type 'Record<"a", string>'.
+consistentAliasVsNonAliasRecordBehavior.ts(34,5): error TS2741: Property 'a' is missing in type 'Record<string, T>' but required in type 'Record2<"a", T>'.
+consistentAliasVsNonAliasRecordBehavior.ts(38,5): error TS2741: Property 'a' is missing in type 'Record2<string, T>' but required in type 'Record<"a", T>'.
 
 
-==== tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts (4 errors) ====
+==== consistentAliasVsNonAliasRecordBehavior.ts (4 errors) ====
     // TODO: FIXME: All the below cases labeled `no error` _should be an error_, and are only prevented from so being
     // by incorrect variance-based relationships
     // Ref: https://github.com/Microsoft/TypeScript/issues/29698

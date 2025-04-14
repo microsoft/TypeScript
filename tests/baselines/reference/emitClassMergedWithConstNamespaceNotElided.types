@@ -1,41 +1,61 @@
-=== tests/cases/compiler/enum.d.ts ===
+//// [tests/cases/compiler/emitClassMergedWithConstNamespaceNotElided.ts] ////
+
+=== enum.d.ts ===
 export namespace Clone {
     const enum LOCAL {
 >LOCAL : LOCAL
+>      : ^^^^^
 
         AUTO = 0,
 >AUTO : LOCAL.AUTO
+>     : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
         LOCAL = 1,
 >LOCAL : LOCAL.LOCAL
+>      : ^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         NO_LOCAL = 2,
 >NO_LOCAL : LOCAL.NO_LOCAL
+>         : ^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
         NO_LINKS = 3
 >NO_LINKS : LOCAL.NO_LINKS
+>         : ^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
     }
 }
 
 export class Clone {
 >Clone : Clone
+>      : ^^^^^
 
     static clone(url: string): void;
 >clone : (url: string) => void
+>      : ^   ^^      ^^^^^    
 >url : string
+>    : ^^^^^^
 }
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 import {Clone} from "./enum";
 >Clone : typeof Clone
+>      : ^^^^^^^^^^^^
 
 Clone.clone("ok");
 >Clone.clone("ok") : void
+>                  : ^^^^
 >Clone.clone : (url: string) => void
+>            : ^   ^^      ^^^^^    
 >Clone : typeof Clone
+>      : ^^^^^^^^^^^^
 >clone : (url: string) => void
+>      : ^   ^^      ^^^^^    
 >"ok" : "ok"
+>     : ^^^^
 

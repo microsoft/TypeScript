@@ -1,13 +1,13 @@
-tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts(1,2): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts(1,11): error TS2304: Cannot find name 'c'.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts(1,15): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts(1,22): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts(1,32): error TS2304: Cannot find name 'c'.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts(1,35): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts(1,40): error TS2304: Cannot find name '_'.
+parserConditionalExpression1.ts(1,2): error TS2304: Cannot find name 'a'.
+parserConditionalExpression1.ts(1,11): error TS2304: Cannot find name 'c'.
+parserConditionalExpression1.ts(1,15): error TS2304: Cannot find name 'a'.
+parserConditionalExpression1.ts(1,22): error TS2304: Cannot find name 'a'.
+parserConditionalExpression1.ts(1,32): error TS2304: Cannot find name 'c'.
+parserConditionalExpression1.ts(1,35): error TS2304: Cannot find name 'a'.
+parserConditionalExpression1.ts(1,40): error TS2304: Cannot find name '_'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts (7 errors) ====
+==== parserConditionalExpression1.ts (7 errors) ====
     (a=this.R[c])?a.JW||(a.e5(this,c),a.JW=_.l):this.A
      ~
 !!! error TS2304: Cannot find name 'a'.

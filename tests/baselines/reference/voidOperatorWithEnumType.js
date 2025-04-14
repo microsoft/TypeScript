@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithEnumType.ts] ////
+
 //// [voidOperatorWithEnumType.ts]
 // void  operator on enum type
 

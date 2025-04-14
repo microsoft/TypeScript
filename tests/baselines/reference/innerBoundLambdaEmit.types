@@ -1,17 +1,25 @@
-=== tests/cases/compiler/innerBoundLambdaEmit.ts ===
+//// [tests/cases/compiler/innerBoundLambdaEmit.ts] ////
+
+=== innerBoundLambdaEmit.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class Foo {
 >Foo : Foo
+>    : ^^^
     }
     var bar = () => { };
 >bar : () => void
+>    : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 }
 interface Array<T> {
     toFoo(): M.Foo
 >toFoo : () => M.Foo
+>      : ^^^^^^     
 >M : any
+>  : ^^^
 }
 

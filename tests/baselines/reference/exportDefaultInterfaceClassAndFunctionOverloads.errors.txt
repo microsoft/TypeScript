@@ -1,30 +1,30 @@
-tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts(1,25): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts(2,25): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts(3,25): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts(7,16): error TS2528: A module cannot have multiple default exports.
+exportDefaultInterfaceClassAndFunctionOverloads.ts(1,25): error TS2528: A module cannot have multiple default exports.
+exportDefaultInterfaceClassAndFunctionOverloads.ts(2,25): error TS2528: A module cannot have multiple default exports.
+exportDefaultInterfaceClassAndFunctionOverloads.ts(3,25): error TS2528: A module cannot have multiple default exports.
+exportDefaultInterfaceClassAndFunctionOverloads.ts(7,16): error TS2528: A module cannot have multiple default exports.
 
 
-==== tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts (4 errors) ====
+==== exportDefaultInterfaceClassAndFunctionOverloads.ts (4 errors) ====
     export default function foo(value: number): number
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts:7:16: Another export default is here.
+!!! related TS2753 exportDefaultInterfaceClassAndFunctionOverloads.ts:7:16: Another export default is here.
     export default function foo(value: string): string
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS6204 tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts:7:16: and here.
+!!! related TS6204 exportDefaultInterfaceClassAndFunctionOverloads.ts:7:16: and here.
     export default function foo(value: string | number): string | number {
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS6204 tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts:7:16: and here.
+!!! related TS6204 exportDefaultInterfaceClassAndFunctionOverloads.ts:7:16: and here.
         return 1
     }
     declare class Foo {}
     export default Foo
                    ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts:1:25: The first export default is here.
-!!! related TS2752 tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts:2:25: The first export default is here.
-!!! related TS2752 tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts:3:25: The first export default is here.
+!!! related TS2752 exportDefaultInterfaceClassAndFunctionOverloads.ts:1:25: The first export default is here.
+!!! related TS2752 exportDefaultInterfaceClassAndFunctionOverloads.ts:2:25: The first export default is here.
+!!! related TS2752 exportDefaultInterfaceClassAndFunctionOverloads.ts:3:25: The first export default is here.
     export default interface Bar {}
     

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag3.ts] ////
+
+=== test.js ===
 /** @type {Array<?number>} */
 var nns;
 >nns : Symbol(nns, Decl(test.js, 1, 3))

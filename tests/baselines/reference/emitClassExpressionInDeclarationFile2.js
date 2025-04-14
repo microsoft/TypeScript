@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts] ////
+
 //// [emitClassExpressionInDeclarationFile2.ts]
 export var noPrivates = class {
     static getTags() { }
@@ -46,9 +48,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a;
-exports.__esModule = true;
-exports.Test = exports.WithTags = exports.FooItem = exports.noPrivates = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Test = exports.FooItem = exports.noPrivates = void 0;
+exports.WithTags = WithTags;
 exports.noPrivates = (_a = /** @class */ (function () {
         function class_1() {
             this.p = 12;
@@ -57,6 +64,7 @@ exports.noPrivates = (_a = /** @class */ (function () {
         class_1.prototype.tags = function () { };
         return class_1;
     }()),
+    __setFunctionName(_a, "noPrivates"),
     _a.ps = -1,
     _a);
 // altered repro from #15066 to add private property
@@ -79,7 +87,6 @@ function WithTags(Base) {
         return class_2;
     }(Base));
 }
-exports.WithTags = WithTags;
 var Test = /** @class */ (function (_super) {
     __extends(Test, _super);
     function Test() {

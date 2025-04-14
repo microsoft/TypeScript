@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignatures.ts] ////
+
 //// [subtypingWithCallSignatures.ts]
 module CallSignature {
     declare function foo1(cb: (x: number) => void): typeof cb;

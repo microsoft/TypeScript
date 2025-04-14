@@ -1,5 +1,7 @@
-=== tests/cases/compiler/usage.ts ===
-/// <reference path="./internal.ts" />
+//// [tests/cases/compiler/importAliasFromNamespace.ts] ////
+
+=== usage.ts ===
+/// <reference path="./internal.ts" preserve="true" />
 namespace SomeOther.Thing {
 >SomeOther : Symbol(SomeOther, Decl(usage.ts, 0, 0))
 >Thing : Symbol(Thing, Decl(usage.ts, 1, 20))
@@ -32,7 +34,7 @@ namespace SomeOther.Thing {
         }
     }
 }
-=== tests/cases/compiler/internal.ts ===
+=== internal.ts ===
 namespace My.Internal {
 >My : Symbol(My, Decl(internal.ts, 0, 0))
 >Internal : Symbol(Internal, Decl(internal.ts, 0, 13))

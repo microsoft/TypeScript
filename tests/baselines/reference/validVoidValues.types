@@ -1,14 +1,21 @@
-=== tests/cases/conformance/types/primitives/void/validVoidValues.ts ===
+//// [tests/cases/conformance/types/primitives/void/validVoidValues.ts] ////
+
+=== validVoidValues.ts ===
 var x: void;
 >x : void
+>  : ^^^^
 
 x = undefined;
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : void
+>  : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 x = null;
 >x = null : null
+>         : ^^^^
 >x : void
->null : null
+>  : ^^^^
 

@@ -1,77 +1,118 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithMethodInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithMethodInES6.ts] ////
+
+=== emitClassDeclarationWithMethodInES6.ts ===
 class D {
 >D : D
+>  : ^
 
     _bar: string;
 >_bar : string
+>     : ^^^^^^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     ["computedName1"]() { }
 >["computedName1"] : () => void
+>                  : ^^^^^^^^^^
 >"computedName1" : "computedName1"
+>                : ^^^^^^^^^^^^^^^
 
     ["computedName2"](a: string) { }
 >["computedName2"] : (a: string) => void
+>                  : ^ ^^      ^^^^^^^^^
 >"computedName2" : "computedName2"
+>                : ^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
     ["computedName3"](a: string): number { return 1; }
 >["computedName3"] : (a: string) => number
+>                  : ^ ^^      ^^^^^      
 >"computedName3" : "computedName3"
+>                : ^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     bar(): string {
 >bar : () => string
+>    : ^^^^^^      
 
         return this._bar;
 >this._bar : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >_bar : string
+>     : ^^^^^^
     } 
     baz(a: any, x: string): string {
 >baz : (a: any, x: string) => string
+>    : ^ ^^   ^^ ^^      ^^^^^      
 >a : any
 >x : string
+>  : ^^^^^^
 
         return "HELLO";
 >"HELLO" : "HELLO"
+>        : ^^^^^^^
     }
     static ["computedname4"]() { }
 >["computedname4"] : () => void
+>                  : ^^^^^^^^^^
 >"computedname4" : "computedname4"
+>                : ^^^^^^^^^^^^^^^
 
     static ["computedname5"](a: string) { }
 >["computedname5"] : (a: string) => void
+>                  : ^ ^^      ^^^^^^^^^
 >"computedname5" : "computedname5"
+>                : ^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
     static ["computedname6"](a: string): boolean { return true; }
 >["computedname6"] : (a: string) => boolean
+>                  : ^ ^^      ^^^^^       
 >"computedname6" : "computedname6"
+>                : ^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >true : true
+>     : ^^^^
 
     static staticMethod() {
 >staticMethod : () => number
+>             : ^^^^^^^^^^^^
 
         var x = 1 + 2;
 >x : number
+>  : ^^^^^^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
         return x
 >x : number
+>  : ^^^^^^
     }
     static foo(a: string) { }
 >foo : (a: string) => void
+>    : ^ ^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
     static bar(a: string): number { return 1; }
 >bar : (a: string) => number
+>    : ^ ^^      ^^^^^      
 >a : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }

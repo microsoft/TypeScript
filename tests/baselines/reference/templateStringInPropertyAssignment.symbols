@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInPropertyAssignment.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInPropertyAssignment.ts] ////
+
+=== templateStringInPropertyAssignment.ts ===
 var x = {
 >x : Symbol(x, Decl(templateStringInPropertyAssignment.ts, 0, 3))
 

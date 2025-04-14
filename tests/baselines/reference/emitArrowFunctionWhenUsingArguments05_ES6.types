@@ -1,10 +1,15 @@
-=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments05_ES6.ts ===
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments05_ES6.ts] ////
+
+=== emitArrowFunctionWhenUsingArguments05_ES6.ts ===
 function f(arguments) {
 >f : (arguments: any) => void
+>  : ^         ^^^^^^^^^^^^^^
 >arguments : any
 
     var a = () => arguments;
 >a : () => any
+>  : ^^^^^^^^^
 >() => arguments : () => any
+>                : ^^^^^^^^^
 >arguments : any
 }

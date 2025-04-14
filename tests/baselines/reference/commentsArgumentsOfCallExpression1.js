@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsArgumentsOfCallExpression1.ts] ////
+
 //// [commentsArgumentsOfCallExpression1.ts]
 function foo(/*c1*/ x: any) { }
 foo(/*c2*/ 1);

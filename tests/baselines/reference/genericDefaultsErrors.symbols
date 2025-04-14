@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericDefaultsErrors.ts ===
+//// [tests/cases/compiler/genericDefaultsErrors.ts] ////
+
+=== genericDefaultsErrors.ts ===
 declare const x: any;
 >x : Symbol(x, Decl(genericDefaultsErrors.ts, 0, 13))
 

@@ -1,7 +1,11 @@
-=== tests/cases/compiler/declFileClassWithIndexSignature.ts ===
+//// [tests/cases/compiler/declFileClassWithIndexSignature.ts] ////
+
+=== declFileClassWithIndexSignature.ts ===
 class BlockIntrinsics {
 >BlockIntrinsics : BlockIntrinsics
+>                : ^^^^^^^^^^^^^^^
 
     [s: string]: string;
 >s : string
+>  : ^^^^^^
 }

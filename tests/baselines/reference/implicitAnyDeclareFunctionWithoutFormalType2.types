@@ -1,17 +1,23 @@
-=== tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType2.ts ===
+//// [tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType2.ts] ////
+
+=== implicitAnyDeclareFunctionWithoutFormalType2.ts ===
 // generates function fn1(): number;
 function fn1() {
 >fn1 : () => number
+>    : ^^^^^^^^^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     return x;
 >x : number
+>  : ^^^^^^
 }
 // generates function fn2(): any;
 function fn2(): any {
 >fn2 : () => any
+>    : ^^^^^^   
 
     var x: any;
 >x : any
@@ -22,6 +28,7 @@ function fn2(): any {
 // generates function fn3();
 function fn3() {
 >fn3 : () => any
+>    : ^^^^^^^^^
 
     var x: any;
 >x : any

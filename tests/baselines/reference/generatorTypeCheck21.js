@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck21.ts] ////
+
 //// [generatorTypeCheck21.ts]
 class Foo { x: number }
 class Bar extends Foo { y: string }

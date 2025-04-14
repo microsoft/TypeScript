@@ -1,1722 +1,2742 @@
-=== tests/cases/compiler/genericDefaults.ts ===
+//// [tests/cases/compiler/genericDefaults.ts] ////
+
+=== genericDefaults.ts ===
 interface A { a: number; }
 >a : number
+>  : ^^^^^^
 
 interface B { b: number; }
 >b : number
+>  : ^^^^^^
 
 interface C { c: number; }
 >c : number
+>  : ^^^^^^
 
 interface D { d: number; }
 >d : number
+>  : ^^^^^^
 
 interface AB { a: number; b: number; }
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 interface BC { b: number; c: number; }
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 declare const a: A;
 >a : A
+>  : ^
 
 declare const b: B;
 >b : B
+>  : ^
 
 declare const c: C;
 >c : C
+>  : ^
 
 declare const d: D;
 >d : D
+>  : ^
 
 declare const ab: AB;
 >ab : AB
+>   : ^^
 
 declare const bc: BC;
 >bc : BC
+>   : ^^
 
 declare const x: any;
 >x : any
+>  : ^^^
 
 // function without type parameters
 declare function f00(a?: A): A;
 >f00 : (a?: A) => A
+>    : ^ ^^^ ^^^^^ 
 >a : A
+>  : ^
 
 // no inference
 f00();
 >f00() : A
+>      : ^
 >f00 : (a?: A) => A
+>    : ^ ^^^ ^^^^^ 
 
 f00(a);
 >f00(a) : A
+>       : ^
 >f00 : (a?: A) => A
+>    : ^ ^^^ ^^^^^ 
 >a : A
+>  : ^
 
 // function with a type parameter without a default
 declare function f01<T>(a?: T): T;
 >f01 : <T>(a?: T) => T
+>    : ^ ^^ ^^^ ^^^^^ 
 >a : T
+>  : ^
 
 // inference
 f01();
 >f01() : unknown
+>      : ^^^^^^^
 >f01 : <T>(a?: T) => T
+>    : ^ ^^ ^^^ ^^^^^ 
 
 f01(a);
 >f01(a) : A
+>       : ^
 >f01 : <T>(a?: T) => T
+>    : ^ ^^ ^^^ ^^^^^ 
 >a : A
+>  : ^
 
 // no inference, fully supplied
 f01<A>();
 >f01<A>() : A
+>         : ^
 >f01 : <T>(a?: T) => T
+>    : ^ ^^ ^^^ ^^^^^ 
 
 f01<A>(a);
 >f01<A>(a) : A
+>          : ^
 >f01 : <T>(a?: T) => T
+>    : ^ ^^ ^^^ ^^^^^ 
 >a : A
+>  : ^
 
 // function with a type paramter with a default
 declare function f02<T = A>(a?: T): T;
 >f02 : <T = A>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >a : T
+>  : ^
 
 // inference
 f02();
 >f02() : A
+>      : ^
 >f02 : <T = A>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 
 f02(a);
 >f02(a) : A
+>       : ^
 >f02 : <T = A>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >a : A
+>  : ^
 
 f02(b);
 >f02(b) : B
+>       : ^
 >f02 : <T = A>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >b : B
+>  : ^
 
 // no inference, fully supplied
 f02<A>();
 >f02<A>() : A
+>         : ^
 >f02 : <T = A>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 
 f02<A>(a);
 >f02<A>(a) : A
+>          : ^
 >f02 : <T = A>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >a : A
+>  : ^
 
 f02<B>();
 >f02<B>() : B
+>         : ^
 >f02 : <T = A>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 
 f02<B>(b);
 >f02<B>(b) : B
+>          : ^
 >f02 : <T = A>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >b : B
+>  : ^
 
 // function with a type parameter with a default that refers to itself
 declare function f03<T = T>(a?: T): T;
 >f03 : <T = T>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >a : T
+>  : ^
 
 // inference
 f03();
 >f03() : unknown
+>      : ^^^^^^^
 >f03 : <T = T>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 
 f03(a);
 >f03(a) : A
+>       : ^
 >f03 : <T = T>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >a : A
+>  : ^
 
 f03(b);
 >f03(b) : B
+>       : ^
 >f03 : <T = T>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >b : B
+>  : ^
 
 // no inference, fully supplied
 f03<A>();
 >f03<A>() : A
+>         : ^
 >f03 : <T = T>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 
 f03<A>(a);
 >f03<A>(a) : A
+>          : ^
 >f03 : <T = T>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >a : A
+>  : ^
 
 f03<B>();
 >f03<B>() : B
+>         : ^
 >f03 : <T = T>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 
 f03<B>(b);
 >f03<B>(b) : B
+>          : ^
 >f03 : <T = T>(a?: T) => T
+>    : ^ ^^^^^^ ^^^ ^^^^^ 
 >b : B
+>  : ^
 
 // function with a type paramter without a default and a type parameter with a default
 declare function f04<T, U = B>(a?: T, b?: U): [T, U];
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f04();
 >f04() : [unknown, B]
+>      : ^^^^^^^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f04(a);
 >f04(a) : [A, B]
+>       : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f04(a, b);
 >f04(a, b) : [A, B]
+>          : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f04(a, c);
 >f04(a, c) : [A, C]
+>          : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f04<A>();
 >f04<A>() : [A, B]
+>         : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f04<A>(a);
 >f04<A>(a) : [A, B]
+>          : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f04<A>(a, b);
 >f04<A>(a, b) : [A, B]
+>             : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // no inference, fully supplied
 f04<A, B>();
 >f04<A, B>() : [A, B]
+>            : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f04<A, B>(a);
 >f04<A, B>(a) : [A, B]
+>             : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f04<A, B>(a, b);
 >f04<A, B>(a, b) : [A, B]
+>                : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f04<A, C>();
 >f04<A, C>() : [A, C]
+>            : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f04<A, C>(a);
 >f04<A, C>(a) : [A, C]
+>             : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f04<A, C>(a, c);
 >f04<A, C>(a, c) : [A, C]
+>                : ^^^^^^
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter
 declare function f05<T, U = T>(a?: T, b?: U): [T, U];
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f05();
 >f05() : [unknown, unknown]
+>      : ^^^^^^^^^^^^^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f05(a);
 >f05(a) : [A, A]
+>       : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f05(a, a);
 >f05(a, a) : [A, A]
+>          : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f05(a, b);
 >f05(a, b) : [A, B]
+>          : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // no inference, partially supplied
 f05<A>();
 >f05<A>() : [A, A]
+>         : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f05<A>(a);
 >f05<A>(a) : [A, A]
+>          : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f05<A>(a, a);
 >f05<A>(a, a) : [A, A]
+>             : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 // no inference, fully supplied
 f05<A, B>();
 >f05<A, B>() : [A, B]
+>            : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f05<A, B>(a);
 >f05<A, B>(a) : [A, B]
+>             : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f05<A, B>(a, b);
 >f05<A, B>(a, b) : [A, B]
+>                : ^^^^^^
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // function with a type parameter with a default that refers to an earlier type parameter with a default
 declare function f06<T = A, U = T>(a?: T, b?: U): [T, U];
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f06();
 >f06() : [A, A]
+>      : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f06(a);
 >f06(a) : [A, A]
+>       : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f06(a, a);
 >f06(a, a) : [A, A]
+>          : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f06(a, b);
 >f06(a, b) : [A, B]
+>          : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f06(b, a);
 >f06(b, a) : [B, A]
+>          : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >b : B
+>  : ^
 >a : A
+>  : ^
 
 f06(b, b);
 >f06(b, b) : [B, B]
+>          : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 // no inference, partially supplied
 f06<A>();
 >f06<A>() : [A, A]
+>         : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f06<A>(a);
 >f06<A>(a) : [A, A]
+>          : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f06<A>(a, a);
 >f06<A>(a, a) : [A, A]
+>             : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f06<B>();
 >f06<B>() : [B, B]
+>         : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f06<B>(b);
 >f06<B>(b) : [B, B]
+>          : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >b : B
+>  : ^
 
 f06<B>(b, b);
 >f06<B>(b, b) : [B, B]
+>             : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 // no inference, fully supplied
 f06<A, B>();
 >f06<A, B>() : [A, B]
+>            : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f06<A, B>(a);
 >f06<A, B>(a) : [A, B]
+>             : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f06<A, B>(a, b);
 >f06<A, B>(a, b) : [A, B]
+>                : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f06<B, C>();
 >f06<B, C>() : [B, C]
+>            : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f06<B, C>(b);
 >f06<B, C>(b) : [B, C]
+>             : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >b : B
+>  : ^
 
 f06<B, C>(b, c);
 >f06<B, C>(b, c) : [B, C]
+>                : ^^^^^^
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 // function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter with a default
 declare function f07<T, U = B, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : T
+>  : ^
 >b : U
+>  : ^
 >c : V
+>  : ^
 
 // inference
 f07();
 >f07() : [unknown, B, B]
+>      : ^^^^^^^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f07(a, b);
 >f07(a, b) : [A, B, B]
+>          : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f07(a, c);
 >f07(a, c) : [A, C, C]
+>          : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 f07(a, b, b);
 >f07(a, b, b) : [A, B, B]
+>             : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 f07(a, b, c);
 >f07(a, b, c) : [A, B, C]
+>             : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 f07(a, c, b);
 >f07(a, c, b) : [A, C, B]
+>             : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >c : C
+>  : ^
 >b : B
+>  : ^
 
 f07(a, c, c);
 >f07(a, c, c) : [A, C, C]
+>             : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >c : C
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f07<A>();
 >f07<A>() : [A, B, B]
+>         : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f07<A>(a);
 >f07<A>(a) : [A, B, B]
+>          : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f07<A>(a, b);
 >f07<A>(a, b) : [A, B, B]
+>             : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f07<A>(a, b, b);
 >f07<A>(a, b, b) : [A, B, B]
+>                : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 f07<A, B>();
 >f07<A, B>() : [A, B, B]
+>            : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f07<A, B>(a);
 >f07<A, B>(a) : [A, B, B]
+>             : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f07<A, B>(a, b);
 >f07<A, B>(a, b) : [A, B, B]
+>                : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f07<A, B>(a, b, b);
 >f07<A, B>(a, b, b) : [A, B, B]
+>                   : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 f07<A, C>();
 >f07<A, C>() : [A, C, C]
+>            : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f07<A, C>(a);
 >f07<A, C>(a) : [A, C, C]
+>             : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f07<A, C>(a, c);
 >f07<A, C>(a, c) : [A, C, C]
+>                : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 f07<A, C>(a, c, c);
 >f07<A, C>(a, c, c) : [A, C, C]
+>                   : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >c : C
+>  : ^
 >c : C
+>  : ^
 
 // no inference, fully supplied
 f07<A, B, C>();
 >f07<A, B, C>() : [A, B, C]
+>               : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f07<A, B, C>(a);
 >f07<A, B, C>(a) : [A, B, C]
+>                : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f07<A, B, C>(a, b);
 >f07<A, B, C>(a, b) : [A, B, C]
+>                   : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f07<A, B, C>(a, b, c);
 >f07<A, B, C>(a, b, c) : [A, B, C]
+>                      : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 f07<A, C, A>();
 >f07<A, C, A>() : [A, C, A]
+>               : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f07<A, C, A>(a);
 >f07<A, C, A>(a) : [A, C, A]
+>                : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f07<A, C, D>(a, c);
 >f07<A, C, D>(a, c) : [A, C, D]
+>                   : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 f07<A, C, D>(a, c, d);
 >f07<A, C, D>(a, c, d) : [A, C, D]
+>                      : ^^^^^^^^^
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >c : C
+>  : ^
 >d : D
+>  : ^
 
 // function with a type parameter with a default that refers to an earlier type parameter with a constraint
 declare function f08<T extends A, U = T>(a?: T, b?: U): [T, U];
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f08();
 >f08() : [A, A]
+>      : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f08(a);
 >f08(a) : [A, A]
+>       : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f08(a, a);
 >f08(a, a) : [A, A]
+>          : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f08(a, b);
 >f08(a, b) : [A, B]
+>          : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // no inference, partially supplied
 f08<A>();
 >f08<A>() : [A, A]
+>         : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f08<A>(a);
 >f08<A>(a) : [A, A]
+>          : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f08<A>(a, a);
 >f08<A>(a, a) : [A, A]
+>             : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 // no inference, fully supplied
 f08<A, B>();
 >f08<A, B>() : [A, B]
+>            : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f08<A, B>(a);
 >f08<A, B>(a) : [A, B]
+>             : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f08<A, B>(a, b);
 >f08<A, B>(a, b) : [A, B]
+>                : ^^^^^^
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // function with a type parameter with a constraint and a default that refers to an earlier type parameter
 declare function f09<T, U extends T = T>(a?: T, b?: U): [T, U];
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f09();
 >f09() : [unknown, unknown]
+>      : ^^^^^^^^^^^^^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f09(a);
 >f09(a) : [A, A]
+>       : ^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f09(a, a);
 >f09(a, a) : [A, A]
+>          : ^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f09(a, ab);
 >f09(a, ab) : [A, AB]
+>           : ^^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 // no inference, partially supplied
 f09<A>();
 >f09<A>() : [A, A]
+>         : ^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f09<A>(a);
 >f09<A>(a) : [A, A]
+>          : ^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f09<A>(a, a);
 >f09<A>(a, a) : [A, A]
+>             : ^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f09<A>(a, ab);
 >f09<A>(a, ab) : [A, A]
+>              : ^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 // no inference, fully supplied
 f09<A, AB>();
 >f09<A, AB>() : [A, AB]
+>             : ^^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f09<A, AB>(a);
 >f09<A, AB>(a) : [A, AB]
+>              : ^^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f09<A, AB>(a, ab);
 >f09<A, AB>(a, ab) : [A, AB]
+>                  : ^^^^^^^
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 // function with a type parameter with a constraint and a default that refers to an earlier type parameter with a constraint
 declare function f10<T extends A, U extends T = T>(a?: T, b?: U): [T, U];
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f10();
 >f10() : [A, A]
+>      : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f10(a);
 >f10(a) : [A, A]
+>       : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f10(a, a);
 >f10(a, a) : [A, A]
+>          : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f10(a, ab);
 >f10(a, ab) : [A, AB]
+>           : ^^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 // no inference, partially supplied
 f10<A>();
 >f10<A>() : [A, A]
+>         : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f10<A>(a);
 >f10<A>(a) : [A, A]
+>          : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f10<A>(a, a);
 >f10<A>(a, a) : [A, A]
+>             : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f10<A>(a, ab);
 >f10<A>(a, ab) : [A, A]
+>              : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 // no inference, fully supplied
 f10<A, A>();
 >f10<A, A>() : [A, A]
+>            : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f10<A, A>(a);
 >f10<A, A>(a) : [A, A]
+>             : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f10<A, A>(a, a);
 >f10<A, A>(a, a) : [A, A]
+>                : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f10<A, A>(a, ab);
 >f10<A, A>(a, ab) : [A, A]
+>                 : ^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 f10<A, AB>();
 >f10<A, AB>() : [A, AB]
+>             : ^^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f10<A, AB>(a);
 >f10<A, AB>(a) : [A, AB]
+>              : ^^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f10<A, AB>(a, ab);
 >f10<A, AB>(a, ab) : [A, AB]
+>                  : ^^^^^^^
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 // function with a type parameter with a default that refers to an earier type parameter in a union
 declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f11();
 >f11() : [unknown, unknown]
+>      : ^^^^^^^^^^^^^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f11(a);
 >f11(a) : [A, A | B]
+>       : ^^^^^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f11(a, a);
 >f11(a, a) : [A, A]
+>          : ^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f11(a, b);
 >f11(a, b) : [A, B]
+>          : ^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f11(a, c);
 >f11(a, c) : [A, C]
+>          : ^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f11<A>();
 >f11<A>() : [A, A | B]
+>         : ^^^^^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f11<A>(a);
 >f11<A>(a) : [A, A | B]
+>          : ^^^^^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f11<A>(a, a);
 >f11<A>(a, a) : [A, A | B]
+>             : ^^^^^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f11<A>(a, b);
 >f11<A>(a, b) : [A, A | B]
+>             : ^^^^^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // no inference, fully supplied
 f11<A, C>();
 >f11<A, C>() : [A, C]
+>            : ^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f11<A, C>(a);
 >f11<A, C>(a) : [A, C]
+>             : ^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f11<A, C>(a, c);
 >f11<A, C>(a, c) : [A, C]
+>                : ^^^^^^
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // function with a type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f12();
 >f12() : [unknown, B]
+>      : ^^^^^^^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f12(a);
 >f12(a) : [A, A & B]
+>       : ^^^^^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f12(a, a);
 >f12(a, a) : [A, A]
+>          : ^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f12(a, b);
 >f12(a, b) : [A, B]
+>          : ^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f12(a, c);
 >f12(a, c) : [A, C]
+>          : ^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f12<A>();
 >f12<A>() : [A, A & B]
+>         : ^^^^^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f12<A>(a);
 >f12<A>(a) : [A, A & B]
+>          : ^^^^^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f12<A>(a, ab);
 >f12<A>(a, ab) : [A, A & B]
+>              : ^^^^^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 // no inference, fully supplied
 f12<A, C>();
 >f12<A, C>() : [A, C]
+>            : ^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f12<A, C>(a);
 >f12<A, C>(a) : [A, C]
+>             : ^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f12<A, C>(a, c);
 >f12<A, C>(a, c) : [A, C]
+>                : ^^^^^^
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // function with a type parameter with a default that refers to a later type parameter with a default
 declare function f13<T = U, U = B>(a?: T, b?: U): [T, U];
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f13();
 >f13() : [unknown, B]
+>      : ^^^^^^^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f13(a);
 >f13(a) : [A, B]
+>       : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f13(a, b);
 >f13(a, b) : [A, B]
+>          : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f13(a, c);
 >f13(a, c) : [A, C]
+>          : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f13<A>();
 >f13<A>() : [A, B]
+>         : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f13<A>(a);
 >f13<A>(a) : [A, B]
+>          : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f13<A>(a, b);
 >f13<A>(a, b) : [A, B]
+>             : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // no inference, fully supplied
 f13<A, C>();
 >f13<A, C>() : [A, C]
+>            : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f13<A, C>(a);
 >f13<A, C>(a) : [A, C]
+>             : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f13<A, C>(a, c);
 >f13<A, C>(a, c) : [A, C]
+>                : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 f13<A, C>(a, c);
 >f13<A, C>(a, c) : [A, C]
+>                : ^^^^^^
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default
 declare function f14<T, U = V, V = C>(a?: T, b?: U, c?: V): [T, U, V];
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : T
+>  : ^
 >b : U
+>  : ^
 >c : V
+>  : ^
 
 // inference
 f14();
 >f14() : [unknown, unknown, C]
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f14(a);
 >f14(a) : [A, unknown, C]
+>       : ^^^^^^^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f14(a, b);
 >f14(a, b) : [A, B, C]
+>          : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f14(a, b, c);
 >f14(a, b, c) : [A, B, C]
+>             : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 f14(a, b, d);
 >f14(a, b, d) : [A, B, D]
+>             : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >d : D
+>  : ^
 
 // no inference, partially supplied
 f14<A>();
 >f14<A>() : [A, any, C]
+>         : ^^^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f14<A>(a);
 >f14<A>(a) : [A, any, C]
+>          : ^^^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f14<A>(a, b);
 >f14<A>(a, b) : [A, any, C]
+>             : ^^^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f14<A>(a, b, c);
 >f14<A>(a, b, c) : [A, any, C]
+>                : ^^^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 f14<A, B>();
 >f14<A, B>() : [A, B, C]
+>            : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f14<A, B>(a);
 >f14<A, B>(a) : [A, B, C]
+>             : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f14<A, B>(a, b);
 >f14<A, B>(a, b) : [A, B, C]
+>                : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f14<A, B>(a, b, c);
 >f14<A, B>(a, b, c) : [A, B, C]
+>                   : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 // no inference fully supplied
 f14<A, B, D>();
 >f14<A, B, D>() : [A, B, D]
+>               : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f14<A, B, D>(a);
 >f14<A, B, D>(a) : [A, B, D]
+>                : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f14<A, B, D>(a, b);
 >f14<A, B, D>(a, b) : [A, B, D]
+>                   : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f14<A, B, D>(a, b, d);
 >f14<A, B, D>(a, b, d) : [A, B, D]
+>                      : ^^^^^^^^^
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >d : D
+>  : ^
 
 // function with two type parameters with defaults that mutually refer to each other
 declare function f15<T = U, U = T>(a?: T, b?: U): [T, U];
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f15();
 >f15() : [unknown, unknown]
+>      : ^^^^^^^^^^^^^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f15(a);
 >f15(a) : [A, A]
+>       : ^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f15(a, b);
 >f15(a, b) : [A, B]
+>          : ^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // no inference, partially supplied
 f15<A>();
 >f15<A>() : [A, A]
+>         : ^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f15<A>(a);
 >f15<A>(a) : [A, A]
+>          : ^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f15<A>(a, a);
 >f15<A>(a, a) : [A, A]
+>             : ^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 // no inference, fully supplied
 f15<A, B>();
 >f15<A, B>() : [A, B]
+>            : ^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f15<A, B>(a);
 >f15<A, B>(a) : [A, B]
+>             : ^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f15<A, B>(a, b);
 >f15<A, B>(a, b) : [A, B]
+>                : ^^^^^^
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // function with a type parameter without a default and two type parameters with defaults that mutually refer to each other
 declare function f16<T, U = V, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : T
+>  : ^
 >b : U
+>  : ^
 >c : V
+>  : ^
 
 // no inference
 f16();
 >f16() : [unknown, unknown, unknown]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f16(a);
 >f16(a) : [A, unknown, unknown]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f16(a, b);
 >f16(a, b) : [A, B, B]
+>          : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f16(a, b, b);
 >f16(a, b, b) : [A, B, B]
+>             : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 // no inference, partially supplied
 f16<A>();
 >f16<A>() : [A, any, any]
+>         : ^^^^^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f16<A>(a);
 >f16<A>(a) : [A, any, any]
+>          : ^^^^^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f16<A>(a, b);
 >f16<A>(a, b) : [A, any, any]
+>             : ^^^^^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f16<A>(a, b, b);
 >f16<A>(a, b, b) : [A, any, any]
+>                : ^^^^^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 f16<A, B>();
 >f16<A, B>() : [A, B, B]
+>            : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f16<A, B>(a);
 >f16<A, B>(a) : [A, B, B]
+>             : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f16<A, B>(a, b);
 >f16<A, B>(a, b) : [A, B, B]
+>                : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f16<A, B>(a, b, b);
 >f16<A, B>(a, b, b) : [A, B, B]
+>                   : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 // no inference, fully supplied
 f16<A, B, D>();
 >f16<A, B, D>() : [A, B, D]
+>               : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f16<A, B, D>(a);
 >f16<A, B, D>(a) : [A, B, D]
+>                : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f16<A, B, D>(a, b);
 >f16<A, B, D>(a, b) : [A, B, D]
+>                   : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f16<A, B, D>(a, b, d);
 >f16<A, B, D>(a, b, d) : [A, B, D]
+>                      : ^^^^^^^^^
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >d : D
+>  : ^
 
 // function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
 declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f17();
 >f17() : [unknown, unknown]
+>      : ^^^^^^^^^^^^^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f17(a);
 >f17(a) : [A, A | B]
+>       : ^^^^^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f17(a, a);
 >f17(a, a) : [A, A]
+>          : ^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f17(a, b);
 >f17(a, b) : [A, B]
+>          : ^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f17(a, c);
 >f17(a, c) : [A, C]
+>          : ^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f17<A>();
 >f17<A>() : [A, A | B]
+>         : ^^^^^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f17<A>(a);
 >f17<A>(a) : [A, A | B]
+>          : ^^^^^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f17<A>(a, a);
 >f17<A>(a, a) : [A, A | B]
+>             : ^^^^^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f17<A>(a, b);
 >f17<A>(a, b) : [A, A | B]
+>             : ^^^^^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 // no inference, fully supplied
 f17<A, C>();
 >f17<A, C>() : [A, C]
+>            : ^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f17<A, C>(a);
 >f17<A, C>(a) : [A, C]
+>             : ^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f17<A, C>(a, c);
 >f17<A, C>(a, c) : [A, C]
+>                : ^^^^^^
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
 declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : T
+>  : ^
 >b : U
+>  : ^
 >c : V
+>  : ^
 
 // inference
 f18();
 >f18() : [unknown, unknown, unknown]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f18(a);
 >f18(a) : [A, unknown, unknown]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f18(a, b);
 >f18(a, b) : [A, B, B | C]
+>          : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f18(a, b, b);
 >f18(a, b, b) : [A, B, B]
+>             : ^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 f18(a, b, c);
 >f18(a, b, c) : [A, B, C]
+>             : ^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f18<A>();
 >f18<A>() : [A, any, any]
+>         : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f18<A>(a);
 >f18<A>(a) : [A, any, any]
+>          : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f18<A>(a, b);
 >f18<A>(a, b) : [A, any, any]
+>             : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f18<A>(a, b, b);
 >f18<A>(a, b, b) : [A, any, any]
+>                : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 f18<A>(a, b, c);
 >f18<A>(a, b, c) : [A, any, any]
+>                : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 f18<A, B>();
 >f18<A, B>() : [A, B, B | C]
+>            : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f18<A, B>(a);
 >f18<A, B>(a) : [A, B, B | C]
+>             : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f18<A, B>(a, b);
 >f18<A, B>(a, b) : [A, B, B | C]
+>                : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f18<A, B>(a, b, b);
 >f18<A, B>(a, b, b) : [A, B, B | C]
+>                   : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >b : B
+>  : ^
 
 f18<A, B>(a, b, c);
 >f18<A, B>(a, b, c) : [A, B, B | C]
+>                   : ^^^^^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 // no inference, fully supplied
 f18<A, B, D>();
 >f18<A, B, D>() : [A, B, D]
+>               : ^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f18<A, B, D>(a);
 >f18<A, B, D>(a) : [A, B, D]
+>                : ^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f18<A, B, D>(a, b);
 >f18<A, B, D>(a, b) : [A, B, D]
+>                   : ^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f18<A, B, D>(a, b, d);
 >f18<A, B, D>(a, b, d) : [A, B, D]
+>                      : ^^^^^^^^^
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >d : D
+>  : ^
 
 // function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 // inference
 f19();
 >f19() : [unknown, B]
+>      : ^^^^^^^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f19(a);
 >f19(a) : [A, A & B]
+>       : ^^^^^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f19(a, a);
 >f19(a, a) : [A, A]
+>          : ^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 f19(a, b);
 >f19(a, b) : [A, B]
+>          : ^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f19(a, ab);
 >f19(a, ab) : [A, AB]
+>           : ^^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 f19(a, c);
 >f19(a, c) : [A, C]
+>          : ^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f19<A>();
 >f19<A>() : [A, A & B]
+>         : ^^^^^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f19<A>(a);
 >f19<A>(a) : [A, A & B]
+>          : ^^^^^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f19<A>(a, ab);
 >f19<A>(a, ab) : [A, A & B]
+>              : ^^^^^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >ab : AB
+>   : ^^
 
 // no inference, fully supplied
 f19<A, C>();
 >f19<A, C>() : [A, C]
+>            : ^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 
 f19<A, C>(a);
 >f19<A, C>(a) : [A, C]
+>             : ^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 
 f19<A, C>(a, c);
 >f19<A, C>(a, c) : [A, C]
+>                : ^^^^^^
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^      
 >a : A
+>  : ^
 >c : C
+>  : ^
 
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : T
+>  : ^
 >b : U
+>  : ^
 >c : V
+>  : ^
 
 // inference
 f20();
 >f20() : [unknown, unknown, C]
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f20(a);
 >f20(a) : [A, unknown, C]
+>       : ^^^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f20(a, b);
 >f20(a, b) : [A, B, B & C]
+>          : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f20(a, b, c);
 >f20(a, b, c) : [A, B, C]
+>             : ^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 // no inference, partially supplied
 f20<A>();
 >f20<A>() : [A, any, any]
+>         : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f20<A>(a);
 >f20<A>(a) : [A, any, any]
+>          : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f20<A>(a, b);
 >f20<A>(a, b) : [A, any, any]
+>             : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f20<A>(a, b, bc);
 >f20<A>(a, b, bc) : [A, any, any]
+>                 : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >bc : BC
+>   : ^^
 
 f20<A, B>();
 >f20<A, B>() : [A, B, B & C]
+>            : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f20<A, B>(a);
 >f20<A, B>(a) : [A, B, B & C]
+>             : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f20<A, B>(a, b);
 >f20<A, B>(a, b) : [A, B, B & C]
+>                : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f20<A, B>(a, b, bc);
 >f20<A, B>(a, b, bc) : [A, B, B & C]
+>                    : ^^^^^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >bc : BC
+>   : ^^
 
 // no inference, fully supplied
 f20<A, B, D>();
 >f20<A, B, D>() : [A, B, D]
+>               : ^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 
 f20<A, B, D>(a);
 >f20<A, B, D>(a) : [A, B, D]
+>                : ^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 
 f20<A, B, D>(a, b);
 >f20<A, B, D>(a, b) : [A, B, D]
+>                   : ^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 f20<A, B, D>(a, b, d);
 >f20<A, B, D>(a, b, d) : [A, B, D]
+>                      : ^^^^^^^^^
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^         
 >a : A
+>  : ^
 >b : B
+>  : ^
 >d : D
+>  : ^
 
 interface i00<T = number> { a: T; }
 >a : T
+>  : ^
 
 const i00c00 = (<i00>x).a;
 >i00c00 : number
+>       : ^^^^^^
 >(<i00>x).a : number
+>           : ^^^^^^
 >(<i00>x) : i00<number>
+>         : ^^^^^^^^^^^
 ><i00>x : i00<number>
+>       : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
 const i00c01 = (<i00<number>>x).a;
 >i00c01 : number
+>       : ^^^^^^
 >(<i00<number>>x).a : number
+>                   : ^^^^^^
 >(<i00<number>>x) : i00<number>
+>                 : ^^^^^^^^^^^
 ><i00<number>>x : i00<number>
+>               : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
 interface i01<T, U = T> { a: [T, U]; }
 >a : [T, U]
+>  : ^^^^^^
 
 const i01c00 = (<i01<number>>x).a;
 >i01c00 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<i01<number>>x).a : [number, number]
+>                   : ^^^^^^^^^^^^^^^^
 >(<i01<number>>x) : i01<number, number>
+>                 : ^^^^^^^^^^^^^^^^^^^
 ><i01<number>>x : i01<number, number>
+>               : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const i01c01 = (<i01<number, string>>x).a;
 >i01c01 : [number, string]
+>       : ^^^^^^^^^^^^^^^^
 >(<i01<number, string>>x).a : [number, string]
+>                           : ^^^^^^^^^^^^^^^^
 >(<i01<number, string>>x) : i01<number, string>
+>                         : ^^^^^^^^^^^^^^^^^^^
 ><i01<number, string>>x : i01<number, string>
+>                       : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, string]
+>  : ^^^^^^^^^^^^^^^^
 
 interface i02<T extends number, U = T> { a: [T, U]; }
 >a : [T, U]
+>  : ^^^^^^
 
 const i02c00 = (<i02<number>>x).a;
 >i02c00 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<i02<number>>x).a : [number, number]
+>                   : ^^^^^^^^^^^^^^^^
 >(<i02<number>>x) : i02<number, number>
+>                 : ^^^^^^^^^^^^^^^^^^^
 ><i02<number>>x : i02<number, number>
+>               : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const i02c01 = (<i02<1>>x).a;
 >i02c01 : [1, 1]
+>       : ^^^^^^
 >(<i02<1>>x).a : [1, 1]
+>              : ^^^^^^
 >(<i02<1>>x) : i02<1, 1>
+>            : ^^^^^^^^^
 ><i02<1>>x : i02<1, 1>
+>          : ^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [1, 1]
+>  : ^^^^^^
 
 const i02c02 = (<i02<number, number>>x).a;
 >i02c02 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<i02<number, number>>x).a : [number, number]
+>                           : ^^^^^^^^^^^^^^^^
 >(<i02<number, number>>x) : i02<number, number>
+>                         : ^^^^^^^^^^^^^^^^^^^
 ><i02<number, number>>x : i02<number, number>
+>                       : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const i02c03 = (<i02<1, number>>x).a;
 >i02c03 : [1, number]
+>       : ^^^^^^^^^^^
 >(<i02<1, number>>x).a : [1, number]
+>                      : ^^^^^^^^^^^
 >(<i02<1, number>>x) : i02<1, number>
+>                    : ^^^^^^^^^^^^^^
 ><i02<1, number>>x : i02<1, number>
+>                  : ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [1, number]
+>  : ^^^^^^^^^^^
 
 const i02c04 = (<i02<number, 1>>x).a;
 >i02c04 : [number, 1]
+>       : ^^^^^^^^^^^
 >(<i02<number, 1>>x).a : [number, 1]
+>                      : ^^^^^^^^^^^
 >(<i02<number, 1>>x) : i02<number, 1>
+>                    : ^^^^^^^^^^^^^^
 ><i02<number, 1>>x : i02<number, 1>
+>                  : ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, 1]
+>  : ^^^^^^^^^^^
 
 interface i03<T extends number, U extends T = T> { a: [T, U]; }
 >a : [T, U]
+>  : ^^^^^^
 
 const i03c00 = (<i03<number>>x).a;
 >i03c00 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<i03<number>>x).a : [number, number]
+>                   : ^^^^^^^^^^^^^^^^
 >(<i03<number>>x) : i03<number, number>
+>                 : ^^^^^^^^^^^^^^^^^^^
 ><i03<number>>x : i03<number, number>
+>               : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const i03c01 = (<i03<1>>x).a;
 >i03c01 : [1, 1]
+>       : ^^^^^^
 >(<i03<1>>x).a : [1, 1]
+>              : ^^^^^^
 >(<i03<1>>x) : i03<1, 1>
+>            : ^^^^^^^^^
 ><i03<1>>x : i03<1, 1>
+>          : ^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [1, 1]
+>  : ^^^^^^
 
 const i03c02 = (<i03<number, number>>x).a;
 >i03c02 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<i03<number, number>>x).a : [number, number]
+>                           : ^^^^^^^^^^^^^^^^
 >(<i03<number, number>>x) : i03<number, number>
+>                         : ^^^^^^^^^^^^^^^^^^^
 ><i03<number, number>>x : i03<number, number>
+>                       : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const i03c03 = (<i03<1, 1>>x).a;
 >i03c03 : [1, 1]
+>       : ^^^^^^
 >(<i03<1, 1>>x).a : [1, 1]
+>                 : ^^^^^^
 >(<i03<1, 1>>x) : i03<1, 1>
+>               : ^^^^^^^^^
 ><i03<1, 1>>x : i03<1, 1>
+>             : ^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [1, 1]
+>  : ^^^^^^
 
 const i03c04 = (<i03<number, 1>>x).a;
 >i03c04 : [number, 1]
+>       : ^^^^^^^^^^^
 >(<i03<number, 1>>x).a : [number, 1]
+>                      : ^^^^^^^^^^^
 >(<i03<number, 1>>x) : i03<number, 1>
+>                    : ^^^^^^^^^^^^^^
 ><i03<number, 1>>x : i03<number, 1>
+>                  : ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, 1]
+>  : ^^^^^^^^^^^
 
 interface i04 {}
 interface i04<T> {}
@@ -1725,325 +2745,537 @@ interface i04<T = number, U = string> {}
 
 interface i05<T = T> { a: T; }
 >a : T
+>  : ^
 
 const i05c00 = (<i05>x).a;
 >i05c00 : any
+>       : ^^^
 >(<i05>x).a : any
+>           : ^^^
 >(<i05>x) : i05<any>
+>         : ^^^^^^^^
 ><i05>x : i05<any>
+>       : ^^^^^^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 const i05c01 = (<i05<number>>x).a;
 >i05c01 : number
+>       : ^^^^^^
 >(<i05<number>>x).a : number
+>                   : ^^^^^^
 >(<i05<number>>x) : i05<number>
+>                 : ^^^^^^^^^^^
 ><i05<number>>x : i05<number>
+>               : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
 interface i06<T = U, U = T> { a: [T, U]; }
 >a : [T, U]
+>  : ^^^^^^
 
 const i06c00 = (<i06>x).a;
 >i06c00 : [any, any]
+>       : ^^^^^^^^^^
 >(<i06>x).a : [any, any]
+>           : ^^^^^^^^^^
 >(<i06>x) : i06<any, any>
+>         : ^^^^^^^^^^^^^
 ><i06>x : i06<any, any>
+>       : ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [any, any]
+>  : ^^^^^^^^^^
 
 const i06c01 = (<i06<number>>x).a;
 >i06c01 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<i06<number>>x).a : [number, number]
+>                   : ^^^^^^^^^^^^^^^^
 >(<i06<number>>x) : i06<number, number>
+>                 : ^^^^^^^^^^^^^^^^^^^
 ><i06<number>>x : i06<number, number>
+>               : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const i06c02 = (<i06<number, string>>x).a;
 >i06c02 : [number, string]
+>       : ^^^^^^^^^^^^^^^^
 >(<i06<number, string>>x).a : [number, string]
+>                           : ^^^^^^^^^^^^^^^^
 >(<i06<number, string>>x) : i06<number, string>
+>                         : ^^^^^^^^^^^^^^^^^^^
 ><i06<number, string>>x : i06<number, string>
+>                       : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, string]
+>  : ^^^^^^^^^^^^^^^^
 
 interface i07 { a: A; }
 >a : globalThis.A
+>  : ^^^^^^^^^^^^
 
 interface i07<A = number> { b: A; }
 >b : A
+>  : ^
 
 const i07c00 = (<i07>x).a;
 >i07c00 : A
+>       : ^
 >(<i07>x).a : A
+>           : ^
 >(<i07>x) : i07<number>
+>         : ^^^^^^^^^^^
 ><i07>x : i07<number>
+>       : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : A
+>  : ^
 
 const i07c01 = (<i07>x).b;
 >i07c01 : number
+>       : ^^^^^^
 >(<i07>x).b : number
+>           : ^^^^^^
 >(<i07>x) : i07<number>
+>         : ^^^^^^^^^^^
 ><i07>x : i07<number>
+>       : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 
 const i07c02 = (<i07<B>>x).a;
 >i07c02 : A
+>       : ^
 >(<i07<B>>x).a : A
+>              : ^
 >(<i07<B>>x) : i07<B>
+>            : ^^^^^^
 ><i07<B>>x : i07<B>
+>          : ^^^^^^
 >x : any
+>  : ^^^
 >a : A
+>  : ^
 
 const i07c03 = (<i07<B>>x).b;
 >i07c03 : B
+>       : ^
 >(<i07<B>>x).b : B
+>              : ^
 >(<i07<B>>x) : i07<B>
+>            : ^^^^^^
 ><i07<B>>x : i07<B>
+>          : ^^^^^^
 >x : any
+>  : ^^^
 >b : B
+>  : ^
 
 interface Base01<T> { a: T; }
 >a : T
+>  : ^
 
 interface Base01Constructor { new <T = number>(a?: T): Base01<T>; }
 >a : T
+>  : ^
 
 declare const Base01: Base01Constructor;
 >Base01 : Base01Constructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const Base01c00 = new Base01();
 >Base01c00 : Base01<number>
+>          : ^^^^^^^^^^^^^^
 >new Base01() : Base01<number>
+>             : ^^^^^^^^^^^^^^
 >Base01 : Base01Constructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const Base01c01 = new Base01(1);
 >Base01c01 : Base01<number>
+>          : ^^^^^^^^^^^^^^
 >new Base01(1) : Base01<number>
+>              : ^^^^^^^^^^^^^^
 >Base01 : Base01Constructor
+>       : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const Base01c02 = new Base01<number>();
 >Base01c02 : Base01<number>
+>          : ^^^^^^^^^^^^^^
 >new Base01<number>() : Base01<number>
+>                     : ^^^^^^^^^^^^^^
 >Base01 : Base01Constructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const Base01c03 = new Base01<number>(1);
 >Base01c03 : Base01<number>
+>          : ^^^^^^^^^^^^^^
 >new Base01<number>(1) : Base01<number>
+>                      : ^^^^^^^^^^^^^^
 >Base01 : Base01Constructor
+>       : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 declare class Derived01<T> extends Base01<T> { }
 >Derived01 : Derived01<T>
+>          : ^^^^^^^^^^^^
 >Base01 : Base01<T>
+>       : ^^^^^^^^^
 
 const Derived01c00 = new Derived01();
 >Derived01c00 : Derived01<unknown>
+>             : ^^^^^^^^^^^^^^^^^^
 >new Derived01() : Derived01<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
 >Derived01 : typeof Derived01
+>          : ^^^^^^^^^^^^^^^^
 
 const Derived01c01 = new Derived01(1);
 >Derived01c01 : Derived01<number>
+>             : ^^^^^^^^^^^^^^^^^
 >new Derived01(1) : Derived01<number>
+>                 : ^^^^^^^^^^^^^^^^^
 >Derived01 : typeof Derived01
+>          : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const Derived01c02 = new Derived01<number>();
 >Derived01c02 : Derived01<number>
+>             : ^^^^^^^^^^^^^^^^^
 >new Derived01<number>() : Derived01<number>
+>                        : ^^^^^^^^^^^^^^^^^
 >Derived01 : typeof Derived01
+>          : ^^^^^^^^^^^^^^^^
 
 const Derived01c03 = new Derived01<number>(1);
 >Derived01c03 : Derived01<number>
+>             : ^^^^^^^^^^^^^^^^^
 >new Derived01<number>(1) : Derived01<number>
+>                         : ^^^^^^^^^^^^^^^^^
 >Derived01 : typeof Derived01
+>          : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 declare class Derived02<T = string> extends Base01<T> { }
 >Derived02 : Derived02<T>
+>          : ^^^^^^^^^^^^
 >Base01 : Base01<T>
+>       : ^^^^^^^^^
 
 const Derived02c00 = new Derived02();
 >Derived02c00 : Derived02<string>
+>             : ^^^^^^^^^^^^^^^^^
 >new Derived02() : Derived02<string>
+>                : ^^^^^^^^^^^^^^^^^
 >Derived02 : typeof Derived02
+>          : ^^^^^^^^^^^^^^^^
 
 const Derived02c01 = new Derived02(1);
 >Derived02c01 : Derived02<number>
+>             : ^^^^^^^^^^^^^^^^^
 >new Derived02(1) : Derived02<number>
+>                 : ^^^^^^^^^^^^^^^^^
 >Derived02 : typeof Derived02
+>          : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const Derived02c02 = new Derived02<number>();
 >Derived02c02 : Derived02<number>
+>             : ^^^^^^^^^^^^^^^^^
 >new Derived02<number>() : Derived02<number>
+>                        : ^^^^^^^^^^^^^^^^^
 >Derived02 : typeof Derived02
+>          : ^^^^^^^^^^^^^^^^
 
 const Derived02c03 = new Derived02<number>(1);
 >Derived02c03 : Derived02<number>
+>             : ^^^^^^^^^^^^^^^^^
 >new Derived02<number>(1) : Derived02<number>
+>                         : ^^^^^^^^^^^^^^^^^
 >Derived02 : typeof Derived02
+>          : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 // https://github.com/Microsoft/TypeScript/issues/16211
 interface Base02 {}
 interface Base02Constructor { new <T = A>(a: T): Base02 & T; }
 >a : T
+>  : ^
 
 declare const Base02: Base02Constructor;
 >Base02 : Base02Constructor
+>       : ^^^^^^^^^^^^^^^^^
 
 declare class Derived03 extends Base02 {}
 >Derived03 : Derived03
+>          : ^^^^^^^^^
 >Base02 : Base02 & A
+>       : ^^^^^^^^^^
 
 const Derived03c00 = new Derived03(ab);
 >Derived03c00 : Derived03
+>             : ^^^^^^^^^
 >new Derived03(ab) : Derived03
+>                  : ^^^^^^^^^
 >Derived03 : typeof Derived03
+>          : ^^^^^^^^^^^^^^^^
 >ab : AB
+>   : ^^
 
 const Derived03c01 = Derived03c00.a;
 >Derived03c01 : number
+>             : ^^^^^^
 >Derived03c00.a : number
+>               : ^^^^^^
 >Derived03c00 : Derived03
+>             : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 type DerivedProps = keyof Derived03;
 >DerivedProps : "a"
+>             : ^^^
 
 type t00<T = number> = { a: T; }
 >t00 : t00<T>
+>    : ^^^^^^
 >a : T
+>  : ^
 
 const t00c00 = (<t00>x).a;
 >t00c00 : number
+>       : ^^^^^^
 >(<t00>x).a : number
+>           : ^^^^^^
 >(<t00>x) : t00<number>
+>         : ^^^^^^^^^^^
 ><t00>x : t00<number>
+>       : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
 const t00c01 = (<t00<number>>x).a;
 >t00c01 : number
+>       : ^^^^^^
 >(<t00<number>>x).a : number
+>                   : ^^^^^^
 >(<t00<number>>x) : t00<number>
+>                 : ^^^^^^^^^^^
 ><t00<number>>x : t00<number>
+>               : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
 type t01<T, U = T> = { a: [T, U]; }
 >t01 : t01<T, U>
+>    : ^^^^^^^^^
 >a : [T, U]
+>  : ^^^^^^
 
 const t01c00 = (<t01<number>>x).a;
 >t01c00 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<t01<number>>x).a : [number, number]
+>                   : ^^^^^^^^^^^^^^^^
 >(<t01<number>>x) : t01<number, number>
+>                 : ^^^^^^^^^^^^^^^^^^^
 ><t01<number>>x : t01<number, number>
+>               : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const t01c01 = (<t01<number, string>>x).a;
 >t01c01 : [number, string]
+>       : ^^^^^^^^^^^^^^^^
 >(<t01<number, string>>x).a : [number, string]
+>                           : ^^^^^^^^^^^^^^^^
 >(<t01<number, string>>x) : t01<number, string>
+>                         : ^^^^^^^^^^^^^^^^^^^
 ><t01<number, string>>x : t01<number, string>
+>                       : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, string]
+>  : ^^^^^^^^^^^^^^^^
 
 type t02<T extends number, U = T> = { a: [T, U]; }
 >t02 : t02<T, U>
+>    : ^^^^^^^^^
 >a : [T, U]
+>  : ^^^^^^
 
 const t02c00 = (<t02<number>>x).a;
 >t02c00 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<t02<number>>x).a : [number, number]
+>                   : ^^^^^^^^^^^^^^^^
 >(<t02<number>>x) : t02<number, number>
+>                 : ^^^^^^^^^^^^^^^^^^^
 ><t02<number>>x : t02<number, number>
+>               : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const t02c01 = (<t02<1>>x).a;
 >t02c01 : [1, 1]
+>       : ^^^^^^
 >(<t02<1>>x).a : [1, 1]
+>              : ^^^^^^
 >(<t02<1>>x) : t02<1, 1>
+>            : ^^^^^^^^^
 ><t02<1>>x : t02<1, 1>
+>          : ^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [1, 1]
+>  : ^^^^^^
 
 const t02c02 = (<t02<number, number>>x).a;
 >t02c02 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<t02<number, number>>x).a : [number, number]
+>                           : ^^^^^^^^^^^^^^^^
 >(<t02<number, number>>x) : t02<number, number>
+>                         : ^^^^^^^^^^^^^^^^^^^
 ><t02<number, number>>x : t02<number, number>
+>                       : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const t02c03 = (<t02<1, number>>x).a;
 >t02c03 : [1, number]
+>       : ^^^^^^^^^^^
 >(<t02<1, number>>x).a : [1, number]
+>                      : ^^^^^^^^^^^
 >(<t02<1, number>>x) : t02<1, number>
+>                    : ^^^^^^^^^^^^^^
 ><t02<1, number>>x : t02<1, number>
+>                  : ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [1, number]
+>  : ^^^^^^^^^^^
 
 const t02c04 = (<t02<number, 1>>x).a;
 >t02c04 : [number, 1]
+>       : ^^^^^^^^^^^
 >(<t02<number, 1>>x).a : [number, 1]
+>                      : ^^^^^^^^^^^
 >(<t02<number, 1>>x) : t02<number, 1>
+>                    : ^^^^^^^^^^^^^^
 ><t02<number, 1>>x : t02<number, 1>
+>                  : ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, 1]
+>  : ^^^^^^^^^^^
 
 type t03<T extends number, U extends T = T> = { a: [T, U]; }
 >t03 : t03<T, U>
+>    : ^^^^^^^^^
 >a : [T, U]
+>  : ^^^^^^
 
 const t03c00 = (<t03<number>>x).a;
 >t03c00 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<t03<number>>x).a : [number, number]
+>                   : ^^^^^^^^^^^^^^^^
 >(<t03<number>>x) : t03<number, number>
+>                 : ^^^^^^^^^^^^^^^^^^^
 ><t03<number>>x : t03<number, number>
+>               : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const t03c01 = (<t03<1>>x).a;
 >t03c01 : [1, 1]
+>       : ^^^^^^
 >(<t03<1>>x).a : [1, 1]
+>              : ^^^^^^
 >(<t03<1>>x) : t03<1, 1>
+>            : ^^^^^^^^^
 ><t03<1>>x : t03<1, 1>
+>          : ^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [1, 1]
+>  : ^^^^^^
 
 const t03c02 = (<t03<number, number>>x).a;
 >t03c02 : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >(<t03<number, number>>x).a : [number, number]
+>                           : ^^^^^^^^^^^^^^^^
 >(<t03<number, number>>x) : t03<number, number>
+>                         : ^^^^^^^^^^^^^^^^^^^
 ><t03<number, number>>x : t03<number, number>
+>                       : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 const t03c03 = (<t03<1, 1>>x).a;
 >t03c03 : [1, 1]
+>       : ^^^^^^
 >(<t03<1, 1>>x).a : [1, 1]
+>                 : ^^^^^^
 >(<t03<1, 1>>x) : t03<1, 1>
+>               : ^^^^^^^^^
 ><t03<1, 1>>x : t03<1, 1>
+>             : ^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [1, 1]
+>  : ^^^^^^
 
 const t03c04 = (<t03<number, 1>>x).a;
 >t03c04 : [number, 1]
+>       : ^^^^^^^^^^^
 >(<t03<number, 1>>x).a : [number, 1]
+>                      : ^^^^^^^^^^^
 >(<t03<number, 1>>x) : t03<number, 1>
+>                    : ^^^^^^^^^^^^^^
 ><t03<number, 1>>x : t03<number, 1>
+>                  : ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : [number, 1]
+>  : ^^^^^^^^^^^
 
 // https://github.com/Microsoft/TypeScript/issues/16221
 interface SelfReference<T = SelfReference<string>> {}

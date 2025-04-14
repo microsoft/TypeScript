@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/TypeGuardWithArrayUnion.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/TypeGuardWithArrayUnion.ts] ////
+
+=== TypeGuardWithArrayUnion.ts ===
 class Message {
 >Message : Symbol(Message, Decl(TypeGuardWithArrayUnion.ts, 0, 0))
 

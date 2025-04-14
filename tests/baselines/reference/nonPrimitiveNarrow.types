@@ -1,64 +1,98 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts] ////
+
+=== nonPrimitiveNarrow.ts ===
 class Narrow {
 >Narrow : Narrow
+>       : ^^^^^^
 
     narrowed: boolean
 >narrowed : boolean
+>         : ^^^^^^^
 }
 
 var a: object
 >a : object
+>  : ^^^^^^
 
 if (a instanceof Narrow) {
 >a instanceof Narrow : boolean
+>                    : ^^^^^^^
 >a : object
+>  : ^^^^^^
 >Narrow : typeof Narrow
+>       : ^^^^^^^^^^^^^
 
     a.narrowed; // ok
 >a.narrowed : boolean
+>           : ^^^^^^^
 >a : Narrow
+>  : ^^^^^^
 >narrowed : boolean
+>         : ^^^^^^^
 
     a = 123; // error
 >a = 123 : 123
+>        : ^^^
 >a : object
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 }
 
 if (typeof a === 'number') {
 >typeof a === 'number' : boolean
+>                      : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : object
+>  : ^^^^^^
 >'number' : "number"
+>         : ^^^^^^^^
 
     a.toFixed(); // error, never
 >a.toFixed() : any
+>            : ^^^
 >a.toFixed : any
+>          : ^^^
 >a : never
+>  : ^^^^^
 >toFixed : any
+>        : ^^^
 }
 
 var b: object | null
 >b : object
->null : null
+>  : ^^^^^^
 
 if (typeof b === 'object') {
 >typeof b === 'object' : boolean
+>                      : ^^^^^^^
 >typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : object
+>  : ^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
    b.toString(); // ok, object | null
 >b.toString() : string
+>             : ^^^^^^
 >b.toString : () => string
+>           : ^^^^^^      
 >b : object
+>  : ^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 
 } else {
    b.toString(); // error, never
 >b.toString() : any
+>             : ^^^
 >b.toString : any
+>           : ^^^
 >b : never
+>  : ^^^^^
 >toString : any
+>         : ^^^
 }
 

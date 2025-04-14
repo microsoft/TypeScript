@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionsNotContextSensitive.ts ===
+//// [tests/cases/compiler/genericFunctionsNotContextSensitive.ts] ////
+
+=== genericFunctionsNotContextSensitive.ts ===
 // Repro from #37110
 
 const f = <F extends (...args: any[]) => <G>(x: G) => void>(_: F): F => _;

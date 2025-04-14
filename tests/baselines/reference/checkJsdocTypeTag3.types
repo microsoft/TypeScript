@@ -1,5 +1,8 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag3.ts] ////
+
+=== test.js ===
 /** @type {Array<?number>} */
 var nns;
 >nns : number[]
+>    : ^^^^^^^^
 

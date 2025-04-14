@@ -1,19 +1,29 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImports3.ts] ////
+
+=== a.ts ===
 import Namespace from "./b";
 >Namespace : any
+>          : ^^^
 
 export var x = new Namespace.Foo();
 >x : any
+>  : ^^^
 >new Namespace.Foo() : any
+>                    : ^^^
 >Namespace.Foo : any
+>              : ^^^
 >Namespace : any
+>          : ^^^
 >Foo : any
+>    : ^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
 	member: string;
 >member : string
+>       : ^^^^^^
 }
 

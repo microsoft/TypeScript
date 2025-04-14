@@ -1,15 +1,23 @@
-=== tests/cases/compiler/incorrectClassOverloadChain.ts ===
+//// [tests/cases/compiler/incorrectClassOverloadChain.ts] ////
+
+=== incorrectClassOverloadChain.ts ===
 class C {
 >C : C
+>  : ^
 
     foo(): string;
 >foo : { (): string; (x: any): number; }
+>    : ^^^^^^      ^^^ ^^^^^^^^      ^^^
 
     foo(x): number;
 >foo : { (): string; (x: any): number; }
+>    : ^^^^^^      ^^^ ^^^^^^^^      ^^^
 >x : any
+>  : ^^^
 
     x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }

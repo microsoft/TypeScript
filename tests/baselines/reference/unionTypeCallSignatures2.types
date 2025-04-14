@@ -1,113 +1,174 @@
-=== tests/cases/conformance/types/union/unionTypeCallSignatures2.ts ===
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures2.ts] ////
+
+=== unionTypeCallSignatures2.ts ===
 interface A {
     (x: number): number;
 >x : number
+>  : ^^^^^^
 
     (x: string, y?: string): boolean;
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     (x: Date): void;
 >x : Date
+>  : ^^^^
 
     <T>(x: T[]): T[];
 >x : T[]
+>  : ^^^
 }
 
 interface B {
     (x: number): number;
 >x : number
+>  : ^^^^^^
 
     (x: string): string;
 >x : string
+>  : ^^^^^^
 
     (x: Date): void;
 >x : Date
+>  : ^^^^
 
     <T>(x: T[]): T[];
 >x : T[]
+>  : ^^^
 }
 
 interface C {
     (x: string, ...y: string[]): number;
 >x : string
+>  : ^^^^^^
 >y : string[]
+>  : ^^^^^^^^
 
     (x: number, s?: string): number;
 >x : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     <T>(x: T[]): T[];
 >x : T[]
+>  : ^^^
 }
 
 var f1: A | B | C;
 >f1 : A | B | C
+>   : ^^^^^^^^^
 
 var n1 = f1(42);             // number
 >n1 : number
+>   : ^^^^^^
 >f1(42) : number
+>       : ^^^^^^
 >f1 : A | B | C
+>   : ^^^^^^^^^
 >42 : 42
+>   : ^^
 
 var s1 = f1("abc");          // boolean | string | number
 >s1 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1("abc") : string | number | boolean
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : A | B | C
+>   : ^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 var a1 = f1([true, false]);  // boolean[]
 >a1 : boolean[]
+>   : ^^^^^^^^^
 >f1([true, false]) : boolean[]
+>                  : ^^^^^^^^^
 >f1 : A | B | C
+>   : ^^^^^^^^^
 >[true, false] : boolean[]
+>              : ^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 var f2: C | B | A;
 >f2 : A | B | C
+>   : ^^^^^^^^^
 
 var n2 = f2(42);             // number
 >n2 : number
+>   : ^^^^^^
 >f2(42) : number
+>       : ^^^^^^
 >f2 : A | B | C
+>   : ^^^^^^^^^
 >42 : 42
+>   : ^^
 
 var s2 = f2("abc");          // number | string | boolean
 >s2 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2("abc") : string | number | boolean
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : A | B | C
+>   : ^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 var a2 = f2([true, false]);  // boolean[]
 >a2 : boolean[]
+>   : ^^^^^^^^^
 >f2([true, false]) : boolean[]
+>                  : ^^^^^^^^^
 >f2 : A | B | C
+>   : ^^^^^^^^^
 >[true, false] : boolean[]
+>              : ^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 var f3: B | A | C;
 >f3 : A | B | C
+>   : ^^^^^^^^^
 
 var n3 = f3(42);             // number
 >n3 : number
+>   : ^^^^^^
 >f3(42) : number
+>       : ^^^^^^
 >f3 : A | B | C
+>   : ^^^^^^^^^
 >42 : 42
+>   : ^^
 
 var s3 = f3("abc");          // string | boolean | number
 >s3 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f3("abc") : string | number | boolean
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f3 : A | B | C
+>   : ^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 var a3 = f3([true, false]);  // boolean[]
 >a3 : boolean[]
+>   : ^^^^^^^^^
 >f3([true, false]) : boolean[]
+>                  : ^^^^^^^^^
 >f3 : A | B | C
+>   : ^^^^^^^^^
 >[true, false] : boolean[]
+>              : ^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 

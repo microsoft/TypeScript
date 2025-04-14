@@ -1,7 +1,8 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardsInIfStatement.ts(139,17): error TS2339: Property 'toString' does not exist on type 'never'.
+typeGuardsInIfStatement.ts(120,17): error TS2872: This kind of expression is always truthy.
+typeGuardsInIfStatement.ts(139,17): error TS2339: Property 'toString' does not exist on type 'never'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardsInIfStatement.ts (1 errors) ====
+==== typeGuardsInIfStatement.ts (2 errors) ====
     // In the true branch statement of an 'if' statement, 
     // the type of a variable or parameter is narrowed by any type guard in the 'if' condition when true.
     // In the false branch statement of an 'if' statement, 
@@ -122,6 +123,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsInIfStatement.ts(139,17
                 ? (
                 // change value of x
                 x = 10 && x.toString() // number | boolean | string
+                    ~~
+!!! error TS2872: This kind of expression is always truthy.
                 )
                 : (
                 // do not change value

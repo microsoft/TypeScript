@@ -1,38 +1,57 @@
+//// [tests/cases/compiler/typeReferenceDirectives12.ts] ////
+
 === /mod2.ts ===
 import { Cls } from "./main";
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
 import "./mod1";
 
 export const cls = Cls;
 >cls : typeof Cls
+>    : ^^^^^^^^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
 export const foo = new Cls().foo();
 >foo : Lib
+>    : ^^^
 >new Cls().foo() : Lib
+>                : ^^^
 >new Cls().foo : () => Lib
+>              : ^^^^^^   
 >new Cls() : Cls
+>          : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >foo : () => Lib
+>    : ^^^^^^   
 
 export const bar = Cls.bar();
 >bar : Lib
+>    : ^^^
 >Cls.bar() : Lib
+>          : ^^^
 >Cls.bar : () => Lib
+>        : ^^^^^^   
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >bar : () => Lib
+>    : ^^^^^^   
 
 === /types/lib/index.d.ts ===
 interface Lib { x }
 >x : any
+>  : ^^^
 
 === /main.ts ===
 export class Cls {
 >Cls : Cls
+>    : ^^^
 
     x
 >x : any
+>  : ^^^
 }
 
 === /mod1.ts ===
@@ -40,29 +59,42 @@ export class Cls {
 
 import {Cls} from "./main";
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
 Cls.prototype.foo = function() { return undefined; }
 >Cls.prototype.foo = function() { return undefined; } : () => any
+>                                                     : ^^^^^^^^^
 >Cls.prototype.foo : () => Lib
+>                  : ^^^^^^   
 >Cls.prototype : Cls
+>              : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >prototype : Cls
+>          : ^^^
 >foo : () => Lib
+>    : ^^^^^^   
 >function() { return undefined; } : () => any
+>                                 : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 declare module "./main" {
 >"./main" : typeof import("/main")
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 
     interface Cls {
         foo(): Lib;
 >foo : () => Lib
+>    : ^^^^^^   
     }
     namespace Cls {
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
         function bar(): Lib;
 >bar : () => Lib
+>    : ^^^^^^   
     }
 }
 

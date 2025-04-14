@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/keyof/keyofIntersection.ts ===
+//// [tests/cases/conformance/types/keyof/keyofIntersection.ts] ////
+
+=== keyofIntersection.ts ===
 type A = { a: string };
 >A : Symbol(A, Decl(keyofIntersection.ts, 0, 0))
 >a : Symbol(a, Decl(keyofIntersection.ts, 0, 10))

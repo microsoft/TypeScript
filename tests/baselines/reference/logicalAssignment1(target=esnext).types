@@ -1,75 +1,113 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment1.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment1.ts] ////
+
+=== logicalAssignment1.ts ===
 declare let a: string | undefined
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let b: string | undefined
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let c: string | undefined
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let d: number | undefined
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let e: number | undefined
 >e : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let f: number | undefined
 >f : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let g: 0 | 1 | 42
 >g : 0 | 1 | 42
+>  : ^^^^^^^^^^
 
 declare let h: 0 | 1 | 42
 >h : 0 | 1 | 42
+>  : ^^^^^^^^^^
 
 declare let i: 0 | 1 | 42
 >i : 0 | 1 | 42
+>  : ^^^^^^^^^^
 
 
 a &&= "foo"
 >a &&= "foo" : "" | "foo" | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 b ||= "foo"
 >b ||= "foo" : string
+>            : ^^^^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 c ??= "foo"
 >c ??= "foo" : string
+>            : ^^^^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 
 d &&= 42
 >d &&= 42 : 0 | 42 | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 e ||= 42
 >e ||= 42 : number
+>         : ^^^^^^
 >e : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 f ??= 42
 >f ??= 42 : number
+>         : ^^^^^^
 >f : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 g &&= 42
 >g &&= 42 : 0 | 42
+>         : ^^^^^^
 >g : 0 | 1 | 42
+>  : ^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 h ||= 42
 >h ||= 42 : 1 | 42
+>         : ^^^^^^
 >h : 0 | 1 | 42
+>  : ^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 i ??= 42
 >i ??= 42 : 0 | 1 | 42
+>         : ^^^^^^^^^^
 >i : 0 | 1 | 42
+>  : ^^^^^^^^^^
 >42 : 42
+>   : ^^
 

@@ -1,23 +1,27 @@
-tests/cases/conformance/types/witness/witness.ts(4,21): error TS2372: Parameter 'pInit' cannot reference itself.
-tests/cases/conformance/types/witness/witness.ts(8,14): error TS2729: Property 'x' is used before its initialization.
-tests/cases/conformance/types/witness/witness.ts(28,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/types/witness/witness.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/types/witness/witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/types/witness/witness.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(57,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
-tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
-tests/cases/conformance/types/witness/witness.ts(121,14): error TS2729: Property 'n' is used before its initialization.
-tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property 'q' is used before its initialization.
+witness.ts(4,21): error TS2372: Parameter 'pInit' cannot reference itself.
+witness.ts(8,14): error TS2729: Property 'x' is used before its initialization.
+witness.ts(20,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'never'.
+witness.ts(28,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
+witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
+witness.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
+witness.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
+witness.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
+witness.ts(50,11): error TS2873: This kind of expression is always falsy.
+witness.ts(57,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
+witness.ts(58,12): error TS2873: This kind of expression is always falsy.
+witness.ts(68,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fnCallResult' must be of type 'never', but here has type 'any'.
+witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
+witness.ts(121,14): error TS2729: Property 'n' is used before its initialization.
+witness.ts(128,19): error TS2729: Property 'q' is used before its initialization.
 
 
-==== tests/cases/conformance/types/witness/witness.ts (17 errors) ====
+==== witness.ts (21 errors) ====
     // Initializers
     var varInit = varInit; // any
     var pInit: any;
@@ -30,7 +34,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
         x = this.x;
                  ~
 !!! error TS2729: Property 'x' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/types/witness/witness.ts:8:5: 'x' is declared here.
+!!! related TS2728 witness.ts:8:5: 'x' is declared here.
         fn() {
             var y = this.x;
             var y: any;
@@ -43,6 +47,9 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     }
     var a: any;
     var a = fnReturn1();
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'never'.
+!!! related TS6203 witness.ts:19:5: 'a' was also declared here.
     
     function fnReturn2() {
         return fnReturn2;
@@ -56,7 +63,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var co1: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:28:5: 'co1' was also declared here.
+!!! related TS6203 witness.ts:28:5: 'co1' was also declared here.
     var co2 = (3, 4, co2);
                ~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
@@ -73,26 +80,26 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var co3: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:32:5: 'co3' was also declared here.
+!!! related TS6203 witness.ts:32:5: 'co3' was also declared here.
     
     // Assignment
     var as1 = (as1 = 2);
     var as1: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:36:5: 'as1' was also declared here.
+!!! related TS6203 witness.ts:36:5: 'as1' was also declared here.
     var as2 = (as2 = as2 = 2);
     var as2: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:38:5: 'as2' was also declared here.
+!!! related TS6203 witness.ts:38:5: 'as2' was also declared here.
     
     // Conditional
     var cnd1 = cnd1 ? 0 : 1;
     var cnd1: number;
         ~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:42:5: 'cnd1' was also declared here.
+!!! related TS6203 witness.ts:42:5: 'cnd1' was also declared here.
     var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
     var cnd2: string;
     
@@ -100,6 +107,8 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var or1 = or1 || '';
     var or1: any;
     var or2 = '' || or2;
+              ~~
+!!! error TS2873: This kind of expression is always falsy.
     var or2: any;
     var or3 = or3 || or3;
     var or3: any;
@@ -109,8 +118,10 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var and1: string;
         ~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:56:5: 'and1' was also declared here.
+!!! related TS6203 witness.ts:56:5: 'and1' was also declared here.
     var and2 = '' && and2;
+               ~~
+!!! error TS2873: This kind of expression is always falsy.
     var and2: any;
     var and3 = and3 && and3;
     var and3: any;
@@ -121,6 +132,9 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     }
     var fnCallResult = fnCall();
     var fnCallResult: any;
+        ~~~~~~~~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fnCallResult' must be of type 'never', but here has type 'any'.
+!!! related TS6203 witness.ts:67:5: 'fnCallResult' was also declared here.
     
     // Call argument
     function fnArg1(x: typeof fnArg1, y: number) {
@@ -165,7 +179,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var propAcc1: { m: any; }
         ~~~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
-!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:107:5: 'propAcc1' was also declared here.
+!!! related TS6203 witness.ts:107:5: 'propAcc1' was also declared here.
     
     // Property access of module member
     module M2 {
@@ -179,7 +193,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
         n = this.n; // n: any
                  ~
 !!! error TS2729: Property 'n' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/types/witness/witness.ts:121:5: 'n' is declared here.
+!!! related TS2728 witness.ts:121:5: 'n' is declared here.
     }
     var c2inst = new C2().n;
     var c2inst: any;
@@ -189,7 +203,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
         static q = C3.q;
                       ~
 !!! error TS2729: Property 'q' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/types/witness/witness.ts:128:12: 'q' is declared here.
+!!! related TS2728 witness.ts:128:12: 'q' is declared here.
     }
     var qq = C3.q;
     var qq: any;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/umdDependencyCommentName2.ts] ////
+
 //// [umdDependencyCommentName2.ts]
 ///<amd-dependency path='bar' name='b'/>
 ///<amd-dependency path='foo'/>
@@ -21,7 +23,7 @@ m1.f();
     }
 })(function (require, exports, b, c) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var m1 = require("m2");
     m1.f();
 });

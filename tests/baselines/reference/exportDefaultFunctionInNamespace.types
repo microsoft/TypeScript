@@ -1,12 +1,16 @@
-=== tests/cases/compiler/exportDefaultFunctionInNamespace.ts ===
+//// [tests/cases/compiler/exportDefaultFunctionInNamespace.ts] ////
+
+=== exportDefaultFunctionInNamespace.ts ===
 namespace ns_function {
 >ns_function : typeof ns_function
+>            : ^^^^^^^^^^^^^^^^^^
 
     export default function () {}
 }
 
 namespace ns_async_function {
 >ns_async_function : typeof ns_async_function
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     export default async function () {}
 }

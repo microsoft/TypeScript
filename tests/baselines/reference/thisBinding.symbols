@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisBinding.ts ===
+//// [tests/cases/compiler/thisBinding.ts] ////
+
+=== thisBinding.ts ===
 module M {
 >M : Symbol(M, Decl(thisBinding.ts, 0, 0))
 

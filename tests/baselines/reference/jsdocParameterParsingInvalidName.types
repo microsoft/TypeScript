@@ -1,12 +1,16 @@
-=== tests/cases/compiler/jsdocParameterParsingInvalidName.ts ===
+//// [tests/cases/compiler/jsdocParameterParsingInvalidName.ts] ////
+
+=== jsdocParameterParsingInvalidName.ts ===
 class c {
 >c : c
+>  : ^
 
     /**
      * @param {string} [`foo]
      */
     method(foo) {
 >method : (foo: any) => void
+>       : ^   ^^^^^^^^^^^^^^
 >foo : any
     }
 }

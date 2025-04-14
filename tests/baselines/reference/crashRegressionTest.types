@@ -1,63 +1,96 @@
-=== tests/cases/compiler/crashRegressionTest.ts ===
+//// [tests/cases/compiler/crashRegressionTest.ts] ////
+
+=== crashRegressionTest.ts ===
 module MsPortal.Util.TemplateEngine {
 >MsPortal : typeof MsPortal
+>         : ^^^^^^^^^^^^^^^
 >Util : typeof Util
+>     : ^^^^^^^^^^^
 >TemplateEngine : typeof TemplateEngine
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
     "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
  
     interface TemplateKeyValue {
         [name: string]: string;
 >name : string
+>     : ^^^^^^
     }
  
     class StringTemplate {
 >StringTemplate : StringTemplate
+>               : ^^^^^^^^^^^^^^
 
         private _templateStorage: TemplateStorage;
 >_templateStorage : TemplateStorage
+>                 : ^^^^^^^^^^^^^^^
  
         constructor(templateStorage: TemplateStorage) {
 >templateStorage : TemplateStorage
+>                : ^^^^^^^^^^^^^^^
 
             this._templateStorage = templateStorage;
 >this._templateStorage = templateStorage : TemplateStorage
+>                                        : ^^^^^^^^^^^^^^^
 >this._templateStorage : TemplateStorage
+>                      : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_templateStorage : TemplateStorage
+>                 : ^^^^^^^^^^^^^^^
 >templateStorage : TemplateStorage
+>                : ^^^^^^^^^^^^^^^
         }
  
         public text(value?: string): any {
 >text : (value?: string) => any
+>     : ^     ^^^      ^^^^^   
 >value : string
+>      : ^^^^^^
 
             this._templateStorage.templateSources[this._name] = value;
 >this._templateStorage.templateSources[this._name] = value : string
+>                                                          : ^^^^^^
 >this._templateStorage.templateSources[this._name] : string
+>                                                  : ^^^^^^
 >this._templateStorage.templateSources : TemplateKeyValue
+>                                      : ^^^^^^^^^^^^^^^^
 >this._templateStorage : TemplateStorage
+>                      : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_templateStorage : TemplateStorage
+>                 : ^^^^^^^^^^^^^^^
 >templateSources : TemplateKeyValue
+>                : ^^^^^^^^^^^^^^^^
 >this._name : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >_name : any
+>      : ^^^
 >value : string
+>      : ^^^^^^
         }
     }
  
     export class TemplateStorage {
 >TemplateStorage : TemplateStorage
+>                : ^^^^^^^^^^^^^^^
 
         public templateSources: TemplateKeyValue = {};
 >templateSources : TemplateKeyValue
+>                : ^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
         public templateData: TemplateKeyValue = {};
 >templateData : TemplateKeyValue
+>             : ^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
     }
 }
 

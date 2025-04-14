@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5ModuleWithoutModuleGenTarget.ts ===
+//// [tests/cases/compiler/es5ModuleWithoutModuleGenTarget.ts] ////
+
+=== es5ModuleWithoutModuleGenTarget.ts ===
 export class A
 >A : Symbol(A, Decl(es5ModuleWithoutModuleGenTarget.ts, 0, 0))
 {

@@ -1,0 +1,16 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/src/types/lib/index.d.ts ===
+// [||]declare let $: {x: number};
+
+// === /tests/cases/fourslash/src/app.ts ===
+// /// <reference types="[|lib|]/*GOTO DEF*/"/>
+// $.x;
+
+  // === Details ===
+  [
+   {
+    "kind": "script",
+    "name": "lib",
+    "unverified": false
+   }
+  ]

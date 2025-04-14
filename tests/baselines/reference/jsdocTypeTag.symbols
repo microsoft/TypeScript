@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeTag.ts] ////
+
+=== a.js ===
 /** @type {String} */
 var S;
 >S : Symbol(S, Decl(a.js, 1, 3), Decl(b.ts, 0, 3))
@@ -15,79 +17,87 @@ var N;
 var n;
 >n : Symbol(n, Decl(a.js, 10, 3), Decl(b.ts, 3, 3))
 
+/** @type {BigInt} */
+var BI;
+>BI : Symbol(BI, Decl(a.js, 13, 3), Decl(b.ts, 6, 3))
+
+/** @type {bigint} */
+var bi;
+>bi : Symbol(bi, Decl(a.js, 16, 3), Decl(b.ts, 7, 3))
+
 /** @type {Boolean} */
 var B;
->B : Symbol(B, Decl(a.js, 13, 3), Decl(b.ts, 4, 3))
+>B : Symbol(B, Decl(a.js, 19, 3), Decl(b.ts, 4, 3))
 
 /** @type {boolean} */
 var b;
->b : Symbol(b, Decl(a.js, 16, 3), Decl(b.ts, 5, 3))
+>b : Symbol(b, Decl(a.js, 22, 3), Decl(b.ts, 5, 3))
 
 /** @type {Void} */
 var V;
->V : Symbol(V, Decl(a.js, 19, 3), Decl(b.ts, 6, 3))
+>V : Symbol(V, Decl(a.js, 25, 3), Decl(b.ts, 8, 3))
 
 /** @type {void} */
 var v;
->v : Symbol(v, Decl(a.js, 22, 3), Decl(b.ts, 7, 3))
+>v : Symbol(v, Decl(a.js, 28, 3), Decl(b.ts, 9, 3))
 
 /** @type {Undefined} */
 var U;
->U : Symbol(U, Decl(a.js, 25, 3), Decl(b.ts, 8, 3))
+>U : Symbol(U, Decl(a.js, 31, 3), Decl(b.ts, 10, 3))
 
 /** @type {undefined} */
 var u;
->u : Symbol(u, Decl(a.js, 28, 3), Decl(b.ts, 9, 3))
+>u : Symbol(u, Decl(a.js, 34, 3), Decl(b.ts, 11, 3))
 
 /** @type {Null} */
 var Nl;
->Nl : Symbol(Nl, Decl(a.js, 31, 3), Decl(b.ts, 10, 3))
+>Nl : Symbol(Nl, Decl(a.js, 37, 3), Decl(b.ts, 12, 3))
 
 /** @type {null} */
 var nl;
->nl : Symbol(nl, Decl(a.js, 34, 3), Decl(b.ts, 11, 3))
+>nl : Symbol(nl, Decl(a.js, 40, 3), Decl(b.ts, 13, 3))
 
 /** @type {Array} */
 var A;
->A : Symbol(A, Decl(a.js, 37, 3), Decl(b.ts, 12, 3))
+>A : Symbol(A, Decl(a.js, 43, 3), Decl(b.ts, 14, 3))
 
 /** @type {array} */
 var a;
->a : Symbol(a, Decl(a.js, 40, 3), Decl(b.ts, 13, 3))
+>a : Symbol(a, Decl(a.js, 46, 3), Decl(b.ts, 15, 3))
 
 /** @type {Promise} */
 var P;
->P : Symbol(P, Decl(a.js, 43, 3), Decl(b.ts, 14, 3))
+>P : Symbol(P, Decl(a.js, 49, 3), Decl(b.ts, 16, 3))
 
 /** @type {promise} */
 var p;
->p : Symbol(p, Decl(a.js, 46, 3), Decl(b.ts, 15, 3))
+>p : Symbol(p, Decl(a.js, 52, 3), Decl(b.ts, 17, 3))
 
 /** @type {?number} */
 var nullable;
->nullable : Symbol(nullable, Decl(a.js, 49, 3), Decl(b.ts, 16, 3))
+>nullable : Symbol(nullable, Decl(a.js, 55, 3), Decl(b.ts, 18, 3))
 
 /** @type {Object} */
 var Obj;
->Obj : Symbol(Obj, Decl(a.js, 52, 3), Decl(b.ts, 17, 3))
+>Obj : Symbol(Obj, Decl(a.js, 58, 3), Decl(b.ts, 19, 3))
 
 /** @type {object} */
 var obj;
->obj : Symbol(obj, Decl(a.js, 55, 3), Decl(b.ts, 18, 3))
+>obj : Symbol(obj, Decl(a.js, 61, 3), Decl(b.ts, 20, 3))
 
 /** @type {Function} */
 var Func;
->Func : Symbol(Func, Decl(a.js, 58, 3), Decl(b.ts, 19, 3))
+>Func : Symbol(Func, Decl(a.js, 64, 3), Decl(b.ts, 21, 3))
 
 /** @type {(s: string) => number} */
 var f;
->f : Symbol(f, Decl(a.js, 61, 3), Decl(b.ts, 20, 3))
+>f : Symbol(f, Decl(a.js, 67, 3), Decl(b.ts, 22, 3))
 
 /** @type {new (s: string) => { s: string }} */
 var ctor;
->ctor : Symbol(ctor, Decl(a.js, 64, 3), Decl(b.ts, 21, 3))
+>ctor : Symbol(ctor, Decl(a.js, 70, 3), Decl(b.ts, 23, 3))
 
-=== tests/cases/conformance/jsdoc/b.ts ===
+=== b.ts ===
 var S: string;
 >S : Symbol(S, Decl(a.js, 1, 3), Decl(b.ts, 0, 3))
 
@@ -101,62 +111,68 @@ var n: number
 >n : Symbol(n, Decl(a.js, 10, 3), Decl(b.ts, 3, 3))
 
 var B: boolean;
->B : Symbol(B, Decl(a.js, 13, 3), Decl(b.ts, 4, 3))
+>B : Symbol(B, Decl(a.js, 19, 3), Decl(b.ts, 4, 3))
 
 var b: boolean;
->b : Symbol(b, Decl(a.js, 16, 3), Decl(b.ts, 5, 3))
+>b : Symbol(b, Decl(a.js, 22, 3), Decl(b.ts, 5, 3))
+
+var BI: bigint;
+>BI : Symbol(BI, Decl(a.js, 13, 3), Decl(b.ts, 6, 3))
+
+var bi: bigint;
+>bi : Symbol(bi, Decl(a.js, 16, 3), Decl(b.ts, 7, 3))
 
 var V :void;
->V : Symbol(V, Decl(a.js, 19, 3), Decl(b.ts, 6, 3))
+>V : Symbol(V, Decl(a.js, 25, 3), Decl(b.ts, 8, 3))
 
 var v: void;
->v : Symbol(v, Decl(a.js, 22, 3), Decl(b.ts, 7, 3))
+>v : Symbol(v, Decl(a.js, 28, 3), Decl(b.ts, 9, 3))
 
 var U: undefined;
->U : Symbol(U, Decl(a.js, 25, 3), Decl(b.ts, 8, 3))
+>U : Symbol(U, Decl(a.js, 31, 3), Decl(b.ts, 10, 3))
 
 var u: undefined;
->u : Symbol(u, Decl(a.js, 28, 3), Decl(b.ts, 9, 3))
+>u : Symbol(u, Decl(a.js, 34, 3), Decl(b.ts, 11, 3))
 
 var Nl: null;
->Nl : Symbol(Nl, Decl(a.js, 31, 3), Decl(b.ts, 10, 3))
+>Nl : Symbol(Nl, Decl(a.js, 37, 3), Decl(b.ts, 12, 3))
 
 var nl: null;
->nl : Symbol(nl, Decl(a.js, 34, 3), Decl(b.ts, 11, 3))
+>nl : Symbol(nl, Decl(a.js, 40, 3), Decl(b.ts, 13, 3))
 
 var A: any[];
->A : Symbol(A, Decl(a.js, 37, 3), Decl(b.ts, 12, 3))
+>A : Symbol(A, Decl(a.js, 43, 3), Decl(b.ts, 14, 3))
 
 var a: any[];
->a : Symbol(a, Decl(a.js, 40, 3), Decl(b.ts, 13, 3))
+>a : Symbol(a, Decl(a.js, 46, 3), Decl(b.ts, 15, 3))
 
 var P: Promise<any>;
->P : Symbol(P, Decl(a.js, 43, 3), Decl(b.ts, 14, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(a.js, 49, 3), Decl(b.ts, 16, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
 var p: Promise<any>;
->p : Symbol(p, Decl(a.js, 46, 3), Decl(b.ts, 15, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>p : Symbol(p, Decl(a.js, 52, 3), Decl(b.ts, 17, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
 var nullable: number | null;
->nullable : Symbol(nullable, Decl(a.js, 49, 3), Decl(b.ts, 16, 3))
+>nullable : Symbol(nullable, Decl(a.js, 55, 3), Decl(b.ts, 18, 3))
 
 var Obj: any;
->Obj : Symbol(Obj, Decl(a.js, 52, 3), Decl(b.ts, 17, 3))
+>Obj : Symbol(Obj, Decl(a.js, 58, 3), Decl(b.ts, 19, 3))
 
 var obj: any;
->obj : Symbol(obj, Decl(a.js, 55, 3), Decl(b.ts, 18, 3))
+>obj : Symbol(obj, Decl(a.js, 61, 3), Decl(b.ts, 20, 3))
 
 var Func: Function;
->Func : Symbol(Func, Decl(a.js, 58, 3), Decl(b.ts, 19, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Func : Symbol(Func, Decl(a.js, 64, 3), Decl(b.ts, 21, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
 
 var f: (s: string) => number;
->f : Symbol(f, Decl(a.js, 61, 3), Decl(b.ts, 20, 3))
->s : Symbol(s, Decl(b.ts, 20, 8))
+>f : Symbol(f, Decl(a.js, 67, 3), Decl(b.ts, 22, 3))
+>s : Symbol(s, Decl(b.ts, 22, 8))
 
 var ctor: new (s: string) => { s: string };
->ctor : Symbol(ctor, Decl(a.js, 64, 3), Decl(b.ts, 21, 3))
->s : Symbol(s, Decl(b.ts, 21, 15))
->s : Symbol(s, Decl(b.ts, 21, 30))
+>ctor : Symbol(ctor, Decl(a.js, 70, 3), Decl(b.ts, 23, 3))
+>s : Symbol(s, Decl(b.ts, 23, 15))
+>s : Symbol(s, Decl(b.ts, 23, 30))
 

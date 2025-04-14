@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts] ////
+
 //// [consistentAliasVsNonAliasRecordBehavior.ts]
 // TODO: FIXME: All the below cases labeled `no error` _should be an error_, and are only prevented from so being
 // by incorrect variance-based relationships

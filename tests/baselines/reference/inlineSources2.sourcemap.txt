@@ -1,13 +1,13 @@
 ===================================================================
 JsFile: out.js
-mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsidGVzdHMvY2FzZXMvY29tcGlsZXIvYS50cyIsInRlc3RzL2Nhc2VzL2NvbXBpbGVyL2IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0RmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDA7XG5jb25zb2xlLmxvZyhhKTtcbiIsInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpOyJdfQ==
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyIsImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0RmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDA7XG5jb25zb2xlLmxvZyhhKTtcbiIsInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpO1xuIl19
 sourceRoot: 
-sources: tests/cases/compiler/a.ts,tests/cases/compiler/b.ts
-sourcesContent: ["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);"]
+sources: a.ts,b.ts
+sourcesContent: ["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);\n"]
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:out.js
-sourceFile:tests/cases/compiler/a.ts
+sourceFile:a.ts
 -------------------------------------------------------------------
 >>>var a = 0;
 1 >
@@ -59,7 +59,7 @@ sourceFile:tests/cases/compiler/a.ts
 ---
 -------------------------------------------------------------------
 emittedFile:out.js
-sourceFile:tests/cases/compiler/b.ts
+sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var b = 0;
 1 >
@@ -91,7 +91,7 @@ sourceFile:tests/cases/compiler/b.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >console
@@ -110,4 +110,4 @@ sourceFile:tests/cases/compiler/b.ts
 7 >Emitted(4, 15) Source(2, 15) + SourceIndex(1)
 8 >Emitted(4, 16) Source(2, 16) + SourceIndex(1)
 ---
->>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsidGVzdHMvY2FzZXMvY29tcGlsZXIvYS50cyIsInRlc3RzL2Nhc2VzL2NvbXBpbGVyL2IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0RmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDA7XG5jb25zb2xlLmxvZyhhKTtcbiIsInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpOyJdfQ==
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyIsImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0RmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDA7XG5jb25zb2xlLmxvZyhhKTtcbiIsInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpO1xuIl19

@@ -1,8 +1,8 @@
-tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts(1,6): error TS1109: Expression expected.
-tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts(3,1): error TS1128: Declaration or statement expected.
+invalidThrowStatement.ts(1,6): error TS1109: Expression expected.
+invalidThrowStatement.ts(3,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts (2 errors) ====
+==== invalidThrowStatement.ts (2 errors) ====
     throw; 
          ~
 !!! error TS1109: Expression expected.

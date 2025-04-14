@@ -1,34 +1,54 @@
-=== tests/cases/compiler/downlevelLetConst12.ts ===
+//// [tests/cases/compiler/downlevelLetConst12.ts] ////
+
+=== downlevelLetConst12.ts ===
 'use strict'
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 
 // top level let\const should not be renamed
 let foo;
 >foo : any
+>    : ^^^
 
 const bar = 1;
 >bar : 1
+>    : ^
 >1 : 1
+>  : ^
 
 let [baz] = [];
 >baz : undefined
+>    : ^^^^^^^^^
 >[] : []
+>   : ^^
 
 let {a: baz2} = { a: 1 };
 >a : any
+>  : ^^^
 >baz2 : number
+>     : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 const [baz3] = []
 >baz3 : undefined
+>     : ^^^^^^^^^
 >[] : []
+>   : ^^
 
 const {a: baz4} = { a: 1 };
 >a : any
+>  : ^^^
 >baz4 : number
+>     : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

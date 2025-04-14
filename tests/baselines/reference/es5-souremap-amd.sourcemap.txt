@@ -5,7 +5,7 @@ sourceRoot:
 sources: es5-souremap-amd.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/es5-souremap-amd.js
+emittedFile:es5-souremap-amd.js
 sourceFile:es5-souremap-amd.ts
 -------------------------------------------------------------------
 >>>var A = /** @class */ (function () {

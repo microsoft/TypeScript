@@ -1,4 +1,6 @@
-=== tests/cases/compiler/funduleExportedClassIsUsedBeforeDeclaration.ts ===
+//// [tests/cases/compiler/funduleExportedClassIsUsedBeforeDeclaration.ts] ////
+
+=== funduleExportedClassIsUsedBeforeDeclaration.ts ===
 interface A {   // interface before module declaration
 >A : Symbol(A, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 0, 0))
 

@@ -1,0 +1,33 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renamePrivateAccessor.ts ===
+// class Foo {
+//    <|get /*RENAME*/[|#fooRENAME|]() { return 1 }|>
+//    <|set [|#fooRENAME|](value: number) { }|>
+//    retFoo() {
+//        return this.[|#fooRENAME|];
+//    }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renamePrivateAccessor.ts ===
+// class Foo {
+//    <|get [|#fooRENAME|]() { return 1 }|>
+//    <|set /*RENAME*/[|#fooRENAME|](value: number) { }|>
+//    retFoo() {
+//        return this.[|#fooRENAME|];
+//    }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renamePrivateAccessor.ts ===
+// class Foo {
+//    <|get [|#fooRENAME|]() { return 1 }|>
+//    <|set [|#fooRENAME|](value: number) { }|>
+//    retFoo() {
+//        return this./*RENAME*/[|#fooRENAME|];
+//    }
+// }

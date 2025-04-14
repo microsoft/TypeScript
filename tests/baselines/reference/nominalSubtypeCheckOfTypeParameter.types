@@ -1,22 +1,30 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/nominalSubtypeCheckOfTypeParameter.ts ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/nominalSubtypeCheckOfTypeParameter.ts] ////
+
+=== nominalSubtypeCheckOfTypeParameter.ts ===
 interface BinaryTuple<T, S> {
     first: T
 >first : T
+>      : ^
 
     second: S
 >second : S
+>       : ^
 }
 
 interface Sequence<T> {
     hasNext(): boolean
 >hasNext : () => boolean
+>        : ^^^^^^       
 
     pop(): T
 >pop : () => T
+>    : ^^^^^^ 
 
     zip<S>(seq: Sequence<S>): Sequence<BinaryTuple<T, S>>
 >zip : <S>(seq: Sequence<S>) => Sequence<BinaryTuple<T, S>>
+>    : ^ ^^   ^^           ^^^^^                           
 >seq : Sequence<S>
+>    : ^^^^^^^^^^^
 }
 
 // error, despite the fact that the code explicitly says List<T> extends Sequence<T>, the current rules for infinitely expanding type references 
@@ -24,9 +32,12 @@ interface Sequence<T> {
 interface List<T> extends Sequence<T> {
     getLength(): number
 >getLength : () => number
+>          : ^^^^^^      
 
     zip<S>(seq: Sequence<S>): List<BinaryTuple<T, S>>
 >zip : <S>(seq: Sequence<S>) => List<BinaryTuple<T, S>>
+>    : ^ ^^   ^^           ^^^^^                       
 >seq : Sequence<S>
+>    : ^^^^^^^^^^^
 }
 

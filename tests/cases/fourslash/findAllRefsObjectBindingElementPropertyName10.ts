@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface Recursive {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}next|]?: Recursive;|]
+////    /*1*/next?: Recursive;
 ////    value: any;
 ////}
 ////
-////function f ([|{ [|{| "contextRangeIndex": 2 |}next|]: { [|{| "contextRangeIndex": 2 |}next|]: x} }: Recursive|]) {
+////function f (/*2*/{ /*3*/next: { /*4*/next: x} }: Recursive) {
 ////}
 
-verify.singleReferenceGroup("(property) Recursive.next?: Recursive", "next");
+verify.baselineFindAllReferences('1', '2', '3', '4');

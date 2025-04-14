@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag7.ts] ////
+
+=== test.js ===
 /**
  * @typedef {(a: string, b: number) => void} Foo
  */
@@ -11,5 +13,9 @@ class C {
 >foo : Symbol(C.foo, Decl(test.js, 4, 9))
 >a : Symbol(a, Decl(test.js, 6, 8))
 >b : Symbol(b, Decl(test.js, 6, 10))
+
+    /** @type {(optional?) => void} */
+    methodWithOptionalParameters() {}
+>methodWithOptionalParameters : Symbol(C.methodWithOptionalParameters, Decl(test.js, 6, 16))
 }
 

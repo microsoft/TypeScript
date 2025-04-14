@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxUnionSpread.tsx] ////
+
 //// [index.tsx]
 namespace JSX {
     export interface Element {}
@@ -24,7 +26,7 @@ var component2 = <AnimalComponent {...props2} />
 
 //// [index.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function AnimalComponent(info) {
     return undefined;
 }

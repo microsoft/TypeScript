@@ -20,7 +20,7 @@ y2 = ext;
 
 //// [typeofAmbientExternalModules_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
@@ -38,7 +38,7 @@ var D = /** @class */ (function () {
 module.exports = D;
 //// [typeofAmbientExternalModules_2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='typeofAmbientExternalModules_0.ts'/>
 ///<reference path='typeofAmbientExternalModules_1.ts'/>
 var ext = require("./typeofAmbientExternalModules_0");

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesClass2.ts] ////
+
 //// [augmentedTypesClass2.ts]
 // Checking class with other things in type space not value space
 

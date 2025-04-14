@@ -1,37 +1,62 @@
-=== tests/cases/compiler/promiseTypeInference.ts ===
+//// [tests/cases/compiler/promiseTypeInference.ts] ////
+
+=== promiseTypeInference.ts ===
 declare class CPromise<T> {
 >CPromise : CPromise<T>
+>         : ^^^^^^^^^^^
 
     then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;
 >then : <U>(success?: (value: T) => CPromise<U>) => CPromise<U>
+>     : ^ ^^       ^^^                         ^^^^^           
 >success : (value: T) => CPromise<U>
+>        : ^     ^^ ^^^^^           
 >value : T
+>      : ^
 }
 interface IPromise<T> {
     then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
 >then : <U>(success?: (value: T) => IPromise<U>) => IPromise<U>
+>     : ^ ^^       ^^^                         ^^^^^           
 >success : (value: T) => IPromise<U>
+>        : ^     ^^ ^^^^^           
 >value : T
+>      : ^
 }
 declare function load(name: string): CPromise<string>;
 >load : (name: string) => CPromise<string>
+>     : ^    ^^      ^^^^^                
 >name : string
+>     : ^^^^^^
 
 declare function convert(s: string): IPromise<number>;
 >convert : (s: string) => IPromise<number>
+>        : ^ ^^      ^^^^^                
 >s : string
+>  : ^^^^^^
 
 var $$x = load("something").then(s => convert(s));
 >$$x : CPromise<number>
+>    : ^^^^^^^^^^^^^^^^
 >load("something").then(s => convert(s)) : CPromise<number>
+>                                        : ^^^^^^^^^^^^^^^^
 >load("something").then : <U>(success?: (value: string) => CPromise<U>) => CPromise<U>
+>                       : ^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >load("something") : CPromise<string>
+>                  : ^^^^^^^^^^^^^^^^
 >load : (name: string) => CPromise<string>
+>     : ^    ^^      ^^^^^                
 >"something" : "something"
+>            : ^^^^^^^^^^^
 >then : <U>(success?: (value: string) => CPromise<U>) => CPromise<U>
+>     : ^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s => convert(s) : (s: string) => IPromise<number>
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >convert(s) : IPromise<number>
+>           : ^^^^^^^^^^^^^^^^
 >convert : (s: string) => IPromise<number>
+>        : ^ ^^      ^^^^^                
 >s : string
+>  : ^^^^^^
 

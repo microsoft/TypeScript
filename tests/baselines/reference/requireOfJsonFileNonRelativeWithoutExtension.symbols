@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileNonRelativeWithoutExtension.ts] ////
+
 === /src/projects/file1.ts ===
 import d = require("d.json"); // Should fail
 >d : Symbol(d, Decl(file1.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts] ////
+
 //// [typeofClassWithPrivates.ts]
 class C<T> {
     private a: number;

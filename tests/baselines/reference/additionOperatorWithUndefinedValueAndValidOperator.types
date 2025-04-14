@@ -1,128 +1,210 @@
-=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts] ////
+
+=== additionOperatorWithUndefinedValueAndValidOperator.ts ===
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
 
 enum E { a, b, c }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 
 var a: any;
 >a : any
+>  : ^^^
 
 var b: number;
 >b : number
+>  : ^^^^^^
 
 var c: E;
 >c : E
+>  : ^
 
 var d: string;
 >d : string
+>  : ^^^^^^
 
 // undefined + any
 var r1: any = undefined + a;
 >r1 : any
+>   : ^^^
 >undefined + a : any
+>              : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : any
+>  : ^^^
 
 var r2: any = a + undefined;
 >r2 : any
+>   : ^^^
 >a + undefined : any
+>              : ^^^
 >a : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // undefined + number/enum
 var r3 = undefined + b;
 >r3 : any
+>   : ^^^
 >undefined + b : any
+>              : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 var r4 = undefined + 1;
 >r4 : any
+>   : ^^^
 >undefined + 1 : any
+>              : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >1 : 1
+>  : ^
 
 var r5 = undefined + c;
 >r5 : any
+>   : ^^^
 >undefined + c : any
+>              : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : E
+>  : ^
 
 var r6 = undefined + E.a;
 >r6 : any
+>   : ^^^
 >undefined + E.a : any
+>                : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var r7 = undefined + E['a'];
 >r7 : any
+>   : ^^^
 >undefined + E['a'] : any
+>                   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >E['a'] : E.a
+>       : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
 var r8 = b + undefined;
 >r8 : any
+>   : ^^^
 >b + undefined : any
+>              : ^^^
 >b : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r9 = 1 + undefined;
 >r9 : any
+>   : ^^^
 >1 + undefined : any
+>              : ^^^
 >1 : 1
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r10 = c + undefined
 >r10 : any
+>    : ^^^
 >c + undefined : any
+>              : ^^^
 >c : E
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r11 = E.a + undefined;
 >r11 : any
+>    : ^^^
 >E.a + undefined : any
+>                : ^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r12 = E['a'] + undefined;
 >r12 : any
+>    : ^^^
 >E['a'] + undefined : any
+>                   : ^^^
 >E['a'] : E.a
+>       : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >'a' : "a"
+>    : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // undefined + string
 var r13 = undefined + d;
 >r13 : string
+>    : ^^^^^^
 >undefined + d : string
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >d : string
+>  : ^^^^^^
 
 var r14 = undefined + '';
 >r14 : string
+>    : ^^^^^^
 >undefined + '' : string
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r15 = d + undefined;
 >r15 : string
+>    : ^^^^^^
 >d + undefined : string
+>              : ^^^^^^
 >d : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r16 = '' + undefined;
 >r16 : string
+>    : ^^^^^^
 >'' + undefined : string
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

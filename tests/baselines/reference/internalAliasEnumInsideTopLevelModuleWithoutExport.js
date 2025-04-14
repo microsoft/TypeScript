@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasEnumInsideTopLevelModuleWithoutExport.ts] ////
+
 //// [internalAliasEnumInsideTopLevelModuleWithoutExport.ts]
 export module a {
     export enum weekend {
@@ -14,7 +16,7 @@ export var bVal: b = b.Sunday;
 //// [internalAliasEnumInsideTopLevelModuleWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.bVal = exports.a = void 0;
     var a;
     (function (a) {
@@ -24,14 +26,14 @@ define(["require", "exports"], function (require, exports) {
             weekend[weekend["Saturday"] = 1] = "Saturday";
             weekend[weekend["Sunday"] = 2] = "Sunday";
         })(weekend = a.weekend || (a.weekend = {}));
-    })(a = exports.a || (exports.a = {}));
+    })(a || (exports.a = a = {}));
     var b = a.weekend;
     exports.bVal = b.Sunday;
 });
 
 
 //// [internalAliasEnumInsideTopLevelModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     enum weekend {
         Friday = 0,
         Saturday = 1,

@@ -1,0 +1,245 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForObjectLiteralProperties.ts ===
+// var x = { /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}add|]: 0|>, b: "string" };
+// x["[|add|]"];
+// x.[|add|];
+// var y = x;
+// y.[|add|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForObjectLiteralProperties.ts ===
+  // var x = { /*FIND ALL REFS*/<|[|add|]: 0|>, b: "string" };
+  // x["add"];
+  // x.add;
+  // var y = x;
+  // y.add;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) add: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "add",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForObjectLiteralProperties.ts ===
+// var x = { <|[|{| isWriteAccess: true |}add|]: 0|>, b: "string" };
+// x["/*FIND ALL REFS*/[|add|]"];
+// x.[|add|];
+// var y = x;
+// y.[|add|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForObjectLiteralProperties.ts ===
+  // var x = { <|[|add|]: 0|>, b: "string" };
+  // x["/*FIND ALL REFS*/add"];
+  // x.add;
+  // var y = x;
+  // y.add;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) add: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "add",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForObjectLiteralProperties.ts ===
+// var x = { <|[|{| isWriteAccess: true |}add|]: 0|>, b: "string" };
+// x["[|add|]"];
+// x./*FIND ALL REFS*/[|add|];
+// var y = x;
+// y.[|add|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForObjectLiteralProperties.ts ===
+  // var x = { <|[|add|]: 0|>, b: "string" };
+  // x["add"];
+  // x./*FIND ALL REFS*/add;
+  // var y = x;
+  // y.add;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) add: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "add",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForObjectLiteralProperties.ts ===
+// var x = { <|[|{| isWriteAccess: true |}add|]: 0|>, b: "string" };
+// x["[|add|]"];
+// x.[|add|];
+// var y = x;
+// y./*FIND ALL REFS*/[|add|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForObjectLiteralProperties.ts ===
+  // var x = { <|[|add|]: 0|>, b: "string" };
+  // x["add"];
+  // x.add;
+  // var y = x;
+  // y./*FIND ALL REFS*/add;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) add: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "add",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

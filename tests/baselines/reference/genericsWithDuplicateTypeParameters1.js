@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts] ////
+
 //// [genericsWithDuplicateTypeParameters1.ts]
 function f<x, x>() { }
 function f2<X, X>(a: X, b: X): X { return null; }

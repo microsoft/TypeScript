@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxNestedWithinTernaryParsesCorrectly.tsx ===
+//// [tests/cases/compiler/jsxNestedWithinTernaryParsesCorrectly.tsx] ////
+
+=== jsxNestedWithinTernaryParsesCorrectly.tsx ===
 const emptyMessage = null as any;
 >emptyMessage : Symbol(emptyMessage, Decl(jsxNestedWithinTernaryParsesCorrectly.tsx, 0, 5))
 

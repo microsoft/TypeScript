@@ -1,17 +1,22 @@
-=== tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts ===
+//// [tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts] ////
+
+=== importStatementsInterfaces.ts ===
 module A {
     export interface Point {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 
     export module inA {
         export interface Point3D extends Point {
             z: number;
 >z : number
+>  : ^^^^^^
         }
     }
 }
@@ -20,73 +25,110 @@ module A {
 module B {
     import a = A;
 >a : any
+>  : ^^^
 >A : any
+>  : ^^^
 }
 
 // no code gen expected
 module C {
 >C : typeof C
+>  : ^^^^^^^^
 
     import a = A;
 >a : any
+>  : ^^^
 >A : any
+>  : ^^^
 
     import b = a.inA;
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 >inA : any
+>    : ^^^
 
     var m: typeof a;
 >m : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     var p: b.Point3D;
 >p : b.Point3D
+>  : ^^^^^^^^^
 >b : any
+>  : ^^^
 
     var p = {x:0, y:0, z: 0 };
 >p : b.Point3D
+>  : ^^^^^^^^^
 >{x:0, y:0, z: 0 } : { x: number; y: number; z: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >z : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 // no code gen expected
 module D {
 >D : typeof D
+>  : ^^^^^^^^
 
     import a = A;
 >a : any
+>  : ^^^
 >A : any
+>  : ^^^
 
     var p : a.Point;
 >p : a.Point
+>  : ^^^^^^^
 >a : any
+>  : ^^^
 }
 
 // no code gen expected
 module E {
 >E : typeof E
+>  : ^^^^^^^^
 
     import a = A.inA;
 >a : any
+>  : ^^^
 >A : any
+>  : ^^^
 >inA : any
+>    : ^^^
 
     export function xDist(x: a.Point3D) {
 >xDist : (x: a.Point3D) => number
+>      : ^ ^^         ^^^^^^^^^^^
 >x : a.Point3D
+>  : ^^^^^^^^^
 >a : any
+>  : ^^^
 
         return 0 - x.x;
 >0 - x.x : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 >x.x : number
+>    : ^^^^^^
 >x : a.Point3D
+>  : ^^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }

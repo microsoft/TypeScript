@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericIndexerTyping1.ts] ////
+
 //// [numericIndexerTyping1.ts]
 interface I {
     [x: string]: Date;

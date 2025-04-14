@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/checkJsObjectLiteralHasCheckedKeyof.ts] ////
+
+=== file.js ===
 // @ts-check
 const obj = {
 >obj : Symbol(obj, Decl(file.js, 1, 5))

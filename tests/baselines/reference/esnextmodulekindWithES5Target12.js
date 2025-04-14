@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target12.ts] ////
+
 //// [esnextmodulekindWithES5Target12.ts]
 export class C {
 }

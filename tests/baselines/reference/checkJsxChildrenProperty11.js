@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty11.tsx] ////
+
 //// [file.tsx]
 declare module JSX {
 	interface Element { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts] ////
+
 //// [es5ExportDefaultClassDeclaration3.ts]
 var before: C = new C();
 

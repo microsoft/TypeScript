@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCallbacksAndClassHierarchy.ts ===
+//// [tests/cases/compiler/genericCallbacksAndClassHierarchy.ts] ////
+
+=== genericCallbacksAndClassHierarchy.ts ===
 module M {
 >M : Symbol(M, Decl(genericCallbacksAndClassHierarchy.ts, 0, 0))
 

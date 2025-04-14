@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts] ////
+
 //// [derivedClassSuperStatementPosition.ts]
 class DerivedBasic extends Object {
     prop = 1;

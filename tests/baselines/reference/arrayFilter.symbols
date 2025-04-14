@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayFilter.ts ===
+//// [tests/cases/compiler/arrayFilter.ts] ////
+
+=== arrayFilter.ts ===
 var foo = [
 >foo : Symbol(foo, Decl(arrayFilter.ts, 0, 3))
 

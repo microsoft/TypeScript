@@ -1,12 +1,21 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassInstance1.ts] ////
+
+=== index.js ===
 class Foo {}
 >Foo : Foo
+>    : ^^^
 
 module.exports = new Foo();
 >module.exports = new Foo() : Foo
+>                           : ^^^
 >module.exports : Foo
+>               : ^^^
 >module : { exports: Foo; }
+>       : ^^^^^^^^^^^^^^^^^
 >exports : Foo
+>        : ^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 

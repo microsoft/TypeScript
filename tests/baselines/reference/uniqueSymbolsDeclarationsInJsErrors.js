@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.ts] ////
+
 //// [uniqueSymbolsDeclarationsInJsErrors.js]
 class C {
     /**
@@ -14,6 +16,7 @@ class C {
      */
     static readwriteType;
 }
+
 
 //// [uniqueSymbolsDeclarationsInJsErrors-out.js]
 class C {

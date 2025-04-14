@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/jsx/tsxNamespacedAttributeName2.tsx] ////
+
+=== a.tsx ===
+declare var React: any;
+>React : any
+
+const a = <svg:path a:b={1}></svg:path>;
+>a : error
+><svg:path a:b={1}></svg:path> : error
+>svg : error
+>path : error
+>a:b : number
+>    : ^^^^^^
+>a : error
+>b : error
+>1 : 1
+>  : ^
+>svg : error
+>path : error
+
+const b = <svg : path a:b={1}></svg : path>;
+>b : error
+><svg : path a:b={1}></svg : path> : error
+>svg : error
+>path : error
+>a:b : number
+>    : ^^^^^^
+>a : error
+>b : error
+>1 : 1
+>  : ^
+>svg : error
+>path : error
+

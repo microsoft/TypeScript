@@ -1,16 +1,27 @@
-=== tests/cases/conformance/dynamicImport/importCallExpressionShouldNotGetParen.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionShouldNotGetParen.ts] ////
+
+=== importCallExpressionShouldNotGetParen.ts ===
 const localeName = "zh-CN";
 >localeName : "zh-CN"
+>           : ^^^^^^^
 >"zh-CN" : "zh-CN"
+>        : ^^^^^^^
 
 import(`./locales/${localeName}.js`).then(bar => {
 >import(`./locales/${localeName}.js`).then(bar => {    let x = bar;}) : Promise<void>
+>                                                                     : ^^^^^^^^^^^^^
 >import(`./locales/${localeName}.js`).then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                          : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import(`./locales/${localeName}.js`) : Promise<any>
->`./locales/${localeName}.js` : string
+>                                     : ^^^^^^^^^^^^
+>`./locales/${localeName}.js` : "./locales/zh-CN.js"
+>                             : ^^^^^^^^^^^^^^^^^^^^
 >localeName : "zh-CN"
+>           : ^^^^^^^
 >then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar => {    let x = bar;} : (bar: any) => void
+>                          : ^   ^^^^^^^^^^^^^^
 >bar : any
 
     let x = bar;
@@ -21,15 +32,25 @@ import(`./locales/${localeName}.js`).then(bar => {
 
 import("./locales/" + localeName + ".js").then(bar => {
 >import("./locales/" + localeName + ".js").then(bar => {    let x = bar;}) : Promise<void>
+>                                                                          : ^^^^^^^^^^^^^
 >import("./locales/" + localeName + ".js").then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                               : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./locales/" + localeName + ".js") : Promise<any>
+>                                          : ^^^^^^^^^^^^
 >"./locales/" + localeName + ".js" : string
+>                                  : ^^^^^^
 >"./locales/" + localeName : string
+>                          : ^^^^^^
 >"./locales/" : "./locales/"
+>             : ^^^^^^^^^^^^
 >localeName : "zh-CN"
+>           : ^^^^^^^
 >".js" : ".js"
+>      : ^^^^^
 >then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar => {    let x = bar;} : (bar: any) => void
+>                          : ^   ^^^^^^^^^^^^^^
 >bar : any
 
     let x = bar;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts] ////
+
 //// [parenthesizedContexualTyping1.ts]
 function fun<T>(g: (x: T) => T, x: T): T;
 function fun<T>(g: (x: T) => T, h: (y: T) => T, x: T): T;

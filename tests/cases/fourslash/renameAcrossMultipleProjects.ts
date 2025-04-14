@@ -11,4 +11,4 @@
 /////// <reference path="a.ts" />
 ////[|x|]++;
 
-verify.rangesWithSameTextAreRenameLocations("x");
+verify.baselineRenameAtRangesWithText("x");

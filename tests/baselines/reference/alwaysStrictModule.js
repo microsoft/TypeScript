@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/alwaysStrictModule.ts] ////
+
 //// [alwaysStrictModule.ts]
 module M {
     export function f() {

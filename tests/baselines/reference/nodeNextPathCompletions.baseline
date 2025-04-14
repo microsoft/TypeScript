@@ -1,11 +1,19 @@
+// === Completions ===
+=== /home/src/workspaces/project/src/foo.ts ===
+// import { fooFromIndex } from "";
+//                               ^
+// | ----------------------------------------------------------------------
+// | dependency
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
-      "fileName": "/src/foo.ts",
+      "fileName": "/home/src/workspaces/project/src/foo.ts",
       "position": 30,
       "name": ""
     },
-    "completionList": {
+    "item": {
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -23,7 +31,8 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

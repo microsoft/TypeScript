@@ -3,11 +3,11 @@
 // Global module reference.
 
 // @Filename: referencesForGlobals_1.ts
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalModule|] {
+/////*1*/module /*2*/globalModule {
 ////     export f() { };
-////}|]
+////}
 
 // @Filename: referencesForGlobals_2.ts
-////var m = [|globalModule|];
+////var m = /*3*/globalModule;
 
-verify.singleReferenceGroup("namespace globalModule", "globalModule");
+verify.baselineFindAllReferences('1', '2', '3');

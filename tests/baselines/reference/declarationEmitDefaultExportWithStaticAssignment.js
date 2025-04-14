@@ -34,7 +34,7 @@ C.B = B;
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
@@ -44,24 +44,25 @@ var Foo = /** @class */ (function () {
 exports.Foo = Foo;
 //// [index1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Example;
 var foo_1 = require("./foo");
 function Example() { }
-exports["default"] = Example;
 Example.Foo = foo_1.Foo;
 //// [index2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
+exports.default = Example;
 var foo_1 = require("./foo");
-exports.Foo = foo_1.Foo;
+Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return foo_1.Foo; } });
 function Example() { }
-exports["default"] = Example;
 Example.Foo = foo_1.Foo;
 //// [index3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
+exports.default = Example;
 var Bar = /** @class */ (function () {
     function Bar() {
     }
@@ -69,18 +70,16 @@ var Bar = /** @class */ (function () {
 }());
 exports.Bar = Bar;
 function Example() { }
-exports["default"] = Example;
 Example.Bar = Bar;
 //// [index4.js]
 "use strict";
-exports.__esModule = true;
-exports.C = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = C;
 function A() { }
 function B() { }
 function C() {
     return null;
 }
-exports.C = C;
 C.A = A;
 C.B = B;
 

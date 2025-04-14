@@ -10,5 +10,5 @@
 //@Filename: c.ts
 ////[|export { /*class2*/[|{| "contextRangeIndex": 6 |}Class|] as /*c3*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}C3|] } from "./a";|]
 
-verify.baselineFindAllReferences('class0', 'class1', 'class2', 'c2_0', 'c2_1', 'c3')
-verify.rangesWithSameTextAreRenameLocations("Class", "C2", "C3");
+verify.baselineFindAllReferences('class0', 'class1', 'class2', 'c2_0', 'c2_1', 'c3');
+verify.baselineRenameAtRangesWithText(["Class", "C2", "C3"]);

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ClassTest4.ts] ////
+
 //// [es6ClassTest4.ts]
 declare class Point
 {

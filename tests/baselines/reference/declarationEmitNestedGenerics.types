@@ -1,30 +1,42 @@
-=== tests/cases/compiler/declarationEmitNestedGenerics.ts ===
+//// [tests/cases/compiler/declarationEmitNestedGenerics.ts] ////
+
+=== declarationEmitNestedGenerics.ts ===
 function f<T>(p: T) {
->f : <T>(p: T) => <T>(x: T) => typeof p
+>f : <T>(p: T) => <T_1>(x: T_1) => typeof p
+>  : ^ ^^ ^^ ^^^^^^^^^^^ ^^   ^^^^^        
 >p : T
+>  : ^
 
     let g: <T>(x: T) => typeof p = null as any;
->g : <T>(x: T) => typeof p
+>g : <T_1>(x: T_1) => typeof p
+>  : ^^^^^^ ^^   ^^^^^        
 >x : T
->p : T
+>  : ^
+>p : T_1
+>  : ^^^
 >null as any : any
->null : null
 
     return g;
->g : <T>(x: T) => T
+>g : <T_1>(x: T_1) => typeof p
+>  : ^^^^^^ ^^   ^^^^^        
 }
 
 function g<T>(x: T) {
->g : <T>(x: T) => T extends (infer T)[] ? T : T
+>g : <T>(x: T) => T extends (infer T_1)[] ? T_1 : T
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     let y: typeof x extends (infer T)[] ? T : typeof x = null as any;
->y : T extends (infer T)[] ? T : T
+>y : T extends (infer T_1)[] ? T_1 : T
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 >null as any : any
->null : null
 
     return y;
->y : T extends (infer T)[] ? T : T
+>y : T extends (infer T_1)[] ? T_1 : T
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

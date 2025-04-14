@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesEnum3.ts ===
+//// [tests/cases/compiler/augmentedTypesEnum3.ts] ////
+
+=== augmentedTypesEnum3.ts ===
 module E {
 >E : Symbol(E, Decl(augmentedTypesEnum3.ts, 0, 0), Decl(augmentedTypesEnum3.ts, 2, 1))
 

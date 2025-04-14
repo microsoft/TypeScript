@@ -1,5 +1,7 @@
-=== tests/cases/compiler/moduleKeywordRepeatError.ts ===
+//// [tests/cases/compiler/moduleKeywordRepeatError.ts] ////
+
+=== moduleKeywordRepeatError.ts ===
+
 // "module.module { }" should raise a syntax error
-No type information for this code.
-No type information for this code.module.module { }
-No type information for this code.
+
+module.module { }

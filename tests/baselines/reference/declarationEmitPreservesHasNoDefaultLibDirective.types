@@ -1,10 +1,14 @@
-=== tests/cases/compiler/declarationEmitPreservesHasNoDefaultLibDirective.ts ===
+//// [tests/cases/compiler/declarationEmitPreservesHasNoDefaultLibDirective.ts] ////
+
+=== declarationEmitPreservesHasNoDefaultLibDirective.ts ===
 /// <reference no-default-lib="true"/>
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     public: string;
 >public : string
+>       : ^^^^^^
 }
 interface Array<T> {}
 interface Boolean {}

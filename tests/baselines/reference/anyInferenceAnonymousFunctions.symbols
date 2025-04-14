@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyInferenceAnonymousFunctions.ts ===
+//// [tests/cases/compiler/anyInferenceAnonymousFunctions.ts] ////
+
+=== anyInferenceAnonymousFunctions.ts ===
 var paired: any[];
 >paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
 

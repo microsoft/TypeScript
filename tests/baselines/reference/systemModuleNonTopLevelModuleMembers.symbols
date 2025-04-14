@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemModuleNonTopLevelModuleMembers.ts ===
+//// [tests/cases/compiler/systemModuleNonTopLevelModuleMembers.ts] ////
+
+=== systemModuleNonTopLevelModuleMembers.ts ===
 export class TopLevelClass {}
 >TopLevelClass : Symbol(TopLevelClass, Decl(systemModuleNonTopLevelModuleMembers.ts, 0, 0))
 

@@ -17,6 +17,10 @@ type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected
 type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
 type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
 
+type TUndefined = Awaited<undefined>;
+type TNull = Awaited<null>;
+type TNullOrUndefined = Awaited<null | undefined>;
+
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 type T16 = Awaited<BadPromise>; // error
 
@@ -162,3 +166,89 @@ async function f16<T extends number & { then(): void }>(x: T) {
 
 // helps with tests where '.types' just prints out the type alias name
 type _Expect<TActual extends TExpected, TExpected> = TActual;
+
+// https://github.com/microsoft/TypeScript/issues/48320
+async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
+    const ret: Awaited<ReturnType<T>> = await fn(1, 2, 3);
+    return ret;
+}
+async function f17_usage() {
+    const x = await f17(async () => 123 as const);
+    return { x };
+}
+
+// https://github.com/microsoft/TypeScript/issues/47144
+type GenericStructure<
+  AcceptableKeyType extends string = string
+> = Record<AcceptableKeyType, number>;
+
+async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
+  const structure = await structurePromise;
+  structure[key] = 1;
+}
+
+// repro from #46543
+
+type SelectAndInclude = {
+  select: any;
+  include: any;
+};
+type HasSelect = {
+  select: any;
+};
+type HasInclude = {
+  include: any;
+};
+
+type CheckSelect<T, S, U> = T extends SelectAndInclude
+  ? "Please either choose `select` or `include`"
+  : T extends HasSelect
+  ? U
+  : T extends HasInclude
+  ? U
+  : S;
+
+declare function findMany<T extends { select?: string; include?: string }>(
+  args: T
+): CheckSelect<T, Promise<1>, Promise<2>>;
+
+async function findManyWrapper<
+  T extends { select?: string; include?: string }
+>(args: T) {
+  const result = await findMany(args);
+  return result;
+}
+
+async function mainFindMany() {
+  const shouldBeErrorText = await findManyWrapper({
+    select: "foo",
+    include: "bar",
+  });
+  const itsOne = await findManyWrapper({});
+  const itsTwo1 = await findManyWrapper({ select: "foo" });
+  const itsTwo2 = await findManyWrapper({ include: "bar" });
+}
+
+// repro from #41831
+
+{
+  const promises = [Promise.resolve(0)] as const
+
+  Promise.all(promises).then((results) => {
+    const first = results[0]
+    const second = results[1] // error
+  })
+}
+
+// repro from #40330
+
+async function test40330() {
+
+    const promiseNumber = Promise.resolve(1);
+    const promiseVoid = async () => {}
+
+    const res = await Promise.all([
+        promiseNumber,
+        ...[promiseVoid()]
+    ])
+}

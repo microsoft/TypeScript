@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionPropertyExistence.ts] ////
+
 //// [unionPropertyExistence.ts]
 interface A {
     inAll: string;

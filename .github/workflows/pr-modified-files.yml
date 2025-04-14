@@ -1,0 +1,135 @@
+name: Check modified files
+on:
+  # For security reasons, we have to use pull_request_target here.
+  # This differs from pull_request in that it runs at the _base_ of the PR,
+  # e.g. main. This allows us to access secrets. In this workflow, we should
+  # never actually clone the PR, as it may contain malicious code.
+  # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+  pull_request_target:
+    branches:
+      - main
+
+# We only ever need one of these running on a single PR.
+# Just let the newest one complete if there are multiple running.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  manage-prs:
+    runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
+
+    # No need to set explicit permissions; we are using typescript-bot's token, not github-actions' token.
+
+    env:
+      GH_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+
+    steps:
+      - name: Check if PR author is in pr_owners.txt
+        id: pr_owner
+        run: |
+          curl -s https://raw.githubusercontent.com/microsoft/TypeScript/main/.github/pr_owners.txt > pr_owners.txt
+          if grep -Fxq -m1 "${{ github.event.pull_request.user.login }}" pr_owners.txt; then
+            echo "pr_owner=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pr_owner=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create scripts
+        run: |
+          cat > is_changed.sh <<'EOF'
+            #!/bin/bash
+            FILENAME=changed_files.txt
+            if [ ! -f $FILENAME ]; then
+              # The gh command only returns info for the first 100 files. To get
+              # the rest, we have to use the graphql API. See:
+              # https://github.com/cli/cli/issues/5368#issuecomment-1344253654
+              gh api graphql -f query='
+                query($endCursor: String) {
+                  repository(owner: "microsoft", name: "TypeScript") {
+                    pullRequest(number: ${{ github.event.pull_request.number }}) {
+                      files(first: 100, after: $endCursor) {
+                        pageInfo{ hasNextPage, endCursor }
+                        nodes {
+                          path
+                        }
+                      }
+                    }
+                  }
+                }' --paginate --jq '.data.repository.pullRequest.files.nodes.[].path' > $FILENAME
+            fi
+            for file in "$@"; do
+              grep -Fxq -m1 "$file" $FILENAME && exit 0
+            done
+            exit 1
+          EOF
+          chmod +x is_changed.sh
+
+          cat > already_commented.sh <<'EOF'
+            #!/bin/bash
+            FILENAME=bot_comments.txt
+            if [ ! -f $FILENAME ]; then
+              gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} \
+                --json 'comments' --jq '.comments[] | select(.author.login == "typescript-bot") | .body' > $FILENAME
+            fi
+            exec grep -Fq -m1 "$1" $FILENAME
+          EOF
+          chmod +x already_commented.sh
+
+      - name: Generated DOM files
+        if: steps.pr_owner.outputs.pr_owner == 'false'
+        run: |
+          if ./is_changed.sh "src/lib/dom.generated.d.ts" \
+              "src/lib/dom.iterable.generated.d.ts" \
+              "src/lib/webworker.generated.d.ts" \
+              "src/lib/webworker.iterable.generated.d.ts"; then
+            MESSAGE="It looks like you've sent a pull request to update some generated declaration files related to the DOM."
+            MESSAGE+=" These files aren't meant to be edited by hand, as they are synchronized with files in"
+            MESSAGE+=" [the TypeScript-DOM-lib-generator repository](https://github.com/microsoft/TypeScript-DOM-lib-generator)."
+            MESSAGE+=" You can [read more here](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md#contributing-libdts-fixes)."
+            MESSAGE+=" For house-keeping purposes, this pull request will be closed."
+
+            gh pr close ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --comment "$MESSAGE"
+            exit 1 # Stop the pipeline; we just closed the PR.
+          fi
+
+      - name: Check if PR modifies protocol.ts
+        run: |
+          if ./is_changed.sh "src/server/protocol.ts"; then
+            MESSAGE="Thanks for the PR! It looks like you've changed the TSServer protocol in some way."
+            MESSAGE+=" Please ensure that any changes here don't break consumers of the current TSServer API."
+            MESSAGE+=" For some extra review, we'll ping @sheetalkamat, @mjbvz, @zkat, and @joj for you."
+            MESSAGE+=" Feel free to loop in other consumers/maintainers if necessary."
+
+            if ./already_commented.sh "It looks like you've changed the TSServer protocol in some way."; then
+              echo "Already commented."
+            else
+              gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "$MESSAGE"
+            fi
+          fi
+
+      - name: Check for breaking changes
+        run: |
+          if ./is_changed.sh "tests/baselines/reference/api/typescript.d.ts"; then
+            MESSAGE="Looks like you're introducing a change to the public API surface area."
+            MESSAGE+=" If this includes breaking changes, please document them"
+            MESSAGE+=" [on our wiki's API Breaking Changes page](https://github.com/microsoft/TypeScript/wiki/API-Breaking-Changes)."
+            MESSAGE+=$'\n\n'
+            MESSAGE+="Also, please make sure @DanielRosenwasser and @RyanCavanaugh are aware of the changes, just as a heads up."
+
+            if ./already_commented.sh "Looks like you're introducing a change to the public API surface area."; then
+              echo "Already commented."
+            else
+              gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "$MESSAGE"
+            fi
+          fi

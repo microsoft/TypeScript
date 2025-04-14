@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interMixingModulesInterfaces0.ts ===
+//// [tests/cases/compiler/interMixingModulesInterfaces0.ts] ////
+
+=== interMixingModulesInterfaces0.ts ===
 module A {
 >A : Symbol(A, Decl(interMixingModulesInterfaces0.ts, 0, 0))
 

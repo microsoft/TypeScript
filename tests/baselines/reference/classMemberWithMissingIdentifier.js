@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classMemberWithMissingIdentifier.ts] ////
+
 //// [classMemberWithMissingIdentifier.ts]
 class C { 
     public {};

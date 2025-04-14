@@ -1,1 +1,4 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsJsDocTypeDef.ts ===
+// /** @typedef {Object} /*FIND ALL REFS*/T */
+// function foo() {}

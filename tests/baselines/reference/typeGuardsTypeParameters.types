@@ -1,59 +1,88 @@
-=== tests/cases/conformance/controlFlow/typeGuardsTypeParameters.ts ===
+//// [tests/cases/conformance/controlFlow/typeGuardsTypeParameters.ts] ////
+
+=== typeGuardsTypeParameters.ts ===
 // Type guards involving type parameters produce intersection types
 
 class C {
 >C : C
+>  : ^
 
     prop: string;
 >prop : string
+>     : ^^^^^^
 }
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (x instanceof C) {
 >x instanceof C : boolean
+>               : ^^^^^^^
 >x : T
+>  : ^
 >C : typeof C
+>  : ^^^^^^^^
 
         let v1: T = x;
 >v1 : T
+>   : ^
 >x : T & C
+>  : ^^^^^
 
         let v2: C = x;
 >v2 : C
+>   : ^
 >x : T & C
+>  : ^^^^^
 
         x.prop;
 >x.prop : string
+>       : ^^^^^^
 >x : T & C
+>  : ^^^^^
 >prop : string
+>     : ^^^^^^
     }
 }
 
 function f2<T>(x: T) {
 >f2 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
         let v1: T = x;
 >v1 : T
+>   : ^
 >x : T & string
+>  : ^^^^^^^^^^
 
         let v2: string = x;
 >v2 : string
+>   : ^^^^^^
 >x : T & string
+>  : ^^^^^^^^^^
 
         x.length;
 >x.length : number
+>         : ^^^^^^
 >x : T & string
+>  : ^^^^^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
@@ -61,34 +90,53 @@ function f2<T>(x: T) {
 
 function fun<T>(item: { [P in keyof T]: T[P] }) {
 >fun : <T>(item: { [P in keyof T]: T[P]; }) => void
+>    : ^ ^^    ^^                         ^^^^^^^^^
 >item : { [P in keyof T]: T[P]; }
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     const strings: string[] = [];
 >strings : string[]
+>        : ^^^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
     for (const key in item) {
 >key : Extract<keyof T, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >item : { [P in keyof T]: T[P]; }
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
         const value = item[key];
 >value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item[key] : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
+>          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : { [P in keyof T]: T[P]; }
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >key : Extract<keyof T, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (typeof value === "string") {
 >typeof value === "string" : boolean
+>                          : ^^^^^^^
 >typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
             strings.push(value);
 >strings.push(value) : number
+>                    : ^^^^^^
 >strings.push : (...items: string[]) => number
+>             : ^^^^     ^^^^^^^^^^^^^^^      
 >strings : string[]
+>        : ^^^^^^^^
 >push : (...items: string[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>] & string
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
     }
 }

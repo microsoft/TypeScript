@@ -1,102 +1,133 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts] ////
+
+=== derivedGenericClassWithAny.ts ===
 class C<T extends number> {
 >C : C<T>
+>  : ^^^^
 
     x: T;
 >x : T
+>  : ^
 
     get X(): T { return null; }
 >X : T
->null : null
+>  : ^
 
     foo(): T {
 >foo : () => T
+>    : ^^^^^^ 
 
         return null;
->null : null
     }
 }
 
 class D extends C<number> {
 >D : D
+>  : ^
 >C : C<number>
+>  : ^^^^^^^^^
 
     x: any;
 >x : any
+>  : ^^^
 
     get X(): any {
 >X : any
+>  : ^^^
 
         return null;
->null : null
     }
     foo(): any {
 >foo : () => any
+>    : ^^^^^^   
 
         return 1;
 >1 : 1
+>  : ^
     }
 
     static y: any;
 >y : any
+>  : ^^^
 
     static get Y(): any {
 >Y : any
+>  : ^^^
 
         return null;
->null : null
     }
     static bar(): any {
 >bar : () => any
+>    : ^^^^^^   
 
         return null;
->null : null
     }
 }
 
 // if D is a valid class definition than E is now not safe tranisitively through C
 class E<T extends string> extends D {
 >E : E<T>
+>  : ^^^^
 >D : D
+>  : ^
 
     x: T;
 >x : T
+>  : ^
 
     get X(): T { return ''; } // error
 >X : T
+>  : ^
 >'' : ""
+>   : ^^
 
     foo(): T {
 >foo : () => T
+>    : ^^^^^^ 
 
         return ''; // error
 >'' : ""
+>   : ^^
     }
 }
 
 var c: C<number>;
 >c : C<number>
+>  : ^^^^^^^^^
 
 var d: D;
 >d : D
+>  : ^
 
 var e: E<string>;
 >e : E<string>
+>  : ^^^^^^^^^
 
 c = d;
 >c = d : D
+>      : ^
 >c : C<number>
+>  : ^^^^^^^^^
 >d : D
+>  : ^
 
 c = e;
 >c = e : E<string>
+>      : ^^^^^^^^^
 >c : C<number>
+>  : ^^^^^^^^^
 >e : E<string>
+>  : ^^^^^^^^^
 
 var r = c.foo(); // e.foo would return string
 >r : number
+>  : ^^^^^^
 >c.foo() : number
+>        : ^^^^^^
 >c.foo : () => number
+>      : ^^^^^^^^^^^^
 >c : C<number>
+>  : ^^^^^^^^^
 >foo : () => number
+>    : ^^^^^^^^^^^^
 

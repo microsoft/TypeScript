@@ -1,80 +1,120 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod4_Js.ts] ////
+
 === /a.js ===
 class A {
 >A : A
+>  : ^
 
 	/**
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
 >m : (foo?: object) => void
+>  : ^   ^^^      ^^^^^^^^^
 >foo : any
+>    : ^^^
 >{} : {}
+>   : ^^
 
 		const key = "bar";
 >key : "bar"
+>    : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 		/**
 		 * @type object
 		 */
 		this.foo = foo;
 >this.foo = foo : any
+>               : ^^^
 >this.foo : any
+>         : ^^^
 >this : this
+>     : ^^^^
 >foo : any
+>    : ^^^
 >foo : any
+>    : ^^^
 
 		/**
 		 * @type object
 		 */
 		const arguments = this.arguments;
 >arguments : any
+>          : ^^^
 >this.arguments : { bar: {}; }
+>               : ^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >arguments : { bar: {}; }
+>          : ^^^^^^^^^^^^
 
 		/**
 		 * @type object
 		 */
 		this.bar = arguments.bar;
 >this.bar = arguments.bar : any
+>                         : ^^^
 >this.bar : any
+>         : ^^^
 >this : this
+>     : ^^^^
 >bar : any
+>    : ^^^
 >arguments.bar : any
+>              : ^^^
 >arguments : any
+>          : ^^^
 >bar : any
+>    : ^^^
 
 		/**
 		 * @type object
 		 */
 		this.baz = arguments[key];
 >this.baz = arguments[key] : any
+>                          : ^^^
 >this.baz : any
+>         : ^^^
 >this : this
+>     : ^^^^
 >baz : any
+>    : ^^^
 >arguments[key] : any
+>               : ^^^
 >arguments : any
+>          : ^^^
 >key : "bar"
+>    : ^^^^^
 
 		/**
 		 * @type object
 		 */
 		this.options = arguments;
 >this.options = arguments : any
+>                         : ^^^
 >this.options : any
+>             : ^^^
 >this : this
+>     : ^^^^
 >options : any
+>        : ^^^
 >arguments : any
+>          : ^^^
 	}
 
 	get arguments() {
 >arguments : { bar: {}; }
+>          : ^^^^^^^^^^^^
 
 		return { bar: {} };
 >{ bar: {} } : { bar: {}; }
+>            : ^^^^^^^^^^^^
 >bar : {}
+>    : ^^
 >{} : {}
+>   : ^^
 	}
 }
 

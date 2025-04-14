@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedThisContainer.ts] ////
+
 //// [nestedThisContainer.ts]
 type Foo = any;
 

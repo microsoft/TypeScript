@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowedImports.ts] ////
+
 === /x.ts ===
 import a0, { a1, a1 as a2 } from "./a";
 >a0 : Symbol(a0, Decl(x.ts, 0, 6))

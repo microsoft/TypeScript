@@ -1,15 +1,23 @@
-=== tests/cases/compiler/classExtendingQualifiedName.ts ===
+//// [tests/cases/compiler/classExtendingQualifiedName.ts] ////
+
+=== classExtendingQualifiedName.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     class C {
 >C : C
+>  : ^
     }
 
     class D extends M.C {
 >D : D
+>  : ^
 >M.C : any
+>    : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >C : any
+>  : ^^^
     }
 }

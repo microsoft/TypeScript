@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts ===
+//// [tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts] ////
+
+=== invalidAssignmentsToVoid.ts ===
 var x: void;
 >x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
 

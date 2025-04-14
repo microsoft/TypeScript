@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/declarationEmitWorkWithInlineComments.ts] ////
+
 //// [declarationEmitWorkWithInlineComments.ts]
 export class Foo {
   constructor(
@@ -36,7 +38,7 @@ export class Baz {
 
 //// [declarationEmitWorkWithInlineComments.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Baz = exports.Bar = exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo(

@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx(17,12): error TS2307: Cannot find module 'react/jsx-runtime' or its corresponding type declarations.
-tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
+tsxSpreadChildrenInvalidType.tsx(17,12): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
 
 
-==== tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx (2 errors) ====
+==== tsxSpreadChildrenInvalidType.tsx (2 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -21,7 +21,7 @@ tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609
     function Todo(prop: { key: number, todo: string }) {
         return <div>{prop.key.toString() + prop.todo}</div>;
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'react/jsx-runtime' or its corresponding type declarations.
+!!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
     }
     function TodoList({ todos }: TodoListProps) {
         return <div>

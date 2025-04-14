@@ -1,106 +1,162 @@
-=== tests/cases/compiler/narrowingOfDottedNames.ts ===
+//// [tests/cases/compiler/narrowingOfDottedNames.ts] ////
+
+=== narrowingOfDottedNames.ts ===
 // Repro from #8383
 
 class A {
 >A : A
+>  : ^
 
     prop!: { a: string; };
 >prop : { a: string; }
+>     : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 }
 
 class B {
 >B : B
+>  : ^
 
     prop!: { b: string; }
 >prop : { b: string; }
+>     : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 }
 
 function isA(x: any): x is A {
 >isA : (x: any) => x is A
+>    : ^ ^^   ^^^^^      
 >x : any
+>  : ^^^
 
     return x instanceof A;
 >x instanceof A : boolean
+>               : ^^^^^^^
 >x : any
+>  : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 }
 
 function isB(x: any): x is B {
 >isB : (x: any) => x is B
+>    : ^ ^^   ^^^^^      
 >x : any
+>  : ^^^
 
     return x instanceof B;
 >x instanceof B : boolean
+>               : ^^^^^^^
 >x : any
+>  : ^^^
 >B : typeof B
+>  : ^^^^^^^^
 }
 
 function f1(x: A | B) {
 >f1 : (x: A | B) => void
+>   : ^ ^^     ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         if (x instanceof A) {
 >x instanceof A : boolean
+>               : ^^^^^^^
 >x : A | B
+>  : ^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
             x.prop.a;
 >x.prop.a : string
+>         : ^^^^^^
 >x.prop : { a: string; }
+>       : ^^^^^      ^^^
 >x : A
+>  : ^
 >prop : { a: string; }
+>     : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
         }
         else if (x instanceof B) {
 >x instanceof B : boolean
+>               : ^^^^^^^
 >x : B
+>  : ^
 >B : typeof B
+>  : ^^^^^^^^
 
             x.prop.b;
 >x.prop.b : string
+>         : ^^^^^^
 >x.prop : { b: string; }
+>       : ^^^^^      ^^^
 >x : B
+>  : ^
 >prop : { b: string; }
+>     : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
         }
     }
 }
 
 function f2(x: A | B) {
 >f2 : (x: A | B) => void
+>   : ^ ^^     ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         if (isA(x)) {
 >isA(x) : boolean
+>       : ^^^^^^^
 >isA : (x: any) => x is A
+>    : ^ ^^   ^^^^^      
 >x : A | B
+>  : ^^^^^
 
             x.prop.a;
 >x.prop.a : string
+>         : ^^^^^^
 >x.prop : { a: string; }
+>       : ^^^^^      ^^^
 >x : A
+>  : ^
 >prop : { a: string; }
+>     : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
         }
         else if (isB(x)) {
 >isB(x) : boolean
+>       : ^^^^^^^
 >isB : (x: any) => x is B
+>    : ^ ^^   ^^^^^      
 >x : B
+>  : ^
 
             x.prop.b;
 >x.prop.b : string
+>         : ^^^^^^
 >x.prop : { b: string; }
+>       : ^^^^^      ^^^
 >x : B
+>  : ^
 >prop : { b: string; }
+>     : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
         }
     }
 }
@@ -109,24 +165,31 @@ function f2(x: A | B) {
 
 class Foo1
 >Foo1 : Foo1
+>     : ^^^^
 {
     x: number;  // Error
 >x : number
+>  : ^^^^^^
 
     constructor() {
         if (this instanceof Boolean) {
 >this instanceof Boolean : boolean
+>                        : ^^^^^^^
 >this : this
+>     : ^^^^
 >Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
         }
     }
 }
 
 class Foo2
 >Foo2 : Foo2
+>     : ^^^^
 {
     x: number;  // Error
 >x : number
+>  : ^^^^^^
 
     constructor() {
     }
@@ -136,76 +199,110 @@ class Foo2
 
 class AInfo {
 >AInfo : AInfo
+>      : ^^^^^
 
     a_count: number = 1;
 >a_count : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 class BInfo {
 >BInfo : BInfo
+>      : ^^^^^
 
     b_count: number = 1;
 >b_count : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     id: number = 0;
 >id : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 class A2 extends Base {
 >A2 : A2
+>   : ^^
 >Base : Base
+>     : ^^^^
 
     info!: AInfo;
 >info : AInfo
+>     : ^^^^^
 }
 
 class B2 extends Base {
 >B2 : B2
+>   : ^^
 >Base : Base
+>     : ^^^^
 
     info!: BInfo;
 >info : BInfo
+>     : ^^^^^
 }
 
 let target: Base = null as any;
 >target : Base
+>       : ^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 while (target) {
 >target : Base
+>       : ^^^^
 
     if (target instanceof A2) {
 >target instanceof A2 : boolean
+>                     : ^^^^^^^
 >target : Base
+>       : ^^^^
 >A2 : typeof A2
+>   : ^^^^^^^^^
 
         target.info.a_count = 3;
 >target.info.a_count = 3 : 3
+>                        : ^
 >target.info.a_count : number
+>                    : ^^^^^^
 >target.info : AInfo
+>            : ^^^^^
 >target : A2
+>       : ^^
 >info : AInfo
+>     : ^^^^^
 >a_count : number
+>        : ^^^^^^
 >3 : 3
+>  : ^
     }
     else if (target instanceof B2) {
 >target instanceof B2 : boolean
+>                     : ^^^^^^^
 >target : Base
+>       : ^^^^
 >B2 : typeof B2
+>   : ^^^^^^^^^
 
         const j: BInfo = target.info;
 >j : BInfo
+>  : ^^^^^
 >target.info : BInfo
+>            : ^^^^^
 >target : B2
+>       : ^^
 >info : BInfo
+>     : ^^^^^
     }
 }
 

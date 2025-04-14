@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error TS2322: Type '() => Generator<Bar | Baz, void, undefined>' is not assignable to type '() => Iterable<Foo>'.
-  Call signature return types 'Generator<Bar | Baz, void, undefined>' and 'Iterable<Foo>' are incompatible.
+generatorTypeCheck25.ts(4,5): error TS2322: Type '() => Generator<Bar | Baz, void, unknown>' is not assignable to type '() => Iterable<Foo>'.
+  Call signature return types 'Generator<Bar | Baz, void, unknown>' and 'Iterable<Foo>' are incompatible.
     The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
       Type 'IteratorResult<Bar | Baz, void>' is not assignable to type 'IteratorResult<Foo, any>'.
         Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo, any>'.
@@ -8,21 +8,21 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error
               Property 'x' is missing in type 'Baz' but required in type 'Foo'.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts (1 errors) ====
+==== generatorTypeCheck25.ts (1 errors) ====
     class Foo { x: number }
     class Bar extends Foo { y: string }
     class Baz { z: number }
     var g3: () => Iterable<Foo> = function* () {
         ~~
-!!! error TS2322: Type '() => Generator<Bar | Baz, void, undefined>' is not assignable to type '() => Iterable<Foo>'.
-!!! error TS2322:   Call signature return types 'Generator<Bar | Baz, void, undefined>' and 'Iterable<Foo>' are incompatible.
+!!! error TS2322: Type '() => Generator<Bar | Baz, void, unknown>' is not assignable to type '() => Iterable<Foo>'.
+!!! error TS2322:   Call signature return types 'Generator<Bar | Baz, void, unknown>' and 'Iterable<Foo>' are incompatible.
 !!! error TS2322:     The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
 !!! error TS2322:       Type 'IteratorResult<Bar | Baz, void>' is not assignable to type 'IteratorResult<Foo, any>'.
 !!! error TS2322:         Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo, any>'.
 !!! error TS2322:           Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorYieldResult<Foo>'.
 !!! error TS2322:             Type 'Bar | Baz' is not assignable to type 'Foo'.
 !!! error TS2322:               Property 'x' is missing in type 'Baz' but required in type 'Foo'.
-!!! related TS2728 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:13: 'x' is declared here.
+!!! related TS2728 generatorTypeCheck25.ts:1:13: 'x' is declared here.
         yield;
         yield new Bar;
         yield new Baz;

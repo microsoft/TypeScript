@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts] ////
+
 //// [callWithWrongNumberOfTypeArguments.ts]
 function f<T, U>() { }
 

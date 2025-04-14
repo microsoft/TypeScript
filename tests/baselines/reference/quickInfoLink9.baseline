@@ -1,0 +1,65 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLink9.ts ===
+// type Foo = {
+//     /**
+//      * Text before {@link a} text after
+//                           ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | ----------------------------------------------------------------------
+//      */
+//     c: (a: number) => void;
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoLink9.ts",
+      "position": 47,
+      "name": ""
+    },
+    "item": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 47,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

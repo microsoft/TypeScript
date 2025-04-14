@@ -1,4 +1,7 @@
-=== tests/cases/compiler/asiBreak.ts ===
+//// [tests/cases/compiler/asiBreak.ts] ////
+
+=== asiBreak.ts ===
 while (true) break
 >true : true
+>     : ^^^^
 

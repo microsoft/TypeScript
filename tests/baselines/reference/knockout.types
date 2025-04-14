@@ -1,98 +1,163 @@
-=== tests/cases/compiler/knockout.ts ===
+//// [tests/cases/compiler/knockout.ts] ////
+
+=== knockout.ts ===
   declare module ko {
 >ko : typeof ko
+>   : ^^^^^^^^^
 
    export interface Observable<T> {
      (): T;
      (value: T): any;
 >value : T
+>      : ^
 
      N: number;
 >N : number
+>  : ^^^^^^
 
      g: boolean;
 >g : boolean
+>  : ^^^^^^^
 
      r: T;
 >r : T
+>  : ^
    }
    export function observable<T>(value: T): Observable<T>;
 >observable : <T>(value: T) => Observable<T>
+>           : ^ ^^     ^^ ^^^^^             
 >value : T
+>      : ^
  }
  var o = {
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{     name: ko.observable("Bob"),     age: ko.observable(37) } : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
      name: ko.observable("Bob"),
 >name : ko.Observable<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >ko.observable("Bob") : ko.Observable<string>
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >ko.observable : <T>(value: T) => ko.Observable<T>
+>              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
 >ko : typeof ko
+>   : ^^^^^^^^^
 >observable : <T>(value: T) => ko.Observable<T>
+>           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
 >"Bob" : "Bob"
+>      : ^^^^^
 
      age: ko.observable(37)
 >age : ko.Observable<number>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >ko.observable(37) : ko.Observable<number>
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 >ko.observable : <T>(value: T) => ko.Observable<T>
+>              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
 >ko : typeof ko
+>   : ^^^^^^^^^
 >observable : <T>(value: T) => ko.Observable<T>
+>           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
 >37 : 37
+>   : ^^
  }
  var x_v = o.name().length
 >x_v : number
+>    : ^^^^^^
 >o.name().length : number
+>                : ^^^^^^
 >o.name() : string
+>         : ^^^^^^
 >o.name : ko.Observable<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : ko.Observable<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 
  var age_v = o.age();
 >age_v : number
+>      : ^^^^^^
 >o.age() : number
+>        : ^^^^^^
 >o.age : ko.Observable<number>
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >age : ko.Observable<number>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
  var name_v = o.name("Robert");
 >name_v : any
+>       : ^^^
 >o.name("Robert") : any
+>                 : ^^^
 >o.name : ko.Observable<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : ko.Observable<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >"Robert" : "Robert"
+>         : ^^^^^^^^
 
  var zz_v = o.name.N;
 >zz_v : number
+>     : ^^^^^^
 >o.name.N : number
+>         : ^^^^^^
 >o.name : ko.Observable<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : ko.Observable<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >N : number
+>  : ^^^^^^
 
  var yy_v = o.name.g;
 >yy_v : boolean
+>     : ^^^^^^^
 >o.name.g : boolean
+>         : ^^^^^^^
 >o.name : ko.Observable<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : ko.Observable<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >g : boolean
+>  : ^^^^^^^
 
  var rr_v = o.name.r;
 >rr_v : string
+>     : ^^^^^^
 >o.name.r : string
+>         : ^^^^^^
 >o.name : ko.Observable<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : ko.Observable<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >r : string
+>  : ^^^^^^
 
  var dd_v = o.name.d;
 >dd_v : any
+>     : ^^^
 >o.name.d : any
+>         : ^^^
 >o.name : ko.Observable<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : ko.Observable<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >d : any
+>  : ^^^
 

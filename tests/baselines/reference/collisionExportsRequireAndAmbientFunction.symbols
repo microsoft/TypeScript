@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndAmbientFunction.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientFunction.ts] ////
+
+=== collisionExportsRequireAndAmbientFunction.ts ===
 export declare function exports(): number;
 >exports : Symbol(exports, Decl(collisionExportsRequireAndAmbientFunction.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowInstanceof.ts ===
+//// [tests/cases/compiler/controlFlowInstanceof.ts] ////
+
+=== controlFlowInstanceof.ts ===
 // Repros from #10167
 
 function f1(s: Set<string> | Set<number>) {
@@ -248,7 +250,7 @@ if (x instanceof ctor) {
 }
 
 // Repro from #27550 (based on uglify code)
-=== tests/cases/compiler/uglify.js ===
+=== uglify.js ===
 /** @constructor */
 function AtTop(val) { this.val = val }
 >AtTop : Symbol(AtTop, Decl(uglify.js, 0, 0))

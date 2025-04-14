@@ -1,16 +1,24 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty50.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty50.ts] ////
+
+=== symbolProperty50.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     interface Symbol { }
 
     class C {
 >C : C
+>  : ^
 
         [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
     }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/number/extendNumberInterface.ts ===
+//// [tests/cases/conformance/types/primitives/number/extendNumberInterface.ts] ////
+
+=== extendNumberInterface.ts ===
 interface Number {
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(extendNumberInterface.ts, 0, 0))
 

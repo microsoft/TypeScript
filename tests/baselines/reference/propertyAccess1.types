@@ -1,19 +1,33 @@
-=== tests/cases/compiler/propertyAccess1.ts ===
+//// [tests/cases/compiler/propertyAccess1.ts] ////
+
+=== propertyAccess1.ts ===
 var foo: { a: number; };
 >foo : { a: number; }
+>    : ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 foo.a = 4;
 >foo.a = 4 : 4
+>          : ^
 >foo.a : number
+>      : ^^^^^^
 >foo : { a: number; }
+>    : ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
 foo.b = 5;
 >foo.b = 5 : 5
+>          : ^
 >foo.b : any
+>      : ^^^
 >foo : { a: number; }
+>    : ^^^^^      ^^^
 >b : any
+>  : ^^^
 >5 : 5
+>  : ^
 

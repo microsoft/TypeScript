@@ -4,11 +4,11 @@
 
 // @Filename: /a.js
 ////module.exports = 0;
-/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Foo|]|] */
+/////** /*1*/@typedef {number} /*2*/Foo */
 ////const dummy = 0;
 
 // @Filename: /b.js
-/////** @type {import('./a').[|Foo|]} */
+/////** @type {import('./a')./*3*/Foo} */
 ////const x = 0;
 
-verify.singleReferenceGroup("type Foo = number", "Foo");
+verify.baselineFindAllReferences('1', '2', '3');

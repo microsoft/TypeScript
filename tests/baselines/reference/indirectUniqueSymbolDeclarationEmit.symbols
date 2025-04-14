@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indirectUniqueSymbolDeclarationEmit.ts ===
+//// [tests/cases/compiler/indirectUniqueSymbolDeclarationEmit.ts] ////
+
+=== indirectUniqueSymbolDeclarationEmit.ts ===
 export const x = Symbol();
 >x : Symbol(x, Decl(indirectUniqueSymbolDeclarationEmit.ts, 0, 12))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/vueLikeDataAndPropsInference.ts] ////
+
 //// [vueLikeDataAndPropsInference.ts]
 interface Instance {
     _instanceBrand: never

@@ -13,9 +13,7 @@ type DiscriminatorFalse = {
     cb: (x: number) => void;
 }
 
-type Unrelated = {
-    val: number;
-}
+type Props = DiscriminatorTrue | DiscriminatorFalse;
 
 declare function f(options: DiscriminatorTrue | DiscriminatorFalse): any;
 
@@ -39,13 +37,5 @@ f({
 
 // requires checking type information since discriminator is missing from object
 f({
-    cb: n => n.toFixed()
-});
-
-
-declare function g(options: DiscriminatorTrue | DiscriminatorFalse | Unrelated): any;
-
-// requires checking properties of all types, rather than properties of just the union type (e.g. only intersection)
-g({
     cb: n => n.toFixed()
 });

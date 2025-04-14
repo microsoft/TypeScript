@@ -1,9 +1,13 @@
-=== tests/cases/compiler/missingReturnStatement1.ts ===
+//// [tests/cases/compiler/missingReturnStatement1.ts] ////
+
+=== missingReturnStatement1.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     foo(): number {
 >foo : () => number
+>    : ^^^^^^      
 
         //return 4;
     }

@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/moduleDetectionIsolatedModulesCjsFileScope.ts] ////
+
+=== filename.cts ===
+const a = 2;
+>a : Symbol(a, Decl(filename.cts, 0, 5))
+
+=== filename.mts ===
+const a = 2;
+>a : Symbol(a, Decl(filename.mts, 0, 5))
+

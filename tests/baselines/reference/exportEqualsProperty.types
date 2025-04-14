@@ -1,93 +1,136 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/exportEqualsProperty.ts] ////
+
+=== index.ts ===
 /// <reference path="declarations.d.ts" />
 import { X } from "foobar";
 >X : number
+>  : ^^^^^^
 
 import X2 = require("foobarx");
 >X2 : number
+>   : ^^^^^^
 
 const x: X = X;
 >x : number
+>  : ^^^^^^
 >X : number
+>  : ^^^^^^
 
 const x2: X2 = X2;
 >x2 : number
+>   : ^^^^^^
 >X2 : number
+>   : ^^^^^^
 
 import B = require("./a");
 >B : typeof B
+>  : ^^^^^^^^
 
 const b: B = new B(B.b);
 >b : B
+>  : ^
 >new B(B.b) : B
+>           : ^
 >B : typeof B
+>  : ^^^^^^^^
 >B.b : number
+>    : ^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 import fooLength = require("./b");
 >fooLength : number
+>          : ^^^^^^
 
 fooLength + 1;
 >fooLength + 1 : number
+>              : ^^^^^^
 >fooLength : number
+>          : ^^^^^^
 >1 : 1
+>  : ^
 
-=== tests/cases/compiler/declarations.d.ts ===
-// This test is just like exportDefaultProperty, but with `export =`.
-
+=== declarations.d.ts ===
 declare namespace foo.bar {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >bar : typeof bar
+>    : ^^^^^^^^^^
 
     export type X = number;
 >X : number
+>  : ^^^^^^
 
     export const X: number;
 >X : number
+>  : ^^^^^^
 }
 
 declare module "foobar" {
 >"foobar" : typeof import("foobar")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
     export = foo.bar;
 >foo.bar : typeof foo.bar
+>        : ^^^^^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >bar : typeof foo.bar
+>    : ^^^^^^^^^^^^^^
 }
 
 declare module "foobarx" {
 >"foobarx" : typeof import("foobarx")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     export = foo.bar.X;
 >foo.bar.X : number
+>          : ^^^^^^
 >foo.bar : typeof foo.bar
+>        : ^^^^^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >bar : typeof foo.bar
+>    : ^^^^^^^^^^^^^^
 >X : number
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 namespace A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class B { constructor(b: number) {} }
 >B : B
+>  : ^
 >b : number
+>  : ^^^^^^
 
     export namespace B { export const b: number = 0; }
 >B : typeof B
+>  : ^^^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 export = A.B;
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export = "foo".length;
 >"foo".length : number
+>             : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >length : number
+>       : ^^^^^^
 

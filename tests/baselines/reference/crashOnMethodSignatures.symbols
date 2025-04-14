@@ -1,4 +1,6 @@
-=== tests/cases/compiler/crashOnMethodSignatures.ts ===
+//// [tests/cases/compiler/crashOnMethodSignatures.ts] ////
+
+=== crashOnMethodSignatures.ts ===
 class A {
 >A : Symbol(A, Decl(crashOnMethodSignatures.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts ===
+//// [tests/cases/compiler/declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts] ////
+
+=== declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts ===
 type A<T extends Unknown> = {}
 >A : Symbol(A, Decl(declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts, 0, 0))
 >T : Symbol(T, Decl(declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts, 0, 7))

@@ -1,23 +1,34 @@
-=== tests/cases/compiler/declarationEmitOptionalMethod.ts ===
+//// [tests/cases/compiler/declarationEmitOptionalMethod.ts] ////
+
+=== declarationEmitOptionalMethod.ts ===
 export const Foo = (opts: {
->Foo : (opts: {    a?(): void;    b?: () => void;}) => {    c?(): void;    d?: () => void;}
->(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: {    a?(): void;    b?: () => void;}) => {    c?(): void;    d?: () => void;}
->opts : { a?(): void; b?: (() => void) | undefined; }
+>Foo : (opts: { a?(): void; b?: () => void; }) => { c?(): void; d?: () => void; }
+>    : ^    ^^                               ^^^^^                               
+>(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: { a?(): void; b?: () => void; }) => { c?(): void; d?: () => void; }
+>                                                                                             : ^    ^^                               ^^^^^                               
+>opts : { a?(): void; b?: () => void; }
+>     : ^^^^^^^^    ^^^^^^          ^^^
 
     a?(): void,
 >a : (() => void) | undefined
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
     b?: () => void,
 >b : (() => void) | undefined
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
 }): {
     c?(): void,
 >c : (() => void) | undefined
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
     d?: () => void,
 >d : (() => void) | undefined
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
 } => ({  });
 >({  }) : {}
+>       : ^^
 >{  } : {}
+>     : ^^
 

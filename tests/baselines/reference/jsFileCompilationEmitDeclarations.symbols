@@ -1,9 +1,11 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationEmitDeclarations.ts] ////
+
+=== a.ts ===
 class c {
 >c : Symbol(c, Decl(a.ts, 0, 0))
 }
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 function foo() {
 >foo : Symbol(foo, Decl(b.js, 0, 0))
 }

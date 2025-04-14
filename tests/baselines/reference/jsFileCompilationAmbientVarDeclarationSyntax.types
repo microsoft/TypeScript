@@ -1,4 +1,7 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationAmbientVarDeclarationSyntax.ts] ////
+
+=== a.js ===
 declare var v;
 >v : any
+>  : ^^^
 

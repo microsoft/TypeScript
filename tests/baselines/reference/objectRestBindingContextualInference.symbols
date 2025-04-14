@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/objectRestBindingContextualInference.ts] ////
+
+=== objectRestBindingContextualInference.ts ===
+// slimmed-down repro from #52629
+
+type ImageHolder<K extends string> = {
+>ImageHolder : Symbol(ImageHolder, Decl(objectRestBindingContextualInference.ts, 0, 0))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 2, 17))
+
+  [P in K]: string;
+>P : Symbol(P, Decl(objectRestBindingContextualInference.ts, 3, 3))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 2, 17))
+
+};
+
+type SetupImageRefs<K extends string> = {
+>SetupImageRefs : Symbol(SetupImageRefs, Decl(objectRestBindingContextualInference.ts, 4, 2))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 6, 20))
+
+  [P in K]: File;
+>P : Symbol(P, Decl(objectRestBindingContextualInference.ts, 7, 3))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 6, 20))
+>File : Symbol(File, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+};
+
+type SetupImages<K extends string> = SetupImageRefs<K> & {
+>SetupImages : Symbol(SetupImages, Decl(objectRestBindingContextualInference.ts, 8, 2))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 10, 17))
+>SetupImageRefs : Symbol(SetupImageRefs, Decl(objectRestBindingContextualInference.ts, 4, 2))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 10, 17))
+
+  prepare: () => { type: K };
+>prepare : Symbol(prepare, Decl(objectRestBindingContextualInference.ts, 10, 58))
+>type : Symbol(type, Decl(objectRestBindingContextualInference.ts, 11, 18))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 10, 17))
+
+};
+
+interface TestInterface {
+>TestInterface : Symbol(TestInterface, Decl(objectRestBindingContextualInference.ts, 12, 2))
+
+  name: string;
+>name : Symbol(TestInterface.name, Decl(objectRestBindingContextualInference.ts, 14, 25))
+
+  image: string;
+>image : Symbol(TestInterface.image, Decl(objectRestBindingContextualInference.ts, 15, 15))
+}
+
+declare function setupImages<R extends ImageHolder<K>, K extends string>(
+>setupImages : Symbol(setupImages, Decl(objectRestBindingContextualInference.ts, 17, 1))
+>R : Symbol(R, Decl(objectRestBindingContextualInference.ts, 19, 29))
+>ImageHolder : Symbol(ImageHolder, Decl(objectRestBindingContextualInference.ts, 0, 0))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 19, 54))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 19, 54))
+
+  item: R,
+>item : Symbol(item, Decl(objectRestBindingContextualInference.ts, 19, 73))
+>R : Symbol(R, Decl(objectRestBindingContextualInference.ts, 19, 29))
+
+  keys: K[]
+>keys : Symbol(keys, Decl(objectRestBindingContextualInference.ts, 20, 10))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 19, 54))
+
+): SetupImages<K>;
+>SetupImages : Symbol(SetupImages, Decl(objectRestBindingContextualInference.ts, 8, 2))
+>K : Symbol(K, Decl(objectRestBindingContextualInference.ts, 19, 54))
+
+declare const test: TestInterface;
+>test : Symbol(test, Decl(objectRestBindingContextualInference.ts, 24, 13))
+>TestInterface : Symbol(TestInterface, Decl(objectRestBindingContextualInference.ts, 12, 2))
+
+const { prepare, ...rest } = setupImages(test, ["image"]);
+>prepare : Symbol(prepare, Decl(objectRestBindingContextualInference.ts, 26, 7))
+>rest : Symbol(rest, Decl(objectRestBindingContextualInference.ts, 26, 16))
+>setupImages : Symbol(setupImages, Decl(objectRestBindingContextualInference.ts, 17, 1))
+>test : Symbol(test, Decl(objectRestBindingContextualInference.ts, 24, 13))
+

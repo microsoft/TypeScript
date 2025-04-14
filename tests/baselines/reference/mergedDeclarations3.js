@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedDeclarations3.ts] ////
+
 //// [mergedDeclarations3.ts]
 module M {
  export enum Color {

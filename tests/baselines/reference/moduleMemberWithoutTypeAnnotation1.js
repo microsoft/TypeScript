@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts] ////
+
 //// [moduleMemberWithoutTypeAnnotation1.ts]
 module TypeScript.Parser {
     class SyntaxCursor {

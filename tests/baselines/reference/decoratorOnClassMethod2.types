@@ -1,14 +1,22 @@
-=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod2.ts ===
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod2.ts] ////
+
+=== decoratorOnClassMethod2.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >target : any
 >propertyKey : string
+>            : ^^^^^^
 >descriptor : TypedPropertyDescriptor<T>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     @dec public method() {}
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >method : () => void
+>       : ^^^^^^^^^^
 }

@@ -1,0 +1,23 @@
+/ctsExtension.cts(1,16): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./module.mjs")' call instead.
+
+
+==== /package.json (0 errors) ====
+    { "type": "module" }
+    
+==== /module.mts (0 errors) ====
+    export {};
+    
+==== /tsExtension.ts (0 errors) ====
+    import {} from "./module.mjs";
+    
+==== /jsExtension.js (0 errors) ====
+    import {} from "./module.mjs";
+    
+==== /ctsExtension.cts (1 errors) ====
+    import {} from "./module.mjs";
+                   ~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./module.mjs")' call instead.
+    
+==== /tsxExtension.tsx (0 errors) ====
+    import {} from "./module.mjs";
+    

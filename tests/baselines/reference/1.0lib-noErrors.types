@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/1.0lib-noErrors.ts ===
+//// [tests/cases/conformance/decorators/1.0lib-noErrors.ts] ////
+
+=== 1.0lib-noErrors.ts ===
 /* *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved. 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -22,9 +24,11 @@ and limitations under the License.
 
 declare var NaN: number;
 >NaN : number
+>    : ^^^^^^
 
 declare var Infinity: number;
 >Infinity : number
+>         : ^^^^^^
 
 /**
   * Evaluates JavaScript code and executes it. 
@@ -32,7 +36,9 @@ declare var Infinity: number;
   */
 declare function eval(x: string): any;
 >eval : (x: string) => any
+>     : ^ ^^      ^^^^^   
 >x : string
+>  : ^^^^^^
 
 /**
   * Converts A string to an integer.
@@ -43,8 +49,11 @@ declare function eval(x: string): any;
   */
 declare function parseInt(s: string, radix?: number): number;
 >parseInt : (s: string, radix?: number) => number
+>         : ^ ^^      ^^     ^^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 >radix : number
+>      : ^^^^^^
 
 /**
   * Converts a string to a floating-point number. 
@@ -52,7 +61,9 @@ declare function parseInt(s: string, radix?: number): number;
   */
 declare function parseFloat(string: string): number;
 >parseFloat : (string: string) => number
+>           : ^      ^^      ^^^^^      
 >string : string
+>       : ^^^^^^
 
 /**
   * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number). 
@@ -60,7 +71,9 @@ declare function parseFloat(string: string): number;
   */
 declare function isNaN(number: number): boolean;
 >isNaN : (number: number) => boolean
+>      : ^      ^^      ^^^^^       
 >number : number
+>       : ^^^^^^
 
 /** 
   * Determines whether a supplied number is finite.
@@ -68,7 +81,9 @@ declare function isNaN(number: number): boolean;
   */
 declare function isFinite(number: number): boolean;
 >isFinite : (number: number) => boolean
+>         : ^      ^^      ^^^^^       
 >number : number
+>       : ^^^^^^
 
 /**
   * Gets the unencoded version of an encoded Uniform Resource Identifier (URI).
@@ -76,7 +91,9 @@ declare function isFinite(number: number): boolean;
   */
 declare function decodeURI(encodedURI: string): string;
 >decodeURI : (encodedURI: string) => string
+>          : ^          ^^      ^^^^^      
 >encodedURI : string
+>           : ^^^^^^
 
 /**
   * Gets the unencoded version of an encoded component of a Uniform Resource Identifier (URI).
@@ -84,7 +101,9 @@ declare function decodeURI(encodedURI: string): string;
   */
 declare function decodeURIComponent(encodedURIComponent: string): string;
 >decodeURIComponent : (encodedURIComponent: string) => string
+>                   : ^                   ^^      ^^^^^      
 >encodedURIComponent : string
+>                    : ^^^^^^
 
 /** 
   * Encodes a text string as a valid Uniform Resource Identifier (URI)
@@ -92,7 +111,9 @@ declare function decodeURIComponent(encodedURIComponent: string): string;
   */
 declare function encodeURI(uri: string): string;
 >encodeURI : (uri: string) => string
+>          : ^   ^^      ^^^^^      
 >uri : string
+>    : ^^^^^^
 
 /**
   * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
@@ -100,50 +121,62 @@ declare function encodeURI(uri: string): string;
   */
 declare function encodeURIComponent(uriComponent: string | number | boolean): string;
 >encodeURIComponent : (uriComponent: string | number | boolean) => string
+>                   : ^            ^^                         ^^^^^      
 >uriComponent : string | number | boolean
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 interface PropertyDescriptor {
     configurable?: boolean;
 >configurable : boolean
+>             : ^^^^^^^
 
     enumerable?: boolean;
 >enumerable : boolean
+>           : ^^^^^^^
 
     value?: any;
 >value : any
 
     writable?: boolean;
 >writable : boolean
+>         : ^^^^^^^
 
     get?(): any;
 >get : () => any
+>    : ^^^^^^   
 
     set?(v: any): void;
 >set : (v: any) => void
+>    : ^ ^^   ^^^^^    
 >v : any
 }
 
 interface PropertyDescriptorMap {
     [s: string]: PropertyDescriptor;
 >s : string
+>  : ^^^^^^
 }
 
 interface Object {
     /** The initial value of Object.prototype.constructor is the standard built-in Object constructor. */
     constructor: Function;
 >constructor : Function
+>            : ^^^^^^^^
 
     /** Returns a string representation of an object. */
     toString(): string;
 >toString : () => string
+>         : ^^^^^^      
 
     /** Returns a date converted to a string using the current locale. */
     toLocaleString(): string;
 >toLocaleString : () => string
+>               : ^^^^^^      
 
     /** Returns the primitive value of the specified object. */
     valueOf(): Object;
 >valueOf : () => Object
+>        : ^^^^^^      
 
     /**
       * Determines whether an object has a property with the specified name. 
@@ -151,7 +184,9 @@ interface Object {
       */
     hasOwnProperty(v: string): boolean;
 >hasOwnProperty : (v: string) => boolean
+>               : ^ ^^      ^^^^^       
 >v : string
+>  : ^^^^^^
 
     /**
       * Determines whether an object exists in another object's prototype chain. 
@@ -159,7 +194,9 @@ interface Object {
       */
     isPrototypeOf(v: Object): boolean;
 >isPrototypeOf : (v: Object) => boolean
+>              : ^ ^^      ^^^^^       
 >v : Object
+>  : ^^^^^^
 
     /** 
       * Determines whether a specified property is enumerable.
@@ -167,7 +204,9 @@ interface Object {
       */
     propertyIsEnumerable(v: string): boolean;
 >propertyIsEnumerable : (v: string) => boolean
+>                     : ^ ^^      ^^^^^       
 >v : string
+>  : ^^^^^^
 }
 
 /**
@@ -175,6 +214,7 @@ interface Object {
   */
 declare var Object: {
 >Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
+>       : ^^^^^^   ^^^     ^^   ^^^   ^^^^^^^     ^^^   ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^ ^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^ ^^      ^^^                  ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^        ^^^^^^^^^ ^^   ^^          ^^^                     ^^^   ^^^^^^^^^^^^^^^^^ ^^   ^^ ^^      ^^          ^^                  ^^^   ^^^^^^^^^^^^^^^^^^^ ^^   ^^          ^^                     ^^^   ^^^^^^^ ^^   ^^^   ^^^^^^^^^ ^^   ^^^   ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^   ^^^^^^^^^^^ ^^   ^^^       ^^^^^^^^^^^ ^^   ^^^       ^^^^^^^^^^^^^^^ ^^   ^^^       ^^^^^^^ ^^   ^^^        ^^^
 
     new (value?: any): Object;
 >value : any
@@ -186,6 +226,7 @@ declare var Object: {
     /** A reference to the prototype for a class of objects. */
     prototype: Object;
 >prototype : Object
+>          : ^^^^^^
 
     /** 
       * Returns the prototype of an object. 
@@ -193,6 +234,7 @@ declare var Object: {
       */
     getPrototypeOf(o: any): any;
 >getPrototypeOf : (o: any) => any
+>               : ^ ^^   ^^^^^   
 >o : any
 
     /**
@@ -203,8 +245,10 @@ declare var Object: {
     */
     getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor;
 >getOwnPropertyDescriptor : (o: any, p: string) => PropertyDescriptor
+>                         : ^ ^^   ^^ ^^      ^^^^^                  
 >o : any
 >p : string
+>  : ^^^^^^
 
     /** 
       * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly 
@@ -213,6 +257,7 @@ declare var Object: {
       */
     getOwnPropertyNames(o: any): string[];
 >getOwnPropertyNames : (o: any) => string[]
+>                    : ^ ^^   ^^^^^        
 >o : any
 
     /** 
@@ -222,8 +267,10 @@ declare var Object: {
       */
     create(o: any, properties?: PropertyDescriptorMap): any;
 >create : (o: any, properties?: PropertyDescriptorMap) => any
+>       : ^ ^^   ^^          ^^^                     ^^^^^   
 >o : any
 >properties : PropertyDescriptorMap
+>           : ^^^^^^^^^^^^^^^^^^^^^
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property. 
@@ -233,9 +280,12 @@ declare var Object: {
       */
     defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
 >defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
+>               : ^ ^^   ^^ ^^      ^^          ^^                  ^^^^^   
 >o : any
 >p : string
+>  : ^^^^^^
 >attributes : PropertyDescriptor
+>           : ^^^^^^^^^^^^^^^^^^
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties. 
@@ -244,8 +294,10 @@ declare var Object: {
       */
     defineProperties(o: any, properties: PropertyDescriptorMap): any;
 >defineProperties : (o: any, properties: PropertyDescriptorMap) => any
+>                 : ^ ^^   ^^          ^^                     ^^^^^   
 >o : any
 >properties : PropertyDescriptorMap
+>           : ^^^^^^^^^^^^^^^^^^^^^
 
     /**
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -253,6 +305,7 @@ declare var Object: {
       */
     seal(o: any): any;
 >seal : (o: any) => any
+>     : ^ ^^   ^^^^^   
 >o : any
 
     /**
@@ -261,6 +314,7 @@ declare var Object: {
       */
     freeze(o: any): any;
 >freeze : (o: any) => any
+>       : ^ ^^   ^^^^^   
 >o : any
 
     /**
@@ -269,6 +323,7 @@ declare var Object: {
       */
     preventExtensions(o: any): any;
 >preventExtensions : (o: any) => any
+>                  : ^ ^^   ^^^^^   
 >o : any
 
     /**
@@ -277,6 +332,7 @@ declare var Object: {
       */
     isSealed(o: any): boolean;
 >isSealed : (o: any) => boolean
+>         : ^ ^^   ^^^^^       
 >o : any
 
     /**
@@ -285,6 +341,7 @@ declare var Object: {
       */
     isFrozen(o: any): boolean;
 >isFrozen : (o: any) => boolean
+>         : ^ ^^   ^^^^^       
 >o : any
 
     /**
@@ -293,6 +350,7 @@ declare var Object: {
       */
     isExtensible(o: any): boolean;
 >isExtensible : (o: any) => boolean
+>             : ^ ^^   ^^^^^       
 >o : any
 
     /**
@@ -301,6 +359,7 @@ declare var Object: {
       */
     keys(o: any): string[];
 >keys : (o: any) => string[]
+>     : ^ ^^   ^^^^^        
 >o : any
 }
 
@@ -315,6 +374,7 @@ interface Function {
       */
     apply(thisArg: any, argArray?: any): any;
 >apply : (thisArg: any, argArray?: any) => any
+>      : ^       ^^   ^^        ^^^   ^^^^^   
 >thisArg : any
 >argArray : any
 
@@ -325,8 +385,10 @@ interface Function {
       */
     call(thisArg: any, ...argArray: any[]): any;
 >call : (thisArg: any, ...argArray: any[]) => any
+>     : ^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
 >argArray : any[]
+>         : ^^^^^
 
     /**
       * For a given function, creates a bound function that has the same body as the original function. 
@@ -336,14 +398,17 @@ interface Function {
       */
     bind(thisArg: any, ...argArray: any[]): any;
 >bind : (thisArg: any, ...argArray: any[]) => any
+>     : ^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
 >argArray : any[]
+>         : ^^^^^
 
     prototype: any;
 >prototype : any
 
     length: number;
 >length : number
+>       : ^^^^^^
 
     // Non-standard extensions
     arguments: any;
@@ -351,10 +416,12 @@ interface Function {
 
     caller: Function;
 >caller : Function
+>       : ^^^^^^^^
 }
 
 declare var Function: {
 >Function : { (...args: string[]): Function; new (...args: string[]): Function; prototype: Function; }
+>         : ^^^^^^    ^^        ^^^        ^^^^^^^^^^    ^^        ^^^        ^^^^^^^^^^^^^        ^^^
 
     /** 
       * Creates a new function.
@@ -362,29 +429,36 @@ declare var Function: {
       */
     new (...args: string[]): Function;
 >args : string[]
+>     : ^^^^^^^^
 
     (...args: string[]): Function;
 >args : string[]
+>     : ^^^^^^^^
 
     prototype: Function;
 >prototype : Function
+>          : ^^^^^^^^
 }
 
 interface IArguments {
     [index: number]: any;
 >index : number
+>      : ^^^^^^
 
     length: number;
 >length : number
+>       : ^^^^^^
 
     callee: Function;
 >callee : Function
+>       : ^^^^^^^^
 }
 
 interface String {
     /** Returns a string representation of a string. */
     toString(): string;
 >toString : () => string
+>         : ^^^^^^      
 
     /**
       * Returns the character at the specified index.
@@ -392,7 +466,9 @@ interface String {
       */
     charAt(pos: number): string;
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >pos : number
+>    : ^^^^^^
 
     /** 
       * Returns the Unicode value of the character at the specified location.
@@ -400,7 +476,9 @@ interface String {
       */
     charCodeAt(index: number): number;
 >charCodeAt : (index: number) => number
+>           : ^     ^^      ^^^^^      
 >index : number
+>      : ^^^^^^
 
     /**
       * Returns a string that contains the concatenation of two or more strings.
@@ -408,7 +486,9 @@ interface String {
       */
     concat(...strings: string[]): string;
 >concat : (...strings: string[]) => string
+>       : ^^^^       ^^        ^^^^^      
 >strings : string[]
+>        : ^^^^^^^^
 
     /**
       * Returns the position of the first occurrence of a substring. 
@@ -417,8 +497,11 @@ interface String {
       */
     indexOf(searchString: string, position?: number): number;
 >indexOf : (searchString: string, position?: number) => number
+>        : ^            ^^      ^^        ^^^      ^^^^^      
 >searchString : string
+>             : ^^^^^^
 >position : number
+>         : ^^^^^^
 
     /**
       * Returns the last occurrence of a substring in the string.
@@ -427,8 +510,11 @@ interface String {
       */
     lastIndexOf(searchString: string, position?: number): number;
 >lastIndexOf : (searchString: string, position?: number) => number
+>            : ^            ^^      ^^        ^^^      ^^^^^      
 >searchString : string
+>             : ^^^^^^
 >position : number
+>         : ^^^^^^
 
     /**
       * Determines whether two strings are equivalent in the current locale.
@@ -436,7 +522,9 @@ interface String {
       */
     localeCompare(that: string): number;
 >localeCompare : (that: string) => number
+>              : ^    ^^      ^^^^^      
 >that : string
+>     : ^^^^^^
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of that search.
@@ -444,7 +532,9 @@ interface String {
       */
     match(regexp: string): string[];
 >match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
+>      : ^^^      ^^      ^^^        ^^^      ^^      ^^^        ^^^
 >regexp : string
+>       : ^^^^^^
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of that search.
@@ -452,7 +542,9 @@ interface String {
       */
     match(regexp: RegExp): string[];
 >match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
+>      : ^^^      ^^      ^^^        ^^^      ^^      ^^^        ^^^
 >regexp : RegExp
+>       : ^^^^^^
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -461,8 +553,11 @@ interface String {
       */
     replace(searchValue: string, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : string
+>            : ^^^^^^
 >replaceValue : string
+>             : ^^^^^^
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -471,10 +566,15 @@ interface String {
       */
     replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : string
+>            : ^^^^^^
 >replaceValue : (substring: string, ...args: any[]) => string
+>             : ^         ^^      ^^^^^    ^^     ^^^^^      
 >substring : string
+>          : ^^^^^^
 >args : any[]
+>     : ^^^^^
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -483,8 +583,11 @@ interface String {
       */
     replace(searchValue: RegExp, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : RegExp
+>            : ^^^^^^
 >replaceValue : string
+>             : ^^^^^^
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -493,10 +596,15 @@ interface String {
       */
     replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : RegExp
+>            : ^^^^^^
 >replaceValue : (substring: string, ...args: any[]) => string
+>             : ^         ^^      ^^^^^    ^^     ^^^^^      
 >substring : string
+>          : ^^^^^^
 >args : any[]
+>     : ^^^^^
 
     /**
       * Finds the first substring match in a regular expression search.
@@ -504,7 +612,9 @@ interface String {
       */
     search(regexp: string): number;
 >search : { (regexp: string): number; (regexp: RegExp): number; }
+>       : ^^^      ^^      ^^^      ^^^      ^^      ^^^      ^^^
 >regexp : string
+>       : ^^^^^^
 
     /**
       * Finds the first substring match in a regular expression search.
@@ -512,7 +622,9 @@ interface String {
       */
     search(regexp: RegExp): number;
 >search : { (regexp: string): number; (regexp: RegExp): number; }
+>       : ^^^      ^^      ^^^      ^^^      ^^      ^^^      ^^^
 >regexp : RegExp
+>       : ^^^^^^
 
     /**
       * Returns a section of a string.
@@ -522,8 +634,11 @@ interface String {
       */
     slice(start?: number, end?: number): string;
 >slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 >start : number
+>      : ^^^^^^
 >end : number
+>    : ^^^^^^
 
     /**
       * Split a string into substrings using the specified separator and return them as an array.
@@ -532,8 +647,11 @@ interface String {
       */
     split(separator: string, limit?: number): string[];
 >split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
+>      : ^^^         ^^      ^^     ^^^      ^^^        ^^^         ^^      ^^     ^^^      ^^^        ^^^
 >separator : string
+>          : ^^^^^^
 >limit : number
+>      : ^^^^^^
 
     /**
       * Split a string into substrings using the specified separator and return them as an array.
@@ -542,8 +660,11 @@ interface String {
       */
     split(separator: RegExp, limit?: number): string[];
 >split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
+>      : ^^^         ^^      ^^     ^^^      ^^^        ^^^         ^^      ^^     ^^^      ^^^        ^^^
 >separator : RegExp
+>          : ^^^^^^
 >limit : number
+>      : ^^^^^^
 
     /**
       * Returns the substring at the specified location within a String object. 
@@ -553,32 +674,41 @@ interface String {
       */
     substring(start: number, end?: number): string;
 >substring : (start: number, end?: number) => string
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >start : number
+>      : ^^^^^^
 >end : number
+>    : ^^^^^^
 
     /** Converts all the alphabetic characters in a string to lowercase. */
     toLowerCase(): string;
 >toLowerCase : () => string
+>            : ^^^^^^      
 
     /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
     toLocaleLowerCase(): string;
 >toLocaleLowerCase : () => string
+>                  : ^^^^^^      
 
     /** Converts all the alphabetic characters in a string to uppercase. */
     toUpperCase(): string;
 >toUpperCase : () => string
+>            : ^^^^^^      
 
     /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
     toLocaleUpperCase(): string;
 >toLocaleUpperCase : () => string
+>                  : ^^^^^^      
 
     /** Removes the leading and trailing white space and line terminator characters from a string. */
     trim(): string;
 >trim : () => string
+>     : ^^^^^^      
 
     /** Returns the length of a String object. */
     length: number;
 >length : number
+>       : ^^^^^^
 
     // IE extensions
     /**
@@ -588,11 +718,15 @@ interface String {
       */
     substr(from: number, length?: number): string;
 >substr : (from: number, length?: number) => string
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >from : number
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     [index: number]: string;
 >index : number
+>      : ^^^^^^
 }
 
 /** 
@@ -600,6 +734,7 @@ interface String {
   */
 declare var String: {
 >String : { (value?: any): string; new (value?: any): String; prototype: String; fromCharCode(...codes: number[]): string; }
+>       : ^^^     ^^^   ^^^      ^^^^^^^     ^^^   ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^     ^^        ^^^      ^^^
 
     new (value?: any): String;
 >value : any
@@ -609,16 +744,20 @@ declare var String: {
 
     prototype: String;
 >prototype : String
+>          : ^^^^^^
 
     fromCharCode(...codes: number[]): string;
 >fromCharCode : (...codes: number[]) => string
+>             : ^^^^     ^^        ^^^^^      
 >codes : number[]
+>      : ^^^^^^^^
 }
 
 interface Boolean {
 }
 declare var Boolean: {
 >Boolean : { (value?: any): boolean; new (value?: any): Boolean; prototype: Boolean; }
+>        : ^^^     ^^^   ^^^       ^^^^^^^     ^^^   ^^^       ^^^^^^^^^^^^^       ^^^
 
     new (value?: any): Boolean;
 >value : any
@@ -628,6 +767,7 @@ declare var Boolean: {
 
     prototype: Boolean;
 >prototype : Boolean
+>          : ^^^^^^^
 }
 
 interface Number {
@@ -637,7 +777,9 @@ interface Number {
       */
     toString(radix?: number): string;
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 >radix : number
+>      : ^^^^^^
 
     /** 
       * Returns a string representing a number in fixed-point notation.
@@ -645,7 +787,9 @@ interface Number {
       */
     toFixed(fractionDigits?: number): string;
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 >fractionDigits : number
+>               : ^^^^^^
 
     /**
       * Returns a string containing a number represented in exponential notation.
@@ -653,7 +797,9 @@ interface Number {
       */
     toExponential(fractionDigits?: number): string;
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >fractionDigits : number
+>               : ^^^^^^
 
     /**
       * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
@@ -661,12 +807,15 @@ interface Number {
       */
     toPrecision(precision?: number): string;
 >toPrecision : (precision?: number) => string
+>            : ^         ^^^      ^^^^^      
 >precision : number
+>          : ^^^^^^
 }
 
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare var Number: {
 >Number : { (value?: any): number; new (value?: any): Number; prototype: Number; MAX_VALUE: number; MIN_VALUE: number; NaN: number; NEGATIVE_INFINITY: number; POSITIVE_INFINITY: number; }
+>       : ^^^     ^^^   ^^^      ^^^^^^^     ^^^   ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     new (value?: any): Number;
 >value : any
@@ -676,14 +825,17 @@ declare var Number: {
 
     prototype: Number;
 >prototype : Number
+>          : ^^^^^^
 
     /** The largest number that can be represented in JavaScript. Equal to approximately 1.79E+308. */
     MAX_VALUE: number;
 >MAX_VALUE : number
+>          : ^^^^^^
 
     /** The closest number to zero that can be represented in JavaScript. Equal to approximately 5.00E-324. */
     MIN_VALUE: number;
 >MIN_VALUE : number
+>          : ^^^^^^
 
     /** 
       * A value that is not a number.
@@ -691,6 +843,7 @@ declare var Number: {
       */
     NaN: number;
 >NaN : number
+>    : ^^^^^^
 
     /** 
       * A value that is less than the largest negative number that can be represented in JavaScript.
@@ -698,6 +851,7 @@ declare var Number: {
       */
     NEGATIVE_INFINITY: number;
 >NEGATIVE_INFINITY : number
+>                  : ^^^^^^
 
     /**
       * A value greater than the largest number that can be represented in JavaScript. 
@@ -705,40 +859,49 @@ declare var Number: {
       */
     POSITIVE_INFINITY: number;
 >POSITIVE_INFINITY : number
+>                  : ^^^^^^
 }
 
 interface Math {
     /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
     E: number;
 >E : number
+>  : ^^^^^^
 
     /** The natural logarithm of 10. */
     LN10: number;
 >LN10 : number
+>     : ^^^^^^
 
     /** The natural logarithm of 2. */
     LN2: number;
 >LN2 : number
+>    : ^^^^^^
 
     /** The base-2 logarithm of e. */
     LOG2E: number;
 >LOG2E : number
+>      : ^^^^^^
 
     /** The base-10 logarithm of e. */
     LOG10E: number;
 >LOG10E : number
+>       : ^^^^^^
 
     /** Pi. This is the ratio of the circumference of a circle to its diameter. */
     PI: number;
 >PI : number
+>   : ^^^^^^
 
     /** The square root of 0.5, or, equivalently, one divided by the square root of 2. */
     SQRT1_2: number;
 >SQRT1_2 : number
+>        : ^^^^^^
 
     /** The square root of 2. */
     SQRT2: number;
 >SQRT2 : number
+>      : ^^^^^^
 
     /**
       * Returns the absolute value of a number (the value without regard to whether it is positive or negative). 
@@ -747,7 +910,9 @@ interface Math {
       */
     abs(x: number): number;
 >abs : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the arc cosine (or inverse cosine) of a number. 
@@ -755,7 +920,9 @@ interface Math {
       */
     acos(x: number): number;
 >acos : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /** 
       * Returns the arcsine of a number. 
@@ -763,7 +930,9 @@ interface Math {
       */
     asin(x: number): number;
 >asin : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the arctangent of a number. 
@@ -771,7 +940,9 @@ interface Math {
       */
     atan(x: number): number;
 >atan : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the angle (in radians) from the X axis to a point (y,x).
@@ -780,8 +951,11 @@ interface Math {
       */
     atan2(y: number, x: number): number;
 >atan2 : (y: number, x: number) => number
+>      : ^ ^^      ^^ ^^      ^^^^^      
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the smallest number greater than or equal to its numeric argument. 
@@ -789,7 +963,9 @@ interface Math {
       */
     ceil(x: number): number;
 >ceil : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the cosine of a number. 
@@ -797,7 +973,9 @@ interface Math {
       */
     cos(x: number): number;
 >cos : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns e (the base of natural logarithms) raised to a power. 
@@ -805,7 +983,9 @@ interface Math {
       */
     exp(x: number): number;
 >exp : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the greatest number less than or equal to its numeric argument. 
@@ -813,7 +993,9 @@ interface Math {
       */
     floor(x: number): number;
 >floor : (x: number) => number
+>      : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the natural logarithm (base e) of a number. 
@@ -821,7 +1003,9 @@ interface Math {
       */
     log(x: number): number;
 >log : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the larger of a set of supplied numeric expressions. 
@@ -829,7 +1013,9 @@ interface Math {
       */
     max(...values: number[]): number;
 >max : (...values: number[]) => number
+>    : ^^^^      ^^        ^^^^^      
 >values : number[]
+>       : ^^^^^^^^
 
     /**
       * Returns the smaller of a set of supplied numeric expressions. 
@@ -837,7 +1023,9 @@ interface Math {
       */
     min(...values: number[]): number;
 >min : (...values: number[]) => number
+>    : ^^^^      ^^        ^^^^^      
 >values : number[]
+>       : ^^^^^^^^
 
     /**
       * Returns the value of a base expression taken to a specified power. 
@@ -846,12 +1034,16 @@ interface Math {
       */
     pow(x: number, y: number): number;
 >pow : (x: number, y: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     /** Returns a pseudorandom number between 0 and 1. */
     random(): number;
 >random : () => number
+>       : ^^^^^^      
 
     /** 
       * Returns a supplied numeric expression rounded to the nearest number.
@@ -859,7 +1051,9 @@ interface Math {
       */
     round(x: number): number;
 >round : (x: number) => number
+>      : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the sine of a number.
@@ -867,7 +1061,9 @@ interface Math {
       */
     sin(x: number): number;
 >sin : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the square root of a number.
@@ -875,7 +1071,9 @@ interface Math {
       */
     sqrt(x: number): number;
 >sqrt : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     /**
       * Returns the tangent of a number.
@@ -883,113 +1081,141 @@ interface Math {
       */
     tan(x: number): number;
 >tan : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 }
 /** An intrinsic object that provides basic mathematics functionality and constants. */
 declare var Math: Math;
 >Math : Math
+>     : ^^^^
 
 /** Enables basic storage and retrieval of dates and times. */
 interface Date {
     /** Returns a string representation of a date. The format of the string depends on the locale. */
     toString(): string;
 >toString : () => string
+>         : ^^^^^^      
 
     /** Returns a date as a string value. */
     toDateString(): string;
 >toDateString : () => string
+>             : ^^^^^^      
 
     /** Returns a time as a string value. */
     toTimeString(): string;
 >toTimeString : () => string
+>             : ^^^^^^      
 
     /** Returns a value as a string value appropriate to the host environment's current locale. */
     toLocaleString(): string;
 >toLocaleString : () => string
+>               : ^^^^^^      
 
     /** Returns a date as a string value appropriate to the host environment's current locale. */
     toLocaleDateString(): string;
 >toLocaleDateString : () => string
+>                   : ^^^^^^      
 
     /** Returns a time as a string value appropriate to the host environment's current locale. */
     toLocaleTimeString(): string;
 >toLocaleTimeString : () => string
+>                   : ^^^^^^      
 
     /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
     valueOf(): number;
 >valueOf : () => number
+>        : ^^^^^^      
 
     /** Gets the time value in milliseconds. */
     getTime(): number;
 >getTime : () => number
+>        : ^^^^^^      
 
     /** Gets the year, using local time. */
     getFullYear(): number;
 >getFullYear : () => number
+>            : ^^^^^^      
 
     /** Gets the year using Universal Coordinated Time (UTC). */
     getUTCFullYear(): number;
 >getUTCFullYear : () => number
+>               : ^^^^^^      
 
     /** Gets the month, using local time. */
     getMonth(): number;
 >getMonth : () => number
+>         : ^^^^^^      
 
     /** Gets the month of a Date object using Universal Coordinated Time (UTC). */
     getUTCMonth(): number;
 >getUTCMonth : () => number
+>            : ^^^^^^      
 
     /** Gets the day-of-the-month, using local time. */
     getDate(): number;
 >getDate : () => number
+>        : ^^^^^^      
 
     /** Gets the day-of-the-month, using Universal Coordinated Time (UTC). */
     getUTCDate(): number;
 >getUTCDate : () => number
+>           : ^^^^^^      
 
     /** Gets the day of the week, using local time. */
     getDay(): number;
 >getDay : () => number
+>       : ^^^^^^      
 
     /** Gets the day of the week using Universal Coordinated Time (UTC). */
     getUTCDay(): number;
 >getUTCDay : () => number
+>          : ^^^^^^      
 
     /** Gets the hours in a date, using local time. */
     getHours(): number;
 >getHours : () => number
+>         : ^^^^^^      
 
     /** Gets the hours value in a Date object using Universal Coordinated Time (UTC). */
     getUTCHours(): number;
 >getUTCHours : () => number
+>            : ^^^^^^      
 
     /** Gets the minutes of a Date object, using local time. */
     getMinutes(): number;
 >getMinutes : () => number
+>           : ^^^^^^      
 
     /** Gets the minutes of a Date object using Universal Coordinated Time (UTC). */
     getUTCMinutes(): number;
 >getUTCMinutes : () => number
+>              : ^^^^^^      
 
     /** Gets the seconds of a Date object, using local time. */
     getSeconds(): number;
 >getSeconds : () => number
+>           : ^^^^^^      
 
     /** Gets the seconds of a Date object using Universal Coordinated Time (UTC). */
     getUTCSeconds(): number;
 >getUTCSeconds : () => number
+>              : ^^^^^^      
 
     /** Gets the milliseconds of a Date, using local time. */
     getMilliseconds(): number;
 >getMilliseconds : () => number
+>                : ^^^^^^      
 
     /** Gets the milliseconds of a Date object using Universal Coordinated Time (UTC). */
     getUTCMilliseconds(): number;
 >getUTCMilliseconds : () => number
+>                   : ^^^^^^      
 
-    /** Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC). */
+    /** Gets the difference in minutes between Universal Coordinated Time (UTC) and the time on the local computer. */
     getTimezoneOffset(): number;
 >getTimezoneOffset : () => number
+>                  : ^^^^^^      
 
     /** 
       * Sets the date and time value in the Date object.
@@ -997,7 +1223,9 @@ interface Date {
       */
     setTime(time: number): number;
 >setTime : (time: number) => number
+>        : ^    ^^      ^^^^^      
 >time : number
+>     : ^^^^^^
 
     /**
       * Sets the milliseconds value in the Date object using local time. 
@@ -1005,7 +1233,9 @@ interface Date {
       */
     setMilliseconds(ms: number): number;
 >setMilliseconds : (ms: number) => number
+>                : ^  ^^      ^^^^^      
 >ms : number
+>   : ^^^^^^
 
     /** 
       * Sets the milliseconds value in the Date object using Universal Coordinated Time (UTC).
@@ -1013,7 +1243,9 @@ interface Date {
       */
     setUTCMilliseconds(ms: number): number;
 >setUTCMilliseconds : (ms: number) => number
+>                   : ^  ^^      ^^^^^      
 >ms : number
+>   : ^^^^^^
 
     /**
       * Sets the seconds value in the Date object using local time. 
@@ -1022,8 +1254,11 @@ interface Date {
       */
     setSeconds(sec: number, ms?: number): number;
 >setSeconds : (sec: number, ms?: number) => number
+>           : ^   ^^      ^^  ^^^      ^^^^^      
 >sec : number
+>    : ^^^^^^
 >ms : number
+>   : ^^^^^^
 
     /**
       * Sets the seconds value in the Date object using Universal Coordinated Time (UTC).
@@ -1032,8 +1267,11 @@ interface Date {
       */
     setUTCSeconds(sec: number, ms?: number): number;
 >setUTCSeconds : (sec: number, ms?: number) => number
+>              : ^   ^^      ^^  ^^^      ^^^^^      
 >sec : number
+>    : ^^^^^^
 >ms : number
+>   : ^^^^^^
 
     /**
       * Sets the minutes value in the Date object using local time. 
@@ -1043,9 +1281,13 @@ interface Date {
       */
     setMinutes(min: number, sec?: number, ms?: number): number;
 >setMinutes : (min: number, sec?: number, ms?: number) => number
+>           : ^   ^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >min : number
+>    : ^^^^^^
 >sec : number
+>    : ^^^^^^
 >ms : number
+>   : ^^^^^^
 
     /**
       * Sets the minutes value in the Date object using Universal Coordinated Time (UTC).
@@ -1055,9 +1297,13 @@ interface Date {
       */
     setUTCMinutes(min: number, sec?: number, ms?: number): number;
 >setUTCMinutes : (min: number, sec?: number, ms?: number) => number
+>              : ^   ^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >min : number
+>    : ^^^^^^
 >sec : number
+>    : ^^^^^^
 >ms : number
+>   : ^^^^^^
 
     /**
       * Sets the hour value in the Date object using local time.
@@ -1068,10 +1314,15 @@ interface Date {
       */
     setHours(hours: number, min?: number, sec?: number, ms?: number): number;
 >setHours : (hours: number, min?: number, sec?: number, ms?: number) => number
+>         : ^     ^^      ^^   ^^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >hours : number
+>      : ^^^^^^
 >min : number
+>    : ^^^^^^
 >sec : number
+>    : ^^^^^^
 >ms : number
+>   : ^^^^^^
 
     /**
       * Sets the hours value in the Date object using Universal Coordinated Time (UTC).
@@ -1082,10 +1333,15 @@ interface Date {
       */
     setUTCHours(hours: number, min?: number, sec?: number, ms?: number): number;
 >setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number
+>            : ^     ^^      ^^   ^^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >hours : number
+>      : ^^^^^^
 >min : number
+>    : ^^^^^^
 >sec : number
+>    : ^^^^^^
 >ms : number
+>   : ^^^^^^
 
     /**
       * Sets the numeric day-of-the-month value of the Date object using local time. 
@@ -1093,7 +1349,9 @@ interface Date {
       */
     setDate(date: number): number;
 >setDate : (date: number) => number
+>        : ^    ^^      ^^^^^      
 >date : number
+>     : ^^^^^^
 
     /** 
       * Sets the numeric day of the month in the Date object using Universal Coordinated Time (UTC).
@@ -1101,7 +1359,9 @@ interface Date {
       */
     setUTCDate(date: number): number;
 >setUTCDate : (date: number) => number
+>           : ^    ^^      ^^^^^      
 >date : number
+>     : ^^^^^^
 
     /** 
       * Sets the month value in the Date object using local time. 
@@ -1110,8 +1370,11 @@ interface Date {
       */
     setMonth(month: number, date?: number): number;
 >setMonth : (month: number, date?: number) => number
+>         : ^     ^^      ^^    ^^^      ^^^^^      
 >month : number
+>      : ^^^^^^
 >date : number
+>     : ^^^^^^
 
     /**
       * Sets the month value in the Date object using Universal Coordinated Time (UTC).
@@ -1120,8 +1383,11 @@ interface Date {
       */
     setUTCMonth(month: number, date?: number): number;
 >setUTCMonth : (month: number, date?: number) => number
+>            : ^     ^^      ^^    ^^^      ^^^^^      
 >month : number
+>      : ^^^^^^
 >date : number
+>     : ^^^^^^
 
     /**
       * Sets the year of the Date object using local time.
@@ -1131,9 +1397,13 @@ interface Date {
       */
     setFullYear(year: number, month?: number, date?: number): number;
 >setFullYear : (year: number, month?: number, date?: number) => number
+>            : ^    ^^      ^^     ^^^      ^^    ^^^      ^^^^^      
 >year : number
+>     : ^^^^^^
 >month : number
+>      : ^^^^^^
 >date : number
+>     : ^^^^^^
 
     /**
       * Sets the year value in the Date object using Universal Coordinated Time (UTC).
@@ -1143,46 +1413,64 @@ interface Date {
       */
     setUTCFullYear(year: number, month?: number, date?: number): number;
 >setUTCFullYear : (year: number, month?: number, date?: number) => number
+>               : ^    ^^      ^^     ^^^      ^^    ^^^      ^^^^^      
 >year : number
+>     : ^^^^^^
 >month : number
+>      : ^^^^^^
 >date : number
+>     : ^^^^^^
 
     /** Returns a date converted to a string using Universal Coordinated Time (UTC). */
     toUTCString(): string;
 >toUTCString : () => string
+>            : ^^^^^^      
 
     /** Returns a date as a string value in ISO format. */
     toISOString(): string;
 >toISOString : () => string
+>            : ^^^^^^      
 
     /** Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization. */
     toJSON(key?: any): string;
 >toJSON : (key?: any) => string
+>       : ^   ^^^   ^^^^^      
 >key : any
 }
 
 declare var Date: {
 >Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>     : ^^^^^^      ^^^^^^^^^^    ^^^^^^^     ^^      ^^^    ^^^^^^^     ^^      ^^^    ^^^^^^^    ^^      ^^     ^^      ^^    ^^^      ^^     ^^^      ^^       ^^^      ^^       ^^^      ^^  ^^^      ^^^    ^^^^^^^^^^^^^    ^^^^^^^^ ^^      ^^^      ^^^^^^    ^^      ^^     ^^      ^^    ^^^      ^^     ^^^      ^^       ^^^      ^^       ^^^      ^^  ^^^      ^^^      ^^^^^^^^^      ^^^
 
     new (): Date;
     new (value: number): Date;
 >value : number
+>      : ^^^^^^
 
     new (value: string): Date;
 >value : string
+>      : ^^^^^^
 
     new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
 >year : number
+>     : ^^^^^^
 >month : number
+>      : ^^^^^^
 >date : number
+>     : ^^^^^^
 >hours : number
+>      : ^^^^^^
 >minutes : number
+>        : ^^^^^^
 >seconds : number
+>        : ^^^^^^
 >ms : number
+>   : ^^^^^^
 
     (): string;
     prototype: Date;
 >prototype : Date
+>          : ^^^^
 
     /**
       * Parses a string containing a date, and returns the number of milliseconds between that date and midnight, January 1, 1970.
@@ -1190,7 +1478,9 @@ declare var Date: {
       */
     parse(s: string): number;
 >parse : (s: string) => number
+>      : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 
     /**
       * Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date. 
@@ -1204,149 +1494,227 @@ declare var Date: {
       */
     UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
 >UTC : (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number) => number
+>    : ^    ^^      ^^     ^^      ^^    ^^^      ^^     ^^^      ^^       ^^^      ^^       ^^^      ^^  ^^^      ^^^^^      
 >year : number
+>     : ^^^^^^
 >month : number
+>      : ^^^^^^
 >date : number
+>     : ^^^^^^
 >hours : number
+>      : ^^^^^^
 >minutes : number
+>        : ^^^^^^
 >seconds : number
+>        : ^^^^^^
 >ms : number
+>   : ^^^^^^
 
     now(): number;
 >now : () => number
+>    : ^^^^^^      
 }
 
 interface RegExpExecArray {
     [index: number]: string;
 >index : number
+>      : ^^^^^^
 
     length: number;
 >length : number
+>       : ^^^^^^
 
     index: number;
 >index : number
+>      : ^^^^^^
 
     input: string;
 >input : string
+>      : ^^^^^^
 
     toString(): string;
 >toString : () => string
+>         : ^^^^^^      
 
     toLocaleString(): string;
 >toLocaleString : () => string
+>               : ^^^^^^      
 
     concat(...items: string[][]): string[];
 >concat : (...items: string[][]) => string[]
+>       : ^^^^     ^^          ^^^^^        
 >items : string[][]
+>      : ^^^^^^^^^^
 
     join(separator?: string): string;
 >join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
 >separator : string
+>          : ^^^^^^
 
     pop(): string;
 >pop : () => string
+>    : ^^^^^^      
 
     push(...items: string[]): number;
 >push : (...items: string[]) => number
+>     : ^^^^     ^^        ^^^^^      
 >items : string[]
+>      : ^^^^^^^^
 
     reverse(): string[];
 >reverse : () => string[]
+>        : ^^^^^^        
 
     shift(): string;
 >shift : () => string
+>      : ^^^^^^      
 
     slice(start?: number, end?: number): string[];
 >slice : (start?: number, end?: number) => string[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^        
 >start : number
+>      : ^^^^^^
 >end : number
+>    : ^^^^^^
 
     sort(compareFn?: (a: string, b: string) => number): string[];
 >sort : (compareFn?: (a: string, b: string) => number) => string[]
+>     : ^         ^^^                                ^^^^^        
 >compareFn : (a: string, b: string) => number
+>          : ^ ^^      ^^ ^^      ^^^^^      
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     splice(start: number): string[];
 >splice : { (start: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^^        ^^^     ^^      ^^           ^^      ^^^^^     ^^        ^^^        ^^^
 >start : number
+>      : ^^^^^^
 
     splice(start: number, deleteCount: number, ...items: string[]): string[];
 >splice : { (start: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }
+>       : ^^^     ^^      ^^^        ^^^     ^^      ^^           ^^      ^^^^^     ^^        ^^^        ^^^
 >start : number
+>      : ^^^^^^
 >deleteCount : number
+>            : ^^^^^^
 >items : string[]
+>      : ^^^^^^^^
 
     unshift(...items: string[]): number;
 >unshift : (...items: string[]) => number
+>        : ^^^^     ^^        ^^^^^      
 >items : string[]
+>      : ^^^^^^^^
 
     indexOf(searchElement: string, fromIndex?: number): number;
 >indexOf : (searchElement: string, fromIndex?: number) => number
+>        : ^             ^^      ^^         ^^^      ^^^^^      
 >searchElement : string
+>              : ^^^^^^
 >fromIndex : number
+>          : ^^^^^^
 
     lastIndexOf(searchElement: string, fromIndex?: number): number;
 >lastIndexOf : (searchElement: string, fromIndex?: number) => number
+>            : ^             ^^      ^^         ^^^      ^^^^^      
 >searchElement : string
+>              : ^^^^^^
 >fromIndex : number
+>          : ^^^^^^
 
     every(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): boolean;
 >every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>      : ^          ^^                                                          ^^       ^^^   ^^^^^       
 >callbackfn : (value: string, index: number, array: string[]) => boolean
+>           : ^     ^^      ^^     ^^      ^^     ^^        ^^^^^       
 >value : string
+>      : ^^^^^^
 >index : number
+>      : ^^^^^^
 >array : string[]
+>      : ^^^^^^^^
 >thisArg : any
 
     some(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): boolean;
 >some : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>     : ^          ^^                                                          ^^       ^^^   ^^^^^       
 >callbackfn : (value: string, index: number, array: string[]) => boolean
+>           : ^     ^^      ^^     ^^      ^^     ^^        ^^^^^       
 >value : string
+>      : ^^^^^^
 >index : number
+>      : ^^^^^^
 >array : string[]
+>      : ^^^^^^^^
 >thisArg : any
 
     forEach(callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any): void;
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>        : ^          ^^                                                       ^^       ^^^   ^^^^^    
 >callbackfn : (value: string, index: number, array: string[]) => void
+>           : ^     ^^      ^^     ^^      ^^     ^^        ^^^^^    
 >value : string
+>      : ^^^^^^
 >index : number
+>      : ^^^^^^
 >array : string[]
+>      : ^^^^^^^^
 >thisArg : any
 
     map(callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): any[];
 >map : (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any) => any[]
+>    : ^          ^^                                                      ^^       ^^^   ^^^^^     
 >callbackfn : (value: string, index: number, array: string[]) => any
+>           : ^     ^^      ^^     ^^      ^^     ^^        ^^^^^   
 >value : string
+>      : ^^^^^^
 >index : number
+>      : ^^^^^^
 >array : string[]
+>      : ^^^^^^^^
 >thisArg : any
 
     filter(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): string[];
 >filter : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => string[]
+>       : ^          ^^                                                          ^^       ^^^   ^^^^^        
 >callbackfn : (value: string, index: number, array: string[]) => boolean
+>           : ^     ^^      ^^     ^^      ^^     ^^        ^^^^^       
 >value : string
+>      : ^^^^^^
 >index : number
+>      : ^^^^^^
 >array : string[]
+>      : ^^^^^^^^
 >thisArg : any
 
     reduce(callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any): any;
 >reduce : (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any) => any
+>       : ^          ^^                                                                                     ^^            ^^^   ^^^^^   
 >callbackfn : (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any
+>           : ^             ^^   ^^            ^^   ^^            ^^      ^^     ^^        ^^^^^   
 >previousValue : any
 >currentValue : any
 >currentIndex : number
+>             : ^^^^^^
 >array : string[]
+>      : ^^^^^^^^
 >initialValue : any
 
     reduceRight(callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any): any;
 >reduceRight : (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any) => any
+>            : ^          ^^                                                                                     ^^            ^^^   ^^^^^   
 >callbackfn : (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any
+>           : ^             ^^   ^^            ^^   ^^            ^^      ^^     ^^        ^^^^^   
 >previousValue : any
 >currentValue : any
 >currentIndex : number
+>             : ^^^^^^
 >array : string[]
+>      : ^^^^^^^^
 >initialValue : any
 }
 
@@ -1358,7 +1726,9 @@ interface RegExp {
       */
     exec(string: string): RegExpExecArray;
 >exec : (string: string) => RegExpExecArray
+>     : ^      ^^      ^^^^^               
 >string : string
+>       : ^^^^^^
 
     /** 
       * Returns a Boolean value that indicates whether or not a pattern exists in a searched string.
@@ -1366,182 +1736,235 @@ interface RegExp {
       */
     test(string: string): boolean;
 >test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
 >string : string
+>       : ^^^^^^
 
     /** Returns a copy of the text of the regular expression pattern. Read-only. The rgExp argument is a Regular expression object. It can be a variable name or a literal. */
     source: string;
 >source : string
+>       : ^^^^^^
 
     /** Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only. */
     global: boolean;
 >global : boolean
+>       : ^^^^^^^
 
     /** Returns a Boolean value indicating the state of the ignoreCase flag (i) used with a regular expression. Default is false. Read-only. */
     ignoreCase: boolean;
 >ignoreCase : boolean
+>           : ^^^^^^^
 
     /** Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only. */
     multiline: boolean;
 >multiline : boolean
+>          : ^^^^^^^
 
     lastIndex: number;
 >lastIndex : number
+>          : ^^^^^^
 
     // Non-standard extensions
     compile(): RegExp;
 >compile : () => RegExp
+>        : ^^^^^^      
 }
 declare var RegExp: {
 >RegExp : { (pattern: string, flags?: string): RegExp; new (pattern: string, flags?: string): RegExp; $1: string; $2: string; $3: string; $4: string; $5: string; $6: string; $7: string; $8: string; $9: string; lastMatch: string; }
+>       : ^^^       ^^      ^^     ^^^      ^^^      ^^^^^^^       ^^      ^^     ^^^      ^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^^^^^^^^      ^^^
 
     new (pattern: string, flags?: string): RegExp;
 >pattern : string
+>        : ^^^^^^
 >flags : string
+>      : ^^^^^^
 
     (pattern: string, flags?: string): RegExp;
 >pattern : string
+>        : ^^^^^^
 >flags : string
+>      : ^^^^^^
 
     // Non-standard extensions
     $1: string;
 >$1 : string
+>   : ^^^^^^
 
     $2: string;
 >$2 : string
+>   : ^^^^^^
 
     $3: string;
 >$3 : string
+>   : ^^^^^^
 
     $4: string;
 >$4 : string
+>   : ^^^^^^
 
     $5: string;
 >$5 : string
+>   : ^^^^^^
 
     $6: string;
 >$6 : string
+>   : ^^^^^^
 
     $7: string;
 >$7 : string
+>   : ^^^^^^
 
     $8: string;
 >$8 : string
+>   : ^^^^^^
 
     $9: string;
 >$9 : string
+>   : ^^^^^^
 
     lastMatch: string;
 >lastMatch : string
+>          : ^^^^^^
 }
 
 interface Error {
     name: string;
 >name : string
+>     : ^^^^^^
 
     message: string;
 >message : string
+>        : ^^^^^^
 }
 declare var Error: {
 >Error : { (message?: string): Error; new (message?: string): Error; prototype: Error; }
+>      : ^^^       ^^^      ^^^     ^^^^^^^       ^^^      ^^^     ^^^^^^^^^^^^^     ^^^
 
     new (message?: string): Error;
 >message : string
+>        : ^^^^^^
 
     (message?: string): Error;
 >message : string
+>        : ^^^^^^
 
     prototype: Error;
 >prototype : Error
+>          : ^^^^^
 }
 
 interface EvalError extends Error {
 }
 declare var EvalError: {
 >EvalError : { (message?: string): EvalError; new (message?: string): EvalError; prototype: EvalError; }
+>          : ^^^       ^^^      ^^^         ^^^^^^^       ^^^      ^^^         ^^^^^^^^^^^^^         ^^^
 
     new (message?: string): EvalError;
 >message : string
+>        : ^^^^^^
 
     (message?: string): EvalError;
 >message : string
+>        : ^^^^^^
 
     prototype: EvalError;
 >prototype : EvalError
+>          : ^^^^^^^^^
 }
 
 interface RangeError extends Error {
 }
 declare var RangeError: {
 >RangeError : { (message?: string): RangeError; new (message?: string): RangeError; prototype: RangeError; }
+>           : ^^^       ^^^      ^^^          ^^^^^^^       ^^^      ^^^          ^^^^^^^^^^^^^          ^^^
 
     new (message?: string): RangeError;
 >message : string
+>        : ^^^^^^
 
     (message?: string): RangeError;
 >message : string
+>        : ^^^^^^
 
     prototype: RangeError;
 >prototype : RangeError
+>          : ^^^^^^^^^^
 }
 
 interface ReferenceError extends Error {
 }
 declare var ReferenceError: {
 >ReferenceError : { (message?: string): ReferenceError; new (message?: string): ReferenceError; prototype: ReferenceError; }
+>               : ^^^       ^^^      ^^^              ^^^^^^^       ^^^      ^^^              ^^^^^^^^^^^^^              ^^^
 
     new (message?: string): ReferenceError;
 >message : string
+>        : ^^^^^^
 
     (message?: string): ReferenceError;
 >message : string
+>        : ^^^^^^
 
     prototype: ReferenceError;
 >prototype : ReferenceError
+>          : ^^^^^^^^^^^^^^
 }
 
 interface SyntaxError extends Error {
 }
 declare var SyntaxError: {
 >SyntaxError : { (message?: string): SyntaxError; new (message?: string): SyntaxError; prototype: SyntaxError; }
+>            : ^^^       ^^^      ^^^           ^^^^^^^       ^^^      ^^^           ^^^^^^^^^^^^^           ^^^
 
     new (message?: string): SyntaxError;
 >message : string
+>        : ^^^^^^
 
     (message?: string): SyntaxError;
 >message : string
+>        : ^^^^^^
 
     prototype: SyntaxError;
 >prototype : SyntaxError
+>          : ^^^^^^^^^^^
 }
 
 interface TypeError extends Error {
 }
 declare var TypeError: {
 >TypeError : { (message?: string): TypeError; new (message?: string): TypeError; prototype: TypeError; }
+>          : ^^^       ^^^      ^^^         ^^^^^^^       ^^^      ^^^         ^^^^^^^^^^^^^         ^^^
 
     new (message?: string): TypeError;
 >message : string
+>        : ^^^^^^
 
     (message?: string): TypeError;
 >message : string
+>        : ^^^^^^
 
     prototype: TypeError;
 >prototype : TypeError
+>          : ^^^^^^^^^
 }
 
 interface URIError extends Error {
 }
 declare var URIError: {
 >URIError : { (message?: string): URIError; new (message?: string): URIError; prototype: URIError; }
+>         : ^^^       ^^^      ^^^        ^^^^^^^       ^^^      ^^^        ^^^^^^^^^^^^^        ^^^
 
     new (message?: string): URIError;
 >message : string
+>        : ^^^^^^
 
     (message?: string): URIError;
 >message : string
+>        : ^^^^^^
 
     prototype: URIError;
 >prototype : URIError
+>          : ^^^^^^^^
 }
 
 interface JSON {
@@ -1553,8 +1976,11 @@ interface JSON {
       */
     parse(text: string, reviver?: (key: any, value: any) => any): any;
 >parse : (text: string, reviver?: (key: any, value: any) => any) => any
+>      : ^    ^^      ^^       ^^^                             ^^^^^   
 >text : string
+>     : ^^^^^^
 >reviver : (key: any, value: any) => any
+>        : ^   ^^   ^^     ^^   ^^^^^   
 >key : any
 >value : any
 
@@ -1564,6 +1990,7 @@ interface JSON {
       */
     stringify(value: any): string;
 >stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
+>          : ^^^     ^^   ^^^      ^^^     ^^   ^^        ^^                                ^^^      ^^^     ^^   ^^        ^^     ^^^      ^^^     ^^   ^^        ^^                                ^^     ^^   ^^^      ^^^     ^^   ^^        ^^     ^^     ^^   ^^^      ^^^
 >value : any
 
     /**
@@ -1573,9 +2000,12 @@ interface JSON {
       */
     stringify(value: any, replacer: (key: string, value: any) => any): string;
 >stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
+>          : ^^^     ^^   ^^^      ^^^     ^^   ^^        ^^                                ^^^      ^^^     ^^   ^^        ^^     ^^^      ^^^     ^^   ^^        ^^                                ^^     ^^   ^^^      ^^^     ^^   ^^        ^^     ^^     ^^   ^^^      ^^^
 >value : any
 >replacer : (key: string, value: any) => any
+>         : ^   ^^      ^^     ^^   ^^^^^   
 >key : string
+>    : ^^^^^^
 >value : any
 
     /**
@@ -1585,8 +2015,10 @@ interface JSON {
       */
     stringify(value: any, replacer: any[]): string;
 >stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
+>          : ^^^     ^^   ^^^      ^^^     ^^   ^^        ^^                                ^^^      ^^^     ^^   ^^        ^^     ^^^      ^^^     ^^   ^^        ^^                                ^^     ^^   ^^^      ^^^     ^^   ^^        ^^     ^^     ^^   ^^^      ^^^
 >value : any
 >replacer : any[]
+>         : ^^^^^
 
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
@@ -1596,9 +2028,12 @@ interface JSON {
       */
     stringify(value: any, replacer: (key: string, value: any) => any, space: any): string;
 >stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
+>          : ^^^     ^^   ^^^      ^^^     ^^   ^^        ^^                                ^^^      ^^^     ^^   ^^        ^^     ^^^      ^^^     ^^   ^^        ^^                                ^^     ^^   ^^^      ^^^     ^^   ^^        ^^     ^^     ^^   ^^^      ^^^
 >value : any
 >replacer : (key: string, value: any) => any
+>         : ^   ^^      ^^     ^^   ^^^^^   
 >key : string
+>    : ^^^^^^
 >value : any
 >space : any
 
@@ -1610,8 +2045,10 @@ interface JSON {
       */
     stringify(value: any, replacer: any[], space: any): string;
 >stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
+>          : ^^^     ^^   ^^^      ^^^     ^^   ^^        ^^                                ^^^      ^^^     ^^   ^^        ^^     ^^^      ^^^     ^^   ^^        ^^                                ^^     ^^   ^^^      ^^^     ^^   ^^        ^^     ^^     ^^   ^^^      ^^^
 >value : any
 >replacer : any[]
+>         : ^^^^^
 >space : any
 }
 /**
@@ -1619,6 +2056,7 @@ interface JSON {
   */
 declare var JSON: JSON;
 >JSON : JSON
+>     : ^^^^
 
 
 /////////////////////////////
@@ -1631,9 +2069,11 @@ interface Array<T> {
       */
     toString(): string;
 >toString : () => string
+>         : ^^^^^^      
 
     toLocaleString(): string;
 >toLocaleString : () => string
+>               : ^^^^^^      
 
     /**
       * Combines two or more arrays.
@@ -1641,7 +2081,9 @@ interface Array<T> {
       */
     concat<U extends T[]>(...items: U[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
+>       : ^^^ ^^^^^^^^^   ^^^^^     ^^   ^^^   ^^^^^^     ^^   ^^^   ^^^
 >items : U[]
+>      : ^^^
 
     /**
       * Combines two or more arrays.
@@ -1649,7 +2091,9 @@ interface Array<T> {
       */
     concat(...items: T[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
+>       : ^^^ ^^^^^^^^^   ^^^^^     ^^   ^^^   ^^^^^^     ^^   ^^^   ^^^
 >items : T[]
+>      : ^^^
 
     /**
       * Adds all the elements of an array separated by the specified separator string.
@@ -1657,13 +2101,16 @@ interface Array<T> {
       */
     join(separator?: string): string;
 >join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
 >separator : string
+>          : ^^^^^^
 
     /**
       * Removes the last element from an array and returns it.
       */
     pop(): T;
 >pop : () => T
+>    : ^^^^^^ 
 
     /**
       * Appends new elements to an array, and returns the new length of the array.
@@ -1671,19 +2118,23 @@ interface Array<T> {
       */
     push(...items: T[]): number;
 >push : (...items: T[]) => number
+>     : ^^^^     ^^   ^^^^^      
 >items : T[]
+>      : ^^^
 
     /**
       * Reverses the elements in an Array. 
       */
     reverse(): T[];
 >reverse : () => T[]
+>        : ^^^^^^   
 
     /**
       * Removes the first element from an array and returns it.
       */
     shift(): T;
 >shift : () => T
+>      : ^^^^^^ 
 
     /** 
       * Returns a section of an array.
@@ -1692,8 +2143,11 @@ interface Array<T> {
       */
     slice(start?: number, end?: number): T[];
 >slice : (start?: number, end?: number) => T[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^   
 >start : number
+>      : ^^^^^^
 >end : number
+>    : ^^^^^^
 
     /**
       * Sorts an array.
@@ -1701,9 +2155,13 @@ interface Array<T> {
       */
     sort(compareFn?: (a: T, b: T) => number): T[];
 >sort : (compareFn?: (a: T, b: T) => number) => T[]
+>     : ^         ^^^                      ^^^^^   
 >compareFn : (a: T, b: T) => number
+>          : ^ ^^ ^^ ^^ ^^^^^      
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     /**
       * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
@@ -1711,7 +2169,9 @@ interface Array<T> {
       */
     splice(start: number): T[];
 >splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>       : ^^^     ^^      ^^^   ^^^     ^^      ^^           ^^      ^^^^^     ^^   ^^^   ^^^
 >start : number
+>      : ^^^^^^
 
     /**
       * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
@@ -1721,9 +2181,13 @@ interface Array<T> {
       */
     splice(start: number, deleteCount: number, ...items: T[]): T[];
 >splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>       : ^^^     ^^      ^^^   ^^^     ^^      ^^           ^^      ^^^^^     ^^   ^^^   ^^^
 >start : number
+>      : ^^^^^^
 >deleteCount : number
+>            : ^^^^^^
 >items : T[]
+>      : ^^^
 
     /**
       * Inserts new elements at the start of an array.
@@ -1731,7 +2195,9 @@ interface Array<T> {
       */
     unshift(...items: T[]): number;
 >unshift : (...items: T[]) => number
+>        : ^^^^     ^^   ^^^^^      
 >items : T[]
+>      : ^^^
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -1740,8 +2206,11 @@ interface Array<T> {
       */
     indexOf(searchElement: T, fromIndex?: number): number;
 >indexOf : (searchElement: T, fromIndex?: number) => number
+>        : ^             ^^ ^^         ^^^      ^^^^^      
 >searchElement : T
+>              : ^
 >fromIndex : number
+>          : ^^^^^^
 
     /**
       * Returns the index of the last occurrence of a specified value in an array.
@@ -1750,8 +2219,11 @@ interface Array<T> {
       */
     lastIndexOf(searchElement: T, fromIndex?: number): number;
 >lastIndexOf : (searchElement: T, fromIndex?: number) => number
+>            : ^             ^^ ^^         ^^^      ^^^^^      
 >searchElement : T
+>              : ^
 >fromIndex : number
+>          : ^^^^^^
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -1760,10 +2232,15 @@ interface Array<T> {
       */
     every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
 >every : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean
+>      : ^          ^^                                                ^^       ^^^   ^^^^^       
 >callbackfn : (value: T, index: number, array: T[]) => boolean
+>           : ^     ^^ ^^     ^^      ^^     ^^   ^^^^^       
 >value : T
+>      : ^
 >index : number
+>      : ^^^^^^
 >array : T[]
+>      : ^^^
 >thisArg : any
 
     /**
@@ -1773,10 +2250,15 @@ interface Array<T> {
       */
     some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
 >some : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean
+>     : ^          ^^                                                ^^       ^^^   ^^^^^       
 >callbackfn : (value: T, index: number, array: T[]) => boolean
+>           : ^     ^^ ^^     ^^      ^^     ^^   ^^^^^       
 >value : T
+>      : ^
 >index : number
+>      : ^^^^^^
 >array : T[]
+>      : ^^^
 >thisArg : any
 
     /**
@@ -1786,10 +2268,15 @@ interface Array<T> {
       */
     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
 >forEach : (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => void
+>        : ^          ^^                                             ^^       ^^^   ^^^^^    
 >callbackfn : (value: T, index: number, array: T[]) => void
+>           : ^     ^^ ^^     ^^      ^^     ^^   ^^^^^    
 >value : T
+>      : ^
 >index : number
+>      : ^^^^^^
 >array : T[]
+>      : ^^^
 >thisArg : any
 
     /**
@@ -1799,10 +2286,15 @@ interface Array<T> {
       */
     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
 >map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^                                          ^^       ^^^   ^^^^^   
 >callbackfn : (value: T, index: number, array: T[]) => U
+>           : ^     ^^ ^^     ^^      ^^     ^^   ^^^^^ 
 >value : T
+>      : ^
 >index : number
+>      : ^^^^^^
 >array : T[]
+>      : ^^^
 >thisArg : any
 
     /**
@@ -1812,10 +2304,15 @@ interface Array<T> {
       */
     filter(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T[];
 >filter : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => T[]
+>       : ^          ^^                                                ^^       ^^^   ^^^^^   
 >callbackfn : (value: T, index: number, array: T[]) => boolean
+>           : ^     ^^ ^^     ^^      ^^     ^^   ^^^^^       
 >value : T
+>      : ^
 >index : number
+>      : ^^^^^^
 >array : T[]
+>      : ^^^
 >thisArg : any
 
     /**
@@ -1825,12 +2322,19 @@ interface Array<T> {
       */
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
 >reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>       : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^ ^^          ^^                                                                          ^^            ^^ ^^^ ^^^
 >callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
+>           : ^             ^^ ^^            ^^ ^^            ^^      ^^     ^^   ^^^^^ 
 >previousValue : T
+>              : ^
 >currentValue : T
+>             : ^
 >currentIndex : number
+>             : ^^^^^^
 >array : T[]
+>      : ^^^
 >initialValue : T
+>             : ^
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -1839,12 +2343,19 @@ interface Array<T> {
       */
     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 >reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>       : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^ ^^          ^^                                                                          ^^            ^^ ^^^ ^^^
 >callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
+>           : ^             ^^ ^^            ^^ ^^            ^^      ^^     ^^   ^^^^^ 
 >previousValue : U
+>              : ^
 >currentValue : T
+>             : ^
 >currentIndex : number
+>             : ^^^^^^
 >array : T[]
+>      : ^^^
 >initialValue : U
+>             : ^
 
     /** 
       * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -1853,12 +2364,19 @@ interface Array<T> {
       */
     reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
 >reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>            : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^ ^^          ^^                                                                          ^^            ^^ ^^^ ^^^
 >callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
+>           : ^             ^^ ^^            ^^ ^^            ^^      ^^     ^^   ^^^^^ 
 >previousValue : T
+>              : ^
 >currentValue : T
+>             : ^
 >currentIndex : number
+>             : ^^^^^^
 >array : T[]
+>      : ^^^
 >initialValue : T
+>             : ^
 
     /** 
       * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -1867,48 +2385,66 @@ interface Array<T> {
       */
     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 >reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>            : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^ ^^          ^^                                                                          ^^            ^^ ^^^ ^^^
 >callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
+>           : ^             ^^ ^^            ^^ ^^            ^^      ^^     ^^   ^^^^^ 
 >previousValue : U
+>              : ^
 >currentValue : T
+>             : ^
 >currentIndex : number
+>             : ^^^^^^
 >array : T[]
+>      : ^^^
 >initialValue : U
+>             : ^
 
     /**
       * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
       */
     length: number;
 >length : number
+>       : ^^^^^^
 
     [n: number]: T;
 >n : number
+>  : ^^^^^^
 }
 declare var Array: {
 >Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: Array<any>; }
+>      : ^^^           ^^^      ^^^     ^^^ ^^           ^^      ^^^   ^^^ ^^^^^     ^^   ^^^   ^^^^^^^           ^^^      ^^^     ^^^^^^^ ^^           ^^      ^^^   ^^^^^^^ ^^^^^     ^^   ^^^   ^^^^^^^^^^   ^^   ^^^       ^^^^^^^^^^^^^          ^^^
 
     new (arrayLength?: number): any[];
 >arrayLength : number
+>            : ^^^^^^
 
     new <T>(arrayLength: number): T[];
 >arrayLength : number
+>            : ^^^^^^
 
     new <T>(...items: T[]): T[];
 >items : T[]
+>      : ^^^
 
     (arrayLength?: number): any[];
 >arrayLength : number
+>            : ^^^^^^
 
     <T>(arrayLength: number): T[];
 >arrayLength : number
+>            : ^^^^^^
 
     <T>(...items: T[]): T[];
 >items : T[]
+>      : ^^^
 
     isArray(arg: any): boolean;
 >isArray : (arg: any) => boolean
+>        : ^   ^^   ^^^^^       
 >arg : any
 
     prototype: Array<any>;
 >prototype : any[]
+>          : ^^^^^
 }
 

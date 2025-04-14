@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty33.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty33.ts] ////
+
+=== symbolProperty33.ts ===
 class C1 extends C2 {
 >C1 : Symbol(C1, Decl(symbolProperty33.ts, 0, 0))
 >C2 : Symbol(C2, Decl(symbolProperty33.ts, 4, 1))

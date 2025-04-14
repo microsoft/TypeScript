@@ -1,215 +1,333 @@
-=== tests/cases/compiler/controlFlowArrayErrors.ts ===
+//// [tests/cases/compiler/controlFlowArrayErrors.ts] ////
+
+=== controlFlowArrayErrors.ts ===
 declare function cond(): boolean;
 >cond : () => boolean
+>     : ^^^^^^       
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let x = [];  // Implicit any[] error in some locations
 >x : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     let y = x;   // Implicit any[] error
 >y : any[]
+>  : ^^^^^
 >x : any[]
+>  : ^^^^^
 
     x.push(5);
 >x.push(5) : number
+>          : ^^^^^^
 >x.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
+>  : ^
 
     let z = x;
 >z : number[]
+>  : ^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     let x;       // Implicit any[] error in some locations
 >x : any
+>  : ^^^
 
     x = [];
 >x = [] : undefined[]
+>       : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     let y = x;   // Implicit any[] error
 >y : any[]
+>  : ^^^^^
 >x : any[]
+>  : ^^^^^
 
     x.push(5);
 >x.push(5) : number
+>          : ^^^^^^
 >x.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
+>  : ^
 
     let z = x;
 >z : number[]
+>  : ^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     let x = [];  // Implicit any[] error in some locations
 >x : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     x.push(5);
 >x.push(5) : number
+>          : ^^^^^^
 >x.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
+>  : ^
 
     function g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
         x;       // Implicit any[] error
 >x : any[]
+>  : ^^^^^
     }
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     let x;
 >x : any
+>  : ^^^
 
     x = [5, "hello"];  // Non-evolving array
 >x = [5, "hello"] : (string | number)[]
+>                 : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >[5, "hello"] : (string | number)[]
+>             : ^^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     x.push(true);      // Error
 >x.push(true) : number
+>             : ^^^^^^
 >x.push : (...items: (string | number)[]) => number
+>       : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >x : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >push : (...items: (string | number)[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >true : true
+>     : ^^^^
 }
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     let x = [5, "hello"];  // Non-evolving array
 >x : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >[5, "hello"] : (string | number)[]
+>             : ^^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     x.push(true);          // Error
 >x.push(true) : number
+>             : ^^^^^^
 >x.push : (...items: (string | number)[]) => number
+>       : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >x : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >push : (...items: (string | number)[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >true : true
+>     : ^^^^
 }
 
 function f6() {
 >f6 : () => void
+>   : ^^^^^^^^^^
 
     let x;
 >x : any
+>  : ^^^
 
     if (cond()) {
 >cond() : boolean
+>       : ^^^^^^^
 >cond : () => boolean
+>     : ^^^^^^       
 
         x = [];
 >x = [] : undefined[]
+>       : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         x.push(5);
 >x.push(5) : number
+>          : ^^^^^^
 >x.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
+>  : ^
 
         x.push("hello");
 >x.push("hello") : number
+>                : ^^^^^^
 >x.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     else {
         x = [true];  // Non-evolving array
 >x = [true] : boolean[]
+>           : ^^^^^^^^^
 >x : any
+>  : ^^^
 >[true] : boolean[]
+>       : ^^^^^^^^^
 >true : true
+>     : ^^^^
     }
     x;           // boolean[] | (string | number)[]
 >x : (string | number)[] | boolean[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x.push(99);  // Error
 >x.push(99) : number
+>           : ^^^^^^
 >x.push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
+>       : ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^     ^^^^^^^^^^^^^^^^      ^
 >x : (string | number)[] | boolean[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
+>     : ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^     ^^^^^^^^^^^^^^^^      ^
 >99 : 99
+>   : ^^
 }
 
 function f7() {
 >f7 : () => void
+>   : ^^^^^^^^^^
 
     let x = [];       // x has evolving array value
 >x : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     x.push(5);
 >x.push(5) : number
+>          : ^^^^^^
 >x.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
+>  : ^
 
     let y = x;        // y has non-evolving array value
 >y : number[]
+>  : ^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 
     x.push("hello");  // Ok
 >x.push("hello") : number
+>                : ^^^^^^
 >x.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
+>        : ^^^^^^^
 
     y.push("hello");  // Error
 >y.push("hello") : number
+>                : ^^^^^^
 >y.push : (...items: number[]) => number
+>       : ^^^^     ^^^^^^^^^^^^^^^      
 >y : number[]
+>  : ^^^^^^^^
 >push : (...items: number[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 function f8() {
 >f8 : () => void
+>   : ^^^^^^^^^^
 
     const x = [];  // Implicit any[] error in some locations
 >x : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     x.push(5);
 >x.push(5) : number
+>          : ^^^^^^
 >x.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
+>  : ^
 
     function g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
         x;  // Implicit any[] error
 >x : any[]
+>  : ^^^^^
     }
 }

@@ -1,21 +1,31 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors5.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors5.ts] ////
+
+=== propertyOverridesAccessors5.ts ===
 class A {
 >A : A
+>  : ^
 
     get p() { return 'oh no' }
 >p : string
+>  : ^^^^^^
 >'oh no' : "oh no"
+>        : ^^^^^^^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     constructor(public p: string) {
 >p : string
+>  : ^^^^^^
 
         super()
 >super() : void
+>        : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
     }
 }
 

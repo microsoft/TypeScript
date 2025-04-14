@@ -1,9 +1,11 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of14.ts ===
-class StringIterator {
->StringIterator : Symbol(StringIterator, Decl(for-of14.ts, 0, 0))
+//// [tests/cases/conformance/es6/for-ofStatements/for-of14.ts] ////
+
+=== for-of14.ts ===
+class MyStringIterator {
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of14.ts, 0, 0))
 
     next() {
->next : Symbol(StringIterator.next, Decl(for-of14.ts, 0, 22))
+>next : Symbol(MyStringIterator.next, Decl(for-of14.ts, 0, 24))
 
         return "";
     }
@@ -12,7 +14,7 @@ class StringIterator {
 var v: string;
 >v : Symbol(v, Decl(for-of14.ts, 6, 3))
 
-for (v of new StringIterator) { } // Should fail because the iterator is not iterable
+for (v of new MyStringIterator) { } // Should fail because the iterator is not iterable
 >v : Symbol(v, Decl(for-of14.ts, 6, 3))
->StringIterator : Symbol(StringIterator, Decl(for-of14.ts, 0, 0))
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of14.ts, 0, 0))
 

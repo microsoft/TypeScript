@@ -1,107 +1,164 @@
-=== tests/cases/compiler/operationsAvailableOnPromisedType.ts ===
+//// [tests/cases/compiler/operationsAvailableOnPromisedType.ts] ////
+
+=== operationsAvailableOnPromisedType.ts ===
 async function fn(
->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{    prop: string;}>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{    new (): any;}>) => Promise<void>
+>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void>
+>   : ^ ^^      ^^ ^^               ^^ ^^                 ^^ ^^                          ^^ ^^                   ^^ ^^                                  ^^ ^^                         ^^^^^^^^^^^^^^^^^^
 
     a: number,
 >a : number
+>  : ^^^^^^
 
     b: Promise<number>,
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     c: Promise<string[]>,
 >c : Promise<string[]>
+>  : ^^^^^^^^^^^^^^^^^
 
     d: Promise<{ prop: string }>,
 >d : Promise<{ prop: string; }>
+>  : ^^^^^^^^^^^^^^^^      ^^^^
 >prop : string
+>     : ^^^^^^
 
     e: Promise<() => void>,
 >e : Promise<() => void>
+>  : ^^^^^^^^^^^^^^    ^
 
     f: Promise<() => void> | (() => void),
 >f : Promise<() => void> | (() => void)
+>  : ^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^
 
     g: Promise<{ new(): any }>
 >g : Promise<new () => any>
+>  : ^^^^^^^^^^^^^^^^^^   ^
 
 ) {
     // All errors
     a | b;
 >a | b : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     b | a;
 >b | a : number
+>      : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     a + b;
 >a + b : any
+>      : ^^^
 >a : number
+>  : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     a > b;
 >a > b : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     b++;
 >b++ : number
+>    : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     --b;
 >--b : number
+>    : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     a === b;
 >a === b : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     [...c];
 >[...c] : any[]
+>       : ^^^^^
 >...c : any
+>     : ^^^
 >c : Promise<string[]>
+>  : ^^^^^^^^^^^^^^^^^
 
     for (const s of c) {
 >s : any
+>  : ^^^
 >c : Promise<string[]>
+>  : ^^^^^^^^^^^^^^^^^
 
         fn(b, b, c, d, e, f, g);
 >fn(b, b, c, d, e, f, g) : Promise<void>
->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<new () => any>) => Promise<void>
+>                        : ^^^^^^^^^^^^^
+>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void>
+>   : ^ ^^      ^^ ^^               ^^ ^^                 ^^ ^^                          ^^ ^^                   ^^ ^^                                  ^^ ^^                         ^^^^^^^^^^^^^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >c : Promise<string[]>
+>  : ^^^^^^^^^^^^^^^^^
 >d : Promise<{ prop: string; }>
+>  : ^^^^^^^^^^^^^^^^      ^^^^
 >e : Promise<() => void>
+>  : ^^^^^^^^^^^^^^    ^
 >f : Promise<() => void> | (() => void)
+>  : ^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^
 >g : Promise<new () => any>
+>  : ^^^^^^^^^^^^^^^^^^   ^
 
         d.prop;
 >d.prop : any
+>       : ^^^
 >d : Promise<{ prop: string; }>
+>  : ^^^^^^^^^^^^^^^^      ^^^^
 >prop : any
+>     : ^^^
     }
     for await (const s of c) {}
 >s : any
+>  : ^^^
 >c : Promise<string[]>
+>  : ^^^^^^^^^^^^^^^^^
 
     e();
 >e() : any
+>    : ^^^
 >e : Promise<() => void>
+>  : ^^^^^^^^^^^^^^    ^
 
     f();
 >f() : any
+>    : ^^^
 >f : Promise<() => void> | (() => void)
+>  : ^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^
 
     new g();
 >new g() : any
+>        : ^^^
 >g : Promise<new () => any>
+>  : ^^^^^^^^^^^^^^^^^^   ^
 
     b();
 >b() : any
+>    : ^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 }
 

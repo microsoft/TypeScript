@@ -1,43 +1,69 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts] ////
+
+=== generatorTypeCheck25.ts ===
 class Foo { x: number }
 >Foo : Foo
+>    : ^^^
 >x : number
+>  : ^^^^^^
 
 class Bar extends Foo { y: string }
 >Bar : Bar
+>    : ^^^
 >Foo : Foo
+>    : ^^^
 >y : string
+>  : ^^^^^^
 
 class Baz { z: number }
 >Baz : Baz
+>    : ^^^
 >z : number
+>  : ^^^^^^
 
 var g3: () => Iterable<Foo> = function* () {
 >g3 : () => Iterable<Foo>
->function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => Generator<Bar | Baz, void, undefined>
+>   : ^^^^^^             
+>function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => Generator<Bar | Baz, void, unknown>
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
->yield : undefined
+>yield : any
+>      : ^^^
 
     yield new Bar;
->yield new Bar : undefined
+>yield new Bar : any
+>              : ^^^
 >new Bar : Bar
+>        : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
     yield new Baz;
->yield new Baz : undefined
+>yield new Baz : any
+>              : ^^^
 >new Baz : Baz
+>        : ^^^
 >Baz : typeof Baz
+>    : ^^^^^^^^^^
 
     yield *[new Bar];
 >yield *[new Bar] : any
+>                 : ^^^
 >[new Bar] : Bar[]
+>          : ^^^^^
 >new Bar : Bar
+>        : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
     yield *[new Baz];
 >yield *[new Baz] : any
+>                 : ^^^
 >[new Baz] : Baz[]
+>          : ^^^^^
 >new Baz : Baz
+>        : ^^^
 >Baz : typeof Baz
+>    : ^^^^^^^^^^
 }

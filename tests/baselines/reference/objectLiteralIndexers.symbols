@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralIndexers.ts ===
+//// [tests/cases/compiler/objectLiteralIndexers.ts] ////
+
+=== objectLiteralIndexers.ts ===
 interface A {
 >A : Symbol(A, Decl(objectLiteralIndexers.ts, 0, 0))
 

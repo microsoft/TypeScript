@@ -1,30 +1,46 @@
-=== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts ===
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts] ////
+
+=== binaryIntegerLiteralError.ts ===
 // error
 var bin1 = 0B1102110;
 >bin1 : number
+>     : ^^^^^^
 >0B110 : 6
+>      : ^
 >2110 : 2110
+>     : ^^^^
 
 var bin1 = 0b11023410;
 >bin1 : number
+>     : ^^^^^^
 >0b110 : 6
+>      : ^
 >23410 : 23410
+>      : ^^^^^
 
 var obj1 = {
 >obj1 : { 26: string; }
+>     : ^^^^^^^^^^^^^^^
 >{    0b11010: "hi",    26: "Hello",    "26": "world",} : { 26: string; }
+>                                                       : ^^^^^^^^^^^^^^^
 
     0b11010: "hi",
 >0b11010 : string
+>        : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
     26: "Hello",
 >26 : string
+>   : ^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 
     "26": "world",
 >"26" : string
+>     : ^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 
 };
 

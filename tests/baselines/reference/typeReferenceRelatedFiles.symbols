@@ -1,13 +1,16 @@
-=== tests/cases/conformance/declarationEmit/node_modules/@types/node/index.d.ts ===
+//// [tests/cases/conformance/declarationEmit/typeReferenceRelatedFiles.ts] ////
+
+=== node_modules/@types/node/index.d.ts ===
+
 /// <reference path="fs.d.ts" />
-No type information for this code.=== tests/cases/conformance/declarationEmit/node_modules/@types/node/fs.d.ts ===
+=== node_modules/@types/node/fs.d.ts ===
 declare module "fs" {
 >"fs" : Symbol("fs", Decl(fs.d.ts, 0, 0))
 
     interface FSWatcher {}
 >FSWatcher : Symbol(FSWatcher, Decl(fs.d.ts, 0, 21))
 }
-=== tests/cases/conformance/declarationEmit/main.ts ===
+=== main.ts ===
 /// <reference types="node" />
 import { FSWatcher } from "fs";
 >FSWatcher : Symbol(FSWatcher, Decl(main.ts, 1, 8))

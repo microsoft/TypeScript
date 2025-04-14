@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer3.ts] ////
+
 //// [subtypingWithStringIndexer3.ts]
 // Derived type indexer must be subtype of base type indexer
 

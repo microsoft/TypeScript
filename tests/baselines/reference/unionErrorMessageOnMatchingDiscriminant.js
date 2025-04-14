@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts] ////
+
 //// [unionErrorMessageOnMatchingDiscriminant.ts]
 type A = {
     type: 'a',

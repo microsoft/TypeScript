@@ -4,6 +4,4 @@
 ////     undefined
 //// }
 
-verify.codeFixAvailable([
-    { description: 'Add a return statement' },
-]);
+verify.not.codeFixAvailable();

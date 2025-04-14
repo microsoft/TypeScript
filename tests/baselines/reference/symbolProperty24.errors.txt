@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/Symbols/symbolProperty24.ts(6,5): error TS2416: Property '[Symbol.toPrimitive]' in type 'C' is not assignable to the same property in base type 'I'.
+symbolProperty24.ts(6,5): error TS2416: Property '[Symbol.toPrimitive]' in type 'C' is not assignable to the same property in base type 'I'.
   Type '() => string' is not assignable to type '() => boolean'.
     Type 'string' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolProperty24.ts (1 errors) ====
+==== symbolProperty24.ts (1 errors) ====
     interface I {
         [Symbol.toPrimitive]: () => boolean;
     }

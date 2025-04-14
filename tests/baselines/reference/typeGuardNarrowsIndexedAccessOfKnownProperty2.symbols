@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty2.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty2.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty2.ts ===
 const foo: { key?: number } = {};
 >foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 5))
 >key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 12))

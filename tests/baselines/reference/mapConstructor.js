@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mapConstructor.ts] ////
+
 //// [mapConstructor.ts]
 new Map();
 

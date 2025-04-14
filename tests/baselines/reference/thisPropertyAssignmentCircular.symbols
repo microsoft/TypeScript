@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/thisPropertyAssignmentCircular.js ===
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentCircular.ts] ////
+
+=== thisPropertyAssignmentCircular.js ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
 

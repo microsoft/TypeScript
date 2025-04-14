@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionTypeArgumentArrayAssignment.ts ===
+//// [tests/cases/compiler/functionTypeArgumentArrayAssignment.ts] ////
+
+=== functionTypeArgumentArrayAssignment.ts ===
 module test {
 >test : Symbol(test, Decl(functionTypeArgumentArrayAssignment.ts, 0, 0))
 

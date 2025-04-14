@@ -1,46 +1,73 @@
-=== tests/cases/compiler/mergedClassNamespaceRecordCast.ts ===
+//// [tests/cases/compiler/mergedClassNamespaceRecordCast.ts] ////
+
+=== mergedClassNamespaceRecordCast.ts ===
 class C1 { foo() {} }
 >C1 : C1
+>   : ^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 new C1() as Record<string, unknown>;
 >new C1() as Record<string, unknown> : Record<string, unknown>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^
 >new C1() : C1
+>         : ^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
 
 class C2 { foo() {} }
 >C2 : C2
+>   : ^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 namespace C2 { export const unrelated = 3; }
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >unrelated : 3
+>          : ^
 >3 : 3
+>  : ^
 
 new C2() as Record<string, unknown>;
 >new C2() as Record<string, unknown> : Record<string, unknown>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 C2.unrelated
 >C2.unrelated : 3
+>             : ^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >unrelated : 3
+>          : ^
 
 new C2().unrelated
 >new C2().unrelated : any
+>                   : ^^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >unrelated : any
+>          : ^^^
 
 
 namespace C3 { export const unrelated = 3; }
 >C3 : typeof C3
+>   : ^^^^^^^^^
 >unrelated : 3
+>          : ^
 >3 : 3
+>  : ^
 
 C3 as Record<string, unknown>;
 >C3 as Record<string, unknown> : Record<string, unknown>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 

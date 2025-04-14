@@ -14,4 +14,4 @@
 //// var person;
 
 goTo.file('jsDocTypedef_form3.js')
-verify.rangesAreRenameLocations({ findInComments: true, ranges: test.rangesByText().get("Person") });
+verify.baselineRename(test.rangesByText().get("Person"), { findInComments: true });

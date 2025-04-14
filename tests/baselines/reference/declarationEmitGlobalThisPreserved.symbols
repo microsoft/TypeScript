@@ -1,0 +1,504 @@
+//// [tests/cases/compiler/declarationEmitGlobalThisPreserved.ts] ////
+
+=== declarationEmitGlobalThisPreserved.ts ===
+// Adding this makes tooltips fail too.
+// declare global {
+//     namespace isNaN {
+//         const prop: number;
+//     }
+// }
+
+// Broken inference cases.
+
+export const a1 = (isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN => isNaN;
+>a1 : Symbol(a1, Decl(declarationEmitGlobalThisPreserved.ts, 9, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 9, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 9, 19))
+
+export const a2 = (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN;
+>a2 : Symbol(a2, Decl(declarationEmitGlobalThisPreserved.ts, 10, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 10, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 10, 50))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 10, 50))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 10, 19))
+
+export const a3 = (isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN => bar;
+>a3 : Symbol(a3, Decl(declarationEmitGlobalThisPreserved.ts, 11, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 11, 19))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 11, 33))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 11, 33))
+
+export const a4 = (isNaN: number): typeof globalThis.isNaN => globalThis.isNaN;
+>a4 : Symbol(a4, Decl(declarationEmitGlobalThisPreserved.ts, 12, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 12, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+
+export const aObj = {
+>aObj : Symbol(aObj, Decl(declarationEmitGlobalThisPreserved.ts, 14, 12))
+
+    a1: (isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN => isNaN,
+>a1 : Symbol(a1, Decl(declarationEmitGlobalThisPreserved.ts, 14, 21))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 15, 9))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 15, 9))
+
+    a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN,
+>a2 : Symbol(a2, Decl(declarationEmitGlobalThisPreserved.ts, 15, 75))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 16, 9))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 16, 40))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 16, 40))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 16, 9))
+
+    a3: (isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN => bar,
+>a3 : Symbol(a3, Decl(declarationEmitGlobalThisPreserved.ts, 16, 113))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 17, 9))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 17, 23))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 17, 23))
+
+    a4: (isNaN: number): typeof globalThis.isNaN => globalThis.isNaN,
+>a4 : Symbol(a4, Decl(declarationEmitGlobalThisPreserved.ts, 17, 86))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 18, 9))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+}
+
+export type a4Return = ReturnType<ReturnType<typeof a4>>;
+>a4Return : Symbol(a4Return, Decl(declarationEmitGlobalThisPreserved.ts, 19, 1))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>a4 : Symbol(a4, Decl(declarationEmitGlobalThisPreserved.ts, 12, 12))
+
+export type a4oReturn = ReturnType<ReturnType<typeof aObj['a4']>>;
+>a4oReturn : Symbol(a4oReturn, Decl(declarationEmitGlobalThisPreserved.ts, 21, 57))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>aObj : Symbol(aObj, Decl(declarationEmitGlobalThisPreserved.ts, 14, 12))
+
+export const b1 = (isNaN: typeof globalThis.isNaN) => isNaN;
+>b1 : Symbol(b1, Decl(declarationEmitGlobalThisPreserved.ts, 24, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 24, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 24, 19))
+
+export const b2 = (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN;
+>b2 : Symbol(b2, Decl(declarationEmitGlobalThisPreserved.ts, 25, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 25, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 25, 50))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 25, 50))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 25, 19))
+
+export const b3 = (isNaN: number, bar: typeof globalThis.isNaN) => bar;
+>b3 : Symbol(b3, Decl(declarationEmitGlobalThisPreserved.ts, 26, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 26, 19))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 26, 33))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 26, 33))
+
+export const b4 = (isNaN: number) => globalThis.isNaN;
+>b4 : Symbol(b4, Decl(declarationEmitGlobalThisPreserved.ts, 27, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 27, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+
+export const bObj = {
+>bObj : Symbol(bObj, Decl(declarationEmitGlobalThisPreserved.ts, 29, 12))
+
+    b1: (isNaN: typeof globalThis.isNaN) => isNaN,
+>b1 : Symbol(b1, Decl(declarationEmitGlobalThisPreserved.ts, 29, 21))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 30, 9))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 30, 9))
+
+    b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN,
+>b2 : Symbol(b2, Decl(declarationEmitGlobalThisPreserved.ts, 30, 50))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 31, 9))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 31, 40))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 31, 40))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 31, 9))
+
+    b3: (isNaN: number, bar: typeof globalThis.isNaN) => bar,
+>b3 : Symbol(b3, Decl(declarationEmitGlobalThisPreserved.ts, 31, 88))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 32, 9))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 32, 23))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 32, 23))
+
+    b4: (isNaN: number) => globalThis.isNaN,
+>b4 : Symbol(b4, Decl(declarationEmitGlobalThisPreserved.ts, 32, 61))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 33, 9))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+}
+
+export type b4Return = ReturnType<ReturnType<typeof b4>>;
+>b4Return : Symbol(b4Return, Decl(declarationEmitGlobalThisPreserved.ts, 34, 1))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>b4 : Symbol(b4, Decl(declarationEmitGlobalThisPreserved.ts, 27, 12))
+
+export type b4oReturn = ReturnType<ReturnType<typeof bObj['b4']>>;
+>b4oReturn : Symbol(b4oReturn, Decl(declarationEmitGlobalThisPreserved.ts, 36, 57))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>bObj : Symbol(bObj, Decl(declarationEmitGlobalThisPreserved.ts, 29, 12))
+
+export function c1(isNaN: typeof globalThis.isNaN) { return isNaN }
+>c1 : Symbol(c1, Decl(declarationEmitGlobalThisPreserved.ts, 37, 66))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 39, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 39, 19))
+
+export function c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN }
+>c2 : Symbol(c2, Decl(declarationEmitGlobalThisPreserved.ts, 39, 67))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 40, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 40, 50))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 40, 50))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 40, 19))
+
+export function c3(isNaN: number, bar: typeof globalThis.isNaN) { return bar }
+>c3 : Symbol(c3, Decl(declarationEmitGlobalThisPreserved.ts, 40, 105))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 41, 19))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 41, 33))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 41, 33))
+
+export function c4(isNaN: number) { return globalThis.isNaN; }
+>c4 : Symbol(c4, Decl(declarationEmitGlobalThisPreserved.ts, 41, 78))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 42, 19))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+
+export const cObj = {
+>cObj : Symbol(cObj, Decl(declarationEmitGlobalThisPreserved.ts, 44, 12))
+
+    c1(isNaN: typeof globalThis.isNaN) { return isNaN },
+>c1 : Symbol(c1, Decl(declarationEmitGlobalThisPreserved.ts, 44, 21))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 45, 7))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 45, 7))
+
+    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN },
+>c2 : Symbol(c2, Decl(declarationEmitGlobalThisPreserved.ts, 45, 56))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 46, 7))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 46, 38))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 46, 38))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 46, 7))
+
+    c3(isNaN: number, bar: typeof globalThis.isNaN) { return bar },
+>c3 : Symbol(c3, Decl(declarationEmitGlobalThisPreserved.ts, 46, 94))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 47, 7))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 47, 21))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 47, 21))
+
+    c4(isNaN: number) { return globalThis.isNaN; },
+>c4 : Symbol(c4, Decl(declarationEmitGlobalThisPreserved.ts, 47, 67))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 48, 7))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+}
+
+export type c4Return = ReturnType<ReturnType<typeof c4>>;
+>c4Return : Symbol(c4Return, Decl(declarationEmitGlobalThisPreserved.ts, 49, 1))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>c4 : Symbol(c4, Decl(declarationEmitGlobalThisPreserved.ts, 41, 78))
+
+export type c4oReturn = ReturnType<ReturnType<typeof cObj['c4']>>;
+>c4oReturn : Symbol(c4oReturn, Decl(declarationEmitGlobalThisPreserved.ts, 51, 57))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>cObj : Symbol(cObj, Decl(declarationEmitGlobalThisPreserved.ts, 44, 12))
+
+export function d1() {
+>d1 : Symbol(d1, Decl(declarationEmitGlobalThisPreserved.ts, 52, 66))
+
+    const fn = (isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN => isNaN;
+>fn : Symbol(fn, Decl(declarationEmitGlobalThisPreserved.ts, 55, 9))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 55, 16))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 55, 16))
+
+    return function() { return fn };
+>fn : Symbol(fn, Decl(declarationEmitGlobalThisPreserved.ts, 55, 9))
+}
+
+export function d2() {
+>d2 : Symbol(d2, Decl(declarationEmitGlobalThisPreserved.ts, 57, 1))
+
+    const fn = (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN;
+>fn : Symbol(fn, Decl(declarationEmitGlobalThisPreserved.ts, 60, 9))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 60, 16))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 60, 47))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 60, 47))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 60, 16))
+
+    return function() { return fn };
+>fn : Symbol(fn, Decl(declarationEmitGlobalThisPreserved.ts, 60, 9))
+}
+
+export function d3() {
+>d3 : Symbol(d3, Decl(declarationEmitGlobalThisPreserved.ts, 62, 1))
+
+    const fn = (isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN => bar;
+>fn : Symbol(fn, Decl(declarationEmitGlobalThisPreserved.ts, 65, 9))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 65, 16))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 65, 30))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 65, 30))
+
+    return function() { return fn };
+>fn : Symbol(fn, Decl(declarationEmitGlobalThisPreserved.ts, 65, 9))
+}
+
+export function d4() {
+>d4 : Symbol(d4, Decl(declarationEmitGlobalThisPreserved.ts, 67, 1))
+
+    const fn = (isNaN: number): typeof globalThis.isNaN => globalThis.isNaN;
+>fn : Symbol(fn, Decl(declarationEmitGlobalThisPreserved.ts, 70, 9))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 70, 16))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+
+    return function() { return fn };
+>fn : Symbol(fn, Decl(declarationEmitGlobalThisPreserved.ts, 70, 9))
+}
+
+export type d4Return = ReturnType<ReturnType<ReturnType<ReturnType<typeof d4>>>>;
+>d4Return : Symbol(d4Return, Decl(declarationEmitGlobalThisPreserved.ts, 72, 1))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>d4 : Symbol(d4, Decl(declarationEmitGlobalThisPreserved.ts, 67, 1))
+
+export class A {
+>A : Symbol(A, Decl(declarationEmitGlobalThisPreserved.ts, 74, 81))
+
+    method1(isNaN: typeof globalThis.isNaN) { return isNaN }
+>method1 : Symbol(A.method1, Decl(declarationEmitGlobalThisPreserved.ts, 76, 16))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 77, 12))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 77, 12))
+
+    method2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN }
+>method2 : Symbol(A.method2, Decl(declarationEmitGlobalThisPreserved.ts, 77, 60))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 78, 12))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 78, 43))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 78, 43))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 78, 12))
+
+    method3(isNaN: number, bar: typeof globalThis.isNaN) { return bar }
+>method3 : Symbol(A.method3, Decl(declarationEmitGlobalThisPreserved.ts, 78, 98))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 79, 12))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 79, 26))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 79, 26))
+
+    method4(isNaN: number) { return globalThis.isNaN; }
+>method4 : Symbol(A.method4, Decl(declarationEmitGlobalThisPreserved.ts, 79, 71))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 80, 12))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+}
+
+export function fromParameter(isNaN: number, bar: typeof globalThis.isNaN) {
+>fromParameter : Symbol(fromParameter, Decl(declarationEmitGlobalThisPreserved.ts, 81, 1))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 83, 30))
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 83, 44))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+
+    return function() { return { bar } };
+>bar : Symbol(bar, Decl(declarationEmitGlobalThisPreserved.ts, 84, 32))
+}
+
+// Non-inference cases.
+
+export const explicitlyTypedVariable: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN = (isNaN) => isNaN;
+>explicitlyTypedVariable : Symbol(explicitlyTypedVariable, Decl(declarationEmitGlobalThisPreserved.ts, 89, 12))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 89, 39))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 89, 101))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 89, 101))
+
+export function explicitlyTypedFunction(isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN {
+>explicitlyTypedFunction : Symbol(explicitlyTypedFunction, Decl(declarationEmitGlobalThisPreserved.ts, 89, 117))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 91, 40))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+
+    return isNaN;
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 91, 40))
+
+};
+
+export type AsObjectProperty = {
+>AsObjectProperty : Symbol(AsObjectProperty, Decl(declarationEmitGlobalThisPreserved.ts, 93, 2))
+
+    isNaN: typeof globalThis.isNaN;
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 95, 32))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+}
+
+export class AsClassProperty {
+>AsClassProperty : Symbol(AsClassProperty, Decl(declarationEmitGlobalThisPreserved.ts, 97, 1))
+
+    isNaN?: typeof globalThis.isNaN;
+>isNaN : Symbol(AsClassProperty.isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 99, 30))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+}
+
+export type AsFunctionType = (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+>AsFunctionType : Symbol(AsFunctionType, Decl(declarationEmitGlobalThisPreserved.ts, 101, 1))
+>isNaN : Symbol(isNaN, Decl(declarationEmitGlobalThisPreserved.ts, 103, 30))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis.isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+
+

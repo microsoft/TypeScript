@@ -1,27 +1,39 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImportsWithUnderscores2.ts] ////
+
+=== m1.ts ===
 var R: any
 >R : any
 
 export default R = {
 >R = {    "__esmodule": true,    "__proto__": {}} : { __esmodule: boolean; __proto__: {}; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >R : any
 >{    "__esmodule": true,    "__proto__": {}} : { __esmodule: boolean; __proto__: {}; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "__esmodule": true,
 >"__esmodule" : boolean
+>             : ^^^^^^^
 >true : true
+>     : ^^^^
 
     "__proto__": {}
 >"__proto__" : {}
+>            : ^^
 >{} : {}
+>   : ^^
 }
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import R from "./m1";
 >R : { __esmodule: boolean; __proto__: {}; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { __esmodule, __proto__ } = R;
 >__esmodule : boolean
+>           : ^^^^^^^
 >__proto__ : {}
+>          : ^^
 >R : { __esmodule: boolean; __proto__: {}; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface Foo { }
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Foo|] {
+/////*1*/module /*2*/Foo {
 ////    export interface Bar { }
 ////    export module Bar { export interface Baz { } }
 ////    export function Bar() { }
-////}|]
+////}
 ////
 ////// module
-////import a1 = [|Foo|];
+////import a1 = /*3*/Foo;
 
-verify.singleReferenceGroup("namespace Foo", "Foo");
+verify.baselineFindAllReferences('1', '2', '3');

@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts(12,20): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts(12,22): error TS1442: Expected '=' for property initializer.
+parserErrorRecovery_IncompleteMemberVariable2.ts(12,20): error TS2304: Cannot find name 'C'.
+parserErrorRecovery_IncompleteMemberVariable2.ts(12,22): error TS1442: Expected '=' for property initializer.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts (2 errors) ====
+==== parserErrorRecovery_IncompleteMemberVariable2.ts (2 errors) ====
     // Interface
     interface IPoint {
         getDist(): number;

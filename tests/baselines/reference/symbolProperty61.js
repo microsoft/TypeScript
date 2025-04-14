@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty61.ts] ////
+
 //// [symbolProperty61.ts]
 declare global {
   interface SymbolConstructor {

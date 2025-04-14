@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadChildren.tsx] ////
+
 //// [tsxSpreadChildren.tsx]
 declare module JSX {
 	interface Element { }

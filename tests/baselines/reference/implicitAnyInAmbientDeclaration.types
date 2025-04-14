@@ -1,25 +1,36 @@
-=== tests/cases/compiler/implicitAnyInAmbientDeclaration.ts ===
+//// [tests/cases/compiler/implicitAnyInAmbientDeclaration.ts] ////
+
+=== implicitAnyInAmbientDeclaration.ts ===
 module Test {
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 
     declare class C {
 >C : C
+>  : ^
 
         public publicMember;  // this should be an error
 >publicMember : any
+>             : ^^^
 
         private privateMember;  // this should not be an error
 >privateMember : any
+>              : ^^^
 
         public publicFunction(x);  // this should be an error
 >publicFunction : (x: any) => any
+>               : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
         private privateFunction(privateParam);  // this should not be an error
 >privateFunction : (privateParam: any) => any
+>                : ^            ^^^^^^^^^^^^^
 >privateParam : any
+>             : ^^^
 
         private constructor(privateParam);
 >privateParam : any
+>             : ^^^
     }
 }

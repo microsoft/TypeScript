@@ -1,7 +1,7 @@
-tests/cases/compiler/ClassDeclaration22.ts(3,5): error TS2389: Function implementation name must be '"foo"'.
+ClassDeclaration22.ts(3,5): error TS2389: Function implementation name must be '"foo"'.
 
 
-==== tests/cases/compiler/ClassDeclaration22.ts (1 errors) ====
+==== ClassDeclaration22.ts (1 errors) ====
     class C {
         "foo"();
         "bar"() { }

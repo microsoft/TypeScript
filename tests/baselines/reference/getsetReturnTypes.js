@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getsetReturnTypes.ts] ////
+
 //// [getsetReturnTypes.ts]
 function makePoint(x: number) { 
  return { 

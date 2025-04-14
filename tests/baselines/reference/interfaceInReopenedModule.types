@@ -1,17 +1,22 @@
-=== tests/cases/compiler/interfaceInReopenedModule.ts ===
+//// [tests/cases/compiler/interfaceInReopenedModule.ts] ////
+
+=== interfaceInReopenedModule.ts ===
 module m {
 }
 
 // In second instance of same module, exported interface is not visible
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     interface f {}
     export class n { 
 >n : n
+>  : ^
 
         private n: f;
 >n : f
+>  : ^
     }
 }
 

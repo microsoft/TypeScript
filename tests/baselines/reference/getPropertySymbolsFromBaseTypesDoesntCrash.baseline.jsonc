@@ -1,0 +1,5 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class ClassA implements IInterface {
+//     <|private /*HIGHLIGHTS*/[|{| kind: "reference" |}value|]: number;|>
+// }

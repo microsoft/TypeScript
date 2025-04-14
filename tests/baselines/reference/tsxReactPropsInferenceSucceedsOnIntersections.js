@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxReactPropsInferenceSucceedsOnIntersections.tsx] ////
+
 //// [tsxReactPropsInferenceSucceedsOnIntersections.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -33,6 +35,6 @@ var __assign = (this && this.__assign) || function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
-var CustomButton = function (props) { return react_1["default"].createElement(Button, __assign({}, props)); };
+var CustomButton = function (props) { return react_1.default.createElement(Button, __assign({}, props)); };

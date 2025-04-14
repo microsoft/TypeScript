@@ -1,0 +1,14 @@
+/foo.js(1,33): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+/foo.js(1,33): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/foo.js(1,38): error TS1005: '{' expected.
+
+
+==== /foo.js (3 errors) ====
+    /** @import * as f from "./foo" with */
+                                    ~~~~
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+                                    ~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+                                         
+!!! error TS1005: '{' expected.
+    

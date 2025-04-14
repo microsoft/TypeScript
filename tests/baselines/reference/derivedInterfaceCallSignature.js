@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/derivedInterfaceCallSignature.ts] ////
+
 //// [derivedInterfaceCallSignature.ts]
 interface D3SvgPath {
     (data: any, index?: number): string;

@@ -1,5 +1,7 @@
-=== tests/cases/compiler/continueTarget6.ts ===
+//// [tests/cases/compiler/continueTarget6.ts] ////
+
+=== continueTarget6.ts ===
+
 while (true) {
-No type information for this code.  continue target;
-No type information for this code.}
-No type information for this code.
+  continue target;
+}

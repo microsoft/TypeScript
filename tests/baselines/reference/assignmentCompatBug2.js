@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatBug2.ts] ////
+
 //// [assignmentCompatBug2.ts]
 var b2: { b: number;} = { a: 0 }; // error
 
@@ -46,26 +48,26 @@ var b3;
 b3 = {
     f: function (n) { return 0; },
     g: function (s) { return 0; },
-    m: 0
+    m: 0,
 }; // ok
 b3 = {
     f: function (n) { return 0; },
-    g: function (s) { return 0; }
+    g: function (s) { return 0; },
 }; // error
 b3 = {
     f: function (n) { return 0; },
-    m: 0
+    m: 0,
 }; // error
 b3 = {
     f: function (n) { return 0; },
     g: function (s) { return 0; },
     m: 0,
     n: 0,
-    k: function (a) { return null; }
+    k: function (a) { return null; },
 }; // ok
 b3 = {
     f: function (n) { return 0; },
     g: function (s) { return 0; },
     n: 0,
-    k: function (a) { return null; }
+    k: function (a) { return null; },
 }; // error

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/incompleteObjectLiteral1.ts ===
+//// [tests/cases/compiler/incompleteObjectLiteral1.ts] ////
+
+=== incompleteObjectLiteral1.ts ===
 var tt = { aa; }
 >tt : Symbol(tt, Decl(incompleteObjectLiteral1.ts, 0, 3))
 >aa : Symbol(aa, Decl(incompleteObjectLiteral1.ts, 0, 10))

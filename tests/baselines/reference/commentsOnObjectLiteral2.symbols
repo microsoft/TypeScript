@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsOnObjectLiteral2.ts ===
+//// [tests/cases/compiler/commentsOnObjectLiteral2.ts] ////
+
+=== commentsOnObjectLiteral2.ts ===
 var Person = makeClass( 
 >Person : Symbol(Person, Decl(commentsOnObjectLiteral2.ts, 0, 3))
    { 

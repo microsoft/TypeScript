@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intTypeCheck.ts] ////
+
 //// [intTypeCheck.ts]
 interface i1 {
     //Property Signatures

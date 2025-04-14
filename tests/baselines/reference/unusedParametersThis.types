@@ -1,92 +1,141 @@
-=== tests/cases/compiler/unusedParametersThis.ts ===
+//// [tests/cases/compiler/unusedParametersThis.ts] ////
+
+=== unusedParametersThis.ts ===
 class A {
 >A : A
+>  : ^
 
     public a: number;
 >a : number
+>  : ^^^^^^
 
     public method(this: this): number {
 >method : (this: this) => number
+>       : ^    ^^    ^^^^^      
 >this : this
+>     : ^^^^
 
         return this.a;
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
     }
 
     public method2(this: A): number {
 >method2 : (this: A) => number
+>        : ^    ^^ ^^^^^      
 >this : A
+>     : ^
 
         return this.a;
 >this.a : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >a : number
+>  : ^^^^^^
     }
 
     public method3(this: this): number {
 >method3 : (this: this) => number
+>        : ^    ^^    ^^^^^      
 >this : this
+>     : ^^^^
 
         var fn = () => this.a;
 >fn : () => number
+>   : ^^^^^^^^^^^^
 >() => this.a : () => number
+>             : ^^^^^^^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 
         return fn();
 >fn() : number
+>     : ^^^^^^
 >fn : () => number
+>   : ^^^^^^^^^^^^
     }
 
     public method4(this: A): number {
 >method4 : (this: A) => number
+>        : ^    ^^ ^^^^^      
 >this : A
+>     : ^
 
         var fn = () => this.a;
 >fn : () => number
+>   : ^^^^^^^^^^^^
 >() => this.a : () => number
+>             : ^^^^^^^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >a : number
+>  : ^^^^^^
 
         return fn();
 >fn() : number
+>     : ^^^^^^
 >fn : () => number
+>   : ^^^^^^^^^^^^
     }
 
     static staticMethod(this: A): number {
 >staticMethod : (this: A) => number
+>             : ^    ^^ ^^^^^      
 >this : A
+>     : ^
 
         return this.a;
 >this.a : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >a : number
+>  : ^^^^^^
     }
 }
 
 function f(this: A): number {
 >f : (this: A) => number
+>  : ^    ^^ ^^^^^      
 >this : A
+>     : ^
 
     return this.a
 >this.a : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >a : number
+>  : ^^^^^^
 }
 
 var f2 = function f2(this: A): number {
 >f2 : (this: A) => number
+>   : ^    ^^ ^^^^^      
 >function f2(this: A): number {    return this.a;} : (this: A) => number
+>                                                  : ^    ^^ ^^^^^      
 >f2 : (this: A) => number
+>   : ^    ^^ ^^^^^      
 >this : A
+>     : ^
 
     return this.a;
 >this.a : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >a : number
+>  : ^^^^^^
 
 };

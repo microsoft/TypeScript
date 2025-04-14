@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors.ts] ////
+
 //// [plainJSGrammarErrors.js]
 class C {
     // #private mistakes
@@ -228,8 +230,8 @@ class C {
         return null;
     }
     // modifier mistakes
-    static constructor() { }
-    async constructor() { }
+    constructor() { }
+    constructor() { }
     x = 1;
     y() {
         return 12;

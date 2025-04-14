@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerModExport1.ts] ////
+
 //// [innerModExport1.ts]
 module Outer {
 

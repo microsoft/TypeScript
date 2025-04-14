@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/everyTypeWithInitializer.ts] ////
+
 //// [everyTypeWithInitializer.ts]
 interface I {
     id: number;

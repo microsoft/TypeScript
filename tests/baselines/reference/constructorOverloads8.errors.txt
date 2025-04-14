@@ -1,14 +1,14 @@
-tests/cases/compiler/constructorOverloads8.ts(2,5): error TS2392: Multiple constructor implementations are not allowed.
-tests/cases/compiler/constructorOverloads8.ts(3,5): error TS2392: Multiple constructor implementations are not allowed.
+constructorOverloads8.ts(2,5): error TS2392: Multiple constructor implementations are not allowed.
+constructorOverloads8.ts(3,5): error TS2392: Multiple constructor implementations are not allowed.
 
 
-==== tests/cases/compiler/constructorOverloads8.ts (2 errors) ====
+==== constructorOverloads8.ts (2 errors) ====
     class C {
         constructor(x) { }
-        ~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
         constructor(y, x) { } // illegal, 2 constructor implementations
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
     }
     

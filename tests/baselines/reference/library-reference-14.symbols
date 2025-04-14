@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/references/library-reference-14.ts] ////
+
 === /a/b/consumer.ts ===
 $.foo();
 >$.foo : Symbol(foo, Decl(index.d.ts, 0, 16))

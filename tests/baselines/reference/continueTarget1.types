@@ -1,7 +1,11 @@
-=== tests/cases/compiler/continueTarget1.ts ===
+//// [tests/cases/compiler/continueTarget1.ts] ////
+
+=== continueTarget1.ts ===
 target:
 >target : any
+>       : ^^^
 
   continue target;
 >target : any
+>       : ^^^
 

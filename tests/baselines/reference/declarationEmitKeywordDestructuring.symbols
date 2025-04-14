@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/declarationEmitKeywordDestructuring.ts] ////
+
+=== declarationEmitKeywordDestructuring.ts ===
+type P = {
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    enum: boolean;
+>enum : Symbol(enum, Decl(declarationEmitKeywordDestructuring.ts, 0, 10))
+
+    function: boolean;
+>function : Symbol(function, Decl(declarationEmitKeywordDestructuring.ts, 1, 18))
+
+    abstract: boolean;
+>abstract : Symbol(abstract, Decl(declarationEmitKeywordDestructuring.ts, 2, 22))
+
+    async: boolean;
+>async : Symbol(async, Decl(declarationEmitKeywordDestructuring.ts, 3, 22))
+
+    await: boolean;
+>await : Symbol(await, Decl(declarationEmitKeywordDestructuring.ts, 4, 19))
+
+    one: boolean;
+>one : Symbol(one, Decl(declarationEmitKeywordDestructuring.ts, 5, 19))
+
+};
+
+function f1({ enum: _enum, ...rest }: P) {
+>f1 : Symbol(f1, Decl(declarationEmitKeywordDestructuring.ts, 7, 2))
+>enum : Symbol(enum, Decl(declarationEmitKeywordDestructuring.ts, 0, 10))
+>_enum : Symbol(_enum, Decl(declarationEmitKeywordDestructuring.ts, 9, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 9, 26))
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    return rest;
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 9, 26))
+}
+
+function f2({ function: _function, ...rest }: P) {
+>f2 : Symbol(f2, Decl(declarationEmitKeywordDestructuring.ts, 11, 1))
+>function : Symbol(function, Decl(declarationEmitKeywordDestructuring.ts, 1, 18))
+>_function : Symbol(_function, Decl(declarationEmitKeywordDestructuring.ts, 13, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 13, 34))
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    return rest;
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 13, 34))
+}
+
+function f3({ abstract: _abstract, ...rest }: P) {
+>f3 : Symbol(f3, Decl(declarationEmitKeywordDestructuring.ts, 15, 1))
+>abstract : Symbol(abstract, Decl(declarationEmitKeywordDestructuring.ts, 2, 22))
+>_abstract : Symbol(_abstract, Decl(declarationEmitKeywordDestructuring.ts, 17, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 17, 34))
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    return rest;
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 17, 34))
+}
+
+function f4({ async: _async, ...rest }: P) {
+>f4 : Symbol(f4, Decl(declarationEmitKeywordDestructuring.ts, 19, 1))
+>async : Symbol(async, Decl(declarationEmitKeywordDestructuring.ts, 3, 22))
+>_async : Symbol(_async, Decl(declarationEmitKeywordDestructuring.ts, 21, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 21, 28))
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    return rest;
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 21, 28))
+}
+
+function f5({ await: _await, ...rest }: P) {
+>f5 : Symbol(f5, Decl(declarationEmitKeywordDestructuring.ts, 23, 1))
+>await : Symbol(await, Decl(declarationEmitKeywordDestructuring.ts, 4, 19))
+>_await : Symbol(_await, Decl(declarationEmitKeywordDestructuring.ts, 25, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 25, 28))
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    return rest;
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 25, 28))
+}
+

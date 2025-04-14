@@ -1,4 +1,6 @@
-=== tests/cases/compiler/returnTypeParameterWithModules.ts ===
+//// [tests/cases/compiler/returnTypeParameterWithModules.ts] ////
+
+=== returnTypeParameterWithModules.ts ===
 module M1 {
 >M1 : Symbol(M1, Decl(returnTypeParameterWithModules.ts, 0, 0))
 

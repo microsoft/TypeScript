@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringMultiline1_ES6.ts] ////
+
 //// [templateStringMultiline1_ES6.ts]
 // newlines are <CR><LF>
 `

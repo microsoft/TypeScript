@@ -1,63 +1,95 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts] ////
+
+=== genericCallWithObjectTypeArgsAndConstraints5.ts ===
 // Generic call with constraints infering type parameter from object member properties
 
 class C {
 >C : C
+>  : ^
 
     x: string;
 >x : string
+>  : ^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     x: string;
 >x : string
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 }
 
 function foo<T, U extends T>(t: T, t2: U) {
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >t : T
+>  : ^
 >t2 : U
+>   : ^
 
     return (x: T) => t2;
 >(x: T) => t2 : (x: T) => U
+>             : ^ ^^ ^^^^^^
 >x : T
+>  : ^
 >t2 : U
+>   : ^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var d: D;
 >d : D
+>  : ^
 
 var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
 >r2 : (x: D) => D
+>   : ^ ^^^^^^^^^
 >foo(d, c) : (x: D) => D
+>          : ^ ^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >d : D
+>  : ^
 >c : C
+>  : ^
 
 var r9 = foo(() => 1, () => { }); // the constraints are self-referencing, no downstream error
 >r9 : (x: () => number) => () => number
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(() => 1, () => { }) : (x: () => number) => () => number
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >() => 1 : () => number
+>        : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 function other<T, U extends T>() {
 >other : <T, U extends T>() => void
+>      : ^ ^^ ^^^^^^^^^ ^^^^^^^^^^^
 
     var r5 = foo<T, U>(c, d); // error
 >r5 : (x: T) => U
+>   : ^ ^^^^^^^^^
 >foo<T, U>(c, d) : (x: T) => U
->foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>                : ^ ^^^^^^^^^
+>foo : <T_1, U_1 extends T_1>(t: T_1, t2: U_1) => (x: T_1) => U_1
+>    : ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^  ^^   ^^^^^^      ^^^^^^^^
 >c : C
+>  : ^
 >d : D
+>  : ^
 }
 

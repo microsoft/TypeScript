@@ -1,36 +1,60 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType1_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType1_ES5.ts] ////
+
+=== computedPropertyNamesContextualType1_ES5.ts ===
 interface I {
     [s: string]: (x: string) => number;
 >s : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
     [s: number]: (x: any) => number; // Doesn't get hit
 >s : number
+>  : ^^^^^^
 >x : any
 }
 
 var o: I = {
 >o : I
+>  : ^
 >{    ["" + 0](y) { return y.length; },    ["" + 1]: y => y.length} : { [x: string]: (y: string) => number; }
+>                                                                   : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     ["" + 0](y) { return y.length; },
 >["" + 0] : (y: string) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >"" + 0 : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 >y : string
+>  : ^^^^^^
 >y.length : number
+>         : ^^^^^^
 >y : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     ["" + 1]: y => y.length
 >["" + 1] : (y: string) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >"" + 1 : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >1 : 1
+>  : ^
 >y => y.length : (y: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >y.length : number
+>         : ^^^^^^
 >y : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 }

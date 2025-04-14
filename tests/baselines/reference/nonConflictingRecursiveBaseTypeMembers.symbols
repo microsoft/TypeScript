@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonConflictingRecursiveBaseTypeMembers.ts ===
+//// [tests/cases/compiler/nonConflictingRecursiveBaseTypeMembers.ts] ////
+
+=== nonConflictingRecursiveBaseTypeMembers.ts ===
 interface A<T> {
 >A : Symbol(A, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 0))
 >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 12))

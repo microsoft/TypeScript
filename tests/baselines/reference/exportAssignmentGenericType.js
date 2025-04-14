@@ -22,7 +22,7 @@ var Foo = /** @class */ (function () {
 module.exports = Foo;
 //// [foo_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = require("./foo_0");
 var x = new foo();
 var y = x.test;

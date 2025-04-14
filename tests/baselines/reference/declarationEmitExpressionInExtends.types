@@ -1,6 +1,9 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionInExtends.ts] ////
+
+=== declarationEmitExpressionInExtends.ts ===
 var x: {
 >x : new <T>(s: any) => Q
+>  : ^^^^^ ^^ ^^   ^^^^^ 
 
     new<T>(s: any): Q;
 >s : any
@@ -8,21 +11,29 @@ var x: {
 
 class Q {
 >Q : Q
+>  : ^
 
     s: string;    
 >s : string
+>  : ^^^^^^
 }
 
 class B extends x<string> {    
 >B : B
+>  : ^
 >x : Q
+>  : ^
 }
 
 var q: B;
 >q : B
+>  : ^
 
 q.s;
 >q.s : string
+>    : ^^^^^^
 >q : B
+>  : ^
 >s : string
+>  : ^^^^^^
 

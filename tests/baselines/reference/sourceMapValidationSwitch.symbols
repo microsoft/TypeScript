@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationSwitch.ts ===
+//// [tests/cases/compiler/sourceMapValidationSwitch.ts] ////
+
+=== sourceMapValidationSwitch.ts ===
 var x = 10;
 >x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 

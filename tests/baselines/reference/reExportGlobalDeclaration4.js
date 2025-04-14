@@ -17,5 +17,5 @@ export {Cls2 as CCCls2};
 
 //// [file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.CCCls2 = exports.CCCls1 = exports.CCls2 = exports.Cls2 = exports.CCls1 = exports.Cls1 = void 0;

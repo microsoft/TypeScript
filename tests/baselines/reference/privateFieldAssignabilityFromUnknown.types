@@ -1,13 +1,20 @@
-=== tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts ===
+//// [tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts] ////
+
+=== privateFieldAssignabilityFromUnknown.ts ===
 export class Class {
 >Class : Class
+>      : ^^^^^
 
   #field: any
 >#field : any
+>       : ^^^
 }
 
 const task: Class = {} as unknown;
 >task : Class
+>     : ^^^^^
 >{} as unknown : unknown
+>              : ^^^^^^^
 >{} : {}
+>   : ^^
 

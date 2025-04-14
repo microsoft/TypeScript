@@ -1,0 +1,144 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// t /*HIGHLIGHTS*/ry {
+//     try {
+//     }
+//     ctch (x) {
+// --- (line: 5) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// t ry {
+//     [|{| kind: "none" |}t/*HIGHLIGHTS*/ry|] {
+//     }
+//     ctch (x) {
+//     }
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// --- (line: 5) skipped ---
+// 
+//     tr {
+//     }
+//     [|{| kind: "none" |}fin/*HIGHLIGHTS*/ally|] {
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// --- (line: 8) skipped ---
+//     finally {
+//     }
+// }
+// [|{| kind: "none" |}c/*HIGHLIGHTS*/atch|] (e) {
+// }
+// [|{| kind: "none" |}finally|] {
+// }
+// 
+// // Missing catch variable
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// --- (line: 8) skipped ---
+//     finally {
+//     }
+// }
+// [|{| kind: "none" |}catch|] (e) {
+// }
+// [|{| kind: "none" |}f/*HIGHLIGHTS*/inally|] {
+// }
+// 
+// // Missing catch variable
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// --- (line: 14) skipped ---
+// }
+// 
+// // Missing catch variable
+// [|{| kind: "none" |}t/*HIGHLIGHTS*/ry|] {
+// }
+// [|{| kind: "none" |}catch|] {
+// }
+// [|{| kind: "none" |}finally|] {
+// }
+// 
+// // Missing try entirely
+// --- (line: 26) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// --- (line: 14) skipped ---
+// }
+// 
+// // Missing catch variable
+// [|{| kind: "none" |}try|] {
+// }
+// [|{| kind: "none" |}catc/*HIGHLIGHTS*/h|] {
+// }
+// [|{| kind: "none" |}finally|] {
+// }
+// 
+// // Missing try entirely
+// --- (line: 26) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// --- (line: 14) skipped ---
+// }
+// 
+// // Missing catch variable
+// [|{| kind: "none" |}try|] {
+// }
+// [|{| kind: "none" |}catch|] {
+// }
+// /*HIGHLIGHTS*/[|{| kind: "none" |}finally|] {
+// }
+// 
+// // Missing try entirely
+// --- (line: 26) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// --- (line: 22) skipped ---
+// }
+// 
+// // Missing try entirely
+// [|{| kind: "none" |}cat/*HIGHLIGHTS*/ch|] (x) {
+// }
+// [|{| kind: "none" |}finally|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
+// --- (line: 22) skipped ---
+// }
+// 
+// // Missing try entirely
+// [|{| kind: "none" |}catch|] (x) {
+// }
+// [|{| kind: "none" |}final/*HIGHLIGHTS*/ly|] {
+// }

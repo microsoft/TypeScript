@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/genericTypeAliases.ts ===
+//// [tests/cases/conformance/types/typeAliases/genericTypeAliases.ts] ////
+
+=== genericTypeAliases.ts ===
 type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
 >Tree : Symbol(Tree, Decl(genericTypeAliases.ts, 0, 0))
 >T : Symbol(T, Decl(genericTypeAliases.ts, 0, 10))

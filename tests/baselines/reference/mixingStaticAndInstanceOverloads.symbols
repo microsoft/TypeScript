@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mixingStaticAndInstanceOverloads.ts ===
+//// [tests/cases/compiler/mixingStaticAndInstanceOverloads.ts] ////
+
+=== mixingStaticAndInstanceOverloads.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(mixingStaticAndInstanceOverloads.ts, 0, 0))
 

@@ -85,7 +85,7 @@ function x(a) {
 module.exports = x;
 //// [consumer.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var iString = require("./expString");
 var v1 = iString;
 var iNumber = require("./expNumber");

@@ -1,0 +1,377 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+// /*FIND ALL REFS*/<|function [|{| isDefinition: true |}foo|](x: string);|>
+// <|function [|{| isWriteAccess: true, isDefinition: true |}foo|](x: string, y: number) {
+//     [|foo|]('', 43);
+// }|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+  // /*FIND ALL REFS*/<|function [|foo|](x: string);|>
+  // function foo(x: string, y: number) {
+  //     foo('', 43);
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function foo(x: string): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+// <|function /*FIND ALL REFS*/[|{| isDefinition: true |}foo|](x: string);|>
+// <|function [|{| isWriteAccess: true, isDefinition: true |}foo|](x: string, y: number) {
+//     [|foo|]('', 43);
+// }|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+  // <|function /*FIND ALL REFS*/[|foo|](x: string);|>
+  // function foo(x: string, y: number) {
+  //     foo('', 43);
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function foo(x: string): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+// <|function [|{| isDefinition: true |}foo|](x: string);|>
+// /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}foo|](x: string, y: number) {
+//     [|foo|]('', 43);
+// }|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+  // <|function [|foo|](x: string);|>
+  // /*FIND ALL REFS*/function foo(x: string, y: number) {
+  //     foo('', 43);
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function foo(x: string): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+// <|function [|{| isDefinition: true |}foo|](x: string);|>
+// <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|](x: string, y: number) {
+//     [|foo|]('', 43);
+// }|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+  // <|function [|foo|](x: string);|>
+  // function /*FIND ALL REFS*/foo(x: string, y: number) {
+  //     foo('', 43);
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function foo(x: string): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+// <|function [|foo|](x: string);|>
+// <|function [|{| isWriteAccess: true |}foo|](x: string, y: number) {
+//     /*FIND ALL REFS*/[|foo|]('', 43);
+// }|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForFunctionOverloads.ts ===
+  // <|function [|foo|](x: string);|>
+  // function foo(x: string, y: number) {
+  //     /*FIND ALL REFS*/foo('', 43);
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function foo(x: string): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

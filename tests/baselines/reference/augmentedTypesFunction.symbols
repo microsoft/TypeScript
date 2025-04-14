@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesFunction.ts ===
+//// [tests/cases/compiler/augmentedTypesFunction.ts] ////
+
+=== augmentedTypesFunction.ts ===
 // function then var
 function y1() { } // error
 >y1 : Symbol(y1, Decl(augmentedTypesFunction.ts, 0, 0))

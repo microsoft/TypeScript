@@ -1,11 +1,16 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type 'new (x: number) => number' is not assignable to type 'new () => number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(17,5): error TS2322: Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(19,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(27,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type 'new (x: number) => number' is not assignable to type 'new () => number'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(17,5): error TS2322: Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(19,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
+  Target signature provides too few arguments. Expected 2 or more, but got 0.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(27,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts (5 errors) ====
+==== assignmentCompatWithConstructSignaturesWithOptionalParameters.ts (5 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
     interface Base { 
@@ -24,13 +29,16 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         a = b.a3; // error
         ~
 !!! error TS2322: Type 'new (x: number) => number' is not assignable to type 'new () => number'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
         a = b.a4; // error
         ~
 !!! error TS2322: Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
         a = b.a5; // ok
         a = b.a6; // error
         ~
 !!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 0.
     
     var a2: new (x?: number) => number; 
         a2 = b.a; // ok
@@ -41,6 +49,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         a2 = b.a6; // error
         ~~
 !!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
     var a3: new (x: number) => number; 
         a3 = b.a; // ok
@@ -51,6 +60,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         a3 = b.a6; // error
         ~~
 !!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
     var a4: new (x: number, y?: number) => number;
         a4 = b.a; // ok

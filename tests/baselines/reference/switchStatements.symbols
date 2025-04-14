@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/switchStatements/switchStatements.ts ===
+//// [tests/cases/conformance/statements/switchStatements/switchStatements.ts] ////
+
+=== switchStatements.ts ===
 module M {
 >M : Symbol(M, Decl(switchStatements.ts, 0, 0))
 

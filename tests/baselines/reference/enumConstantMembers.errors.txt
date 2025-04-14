@@ -1,13 +1,13 @@
-tests/cases/conformance/enums/enumConstantMembers.ts(32,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-tests/cases/conformance/enums/enumConstantMembers.ts(33,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-tests/cases/conformance/enums/enumConstantMembers.ts(34,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-tests/cases/conformance/enums/enumConstantMembers.ts(35,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
-tests/cases/conformance/enums/enumConstantMembers.ts(36,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
-tests/cases/conformance/enums/enumConstantMembers.ts(37,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-tests/cases/conformance/enums/enumConstantMembers.ts(38,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+enumConstantMembers.ts(32,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+enumConstantMembers.ts(33,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+enumConstantMembers.ts(34,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+enumConstantMembers.ts(35,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
+enumConstantMembers.ts(36,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
+enumConstantMembers.ts(37,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+enumConstantMembers.ts(38,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 
 
-==== tests/cases/conformance/enums/enumConstantMembers.ts (7 errors) ====
+==== enumConstantMembers.ts (7 errors) ====
     // Constant members allow negatives, but not decimals. Also hex literals are allowed
     enum E1 {
         a = 1,

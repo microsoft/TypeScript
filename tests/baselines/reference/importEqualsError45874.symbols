@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importEqualsError45874.ts] ////
+
 === /globals.ts ===
 namespace globals {
 >globals : Symbol(globals, Decl(globals.ts, 0, 0))

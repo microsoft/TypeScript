@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/usage.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment24.ts] ////
+
+=== usage.js ===
 // note that usage is first in the compilation
 Outer.Inner.Message = function() {
 >Outer.Inner.Message : Symbol(Outer.Inner.Message, Decl(usage.js, 0, 0))
@@ -29,7 +31,7 @@ x.name
 >x : Symbol(x, Decl(usage.js, 7, 3))
 >name : Symbol(Inner.name, Decl(def.js, 1, 21))
 
-=== tests/cases/conformance/salsa/def.js ===
+=== def.js ===
 var Outer = {}
 >Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayLiteralTypeInference.ts ===
+//// [tests/cases/compiler/arrayLiteralTypeInference.ts] ////
+
+=== arrayLiteralTypeInference.ts ===
 class Action {
 >Action : Symbol(Action, Decl(arrayLiteralTypeInference.ts, 0, 0))
 

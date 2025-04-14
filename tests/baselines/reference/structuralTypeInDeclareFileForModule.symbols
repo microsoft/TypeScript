@@ -1,4 +1,6 @@
-=== tests/cases/compiler/structuralTypeInDeclareFileForModule.ts ===
+//// [tests/cases/compiler/structuralTypeInDeclareFileForModule.ts] ////
+
+=== structuralTypeInDeclareFileForModule.ts ===
 module M { export var x; }
 >M : Symbol(M, Decl(structuralTypeInDeclareFileForModule.ts, 0, 0))
 >x : Symbol(x, Decl(structuralTypeInDeclareFileForModule.ts, 0, 21))

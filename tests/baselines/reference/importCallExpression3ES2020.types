@@ -1,37 +1,59 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpression3ES2020.ts] ////
+
+=== 0.ts ===
 export class B {
 >B : B
+>  : ^
 
     print() { return "I am B"}
 >print : () => string
+>      : ^^^^^^^^^^^^
 >"I am B" : "I am B"
+>         : ^^^^^^^^
 }
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 async function foo() {
 >foo : () => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^
 
     class C extends (await import("./0")).B {}
 >C : C
->(await import("./0")).B : import("tests/cases/conformance/dynamicImport/0").B
->(await import("./0")) : typeof import("tests/cases/conformance/dynamicImport/0")
->await import("./0") : typeof import("tests/cases/conformance/dynamicImport/0")
->import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>  : ^
+>(await import("./0")).B : import("0").B
+>                        : ^^^^^^^^^^^^^
+>(await import("./0")) : typeof import("0")
+>                      : ^^^^^^^^^^^^^^^^^^
+>await import("./0") : typeof import("0")
+>                    : ^^^^^^^^^^^^^^^^^^
+>import("./0") : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"
->B : typeof import("tests/cases/conformance/dynamicImport/0").B
+>      : ^^^^^
+>B : typeof import("0").B
+>  : ^^^^^^^^^^^^^^^^^^^^
 
     var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
     c.print();
 >c.print() : string
+>          : ^^^^^^
 >c.print : () => string
+>        : ^^^^^^^^^^^^
 >c : C
+>  : ^
 >print : () => string
+>      : ^^^^^^^^^^^^
 }
 foo();
 >foo() : Promise<void>
+>      : ^^^^^^^^^^^^^
 >foo : () => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^
 

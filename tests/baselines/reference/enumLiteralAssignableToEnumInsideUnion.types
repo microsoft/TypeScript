@@ -1,120 +1,197 @@
-=== tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts ===
+//// [tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts] ////
+
+=== enumLiteralAssignableToEnumInsideUnion.ts ===
 module X {
 >X : typeof X
+>  : ^^^^^^^^
 
     export enum Foo {
 >Foo : Foo
+>    : ^^^
 
         A, B
 >A : Foo.A
+>  : ^^^^^
 >B : Foo.B
+>  : ^^^^^
     }
 }
 module Y {
 >Y : typeof Y
+>  : ^^^^^^^^
 
     export enum Foo {
 >Foo : Foo
+>    : ^^^
 
         A, B
 >A : Foo.A
+>  : ^^^^^
 >B : Foo.B
+>  : ^^^^^
     }
 }
 module Z {
 >Z : typeof Z
+>  : ^^^^^^^^
 
     export enum Foo {
 >Foo : Foo
+>    : ^^^
 
         A = 1 << 1,
->A : Foo
+>A : Foo.A
+>  : ^^^^^
 >1 << 1 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
         B = 1 << 2,
->B : Foo
+>B : Foo.B
+>  : ^^^^^
 >1 << 2 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
     }
 }
 module Ka {
 >Ka : typeof Ka
+>   : ^^^^^^^^^
 
     export enum Foo {
 >Foo : Foo
+>    : ^^^
 
         A = 1 << 10,
->A : Foo
+>A : Foo.A
+>  : ^^^^^
 >1 << 10 : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 >10 : 10
+>   : ^^
 
         B = 1 << 11,
->B : Foo
+>B : Foo.B
+>  : ^^^^^
 >1 << 11 : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 >11 : 11
+>   : ^^
     }
 }
 const e0: X.Foo | boolean = Y.Foo.A; // ok
 >e0 : boolean | X.Foo
+>   : ^^^^^^^^^^^^^^^
 >X : any
+>  : ^^^
 >Y.Foo.A : Y.Foo.A
+>        : ^^^^^^^
 >Y.Foo : typeof Y.Foo
+>      : ^^^^^^^^^^^^
 >Y : typeof Y
+>  : ^^^^^^^^
 >Foo : typeof Y.Foo
+>    : ^^^^^^^^^^^^
 >A : Y.Foo.A
+>  : ^^^^^^^
 
 const e1: X.Foo | boolean = Z.Foo.A; // not legal, Z is computed
 >e1 : boolean | X.Foo
+>   : ^^^^^^^^^^^^^^^
 >X : any
->Z.Foo.A : Z.Foo
+>  : ^^^
+>Z.Foo.A : Z.Foo.A
+>        : ^^^^^^^
 >Z.Foo : typeof Z.Foo
+>      : ^^^^^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 >Foo : typeof Z.Foo
->A : Z.Foo
+>    : ^^^^^^^^^^^^
+>A : Z.Foo.A
+>  : ^^^^^^^
 
 const e2: X.Foo.A | X.Foo.B | boolean = Z.Foo.A; // still not legal
 >e2 : boolean | X.Foo
+>   : ^^^^^^^^^^^^^^^
 >X : any
+>  : ^^^
 >Foo : any
+>    : ^^^
 >X : any
+>  : ^^^
 >Foo : any
->Z.Foo.A : Z.Foo
+>    : ^^^
+>Z.Foo.A : Z.Foo.A
+>        : ^^^^^^^
 >Z.Foo : typeof Z.Foo
+>      : ^^^^^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 >Foo : typeof Z.Foo
->A : Z.Foo
+>    : ^^^^^^^^^^^^
+>A : Z.Foo.A
+>  : ^^^^^^^
 
 const e3: X.Foo.B | boolean = Z.Foo.A; // not legal
 >e3 : boolean | X.Foo.B
+>   : ^^^^^^^^^^^^^^^^^
 >X : any
+>  : ^^^
 >Foo : any
->Z.Foo.A : Z.Foo
+>    : ^^^
+>Z.Foo.A : Z.Foo.A
+>        : ^^^^^^^
 >Z.Foo : typeof Z.Foo
+>      : ^^^^^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 >Foo : typeof Z.Foo
->A : Z.Foo
+>    : ^^^^^^^^^^^^
+>A : Z.Foo.A
+>  : ^^^^^^^
 
 const e4: X.Foo.A | boolean = Z.Foo.A; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
 >e4 : boolean | X.Foo.A
+>   : ^^^^^^^^^^^^^^^^^
 >X : any
+>  : ^^^
 >Foo : any
->Z.Foo.A : Z.Foo
+>    : ^^^
+>Z.Foo.A : Z.Foo.A
+>        : ^^^^^^^
 >Z.Foo : typeof Z.Foo
+>      : ^^^^^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 >Foo : typeof Z.Foo
->A : Z.Foo
+>    : ^^^^^^^^^^^^
+>A : Z.Foo.A
+>  : ^^^^^^^
 
 const e5: Ka.Foo | boolean = Z.Foo.A; // ok
 >e5 : boolean | Ka.Foo
+>   : ^^^^^^^^^^^^^^^^
 >Ka : any
->Z.Foo.A : Z.Foo
+>   : ^^^
+>Z.Foo.A : Z.Foo.A
+>        : ^^^^^^^
 >Z.Foo : typeof Z.Foo
+>      : ^^^^^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 >Foo : typeof Z.Foo
->A : Z.Foo
+>    : ^^^^^^^^^^^^
+>A : Z.Foo.A
+>  : ^^^^^^^
 

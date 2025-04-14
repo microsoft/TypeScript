@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop6_ES6.ts] ////
+
 //// [capturedLetConstInLoop6_ES6.ts]
 // ====let
 for (let x of []) {

@@ -1,30 +1,44 @@
-=== tests/cases/compiler/recur1.ts ===
+//// [tests/cases/compiler/recur1.ts] ////
+
+=== recur1.ts ===
 var salt:any = new salt.pepper();   
 >salt : any
 >new salt.pepper() : any
 >salt.pepper : any
 >salt : any
+>     : ^^^
 >pepper : any
+>       : ^^^
 
 salt.pepper = function() {}
 >salt.pepper = function() {} : () => void
+>                            : ^^^^^^^^^^
 >salt.pepper : any
 >salt : any
+>     : ^^^
 >pepper : any
+>       : ^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 
 var cobalt = new cobalt.pitch();   
 >cobalt : any
 >new cobalt.pitch() : any
 >cobalt.pitch : any
 >cobalt : any
+>       : ^^^
 >pitch : any
+>      : ^^^
 
 cobalt.pitch = function() {}
 >cobalt.pitch = function() {} : () => void
+>                             : ^^^^^^^^^^
 >cobalt.pitch : any
 >cobalt : any
+>       : ^^^
 >pitch : any
+>      : ^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
  
 

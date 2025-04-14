@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts ===
+//// [tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts] ////
+
+=== genericWithIndexerOfTypeParameterType2.ts ===
 export class Collection<TItem extends CollectionItem> {
 >Collection : Symbol(Collection, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 0))
 >TItem : Symbol(TItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 24))

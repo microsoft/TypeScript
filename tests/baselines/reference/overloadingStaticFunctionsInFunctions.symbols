@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts ===
+//// [tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts] ////
+
+=== overloadingStaticFunctionsInFunctions.ts ===
 function boo {
 >boo : Symbol(boo, Decl(overloadingStaticFunctionsInFunctions.ts, 0, 0))
 

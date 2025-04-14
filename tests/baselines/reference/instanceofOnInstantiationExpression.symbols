@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/instanceofOnInstantiationExpression.ts] ////
+
+=== instanceofOnInstantiationExpression.ts ===
+declare class Box<T> {
+>Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
+>T : Symbol(T, Decl(instanceofOnInstantiationExpression.ts, 0, 18))
+
+    value: T;
+>value : Symbol(Box.value, Decl(instanceofOnInstantiationExpression.ts, 0, 22))
+>T : Symbol(T, Decl(instanceofOnInstantiationExpression.ts, 0, 18))
+}
+
+
+declare const maybeBox: unknown;
+>maybeBox : Symbol(maybeBox, Decl(instanceofOnInstantiationExpression.ts, 5, 13))
+
+maybeBox instanceof Box; // OK
+>maybeBox : Symbol(maybeBox, Decl(instanceofOnInstantiationExpression.ts, 5, 13))
+>Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
+
+maybeBox instanceof Box<number>; // error
+>maybeBox : Symbol(maybeBox, Decl(instanceofOnInstantiationExpression.ts, 5, 13))
+>Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
+
+maybeBox instanceof (Box<number>); // error
+>maybeBox : Symbol(maybeBox, Decl(instanceofOnInstantiationExpression.ts, 5, 13))
+>Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
+
+maybeBox instanceof ((Box<number>)); // error
+>maybeBox : Symbol(maybeBox, Decl(instanceofOnInstantiationExpression.ts, 5, 13))
+>Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
+
+Box<number> instanceof Object; // OK
+>Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+(Box<number>) instanceof Object; // OK
+>Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+((Box<number>)) instanceof Object; // OK
+>Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

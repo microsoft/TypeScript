@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts] ////
+
 //// [assignLambdaToNominalSubtypeOfFunction.ts]
 interface IResultCallback extends Function {
     x: number;

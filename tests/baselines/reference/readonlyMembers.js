@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyMembers.ts] ////
+
 //// [readonlyMembers.ts]
 interface X {
     readonly a: number;
@@ -19,7 +21,12 @@ class C {
             this.a = 1;  // Error
             this.b = 1;  // Error
             this.c = 1;  // Error
-        }
+        };
+        (() => {
+            this.a = 1;  // Ok
+            this.b = 1;  // Ok
+            this.c = 1;  // Error
+        })();
     }
     foo() {
         this.a = 1;  // Error
@@ -81,6 +88,11 @@ var C = /** @class */ (function () {
             _this.b = 1; // Error
             _this.c = 1; // Error
         };
+        (function () {
+            _this.a = 1; // Ok
+            _this.b = 1; // Ok
+            _this.c = 1; // Error
+        })();
     }
     Object.defineProperty(C.prototype, "c", {
         get: function () { return 1; },

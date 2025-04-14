@@ -1,9 +1,14 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList6.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList6.ts] ////
+
+=== parserParameterList6.ts ===
 class C {
 >C : C
+>  : ^
 
   constructor(C: (public A) => any) {
 >C : (A: any) => any
+>  : ^ ^^^^^^^^^^   
 >A : any
+>  : ^^^
   }
 }

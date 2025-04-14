@@ -1,11 +1,11 @@
-tests/cases/compiler/noImplicitAnyFunctions.ts(1,18): error TS7010: 'f1', which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/compiler/noImplicitAnyFunctions.ts(5,13): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyFunctions.ts(16,10): error TS7010: 'f6', which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/compiler/noImplicitAnyFunctions.ts(18,10): error TS7010: 'f6', which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/compiler/noImplicitAnyFunctions.ts(18,24): error TS7006: Parameter 'y' implicitly has an 'any' type.
+noImplicitAnyFunctions.ts(1,18): error TS7010: 'f1', which lacks return-type annotation, implicitly has an 'any' return type.
+noImplicitAnyFunctions.ts(5,13): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyFunctions.ts(16,10): error TS7010: 'f6', which lacks return-type annotation, implicitly has an 'any' return type.
+noImplicitAnyFunctions.ts(18,10): error TS7010: 'f6', which lacks return-type annotation, implicitly has an 'any' return type.
+noImplicitAnyFunctions.ts(18,24): error TS7006: Parameter 'y' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/noImplicitAnyFunctions.ts (5 errors) ====
+==== noImplicitAnyFunctions.ts (5 errors) ====
     declare function f1();
                      ~~
 !!! error TS7010: 'f1', which lacks return-type annotation, implicitly has an 'any' return type.

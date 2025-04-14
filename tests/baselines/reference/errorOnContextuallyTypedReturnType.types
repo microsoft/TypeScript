@@ -1,9 +1,15 @@
-=== tests/cases/compiler/errorOnContextuallyTypedReturnType.ts ===
+//// [tests/cases/compiler/errorOnContextuallyTypedReturnType.ts] ////
+
+=== errorOnContextuallyTypedReturnType.ts ===
 var n1: () => boolean = function () { }; // expect an error here
 >n1 : () => boolean
+>   : ^^^^^^       
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 var n2: () => boolean = function ():boolean { }; // expect an error here
 >n2 : () => boolean
+>   : ^^^^^^       
 >function ():boolean { } : () => boolean
+>                        : ^^^^^^       
 

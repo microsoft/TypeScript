@@ -1,3 +1,4 @@
-=== tests/cases/compiler/sourceMap-SingleSpace1.ts ===
+//// [tests/cases/compiler/sourceMap-SingleSpace1.ts] ////
+
+=== sourceMap-SingleSpace1.ts ===
  
-No type information for this code.

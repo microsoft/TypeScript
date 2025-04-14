@@ -1,8 +1,8 @@
-tests/cases/compiler/reactNamespaceMissingDeclaration.tsx(2,2): error TS2304: Cannot find name 'myReactLib'.
+reactNamespaceMissingDeclaration.tsx(2,2): error TS2874: This JSX tag requires 'myReactLib' to be in scope, but it could not be found.
 
 
-==== tests/cases/compiler/reactNamespaceMissingDeclaration.tsx (1 errors) ====
+==== reactNamespaceMissingDeclaration.tsx (1 errors) ====
     // Error myReactLib not declared
     <foo data/>
      ~~~
-!!! error TS2304: Cannot find name 'myReactLib'.
+!!! error TS2874: This JSX tag requires 'myReactLib' to be in scope, but it could not be found.

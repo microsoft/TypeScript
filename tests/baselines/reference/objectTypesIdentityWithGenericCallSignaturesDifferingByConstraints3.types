@@ -1,354 +1,505 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints3.ts] ////
+
+=== objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints3.ts ===
 // Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
 // parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
 // optional or rest) and types, and identical return types.
 
 class One { foo: string }
 >One : One
+>    : ^^^
 >foo : string
+>    : ^^^^^^
 
 class Two { foo: string }
 >Two : Two
+>    : ^^^
 >foo : string
+>    : ^^^^^^
 
 interface Three { foo: string }
 >foo : string
+>    : ^^^^^^
 
 interface Four<T> { foo: T }
 >foo : T
+>    : ^
 
 interface Five<T> extends Four<T> { }
 interface Six<T, U> {
     foo: T;
 >foo : T
+>    : ^
 }
 
 class A {
 >A : A
+>  : ^
 
     foo<T extends U, U extends One>(x: T, y: U): string { return null; }
 >foo : <T extends U, U extends One>(x: T, y: U) => string
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
->null : null
+>  : ^
 }
 
 class B<T extends U, U extends Two> {
 >B : B<T, U>
+>  : ^^^^^^^
 
     foo(x: T, y: U): string { return null; }
 >foo : (x: T, y: U) => string
+>    : ^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
->null : null
+>  : ^
 }
 
 class C<T extends U, U extends Three> {
 >C : C<T, U>
+>  : ^^^^^^^
 
     foo(x: T, y: U): string { return null; }
 >foo : (x: T, y: U) => string
+>    : ^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
->null : null
+>  : ^
 }
 
 class D<T extends U, U extends Four<string>> {
 >D : D<T, U>
+>  : ^^^^^^^
 
     foo(x: T, y: U): string { return null; }
 >foo : (x: T, y: U) => string
+>    : ^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
->null : null
+>  : ^
 }
 
 interface I<T extends U, U extends Five<string>> {
     foo(x: T, y: U): string;
 >foo : (x: T, y: U) => string
+>    : ^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
+>  : ^
 }
 
 interface I2 {
     foo<T extends U, U extends Six<string, string>>(x: T, y: U): string;
 >foo : <T extends U, U extends Six<string, string>>(x: T, y: U) => string
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^                   ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
+>  : ^
 }
 
 var a: { foo<T extends U, U extends One>(x: T, y: U): string }
 >a : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 >foo : <T extends U, U extends One>(x: T, y: U) => string
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
+>  : ^
 
 var b = { foo<T extends U, U extends Two>(x: T, y: U) { return ''; } };
 >b : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >{ foo<T extends U, U extends Two>(x: T, y: U) { return ''; } } : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>                                                               : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >foo : <T extends U, U extends Two>(x: T, y: U) => string
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 >'' : ""
+>   : ^^
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : A
+>  : ^
 
 function foo1(x: A); // error
 >foo1 : { (x: A): any; (x: A): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : A
+>  : ^
 
 function foo1(x: any) { }
 >foo1 : { (x: A): any; (x: A): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 
 function foo1b(x: B<Two, Two>);
 >foo1b : { (x: B<Two, Two>): any; (x: B<Two, Two>): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^           ^^^^^^^^^
 >x : B<Two, Two>
+>  : ^^^^^^^^^^^
 
 function foo1b(x: B<Two, Two>); // error
 >foo1b : { (x: B<Two, Two>): any; (x: B<Two, Two>): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^           ^^^^^^^^^
 >x : B<Two, Two>
+>  : ^^^^^^^^^^^
 
 function foo1b(x: any) { }
 >foo1b : { (x: B<Two, Two>): any; (x: B<Two, Two>): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^           ^^^^^^^^^
 >x : any
 
 function foo1c(x: C<Three, Three>);
 >foo1c : { (x: C<Three, Three>): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo1c(x: C<Three, Three>); // error
 >foo1c : { (x: C<Three, Three>): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo1c(x: any) { }
 >foo1c : { (x: C<Three, Three>): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : any
 
 function foo2(x: I<Five<string>, Five<string>>);
 >foo2 : { (x: I<Five<string>, Five<string>>): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^                             ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : I<Five<string>, Five<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo2(x: I<Five<string>, Five<string>>); // error
 >foo2 : { (x: I<Five<string>, Five<string>>): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^                             ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : I<Five<string>, Five<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo2(x: any) { }
 >foo2 : { (x: I<Five<string>, Five<string>>): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^                             ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : any
 
 function foo3(x: typeof a);
->foo3 : { (x: typeof a): any; (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; }
+>foo3 : { (x: typeof a): any; (x: typeof a): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 >a : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 
 function foo3(x: typeof a); // error
->foo3 : { (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; (x: typeof a): any; }
+>foo3 : { (x: typeof a): any; (x: typeof a): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 >a : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 
 function foo3(x: any) { }
->foo3 : { (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; }
+>foo3 : { (x: typeof a): any; (x: typeof a): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: typeof b): any; (x: { foo<T extends U, U extends Two>(x: T, y: U): string; }): any; }
+>foo4 : { (x: typeof b): any; (x: typeof b): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >b : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { foo<T extends U, U extends Two>(x: T, y: U): string; }): any; (x: typeof b): any; }
+>foo4 : { (x: typeof b): any; (x: typeof b): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >b : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
 function foo4(x: any) { }
->foo4 : { (x: { foo<T extends U, U extends Two>(x: T, y: U): string; }): any; (x: { foo<T extends U, U extends Two>(x: T, y: U): string; }): any; }
+>foo4 : { (x: typeof b): any; (x: typeof b): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 
 function foo5(x: A);
 >foo5 : { (x: A): any; (x: B<Two, Two>): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^           ^^^^^^^^^
 >x : A
+>  : ^
 
 function foo5(x: B<Two, Two>); // ok
 >foo5 : { (x: A): any; (x: B<Two, Two>): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^           ^^^^^^^^^
 >x : B<Two, Two>
+>  : ^^^^^^^^^^^
 
 function foo5(x: any) { }
 >foo5 : { (x: A): any; (x: B<Two, Two>): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^           ^^^^^^^^^
 >x : any
 
 function foo5b(x: A);
 >foo5b : { (x: A): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^ ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : A
+>  : ^
 
 function foo5b(x: C<Three, Three>); // ok
 >foo5b : { (x: A): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^ ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo5b(x: any) { }
 >foo5b : { (x: A): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^ ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : any
 
 function foo5c(x: C<Three, Three>);
 >foo5c : { (x: C<Three, Three>): any; (x: D<Four<string>, Four<string>>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo5c(x: D<Four<string>, Four<string>>); // error
 >foo5c : { (x: C<Three, Three>): any; (x: D<Four<string>, Four<string>>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : D<Four<string>, Four<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo5c(x: any) { }
 >foo5c : { (x: C<Three, Three>): any; (x: D<Four<string>, Four<string>>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : any
 
 function foo6c(x: C<Three, Three>);
 >foo6c : { (x: C<Three, Three>): any; (x: D<Four<string>, Four<string>>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo6c(x: D<Four<string>, Four<string>>); // error
 >foo6c : { (x: C<Three, Three>): any; (x: D<Four<string>, Four<string>>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : D<Four<string>, Four<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo6c(x: any) { }
 >foo6c : { (x: C<Three, Three>): any; (x: D<Four<string>, Four<string>>): any; }
+>      : ^^^ ^^               ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : any
 
 function foo6(x: A);
 >foo6 : { (x: A): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : A
+>  : ^
 
 function foo6(x: I<Five<string>, Five<string>>); // ok
 >foo6 : { (x: A): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : I<Five<string>, Five<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo6(x: any) { }
 >foo6 : { (x: A): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : any
 
 function foo7(x: A);
->foo7 : { (x: A): any; (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; }
+>foo7 : { (x: A): any; (x: typeof a): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : A
+>  : ^
 
 function foo7(x: typeof a); // error
 >foo7 : { (x: A): any; (x: typeof a): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 >a : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 
 function foo7(x: any) { }
->foo7 : { (x: A): any; (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; }
+>foo7 : { (x: A): any; (x: typeof a): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 
 function foo8(x: B<Two, Two>);
 >foo8 : { (x: B<Two, Two>): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^           ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : B<Two, Two>
+>  : ^^^^^^^^^^^
 
 function foo8(x: I<Five<string>, Five<string>>); // error
 >foo8 : { (x: B<Two, Two>): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^           ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : I<Five<string>, Five<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo8(x: any) { }
 >foo8 : { (x: B<Two, Two>): any; (x: I<Five<string>, Five<string>>): any; }
+>     : ^^^ ^^           ^^^^^^^^^ ^^                             ^^^^^^^^^
 >x : any
 
 function foo9(x: B<Two, Two>);
 >foo9 : { (x: B<Two, Two>): any; (x: C<Three, Three>): any; }
+>     : ^^^ ^^           ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : B<Two, Two>
+>  : ^^^^^^^^^^^
 
 function foo9(x: C<Three, Three>); // error
 >foo9 : { (x: B<Two, Two>): any; (x: C<Three, Three>): any; }
+>     : ^^^ ^^           ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo9(x: any) { }
 >foo9 : { (x: B<Two, Two>): any; (x: C<Three, Three>): any; }
+>     : ^^^ ^^           ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : any
 
 function foo10(x: B<Two, Two>);
->foo10 : { (x: B<Two, Two>): any; (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; }
+>foo10 : { (x: B<Two, Two>): any; (x: typeof a): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : B<Two, Two>
+>  : ^^^^^^^^^^^
 
 function foo10(x: typeof a); // ok
 >foo10 : { (x: B<Two, Two>): any; (x: typeof a): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 >a : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 
 function foo10(x: any) { }
->foo10 : { (x: B<Two, Two>): any; (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; }
+>foo10 : { (x: B<Two, Two>): any; (x: typeof a): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 
 function foo11(x: B<Two, Two>);
->foo11 : { (x: B<Two, Two>): any; (x: { foo<T extends U, U extends Two>(x: T, y: U): string; }): any; }
+>foo11 : { (x: B<Two, Two>): any; (x: typeof b): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : B<Two, Two>
+>  : ^^^^^^^^^^^
 
 function foo11(x: typeof b); // ok
 >foo11 : { (x: B<Two, Two>): any; (x: typeof b): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >b : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
 function foo11(x: any) { }
->foo11 : { (x: B<Two, Two>): any; (x: { foo<T extends U, U extends Two>(x: T, y: U): string; }): any; }
+>foo11 : { (x: B<Two, Two>): any; (x: typeof b): any; }
+>      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 
 function foo12(x: I<Five<string>, Five<string>>);
 >foo12 : { (x: I<Five<string>, Five<string>>): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : I<Five<string>, Five<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo12(x: C<Three, Three>); // error
 >foo12 : { (x: I<Five<string>, Five<string>>): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo12(x: any) { }
 >foo12 : { (x: I<Five<string>, Five<string>>): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : any
 
 function foo12b(x: I2);
 >foo12b : { (x: I2): any; (x: C<Three, Three>): any; }
+>       : ^^^ ^^  ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : I2
+>  : ^^
 
 function foo12b(x: C<Three, Three>); // ok
 >foo12b : { (x: I2): any; (x: C<Three, Three>): any; }
+>       : ^^^ ^^  ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo12b(x: any) { }
 >foo12b : { (x: I2): any; (x: C<Three, Three>): any; }
+>       : ^^^ ^^  ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : any
 
 function foo13(x: I<Five<string>, Five<string>>);
->foo13 : { (x: I<Five<string>, Five<string>>): any; (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; }
+>foo13 : { (x: I<Five<string>, Five<string>>): any; (x: typeof a): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : I<Five<string>, Five<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo13(x: typeof a); // ok
 >foo13 : { (x: I<Five<string>, Five<string>>): any; (x: typeof a): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 >a : { foo<T extends U, U extends One>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^      ^^^
 
 function foo13(x: any) { }
->foo13 : { (x: I<Five<string>, Five<string>>): any; (x: { foo<T extends U, U extends One>(x: T, y: U): string; }): any; }
+>foo13 : { (x: I<Five<string>, Five<string>>): any; (x: typeof a): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 
 function foo14(x: I<Five<string>, Five<string>>);
->foo14 : { (x: I<Five<string>, Five<string>>): any; (x: { foo<T extends U, U extends Two>(x: T, y: U): string; }): any; }
+>foo14 : { (x: I<Five<string>, Five<string>>): any; (x: typeof b): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : I<Five<string>, Five<string>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I<Five<string>, Five<string>>): any; (x: typeof b): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >b : { foo<T extends U, U extends Two>(x: T, y: U): string; }
+>  : ^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
 function foo14(x: any) { }
->foo14 : { (x: I<Five<string>, Five<string>>): any; (x: { foo<T extends U, U extends Two>(x: T, y: U): string; }): any; }
+>foo14 : { (x: I<Five<string>, Five<string>>): any; (x: typeof b): any; }
+>      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 
 function foo15(x: I2);
 >foo15 : { (x: I2): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^  ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : I2
+>  : ^^
 
 function foo15(x: C<Three, Three>); // ok
 >foo15 : { (x: I2): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^  ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : C<Three, Three>
+>  : ^^^^^^^^^^^^^^^
 
 function foo15(x: any) { }
 >foo15 : { (x: I2): any; (x: C<Three, Three>): any; }
+>      : ^^^ ^^  ^^^^^^^^^ ^^               ^^^^^^^^^
 >x : any
 

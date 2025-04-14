@@ -1,7 +1,13 @@
-=== tests/cases/compiler/es5ExportDefaultExpression.ts ===
+//// [tests/cases/compiler/es5ExportDefaultExpression.ts] ////
+
+=== es5ExportDefaultExpression.ts ===
 export default (1 + 2);
 >(1 + 2) : number
+>        : ^^^^^^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

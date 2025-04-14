@@ -1,7 +1,7 @@
-tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts(1,17): error TS2394: This overload signature is not compatible with its implementation signature.
+voidAsNonAmbiguousReturnType_0.ts(1,17): error TS2394: This overload signature is not compatible with its implementation signature.
 
 
-==== tests/cases/compiler/voidAsNonAmbiguousReturnType_1.ts (0 errors) ====
+==== voidAsNonAmbiguousReturnType_1.ts (0 errors) ====
     ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
     import fs = require("./voidAsNonAmbiguousReturnType_0");
     
@@ -9,10 +9,10 @@ tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts(1,17): error TS2394: This
      fs.mkdirSync('test'); // should not error - return types are the same
     }
     
-==== tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts (1 errors) ====
+==== voidAsNonAmbiguousReturnType_0.ts (1 errors) ====
     export function mkdirSync(path: string, mode?: number): void;
                     ~~~~~~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts:2:17: The implementation signature is declared here.
+!!! related TS2750 voidAsNonAmbiguousReturnType_0.ts:2:17: The implementation signature is declared here.
     export function mkdirSync(path: string, mode?: string): void {}
     

@@ -1,23 +1,40 @@
-=== tests/cases/conformance/salsa/bug40140.js ===
+//// [tests/cases/conformance/salsa/namespaceAssignmentToRequireAlias.ts] ////
+
+=== bug40140.js ===
 const u = require('untyped');
 >u : any
+>  : ^^^
 >require('untyped') : any
+>                   : ^^^
 >require : any
+>        : ^^^
 >'untyped' : "untyped"
+>          : ^^^^^^^^^
 
 u.assignment.nested = true
 >u.assignment.nested = true : true
+>                           : ^^^^
 >u.assignment.nested : any
+>                    : ^^^
 >u.assignment : any
+>             : ^^^
 >u : any
+>  : ^^^
 >assignment : any
+>           : ^^^
 >nested : any
+>       : ^^^
 >true : true
+>     : ^^^^
 
 u.noError()
 >u.noError() : any
+>            : ^^^
 >u.noError : any
+>          : ^^^
 >u : any
+>  : ^^^
 >noError : any
+>        : ^^^
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload3.tsx] ////
+
 //// [file.tsx]
 interface Context {
     color: any;

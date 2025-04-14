@@ -1,8 +1,11 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty10.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface ElementAttributesProperty { props: {} }
 >props : {}
+>      : ^^
 
 	interface IntrinsicElements { 
 		div: any;
@@ -18,65 +21,108 @@ declare module JSX {
 
 class Button {
 >Button : Button
+>       : ^^^^^^
 
 	props: {}
 >props : {}
+>      : ^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return (<div>My Button</div>)
 >(<div>My Button</div>) : JSX.Element
+>                       : ^^^^^^^^^^^
 ><div>My Button</div> : JSX.Element
+>                     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
 }
 
 // OK
 let k1 = <div> <h2> Hello </h2> <h1> world </h1></div>;
 >k1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div> <h2> Hello </h2> <h1> world </h1></div> : JSX.Element
+>                                              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 ><h2> Hello </h2> : JSX.Element
+>                 : ^^^^^^^^^^^
 >h2 : any
+>   : ^^^
 >h2 : any
+>   : ^^^
 ><h1> world </h1> : JSX.Element
+>                 : ^^^^^^^^^^^
 >h1 : any
+>   : ^^^
 >h1 : any
+>   : ^^^
 >div : any
+>    : ^^^
 
 let k2 = <div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div>;
 >k2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div> : JSX.Element
+>                                                                   : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 ><h2> Hello </h2> : JSX.Element
+>                 : ^^^^^^^^^^^
 >h2 : any
+>   : ^^^
 >h2 : any
+>   : ^^^
 >(user: any) => <h2>{user.name}</h2> : (user: any) => JSX.Element
+>                                    : ^    ^^   ^^^^^^^^^^^^^^^^
 >user : any
 ><h2>{user.name}</h2> : JSX.Element
+>                     : ^^^^^^^^^^^
 >h2 : any
+>   : ^^^
 >user.name : any
 >user : any
+>     : ^^^
 >name : any
+>     : ^^^
 >h2 : any
+>   : ^^^
 >div : any
+>    : ^^^
 
 let k3 = <div> {1} {"That is a number"} </div>;
 >k3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div> {1} {"That is a number"} </div> : JSX.Element
+>                                      : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >1 : 1
+>  : ^
 >"That is a number" : "That is a number"
+>                   : ^^^^^^^^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 let k4 = <Button> <h2> Hello </h2> </Button>;
 >k4 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Button> <h2> Hello </h2> </Button> : JSX.Element
+>                                    : ^^^^^^^^^^^
 >Button : typeof Button
+>       : ^^^^^^^^^^^^^
 ><h2> Hello </h2> : JSX.Element
+>                 : ^^^^^^^^^^^
 >h2 : any
+>   : ^^^
 >h2 : any
+>   : ^^^
 >Button : typeof Button
+>       : ^^^^^^^^^^^^^
 

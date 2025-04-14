@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts ===
+//// [tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts] ////
+
+=== inDoesNotOperateOnPrimitiveTypes.ts ===
 const validHasKey = <T extends object>(
 >validHasKey : Symbol(validHasKey, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 5))
 >T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 21))

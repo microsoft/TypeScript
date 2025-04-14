@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads39.ts] ////
+
 //// [functionOverloads39.ts]
 function foo(bar:{a:number;}[]):string;
 function foo(bar:{a:boolean;}[]):number;

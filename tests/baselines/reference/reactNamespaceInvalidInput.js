@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactNamespaceInvalidInput.tsx] ////
+
 //// [reactNamespaceInvalidInput.tsx]
 <foo data/>;
 

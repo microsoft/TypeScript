@@ -1,112 +1,162 @@
-=== tests/cases/compiler/abstractPropertyNegative.ts ===
+//// [tests/cases/compiler/abstractPropertyNegative.ts] ////
+
+=== abstractPropertyNegative.ts ===
 interface A {
     prop: string;
 >prop : string
+>     : ^^^^^^
 
     m(): string;
 >m : () => string
+>  : ^^^^^^      
 }
 abstract class B implements A {
 >B : B
+>  : ^
 
     abstract prop: string;
 >prop : string
+>     : ^^^^^^
 
     public abstract readonly ro: string;
 >ro : string
+>   : ^^^^^^
 
     abstract get readonlyProp(): string;
 >readonlyProp : string
+>             : ^^^^^^
 
     abstract m(): string;
 >m : () => string
+>  : ^^^^^^      
 
     abstract get mismatch(): string;
 >mismatch : string
+>         : ^^^^^^
 
-    abstract set mismatch(val: number); // error, not same type
+    abstract set mismatch(val: number);
 >mismatch : string
+>         : ^^^^^^
 >val : number
+>    : ^^^^^^
 }
 class C extends B {
 >C : C
+>  : ^
 >B : B
+>  : ^
 
     readonly ro = "readonly please";
 >ro : "readonly please"
+>   : ^^^^^^^^^^^^^^^^^
 >"readonly please" : "readonly please"
+>                  : ^^^^^^^^^^^^^^^^^
 
     abstract notAllowed: string;
 >notAllowed : string
+>           : ^^^^^^
 
     get concreteWithNoBody(): string;
 >concreteWithNoBody : string
+>                   : ^^^^^^
 }
 let c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 c.ro = "error: lhs of assignment can't be readonly";
 >c.ro = "error: lhs of assignment can't be readonly" : "error: lhs of assignment can't be readonly"
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.ro : any
+>     : ^^^
 >c : C
+>  : ^
 >ro : any
+>   : ^^^
 >"error: lhs of assignment can't be readonly" : "error: lhs of assignment can't be readonly"
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 abstract class WrongTypeProperty {
 >WrongTypeProperty : WrongTypeProperty
+>                  : ^^^^^^^^^^^^^^^^^
 
     abstract num: number;
 >num : number
+>    : ^^^^^^
 }
 class WrongTypePropertyImpl extends WrongTypeProperty {
 >WrongTypePropertyImpl : WrongTypePropertyImpl
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >WrongTypeProperty : WrongTypeProperty
+>                  : ^^^^^^^^^^^^^^^^^
 
     num = "nope, wrong";
 >num : string
+>    : ^^^^^^
 >"nope, wrong" : "nope, wrong"
+>              : ^^^^^^^^^^^^^
 }
 abstract class WrongTypeAccessor {
 >WrongTypeAccessor : WrongTypeAccessor
+>                  : ^^^^^^^^^^^^^^^^^
 
     abstract get num(): number;
 >num : number
+>    : ^^^^^^
 }
 class WrongTypeAccessorImpl extends WrongTypeAccessor {
 >WrongTypeAccessorImpl : WrongTypeAccessorImpl
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >WrongTypeAccessor : WrongTypeAccessor
+>                  : ^^^^^^^^^^^^^^^^^
 
     get num() { return "nope, wrong"; }
 >num : string
+>    : ^^^^^^
 >"nope, wrong" : "nope, wrong"
+>              : ^^^^^^^^^^^^^
 }
 class WrongTypeAccessorImpl2 extends WrongTypeAccessor {
 >WrongTypeAccessorImpl2 : WrongTypeAccessorImpl2
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >WrongTypeAccessor : WrongTypeAccessor
+>                  : ^^^^^^^^^^^^^^^^^
 
     num = "nope, wrong";
 >num : string
+>    : ^^^^^^
 >"nope, wrong" : "nope, wrong"
+>              : ^^^^^^^^^^^^^
 }
 
 abstract class AbstractAccessorMismatch {
 >AbstractAccessorMismatch : AbstractAccessorMismatch
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     abstract get p1(): string;
 >p1 : string
+>   : ^^^^^^
 
     set p1(val: string) { };
 >p1 : string
+>   : ^^^^^^
 >val : string
+>    : ^^^^^^
 
     get p2(): string { return "should work"; }
 >p2 : string
+>   : ^^^^^^
 >"should work" : "should work"
+>              : ^^^^^^^^^^^^^
 
     abstract set p2(val: string);
 >p2 : string
+>   : ^^^^^^
 >val : string
+>    : ^^^^^^
 }
 

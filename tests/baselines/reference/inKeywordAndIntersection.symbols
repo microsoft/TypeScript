@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/inKeywordAndIntersection.ts] ////
+
+=== inKeywordAndIntersection.ts ===
+class A { a = 0 }
+>A : Symbol(A, Decl(inKeywordAndIntersection.ts, 0, 0))
+>a : Symbol(A.a, Decl(inKeywordAndIntersection.ts, 0, 9))
+
+class B { b = 0 }
+>B : Symbol(B, Decl(inKeywordAndIntersection.ts, 0, 17))
+>b : Symbol(B.b, Decl(inKeywordAndIntersection.ts, 1, 9))
+
+function f10(obj: A & { x: string } | B) {
+>f10 : Symbol(f10, Decl(inKeywordAndIntersection.ts, 1, 17))
+>obj : Symbol(obj, Decl(inKeywordAndIntersection.ts, 3, 13))
+>A : Symbol(A, Decl(inKeywordAndIntersection.ts, 0, 0))
+>x : Symbol(x, Decl(inKeywordAndIntersection.ts, 3, 23))
+>B : Symbol(B, Decl(inKeywordAndIntersection.ts, 0, 17))
+
+    if (obj instanceof Object) {
+>obj : Symbol(obj, Decl(inKeywordAndIntersection.ts, 3, 13))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        obj;  // A & { x: string } | B
+>obj : Symbol(obj, Decl(inKeywordAndIntersection.ts, 3, 13))
+    }
+    else {
+        obj;  // Error
+>obj : Symbol(obj, Decl(inKeywordAndIntersection.ts, 3, 13))
+    }
+}
+
+// Repro from #50844
+
+interface InstanceOne {
+>InstanceOne : Symbol(InstanceOne, Decl(inKeywordAndIntersection.ts, 10, 1))
+
+    one(): void
+>one : Symbol(InstanceOne.one, Decl(inKeywordAndIntersection.ts, 14, 23))
+}
+
+interface InstanceTwo {
+>InstanceTwo : Symbol(InstanceTwo, Decl(inKeywordAndIntersection.ts, 16, 1))
+
+    two(): void
+>two : Symbol(InstanceTwo.two, Decl(inKeywordAndIntersection.ts, 18, 23))
+}
+
+const instance = {} as InstanceOne | InstanceTwo
+>instance : Symbol(instance, Decl(inKeywordAndIntersection.ts, 22, 5))
+>InstanceOne : Symbol(InstanceOne, Decl(inKeywordAndIntersection.ts, 10, 1))
+>InstanceTwo : Symbol(InstanceTwo, Decl(inKeywordAndIntersection.ts, 16, 1))
+
+const ClassOne = {} as { new(): InstanceOne } & { foo: true };
+>ClassOne : Symbol(ClassOne, Decl(inKeywordAndIntersection.ts, 24, 5))
+>InstanceOne : Symbol(InstanceOne, Decl(inKeywordAndIntersection.ts, 10, 1))
+>foo : Symbol(foo, Decl(inKeywordAndIntersection.ts, 24, 49))
+
+if (instance instanceof ClassOne) {
+>instance : Symbol(instance, Decl(inKeywordAndIntersection.ts, 22, 5))
+>ClassOne : Symbol(ClassOne, Decl(inKeywordAndIntersection.ts, 24, 5))
+
+    instance.one();
+>instance.one : Symbol(InstanceOne.one, Decl(inKeywordAndIntersection.ts, 14, 23))
+>instance : Symbol(instance, Decl(inKeywordAndIntersection.ts, 22, 5))
+>one : Symbol(InstanceOne.one, Decl(inKeywordAndIntersection.ts, 14, 23))
+}
+

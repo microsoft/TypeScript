@@ -1,7 +1,7 @@
-tests/cases/compiler/genericFunctionTypedArgumentsAreFixed.ts(2,14): error TS2339: Property 'length' does not exist on type 'number'.
+genericFunctionTypedArgumentsAreFixed.ts(2,14): error TS2339: Property 'length' does not exist on type 'number'.
 
 
-==== tests/cases/compiler/genericFunctionTypedArgumentsAreFixed.ts (1 errors) ====
+==== genericFunctionTypedArgumentsAreFixed.ts (1 errors) ====
     declare function map<T, U>(f: (x: T) => U, xs: T[]): U[];
     map((a) => a.length, [1]);
                  ~~~~~~

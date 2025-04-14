@@ -1,4 +1,6 @@
-=== tests/cases/compiler/Element.ts ===
+//// [tests/cases/compiler/jsxFactoryNotIdentifierOrQualifiedName.ts] ////
+
+=== Element.ts ===
 declare namespace JSX {
 >JSX : Symbol(JSX, Decl(Element.ts, 0, 0))
 
@@ -76,7 +78,7 @@ function toCamelCase(text: string): string {
 >substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
 }
 
-=== tests/cases/compiler/test.tsx ===
+=== test.tsx ===
 import { Element} from './Element';
 >Element : Symbol(Element, Decl(test.tsx, 0, 8))
 

@@ -1,15 +1,22 @@
-=== tests/cases/compiler/nestedModulePrivateAccess.ts ===
+//// [tests/cases/compiler/nestedModulePrivateAccess.ts] ////
+
+=== nestedModulePrivateAccess.ts ===
 module a{
 >a : typeof a
+>  : ^^^^^^^^
 
        var x:number;
 >x : number
+>  : ^^^^^^
 
        module b{
 >b : typeof b
+>  : ^^^^^^^^
 
                var y = x; // should not be an error
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
        }
 }

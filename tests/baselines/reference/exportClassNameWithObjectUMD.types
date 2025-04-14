@@ -1,4 +1,7 @@
-=== tests/cases/conformance/externalModules/exportClassNameWithObjectUMD.ts ===
+//// [tests/cases/conformance/externalModules/exportClassNameWithObjectUMD.ts] ////
+
+=== exportClassNameWithObjectUMD.ts ===
 export class Object {}
 >Object : Object
+>       : ^^^^^^
 

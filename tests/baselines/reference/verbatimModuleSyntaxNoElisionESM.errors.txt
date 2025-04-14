@@ -1,0 +1,54 @@
+/b.ts(1,13): error TS1484: 'A' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+/b.ts(5,10): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+/b.ts(6,10): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+/c.ts(1,10): error TS1485: 'AClass' resolves to a type-only declaration and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+/main6.ts(2,16): error TS1284: An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+/main7.ts(2,16): error TS1285: An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but 'C' resolves to a type-only declaration.
+
+
+==== /a.ts (0 errors) ====
+    export const a = 0;
+    export type A = typeof a;
+    export class AClass {}
+    
+==== /b.ts (3 errors) ====
+    import { a, A, AClass } from "./a";
+                ~
+!!! error TS1484: 'A' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+    import type { a as aValue, A as AType } from "./a";
+    import { type A as AType2 } from "./a";
+    
+    export { A };
+             ~
+!!! error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+    export { A as A2 } from "./a";
+             ~~~~~~~
+!!! error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+    export type { A as A3 } from "./a";
+    export { type A as A4 } from "./a";
+    export type { AClass } from "./a";
+    
+==== /c.ts (1 errors) ====
+    import { AClass } from "./b";
+             ~~~~~~
+!!! error TS1485: 'AClass' resolves to a type-only declaration and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+!!! related TS1377 /b.ts:9:15: 'AClass' was exported here.
+    
+==== /main4.ts (0 errors) ====
+    export default 1; // ok
+    
+==== /main5.ts (0 errors) ====
+    export default class C {} // ok
+    
+==== /main6.ts (1 errors) ====
+    interface I {}
+    export default I; // error
+                   ~
+!!! error TS1284: An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+    
+==== /main7.ts (1 errors) ====
+    import type C from "./main5";
+    export default C; // error
+                   ~
+!!! error TS1285: An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but 'C' resolves to a type-only declaration.
+    

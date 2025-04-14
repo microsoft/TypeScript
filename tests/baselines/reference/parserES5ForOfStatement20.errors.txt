@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement20.ts(1,10): error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
+parserES5ForOfStatement20.ts(1,10): error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement20.ts (1 errors) ====
+==== parserES5ForOfStatement20.ts (1 errors) ====
     for (var of = 0 in of) { }
              ~~
 !!! error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.

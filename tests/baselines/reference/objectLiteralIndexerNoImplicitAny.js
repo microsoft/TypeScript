@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralIndexerNoImplicitAny.ts] ////
+
 //// [objectLiteralIndexerNoImplicitAny.ts]
 interface I {
     [s: string]: any;

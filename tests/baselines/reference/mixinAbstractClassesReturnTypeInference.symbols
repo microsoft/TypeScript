@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/mixinAbstractClassesReturnTypeInference.ts ===
+//// [tests/cases/conformance/classes/mixinAbstractClassesReturnTypeInference.ts] ////
+
+=== mixinAbstractClassesReturnTypeInference.ts ===
 interface Mixin1 {
 >Mixin1 : Symbol(Mixin1, Decl(mixinAbstractClassesReturnTypeInference.ts, 0, 0))
 

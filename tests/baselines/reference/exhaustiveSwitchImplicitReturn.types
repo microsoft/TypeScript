@@ -1,119 +1,165 @@
-=== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts ===
+//// [tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts] ////
+
+=== exhaustiveSwitchImplicitReturn.ts ===
 function foo1(bar: "a"): number {
 >foo1 : (bar: "a") => number
+>     : ^   ^^   ^^^^^      
 >bar : "a"
+>    : ^^^
 
     switch(bar) {
 >bar : "a"
+>    : ^^^
 
         case "a":
 >"a" : "a"
+>    : ^^^
 
             return 1;
 >1 : 1
+>  : ^
     }
 }
 
 function foo2(bar: "a"): number {
 >foo2 : (bar: "a") => number
+>     : ^   ^^   ^^^^^      
 >bar : "a"
+>    : ^^^
 
     switch(bar) {
 >bar : "a"
+>    : ^^^
 
         case "a":
 >"a" : "a"
+>    : ^^^
 
             return 1;
 >1 : 1
+>  : ^
     }
 
     let unusedVariable;
 >unusedVariable : any
+>               : ^^^
 }
 
 function foo3(bar: "a"): number {
 >foo3 : (bar: "a") => number
+>     : ^   ^^   ^^^^^      
 >bar : "a"
+>    : ^^^
 
     switch(bar) {
 >bar : "a"
+>    : ^^^
 
         case "a":
 >"a" : "a"
+>    : ^^^
 
             return 1;
 >1 : 1
+>  : ^
     }
 
     function neverCalled() {}
 >neverCalled : () => void
+>            : ^^^^^^^^^^
 }
 
 function foo4(bar: "a"): number {
 >foo4 : (bar: "a") => number
+>     : ^   ^^   ^^^^^      
 >bar : "a"
+>    : ^^^
 
     switch(bar) {
 >bar : "a"
+>    : ^^^
 
         case "a":
 >"a" : "a"
+>    : ^^^
 
             return 1;
 >1 : 1
+>  : ^
     }
 
     foo3(bar);
 >foo3(bar) : number
+>          : ^^^^^^
 >foo3 : (bar: "a") => number
+>     : ^   ^^   ^^^^^      
 >bar : never
+>    : ^^^^^
 }
 
 function foo5(bar: "a" | "b"): number {
 >foo5 : (bar: "a" | "b") => number
+>     : ^   ^^         ^^^^^      
 >bar : "a" | "b"
+>    : ^^^^^^^^^
 
     switch(bar) {
 >bar : "a" | "b"
+>    : ^^^^^^^^^
 
         case "a":
 >"a" : "a"
+>    : ^^^
 
             return 1;
 >1 : 1
+>  : ^
     }
 }
 
 function foo6(bar: "a", a: boolean, b: boolean): number {
 >foo6 : (bar: "a", a: boolean, b: boolean) => number
+>     : ^   ^^   ^^ ^^       ^^ ^^       ^^^^^      
 >bar : "a"
+>    : ^^^
 >a : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
     if (a) {
 >a : boolean
+>  : ^^^^^^^
 
         switch (bar) {
 >bar : "a"
+>    : ^^^
 
             case "a": return 1;
 >"a" : "a"
+>    : ^^^
 >1 : 1
+>  : ^
         }
     }
     else {
         switch (b) {
 >b : boolean
+>  : ^^^^^^^
 
             case true: return -1;
 >true : true
+>     : ^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
             case false: return 0;
 >false : false
+>      : ^^^^^
 >0 : 0
+>  : ^
         }
     }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty3.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty3.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty3.ts ===
 type Foo = (number | undefined)[] | undefined;
 >Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 0, 0))
 

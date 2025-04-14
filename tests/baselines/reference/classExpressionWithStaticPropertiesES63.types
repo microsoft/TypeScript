@@ -1,57 +1,96 @@
-=== tests/cases/compiler/classExpressionWithStaticPropertiesES63.ts ===
+//// [tests/cases/compiler/classExpressionWithStaticPropertiesES63.ts] ////
+
+=== classExpressionWithStaticPropertiesES63.ts ===
 declare var console: any;
 >console : any
 
 const arr: {y(): number}[] = [];
 >arr : { y(): number; }[]
+>    : ^^^^^^^      ^^^^^
 >y : () => number
+>  : ^^^^^^      
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 for (let i = 0; i < 3; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 3 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     arr.push(class C {
 >arr.push(class C {        static x = i;        static y = () => C.x * 2;    }) : number
+>                                                                               : ^^^^^^
 >arr.push : (...items: { y(): number; }[]) => number
+>         : ^^^^     ^^^^^^^^^      ^^^^^^^^^^      
 >arr : { y(): number; }[]
+>    : ^^^^^^^      ^^^^^
 >push : (...items: { y(): number; }[]) => number
+>     : ^^^^     ^^^^^^^^^      ^^^^^^^^^^      
 >class C {        static x = i;        static y = () => C.x * 2;    } : typeof C
+>                                                                     : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         static x = i;
 >x : number
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 
         static y = () => C.x * 2;
 >y : () => number
+>  : ^^^^^^^^^^^^
 >() => C.x * 2 : () => number
+>              : ^^^^^^^^^^^^
 >C.x * 2 : number
+>        : ^^^^^^
 >C.x : number
+>    : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     });
 }
 arr.forEach(C => console.log(C.y()));
 >arr.forEach(C => console.log(C.y())) : void
+>                                     : ^^^^
 >arr.forEach : (callbackfn: (value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg?: any) => void
+>            : ^          ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >arr : { y(): number; }[]
+>    : ^^^^^^^      ^^^^^
 >forEach : (callbackfn: (value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^^      ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >C => console.log(C.y()) : (C: { y(): number; }) => any
+>                        : ^ ^^^^^^^^^      ^^^^^^^^^^^
 >C : { y(): number; }
+>  : ^^^^^^^      ^^^
 >console.log(C.y()) : any
 >console.log : any
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >C.y() : number
+>      : ^^^^^^
 >C.y : () => number
+>    : ^^^^^^      
 >C : { y(): number; }
+>  : ^^^^^^^      ^^^
 >y : () => number
+>  : ^^^^^^      
 

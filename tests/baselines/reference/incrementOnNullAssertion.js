@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incrementOnNullAssertion.ts] ////
+
 //// [incrementOnNullAssertion.ts]
 interface Dictionary<T> {
     [myFavouriteType: string]: T | undefined

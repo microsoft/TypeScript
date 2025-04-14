@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues.ts] ////
+
+=== constructorImplementationWithDefaultValues.ts ===
 class C {
 >C : Symbol(C, Decl(constructorImplementationWithDefaultValues.ts, 0, 0))
 

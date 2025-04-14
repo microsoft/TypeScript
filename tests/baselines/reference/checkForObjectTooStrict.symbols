@@ -1,4 +1,6 @@
-=== tests/cases/compiler/checkForObjectTooStrict.ts ===
+//// [tests/cases/compiler/checkForObjectTooStrict.ts] ////
+
+=== checkForObjectTooStrict.ts ===
 module Foo {
 >Foo : Symbol(Foo, Decl(checkForObjectTooStrict.ts, 0, 0))
 

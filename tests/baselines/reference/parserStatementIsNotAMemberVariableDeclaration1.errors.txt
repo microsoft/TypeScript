@@ -1,7 +1,11 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserStatementIsNotAMemberVariableDeclaration1.ts(1,1): error TS1108: A 'return' statement can only be used within a function body.
+error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+parserStatementIsNotAMemberVariableDeclaration1.ts(1,1): error TS1108: A 'return' statement can only be used within a function body.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserStatementIsNotAMemberVariableDeclaration1.ts (1 errors) ====
+!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2304 parserStatementIsNotAMemberVariableDeclaration1.ts:6:5: Cannot find name 'private'.
+==== parserStatementIsNotAMemberVariableDeclaration1.ts (1 errors) ====
     return {
     ~~~~~~
 !!! error TS1108: A 'return' statement can only be used within a function body.

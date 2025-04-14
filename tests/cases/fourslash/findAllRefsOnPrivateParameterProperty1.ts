@@ -1,12 +1,12 @@
 /// <reference path="fourslash.ts" />
 
 ////class ABCD {
-////    constructor(private x: number, public y: number, [|private [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}z|]: number|]) {
+////    constructor(private x: number, public y: number, /*1*/private /*2*/z: number) {
 ////    }
 ////
 ////    func() {
-////        return this.[|z|];
+////        return this./*3*/z;
 ////    }
 ////}
 
-verify.singleReferenceGroup("(property) ABCD.z: number", "z");
+verify.baselineFindAllReferences('1', '2', '3');

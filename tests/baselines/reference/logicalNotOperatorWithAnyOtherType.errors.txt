@@ -1,10 +1,12 @@
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(57,1): error TS2695: Left side of comma operator is unused and has no side effects.
+logicalNotOperatorWithAnyOtherType.ts(33,25): error TS2873: This kind of expression is always falsy.
+logicalNotOperatorWithAnyOtherType.ts(34,25): error TS2873: This kind of expression is always falsy.
+logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+logicalNotOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+logicalNotOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+logicalNotOperatorWithAnyOtherType.ts(57,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts (4 errors) ====
+==== logicalNotOperatorWithAnyOtherType.ts (6 errors) ====
     // ! operator on any type
     
     var ANY: any;
@@ -38,7 +40,11 @@ tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNot
     
     // any type literal
     var ResultIsBoolean7 = !undefined;
+                            ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var ResultIsBoolean8 = !null;
+                            ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     // any type expressions
     var ResultIsBoolean9 = !ANY2[0];

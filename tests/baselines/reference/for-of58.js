@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of58.ts] ////
+
 //// [for-of58.ts]
 type X = { x: 'x' };
 type Y = { y: 'y' };

@@ -1,56 +1,76 @@
-=== tests/cases/compiler/propertyIdentityWithPrivacyMismatch_1.ts ===
+//// [tests/cases/compiler/propertyIdentityWithPrivacyMismatch.ts] ////
+
+=== propertyIdentityWithPrivacyMismatch_1.ts ===
 ///<reference path='propertyIdentityWithPrivacyMismatch_0.ts'/>
 import m1 = require('mod1');
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
 import m2 = require('mod2');
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
 var x: m1.Foo;
 >x : m1.Foo
+>  : ^^^^^^
 >m1 : any
+>   : ^^^
 
 var x: m2.Foo; // Should be error (mod1.Foo !== mod2.Foo)
 >x : m1.Foo
+>  : ^^^^^^
 >m2 : any
+>   : ^^^
 
 class Foo1 {
 >Foo1 : Foo1
+>     : ^^^^
 
     private n;
 >n : any
+>  : ^^^
 }
 class Foo2 {
 >Foo2 : Foo2
+>     : ^^^^
 
     private n;
 >n : any
+>  : ^^^
 }
 var y: Foo1;
 >y : Foo1
+>  : ^^^^
 
 var y: Foo2;
 >y : Foo1
+>  : ^^^^
 
-=== tests/cases/compiler/propertyIdentityWithPrivacyMismatch_0.ts ===
+=== propertyIdentityWithPrivacyMismatch_0.ts ===
 declare module 'mod1' {
 >'mod1' : typeof import("mod1")
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
     class Foo {
 >Foo : Foo
+>    : ^^^
 
         private n;
 >n : any
+>  : ^^^
     }
 }
 declare module 'mod2' {
 >'mod2' : typeof import("mod2")
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
     class Foo {
 >Foo : Foo
+>    : ^^^
 
         private n;
 >n : any
+>  : ^^^
     }
 }
 

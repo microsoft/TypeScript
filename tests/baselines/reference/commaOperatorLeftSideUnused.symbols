@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commaOperatorLeftSideUnused.ts ===
+//// [tests/cases/compiler/commaOperatorLeftSideUnused.ts] ////
+
+=== commaOperatorLeftSideUnused.ts ===
 var xx: any;
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
 
@@ -109,6 +111,10 @@ xx = (+xx, 10);
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
 
+xx = (0, xx)();
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
 // OK cases
 xx = (xx ? x++ : 4, 10);
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
@@ -148,6 +154,18 @@ xx = (void xx, 10);
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
 
 xx = (xx as any, 100);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (0, xx.fn)();
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (0, xx['fn'])();
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (0, xx.fn)``;
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
 

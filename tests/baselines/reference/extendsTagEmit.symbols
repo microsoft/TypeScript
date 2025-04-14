@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/super.js ===
+//// [tests/cases/conformance/jsdoc/extendsTagEmit.ts] ////
+
+=== super.js ===
 export class B { }
 >B : Symbol(B, Decl(super.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/main.js ===
+=== main.js ===
 import { B } from './super'
 >B : Symbol(B, Decl(main.js, 0, 8))
 

@@ -1,0 +1,222 @@
+//// [tests/cases/compiler/thisInFunctionCall.ts] ////
+
+=== thisInFunctionCall.ts ===
+class Test {
+>Test : Test
+>     : ^^^^
+
+  data: number[]
+>data : number[]
+>     : ^^^^^^^^
+
+  constructor() {
+    this.data = [1, 2, 3]
+>this.data = [1, 2, 3] : number[]
+>                      : ^^^^^^^^
+>this.data : number[]
+>          : ^^^^^^^^
+>this : this
+>     : ^^^^
+>data : number[]
+>     : ^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+  }
+
+  finderRaw() {
+>finderRaw : () => void
+>          : ^^^^^^^^^^
+
+    this.data.find(function (d) {
+>this.data.find(function (d) {      return d === this.data.length    }) : number
+>                                                                       : ^^^^^^
+>this.data.find : { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^
+>this.data : number[]
+>          : ^^^^^^^^
+>this : this
+>     : ^^^^
+>data : number[]
+>     : ^^^^^^^^
+>find : { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number; }
+>     : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^
+>function (d) {      return d === this.data.length    } : (d: number) => boolean
+>                                                       : ^ ^^^^^^^^^^^^^^^^^^^^
+>d : number
+>  : ^^^^^^
+
+      return d === this.data.length
+>d === this.data.length : boolean
+>                       : ^^^^^^^
+>d : number
+>  : ^^^^^^
+>this.data.length : any
+>                 : ^^^
+>this.data : any
+>          : ^^^
+>this : any
+>     : ^^^
+>data : any
+>     : ^^^
+>length : any
+>       : ^^^
+
+    })
+  }
+
+  forEacherRaw() {
+>forEacherRaw : () => void
+>             : ^^^^^^^^^^
+
+    this.data.forEach(function (d) {
+>this.data.forEach(function (d) {      console.log(d === this.data.length)    }) : void
+>                                                                                : ^^^^
+>this.data.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>                  : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>this.data : number[]
+>          : ^^^^^^^^
+>this : this
+>     : ^^^^
+>data : number[]
+>     : ^^^^^^^^
+>forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>function (d) {      console.log(d === this.data.length)    } : (d: number) => void
+>                                                             : ^ ^^^^^^^^^^^^^^^^^
+>d : number
+>  : ^^^^^^
+
+      console.log(d === this.data.length)
+>console.log(d === this.data.length) : void
+>                                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>d === this.data.length : boolean
+>                       : ^^^^^^^
+>d : number
+>  : ^^^^^^
+>this.data.length : any
+>                 : ^^^
+>this.data : any
+>          : ^^^
+>this : any
+>     : ^^^
+>data : any
+>     : ^^^
+>length : any
+>       : ^^^
+
+    })
+  }
+
+  forEacher() {
+>forEacher : () => void
+>          : ^^^^^^^^^^
+
+    this.data.forEach(
+>this.data.forEach(    /** @this {Test} */    function (d) {      console.log(d === this.data.length)    }, this) : void
+>                                                                                                                 : ^^^^
+>this.data.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>                  : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>this.data : number[]
+>          : ^^^^^^^^
+>this : this
+>     : ^^^^
+>data : number[]
+>     : ^^^^^^^^
+>forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+
+    /** @this {Test} */
+    function (d) {
+>function (d) {      console.log(d === this.data.length)    } : (d: number) => void
+>                                                             : ^ ^^^^^^^^^^^^^^^^^
+>d : number
+>  : ^^^^^^
+
+      console.log(d === this.data.length)
+>console.log(d === this.data.length) : void
+>                                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>d === this.data.length : boolean
+>                       : ^^^^^^^
+>d : number
+>  : ^^^^^^
+>this.data.length : any
+>                 : ^^^
+>this.data : any
+>          : ^^^
+>this : any
+>     : ^^^
+>data : any
+>     : ^^^
+>length : any
+>       : ^^^
+
+    }, this)
+>this : this
+>     : ^^^^
+  }
+
+  finder() {
+>finder : () => void
+>       : ^^^^^^^^^^
+
+    this.data.find(
+>this.data.find(    /** @this {Test} */    function (d) {      return d === this.data.length    }, this) : number
+>                                                                                                        : ^^^^^^
+>this.data.find : { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^
+>this.data : number[]
+>          : ^^^^^^^^
+>this : this
+>     : ^^^^
+>data : number[]
+>     : ^^^^^^^^
+>find : { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number; }
+>     : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^
+
+    /** @this {Test} */
+    function (d) {
+>function (d) {      return d === this.data.length    } : (d: number) => boolean
+>                                                       : ^ ^^^^^^^^^^^^^^^^^^^^
+>d : number
+>  : ^^^^^^
+
+      return d === this.data.length
+>d === this.data.length : boolean
+>                       : ^^^^^^^
+>d : number
+>  : ^^^^^^
+>this.data.length : any
+>                 : ^^^
+>this.data : any
+>          : ^^^
+>this : any
+>     : ^^^
+>data : any
+>     : ^^^
+>length : any
+>       : ^^^
+
+    }, this)
+>this : this
+>     : ^^^^
+  }
+}
+

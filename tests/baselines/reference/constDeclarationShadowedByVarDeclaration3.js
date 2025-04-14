@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarationShadowedByVarDeclaration3.ts] ////
+
 //// [constDeclarationShadowedByVarDeclaration3.ts]
 // Ensure only checking for const declarations shadowed by vars
 class Rule {

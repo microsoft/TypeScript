@@ -1,179 +1,288 @@
-=== tests/cases/compiler/arrowFunctionsMissingTokens.ts ===
+//// [tests/cases/compiler/arrowFunctionsMissingTokens.ts] ////
+
+=== arrowFunctionsMissingTokens.ts ===
 module missingArrowsWithCurly {
 >missingArrowsWithCurly : typeof missingArrowsWithCurly
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var a = () { };
 >a : () => void
+>  : ^^^^^^^^^^
 >() { } : () => void
+>       : ^^^^^^^^^^
 
     var b = (): void { }
 >b : () => void
+>  : ^^^^^^    
 >(): void { } : () => void
+>             : ^^^^^^    
 
     var c = (x) { };
 >c : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >(x) { } : (x: any) => void
+>        : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     var d = (x: number, y: string) { };
 >d : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(x: number, y: string) { } : (x: number, y: string) => void
+>                           : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     var e = (x: number, y: string): void { };
 >e : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void { } : (x: number, y: string) => void
+>                                 : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 
 module missingCurliesWithArrow {
 >missingCurliesWithArrow : typeof missingCurliesWithArrow
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     module withStatement {
 >withStatement : typeof withStatement
+>              : ^^^^^^^^^^^^^^^^^^^^
 
         var a = () => var k = 10;};
 >a : () => void
+>  : ^^^^^^^^^^
 >() => var k = 10;} : () => void
+>                   : ^^^^^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         var b = (): void => var k = 10;}
 >b : () => void
+>  : ^^^^^^    
 >(): void => var k = 10;} : () => void
+>                         : ^^^^^^    
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         var c = (x) => var k = 10;};
 >c : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >(x) => var k = 10;} : (x: any) => void
+>                    : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         var d = (x: number, y: string) => var k = 10;};
 >d : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(x: number, y: string) => var k = 10;} : (x: number, y: string) => void
+>                                       : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         var e = (x: number, y: string): void => var k = 10;};
 >e : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void => var k = 10;} : (x: number, y: string) => void
+>                                             : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         var f = () => var k = 10;}
 >f : () => void
+>  : ^^^^^^^^^^
 >() => var k = 10;} : () => void
+>                   : ^^^^^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     }
 
     module withoutStatement {
 >withoutStatement : typeof withoutStatement
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
         var a = () => };
 >a : () => any
+>  : ^^^^^^^^^
 >() => : () => any
+>      : ^^^^^^^^^
 > : any
+> : ^^^
 
         var b = (): void => }
 >b : () => void
+>  : ^^^^^^    
 >(): void => : () => void
+>            : ^^^^^^    
 > : any
+> : ^^^
 
         var c = (x) => };
 >c : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >(x) => : (x: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 > : any
+> : ^^^
 
         var d = (x: number, y: string) => };
 >d : (x: number, y: string) => any
+>  : ^ ^^      ^^ ^^      ^^^^^^^^
 >(x: number, y: string) => : (x: number, y: string) => any
+>                          : ^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 > : any
+> : ^^^
 
         var e = (x: number, y: string): void => };
 >e : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void => : (x: number, y: string) => void
+>                                : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 > : any
+> : ^^^
 
         var f = () => }
 >f : () => any
+>  : ^^^^^^^^^
 >() => : () => any
+>      : ^^^^^^^^^
 > : any
+> : ^^^
     }
 }
 
 module ce_nEst_pas_une_arrow_function {
 >ce_nEst_pas_une_arrow_function : typeof ce_nEst_pas_une_arrow_function
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var a = ();
 >a : any
+>  : ^^^
 >() : any
+>   : ^^^
 > : any
+> : ^^^
 
     var b = (): void;
 >b : () => void
+>  : ^^^^^^    
 >(): void : () => void
+>         : ^^^^^^    
 > : any
+> : ^^^
 
     var c = (x);
 >c : any
+>  : ^^^
 >(x) : any
+>    : ^^^
 >x : any
+>  : ^^^
 
     var d = (x: number, y: string);
 >d : (x: number, y: string) => any
+>  : ^ ^^      ^^ ^^      ^^^^^^^^
 >(x: number, y: string) : (x: number, y: string) => any
+>                       : ^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 > : any
+> : ^^^
 
     var e = (x: number, y: string): void;
 >e : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void : (x: number, y: string) => void
+>                             : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 > : any
+> : ^^^
 }
 
 module okay {
 >okay : typeof okay
+>     : ^^^^^^^^^^^
 
     var a = () => { };
 >a : () => void
+>  : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
     var b = (): void => { }
 >b : () => void
+>  : ^^^^^^    
 >(): void => { } : () => void
+>                : ^^^^^^    
 
     var c = (x) => { };
 >c : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >(x) => { } : (x: any) => void
+>           : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     var d = (x: number, y: string) => { };
 >d : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(x: number, y: string) => { } : (x: number, y: string) => void
+>                              : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     var e = (x: number, y: string): void => { };
 >e : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void => { } : (x: number, y: string) => void
+>                                    : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }

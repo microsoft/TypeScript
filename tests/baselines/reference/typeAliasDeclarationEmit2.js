@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasDeclarationEmit2.ts] ////
+
 //// [typeAliasDeclarationEmit2.ts]
 export type A<a> = { value: a };
 
@@ -9,6 +11,6 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [typeAliasDeclarationEmit2.d.ts]
-export declare type A<a> = {
+export type A<a> = {
     value: a;
 };

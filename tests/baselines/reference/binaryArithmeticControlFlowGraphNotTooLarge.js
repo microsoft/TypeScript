@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/binaryArithmeticControlFlowGraphNotTooLarge.ts] ////
+
 //// [binaryArithmeticControlFlowGraphNotTooLarge.ts]
 // Repro from #29926 (expanded 10x for good measure)
 

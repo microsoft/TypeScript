@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveSpecializationOfSignatures.ts ===
+//// [tests/cases/compiler/recursiveSpecializationOfSignatures.ts] ////
+
+=== recursiveSpecializationOfSignatures.ts ===
 class S0<B, A> {
 >S0 : Symbol(S0, Decl(recursiveSpecializationOfSignatures.ts, 0, 0))
 >B : Symbol(B, Decl(recursiveSpecializationOfSignatures.ts, 0, 9))

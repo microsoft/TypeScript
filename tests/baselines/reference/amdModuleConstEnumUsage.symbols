@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdModuleConstEnumUsage.ts] ////
+
 === /proj/defs/cc.ts ===
 export const enum CharCode {
 >CharCode : Symbol(CharCode, Decl(cc.ts, 0, 0))

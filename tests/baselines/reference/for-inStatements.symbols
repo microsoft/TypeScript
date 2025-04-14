@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-inStatements/for-inStatements.ts ===
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatements.ts] ////
+
+=== for-inStatements.ts ===
 var aString: string;
 >aString : Symbol(aString, Decl(for-inStatements.ts, 0, 3))
 

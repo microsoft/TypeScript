@@ -1,7 +1,7 @@
-tests/cases/conformance/controlFlow/controlFlowAliasingCatchVariables.ts(20,11): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+controlFlowAliasingCatchVariables.ts(20,11): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowAliasingCatchVariables.ts (1 errors) ====
+==== controlFlowAliasingCatchVariables.ts (1 errors) ====
     try {}
     catch (e) {
         const isString = typeof e === 'string';

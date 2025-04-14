@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/super.ts] ////
+
 //// [super.ts]
 class Base {
     constructor() {

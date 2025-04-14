@@ -1,7 +1,7 @@
-tests/cases/compiler/blockScopedFunctionDeclarationStrictES6.ts(6,1): error TS2304: Cannot find name 'foo'.
+blockScopedFunctionDeclarationStrictES6.ts(6,1): error TS2304: Cannot find name 'foo'.
 
 
-==== tests/cases/compiler/blockScopedFunctionDeclarationStrictES6.ts (1 errors) ====
+==== blockScopedFunctionDeclarationStrictES6.ts (1 errors) ====
     "use strict";
     if (true) {
         function foo() { } // Allowed to declare block scope function

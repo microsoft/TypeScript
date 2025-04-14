@@ -1,28 +1,43 @@
-=== tests/cases/compiler/unusedVariablesinNamespaces2.ts ===
+//// [tests/cases/compiler/unusedVariablesinNamespaces2.ts] ////
+
+=== unusedVariablesinNamespaces2.ts ===
 namespace Validation {
 >Validation : typeof Validation
+>           : ^^^^^^^^^^^^^^^^^
 
     const lettersRegexp = /^[A-Za-z]+$/;
 >lettersRegexp : RegExp
+>              : ^^^^^^
 >/^[A-Za-z]+$/ : RegExp
+>              : ^^^^^^
 
     const numberRegexp = /^[0-9]+$/;
 >numberRegexp : RegExp
+>             : ^^^^^^
 >/^[0-9]+$/ : RegExp
+>           : ^^^^^^
 
     export class LettersOnlyValidator {
 >LettersOnlyValidator : LettersOnlyValidator
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         isAcceptable(s2: string) {
 >isAcceptable : (s2: string) => boolean
+>             : ^  ^^      ^^^^^^^^^^^^
 >s2 : string
+>   : ^^^^^^
 
             return lettersRegexp.test(s2);
 >lettersRegexp.test(s2) : boolean
+>                       : ^^^^^^^
 >lettersRegexp.test : (string: string) => boolean
+>                   : ^      ^^      ^^^^^       
 >lettersRegexp : RegExp
+>              : ^^^^^^
 >test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
 >s2 : string
+>   : ^^^^^^
         }
     }
 }

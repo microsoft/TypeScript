@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts(1,8): error TS2833: Cannot find namespace 'TypeModule1'. Did you mean 'TypeModule2'?
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts(1,20): error TS1003: Identifier expected.
+parserUnfinishedTypeNameBeforeKeyword1.ts(1,8): error TS2833: Cannot find namespace 'TypeModule1'. Did you mean 'TypeModule2'?
+parserUnfinishedTypeNameBeforeKeyword1.ts(1,20): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts (2 errors) ====
+==== parserUnfinishedTypeNameBeforeKeyword1.ts (2 errors) ====
     var x: TypeModule1.
            ~~~~~~~~~~~
 !!! error TS2833: Cannot find namespace 'TypeModule1'. Did you mean 'TypeModule2'?

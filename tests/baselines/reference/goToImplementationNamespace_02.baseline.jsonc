@@ -1,0 +1,56 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_02.ts ===
+// module Foo {
+//     <|export function [|hello|]() {}|>
+// }
+// 
+// Foo.hell/*GOTO IMPL*/o();
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "function"
+   }
+  ]

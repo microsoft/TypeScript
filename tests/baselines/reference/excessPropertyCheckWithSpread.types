@@ -1,44 +1,68 @@
-=== tests/cases/compiler/excessPropertyCheckWithSpread.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithSpread.ts] ////
+
+=== excessPropertyCheckWithSpread.ts ===
 declare function f({ a: number }): void
 >f : ({ a: number }: { a: any; }) => void
+>  : ^             ^^^^^^^^^^^^^^^^^^    
 >a : any
+>  : ^^^
 >number : any
+>       : ^^^
 
 interface I {
     readonly n: number;
 >n : number
+>  : ^^^^^^
 }
 declare let i: I;
 >i : I
+>  : ^
 
 f({ a: 1, ...i });
 >f({ a: 1, ...i }) : void
+>                  : ^^^^
 >f : ({ a: number }: { a: any; }) => void
+>  : ^             ^^^^^^^^^^^^^^^^^^    
 >{ a: 1, ...i } : { n: number; a: number; }
+>               : ^^^^^      ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i : I
+>  : ^
 
 interface R {
     opt?: number
 >opt : number
+>    : ^^^^^^
 }
 interface L {
     opt: string
 >opt : string
+>    : ^^^^^^
 }
 declare let l: L;
 >l : L
+>  : ^
 
 declare let r: R;
 >r : R
+>  : ^
 
 f({ a: 1, ...l, ...r });
 >f({ a: 1, ...l, ...r }) : void
+>                        : ^^^^
 >f : ({ a: number }: { a: any; }) => void
+>  : ^             ^^^^^^^^^^^^^^^^^^    
 >{ a: 1, ...l, ...r } : { opt: string | number; a: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >l : L
+>  : ^
 >r : R
+>  : ^
 

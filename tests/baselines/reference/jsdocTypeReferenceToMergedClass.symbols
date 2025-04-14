@@ -1,32 +1,32 @@
-=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.js ===
-// https://github.com/microsoft/TypeScript/issues/34685
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.ts] ////
 
+=== jsdocTypeReferenceToMergedClass.js ===
 var Workspace = {}
->Workspace : Symbol(Workspace, Decl(jsdocTypeReferenceToMergedClass.js, 2, 3), Decl(jsdocTypeReferenceToMergedClass.js, 5, 20), Decl(jsdocTypeReferenceToMergedClass.js, 7, 37))
+>Workspace : Symbol(Workspace, Decl(jsdocTypeReferenceToMergedClass.js, 0, 3), Decl(jsdocTypeReferenceToMergedClass.js, 3, 20), Decl(jsdocTypeReferenceToMergedClass.js, 5, 37))
 
 /** @type {Workspace.Project} */
 var p;
->p : Symbol(p, Decl(jsdocTypeReferenceToMergedClass.js, 4, 3))
+>p : Symbol(p, Decl(jsdocTypeReferenceToMergedClass.js, 2, 3))
 
 p.isServiceProject()
->p.isServiceProject : Symbol(isServiceProject, Decl(jsdocTypeReferenceToMergedClass.js, 8, 31))
->p : Symbol(p, Decl(jsdocTypeReferenceToMergedClass.js, 4, 3))
->isServiceProject : Symbol(isServiceProject, Decl(jsdocTypeReferenceToMergedClass.js, 8, 31))
+>p.isServiceProject : Symbol(isServiceProject, Decl(jsdocTypeReferenceToMergedClass.js, 6, 31))
+>p : Symbol(p, Decl(jsdocTypeReferenceToMergedClass.js, 2, 3))
+>isServiceProject : Symbol(isServiceProject, Decl(jsdocTypeReferenceToMergedClass.js, 6, 31))
 
 Workspace.Project = function wp() { }
->Workspace.Project : Symbol(Workspace.Project, Decl(jsdocTypeReferenceToMergedClass.js, 5, 20), Decl(jsdocTypeReferenceToMergedClass.js, 8, 10))
->Workspace : Symbol(Workspace, Decl(jsdocTypeReferenceToMergedClass.js, 2, 3), Decl(jsdocTypeReferenceToMergedClass.js, 5, 20), Decl(jsdocTypeReferenceToMergedClass.js, 7, 37))
->Project : Symbol(Workspace.Project, Decl(jsdocTypeReferenceToMergedClass.js, 5, 20), Decl(jsdocTypeReferenceToMergedClass.js, 8, 10))
->wp : Symbol(wp, Decl(jsdocTypeReferenceToMergedClass.js, 7, 19))
+>Workspace.Project : Symbol(Workspace.Project, Decl(jsdocTypeReferenceToMergedClass.js, 3, 20), Decl(jsdocTypeReferenceToMergedClass.js, 6, 10))
+>Workspace : Symbol(Workspace, Decl(jsdocTypeReferenceToMergedClass.js, 0, 3), Decl(jsdocTypeReferenceToMergedClass.js, 3, 20), Decl(jsdocTypeReferenceToMergedClass.js, 5, 37))
+>Project : Symbol(Workspace.Project, Decl(jsdocTypeReferenceToMergedClass.js, 3, 20), Decl(jsdocTypeReferenceToMergedClass.js, 6, 10))
+>wp : Symbol(wp, Decl(jsdocTypeReferenceToMergedClass.js, 5, 19))
 
 Workspace.Project.prototype = {
->Workspace.Project.prototype : Symbol(Workspace.Project.prototype, Decl(jsdocTypeReferenceToMergedClass.js, 7, 37))
->Workspace.Project : Symbol(Workspace.Project, Decl(jsdocTypeReferenceToMergedClass.js, 5, 20), Decl(jsdocTypeReferenceToMergedClass.js, 8, 10))
->Workspace : Symbol(Workspace, Decl(jsdocTypeReferenceToMergedClass.js, 2, 3), Decl(jsdocTypeReferenceToMergedClass.js, 5, 20), Decl(jsdocTypeReferenceToMergedClass.js, 7, 37))
->Project : Symbol(Workspace.Project, Decl(jsdocTypeReferenceToMergedClass.js, 5, 20), Decl(jsdocTypeReferenceToMergedClass.js, 8, 10))
->prototype : Symbol(Workspace.Project.prototype, Decl(jsdocTypeReferenceToMergedClass.js, 7, 37))
+>Workspace.Project.prototype : Symbol(Workspace.Project.prototype, Decl(jsdocTypeReferenceToMergedClass.js, 5, 37))
+>Workspace.Project : Symbol(Workspace.Project, Decl(jsdocTypeReferenceToMergedClass.js, 3, 20), Decl(jsdocTypeReferenceToMergedClass.js, 6, 10))
+>Workspace : Symbol(Workspace, Decl(jsdocTypeReferenceToMergedClass.js, 0, 3), Decl(jsdocTypeReferenceToMergedClass.js, 3, 20), Decl(jsdocTypeReferenceToMergedClass.js, 5, 37))
+>Project : Symbol(Workspace.Project, Decl(jsdocTypeReferenceToMergedClass.js, 3, 20), Decl(jsdocTypeReferenceToMergedClass.js, 6, 10))
+>prototype : Symbol(Workspace.Project.prototype, Decl(jsdocTypeReferenceToMergedClass.js, 5, 37))
 
   isServiceProject() {}
->isServiceProject : Symbol(isServiceProject, Decl(jsdocTypeReferenceToMergedClass.js, 8, 31))
+>isServiceProject : Symbol(isServiceProject, Decl(jsdocTypeReferenceToMergedClass.js, 6, 31))
 }
 

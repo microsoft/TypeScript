@@ -1,89 +1,138 @@
-=== tests/cases/compiler/arraySigChecking.ts ===
+//// [tests/cases/compiler/arraySigChecking.ts] ////
+
+=== arraySigChecking.ts ===
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     interface iBar { t: any; }
 >t : any
+>  : ^^^
 
     interface iFoo extends iBar {
         s: any;
 >s : any
+>  : ^^^
     }
 
     class cFoo {
 >cFoo : cFoo
+>     : ^^^^
 
         t: any;
 >t : any
+>  : ^^^
     }
 
     var foo: { [index: any]; }; // expect an error here
 >foo : {}
+>    : ^^
 >index : any
+>      : ^^^
 }
 
 interface myInt {
     voidFn(): void;
 >voidFn : () => void
+>       : ^^^^^^    
 }
 var myVar: myInt;
 >myVar : myInt
+>      : ^^^^^
 
 var strArray: string[] = [myVar.voidFn()];
 >strArray : string[]
+>         : ^^^^^^^^
 >[myVar.voidFn()] : void[]
+>                 : ^^^^^^
 >myVar.voidFn() : void
+>               : ^^^^
 >myVar.voidFn : () => void
+>             : ^^^^^^    
 >myVar : myInt
+>      : ^^^^^
 >voidFn : () => void
+>       : ^^^^^^    
 
 
 var myArray: number[][][];
 >myArray : number[][][]
+>        : ^^^^^^^^^^^^
 
 myArray = [[1, 2]];
 >myArray = [[1, 2]] : number[][]
+>                   : ^^^^^^^^^^
 >myArray : number[][][]
+>        : ^^^^^^^^^^^^
 >[[1, 2]] : number[][]
+>         : ^^^^^^^^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 function isEmpty(l: { length: number }) {
->isEmpty : (l: {    length: number;}) => boolean
+>isEmpty : (l: { length: number; }) => boolean
+>        : ^ ^^                   ^^^^^^^^^^^^
 >l : { length: number; }
+>  : ^^^^^^^^^^      ^^^
 >length : number
+>       : ^^^^^^
 
     return l.length === 0;
 >l.length === 0 : boolean
+>               : ^^^^^^^
 >l.length : number
+>         : ^^^^^^
 >l : { length: number; }
+>  : ^^^^^^^^^^      ^^^
 >length : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 isEmpty([]);
 >isEmpty([]) : boolean
+>            : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
+>        : ^ ^^                   ^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 isEmpty(new Array(3));
 >isEmpty(new Array(3)) : boolean
+>                      : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
+>        : ^ ^^                   ^^^^^^^^^^^^
 >new Array(3) : any[]
+>             : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
 isEmpty(new Array<string>(3));
 >isEmpty(new Array<string>(3)) : boolean
+>                              : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
+>        : ^ ^^                   ^^^^^^^^^^^^
 >new Array<string>(3) : string[]
+>                     : ^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
 isEmpty(['a']);
 >isEmpty(['a']) : boolean
+>               : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
+>        : ^ ^^                   ^^^^^^^^^^^^
 >['a'] : string[]
+>      : ^^^^^^^^
 >'a' : "a"
+>    : ^^^
 

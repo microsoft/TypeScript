@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newExpressionWithCast.ts] ////
+
 //// [newExpressionWithCast.ts]
 function Test() { }
 // valid but error with noImplicitAny

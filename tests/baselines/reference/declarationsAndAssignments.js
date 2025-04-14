@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts] ////
+
 //// [declarationsAndAssignments.ts]
 function f0() {
     var [] = [1, "hello"];
@@ -20,7 +22,7 @@ function f1() {
 }
 
 function f2() {
-    var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+    var { } = { x: 5, y: "hello" };       // Ok, empty binding pattern means nothing
     var { x } = { x: 5, y: "hello" };     // Error, no y in target
     var { y } = { x: 5, y: "hello" };     // Error, no x in target
     var { x, y } = { x: 5, y: "hello" };
@@ -206,7 +208,7 @@ function f1() {
     var z;
 }
 function f2() {
-    var _a = { x: 5, y: "hello" }; // Error, no x and y in target
+    var _a = { x: 5, y: "hello" }; // Ok, empty binding pattern means nothing
     var x = { x: 5, y: "hello" }.x; // Error, no y in target
     var y = { x: 5, y: "hello" }.y; // Error, no x in target
     var _b = { x: 5, y: "hello" }, x = _b.x, y = _b.y;

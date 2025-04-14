@@ -1,13 +1,19 @@
-=== tests/cases/compiler/recursiveSpecializationOfSignatures.ts ===
+//// [tests/cases/compiler/recursiveSpecializationOfSignatures.ts] ////
+
+=== recursiveSpecializationOfSignatures.ts ===
 class S0<B, A> {
 >S0 : S0<B, A>
+>   : ^^^^^^^^
 
 set S1(S2: S0<any,any>) {
 >S1 : S0<any, any>
+>   : ^^^^^^^^^^^^
 >S2 : S0<any, any>
+>   : ^^^^^^^^^^^^
 }
 constructor(public S17: S0<any, (S18) => A>) { }
 >S17 : S0<any, (S18: any) => A>
+>    : ^^^^^^^^^   ^^^^^^^^^^ ^
 >S18 : any
 }
 

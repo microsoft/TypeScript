@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSetterInClass2.ts] ////
+
 //// [unusedSetterInClass2.ts]
 // Unlike everything else, a setter without a getter is used by a write access.
 class Employee {

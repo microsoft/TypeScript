@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumAssignmentCompat5.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat5.ts] ////
+
+=== enumAssignmentCompat5.ts ===
 enum E {
 >E : Symbol(E, Decl(enumAssignmentCompat5.ts, 0, 0))
 

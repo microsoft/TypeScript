@@ -1,16 +1,29 @@
-=== tests/cases/conformance/salsa/x.js ===
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop1.ts] ////
+
+=== x.js ===
 exports.fn1();
 >exports.fn1() : any
+>              : ^^^
 >exports.fn1 : any
->exports : typeof import("tests/cases/conformance/salsa/x")
+>            : ^^^
+>exports : typeof import("x")
+>        : ^^^^^^^^^^^^^^^^^^
 >fn1 : any
+>    : ^^^
 
 exports.fn2 = Math.min;
 >exports.fn2 = Math.min : (...values: number[]) => number
+>                       : ^^^^      ^^        ^^^^^      
 >exports.fn2 : (...values: number[]) => number
->exports : typeof import("tests/cases/conformance/salsa/x")
+>            : ^^^^      ^^        ^^^^^      
+>exports : typeof import("x")
+>        : ^^^^^^^^^^^^^^^^^^
 >fn2 : (...values: number[]) => number
+>    : ^^^^      ^^        ^^^^^      
 >Math.min : (...values: number[]) => number
+>         : ^^^^      ^^        ^^^^^      
 >Math : Math
+>     : ^^^^
 >min : (...values: number[]) => number
+>    : ^^^^      ^^        ^^^^^      
 

@@ -1,18 +1,26 @@
-=== tests/cases/conformance/jsx/tsxDynamicTagName2.tsx ===
+//// [tests/cases/conformance/jsx/tsxDynamicTagName2.tsx] ////
+
+=== tsxDynamicTagName2.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
         div: any
 >div : any
+>    : ^^^
 	}
 }
 
 var customTag = "h1";
 >customTag : string
+>          : ^^^^^^
 >"h1" : "h1"
+>     : ^^^^
 
 <customTag> Hello World </customTag>  // This should be an error. The lower-case is look up as an intrinsic element name
 ><customTag> Hello World </customTag> : JSX.Element
+>                                     : ^^^^^^^^^^^
 >customTag : string
+>          : ^^^^^^
 >customTag : string
+>          : ^^^^^^
 

@@ -1,38 +1,52 @@
-=== tests/cases/compiler/arrayAssignmentTest6.ts ===
+//// [tests/cases/compiler/arrayAssignmentTest6.ts] ////
+
+=== arrayAssignmentTest6.ts ===
 module Test {
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 
     interface IState {
     }
     interface IToken {
         startIndex: number;
 >startIndex : number
+>           : ^^^^^^
     }
     interface ILineTokens {
         tokens: IToken[];
 >tokens : IToken[]
+>       : ^^^^^^^^
 
         endState: IState;
 >endState : IState
+>         : ^^^^^^
     }
     interface IMode {
         tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >line : string
+>     : ^^^^^^
 >state : IState
+>      : ^^^^^^
 >includeStates : boolean
+>              : ^^^^^^^
     }
     export class Bug implements IMode {
 >Bug : Bug
+>    : ^^^
 
         public tokenize(line:string, tokens:IToken[], includeStates:boolean):ILineTokens {
 >tokenize : (line: string, tokens: IToken[], includeStates: boolean) => ILineTokens
+>         : ^    ^^      ^^      ^^        ^^             ^^       ^^^^^           
 >line : string
+>     : ^^^^^^
 >tokens : IToken[]
+>       : ^^^^^^^^
 >includeStates : boolean
+>              : ^^^^^^^
 
             return null;
->null : null
         }
     }    
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx] ////
+
 //// [jsxNamespacePrefixInNameReact.tsx]
 declare var React: any;
 
@@ -63,9 +65,9 @@ var justAttribute3 = React.createElement("element", { "a:attr": "value" }, "text
 var both1 = React.createElement("a:element", { "a:attr": "value" });
 var both2 = React.createElement("a:element", { "k:attr": "value" });
 var both3 = React.createElement("a:element", { "a:attr": "value" }, "text");
-var endOfIdent1 = React.createElement("a", { attr: "value" });
-var endOfIdent2 = React.createElement("a", __assign({ attr: true }, "value"));
+var endOfIdent1 = React.createElement("a:attr", __assign({}, "value"));
+var endOfIdent2 = React.createElement("a", { "attr:": "value" });
 var beginOfIdent1 =  < , a, attr = { "value":  } /  > ;
-var beginOfIdent2 = React.createElement("a", { attr: "value" });
+var beginOfIdent2 = React.createElement("a:attr", __assign({}, "value"));
 var upcaseComponent1 = React.createElement("ns:Upcase", null); // Parsed as intrinsic
 var upcaseComponent2 = React.createElement("Upcase:element", null); // Parsed as instrinsic

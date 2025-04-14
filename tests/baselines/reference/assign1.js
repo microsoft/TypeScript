@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assign1.ts] ////
+
 //// [assign1.ts]
 module M {
     interface I {

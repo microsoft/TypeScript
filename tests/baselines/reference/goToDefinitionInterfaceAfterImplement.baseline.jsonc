@@ -1,0 +1,25 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionInterfaceAfterImplement.ts ===
+// <|interface [|sInt|] {
+//     sVar: number;
+//     sFn: () => void;
+// }|>
+// 
+// class iClass implements /*GOTO DEF POS*/sInt {
+//     public sVar = 1;
+//     public sFn() {
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "sInt",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

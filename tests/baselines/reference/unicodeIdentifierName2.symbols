@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unicodeIdentifierName2.ts ===
+//// [tests/cases/compiler/unicodeIdentifierName2.ts] ////
+
+=== unicodeIdentifierName2.ts ===
 var a₁ = "hello"; alert(a₁)
 >a : Symbol(a, Decl(unicodeIdentifierName2.ts, 0, 3))
 >alert : Symbol(alert, Decl(lib.dom.d.ts, --, --))

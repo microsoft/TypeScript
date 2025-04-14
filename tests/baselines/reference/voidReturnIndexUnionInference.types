@@ -1,61 +1,89 @@
-=== tests/cases/compiler/voidReturnIndexUnionInference.ts ===
+//// [tests/cases/compiler/voidReturnIndexUnionInference.ts] ////
+
+=== voidReturnIndexUnionInference.ts ===
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
 export function safeInvoke<A1, R>(
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
+>           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^             
 
     func: ((arg1: A1) => R) | null | undefined,
 >func : ((arg1: A1) => R) | null | undefined
+>     : ^^    ^^  ^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >arg1 : A1
->null : null
+>     : ^^
 
     arg1: A1
 >arg1 : A1
+>     : ^^
 
 ): R | undefined {
     if (func) {
 >func : ((arg1: A1) => R) | null | undefined
+>     : ^^    ^^  ^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
         return func(arg1);
 >func(arg1) : R
+>           : ^
 >func : (arg1: A1) => R
+>     : ^    ^^  ^^^^^ 
 >arg1 : A1
+>     : ^^
 
     } else {
         return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
     }
 }
 
 interface Props {
     onFoo?(value: string): boolean;
 >onFoo : ((value: string) => boolean) | undefined
+>      : ^^     ^^      ^^^^^       ^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 
     onBar?(value: string): void;
 >onBar : ((value: string) => void) | undefined
+>      : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 }
 
 function bad<P extends Props>(props: Readonly<P>) {
 >bad : <P extends Props>(props: Readonly<P>) => void
+>    : ^ ^^^^^^^^^     ^^     ^^           ^^^^^^^^^
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 
     safeInvoke(props.onFoo, "blah");
 >safeInvoke(props.onFoo, "blah") : boolean | undefined
+>                                : ^^^^^^^^^^^^^^^^^^^
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
+>           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^             
 >props.onFoo : ((value: string) => boolean) | undefined
+>            : ^^     ^^      ^^^^^       ^^^^^^^^^^^^^
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 >onFoo : ((value: string) => boolean) | undefined
+>      : ^^     ^^      ^^^^^       ^^^^^^^^^^^^^
 >"blah" : "blah"
+>       : ^^^^^^
 
     // ERROR HERE!!!
     // Type R in signature of safeInvoke incorrectly inferred as {} instead of void!
     safeInvoke(props.onBar, "blah");
 >safeInvoke(props.onBar, "blah") : void | undefined
+>                                : ^^^^^^^^^^^^^^^^
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
+>           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^             
 >props.onBar : ((value: string) => void) | undefined
+>            : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 >onBar : ((value: string) => void) | undefined
+>      : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >"blah" : "blah"
+>       : ^^^^^^
 }
 

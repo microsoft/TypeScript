@@ -1,4 +1,6 @@
-=== tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts ===
+//// [tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts] ////
+
+=== elaboratedErrorsOnNullableTargets01.ts ===
 export declare let x: null | { foo: { bar: string | null } | undefined } | undefined;
 >x : Symbol(x, Decl(elaboratedErrorsOnNullableTargets01.ts, 0, 18))
 >foo : Symbol(foo, Decl(elaboratedErrorsOnNullableTargets01.ts, 0, 30))

@@ -1,9 +1,12 @@
-=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod16.ts ===
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod16.ts] ////
+
+=== decoratorOnClassMethod16.ts ===
 declare var decorator: any;
 >decorator : any
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     private prop
 >prop : any
@@ -13,9 +16,11 @@ class Foo {
 
     foo() {
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentWithDefaultTypeParameter1.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 
@@ -16,7 +18,7 @@ let i1 = <MyComponent values="Hello"/>;
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     function MyComponent(attr) {
         return <div>attr.values</div>;
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts] ////
+
 //// [blockScopedSameNameFunctionDeclarationStrictES5.ts]
 "use strict";
 function foo(a: number) {

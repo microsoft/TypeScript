@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/asOperator/asOperator3.ts] ////
+
 //// [asOperator3.ts]
 declare function tag(...x: any[]): any;
 

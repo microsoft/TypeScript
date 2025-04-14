@@ -1,22 +1,36 @@
-=== tests/cases/compiler/functionOverloads22.ts ===
+//// [tests/cases/compiler/functionOverloads22.ts] ////
+
+=== functionOverloads22.ts ===
 function foo(bar:number):{a:number;}[];
->foo : { (bar: number): {    a: number;}[]; (bar: string): { a: number; b: string; }[]; }
+>foo : { (bar: number): { a: number; }[]; (bar: string): { a: number; b: string; }[]; }
+>    : ^^^   ^^      ^^^                ^^^   ^^      ^^^                           ^^^
 >bar : number
+>    : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 function foo(bar:string):{a:number; b:string;}[];
->foo : { (bar: number): { a: number; }[]; (bar: string): {    a: number;    b: string;}[]; }
+>foo : { (bar: number): { a: number; }[]; (bar: string): { a: number; b: string; }[]; }
+>    : ^^^   ^^      ^^^                ^^^   ^^      ^^^                           ^^^
 >bar : string
+>    : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 function foo(bar:any):{a:any;b?:any;}[] { return [{a:""}] }
 >foo : { (bar: number): { a: number; }[]; (bar: string): { a: number; b: string; }[]; }
+>    : ^^^   ^^      ^^^                ^^^   ^^      ^^^                           ^^^
 >bar : any
 >a : any
 >b : any
 >[{a:""}] : { a: string; }[]
+>         : ^^^^^^^^^^^^^^^^
 >{a:""} : { a: string; }
+>       : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 

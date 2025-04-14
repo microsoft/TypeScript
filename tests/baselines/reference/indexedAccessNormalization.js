@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessNormalization.ts] ////
+
 //// [indexedAccessNormalization.ts]
 // Repro from from #43152
 

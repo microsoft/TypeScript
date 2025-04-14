@@ -1,8 +1,8 @@
-tests/cases/compiler/innerModExport1.ts(5,5): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/innerModExport1.ts(5,12): error TS1437: Namespace must be given a name.
+innerModExport1.ts(5,5): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+innerModExport1.ts(5,12): error TS1437: Namespace must be given a name.
 
 
-==== tests/cases/compiler/innerModExport1.ts (2 errors) ====
+==== innerModExport1.ts (2 errors) ====
     module Outer {
     
         // inner mod 1

@@ -77,19 +77,19 @@ const [
     constDecl_constKeyword,
     constDecl_name,
 ] = test.ranges();
-verify.renameLocations(classDecl1_classKeyword, [{ range: classDecl1_name }]);
-verify.renameLocations(classDecl1_extendsKeyword, [{ range: baseDecl_name }, { range: classDecl1_extendsName }, { range: interfaceDecl1_extendsName }]);
-verify.renameLocations(classDecl1_implementsKeyword, [{ range: implemented1Decl_name }, { range: classDecl1_implementsName }]);
-for (const keyword of [getDecl_getKeyword, setDecl_setKeyword]) {
-    verify.renameLocations(keyword, [{ range: getDecl_name }, { range: setDecl_name }]);
-}
-verify.renameLocations(interfaceDecl1_interfaceKeyword, [{ range: interfaceDecl1_name }]);
-verify.renameLocations(interfaceDecl1_extendsKeyword, [{ range: baseDecl_name }, { range: classDecl1_extendsName }, { range: interfaceDecl1_extendsName }]);
-verify.renameLocations(typeDecl_typeKeyword, [{ range: typeDecl_name }]);
-verify.renameLocations(enumDecl_enumKeyword, [{ range: enumDecl_name }]);
-verify.renameLocations(namespaceDecl_namespaceKeyword, [{ range: namespaceDecl_name }]);
-verify.renameLocations(moduleDecl_moduleKeyword, [{ range: moduleDecl_name }]);
-verify.renameLocations(functionDecl_functionKeyword, [{ range: functionDecl_name }]);
-verify.renameLocations(varDecl_varKeyword, [{ range: varDecl_name }]);
-verify.renameLocations(letDecl_letKeyword, [{ range: letDecl_name }]);
-verify.renameLocations(constDecl_constKeyword, [{ range: constDecl_name }]);
+verify.baselineRename([
+    classDecl1_classKeyword,
+    classDecl1_extendsKeyword,
+    classDecl1_implementsKeyword,
+    getDecl_getKeyword, setDecl_setKeyword,
+    interfaceDecl1_interfaceKeyword,
+    interfaceDecl1_extendsKeyword,
+    typeDecl_typeKeyword,
+    enumDecl_enumKeyword,
+    namespaceDecl_namespaceKeyword,
+    moduleDecl_moduleKeyword,
+    functionDecl_functionKeyword,
+    varDecl_varKeyword,
+    letDecl_letKeyword,
+    constDecl_constKeyword,
+]);

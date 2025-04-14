@@ -1,23 +1,33 @@
-=== tests/cases/compiler/yieldExpression1.ts ===
+//// [tests/cases/compiler/yieldExpression1.ts] ////
+
+=== yieldExpression1.ts ===
 function* a() {
 >a : () => Generator<0 | undefined, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
 >yield : any
+>      : ^^^
 
     yield 0;
 >yield 0 : any
+>        : ^^^
 >0 : 0
+>  : ^
 }
 
 function* b(): IterableIterator<number> {
 >b : () => IterableIterator<number>
+>  : ^^^^^^                        
 
     yield;
->yield : undefined
+>yield : any
+>      : ^^^
 
     yield 0;
->yield 0 : undefined
+>yield 0 : any
+>        : ^^^
 >0 : 0
+>  : ^
 }
 

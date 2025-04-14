@@ -1,27 +1,41 @@
-=== tests/cases/compiler/genericConstraint1.ts ===
+//// [tests/cases/compiler/genericConstraint1.ts] ////
+
+=== genericConstraint1.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     public bar2<U extends T>(x: T, y: U): T {
 >bar2 : <U extends T>(x: T, y: U) => T
+>     : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : U
+>  : ^
 
         return null;
->null : null
     }
 }
 
 var x = new C<number>();
 >x : C<number>
+>  : ^^^^^^^^^
 >new C<number>() : C<number>
+>                : ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 x.bar2<string>(2, "");
 >x.bar2<string>(2, "") : number
+>                      : ^^^^^^
 >x.bar2 : <U extends number>(x: number, y: U) => number
+>       : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >x : C<number>
+>  : ^^^^^^^^^
 >bar2 : <U extends number>(x: number, y: U) => number
+>     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >"" : ""
+>   : ^^
 

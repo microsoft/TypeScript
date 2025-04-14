@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE3.ts] ////
+
+=== contextualReturnTypeOfIIFE3.ts ===
+declare namespace app {
+>app : Symbol(app, Decl(contextualReturnTypeOfIIFE3.ts, 0, 0))
+
+  var foo: {
+>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+
+    bar: {
+>bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+
+      someFun: (arg: number) => void;
+>someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE3.ts, 2, 10))
+>arg : Symbol(arg, Decl(contextualReturnTypeOfIIFE3.ts, 3, 16))
+
+    };
+  };
+}
+
+app.foo.bar = (function () {
+>app.foo.bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+>app.foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+>app : Symbol(app, Decl(contextualReturnTypeOfIIFE3.ts, 0, 0))
+>foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+>bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+
+  return { someFun(arg) {} };
+>someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE3.ts, 9, 10))
+>arg : Symbol(arg, Decl(contextualReturnTypeOfIIFE3.ts, 9, 19))
+
+})();
+
+app.foo.bar.someFun(1);
+>app.foo.bar.someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE3.ts, 2, 10))
+>app.foo.bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+>app.foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+>app : Symbol(app, Decl(contextualReturnTypeOfIIFE3.ts, 0, 0))
+>foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+>bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+>someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE3.ts, 2, 10))
+

@@ -1,370 +1,649 @@
-=== tests/cases/compiler/library_DatePrototypeProperties.ts ===
+//// [tests/cases/compiler/library_DatePrototypeProperties.ts] ////
+
+=== library_DatePrototypeProperties.ts ===
 // Properties of the Date prototype object as per ES5 spec
 // http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.5
 Date.prototype.constructor;
 >Date.prototype.constructor : Function
+>                           : ^^^^^^^^
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >constructor : Function
+>            : ^^^^^^^^
 
 Date.prototype.toString();
 >Date.prototype.toString() : string
+>                          : ^^^^^^
 >Date.prototype.toString : () => string
+>                        : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toString : () => string
+>         : ^^^^^^      
 
 Date.prototype.toDateString();
 >Date.prototype.toDateString() : string
+>                              : ^^^^^^
 >Date.prototype.toDateString : () => string
+>                            : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toDateString : () => string
+>             : ^^^^^^      
 
 Date.prototype.toTimeString();
 >Date.prototype.toTimeString() : string
+>                              : ^^^^^^
 >Date.prototype.toTimeString : () => string
+>                            : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toTimeString : () => string
+>             : ^^^^^^      
 
 Date.prototype.toLocaleString();
 >Date.prototype.toLocaleString() : string
+>                                : ^^^^^^
 >Date.prototype.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
+>                              : ^^^^^^      ^^^       ^^^                 ^^       ^^^                          ^^^      ^^^
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^^                 ^^       ^^^                          ^^^      ^^^
 
 Date.prototype.toLocaleDateString();
 >Date.prototype.toLocaleDateString() : string
+>                                    : ^^^^^^
 >Date.prototype.toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
+>                                  : ^^^^^^      ^^^       ^^^                 ^^       ^^^                          ^^^      ^^^
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^      ^^^       ^^^                 ^^       ^^^                          ^^^      ^^^
 
 Date.prototype.toLocaleTimeString();
 >Date.prototype.toLocaleTimeString() : string
+>                                    : ^^^^^^
 >Date.prototype.toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
+>                                  : ^^^^^^      ^^^       ^^^                 ^^       ^^^                          ^^^      ^^^
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^      ^^^       ^^^                 ^^       ^^^                          ^^^      ^^^
 
 Date.prototype.valueOf();
 >Date.prototype.valueOf() : number
+>                         : ^^^^^^
 >Date.prototype.valueOf : () => number
+>                       : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >valueOf : () => number
+>        : ^^^^^^      
 
 Date.prototype.getTime();
 >Date.prototype.getTime() : number
+>                         : ^^^^^^
 >Date.prototype.getTime : () => number
+>                       : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getTime : () => number
+>        : ^^^^^^      
 
 Date.prototype.getFullYear();
 >Date.prototype.getFullYear() : number
+>                             : ^^^^^^
 >Date.prototype.getFullYear : () => number
+>                           : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getFullYear : () => number
+>            : ^^^^^^      
 
 Date.prototype.getUTCFullYear();
 >Date.prototype.getUTCFullYear() : number
+>                                : ^^^^^^
 >Date.prototype.getUTCFullYear : () => number
+>                              : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getUTCFullYear : () => number
+>               : ^^^^^^      
 
 Date.prototype.getMonth();
 >Date.prototype.getMonth() : number
+>                          : ^^^^^^
 >Date.prototype.getMonth : () => number
+>                        : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getMonth : () => number
+>         : ^^^^^^      
 
 Date.prototype.getUTCMonth();
 >Date.prototype.getUTCMonth() : number
+>                             : ^^^^^^
 >Date.prototype.getUTCMonth : () => number
+>                           : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getUTCMonth : () => number
+>            : ^^^^^^      
 
 Date.prototype.getDate();
 >Date.prototype.getDate() : number
+>                         : ^^^^^^
 >Date.prototype.getDate : () => number
+>                       : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getDate : () => number
+>        : ^^^^^^      
 
 Date.prototype.getUTCDate();
 >Date.prototype.getUTCDate() : number
+>                            : ^^^^^^
 >Date.prototype.getUTCDate : () => number
+>                          : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getUTCDate : () => number
+>           : ^^^^^^      
 
 Date.prototype.getDay();
 >Date.prototype.getDay() : number
+>                        : ^^^^^^
 >Date.prototype.getDay : () => number
+>                      : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getDay : () => number
+>       : ^^^^^^      
 
 Date.prototype.getUTCDay();
 >Date.prototype.getUTCDay() : number
+>                           : ^^^^^^
 >Date.prototype.getUTCDay : () => number
+>                         : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getUTCDay : () => number
+>          : ^^^^^^      
 
 Date.prototype.getHours();
 >Date.prototype.getHours() : number
+>                          : ^^^^^^
 >Date.prototype.getHours : () => number
+>                        : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getHours : () => number
+>         : ^^^^^^      
 
 Date.prototype.getUTCHours();
 >Date.prototype.getUTCHours() : number
+>                             : ^^^^^^
 >Date.prototype.getUTCHours : () => number
+>                           : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getUTCHours : () => number
+>            : ^^^^^^      
 
 Date.prototype.getMinutes();
 >Date.prototype.getMinutes() : number
+>                            : ^^^^^^
 >Date.prototype.getMinutes : () => number
+>                          : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getMinutes : () => number
+>           : ^^^^^^      
 
 Date.prototype.getUTCMinutes();
 >Date.prototype.getUTCMinutes() : number
+>                               : ^^^^^^
 >Date.prototype.getUTCMinutes : () => number
+>                             : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getUTCMinutes : () => number
+>              : ^^^^^^      
 
 Date.prototype.getSeconds();
 >Date.prototype.getSeconds() : number
+>                            : ^^^^^^
 >Date.prototype.getSeconds : () => number
+>                          : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getSeconds : () => number
+>           : ^^^^^^      
 
 Date.prototype.getUTCSeconds();
 >Date.prototype.getUTCSeconds() : number
+>                               : ^^^^^^
 >Date.prototype.getUTCSeconds : () => number
+>                             : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getUTCSeconds : () => number
+>              : ^^^^^^      
 
 Date.prototype.getMilliseconds();
 >Date.prototype.getMilliseconds() : number
+>                                 : ^^^^^^
 >Date.prototype.getMilliseconds : () => number
+>                               : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getMilliseconds : () => number
+>                : ^^^^^^      
 
 Date.prototype.getUTCMilliseconds();
 >Date.prototype.getUTCMilliseconds() : number
+>                                    : ^^^^^^
 >Date.prototype.getUTCMilliseconds : () => number
+>                                  : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getUTCMilliseconds : () => number
+>                   : ^^^^^^      
 
 Date.prototype.getTimezoneOffset();
 >Date.prototype.getTimezoneOffset() : number
+>                                   : ^^^^^^
 >Date.prototype.getTimezoneOffset : () => number
+>                                 : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >getTimezoneOffset : () => number
+>                  : ^^^^^^      
 
 Date.prototype.setTime(0);
 >Date.prototype.setTime(0) : number
+>                          : ^^^^^^
 >Date.prototype.setTime : (time: number) => number
+>                       : ^    ^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setTime : (time: number) => number
+>        : ^    ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setMilliseconds(0);
 >Date.prototype.setMilliseconds(0) : number
+>                                  : ^^^^^^
 >Date.prototype.setMilliseconds : (ms: number) => number
+>                               : ^  ^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setMilliseconds : (ms: number) => number
+>                : ^  ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setUTCMilliseconds(0);
 >Date.prototype.setUTCMilliseconds(0) : number
+>                                     : ^^^^^^
 >Date.prototype.setUTCMilliseconds : (ms: number) => number
+>                                  : ^  ^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setUTCMilliseconds : (ms: number) => number
+>                   : ^  ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setSeconds(0);
 >Date.prototype.setSeconds(0) : number
+>                             : ^^^^^^
 >Date.prototype.setSeconds : (sec: number, ms?: number) => number
+>                          : ^   ^^      ^^  ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setSeconds : (sec: number, ms?: number) => number
+>           : ^   ^^      ^^  ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setUTCSeconds(0);
 >Date.prototype.setUTCSeconds(0) : number
+>                                : ^^^^^^
 >Date.prototype.setUTCSeconds : (sec: number, ms?: number) => number
+>                             : ^   ^^      ^^  ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setUTCSeconds : (sec: number, ms?: number) => number
+>              : ^   ^^      ^^  ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setMinutes(0);
 >Date.prototype.setMinutes(0) : number
+>                             : ^^^^^^
 >Date.prototype.setMinutes : (min: number, sec?: number, ms?: number) => number
+>                          : ^   ^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setMinutes : (min: number, sec?: number, ms?: number) => number
+>           : ^   ^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setUTCMinutes(0);
 >Date.prototype.setUTCMinutes(0) : number
+>                                : ^^^^^^
 >Date.prototype.setUTCMinutes : (min: number, sec?: number, ms?: number) => number
+>                             : ^   ^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setUTCMinutes : (min: number, sec?: number, ms?: number) => number
+>              : ^   ^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setHours(0);
 >Date.prototype.setHours(0) : number
+>                           : ^^^^^^
 >Date.prototype.setHours : (hours: number, min?: number, sec?: number, ms?: number) => number
+>                        : ^     ^^      ^^   ^^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setHours : (hours: number, min?: number, sec?: number, ms?: number) => number
+>         : ^     ^^      ^^   ^^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setUTCHours(0);
 >Date.prototype.setUTCHours(0) : number
+>                              : ^^^^^^
 >Date.prototype.setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number
+>                           : ^     ^^      ^^   ^^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number
+>            : ^     ^^      ^^   ^^^      ^^   ^^^      ^^  ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setDate(0);
 >Date.prototype.setDate(0) : number
+>                          : ^^^^^^
 >Date.prototype.setDate : (date: number) => number
+>                       : ^    ^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setDate : (date: number) => number
+>        : ^    ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setUTCDate(0);
 >Date.prototype.setUTCDate(0) : number
+>                             : ^^^^^^
 >Date.prototype.setUTCDate : (date: number) => number
+>                          : ^    ^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setUTCDate : (date: number) => number
+>           : ^    ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setMonth(0);
 >Date.prototype.setMonth(0) : number
+>                           : ^^^^^^
 >Date.prototype.setMonth : (month: number, date?: number) => number
+>                        : ^     ^^      ^^    ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setMonth : (month: number, date?: number) => number
+>         : ^     ^^      ^^    ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setUTCMonth(0);
 >Date.prototype.setUTCMonth(0) : number
+>                              : ^^^^^^
 >Date.prototype.setUTCMonth : (month: number, date?: number) => number
+>                           : ^     ^^      ^^    ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setUTCMonth : (month: number, date?: number) => number
+>            : ^     ^^      ^^    ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setFullYear(0);
 >Date.prototype.setFullYear(0) : number
+>                              : ^^^^^^
 >Date.prototype.setFullYear : (year: number, month?: number, date?: number) => number
+>                           : ^    ^^      ^^     ^^^      ^^    ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setFullYear : (year: number, month?: number, date?: number) => number
+>            : ^    ^^      ^^     ^^^      ^^    ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.setUTCFullYear(0);
 >Date.prototype.setUTCFullYear(0) : number
+>                                 : ^^^^^^
 >Date.prototype.setUTCFullYear : (year: number, month?: number, date?: number) => number
+>                              : ^    ^^      ^^     ^^^      ^^    ^^^      ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >setUTCFullYear : (year: number, month?: number, date?: number) => number
+>               : ^    ^^      ^^     ^^^      ^^    ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 Date.prototype.toUTCString();
 >Date.prototype.toUTCString() : string
+>                             : ^^^^^^
 >Date.prototype.toUTCString : () => string
+>                           : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toUTCString : () => string
+>            : ^^^^^^      
 
 Date.prototype.toISOString();
 >Date.prototype.toISOString() : string
+>                             : ^^^^^^
 >Date.prototype.toISOString : () => string
+>                           : ^^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toISOString : () => string
+>            : ^^^^^^      
 
 Date.prototype.toJSON(null);
 >Date.prototype.toJSON(null) : string
+>                            : ^^^^^^
 >Date.prototype.toJSON : (key?: any) => string
+>                      : ^   ^^^   ^^^^^      
 >Date.prototype : Date
+>               : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >prototype : Date
+>          : ^^^^
 >toJSON : (key?: any) => string
->null : null
+>       : ^   ^^^   ^^^^^      
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.d.ts ===
+//// [tests/cases/compiler/initializedParameterBeforeNonoptionalNotOptional.ts] ////
+
+=== index.d.ts ===
 export declare function foo({a}?: {
 >foo : Symbol(foo, Decl(index.d.ts, 0, 0))
 >a : Symbol(a, Decl(index.d.ts, 0, 29))

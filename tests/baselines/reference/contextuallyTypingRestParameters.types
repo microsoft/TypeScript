@@ -1,28 +1,44 @@
-=== tests/cases/compiler/contextuallyTypingRestParameters.ts ===
+//// [tests/cases/compiler/contextuallyTypingRestParameters.ts] ////
+
+=== contextuallyTypingRestParameters.ts ===
 var x: (...y: string[]) => void = function (.../*3*/y) { 
 >x : (...y: string[]) => void
+>  : ^^^^ ^^        ^^^^^    
 >y : string[]
+>  : ^^^^^^^^
 >function (.../*3*/y) {     var t = y;     var x2: string = t; // This should be error    var x3: string[] = t; // No error    var y2: string = y; // This should be error    var y3: string[] = y; // No error} : (...y: string[]) => void
+>                                                                                                                                                                                                                : ^^^^ ^^^^^^^^^^^^^^^^^^^
 >y : string[]
+>  : ^^^^^^^^
 
     var t = y; 
 >t : string[]
+>  : ^^^^^^^^
 >y : string[]
+>  : ^^^^^^^^
 
     var x2: string = t; // This should be error
 >x2 : string
+>   : ^^^^^^
 >t : string[]
+>  : ^^^^^^^^
 
     var x3: string[] = t; // No error
 >x3 : string[]
+>   : ^^^^^^^^
 >t : string[]
+>  : ^^^^^^^^
 
     var y2: string = y; // This should be error
 >y2 : string
+>   : ^^^^^^
 >y : string[]
+>  : ^^^^^^^^
 
     var y3: string[] = y; // No error
 >y3 : string[]
+>   : ^^^^^^^^
 >y : string[]
+>  : ^^^^^^^^
 
 };

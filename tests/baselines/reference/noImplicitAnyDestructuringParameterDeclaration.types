@@ -1,48 +1,79 @@
-=== tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts ===
+//// [tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts] ////
+
+=== noImplicitAnyDestructuringParameterDeclaration.ts ===
 function f1([a], {b}, c, d) { // error
 >f1 : ([a]: [any], { b }: { b: any; }, c: any, d: any) => void
+>   : ^   ^^^^^^^^^     ^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 }
 function f2([a = undefined], {b = null}, c = undefined, d = null) { // error
 >f2 : ([a]: [any?], { b }: { b?: any; }, c?: any, d?: any) => void
+>   : ^   ^^^^^^^^^^     ^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : any
->null : null
+>  : ^^^
 >c : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >d : any
->null : null
+>  : ^^^
 }
 function f3([a]: [any], {b}: { b: any }, c: any, d: any) {
->f3 : ([a]: [any], { b }: {    b: any;}, c: any, d: any) => void
+>f3 : ([a]: [any], { b }: { b: any; }, c: any, d: any) => void
+>   : ^   ^^     ^^     ^^           ^^ ^^   ^^ ^^   ^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 }
 function f4({b}: { b }, x: { b }) { // error in type instead
->f4 : ({ b }: {    b;}, x: {    b;}) => void
+>f4 : ({ b }: { b: any; }, x: { b: any; }) => void
+>   : ^     ^^     ^^^   ^^ ^^     ^^^   ^^^^^^^^^
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 >x : { b: any; }
+>  : ^^^^^^^^^^^
 >b : any
+>  : ^^^
 }
 function f5([a1] = [undefined], {b1} = { b1: null }, c1 = undefined, d1 = null) { // error
 >f5 : ([a1]?: [any], { b1 }?: { b1: any; }, c1?: any, d1?: any) => void
+>   : ^    ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^  ^^^^^^^^  ^^^^^^^^^^^^^^^
 >a1 : any
+>   : ^^^
 >[undefined] : [undefined]
+>            : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b1 : any
+>   : ^^^
 >{ b1: null } : { b1: null; }
+>             : ^^^^^^^^^^^^^
 >b1 : null
->null : null
+>   : ^^^^
 >c1 : any
+>   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >d1 : any
->null : null
+>   : ^^^
 }

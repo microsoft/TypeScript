@@ -1,0 +1,147 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/Remote2.ts ===
+// <|var [|rem2Var|];|>
+// function rem2Fn() { }
+// class rem2Cls { }
+// interface rem2Int{}
+// module rem2Mod { export var foo; }
+
+// === /tests/cases/fourslash/Definition.ts ===
+// /*GOTO DEF POS*/rem2Var = 1;
+// rem2Fn();
+// var rem2foo = new rem2Cls();
+// class rem2fooCls implements rem2Int { }
+// var rem2fooVar = rem2Mod.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "rem2Var",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/Remote2.ts ===
+// var rem2Var;
+// <|function [|rem2Fn|]() { }|>
+// class rem2Cls { }
+// interface rem2Int{}
+// module rem2Mod { export var foo; }
+
+// === /tests/cases/fourslash/Definition.ts ===
+// rem2Var = 1;
+// /*GOTO DEF POS*/rem2Fn();
+// var rem2foo = new rem2Cls();
+// class rem2fooCls implements rem2Int { }
+// var rem2fooVar = rem2Mod.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "rem2Fn",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/Remote2.ts ===
+// var rem2Var;
+// function rem2Fn() { }
+// <|class [|rem2Cls|] { }|>
+// interface rem2Int{}
+// module rem2Mod { export var foo; }
+
+// === /tests/cases/fourslash/Definition.ts ===
+// rem2Var = 1;
+// rem2Fn();
+// var rem2foo = new /*GOTO DEF POS*/rem2Cls();
+// class rem2fooCls implements rem2Int { }
+// var rem2fooVar = rem2Mod.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "rem2Cls",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/Remote2.ts ===
+// var rem2Var;
+// function rem2Fn() { }
+// class rem2Cls { }
+// <|interface [|rem2Int|]{}|>
+// module rem2Mod { export var foo; }
+
+// === /tests/cases/fourslash/Definition.ts ===
+// rem2Var = 1;
+// rem2Fn();
+// var rem2foo = new rem2Cls();
+// class rem2fooCls implements /*GOTO DEF POS*/rem2Int { }
+// var rem2fooVar = rem2Mod.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "rem2Int",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/Remote2.ts ===
+// var rem2Var;
+// function rem2Fn() { }
+// class rem2Cls { }
+// interface rem2Int{}
+// <|module [|rem2Mod|] { export var foo; }|>
+
+// === /tests/cases/fourslash/Definition.ts ===
+// rem2Var = 1;
+// rem2Fn();
+// var rem2foo = new rem2Cls();
+// class rem2fooCls implements rem2Int { }
+// var rem2fooVar = /*GOTO DEF POS*/rem2Mod.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "rem2Mod",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

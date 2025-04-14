@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts] ////
+
 //// [numericIndexerConstrainsPropertyDeclarations2.ts]
 // String indexer providing a constraint of a user defined type
 

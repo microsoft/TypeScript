@@ -1,17 +1,27 @@
-=== tests/cases/conformance/es6/Symbols/symbolType15.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType15.ts] ////
+
+=== symbolType15.ts ===
 var sym: symbol;
 >sym : symbol
+>    : ^^^^^^
 
 var symObj: Symbol;
 >symObj : Symbol
+>       : ^^^^^^
 
 symObj = sym;
 >symObj = sym : symbol
+>             : ^^^^^^
 >symObj : Symbol
+>       : ^^^^^^
 >sym : symbol
+>    : ^^^^^^
 
 sym = symObj;
 >sym = symObj : Symbol
+>             : ^^^^^^
 >sym : symbol
+>    : ^^^^^^
 >symObj : Symbol
+>       : ^^^^^^
 

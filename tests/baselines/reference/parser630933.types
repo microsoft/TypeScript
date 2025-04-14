@@ -1,13 +1,23 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser630933.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser630933.ts] ////
+
+=== parser630933.ts ===
 var a = "Hello";
 >a : string
+>  : ^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 
 var b = a.match(/\/ver=([^/]+)/);
 >b : RegExpMatchArray
+>  : ^^^^^^^^^^^^^^^^
 >a.match(/\/ver=([^/]+)/) : RegExpMatchArray
->a.match : (regexp: string | RegExp) => RegExpMatchArray
+>                         : ^^^^^^^^^^^^^^^^
+>a.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>        : ^      ^^               ^^^^^                       
 >a : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>  : ^^^^^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/\/ver=([^/]+)/ : RegExp
+>                : ^^^^^^
 

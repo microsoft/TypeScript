@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationArrayType.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationArrayType.ts] ////
+
+=== declFileTypeAnnotationArrayType.ts ===
 class c {
 >c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
 }

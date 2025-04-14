@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privateAccessInSubclass1.ts ===
+//// [tests/cases/compiler/privateAccessInSubclass1.ts] ////
+
+=== privateAccessInSubclass1.ts ===
 class Base {
 >Base : Symbol(Base, Decl(privateAccessInSubclass1.ts, 0, 0))
 

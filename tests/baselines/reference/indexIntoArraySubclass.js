@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexIntoArraySubclass.ts] ////
+
 //// [indexIntoArraySubclass.ts]
 interface Foo2<T> extends Array<T> { }
 var x2: Foo2<string>;

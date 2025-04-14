@@ -1,354 +1,600 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryDeclarationsLocalTypes.tsx] ////
+
+=== renderer.d.ts ===
 export namespace dom {
     namespace JSX {
         interface IntrinsicElements {
             [e: string]: {};
 >e : string
+>  : ^^^^^^
         }
         interface Element {
             __domBrand: void;
 >__domBrand : void
+>           : ^^^^
 
             props: {
 >props : { children?: Element[]; }
+>      : ^^^^^^^^^^^^^         ^^^
 
                 children?: Element[];
 >children : Element[]
+>         : ^^^^^^^^^
 
             };
         }
         interface ElementClass extends Element {
             render(): Element;
 >render : () => Element
+>       : ^^^^^^       
         }
         interface ElementAttributesProperty { props: any; }
 >props : any
+>      : ^^^
 
         interface ElementChildrenAttribute { children: any; }
 >children : any
+>         : ^^^
     }
 }
 export function dom(): dom.JSX.Element;
 >dom : () => dom.JSX.Element
+>    : ^^^^^^               
 >dom : any
+>    : ^^^
 >JSX : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/inline/renderer2.d.ts ===
+=== renderer2.d.ts ===
 export namespace predom {
     namespace JSX {
         interface IntrinsicElements {
             [e: string]: {};
 >e : string
+>  : ^^^^^^
         }
         interface Element {
             __predomBrand: void;
 >__predomBrand : void
+>              : ^^^^
 
             props: {
 >props : { children?: Element[]; }
+>      : ^^^^^^^^^^^^^         ^^^
 
                 children?: Element[];
 >children : Element[]
+>         : ^^^^^^^^^
 
             };
         }
         interface ElementClass extends Element {
             render(): Element;
 >render : () => Element
+>       : ^^^^^^       
         }
         interface ElementAttributesProperty { props: any; }
 >props : any
+>      : ^^^
 
         interface ElementChildrenAttribute { children: any; }
 >children : any
+>         : ^^^
     }
 }
 export function predom(): predom.JSX.Element;
 >predom : () => predom.JSX.Element
+>       : ^^^^^^                  
 >predom : any
+>       : ^^^
 >JSX : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/inline/component.tsx ===
+=== component.tsx ===
 /** @jsx predom */
 import { predom } from "./renderer2"
 >predom : () => predom.JSX.Element
+>       : ^^^^^^                  
 
 export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
->MySFC : (props: {    x: number;    y: number;    children?: predom.JSX.Element[];}) => predom.JSX.Element
->(props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p> : (props: {    x: number;    y: number;    children?: predom.JSX.Element[];}) => predom.JSX.Element
+>MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
+>      : ^     ^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
+>(props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p> : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
+>                                                                                                                                               : ^     ^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >children : predom.JSX.Element[]
+>         : ^^^^^^^^^^^^^^^^^^^^
 >predom : any
+>       : ^^^
 >JSX : any
+>    : ^^^
 ><p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p> : predom.JSX.Element
+>                                                                           : ^^^^^^^^^^^^^^^^^^
 >p : any
+>  : ^^^
 >props.x : number
+>        : ^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
+>  : ^^^^^^
 >props.y : number
+>        : ^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >y : number
+>  : ^^^^^^
 >props.x + props.y : number
+>                  : ^^^^^^
 >props.x : number
+>        : ^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
+>  : ^^^^^^
 >props.y : number
+>        : ^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >y : number
+>  : ^^^^^^
 >this.props.children : any
+>                    : ^^^
 >this.props : any
+>           : ^^^
 >this : undefined
+>     : ^^^^^^^^^
 >props : any
+>      : ^^^
 >children : any
+>         : ^^^
 >p : any
+>  : ^^^
 
 export class MyClass implements predom.JSX.Element {
 >MyClass : MyClass
+>        : ^^^^^^^
 >predom.JSX : any
+>           : ^^^
 >predom : () => predom.JSX.Element
+>       : ^^^^^^                  
 >JSX : any
+>    : ^^^
 
     __predomBrand!: void;
 >__predomBrand : void
+>              : ^^^^
 
     constructor(public props: {x: number, y: number, children?: predom.JSX.Element[]}) {}
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >children : predom.JSX.Element[]
+>         : ^^^^^^^^^^^^^^^^^^^^
 >predom : any
+>       : ^^^
 >JSX : any
+>    : ^^^
 
     render() {
 >render : () => predom.JSX.Element
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         return <p>
 ><p>            {this.props.x} + {this.props.y} = {this.props.x + this.props.y}            {...this.props.children}        </p> : predom.JSX.Element
+>                                                                                                                               : ^^^^^^^^^^^^^^^^^^
 >p : any
+>  : ^^^
 
             {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
 >this.props.x : number
+>             : ^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
+>  : ^^^^^^
 >this.props.y : number
+>             : ^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >y : number
+>  : ^^^^^^
 >this.props.x + this.props.y : number
+>                            : ^^^^^^
 >this.props.x : number
+>             : ^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
+>  : ^^^^^^
 >this.props.y : number
+>             : ^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >y : number
+>  : ^^^^^^
 
             {...this.props.children}
 >this.props.children : predom.JSX.Element[]
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >children : predom.JSX.Element[]
+>         : ^^^^^^^^^^^^^^^^^^^^
 
         </p>;
 >p : any
+>  : ^^^
     }
 }
 export const tree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
 >tree : predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^
 ><MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC> : predom.JSX.Element
+>                                                                          : ^^^^^^^^^^^^^^^^^^
 >MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
+>      : ^     ^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 ><MyClass x={3} y={4} /> : predom.JSX.Element
+>                        : ^^^^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >y : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 ><MyClass x={5} y={6} /> : predom.JSX.Element
+>                        : ^^^^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 >MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
+>      : ^     ^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 
 export default <h></h>
 ><h></h> : predom.JSX.Element
+>        : ^^^^^^^^^^^^^^^^^^
 >h : any
+>  : ^^^
 >h : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/inline/index.tsx ===
+=== index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer"
 >dom : () => dom.JSX.Element
+>    : ^^^^^^               
 
 import prerendered, {MySFC, MyClass, tree} from "./component";
->prerendered : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
->MySFC : (props: { x: number; y: number; children?: import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]; }) => import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>prerendered : import("renderer2").predom.JSX.Element
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
+>      : ^     ^^                                          ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
->tree : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>        : ^^^^^^^^^^^^^^
+>tree : import("renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let elem = prerendered;
->elem : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
->prerendered : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>elem : import("renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prerendered : import("renderer2").predom.JSX.Element
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 elem = <h></h>; // Expect assignability error here
 >elem = <h></h> : dom.JSX.Element
->elem : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>               : ^^^^^^^^^^^^^^^
+>elem : import("renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><h></h> : dom.JSX.Element
+>        : ^^^^^^^^^^^^^^^
 >h : any
+>  : ^^^
 >h : any
+>  : ^^^
 
 const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
->DOMSFC : (props: {    x: number;    y: number;    children?: dom.JSX.Element[];}) => dom.JSX.Element
->(props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p> : (props: {    x: number;    y: number;    children?: dom.JSX.Element[];}) => dom.JSX.Element
+>DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
+>       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
+>(props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p> : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
+>                                                                                                                                    : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >children : dom.JSX.Element[]
+>         : ^^^^^^^^^^^^^^^^^
 >dom : any
+>    : ^^^
 >JSX : any
+>    : ^^^
 ><p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p> : dom.JSX.Element
+>                                                                   : ^^^^^^^^^^^^^^^
 >p : any
+>  : ^^^
 >props.x : number
+>        : ^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
+>  : ^^^^^^
 >props.y : number
+>        : ^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
+>  : ^^^^^^
 >props.x + props.y : number
+>                  : ^^^^^^
 >props.x : number
+>        : ^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
+>  : ^^^^^^
 >props.y : number
+>        : ^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
+>  : ^^^^^^
 >props.children : dom.JSX.Element[]
+>               : ^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >children : dom.JSX.Element[]
+>         : ^^^^^^^^^^^^^^^^^
 >p : any
+>  : ^^^
 
 class DOMClass implements dom.JSX.Element {
 >DOMClass : DOMClass
+>         : ^^^^^^^^
 >dom.JSX : any
+>        : ^^^
 >dom : () => dom.JSX.Element
+>    : ^^^^^^               
 >JSX : any
+>    : ^^^
 
     __domBrand!: void;
 >__domBrand : void
+>           : ^^^^
 
     constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >children : dom.JSX.Element[]
+>         : ^^^^^^^^^^^^^^^^^
 >dom : any
+>    : ^^^
 >JSX : any
+>    : ^^^
 
     render() {
 >render : () => dom.JSX.Element
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
         return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;
 ><p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p> : dom.JSX.Element
+>                                                                                               : ^^^^^^^^^^^^^^^
 >p : any
+>  : ^^^
 >this.props.x : number
+>             : ^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
+>  : ^^^^^^
 >this.props.y : number
+>             : ^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
+>  : ^^^^^^
 >this.props.x + this.props.y : number
+>                            : ^^^^^^
 >this.props.x : number
+>             : ^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
+>  : ^^^^^^
 >this.props.y : number
+>             : ^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
+>  : ^^^^^^
 >this.props.children : dom.JSX.Element[]
+>                    : ^^^^^^^^^^^^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
+>     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >children : dom.JSX.Element[]
+>         : ^^^^^^^^^^^^^^^^^
 >p : any
+>  : ^^^
     }
 }
 
 // Should work, everything is a DOM element
 const _tree = <DOMSFC x={1} y={2}><DOMClass x={3} y={4} /><DOMClass x={5} y={6} /></DOMSFC>
 >_tree : dom.JSX.Element
+>      : ^^^^^^^^^^^^^^^
 ><DOMSFC x={1} y={2}><DOMClass x={3} y={4} /><DOMClass x={5} y={6} /></DOMSFC> : dom.JSX.Element
+>                                                                              : ^^^^^^^^^^^^^^^
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
+>       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 ><DOMClass x={3} y={4} /> : dom.JSX.Element
+>                         : ^^^^^^^^^^^^^^^
 >DOMClass : typeof DOMClass
+>         : ^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >y : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 ><DOMClass x={5} y={6} /> : dom.JSX.Element
+>                         : ^^^^^^^^^^^^^^^
 >DOMClass : typeof DOMClass
+>         : ^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
+>       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 
 // Should fail, no dom elements
 const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
 >_brokenTree : dom.JSX.Element
+>            : ^^^^^^^^^^^^^^^
 ><MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC> : dom.JSX.Element
->MySFC : (props: { x: number; y: number; children?: import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]; }) => import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>                                                                          : ^^^^^^^^^^^^^^^
+>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
+>      : ^     ^^                                          ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 ><MyClass x={3} y={4} /> : dom.JSX.Element
+>                        : ^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >y : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 ><MyClass x={5} y={6} /> : dom.JSX.Element
+>                        : ^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : number
+>  : ^^^^^^
 >6 : 6
->MySFC : (props: { x: number; y: number; children?: import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]; }) => import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>  : ^
+>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
+>      : ^     ^^                                          ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Should fail, nondom isn't allowed as children of dom
 const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 >_brokenTree2 : dom.JSX.Element
+>             : ^^^^^^^^^^^^^^^
 ><DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC> : dom.JSX.Element
+>                                          : ^^^^^^^^^^^^^^^
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
+>       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
->tree : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
->tree : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>  : ^
+>tree : import("renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tree : import("renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
+>       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 

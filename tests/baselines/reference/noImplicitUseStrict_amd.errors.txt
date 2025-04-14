@@ -1,0 +1,6 @@
+error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+
+
+!!! error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+==== noImplicitUseStrict_amd.ts (0 errors) ====
+    export var x = 0;

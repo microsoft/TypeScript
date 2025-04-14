@@ -1,25 +1,39 @@
-=== tests/cases/compiler/staticInstanceResolution2.ts ===
+//// [tests/cases/compiler/staticInstanceResolution2.ts] ////
+
+=== staticInstanceResolution2.ts ===
 class A { }
 >A : A
+>  : ^
 
 A.hasOwnProperty('foo');
 >A.hasOwnProperty('foo') : boolean
+>                        : ^^^^^^^
 >A.hasOwnProperty : (v: PropertyKey) => boolean
+>                 : ^ ^^           ^^^^^       
 >A : typeof A
+>  : ^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
+>               : ^ ^^           ^^^^^       
 >'foo' : "foo"
+>      : ^^^^^
 
 class B {
 >B : B
+>  : ^
 
     constructor() { }
 }
 B.hasOwnProperty('foo');
 >B.hasOwnProperty('foo') : boolean
+>                        : ^^^^^^^
 >B.hasOwnProperty : (v: PropertyKey) => boolean
+>                 : ^ ^^           ^^^^^       
 >B : typeof B
+>  : ^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
+>               : ^ ^^           ^^^^^       
 >'foo' : "foo"
+>      : ^^^^^
 
 
 

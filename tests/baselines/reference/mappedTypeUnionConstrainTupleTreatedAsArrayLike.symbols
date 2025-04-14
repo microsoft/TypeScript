@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts] ////
+
+=== mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts ===
+type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }
+>HomomorphicMappedType : Symbol(HomomorphicMappedType, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 27))
+>P : Symbol(P, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 35))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 27))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 27))
+>P : Symbol(P, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 35))
+
+function test1<T extends [number] | [string]>(args: T) {
+>test1 : Symbol(test1, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 88))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 2, 15))
+>args : Symbol(args, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 2, 46))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 2, 15))
+
+  const arr: any[] = [] as HomomorphicMappedType<T>
+>arr : Symbol(arr, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 3, 7))
+>HomomorphicMappedType : Symbol(HomomorphicMappedType, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 2, 15))
+
+  const arr2: readonly any[] = [] as HomomorphicMappedType<T>
+>arr2 : Symbol(arr2, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 4, 7))
+>HomomorphicMappedType : Symbol(HomomorphicMappedType, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 2, 15))
+}
+
+function test2<T extends [number] | readonly [string]>(args: T) {
+>test2 : Symbol(test2, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 5, 1))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 7, 15))
+>args : Symbol(args, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 7, 55))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 7, 15))
+
+  const arr: any[] = [] as HomomorphicMappedType<T> // error
+>arr : Symbol(arr, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 8, 7))
+>HomomorphicMappedType : Symbol(HomomorphicMappedType, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 7, 15))
+
+  const arr2: readonly any[] = [] as HomomorphicMappedType<T>
+>arr2 : Symbol(arr2, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 9, 7))
+>HomomorphicMappedType : Symbol(HomomorphicMappedType, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 7, 15))
+}
+

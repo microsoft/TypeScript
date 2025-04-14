@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution13.tsx] ////
+
+=== test.tsx ===
 function Test() { }
 >Test : Symbol(Test, Decl(test.tsx, 0, 0))
 

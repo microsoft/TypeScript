@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeComparisonCaching.ts] ////
+
 //// [typeComparisonCaching.ts]
 // Check that we only cache results of type comparisons that are free of assumptions
 

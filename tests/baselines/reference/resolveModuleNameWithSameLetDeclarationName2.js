@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName2.ts] ////
+
 //// [resolveModuleNameWithSameLetDeclarationName2.ts]
 declare module "punycode" {
     interface ucs2 {

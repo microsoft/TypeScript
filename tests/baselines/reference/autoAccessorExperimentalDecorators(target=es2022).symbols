@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorExperimentalDecorators.ts] ////
+
+=== autoAccessorExperimentalDecorators.ts ===
+declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => void;
+>dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+>target : Symbol(target, Decl(autoAccessorExperimentalDecorators.ts, 0, 18))
+>key : Symbol(key, Decl(autoAccessorExperimentalDecorators.ts, 0, 30))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>desc : Symbol(desc, Decl(autoAccessorExperimentalDecorators.ts, 0, 48))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+
+class C1 {
+>C1 : Symbol(C1, Decl(autoAccessorExperimentalDecorators.ts, 0, 83))
+
+    @dec
+>dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+
+    accessor a: any;
+>a : Symbol(C1.a, Decl(autoAccessorExperimentalDecorators.ts, 2, 10))
+
+    @dec
+>dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+
+    static accessor b: any;
+>b : Symbol(C1.b, Decl(autoAccessorExperimentalDecorators.ts, 4, 20))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(autoAccessorExperimentalDecorators.ts, 8, 1))
+
+    @dec
+>dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+
+    accessor #a: any;
+>#a : Symbol(C2.#a, Decl(autoAccessorExperimentalDecorators.ts, 10, 10))
+
+    @dec
+>dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+
+    static accessor #b: any;
+>#b : Symbol(C2.#b, Decl(autoAccessorExperimentalDecorators.ts, 12, 21))
+}
+

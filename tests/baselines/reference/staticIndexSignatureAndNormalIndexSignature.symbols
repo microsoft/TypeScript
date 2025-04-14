@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticIndexSignatureAndNormalIndexSignature.ts ===
+//// [tests/cases/compiler/staticIndexSignatureAndNormalIndexSignature.ts] ////
+
+=== staticIndexSignatureAndNormalIndexSignature.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(staticIndexSignatureAndNormalIndexSignature.ts, 0, 0))
 

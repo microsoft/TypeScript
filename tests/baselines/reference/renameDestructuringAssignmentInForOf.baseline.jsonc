@@ -1,0 +1,76 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentInForOf.ts ===
+// interface I {
+//     /*RENAME*/<|[|property1RENAME|]: number;|>
+//     property2: string;
+// }
+// var elems: I[];
+// 
+// var property1: number, p2: number;
+// for (<|{ [|property1RENAME|]: property1/*END SUFFIX*/ } of elems|>) {
+//     property1++;
+// }
+// for (<|{ [|property1RENAME|]: p2 } of elems|>) {
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentInForOf.ts ===
+// interface I {
+//     <|[|property1RENAME|]: number;|>
+//     property2: string;
+// }
+// var elems: I[];
+// 
+// var property1: number, p2: number;
+// for (<|{ [|property1RENAME|]: property1/*END SUFFIX*/ } of elems|>) {
+//     property1++;
+// }
+// for (<|{ /*RENAME*/[|property1RENAME|]: p2 } of elems|>) {
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentInForOf.ts ===
+// --- (line: 3) skipped ---
+// }
+// var elems: I[];
+// 
+// var /*RENAME*/<|[|property1RENAME|]: number|>, p2: number;
+// for (<|{ /*START PREFIX*/property1: [|property1RENAME|] } of elems|>) {
+//     [|property1RENAME|]++;
+// }
+// for ({ property1: p2 } of elems) {
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentInForOf.ts ===
+// --- (line: 3) skipped ---
+// }
+// var elems: I[];
+// 
+// var <|[|property1RENAME|]: number|>, p2: number;
+// for (<|{ /*START PREFIX*/property1: /*RENAME*/[|property1RENAME|] } of elems|>) {
+//     [|property1RENAME|]++;
+// }
+// for ({ property1: p2 } of elems) {
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentInForOf.ts ===
+// --- (line: 3) skipped ---
+// }
+// var elems: I[];
+// 
+// var <|[|property1RENAME|]: number|>, p2: number;
+// for (<|{ /*START PREFIX*/property1: [|property1RENAME|] } of elems|>) {
+//     /*RENAME*/[|property1RENAME|]++;
+// }
+// for ({ property1: p2 } of elems) {
+// }

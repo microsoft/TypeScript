@@ -1,99 +1,155 @@
-=== tests/cases/conformance/classes/classExpressions/genericClassExpressionInFunction.ts ===
+//// [tests/cases/conformance/classes/classExpressions/genericClassExpressionInFunction.ts] ////
+
+=== genericClassExpressionInFunction.ts ===
 class A<T> {
 >A : A<T>
+>  : ^^^^
 
     genericVar: T
 >genericVar : T
+>           : ^
 }
 function B1<U>() {
 >B1 : <U>() => typeof (Anonymous class)
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // class expression can use T
     return class extends A<U> { }
 >class extends A<U> { } : typeof (Anonymous class)
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >A : A<U>
+>  : ^^^^
 }
 class B2<V> {
 >B2 : B2<V>
+>   : ^^^^^
 
     anon = class extends A<V> { }
 >anon : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class extends A<V> { } : typeof (Anonymous class)
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >A : A<V>
+>  : ^^^^
 }
 function B3<W>() {
 >B3 : <W>() => typeof Inner
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 
     return class Inner<TInner> extends A<W> { }
 >class Inner<TInner> extends A<W> { } : typeof Inner
+>                                     : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 >A : A<W>
+>  : ^^^^
 }
 // extends can call B
 class K extends B1<number>() {
 >K : K
+>  : ^
 >B1<number>() : B1<number>.(Anonymous class)
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >B1 : <U>() => typeof (Anonymous class)
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     namae: string;
 >namae : string
+>      : ^^^^^^
 }
 class C extends (new B2<number>().anon) {
 >C : C
+>  : ^
 >(new B2<number>().anon) : B2<number>.(Anonymous class)
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new B2<number>().anon : typeof (Anonymous class)
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >new B2<number>() : B2<number>
+>                 : ^^^^^^^^^^
 >B2 : typeof B2
+>   : ^^^^^^^^^
 >anon : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     name: string;
 >name : string
+>     : ^^^^^^
 }
 let b3Number = B3<number>();
 >b3Number : typeof Inner
+>         : ^^^^^^^^^^^^
 >B3<number>() : typeof Inner
+>             : ^^^^^^^^^^^^
 >B3 : <W>() => typeof Inner
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 
 class S extends b3Number<string> {
 >S : S
+>  : ^
 >b3Number : B3<number>.Inner<string>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     nom: string;
 >nom : string
+>    : ^^^^^^
 }
 var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var k = new K();
 >k : K
+>  : ^
 >new K() : K
+>        : ^
 >K : typeof K
+>  : ^^^^^^^^
 
 var s = new S();
 >s : S
+>  : ^
 >new S() : S
+>        : ^
 >S : typeof S
+>  : ^^^^^^^^
 
 c.genericVar = 12;
 >c.genericVar = 12 : 12
+>                  : ^^
 >c.genericVar : number
+>             : ^^^^^^
 >c : C
+>  : ^
 >genericVar : number
+>           : ^^^^^^
 >12 : 12
+>   : ^^
 
 k.genericVar = 12;
 >k.genericVar = 12 : 12
+>                  : ^^
 >k.genericVar : number
+>             : ^^^^^^
 >k : K
+>  : ^
 >genericVar : number
+>           : ^^^^^^
 >12 : 12
+>   : ^^
 
 s.genericVar = 12;
 >s.genericVar = 12 : 12
+>                  : ^^
 >s.genericVar : number
+>             : ^^^^^^
 >s : S
+>  : ^
 >genericVar : number
+>           : ^^^^^^
 >12 : 12
+>   : ^^
 

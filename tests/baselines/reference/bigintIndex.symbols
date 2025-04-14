@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/bigintIndex.ts] ////
+
+=== a.ts ===
 interface BigIntIndex<E> {
 >BigIntIndex : Symbol(BigIntIndex, Decl(a.ts, 0, 0))
 >E : Symbol(E, Decl(a.ts, 0, 22))
@@ -23,57 +25,45 @@ num = arr[1n]; // should error
 >num : Symbol(num, Decl(a.ts, 5, 3))
 >arr : Symbol(arr, Decl(a.ts, 4, 5))
 
+num = [1, 2, 3][1n]; // should error
+>num : Symbol(num, Decl(a.ts, 5, 3))
+
 let key: keyof any; // should be type "string | number | symbol"
->key : Symbol(key, Decl(a.ts, 9, 3))
+>key : Symbol(key, Decl(a.ts, 10, 3))
 
 key = 123;
->key : Symbol(key, Decl(a.ts, 9, 3))
+>key : Symbol(key, Decl(a.ts, 10, 3))
 
 key = "abc";
->key : Symbol(key, Decl(a.ts, 9, 3))
+>key : Symbol(key, Decl(a.ts, 10, 3))
 
 key = Symbol();
->key : Symbol(key, Decl(a.ts, 9, 3))
+>key : Symbol(key, Decl(a.ts, 10, 3))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 key = 123n; // should error
->key : Symbol(key, Decl(a.ts, 9, 3))
+>key : Symbol(key, Decl(a.ts, 10, 3))
 
 // Show correct usage of bigint index: explicitly convert to string
 const bigNum: bigint = 0n;
->bigNum : Symbol(bigNum, Decl(a.ts, 16, 5))
+>bigNum : Symbol(bigNum, Decl(a.ts, 17, 5))
 
 const typedArray = new Uint8Array(3);
->typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>typedArray : Symbol(typedArray, Decl(a.ts, 18, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
 typedArray[bigNum] = 0xAA; // should error
->typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
->bigNum : Symbol(bigNum, Decl(a.ts, 16, 5))
+>typedArray : Symbol(typedArray, Decl(a.ts, 18, 5))
+>bigNum : Symbol(bigNum, Decl(a.ts, 17, 5))
 
 typedArray[String(bigNum)] = 0xAA;
->typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
+>typedArray : Symbol(typedArray, Decl(a.ts, 18, 5))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 4 more)
->bigNum : Symbol(bigNum, Decl(a.ts, 16, 5))
+>bigNum : Symbol(bigNum, Decl(a.ts, 17, 5))
 
 typedArray["1"] = 0xBB;
->typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
+>typedArray : Symbol(typedArray, Decl(a.ts, 18, 5))
 
 typedArray[2] = 0xCC;
->typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
-
-// {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
-=== tests/cases/compiler/b.ts ===
-// BigInt cannot be used as an object literal property
-const a = {1n: 123};
->a : Symbol(a, Decl(b.ts, 1, 5))
-
-const b = {[1n]: 456};
->b : Symbol(b, Decl(b.ts, 2, 5))
->[1n] : Symbol([1n], Decl(b.ts, 2, 11))
-
-const c = {[bigNum]: 789};
->c : Symbol(c, Decl(b.ts, 3, 5))
->[bigNum] : Symbol([bigNum], Decl(b.ts, 3, 11))
->bigNum : Symbol(bigNum, Decl(a.ts, 16, 5))
+>typedArray : Symbol(typedArray, Decl(a.ts, 18, 5))
 

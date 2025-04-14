@@ -1,53 +1,92 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty18.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty18.ts] ////
+
+=== symbolProperty18.ts ===
 var i = {
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >{    [Symbol.iterator]: 0,    [Symbol.toStringTag]() { return "" },    set [Symbol.toPrimitive](p: boolean) { }} : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 
     [Symbol.iterator]: 0,
 >[Symbol.iterator] : number
+>                  : ^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     [Symbol.toStringTag]() { return "" },
 >[Symbol.toStringTag] : () => string
+>                     : ^^^^^^^^^^^^
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     set [Symbol.toPrimitive](p: boolean) { }
 >[Symbol.toPrimitive] : boolean
+>                     : ^^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >p : boolean
+>  : ^^^^^^^
 }
 
 var it = i[Symbol.iterator];
 >it : number
+>   : ^^^^^^
 >i[Symbol.iterator] : number
+>                   : ^^^^^^
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
 var str = i[Symbol.toStringTag]();
 >str : string
+>    : ^^^^^^
 >i[Symbol.toStringTag]() : string
+>                        : ^^^^^^
 >i[Symbol.toStringTag] : () => string
+>                      : ^^^^^^^^^^^^
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 
 i[Symbol.toPrimitive] = false;
 >i[Symbol.toPrimitive] = false : false
+>                              : ^^^^^
 >i[Symbol.toPrimitive] : boolean
+>                      : ^^^^^^^
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 

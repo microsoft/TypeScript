@@ -1,12 +1,18 @@
-=== tests/cases/compiler/a.d.ts ===
+//// [tests/cases/compiler/ambientClassDeclaredBeforeBase.ts] ////
+
+=== a.d.ts ===
 declare namespace ns {
 >ns : typeof ns
+>   : ^^^^^^^^^
 
   class SecondNS extends FirstNS { }
 >SecondNS : SecondNS
+>         : ^^^^^^^^
 >FirstNS : FirstNS
+>        : ^^^^^^^
 
   class FirstNS { }
 >FirstNS : FirstNS
+>        : ^^^^^^^
 }
 

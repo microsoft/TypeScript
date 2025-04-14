@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/optionalTupleElementsAndUndefined.ts] ////
+
+=== optionalTupleElementsAndUndefined.ts ===
+// Repro from #50753
+
+type UnNullify<T> = { [K in keyof T]: NonNullable<T[K]> };
+>UnNullify : UnNullify<T>
+>          : ^^^^^^^^^^^^
+
+type Foo = UnNullify<[a: 1, b?: 2 | undefined]>;
+>Foo : [a: 1, b?: 2 | undefined]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type Test = [a: 1, b?: 2] extends Foo ? true : false;  // true
+>Test : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+// Types in the following declarations should be identical
+
+var v: [1, 2?];
+>v : [1, (2 | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+var v: [1, (2 | undefined)?];
+>v : [1, (2 | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+var v: [a: 1, b?: 2];
+>v : [1, (2 | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+var v: [a: 1, b?: 2 | undefined];
+>v : [1, (2 | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+var v: UnNullify<[1, 2?]>;
+>v : [1, (2 | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+var v: UnNullify<[1, (2 | undefined)?]>;
+>v : [1, (2 | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+var v: UnNullify<[a: 1, b?: 2]>;
+>v : [1, (2 | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+var v: UnNullify<[a: 1, b?: 2 | undefined]>;
+>v : [1, (2 | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts] ////
+
 //// [reservedNamesInAliases.ts]
 interface I {}
 type any = I;

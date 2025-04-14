@@ -1,42 +1,71 @@
-=== tests/cases/compiler/assignmentCompatability39.ts ===
+//// [tests/cases/compiler/assignmentCompatability39.ts] ////
+
+=== assignmentCompatability39.ts ===
 module __test1__ {
 >__test1__ : typeof __test1__
+>          : ^^^^^^^^^^^^^^^^
 
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
 >one : T
+>    : ^
 >two : U
+>    : ^
 >obj4 : interfaceWithPublicAndOptional<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ one: 1 } : { one: number; }
+>           : ^^^^^^^^^^^^^^^^
 >one : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     export var __val__obj4 = obj4;
 >__val__obj4 : interfaceWithPublicAndOptional<number, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj4 : interfaceWithPublicAndOptional<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 module __test2__ {
 >__test2__ : typeof __test2__
+>          : ^^^^^^^^^^^^^^^^
 
     export         class classWithTwoPublic<T,U> { constructor(public one: T, public two: U) {} }    var x2 = new classWithTwoPublic(1, "a");;
 >classWithTwoPublic : classWithTwoPublic<T, U>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >one : T
+>    : ^
 >two : U
+>    : ^
 >x2 : classWithTwoPublic<number, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new classWithTwoPublic(1, "a") : classWithTwoPublic<number, string>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >classWithTwoPublic : typeof classWithTwoPublic
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"a" : "a"
+>    : ^^^
 
     export var __val__x2 = x2;
 >__val__x2 : classWithTwoPublic<number, string>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : classWithTwoPublic<number, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 __test2__.__val__x2 = __test1__.__val__obj4
 >__test2__.__val__x2 = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__.__val__x2 : __test2__.classWithTwoPublic<number, string>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__ : typeof __test2__
+>          : ^^^^^^^^^^^^^^^^
 >__val__x2 : __test2__.classWithTwoPublic<number, string>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__ : typeof __test1__
+>          : ^^^^^^^^^^^^^^^^
 >__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

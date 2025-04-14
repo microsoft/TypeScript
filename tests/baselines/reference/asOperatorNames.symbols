@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/asOperator/asOperatorNames.ts ===
+//// [tests/cases/conformance/expressions/asOperator/asOperatorNames.ts] ////
+
+=== asOperatorNames.ts ===
 var a = 20;
 >a : Symbol(a, Decl(asOperatorNames.ts, 0, 3))
 

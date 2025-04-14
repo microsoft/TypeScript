@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/contextualIntersectionType.ts] ////
+
 //// [contextualIntersectionType.ts]
 var x: { a: (s: string) => string } & { b: (n: number) => number };
 x = {

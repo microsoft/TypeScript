@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doNotEmitPinnedDetachedComments.ts ===
+//// [tests/cases/compiler/doNotEmitPinnedDetachedComments.ts] ////
+
+=== doNotEmitPinnedDetachedComments.ts ===
 var x = 10;
 >x : Symbol(x, Decl(doNotEmitPinnedDetachedComments.ts, 0, 3))
 

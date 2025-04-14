@@ -1,19 +1,33 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of23.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of23.ts] ////
+
+=== ES5For-of23.ts ===
 for (var x of [1, 2, 3]) {
 >x : number
+>  : ^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     var _a = 0;
 >_a : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     console.log(x);
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : number
+>  : ^^^^^^
 }

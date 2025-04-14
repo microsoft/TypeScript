@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitThisBigThis.ts] ////
+
 //// [noImplicitThisBigThis.ts]
 // https://github.com/microsoft/TypeScript/issues/29902
 
@@ -98,18 +100,18 @@ function createObjNoCrash() {
 
 //// [noImplicitThisBigThis.d.ts]
 declare function createObj(): {
-    func1(): any;
-    func2(): any;
-    func3(): any;
+    func1(): /*elided*/ any;
+    func2(): /*elided*/ any;
+    func3(): /*elided*/ any;
 };
 declare function createObjNoCrash(): {
-    func1(): any;
-    func2(): any;
-    func3(): any;
-    func4(): any;
-    func5(): any;
-    func6(): any;
-    func7(): any;
-    func8(): any;
-    func9(): any;
+    func1(): /*elided*/ any;
+    func2(): /*elided*/ any;
+    func3(): /*elided*/ any;
+    func4(): /*elided*/ any;
+    func5(): /*elided*/ any;
+    func6(): /*elided*/ any;
+    func7(): /*elided*/ any;
+    func8(): /*elided*/ any;
+    func9(): /*elided*/ any;
 };

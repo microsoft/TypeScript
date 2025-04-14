@@ -1,7 +1,7 @@
-tests/cases/compiler/primitiveTypeAsClassName.ts(1,7): error TS2414: Class name cannot be 'any'.
+primitiveTypeAsClassName.ts(1,7): error TS2414: Class name cannot be 'any'.
 
 
-==== tests/cases/compiler/primitiveTypeAsClassName.ts (1 errors) ====
+==== primitiveTypeAsClassName.ts (1 errors) ====
     class any {}
           ~~~
 !!! error TS2414: Class name cannot be 'any'.

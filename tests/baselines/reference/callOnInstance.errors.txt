@@ -1,10 +1,10 @@
-tests/cases/compiler/callOnInstance.ts(7,18): error TS2349: This expression is not callable.
+callOnInstance.ts(7,18): error TS2349: This expression is not callable.
   Type 'D' has no call signatures.
-tests/cases/compiler/callOnInstance.ts(10,1): error TS2349: This expression is not callable.
+callOnInstance.ts(10,1): error TS2349: This expression is not callable.
   Type 'C' has no call signatures.
 
 
-==== tests/cases/compiler/callOnInstance.ts (2 errors) ====
+==== callOnInstance.ts (2 errors) ====
     declare function D(): string; // error
     
     declare class D { constructor (value: number); } // error

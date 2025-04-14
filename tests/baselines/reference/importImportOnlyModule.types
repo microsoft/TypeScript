@@ -1,29 +1,42 @@
-=== tests/cases/conformance/externalModules/foo_2.ts ===
+//// [tests/cases/conformance/externalModules/importImportOnlyModule.ts] ////
+
+=== foo_2.ts ===
 import foo = require("./foo_1");
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 var x = foo; // Cause a runtime dependency
 >x : typeof foo
+>  : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 export class C1 {
 >C1 : C1
+>   : ^^
 
 	m1 = 42;
 >m1 : number
+>   : ^^^^^^
 >42 : 42
+>   : ^^
 
 	static s1 = true;
 >s1 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+=== foo_1.ts ===
 import c1 = require('./foo_0'); // Makes this an external module
 >c1 : typeof c1
+>   : ^^^^^^^^^
 
 var answer = 42; // No exports
 >answer : number
+>       : ^^^^^^
 >42 : 42
+>   : ^^
 

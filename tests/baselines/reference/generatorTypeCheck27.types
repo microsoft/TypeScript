@@ -1,20 +1,32 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck27.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck27.ts] ////
+
+=== generatorTypeCheck27.ts ===
 function* g(): IterableIterator<(x: string) => number> {
 >g : () => IterableIterator<(x: string) => number>
+>  : ^^^^^^                                       
 >x : string
+>  : ^^^^^^
 
     yield * function* () {
 >yield * function* () {        yield x => x.length;    } () : void
->function* () {        yield x => x.length;    } () : Generator<(x: string) => number, void, undefined>
->function* () {        yield x => x.length;    } : () => Generator<(x: string) => number, void, undefined>
+>                                                           : ^^^^
+>function* () {        yield x => x.length;    } () : Generator<(x: string) => number, void, any>
+>                                                   : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () {        yield x => x.length;    } : () => Generator<(x: string) => number, void, any>
+>                                                : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield x => x.length;
->yield x => x.length : undefined
+>yield x => x.length : any
 >x => x.length : (x: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     } ();
 }

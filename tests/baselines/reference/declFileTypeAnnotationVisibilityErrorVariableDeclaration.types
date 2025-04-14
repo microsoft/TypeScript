@@ -1,76 +1,113 @@
-=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts] ////
+
+=== declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts ===
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     class private1 {
 >private1 : private1
+>         : ^^^^^^^^
     }
 
     export class public1 {
 >public1 : public1
+>        : ^^^^^^^
     }
 
     // Directly using names from this module
     var x: private1;
 >x : private1
+>  : ^^^^^^^^
 
     var y = new private1();
 >y : private1
+>  : ^^^^^^^^
 >new private1() : private1
+>               : ^^^^^^^^
 >private1 : typeof private1
+>         : ^^^^^^^^^^^^^^^
 
     export var k: private1;
 >k : private1
+>  : ^^^^^^^^
 
     export var l = new private1();
 >l : private1
+>  : ^^^^^^^^
 >new private1() : private1
+>               : ^^^^^^^^
 >private1 : typeof private1
+>         : ^^^^^^^^^^^^^^^
 
     var x2: public1;
 >x2 : public1
+>   : ^^^^^^^
 
     var y2 = new public1();
 >y2 : public1
+>   : ^^^^^^^
 >new public1() : public1
+>              : ^^^^^^^
 >public1 : typeof public1
+>        : ^^^^^^^^^^^^^^
 
     export var k2: public1;
 >k2 : public1
+>   : ^^^^^^^
 
     export var l2 = new public1();
 >l2 : public1
+>   : ^^^^^^^
 >new public1() : public1
+>              : ^^^^^^^
 >public1 : typeof public1
+>        : ^^^^^^^^^^^^^^
 
     module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
         export class public2 {
 >public2 : public2
+>        : ^^^^^^^
         }
     }
 
     var x3: m2.public2;
 >x3 : m2.public2
+>   : ^^^^^^^^^^
 >m2 : any
+>   : ^^^
 
     var y3 = new m2.public2();
 >y3 : m2.public2
+>   : ^^^^^^^^^^
 >new m2.public2() : m2.public2
+>                 : ^^^^^^^^^^
 >m2.public2 : typeof m2.public2
+>           : ^^^^^^^^^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 >public2 : typeof m2.public2
+>        : ^^^^^^^^^^^^^^^^^
 
     export var k3: m2.public2;
 >k3 : m2.public2
+>   : ^^^^^^^^^^
 >m2 : any
+>   : ^^^
 
     export var l3 = new m2.public2();
 >l3 : m2.public2
+>   : ^^^^^^^^^^
 >new m2.public2() : m2.public2
+>                 : ^^^^^^^^^^
 >m2.public2 : typeof m2.public2
+>           : ^^^^^^^^^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 >public2 : typeof m2.public2
+>        : ^^^^^^^^^^^^^^^^^
 }
 

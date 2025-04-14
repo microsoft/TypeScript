@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplatesInDifferentScopes.ts] ////
+
 //// [taggedTemplatesInDifferentScopes.ts]
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
     return parts[0];
@@ -22,8 +24,8 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
-exports.__esModule = true;
-exports.tag = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.tag = tag;
 function tag(parts) {
     var values = [];
     for (var _i = 1; _i < arguments.length; _i++) {
@@ -31,7 +33,6 @@ function tag(parts) {
     }
     return parts[0];
 }
-exports.tag = tag;
 function foo() {
     tag(templateObject_1 || (templateObject_1 = __makeTemplateObject(["foo"], ["foo"])));
     tag(templateObject_2 || (templateObject_2 = __makeTemplateObject(["foo2"], ["foo2"])));

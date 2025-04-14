@@ -1,18 +1,26 @@
-=== tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_1.ts ===
-///<reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.ts'/>
+//// [tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule.ts] ////
+
+=== declFileAmbientExternalModuleWithSingleExportedModule_1.ts ===
+///<reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.ts' preserve="true" />
 import SubModule = require('SubModule');
 >SubModule : typeof SubModule
+>          : ^^^^^^^^^^^^^^^^
 
 export var x: SubModule.m.m3.c;
 >x : SubModule.m.m3.c
+>  : ^^^^^^^^^^^^^^^^
 >SubModule : any
+>          : ^^^
 >m : any
+>  : ^^^
 >m3 : any
+>   : ^^^
 
 
-=== tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_0.ts ===
+=== declFileAmbientExternalModuleWithSingleExportedModule_0.ts ===
 declare module "SubModule" {
 >"SubModule" : typeof import("SubModule")
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export module m {
         export module m3 {

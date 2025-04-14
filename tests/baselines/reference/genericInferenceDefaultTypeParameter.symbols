@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/genericInferenceDefaultTypeParameter.ts] ////
+
+=== genericInferenceDefaultTypeParameter.ts ===
+// Repro from #50858
+
+type Type = {
+>Type : Symbol(Type, Decl(genericInferenceDefaultTypeParameter.ts, 0, 0))
+
+    a: (e: string) => void;
+>a : Symbol(a, Decl(genericInferenceDefaultTypeParameter.ts, 2, 13))
+>e : Symbol(e, Decl(genericInferenceDefaultTypeParameter.ts, 3, 8))
+
+    b: (e: number) => void;
+>b : Symbol(b, Decl(genericInferenceDefaultTypeParameter.ts, 3, 27))
+>e : Symbol(e, Decl(genericInferenceDefaultTypeParameter.ts, 4, 8))
+}
+
+declare function f1<T extends keyof Type = "a">(props: Type[T]): void;
+>f1 : Symbol(f1, Decl(genericInferenceDefaultTypeParameter.ts, 5, 1))
+>T : Symbol(T, Decl(genericInferenceDefaultTypeParameter.ts, 7, 20))
+>Type : Symbol(Type, Decl(genericInferenceDefaultTypeParameter.ts, 0, 0))
+>props : Symbol(props, Decl(genericInferenceDefaultTypeParameter.ts, 7, 48))
+>Type : Symbol(Type, Decl(genericInferenceDefaultTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(genericInferenceDefaultTypeParameter.ts, 7, 20))
+
+f1(event => { });
+>f1 : Symbol(f1, Decl(genericInferenceDefaultTypeParameter.ts, 5, 1))
+>event : Symbol(event, Decl(genericInferenceDefaultTypeParameter.ts, 9, 3))
+
+f1<"a">(event => { });
+>f1 : Symbol(f1, Decl(genericInferenceDefaultTypeParameter.ts, 5, 1))
+>event : Symbol(event, Decl(genericInferenceDefaultTypeParameter.ts, 10, 8))
+
+f1<"b">(event => { });
+>f1 : Symbol(f1, Decl(genericInferenceDefaultTypeParameter.ts, 5, 1))
+>event : Symbol(event, Decl(genericInferenceDefaultTypeParameter.ts, 11, 8))
+

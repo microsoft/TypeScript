@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericObjectLitReturnType.ts ===
+//// [tests/cases/compiler/genericObjectLitReturnType.ts] ////
+
+=== genericObjectLitReturnType.ts ===
 class X<T>
 >X : Symbol(X, Decl(genericObjectLitReturnType.ts, 0, 0))
 >T : Symbol(T, Decl(genericObjectLitReturnType.ts, 0, 8))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParametersWithUnderscore.ts ===
+//// [tests/cases/compiler/unusedTypeParametersWithUnderscore.ts] ////
+
+=== unusedTypeParametersWithUnderscore.ts ===
 function f<_T, U>() { }
 >f : Symbol(f, Decl(unusedTypeParametersWithUnderscore.ts, 0, 0))
 >_T : Symbol(_T, Decl(unusedTypeParametersWithUnderscore.ts, 0, 11))

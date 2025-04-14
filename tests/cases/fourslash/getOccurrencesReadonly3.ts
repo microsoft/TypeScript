@@ -9,6 +9,5 @@
 ////  }
 ////}
 
-verify.rangesAreOccurrences(false);
-goTo.marker();
-verify.occurrencesAtPositionCount(1);
+verify.baselineDocumentHighlights();
+verify.baselineDocumentHighlights("");

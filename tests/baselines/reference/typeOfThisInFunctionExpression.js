@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functions/typeOfThisInFunctionExpression.ts] ////
+
 //// [typeOfThisInFunctionExpression.ts]
 // type of 'this' in FunctionExpression is Any
 

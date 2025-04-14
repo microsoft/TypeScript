@@ -1,32 +1,51 @@
-=== tests/cases/compiler/transformParenthesizesConditionalSubexpression.ts ===
+//// [tests/cases/compiler/transformParenthesizesConditionalSubexpression.ts] ////
+
+=== transformParenthesizesConditionalSubexpression.ts ===
 var K = 'k'
 >K : string
+>  : ^^^^^^
 >'k' : "k"
+>    : ^^^
 
 var a = { p  : (true ? { [K] : 'v'}        : null) }
->a : { p: { [x: string]: string; }; }
->{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [x: string]: string; }; }
->p : { [x: string]: string; }
->(true ? { [K] : 'v'}        : null) : { [x: string]: string; }
->true ? { [K] : 'v'}        : null : { [x: string]: string; }
+>a : { p: { [K]: string; }; }
+>  : ^^^^^^^     ^^^^^^ ^^^^^
+>{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [K]: string; }; }
+>                                             : ^^^^^^^     ^^^^^^ ^^^^^
+>p : { [K]: string; }
+>  : ^^     ^^^^^^ ^^
+>(true ? { [K] : 'v'}        : null) : { [K]: string; }
+>                                    : ^^     ^^^^^^ ^^
+>true ? { [K] : 'v'}        : null : { [K]: string; }
+>                                  : ^^     ^^^^^^ ^^
 >true : true
->{ [K] : 'v'} : { [x: string]: string; }
+>     : ^^^^
+>{ [K] : 'v'} : { [K]: string; }
+>             : ^^     ^^^^^^ ^^
 >[K] : string
+>    : ^^^^^^
 >K : string
+>  : ^^^^^^
 >'v' : "v"
->null : null
+>    : ^^^
 
 var b = { p  : (true ? { [K] : 'v'} as any : null) }
 >b : { p: any; }
+>  : ^^^^^^^^^^^
 >{ p  : (true ? { [K] : 'v'} as any : null) } : { p: any; }
+>                                             : ^^^^^^^^^^^
 >p : any
 >(true ? { [K] : 'v'} as any : null) : any
 >true ? { [K] : 'v'} as any : null : any
 >true : true
+>     : ^^^^
 >{ [K] : 'v'} as any : any
->{ [K] : 'v'} : { [x: string]: string; }
+>{ [K] : 'v'} : { [K]: string; }
+>             : ^^     ^^^^^^ ^^
 >[K] : string
+>    : ^^^^^^
 >K : string
+>  : ^^^^^^
 >'v' : "v"
->null : null
+>    : ^^^
 

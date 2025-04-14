@@ -1,0 +1,95 @@
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_Pick.ts ===
+// type User = [|{| defId: 0 |}{ id: number; name: string; }|];
+// declare const user: Pick<User, "name">
+// /*GOTO TYPE*/user
+// 
+// type PickedUser = Pick<User, "name">
+// declare const user2: PickedUser
+// user2
+
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// /**
+//  * From T, pick a set of properties whose keys are in the union K
+//  */
+// type Pick<T, K extends keyof T> = [|{| defId: 1 |}{
+//     [P in K]: T[P];
+// }|];
+// 
+// /**
+//  * Construct a type with a set of properties K of type T
+// --- (line: --) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_Pick.ts ===
+// type User = [|{| defId: 0 |}{ id: number; name: string; }|];
+// declare const user: Pick<User, "name">
+// user
+// 
+// type PickedUser = Pick<User, "name">
+// declare const user2: PickedUser
+// /*GOTO TYPE*/user2
+
+// === lib.d.ts ===
+// --- (line: --) skipped ---
+// /**
+//  * From T, pick a set of properties whose keys are in the union K
+//  */
+// type Pick<T, K extends keyof T> = [|{| defId: 1 |}{
+//     [P in K]: T[P];
+// }|];
+// 
+// /**
+//  * Construct a type with a set of properties K of type T
+// --- (line: --) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

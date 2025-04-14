@@ -1,0 +1,98 @@
+trigger:
+  branches:
+    include:
+      - release-*
+
+resources:
+  repositories:
+    - repository: 1esPipelines
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+
+variables:
+  Codeql.InitParameters: '--codescanning-config=$(Build.SourcesDirectory)/.github/codeql/codeql-configuration.yml'
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
+  parameters:
+    pool:
+      name: TypeScript-AzurePipelines-EO
+      image: 1ESPT-Mariner2.0
+      os: linux
+
+    sdl:
+      sourceAnalysisPool:
+        name: TypeScript-AzurePipelines-EO
+        image: 1ESPT-Windows2022
+        os: windows
+
+    stages:
+      - stage: buildStage
+        displayName: Build Stage
+        jobs:
+          - job: test
+            displayName: Test
+            steps:
+              - checkout: self
+                clean: true
+                fetchDepth: 1
+                fetchTags: false
+
+              - task: NodeTool@0
+                inputs:
+                  versionSpec: 20.x
+                displayName: 'Install Node'
+
+              - script: |
+                  npm install -g `node -e 'console.log(JSON.parse(fs.readFileSync("package.json", "utf8")).packageManager)'`
+                  npm --version
+                displayName: 'Install packageManager from package.json'
+
+              - script: npm ci
+                displayName: 'npm ci'
+
+              - script: 'npm test'
+                displayName: 'npm test'
+
+          - job: build
+            displayName: Build
+            dependsOn: test
+            steps:
+              - checkout: self
+                clean: true
+                fetchDepth: 1
+                fetchTags: false
+
+              - task: NodeTool@0
+                inputs:
+                  versionSpec: 20.x
+                displayName: 'Install Node'
+
+              - script: |
+                  npm install -g `node -e 'console.log(JSON.parse(fs.readFileSync("package.json", "utf8")).packageManager)'`
+                  npm --version
+                displayName: 'Install packageManager from package.json'
+
+              - script: npm ci
+                displayName: 'npm ci'
+
+              - script: |
+                  npx hereby LKG
+                  npx hereby clean
+                  node ./scripts/addPackageJsonGitHead.mjs package.json
+                  npm pack
+                displayName: 'LKG, clean, pack'
+
+              - task: CopyFiles@2
+                displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+                inputs:
+                  SourceFolder: ./
+                  Contents: 'typescript-*.tgz'
+                  TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  targetPath: '$(Build.ArtifactStagingDirectory)'
+                  artifactName: tgz

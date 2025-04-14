@@ -1,0 +1,59 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function [|decorator|](target) {
+//     return target;
+// }|>
+// function decoratorFactory(...args) {
+//     return target => target;
+// }
+
+// === /tests/cases/fourslash/b.ts ===
+// @/*GOTO DEF*/[|decorator|]
+// class C {
+//     @decoratorFactory(a, "22", true)
+//     method() {}
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "decorator",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// function decorator(target) {
+//     return target;
+// }
+// <|function [|decoratorFactory|](...args) {
+//     return target => target;
+// }|>
+
+// === /tests/cases/fourslash/b.ts ===
+// @decorator
+// class C {
+//     @[|decora/*GOTO DEF*/torFactory|](a, "22", true)
+//     method() {}
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "decoratorFactory",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

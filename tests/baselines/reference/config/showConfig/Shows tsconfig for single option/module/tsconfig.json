@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "moduleResolution": "classic"
+    }
+}

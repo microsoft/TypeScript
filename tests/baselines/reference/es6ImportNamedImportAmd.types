@@ -1,128 +1,191 @@
-=== tests/cases/compiler/es6ImportNamedImportAmd_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportAmd.ts] ////
+
+=== es6ImportNamedImportAmd_0.ts ===
 export var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export var x = a;
 >x : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 export var m = a;
 >m : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 export var a1 = 10;
 >a1 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 
 export var x1 = 10;
 >x1 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 
 export var z1 = 10;
 >z1 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 
 export var z2 = 10;
 >z2 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 
 export var aaaa = 10;
 >aaaa : number
+>     : ^^^^^^
 >10 : 10
+>   : ^^
 
-=== tests/cases/compiler/es6ImportNamedImportAmd_1.ts ===
+=== es6ImportNamedImportAmd_1.ts ===
 import { } from "es6ImportNamedImportAmd_0";
 import { a } from "es6ImportNamedImportAmd_0";
 >a : number
+>  : ^^^^^^
 
 var xxxx = a;
 >xxxx : number
+>     : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 import { a as b } from "es6ImportNamedImportAmd_0";
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var xxxx = b;
 >xxxx : number
+>     : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 import { x, a as y } from "es6ImportNamedImportAmd_0";
 >x : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var xxxx = x;
 >xxxx : number
+>     : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 var xxxx = y;
 >xxxx : number
+>     : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 import { x as z,  } from "es6ImportNamedImportAmd_0";
 >x : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 
 var xxxx = z;
 >xxxx : number
+>     : ^^^^^^
 >z : number
+>  : ^^^^^^
 
 import { m,  } from "es6ImportNamedImportAmd_0";
 >m : number
+>  : ^^^^^^
 
 var xxxx = m;
 >xxxx : number
+>     : ^^^^^^
 >m : number
+>  : ^^^^^^
 
 import { a1, x1 } from "es6ImportNamedImportAmd_0";
 >a1 : number
+>   : ^^^^^^
 >x1 : number
+>   : ^^^^^^
 
 var xxxx = a1;
 >xxxx : number
+>     : ^^^^^^
 >a1 : number
+>   : ^^^^^^
 
 var xxxx = x1;
 >xxxx : number
+>     : ^^^^^^
 >x1 : number
+>   : ^^^^^^
 
 import { a1 as a11, x1 as x11 } from "es6ImportNamedImportAmd_0";
 >a1 : number
+>   : ^^^^^^
 >a11 : number
+>    : ^^^^^^
 >x1 : number
+>   : ^^^^^^
 >x11 : number
+>    : ^^^^^^
 
 var xxxx = a11;
 >xxxx : number
+>     : ^^^^^^
 >a11 : number
+>    : ^^^^^^
 
 var xxxx = x11;
 >xxxx : number
+>     : ^^^^^^
 >x11 : number
+>    : ^^^^^^
 
 import { z1 } from "es6ImportNamedImportAmd_0";
 >z1 : number
+>   : ^^^^^^
 
 var z111 = z1;
 >z111 : number
+>     : ^^^^^^
 >z1 : number
+>   : ^^^^^^
 
 import { z2 as z3 } from "es6ImportNamedImportAmd_0";
 >z2 : number
+>   : ^^^^^^
 >z3 : number
+>   : ^^^^^^
 
 var z2 = z3; // z2 shouldn't give redeclare error
 >z2 : number
+>   : ^^^^^^
 >z3 : number
+>   : ^^^^^^
 
 // These are elided
 import { aaaa } from "es6ImportNamedImportAmd_0";
 >aaaa : number
+>     : ^^^^^^
 
 // These are elided
 import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
 >aaaa : number
+>     : ^^^^^^
 >bbbb : number
+>     : ^^^^^^
 

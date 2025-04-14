@@ -1,22 +1,32 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/importHelpersNoHelpersForAsyncGenerators.ts] ////
+
+=== main.ts ===
 export async function * f() {
->f : () => AsyncGenerator<number, void, undefined>
+>f : () => AsyncGenerator<number, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 
     yield 2;
 >yield 2 : any
+>        : ^^^
 >2 : 2
+>  : ^
 
     yield* [3];
 >yield* [3] : any
+>           : ^^^
 >[3] : number[]
+>    : ^^^^^^^^
 >3 : 3
+>  : ^
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
+
 export {}
-No type information for this code.
-No type information for this code.
+

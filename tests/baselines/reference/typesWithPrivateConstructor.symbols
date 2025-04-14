@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/typesWithPrivateConstructor.ts ===
+//// [tests/cases/conformance/types/members/typesWithPrivateConstructor.ts] ////
+
+=== typesWithPrivateConstructor.ts ===
 class C {
 >C : Symbol(C, Decl(typesWithPrivateConstructor.ts, 0, 0))
 

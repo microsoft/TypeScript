@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveGenericUnionType1.ts] ////
+
 //// [recursiveGenericUnionType1.ts]
 declare module Test1 {
     export type Container<T> = T | {

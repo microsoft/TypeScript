@@ -1,16 +1,16 @@
-tests/cases/compiler/weakType.ts(15,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
-tests/cases/compiler/weakType.ts(16,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
-tests/cases/compiler/weakType.ts(17,13): error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
-tests/cases/compiler/weakType.ts(18,13): error TS2559: Type '12' has no properties in common with type 'Settings'.
-tests/cases/compiler/weakType.ts(19,13): error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
-tests/cases/compiler/weakType.ts(20,13): error TS2559: Type 'false' has no properties in common with type 'Settings'.
-tests/cases/compiler/weakType.ts(37,18): error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
-tests/cases/compiler/weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
+weakType.ts(15,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+weakType.ts(16,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+weakType.ts(17,13): error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
+weakType.ts(18,13): error TS2559: Type '12' has no properties in common with type 'Settings'.
+weakType.ts(19,13): error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
+weakType.ts(20,13): error TS2559: Type 'false' has no properties in common with type 'Settings'.
+weakType.ts(37,18): error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
+weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
   Types of property 'properties' are incompatible.
     Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
 
 
-==== tests/cases/compiler/weakType.ts (8 errors) ====
+==== weakType.ts (8 errors) ====
     interface Settings {
         timeout?: number;
         onError?(): void;
@@ -28,15 +28,15 @@ tests/cases/compiler/weakType.ts(62,5): error TS2322: Type '{ properties: { wron
     doSomething(getDefaultSettings);
                 ~~~~~~~~~~~~~~~~~~
 !!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
-!!! related TS6212 tests/cases/compiler/weakType.ts:15:13: Did you mean to call this expression?
+!!! related TS6212 weakType.ts:15:13: Did you mean to call this expression?
     doSomething(() => ({ timeout: 1000 }));
                 ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
-!!! related TS6212 tests/cases/compiler/weakType.ts:16:13: Did you mean to call this expression?
+!!! related TS6212 weakType.ts:16:13: Did you mean to call this expression?
     doSomething(null as CtorOnly);
                 ~~~~~~~~~~~~~~~~
 !!! error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
-!!! related TS6213 tests/cases/compiler/weakType.ts:17:13: Did you mean to use 'new' with this expression?
+!!! related TS6213 weakType.ts:17:13: Did you mean to use 'new' with this expression?
     doSomething(12);
                 ~~
 !!! error TS2559: Type '12' has no properties in common with type 'Settings'.

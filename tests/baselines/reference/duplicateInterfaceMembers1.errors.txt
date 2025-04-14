@@ -1,8 +1,8 @@
-tests/cases/compiler/duplicateInterfaceMembers1.ts(2,4): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/duplicateInterfaceMembers1.ts(3,4): error TS2300: Duplicate identifier 'x'.
+duplicateInterfaceMembers1.ts(2,4): error TS2300: Duplicate identifier 'x'.
+duplicateInterfaceMembers1.ts(3,4): error TS2300: Duplicate identifier 'x'.
 
 
-==== tests/cases/compiler/duplicateInterfaceMembers1.ts (2 errors) ====
+==== duplicateInterfaceMembers1.ts (2 errors) ====
     interface Bar {
        x: number;
        ~

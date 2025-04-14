@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts] ////
+
 //// [intersectionAndUnionTypes.ts]
 interface A { a: string }
 interface B { b: string }

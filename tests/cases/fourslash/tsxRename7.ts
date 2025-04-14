@@ -21,4 +21,4 @@
 //// let opt2 = <Opt [|[|{| "contextRangeIndex": 4 |}propx|]={100}|] optional/>;
 //// let opt3 = <Opt wrong />;
 
-verify.rangesWithSameTextAreRenameLocations("propx");
+verify.baselineRenameAtRangesWithText("propx");

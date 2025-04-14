@@ -1,8 +1,8 @@
-tests/cases/compiler/duplicateIdentifierDifferentSpelling.ts(3,3): error TS2300: Duplicate identifier '3'.
-tests/cases/compiler/duplicateIdentifierDifferentSpelling.ts(6,21): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateIdentifierDifferentSpelling.ts(3,3): error TS2300: Duplicate identifier '3'.
+duplicateIdentifierDifferentSpelling.ts(6,21): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
-==== tests/cases/compiler/duplicateIdentifierDifferentSpelling.ts (2 errors) ====
+==== duplicateIdentifierDifferentSpelling.ts (2 errors) ====
     class A {
       0b11 = '';
       3 = '';

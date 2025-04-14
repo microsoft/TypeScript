@@ -1,49 +1,67 @@
-=== tests/cases/compiler/interfaceImplementation1.ts ===
+//// [tests/cases/compiler/interfaceImplementation1.ts] ////
+
+=== interfaceImplementation1.ts ===
 interface I1 {
     iObj:{ };
 >iObj : {}
+>     : ^^
 
     iNum:number;
 >iNum : number
+>     : ^^^^^^
 
     iAny:any;
 >iAny : any
+>     : ^^^
 
     iFn():void;
 >iFn : () => void
+>    : ^^^^^^    
 }
 
 interface I2 {
 	iFn(n:number, s:string):void;
 >iFn : (n: number, s: string) => void
+>    : ^ ^^      ^^ ^^      ^^^^^    
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 }
 
 class C1 implements I1,I2 {
 >C1 : C1
+>   : ^^
 
     private iFn();
 >iFn : () => any
+>    : ^^^^^^^^^
 
 	private iFn(n?:number, s?:string) { }
 >iFn : () => any
+>    : ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     private iAny:any;
 >iAny : any
+>     : ^^^
 
     private iNum:number;
 >iNum : number
+>     : ^^^^^^
 
     private iObj:{ };
 >iObj : {}
+>     : ^^
 }
 
 interface I3 {
     x: number;
 >x : number
+>  : ^^^^^^
 }
 
 interface I4 {
@@ -51,27 +69,37 @@ interface I4 {
     new ():I3;
     [call:number]:string;
 >call : number
+>     : ^^^^^^
 }
 
 class C2 implements I3 {
 >C2 : C2
+>   : ^^
 
     public x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 var a:I4 = function(){ 
 >a : I4
+>  : ^^
 >function(){     return new C2();} : () => C2
+>                                  : ^^^^^^^^
 
     return new C2();
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 }
 new a();
 >new a() : I3
+>        : ^^
 >a : I4
+>  : ^^
 
 /*var b:I4 = C2;
 new b();
@@ -79,14 +107,21 @@ new b();
 
 var c:I4;
 >c : I4
+>  : ^^
 
 c[5];
 >c[5] : string
+>     : ^^^^^^
 >c : I4
+>  : ^^
 >5 : 5
+>  : ^
 
 c["foo"];
 >c["foo"] : any
+>         : ^^^
 >c : I4
+>  : ^^
 >"foo" : "foo"
+>      : ^^^^^
 

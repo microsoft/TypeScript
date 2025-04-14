@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleConst.ts] ////
+
 //// [es6ModuleConst.ts]
 export const a = "hello";
 export const x: string = a, y = x;

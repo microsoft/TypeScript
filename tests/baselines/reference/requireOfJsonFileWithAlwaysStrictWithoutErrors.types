@@ -1,45 +1,71 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithAlwaysStrictWithoutErrors.ts] ////
+
+=== file1.ts ===
 import b1 = require('./b.json');
 >b1 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let x = b1.a;
 >x : boolean
+>  : ^^^^^^^
 >b1.a : boolean
+>     : ^^^^^^^
 >b1 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 import b2 = require('./b.json');
 >b2 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (x) {
 >x : boolean
+>  : ^^^^^^^
 
     let b = b2.b;
 >b : string
+>  : ^^^^^^
 >b2.b : string
+>     : ^^^^^^
 >b2 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
     x = (b1.b === b);
 >x = (b1.b === b) : boolean
+>                 : ^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >(b1.b === b) : boolean
+>             : ^^^^^^^
 >b1.b === b : boolean
+>           : ^^^^^^^
 >b1.b : string
+>     : ^^^^^^
 >b1 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 {
 >{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "a": true,
 >"a" : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
 
     "b": "hello"
 >"b" : string
+>    : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }

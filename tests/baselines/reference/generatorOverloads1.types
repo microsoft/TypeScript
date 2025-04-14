@@ -1,16 +1,25 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorOverloads1.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorOverloads1.ts] ////
+
+=== generatorOverloads1.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     function* f(s: string): Iterable<any>;
 >f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
+>  : ^^^ ^^      ^^^             ^^^ ^^      ^^^             ^^^
 >s : string
+>  : ^^^^^^
 
     function* f(s: number): Iterable<any>;
 >f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
+>  : ^^^ ^^      ^^^             ^^^ ^^      ^^^             ^^^
 >s : number
+>  : ^^^^^^
 
     function* f(s: any): Iterable<any> { }
 >f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
+>  : ^^^ ^^      ^^^             ^^^ ^^      ^^^             ^^^
 >s : any
+>  : ^^^
 }

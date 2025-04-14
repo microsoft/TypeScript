@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/exportEqualsProperty2.ts] ////
 
 //// [a.ts]
-// This test is just like exportDefaultProperty2, but with `export =`.
-
 class C {
     static B: number;
 }
@@ -19,7 +17,6 @@ const x: B = { c: B };
 
 //// [a.js]
 "use strict";
-// This test is just like exportDefaultProperty2, but with `export =`.
 var C = /** @class */ (function () {
     function C() {
     }
@@ -28,6 +25,6 @@ var C = /** @class */ (function () {
 module.exports = C.B;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var B = require("./a");
 var x = { c: B };

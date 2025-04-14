@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {
+/////*1*/class /*2*/C {
 ////    n: number;
 ////    constructor() {
 ////        this.n = 12;
 ////    }
-////}|]
-////let c = new [|C|]();
+////}
+////let c = new /*3*/C();
 
-verify.singleReferenceGroup("class C", "C");
+verify.baselineFindAllReferences('1', '2', '3');

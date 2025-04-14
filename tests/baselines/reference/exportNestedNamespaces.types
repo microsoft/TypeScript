@@ -1,86 +1,138 @@
-=== tests/cases/conformance/salsa/mod.js ===
+//// [tests/cases/conformance/salsa/exportNestedNamespaces.ts] ////
+
+=== mod.js ===
 exports.n = {};
 >exports.n = {} : typeof n
+>               : ^^^^^^^^
 >exports.n : typeof n
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>          : ^^^^^^^^
+>exports : typeof import("mod")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >n : typeof n
+>  : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 exports.n.K = function () {
 >exports.n.K = function () {    this.x = 10;} : typeof K
+>                                             : ^^^^^^^^
 >exports.n.K : typeof K
+>            : ^^^^^^^^
 >exports.n : typeof n
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>          : ^^^^^^^^
+>exports : typeof import("mod")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >n : typeof n
+>  : ^^^^^^^^
 >K : typeof K
+>  : ^^^^^^^^
 >function () {    this.x = 10;} : typeof K
+>                               : ^^^^^^^^
 
     this.x = 10;
 >this.x = 10 : 10
+>            : ^^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >10 : 10
+>   : ^^
 }
 exports.Classic = class {
 >exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
+>                                                                     : ^^^^^^^^^^^^^^
 >exports.Classic : typeof Classic
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>                : ^^^^^^^^^^^^^^
+>exports : typeof import("mod")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >Classic : typeof Classic
+>        : ^^^^^^^^^^^^^^
 >class {    constructor() {        this.p = 1    }} : typeof Classic
+>                                                   : ^^^^^^^^^^^^^^
 
     constructor() {
         this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
 }
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 import * as s from './mod'
 >s : typeof s
+>  : ^^^^^^^^
 
 var k = new s.n.K()
 >k : K
+>  : ^
 >new s.n.K() : K
+>            : ^
 >s.n.K : typeof K
+>      : ^^^^^^^^
 >s.n : typeof s.n
+>    : ^^^^^^^^^^
 >s : typeof s
+>  : ^^^^^^^^
 >n : typeof s.n
+>  : ^^^^^^^^^^
 >K : typeof K
+>  : ^^^^^^^^
 
 k.x
 >k.x : number
+>    : ^^^^^^
 >k : K
+>  : ^
 >x : number
+>  : ^^^^^^
 
 var classic = new s.Classic()
 >classic : s.Classic
+>        : ^^^^^^^^^
 >new s.Classic() : s.Classic
+>                : ^^^^^^^^^
 >s.Classic : typeof s.Classic
+>          : ^^^^^^^^^^^^^^^^
 >s : typeof s
+>  : ^^^^^^^^
 >Classic : typeof s.Classic
+>        : ^^^^^^^^^^^^^^^^
 
 
 /** @param {s.n.K} c
     @param {s.Classic} classic */
 function f(c, classic) {
 >f : (c: K, classic: s.Classic) => void
+>  : ^ ^^^^^       ^^         ^^^^^^^^^
 >c : K
+>  : ^
 >classic : s.Classic
+>        : ^^^^^^^^^
 
     c.x
 >c.x : number
+>    : ^^^^^^
 >c : K
+>  : ^
 >x : number
+>  : ^^^^^^
 
     classic.p
 >classic.p : number
+>          : ^^^^^^
 >classic : s.Classic
+>        : ^^^^^^^^^
 >p : number
+>  : ^^^^^^
 }
 
 

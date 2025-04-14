@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactNamespaceJSXEmit.tsx] ////
+
 //// [reactNamespaceJSXEmit.tsx]
 declare var myReactLib: any;
 declare var foo: any;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/commonJsImportBindingElementNarrowType.ts] ////
+
 === /bar.js ===
 const { a } = require("./foo");
 >a : Symbol(a, Decl(bar.js, 0, 7))
@@ -12,9 +14,6 @@ if (a) {
 >a : Symbol(a, Decl(bar.js, 0, 7))
 }
 === /foo.d.ts ===
-// Regresion test for GH#41957
-
-
 export const a: number | null;
->a : Symbol(a, Decl(foo.d.ts, 3, 12))
+>a : Symbol(a, Decl(foo.d.ts, 0, 12))
 

@@ -1,62 +1,95 @@
-=== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts] ////
+
+=== stringLiteralsWithSwitchStatements04.ts ===
 let x: "foo";
 >x : "foo"
+>  : ^^^^^
 
 let y: "foo" | "bar"; 
 >y : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 
 declare function randBool(): boolean;
 >randBool : () => boolean
+>         : ^^^^^^       
 
 switch (y) {
 >y : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 
     case "foo", x:
 >"foo", x : "foo"
+>         : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >x : "foo"
+>  : ^^^^^
 
         break;
     case x, "foo":
 >x, "foo" : "foo"
+>         : ^^^^^
 >x : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         break;
     case x, "baz":
 >x, "baz" : "baz"
+>         : ^^^^^
 >x : "foo"
+>  : ^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
         break;
     case "baz", x:
 >"baz", x : "foo"
+>         : ^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 >x : "foo"
+>  : ^^^^^
 
         break;
     case "baz" && "bar":
 >"baz" && "bar" : "" | "bar"
+>               : ^^^^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
         break;
     case "baz" && ("foo" || "bar"):
 >"baz" && ("foo" || "bar") : "" | "foo" | "bar"
+>                          : ^^^^^^^^^^^^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 >("foo" || "bar") : "foo" | "bar"
+>                 : ^^^^^^^^^^^^^
 >"foo" || "bar" : "foo" | "bar"
+>               : ^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
         break;
     case "bar" && ("baz" || "bar"):
 >"bar" && ("baz" || "bar") : "" | "bar" | "baz"
+>                          : ^^^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 >("baz" || "bar") : "bar" | "baz"
+>                 : ^^^^^^^^^^^^^
 >"baz" || "bar" : "bar" | "baz"
+>               : ^^^^^^^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
         break;
 }

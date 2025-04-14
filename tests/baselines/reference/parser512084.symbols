@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512084.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512084.ts] ////
+
+=== parser512084.ts ===
 class foo {
 >foo : Symbol(foo, Decl(parser512084.ts, 0, 0))
 

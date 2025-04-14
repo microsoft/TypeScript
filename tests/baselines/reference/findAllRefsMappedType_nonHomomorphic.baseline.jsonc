@@ -1,0 +1,117 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts ===
+// function f(x: { [K in "m"]: number; }) {
+//     x./*FIND ALL REFS*/[|m|];
+//     x.[|m|]
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts ===
+  // function f(x: { [K in "m"]: number; }) {
+  //     x./*FIND ALL REFS*/[|m|];
+  //     x.m
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) m: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "m",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts ===
+// function f(x: { [K in "m"]: number; }) {
+//     x.[|m|];
+//     x./*FIND ALL REFS*/[|m|]
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts ===
+  // function f(x: { [K in "m"]: number; }) {
+  //     x.m;
+  //     x./*FIND ALL REFS*/[|m|]
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) m: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "m",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

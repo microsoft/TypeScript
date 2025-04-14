@@ -1,109 +1,97 @@
-[96mtests/cases/compiler/a.ts[0m:[93m1[0m:[93m11[0m - [91merror[0m[90m TS1109: [0mExpression expected.
+[96ma.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
 
 [7m1[0m const a =!@#!@$
-[7m [0m [91m          ~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
+[7m [0m [91m           ~~[0m
+[96ma.ts[0m:[93m1[0m:[93m13[0m - [91merror[0m[90m TS1134: [0mVariable declaration expected.
 
 [7m1[0m const a =!@#!@$
-[7m [0m [91m           [0m
-[96mtests/cases/compiler/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS1109: [0mExpression expected.
+[7m [0m [91m            ~[0m
+[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS1109: [0mExpression expected.
 
 [7m1[0m const a =!@#!@$
-[7m [0m [91m             ~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m12[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-
-[7m2[0m const b = !@#!@#!@#!
-[7m [0m [91m           ~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m13[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
-
-[7m2[0m const b = !@#!@#!@#!
-[7m [0m [91m            [0m
-[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m15[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-
-[7m2[0m const b = !@#!@#!@#!
-[7m [0m [91m              ~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
-
-[7m2[0m const b = !@#!@#!@#!
 [7m [0m [91m               [0m
-[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m18[0m - [91merror[0m[90m TS1109: [0mExpression expected.
+[96ma.ts[0m:[93m2[0m:[93m13[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
 
 [7m2[0m const b = !@#!@#!@#!
-[7m [0m [91m                 ~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
+[7m [0m [91m            ~~[0m
+[96ma.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS1134: [0mVariable declaration expected.
 
 [7m2[0m const b = !@#!@#!@#!
-[7m [0m [91m                  [0m
-[96mtests/cases/compiler/a.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'OK'.
+[7m [0m [91m             ~[0m
+[96ma.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
+
+[7m2[0m const b = !@#!@#!@#!
+[7m [0m [91m               ~~[0m
+[96ma.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
+
+[7m2[0m const b = !@#!@#!@#!
+[7m [0m [91m                  ~~[0m
+[96ma.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'OK'.
 
 [7m3[0m OK!
 [7m [0m [91m~~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1434: [0mUnexpected keyword or identifier.
+[96ma.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1434: [0mUnexpected keyword or identifier.
 
 [7m4[0m HERE's A shouty thing
 [7m [0m [91m~~~~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'HERE'.
+[96ma.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'HERE'.
 
 [7m4[0m HERE's A shouty thing
 [7m [0m [91m~~~~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m4[0m HERE's A shouty thing
 [7m [0m [91m                     [0m
-[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m1[0m - [91merror[0m[90m TS1434: [0mUnexpected keyword or identifier.
+[96ma.ts[0m:[93m5[0m:[93m1[0m - [91merror[0m[90m TS1434: [0mUnexpected keyword or identifier.
 
 [7m5[0m GOTTA GO FAST
 [7m [0m [91m~~~~~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'GOTTA'.
+[96ma.ts[0m:[93m5[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'GOTTA'.
 
 [7m5[0m GOTTA GO FAST
 [7m [0m [91m~~~~~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m7[0m - [91merror[0m[90m TS1434: [0mUnexpected keyword or identifier.
+[96ma.ts[0m:[93m5[0m:[93m7[0m - [91merror[0m[90m TS1434: [0mUnexpected keyword or identifier.
 
 [7m5[0m GOTTA GO FAST
 [7m [0m [91m      ~~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m7[0m - [91merror[0m[90m TS2304: [0mCannot find name 'GO'.
+[96ma.ts[0m:[93m5[0m:[93m7[0m - [91merror[0m[90m TS2304: [0mCannot find name 'GO'.
 
 [7m5[0m GOTTA GO FAST
 [7m [0m [91m      ~~[0m
-[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m10[0m - [91merror[0m[90m TS2304: [0mCannot find name 'FAST'.
+[96ma.ts[0m:[93m5[0m:[93m10[0m - [91merror[0m[90m TS2304: [0mCannot find name 'FAST'.
 
 [7m5[0m GOTTA GO FAST
 [7m [0m [91m         ~~~~[0m
-[96mtests/cases/compiler/b.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'fhqwhgads'.
+[96mb.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'fhqwhgads'.
 
 [7m1[0m fhqwhgads
 [7m [0m [91m~~~~~~~~~[0m
-[96mtests/cases/compiler/b.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'to'.
+[96mb.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'to'.
 
 [7m2[0m to
 [7m [0m [91m~~[0m
-[96mtests/cases/compiler/b.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'limit'.
+[96mb.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'limit'.
 
 [7m3[0m limit
 [7m [0m [91m~~~~~[0m
 
 
-==== tests/cases/compiler/a.ts (18 errors) ====
+==== a.ts (16 errors) ====
     const a =!@#!@$
-              ~
-!!! error TS1109: Expression expected.
-               
+               ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
-                 ~
+                ~
+!!! error TS1134: Variable declaration expected.
+                   
 !!! error TS1109: Expression expected.
     const b = !@#!@#!@#!
-               ~
-!!! error TS1109: Expression expected.
-                
+                ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
-                  ~
-!!! error TS1109: Expression expected.
-                   
+                 ~
+!!! error TS1134: Variable declaration expected.
+                   ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
-                     ~
-!!! error TS1109: Expression expected.
-                      
+                      ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
     OK!
     ~~
@@ -127,7 +115,7 @@
              ~~~~
 !!! error TS2304: Cannot find name 'FAST'.
     
-==== tests/cases/compiler/b.ts (3 errors) ====
+==== b.ts (3 errors) ====
     fhqwhgads
     ~~~~~~~~~
 !!! error TS2304: Cannot find name 'fhqwhgads'.
@@ -137,8 +125,8 @@
     limit
     ~~~~~
 !!! error TS2304: Cannot find name 'limit'.
-Found 21 errors in 2 files.
+Found 19 errors in 2 files.
 
 Errors  Files
-    18  tests/cases/compiler/a.ts[90m:1[0m
-     3  tests/cases/compiler/b.ts[90m:1[0m
+    16  a.ts[90m:1[0m
+     3  b.ts[90m:1[0m

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass.ts] ////
+
 //// [protectedStaticClassPropertyAccessibleWithinSubclass.ts]
 class Base {
     protected static x: string;

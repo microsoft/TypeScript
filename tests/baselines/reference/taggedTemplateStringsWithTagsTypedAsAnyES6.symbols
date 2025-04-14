@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAnyES6.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAnyES6.ts] ////
+
+=== taggedTemplateStringsWithTagsTypedAsAnyES6.ts ===
 var f: any;
 >f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAnyES6.ts, 0, 3))
 

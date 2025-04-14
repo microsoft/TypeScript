@@ -1,88 +1,143 @@
-=== tests/cases/compiler/inferenceOptionalPropertiesStrict.ts ===
+//// [tests/cases/compiler/inferenceOptionalPropertiesStrict.ts] ////
+
+=== inferenceOptionalPropertiesStrict.ts ===
 declare function test<T>(x: { [key: string]: T }): T;
 >test : <T>(x: { [key: string]: T; }) => T
+>     : ^ ^^ ^^                     ^^^^^ 
 >x : { [key: string]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 declare let x1: { a?: string, b?: number };
 >x1 : { a?: string; b?: number; }
+>   : ^^^^^^      ^^^^^^      ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let x2: { a?: string, b?: number | undefined };
 >x2 : { a?: string; b?: number | undefined; }
+>   : ^^^^^^      ^^^^^^                  ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 const y1 = test(x1);
 >y1 : string | number
+>   : ^^^^^^^^^^^^^^^
 >test(x1) : string | number
+>         : ^^^^^^^^^^^^^^^
 >test : <T>(x: { [key: string]: T; }) => T
+>     : ^ ^^ ^^                     ^^^^^ 
 >x1 : { a?: string; b?: number; }
+>   : ^^^^^^      ^^^^^^      ^^^
 
 const y2 = test(x2);
 >y2 : string | number | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test(x2) : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T>(x: { [key: string]: T; }) => T
+>     : ^ ^^ ^^                     ^^^^^ 
 >x2 : { a?: string; b?: number | undefined; }
+>   : ^^^^^^      ^^^^^^                  ^^^
 
 var v1: Required<{ a?: string, b?: number }>;
 >v1 : Required<{ a?: string; b?: number; }>
+>   : ^^^^^^^^^^^^^^^      ^^^^^^      ^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var v1: { a: string, b: number };
 >v1 : Required<{ a?: string; b?: number; }>
+>   : ^^^^^^^^^^^^^^^      ^^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var v2: Required<{ a?: string, b?: number | undefined }>;
 >v2 : Required<{ a?: string; b?: number | undefined; }>
+>   : ^^^^^^^^^^^^^^^      ^^^^^^                  ^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var v2: { a: string, b: number | undefined };
 >v2 : Required<{ a?: string; b?: number | undefined; }>
+>   : ^^^^^^^^^^^^^^^      ^^^^^^                  ^^^^
 >a : string
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var v3: Partial<{ a: string, b: string }>;
 >v3 : Partial<{ a: string; b: string; }>
+>   : ^^^^^^^^^^^^^      ^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var v3: { a?: string, b?: string };
 >v3 : Partial<{ a: string; b: string; }>
+>   : ^^^^^^^^^^^^^      ^^^^^      ^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var v4: Partial<{ a: string, b: string | undefined }>;
 >v4 : Partial<{ a: string; b: string | undefined; }>
+>   : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string
+>  : ^^^^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var v4: { a?: string, b?: string | undefined };
 >v4 : Partial<{ a: string; b: string | undefined; }>
+>   : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var v5: Required<Partial<{ a: string, b: string }>>;
 >v5 : Required<Partial<{ a: string; b: string; }>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var v5: { a: string, b: string };
 >v5 : Required<Partial<{ a: string; b: string; }>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var v6: Required<Partial<{ a: string, b: string | undefined }>>;
 >v6 : Required<Partial<{ a: string; b: string | undefined; }>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^                  ^^^^^
 >a : string
+>  : ^^^^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var v6: { a: string, b: string | undefined };
 >v6 : Required<Partial<{ a: string; b: string | undefined; }>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^                  ^^^^^
 >a : string
+>  : ^^^^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 

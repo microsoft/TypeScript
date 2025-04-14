@@ -1,90 +1,125 @@
-=== tests/cases/conformance/externalModules/foo1.ts ===
+//// [tests/cases/conformance/externalModules/duplicateExportAssignments.ts] ////
+
+=== foo1.ts ===
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var y = 20;
 >y : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
 export = x;
 >x : number
+>  : ^^^^^^
 
 export = y;
 >y : number
+>  : ^^^^^^
 
-=== tests/cases/conformance/externalModules/foo2.ts ===
+=== foo2.ts ===
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 class y {};
 >y : y
+>  : ^
 
 export = x;
 >x : number
+>  : ^^^^^^
 
 export = y;
 >y : y
+>  : ^
 
-=== tests/cases/conformance/externalModules/foo3.ts ===
+=== foo3.ts ===
 module x {
->x : typeof import("tests/cases/conformance/externalModules/foo3")
+>x : typeof import("foo3")
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 	export var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 class y {
 >y : y
+>  : ^
 
 	y: number;
 >y : number
+>  : ^^^^^^
 }
 export = x;
 >x : typeof x
+>  : ^^^^^^^^
 
 export = y;
 >y : y
+>  : ^
 
-=== tests/cases/conformance/externalModules/foo4.ts ===
+=== foo4.ts ===
 export = x;
 >x : () => number
+>  : ^^^^^^^^^^^^
 
 function x(){
 >x : () => number
+>  : ^^^^^^^^^^^^
 
 	return 42;
 >42 : 42
+>   : ^^
 }
 function y(){
 >y : () => number
+>  : ^^^^^^^^^^^^
 
 	return 42;
 >42 : 42
+>   : ^^
 }
 export = y;
 >y : () => number
+>  : ^^^^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/foo5.ts ===
+=== foo5.ts ===
 var x = 5;
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
 var y = "test";
 >y : string
+>  : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
 var z = {};
 >z : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 export = x;
 >x : number
+>  : ^^^^^^
 
 export = y;
 >y : string
+>  : ^^^^^^
 
 export = z;
 >z : {}
+>  : ^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classStaticPropertyAccess.ts ===
+//// [tests/cases/compiler/classStaticPropertyAccess.ts] ////
+
+=== classStaticPropertyAccess.ts ===
 class A {
 >A : Symbol(A, Decl(classStaticPropertyAccess.ts, 0, 0))
 

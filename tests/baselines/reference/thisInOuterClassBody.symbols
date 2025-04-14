@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInOuterClassBody.ts ===
+//// [tests/cases/compiler/thisInOuterClassBody.ts] ////
+
+=== thisInOuterClassBody.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(thisInOuterClassBody.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx] ////
+
 //// [file.tsx]
 declare module JSX {
 	interface Element { }
@@ -20,4 +22,4 @@ data = { 32:  } /  > ;
 {
     32;
 }
-/>;;
+/>;

@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionReturn5.ts ===
+// <|function [|foo|]() {
+//     class Foo {
+//         static { /*GOTO DEF*/return; }
+//     }
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

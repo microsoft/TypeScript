@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fuzzy.ts] ////
+
 //// [fuzzy.ts]
 module M {
     export interface I {

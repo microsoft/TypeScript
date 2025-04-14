@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictFunctionTypesErrors.ts ===
+//// [tests/cases/compiler/strictFunctionTypesErrors.ts] ////
+
+=== strictFunctionTypesErrors.ts ===
 export {}
 
 

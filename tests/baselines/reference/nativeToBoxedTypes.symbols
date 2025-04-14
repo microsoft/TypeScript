@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nativeToBoxedTypes.ts ===
+//// [tests/cases/compiler/nativeToBoxedTypes.ts] ////
+
+=== nativeToBoxedTypes.ts ===
 var N = new Number();
 >N : Symbol(N, Decl(nativeToBoxedTypes.ts, 0, 3))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

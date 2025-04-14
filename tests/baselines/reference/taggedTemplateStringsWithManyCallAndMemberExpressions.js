@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithManyCallAndMemberExpressions.ts] ////
+
 //// [taggedTemplateStringsWithManyCallAndMemberExpressions.ts]
 interface I {
     (strs: TemplateStringsArray, ...subs: number[]): I;

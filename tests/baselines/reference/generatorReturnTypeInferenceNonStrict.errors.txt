@@ -1,13 +1,13 @@
-tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(9,11): error TS7055: 'g001', which lacks return-type annotation, implicitly has an 'any' yield type.
-tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(17,11): error TS7055: 'g003', which lacks return-type annotation, implicitly has an 'any' yield type.
-tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(74,15): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
-tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(79,11): error TS7055: 'g301', which lacks return-type annotation, implicitly has an 'any' yield type.
-tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(89,11): error TS7055: 'g303', which lacks return-type annotation, implicitly has an 'any' yield type.
-tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(126,11): error TS7055: 'g310', which lacks return-type annotation, implicitly has an 'any' yield type.
-tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(131,10): error TS7025: Generator implicitly has yield type 'any' because it does not yield any values. Consider supplying a return type annotation.
+generatorReturnTypeInferenceNonStrict.ts(9,11): error TS7055: 'g001', which lacks return-type annotation, implicitly has an 'any' yield type.
+generatorReturnTypeInferenceNonStrict.ts(17,11): error TS7055: 'g003', which lacks return-type annotation, implicitly has an 'any' yield type.
+generatorReturnTypeInferenceNonStrict.ts(74,15): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
+generatorReturnTypeInferenceNonStrict.ts(79,11): error TS7055: 'g301', which lacks return-type annotation, implicitly has an 'any' yield type.
+generatorReturnTypeInferenceNonStrict.ts(89,11): error TS7055: 'g303', which lacks return-type annotation, implicitly has an 'any' yield type.
+generatorReturnTypeInferenceNonStrict.ts(126,11): error TS7055: 'g310', which lacks return-type annotation, implicitly has an 'any' yield type.
+generatorReturnTypeInferenceNonStrict.ts(131,10): error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
 
 
-==== tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts (7 errors) ====
+==== generatorReturnTypeInferenceNonStrict.ts (7 errors) ====
     declare const iterableIterator: IterableIterator<number>;
     declare const generator: Generator<number, string, boolean>;
     declare const never: never;
@@ -86,7 +86,7 @@ tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(131,
     
     function* g204() { // Generator<number, void, any>
     	const x = f2(yield 1);
-    	             ~~~~~~~
+    	             ~~~~~
 !!! error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
     }
     
@@ -152,7 +152,7 @@ tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts(131,
     function* g311() { // Generator<any (implicit), void, string>
     	yield* (function*() {
     	        ~~~~~~~~
-!!! error TS7025: Generator implicitly has yield type 'any' because it does not yield any values. Consider supplying a return type annotation.
+!!! error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
     		const y: string = yield;
     	})();
     }

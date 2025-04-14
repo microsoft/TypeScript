@@ -1,16 +1,22 @@
-=== tests/cases/compiler/commentsOnObjectLiteral4.ts ===
+//// [tests/cases/compiler/commentsOnObjectLiteral4.ts] ////
+
+=== commentsOnObjectLiteral4.ts ===
 var v = {
 >v : { readonly bar: number; }
+>  : ^^^^^^^^^^^^^^^^      ^^^
 >{ /**  * @type {number}  */ get bar(): number {  return 12; }} : { readonly bar: number; }
+>                                                               : ^^^^^^^^^^^^^^^^      ^^^
 
  /**
   * @type {number}
   */
  get bar(): number {
 >bar : number
+>    : ^^^^^^
 
   return 12;
 >12 : 12
+>   : ^^
  }
 }
 

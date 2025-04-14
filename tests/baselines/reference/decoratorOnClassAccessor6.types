@@ -1,16 +1,27 @@
-=== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts ===
+//// [tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts] ////
+
+=== decoratorOnClassAccessor6.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >target : any
+>       : ^^^
 >propertyKey : string
+>            : ^^^^^^
 >descriptor : TypedPropertyDescriptor<T>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     public @dec set accessor(value: number) { }
 >public : any
+>       : ^^^
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >accessor : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 }

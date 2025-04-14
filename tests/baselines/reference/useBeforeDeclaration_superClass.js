@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useBeforeDeclaration_superClass.ts] ////
+
 //// [useBeforeDeclaration_superClass.ts]
 class C {
     x = 0;

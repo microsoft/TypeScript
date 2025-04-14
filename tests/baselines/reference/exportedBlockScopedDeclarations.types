@@ -1,46 +1,68 @@
-=== tests/cases/compiler/exportedBlockScopedDeclarations.ts ===
+//// [tests/cases/compiler/exportedBlockScopedDeclarations.ts] ////
+
+=== exportedBlockScopedDeclarations.ts ===
 const foo = foo; // compile error
 >foo : any
+>    : ^^^
 >foo : any
+>    : ^^^
 
 export const bar = bar; // should be compile error
 >bar : any
+>    : ^^^
 >bar : any
+>    : ^^^
 
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
   const bar = bar; // compile error
 >bar : any
+>    : ^^^
 >bar : any
+>    : ^^^
 }
 namespace NS {
 >NS : typeof NS
+>   : ^^^^^^^^^
 
   export const bar = bar; // should be compile error
 >bar : any
+>    : ^^^
 >bar : any
+>    : ^^^
 }
 
 let foo1 = foo1; // compile error
 >foo1 : any
+>     : ^^^
 >foo1 : any
+>     : ^^^
 
 export let bar1 = bar1; // should be compile error
 >bar1 : any
+>     : ^^^
 >bar1 : any
+>     : ^^^
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
   let bar1 = bar1; // compile error
 >bar1 : any
+>     : ^^^
 >bar1 : any
+>     : ^^^
 }
 namespace NS1 {
 >NS1 : typeof NS1
+>    : ^^^^^^^^^^
 
   export let bar1 = bar1; // should be compile error
 >bar1 : any
+>     : ^^^
 >bar1 : any
+>     : ^^^
 }

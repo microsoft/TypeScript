@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferTypeParameterConstraints.ts ===
+//// [tests/cases/compiler/inferTypeParameterConstraints.ts] ////
+
+=== inferTypeParameterConstraints.ts ===
 // Repro from #42636
 
 type SubGuard<A, X extends [A]> = X;
@@ -48,4 +50,62 @@ type Foo<A> = A extends Constrain<infer X, A> ? X : never;
 type T0 = Foo<string>;  // string
 >T0 : Symbol(T0, Decl(inferTypeParameterConstraints.ts, 14, 58))
 >Foo : Symbol(Foo, Decl(inferTypeParameterConstraints.ts, 12, 41))
+
+// https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
+
+class BaseClass<V> {
+>BaseClass : Symbol(BaseClass, Decl(inferTypeParameterConstraints.ts, 16, 22))
+>V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 20, 16))
+
+  protected fake(): V {
+>fake : Symbol(BaseClass.fake, Decl(inferTypeParameterConstraints.ts, 20, 20))
+>V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 20, 16))
+
+    throw new Error("");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+class Klass<V> extends BaseClass<V> {
+>Klass : Symbol(Klass, Decl(inferTypeParameterConstraints.ts, 24, 1))
+>V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 26, 12))
+>BaseClass : Symbol(BaseClass, Decl(inferTypeParameterConstraints.ts, 16, 22))
+>V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 26, 12))
+
+  child = true;
+>child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
+}
+
+type Constructor<V, P extends BaseClass<V>> = new () => P;
+>Constructor : Symbol(Constructor, Decl(inferTypeParameterConstraints.ts, 28, 1))
+>V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 30, 17))
+>P : Symbol(P, Decl(inferTypeParameterConstraints.ts, 30, 19))
+>BaseClass : Symbol(BaseClass, Decl(inferTypeParameterConstraints.ts, 16, 22))
+>V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 30, 17))
+>P : Symbol(P, Decl(inferTypeParameterConstraints.ts, 30, 19))
+
+type inferTest<V, T> = T extends Constructor<V, infer P> ? P : never;
+>inferTest : Symbol(inferTest, Decl(inferTypeParameterConstraints.ts, 30, 58))
+>V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 31, 15))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 31, 17))
+>T : Symbol(T, Decl(inferTypeParameterConstraints.ts, 31, 17))
+>Constructor : Symbol(Constructor, Decl(inferTypeParameterConstraints.ts, 28, 1))
+>V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 31, 15))
+>P : Symbol(P, Decl(inferTypeParameterConstraints.ts, 31, 53))
+>P : Symbol(P, Decl(inferTypeParameterConstraints.ts, 31, 53))
+
+type U = inferTest<number, Constructor<number, Klass<number>>>;
+>U : Symbol(U, Decl(inferTypeParameterConstraints.ts, 31, 69))
+>inferTest : Symbol(inferTest, Decl(inferTypeParameterConstraints.ts, 30, 58))
+>Constructor : Symbol(Constructor, Decl(inferTypeParameterConstraints.ts, 28, 1))
+>Klass : Symbol(Klass, Decl(inferTypeParameterConstraints.ts, 24, 1))
+
+declare let m: U;
+>m : Symbol(m, Decl(inferTypeParameterConstraints.ts, 35, 11))
+>U : Symbol(U, Decl(inferTypeParameterConstraints.ts, 31, 69))
+
+m.child; // ok
+>m.child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
+>m : Symbol(m, Decl(inferTypeParameterConstraints.ts, 35, 11))
+>child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
 

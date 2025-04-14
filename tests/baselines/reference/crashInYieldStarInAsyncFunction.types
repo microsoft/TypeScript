@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/crashInYieldStarInAsyncFunction.ts] ////
+
+=== crashInYieldStarInAsyncFunction.ts ===
+// https://github.com/microsoft/TypeScript/issues/53145
+var obj = {
+>obj : { [Symbol.asyncIterator](): { next(): { then(): void; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [Symbol.asyncIterator]() {        return {            next() {                return { then() { } };            }        };    }} : { [Symbol.asyncIterator](): { next(): { then(): void; }; }; }
+>                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Symbol.asyncIterator]() {
+>[Symbol.asyncIterator] : () => { next(): { then(): void; }; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Symbol.asyncIterator : unique symbol
+>                     : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>asyncIterator : unique symbol
+>              : ^^^^^^^^^^^^^
+
+        return {
+>{            next() {                return { then() { } };            }        } : { next(): { then(): void; }; }
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            next() {
+>next : () => { then(): void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+
+                return { then() { } };
+>{ then() { } } : { then(): void; }
+>               : ^^^^^^^^^^^^^^^^^
+>then : () => void
+>     : ^^^^^^^^^^
+            }
+        };
+    }
+};
+
+async function* g() {
+>g : () => AsyncGenerator<any, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    yield* obj;
+>yield* obj : any
+>           : ^^^
+>obj : { [Symbol.asyncIterator](): { next(): { then(): void; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}

@@ -1,14 +1,19 @@
-=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithEnum.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithEnum.ts] ////
+
+=== exponentiationOperatorWithEnum.ts ===
 // operands of an enum type are treated as having the primitive type Number.
 
 enum E {
 >E : E
+>  : ^
 
     a,
 >a : E.a
+>  : ^^^
 
     b
 >b : E.b
+>  : ^^^
 }
 
 var a: any;
@@ -16,96 +21,158 @@ var a: any;
 
 var b: number;
 >b : number
+>  : ^^^^^^
 
 var c: E;
 >c : E
+>  : ^
 
 // operator **
 var r1 = c ** a;
 >r1 : number
+>   : ^^^^^^
 >c ** a : number
+>       : ^^^^^^
 >c : E
+>  : ^
 >a : any
 
 var r2 = c ** b;
 >r2 : number
+>   : ^^^^^^
 >c ** b : number
+>       : ^^^^^^
 >c : E
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var r3 = c ** c;
 >r3 : number
+>   : ^^^^^^
 >c ** c : number
+>       : ^^^^^^
 >c : E
+>  : ^
 >c : E
+>  : ^
 
 var r4 = a ** c;
 >r4 : number
+>   : ^^^^^^
 >a ** c : number
+>       : ^^^^^^
 >a : any
 >c : E
+>  : ^
 
 var r5 = b ** c;
 >r5 : number
+>   : ^^^^^^
 >b ** c : number
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : E
+>  : ^
 
 var r6 = E.a ** a;
 >r6 : number
+>   : ^^^^^^
 >E.a ** a : number
+>         : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 >a : any
 
 var r7 = E.a ** b;
 >r7 : number
+>   : ^^^^^^
 >E.a ** b : number
+>         : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 >b : number
+>  : ^^^^^^
 
 var r8 = E.a ** E.b;
 >r8 : number
+>   : ^^^^^^
 >E.a ** E.b : number
+>           : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 var r9 = E.a ** 1;
 >r9 : number
+>   : ^^^^^^
 >E.a ** 1 : number
+>         : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 >1 : 1
+>  : ^
 
 var r10 = a ** E.b;
 >r10 : number
+>    : ^^^^^^
 >a ** E.b : number
+>         : ^^^^^^
 >a : any
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 var r11 = b ** E.b;
 >r11 : number
+>    : ^^^^^^
 >b ** E.b : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 var r12 = 1 ** E.b;
 >r12 : number
+>    : ^^^^^^
 >1 ** E.b : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryWithReservedWords.ts] ////
+
 //// [typeQueryWithReservedWords.ts]
 class Controller {
     create() {
@@ -21,9 +23,9 @@ var Controller = /** @class */ (function () {
     }
     Controller.prototype.create = function () {
     };
-    Controller.prototype["delete"] = function () {
+    Controller.prototype.delete = function () {
     };
-    Controller.prototype["var"] = function () {
+    Controller.prototype.var = function () {
     };
     return Controller;
 }());

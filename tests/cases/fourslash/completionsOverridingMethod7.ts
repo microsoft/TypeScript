@@ -9,7 +9,7 @@
 ////}
 ////
 ////abstract class Derived extends Base {
-////    [|abstract|] /*a*/
+////    abstract /*a*/
 ////}
 
 verify.completions({
@@ -24,10 +24,32 @@ verify.completions({
         {
             name: "M",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: test.ranges()[0],
             insertText:
 `abstract M<T>(t: T): void;
 abstract M<T>(t: T, x: number): void;`,
+            filterText: "M",
+            hasAction: true,
+            source: completion.CompletionSource.ClassMemberSnippet,
         },
     ],
+});
+
+verify.applyCodeActionFromCompletion("a", {
+    preferences: {
+      includeCompletionsWithInsertText: true,
+      includeCompletionsWithSnippetText: false,
+      includeCompletionsWithClassMemberSnippets: true,
+    },
+    name: "M",
+    source: completion.CompletionSource.ClassMemberSnippet,
+    description: "Update modifiers of 'M'",
+    newFileContent:
+`abstract class Base {
+    abstract M<T>(t: T): void;
+    abstract M<T>(t: T, x: number): void;
+}
+
+abstract class Derived extends Base {
+    
+}`
 });

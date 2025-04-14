@@ -1,31 +1,41 @@
-tests/cases/compiler/bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/compiler/bigintWithLib.ts(19,33): error TS2769: No overload matches this call.
-  Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.
-    Argument of type 'number[]' is not assignable to parameter of type 'number'.
-  Overload 2 of 3, '(array: Iterable<bigint>): BigInt64Array', gave the following error.
-    Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
-      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-        Type 'IteratorResult<number, any>' is not assignable to type 'IteratorResult<bigint, any>'.
-          Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<bigint, any>'.
-            Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<bigint>'.
-              Type 'number' is not assignable to type 'bigint'.
-  Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
-    Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
-      Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
-tests/cases/compiler/bigintWithLib.ts(24,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
-tests/cases/compiler/bigintWithLib.ts(31,35): error TS2769: No overload matches this call.
-  Overload 1 of 3, '(length?: number): BigUint64Array', gave the following error.
-    Argument of type 'number[]' is not assignable to parameter of type 'number'.
-  Overload 2 of 3, '(array: Iterable<bigint>): BigUint64Array', gave the following error.
-    Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
-  Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
-    Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
-tests/cases/compiler/bigintWithLib.ts(36,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
-tests/cases/compiler/bigintWithLib.ts(43,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
-tests/cases/compiler/bigintWithLib.ts(46,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
+bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
+bigintWithLib.ts(19,34): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'number' is not assignable to type 'bigint'.
+      Type 'number' is not assignable to type 'bigint'.
+        Type 'number' is not assignable to type 'bigint'.
+bigintWithLib.ts(19,37): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'number' is not assignable to type 'bigint'.
+      Type 'number' is not assignable to type 'bigint'.
+        Type 'number' is not assignable to type 'bigint'.
+bigintWithLib.ts(19,40): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'number' is not assignable to type 'bigint'.
+      Type 'number' is not assignable to type 'bigint'.
+        Type 'number' is not assignable to type 'bigint'.
+bigintWithLib.ts(24,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
+bigintWithLib.ts(31,36): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'number' is not assignable to type 'bigint'.
+      Type 'number' is not assignable to type 'bigint'.
+        Type 'number' is not assignable to type 'bigint'.
+bigintWithLib.ts(31,39): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'number' is not assignable to type 'bigint'.
+      Type 'number' is not assignable to type 'bigint'.
+        Type 'number' is not assignable to type 'bigint'.
+bigintWithLib.ts(31,42): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'number' is not assignable to type 'bigint'.
+      Type 'number' is not assignable to type 'bigint'.
+        Type 'number' is not assignable to type 'bigint'.
+bigintWithLib.ts(36,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
+bigintWithLib.ts(43,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
+bigintWithLib.ts(46,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
 
 
-==== tests/cases/compiler/bigintWithLib.ts (7 errors) ====
+==== bigintWithLib.ts (11 errors) ====
     // Test BigInt functions
     let bigintVal: bigint = BigInt(123);
     bigintVal = BigInt("456");
@@ -47,20 +57,27 @@ tests/cases/compiler/bigintWithLib.ts(46,26): error TS2345: Argument of type 'nu
     bigIntArray = new BigInt64Array(10);
     bigIntArray = new BigInt64Array([1n, 2n, 3n]);
     bigIntArray = new BigInt64Array([1, 2, 3]); // should error
-                                    ~~~~~~~~~
+                                     ~
 !!! error TS2769: No overload matches this call.
-!!! error TS2769:   Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.
-!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'number'.
-!!! error TS2769:   Overload 2 of 3, '(array: Iterable<bigint>): BigInt64Array', gave the following error.
-!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
-!!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-!!! error TS2769:         Type 'IteratorResult<number, any>' is not assignable to type 'IteratorResult<bigint, any>'.
-!!! error TS2769:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<bigint, any>'.
-!!! error TS2769:             Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<bigint>'.
-!!! error TS2769:               Type 'number' is not assignable to type 'bigint'.
-!!! error TS2769:   Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
-!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
-!!! error TS2769:       Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:       Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:         Type 'number' is not assignable to type 'bigint'.
+!!! related TS2771 lib.es2020.bigint.d.ts:--:--: The last overload is declared here.
+                                        ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:       Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:         Type 'number' is not assignable to type 'bigint'.
+!!! related TS2771 lib.es2020.bigint.d.ts:--:--: The last overload is declared here.
+                                           ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:       Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:         Type 'number' is not assignable to type 'bigint'.
+!!! related TS2771 lib.es2020.bigint.d.ts:--:--: The last overload is declared here.
     bigIntArray = new BigInt64Array(new ArrayBuffer(80));
     bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
     bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
@@ -75,14 +92,27 @@ tests/cases/compiler/bigintWithLib.ts(46,26): error TS2345: Argument of type 'nu
     bigUintArray = new BigUint64Array(10);
     bigUintArray = new BigUint64Array([1n, 2n, 3n]);
     bigUintArray = new BigUint64Array([1, 2, 3]); // should error
-                                      ~~~~~~~~~
+                                       ~
 !!! error TS2769: No overload matches this call.
-!!! error TS2769:   Overload 1 of 3, '(length?: number): BigUint64Array', gave the following error.
-!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'number'.
-!!! error TS2769:   Overload 2 of 3, '(array: Iterable<bigint>): BigUint64Array', gave the following error.
-!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
-!!! error TS2769:   Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
-!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:       Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:         Type 'number' is not assignable to type 'bigint'.
+!!! related TS2771 lib.es2020.bigint.d.ts:--:--: The last overload is declared here.
+                                          ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:       Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:         Type 'number' is not assignable to type 'bigint'.
+!!! related TS2771 lib.es2020.bigint.d.ts:--:--: The last overload is declared here.
+                                             ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:       Type 'number' is not assignable to type 'bigint'.
+!!! error TS2769:         Type 'number' is not assignable to type 'bigint'.
+!!! related TS2771 lib.es2020.bigint.d.ts:--:--: The last overload is declared here.
     bigUintArray = new BigUint64Array(new ArrayBuffer(80));
     bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
     bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);

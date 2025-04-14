@@ -1,40 +1,40 @@
-tests/cases/compiler/typedArrays-es5.ts(2,5): error TS2802: Type 'Float32Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(5,5): error TS2802: Type 'Float64Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(8,5): error TS2802: Type 'Int16Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(11,5): error TS2802: Type 'Int32Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(14,5): error TS2802: Type 'Int8Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(17,5): error TS2802: Type 'NodeList' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(20,5): error TS2802: Type 'Uint16Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(23,5): error TS2802: Type 'Uint32Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(26,5): error TS2802: Type 'Uint8Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
-tests/cases/compiler/typedArrays-es5.ts(29,5): error TS2802: Type 'Uint8ClampedArray' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(2,5): error TS2802: Type 'Float32Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(5,5): error TS2802: Type 'Float64Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(8,5): error TS2802: Type 'Int16Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(11,5): error TS2802: Type 'Int32Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(14,5): error TS2802: Type 'Int8Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(17,5): error TS2802: Type 'NodeList' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(20,5): error TS2802: Type 'Uint16Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(23,5): error TS2802: Type 'Uint32Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(26,5): error TS2802: Type 'Uint8Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+typedArrays-es5.ts(29,5): error TS2802: Type 'Uint8ClampedArray<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
 
 
-==== tests/cases/compiler/typedArrays-es5.ts (10 errors) ====
+==== typedArrays-es5.ts (10 errors) ====
     const float32Array = new Float32Array(1);
     [...float32Array];
         ~~~~~~~~~~~~
-!!! error TS2802: Type 'Float32Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Float32Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     const float64Array = new Float64Array(1);
     [...float64Array];
         ~~~~~~~~~~~~
-!!! error TS2802: Type 'Float64Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Float64Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     const int16Array = new Int16Array(1);
     [...int16Array];
         ~~~~~~~~~~
-!!! error TS2802: Type 'Int16Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Int16Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     const int32Array = new Int32Array(1);
     [...int32Array];
         ~~~~~~~~~~
-!!! error TS2802: Type 'Int32Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Int32Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     const int8Array = new Int8Array(1);
     [...int8Array];
         ~~~~~~~~~
-!!! error TS2802: Type 'Int8Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Int8Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     const nodeList = new NodeList();
     [...nodeList];
@@ -44,22 +44,22 @@ tests/cases/compiler/typedArrays-es5.ts(29,5): error TS2802: Type 'Uint8ClampedA
     const uint16Array = new Uint16Array(1);
     [...uint16Array];
         ~~~~~~~~~~~
-!!! error TS2802: Type 'Uint16Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Uint16Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     const uint32Array = new Uint32Array(1);
     [...uint32Array];
         ~~~~~~~~~~~
-!!! error TS2802: Type 'Uint32Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Uint32Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     const uint8Array = new Uint8Array(1);
     [...uint8Array];
         ~~~~~~~~~~
-!!! error TS2802: Type 'Uint8Array' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Uint8Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     const uint8ClampedArray = new Uint8ClampedArray(1);
     [...uint8ClampedArray];
         ~~~~~~~~~~~~~~~~~
-!!! error TS2802: Type 'Uint8ClampedArray' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2802: Type 'Uint8ClampedArray<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     
     
     

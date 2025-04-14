@@ -33,6 +33,7 @@ verify.completions({
             name: "a",
             sortText: completion.SortText.LocationPriority,
             insertText: "a: string",
+            filterText: "a"
         },
         {
             name: "b",
@@ -40,6 +41,7 @@ verify.completions({
             insertText:
 `b(a: string): void {
 }`,
+            filterText: "b"
         },
         {
             name: "c",
@@ -49,6 +51,7 @@ verify.completions({
 c(a: number): number
 c(a: unknown): string | number {
 }`,
+            filterText: "c"
         },
     ],
 });

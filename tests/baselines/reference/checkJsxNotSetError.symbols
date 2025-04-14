@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsxNotSetError.ts] ////
+
 === /foo.jsx ===
 const Foo = () => (
 >Foo : Symbol(Foo, Decl(foo.jsx, 0, 5))

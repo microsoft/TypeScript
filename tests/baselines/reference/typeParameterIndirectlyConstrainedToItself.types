@@ -1,21 +1,28 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts] ////
+
+=== typeParameterIndirectlyConstrainedToItself.ts ===
 class C<U extends T, T extends U> { }
 >C : C<U, T>
+>  : ^^^^^^^
 
 class C2<T extends U, U extends V, V extends T> { }
 >C2 : C2<T, U, V>
+>   : ^^^^^^^^^^^
 
 interface I<U extends T, T extends U> { }
 interface I2<T extends U, U extends V, V extends T> { }
 
 function f<U extends T, T extends U>() { }
 >f : <U, T>() => void
+>  : ^ ^^ ^^^^^^^^^^^
 
 function f2<T extends U, U extends V, V extends T>() { }
 >f2 : <T, U, V>() => void
+>   : ^ ^^ ^^ ^^^^^^^^^^^
 
 var a: {
 >a : { <U, T>(): void; <T, U, V>(): void; }
+>  : ^^^ ^^ ^^^^^    ^^^ ^^ ^^ ^^^^^    ^^^
 
     <U extends T, T extends U>(): void;
     <T extends U, U extends V, V extends T>(): void;
@@ -23,20 +30,27 @@ var a: {
 
 var b = <U extends T, T extends U>() => { }
 >b : <U, T>() => void
+>  : ^ ^^ ^^^^^^^^^^^
 ><U extends T, T extends U>() => { } : <U, T>() => void
+>                                    : ^ ^^ ^^^^^^^^^^^
 
 var b2 = <T extends U, U extends V, V extends T>() => { }
 >b2 : <T, U, V>() => void
+>   : ^ ^^ ^^ ^^^^^^^^^^^
 ><T extends U, U extends V, V extends T>() => { } : <T, U, V>() => void
+>                                                 : ^ ^^ ^^ ^^^^^^^^^^^
 
 class D<U extends T, T extends V, V extends T> { }
 >D : D<U, T, V>
+>  : ^^^^^^^^^^
 
 // Repro from #25740
 
 type Foo<T> = [T] extends [number] ? {} : {};
 >Foo : Foo<T>
+>    : ^^^^^^
 
 function foo<S extends Foo<S>>() {}
 >foo : <S extends Foo<S>>() => void
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^
 

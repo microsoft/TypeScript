@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specedNoStackBlown.ts ===
+//// [tests/cases/compiler/specedNoStackBlown.ts] ////
+
+=== specedNoStackBlown.ts ===
 // Type definitions for spected 0.7
 // Project: https://github.com/25th-floor/spected
 // Definitions by: Benjamin Makus <https://github.com/benneq>
@@ -7,48 +9,63 @@
 
 declare function spected<ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT): Result<ROOTINPUT, SPEC>;
 >spected : <ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT) => Result<ROOTINPUT, SPEC>
+>        : ^         ^^    ^^^^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^     ^^         ^^^^^                       
 >spec : SPEC
+>     : ^^^^
 >input : ROOTINPUT
+>      : ^^^^^^^^^
 
 type Predicate<INPUT, ROOTINPUT> = (value: INPUT, inputs: ROOTINPUT) => boolean;
 >Predicate : Predicate<INPUT, ROOTINPUT>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : INPUT
+>      : ^^^^^
 >inputs : ROOTINPUT
+>       : ^^^^^^^^^
 
 type ErrorMsg<INPUT> =
 >ErrorMsg : ErrorMsg<INPUT>
+>         : ^^^^^^^^^^^^^^^
 
     | (string | number | boolean | symbol | null | undefined | object)
->null : null
-
     | ((value: INPUT, field: string) => any);
 >value : INPUT
+>      : ^^^^^
 >field : string
+>      : ^^^^^^
 
 export type Spec<INPUT, ROOTINPUT = any> = [Predicate<INPUT, ROOTINPUT>, ErrorMsg<INPUT>];
 >Spec : Spec<INPUT, ROOTINPUT>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
 export type SpecArray<INPUT, ROOTINPUT = any> = Array<Spec<INPUT, ROOTINPUT>>;
 >SpecArray : SpecArray<INPUT, ROOTINPUT>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type SpecFunction<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<infer U>]
 >SpecFunction : SpecFunction<INPUT, ROOTINPUT>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ? (value: INPUT) => ReadonlyArray<SpecArray<U, ROOTINPUT>>
 >value : INPUT
+>      : ^^^^^
 
     : [INPUT] extends [object]
         ? (value: INPUT) => SpecObject<INPUT, ROOTINPUT>
 >value : INPUT
+>      : ^^^^^
 
         : (value: INPUT) => SpecArray<INPUT, ROOTINPUT>;
 >value : INPUT
+>      : ^^^^^
 
 export type SpecObject<INPUT, ROOTINPUT = any> = Partial<{[key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>}>;
 >SpecObject : Partial<{ [key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>; }>
+>           : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type SpecValue<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<any>]
 >SpecValue : SpecValue<INPUT, ROOTINPUT>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ? SpecArray<INPUT, ROOTINPUT> | SpecFunction<INPUT, ROOTINPUT>
         : [INPUT] extends [object]
@@ -57,8 +74,11 @@ export type SpecValue<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<a
 
 export type Result<INPUT, SPEC> = {[key in keyof INPUT]: true | any[] | Result<INPUT[key], any>};
 >Result : Result<INPUT, SPEC>
+>       : ^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 export default spected;
 >spected : <ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT) => Result<ROOTINPUT, SPEC>
+>        : ^         ^^    ^^^^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^     ^^         ^^^^^                       
 

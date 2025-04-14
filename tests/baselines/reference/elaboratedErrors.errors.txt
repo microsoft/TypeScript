@@ -1,12 +1,12 @@
-tests/cases/compiler/elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
+elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/elaboratedErrors.ts(20,1): error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
-tests/cases/compiler/elaboratedErrors.ts(21,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
-tests/cases/compiler/elaboratedErrors.ts(24,1): error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
-tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
+elaboratedErrors.ts(20,1): error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
+elaboratedErrors.ts(21,1): error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
+elaboratedErrors.ts(24,1): error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
+elaboratedErrors.ts(25,1): error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
 
 
-==== tests/cases/compiler/elaboratedErrors.ts (5 errors) ====
+==== elaboratedErrors.ts (5 errors) ====
     interface FileSystem {
       read: number;
     }
@@ -32,17 +32,19 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     x = y;
     ~
 !!! error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
-!!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:14:19: 'x' is declared here.
+!!! related TS2728 elaboratedErrors.ts:14:19: 'x' is declared here.
     x = y;
     ~
-!!! error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
+!!! error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
+!!! related TS2728 elaboratedErrors.ts:14:19: 'x' is declared here.
     
     // Only one of these errors should be large
     y = x;
     ~
 !!! error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
-!!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:15:18: 'y' is declared here.
+!!! related TS2728 elaboratedErrors.ts:15:18: 'y' is declared here.
     y = x;
     ~
-!!! error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
+!!! error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
+!!! related TS2728 elaboratedErrors.ts:15:18: 'y' is declared here.
     

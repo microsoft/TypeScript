@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/callChain.3.ts] ////
+
 //// [callChain.3.ts]
 declare function absorb<T>(): T;
 declare const a: { m?<T>(obj: {x: T}): T } | undefined;

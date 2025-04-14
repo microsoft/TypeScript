@@ -1,4 +1,6 @@
-=== tests/cases/compiler/variableDeclarator1.ts ===
+//// [tests/cases/compiler/variableDeclarator1.ts] ////
+
+=== variableDeclarator1.ts ===
 var a = function () {
 >a : Symbol(a, Decl(variableDeclarator1.ts, 0, 3))
 

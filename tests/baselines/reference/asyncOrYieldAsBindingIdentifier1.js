@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts] ////
+
 //// [asyncOrYieldAsBindingIdentifier1.ts]
 function f_let () {
     let await = 1

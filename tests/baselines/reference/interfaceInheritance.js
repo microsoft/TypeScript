@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceInheritance.ts] ////
+
 //// [interfaceInheritance.ts]
 interface I1 {
     i1P1: number;

@@ -1,3 +1,27 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTagsFunctionOverload01.ts ===
+// /**
+//  * Doc foo
+//  */
+// declare function foo(): void;
+//                  ^^^
+// | ----------------------------------------------------------------------
+// | function foo(): void (+1 overload)
+// | Doc foo
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * Doc foo overloaded
+//  * @tag Tag text
+//  */
+// declare function foo(x: number): void
+//                  ^^^
+// | ----------------------------------------------------------------------
+// | function foo(x: number): void (+1 overload)
+// | Doc foo overloaded
+// | @tag Tag text
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +29,7 @@
       "position": 36,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "declare",
       "textSpan": {
@@ -88,7 +112,7 @@
       "position": 114,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "declare",
       "textSpan": {

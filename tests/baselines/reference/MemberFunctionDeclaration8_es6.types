@@ -1,19 +1,29 @@
-=== tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts ===
+//// [tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts] ////
+
+=== MemberFunctionDeclaration8_es6.ts ===
 class C {
 >C : C
+>  : ^
 
   foo() {
 >foo : () => any
+>    : ^^^^^^^^^
 
     // Make sure we don't think of *bar as the start of a generator method.
     if (a) ¬ * bar;
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 >* bar : number
+>      : ^^^^^^
 > : any
+> : ^^^
 >bar : any
+>    : ^^^
 
     return bar;
 >bar : any
+>    : ^^^
   }
 }

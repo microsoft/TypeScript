@@ -16,6 +16,12 @@
 //// anotherThing;
 
 verify.organizeImports(
-`import * as anotherThing from "someopath"; /* small comment */ // single line one.
+`/* some comment here
+* and there
+*/
+import * as anotherThing from "someopath"; /* small comment */ // single line one.
+/* some comment here
+* and there
+*/
 
 anotherThing;`);

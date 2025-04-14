@@ -1,0 +1,201 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsEnumMember.ts ===
+// enum E { /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}A|], B }
+// const e: E.[|A|] = E.[|A|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumMember.ts ===
+  // enum E { /*FIND ALL REFS*/[|A|], B }
+  // const e: E.A = E.A;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E.A = 0",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "A",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsEnumMember.ts ===
+// enum E { [|{| isWriteAccess: true |}A|], B }
+// const e: E./*FIND ALL REFS*/[|A|] = E.[|A|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumMember.ts ===
+  // enum E { [|A|], B }
+  // const e: E./*FIND ALL REFS*/A = E.A;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E.A = 0",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "A",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsEnumMember.ts ===
+// enum E { [|{| isWriteAccess: true |}A|], B }
+// const e: E.[|A|] = E./*FIND ALL REFS*/[|A|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumMember.ts ===
+  // enum E { [|A|], B }
+  // const e: E.A = E./*FIND ALL REFS*/A;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E.A = 0",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "A",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]

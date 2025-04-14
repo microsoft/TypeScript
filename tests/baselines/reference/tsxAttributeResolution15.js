@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution15.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 
@@ -33,7 +35,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var _this = this;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var BigGreeter = /** @class */ (function (_super) {
     __extends(BigGreeter, _super);

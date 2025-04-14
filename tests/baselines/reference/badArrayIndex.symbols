@@ -1,4 +1,6 @@
-=== tests/cases/compiler/badArrayIndex.ts ===
+//// [tests/cases/compiler/badArrayIndex.ts] ////
+
+=== badArrayIndex.ts ===
 var results = number[];
 >results : Symbol(results, Decl(badArrayIndex.ts, 0, 3))
 

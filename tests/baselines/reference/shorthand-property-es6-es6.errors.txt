@@ -1,10 +1,10 @@
-tests/cases/compiler/test.ts(1,19): error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+test.ts(1,19): error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/test.ts (1 errors) ====
+==== test.ts (1 errors) ====
     import {foo} from './foo';
                       ~~~~~~~
-!!! error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     const baz = 42;
     const bar = { foo, baz };
     

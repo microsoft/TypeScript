@@ -1,12 +1,18 @@
-=== tests/cases/compiler/visibilityOfTypeParameters.ts ===
+//// [tests/cases/compiler/visibilityOfTypeParameters.ts] ////
+
+=== visibilityOfTypeParameters.ts ===
 export class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
     protected myMethod<T>(val: T): T {
 >myMethod : <T>(val: T) => T
+>         : ^ ^^   ^^ ^^^^^ 
 >val : T
+>    : ^
 
         return val;
 >val : T
+>    : ^
     }
 }

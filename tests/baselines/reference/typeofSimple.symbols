@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofSimple.ts ===
+//// [tests/cases/compiler/typeofSimple.ts] ////
+
+=== typeofSimple.ts ===
 var v = 3;
 >v : Symbol(v, Decl(typeofSimple.ts, 0, 3))
 

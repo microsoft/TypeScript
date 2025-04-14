@@ -1,52 +1,84 @@
-=== tests/cases/compiler/declFileTypeAnnotationTupleType.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationTupleType.ts] ////
+
+=== declFileTypeAnnotationTupleType.ts ===
 class c {
 >c : c
+>  : ^
 }
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export class c {
 >c : c
+>  : ^
     }
     export class g<T> {
 >g : g<T>
+>  : ^^^^
     }
 }
 class g<T> {
 >g : g<T>
+>  : ^^^^
 }
 
 // Just the name
 var k: [c, m.c] = [new c(), new m.c()];
 >k : [c, m.c]
+>  : ^^^^^^^^
 >m : any
+>  : ^^^
 >[new c(), new m.c()] : [c, m.c]
+>                     : ^^^^^^^^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
 >new m.c() : m.c
+>          : ^^^
 >m.c : typeof m.c
+>    : ^^^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >c : typeof m.c
+>  : ^^^^^^^^^^
 
 var l = k;
 >l : [c, m.c]
+>  : ^^^^^^^^
 >k : [c, m.c]
+>  : ^^^^^^^^
 
 var x: [g<string>, m.g<number>, () => c] = [new g<string>(), new m.g<number>(), () => new c()];
 >x : [g<string>, m.g<number>, () => c]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^
 >m : any
+>  : ^^^
 >[new g<string>(), new m.g<number>(), () => new c()] : [g<string>, m.g<number>, () => c]
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new g<string>() : g<string>
+>                : ^^^^^^^^^
 >g : typeof g
+>  : ^^^^^^^^
 >new m.g<number>() : m.g<number>
+>                  : ^^^^^^^^^^^
 >m.g : typeof m.g
+>    : ^^^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >g : typeof m.g
+>  : ^^^^^^^^^^
 >() => new c() : () => c
+>              : ^^^^^^^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
 
 var y = x;
 >y : [g<string>, m.g<number>, () => c]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^
 >x : [g<string>, m.g<number>, () => c]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^
 

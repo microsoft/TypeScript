@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/literalTypesAndTypeAssertions.ts ===
+//// [tests/cases/conformance/types/literal/literalTypesAndTypeAssertions.ts] ////
+
+=== literalTypesAndTypeAssertions.ts ===
 const obj = {
 >obj : Symbol(obj, Decl(literalTypesAndTypeAssertions.ts, 0, 5))
 

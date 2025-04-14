@@ -1,124 +1,192 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts] ////
+
+=== genericCallWithObjectTypeArgsAndConstraints4.ts ===
 // Generic call with constraints infering type parameter from object member properties
 
 class C {
 >C : C
+>  : ^
 
     x: string;
 >x : string
+>  : ^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     x: string;
 >x : string
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 }
 
 function foo<T, U extends T>(t: T, t2: U) {
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >t : T
+>  : ^
 >t2 : U
+>   : ^
 
     return (x: T) => t2;
 >(x: T) => t2 : (x: T) => U
+>             : ^ ^^ ^^^^^^
 >x : T
+>  : ^
 >t2 : U
+>   : ^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var d: D;
 >d : D
+>  : ^
 
 var r = foo(c, d);
 >r : (x: C) => D
+>  : ^ ^^^^^^^^^
 >foo(c, d) : (x: C) => D
+>          : ^ ^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >c : C
+>  : ^
 >d : D
+>  : ^
 
 var r2 = foo(d, c); // error because C does not extend D
 >r2 : (x: D) => D
+>   : ^ ^^^^^^^^^
 >foo(d, c) : (x: D) => D
+>          : ^ ^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >d : D
+>  : ^
 >c : C
+>  : ^
 
 var r3 = foo(c, { x: '', foo: c });
 >r3 : (x: C) => { x: string; foo: C; }
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(c, { x: '', foo: c }) : (x: C) => { x: string; foo: C; }
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >c : C
+>  : ^
 >{ x: '', foo: c } : { x: string; foo: C; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >foo : C
+>    : ^
 >c : C
+>  : ^
 
 var r4 = foo(null, null);
 >r4 : (x: any) => any
+>   : ^ ^^^^^^^^^^^^^
 >foo(null, null) : (x: any) => any
+>                : ^ ^^^^^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->null : null
->null : null
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 
 var r5 = foo({}, null);
 >r5 : (x: {}) => any
+>   : ^ ^^^^^^^^^^^^
 >foo({}, null) : (x: {}) => any
+>              : ^ ^^^^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 var r6 = foo(null, {});
 >r6 : (x: any) => {}
+>   : ^ ^^^^^^^^^^^^
 >foo(null, {}) : (x: any) => {}
+>              : ^ ^^^^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->null : null
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >{} : {}
+>   : ^^
 
 var r7 = foo({}, {});
 >r7 : (x: {}) => {}
+>   : ^ ^^^^^^^^^^^
 >foo({}, {}) : (x: {}) => {}
+>            : ^ ^^^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 var r8 = foo(() => { }, () => { });
 >r8 : (x: () => void) => () => void
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(() => { }, () => { }) : (x: () => void) => () => void
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 var r9 = foo(() => { }, () => 1);
 >r9 : (x: () => void) => () => number
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(() => { }, () => 1) : (x: () => void) => () => number
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^  ^^ ^^^^^^    ^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 >() => 1 : () => number
+>        : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 function other<T, U extends T>() {
 >other : <T, U extends T>() => void
+>      : ^ ^^ ^^^^^^^^^ ^^^^^^^^^^^
 
     var r4 = foo(c, d);
 >r4 : (x: C) => D
+>   : ^ ^^^^^^^^^
 >foo(c, d) : (x: C) => D
->foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>          : ^ ^^^^^^^^^
+>foo : <T_1, U_1 extends T_1>(t: T_1, t2: U_1) => (x: T_1) => U_1
+>    : ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^  ^^   ^^^^^^      ^^^^^^^^
 >c : C
+>  : ^
 >d : D
+>  : ^
 
     var r5 = foo<T, U>(c, d); // error
 >r5 : (x: T) => U
+>   : ^ ^^^^^^^^^
 >foo<T, U>(c, d) : (x: T) => U
->foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>                : ^ ^^^^^^^^^
+>foo : <T_1, U_1 extends T_1>(t: T_1, t2: U_1) => (x: T_1) => U_1
+>    : ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^  ^^   ^^^^^^      ^^^^^^^^
 >c : C
+>  : ^
 >d : D
+>  : ^
 }
 
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts ===
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts] ////
+
+=== objectLiteralNormalization.ts ===
 // Object literals in unions are normalized upon widening
 let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
 >a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))

@@ -1,159 +1,245 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts] ////
+
+=== typeGuardFunctionOfFormThisErrors.ts ===
 class RoyalGuard {
 >RoyalGuard : RoyalGuard
+>           : ^^^^^^^^^^
 
     isLeader(): this is LeadGuard {
 >isLeader : () => this is LeadGuard
+>         : ^^^^^^                 
 
         return this instanceof LeadGuard;
 >this instanceof LeadGuard : boolean
+>                          : ^^^^^^^
 >this : this
+>     : ^^^^
 >LeadGuard : typeof LeadGuard
+>          : ^^^^^^^^^^^^^^^^
     }
     isFollower(): this is FollowerGuard {
 >isFollower : () => this is FollowerGuard
+>           : ^^^^^^                     
 
         return this instanceof FollowerGuard;
 >this instanceof FollowerGuard : boolean
+>                              : ^^^^^^^
 >this : this
+>     : ^^^^
 >FollowerGuard : typeof FollowerGuard
+>              : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 class LeadGuard extends RoyalGuard {
 >LeadGuard : LeadGuard
+>          : ^^^^^^^^^
 >RoyalGuard : RoyalGuard
+>           : ^^^^^^^^^^
 
     lead(): void {};
 >lead : () => void
+>     : ^^^^^^    
 }
 
 class FollowerGuard extends RoyalGuard {
 >FollowerGuard : FollowerGuard
+>              : ^^^^^^^^^^^^^
 >RoyalGuard : RoyalGuard
+>           : ^^^^^^^^^^
 
     follow(): void {};
 >follow : () => void
+>       : ^^^^^^    
 }
 
 interface GuardInterface extends RoyalGuard {}
 let a: RoyalGuard = new FollowerGuard();
 >a : RoyalGuard
+>  : ^^^^^^^^^^
 >new FollowerGuard() : FollowerGuard
+>                    : ^^^^^^^^^^^^^
 >FollowerGuard : typeof FollowerGuard
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 let b: GuardInterface = new LeadGuard();
 >b : GuardInterface
+>  : ^^^^^^^^^^^^^^
 >new LeadGuard() : LeadGuard
+>                : ^^^^^^^^^
 >LeadGuard : typeof LeadGuard
+>          : ^^^^^^^^^^^^^^^^
 
 // Mismatched guards shouldn't be assignable
 b.isFollower = b.isLeader;
 >b.isFollower = b.isLeader : () => this is LeadGuard
+>                          : ^^^^^^                 
 >b.isFollower : () => this is FollowerGuard
+>             : ^^^^^^                     
 >b : GuardInterface
+>  : ^^^^^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
+>           : ^^^^^^                     
 >b.isLeader : () => this is LeadGuard
+>           : ^^^^^^                 
 >b : GuardInterface
+>  : ^^^^^^^^^^^^^^
 >isLeader : () => this is LeadGuard
+>         : ^^^^^^                 
 
 b.isLeader = b.isFollower;
 >b.isLeader = b.isFollower : () => this is FollowerGuard
+>                          : ^^^^^^                     
 >b.isLeader : () => this is LeadGuard
+>           : ^^^^^^                 
 >b : GuardInterface
+>  : ^^^^^^^^^^^^^^
 >isLeader : () => this is LeadGuard
+>         : ^^^^^^                 
 >b.isFollower : () => this is FollowerGuard
+>             : ^^^^^^                     
 >b : GuardInterface
+>  : ^^^^^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
+>           : ^^^^^^                     
 
 a.isFollower = a.isLeader;
 >a.isFollower = a.isLeader : () => this is LeadGuard
+>                          : ^^^^^^                 
 >a.isFollower : () => this is FollowerGuard
+>             : ^^^^^^                     
 >a : RoyalGuard
+>  : ^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
+>           : ^^^^^^                     
 >a.isLeader : () => this is LeadGuard
+>           : ^^^^^^                 
 >a : RoyalGuard
+>  : ^^^^^^^^^^
 >isLeader : () => this is LeadGuard
+>         : ^^^^^^                 
 
 a.isLeader = a.isFollower;
 >a.isLeader = a.isFollower : () => this is FollowerGuard
+>                          : ^^^^^^                     
 >a.isLeader : () => this is LeadGuard
+>           : ^^^^^^                 
 >a : RoyalGuard
+>  : ^^^^^^^^^^
 >isLeader : () => this is LeadGuard
+>         : ^^^^^^                 
 >a.isFollower : () => this is FollowerGuard
+>             : ^^^^^^                     
 >a : RoyalGuard
+>  : ^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
+>           : ^^^^^^                     
 
 function invalidGuard(c: any): this is number {
 >invalidGuard : (c: any) => this is number
+>             : ^ ^^   ^^^^^              
 >c : any
+>  : ^^^
 
     return false;
 >false : false
+>      : ^^^^^
 }
 
 let c: number | number[];
 >c : number | number[]
+>  : ^^^^^^^^^^^^^^^^^
 
 if (invalidGuard(c)) {
 >invalidGuard(c) : boolean
+>                : ^^^^^^^
 >invalidGuard : (c: any) => this is number
+>             : ^ ^^   ^^^^^              
 >c : number | number[]
+>  : ^^^^^^^^^^^^^^^^^
 
     c;
 >c : number | number[]
+>  : ^^^^^^^^^^^^^^^^^
 }
 else {
     c;
 >c : number | number[]
+>  : ^^^^^^^^^^^^^^^^^
 }
 
 let holder = {invalidGuard};
 >holder : { invalidGuard: (c: any) => this is number; }
+>       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^              ^^^
 >{invalidGuard} : { invalidGuard: (c: any) => this is number; }
+>               : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^              ^^^
 >invalidGuard : (c: any) => this is number
+>             : ^ ^^   ^^^^^              
 
 if (holder.invalidGuard(c)) {
 >holder.invalidGuard(c) : boolean
+>                       : ^^^^^^^
 >holder.invalidGuard : (c: any) => this is number
+>                    : ^ ^^   ^^^^^              
 >holder : { invalidGuard: (c: any) => this is number; }
+>       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^              ^^^
 >invalidGuard : (c: any) => this is number
+>             : ^ ^^   ^^^^^              
 >c : number | number[]
+>  : ^^^^^^^^^^^^^^^^^
 
     c;
 >c : number | number[]
+>  : ^^^^^^^^^^^^^^^^^
 
     holder;
 >holder : { invalidGuard: (c: any) => this is number; } & number
+>       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^              ^^^^^^^^^^^^
 }
 else {
     c;
 >c : number | number[]
+>  : ^^^^^^^^^^^^^^^^^
 
     holder;
 >holder : { invalidGuard: (c: any) => this is number; }
+>       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^              ^^^
 }
 
 let detached = a.isFollower;
 >detached : () => this is FollowerGuard
+>         : ^^^^^^                     
 >a.isFollower : () => this is FollowerGuard
+>             : ^^^^^^                     
 >a : RoyalGuard
+>  : ^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
+>           : ^^^^^^                     
 
 if (detached()) {
 >detached() : boolean
+>           : ^^^^^^^
 >detached : () => this is FollowerGuard
+>         : ^^^^^^                     
 
     a.follow();
 >a.follow() : any
+>           : ^^^
 >a.follow : any
+>         : ^^^
 >a : RoyalGuard
+>  : ^^^^^^^^^^
 >follow : any
+>       : ^^^
 }
 else {
     a.lead();
 >a.lead() : any
+>         : ^^^
 >a.lead : any
+>       : ^^^
 >a : RoyalGuard
+>  : ^^^^^^^^^^
 >lead : any
+>     : ^^^
 }

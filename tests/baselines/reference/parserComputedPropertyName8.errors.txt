@@ -1,12 +1,9 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName8.ts(2,11): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName8.ts(2,12): error TS2304: Cannot find name 'e'.
+parserComputedPropertyName8.ts(2,12): error TS2304: Cannot find name 'e'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName8.ts (2 errors) ====
+==== parserComputedPropertyName8.ts (1 errors) ====
     class C {
        public [e]
-              ~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
                ~
 !!! error TS2304: Cannot find name 'e'.
     }

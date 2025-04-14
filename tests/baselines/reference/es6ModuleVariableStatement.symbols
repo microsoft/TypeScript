@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ModuleVariableStatement.ts ===
+//// [tests/cases/compiler/es6ModuleVariableStatement.ts] ////
+
+=== es6ModuleVariableStatement.ts ===
 export var a = "hello";
 >a : Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
 

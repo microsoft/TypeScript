@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/thisAssignmentInNamespaceDeclaration1.ts] ////
+
+=== a.js ===
+module foo {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+
+    this.bar = 4;
+}
+
+=== b.js ===
+namespace blah {
+>blah : Symbol(blah, Decl(b.js, 0, 0))
+
+    this.prop = 42;
+}
+

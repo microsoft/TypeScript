@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypePartialNonHomomorphicBaseConstraint.ts ===
+//// [tests/cases/compiler/mappedTypePartialNonHomomorphicBaseConstraint.ts] ////
+
+=== mappedTypePartialNonHomomorphicBaseConstraint.ts ===
 export type Errors<D> = { readonly [K in keyof D | "base"]?: string[] };
 >Errors : Symbol(Errors, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 0))
 >D : Symbol(D, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 19))

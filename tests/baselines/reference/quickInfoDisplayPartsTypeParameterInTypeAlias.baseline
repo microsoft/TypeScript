@@ -1,3 +1,32 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInTypeAlias.ts ===
+// type List<T> = T[]
+//      ^^^^
+// | ----------------------------------------------------------------------
+// | type List<T> = T[]
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | (type parameter) T in type List<T>
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | (type parameter) T in type List<T>
+// | ----------------------------------------------------------------------
+// type List2<T extends string> = T[];
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | type List2<T extends string> = T[]
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | (type parameter) T in type List2<T extends string>
+// | ----------------------------------------------------------------------
+//                                ^
+// | ----------------------------------------------------------------------
+// | (type parameter) T in type List2<T extends string>
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +34,7 @@
       "position": 5,
       "name": "0"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -71,7 +100,7 @@
       "position": 10,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -145,7 +174,7 @@
       "position": 15,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -219,7 +248,7 @@
       "position": 24,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -301,7 +330,7 @@
       "position": 30,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -391,7 +420,7 @@
       "position": 50,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type parameter",
       "kindModifiers": "",
       "textSpan": {

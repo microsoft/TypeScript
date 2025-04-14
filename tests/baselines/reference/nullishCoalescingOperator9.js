@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator9.ts] ////
+
 //// [nullishCoalescingOperator9.ts]
 declare let f: null | ((x: string) => void);
 

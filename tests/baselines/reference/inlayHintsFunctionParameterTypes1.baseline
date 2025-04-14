@@ -1,0 +1,81 @@
+// === Inlay Hints ===
+const f1: F1 = (a, b) => { }
+                 ^
+{
+  "text": ": string",
+  "position": 58,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const f1: F1 = (a, b) => { }
+                    ^
+{
+  "text": ": number",
+  "position": 61,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const f2: F1 = (a, b: number) => { }
+                 ^
+{
+  "text": ": string",
+  "position": 87,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+foo1((a) => { })
+       ^
+{
+  "text": ": string",
+  "position": 157,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+foo2((a) => { })
+       ^
+{
+  "text": ": 2 | 3",
+  "position": 232,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+foo3(a => {
+      ^
+{
+  "text": ": (c: (d: 2 | 3) => void) => void",
+  "position": 331,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+    a(d => {})
+       ^
+{
+  "text": ": 2 | 3",
+  "position": 344,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+foo4(1, a => { })
+         ^
+{
+  "text": ": number",
+  "position": 409,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const foo5: F2 = (a) => { }
+                   ^
+{
+  "text": ": { a: number; b: string; }",
+  "position": 492,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

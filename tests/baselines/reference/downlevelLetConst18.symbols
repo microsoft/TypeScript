@@ -1,4 +1,6 @@
-=== tests/cases/compiler/downlevelLetConst18.ts ===
+//// [tests/cases/compiler/downlevelLetConst18.ts] ////
+
+=== downlevelLetConst18.ts ===
 'use strict'
 
 for (let x; ;) {

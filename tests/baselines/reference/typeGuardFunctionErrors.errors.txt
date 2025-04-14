@@ -1,71 +1,76 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(14,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,60): error TS1434: Unexpected keyword or identifier.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(21,33): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(29,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(30,5): error TS1131: Property or signature expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(31,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(33,38): error TS1225: Cannot find parameter 'x'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(37,51): error TS2677: A type predicate's type must be assignable to its parameter's type.
+typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
+typeGuardFunctionErrors.ts(14,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
+typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
+typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
+typeGuardFunctionErrors.ts(17,60): error TS1434: Unexpected keyword or identifier.
+typeGuardFunctionErrors.ts(21,33): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
+typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
+typeGuardFunctionErrors.ts(29,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+typeGuardFunctionErrors.ts(30,5): error TS1131: Property or signature expected.
+typeGuardFunctionErrors.ts(31,1): error TS1128: Declaration or statement expected.
+typeGuardFunctionErrors.ts(33,38): error TS1225: Cannot find parameter 'x'.
+typeGuardFunctionErrors.ts(37,51): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Property 'propA' is missing in type 'B' but required in type 'A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(41,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
+typeGuardFunctionErrors.ts(41,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(45,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
+typeGuardFunctionErrors.ts(45,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Type 'T[]' is not assignable to type 'string'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(59,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(64,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(69,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(74,46): error TS2345: Argument of type '(p1: any) => p1 is C' is not assignable to parameter of type '(p1: any) => p1 is B'.
+typeGuardFunctionErrors.ts(59,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+typeGuardFunctionErrors.ts(64,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+typeGuardFunctionErrors.ts(69,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+typeGuardFunctionErrors.ts(74,46): error TS2345: Argument of type '(p1: any) => p1 is C' is not assignable to parameter of type '(p1: any) => p1 is B'.
   Type predicate 'p1 is C' is not assignable to 'p1 is B'.
     Property 'propB' is missing in type 'C' but required in type 'B'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(78,1): error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+typeGuardFunctionErrors.ts(78,1): error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is A'.
   Signature '(p1: any, p2: any): boolean' must be a type predicate.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(84,1): error TS2322: Type '(p1: any, p2: any) => p2 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+typeGuardFunctionErrors.ts(84,1): error TS2322: Type '(p1: any, p2: any) => p2 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
     Parameter 'p2' is not in the same position as parameter 'p1'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,16): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,21): error TS1005: ',' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,20): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,22): error TS1144: '{' or ';' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,25): error TS1434: Unexpected keyword or identifier.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(103,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,9): error TS2322: Type 'boolean' is not assignable to type 'D'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(106,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(109,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(110,9): error TS2408: Setters cannot return a value.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(115,18): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(119,22): error TS2304: Cannot find name 'p1'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(119,25): error TS1005: ';' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(120,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(123,20): error TS1229: A type predicate cannot reference a rest parameter.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(128,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(132,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(136,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(152,68): error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
+typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+  Target signature provides too few arguments. Expected 3 or more, but got 2.
+typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
+typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
+typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
+typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
+typeGuardFunctionErrors.ts(96,16): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
+typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
+typeGuardFunctionErrors.ts(96,21): error TS1005: ',' expected.
+typeGuardFunctionErrors.ts(97,20): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
+typeGuardFunctionErrors.ts(97,22): error TS1144: '{' or ';' expected.
+typeGuardFunctionErrors.ts(97,25): error TS1434: Unexpected keyword or identifier.
+typeGuardFunctionErrors.ts(103,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardFunctionErrors.ts(104,9): error TS2322: Type 'boolean' is not assignable to type 'D'.
+typeGuardFunctionErrors.ts(104,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
+typeGuardFunctionErrors.ts(106,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardFunctionErrors.ts(109,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardFunctionErrors.ts(110,9): error TS2408: Setters cannot return a value.
+typeGuardFunctionErrors.ts(115,18): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardFunctionErrors.ts(119,22): error TS2304: Cannot find name 'p1'.
+typeGuardFunctionErrors.ts(119,25): error TS1005: ';' expected.
+typeGuardFunctionErrors.ts(120,1): error TS1128: Declaration or statement expected.
+typeGuardFunctionErrors.ts(123,20): error TS1229: A type predicate cannot reference a rest parameter.
+typeGuardFunctionErrors.ts(128,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+typeGuardFunctionErrors.ts(132,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+typeGuardFunctionErrors.ts(136,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+typeGuardFunctionErrors.ts(152,68): error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
   Type '"d"' is not assignable to type 'Keys'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(159,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+typeGuardFunctionErrors.ts(159,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
   Types of property ''a'' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(162,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(163,35): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(164,51): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(165,51): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,45): error TS2677: A type predicate's type must be assignable to its parameter's type.
+typeGuardFunctionErrors.ts(162,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+  Types of property ''a'' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+typeGuardFunctionErrors.ts(163,35): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+typeGuardFunctionErrors.ts(164,51): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+  Types of property ''a'' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+typeGuardFunctionErrors.ts(165,51): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+typeGuardFunctionErrors.ts(166,45): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Type 'NeedsFoo<number>' is not assignable to type 'number'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (53 errors) ====
+==== typeGuardFunctionErrors.ts (53 errors) ====
     class A {
           ~
 !!! error TS2300: Duplicate identifier 'A'.
@@ -82,7 +87,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     
     function hasANonBooleanReturnStatement(x): x is A {
         return '';
-        ~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     }
     
@@ -128,7 +133,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                                                       ~
 !!! error TS2677: A type predicate's type must be assignable to its parameter's type.
 !!! error TS2677:   Property 'propA' is missing in type 'B' but required in type 'A'.
-!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
+!!! related TS2728 typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
         return true;
     }
     
@@ -159,7 +164,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB;
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
-!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
+!!! related TS2728 typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // Parameter index and argument index for the type guard target is not matching.
@@ -167,7 +172,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB; // Error
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
-!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
+!!! related TS2728 typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // No type guard in if statement
@@ -175,7 +180,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB;
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
-!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
+!!! related TS2728 typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // Type predicate type is not assignable
@@ -185,7 +190,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
 !!! error TS2345: Argument of type '(p1: any) => p1 is C' is not assignable to parameter of type '(p1: any) => p1 is B'.
 !!! error TS2345:   Type predicate 'p1 is C' is not assignable to 'p1 is B'.
 !!! error TS2345:     Property 'propB' is missing in type 'C' but required in type 'B'.
-!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:6:5: 'propB' is declared here.
+!!! related TS2728 typeGuardFunctionErrors.ts:6:5: 'propB' is declared here.
     
     // Boolean not assignable to type guard
     var assign1: (p1, p2) => p1 is A;
@@ -211,6 +216,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     assign3 = function(p1, p2, p3): p1 is A {
     ~~~~~~~
 !!! error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 3 or more, but got 2.
         return true;
     };
     
@@ -247,9 +253,9 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                             ~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'D'.
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }
         get m1(p1: A): p1 is C {
@@ -261,7 +267,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                        ~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2408: Setters cannot return a value.
         }
     }
@@ -340,12 +346,16 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     declare var anError: NeedsFoo<Bar>; // error, as expected
                                   ~~~
 !!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+!!! error TS2344:   Types of property ''a'' are incompatible.
+!!! error TS2344:     Type 'number' is not assignable to type 'string'.
     declare var alsoAnError: NeedsFoo<number>; // also error, as expected
                                       ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
     declare function newError1(x: any): x is NeedsFoo<Bar>; // should error
                                                       ~~~
 !!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+!!! error TS2344:   Types of property ''a'' are incompatible.
+!!! error TS2344:     Type 'number' is not assignable to type 'string'.
     declare function newError2(x: any): x is NeedsFoo<number>; // should error
                                                       ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'Foo'.

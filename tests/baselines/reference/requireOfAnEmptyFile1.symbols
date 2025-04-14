@@ -1,9 +1,8 @@
-=== tests/cases/compiler/requireOfAnEmptyFile1_a.ts ===
-//requireOfAnEmptyFile1
+//// [tests/cases/compiler/requireOfAnEmptyFile1.ts] ////
 
+=== requireOfAnEmptyFile1_a.ts ===
 import fs = require('./requireOfAnEmptyFile1_b');
 >fs : Symbol(fs, Decl(requireOfAnEmptyFile1_a.ts, 0, 0))
 
-=== tests/cases/compiler/requireOfAnEmptyFile1_b.ts ===
+=== requireOfAnEmptyFile1_b.ts ===
 
-No type information for this code.

@@ -4,7 +4,7 @@ error TS2318: Cannot find global type 'NewableFunction'.
 
 !!! error TS2318: Cannot find global type 'CallableFunction'.
 !!! error TS2318: Cannot find global type 'NewableFunction'.
-==== tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx (0 errors) ====
+==== booleanLiteralsContextuallyTypedFromUnion.tsx (0 errors) ====
     interface A { isIt: true; text: string; }
     interface B { isIt: false; value: number; }
     type C = A | B;

@@ -1,124 +1,164 @@
-=== tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts ===
+//// [tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts] ////
+
+=== switchBreakStatements.ts ===
 switch ('') {
 >'' : ""
+>   : ^^
 
     case 'a':
 >'a' : "a"
+>    : ^^^
 
         break;
 }
 
 ONE:
 >ONE : any
+>    : ^^^
 
 switch ('') {
 >'' : ""
+>   : ^^
 
     case 'a':
 >'a' : "a"
+>    : ^^^
 
         break ONE;
 >ONE : any
+>    : ^^^
 }
 
 TWO:
 >TWO : any
+>    : ^^^
 
 THREE:
 >THREE : any
+>      : ^^^
 
 switch ('') {
 >'' : ""
+>   : ^^
 
     case 'a':
 >'a' : "a"
+>    : ^^^
 
         break THREE;
 >THREE : any
+>      : ^^^
 }
 
 FOUR:
 >FOUR : any
+>     : ^^^
 
 switch ('') {
 >'' : ""
+>   : ^^
 
     case 'a':
 >'a' : "a"
+>    : ^^^
 
         FIVE:
 >FIVE : any
+>     : ^^^
 
         switch ('') {
 >'' : ""
+>   : ^^
 
             case 'a':
 >'a' : "a"
+>    : ^^^
 
                 break FOUR;
 >FOUR : any
+>     : ^^^
         }
 }
 
 switch ('') {
 >'' : ""
+>   : ^^
 
     case 'a':
 >'a' : "a"
+>    : ^^^
 
         SIX:
 >SIX : any
+>    : ^^^
 
         switch ('') {
 >'' : ""
+>   : ^^
 
             case 'a':
 >'a' : "a"
+>    : ^^^
 
                 break SIX;
 >SIX : any
+>    : ^^^
         }
 }
 
 SEVEN:
 >SEVEN : any
+>      : ^^^
 
 switch ('') {
 >'' : ""
+>   : ^^
 
     case 'a':
 >'a' : "a"
+>    : ^^^
 
         switch ('') {
 >'' : ""
+>   : ^^
 
             case 'a':
 >'a' : "a"
+>    : ^^^
 
                 switch ('') {
 >'' : ""
+>   : ^^
 
                     case 'a':
 >'a' : "a"
+>    : ^^^
 
                         break SEVEN;
 >SEVEN : any
+>      : ^^^
 
                         EIGHT:
 >EIGHT : any
+>      : ^^^
 
                         switch ('') {
 >'' : ""
+>   : ^^
 
                             case 'a':
 >'a' : "a"
+>    : ^^^
 
                                 var fn = function () { }
 >fn : () => void
+>   : ^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
                                 break EIGHT;
 >EIGHT : any
+>      : ^^^
                         }
                 }
         }

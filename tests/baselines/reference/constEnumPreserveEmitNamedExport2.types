@@ -1,19 +1,27 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/constEnumPreserveEmitNamedExport2.ts] ////
+
+=== a.ts ===
 const enum A {
 >A : A
+>  : ^
 
     Foo
 >Foo : A.Foo
+>    : ^^^^^
 
 };
 export { A };
 >A : typeof A
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { A } from './a';
 >A : typeof A
+>  : ^^^^^^^^
 
 export { A as B };
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A
+>  : ^^^^^^^^
 

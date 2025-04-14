@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeMatch1.ts ===
+//// [tests/cases/compiler/typeMatch1.ts] ////
+
+=== typeMatch1.ts ===
 interface I { z; }
 >I : Symbol(I, Decl(typeMatch1.ts, 0, 0))
 >z : Symbol(I.z, Decl(typeMatch1.ts, 0, 13))

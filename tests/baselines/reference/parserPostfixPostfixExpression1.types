@@ -1,7 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixPostfixExpression1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixPostfixExpression1.ts] ////
+
+=== parserPostfixPostfixExpression1.ts ===
 a++ ++;
 >a++ : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >++ : number
+>   : ^^^^^^
 > : any
+> : ^^^
 

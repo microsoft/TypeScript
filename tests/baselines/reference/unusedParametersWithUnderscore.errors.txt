@@ -1,13 +1,13 @@
-tests/cases/compiler/unusedParametersWithUnderscore.ts(1,12): error TS6133: 'a' is declared but its value is never read.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(1,19): error TS6133: 'c' is declared but its value is never read.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(1,27): error TS6133: 'd' is declared but its value is never read.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(1,29): error TS6133: 'e___' is declared but its value is never read.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(5,13): error TS6198: All destructured elements are unused.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(11,16): error TS6133: 'arg' is declared but its value is never read.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(17,13): error TS6133: 'arg' is declared but its value is never read.
+unusedParametersWithUnderscore.ts(1,12): error TS6133: 'a' is declared but its value is never read.
+unusedParametersWithUnderscore.ts(1,19): error TS6133: 'c' is declared but its value is never read.
+unusedParametersWithUnderscore.ts(1,27): error TS6133: 'd' is declared but its value is never read.
+unusedParametersWithUnderscore.ts(1,29): error TS6133: 'e___' is declared but its value is never read.
+unusedParametersWithUnderscore.ts(5,13): error TS6198: All destructured elements are unused.
+unusedParametersWithUnderscore.ts(11,16): error TS6133: 'arg' is declared but its value is never read.
+unusedParametersWithUnderscore.ts(17,13): error TS6133: 'arg' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedParametersWithUnderscore.ts (7 errors) ====
+==== unusedParametersWithUnderscore.ts (7 errors) ====
     function f(a, _b, c, ___, d,e___, _f) {
                ~
 !!! error TS6133: 'a' is declared but its value is never read.

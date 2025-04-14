@@ -1,0 +1,90 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-preservesThis.ts] ////
+
+=== esDecorators-preservesThis.ts ===
+// https://github.com/microsoft/TypeScript/issues/53752
+
+declare class DecoratorProvider {
+>DecoratorProvider : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+
+    decorate<T>(this: DecoratorProvider, v: T, ctx: DecoratorContext): T;
+>decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+>T : Symbol(T, Decl(esDecorators-preservesThis.ts, 3, 13))
+>this : Symbol(this, Decl(esDecorators-preservesThis.ts, 3, 16))
+>DecoratorProvider : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+>v : Symbol(v, Decl(esDecorators-preservesThis.ts, 3, 40))
+>T : Symbol(T, Decl(esDecorators-preservesThis.ts, 3, 13))
+>ctx : Symbol(ctx, Decl(esDecorators-preservesThis.ts, 3, 46))
+>DecoratorContext : Symbol(DecoratorContext, Decl(lib.decorators.d.ts, --, --))
+>T : Symbol(T, Decl(esDecorators-preservesThis.ts, 3, 13))
+}
+
+declare const instance: DecoratorProvider;
+>instance : Symbol(instance, Decl(esDecorators-preservesThis.ts, 6, 13))
+>DecoratorProvider : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+
+// preserve `this` for access
+class C {
+>C : Symbol(C, Decl(esDecorators-preservesThis.ts, 6, 42))
+
+    @instance.decorate
+>instance.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+>instance : Symbol(instance, Decl(esDecorators-preservesThis.ts, 6, 13))
+>decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+
+    method1() { }
+>method1 : Symbol(C.method1, Decl(esDecorators-preservesThis.ts, 9, 9))
+
+    @(instance["decorate"])
+>instance : Symbol(instance, Decl(esDecorators-preservesThis.ts, 6, 13))
+>"decorate" : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+
+    method2() { }
+>method2 : Symbol(C.method2, Decl(esDecorators-preservesThis.ts, 11, 17))
+
+    // even in parens
+    @((instance.decorate))
+>instance.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+>instance : Symbol(instance, Decl(esDecorators-preservesThis.ts, 6, 13))
+>decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+
+    method3() { }
+>method3 : Symbol(C.method3, Decl(esDecorators-preservesThis.ts, 14, 17))
+}
+
+// preserve `this` for `super` access
+class D extends DecoratorProvider {
+>D : Symbol(D, Decl(esDecorators-preservesThis.ts, 19, 1))
+>DecoratorProvider : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+
+    m() {
+>m : Symbol(D.m, Decl(esDecorators-preservesThis.ts, 22, 35))
+
+        class C {
+>C : Symbol(C, Decl(esDecorators-preservesThis.ts, 23, 9))
+
+            @(super.decorate)
+>super.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+>super : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+>decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+
+            method1() { }
+>method1 : Symbol(C.method1, Decl(esDecorators-preservesThis.ts, 24, 17))
+
+            @(super["decorate"])
+>super : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+>"decorate" : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+
+            method2() { }
+>method2 : Symbol(C.method2, Decl(esDecorators-preservesThis.ts, 26, 25))
+
+            @((super.decorate))
+>super.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+>super : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+>decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+
+            method3() { }
+>method3 : Symbol(C.method3, Decl(esDecorators-preservesThis.ts, 29, 25))
+        }
+    }
+}
+

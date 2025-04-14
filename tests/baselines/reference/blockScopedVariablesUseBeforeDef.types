@@ -1,276 +1,391 @@
-=== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts ===
+//// [tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts] ////
+
+=== blockScopedVariablesUseBeforeDef.ts ===
 function foo0() {
 >foo0 : () => void
+>     : ^^^^^^^^^^
 
     let a = x;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo1() {
 >foo1 : () => void
+>     : ^^^^^^^^^^
 
     let a = () => x;
 >a : () => any
+>  : ^^^^^^^^^
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo2() {
 >foo2 : () => void
+>     : ^^^^^^^^^^
 
     let a = function () { return x; }
 >a : () => any
+>  : ^^^^^^^^^
 >function () { return x; } : () => any
+>                          : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo3() {
 >foo3 : () => void
+>     : ^^^^^^^^^^
 
     class X {
 >X : X
+>  : ^
 
         m() { return x;}
 >m : () => any
+>  : ^^^^^^^^^
 >x : any
+>  : ^^^
     }
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo4() {
 >foo4 : () => void
+>     : ^^^^^^^^^^
 
     let y = class {
 >y : typeof y
+>  : ^^^^^^^^
 >class {        m() { return x; }    } : typeof y
+>                                      : ^^^^^^^^
 
         m() { return x; }
 >m : () => any
+>  : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     };
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo5() {
 >foo5 : () => void
+>     : ^^^^^^^^^^
 
     let x = () => y;
 >x : () => () => any
+>  : ^^^^^^^^^^^^^^^
 >() => y : () => () => any
+>        : ^^^^^^^^^^^^^^^
 >y : () => () => any
+>  : ^^^^^^^^^^^^^^^
 
     let y = () => x;
 >y : () => () => any
+>  : ^^^^^^^^^^^^^^^
 >() => x : () => () => any
+>        : ^^^^^^^^^^^^^^^
 >x : () => () => any
+>  : ^^^^^^^^^^^^^^^
 }
 
 function foo6() {
 >foo6 : () => void
+>     : ^^^^^^^^^^
 
     function f() {
 >f : () => any
+>  : ^^^^^^^^^
 
         return x;
 >x : any
+>  : ^^^
     }
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo7() {
 >foo7 : () => void
+>     : ^^^^^^^^^^
 
     class A {
 >A : A
+>  : ^
 
         a = x;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
     }
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo8() {
 >foo8 : () => void
+>     : ^^^^^^^^^^
 
     let y = class {
 >y : typeof y
+>  : ^^^^^^^^
 >class {        a = x;    } : typeof y
+>                           : ^^^^^^^^
 
         a = x;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
     }
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo9() {
 >foo9 : () => void
+>     : ^^^^^^^^^^
 
     let y = class {
 >y : typeof y
+>  : ^^^^^^^^
 >class {        static a = x;    } : typeof y
+>                                  : ^^^^^^^^
 
         static a = x;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
     }
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo10() {
 >foo10 : () => void
+>      : ^^^^^^^^^^
 
     class A {
 >A : A
+>  : ^
 
         static a = x;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
     }
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo11() {
 >foo11 : () => void
+>      : ^^^^^^^^^^
 
     function f () {
 >f : () => void
+>  : ^^^^^^^^^^
 
         let y = class {
 >y : typeof y
+>  : ^^^^^^^^
 >class {            static a = x;        } : typeof y
+>                                          : ^^^^^^^^
 
             static a = x;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
         }
     }
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo12() {
 >foo12 : () => void
+>      : ^^^^^^^^^^
 
     function f () {
 >f : () => void
+>  : ^^^^^^^^^^
 
         let y = class {
 >y : typeof y
+>  : ^^^^^^^^
 >class {            a;            constructor() {                this.a = x;            }        } : typeof y
+>                                                                                                  : ^^^^^^^^
 
             a;
 >a : any
+>  : ^^^
 
             constructor() {
                 this.a = x;
 >this.a = x : any
+>           : ^^^
 >this.a : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
             }
         }
     }
     let x;
 >x : any
+>  : ^^^
 }
 
 function foo13() {
 >foo13 : () => void
+>      : ^^^^^^^^^^
 
     let a = {
 >a : { readonly a: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^
 >{        get a() { return x }     } : { readonly a: any; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^
 
         get a() { return x } 
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
     }
     let x
 >x : any
+>  : ^^^
 }
 
 function foo14() {
 >foo14 : () => void
+>      : ^^^^^^^^^^
 
     let a = {
 >a : { a: any; }
+>  : ^^^^^^^^^^^
 >{        a: x     } : { a: any; }
+>                    : ^^^^^^^^^^^
 
         a: x 
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
     }
     let x
 >x : any
+>  : ^^^
 }
 
 function foo15() {
 >foo15 : () => void
+>      : ^^^^^^^^^^
 
     // https://github.com/microsoft/TypeScript/issues/42678
     const [
         a,
 >a : number
+>  : ^^^^^^
 
         b,
 >b : number
+>  : ^^^^^^
 
     ] = ((): [number, number] => {
 >((): [number, number] => {        (() => console.log(a))();  // should error        console.log(a);            // should error        const b = () => a;         // should be ok        return [            0,            0,        ];    })() : [number, number]
+>                                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^
 >((): [number, number] => {        (() => console.log(a))();  // should error        console.log(a);            // should error        const b = () => a;         // should be ok        return [            0,            0,        ];    }) : () => [number, number]
+>                                                                                                                                                                                                                                             : ^^^^^^                
 >(): [number, number] => {        (() => console.log(a))();  // should error        console.log(a);            // should error        const b = () => a;         // should be ok        return [            0,            0,        ];    } : () => [number, number]
+>                                                                                                                                                                                                                                           : ^^^^^^                
 
         (() => console.log(a))();  // should error
 >(() => console.log(a))() : void
+>                         : ^^^^
 >(() => console.log(a)) : () => void
+>                       : ^^^^^^^^^^
 >() => console.log(a) : () => void
+>                     : ^^^^^^^^^^
 >console.log(a) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >a : number
+>  : ^^^^^^
 
         console.log(a);            // should error
 >console.log(a) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >a : number
+>  : ^^^^^^
 
         const b = () => a;         // should be ok
 >b : () => number
+>  : ^^^^^^^^^^^^
 >() => a : () => number
+>        : ^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
         return [
 >[            0,            0,        ] : [number, number]
+>                                       : ^^^^^^^^^^^^^^^^
 
             0,
 >0 : 0
+>  : ^
 
             0,
 >0 : 0
+>  : ^
 
         ];
     })();    
@@ -278,12 +393,120 @@ function foo15() {
 
 function foo16() {
 >foo16 : () => void
+>      : ^^^^^^^^^^
 
     let [a] = (() => a)();
 >a : any
+>  : ^^^
 >(() => a)() : any
+>            : ^^^
 >(() => a) : () => any
+>          : ^^^^^^^^^
 >() => a : () => any
+>        : ^^^^^^^^^
 >a : any
+>  : ^^^
+}
+
+function foo17() {
+>foo17 : () => void
+>      : ^^^^^^^^^^
+
+    const promise = (async () => {
+>promise : Promise<void>
+>        : ^^^^^^^^^^^^^
+>(async () => {        promise        foo        await null        promise        foo    })() : Promise<void>
+>                                                                                             : ^^^^^^^^^^^^^
+>(async () => {        promise        foo        await null        promise        foo    }) : () => Promise<void>
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^
+>async () => {        promise        foo        await null        promise        foo    } : () => Promise<void>
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^
+
+        promise
+>promise : Promise<void>
+>        : ^^^^^^^^^^^^^
+
+        foo
+>foo : 1
+>    : ^
+
+        await null
+>await null : null
+>           : ^^^^
+
+        promise
+>promise : Promise<void>
+>        : ^^^^^^^^^^^^^
+
+        foo
+>foo : 1
+>    : ^
+
+    })()
+
+    const foo = 1;
+>foo : 1
+>    : ^
+>1 : 1
+>  : ^
+}
+
+// #30907
+function wrapI1() {
+>wrapI1 : () => void
+>       : ^^^^^^^^^^
+
+    const iter = (function* foo() {
+>iter : Generator<number, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function* foo() {        iter;        yield 1;    })() : Generator<number, void, unknown>
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function* foo() {        iter;        yield 1;    }) : () => Generator<number, void, unknown>
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* foo() {        iter;        yield 1;    } : () => Generator<number, void, unknown>
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        iter;
+>iter : Generator<number, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        yield 1;
+>yield 1 : any
+>        : ^^^
+>1 : 1
+>  : ^
+
+    })();
+}
+
+function wrapI2() {
+>wrapI2 : () => void
+>       : ^^^^^^^^^^
+
+    const iter = (async function* foo() {
+>iter : AsyncGenerator<number, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(async function* foo() {        iter;        yield 1;    })() : AsyncGenerator<number, void, unknown>
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(async function* foo() {        iter;        yield 1;    }) : () => AsyncGenerator<number, void, unknown>
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function* foo() {        iter;        yield 1;    } : () => AsyncGenerator<number, void, unknown>
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : () => AsyncGenerator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        iter;
+>iter : AsyncGenerator<number, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        yield 1;
+>yield 1 : any
+>        : ^^^
+>1 : 1
+>  : ^
+
+    })();
 }
 

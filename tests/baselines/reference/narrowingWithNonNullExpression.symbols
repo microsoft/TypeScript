@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingWithNonNullExpression.ts ===
+//// [tests/cases/compiler/narrowingWithNonNullExpression.ts] ////
+
+=== narrowingWithNonNullExpression.ts ===
 const m = ''.match('');
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
 >''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
@@ -7,8 +9,11 @@ const m = ''.match('');
 m! && m[0];
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
+>0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 
 m?.[0]! && m[0];
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
+>0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
+>0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 

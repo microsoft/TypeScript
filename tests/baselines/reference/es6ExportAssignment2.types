@@ -1,12 +1,18 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/es6ExportAssignment2.ts] ////
+
+=== a.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export = a;  // Error: export = not allowed in ES6
 >a : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import * as a from "a";
 >a : number
+>  : ^^^^^^
 

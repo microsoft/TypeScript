@@ -1,7 +1,7 @@
-tests/cases/compiler/semicolonsInModuleDeclarations.ts(2,27): error TS1036: Statements are not allowed in ambient contexts.
+semicolonsInModuleDeclarations.ts(2,27): error TS1036: Statements are not allowed in ambient contexts.
 
 
-==== tests/cases/compiler/semicolonsInModuleDeclarations.ts (1 errors) ====
+==== semicolonsInModuleDeclarations.ts (1 errors) ====
     declare module ambiModule {
        export interface i1 { };
                               ~

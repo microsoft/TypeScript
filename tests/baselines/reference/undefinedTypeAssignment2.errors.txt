@@ -1,7 +1,7 @@
-tests/cases/compiler/undefinedTypeAssignment2.ts(1,5): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+undefinedTypeAssignment2.ts(1,5): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
 
 
-==== tests/cases/compiler/undefinedTypeAssignment2.ts (1 errors) ====
+==== undefinedTypeAssignment2.ts (1 errors) ====
     var undefined = void 0;
         ~~~~~~~~~
 !!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.

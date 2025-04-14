@@ -1,144 +1,253 @@
-=== tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping3.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping3.ts] ////
+
+=== parenthesizedContexualTyping3.ts ===
 // Contextual typing for parenthesized substitution expressions in tagged templates.
 
 /**
  * tempFun - Can't have fun for too long.
  */
 function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T;
->tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^^^^^^        ^^                    ^^ ^^               ^^ ^^               ^^ ^^   ^^^   ^^^
 >tempStrs : TemplateStringsArray
+>         : ^^^^^^^^^^^^^^^^^^^^
 >g : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >x : T
+>  : ^
 
 function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T;
->tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>tempFun : { <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, x: T_1): T_1; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^^^^^^        ^^                    ^^ ^^               ^^ ^^   ^^^   ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >tempStrs : TemplateStringsArray
+>         : ^^^^^^^^^^^^^^^^^^^^
 >g : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >h : (y: T) => T
+>  : ^ ^^ ^^^^^ 
 >y : T
+>  : ^
 >x : T
+>  : ^
 
 function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T {
->tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>tempFun : { <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, x: T_1): T_1; <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
+>        : ^^^^^^^^        ^^                    ^^ ^^               ^^ ^^   ^^^   ^^^^^^^^        ^^                    ^^ ^^               ^^ ^^               ^^ ^^   ^^^   ^^^
 >tempStrs : TemplateStringsArray
+>         : ^^^^^^^^^^^^^^^^^^^^
 >g : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >x : T
+>  : ^
 
     return g(x);
 >g(x) : T
+>     : ^
 >g : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 
 var a = tempFun `${ x => x }  ${ 10 }`
 >a : number
+>  : ^^^^^^
 >tempFun `${ x => x }  ${ 10 }` : number
+>                               : ^^^^^^
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >`${ x => x }  ${ 10 }` : string
+>                       : ^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var b = tempFun `${ (x => x) }  ${ 10 }`
 >b : number
+>  : ^^^^^^
 >tempFun `${ (x => x) }  ${ 10 }` : number
+>                                 : ^^^^^^
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >`${ (x => x) }  ${ 10 }` : string
+>                         : ^^^^^^
 >(x => x) : (x: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var c = tempFun `${ ((x => x)) } ${ 10 }`
 >c : number
+>  : ^^^^^^
 >tempFun `${ ((x => x)) } ${ 10 }` : number
+>                                  : ^^^^^^
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >`${ ((x => x)) } ${ 10 }` : string
+>                          : ^^^^^^
 >((x => x)) : (x: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >(x => x) : (x: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var d = tempFun `${ x => x } ${ x => x } ${ 10 }`
 >d : number
+>  : ^^^^^^
 >tempFun `${ x => x } ${ x => x } ${ 10 }` : number
+>                                          : ^^^^^^
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >`${ x => x } ${ x => x } ${ 10 }` : string
+>                                  : ^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var e = tempFun `${ x => x } ${ (x => x) } ${ 10 }`
 >e : number
+>  : ^^^^^^
 >tempFun `${ x => x } ${ (x => x) } ${ 10 }` : number
+>                                            : ^^^^^^
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >`${ x => x } ${ (x => x) } ${ 10 }` : string
+>                                    : ^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >(x => x) : (x: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var f = tempFun `${ x => x } ${ ((x => x)) } ${ 10 }`
 >f : number
+>  : ^^^^^^
 >tempFun `${ x => x } ${ ((x => x)) } ${ 10 }` : number
+>                                              : ^^^^^^
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >`${ x => x } ${ ((x => x)) } ${ 10 }` : string
+>                                      : ^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >((x => x)) : (x: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >(x => x) : (x: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var g = tempFun `${ (x => x) } ${ (((x => x))) } ${ 10 }`
 >g : number
+>  : ^^^^^^
 >tempFun `${ (x => x) } ${ (((x => x))) } ${ 10 }` : number
+>                                                  : ^^^^^^
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >`${ (x => x) } ${ (((x => x))) } ${ 10 }` : string
+>                                          : ^^^^^^
 >(x => x) : (x: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >(((x => x))) : (x: number) => number
+>             : ^ ^^^^^^^^^^^^^^^^^^^
 >((x => x)) : (x: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >(x => x) : (x: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var h = tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }`
 >h : any
 >tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }` : any
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>        : ^^^ ^^        ^^                    ^^ ^^           ^^ ^^ ^^^ ^^^ ^^        ^^                    ^^ ^^           ^^ ^^           ^^ ^^ ^^^ ^^^
 >`${ (x => x) } ${ (((x => x))) } ${ undefined }` : string
+>                                                 : ^^^^^^
 >(x => x) : (x: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >x => x : (x: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 >(((x => x))) : (x: any) => any
+>             : ^ ^^^^^^^^^^^^^
 >((x => x)) : (x: any) => any
+>           : ^ ^^^^^^^^^^^^^
 >(x => x) : (x: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >x => x : (x: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 >undefined : undefined
+>          : ^^^^^^^^^
 

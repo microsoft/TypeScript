@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unknownTypeArgOnCall.ts ===
+//// [tests/cases/compiler/unknownTypeArgOnCall.ts] ////
+
+=== unknownTypeArgOnCall.ts ===
 class Foo<T> {
 >Foo : Symbol(Foo, Decl(unknownTypeArgOnCall.ts, 0, 0))
 >T : Symbol(T, Decl(unknownTypeArgOnCall.ts, 0, 10))

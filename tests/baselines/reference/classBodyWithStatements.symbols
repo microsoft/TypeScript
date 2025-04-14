@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classBody/classBodyWithStatements.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classBody/classBodyWithStatements.ts] ////
+
+=== classBodyWithStatements.ts ===
 class C {
 >C : Symbol(C, Decl(classBodyWithStatements.ts, 0, 0))
 

@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty10.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty10.ts ===
+interface Foo { bar: any; }
+>Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 0, 0))
+>bar : Symbol(Foo.bar, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 0, 15))
+
+const bar: { [id: string]: number } = {};
+>bar : Symbol(bar, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 1, 5))
+>id : Symbol(id, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 1, 14))
+
+(foo: Foo) => {
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 3, 1))
+>Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 0, 0))
+
+	bar[id]++;
+>bar : Symbol(bar, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 1, 5))
+>id : Symbol(id, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 5, 6))
+
+	const id = foo.bar;
+>id : Symbol(id, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 5, 6))
+>foo.bar : Symbol(Foo.bar, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 0, 15))
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 3, 1))
+>bar : Symbol(Foo.bar, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty10.ts, 0, 15))
+}
+

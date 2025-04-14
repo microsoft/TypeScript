@@ -1,12 +1,12 @@
-tests/cases/compiler/test.tsx(3,17): error TS2304: Cannot find name 'factory'.
+test.tsx(3,17): error TS2874: This JSX tag requires 'factory' to be in scope, but it could not be found.
 
 
-==== tests/cases/compiler/test.tsx (1 errors) ====
+==== test.tsx (1 errors) ====
     export class C {
         factory() {
             return <div></div>;
                     ~~~
-!!! error TS2304: Cannot find name 'factory'.
+!!! error TS2874: This JSX tag requires 'factory' to be in scope, but it could not be found.
         }
     }
     

@@ -1,6 +1,6 @@
 /index.ts(6,14): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
-/index.ts(6,50): error TS1454: `resolution-mode` can only be set for type-only imports.
-/index.ts(7,49): error TS1454: `resolution-mode` can only be set for type-only imports.
+/index.ts(6,50): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+/index.ts(7,49): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
 
 
 ==== /index.ts (3 errors) ====
@@ -12,11 +12,11 @@
     import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
                  ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
-                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1454: `resolution-mode` can only be set for type-only imports.
+                                                     ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
     import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
-                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1454: `resolution-mode` can only be set for type-only imports.
+                                                    ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
     export interface Loc extends Req, Imp {}
     
     export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };

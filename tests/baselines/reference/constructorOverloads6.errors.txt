@@ -1,7 +1,7 @@
-tests/cases/compiler/constructorOverloads6.ts(4,25): error TS1183: An implementation cannot be declared in ambient contexts.
+constructorOverloads6.ts(4,25): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/constructorOverloads6.ts (1 errors) ====
+==== constructorOverloads6.ts (1 errors) ====
     declare class FooBase {
         constructor(s: string);
         constructor(n: number);

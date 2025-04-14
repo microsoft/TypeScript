@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads36.ts] ////
+
 //// [functionOverloads36.ts]
 function foo(bar:{a:number;}):number;
 function foo(bar:{a:string;}):string;

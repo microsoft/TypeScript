@@ -1,17 +1,16 @@
 /index.ts(2,51): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(5,78): error TS1453: `resolution-mode` should be either `require` or `import`.
 /other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-/other.ts(3,22): error TS1005: 'assert' expected.
+/other.ts(3,22): error TS1005: 'with' expected.
 /other.ts(3,39): error TS1005: ';' expected.
 /other.ts(3,50): error TS1128: Declaration or statement expected.
 /other.ts(3,51): error TS1128: Declaration or statement expected.
 /other.ts(3,52): error TS1128: Declaration or statement expected.
 /other.ts(3,53): error TS2304: Cannot find name 'RequireInterface'.
-/other.ts(4,22): error TS2322: Type '{ "resolution-mode": string; }' is not assignable to type 'ImportCallOptions'.
-  Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
+/other.ts(4,22): error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
 /other.ts(4,52): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /other.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-/other.ts(6,49): error TS1005: 'assert' expected.
+/other.ts(6,49): error TS1005: 'with' expected.
 /other.ts(6,66): error TS1005: ';' expected.
 /other.ts(6,77): error TS1128: Declaration or statement expected.
 /other.ts(6,78): error TS1128: Declaration or statement expected.
@@ -20,7 +19,7 @@
 /other.ts(6,80): error TS2304: Cannot find name 'RequireInterface'.
 /other.ts(6,96): error TS1128: Declaration or statement expected.
 /other.ts(7,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-/other.ts(7,49): error TS1005: 'assert' expected.
+/other.ts(7,49): error TS1005: 'with' expected.
 /other.ts(7,66): error TS1005: ';' expected.
 /other.ts(7,76): error TS1128: Declaration or statement expected.
 /other.ts(7,77): error TS1128: Declaration or statement expected.
@@ -40,7 +39,10 @@
 /other3.ts(3,55): error TS1005: ';' expected.
 /other3.ts(3,56): error TS1128: Declaration or statement expected.
 /other3.ts(3,57): error TS2304: Cannot find name 'RequireInterface'.
-/other3.ts(4,21): error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
+/other3.ts(4,21): error TS2322: Type '{ "resolution-mode": string; }[]' is not assignable to type 'ImportCallOptions'.
+  Types of property 'with' are incompatible.
+    Type '(index: number, value: { "resolution-mode": string; }) => { "resolution-mode": string; }[]' is not assignable to type 'ImportAttributes'.
+      Index signature for type 'string' is missing in type '(index: number, value: { "resolution-mode": string; }) => { "resolution-mode": string; }[]'.
 /other3.ts(4,56): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /other3.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other3.ts(6,48): error TS1005: '{' expected.
@@ -107,7 +109,7 @@
           ~~~~~~~~~~~~~~~
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                          ~~~~~~~~~~~~~~~~~
-!!! error TS1005: 'assert' expected.
+!!! error TS1005: 'with' expected.
 !!! related TS1007 /other.ts:3:21: The parser expected to find a '}' to match the '{' token here.
                                           ~
 !!! error TS1005: ';' expected.
@@ -120,9 +122,8 @@
                                                         ~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'RequireInterface'.
         & import("pkg", {"resolution-mode": "import"}).ImportInterface;
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ "resolution-mode": string; }' is not assignable to type 'ImportCallOptions'.
-!!! error TS2322:   Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
+                         ~~~~~~~~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
                                                        ~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
     
@@ -130,7 +131,7 @@
                                      ~~~~~~~~~~~~~~~
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                     ~~~~~~~~~~~~~~~~~
-!!! error TS1005: 'assert' expected.
+!!! error TS1005: 'with' expected.
 !!! related TS1007 /other.ts:6:48: The parser expected to find a '}' to match the '{' token here.
                                                                      ~
 !!! error TS1005: ';' expected.
@@ -150,7 +151,7 @@
                                      ~~~~~~~~~~~~~~~
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                     ~~~~~~~~~~~~~~~~~
-!!! error TS1005: 'assert' expected.
+!!! error TS1005: 'with' expected.
 !!! related TS1007 /other.ts:7:48: The parser expected to find a '}' to match the '{' token here.
                                                                      ~
 !!! error TS1005: ';' expected.
@@ -205,7 +206,10 @@
 !!! error TS2304: Cannot find name 'RequireInterface'.
         & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
+!!! error TS2322: Type '{ "resolution-mode": string; }[]' is not assignable to type 'ImportCallOptions'.
+!!! error TS2322:   Types of property 'with' are incompatible.
+!!! error TS2322:     Type '(index: number, value: { "resolution-mode": string; }) => { "resolution-mode": string; }[]' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:       Index signature for type 'string' is missing in type '(index: number, value: { "resolution-mode": string; }) => { "resolution-mode": string; }[]'.
                                                            ~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
     

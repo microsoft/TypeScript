@@ -1,7 +1,7 @@
-tests/cases/conformance/externalModules/exportClassNameWithObjectAMD.ts(1,14): error TS2725: Class name cannot be 'Object' when targeting ES5 with module AMD.
+exportClassNameWithObjectAMD.ts(1,14): error TS2725: Class name cannot be 'Object' when targeting ES5 with module AMD.
 
 
-==== tests/cases/conformance/externalModules/exportClassNameWithObjectAMD.ts (1 errors) ====
+==== exportClassNameWithObjectAMD.ts (1 errors) ====
     export class Object {}
                  ~~~~~~
 !!! error TS2725: Class name cannot be 'Object' when targeting ES5 with module AMD.

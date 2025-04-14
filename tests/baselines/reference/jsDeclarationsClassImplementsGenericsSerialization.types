@@ -1,28 +1,38 @@
-=== tests/cases/conformance/jsdoc/declarations/interface.ts ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassImplementsGenericsSerialization.ts] ////
+
+=== interface.ts ===
 export interface Encoder<T> {
     encode(value: T): Uint8Array
 >encode : (value: T) => Uint8Array
+>       : ^     ^^ ^^^^^          
 >value : T
+>      : ^
 }
-=== tests/cases/conformance/jsdoc/declarations/lib.js ===
+=== lib.js ===
 /**
  * @template T
  * @implements {IEncoder<T>}
  */
 export class Encoder {
 >Encoder : Encoder<T>
+>        : ^^^^^^^^^^
 
     /**
      * @param {T} value 
      */
     encode(value) {
->encode : (value: T) => Uint8Array
+>encode : (value: T) => Uint8Array<ArrayBuffer>
+>       : ^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
+>      : ^
 
         return new Uint8Array(0)
->new Uint8Array(0) : Uint8Array
+>new Uint8Array(0) : Uint8Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
     }
 }
 

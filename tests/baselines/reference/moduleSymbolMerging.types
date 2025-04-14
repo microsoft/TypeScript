@@ -1,19 +1,24 @@
-=== tests/cases/compiler/B.ts ===
-///<reference path="A.ts" />
+//// [tests/cases/compiler/moduleSymbolMerging.ts] ////
+
+=== B.ts ===
+///<reference path="A.ts" preserve="true" />
 module A { ; }
 >A : typeof A
+>  : ^^^^^^^^
 
 module B {
 >B : typeof B
+>  : ^^^^^^^^
 
 	export function f(): A.I { return null; }
 >f : () => A.I
+>  : ^^^^^^   
 >A : any
->null : null
+>  : ^^^
 }
 
 
-=== tests/cases/compiler/A.ts ===
+=== A.ts ===
+
 module A { export interface I {} }
-No type information for this code.
-No type information for this code.
+

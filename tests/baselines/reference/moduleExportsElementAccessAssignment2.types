@@ -1,10 +1,16 @@
-=== tests/cases/conformance/jsdoc/file1.js ===
+//// [tests/cases/conformance/jsdoc/moduleExportsElementAccessAssignment2.ts] ////
+
+=== file1.js ===
 // this file _should_ be a global file
 var GlobalThing = { x: 12 };
 >GlobalThing : { x: number; }
+>            : ^^^^^^^^^^^^^^
 >{ x: 12 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 /**
  * @param {*} type 
@@ -13,30 +19,39 @@ var GlobalThing = { x: 12 };
  */
 function f(type, ctor, exports) {
 >f : (type: any, ctor: any, exports: any) => void
+>  : ^    ^^   ^^    ^^   ^^       ^^   ^^^^^^^^^
 >type : any
 >ctor : any
 >exports : any
 
     if (typeof exports !== "undefined") {
 >typeof exports !== "undefined" : boolean
+>                               : ^^^^^^^
 >typeof exports : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : any
 >"undefined" : "undefined"
+>            : ^^^^^^^^^^^
 
         exports["AST_" + type] = ctor;
 >exports["AST_" + type] = ctor : any
 >exports["AST_" + type] : any
 >exports : any
 >"AST_" + type : string
+>              : ^^^^^^
 >"AST_" : "AST_"
+>       : ^^^^^^
 >type : any
 >ctor : any
     }
 }
 
-=== tests/cases/conformance/jsdoc/ref.js ===
+=== ref.js ===
 GlobalThing.x
 >GlobalThing.x : number
+>              : ^^^^^^
 >GlobalThing : { x: number; }
+>            : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 

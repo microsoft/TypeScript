@@ -1,23 +1,32 @@
-=== tests/cases/compiler/ConstEnum.ts ===
+//// [tests/cases/compiler/constEnumPreserveEmitReexport.ts] ////
+
+=== ConstEnum.ts ===
 export const enum MyConstEnum {
 >MyConstEnum : MyConstEnum
+>            : ^^^^^^^^^^^
 
     Foo,
 >Foo : MyConstEnum.Foo
+>    : ^^^^^^^^^^^^^^^
 
     Bar
 >Bar : MyConstEnum.Bar
+>    : ^^^^^^^^^^^^^^^
 
 };
-=== tests/cases/compiler/ImportExport.ts ===
+=== ImportExport.ts ===
 import { MyConstEnum } from './ConstEnum';
 >MyConstEnum : typeof MyConstEnum
+>            : ^^^^^^^^^^^^^^^^^^
 
 export default MyConstEnum;
 >MyConstEnum : MyConstEnum
+>            : ^^^^^^^^^^^
 
-=== tests/cases/compiler/ReExport.ts ===
+=== ReExport.ts ===
 export { MyConstEnum as default } from './ConstEnum';
->MyConstEnum : typeof import("tests/cases/compiler/ConstEnum").MyConstEnum
->default : typeof import("tests/cases/compiler/ConstEnum").MyConstEnum
+>MyConstEnum : typeof import("ConstEnum").MyConstEnum
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>default : typeof import("ConstEnum").MyConstEnum
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

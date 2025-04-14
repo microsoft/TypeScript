@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateLiteralsInTypes.ts] ////
+
 //// [templateLiteralsInTypes.ts]
 const f = (hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${number}\r\n`;
 

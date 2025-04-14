@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts ===
+//// [tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts] ////
+
+=== collisionSuperAndLocalVarInConstructor.ts ===
 var _super = 10; // No Error
 >_super : Symbol(_super, Decl(collisionSuperAndLocalVarInConstructor.ts, 0, 3))
 

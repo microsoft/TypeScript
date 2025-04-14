@@ -1,33 +1,50 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal1.ts] ////
+
+=== f1.ts ===
 export class A {x: number;}
 >A : A
+>  : ^
 >x : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 import {A} from "./f1";
 >A : typeof A
+>  : ^^^^^^^^
 
 // change the shape of Array<T>
 declare global {
 >global : any
+>       : ^^^
 
     interface Array<T> {
         getA(): A;
 >getA : () => A
+>     : ^^^^^^ 
     }
 }
 
 let x = [1];
 >x : number[]
+>  : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 let y = x.getA().x;
 >y : number
+>  : ^^^^^^
 >x.getA().x : number
+>           : ^^^^^^
 >x.getA() : A
+>         : ^
 >x.getA : () => A
+>       : ^^^^^^ 
 >x : number[]
+>  : ^^^^^^^^
 >getA : () => A
+>     : ^^^^^^ 
 >x : number
+>  : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts] ////
+
 //// [typeCheckingInsideFunctionExpressionInArray.ts]
 var functions = [function () {
   var k: string = 10;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts] ////
+
 //// [indexWithUndefinedAndNullStrictNullChecks.ts]
 interface N {
     [n: number]: string;

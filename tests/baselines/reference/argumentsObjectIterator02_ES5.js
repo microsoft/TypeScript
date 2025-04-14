@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsObjectIterator02_ES5.ts] ////
+
 //// [argumentsObjectIterator02_ES5.ts]
 function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
     let blah = arguments[Symbol.iterator];

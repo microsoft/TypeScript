@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesEnum.ts] ////
+
 //// [augmentedTypesEnum.ts]
 // enum then var
 enum e1111 { One } // error

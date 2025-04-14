@@ -1,11 +1,12 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPropertyContextuallyTypedByTypeParam01.ts ===
 // interface IFoo {
-//     /*FIND ALL REFS*/[|a|]: string;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}a|]: string;|>
 // }
 // class C<T extends IFoo> {
 //     method() {
 //         var x: T = {
-//             [|a|]: ""
+//             <|[|{| isWriteAccess: true |}a|]: ""|>
 //         };
 //         x.[|a|];
 //     }
@@ -13,117 +14,66 @@
 // 
 // 
 // var x: IFoo = {
-//     [|a|]: "ss"
+//     <|[|{| isWriteAccess: true |}a|]: "ss"|>
 // };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPropertyContextuallyTypedByTypeParam01.ts",
-      "kind": "property",
-      "name": "(property) IFoo.a: string",
-      "textSpan": {
-        "start": 21,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "IFoo",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "a",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 21,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPropertyContextuallyTypedByTypeParam01.ts",
-        "contextSpan": {
-          "start": 21,
-          "length": 10
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 108,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPropertyContextuallyTypedByTypeParam01.ts",
-        "contextSpan": {
-          "start": 108,
-          "length": 5
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 135,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPropertyContextuallyTypedByTypeParam01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 168,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPropertyContextuallyTypedByTypeParam01.ts",
-        "contextSpan": {
-          "start": 168,
-          "length": 7
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPropertyContextuallyTypedByTypeParam01.ts ===
+  // interface IFoo {
+  //     /*FIND ALL REFS*/<|[|a|]: string;|>
+  // }
+  // class C<T extends IFoo> {
+  //     method() {
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) IFoo.a: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "IFoo",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "a",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts ===
+//// [tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts] ////
+
+=== shorthandPropertyAssignmentsInDestructuring_ES6.ts ===
 (function() {
 	var s0;
 >s0 : Symbol(s0, Decl(shorthandPropertyAssignmentsInDestructuring_ES6.ts, 1, 4))

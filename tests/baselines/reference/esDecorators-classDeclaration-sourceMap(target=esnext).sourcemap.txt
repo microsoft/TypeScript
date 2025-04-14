@@ -1,0 +1,745 @@
+===================================================================
+JsFile: esDecorators-classDeclaration-sourceMap.js
+mapUrl: esDecorators-classDeclaration-sourceMap.js.map
+sourceRoot: 
+sources: esDecorators-classDeclaration-sourceMap.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:esDecorators-classDeclaration-sourceMap.js
+sourceFile:esDecorators-classDeclaration-sourceMap.ts
+-------------------------------------------------------------------
+>>>@dec
+1 >
+2 >^
+3 > ^^^
+4 >    ^->
+1 >declare var dec: any;
+  >
+  >
+2 >@
+3 > dec
+1 >Emitted(1, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(1, 2) Source(3, 2) + SourceIndex(0)
+3 >Emitted(1, 5) Source(3, 5) + SourceIndex(0)
+---
+>>>@dec
+1->
+2 >^
+3 > ^^^
+4 >    ^^^^^^->
+1->
+  >
+2 >@
+3 > dec
+1->Emitted(2, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(2, 2) Source(4, 2) + SourceIndex(0)
+3 >Emitted(2, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>class C {
+1->^^^^^^
+2 >      ^
+3 >       ^^->
+1->
+  >class 
+2 >      C
+1->Emitted(3, 7) Source(5, 7) + SourceIndex(0)
+2 >Emitted(3, 8) Source(5, 8) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1-> {
+  >    
+2 >    @
+3 >     dec
+1->Emitted(4, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(4, 6) Source(6, 6) + SourceIndex(0)
+3 >Emitted(4, 9) Source(6, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(5, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(7, 6) + SourceIndex(0)
+3 >Emitted(5, 9) Source(7, 9) + SourceIndex(0)
+---
+>>>    method() { }
+1->^^^^
+2 >    ^^^^^^
+3 >          ^^^^^
+4 >               ^
+1->
+  >    
+2 >    method
+3 >          () {
+4 >               }
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 11) Source(8, 11) + SourceIndex(0)
+3 >Emitted(6, 16) Source(8, 15) + SourceIndex(0)
+4 >Emitted(6, 17) Source(8, 16) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(7, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(10, 6) + SourceIndex(0)
+3 >Emitted(7, 9) Source(10, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(8, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(11, 6) + SourceIndex(0)
+3 >Emitted(8, 9) Source(11, 9) + SourceIndex(0)
+---
+>>>    get x() { return 1; }
+1->^^^^^^^^
+2 >        ^
+3 >         ^^^^^
+4 >              ^^^^^^^
+5 >                     ^
+6 >                      ^
+7 >                       ^
+8 >                        ^
+1->
+  >    get 
+2 >        x
+3 >         () { 
+4 >              return 
+5 >                     1
+6 >                      ;
+7 >                        
+8 >                        }
+1->Emitted(9, 9) Source(12, 9) + SourceIndex(0)
+2 >Emitted(9, 10) Source(12, 10) + SourceIndex(0)
+3 >Emitted(9, 15) Source(12, 15) + SourceIndex(0)
+4 >Emitted(9, 22) Source(12, 22) + SourceIndex(0)
+5 >Emitted(9, 23) Source(12, 23) + SourceIndex(0)
+6 >Emitted(9, 24) Source(12, 24) + SourceIndex(0)
+7 >Emitted(9, 25) Source(12, 25) + SourceIndex(0)
+8 >Emitted(9, 26) Source(12, 26) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(10, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(14, 6) + SourceIndex(0)
+3 >Emitted(10, 9) Source(14, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(11, 5) Source(15, 5) + SourceIndex(0)
+2 >Emitted(11, 6) Source(15, 6) + SourceIndex(0)
+3 >Emitted(11, 9) Source(15, 9) + SourceIndex(0)
+---
+>>>    set x(value) { }
+1->^^^^^^^^
+2 >        ^
+3 >         ^
+4 >          ^^^^^
+5 >               ^^^^
+6 >                   ^
+1->
+  >    set 
+2 >        x
+3 >         (
+4 >          value: number
+5 >               ) { 
+6 >                   }
+1->Emitted(12, 9) Source(16, 9) + SourceIndex(0)
+2 >Emitted(12, 10) Source(16, 10) + SourceIndex(0)
+3 >Emitted(12, 11) Source(16, 11) + SourceIndex(0)
+4 >Emitted(12, 16) Source(16, 24) + SourceIndex(0)
+5 >Emitted(12, 20) Source(16, 28) + SourceIndex(0)
+6 >Emitted(12, 21) Source(16, 29) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(13, 5) Source(18, 5) + SourceIndex(0)
+2 >Emitted(13, 6) Source(18, 6) + SourceIndex(0)
+3 >Emitted(13, 9) Source(18, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(14, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(14, 6) Source(19, 6) + SourceIndex(0)
+3 >Emitted(14, 9) Source(19, 9) + SourceIndex(0)
+---
+>>>    y = 1;
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^
+5 >         ^
+1->
+  >    
+2 >    y
+3 >      = 
+4 >        1
+5 >         ;
+1->Emitted(15, 5) Source(20, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(20, 6) + SourceIndex(0)
+3 >Emitted(15, 9) Source(20, 9) + SourceIndex(0)
+4 >Emitted(15, 10) Source(20, 10) + SourceIndex(0)
+5 >Emitted(15, 11) Source(20, 11) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(16, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(16, 6) Source(22, 6) + SourceIndex(0)
+3 >Emitted(16, 9) Source(22, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(17, 5) Source(23, 5) + SourceIndex(0)
+2 >Emitted(17, 6) Source(23, 6) + SourceIndex(0)
+3 >Emitted(17, 9) Source(23, 9) + SourceIndex(0)
+---
+>>>    accessor z = 1;
+1->^^^^
+2 >    ^^^^^^^^
+3 >            ^
+4 >             ^
+5 >              ^^^
+6 >                 ^
+7 >                  ^
+1->
+  >    
+2 >    accessor
+3 >             
+4 >             z
+5 >               = 
+6 >                 1
+7 >                  ;
+1->Emitted(18, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(18, 13) Source(24, 13) + SourceIndex(0)
+3 >Emitted(18, 14) Source(24, 14) + SourceIndex(0)
+4 >Emitted(18, 15) Source(24, 15) + SourceIndex(0)
+5 >Emitted(18, 18) Source(24, 18) + SourceIndex(0)
+6 >Emitted(18, 19) Source(24, 19) + SourceIndex(0)
+7 >Emitted(18, 20) Source(24, 20) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(19, 5) Source(26, 5) + SourceIndex(0)
+2 >Emitted(19, 6) Source(26, 6) + SourceIndex(0)
+3 >Emitted(19, 9) Source(26, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(20, 5) Source(27, 5) + SourceIndex(0)
+2 >Emitted(20, 6) Source(27, 6) + SourceIndex(0)
+3 >Emitted(20, 9) Source(27, 9) + SourceIndex(0)
+---
+>>>    static #method() { }
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^^^^
+5 >                  ^^^^^
+6 >                       ^
+1->
+  >    
+2 >    static
+3 >           
+4 >           #method
+5 >                  () {
+6 >                       }
+1->Emitted(21, 5) Source(28, 5) + SourceIndex(0)
+2 >Emitted(21, 11) Source(28, 11) + SourceIndex(0)
+3 >Emitted(21, 12) Source(28, 12) + SourceIndex(0)
+4 >Emitted(21, 19) Source(28, 19) + SourceIndex(0)
+5 >Emitted(21, 24) Source(28, 23) + SourceIndex(0)
+6 >Emitted(21, 25) Source(28, 24) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(22, 5) Source(30, 5) + SourceIndex(0)
+2 >Emitted(22, 6) Source(30, 6) + SourceIndex(0)
+3 >Emitted(22, 9) Source(30, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(23, 5) Source(31, 5) + SourceIndex(0)
+2 >Emitted(23, 6) Source(31, 6) + SourceIndex(0)
+3 >Emitted(23, 9) Source(31, 9) + SourceIndex(0)
+---
+>>>    static get #x() { return 1; }
+1->^^^^
+2 >    ^^^^^^
+3 >          ^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^
+7 >                             ^
+8 >                              ^
+9 >                               ^
+10>                                ^
+1->
+  >    
+2 >    static
+3 >           get 
+4 >               #x
+5 >                 () { 
+6 >                      return 
+7 >                             1
+8 >                              ;
+9 >                                
+10>                                }
+1->Emitted(24, 5) Source(32, 5) + SourceIndex(0)
+2 >Emitted(24, 11) Source(32, 11) + SourceIndex(0)
+3 >Emitted(24, 16) Source(32, 16) + SourceIndex(0)
+4 >Emitted(24, 18) Source(32, 18) + SourceIndex(0)
+5 >Emitted(24, 23) Source(32, 23) + SourceIndex(0)
+6 >Emitted(24, 30) Source(32, 30) + SourceIndex(0)
+7 >Emitted(24, 31) Source(32, 31) + SourceIndex(0)
+8 >Emitted(24, 32) Source(32, 32) + SourceIndex(0)
+9 >Emitted(24, 33) Source(32, 33) + SourceIndex(0)
+10>Emitted(24, 34) Source(32, 34) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(25, 5) Source(34, 5) + SourceIndex(0)
+2 >Emitted(25, 6) Source(34, 6) + SourceIndex(0)
+3 >Emitted(25, 9) Source(34, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(26, 5) Source(35, 5) + SourceIndex(0)
+2 >Emitted(26, 6) Source(35, 6) + SourceIndex(0)
+3 >Emitted(26, 9) Source(35, 9) + SourceIndex(0)
+---
+>>>    static set #x(value) { }
+1->^^^^
+2 >    ^^^^^^
+3 >          ^^^^^
+4 >               ^^
+5 >                 ^
+6 >                  ^^^^^
+7 >                       ^^^^
+8 >                           ^
+1->
+  >    
+2 >    static
+3 >           set 
+4 >               #x
+5 >                 (
+6 >                  value: number
+7 >                       ) { 
+8 >                           }
+1->Emitted(27, 5) Source(36, 5) + SourceIndex(0)
+2 >Emitted(27, 11) Source(36, 11) + SourceIndex(0)
+3 >Emitted(27, 16) Source(36, 16) + SourceIndex(0)
+4 >Emitted(27, 18) Source(36, 18) + SourceIndex(0)
+5 >Emitted(27, 19) Source(36, 19) + SourceIndex(0)
+6 >Emitted(27, 24) Source(36, 32) + SourceIndex(0)
+7 >Emitted(27, 28) Source(36, 36) + SourceIndex(0)
+8 >Emitted(27, 29) Source(36, 37) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(28, 5) Source(38, 5) + SourceIndex(0)
+2 >Emitted(28, 6) Source(38, 6) + SourceIndex(0)
+3 >Emitted(28, 9) Source(38, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(29, 5) Source(39, 5) + SourceIndex(0)
+2 >Emitted(29, 6) Source(39, 6) + SourceIndex(0)
+3 >Emitted(29, 9) Source(39, 9) + SourceIndex(0)
+---
+>>>    static #y = 1;
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^
+5 >             ^^^
+6 >                ^
+7 >                 ^
+1->
+  >    
+2 >    static
+3 >           
+4 >           #y
+5 >              = 
+6 >                1
+7 >                 ;
+1->Emitted(30, 5) Source(40, 5) + SourceIndex(0)
+2 >Emitted(30, 11) Source(40, 11) + SourceIndex(0)
+3 >Emitted(30, 12) Source(40, 12) + SourceIndex(0)
+4 >Emitted(30, 14) Source(40, 14) + SourceIndex(0)
+5 >Emitted(30, 17) Source(40, 17) + SourceIndex(0)
+6 >Emitted(30, 18) Source(40, 18) + SourceIndex(0)
+7 >Emitted(30, 19) Source(40, 19) + SourceIndex(0)
+---
+>>>    @dec
+1 >^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^->
+1 >
+  >
+  >    
+2 >    @
+3 >     dec
+1 >Emitted(31, 5) Source(42, 5) + SourceIndex(0)
+2 >Emitted(31, 6) Source(42, 6) + SourceIndex(0)
+3 >Emitted(31, 9) Source(42, 9) + SourceIndex(0)
+---
+>>>    @dec
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^^^^->
+1->
+  >    
+2 >    @
+3 >     dec
+1->Emitted(32, 5) Source(43, 5) + SourceIndex(0)
+2 >Emitted(32, 6) Source(43, 6) + SourceIndex(0)
+3 >Emitted(32, 9) Source(43, 9) + SourceIndex(0)
+---
+>>>    static accessor #z = 1;
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^^^^^
+5 >                   ^
+6 >                    ^^
+7 >                      ^^^
+8 >                         ^
+9 >                          ^
+1->
+  >    
+2 >    static
+3 >           
+4 >           accessor
+5 >                    
+6 >                    #z
+7 >                       = 
+8 >                         1
+9 >                          ;
+1->Emitted(33, 5) Source(44, 5) + SourceIndex(0)
+2 >Emitted(33, 11) Source(44, 11) + SourceIndex(0)
+3 >Emitted(33, 12) Source(44, 12) + SourceIndex(0)
+4 >Emitted(33, 20) Source(44, 20) + SourceIndex(0)
+5 >Emitted(33, 21) Source(44, 21) + SourceIndex(0)
+6 >Emitted(33, 23) Source(44, 23) + SourceIndex(0)
+7 >Emitted(33, 26) Source(44, 26) + SourceIndex(0)
+8 >Emitted(33, 27) Source(44, 27) + SourceIndex(0)
+9 >Emitted(33, 28) Source(44, 28) + SourceIndex(0)
+---
+>>>}
+>>>//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map===================================================================
+JsFile: esDecorators-classDeclaration-sourceMap.d.ts
+mapUrl: esDecorators-classDeclaration-sourceMap.d.ts.map
+sourceRoot: 
+sources: esDecorators-classDeclaration-sourceMap.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:esDecorators-classDeclaration-sourceMap.d.ts
+sourceFile:esDecorators-classDeclaration-sourceMap.ts
+-------------------------------------------------------------------
+>>>declare var dec: any;
+1 >
+2 >^^^^^^^
+3 >       ^
+4 >        ^^^^
+5 >            ^^^
+6 >               ^^
+7 >                 ^^^
+8 >                    ^
+1 >
+2 >declare
+3 >        
+4 >        var 
+5 >            dec
+6 >               : 
+7 >                 any
+8 >                    ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+4 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+5 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+6 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+7 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+---
+>>>declare class C {
+1 >
+2 >^^^^^^^^^^^^^^
+3 >              ^
+1 >
+  >
+  >
+2 >@dec
+  >@dec
+  >class 
+3 >              C
+1 >Emitted(2, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(2, 15) Source(5, 7) + SourceIndex(0)
+3 >Emitted(2, 16) Source(5, 8) + SourceIndex(0)
+---
+>>>    #private;
+>>>    method(): void;
+1 >^^^^
+2 >    ^^^^^^
+3 >          ^^^^^^^^^^^->
+1 > {
+  >    @dec
+  >    @dec
+  >    
+2 >    method
+1 >Emitted(4, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(4, 11) Source(8, 11) + SourceIndex(0)
+---
+>>>    get x(): number;
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^^
+5 >             ^^^^^^
+6 >                   ^
+7 >                    ^^^^^^->
+1->() {}
+  >
+  >    
+2 >    @dec
+  >        @dec
+  >        get 
+3 >        x
+4 >         () { return 1; }
+  >         
+  >             @dec
+  >             @dec
+  >             set x(value: 
+5 >             number
+6 >                   
+1->Emitted(5, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(5, 9) Source(12, 9) + SourceIndex(0)
+3 >Emitted(5, 10) Source(12, 10) + SourceIndex(0)
+4 >Emitted(5, 14) Source(16, 18) + SourceIndex(0)
+5 >Emitted(5, 20) Source(16, 24) + SourceIndex(0)
+6 >Emitted(5, 21) Source(12, 26) + SourceIndex(0)
+---
+>>>    set x(value: number);
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^
+5 >          ^^^^^
+6 >               ^^
+7 >                 ^^^^^^
+8 >                       ^^
+1->
+  >
+  >    
+2 >    @dec
+  >        @dec
+  >        set 
+3 >        x
+4 >         (
+5 >          value
+6 >               : 
+7 >                 number
+8 >                       ) { }
+1->Emitted(6, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(6, 9) Source(16, 9) + SourceIndex(0)
+3 >Emitted(6, 10) Source(16, 10) + SourceIndex(0)
+4 >Emitted(6, 11) Source(16, 11) + SourceIndex(0)
+5 >Emitted(6, 16) Source(16, 16) + SourceIndex(0)
+6 >Emitted(6, 18) Source(16, 18) + SourceIndex(0)
+7 >Emitted(6, 24) Source(16, 24) + SourceIndex(0)
+8 >Emitted(6, 26) Source(16, 29) + SourceIndex(0)
+---
+>>>    y: number;
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^
+4 >              ^^^^^^^^^^->
+1 >
+  >
+  >    @dec
+  >    @dec
+  >    
+2 >    y
+3 >      = 1;
+1 >Emitted(7, 5) Source(20, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(20, 6) + SourceIndex(0)
+3 >Emitted(7, 15) Source(20, 11) + SourceIndex(0)
+---
+>>>    accessor z: number;
+1->^^^^
+2 >    ^^^^^^^^
+3 >            ^
+4 >             ^
+5 >              ^^^^^^^^^
+1->
+  >
+  >    @dec
+  >    @dec
+  >    
+2 >    accessor
+3 >             
+4 >             z
+5 >               = 1;
+1->Emitted(8, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(8, 13) Source(24, 13) + SourceIndex(0)
+3 >Emitted(8, 14) Source(24, 14) + SourceIndex(0)
+4 >Emitted(8, 15) Source(24, 15) + SourceIndex(0)
+5 >Emitted(8, 24) Source(24, 20) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >    @dec
+  >    @dec
+  >    static #method() {}
+  >
+  >    @dec
+  >    @dec
+  >    static get #x() { return 1; }
+  >
+  >    @dec
+  >    @dec
+  >    static set #x(value: number) { }
+  >
+  >    @dec
+  >    @dec
+  >    static #y = 1;
+  >
+  >    @dec
+  >    @dec
+  >    static accessor #z = 1;
+  >}
+1 >Emitted(9, 2) Source(45, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.d.ts.map

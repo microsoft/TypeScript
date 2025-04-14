@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality3.ts] ////
+
 //// [subtypingWithObjectMembersOptionality3.ts]
 // Base property is optional and derived type has no property of that name
 

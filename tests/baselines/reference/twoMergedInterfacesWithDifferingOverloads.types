@@ -1,115 +1,171 @@
-=== tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads.ts] ////
+
+=== twoMergedInterfacesWithDifferingOverloads.ts ===
 // interfaces that merge must not have members that conflict
 
 interface A {
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; (x: Date): Date; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^    ^^^    ^^^
 >x : number
+>  : ^^^^^^
 
     foo(x: string): string;
 >foo : { (x: number): number; (x: string): string; (x: Date): Date; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^    ^^^    ^^^
 >x : string
+>  : ^^^^^^
 }
 
 interface A {
     foo(x: Date): Date;
 >foo : { (x: number): number; (x: string): string; (x: Date): Date; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^    ^^^    ^^^
 >x : Date
+>  : ^^^^
 }
 
 interface B<T> {
     foo(x: T): number;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
+>    : ^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^    ^^^ ^^    ^^^      ^^^
 >x : T
+>  : ^
 
     foo(x: string): string;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
+>    : ^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^    ^^^ ^^    ^^^      ^^^
 >x : string
+>  : ^^^^^^
 }
 
 interface B<T> {
     foo(x: T): Date;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
+>    : ^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^    ^^^ ^^    ^^^      ^^^
 >x : T
+>  : ^
 
     foo(x: Date): string;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
+>    : ^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^    ^^^ ^^    ^^^      ^^^
 >x : Date
+>  : ^^^^
 }
 
 var b: B<boolean>;
 >b : B<boolean>
+>  : ^^^^^^^^^^
 
 var r = b.foo(true); // returns Date
 >r : Date
+>  : ^^^^
 >b.foo(true) : Date
+>            : ^^^^
 >b.foo : { (x: boolean): number; (x: string): string; (x: boolean): Date; (x: Date): string; }
+>      : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^      ^^^ ^^^^^^^^^^^^    ^^^ ^^    ^^^      ^^^
 >b : B<boolean>
+>  : ^^^^^^^^^^
 >foo : { (x: boolean): number; (x: string): string; (x: boolean): Date; (x: Date): string; }
+>    : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^      ^^^ ^^^^^^^^^^^^    ^^^ ^^    ^^^      ^^^
 >true : true
+>     : ^^^^
 
 // add generic overload
 interface C<T, U> {
     foo(x: T, y: U): string;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
+>    : ^^^ ^^ ^^ ^^ ^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     foo(x: string, y: string): number;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
+>    : ^^^ ^^ ^^ ^^ ^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 
 interface C<T, U> {
     foo<W>(x: W, y: W): W;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
+>    : ^^^ ^^ ^^ ^^ ^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : W
+>  : ^
 >y : W
+>  : ^
 }
 
 var c: C<boolean, Date>;
 >c : C<boolean, Date>
+>  : ^^^^^^^^^^^^^^^^
 
 var r2 = c.foo(1, 2); // number
 >r2 : number
+>   : ^^^^^^
 >c.foo(1, 2) : 1 | 2
+>            : ^^^^^
 >c.foo : { (x: boolean, y: Date): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
+>      : ^^^ ^^^^^^^^^^^ ^^^^^^^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^^^^ ^^^^^^^^^^
 >c : C<boolean, Date>
+>  : ^^^^^^^^^^^^^^^^
 >foo : { (x: boolean, y: Date): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
+>    : ^^^ ^^^^^^^^^^^ ^^^^^^^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^^^^ ^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 // add generic overload that would be ambiguous
 interface D<T, U> {
     a: T;
 >a : T
+>  : ^
 
     b: U;
 >b : U
+>  : ^
 
     foo<A>(x: A, y: A): U;
 >foo : { <A>(x: A, y: A): U; <W>(x: W, y: W): T; }
+>    : ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : A
+>  : ^
 >y : A
+>  : ^
 }
 
 interface D<T, U> {
     foo<W>(x: W, y: W): T;
 >foo : { <A>(x: A, y: A): U; <W>(x: W, y: W): T; }
+>    : ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : W
+>  : ^
 >y : W
+>  : ^
 }
 
 var d: D<boolean, Date>;
 >d : D<boolean, Date>
+>  : ^^^^^^^^^^^^^^^^
 
 var r3 = d.foo(1, 1); // boolean, last definition wins
 >r3 : boolean
+>   : ^^^^^^^
 >d.foo(1, 1) : boolean
+>            : ^^^^^^^
 >d.foo : { <A>(x: A, y: A): Date; <W>(x: W, y: W): boolean; }
+>      : ^^^ ^^ ^^^^^ ^^^^^^^^^^^^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^^
 >d : D<boolean, Date>
+>  : ^^^^^^^^^^^^^^^^
 >foo : { <A>(x: A, y: A): Date; <W>(x: W, y: W): boolean; }
+>    : ^^^ ^^ ^^^^^ ^^^^^^^^^^^^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 

@@ -1,27 +1,49 @@
-=== tests/cases/compiler/narrowingWithNonNullExpression.ts ===
+//// [tests/cases/compiler/narrowingWithNonNullExpression.ts] ////
+
+=== narrowingWithNonNullExpression.ts ===
 const m = ''.match('');
 >m : RegExpMatchArray
+>  : ^^^^^^^^^^^^^^^^
 >''.match('') : RegExpMatchArray
->''.match : (regexp: string | RegExp) => RegExpMatchArray
+>             : ^^^^^^^^^^^^^^^^
+>''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>         : ^      ^^               ^^^^^                       
 >'' : ""
->match : (regexp: string | RegExp) => RegExpMatchArray
+>   : ^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >'' : ""
+>   : ^^
 
 m! && m[0];
 >m! && m[0] : string
+>           : ^^^^^^
 >m! : RegExpMatchArray
+>   : ^^^^^^^^^^^^^^^^
 >m : RegExpMatchArray
+>  : ^^^^^^^^^^^^^^^^
 >m[0] : string
+>     : ^^^^^^
 >m : RegExpMatchArray
+>  : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 m?.[0]! && m[0];
 >m?.[0]! && m[0] : string
+>                : ^^^^^^
 >m?.[0]! : string
+>        : ^^^^^^
 >m?.[0] : string
+>       : ^^^^^^
 >m : RegExpMatchArray
+>  : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >m[0] : string
+>     : ^^^^^^
 >m : RegExpMatchArray
+>  : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 

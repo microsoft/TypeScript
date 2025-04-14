@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/jsxElementTypeLiteralWithGeneric.tsx] ////
+
+=== jsxElementTypeLiteralWithGeneric.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 6))
+
+declare global {
+>global : Symbol(global, Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 31))
+
+  namespace JSX {
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
+
+    type ElementType<P = any> =
+>ElementType : Symbol(ElementType, Decl(jsxElementTypeLiteralWithGeneric.tsx, 4, 17))
+>P : Symbol(P, Decl(jsxElementTypeLiteralWithGeneric.tsx, 5, 21))
+
+      | {
+        [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]
+>K : Symbol(K, Decl(jsxElementTypeLiteralWithGeneric.tsx, 7, 9))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>P : Symbol(P, Decl(jsxElementTypeLiteralWithGeneric.tsx, 5, 21))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>K : Symbol(K, Decl(jsxElementTypeLiteralWithGeneric.tsx, 7, 9))
+
+        ? K
+>K : Symbol(K, Decl(jsxElementTypeLiteralWithGeneric.tsx, 7, 9))
+
+        : never;
+      }[keyof JSX.IntrinsicElements]
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+
+      | React.ComponentType<P>;
+>React : Symbol(React, Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>P : Symbol(P, Decl(jsxElementTypeLiteralWithGeneric.tsx, 5, 21))
+  }
+}
+
+// should be fine - `ElementType` accepts `div`
+let a = <div />;
+>a : Symbol(a, Decl(jsxElementTypeLiteralWithGeneric.tsx, 16, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+// Should be an error.
+// `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
+let c = <ruhroh />;
+>c : Symbol(c, Decl(jsxElementTypeLiteralWithGeneric.tsx, 20, 3))
+

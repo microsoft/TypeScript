@@ -1,27 +1,40 @@
+//// [tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts] ////
+
 === /a.ts ===
 import * as _ from "./a";
 >_ : typeof _
+>  : ^^^^^^^^
 
 for (const _ of []) { }
 >_ : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 for (const _ in []) { }
 >_ : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 namespace _ns {
 >_ns : typeof _ns
+>    : ^^^^^^^^^^
 
     let _;
 >_ : any
+>  : ^^^
 
     for (const _ of []) { }
 >_ : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     for (const _ in []) { }
 >_ : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 }
 

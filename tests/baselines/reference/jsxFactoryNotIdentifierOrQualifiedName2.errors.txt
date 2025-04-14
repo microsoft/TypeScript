@@ -1,10 +1,10 @@
 error TS5067: Invalid value for 'jsxFactory'. 'id1 id2' is not a valid identifier or qualified-name.
-tests/cases/compiler/test.tsx(12,5): error TS2304: Cannot find name 'React'.
-tests/cases/compiler/test.tsx(13,5): error TS2304: Cannot find name 'React'.
+test.tsx(12,5): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+test.tsx(13,5): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 
 
 !!! error TS5067: Invalid value for 'jsxFactory'. 'id1 id2' is not a valid identifier or qualified-name.
-==== tests/cases/compiler/Element.ts (0 errors) ====
+==== Element.ts (0 errors) ====
     declare namespace JSX {
         interface Element {
             name: string;
@@ -35,7 +35,7 @@ tests/cases/compiler/test.tsx(13,5): error TS2304: Cannot find name 'React'.
         return text[0].toLowerCase() + text.substring(1);
     }
     
-==== tests/cases/compiler/test.tsx (2 errors) ====
+==== test.tsx (2 errors) ====
     import { Element} from './Element';
     
     let c: {
@@ -49,10 +49,10 @@ tests/cases/compiler/test.tsx(13,5): error TS2304: Cannot find name 'React'.
     		return [
     			<meta content="helloworld"></meta>,
     			 ~~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     			<meta content={c.a!.b}></meta>
     			 ~~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     		];
     	}
     }

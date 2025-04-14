@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMap-Comments.ts ===
+//// [tests/cases/compiler/sourceMap-Comments.ts] ////
+
+=== sourceMap-Comments.ts ===
 module sas.tools {
 >sas : Symbol(sas, Decl(sourceMap-Comments.ts, 0, 0))
 >tools : Symbol(tools, Decl(sourceMap-Comments.ts, 0, 11))

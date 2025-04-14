@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumOperations.ts ===
+//// [tests/cases/compiler/enumOperations.ts] ////
+
+=== enumOperations.ts ===
 enum Enum { None = 0 }
 >Enum : Symbol(Enum, Decl(enumOperations.ts, 0, 0))
 >None : Symbol(Enum.None, Decl(enumOperations.ts, 0, 11))

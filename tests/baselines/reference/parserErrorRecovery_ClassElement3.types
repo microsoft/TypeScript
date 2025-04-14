@@ -1,14 +1,20 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts] ////
+
+=== parserErrorRecovery_ClassElement3.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
    ¬
    class C {
 >C : C
+>  : ^
    }
    @
    enum E {
 > : any
+> : ^^^
 >E : E
+>  : ^
 
    ¬

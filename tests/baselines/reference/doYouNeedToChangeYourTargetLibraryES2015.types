@@ -1,684 +1,1178 @@
-=== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts ===
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts] ////
+
+=== doYouNeedToChangeYourTargetLibraryES2015.ts ===
 // es2015
 const noOp = () => {};
 >noOp : () => void
+>     : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 
 const testReflectApply = Reflect.apply(noOp, this, []);
 >testReflectApply : any
+>                 : ^^^
 >Reflect.apply(noOp, this, []) : any
+>                              : ^^^
 >Reflect.apply : any
+>              : ^^^
 >Reflect : any
+>        : ^^^
 >apply : any
+>      : ^^^
 >noOp : () => void
+>     : ^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 const testReflectConstruct = Reflect.construct(noOp, []);
 >testReflectConstruct : any
+>                     : ^^^
 >Reflect.construct(noOp, []) : any
+>                            : ^^^
 >Reflect.construct : any
+>                  : ^^^
 >Reflect : any
+>        : ^^^
 >construct : any
+>          : ^^^
 >noOp : () => void
+>     : ^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 const testReflectDefineProperty = Reflect.defineProperty({}, "", {});
 >testReflectDefineProperty : any
+>                          : ^^^
 >Reflect.defineProperty({}, "", {}) : any
+>                                   : ^^^
 >Reflect.defineProperty : any
+>                       : ^^^
 >Reflect : any
+>        : ^^^
 >defineProperty : any
+>               : ^^^
 >{} : {}
+>   : ^^
 >"" : ""
+>   : ^^
 >{} : {}
+>   : ^^
 
 const testReflectDeleteProperty = Reflect.deleteProperty({}, "");
 >testReflectDeleteProperty : any
+>                          : ^^^
 >Reflect.deleteProperty({}, "") : any
+>                               : ^^^
 >Reflect.deleteProperty : any
+>                       : ^^^
 >Reflect : any
+>        : ^^^
 >deleteProperty : any
+>               : ^^^
 >{} : {}
+>   : ^^
 >"" : ""
+>   : ^^
 
 const testReflectGet = Reflect.get({}, "");
 >testReflectGet : any
+>               : ^^^
 >Reflect.get({}, "") : any
+>                    : ^^^
 >Reflect.get : any
+>            : ^^^
 >Reflect : any
+>        : ^^^
 >get : any
+>    : ^^^
 >{} : {}
+>   : ^^
 >"" : ""
+>   : ^^
 
 const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
 >testReflectGetOwnPropertyDescriptor : any
+>                                    : ^^^
 >Reflect.getOwnPropertyDescriptor({}, "") : any
+>                                         : ^^^
 >Reflect.getOwnPropertyDescriptor : any
+>                                 : ^^^
 >Reflect : any
+>        : ^^^
 >getOwnPropertyDescriptor : any
+>                         : ^^^
 >{} : {}
+>   : ^^
 >"" : ""
+>   : ^^
 
 const testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
 >testReflectGetPrototypeOf : any
+>                          : ^^^
 >Reflect.getPrototypeOf({}) : any
+>                           : ^^^
 >Reflect.getPrototypeOf : any
+>                       : ^^^
 >Reflect : any
+>        : ^^^
 >getPrototypeOf : any
+>               : ^^^
 >{} : {}
+>   : ^^
 
 const testReflectIsExtensible = Reflect.isExtensible({});
 >testReflectIsExtensible : any
+>                        : ^^^
 >Reflect.isExtensible({}) : any
+>                         : ^^^
 >Reflect.isExtensible : any
+>                     : ^^^
 >Reflect : any
+>        : ^^^
 >isExtensible : any
+>             : ^^^
 >{} : {}
+>   : ^^
 
 const testReflectOwnKeys = Reflect.ownKeys({});
 >testReflectOwnKeys : any
+>                   : ^^^
 >Reflect.ownKeys({}) : any
+>                    : ^^^
 >Reflect.ownKeys : any
+>                : ^^^
 >Reflect : any
+>        : ^^^
 >ownKeys : any
+>        : ^^^
 >{} : {}
+>   : ^^
 
 const testReflectPreventExtensions = Reflect.preventExtensions({});
 >testReflectPreventExtensions : any
+>                             : ^^^
 >Reflect.preventExtensions({}) : any
+>                              : ^^^
 >Reflect.preventExtensions : any
+>                          : ^^^
 >Reflect : any
+>        : ^^^
 >preventExtensions : any
+>                  : ^^^
 >{} : {}
+>   : ^^
 
 const testReflectSet = Reflect.set({}, "", 0);
 >testReflectSet : any
+>               : ^^^
 >Reflect.set({}, "", 0) : any
+>                       : ^^^
 >Reflect.set : any
+>            : ^^^
 >Reflect : any
+>        : ^^^
 >set : any
+>    : ^^^
 >{} : {}
+>   : ^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 
 const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {}); 
 >testReflectSetPrototypeOf : any
+>                          : ^^^
 >Reflect.setPrototypeOf({}, {}) : any
+>                               : ^^^
 >Reflect.setPrototypeOf : any
+>                       : ^^^
 >Reflect : any
+>        : ^^^
 >setPrototypeOf : any
+>               : ^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 const testArrayFind = [""].find((val, idx, obj) => {
 >testArrayFind : any
+>              : ^^^
 >[""].find((val, idx, obj) => {    return true;}) : any
+>                                                 : ^^^
 >[""].find : any
+>          : ^^^
 >[""] : string[]
+>     : ^^^^^^^^
 >"" : ""
+>   : ^^
 >find : any
+>     : ^^^
 >(val, idx, obj) => {    return true;} : (val: any, idx: any, obj: any) => boolean
+>                                      : ^   ^^^^^^^   ^^^^^^^   ^^^^^^^^^^^^^^^^^
 >val : any
+>    : ^^^
 >idx : any
+>    : ^^^
 >obj : any
+>    : ^^^
 
     return true;
 >true : true
+>     : ^^^^
 
 });
 const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
 >testArrayFindIndex : any
+>                   : ^^^
 >[""].findIndex((val, idx, obj) => {    return true;}) : any
+>                                                      : ^^^
 >[""].findIndex : any
+>               : ^^^
 >[""] : string[]
+>     : ^^^^^^^^
 >"" : ""
+>   : ^^
 >findIndex : any
+>          : ^^^
 >(val, idx, obj) => {    return true;} : (val: any, idx: any, obj: any) => boolean
+>                                      : ^   ^^^^^^^   ^^^^^^^   ^^^^^^^^^^^^^^^^^
 >val : any
+>    : ^^^
 >idx : any
+>    : ^^^
 >obj : any
+>    : ^^^
 
     return true;
 >true : true
+>     : ^^^^
 
 });
 const testArrayFill = [""].fill("fill");
 >testArrayFill : any
+>              : ^^^
 >[""].fill("fill") : any
+>                  : ^^^
 >[""].fill : any
+>          : ^^^
 >[""] : string[]
+>     : ^^^^^^^^
 >"" : ""
+>   : ^^
 >fill : any
+>     : ^^^
 >"fill" : "fill"
+>       : ^^^^^^
 
 const testArrayCopyWithin = [""].copyWithin(0, 0);
 >testArrayCopyWithin : any
+>                    : ^^^
 >[""].copyWithin(0, 0) : any
+>                      : ^^^
 >[""].copyWithin : any
+>                : ^^^
 >[""] : string[]
+>     : ^^^^^^^^
 >"" : ""
+>   : ^^
 >copyWithin : any
+>           : ^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 const testArrayEntries = [""].entries();
 >testArrayEntries : any
+>                 : ^^^
 >[""].entries() : any
+>               : ^^^
 >[""].entries : any
+>             : ^^^
 >[""] : string[]
+>     : ^^^^^^^^
 >"" : ""
+>   : ^^
 >entries : any
+>        : ^^^
 
 const testArrayKeys = [""].keys();
 >testArrayKeys : any
+>              : ^^^
 >[""].keys() : any
+>            : ^^^
 >[""].keys : any
+>          : ^^^
 >[""] : string[]
+>     : ^^^^^^^^
 >"" : ""
+>   : ^^
 >keys : any
+>     : ^^^
 
 const testArrayValues = [""].values();
 >testArrayValues : any
+>                : ^^^
 >[""].values() : any
+>              : ^^^
 >[""].values : any
+>            : ^^^
 >[""] : string[]
+>     : ^^^^^^^^
 >"" : ""
+>   : ^^
 >values : any
+>       : ^^^
 
 const testArrayConstructorFrom = Array.from([]);
 >testArrayConstructorFrom : any
+>                         : ^^^
 >Array.from([]) : any
+>               : ^^^
 >Array.from : any
+>           : ^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >from : any
+>     : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 const testArrayConstructorOf = Array.of([]);
 >testArrayConstructorOf : any
+>                       : ^^^
 >Array.of([]) : any
+>             : ^^^
 >Array.of : any
+>         : ^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >of : any
+>   : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 const testObjectConstructorAssign = Object.assign({}, {});
 >testObjectConstructorAssign : any
+>                            : ^^^
 >Object.assign({}, {}) : any
+>                      : ^^^
 >Object.assign : any
+>              : ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >assign : any
+>       : ^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 const testObjectConstructorGetOwnPropertySymbols = Object.getOwnPropertySymbols({});
 >testObjectConstructorGetOwnPropertySymbols : any
+>                                           : ^^^
 >Object.getOwnPropertySymbols({}) : any
+>                                 : ^^^
 >Object.getOwnPropertySymbols : any
+>                             : ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >getOwnPropertySymbols : any
+>                      : ^^^
 >{} : {}
+>   : ^^
 
 const testObjectConstructorKeys = Object.keys({});
 >testObjectConstructorKeys : string[]
+>                          : ^^^^^^^^
 >Object.keys({}) : string[]
+>                : ^^^^^^^^
 >Object.keys : (o: object) => string[]
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
+>     : ^ ^^      ^^^^^        
 >{} : {}
+>   : ^^
 
 const testObjectConstructorIs = Object.is({}, {});
 >testObjectConstructorIs : any
+>                        : ^^^
 >Object.is({}, {}) : any
+>                  : ^^^
 >Object.is : any
+>          : ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >is : any
+>   : ^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 const testObjectConstructorSetPrototypeOf = Object.setPrototypeOf({}, {});
 >testObjectConstructorSetPrototypeOf : any
+>                                    : ^^^
 >Object.setPrototypeOf({}, {}) : any
+>                              : ^^^
 >Object.setPrototypeOf : any
+>                      : ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >setPrototypeOf : any
+>               : ^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 const testNumberConstructorIsFinite = Number.isFinite(0);
 >testNumberConstructorIsFinite : any
+>                              : ^^^
 >Number.isFinite(0) : any
+>                   : ^^^
 >Number.isFinite : any
+>                : ^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isFinite : any
+>         : ^^^
 >0 : 0
+>  : ^
 
 const testNumberConstructorIsInteger = Number.isInteger(0);
 >testNumberConstructorIsInteger : any
+>                               : ^^^
 >Number.isInteger(0) : any
+>                    : ^^^
 >Number.isInteger : any
+>                 : ^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isInteger : any
+>          : ^^^
 >0 : 0
+>  : ^
 
 const testNumberConstructorIsNan = Number.isNaN(0);
 >testNumberConstructorIsNan : any
+>                           : ^^^
 >Number.isNaN(0) : any
+>                : ^^^
 >Number.isNaN : any
+>             : ^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isNaN : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testNumberConstructorIsSafeInteger = Number.isSafeInteger(0);
 >testNumberConstructorIsSafeInteger : any
+>                                   : ^^^
 >Number.isSafeInteger(0) : any
+>                        : ^^^
 >Number.isSafeInteger : any
+>                     : ^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isSafeInteger : any
+>              : ^^^
 >0 : 0
+>  : ^
 
 const testNumberConstructorParseFloat = Number.parseFloat("0");
 >testNumberConstructorParseFloat : any
+>                                : ^^^
 >Number.parseFloat("0") : any
+>                       : ^^^
 >Number.parseFloat : any
+>                  : ^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >parseFloat : any
+>           : ^^^
 >"0" : "0"
+>    : ^^^
 
 const testNumberConstructorParseInt = Number.parseInt("0");
 >testNumberConstructorParseInt : any
+>                              : ^^^
 >Number.parseInt("0") : any
+>                     : ^^^
 >Number.parseInt : any
+>                : ^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >parseInt : any
+>         : ^^^
 >"0" : "0"
+>    : ^^^
 
 const testMathClz32 = Math.clz32(0);
 >testMathClz32 : any
+>              : ^^^
 >Math.clz32(0) : any
+>              : ^^^
 >Math.clz32 : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >clz32 : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testMathImul = Math.imul(0,0);
 >testMathImul : any
+>             : ^^^
 >Math.imul(0,0) : any
+>               : ^^^
 >Math.imul : any
+>          : ^^^
 >Math : Math
+>     : ^^^^
 >imul : any
+>     : ^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 const testMathSign = Math.sign(0);
 >testMathSign : any
+>             : ^^^
 >Math.sign(0) : any
+>             : ^^^
 >Math.sign : any
+>          : ^^^
 >Math : Math
+>     : ^^^^
 >sign : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 const testMathLog10 = Math.log10(0);
 >testMathLog10 : any
+>              : ^^^
 >Math.log10(0) : any
+>              : ^^^
 >Math.log10 : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >log10 : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testMathLog2 = Math.log2(0);
 >testMathLog2 : any
+>             : ^^^
 >Math.log2(0) : any
+>             : ^^^
 >Math.log2 : any
+>          : ^^^
 >Math : Math
+>     : ^^^^
 >log2 : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 const testMathLog1p = Math.log1p(0);
 >testMathLog1p : any
+>              : ^^^
 >Math.log1p(0) : any
+>              : ^^^
 >Math.log1p : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >log1p : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testMathExpm1 = Math.expm1(0);
 >testMathExpm1 : any
+>              : ^^^
 >Math.expm1(0) : any
+>              : ^^^
 >Math.expm1 : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >expm1 : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testMathCosh = Math.cosh(0);
 >testMathCosh : any
+>             : ^^^
 >Math.cosh(0) : any
+>             : ^^^
 >Math.cosh : any
+>          : ^^^
 >Math : Math
+>     : ^^^^
 >cosh : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 const testMathSinh = Math.sinh(0);
 >testMathSinh : any
+>             : ^^^
 >Math.sinh(0) : any
+>             : ^^^
 >Math.sinh : any
+>          : ^^^
 >Math : Math
+>     : ^^^^
 >sinh : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 const testMathTanh = Math.tanh(0);
 >testMathTanh : any
+>             : ^^^
 >Math.tanh(0) : any
+>             : ^^^
 >Math.tanh : any
+>          : ^^^
 >Math : Math
+>     : ^^^^
 >tanh : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 const testMathAcosh = Math.acosh(0);
 >testMathAcosh : any
+>              : ^^^
 >Math.acosh(0) : any
+>              : ^^^
 >Math.acosh : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >acosh : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testMathAsinh = Math.asinh(0);
 >testMathAsinh : any
+>              : ^^^
 >Math.asinh(0) : any
+>              : ^^^
 >Math.asinh : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >asinh : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testMathAtanh = Math.atanh(0);
 >testMathAtanh : any
+>              : ^^^
 >Math.atanh(0) : any
+>              : ^^^
 >Math.atanh : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >atanh : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testMathHypot = Math.hypot(0,0);
 >testMathHypot : any
+>              : ^^^
 >Math.hypot(0,0) : any
+>                : ^^^
 >Math.hypot : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >hypot : any
+>      : ^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 const testMathTrunc = Math.trunc(0);
 >testMathTrunc : any
+>              : ^^^
 >Math.trunc(0) : any
+>              : ^^^
 >Math.trunc : any
+>           : ^^^
 >Math : Math
+>     : ^^^^
 >trunc : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 const testMathFround = Math.fround(0);
 >testMathFround : any
+>               : ^^^
 >Math.fround(0) : any
+>               : ^^^
 >Math.fround : any
+>            : ^^^
 >Math : Math
+>     : ^^^^
 >fround : any
+>       : ^^^
 >0 : 0
+>  : ^
 
 const testMathCbrt = Math.cbrt(0);
 >testMathCbrt : any
+>             : ^^^
 >Math.cbrt(0) : any
+>             : ^^^
 >Math.cbrt : any
+>          : ^^^
 >Math : Math
+>     : ^^^^
 >cbrt : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 const testMap: Map<any, any> = null as any;
 >testMap : Map<any, any>
+>        : ^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 const testSet: Set<any> = null as any;
 >testSet : Set<any>
+>        : ^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 const testPromiseAll = Promise.all([]);
 >testPromiseAll : any
+>               : ^^^
 >Promise.all([]) : any
+>                : ^^^
 >Promise.all : any
+>            : ^^^
 >Promise : any
+>        : ^^^
 >all : any
+>    : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 const testPromiseRace = Promise.race([]);
 >testPromiseRace : any
+>                : ^^^
 >Promise.race([]) : any
+>                 : ^^^
 >Promise.race : any
+>             : ^^^
 >Promise : any
+>        : ^^^
 >race : any
+>     : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 const testPromiseResolve = Promise.resolve();
 >testPromiseResolve : any
+>                   : ^^^
 >Promise.resolve() : any
+>                  : ^^^
 >Promise.resolve : any
+>                : ^^^
 >Promise : any
+>        : ^^^
 >resolve : any
+>        : ^^^
 
 const testPromiseReject = Promise.reject();
 >testPromiseReject : any
+>                  : ^^^
 >Promise.reject() : any
+>                 : ^^^
 >Promise.reject : any
+>               : ^^^
 >Promise : any
+>        : ^^^
 >reject : any
+>       : ^^^
 
 const testSymbolFor = Symbol.for('a');
 >testSymbolFor : any
+>              : ^^^
 >Symbol.for('a') : any
+>                : ^^^
 >Symbol.for : any
+>           : ^^^
 >Symbol : any
+>       : ^^^
 >for : any
+>    : ^^^
 >'a' : "a"
+>    : ^^^
 
 const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
 >testSymbolKeyFor : any
+>                 : ^^^
 >Symbol.keyFor(testSymbolFor) : any
+>                             : ^^^
 >Symbol.keyFor : any
+>              : ^^^
 >Symbol : any
+>       : ^^^
 >keyFor : any
+>       : ^^^
 >testSymbolFor : any
+>              : ^^^
 
 const testWeakMap: WeakMap<any, any> = null as any;
 >testWeakMap : WeakMap<any, any>
+>            : ^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 const testWeakSet: WeakMap<any, any> = null as any;
 >testWeakSet : WeakMap<any, any>
+>            : ^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 const testIterator: Iterator<any, any, any> = null as any;
 >testIterator : Iterator<any, any, any>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
 >testAsyncIterator : AsyncIterator<any, any, any>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 const testStringCodePointAt = "".codePointAt(0);
 >testStringCodePointAt : any
+>                      : ^^^
 >"".codePointAt(0) : any
+>                  : ^^^
 >"".codePointAt : any
+>               : ^^^
 >"" : ""
+>   : ^^
 >codePointAt : any
+>            : ^^^
 >0 : 0
+>  : ^
 
 const testStringIncludes = "".includes("");
 >testStringIncludes : any
+>                   : ^^^
 >"".includes("") : any
+>                : ^^^
 >"".includes : any
+>            : ^^^
 >"" : ""
+>   : ^^
 >includes : any
+>         : ^^^
 >"" : ""
+>   : ^^
 
 const testStringEndsWith = "".endsWith("");
 >testStringEndsWith : any
+>                   : ^^^
 >"".endsWith("") : any
+>                : ^^^
 >"".endsWith : any
+>            : ^^^
 >"" : ""
+>   : ^^
 >endsWith : any
+>         : ^^^
 >"" : ""
+>   : ^^
 
 const testStringNormalize = "".normalize();
 >testStringNormalize : any
+>                    : ^^^
 >"".normalize() : any
+>               : ^^^
 >"".normalize : any
+>             : ^^^
 >"" : ""
+>   : ^^
 >normalize : any
+>          : ^^^
 
 const testStringRepeat = "".repeat(0);
 >testStringRepeat : any
+>                 : ^^^
 >"".repeat(0) : any
+>             : ^^^
 >"".repeat : any
+>          : ^^^
 >"" : ""
+>   : ^^
 >repeat : any
+>       : ^^^
 >0 : 0
+>  : ^
 
 const testStringStartsWith = "".startsWith("");
 >testStringStartsWith : any
+>                     : ^^^
 >"".startsWith("") : any
+>                  : ^^^
 >"".startsWith : any
+>              : ^^^
 >"" : ""
+>   : ^^
 >startsWith : any
+>           : ^^^
 >"" : ""
+>   : ^^
 
 const testStringAnchor = "".anchor("");
 >testStringAnchor : any
+>                 : ^^^
 >"".anchor("") : any
+>              : ^^^
 >"".anchor : any
+>          : ^^^
 >"" : ""
+>   : ^^
 >anchor : any
+>       : ^^^
 >"" : ""
+>   : ^^
 
 const testStringBig = "".big();
 >testStringBig : any
+>              : ^^^
 >"".big() : any
+>         : ^^^
 >"".big : any
+>       : ^^^
 >"" : ""
+>   : ^^
 >big : any
+>    : ^^^
 
 const testStringBlink = "".blink();
 >testStringBlink : any
+>                : ^^^
 >"".blink() : any
+>           : ^^^
 >"".blink : any
+>         : ^^^
 >"" : ""
+>   : ^^
 >blink : any
+>      : ^^^
 
 const testStringBold = "".bold();
 >testStringBold : any
+>               : ^^^
 >"".bold() : any
+>          : ^^^
 >"".bold : any
+>        : ^^^
 >"" : ""
+>   : ^^
 >bold : any
+>     : ^^^
 
 const testStringFixed = "".fixed();
 >testStringFixed : any
+>                : ^^^
 >"".fixed() : any
+>           : ^^^
 >"".fixed : any
+>         : ^^^
 >"" : ""
+>   : ^^
 >fixed : any
+>      : ^^^
 
 const testStringFontColor = "".fontcolor("blue");
 >testStringFontColor : any
+>                    : ^^^
 >"".fontcolor("blue") : any
+>                     : ^^^
 >"".fontcolor : any
+>             : ^^^
 >"" : ""
+>   : ^^
 >fontcolor : any
+>          : ^^^
 >"blue" : "blue"
+>       : ^^^^^^
 
 const testStringFontSize = "".fontsize(0);
 >testStringFontSize : any
+>                   : ^^^
 >"".fontsize(0) : any
+>               : ^^^
 >"".fontsize : any
+>            : ^^^
 >"" : ""
+>   : ^^
 >fontsize : any
+>         : ^^^
 >0 : 0
+>  : ^
 
 const testStringItalics = "".italics();
 >testStringItalics : any
+>                  : ^^^
 >"".italics() : any
+>             : ^^^
 >"".italics : any
+>           : ^^^
 >"" : ""
+>   : ^^
 >italics : any
+>        : ^^^
 
 const testStringLink = "".link("");
 >testStringLink : any
+>               : ^^^
 >"".link("") : any
+>            : ^^^
 >"".link : any
+>        : ^^^
 >"" : ""
+>   : ^^
 >link : any
+>     : ^^^
 >"" : ""
+>   : ^^
 
 const testStringSmall = "".small();
 >testStringSmall : any
+>                : ^^^
 >"".small() : any
+>           : ^^^
 >"".small : any
+>         : ^^^
 >"" : ""
+>   : ^^
 >small : any
+>      : ^^^
 
 const testStringStrike = "".strike();
 >testStringStrike : any
+>                 : ^^^
 >"".strike() : any
+>            : ^^^
 >"".strike : any
+>          : ^^^
 >"" : ""
+>   : ^^
 >strike : any
+>       : ^^^
 
 const testStringSub = "".sub();
 >testStringSub : any
+>              : ^^^
 >"".sub() : any
+>         : ^^^
 >"".sub : any
+>       : ^^^
 >"" : ""
+>   : ^^
 >sub : any
+>    : ^^^
 
 const testStringSup = "".sup();
 >testStringSup : any
+>              : ^^^
 >"".sup() : any
+>         : ^^^
 >"".sup : any
+>       : ^^^
 >"" : ""
+>   : ^^
 >sup : any
+>    : ^^^
 
 const testStringConstructorFromCodePoint = String.fromCodePoint();
 >testStringConstructorFromCodePoint : any
+>                                   : ^^^
 >String.fromCodePoint() : any
+>                       : ^^^
 >String.fromCodePoint : any
+>                     : ^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >fromCodePoint : any
+>              : ^^^
 
 const testStringConstructorRaw = String.raw``;
 >testStringConstructorRaw : any
+>                         : ^^^
 >String.raw`` : any
+>             : ^^^
 >String.raw : any
+>           : ^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >raw : any
+>    : ^^^
 >`` : ""
+>   : ^^
 
 const testRegExpFlags = /abc/g.flags;
 >testRegExpFlags : any
+>                : ^^^
 >/abc/g.flags : any
+>             : ^^^
 >/abc/g : RegExp
+>       : ^^^^^^
 >flags : any
+>      : ^^^
 
 const testRegExpSticky = /abc/g.sticky;
 >testRegExpSticky : any
+>                 : ^^^
 >/abc/g.sticky : any
+>              : ^^^
 >/abc/g : RegExp
+>       : ^^^^^^
 >sticky : any
+>       : ^^^
 
 const testRegExpUnicode = /abc/g.unicode;
 >testRegExpUnicode : any
+>                  : ^^^
 >/abc/g.unicode : any
+>               : ^^^
 >/abc/g : RegExp
+>       : ^^^^^^
 >unicode : any
+>        : ^^^
 

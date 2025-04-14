@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateIdentifierComputedName.ts ===
+//// [tests/cases/compiler/duplicateIdentifierComputedName.ts] ////
+
+=== duplicateIdentifierComputedName.ts ===
 class C {
 >C : Symbol(C, Decl(duplicateIdentifierComputedName.ts, 0, 0))
 

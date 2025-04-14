@@ -1,6 +1,9 @@
-=== tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js ===
+//// [tests/cases/conformance/jsdoc/jsdocAccessibilityTags.ts] ////
+
+=== jsdocAccessibilityTag.js ===
 class A {
 >A : A
+>  : ^
 
     /**
      * Ap docs
@@ -9,7 +12,9 @@ class A {
      */
     priv = 4;
 >priv : number
+>     : ^^^^^^
 >4 : 4
+>  : ^
 
     /**
      * Aq docs
@@ -18,7 +23,9 @@ class A {
      */
     prot = 5;
 >prot : number
+>     : ^^^^^^
 >5 : 5
+>  : ^
 
     /**
      * Ar docs
@@ -27,22 +34,31 @@ class A {
      */
     pub = 6;
 >pub : number
+>    : ^^^^^^
 >6 : 6
+>  : ^
 
     /** @public */
     get ack() { return this.priv }
 >ack : number
+>    : ^^^^^^
 >this.priv : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >priv : number
+>     : ^^^^^^
 
     /** @private */
     set ack(value) { }
 >ack : number
+>    : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 class C {
 >C : C
+>  : ^
 
     constructor() {
         /**
@@ -52,10 +68,15 @@ class C {
          */
         this.priv2 = 1;
 >this.priv2 = 1 : 1
+>               : ^
 >this.priv2 : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >priv2 : any
+>      : ^^^
 >1 : 1
+>  : ^
 
         /**
          * Cq docs
@@ -64,10 +85,15 @@ class C {
          */
         this.prot2 = 2;
 >this.prot2 = 2 : 2
+>               : ^
 >this.prot2 : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >prot2 : any
+>      : ^^^
 >2 : 2
+>  : ^
 
         /**
          * Cr docs
@@ -76,120 +102,213 @@ class C {
          */
         this.pub2 = 3;
 >this.pub2 = 3 : 3
+>              : ^
 >this.pub2 : any
+>          : ^^^
 >this : this
+>     : ^^^^
 >pub2 : any
+>     : ^^^
 >3 : 3
+>  : ^
     }
     h() { return this.priv2 }
 >h : () => number
+>  : ^^^^^^^^^^^^
 >this.priv2 : number
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >priv2 : number
+>      : ^^^^^^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.priv + this.prot + this.pub
 >this.priv + this.prot + this.pub : number
+>                                 : ^^^^^^
 >this.priv + this.prot : number
+>                      : ^^^^^^
 >this.priv : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >priv : number
+>     : ^^^^^^
 >this.prot : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prot : number
+>     : ^^^^^^
 >this.pub : number
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >pub : number
+>    : ^^^^^^
     }
 }
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     n() {
 >n : () => void
+>  : ^^^^^^^^^^
 
         this.priv2 + this.prot2 + this.pub2
 >this.priv2 + this.prot2 + this.pub2 : number
+>                                    : ^^^^^^
 >this.priv2 + this.prot2 : number
+>                        : ^^^^^^
 >this.priv2 : number
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >priv2 : number
+>      : ^^^^^^
 >this.prot2 : number
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >prot2 : number
+>      : ^^^^^^
 >this.pub2 : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >pub2 : number
+>     : ^^^^^^
     }
 }
 new A().priv + new A().prot + new A().pub
 >new A().priv + new A().prot + new A().pub : number
+>                                          : ^^^^^^
 >new A().priv + new A().prot : number
+>                            : ^^^^^^
 >new A().priv : number
+>             : ^^^^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >priv : number
+>     : ^^^^^^
 >new A().prot : number
+>             : ^^^^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >prot : number
+>     : ^^^^^^
 >new A().pub : number
+>            : ^^^^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >pub : number
+>    : ^^^^^^
 
 new B().priv + new B().prot + new B().pub
 >new B().priv + new B().prot + new B().pub : number
+>                                          : ^^^^^^
 >new B().priv + new B().prot : number
+>                            : ^^^^^^
 >new B().priv : number
+>             : ^^^^^^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 >priv : number
+>     : ^^^^^^
 >new B().prot : number
+>             : ^^^^^^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 >prot : number
+>     : ^^^^^^
 >new B().pub : number
+>            : ^^^^^^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 >pub : number
+>    : ^^^^^^
 
 new C().priv2 + new C().prot2 + new C().pub2
 >new C().priv2 + new C().prot2 + new C().pub2 : number
+>                                             : ^^^^^^
 >new C().priv2 + new C().prot2 : number
+>                              : ^^^^^^
 >new C().priv2 : number
+>              : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >priv2 : number
+>      : ^^^^^^
 >new C().prot2 : number
+>              : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >prot2 : number
+>      : ^^^^^^
 >new C().pub2 : number
+>             : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >pub2 : number
+>     : ^^^^^^
 
 new D().priv2 + new D().prot2 + new D().pub2
 >new D().priv2 + new D().prot2 + new D().pub2 : number
+>                                             : ^^^^^^
 >new D().priv2 + new D().prot2 : number
+>                              : ^^^^^^
 >new D().priv2 : number
+>              : ^^^^^^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 >priv2 : number
+>      : ^^^^^^
 >new D().prot2 : number
+>              : ^^^^^^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 >prot2 : number
+>      : ^^^^^^
 >new D().pub2 : number
+>             : ^^^^^^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 >pub2 : number
+>     : ^^^^^^
 

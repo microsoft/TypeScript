@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayBufferIsViewNarrowsType.ts ===
+//// [tests/cases/compiler/arrayBufferIsViewNarrowsType.ts] ////
+
+=== arrayBufferIsViewNarrowsType.ts ===
 var obj: Object;
 >obj : Symbol(obj, Decl(arrayBufferIsViewNarrowsType.ts, 0, 3))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

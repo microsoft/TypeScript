@@ -1,3 +1,33 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTags1.ts ===
+// /**
+//  * Doc
+//  * @author Me <me@domain.tld>
+//  * @augments {C<T>} Augments it
+//  * @template T A template
+//  * @type {number | string} A type
+//  * @typedef {number | string} NumOrStr
+//  * @property {number} x The prop
+//  * @param {number} x The param
+//  * @returns The result
+//  * @see x (the parameter)
+//  */
+// function foo(x) {}
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function foo(x: any): void
+// | Doc
+// | @author Me <me@domain.tld>
+// | @augments C<T> Augments it
+// | @template T A template
+// | @type {number | string} A type
+// | @typedef NumOrStr
+// | @property {number} x The prop
+// | @param x The param
+// | @returns The result
+// | @see x (the parameter)
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +35,7 @@
       "position": 298,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

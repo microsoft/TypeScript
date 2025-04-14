@@ -1,77 +1,126 @@
-=== tests/cases/conformance/salsa/node.d.ts ===
+//// [tests/cases/conformance/salsa/constructorFunctions2.ts] ////
+
+=== node.d.ts ===
 declare function require(id: string): any;
 >require : (id: string) => any
+>        : ^  ^^      ^^^^^   
 >id : string
+>   : ^^^^^^
 
 declare var module: any, exports: any;
 >module : any
 >exports : any
 
-=== tests/cases/conformance/salsa/index.js ===
+=== index.js ===
 const A = require("./other");
 >A : typeof A
+>  : ^^^^^^^^
 >require("./other") : typeof A
+>                   : ^^^^^^^^
 >require : (id: string) => any
+>        : ^  ^^      ^^^^^   
 >"./other" : "./other"
+>          : ^^^^^^^^^
 
 const a = new A().id;
 >a : number
+>  : ^^^^^^
 >new A().id : number
+>           : ^^^^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >id : number
+>   : ^^^^^^
 
 const B = function() { this.id = 1; }
 >B : typeof B
+>  : ^^^^^^^^
 >function() { this.id = 1; } : typeof B
+>                            : ^^^^^^^^
 >this.id = 1 : 1
+>            : ^
 >this.id : any
 >this : this
+>     : ^^^^
 >id : any
+>   : ^^^
 >1 : 1
+>  : ^
 
 B.prototype.m = function() { this.x = 2; }
 >B.prototype.m = function() { this.x = 2; } : () => void
+>                                           : ^^^^^^^^^^
 >B.prototype.m : any
 >B.prototype : any
+>            : ^^^
 >B : typeof B
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >m : any
+>  : ^^^
 >function() { this.x = 2; } : () => void
+>                           : ^^^^^^^^^^
 >this.x = 2 : 2
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 const b = new B();
 >b : B
+>  : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 b.id;
 >b.id : number
+>     : ^^^^^^
 >b : B
+>  : ^
 >id : number
+>   : ^^^^^^
 
 b.x;
 >b.x : number
+>    : ^^^^^^
 >b : B
+>  : ^
 >x : number
+>  : ^^^^^^
 
-=== tests/cases/conformance/salsa/other.js ===
+=== other.js ===
 function A() { this.id = 1; }
 >A : typeof A
+>  : ^^^^^^^^
 >this.id = 1 : 1
+>            : ^
 >this.id : any
 >this : this
+>     : ^^^^
 >id : any
+>   : ^^^
 >1 : 1
+>  : ^
 
 module.exports = A;
 >module.exports = A : typeof A
+>                   : ^^^^^^^^
 >module.exports : typeof A
+>               : ^^^^^^^^
 >module : { exports: typeof A; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof A
+>        : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 

@@ -1,44 +1,65 @@
-=== tests/cases/compiler/other.ts ===
+//// [tests/cases/compiler/declarationEmitWithDefaultAsComputedName2.ts] ////
+
+=== other.ts ===
 type Experiment<Name> = {
 >Experiment : Experiment<Name>
+>           : ^^^^^^^^^^^^^^^^
 
     name: Name;
 >name : Name
+>     : ^^^^
 
 };
 declare const createExperiment: <Name extends string>(
 >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
+>                 : ^    ^^^^^^^^^      ^^       ^^                ^^^^^                
 
     options: Experiment<Name>
 >options : Experiment<Name>
+>        : ^^^^^^^^^^^^^^^^
 
 ) => Experiment<Name>;
 export default createExperiment({
 >createExperiment({    name: "foo"}) : Experiment<"foo">
+>                                    : ^^^^^^^^^^^^^^^^^
 >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
+>                 : ^    ^^^^^^^^^      ^^       ^^                ^^^^^                
 >{    name: "foo"} : { name: "foo"; }
+>                  : ^^^^^^^^^^^^^^^^
 
     name: "foo"
 >name : "foo"
+>     : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 });
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import * as other2 from "./other";
 >other2 : typeof other2
+>       : ^^^^^^^^^^^^^
 
 export const obj = {
 >obj : { foo: number; }
+>    : ^^^^^^^^^^^^^^^^
 >{    [other2.default.name]: 1} : { foo: number; }
+>                               : ^^^^^^^^^^^^^^^^
 
     [other2.default.name]: 1
 >[other2.default.name] : number
+>                      : ^^^^^^
 >other2.default.name : "foo"
+>                    : ^^^^^
 >other2.default : { name: "foo"; }
+>               : ^^^^^^^^^^^^^^^^
 >other2 : typeof other2
+>       : ^^^^^^^^^^^^^
 >default : { name: "foo"; }
+>        : ^^^^^^^^^^^^^^^^
 >name : "foo"
+>     : ^^^^^
 >1 : 1
+>  : ^
 
 };

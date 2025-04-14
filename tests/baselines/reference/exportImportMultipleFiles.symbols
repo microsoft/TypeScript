@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportImportMultipleFiles_userCode.ts ===
+//// [tests/cases/compiler/exportImportMultipleFiles.ts] ////
+
+=== exportImportMultipleFiles_userCode.ts ===
 import lib = require('./exportImportMultipleFiles_library');
 >lib : Symbol(lib, Decl(exportImportMultipleFiles_userCode.ts, 0, 0))
 
@@ -9,7 +11,7 @@ lib.math.add(3, 4); // Shouldnt be error
 >math : Symbol(lib.math, Decl(exportImportMultipleFiles_library.ts, 0, 0))
 >add : Symbol(lib.math.add, Decl(exportImportMultipleFiles_math.ts, 0, 0))
 
-=== tests/cases/compiler/exportImportMultipleFiles_math.ts ===
+=== exportImportMultipleFiles_math.ts ===
 export function add(a, b) { return a + b; }
 >add : Symbol(add, Decl(exportImportMultipleFiles_math.ts, 0, 0))
 >a : Symbol(a, Decl(exportImportMultipleFiles_math.ts, 0, 20))
@@ -17,7 +19,7 @@ export function add(a, b) { return a + b; }
 >a : Symbol(a, Decl(exportImportMultipleFiles_math.ts, 0, 20))
 >b : Symbol(b, Decl(exportImportMultipleFiles_math.ts, 0, 22))
 
-=== tests/cases/compiler/exportImportMultipleFiles_library.ts ===
+=== exportImportMultipleFiles_library.ts ===
 export import math = require("exportImportMultipleFiles_math");
 >math : Symbol(math, Decl(exportImportMultipleFiles_library.ts, 0, 0))
 

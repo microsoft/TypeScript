@@ -1,33 +1,45 @@
-=== tests/cases/compiler/sourceMap-Comments.ts ===
+//// [tests/cases/compiler/sourceMap-Comments.ts] ////
+
+=== sourceMap-Comments.ts ===
 module sas.tools {
 >sas : typeof sas
+>    : ^^^^^^^^^^
 >tools : typeof tools
+>      : ^^^^^^^^^^^^
 
     export class Test {
 >Test : Test
+>     : ^^^^
 
         public doX(): void {
 >doX : () => void
+>    : ^^^^^^    
 
             let f: number = 2;
 >f : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
             switch (f) {
 >f : number
+>  : ^^^^^^
 
                 case 1:
 >1 : 1
+>  : ^
 
                     break;
                 case 2:
 >2 : 2
+>  : ^
 
                     //line comment 1
                     //line comment 2
                     break;
                 case 3:
 >3 : 3
+>  : ^
 
                     //a comment
                     break;

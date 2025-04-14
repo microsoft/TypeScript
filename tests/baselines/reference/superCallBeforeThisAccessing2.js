@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing2.ts] ////
+
 //// [superCallBeforeThisAccessing2.ts]
 class Base {
     constructor(c) { }
@@ -34,7 +36,7 @@ var Base = /** @class */ (function () {
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.call(this, function () { _this._t; }) || this;
+        var _this = _super.call(this, function () { _this._t; }) || this; // no error. only check when this is directly accessing in constructor
         return _this;
     }
     return D;

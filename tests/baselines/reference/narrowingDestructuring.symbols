@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingDestructuring.ts ===
+//// [tests/cases/compiler/narrowingDestructuring.ts] ////
+
+=== narrowingDestructuring.ts ===
 type X = { kind: "a", a: string } | { kind: "b", b: string }
 >X : Symbol(X, Decl(narrowingDestructuring.ts, 0, 0))
 >kind : Symbol(kind, Decl(narrowingDestructuring.ts, 0, 10))
@@ -136,7 +138,7 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
 >tail : Symbol(tail, Decl(narrowingDestructuring.ts, 34, 16))
 >x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
 
-    if (x[0] === 'number') {
+    if (typeof x[0] === 'number') {
 >x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
 >0 : Symbol(0)
 
@@ -146,3 +148,4 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
 >x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
     }
 }
+

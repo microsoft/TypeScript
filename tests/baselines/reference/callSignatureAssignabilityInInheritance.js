@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts] ////
+
 //// [callSignatureAssignabilityInInheritance.ts]
 module CallSignature {
     interface Base { // T

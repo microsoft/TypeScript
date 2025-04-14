@@ -1,21 +1,34 @@
-=== tests/cases/compiler/first.ts ===
+//// [tests/cases/compiler/instantiateCrossFileMerge.ts] ////
+
+=== first.ts ===
 declare class P<R> {
 >P : P<R>
+>  : ^^^^
 
     constructor(callback: (resolve: (value: R) => void) => void);
 >callback : (resolve: (value: R) => void) => void
+>         : ^       ^^                  ^^^^^    
 >resolve : (value: R) => void
+>        : ^     ^^ ^^^^^    
 >value : R
+>      : ^
 }
 
-=== tests/cases/compiler/second.ts ===
+=== second.ts ===
 interface P<R> { }
 new P<string>(r => { r('foo') });
 >new P<string>(r => { r('foo') }) : P<string>
+>                                 : ^^^^^^^^^
 >P : typeof P
+>  : ^^^^^^^^
 >r => { r('foo') } : (r: (value: string) => void) => void
+>                  : ^ ^^^     ^^^^^^^^^^^^^    ^^^^^^^^^
 >r : (value: string) => void
+>  : ^     ^^^^^^^^^^^^^    
 >r('foo') : void
+>         : ^^^^
 >r : (value: string) => void
+>  : ^     ^^^^^^^^^^^^^    
 >'foo' : "foo"
+>      : ^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restParameterWithBindingPattern2.ts] ////
+
 //// [restParameterWithBindingPattern2.ts]
 function a(...[a, b]) { }
 

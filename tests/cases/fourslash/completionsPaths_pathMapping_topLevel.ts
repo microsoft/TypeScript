@@ -15,6 +15,6 @@
 
 verify.completions({
     marker: "",
-    exact: ["src", "foo/"].map(name => ({ name, kind: "directory" })),
+    exact: ["src", "foo"].map(name => ({ name, kind: "directory" })),
     isNewIdentifierLocation: true,
 });

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts] ////
+
 //// [definiteAssignmentWithErrorStillStripped.ts]
 class C {
     p!;

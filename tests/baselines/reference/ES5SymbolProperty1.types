@@ -1,27 +1,43 @@
-=== tests/cases/conformance/Symbols/ES5SymbolProperty1.ts ===
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty1.ts] ////
+
+=== ES5SymbolProperty1.ts ===
 interface SymbolConstructor {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 var Symbol: SymbolConstructor;
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var obj = {
->obj : { [x: string]: number; }
->{    [Symbol.foo]: 0} : { [x: string]: number; }
+>obj : { [Symbol.foo]: number; }
+>    : ^^              ^^^^^^ ^^
+>{    [Symbol.foo]: 0} : { [Symbol.foo]: number; }
+>                      : ^^              ^^^^^^ ^^
 
     [Symbol.foo]: 0
 >[Symbol.foo] : number
+>             : ^^^^^^
 >Symbol.foo : string
+>           : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 obj[Symbol.foo];
 >obj[Symbol.foo] : number
->obj : { [x: string]: number; }
+>                : ^^^^^^
+>obj : { [Symbol.foo]: number; }
+>    : ^^              ^^^^^^ ^^
 >Symbol.foo : string
+>           : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 

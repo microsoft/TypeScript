@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedConstructorPropertyContextualType.ts] ////
+
 //// [inheritedConstructorPropertyContextualType.ts]
 interface State {
     version: 2

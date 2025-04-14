@@ -1,15 +1,23 @@
-=== tests/cases/compiler/classWithOverloadImplementationOfWrongName2.ts ===
+//// [tests/cases/compiler/classWithOverloadImplementationOfWrongName2.ts] ////
+
+=== classWithOverloadImplementationOfWrongName2.ts ===
 class C {
 >C : C
+>  : ^
 
     foo(): string;
 >foo : { (): string; (x: any): number; }
+>    : ^^^^^^      ^^^ ^^^^^^^^      ^^^
 
     bar(x): any { }
 >bar : (x: any) => any
+>    : ^ ^^^^^^^^^^   
 >x : any
+>  : ^^^
 
     foo(x): number;
 >foo : { (): string; (x: any): number; }
+>    : ^^^^^^      ^^^ ^^^^^^^^      ^^^
 >x : any
+>  : ^^^
 }

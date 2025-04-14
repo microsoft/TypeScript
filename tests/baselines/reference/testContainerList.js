@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/testContainerList.ts] ////
+
 //// [testContainerList.ts]
 // Regression test for #325
 module A {

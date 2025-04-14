@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/use.js ===
+//// [tests/cases/conformance/jsdoc/typedefCrossModule2.ts] ////
+
+=== use.js ===
 var mod = require('./mod1.js');
 >mod : Symbol(mod, Decl(use.js, 0, 3))
 >require : Symbol(require)
->'./mod1.js' : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>'./mod1.js' : Symbol("mod1", Decl(mod1.js, 0, 0))
 
 /** @type {import("./mod1.js").Baz} */
 var b;
@@ -14,9 +16,11 @@ var bb;
 
 var bbb = new mod.Baz();
 >bbb : Symbol(bbb, Decl(use.js, 5, 3))
+>mod.Baz : Symbol(Baz, Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18), Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18))
 >mod : Symbol(mod, Decl(use.js, 0, 3))
+>Baz : Symbol(Baz, Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18), Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18))
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 // error
 
 /** @typedef {number} Foo */

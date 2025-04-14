@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatForEnums.ts ===
+//// [tests/cases/compiler/assignmentCompatForEnums.ts] ////
+
+=== assignmentCompatForEnums.ts ===
 enum TokenType { One, Two };
 >TokenType : Symbol(TokenType, Decl(assignmentCompatForEnums.ts, 0, 0))
 >One : Symbol(TokenType.One, Decl(assignmentCompatForEnums.ts, 0, 16))

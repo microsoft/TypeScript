@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/quotedConstructors.ts] ////
+
 //// [quotedConstructors.ts]
 class C {
     "constructor"() {

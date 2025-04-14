@@ -1,172 +1,282 @@
-=== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts] ////
+
+=== logicalNotOperatorWithStringType.ts ===
 // ! operator on string type
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var STRING1: string[] = ["", "abc"];
 >STRING1 : string[]
+>        : ^^^^^^^^
 >["", "abc"] : string[]
+>            : ^^^^^^^^
 >"" : ""
+>   : ^^
 >"abc" : "abc"
+>      : ^^^^^
 
 function foo(): string { return "abc"; }
 >foo : () => string
+>    : ^^^^^^      
 >"abc" : "abc"
+>      : ^^^^^
 
 class A {
 >A : A
+>  : ^
 
     public a: string;
 >a : string
+>  : ^^^^^^
 
     static foo() { return ""; }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var n: string;
 >n : string
+>  : ^^^^^^
 }
 
 var objA = new A();
 >objA : A
+>     : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 // string type var
 var ResultIsBoolean1 = !STRING;
 >ResultIsBoolean1 : boolean
+>                 : ^^^^^^^
 >!STRING : boolean
+>        : ^^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsBoolean2 = !STRING1;
 >ResultIsBoolean2 : boolean
+>                 : ^^^^^^^
 >!STRING1 : boolean
+>         : ^^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 // string type literal
 var ResultIsBoolean3 = !"";
 >ResultIsBoolean3 : boolean
+>                 : ^^^^^^^
 >!"" : true
+>    : ^^^^
 >"" : ""
+>   : ^^
 
 var ResultIsBoolean4 = !{ x: "", y: "" };
 >ResultIsBoolean4 : boolean
+>                 : ^^^^^^^
 >!{ x: "", y: "" } : boolean
+>                  : ^^^^^^^
 >{ x: "", y: "" } : { x: string; y: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 var ResultIsBoolean5 = !{ x: "", y: (s: string) => { return s; } };
 >ResultIsBoolean5 : boolean
+>                 : ^^^^^^^
 >!{ x: "", y: (s: string) => { return s; } } : boolean
+>                                            : ^^^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
+>                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : (s: string) => string
+>  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 // string type expressions
 var ResultIsBoolean6 = !objA.a;
 >ResultIsBoolean6 : boolean
+>                 : ^^^^^^^
 >!objA.a : boolean
+>        : ^^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 
 var ResultIsBoolean7 = !M.n;
 >ResultIsBoolean7 : boolean
+>                 : ^^^^^^^
 >!M.n : boolean
+>     : ^^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 var ResultIsBoolean8 = !STRING1[0];
 >ResultIsBoolean8 : boolean
+>                 : ^^^^^^^
 >!STRING1[0] : boolean
+>            : ^^^^^^^
 >STRING1[0] : string
+>           : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 var ResultIsBoolean9 = !foo();
 >ResultIsBoolean9 : boolean
+>                 : ^^^^^^^
 >!foo() : boolean
+>       : ^^^^^^^
 >foo() : string
+>      : ^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : boolean
+>                  : ^^^^^^^
 >!A.foo() : boolean
+>         : ^^^^^^^
 >A.foo() : string
+>        : ^^^^^^
 >A.foo : () => string
+>      : ^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
 var ResultIsBoolean11 = !(STRING + STRING);
 >ResultIsBoolean11 : boolean
+>                  : ^^^^^^^
 >!(STRING + STRING) : boolean
+>                   : ^^^^^^^
 >(STRING + STRING) : string
+>                  : ^^^^^^
 >STRING + STRING : string
+>                : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsBoolean12 = !STRING.charAt(0);
 >ResultIsBoolean12 : boolean
+>                  : ^^^^^^^
 >!STRING.charAt(0) : boolean
+>                  : ^^^^^^^
 >STRING.charAt(0) : string
+>                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
+>              : ^   ^^      ^^^^^      
 >STRING : string
+>       : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 // multiple ! operator
 var ResultIsBoolean13 = !!STRING;
 >ResultIsBoolean13 : boolean
+>                  : ^^^^^^^
 >!!STRING : boolean
+>         : ^^^^^^^
 >!STRING : boolean
+>        : ^^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsBoolean14 = !!!(STRING + STRING);
 >ResultIsBoolean14 : boolean
+>                  : ^^^^^^^
 >!!!(STRING + STRING) : boolean
+>                     : ^^^^^^^
 >!!(STRING + STRING) : boolean
+>                    : ^^^^^^^
 >!(STRING + STRING) : boolean
+>                   : ^^^^^^^
 >(STRING + STRING) : string
+>                  : ^^^^^^
 >STRING + STRING : string
+>                : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 // miss assignment operators
 !"";
 >!"" : true
+>    : ^^^^
 >"" : ""
+>   : ^^
 
 !STRING;
 >!STRING : boolean
+>        : ^^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 !STRING1;
 >!STRING1 : boolean
+>         : ^^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 !foo();
 >!foo() : boolean
+>       : ^^^^^^^
 >foo() : string
+>      : ^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 !objA.a,M.n;
 >!objA.a,M.n : string
+>            : ^^^^^^
 >!objA.a : boolean
+>        : ^^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 

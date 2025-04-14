@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts ===
+//// [tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts] ////
+
+=== templateStringsArrayTypeRedefinedInES6Mode.ts ===
 class TemplateStringsArray {
 >TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --), Decl(templateStringsArrayTypeRedefinedInES6Mode.ts, 0, 0))
 }

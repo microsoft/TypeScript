@@ -1,24 +1,66 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts] ////
+
+=== constructorDefaultValuesReferencingThis.ts ===
 class C {
 >C : C
+>  : ^
+
+    public baseProp = 1;
+>baseProp : number
+>         : ^^^^^^
+>1 : 1
+>  : ^
 
     constructor(x = this) { }
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 }
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     constructor(x = this) { }
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 }
 
 class E<T> {
 >E : E<T>
+>  : ^^^^
 
     constructor(public x = this) { }
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 }
+
+class F extends C {
+>F : F
+>  : ^
+>C : C
+>  : ^
+
+    constructor(y = this.baseProp) {
+>y : number
+>  : ^^^^^^
+>this.baseProp : number
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>baseProp : number
+>         : ^^^^^^
+
+        super();
+>super() : void
+>        : ^^^^
+>super : typeof C
+>      : ^^^^^^^^
+    }
+}
+

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumBasics3.ts] ////
+
 //// [enumBasics3.ts]
 module M {
   export namespace N {

@@ -17,11 +17,4 @@
 ////  */
 //// const t3 = 1
 
-goTo.marker("use1");
-verify.goToDefinitionIs(["def1"]);
-
-goTo.marker("use2");
-verify.goToDefinitionIs(["def2"]);
-
-goTo.marker("use3");
-verify.goToDefinitionIs(["def2"]);
+verify.baselineGetDefinitionAtPosition("use1", "use2", "use3");

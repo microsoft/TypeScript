@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inOperator.ts] ////
+
 //// [inOperator.ts]
 var a=[];
 

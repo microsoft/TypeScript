@@ -1,4 +1,6 @@
-=== tests/cases/compiler/input.ts ===
+//// [tests/cases/compiler/declarationFileNoCrashOnExtraExportModifier.ts] ////
+
+=== input.ts ===
 export = exports;
 >exports : Symbol(exports, Decl(input.ts, 0, 17), Decl(input.ts, 9, 1))
 
@@ -12,7 +14,7 @@ declare class exports {
 >t : Symbol(exports.t, Decl(input.ts, 2, 27))
 }
 export class Sub {
->Sub : Symbol(Sub, Decl(input.ts, 4, 1), Decl(input.ts, 4, 1))
+>Sub : Symbol(Sub, Decl(input.ts, 4, 1))
 
     instance!: {
 >instance : Symbol(Sub.instance, Decl(input.ts, 5, 18))

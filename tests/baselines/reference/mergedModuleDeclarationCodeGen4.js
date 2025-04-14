@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedModuleDeclarationCodeGen4.ts] ////
+
 //// [mergedModuleDeclarationCodeGen4.ts]
 module superContain {
     export module contain {

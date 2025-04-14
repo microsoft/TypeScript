@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallFromClassThatDerivesFromGenericType1.ts] ////
+
 //// [superCallFromClassThatDerivesFromGenericType1.ts]
 declare class B<T> {
     m<U>(): B<U>;

@@ -1,0 +1,319 @@
+// === findAllReferences ===
+// === /a.js ===
+// function f() {
+//     /*FIND ALL REFS*/<|[|this|].x = 0;|>
+// }
+// f.prototype.setX = function() {
+//     this.x = 1;
+// }
+// f.prototype.useX = function() { this.x; }
+
+  // === Definitions ===
+  // === /a.js ===
+  // function f() {
+  //     /*FIND ALL REFS*/[|this|].x = 0;
+  // }
+  // f.prototype.setX = function() {
+  //     this.x = 1;
+  // }
+  // f.prototype.useX = function() { this.x; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "keyword"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// function f() {
+//     <|this./*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] = 0;|>
+// }
+// f.prototype.setX = function() {
+//     <|this.[|{| isWriteAccess: true, isDefinition: true |}x|] = 1;|>
+// }
+// f.prototype.useX = function() { this.[|x|]; }
+
+  // === Definitions ===
+  // === /a.js ===
+  // function f() {
+  //     <|this./*FIND ALL REFS*/[|x|] = 0;|>
+  // }
+  // f.prototype.setX = function() {
+  //     this.x = 1;
+  // }
+  // f.prototype.useX = function() { this.x; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) f.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// function f() {
+//     this.x = 0;
+// }
+// f.prototype.setX = function() {
+//     /*FIND ALL REFS*/<|[|this|].x = 1;|>
+// }
+// f.prototype.useX = function() { this.x; }
+
+  // === Definitions ===
+  // === /a.js ===
+  // function f() {
+  //     this.x = 0;
+  // }
+  // f.prototype.setX = function() {
+  //     /*FIND ALL REFS*/[|this|].x = 1;
+  // }
+  // f.prototype.useX = function() { this.x; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "keyword"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// function f() {
+//     <|this.[|{| isWriteAccess: true, isDefinition: true |}x|] = 0;|>
+// }
+// f.prototype.setX = function() {
+//     <|this./*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] = 1;|>
+// }
+// f.prototype.useX = function() { this.[|x|]; }
+
+  // === Definitions ===
+  // === /a.js ===
+  // function f() {
+  //     <|this.[|x|] = 0;|>
+  // }
+  // f.prototype.setX = function() {
+  //     this./*FIND ALL REFS*/x = 1;
+  // }
+  // f.prototype.useX = function() { this.x; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) f.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// function f() {
+//     <|this.[|{| isWriteAccess: true |}x|] = 0;|>
+// }
+// f.prototype.setX = function() {
+//     <|this.[|{| isWriteAccess: true |}x|] = 1;|>
+// }
+// f.prototype.useX = function() { this./*FIND ALL REFS*/[|x|]; }
+
+  // === Definitions ===
+  // === /a.js ===
+  // function f() {
+  //     <|this.[|x|] = 0;|>
+  // }
+  // f.prototype.setX = function() {
+  //     this.x = 1;
+  // }
+  // f.prototype.useX = function() { this./*FIND ALL REFS*/x; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) f.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

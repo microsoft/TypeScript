@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum4.ts] ////
+
+=== parserEnum4.ts ===
     export enum SignatureFlags {
 >SignatureFlags : Symbol(SignatureFlags, Decl(parserEnum4.ts, 0, 0))
 

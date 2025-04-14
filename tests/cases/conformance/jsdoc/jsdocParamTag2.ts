@@ -58,6 +58,13 @@ function good7(x, {a, b}, y) {}
 function good8({a, b}) {}
 
 /**
+ * @param {{ a: string }} argument
+ */
+function good9({ a }) {
+    console.log(arguments, a);
+}
+
+/**
  * @param {object} obj - this type gets ignored
  * @param {string} obj.a
  * @param {string} obj.b - and x's type gets used for both parameters

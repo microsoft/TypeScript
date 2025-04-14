@@ -1,9 +1,9 @@
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts(17,5): error TS2367: This condition will always return 'false' since the types 'I1 & I3' and 'I2' have no overlap.
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts(17,16): error TS2367: This condition will always return 'false' since the types 'I2' and 'I1 & I3' have no overlap.
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts(19,10): error TS2367: This condition will always return 'true' since the types 'I1 & I3' and 'I2' have no overlap.
+equalityWithIntersectionTypes01.ts(17,5): error TS2367: This comparison appears to be unintentional because the types 'I1 & I3' and 'I2' have no overlap.
+equalityWithIntersectionTypes01.ts(17,16): error TS2367: This comparison appears to be unintentional because the types 'I2' and 'I1 & I3' have no overlap.
+equalityWithIntersectionTypes01.ts(19,10): error TS2367: This comparison appears to be unintentional because the types 'I1 & I3' and 'I2' have no overlap.
 
 
-==== tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts (3 errors) ====
+==== equalityWithIntersectionTypes01.ts (3 errors) ====
     interface I1 {
         p1: number
     }
@@ -22,13 +22,13 @@ tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersect
     
     if (y === z || z === y) {
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'I1 & I3' and 'I2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'I1 & I3' and 'I2' have no overlap.
                    ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'I2' and 'I1 & I3' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'I2' and 'I1 & I3' have no overlap.
     }
     else if (y !== z || z !== y) {
              ~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'I1 & I3' and 'I2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'I1 & I3' and 'I2' have no overlap.
     }
     else if (y == z || z == y) {
     }

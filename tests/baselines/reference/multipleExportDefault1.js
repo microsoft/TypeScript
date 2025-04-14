@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/multipleExportDefault1.ts] ////
+
 //// [multipleExportDefault1.ts]
 export default function Foo (){
     
@@ -10,10 +12,10 @@ export default {
 
 //// [multipleExportDefault1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Foo;
 function Foo() {
 }
-exports["default"] = Foo;
-exports["default"] = {
-    uhoh: "another default"
+exports.default = {
+    uhoh: "another default",
 };

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowStringIndex.ts] ////
+
 //// [controlFlowStringIndex.ts]
 type A = {
     other: number | null;

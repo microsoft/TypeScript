@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionsOfLargeUnions2.ts] ////
+
 //// [intersectionsOfLargeUnions2.ts]
 // Repro from #24233
 
@@ -39,13 +41,14 @@ export function assertNodeProperty<
 //// [intersectionsOfLargeUnions2.js]
 "use strict";
 // Repro from #24233
-exports.__esModule = true;
-exports.assertNodeProperty = exports.assertNodeTagName = exports.assertIsElement = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.assertIsElement = assertIsElement;
+exports.assertNodeTagName = assertNodeTagName;
+exports.assertNodeProperty = assertNodeProperty;
 function assertIsElement(node) {
     var nodeType = node === null ? null : node.nodeType;
     return nodeType === 1;
 }
-exports.assertIsElement = assertIsElement;
 function assertNodeTagName(node, tagName) {
     if (assertIsElement(node)) {
         var nodeTagName = node.tagName.toLowerCase();
@@ -53,10 +56,8 @@ function assertNodeTagName(node, tagName) {
     }
     return false;
 }
-exports.assertNodeTagName = assertNodeTagName;
 function assertNodeProperty(node, tagName, prop, value) {
     if (assertNodeTagName(node, tagName)) {
         node[prop];
     }
 }
-exports.assertNodeProperty = assertNodeProperty;

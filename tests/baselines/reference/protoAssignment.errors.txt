@@ -1,7 +1,7 @@
-tests/cases/compiler/protoAssignment.ts(1,26): error TS2304: Cannot find name 'Comparable'.
+protoAssignment.ts(1,26): error TS2304: Cannot find name 'Comparable'.
 
 
-==== tests/cases/compiler/protoAssignment.ts (1 errors) ====
+==== protoAssignment.ts (1 errors) ====
     interface Number extends Comparable<number> {
                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'Comparable'.

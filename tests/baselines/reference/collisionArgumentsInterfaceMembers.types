@@ -1,49 +1,69 @@
-=== tests/cases/compiler/collisionArgumentsInterfaceMembers.ts ===
+//// [tests/cases/compiler/collisionArgumentsInterfaceMembers.ts] ////
+
+=== collisionArgumentsInterfaceMembers.ts ===
 // call
 interface i1 {
     (i: number, ...arguments); // no error - no code gen
 >i : number
+>  : ^^^^^^
 >arguments : any[]
+>          : ^^^^^
 }
 interface i12 {
     (arguments: number, ...rest); // no error - no code gen
 >arguments : number
+>          : ^^^^^^
 >rest : any[]
+>     : ^^^^^
 }
 interface i1NoError {
     (arguments: number);  // no error
 >arguments : number
+>          : ^^^^^^
 }
 
 // new
 interface i2 {
     new (i: number, ...arguments); // no error - no code gen
 >i : number
+>  : ^^^^^^
 >arguments : any[]
+>          : ^^^^^
 }
 interface i21 {
     new (arguments: number, ...rest); // no error - no code gen
 >arguments : number
+>          : ^^^^^^
 >rest : any[]
+>     : ^^^^^
 }
 interface i2NoError {
     new (arguments: number);  // no error
 >arguments : number
+>          : ^^^^^^
 }
 
 // method
 interface i3 {
     foo(i: number, ...arguments); // no error - no code gen
 >foo : (i: number, ...arguments: any[]) => any
+>    : ^ ^^      ^^^^^         ^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >arguments : any[]
+>          : ^^^^^
 
     foo1(arguments: number, ...rest); // no error - no code gen
 >foo1 : (arguments: number, ...rest: any[]) => any
+>     : ^         ^^      ^^^^^    ^^^^^^^^^^^^^^^
 >arguments : number
+>          : ^^^^^^
 >rest : any[]
+>     : ^^^^^
 
     fooNoError(arguments: number);  // no error
 >fooNoError : (arguments: number) => any
+>           : ^         ^^      ^^^^^^^^
 >arguments : number
+>          : ^^^^^^
 }

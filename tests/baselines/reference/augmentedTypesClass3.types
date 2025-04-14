@@ -1,32 +1,48 @@
-=== tests/cases/compiler/augmentedTypesClass3.ts ===
+//// [tests/cases/compiler/augmentedTypesClass3.ts] ////
+
+=== augmentedTypesClass3.ts ===
 // class then module
 class c5 { public foo() { } }
 >c5 : c5
+>   : ^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 module c5 { } // should be ok
 
 class c5a { public foo() { } }
 >c5a : c5a
+>    : ^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 module c5a { var y = 2; } // should be ok
 >c5a : typeof c5a
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 class c5b { public foo() { } }
 >c5b : c5b
+>    : ^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 module c5b { export var y = 2; } // should be ok
 >c5b : typeof c5b
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 //// class then import
 class c5c { public foo() { } }
 >c5c : c5c
+>    : ^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 //import c5c = require('');

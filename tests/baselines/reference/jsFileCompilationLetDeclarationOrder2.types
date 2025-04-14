@@ -1,20 +1,32 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationLetDeclarationOrder2.ts] ////
+
+=== a.ts ===
 let b = 30;
 >b : number
+>  : ^^^^^^
 >30 : 30
+>   : ^^
 
 a = 10;
 >a = 10 : 10
+>       : ^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 let a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 b = 30;
 >b = 30 : 30
+>       : ^^
 >b : number
+>  : ^^^^^^
 >30 : 30
+>   : ^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts] ////
+
 //// [unionTypeInference.ts]
 declare const b: boolean;
 declare const s: string;

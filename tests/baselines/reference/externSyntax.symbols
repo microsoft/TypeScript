@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externSyntax.ts ===
+//// [tests/cases/compiler/externSyntax.ts] ////
+
+=== externSyntax.ts ===
 declare var v;
 >v : Symbol(v, Decl(externSyntax.ts, 0, 11))
 

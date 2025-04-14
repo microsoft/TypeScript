@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexerReturningTypeParameter1.ts ===
+//// [tests/cases/compiler/indexerReturningTypeParameter1.ts] ////
+
+=== indexerReturningTypeParameter1.ts ===
 interface f {
 >f : Symbol(f, Decl(indexerReturningTypeParameter1.ts, 0, 0))
 

@@ -7,13 +7,13 @@
 ////     }
 ////     interface ElementAttributesProperty { props }
 //// }
-//// [|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}MyClass|] {
+//// /*1*/class /*2*/MyClass {
 ////   props: {
 ////     name?: string;
 ////     size?: number;
-//// }|]
+//// }
 ////
 ////
-//// var x = [|<[|{| "contextRangeIndex" : 2 |}MyClass|] name='hello'></[|{| "contextRangeIndex" : 2 |}MyClass|]>|];
+//// var x = /*3*/</*4*/MyClass name='hello'><//*5*/MyClass>;
 
-verify.singleReferenceGroup("class MyClass", "MyClass");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5');

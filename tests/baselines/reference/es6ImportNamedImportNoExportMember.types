@@ -1,17 +1,26 @@
-=== tests/cases/compiler/es6ImportNamedImportNoExportMember_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportNoExportMember.ts] ////
+
+=== es6ImportNamedImportNoExportMember_0.ts ===
 export var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export var x = a;
 >x : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/es6ImportNamedImport_1.ts ===
+=== es6ImportNamedImport_1.ts ===
 import { a1 } from "./es6ImportNamedImportNoExportMember_0";
 >a1 : any
+>   : ^^^
 
 import { x1 as x } from "./es6ImportNamedImportNoExportMember_0";
 >x1 : any
+>   : ^^^
 >x : any
+>  : ^^^
 

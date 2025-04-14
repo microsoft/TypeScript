@@ -1,8 +1,12 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportWithoutFromClauseWithExport.ts] ////
+
+=== server.ts ===
 export var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
+
 export import "server";
-No type information for this code.

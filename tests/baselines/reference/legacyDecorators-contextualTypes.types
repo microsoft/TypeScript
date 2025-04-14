@@ -1,0 +1,206 @@
+//// [tests/cases/conformance/decorators/legacyDecorators-contextualTypes.ts] ////
+
+=== legacyDecorators-contextualTypes.ts ===
+@((t) => { })
+>((t) => { }) : (t: typeof C) => void
+>             : ^ ^^^^^^^^^^^^^^^^^^^
+>(t) => { } : (t: typeof C) => void
+>           : ^ ^^^^^^^^^^^^^^^^^^^
+>t : typeof C
+>  : ^^^^^^^^
+
+class C {
+>C : C
+>  : ^
+
+    constructor(@((t, k, i) => {}) p: any) {}
+>((t, k, i) => {}) : (t: typeof C, k: undefined, i: 0) => void
+>                  : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^
+>(t, k, i) => {} : (t: typeof C, k: undefined, i: 0) => void
+>                : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^
+>t : typeof C
+>  : ^^^^^^^^
+>k : undefined
+>  : ^^^^^^^^^
+>i : 0
+>  : ^
+>p : any
+
+    @((t, k, d) => { })
+>((t, k, d) => { }) : (t: typeof C, k: "f", d: TypedPropertyDescriptor<() => void>) => void
+>                   : ^ ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(t, k, d) => { } : (t: typeof C, k: "f", d: TypedPropertyDescriptor<() => void>) => void
+>                 : ^ ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : typeof C
+>  : ^^^^^^^^
+>k : "f"
+>  : ^^^
+>d : TypedPropertyDescriptor<() => void>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static f() {}
+>f : () => void
+>  : ^^^^^^^^^^
+
+    @((t, k, d) => { })
+>((t, k, d) => { }) : (t: typeof C, k: "x", d: TypedPropertyDescriptor<number>) => void
+>                   : ^ ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(t, k, d) => { } : (t: typeof C, k: "x", d: TypedPropertyDescriptor<number>) => void
+>                 : ^ ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : typeof C
+>  : ^^^^^^^^
+>k : "x"
+>  : ^^^
+>d : TypedPropertyDescriptor<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static get x() { return 1; }
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    static set x(value) { }
+>x : number
+>  : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    @((t, k, d) => { })
+>((t, k, d) => { }) : (t: typeof C, k: "y", d: TypedPropertyDescriptor<number>) => void
+>                   : ^ ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(t, k, d) => { } : (t: typeof C, k: "y", d: TypedPropertyDescriptor<number>) => void
+>                 : ^ ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : typeof C
+>  : ^^^^^^^^
+>k : "y"
+>  : ^^^
+>d : TypedPropertyDescriptor<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static accessor y = 1;
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    @((t, k) => { })
+>((t, k) => { }) : (t: typeof C, k: "z") => void
+>                : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>(t, k) => { } : (t: typeof C, k: "z") => void
+>              : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>t : typeof C
+>  : ^^^^^^^^
+>k : "z"
+>  : ^^^
+
+    static z = 1;
+>z : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    @((t, k, d) => { })
+>((t, k, d) => { }) : (t: C, k: "g", d: TypedPropertyDescriptor<() => void>) => void
+>                   : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(t, k, d) => { } : (t: C, k: "g", d: TypedPropertyDescriptor<() => void>) => void
+>                 : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : C
+>  : ^
+>k : "g"
+>  : ^^^
+>d : TypedPropertyDescriptor<() => void>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    g() {}
+>g : () => void
+>  : ^^^^^^^^^^
+
+    @((t, k, d) => { })
+>((t, k, d) => { }) : (t: C, k: "a", d: TypedPropertyDescriptor<number>) => void
+>                   : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(t, k, d) => { } : (t: C, k: "a", d: TypedPropertyDescriptor<number>) => void
+>                 : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : C
+>  : ^
+>k : "a"
+>  : ^^^
+>d : TypedPropertyDescriptor<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    get a() { return 1; }
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    set a(value) { }
+>a : number
+>  : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    @((t, k, d) => { })
+>((t, k, d) => { }) : (t: C, k: "b", d: TypedPropertyDescriptor<number>) => void
+>                   : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(t, k, d) => { } : (t: C, k: "b", d: TypedPropertyDescriptor<number>) => void
+>                 : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : C
+>  : ^
+>k : "b"
+>  : ^^^
+>d : TypedPropertyDescriptor<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    accessor b = 1;
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    @((t, k) => { })
+>((t, k) => { }) : (t: C, k: "c") => void
+>                : ^ ^^^^^ ^^^^^^^^^^^^^^
+>(t, k) => { } : (t: C, k: "c") => void
+>              : ^ ^^^^^ ^^^^^^^^^^^^^^
+>t : C
+>  : ^
+>k : "c"
+>  : ^^^
+
+    c = 1;
+>c : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    static h(@((t, k, i) => {}) p: any) {}
+>h : (p: any) => void
+>  : ^ ^^   ^^^^^^^^^
+>((t, k, i) => {}) : (t: typeof C, k: "h", i: 0) => void
+>                  : ^ ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^
+>(t, k, i) => {} : (t: typeof C, k: "h", i: 0) => void
+>                : ^ ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^
+>t : typeof C
+>  : ^^^^^^^^
+>k : "h"
+>  : ^^^
+>i : 0
+>  : ^
+>p : any
+
+    h(@((t, k, i) => {}) p: any) {}
+>h : (p: any) => void
+>  : ^ ^^   ^^^^^^^^^
+>((t, k, i) => {}) : (t: C, k: "h", i: 0) => void
+>                  : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^
+>(t, k, i) => {} : (t: C, k: "h", i: 0) => void
+>                : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^
+>t : C
+>  : ^
+>k : "h"
+>  : ^^^
+>i : 0
+>  : ^
+>p : any
+}

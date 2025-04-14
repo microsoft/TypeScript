@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports_mixedImports.ts] ////
+
 === /exports.ts ===
 export function Component() {}
 >Component : Symbol(Component, Decl(exports.ts, 0, 0))

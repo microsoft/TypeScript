@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedStringType.ts] ////
+
+=== decrementOperatorWithUnsupportedStringType.ts ===
 // -- operator on string type
 var STRING: string;
 >STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))

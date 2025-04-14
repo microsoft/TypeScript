@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts] ////
+
 //// [propertyAccessChain.3.ts]
 declare const obj: any;
 

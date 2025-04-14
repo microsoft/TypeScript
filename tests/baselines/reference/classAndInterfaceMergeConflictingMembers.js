@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts] ////
+
 //// [classAndInterfaceMergeConflictingMembers.ts]
 declare class C1 {
     public x : number;

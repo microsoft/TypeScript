@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty12.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty12.ts ===
+enum E {
+>E : Symbol(E, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 0))
+
+    A = "A",
+>A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+
+    B = "B"
+>B : Symbol(E.B, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 1, 12))
+}
+
+declare const m: { [K in E]: string | null };
+>m : Symbol(m, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 5, 13))
+>K : Symbol(K, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 5, 20))
+>E : Symbol(E, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 0))
+
+if (m[E.A] !== null) {
+>m : Symbol(m, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 5, 13))
+>E.A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+>E : Symbol(E, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 0))
+>A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+
+    m[E.A].toString(); // string
+>m[E.A].toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 5, 13))
+>E.A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+>E : Symbol(E, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 0))
+>A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+}
+

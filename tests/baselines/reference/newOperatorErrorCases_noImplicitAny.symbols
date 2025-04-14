@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts ===
+//// [tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts] ////
+
+=== newOperatorErrorCases_noImplicitAny.ts ===
 function fnNumber(this: void): number { return 90; }
 >fnNumber : Symbol(fnNumber, Decl(newOperatorErrorCases_noImplicitAny.ts, 0, 0))
 >this : Symbol(this, Decl(newOperatorErrorCases_noImplicitAny.ts, 0, 18))

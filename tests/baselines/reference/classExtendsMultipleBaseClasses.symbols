@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsMultipleBaseClasses.ts ===
+//// [tests/cases/compiler/classExtendsMultipleBaseClasses.ts] ////
+
+=== classExtendsMultipleBaseClasses.ts ===
 class A { }
 >A : Symbol(A, Decl(classExtendsMultipleBaseClasses.ts, 0, 0))
 

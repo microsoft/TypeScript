@@ -1,19 +1,29 @@
-=== tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts ===
+//// [tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts] ////
+
+=== spreadOfParamsFromGeneratorMakesRequiredParams.ts ===
 declare function call<Fn extends (...args: any[]) => any>(
 >call : <Fn extends (...args: any[]) => any>(fn: Fn, ...args: Parameters<Fn>) => any
+>     : ^  ^^^^^^^^^                       ^^  ^^  ^^^^^    ^^              ^^^^^   
 >args : any[]
+>     : ^^^^^
 
     fn: Fn,
 >fn : Fn
+>   : ^^
 
     ...args: Parameters<Fn>
 >args : Parameters<Fn>
+>     : ^^^^^^^^^^^^^^
 
 ): any;
 
 call(function* (a: 'a') { }); // error, 2nd argument required
 >call(function* (a: 'a') { }) : any
+>                             : ^^^
 >call : <Fn extends (...args: any[]) => any>(fn: Fn, ...args: Parameters<Fn>) => any
->function* (a: 'a') { } : (a: 'a') => {}
+>     : ^  ^^^^^^^^^                       ^^  ^^  ^^^^^    ^^              ^^^^^   
+>function* (a: 'a') { } : (a: "a") => {}
+>                       : ^ ^^   ^^^^^^^
 >a : "a"
+>  : ^^^
 

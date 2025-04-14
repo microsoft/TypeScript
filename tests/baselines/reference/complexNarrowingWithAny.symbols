@@ -1,4 +1,6 @@
-=== tests/cases/compiler/complexNarrowingWithAny.ts ===
+//// [tests/cases/compiler/complexNarrowingWithAny.ts] ////
+
+=== complexNarrowingWithAny.ts ===
 // Repro from #10869
 
 /**

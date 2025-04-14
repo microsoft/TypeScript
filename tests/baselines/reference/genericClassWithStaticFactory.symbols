@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericClassWithStaticFactory.ts ===
+//// [tests/cases/compiler/genericClassWithStaticFactory.ts] ////
+
+=== genericClassWithStaticFactory.ts ===
 module Editor {
 >Editor : Symbol(Editor, Decl(genericClassWithStaticFactory.ts, 0, 0))
 

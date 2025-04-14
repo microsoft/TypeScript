@@ -1,14 +1,21 @@
-=== tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts ===
+//// [tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts] ////
+
+=== enumWithoutInitializerAfterComputedMember.ts ===
 enum E {
 >E : E
+>  : ^
 
     a,
 >a : E.a
+>  : ^^^
 
     b = a,
 >b : E.a
+>  : ^^^
 >a : E.a
+>  : ^^^
 
     c
 >c : E.c
+>  : ^^^
 }

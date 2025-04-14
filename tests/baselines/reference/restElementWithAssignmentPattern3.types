@@ -1,22 +1,39 @@
-=== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern3.ts ===
+//// [tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern3.ts] ////
+
+=== restElementWithAssignmentPattern3.ts ===
 var a: string, b: number;
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var tuple: [string, number] = ["", 1];
 >tuple : [string, number]
+>      : ^^^^^^^^^^^^^^^^
 >["", 1] : [string, number]
+>        : ^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >1 : 1
+>  : ^
 
 [...[a, b = 0]] = tuple;
 >[...[a, b = 0]] = tuple : [string, number]
+>                        : ^^^^^^^^^^^^^^^^
 >[...[a, b = 0]] : [string, number]
+>                : ^^^^^^^^^^^^^^^^
 >...[a, b = 0] : string | number
+>              : ^^^^^^^^^^^^^^^
 >[a, b = 0] : [string, number]
+>           : ^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b = 0 : 0
+>      : ^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >tuple : [string, number]
+>      : ^^^^^^^^^^^^^^^^
 

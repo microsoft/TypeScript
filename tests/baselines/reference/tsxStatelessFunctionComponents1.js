@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponents1.tsx] ////
+
 //// [file.tsx]
 function EmptyPropSFC() {
     return <div> Default Greeting </div>;

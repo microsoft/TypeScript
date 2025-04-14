@@ -1,0 +1,145 @@
+awaitUsingDeclarations.1.ts(1,1): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(36,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(41,9): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(45,9): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(52,13): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(57,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(60,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(63,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(67,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(70,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(74,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(79,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(85,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(90,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarations.1.ts(94,5): error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+
+
+==== awaitUsingDeclarations.1.ts (15 errors) ====
+    await using d1 = { async [Symbol.asyncDispose]() {} };
+    ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    
+    async function af() {
+        await using d3 = { async [Symbol.asyncDispose]() {} };
+        await null;
+    }
+    
+    async function * ag() {
+        await using d5 = { async [Symbol.asyncDispose]() {} };
+        yield;
+        await null;
+    }
+    
+    const a = async () => {
+        await using d6 = { async [Symbol.asyncDispose]() {} };
+    };
+    
+    class C1 {
+        a = async () => {
+            await using d7 = { async [Symbol.asyncDispose]() {} };
+        };
+    
+        async am() {
+            await using d13 = { async [Symbol.asyncDispose]() {} };
+            await null;
+        }
+    
+        async * ag() {
+            await using d15 = { async [Symbol.asyncDispose]() {} };
+            yield;
+            await null;
+        }
+    }
+    
+    {
+        await using d19 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    }
+    
+    switch (Math.random()) {
+        case 0:
+            await using d20 = { async [Symbol.asyncDispose]() {} };
+            ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+            break;
+    
+        case 1:
+            await using d21 = { async [Symbol.asyncDispose]() {} };
+            ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+            break;
+    }
+    
+    if (true)
+        switch (0) {
+            case 0:
+                await using d22 = { async [Symbol.asyncDispose]() {} };
+                ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+                break;
+        }
+    
+    try {
+        await using d23 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    }
+    catch {
+        await using d24 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    }
+    finally {
+        await using d25 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    }
+    
+    if (true) {
+        await using d26 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    }
+    else {
+        await using d27 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    }
+    
+    while (true) {
+        await using d28 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+        break;
+    }
+    
+    do {
+        await using d29 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+        break;
+    }
+    while (true);
+    
+    for (;;) {
+        await using d30 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+        break;
+    }
+    
+    for (const x in {}) {
+        await using d31 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    }
+    
+    for (const x of []) {
+        await using d32 = { async [Symbol.asyncDispose]() {} };
+        ~~~~~
+!!! error TS2854: Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+    }
+    
+    export {};

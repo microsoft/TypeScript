@@ -1,42 +1,73 @@
-=== tests/cases/compiler/intersectionPropertyCheck.ts ===
+//// [tests/cases/compiler/intersectionPropertyCheck.ts] ////
+
+=== intersectionPropertyCheck.ts ===
 let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
->obj : { a: {    x: string;}; } & { c: number; }
+>obj : { a: { x: string; }; } & { c: number; }
+>    : ^^^^^              ^^^^^^^^^^^      ^^^
 >a : { x: string; }
+>  : ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >{ a: { x: 'hello', y: 2 }, c: 5 } : { a: { x: string; y: number; }; c: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 'hello', y: 2 } : { x: string; y: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >c : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
 declare let wrong: { a: { y: string } };
->wrong : { a: {    y: string;}; }
+>wrong : { a: { y: string; }; }
+>      : ^^^^^              ^^^
 >a : { y: string; }
+>  : ^^^^^      ^^^
 >y : string
+>  : ^^^^^^
 
 let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
->weak : { a?: { x?: number | undefined; } | undefined; } & { c?: string | undefined; }
->a : { x?: number | undefined; } | undefined
+>weak : { a?: { x?: number; }; } & { c?: string; }
+>     : ^^^^^^               ^^^^^^^^^^^^      ^^^
+>a : { x?: number; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >wrong : { a: { y: string; }; }
+>      : ^^^^^              ^^^
 
 function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
->foo : <T extends object>(x: {    a?: string;}, y: T & {    a: boolean;}) => void
->x : { a?: string | undefined; }
+>foo : <T extends object>(x: { a?: string; }, y: T & { a: boolean; }) => void
+>    : ^ ^^^^^^^^^      ^^ ^^               ^^ ^^                   ^^^^^^^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >y : T & { a: boolean; }
+>  : ^^^^^^^^^       ^^^
 >a : boolean
+>  : ^^^^^^^
 
   x = y;  // Mismatched property in source intersection
 >x = y : T & { a: boolean; }
->x : { a?: string | undefined; }
+>      : ^^^^^^^^^       ^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 >y : T & { a: boolean; }
+>  : ^^^^^^^^^       ^^^
 }
 
 // Repro from #36637
@@ -44,16 +75,23 @@ function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
 interface Test {
   readonly hi?: string[]
 >hi : string[] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 }
 
 function test<T extends object>(value: T): Test {
 >test : <T extends object>(value: T) => Test
+>     : ^ ^^^^^^^^^      ^^     ^^ ^^^^^    
 >value : T
+>      : ^
 
   return { ...value, hi: true }
 >{ ...value, hi: true } : T & { hi: boolean; }
+>                       : ^^^^^^^^^^^^^^^^^^^^
 >value : T
+>      : ^
 >hi : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 

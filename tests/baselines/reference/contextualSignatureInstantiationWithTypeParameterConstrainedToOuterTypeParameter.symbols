@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts ===
+//// [tests/cases/compiler/contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts] ////
+
+=== contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts ===
 function f<T>() {
 >f : Symbol(f, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 11))

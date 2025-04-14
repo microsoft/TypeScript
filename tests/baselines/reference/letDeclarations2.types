@@ -1,12 +1,19 @@
-=== tests/cases/compiler/letDeclarations2.ts ===
+//// [tests/cases/compiler/letDeclarations2.ts] ////
+
+=== letDeclarations2.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     let l1 = "s";
 >l1 : string
+>   : ^^^^^^
 >"s" : "s"
+>    : ^^^
 
     export let l2 = 0;
 >l2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 }

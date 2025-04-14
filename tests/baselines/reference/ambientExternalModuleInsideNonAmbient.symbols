@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts ===
+//// [tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts] ////
+
+=== ambientExternalModuleInsideNonAmbient.ts ===
 module M {
 >M : Symbol(M, Decl(ambientExternalModuleInsideNonAmbient.ts, 0, 0))
 

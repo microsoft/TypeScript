@@ -1,19 +1,31 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty35.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty35.ts] ////
+
+=== symbolProperty35.ts ===
 interface I1 {
     [Symbol.toStringTag](): { x: string }
->[Symbol.toStringTag] : () => {    x: string;}
+>[Symbol.toStringTag] : () => { x: string; }
+>                     : ^^^^^^              
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 }
 interface I2 {
     [Symbol.toStringTag](): { x: number }
->[Symbol.toStringTag] : () => {    x: number;}
+>[Symbol.toStringTag] : () => { x: number; }
+>                     : ^^^^^^              
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 interface I3 extends I1, I2 { }

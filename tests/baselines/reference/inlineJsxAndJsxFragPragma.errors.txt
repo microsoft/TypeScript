@@ -1,9 +1,9 @@
-tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx(5,12): error TS6133: 'Fragment' is declared but its value is never read.
-tests/cases/conformance/jsx/inline/preacty-only-fragment-no-jsx.tsx(6,1): error TS2304: Cannot find name 'h'.
-tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'jsx'.
+preacty-no-fragment.tsx(5,12): error TS6133: 'Fragment' is declared but its value is never read.
+preacty-only-fragment-no-jsx.tsx(6,1): error TS2874: This JSX tag requires 'h' to be in scope, but it could not be found.
+snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2874: This JSX tag requires 'jsx' to be in scope, but it could not be found.
 
 
-==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
+==== renderer.d.ts (0 errors) ====
     declare global {
         namespace JSX {
             interface IntrinsicElements {
@@ -15,7 +15,7 @@ tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx(4,1): erro
     export function jsx(): void;
     export function Fragment(): void;
     
-==== tests/cases/conformance/jsx/inline/preacty.tsx (0 errors) ====
+==== preacty.tsx (0 errors) ====
     /**
      * @jsx h
      * @jsxFrag Fragment
@@ -23,13 +23,13 @@ tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx(4,1): erro
     import {h, Fragment} from "./renderer";
     <><div></div></>
     
-==== tests/cases/conformance/jsx/inline/snabbdomy.tsx (0 errors) ====
+==== snabbdomy.tsx (0 errors) ====
     /* @jsx jsx */
     /* @jsxfrag null */
     import {jsx} from "./renderer";
     <><span></span></>
     
-==== tests/cases/conformance/jsx/inline/preacty-only-fragment.tsx (0 errors) ====
+==== preacty-only-fragment.tsx (0 errors) ====
     /**
      * @jsx h
      * @jsxFrag Fragment
@@ -37,13 +37,13 @@ tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx(4,1): erro
     import {h, Fragment} from "./renderer";
     <></>
     
-==== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment.tsx (0 errors) ====
+==== snabbdomy-only-fragment.tsx (0 errors) ====
     /* @jsx jsx */
     /* @jsxfrag null */
     import {jsx} from "./renderer";
     <></>
     
-==== tests/cases/conformance/jsx/inline/preacty-only-fragment-no-jsx.tsx (1 errors) ====
+==== preacty-only-fragment-no-jsx.tsx (1 errors) ====
     /**
      * @jsx h
      * @jsxFrag Fragment
@@ -51,17 +51,17 @@ tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx(4,1): erro
     import {Fragment} from "./renderer";
     <></>
     ~~
-!!! error TS2304: Cannot find name 'h'.
+!!! error TS2874: This JSX tag requires 'h' to be in scope, but it could not be found.
     
-==== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx (1 errors) ====
+==== snabbdomy-only-fragment-no-jsx.tsx (1 errors) ====
     /* @jsx jsx */
     /* @jsxfrag null */
     import {} from "./renderer";
     <></>
     ~~
-!!! error TS2304: Cannot find name 'jsx'.
+!!! error TS2874: This JSX tag requires 'jsx' to be in scope, but it could not be found.
     
-==== tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx (1 errors) ====
+==== preacty-no-fragment.tsx (1 errors) ====
     /**
      * @jsx h
      * @jsxFrag Fragment
@@ -71,13 +71,13 @@ tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx(4,1): erro
 !!! error TS6133: 'Fragment' is declared but its value is never read.
     <div></div>
     
-==== tests/cases/conformance/jsx/inline/snabbdomy-no-fragment.tsx (0 errors) ====
+==== snabbdomy-no-fragment.tsx (0 errors) ====
     /* @jsx jsx */
     /* @jsxfrag null */
     import {jsx} from "./renderer";
     <div></div>
     
-==== tests/cases/conformance/jsx/inline/preacty-only-component.tsx (0 errors) ====
+==== preacty-only-component.tsx (0 errors) ====
     /**
      * @jsx h
      */

@@ -1,24 +1,34 @@
-=== tests/cases/compiler/emitDecoratorMetadata_object.ts ===
+//// [tests/cases/compiler/emitDecoratorMetadata_object.ts] ////
+
+=== emitDecoratorMetadata_object.ts ===
 declare const MyClassDecorator: ClassDecorator;
 >MyClassDecorator : ClassDecorator
+>                 : ^^^^^^^^^^^^^^
 
 declare const MyMethodDecorator: MethodDecorator;
 >MyMethodDecorator : MethodDecorator
+>                  : ^^^^^^^^^^^^^^^
 
 @MyClassDecorator
 >MyClassDecorator : ClassDecorator
+>                 : ^^^^^^^^^^^^^^
 
 class A {
 >A : A
+>  : ^
 
     constructor(hi: object) {}
 >hi : object
+>   : ^^^^^^
 
     @MyMethodDecorator
 >MyMethodDecorator : MethodDecorator
+>                  : ^^^^^^^^^^^^^^^
 
     method(there: object) {}
 >method : (there: object) => void
+>       : ^     ^^      ^^^^^^^^^
 >there : object
+>      : ^^^^^^
 }
 

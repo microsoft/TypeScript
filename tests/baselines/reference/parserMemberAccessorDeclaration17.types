@@ -1,8 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration17.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration17.ts] ////
+
+=== parserMemberAccessorDeclaration17.ts ===
 class C {
 >C : C
+>  : ^
 
    set Foo(a?: number) { }
 >Foo : number
+>    : ^^^^^^
 >a : number
+>  : ^^^^^^
 }

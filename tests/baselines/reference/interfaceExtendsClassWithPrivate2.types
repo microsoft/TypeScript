@@ -1,67 +1,101 @@
-=== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts ===
+//// [tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts] ////
+
+=== interfaceExtendsClassWithPrivate2.ts ===
 class C {
 >C : C
+>  : ^
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 interface I extends C {
     other(x: any): any;
 >other : (x: any) => any
+>      : ^ ^^   ^^^^^   
 >x : any
+>  : ^^^
 }
 
 class D extends C implements I { // error
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private x = 2;
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     private y = 3;
 >y : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
     other(x: any) { return x; }
 >other : (x: any) => any
+>      : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     bar() {}
 >bar : () => void
+>    : ^^^^^^^^^^
 } 
 
 class D2 extends C implements I { // error
 >D2 : D2
+>   : ^^
 >C : C
+>  : ^
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private x = "";
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
     other(x: any) { return x; }
 >other : (x: any) => any
+>      : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 } 

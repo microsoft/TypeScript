@@ -1,4 +1,6 @@
-=== tests/cases/compiler/qualify.ts ===
+//// [tests/cases/compiler/qualify.ts] ////
+
+=== qualify.ts ===
 module M {
 >M : Symbol(M, Decl(qualify.ts, 0, 0), Decl(qualify.ts, 5, 1))
 

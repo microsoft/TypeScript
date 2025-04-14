@@ -1,55 +1,81 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/innerTypeParameterShadowingOuterOne.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/innerTypeParameterShadowingOuterOne.ts] ////
+
+=== innerTypeParameterShadowingOuterOne.ts ===
 // inner type parameters shadow outer ones of the same name
 // no errors expected
 
 function f<T extends Date>() {
 >f : <T extends Date>() => void
+>  : ^ ^^^^^^^^^    ^^^^^^^^^^^
 
     function g<T extends Number>() {
 >g : <T extends Number>() => void
+>  : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
         var x: T;
 >x : T
+>  : ^
 
         x.toFixed();
 >x.toFixed() : string
+>            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >x : T
+>  : ^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     var x: T;
 >x : T
+>  : ^
 
     x.getDate();
 >x.getDate() : number
+>            : ^^^^^^
 >x.getDate : () => number
+>          : ^^^^^^      
 >x : T
+>  : ^
 >getDate : () => number
+>        : ^^^^^^      
 }
 
 function f2<T extends Date, U extends Date>() {
 >f2 : <T extends Date, U extends Date>() => void
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^^^^^^^^^^
 
     function g<T extends Number, U extends Number>() {
 >g : <T extends Number, U extends Number>() => void
+>  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^^^^^^^^^^
 
         var x: U;
 >x : U
+>  : ^
 
         x.toFixed();
 >x.toFixed() : string
+>            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >x : U
+>  : ^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     var x: U;
 >x : U
+>  : ^
 
     x.getDate();
 >x.getDate() : number
+>            : ^^^^^^
 >x.getDate : () => number
+>          : ^^^^^^      
 >x : U
+>  : ^
 >getDate : () => number
+>        : ^^^^^^      
 }
 //function f2<T extends Date, U extends T>() {
 //    function g<T extends Number, U extends T>() {

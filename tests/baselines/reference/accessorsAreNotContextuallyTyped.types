@@ -1,33 +1,50 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorsAreNotContextuallyTyped.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorsAreNotContextuallyTyped.ts] ////
+
+=== accessorsAreNotContextuallyTyped.ts ===
 // accessors are not contextually typed
 
 class C {
 >C : C
+>  : ^
 
     set x(v: (a: string) => string) {
 >x : (a: string) => string
+>  : ^ ^^      ^^^^^      
 >v : (a: string) => string
+>  : ^ ^^      ^^^^^      
 >a : string
+>  : ^^^^^^
     }
 
     get x() {
 >x : (a: string) => string
+>  : ^ ^^      ^^^^^      
 
         return (x: string) => "";
 >(x: string) => "" : (x: string) => string
+>                  : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
     }
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var r = c.x(''); // string
 >r : string
+>  : ^^^^^^
 >c.x('') : string
+>        : ^^^^^^
 >c.x : (a: string) => string
+>    : ^ ^^      ^^^^^      
 >c : C
+>  : ^
 >x : (a: string) => string
+>  : ^ ^^      ^^^^^      
 >'' : ""
+>   : ^^
 

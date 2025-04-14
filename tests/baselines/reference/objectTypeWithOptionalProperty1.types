@@ -1,9 +1,15 @@
-=== tests/cases/compiler/objectTypeWithOptionalProperty1.ts ===
+//// [tests/cases/compiler/objectTypeWithOptionalProperty1.ts] ////
+
+=== objectTypeWithOptionalProperty1.ts ===
     var b = {
 >b : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{        x?: 1 // error    } : { x: number; }
+>                             : ^^^^^^^^^^^^^^
 
         x?: 1 // error
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }

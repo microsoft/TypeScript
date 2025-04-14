@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild2.tsx] ////
+
+=== jsxEmptyExpressionNotCountedAsChild2.tsx ===
+// repro from #38108
+
+export {}
+
+declare global {
+>global : any
+>       : ^^^
+
+    namespace JSX {
+        type Element = any;
+>Element : any
+>        : ^^^
+
+        interface ElementAttributesProperty {
+            __properties__: {};
+>__properties__ : {}
+>               : ^^
+        }
+        interface IntrinsicElements {
+            [key: string]: string;
+>key : string
+>    : ^^^^^^
+        }
+        interface ElementChildrenAttribute {
+            __children__: {};
+>__children__ : {}
+>             : ^^
+        }
+    }
+}
+
+interface MockComponentInterface {
+	new (): {
+        __properties__: { bar?: number } & { __children__: () => number };
+>__properties__ : { bar?: number; } & { __children__: () => number; }
+>               : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>__children__ : () => number
+>             : ^^^^^^      
+
+	};
+}
+
+declare const MockComponent: MockComponentInterface;
+>MockComponent : MockComponentInterface
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+
+<MockComponent>{}</MockComponent>; // error
+><MockComponent>{}</MockComponent> : any
+>                                  : ^^^
+>MockComponent : MockComponentInterface
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>MockComponent : MockComponentInterface
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+

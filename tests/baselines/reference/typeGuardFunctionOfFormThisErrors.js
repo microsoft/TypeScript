@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts] ////
+
 //// [typeGuardFunctionOfFormThisErrors.ts]
 class RoyalGuard {
     isLeader(): this is LeadGuard {

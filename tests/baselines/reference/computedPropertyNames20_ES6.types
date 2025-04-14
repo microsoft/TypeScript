@@ -1,12 +1,20 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames20_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames20_ES6.ts] ////
+
+=== computedPropertyNames20_ES6.ts ===
 var obj = {
 >obj : { [x: number]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [this.bar]: 0} : { [x: number]: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [this.bar]: 0
 >[this.bar] : number
+>           : ^^^^^^
 >this.bar : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >bar : any
+>    : ^^^
 >0 : 0
+>  : ^
 }

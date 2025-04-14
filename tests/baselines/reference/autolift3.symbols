@@ -1,4 +1,6 @@
-=== tests/cases/compiler/autolift3.ts ===
+//// [tests/cases/compiler/autolift3.ts] ////
+
+=== autolift3.ts ===
 class B {
 >B : Symbol(B, Decl(autolift3.ts, 0, 0))
 

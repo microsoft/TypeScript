@@ -1,271 +1,489 @@
-=== tests/cases/conformance/expressions/functions/contextuallyTypedIifeStrict.ts ===
+//// [tests/cases/conformance/expressions/functions/contextuallyTypedIifeStrict.ts] ////
+
+=== contextuallyTypedIifeStrict.ts ===
 // arrow
 (jake => { })("build");
 >(jake => { })("build") : void
+>                       : ^^^^
 >(jake => { }) : (jake: string) => void
+>              : ^    ^^^^^^^^^^^^^^^^^
 >jake => { } : (jake: string) => void
+>            : ^    ^^^^^^^^^^^^^^^^^
 >jake : string
+>     : ^^^^^^
 >"build" : "build"
+>        : ^^^^^^^
 
 // function expression
 (function (cats) { })("lol");
 >(function (cats) { })("lol") : void
+>                             : ^^^^
 >(function (cats) { }) : (cats: string) => void
+>                      : ^    ^^^^^^^^^^^^^^^^^
 >function (cats) { } : (cats: string) => void
+>                    : ^    ^^^^^^^^^^^^^^^^^
 >cats : string
+>     : ^^^^^^
 >"lol" : "lol"
+>      : ^^^^^
 
 // Lots of Irritating Superfluous Parentheses
 (function (x) { } ("!"));
 >(function (x) { } ("!")) : void
+>                         : ^^^^
 >function (x) { } ("!") : void
+>                       : ^^^^
 >function (x) { } : (x: string) => void
+>                 : ^ ^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"!" : "!"
+>    : ^^^
 
 ((((function (y) { }))))("-");
 >((((function (y) { }))))("-") : void
+>                              : ^^^^
 >((((function (y) { })))) : (y: string) => void
+>                         : ^ ^^^^^^^^^^^^^^^^^
 >(((function (y) { }))) : (y: string) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^
 >((function (y) { })) : (y: string) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^
 >(function (y) { }) : (y: string) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
 >function (y) { } : (y: string) => void
+>                 : ^ ^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >"-" : "-"
+>    : ^^^
 
 // multiple arguments
 ((a, b, c) => { })("foo", 101, false);
 >((a, b, c) => { })("foo", 101, false) : void
+>                                      : ^^^^
 >((a, b, c) => { }) : (a: string, b: number, c: boolean) => void
+>                   : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >(a, b, c) => { } : (a: string, b: number, c: boolean) => void
+>                 : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >101 : 101
+>    : ^^^
 >false : false
+>      : ^^^^^
 
 // default parameters
 ((m = 10) => m + 1)(12);
 >((m = 10) => m + 1)(12) : number
+>                        : ^^^^^^
 >((m = 10) => m + 1) : (m?: number) => number
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^
 >(m = 10) => m + 1 : (m?: number) => number
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^
 >m : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >m + 1 : number
+>      : ^^^^^^
 >m : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >12 : 12
+>   : ^^
 
 ((n = 10) => n + 1)();
 >((n = 10) => n + 1)() : number
+>                      : ^^^^^^
 >((n = 10) => n + 1) : (n?: number) => number
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^
 >(n = 10) => n + 1 : (n?: number) => number
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >n + 1 : number
+>      : ^^^^^^
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 // optional parameters
 ((j?) => j + 1)(12);
 >((j?) => j + 1)(12) : number
+>                    : ^^^^^^
 >((j?) => j + 1) : (j?: number | undefined) => number
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(j?) => j + 1 : (j?: number | undefined) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >j : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >j + 1 : number
+>      : ^^^^^^
 >j : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >12 : 12
+>   : ^^
 
 ((k?) => k + 1)();
 >((k?) => k + 1)() : any
+>                  : ^^^
 >((k?) => k + 1) : (k?: undefined) => any
+>                : ^ ^^^^^^^^^^^^^^^^^^^^
 >(k?) => k + 1 : (k?: undefined) => any
+>              : ^ ^^^^^^^^^^^^^^^^^^^^
 >k : undefined
+>  : ^^^^^^^^^
 >k + 1 : any
+>      : ^^^
 >k : undefined
+>  : ^^^^^^^^^
 >1 : 1
+>  : ^
 
-((l, o?) => l + o)(12); // o should be any
+((l, o?) => l + o)(12);
 >((l, o?) => l + o)(12) : any
+>                       : ^^^
 >((l, o?) => l + o) : (l: number, o?: undefined) => any
+>                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >(l, o?) => l + o : (l: number, o?: undefined) => any
+>                 : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >l : number
+>  : ^^^^^^
 >o : undefined
+>  : ^^^^^^^^^
 >l + o : any
+>      : ^^^
 >l : number
+>  : ^^^^^^
 >o : undefined
+>  : ^^^^^^^^^
 >12 : 12
+>   : ^^
 
 // rest parameters
 ((...numbers) => numbers.every(n => n > 0))(5,6,7);
 >((...numbers) => numbers.every(n => n > 0))(5,6,7) : boolean
+>                                                   : ^^^^^^^
 >((...numbers) => numbers.every(n => n > 0)) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(...numbers) => numbers.every(n => n > 0) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numbers : [number, number, number]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >numbers.every(n => n > 0) : boolean
+>                          : ^^^^^^^
 >numbers.every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+>              : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >numbers : [number, number, number]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >n => n > 0 : (n: number) => boolean
+>           : ^ ^^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n > 0 : boolean
+>      : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >5 : 5
+>  : ^
 >6 : 6
+>  : ^
 >7 : 7
+>  : ^
 
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
 >((...mixed) => mixed.every(n => !!n))(5,'oops','oh no') : boolean
+>                                                        : ^^^^^^^
 >((...mixed) => mixed.every(n => !!n)) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(...mixed) => mixed.every(n => !!n) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixed : [number, string, string]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >mixed.every(n => !!n) : boolean
+>                      : ^^^^^^^
 >mixed.every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
+>            : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >mixed : [number, string, string]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >n => !!n : (n: string | number) => boolean
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string | number
+>  : ^^^^^^^^^^^^^^^
 >!!n : boolean
+>    : ^^^^^^^
 >!n : boolean
+>   : ^^^^^^^
 >n : string | number
+>  : ^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >'oops' : "oops"
+>       : ^^^^^^
 >'oh no' : "oh no"
+>        : ^^^^^^^
 
 ((...noNumbers) => noNumbers.some(n => n > 0))();
 >((...noNumbers) => noNumbers.some(n => n > 0))() : boolean
+>                                                 : ^^^^^^^
 >((...noNumbers) => noNumbers.some(n => n > 0)) : () => boolean
+>                                               : ^^^^^^^^^^^^^
 >(...noNumbers) => noNumbers.some(n => n > 0) : () => boolean
+>                                             : ^^^^^^^^^^^^^
 >noNumbers : []
+>          : ^^
 >noNumbers.some(n => n > 0) : boolean
+>                           : ^^^^^^^
 >noNumbers.some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
+>               : ^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^       
 >noNumbers : []
+>          : ^^
 >some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
+>     : ^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^       
 >n => n > 0 : (n: never) => boolean
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : never
+>  : ^^^^^
 >n > 0 : boolean
+>      : ^^^^^^^
 >n : never
+>  : ^^^^^
 >0 : 0
+>  : ^
 
 ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
 >((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10) : boolean[]
+>                                                                : ^^^^^^^^^
 >((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, rest_0: number, rest_1: number) => boolean[]
+>                                                        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, rest_0: number, rest_1: number) => boolean[]
+>                                                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >first : number
+>      : ^^^^^^
 >rest : [number, number]
+>     : ^^^^^^^^^^^^^^^^
 >first ? [] : rest.map(n => n > 0) : boolean[]
+>                                  : ^^^^^^^^^
 >first : number
+>      : ^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 >rest.map(n => n > 0) : boolean[]
+>                     : ^^^^^^^^^
 >rest.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>         : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >rest : [number, number]
+>     : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >n => n > 0 : (n: number) => boolean
+>           : ^ ^^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n > 0 : boolean
+>      : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >8 : 8
+>  : ^
 >9 : 9
+>  : ^
 >10 : 10
+>   : ^^
 
 // destructuring parameters (with defaults too!)
 (({ q }) => q)({ q : 13 });
 >(({ q }) => q)({ q : 13 }) : number
+>                           : ^^^^^^
 >(({ q }) => q) : ({ q }: { q: number; }) => number
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ q }) => q : ({ q }: { q: number; }) => number
+>             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >q : number
+>  : ^^^^^^
 >q : number
+>  : ^^^^^^
 >{ q : 13 } : { q: number; }
+>           : ^^^^^^^^^^^^^^
 >q : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 
 (({ p = 14 }) => p)({ p : 15 });
 >(({ p = 14 }) => p)({ p : 15 }) : number
+>                                : ^^^^^^
 >(({ p = 14 }) => p) : ({ p }: { p: number; }) => number
+>                    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ p = 14 }) => p : ({ p }: { p: number; }) => number
+>                  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 >14 : 14
+>   : ^^
 >p : number
+>  : ^^^^^^
 >{ p : 15 } : { p: number; }
+>           : ^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 >15 : 15
+>   : ^^
 
 (({ r = 17 } = { r: 18 }) => r)({r : 19});
 >(({ r = 17 } = { r: 18 }) => r)({r : 19}) : number
+>                                          : ^^^^^^
 >(({ r = 17 } = { r: 18 }) => r) : ({ r }?: { r: number; }) => number
+>                                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ r = 17 } = { r: 18 }) => r : ({ r }?: { r: number; }) => number
+>                              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
+>  : ^^^^^^
 >17 : 17
+>   : ^^
 >{ r: 18 } : { r: number; }
+>          : ^^^^^^^^^^^^^^
 >r : number
+>  : ^^^^^^
 >18 : 18
+>   : ^^
 >r : number
+>  : ^^^^^^
 >{r : 19} : { r: number; }
+>         : ^^^^^^^^^^^^^^
 >r : number
+>  : ^^^^^^
 >19 : 19
+>   : ^^
 
 (({ u = 22 } = { u: 23 }) => u)();
 >(({ u = 22 } = { u: 23 }) => u)() : number
+>                                  : ^^^^^^
 >(({ u = 22 } = { u: 23 }) => u) : ({ u }?: { u?: number; }) => number
+>                                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ u = 22 } = { u: 23 }) => u : ({ u }?: { u?: number; }) => number
+>                              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >u : number
+>  : ^^^^^^
 >22 : 22
+>   : ^^
 >{ u: 23 } : { u?: number; }
+>          : ^^^^^^^^^^^^^^^
 >u : number
+>  : ^^^^^^
 >23 : 23
+>   : ^^
 >u : number
+>  : ^^^^^^
 
 // contextually typed parameters.
 let twelve = (f => f(12))(i => i);
 >twelve : any
+>       : ^^^
 >(f => f(12))(i => i) : any
+>                     : ^^^
 >(f => f(12)) : (f: (i: any) => any) => any
+>             : ^ ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >f => f(12) : (f: (i: any) => any) => any
+>           : ^ ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >f : (i: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >f(12) : any
+>      : ^^^
 >f : (i: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 >i => i : (i: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >i : any
+>  : ^^^
 >i : any
+>  : ^^^
 
 let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 >eleven : any
+>       : ^^^
 >(o => o.a(11))({ a: function(n) { return n; } }) : any
+>                                                 : ^^^
 >(o => o.a(11)) : (o: { a: (n: any) => any; }) => any
+>               : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >o => o.a(11) : (o: { a: (n: any) => any; }) => any
+>             : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: (n: any) => any; }
+>  : ^^^^^^ ^^^^^^^^^^^^^^^^
 >o.a(11) : any
+>        : ^^^
 >o.a : (n: any) => any
+>    : ^ ^^^^^^^^^^^^^
 >o : { a: (n: any) => any; }
+>  : ^^^^^^ ^^^^^^^^^^^^^^^^
 >a : (n: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >11 : 11
+>   : ^^
 >{ a: function(n) { return n; } } : { a: (n: any) => any; }
+>                                 : ^^^^^^ ^^^^^^^^^^^^^^^^
 >a : (n: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >function(n) { return n; } : (n: any) => any
+>                          : ^ ^^^^^^^^^^^^^
 >n : any
+>  : ^^^
 >n : any
+>  : ^^^
 
 // missing arguments
 (function(x, undefined) { return x; })(42);
 >(function(x, undefined) { return x; })(42) : number
+>                                           : ^^^^^^
 >(function(x, undefined) { return x; }) : (x: number, undefined?: undefined) => number
+>                                       : ^ ^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^
 >function(x, undefined) { return x; } : (x: number, undefined?: undefined) => number
+>                                     : ^ ^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 ((x, y, z) => 42)();
 >((x, y, z) => 42)() : number
+>                    : ^^^^^^
 >((x, y, z) => 42) : (x?: undefined, y?: undefined, z?: undefined) => number
+>                  : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >(x, y, z) => 42 : (x?: undefined, y?: undefined, z?: undefined) => number
+>                : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 >y : undefined
+>  : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >42 : 42
+>   : ^^
 

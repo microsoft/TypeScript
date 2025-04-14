@@ -4,17 +4,17 @@
 interface $ { x }
 
 //// [app.ts]
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 interface A {
     x: $
 }
 
 //// [app.js]
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 
 
 //// [app.d.ts]
-/// <reference types="lib" />
+/// <reference types="lib" preserve="true" />
 interface A {
     x: $;
 }

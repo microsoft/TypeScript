@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignValueAndType.ts ===
+//// [tests/cases/compiler/exportAssignValueAndType.ts] ////
+
+=== exportAssignValueAndType.ts ===
 declare module http {
 >http : Symbol(http, Decl(exportAssignValueAndType.ts, 0, 0))
 

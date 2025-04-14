@@ -1,13 +1,18 @@
-=== tests/cases/compiler/jsDocOptionality.js ===
+//// [tests/cases/compiler/signaturesUseJSDocForOptionalParameters.ts] ////
+
+=== jsDocOptionality.js ===
 function MyClass() {
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 
   this.prop = null;
 >this.prop = null : null
+>                 : ^^^^
 >this.prop : any
 >this : this
+>     : ^^^^
 >prop : any
->null : null
+>     : ^^^
 }
 /**
  * @param  {string} required
@@ -16,38 +21,61 @@ function MyClass() {
  */
 MyClass.prototype.optionalParam = function(required, notRequired) {
 >MyClass.prototype.optionalParam = function(required, notRequired) {    return this;} : (required: string, notRequired?: string) => MyClass
+>                                                                                     : ^        ^^      ^^           ^^^      ^^^^^       
 >MyClass.prototype.optionalParam : any
 >MyClass.prototype : any
+>                  : ^^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >optionalParam : any
+>              : ^^^
 >function(required, notRequired) {    return this;} : (required: string, notRequired?: string) => MyClass
+>                                                   : ^        ^^      ^^           ^^^      ^^^^^       
 >required : string
+>         : ^^^^^^
 >notRequired : string
+>            : ^^^^^^
 
     return this;
 >this : this
+>     : ^^^^
 
 };
 let pInst = new MyClass();
 >pInst : MyClass
+>      : ^^^^^^^
 >new MyClass() : MyClass
+>              : ^^^^^^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 
 let c1 = pInst.optionalParam('hello')
 >c1 : MyClass
+>   : ^^^^^^^
 >pInst.optionalParam('hello') : MyClass
+>                             : ^^^^^^^
 >pInst.optionalParam : (required: string, notRequired?: string) => MyClass
+>                    : ^        ^^      ^^           ^^^      ^^^^^       
 >pInst : MyClass
+>      : ^^^^^^^
 >optionalParam : (required: string, notRequired?: string) => MyClass
+>              : ^        ^^      ^^           ^^^      ^^^^^       
 >'hello' : "hello"
+>        : ^^^^^^^
 
 let c2 = pInst.optionalParam('hello', null)
 >c2 : MyClass
+>   : ^^^^^^^
 >pInst.optionalParam('hello', null) : MyClass
+>                                   : ^^^^^^^
 >pInst.optionalParam : (required: string, notRequired?: string) => MyClass
+>                    : ^        ^^      ^^           ^^^      ^^^^^       
 >pInst : MyClass
+>      : ^^^^^^^
 >optionalParam : (required: string, notRequired?: string) => MyClass
+>              : ^        ^^      ^^           ^^^      ^^^^^       
 >'hello' : "hello"
->null : null
+>        : ^^^^^^^
 

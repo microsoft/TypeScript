@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypes3.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypes3.ts] ////
+
+=== templateLiteralTypes3.ts ===
 // Inference from template literal type to template literal type
 
 type Foo1<T> = T extends `*${infer U}*` ? U : never;
@@ -578,5 +580,30 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
 >u1 : Symbol(u1, Decl(templateLiteralTypes3.ts, 185, 53))
 >u2 : Symbol(u2, Decl(templateLiteralTypes3.ts, 185, 80))
+}
+
+// Repro from #52685
+
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+>Boom : Symbol(Boom, Decl(templateLiteralTypes3.ts, 189, 1))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+// Repro from #56582
+
+function a<T extends {id: string}>() {
+>a : Symbol(a, Decl(templateLiteralTypes3.ts, 193, 61))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 197, 11))
+>id : Symbol(id, Decl(templateLiteralTypes3.ts, 197, 22))
+
+    let x: keyof T & string | `-${keyof T & string}`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 198, 7))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 197, 11))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 197, 11))
+
+    x = "id";
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 198, 7))
+
+    x = "-id";
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 198, 7))
 }
 

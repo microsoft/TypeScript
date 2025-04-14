@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleNewExportBug.ts] ////
+
 //// [moduleNewExportBug.ts]
 module mod1 {
 	interface mInt {

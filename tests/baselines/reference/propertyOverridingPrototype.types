@@ -1,18 +1,25 @@
-=== tests/cases/compiler/propertyOverridingPrototype.ts ===
+//// [tests/cases/compiler/propertyOverridingPrototype.ts] ////
+
+=== propertyOverridingPrototype.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
     }
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     foo: () => { };
 >foo : () => {}
+>    : ^^^^^^  
 }
 
 

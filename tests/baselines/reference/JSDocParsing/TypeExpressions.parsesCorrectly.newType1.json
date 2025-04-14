@@ -18,9 +18,7 @@
                 "pos": 10,
                 "end": 13,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "NewKeyword",
                 "escapedText": "new"
             },
             "type": {
@@ -31,7 +29,7 @@
                 "modifierFlagsCache": 0,
                 "transformFlags": 1,
                 "typeName": {
-                    "kind": "FirstNode",
+                    "kind": "QualifiedName",
                     "pos": 14,
                     "end": 17,
                     "flags": "JSDoc",
@@ -42,7 +40,6 @@
                         "pos": 14,
                         "end": 15,
                         "flags": "JSDoc",
-                        "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "escapedText": "a"
                     },
@@ -51,7 +48,6 @@
                         "pos": 16,
                         "end": 17,
                         "flags": "JSDoc",
-                        "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "escapedText": "b"
                     }

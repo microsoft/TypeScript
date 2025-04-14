@@ -1,94 +1,133 @@
-=== tests/cases/conformance/ambient/ambientErrors.ts ===
+//// [tests/cases/conformance/ambient/ambientErrors.ts] ////
+
+=== ambientErrors.ts ===
 // Ambient variable with an initializer 
 declare var x = 4;
 >x : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
 // Ambient functions with invalid overloads
 declare function fn(x: number): string;
 >fn : { (x: number): string; (x: "foo"): number; }
+>   : ^^^ ^^      ^^^      ^^^ ^^     ^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 declare function fn(x: 'foo'): number;
->fn : { (x: number): string; (x: 'foo'): number; }
+>fn : { (x: number): string; (x: "foo"): number; }
+>   : ^^^ ^^      ^^^      ^^^ ^^     ^^^      ^^^
 >x : "foo"
+>  : ^^^^^
 
 // Ambient functions with duplicate signatures
 declare function fn1(x: number): string;
 >fn1 : { (x: number): string; (x: number): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 declare function fn1(x: number): string;
 >fn1 : { (x: number): string; (x: number): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 // Ambient function overloads that differ only by return type
 declare function fn2(x: number): string;
 >fn2 : { (x: number): string; (x: number): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 declare function fn2(x: number): number;
 >fn2 : { (x: number): string; (x: number): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 // Ambient function with default parameter values
 declare function fn3(x = 3);
 >fn3 : (x?: number) => any
+>    : ^ ^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 // Ambient function with function body
 declare function fn4() { };
 >fn4 : () => void
+>    : ^^^^^^^^^^
 
 // Ambient enum with non - integer literal constant member
 declare enum E1 {
 >E1 : E1
+>   : ^^
 
     y = 4.23
 >y : E1.y
+>  : ^^^^
 >4.23 : 4.23
+>     : ^^^^
 }
 
 // Ambient enum with computer member
 declare enum E2 {
 >E2 : E2
+>   : ^^
 
     x = 'foo'.length
->x : E2
+>x : E2.x
+>  : ^^^^
 >'foo'.length : number
+>             : ^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 // Ambient module with initializers for values, bodies for functions / classes
 declare module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     var x = 3;
 >x : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
     function fn() { }
 >fn : () => void
+>   : ^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         static x = 3;
 >x : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
         y = 4;
 >y : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
         constructor() { }
         fn() { }
 >fn : () => void
+>   : ^^^^^^^^^^
 
         static sfn() { }
 >sfn : () => void
+>    : ^^^^^^^^^^
     }
 }
 
@@ -96,23 +135,29 @@ declare module M1 {
 module M2 {
     declare module 'nope' { }
 >'nope' : typeof import("nope")
+>       : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Ambient external module with a string literal name that isn't a top level external module name
 declare module '../foo' { }
 >'../foo' : typeof import("../foo")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
 // Ambient external module with export assignment and other exported members
 declare module 'bar' {
 >'bar' : typeof import("bar")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     var n;
 >n : any
+>  : ^^^
 
     export var q;
 >q : any
+>  : ^^^
 
     export = n;
 >n : any
+>  : ^^^
 }
 

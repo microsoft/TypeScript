@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(11,10): error TS2741: Property 'AnotherProperty1' is missing in type '{ property1: string; property2: number; }' but required in type 'AnotherComponentProps'.
+file.tsx(11,10): error TS2741: Property 'AnotherProperty1' is missing in type '{ property1: string; property2: number; }' but required in type 'AnotherComponentProps'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     import React = require('react');
     
     interface ComponentProps {
@@ -15,7 +15,7 @@ tests/cases/conformance/jsx/file.tsx(11,10): error TS2741: Property 'AnotherProp
             <AnotherComponent {...props} />
              ~~~~~~~~~~~~~~~~
 !!! error TS2741: Property 'AnotherProperty1' is missing in type '{ property1: string; property2: number; }' but required in type 'AnotherComponentProps'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:17:5: 'AnotherProperty1' is declared here.
+!!! related TS2728 file.tsx:17:5: 'AnotherProperty1' is declared here.
         );
     }
     

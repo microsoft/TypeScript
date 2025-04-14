@@ -1,0 +1,45 @@
+// === Inlay Hints ===
+function foo1 () {
+                ^
+{
+  "text": ": number",
+  "position": 16,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+    foo() {
+         ^
+{
+  "text": ": number",
+  "position": 95,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const a = () => 1
+            ^
+{
+  "text": ": number",
+  "position": 135,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const b = function () { return 1 }
+                     ^
+{
+  "text": ": number",
+  "position": 162,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const c = (b) => 1
+             ^
+{
+  "text": ": number",
+  "position": 189,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

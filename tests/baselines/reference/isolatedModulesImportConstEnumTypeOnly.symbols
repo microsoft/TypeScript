@@ -1,9 +1,11 @@
-=== tests/cases/compiler/enum.ts ===
+//// [tests/cases/compiler/isolatedModulesImportConstEnumTypeOnly.ts] ////
+
+=== enum.ts ===
 export const enum Foo { Bar }
 >Foo : Symbol(Foo, Decl(enum.ts, 0, 0))
 >Bar : Symbol(Foo.Bar, Decl(enum.ts, 0, 23))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { Foo } from "./enum";
 >Foo : Symbol(Foo, Decl(index.ts, 0, 8))
 

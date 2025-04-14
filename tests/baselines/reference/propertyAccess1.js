@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAccess1.ts] ////
+
 //// [propertyAccess1.ts]
 var foo: { a: number; };
 foo.a = 4;

@@ -1,36 +1,56 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithNoContent.ts] ////
+
+=== file1.ts ===
 import b1 = require('./b.json');
 >b1 : {}
+>   : ^^
 
 let x = b1.a;
 >x : any
+>  : ^^^
 >b1.a : any
+>     : ^^^
 >b1 : {}
+>   : ^^
 >a : any
+>  : ^^^
 
 import b2 = require('./b.json');
 >b2 : {}
+>   : ^^
 
 if (x) {
 >x : any
+>  : ^^^
 
     let b = b2.b;
 >b : any
+>  : ^^^
 >b2.b : any
+>     : ^^^
 >b2 : {}
+>   : ^^
 >b : any
+>  : ^^^
 
     x = (b1.b === b);
 >x = (b1.b === b) : boolean
+>                 : ^^^^^^^
 >x : any
+>  : ^^^
 >(b1.b === b) : boolean
+>             : ^^^^^^^
 >b1.b === b : boolean
+>           : ^^^^^^^
 >b1.b : any
+>     : ^^^
 >b1 : {}
+>   : ^^
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 }
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 
-No type information for this code.

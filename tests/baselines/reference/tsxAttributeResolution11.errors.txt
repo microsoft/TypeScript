@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
+file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
 
 
-==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
+==== react.d.ts (0 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -15,7 +15,7 @@ tests/cases/conformance/jsx/file.tsx(11,22): error TS2322: Type '{ bar: string; 
     	}
     }
     
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     class MyComponent {  
       render() {
       }

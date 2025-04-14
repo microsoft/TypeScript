@@ -1,36 +1,52 @@
-=== tests/cases/conformance/jsx/0.tsx ===
+//// [tests/cases/conformance/jsx/correctlyMarkAliasAsReferences2.tsx] ////
+
+=== 0.tsx ===
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 >cx : any
 
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 let buttonProps : {[attributeName: string]: ''}
 >buttonProps : { [attributeName: string]: ""; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >attributeName : string
+>              : ^^^^^^
 
 let k = <button {...buttonProps}>
 >k : JSX.Element
+>  : ^^^^^^^^^^^
 ><button {...buttonProps}>            <span className={cx('class1', { class2: true })} />        </button> : JSX.Element
+>                                                                                                          : ^^^^^^^^^^^
 >button : any
+>       : ^^^
 >buttonProps : { [attributeName: string]: ""; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             <span className={cx('class1', { class2: true })} />
 ><span className={cx('class1', { class2: true })} /> : JSX.Element
+>                                                    : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >className : any
 >cx('class1', { class2: true }) : any
 >cx : any
 >'class1' : "class1"
+>         : ^^^^^^^^
 >{ class2: true } : { class2: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
 >class2 : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
         </button>;
 >button : any
+>       : ^^^
 
-=== tests/cases/conformance/jsx/declaration.d.ts ===
+=== declaration.d.ts ===
 declare module "classnames";
 >"classnames" : any
 

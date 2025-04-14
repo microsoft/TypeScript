@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeCircularReferenceInAccessor.ts] ////
+
 //// [mappedTypeCircularReferenceInAccessor.ts]
 interface User {
   firstName: string,

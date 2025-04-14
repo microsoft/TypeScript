@@ -1,130 +1,206 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember2.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember2.ts] ////
+
+=== typeOfThisInInstanceMember2.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     x = this;
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
     foo() {
 >foo : () => this
+>    : ^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
     constructor(x: T) {
 >x : T
+>  : ^
 
         var t = this;
 >t : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
         t.x;
 >t.x : this
+>    : ^^^^
 >t : this
+>  : ^^^^
 >x : this
+>  : ^^^^
 
         t.y;
 >t.y : this
+>    : ^^^^
 >t : this
+>  : ^^^^
 >y : this
+>  : ^^^^
 
         t.z;
 >t.z : T
+>    : ^
 >t : this
+>  : ^^^^
 >z : T
+>  : ^
 
         var r = t.foo();
 >r : this
+>  : ^^^^
 >t.foo() : this
+>        : ^^^^
 >t.foo : () => this
+>      : ^^^^^^^^^^
 >t : this
+>  : ^^^^
 >foo : () => this
+>    : ^^^^^^^^^^
     }
 
     get y() {
 >y : this
+>  : ^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 
     z: T;
 >z : T
+>  : ^
 }
 
 var c: C<string>;
 >c : C<string>
+>  : ^^^^^^^^^
 
 // all ok
 var r = c.x;
 >r : C<string>
+>  : ^^^^^^^^^
 >c.x : C<string>
+>    : ^^^^^^^^^
 >c : C<string>
+>  : ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 
 var ra = c.x.x.x;
 >ra : C<string>
+>   : ^^^^^^^^^
 >c.x.x.x : C<string>
+>        : ^^^^^^^^^
 >c.x.x : C<string>
+>      : ^^^^^^^^^
 >c.x : C<string>
+>    : ^^^^^^^^^
 >c : C<string>
+>  : ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 
 var r2 = c.y;
 >r2 : C<string>
+>   : ^^^^^^^^^
 >c.y : C<string>
+>    : ^^^^^^^^^
 >c : C<string>
+>  : ^^^^^^^^^
 >y : C<string>
+>  : ^^^^^^^^^
 
 var r3 = c.foo();
 >r3 : C<string>
+>   : ^^^^^^^^^
 >c.foo() : C<string>
+>        : ^^^^^^^^^
 >c.foo : () => C<string>
+>      : ^^^^^^^^^^^^^^^
 >c : C<string>
+>  : ^^^^^^^^^
 >foo : () => C<string>
+>    : ^^^^^^^^^^^^^^^
 
 var r4 = c.z;
 >r4 : string
+>   : ^^^^^^
 >c.z : string
+>    : ^^^^^^
 >c : C<string>
+>  : ^^^^^^^^^
 >z : string
+>  : ^^^^^^
 
 var rs = [r, r2, r3];
 >rs : C<string>[]
+>   : ^^^^^^^^^^^
 >[r, r2, r3] : C<string>[]
+>            : ^^^^^^^^^^^
 >r : C<string>
+>  : ^^^^^^^^^
 >r2 : C<string>
+>   : ^^^^^^^^^
 >r3 : C<string>
+>   : ^^^^^^^^^
 
 rs.forEach(x => {
 >rs.forEach(x => {    x.foo;    x.x;    x.y;    x.z;}) : void
+>                                                      : ^^^^
 >rs.forEach : (callbackfn: (value: C<string>, index: number, array: C<string>[]) => void, thisArg?: any) => void
+>           : ^          ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >rs : C<string>[]
+>   : ^^^^^^^^^^^
 >forEach : (callbackfn: (value: C<string>, index: number, array: C<string>[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >x => {    x.foo;    x.x;    x.y;    x.z;} : (x: C<string>) => void
+>                                          : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 
     x.foo;
 >x.foo : () => C<string>
+>      : ^^^^^^^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >foo : () => C<string>
+>    : ^^^^^^^^^^^^^^^
 
     x.x;
 >x.x : C<string>
+>    : ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 
     x.y;
 >x.y : C<string>
+>    : ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >y : C<string>
+>  : ^^^^^^^^^
 
     x.z;
 >x.z : string
+>    : ^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >z : string
+>  : ^^^^^^
 
 });

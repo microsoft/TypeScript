@@ -1,39 +1,61 @@
-=== tests/cases/compiler/argumentsObjectIterator02_ES6.ts ===
+//// [tests/cases/compiler/argumentsObjectIterator02_ES6.ts] ////
+
+=== argumentsObjectIterator02_ES6.ts ===
 function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
 >doubleAndReturnAsArray : (x: number, y: number, z: number) => [number, number, number]
+>                       : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^                        
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 
     let blah = arguments[Symbol.iterator];
->blah : () => IterableIterator<any>
->arguments[Symbol.iterator] : () => IterableIterator<any>
+>blah : () => ArrayIterator<any>
+>     : ^^^^^^                  
+>arguments[Symbol.iterator] : () => ArrayIterator<any>
+>                           : ^^^^^^                  
 >arguments : IArguments
+>          : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
     let result = [];
 >result : any[]
+>       : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     for (let arg of blah()) {
 >arg : any
->blah() : IterableIterator<any>
->blah : () => IterableIterator<any>
+>blah() : ArrayIterator<any>
+>       : ^^^^^^^^^^^^^^^^^^
+>blah : () => ArrayIterator<any>
+>     : ^^^^^^                  
 
         result.push(arg + arg);
 >result.push(arg + arg) : number
+>                       : ^^^^^^
 >result.push : (...items: any[]) => number
+>            : ^^^^     ^^^^^^^^^^^^      
 >result : any[]
+>       : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >arg + arg : any
 >arg : any
 >arg : any
     }
     return <[any, any, any]>result;
 ><[any, any, any]>result : [any, any, any]
+>                        : ^^^^^^^^^^^^^^^
 >result : any[]
+>       : ^^^^^
 }
 
 

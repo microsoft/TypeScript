@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/ambient/ambientDeclarations.ts] ////
+
 //// [ambientDeclarations.ts]
 // Ambient variable without type annotation
 declare var n;

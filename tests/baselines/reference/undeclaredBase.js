@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undeclaredBase.ts] ////
+
 //// [undeclaredBase.ts]
 module M { export class C extends M.I { } }
 

@@ -1,55 +1,86 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/jsxParsingError3.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
   interface Element {}
   interface IntrinsicElements {
     [s: string]: any;
 >s : string
+>  : ^^^^^^
   }
 }
 
-=== tests/cases/conformance/jsx/Error1.tsx ===
+=== Error1.tsx ===
 let x1 = <div>}</div>;
 >x1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div>}</div> : JSX.Element
+>             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/Error2.tsx ===
+=== Error2.tsx ===
 let x2 = <div>></div>;
 >x2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div>></div> : JSX.Element
+>             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/Error3.tsx ===
+=== Error3.tsx ===
 let x3 = <div>{"foo"}}</div>;
 >x3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div>{"foo"}}</div> : JSX.Element
+>                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >"foo" : "foo"
+>      : ^^^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/Error4.tsx ===
+=== Error4.tsx ===
 let x4 = <div>{"foo"}></div>;
 >x4 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div>{"foo"}></div> : JSX.Element
+>                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >"foo" : "foo"
+>      : ^^^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/Error5.tsx ===
+=== Error5.tsx ===
 let x5 = <div>}{"foo"}</div>;
 >x5 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div>}{"foo"}</div> : JSX.Element
+>                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >"foo" : "foo"
+>      : ^^^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/Error6.tsx ===
+=== Error6.tsx ===
 let x6 = <div>>{"foo"}</div>;
 >x6 : JSX.Element
+>   : ^^^^^^^^^^^
 ><div>>{"foo"}</div> : JSX.Element
+>                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >"foo" : "foo"
+>      : ^^^^^
 >div : any
+>    : ^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts] ////
+
+=== taggedTemplatesWithTypeArguments2.ts ===
 export interface SomethingTaggable {
 >SomethingTaggable : Symbol(SomethingTaggable, Decl(taggedTemplatesWithTypeArguments2.ts, 0, 0))
 

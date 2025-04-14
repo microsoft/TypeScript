@@ -1,37 +1,61 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: { "data-foo"?: string };
 >test1 : { "data-foo"?: string; }
+>      : ^^^^^^^^^^^^^^^      ^^^
 >"data-foo" : string
+>           : ^^^^^^
 
 		test2: { "data-foo"?: string };
 >test2 : { "data-foo"?: string; }
+>      : ^^^^^^^^^^^^^^^      ^^^
 >"data-foo" : string
+>           : ^^^^^^
 	}
 }
 
 // Invalid names
 <test1 32data={32} />;
 ><test1 : JSX.Element
+>       : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >32 : 32
+>   : ^^
 >data={32} /> : boolean
+>             : ^^^^^^^
 >data : any
+>     : ^^^
 >{32} /> : boolean
+>        : ^^^^^^^
 >{32} / : number
+>       : ^^^^^^
 >{32} : { 32: any; }
+>     : ^^^^^^^^^^^^
 >32 : any
+>   : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
 <test2 -data={32} />;
 ><test2 -data : number
+>             : ^^^^^^
 ><test2 : JSX.Element
+>       : ^^^^^^^^^^^
 >test2 : any
+>      : ^^^
 >data : any
+>     : ^^^
 >32 : 32
->/>; : RegExp
+>   : ^^
+>/> : RegExp
+>   : ^^^^^^
 

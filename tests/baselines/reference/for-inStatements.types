@@ -1,261 +1,406 @@
-=== tests/cases/conformance/statements/for-inStatements/for-inStatements.ts ===
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatements.ts] ////
+
+=== for-inStatements.ts ===
 var aString: string;
 >aString : string
+>        : ^^^^^^
 
 for (aString in {}) { }
 >aString : string
+>        : ^^^^^^
 >{} : {}
+>   : ^^
 
 var anAny: any;
 >anAny : any
+>      : ^^^
 
 for (anAny in {}) { }
 >anAny : any
+>      : ^^^
 >{} : {}
+>   : ^^
 
 for (var x in {}) { }
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
 for (var x in []) { }
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 for (var x in [1, 2, 3, 4, 5]) { }
 >x : string
+>  : ^^^^^^
 >[1, 2, 3, 4, 5] : number[]
+>                : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >5 : 5
+>  : ^
 
 function fn(): any { }
 >fn : () => any
+>   : ^^^^^^   
 
 for (var x in fn()) { }
 >x : string
+>  : ^^^^^^
 >fn() : any
+>     : ^^^
 >fn : () => any
+>   : ^^^^^^   
 
 for (var x in /[a-z]/) { }
 >x : string
+>  : ^^^^^^
 >/[a-z]/ : RegExp
+>        : ^^^^^^
 
 for (var x in new Date()) { }
 >x : string
+>  : ^^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
 var c: any, d: any, e: any;
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 
 for (var x in c || d) { }
 >x : string
+>  : ^^^^^^
 >c || d : any
+>       : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 for (var x in e ? c : d) { }
 >x : string
+>  : ^^^^^^
 >e ? c : d : any
+>          : ^^^
 >e : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 for (var x in 42 ? c : d) { }
 >x : string
+>  : ^^^^^^
 >42 ? c : d : any
+>           : ^^^
 >42 : 42
+>   : ^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 for (var x in '' ? c : d) { }
 >x : string
+>  : ^^^^^^
 >'' ? c : d : any
+>           : ^^^
 >'' : ""
+>   : ^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 for (var x in 42 ? d[x] : c[x]) { }
 >x : string
+>  : ^^^^^^
 >42 ? d[x] : c[x] : any
+>                 : ^^^
 >42 : 42
+>   : ^^
 >d[x] : any
+>     : ^^^
 >d : any
+>  : ^^^
 >x : string
+>  : ^^^^^^
 >c[x] : any
+>     : ^^^
 >c : any
+>  : ^^^
 >x : string
+>  : ^^^^^^
 
 for (var x in c[d]) { }
 >x : string
+>  : ^^^^^^
 >c[d] : any
+>     : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 for (var x in (<T>(x: T) => x)) { }
 >x : string
+>  : ^^^^^^
 >(<T>(x: T) => x) : <T>(x: T) => T
+>                 : ^ ^^ ^^ ^^^^^^
 ><T>(x: T) => x : <T>(x: T) => T
+>               : ^ ^^ ^^ ^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 
 for (var x in function (x: string, y: number) { return x + y }) { }
 >x : string
+>  : ^^^^^^
 >function (x: string, y: number) { return x + y } : (x: string, y: number) => string
+>                                                 : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >x + y : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 class A {
 >A : A
+>  : ^
 
     biz() {
 >biz : () => any
+>    : ^^^^^^^^^
 
         for (var x in this.biz()) { }
 >x : string
+>  : ^^^^^^
 >this.biz() : any
+>           : ^^^
 >this.biz : () => any
+>         : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >biz : () => any
+>    : ^^^^^^^^^
 
         for (var x in this.biz) { }
 >x : string
+>  : ^^^^^^
 >this.biz : () => any
+>         : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >biz : () => any
+>    : ^^^^^^^^^
 
         for (var x in this) { }
 >x : string
+>  : ^^^^^^
 >this : this
+>     : ^^^^
 
         return null;
->null : null
     }
 
     static baz() {
 >baz : () => any
+>    : ^^^^^^^^^
 
         for (var x in this) { }
 >x : string
+>  : ^^^^^^
 >this : typeof A
+>     : ^^^^^^^^
 
         for (var x in this.baz) { }
 >x : string
+>  : ^^^^^^
 >this.baz : () => any
+>         : ^^^^^^^^^
 >this : typeof A
+>     : ^^^^^^^^
 >baz : () => any
+>    : ^^^^^^^^^
 
         for (var x in this.baz()) { }
 >x : string
+>  : ^^^^^^
 >this.baz() : any
+>           : ^^^
 >this.baz : () => any
+>         : ^^^^^^^^^
 >this : typeof A
+>     : ^^^^^^^^
 >baz : () => any
+>    : ^^^^^^^^^
 
         return null;
->null : null
     }
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     boz() {
 >boz : () => any
+>    : ^^^^^^^^^
 
         for (var x in this.biz()) { }
 >x : string
+>  : ^^^^^^
 >this.biz() : any
+>           : ^^^
 >this.biz : () => any
+>         : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >biz : () => any
+>    : ^^^^^^^^^
 
         for (var x in this.biz) { }
 >x : string
+>  : ^^^^^^
 >this.biz : () => any
+>         : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >biz : () => any
+>    : ^^^^^^^^^
 
         for (var x in this) { }
 >x : string
+>  : ^^^^^^
 >this : this
+>     : ^^^^
 
         for (var x in super.biz) { }
 >x : string
+>  : ^^^^^^
 >super.biz : () => any
+>          : ^^^^^^^^^
 >super : A
+>      : ^
 >biz : () => any
+>    : ^^^^^^^^^
 
         for (var x in super.biz()) { }
 >x : string
+>  : ^^^^^^
 >super.biz() : any
+>            : ^^^
 >super.biz : () => any
+>          : ^^^^^^^^^
 >super : A
+>      : ^
 >biz : () => any
+>    : ^^^^^^^^^
 
         return null;
->null : null
     }
 }
 
 interface I {
     id: number;
 >id : number
+>   : ^^^^^^
 
     [idx: number]: I;
 >idx : number
+>    : ^^^^^^
 }
 var i: I;
 >i : I
+>  : ^
 
 for (var x in i[42]) { } 
 >x : string
+>  : ^^^^^^
 >i[42] : I
+>      : ^
 >i : I
+>  : ^
 >42 : 42
+>   : ^^
 
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class X<T> {
 >X : X<T>
+>  : ^^^^
 
         name:string
 >name : string
+>     : ^^^^^^
     }
 }
 
 for (var x in M) { }
 >x : string
+>  : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 for (var x in M.X) { }
 >x : string
+>  : ^^^^^^
 >M.X : typeof M.X
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >X : typeof M.X
+>  : ^^^^^^^^^^
 
 enum Color { Red, Blue }
 >Color : Color
+>      : ^^^^^
 >Red : Color.Red
+>    : ^^^^^^^^^
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 
 for (var x in Color) { }
 >x : string
+>  : ^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 
 for (var x in Color.Blue) { }
 >x : string
+>  : ^^^^^^
 >Color.Blue : Color.Blue
+>           : ^^^^^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 

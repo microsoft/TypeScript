@@ -1,35 +1,52 @@
-=== tests/cases/conformance/override/override6.ts ===
+//// [tests/cases/conformance/override/override6.ts] ////
+
+=== override6.ts ===
 class B {
 >B : B
+>  : ^
 
     public baz: number = 1;
 >baz : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     constructor(public foo: string, public bar: number) {
 >foo : string
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 
     }
 }
 
 class D extends B {
 >D : D
+>  : ^
 >B : B
+>  : ^
 
     public bar: number = 1
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     constructor(public foo: string, public baz: number) {
 >foo : string
+>    : ^^^^^^
 >baz : number
+>    : ^^^^^^
 
         super(foo, 42)
 >super(foo, 42) : void
+>               : ^^^^
 >super : typeof B
+>      : ^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >42 : 42
+>   : ^^
     }
 }
 

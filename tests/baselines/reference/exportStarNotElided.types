@@ -1,31 +1,45 @@
-=== tests/cases/compiler/register.ts ===
+//// [tests/cases/compiler/exportStarNotElided.ts] ////
+
+=== register.ts ===
 const r: any[] = [];
 >r : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 export function register(data: any) {
 >register : (data: any) => void
+>         : ^    ^^   ^^^^^^^^^
 >data : any
 
   r.push(data);
 >r.push(data) : number
+>             : ^^^^^^
 >r.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >r : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >data : any
 }
-=== tests/cases/compiler/data1.ts ===
+=== data1.ts ===
 import { register } from "./";
 >register : (data: any) => void
+>         : ^    ^^   ^^^^^^^^^
 
 register("ok");
 >register("ok") : void
+>               : ^^^^
 >register : (data: any) => void
+>         : ^    ^^   ^^^^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 export * from "./register";
 export * from "./data1";
 export * as aliased from "./data1";
->aliased : typeof import("tests/cases/compiler/data1")
+>aliased : typeof import("data1")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 

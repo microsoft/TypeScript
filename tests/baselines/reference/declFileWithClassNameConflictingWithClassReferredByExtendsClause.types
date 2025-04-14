@@ -1,54 +1,86 @@
-=== tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts ===
+//// [tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts] ////
+
+=== declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts ===
 declare module A.B.Base {
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
     export class W {
 >W : W
+>  : ^
 
         id: number;
 >id : number
+>   : ^^^^^^
     }
 }
 module X.Y.base {
 >X : typeof X
+>  : ^^^^^^^^
 >Y : typeof Y
+>  : ^^^^^^^^
 >base : typeof base
+>     : ^^^^^^^^^^^
 
     export class W extends A.B.Base.W {
 >W : W
+>  : ^
 >A.B.Base.W : A.B.Base.W
+>           : ^^^^^^^^^^
 >A.B.Base : typeof A.B.Base
+>         : ^^^^^^^^^^^^^^^
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >Base : typeof A.B.Base
+>     : ^^^^^^^^^^^^^^^
 >W : typeof A.B.Base.W
+>  : ^^^^^^^^^^^^^^^^^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 }
 
 module X.Y.base.Z {
 >X : typeof X
+>  : ^^^^^^^^
 >Y : typeof Y
+>  : ^^^^^^^^
 >base : typeof base
+>     : ^^^^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 
     export class W<TValue> extends X.Y.base.W {
 >W : W<TValue>
+>  : ^^^^^^^^^
 >X.Y.base.W : base.W
+>           : ^^^^^^
 >X.Y.base : typeof base
+>         : ^^^^^^^^^^^
 >X.Y : typeof Y
+>    : ^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >Y : typeof Y
+>  : ^^^^^^^^
 >base : typeof base
+>     : ^^^^^^^^^^^
 >W : typeof base.W
+>  : ^^^^^^^^^^^^^
 
         value: boolean;
 >value : boolean
+>      : ^^^^^^^
     }
 }
 

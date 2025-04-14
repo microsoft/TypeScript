@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts ===
+//// [tests/cases/compiler/privacyFunctionParameterDeclFile.ts] ////
+
+=== privacyFunctionParameterDeclFile_externalModule.ts ===
 class privateClass {
 >privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 0, 0))
 }
@@ -1140,7 +1142,7 @@ module privateModule {
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 266, 5))
 }
 
-=== tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts ===
+=== privacyFunctionParameterDeclFile_GlobalFile.ts ===
 class publicClassInGlobal {
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 0, 0))
 }

@@ -23,12 +23,14 @@ verify.completions({
         {
             name: "a",
             sortText: completion.SortText.LocationPriority,
-            insertText: "a?: number;"
+            insertText: "a?: number;",
+            filterText: "a",
         },
         {
             name: "b",
             sortText: completion.SortText.LocationPriority,
-            insertText: "b(x: number): void {\n}"
+            insertText: "b(x: number): void {\n}",
+            filterText: "b",
         },
     ],
 });

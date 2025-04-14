@@ -1,4 +1,4 @@
-// @module: node12,nodenext
+// @module: node16,node18,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: index.ts

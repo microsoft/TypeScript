@@ -1,15 +1,15 @@
-tests/cases/conformance/jsx/file.tsx(8,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(9,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(10,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(11,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(14,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(15,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(16,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(17,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(18,10): error TS2304: Cannot find name 'React'.
+file.tsx(8,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(9,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(10,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(11,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(14,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(15,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(16,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(17,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file.tsx(18,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 
 
-==== tests/cases/conformance/jsx/file.tsx (9 errors) ====
+==== file.tsx (9 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -19,31 +19,31 @@ tests/cases/conformance/jsx/file.tsx(18,10): error TS2304: Cannot find name 'Rea
     
     var m = <div x-y="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     var n = <div xx-y="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     var o = <div x-yy="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     var p = <div xx-yy="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     
     // Investigation
     var a = <div x="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     var b = <div xx="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     var c = <div xxx="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     var d = <div xxxx="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     var e = <div xxxxx="val"></div>;
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     

@@ -1,21 +1,21 @@
-tests/cases/compiler/a.js(4,1): error TS2686: 'Puppeteer' refers to a UMD global, but the current file is a module. Consider adding an import instead.
+a.js(4,1): error TS2686: 'Puppeteer' refers to a UMD global, but the current file is a module. Consider adding an import instead.
 
 
-==== tests/cases/compiler/a.js (1 errors) ====
+==== a.js (1 errors) ====
     const other = require('./other');
     /** @type {Puppeteer.Keyboard} */
     var ppk;
     Puppeteer.connect;
     ~~~~~~~~~
 !!! error TS2686: 'Puppeteer' refers to a UMD global, but the current file is a module. Consider adding an import instead.
-==== tests/cases/compiler/puppet.d.ts (0 errors) ====
+==== puppet.d.ts (0 errors) ====
     export as namespace Puppeteer;
     export interface Keyboard {
         key: string
     }
     export function connect(name: string): void;
     
-==== tests/cases/compiler/other.d.ts (0 errors) ====
+==== other.d.ts (0 errors) ====
     declare function f(): string;
     export = f;
     

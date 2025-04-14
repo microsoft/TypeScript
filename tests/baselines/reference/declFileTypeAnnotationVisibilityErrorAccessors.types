@@ -1,29 +1,38 @@
-=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts] ////
+
+=== declFileTypeAnnotationVisibilityErrorAccessors.ts ===
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     class private1 {
 >private1 : private1
+>         : ^^^^^^^^
     }
 
     export class public1 {
 >public1 : public1
+>        : ^^^^^^^
     }
 
     module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
         export class public2 {
 >public2 : public2
+>        : ^^^^^^^
         }
     }
 
     export class c {
 >c : c
+>  : ^
 
         // getter with annotation
         get foo1(): private1 {
 >foo1 : private1
+>     : ^^^^^^^^
 
             return;
         }
@@ -31,45 +40,59 @@ module m {
         // getter without annotation
         get foo2() {
 >foo2 : private1
+>     : ^^^^^^^^
 
             return new private1();
 >new private1() : private1
+>               : ^^^^^^^^
 >private1 : typeof private1
+>         : ^^^^^^^^^^^^^^^
         }
 
         // setter with annotation
         set foo3(param: private1) {
 >foo3 : private1
+>     : ^^^^^^^^
 >param : private1
+>      : ^^^^^^^^
         }
 
         // Both - getter without annotation, setter with annotation
         get foo4() {
 >foo4 : private1
+>     : ^^^^^^^^
 
             return new private1();
 >new private1() : private1
+>               : ^^^^^^^^
 >private1 : typeof private1
+>         : ^^^^^^^^^^^^^^^
         }
         set foo4(param: private1) {
 >foo4 : private1
+>     : ^^^^^^^^
 >param : private1
+>      : ^^^^^^^^
         }
 
         // Both - with annotation
         get foo5(): private1 {
 >foo5 : private1
+>     : ^^^^^^^^
 
             return;
         }
         set foo5(param: private1) {
 >foo5 : private1
+>     : ^^^^^^^^
 >param : private1
+>      : ^^^^^^^^
         }
 
         // getter with annotation
         get foo11(): public1 {
 >foo11 : public1
+>      : ^^^^^^^
 
             return;
         }
@@ -77,46 +100,61 @@ module m {
         // getter without annotation
         get foo12() {
 >foo12 : public1
+>      : ^^^^^^^
 
             return new public1();
 >new public1() : public1
+>              : ^^^^^^^
 >public1 : typeof public1
+>        : ^^^^^^^^^^^^^^
         }
 
         // setter with annotation
         set foo13(param: public1) {
 >foo13 : public1
+>      : ^^^^^^^
 >param : public1
+>      : ^^^^^^^
         }
 
         // Both - getter without annotation, setter with annotation
         get foo14() {
 >foo14 : public1
+>      : ^^^^^^^
 
             return new public1();
 >new public1() : public1
+>              : ^^^^^^^
 >public1 : typeof public1
+>        : ^^^^^^^^^^^^^^
         }
         set foo14(param: public1) {
 >foo14 : public1
+>      : ^^^^^^^
 >param : public1
+>      : ^^^^^^^
         }
 
         // Both - with annotation
         get foo15(): public1 {
 >foo15 : public1
+>      : ^^^^^^^
 
             return;
         }
         set foo15(param: public1) {
 >foo15 : public1
+>      : ^^^^^^^
 >param : public1
+>      : ^^^^^^^
         }
 
         // getter with annotation
         get foo111(): m2.public2 {
 >foo111 : m2.public2
+>       : ^^^^^^^^^^
 >m2 : any
+>   : ^^^
 
             return;
         }
@@ -124,48 +162,69 @@ module m {
         // getter without annotation
         get foo112() {
 >foo112 : m2.public2
+>       : ^^^^^^^^^^
 
             return new m2.public2();
 >new m2.public2() : m2.public2
+>                 : ^^^^^^^^^^
 >m2.public2 : typeof m2.public2
+>           : ^^^^^^^^^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 >public2 : typeof m2.public2
+>        : ^^^^^^^^^^^^^^^^^
         }
 
         // setter with annotation
         set foo113(param: m2.public2) {
 >foo113 : m2.public2
+>       : ^^^^^^^^^^
 >param : m2.public2
+>      : ^^^^^^^^^^
 >m2 : any
+>   : ^^^
         }
 
         // Both - getter without annotation, setter with annotation
         get foo114() {
 >foo114 : m2.public2
+>       : ^^^^^^^^^^
 
             return new m2.public2();
 >new m2.public2() : m2.public2
+>                 : ^^^^^^^^^^
 >m2.public2 : typeof m2.public2
+>           : ^^^^^^^^^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 >public2 : typeof m2.public2
+>        : ^^^^^^^^^^^^^^^^^
         }
         set foo114(param: m2.public2) {
 >foo114 : m2.public2
+>       : ^^^^^^^^^^
 >param : m2.public2
+>      : ^^^^^^^^^^
 >m2 : any
+>   : ^^^
         }
 
         // Both - with annotation
         get foo115(): m2.public2 {
 >foo115 : m2.public2
+>       : ^^^^^^^^^^
 >m2 : any
+>   : ^^^
 
             return;
         }
         set foo115(param: m2.public2) {
 >foo115 : m2.public2
+>       : ^^^^^^^^^^
 >param : m2.public2
+>      : ^^^^^^^^^^
 >m2 : any
+>   : ^^^
         }
     }
 }

@@ -1,115 +1,180 @@
-=== tests/cases/conformance/dynamicImport/defaultPath.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionReturnPromiseOfAny.ts] ////
+
+=== defaultPath.ts ===
 export class C {}
 >C : C
+>  : ^
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 import * as defaultModule from "./defaultPath";
 >defaultModule : typeof defaultModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 declare function getSpecifier(): string;
 >getSpecifier : () => string
+>             : ^^^^^^      
 
 declare function ValidSomeCondition(): boolean;
 >ValidSomeCondition : () => boolean
+>                   : ^^^^^^       
 
 declare var whatToLoad: boolean;
 >whatToLoad : boolean
+>           : ^^^^^^^
 
 declare const directory: string;
 >directory : string
+>          : ^^^^^^
 
 declare const moduleFile: number;
 >moduleFile : number
+>           : ^^^^^^
 
 import(`${directory}\\${moduleFile}`);
 >import(`${directory}\\${moduleFile}`) : Promise<any>
+>                                      : ^^^^^^^^^^^^
 >`${directory}\\${moduleFile}` : string
+>                              : ^^^^^^
 >directory : string
+>          : ^^^^^^
 >moduleFile : number
+>           : ^^^^^^
 
 import(getSpecifier());
 >import(getSpecifier()) : Promise<any>
+>                       : ^^^^^^^^^^^^
 >getSpecifier() : string
+>               : ^^^^^^
 >getSpecifier : () => string
+>             : ^^^^^^      
 
 var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
 >p1 : Promise<any>
+>   : ^^^^^^^^^^^^
 >import(ValidSomeCondition() ? "./0" : "externalModule") : Promise<any>
+>                                                        : ^^^^^^^^^^^^
 >ValidSomeCondition() ? "./0" : "externalModule" : "./0" | "externalModule"
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >ValidSomeCondition() : boolean
+>                     : ^^^^^^^
 >ValidSomeCondition : () => boolean
+>                   : ^^^^^^       
 >"./0" : "./0"
+>      : ^^^^^
 >"externalModule" : "externalModule"
+>                 : ^^^^^^^^^^^^^^^^
 
 var p1: Promise<any> = import(getSpecifier());
 >p1 : Promise<any>
+>   : ^^^^^^^^^^^^
 >import(getSpecifier()) : Promise<any>
+>                       : ^^^^^^^^^^^^
 >getSpecifier() : string
+>               : ^^^^^^
 >getSpecifier : () => string
+>             : ^^^^^^      
 
 var p11: Promise<typeof defaultModule> = import(getSpecifier());
 >p11 : Promise<typeof defaultModule>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultModule : typeof defaultModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 >import(getSpecifier()) : Promise<any>
+>                       : ^^^^^^^^^^^^
 >getSpecifier() : string
+>               : ^^^^^^
 >getSpecifier : () => string
+>             : ^^^^^^      
 
 const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule>;
 >p2 : Promise<typeof defaultModule>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule> : Promise<typeof defaultModule>
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import(whatToLoad ? getSpecifier() : "defaulPath") : Promise<any>
+>                                                   : ^^^^^^^^^^^^
 >whatToLoad ? getSpecifier() : "defaulPath" : string
+>                                           : ^^^^^^
 >whatToLoad : boolean
+>           : ^^^^^^^
 >getSpecifier() : string
+>               : ^^^^^^
 >getSpecifier : () => string
+>             : ^^^^^^      
 >"defaulPath" : "defaulPath"
+>             : ^^^^^^^^^^^^
 >defaultModule : typeof defaultModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 p1.then(zero => {
 >p1.then(zero => {    return zero.foo();  // ok, zero is any}) : Promise<any>
+>                                                              : ^^^^^^^^^^^^
 >p1.then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>        : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p1 : Promise<any>
+>   : ^^^^^^^^^^^^
 >then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zero => {    return zero.foo();  // ok, zero is any} : (zero: any) => any
+>                                                     : ^    ^^^^^^^^^^^^^
 >zero : any
 
     return zero.foo();  // ok, zero is any
 >zero.foo() : any
 >zero.foo : any
 >zero : any
+>     : ^^^
 >foo : any
+>    : ^^^
 
 });
 
 let j: string;
 >j : string
+>  : ^^^^^^
 
 var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 >p3 : Promise<typeof defaultModule>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultModule : typeof defaultModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 >import(j=getSpecifier()) : Promise<any>
+>                         : ^^^^^^^^^^^^
 >j=getSpecifier() : string
+>                 : ^^^^^^
 >j : string
+>  : ^^^^^^
 >getSpecifier() : string
+>               : ^^^^^^
 >getSpecifier : () => string
+>             : ^^^^^^      
 
 function * loadModule(directories: string[]) {
 >loadModule : (directories: string[]) => Generator<string, void, string>
+>           : ^           ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >directories : string[]
+>            : ^^^^^^^^
 
     for (const directory of directories) {
 >directory : string
+>          : ^^^^^^
 >directories : string[]
+>            : ^^^^^^^^
 
         const path = `${directory}\\moduleFile`;
 >path : string
+>     : ^^^^^^
 >`${directory}\\moduleFile` : string
+>                           : ^^^^^^
 >directory : string
+>          : ^^^^^^
 
         import(yield path);
 >import(yield path) : Promise<any>
+>                   : ^^^^^^^^^^^^
 >yield path : any
 >path : string
+>     : ^^^^^^
     }
 }
 

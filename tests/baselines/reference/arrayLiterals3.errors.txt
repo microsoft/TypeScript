@@ -1,18 +1,18 @@
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
+arrayLiterals3.ts(10,5): error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
   Source has 0 element(s) but target requires 3.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,38): error TS2322: Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,48): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,51): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error TS2322: Type '[number, number, string, boolean]' is not assignable to type '[number, number]'.
+arrayLiterals3.ts(11,38): error TS2322: Type 'string' is not assignable to type 'boolean'.
+arrayLiterals3.ts(11,48): error TS2322: Type 'number' is not assignable to type 'string'.
+arrayLiterals3.ts(11,51): error TS2322: Type 'boolean' is not assignable to type 'number'.
+arrayLiterals3.ts(17,5): error TS2322: Type '[number, number, string, boolean]' is not assignable to type '[number, number]'.
   Source has 4 element(s) but target allows only 2.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(33,5): error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
+arrayLiterals3.ts(33,5): error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
   Target requires 3 element(s) but source may have fewer.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
+arrayLiterals3.ts(34,5): error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
   Type 'string | number' is not assignable to type 'Number'.
     Type 'string' is not assignable to type 'Number'.
 
 
-==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (7 errors) ====
+==== arrayLiterals3.ts (7 errors) ====
     // Each element expression in a non-empty array literal is processed as follows:
     //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
     //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,

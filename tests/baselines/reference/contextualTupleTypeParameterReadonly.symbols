@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/contextualTupleTypeParameterReadonly.ts] ////
+
+=== contextualTupleTypeParameterReadonly.ts ===
+declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;
+>each : Symbol(each, Decl(contextualTupleTypeParameterReadonly.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTupleTypeParameterReadonly.ts, 0, 22))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>cases : Symbol(cases, Decl(contextualTupleTypeParameterReadonly.ts, 0, 52))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(contextualTupleTypeParameterReadonly.ts, 0, 22))
+>fn : Symbol(fn, Decl(contextualTupleTypeParameterReadonly.ts, 0, 79))
+>args : Symbol(args, Decl(contextualTupleTypeParameterReadonly.ts, 0, 84))
+>T : Symbol(T, Decl(contextualTupleTypeParameterReadonly.ts, 0, 22))
+
+const cases = [
+>cases : Symbol(cases, Decl(contextualTupleTypeParameterReadonly.ts, 2, 5))
+
+    [1, '1'],
+    [2, '2'],
+] as const;
+>const : Symbol(const)
+
+const eacher = each(cases);
+>eacher : Symbol(eacher, Decl(contextualTupleTypeParameterReadonly.ts, 7, 5))
+>each : Symbol(each, Decl(contextualTupleTypeParameterReadonly.ts, 0, 0))
+>cases : Symbol(cases, Decl(contextualTupleTypeParameterReadonly.ts, 2, 5))
+
+eacher((a, b) => {
+>eacher : Symbol(eacher, Decl(contextualTupleTypeParameterReadonly.ts, 7, 5))
+>a : Symbol(a, Decl(contextualTupleTypeParameterReadonly.ts, 9, 8))
+>b : Symbol(b, Decl(contextualTupleTypeParameterReadonly.ts, 9, 10))
+
+    a;
+>a : Symbol(a, Decl(contextualTupleTypeParameterReadonly.ts, 9, 8))
+
+    b;
+>b : Symbol(b, Decl(contextualTupleTypeParameterReadonly.ts, 9, 10))
+
+});
+
+// TODO: https://github.com/microsoft/TypeScript/issues/53255
+eacher((...args) => {
+>eacher : Symbol(eacher, Decl(contextualTupleTypeParameterReadonly.ts, 7, 5))
+>args : Symbol(args, Decl(contextualTupleTypeParameterReadonly.ts, 15, 8))
+
+    const [a, b] = args;
+>a : Symbol(a, Decl(contextualTupleTypeParameterReadonly.ts, 16, 11))
+>b : Symbol(b, Decl(contextualTupleTypeParameterReadonly.ts, 16, 13))
+>args : Symbol(args, Decl(contextualTupleTypeParameterReadonly.ts, 15, 8))
+
+    a;
+>a : Symbol(a, Decl(contextualTupleTypeParameterReadonly.ts, 16, 11))
+
+    b;
+>b : Symbol(b, Decl(contextualTupleTypeParameterReadonly.ts, 16, 13))
+
+});
+

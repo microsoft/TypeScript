@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts] ////
+
+=== logicalOrOperatorWithEveryType.ts ===
 // The || operator permits the operands to be of any type.
 // If the || expression is not contextually typed, the right operand is contextually typed
 // by the type of the left operand and the result is of the best common type of the two
@@ -6,632 +8,1005 @@
 
 enum E { a, b, c }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 
 var a1: any;
 >a1 : any
+>   : ^^^
 
 var a2: boolean;
 >a2 : boolean
+>   : ^^^^^^^
 
 var a3: number
 >a3 : number
+>   : ^^^^^^
 
 var a4: string;
 >a4 : string
+>   : ^^^^^^
 
 var a5: void;
 >a5 : void
+>   : ^^^^
 
 var a6: E;
 >a6 : E
+>   : ^
 
 var a7: {a: string};
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 var a8: string[];
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ra1 = a1 || a1;         // any       || any is any
 >ra1 : any
+>    : ^^^
 >a1 || a1 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a1 : any
+>   : ^^^
 
 var ra2 = a2 || a1;         // boolean   || any is any
 >ra2 : any
+>    : ^^^
 >a2 || a1 : any
+>         : ^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a1 : any
+>   : ^^^
 
 var ra3 = a3 || a1;         // number    || any is any
 >ra3 : any
+>    : ^^^
 >a3 || a1 : any
+>         : ^^^
 >a3 : number
+>   : ^^^^^^
 >a1 : any
+>   : ^^^
 
 var ra4 = a4 || a1;         // string    || any is any
 >ra4 : any
+>    : ^^^
 >a4 || a1 : any
+>         : ^^^
 >a4 : string
+>   : ^^^^^^
 >a1 : any
+>   : ^^^
 
 var ra5 = a5 || a1;         // void      || any is any
 >ra5 : any
+>    : ^^^
 >a5 || a1 : any
+>         : ^^^
 >a5 : void
+>   : ^^^^
 >a1 : any
+>   : ^^^
 
 var ra6 = a6 || a1;         // enum      || any is any
 >ra6 : any
+>    : ^^^
 >a6 || a1 : any
+>         : ^^^
 >a6 : E
+>   : ^
 >a1 : any
+>   : ^^^
 
 var ra7 = a7 || a1;         // object    || any is any
 >ra7 : any
+>    : ^^^
 >a7 || a1 : any
+>         : ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a1 : any
+>   : ^^^
 
 var ra8 = a8 || a1;         // array     || any is any
 >ra8 : any
+>    : ^^^
 >a8 || a1 : any
+>         : ^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a1 : any
+>   : ^^^
 
 var ra9 = null || a1;       // null      || any is any
 >ra9 : any
+>    : ^^^
 >null || a1 : any
->null : null
+>           : ^^^
 >a1 : any
+>   : ^^^
 
 var ra10 = undefined || a1; // undefined || any is any
 >ra10 : any
+>     : ^^^
 >undefined || a1 : any
+>                : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a1 : any
+>   : ^^^
 
 var rb1 = a1 || a2;         // any       || boolean is any
 >rb1 : any
+>    : ^^^
 >a1 || a2 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb2 = a2 || a2;         // boolean   || boolean is boolean
 >rb2 : boolean
+>    : ^^^^^^^
 >a2 || a2 : boolean
+>         : ^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb3 = a3 || a2;         // number    || boolean is number | boolean
 >rb3 : number | boolean
+>    : ^^^^^^^^^^^^^^^^
 >a3 || a2 : number | boolean
+>         : ^^^^^^^^^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb4 = a4 || a2;         // string    || boolean is string | boolean
 >rb4 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >a4 || a2 : string | boolean
+>         : ^^^^^^^^^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb5 = a5 || a2;         // void      || boolean is void | boolean
 >rb5 : boolean
+>    : ^^^^^^^
 >a5 || a2 : boolean
+>         : ^^^^^^^
 >a5 : void
+>   : ^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb6 = a6 || a2;         // enum      || boolean is E | boolean
 >rb6 : boolean | E.b | E.c
+>    : ^^^^^^^^^^^^^^^^^^^
 >a6 || a2 : boolean | E.b | E.c
+>         : ^^^^^^^^^^^^^^^^^^^
 >a6 : E
+>   : ^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb7 = a7 || a2;         // object    || boolean is object | boolean
 >rb7 : boolean | { a: string; }
+>    : ^^^^^^^^^^^^^^^      ^^^
 >a7 || a2 : boolean | { a: string; }
+>         : ^^^^^^^^^^^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb8 = a8 || a2;         // array     || boolean is array | boolean
 >rb8 : boolean | string[]
+>    : ^^^^^^^^^^^^^^^^^^
 >a8 || a2 : boolean | string[]
+>         : ^^^^^^^^^^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb9 = null || a2;       // null      || boolean is boolean
 >rb9 : boolean
+>    : ^^^^^^^
 >null || a2 : boolean
->null : null
+>           : ^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb10= undefined || a2;  // undefined || boolean is boolean
 >rb10 : boolean
+>     : ^^^^^^^
 >undefined || a2 : boolean
+>                : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rc1 = a1 || a3;         // any       || number is any
 >rc1 : any
+>    : ^^^
 >a1 || a3 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc2 = a2 || a3;         // boolean   || number is boolean | number
 >rc2 : number | true
+>    : ^^^^^^^^^^^^^
 >a2 || a3 : number | true
+>         : ^^^^^^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc3 = a3 || a3;         // number    || number is number
 >rc3 : number
+>    : ^^^^^^
 >a3 || a3 : number
+>         : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc4 = a4 || a3;         // string    || number is string | number
 >rc4 : string | number
+>    : ^^^^^^^^^^^^^^^
 >a4 || a3 : string | number
+>         : ^^^^^^^^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc5 = a5 || a3;         // void      || number is void | number
 >rc5 : number
+>    : ^^^^^^
 >a5 || a3 : number
+>         : ^^^^^^
 >a5 : void
+>   : ^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc6 = a6 || a3;         // enum      || number is number
 >rc6 : number
+>    : ^^^^^^
 >a6 || a3 : number
+>         : ^^^^^^
 >a6 : E
+>   : ^
 >a3 : number
+>   : ^^^^^^
 
 var rc7 = a7 || a3;         // object    || number is object | number
 >rc7 : number | { a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >a7 || a3 : number | { a: string; }
+>         : ^^^^^^^^^^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc8 = a8 || a3;         // array     || number is array | number
 >rc8 : number | string[]
+>    : ^^^^^^^^^^^^^^^^^
 >a8 || a3 : number | string[]
+>         : ^^^^^^^^^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc9 = null || a3;       // null      || number is number
 >rc9 : number
+>    : ^^^^^^
 >null || a3 : number
->null : null
+>           : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc10 = undefined || a3; // undefined || number is number
 >rc10 : number
+>     : ^^^^^^
 >undefined || a3 : number
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rd1 = a1 || a4;         // any       || string is any
 >rd1 : any
+>    : ^^^
 >a1 || a4 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd2 = a2 || a4;         // boolean   || string is boolean | string
 >rd2 : string | true
+>    : ^^^^^^^^^^^^^
 >a2 || a4 : string | true
+>         : ^^^^^^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd3 = a3 || a4;         // number    || string is number | string
 >rd3 : string | number
+>    : ^^^^^^^^^^^^^^^
 >a3 || a4 : string | number
+>         : ^^^^^^^^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd4 = a4 || a4;         // string    || string is string
 >rd4 : string
+>    : ^^^^^^
 >a4 || a4 : string
+>         : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd5 = a5 || a4;         // void      || string is void | string
 >rd5 : string
+>    : ^^^^^^
 >a5 || a4 : string
+>         : ^^^^^^
 >a5 : void
+>   : ^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd6 = a6 || a4;         // enum      || string is enum | string
 >rd6 : string | E.b | E.c
+>    : ^^^^^^^^^^^^^^^^^^
 >a6 || a4 : string | E.b | E.c
+>         : ^^^^^^^^^^^^^^^^^^
 >a6 : E
+>   : ^
 >a4 : string
+>   : ^^^^^^
 
 var rd7 = a7 || a4;         // object    || string is object | string
 >rd7 : string | { a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >a7 || a4 : string | { a: string; }
+>         : ^^^^^^^^^^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd8 = a8 || a4;         // array     || string is array | string
 >rd8 : string | string[]
+>    : ^^^^^^^^^^^^^^^^^
 >a8 || a4 : string | string[]
+>         : ^^^^^^^^^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd9 = null || a4;       // null      || string is string
 >rd9 : string
+>    : ^^^^^^
 >null || a4 : string
->null : null
+>           : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd10 = undefined || a4; // undefined || string is string
 >rd10 : string
+>     : ^^^^^^
 >undefined || a4 : string
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var re1 = a1 || a5;         // any       || void is any
 >re1 : any
+>    : ^^^
 >a1 || a5 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a5 : void
+>   : ^^^^
 
 var re2 = a2 || a5;         // boolean   || void is boolean | void
 >re2 : true | void
+>    : ^^^^^^^^^^^
 >a2 || a5 : true | void
+>         : ^^^^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a5 : void
+>   : ^^^^
 
 var re3 = a3 || a5;         // number    || void is number | void
 >re3 : number | void
+>    : ^^^^^^^^^^^^^
 >a3 || a5 : number | void
+>         : ^^^^^^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a5 : void
+>   : ^^^^
 
 var re4 = a4 || a5;         // string    || void is string | void
 >re4 : string | void
+>    : ^^^^^^^^^^^^^
 >a4 || a5 : string | void
+>         : ^^^^^^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a5 : void
+>   : ^^^^
 
 var re5 = a5 || a5;         // void      || void is void
 >re5 : void
+>    : ^^^^
 >a5 || a5 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a5 : void
+>   : ^^^^
 
 var re6 = a6 || a5;         // enum      || void is enum | void
 >re6 : void | E.b | E.c
+>    : ^^^^^^^^^^^^^^^^
 >a6 || a5 : void | E.b | E.c
+>         : ^^^^^^^^^^^^^^^^
 >a6 : E
+>   : ^
 >a5 : void
+>   : ^^^^
 
 var re7 = a7 || a5;         // object    || void is object | void
 >re7 : void | { a: string; }
+>    : ^^^^^^^^^^^^      ^^^
 >a7 || a5 : void | { a: string; }
+>         : ^^^^^^^^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a5 : void
+>   : ^^^^
 
 var re8 = a8 || a5;         // array     || void is array | void
 >re8 : void | string[]
+>    : ^^^^^^^^^^^^^^^
 >a8 || a5 : void | string[]
+>         : ^^^^^^^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a5 : void
+>   : ^^^^
 
 var re9 = null || a5;       // null      || void is void
 >re9 : void
+>    : ^^^^
 >null || a5 : void
->null : null
+>           : ^^^^
 >a5 : void
+>   : ^^^^
 
 var re10 = undefined || a5; // undefined || void is void
 >re10 : void
+>     : ^^^^
 >undefined || a5 : void
+>                : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a5 : void
+>   : ^^^^
 
 var rg1 = a1 || a6;         // any       || enum is any
 >rg1 : any
+>    : ^^^
 >a1 || a6 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a6 : E
+>   : ^
 
 var rg2 = a2 || a6;         // boolean   || enum is boolean | enum
 >rg2 : true | E
+>    : ^^^^^^^^
 >a2 || a6 : true | E
+>         : ^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a6 : E
+>   : ^
 
 var rg3 = a3 || a6;         // number    || enum is number
 >rg3 : number
+>    : ^^^^^^
 >a3 || a6 : number
+>         : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a6 : E
+>   : ^
 
 var rg4 = a4 || a6;         // string    || enum is string | enum
 >rg4 : string | E
+>    : ^^^^^^^^^^
 >a4 || a6 : string | E
+>         : ^^^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a6 : E
+>   : ^
 
 var rg5 = a5 || a6;         // void      || enum is void | enum
 >rg5 : E
+>    : ^
 >a5 || a6 : E
+>         : ^
 >a5 : void
+>   : ^^^^
 >a6 : E
+>   : ^
 
 var rg6 = a6 || a6;         // enum      || enum is E
 >rg6 : E
+>    : ^
 >a6 || a6 : E
+>         : ^
 >a6 : E
+>   : ^
 >a6 : E
+>   : ^
 
 var rg7 = a7 || a6;         // object    || enum is object | enum
 >rg7 : E | { a: string; }
+>    : ^^^^^^^^^      ^^^
 >a7 || a6 : E | { a: string; }
+>         : ^^^^^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a6 : E
+>   : ^
 
 var rg8 = a8 || a6;         // array     || enum is array | enum
 >rg8 : E | string[]
+>    : ^^^^^^^^^^^^
 >a8 || a6 : E | string[]
+>         : ^^^^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a6 : E
+>   : ^
 
 var rg9 = null || a6;       // null      || enum is E
 >rg9 : E
+>    : ^
 >null || a6 : E
->null : null
+>           : ^
 >a6 : E
+>   : ^
 
 var rg10 = undefined || a6; // undefined || enum is E
 >rg10 : E
+>     : ^
 >undefined || a6 : E
+>                : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a6 : E
+>   : ^
 
 var rh1 = a1 || a7;         // any       || object is any
 >rh1 : any
+>    : ^^^
 >a1 || a7 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh2 = a2 || a7;         // boolean   || object is boolean | object
 >rh2 : true | { a: string; }
+>    : ^^^^^^^^^^^^      ^^^
 >a2 || a7 : true | { a: string; }
+>         : ^^^^^^^^^^^^      ^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh3 = a3 || a7;         // number    || object is number | object
 >rh3 : number | { a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >a3 || a7 : number | { a: string; }
+>         : ^^^^^^^^^^^^^^      ^^^
 >a3 : number
+>   : ^^^^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh4 = a4 || a7;         // string    || object is string | object
 >rh4 : string | { a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >a4 || a7 : string | { a: string; }
+>         : ^^^^^^^^^^^^^^      ^^^
 >a4 : string
+>   : ^^^^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh5 = a5 || a7;         // void      || object is void | object
 >rh5 : { a: string; }
+>    : ^^^^^      ^^^
 >a5 || a7 : { a: string; }
+>         : ^^^^^      ^^^
 >a5 : void
+>   : ^^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh6 = a6 || a7;         // enum      || object is enum | object
 >rh6 : E.b | E.c | { a: string; }
+>    : ^^^^^^^^^^^^^^^^^      ^^^
 >a6 || a7 : E.b | E.c | { a: string; }
+>         : ^^^^^^^^^^^^^^^^^      ^^^
 >a6 : E
+>   : ^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh7 = a7 || a7;         // object    || object is object
 >rh7 : { a: string; }
+>    : ^^^^^      ^^^
 >a7 || a7 : { a: string; }
+>         : ^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh8 = a8 || a7;         // array     || object is array | object
 >rh8 : { a: string; } | string[]
+>    : ^^^^^      ^^^^^^^^^^^^^^
 >a8 || a7 : { a: string; } | string[]
+>         : ^^^^^      ^^^^^^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh9 = null || a7;       // null      || object is object
 >rh9 : { a: string; }
+>    : ^^^^^      ^^^
 >null || a7 : { a: string; }
->null : null
+>           : ^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var rh10 = undefined || a7; // undefined || object is object
 >rh10 : { a: string; }
+>     : ^^^^^      ^^^
 >undefined || a7 : { a: string; }
+>                : ^^^^^      ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 
 var ri1 = a1 || a8;         // any       || array is any
 >ri1 : any
+>    : ^^^
 >a1 || a8 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri2 = a2 || a8;         // boolean   || array is boolean | array
 >ri2 : true | string[]
+>    : ^^^^^^^^^^^^^^^
 >a2 || a8 : true | string[]
+>         : ^^^^^^^^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri3 = a3 || a8;         // number    || array is number | array
 >ri3 : number | string[]
+>    : ^^^^^^^^^^^^^^^^^
 >a3 || a8 : number | string[]
+>         : ^^^^^^^^^^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri4 = a4 || a8;         // string    || array is string | array
 >ri4 : string | string[]
+>    : ^^^^^^^^^^^^^^^^^
 >a4 || a8 : string | string[]
+>         : ^^^^^^^^^^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri5 = a5 || a8;         // void      || array is void | array
 >ri5 : string[]
+>    : ^^^^^^^^
 >a5 || a8 : string[]
+>         : ^^^^^^^^
 >a5 : void
+>   : ^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri6 = a6 || a8;         // enum      || array is enum | array
 >ri6 : E.b | E.c | string[]
+>    : ^^^^^^^^^^^^^^^^^^^^
 >a6 || a8 : E.b | E.c | string[]
+>         : ^^^^^^^^^^^^^^^^^^^^
 >a6 : E
+>   : ^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri7 = a7 || a8;         // object    || array is object | array
 >ri7 : { a: string; } | string[]
+>    : ^^^^^      ^^^^^^^^^^^^^^
 >a7 || a8 : { a: string; } | string[]
+>         : ^^^^^      ^^^^^^^^^^^^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri8 = a8 || a8;         // array     || array is array
 >ri8 : string[]
+>    : ^^^^^^^^
 >a8 || a8 : string[]
+>         : ^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri9 = null || a8;       // null      || array is array
 >ri9 : string[]
+>    : ^^^^^^^^
 >null || a8 : string[]
->null : null
+>           : ^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri10 = undefined || a8; // undefined || array is array
 >ri10 : string[]
+>     : ^^^^^^^^
 >undefined || a8 : string[]
+>                : ^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rj1 = a1 || null;         // any       || null is any
 >rj1 : any
+>    : ^^^
 >a1 || null : any
+>           : ^^^
 >a1 : any
->null : null
+>   : ^^^
 
 var rj2 = a2 || null;         // boolean   || null is boolean
 >rj2 : true
+>    : ^^^^
 >a2 || null : true
+>           : ^^^^
 >a2 : boolean
->null : null
+>   : ^^^^^^^
 
 var rj3 = a3 || null;         // number    || null is number
 >rj3 : number
+>    : ^^^^^^
 >a3 || null : number
+>           : ^^^^^^
 >a3 : number
->null : null
+>   : ^^^^^^
 
 var rj4 = a4 || null;         // string    || null is string
 >rj4 : string
+>    : ^^^^^^
 >a4 || null : string
+>           : ^^^^^^
 >a4 : string
->null : null
+>   : ^^^^^^
 
 var rj5 = a5 || null;         // void      || null is void
 >rj5 : any
+>    : ^^^
 >a5 || null : null
+>           : ^^^^
 >a5 : void
->null : null
+>   : ^^^^
 
 var rj6 = a6 || null;         // enum      || null is E
 >rj6 : E.b | E.c
+>    : ^^^^^^^^^
 >a6 || null : E.b | E.c
+>           : ^^^^^^^^^
 >a6 : E
->null : null
+>   : ^
 
 var rj7 = a7 || null;         // object    || null is object
 >rj7 : { a: string; }
+>    : ^^^^^      ^^^
 >a7 || null : { a: string; }
+>           : ^^^^^      ^^^
 >a7 : { a: string; }
->null : null
+>   : ^^^^^      ^^^
 
 var rj8 = a8 || null;         // array     || null is array
 >rj8 : string[]
+>    : ^^^^^^^^
 >a8 || null : string[]
+>           : ^^^^^^^^
 >a8 : string[]
->null : null
+>   : ^^^^^^^^
 
 var rj9 = null || null;       // null      || null is any
 >rj9 : any
+>    : ^^^
 >null || null : null
->null : null
->null : null
+>             : ^^^^
 
 var rj10 = undefined || null; // undefined || null is any
 >rj10 : any
+>     : ^^^
 >undefined || null : null
+>                  : ^^^^
 >undefined : undefined
->null : null
+>          : ^^^^^^^^^
 
 var rf1 = a1 || undefined;         // any       || undefined is any
 >rf1 : any
+>    : ^^^
 >a1 || undefined : any
+>                : ^^^
 >a1 : any
+>   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf2 = a2 || undefined;         // boolean   || undefined is boolean
 >rf2 : true
+>    : ^^^^
 >a2 || undefined : true
+>                : ^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf3 = a3 || undefined;         // number    || undefined is number
 >rf3 : number
+>    : ^^^^^^
 >a3 || undefined : number
+>                : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf4 = a4 || undefined;         // string    || undefined is string
 >rf4 : string
+>    : ^^^^^^
 >a4 || undefined : string
+>                : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf5 = a5 || undefined;         // void      || undefined is void
 >rf5 : any
+>    : ^^^
 >a5 || undefined : undefined
+>                : ^^^^^^^^^
 >a5 : void
+>   : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf6 = a6 || undefined;         // enum      || undefined is E
 >rf6 : E.b | E.c
+>    : ^^^^^^^^^
 >a6 || undefined : E.b | E.c
+>                : ^^^^^^^^^
 >a6 : E
+>   : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf7 = a7 || undefined;         // object    || undefined is object
 >rf7 : { a: string; }
+>    : ^^^^^      ^^^
 >a7 || undefined : { a: string; }
+>                : ^^^^^      ^^^
 >a7 : { a: string; }
+>   : ^^^^^      ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf8 = a8 || undefined;         // array     || undefined is array
 >rf8 : string[]
+>    : ^^^^^^^^
 >a8 || undefined : string[]
+>                : ^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf9 = null || undefined;       // null      || undefined is any
 >rf9 : any
+>    : ^^^
 >null || undefined : undefined
->null : null
+>                  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rf10 = undefined || undefined; // undefined || undefined is any
 >rf10 : any
+>     : ^^^
 >undefined || undefined : undefined
+>                       : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

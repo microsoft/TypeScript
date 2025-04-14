@@ -1,7 +1,7 @@
-tests/cases/compiler/staticMethodsReferencingClassTypeParameters.ts(2,17): error TS2302: Static members cannot reference class type parameters.
+staticMethodsReferencingClassTypeParameters.ts(2,17): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/compiler/staticMethodsReferencingClassTypeParameters.ts (1 errors) ====
+==== staticMethodsReferencingClassTypeParameters.ts (1 errors) ====
     class C<T> {
         static s(p: T) { return p; }
                     ~

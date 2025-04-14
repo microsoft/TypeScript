@@ -1,41 +1,62 @@
-=== tests/cases/conformance/types/localTypes/localTypes5.ts ===
+//// [tests/cases/conformance/types/localTypes/localTypes5.ts] ////
+
+=== localTypes5.ts ===
 function foo<A>() {
 >foo : <A>() => X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     class X {
 >X : X
+>  : ^
 
         m<B, C>() {
 >m : <B, C>() => (Anonymous function)<Date>.Y<string>
+>  : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             return (function <D>() {
 >(function <D>() {                class Y<E> {                }                return new Y<string>();            })<Date>() : (Anonymous function)<Date>.Y<string>
+>                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(function <D>() {                class Y<E> {                }                return new Y<string>();            }) : <D>() => Y<string>
+>                                                                                                                    : ^ ^^^^^^^^^^^^^^^^
 >function <D>() {                class Y<E> {                }                return new Y<string>();            } : <D>() => Y<string>
+>                                                                                                                  : ^ ^^^^^^^^^^^^^^^^
 
                 class Y<E> {
 >Y : Y<E>
+>  : ^^^^
                 }
                 return new Y<string>();
 >new Y<string>() : Y<string>
+>                : ^^^^^^^^^
 >Y : typeof Y
+>  : ^^^^^^^^
 
             })<Date>();
         }
     }
     var x = new X();
 >x : X
+>  : ^
 >new X() : X
+>        : ^
 >X : typeof X
+>  : ^^^^^^^^
 
     return x.m<number, boolean>();
 >x.m<number, boolean>() : X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.m : <B, C>() => X.m<B, C>.(Anonymous function)<Date>.Y<string>
+>    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : X
+>  : ^
 >m : <B, C>() => X.m<B, C>.(Anonymous function)<Date>.Y<string>
+>  : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 var x = foo<void>();
 >x : foo<void>.X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo<void>() : foo<void>.X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <A>() => X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

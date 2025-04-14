@@ -33,7 +33,7 @@ const flags: TypeFlag = SymbolFlags.Type;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var SyntaxKind;
 (function (SyntaxKind) {
     SyntaxKind[SyntaxKind["ImportClause"] = 0] = "ImportClause";
@@ -41,12 +41,12 @@ var SyntaxKind;
 })(SyntaxKind || (SyntaxKind = {}));
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 SyntaxKind.ImportClause;
 "Type" /* SymbolFlags.Type */;
 var kind;
 var flags;
 //// [c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var flags = "Type" /* SymbolFlags.Type */;

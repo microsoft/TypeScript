@@ -1,14 +1,20 @@
-=== tests/cases/compiler/unreachableFlowAfterFinally.ts ===
+//// [tests/cases/compiler/unreachableFlowAfterFinally.ts] ////
+
+=== unreachableFlowAfterFinally.ts ===
 function f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
     let x = 100;
 >x : number
+>  : ^^^^^^
 >100 : 100
+>    : ^^^
 
     try {
         throw "WAT"
 >"WAT" : "WAT"
+>      : ^^^^^
     }
     catch (e) {
 >e : any
@@ -17,5 +23,6 @@ function f() {
     finally {
         return x;
 >x : number
+>  : ^^^^^^
     }
 }

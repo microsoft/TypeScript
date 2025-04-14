@@ -1,10 +1,10 @@
-tests/cases/compiler/promisesWithConstraints.ts(15,1): error TS2322: Type 'Promise<Foo>' is not assignable to type 'Promise<Bar>'.
+promisesWithConstraints.ts(15,1): error TS2322: Type 'Promise<Foo>' is not assignable to type 'Promise<Bar>'.
   Property 'y' is missing in type 'Foo' but required in type 'Bar'.
-tests/cases/compiler/promisesWithConstraints.ts(20,1): error TS2322: Type 'CPromise<Foo>' is not assignable to type 'CPromise<Bar>'.
-  Type 'Foo' is not assignable to type 'Bar'.
+promisesWithConstraints.ts(20,1): error TS2322: Type 'CPromise<Foo>' is not assignable to type 'CPromise<Bar>'.
+  Property 'y' is missing in type 'Foo' but required in type 'Bar'.
 
 
-==== tests/cases/compiler/promisesWithConstraints.ts (2 errors) ====
+==== promisesWithConstraints.ts (2 errors) ====
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
     }
@@ -23,7 +23,7 @@ tests/cases/compiler/promisesWithConstraints.ts(20,1): error TS2322: Type 'CProm
     ~
 !!! error TS2322: Type 'Promise<Foo>' is not assignable to type 'Promise<Bar>'.
 !!! error TS2322:   Property 'y' is missing in type 'Foo' but required in type 'Bar'.
-!!! related TS2728 tests/cases/compiler/promisesWithConstraints.ts:10:20: 'y' is declared here.
+!!! related TS2728 promisesWithConstraints.ts:10:20: 'y' is declared here.
     
     var a2: CPromise<Foo>;
     var b2: CPromise<Bar>;
@@ -31,5 +31,6 @@ tests/cases/compiler/promisesWithConstraints.ts(20,1): error TS2322: Type 'CProm
     b2 = a2; // was error
     ~~
 !!! error TS2322: Type 'CPromise<Foo>' is not assignable to type 'CPromise<Bar>'.
-!!! error TS2322:   Type 'Foo' is not assignable to type 'Bar'.
+!!! error TS2322:   Property 'y' is missing in type 'Foo' but required in type 'Bar'.
+!!! related TS2728 promisesWithConstraints.ts:10:20: 'y' is declared here.
     

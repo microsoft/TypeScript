@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardConstructorNarrowAny.ts] ////
+
 //// [typeGuardConstructorNarrowAny.ts]
 // Narrowing any to primitives
 let var1: any;

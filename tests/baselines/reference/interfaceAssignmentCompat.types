@@ -1,194 +1,322 @@
-=== tests/cases/compiler/interfaceAssignmentCompat.ts ===
+//// [tests/cases/compiler/interfaceAssignmentCompat.ts] ////
+
+=== interfaceAssignmentCompat.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export enum Color {
 >Color : Color
+>      : ^^^^^
 
         Green,
 >Green : Color.Green
+>      : ^^^^^^^^^^^
 
         Blue,
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 
         Brown,
 >Brown : Color.Brown
+>      : ^^^^^^^^^^^
     }
 
     export interface IEye {
         color:number;
 >color : number
+>      : ^^^^^^
     }
 
     export interface IFrenchEye {
         coleur:number;
 >coleur : number
+>       : ^^^^^^
     }
 
     export function CompareEyes(a:IEye,b:IEye):number {
 >CompareEyes : (a: IEye, b: IEye) => number
+>            : ^ ^^    ^^ ^^    ^^^^^      
 >a : IEye
+>  : ^^^^
 >b : IEye
+>  : ^^^^
 
         return a.color-b.color;
 >a.color-b.color : number
+>                : ^^^^^^
 >a.color : number
+>        : ^^^^^^
 >a : IEye
+>  : ^^^^
 >color : number
+>      : ^^^^^^
 >b.color : number
+>        : ^^^^^^
 >b : IEye
+>  : ^^^^
 >color : number
+>      : ^^^^^^
     }
 
     export function CompareYeux(a:IFrenchEye,b:IFrenchEye):number {
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
+>            : ^ ^^          ^^ ^^          ^^^^^      
 >a : IFrenchEye
+>  : ^^^^^^^^^^
 >b : IFrenchEye
+>  : ^^^^^^^^^^
 
         return a.coleur-b.coleur;
 >a.coleur-b.coleur : number
+>                  : ^^^^^^
 >a.coleur : number
+>         : ^^^^^^
 >a : IFrenchEye
+>  : ^^^^^^^^^^
 >coleur : number
+>       : ^^^^^^
 >b.coleur : number
+>         : ^^^^^^
 >b : IFrenchEye
+>  : ^^^^^^^^^^
 >coleur : number
+>       : ^^^^^^
     }
 
     export function test() {
 >test : () => string
+>     : ^^^^^^^^^^^^
 
         var x:IEye[]= [];
 >x : IEye[]
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         var result="";
 >result : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
     
         x[0]={ color:Color.Brown };
 >x[0]={ color:Color.Brown } : { color: Color; }
+>                           : ^^^^^^^^^^^^^^^^^
 >x[0] : IEye
+>     : ^^^^
 >x : IEye[]
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ color:Color.Brown } : { color: Color; }
+>                      : ^^^^^^^^^^^^^^^^^
 >color : Color
+>      : ^^^^^
 >Color.Brown : Color.Brown
+>            : ^^^^^^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >Brown : Color.Brown
+>      : ^^^^^^^^^^^
 
         x[1]={ color:Color.Blue };
 >x[1]={ color:Color.Blue } : { color: Color; }
+>                          : ^^^^^^^^^^^^^^^^^
 >x[1] : IEye
+>     : ^^^^
 >x : IEye[]
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >{ color:Color.Blue } : { color: Color; }
+>                     : ^^^^^^^^^^^^^^^^^
 >color : Color
+>      : ^^^^^
 >Color.Blue : Color.Blue
+>           : ^^^^^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 
         x[2]={ color:Color.Green };
 >x[2]={ color:Color.Green } : { color: Color; }
+>                           : ^^^^^^^^^^^^^^^^^
 >x[2] : IEye
+>     : ^^^^
 >x : IEye[]
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >{ color:Color.Green } : { color: Color; }
+>                      : ^^^^^^^^^^^^^^^^^
 >color : Color
+>      : ^^^^^
 >Color.Green : Color.Green
+>            : ^^^^^^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >Green : Color.Green
+>      : ^^^^^^^^^^^
 
         x=x.sort(CompareYeux); // parameter mismatch
 >x=x.sort(CompareYeux) : IEye[]
+>                      : ^^^^^^
 >x : IEye[]
+>  : ^^^^^^
 >x.sort(CompareYeux) : IEye[]
+>                    : ^^^^^^
 >x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
 >x : IEye[]
+>  : ^^^^^^
 >sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
+>            : ^ ^^          ^^ ^^          ^^^^^      
 
         // type of z inferred from specialized array type
         var z=x.sort(CompareEyes); // ok
 >z : IEye[]
+>  : ^^^^^^
 >x.sort(CompareEyes) : IEye[]
+>                    : ^^^^^^
 >x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
 >x : IEye[]
+>  : ^^^^^^
 >sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
 >CompareEyes : (a: IEye, b: IEye) => number
+>            : ^ ^^    ^^ ^^    ^^^^^      
 
         for (var i=0,len=z.length;i<len;i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >len : number
+>    : ^^^^^^
 >z.length : number
+>         : ^^^^^^
 >z : IEye[]
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 >i<len : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >len : number
+>    : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
             result+=((Color._map[z[i].color])+"\r\n");
 >result+=((Color._map[z[i].color])+"\r\n") : string
+>                                          : ^^^^^^
 >result : string
+>       : ^^^^^^
 >((Color._map[z[i].color])+"\r\n") : string
+>                                  : ^^^^^^
 >(Color._map[z[i].color])+"\r\n" : string
+>                                : ^^^^^^
 >(Color._map[z[i].color]) : any
+>                         : ^^^
 >Color._map[z[i].color] : any
+>                       : ^^^
 >Color._map : any
+>           : ^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >_map : any
+>     : ^^^
 >z[i].color : number
+>           : ^^^^^^
 >z[i] : IEye
+>     : ^^^^
 >z : IEye[]
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >color : number
+>      : ^^^^^^
 >"\r\n" : "\r\n"
+>       : ^^^^^^
         }
 
         var eeks:IFrenchEye[] = [];
 >eeks : IFrenchEye[]
+>     : ^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         for (var j=z.length=1;j>=0;j--) {
 >j : number
+>  : ^^^^^^
 >z.length=1 : 1
+>           : ^
 >z.length : number
+>         : ^^^^^^
 >z : IEye[]
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >j>=0 : boolean
+>     : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j-- : number
+>    : ^^^^^^
 >j : number
+>  : ^^^^^^
 
             eeks[j]=z[j];  // nope: element assignment
 >eeks[j]=z[j] : IEye
+>             : ^^^^
 >eeks[j] : IFrenchEye
+>        : ^^^^^^^^^^
 >eeks : IFrenchEye[]
+>     : ^^^^^^^^^^^^
 >j : number
+>  : ^^^^^^
 >z[j] : IEye
+>     : ^^^^
 >z : IEye[]
+>  : ^^^^^^
 >j : number
+>  : ^^^^^^
         }
         eeks=z; // nope: array assignment
 >eeks=z : IEye[]
+>       : ^^^^^^
 >eeks : IFrenchEye[]
+>     : ^^^^^^^^^^^^
 >z : IEye[]
+>  : ^^^^^^
 
         return result;
 >result : string
+>       : ^^^^^^
     }
 }
 
 M.test();
 >M.test() : string
+>         : ^^^^^^
 >M.test : () => string
+>       : ^^^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >test : () => string
+>     : ^^^^^^^^^^^^
 
 
 

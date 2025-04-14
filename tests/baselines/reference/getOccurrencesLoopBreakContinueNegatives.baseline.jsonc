@@ -1,0 +1,133 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 21) skipped ---
+//                 continue label3;
+// 
+//                 // these cross function boundaries
+//                 br/*HIGHLIGHTS*/eak label1;
+//                 continue label1;
+//                 break label2;
+//                 continue label2;
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 22) skipped ---
+// 
+//                 // these cross function boundaries
+//                 break label1;
+//                 cont/*HIGHLIGHTS*/inue label1;
+//                 break label2;
+//                 continue label2;
+// 
+// --- (line: 30) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 23) skipped ---
+//                 // these cross function boundaries
+//                 break label1;
+//                 continue label1;
+//                 bre/*HIGHLIGHTS*/ak label2;
+//                 continue label2;
+// 
+//                 label4: do {
+// --- (line: 31) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 24) skipped ---
+//                 break label1;
+//                 continue label1;
+//                 break label2;
+//                 c/*HIGHLIGHTS*/ontinue label2;
+// 
+//                 label4: do {
+//                     break;
+// --- (line: 32) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 45) skipped ---
+//                     }
+// 
+//                     // these cross function boundaries
+//                     br/*HIGHLIGHTS*/eak label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+// --- (line: 53) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 46) skipped ---
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     co/*HIGHLIGHTS*/ntinue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+// --- (line: 54) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 47) skipped ---
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     br/*HIGHLIGHTS*/eak label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } while (true)
+// --- (line: 55) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 48) skipped ---
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     con/*HIGHLIGHTS*/tinue label2;
+//                     () => { break; }
+//                 } while (true)
+//             }
+// --- (line: 56) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 49) skipped ---
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { b/*HIGHLIGHTS*/reak; }
+//                 } while (true)
+//             }
+//         }
+// --- (line: 57) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinueNegatives.ts ===
+// --- (line: 58) skipped ---
+// 
+// label5: while (true) break label5;
+// 
+// label7: while (true) co/*HIGHLIGHTS*/ntinue label5;

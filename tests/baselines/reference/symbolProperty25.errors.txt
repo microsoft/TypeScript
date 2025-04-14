@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/Symbols/symbolProperty25.ts(5,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
+symbolProperty25.ts(5,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property '[Symbol.toPrimitive]' is missing in type 'C' but required in type 'I'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolProperty25.ts (1 errors) ====
+==== symbolProperty25.ts (1 errors) ====
     interface I {
         [Symbol.toPrimitive]: () => boolean;
     }
@@ -11,7 +11,7 @@ tests/cases/conformance/es6/Symbols/symbolProperty25.ts(5,7): error TS2420: Clas
           ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'I'.
 !!! error TS2420:   Property '[Symbol.toPrimitive]' is missing in type 'C' but required in type 'I'.
-!!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty25.ts:2:5: '[Symbol.toPrimitive]' is declared here.
+!!! related TS2728 symbolProperty25.ts:2:5: '[Symbol.toPrimitive]' is declared here.
         [Symbol.toStringTag]() {
             return "";
         }

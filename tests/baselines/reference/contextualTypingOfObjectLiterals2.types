@@ -1,21 +1,36 @@
-=== tests/cases/compiler/contextualTypingOfObjectLiterals2.ts ===
+//// [tests/cases/compiler/contextualTypingOfObjectLiterals2.ts] ////
+
+=== contextualTypingOfObjectLiterals2.ts ===
 interface Foo {
     foo: (t: string) => string;
 >foo : (t: string) => string
+>    : ^ ^^      ^^^^^      
 >t : string
+>  : ^^^^^^
 }
 function f2(args: Foo) { }
 >f2 : (args: Foo) => void
+>   : ^    ^^   ^^^^^^^^^
 >args : Foo
+>     : ^^^
 
 f2({ foo: s => s.hmm }) // 's' should be 'string', so this should be an error
 >f2({ foo: s => s.hmm }) : void
+>                        : ^^^^
 >f2 : (args: Foo) => void
+>   : ^    ^^   ^^^^^^^^^
 >{ foo: s => s.hmm } : { foo: (s: string) => any; }
+>                    : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >foo : (s: string) => any
+>    : ^ ^^^^^^^^^^^^^^^^
 >s => s.hmm : (s: string) => any
+>           : ^ ^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s.hmm : any
+>      : ^^^
 >s : string
+>  : ^^^^^^
 >hmm : any
+>    : ^^^
 

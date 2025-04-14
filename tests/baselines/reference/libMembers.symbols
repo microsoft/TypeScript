@@ -1,4 +1,6 @@
-=== tests/cases/compiler/libMembers.ts ===
+//// [tests/cases/compiler/libMembers.ts] ////
+
+=== libMembers.ts ===
 var s="hello";
 >s : Symbol(s, Decl(libMembers.ts, 0, 3))
 

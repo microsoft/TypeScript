@@ -1,78 +1,113 @@
-=== tests/cases/conformance/override/overrideParameterProperty.ts ===
+//// [tests/cases/conformance/override/overrideParameterProperty.ts] ////
+
+=== overrideParameterProperty.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
   p1!: string;
 >p1 : string
+>   : ^^^^^^
 }
 
 class C1 extends Base {
 >C1 : C1
+>   : ^^
 >Base : Base
+>     : ^^^^
 
   constructor(public override p1: "hello") {
 >p1 : "hello"
+>   : ^^^^^^^
 
     super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 
     this.p1;
 >this.p1 : "hello"
+>        : ^^^^^^^
 >this : this
+>     : ^^^^
 >p1 : "hello"
+>   : ^^^^^^^
   }
 }
 
 class C2 extends Base {
 >C2 : C2
+>   : ^^
 >Base : Base
+>     : ^^^^
 
   constructor(override p1: "hello") {
 >p1 : "hello"
+>   : ^^^^^^^
 
     super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 
     this.p1;
 >this.p1 : "hello"
+>        : ^^^^^^^
 >this : this
+>     : ^^^^
 >p1 : "hello"
+>   : ^^^^^^^
   }
 }
 
 class C3 extends Base {
 >C3 : C3
+>   : ^^
 >Base : Base
+>     : ^^^^
 
   constructor(override public p1: "hello") {
 >p1 : "hello"
+>   : ^^^^^^^
 
     super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 
     this.p1;
 >this.p1 : "hello"
+>        : ^^^^^^^
 >this : this
+>     : ^^^^
 >p1 : "hello"
+>   : ^^^^^^^
   }
 
   m(override p1: "hello") {}
 >m : (p1: "hello") => void
+>  : ^  ^^       ^^^^^^^^^
 >p1 : "hello"
+>   : ^^^^^^^
 }
 
 class C4 extends Base {
 >C4 : C4
+>   : ^^
 >Base : Base
+>     : ^^^^
 
   constructor(public override p2: string) {
 >p2 : string
+>   : ^^^^^^
 
     super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
   }
 }

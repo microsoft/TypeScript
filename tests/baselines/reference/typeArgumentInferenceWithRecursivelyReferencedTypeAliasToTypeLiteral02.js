@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts] ////
+
 //// [typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts]
 type TreeNode = {
     name: string;

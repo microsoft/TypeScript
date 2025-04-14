@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionsCompositeWithIncrementalFalse.ts ===
+//// [tests/cases/compiler/optionsCompositeWithIncrementalFalse.ts] ////
+
+=== optionsCompositeWithIncrementalFalse.ts ===
 const x = "Hello World";
 >x : Symbol(x, Decl(optionsCompositeWithIncrementalFalse.ts, 0, 5))
 

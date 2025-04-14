@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts] ////
+
 //// [classExtendingPrimitive.ts]
 // classes cannot extend primitives
 
@@ -13,6 +15,15 @@ class C7 extends Undefined { }
 
 enum E { A }
 class C8 extends E { }
+
+const C9 = class extends number { }
+const C10 = class extends string { }
+const C11 = class extends boolean { }
+
+const C12 = class A extends number { }
+const C13 = class B extends string { }
+const C14 = class C extends boolean { }
+
 
 //// [classExtendingPrimitive.js]
 // classes cannot extend primitives
@@ -103,3 +114,45 @@ var C8 = /** @class */ (function (_super) {
     }
     return C8;
 }(E));
+var C9 = /** @class */ (function (_super) {
+    __extends(C9, _super);
+    function C9() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C9;
+}(number));
+var C10 = /** @class */ (function (_super) {
+    __extends(C10, _super);
+    function C10() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C10;
+}(string));
+var C11 = /** @class */ (function (_super) {
+    __extends(C11, _super);
+    function C11() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C11;
+}(boolean));
+var C12 = /** @class */ (function (_super) {
+    __extends(A, _super);
+    function A() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return A;
+}(number));
+var C13 = /** @class */ (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return B;
+}(string));
+var C14 = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(boolean));

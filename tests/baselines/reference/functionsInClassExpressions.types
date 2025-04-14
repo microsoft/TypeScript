@@ -1,32 +1,52 @@
-=== tests/cases/compiler/functionsInClassExpressions.ts ===
+//// [tests/cases/compiler/functionsInClassExpressions.ts] ////
+
+=== functionsInClassExpressions.ts ===
 let Foo = class {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >class {    constructor() {        this.bar++;    }    bar = 0;    inc = () => {        this.bar++;    }    m() { return this.bar; }} : typeof Foo
+>                                                                                                                                     : ^^^^^^^^^^
 
     constructor() {
         this.bar++;
 >this.bar++ : number
+>           : ^^^^^^
 >this.bar : number
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >bar : number
+>    : ^^^^^^
     }
     bar = 0;
 >bar : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     inc = () => {
 >inc : () => void
+>    : ^^^^^^^^^^
 >() => {        this.bar++;    } : () => void
+>                                : ^^^^^^^^^^
 
         this.bar++;
 >this.bar++ : number
+>           : ^^^^^^
 >this.bar : number
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >bar : number
+>    : ^^^^^^
     }
     m() { return this.bar; }
 >m : () => number
+>  : ^^^^^^^^^^^^
 >this.bar : number
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >bar : number
+>    : ^^^^^^
 }

@@ -1,16 +1,16 @@
-tests/cases/compiler/genericTypeAssertions4.ts(19,5): error TS2322: Type 'A' is not assignable to type 'T'.
+genericTypeAssertions4.ts(19,5): error TS2322: Type 'A' is not assignable to type 'T'.
   'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
-tests/cases/compiler/genericTypeAssertions4.ts(20,5): error TS2322: Type 'B' is not assignable to type 'T'.
+genericTypeAssertions4.ts(20,5): error TS2322: Type 'B' is not assignable to type 'T'.
   'B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
-tests/cases/compiler/genericTypeAssertions4.ts(21,5): error TS2322: Type 'C' is not assignable to type 'T'.
+genericTypeAssertions4.ts(21,5): error TS2322: Type 'C' is not assignable to type 'T'.
   'C' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
-tests/cases/compiler/genericTypeAssertions4.ts(23,9): error TS2352: Conversion of type 'B' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+genericTypeAssertions4.ts(23,9): error TS2352: Conversion of type 'B' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   'B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
-tests/cases/compiler/genericTypeAssertions4.ts(24,9): error TS2352: Conversion of type 'C' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+genericTypeAssertions4.ts(24,9): error TS2352: Conversion of type 'C' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   'C' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
 
 
-==== tests/cases/compiler/genericTypeAssertions4.ts (5 errors) ====
+==== genericTypeAssertions4.ts (5 errors) ====
     class A {
         foo() { return ""; }
     }

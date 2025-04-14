@@ -1,6 +1,9 @@
-=== tests/cases/conformance/es6/moduleExportsSystem/a.ts ===
+//// [tests/cases/conformance/es6/moduleExportsSystem/anonymousDefaultExportsSystem.ts] ////
+
+=== a.ts ===
+
 export default class {}
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/es6/moduleExportsSystem/b.ts ===
+
+=== b.ts ===
+
 export default function() {}
-No type information for this code.

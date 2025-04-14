@@ -1,4 +1,6 @@
-=== tests/cases/compiler/higherOrderMappedIndexLookupInference.ts ===
+//// [tests/cases/compiler/higherOrderMappedIndexLookupInference.ts] ////
+
+=== higherOrderMappedIndexLookupInference.ts ===
 // @strict
 
 function f1(a: <T>() => keyof T, b: <U>() => keyof U) {

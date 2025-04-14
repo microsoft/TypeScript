@@ -1,0 +1,30 @@
+/index.ts(2,1): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "extends": "foo/strict.json"
+    }
+    
+==== /index.ts (1 errors) ====
+    let x: string;
+    x.toLowerCase();
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    {
+        "name": "foo",
+        "version": "1.0.0",
+        "exports": {
+            "./*.json": "./configs/*.json"
+        }
+    }
+    
+==== /node_modules/foo/configs/strict.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "strict": true
+        }
+    }
+    

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsValidConstructorFunction.ts] ////
+
 //// [classExtendsValidConstructorFunction.ts]
 function foo() { }
 

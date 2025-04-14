@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/in.js ===
+//// [tests/cases/conformance/jsdoc/jsdocNeverUndefinedNull.ts] ////
+
+=== in.js ===
 /**
  * @param {never} p1
  * @param {undefined} p2
@@ -7,8 +9,12 @@
  */
 function f(p1, p2, p3) {
 >f : (p1: never, p2: undefined, p3: null) => void
+>  : ^  ^^     ^^  ^^         ^^  ^^    ^^^^^    
 >p1 : never
+>   : ^^^^^
 >p2 : undefined
+>   : ^^^^^^^^^
 >p3 : null
+>   : ^^^^
 }
 

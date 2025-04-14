@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTyping3.ts ===
+//// [tests/cases/compiler/contextualTyping3.ts] ////
+
+=== contextualTyping3.ts ===
 class foo { public bar:{id:number;} = {id:5}; }
 >foo : Symbol(foo, Decl(contextualTyping3.ts, 0, 0))
 >bar : Symbol(foo.bar, Decl(contextualTyping3.ts, 0, 11))

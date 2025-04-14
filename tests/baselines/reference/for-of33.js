@@ -1,16 +1,18 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of33.ts] ////
+
 //// [for-of33.ts]
-class StringIterator {
+class MyStringIterator {
     [Symbol.iterator]() {
         return v;
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }
 
 //// [for-of33.js]
-class StringIterator {
+class MyStringIterator {
     [Symbol.iterator]() {
         return v;
     }
 }
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }

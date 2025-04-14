@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/narrowingPlainJsNoCrash1.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/59594
+
+var a$b = {};
+>a$b : {}
+>    : ^^
+>{} : {}
+>   : ^^
+
+var c, d;
+>c : any
+>d : any
+
+d = a$b;
+>d = a$b : {}
+>        : ^^
+>d : any
+>a$b : {}
+>    : ^^
+
+while (d !== a$b);
+>d !== a$b : boolean
+>          : ^^^^^^^
+>d : {}
+>  : ^^
+>a$b : {}
+>    : ^^
+
+while ((c = a$b != a$b)) c.e;
+>(c = a$b != a$b) : boolean
+>                 : ^^^^^^^
+>c = a$b != a$b : boolean
+>               : ^^^^^^^
+>c : any
+>a$b != a$b : boolean
+>           : ^^^^^^^
+>a$b : {}
+>    : ^^
+>a$b : {}
+>    : ^^
+>c.e : error
+>c : true
+>  : ^^^^
+>e : any
+>  : ^^^
+

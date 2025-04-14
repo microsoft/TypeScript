@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/classImplementsMethodWIthTupleArgs.ts] ////
+
+=== classImplementsMethodWIthTupleArgs.ts ===
+declare class MySettable implements Settable {
+>MySettable : Symbol(MySettable, Decl(classImplementsMethodWIthTupleArgs.ts, 0, 0))
+>Settable : Symbol(Settable, Decl(classImplementsMethodWIthTupleArgs.ts, 3, 1))
+
+    set(option: Record<string, unknown>): void;
+>set : Symbol(MySettable.set, Decl(classImplementsMethodWIthTupleArgs.ts, 0, 46), Decl(classImplementsMethodWIthTupleArgs.ts, 1, 47))
+>option : Symbol(option, Decl(classImplementsMethodWIthTupleArgs.ts, 1, 8))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    set(name: string, value: unknown): void;
+>set : Symbol(MySettable.set, Decl(classImplementsMethodWIthTupleArgs.ts, 0, 46), Decl(classImplementsMethodWIthTupleArgs.ts, 1, 47))
+>name : Symbol(name, Decl(classImplementsMethodWIthTupleArgs.ts, 2, 8))
+>value : Symbol(value, Decl(classImplementsMethodWIthTupleArgs.ts, 2, 21))
+}
+
+interface Settable {
+>Settable : Symbol(Settable, Decl(classImplementsMethodWIthTupleArgs.ts, 3, 1))
+
+    set(...args: [option: Record<string, unknown>] | [name: string, value: unknown] | [name: string]): void;
+>set : Symbol(Settable.set, Decl(classImplementsMethodWIthTupleArgs.ts, 5, 20))
+>args : Symbol(args, Decl(classImplementsMethodWIthTupleArgs.ts, 6, 8))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+}
+

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/divergentAccessorsTypes4.ts ===
+//// [tests/cases/compiler/divergentAccessorsTypes4.ts] ////
+
+=== divergentAccessorsTypes4.ts ===
 class One {
 >One : Symbol(One, Decl(divergentAccessorsTypes4.ts, 0, 0))
 

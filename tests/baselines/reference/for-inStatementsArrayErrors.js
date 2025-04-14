@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts] ////
+
 //// [for-inStatementsArrayErrors.ts]
 let a: Date[];
 

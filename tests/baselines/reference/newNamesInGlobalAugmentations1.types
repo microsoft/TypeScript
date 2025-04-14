@@ -1,52 +1,78 @@
-=== tests/cases/compiler/f1.d.ts ===
+//// [tests/cases/compiler/newNamesInGlobalAugmentations1.ts] ////
+
+=== f1.d.ts ===
 export {};
 
 declare module M.M1 {
 >M : typeof M
+>  : ^^^^^^^^
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     export let x: number;
 >x : number
+>  : ^^^^^^
 }
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     interface SymbolConstructor {
         observable: symbol;
 >observable : symbol
+>           : ^^^^^^
     }
     class Cls {x}
 >Cls : Cls
+>    : ^^^
 >x : any
 
     let [a, b]: number[];
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     export import X = M.M1.x;
 >X : number
+>  : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >M1 : typeof M.M1
+>   : ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 Symbol.observable;
 >Symbol.observable : symbol
+>                  : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >observable : symbol
+>           : ^^^^^^
 
 new Cls().x
 >new Cls().x : any
 >new Cls() : Cls
+>          : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >x : any
+>  : ^^^
 
 let c = a + b + X;
 >c : number
+>  : ^^^^^^
 >a + b + X : number
+>          : ^^^^^^
 >a + b : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >X : number
+>  : ^^^^^^
 

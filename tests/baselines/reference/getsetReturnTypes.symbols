@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getsetReturnTypes.ts ===
+//// [tests/cases/compiler/getsetReturnTypes.ts] ////
+
+=== getsetReturnTypes.ts ===
 function makePoint(x: number) { 
 >makePoint : Symbol(makePoint, Decl(getsetReturnTypes.ts, 0, 0))
 >x : Symbol(x, Decl(getsetReturnTypes.ts, 0, 19))

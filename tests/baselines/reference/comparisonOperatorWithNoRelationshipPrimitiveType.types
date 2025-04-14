@@ -1,990 +1,1641 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts] ////
+
+=== comparisonOperatorWithNoRelationshipPrimitiveType.ts ===
 enum E { a, b, c }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 
 var a: number;
 >a : number
+>  : ^^^^^^
 
 var b: boolean;
 >b : boolean
+>  : ^^^^^^^
 
 var c: string;
 >c : string
+>  : ^^^^^^
 
 var d: void;
 >d : void
+>  : ^^^^
 
 var e: E;
 >e : E
+>  : ^
 
 // operator <
 var r1a1 = a < b;
 >r1a1 : boolean
+>     : ^^^^^^^
 >a < b : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r1a1 = a < c;
 >r1a1 : boolean
+>     : ^^^^^^^
 >a < c : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r1a1 = a < d;
 >r1a1 : boolean
+>     : ^^^^^^^
 >a < d : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r1a1 = a < e; // no error, expected
 >r1a1 : boolean
+>     : ^^^^^^^
 >a < e : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r1b1 = b < a;
 >r1b1 : boolean
+>     : ^^^^^^^
 >b < a : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r1b1 = b < c;
 >r1b1 : boolean
+>     : ^^^^^^^
 >b < c : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r1b1 = b < d;
 >r1b1 : boolean
+>     : ^^^^^^^
 >b < d : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >d : void
+>  : ^^^^
 
 var r1b1 = b < e;
 >r1b1 : boolean
+>     : ^^^^^^^
 >b < e : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >e : E
+>  : ^
 
 var r1c1 = c < a;
 >r1c1 : boolean
+>     : ^^^^^^^
 >c < a : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r1c1 = c < b;
 >r1c1 : boolean
+>     : ^^^^^^^
 >c < b : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r1c1 = c < d;
 >r1c1 : boolean
+>     : ^^^^^^^
 >c < d : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r1c1 = c < e;
 >r1c1 : boolean
+>     : ^^^^^^^
 >c < e : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r1d1 = d < a;
 >r1d1 : boolean
+>     : ^^^^^^^
 >d < a : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >a : number
+>  : ^^^^^^
 
 var r1d1 = d < b;
 >r1d1 : boolean
+>     : ^^^^^^^
 >d < b : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r1d1 = d < c;
 >r1d1 : boolean
+>     : ^^^^^^^
 >d < c : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >c : string
+>  : ^^^^^^
 
 var r1d1 = d < e;
 >r1d1 : boolean
+>     : ^^^^^^^
 >d < e : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >e : E
+>  : ^
 
 var r1e1 = e < a; // no error, expected
 >r1e1 : boolean
+>     : ^^^^^^^
 >e < a : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var r1e1 = e < b;
 >r1e1 : boolean
+>     : ^^^^^^^
 >e < b : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
 var r1e1 = e < c;
 >r1e1 : boolean
+>     : ^^^^^^^
 >e < c : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >c : string
+>  : ^^^^^^
 
 var r1e1 = e < d;
 >r1e1 : boolean
+>     : ^^^^^^^
 >e < d : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >d : void
+>  : ^^^^
 
 // operator >
 var r2a1 = a > b;
 >r2a1 : boolean
+>     : ^^^^^^^
 >a > b : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r2a1 = a > c;
 >r2a1 : boolean
+>     : ^^^^^^^
 >a > c : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r2a1 = a > d;
 >r2a1 : boolean
+>     : ^^^^^^^
 >a > d : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r2a1 = a > e; // no error, expected
 >r2a1 : boolean
+>     : ^^^^^^^
 >a > e : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r2b1 = b > a;
 >r2b1 : boolean
+>     : ^^^^^^^
 >b > a : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r2b1 = b > c;
 >r2b1 : boolean
+>     : ^^^^^^^
 >b > c : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r2b1 = b > d;
 >r2b1 : boolean
+>     : ^^^^^^^
 >b > d : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >d : void
+>  : ^^^^
 
 var r2b1 = b > e;
 >r2b1 : boolean
+>     : ^^^^^^^
 >b > e : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >e : E
+>  : ^
 
 var r2c1 = c > a;
 >r2c1 : boolean
+>     : ^^^^^^^
 >c > a : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r2c1 = c > b;
 >r2c1 : boolean
+>     : ^^^^^^^
 >c > b : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r2c1 = c > d;
 >r2c1 : boolean
+>     : ^^^^^^^
 >c > d : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r2c1 = c > e;
 >r2c1 : boolean
+>     : ^^^^^^^
 >c > e : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r2d1 = d > a;
 >r2d1 : boolean
+>     : ^^^^^^^
 >d > a : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >a : number
+>  : ^^^^^^
 
 var r2d1 = d > b;
 >r2d1 : boolean
+>     : ^^^^^^^
 >d > b : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r2d1 = d > c;
 >r2d1 : boolean
+>     : ^^^^^^^
 >d > c : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >c : string
+>  : ^^^^^^
 
 var r2d1 = d > e;
 >r2d1 : boolean
+>     : ^^^^^^^
 >d > e : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >e : E
+>  : ^
 
 var r2e1 = e > a; // no error, expected
 >r2e1 : boolean
+>     : ^^^^^^^
 >e > a : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var r2e1 = e > b;
 >r2e1 : boolean
+>     : ^^^^^^^
 >e > b : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
 var r2e1 = e > c;
 >r2e1 : boolean
+>     : ^^^^^^^
 >e > c : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >c : string
+>  : ^^^^^^
 
 var r2e1 = e > d;
 >r2e1 : boolean
+>     : ^^^^^^^
 >e > d : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >d : void
+>  : ^^^^
 
 // operator <=
 var r3a1 = a <= b;
 >r3a1 : boolean
+>     : ^^^^^^^
 >a <= b : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r3a1 = a <= c;
 >r3a1 : boolean
+>     : ^^^^^^^
 >a <= c : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r3a1 = a <= d;
 >r3a1 : boolean
+>     : ^^^^^^^
 >a <= d : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r3a1 = a <= e; // no error, expected
 >r3a1 : boolean
+>     : ^^^^^^^
 >a <= e : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r3b1 = b <= a;
 >r3b1 : boolean
+>     : ^^^^^^^
 >b <= a : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r3b1 = b <= c;
 >r3b1 : boolean
+>     : ^^^^^^^
 >b <= c : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r3b1 = b <= d;
 >r3b1 : boolean
+>     : ^^^^^^^
 >b <= d : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >d : void
+>  : ^^^^
 
 var r3b1 = b <= e;
 >r3b1 : boolean
+>     : ^^^^^^^
 >b <= e : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >e : E
+>  : ^
 
 var r3c1 = c <= a;
 >r3c1 : boolean
+>     : ^^^^^^^
 >c <= a : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r3c1 = c <= b;
 >r3c1 : boolean
+>     : ^^^^^^^
 >c <= b : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r3c1 = c <= d;
 >r3c1 : boolean
+>     : ^^^^^^^
 >c <= d : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r3c1 = c <= e;
 >r3c1 : boolean
+>     : ^^^^^^^
 >c <= e : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r3d1 = d <= a;
 >r3d1 : boolean
+>     : ^^^^^^^
 >d <= a : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >a : number
+>  : ^^^^^^
 
 var r3d1 = d <= b;
 >r3d1 : boolean
+>     : ^^^^^^^
 >d <= b : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r3d1 = d <= c;
 >r3d1 : boolean
+>     : ^^^^^^^
 >d <= c : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >c : string
+>  : ^^^^^^
 
 var r3d1 = d <= e;
 >r3d1 : boolean
+>     : ^^^^^^^
 >d <= e : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >e : E
+>  : ^
 
 var r3e1 = e <= a; // no error, expected
 >r3e1 : boolean
+>     : ^^^^^^^
 >e <= a : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var r3e1 = e <= b;
 >r3e1 : boolean
+>     : ^^^^^^^
 >e <= b : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
 var r3e1 = e <= c;
 >r3e1 : boolean
+>     : ^^^^^^^
 >e <= c : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >c : string
+>  : ^^^^^^
 
 var r3e1 = e <= d;
 >r3e1 : boolean
+>     : ^^^^^^^
 >e <= d : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >d : void
+>  : ^^^^
 
 // operator >=
 var r4a1 = a >= b;
 >r4a1 : boolean
+>     : ^^^^^^^
 >a >= b : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r4a1 = a >= c;
 >r4a1 : boolean
+>     : ^^^^^^^
 >a >= c : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r4a1 = a >= d;
 >r4a1 : boolean
+>     : ^^^^^^^
 >a >= d : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r4a1 = a >= e; // no error, expected
 >r4a1 : boolean
+>     : ^^^^^^^
 >a >= e : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r4b1 = b >= a;
 >r4b1 : boolean
+>     : ^^^^^^^
 >b >= a : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r4b1 = b >= c;
 >r4b1 : boolean
+>     : ^^^^^^^
 >b >= c : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r4b1 = b >= d;
 >r4b1 : boolean
+>     : ^^^^^^^
 >b >= d : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >d : void
+>  : ^^^^
 
 var r4b1 = b >= e;
 >r4b1 : boolean
+>     : ^^^^^^^
 >b >= e : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >e : E
+>  : ^
 
 var r4c1 = c >= a;
 >r4c1 : boolean
+>     : ^^^^^^^
 >c >= a : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r4c1 = c >= b;
 >r4c1 : boolean
+>     : ^^^^^^^
 >c >= b : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r4c1 = c >= d;
 >r4c1 : boolean
+>     : ^^^^^^^
 >c >= d : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r4c1 = c >= e;
 >r4c1 : boolean
+>     : ^^^^^^^
 >c >= e : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r4d1 = d >= a;
 >r4d1 : boolean
+>     : ^^^^^^^
 >d >= a : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >a : number
+>  : ^^^^^^
 
 var r4d1 = d >= b;
 >r4d1 : boolean
+>     : ^^^^^^^
 >d >= b : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r4d1 = d >= c;
 >r4d1 : boolean
+>     : ^^^^^^^
 >d >= c : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >c : string
+>  : ^^^^^^
 
 var r4d1 = d >= e;
 >r4d1 : boolean
+>     : ^^^^^^^
 >d >= e : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >e : E
+>  : ^
 
 var r4e1 = e >= a; // no error, expected
 >r4e1 : boolean
+>     : ^^^^^^^
 >e >= a : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var r4e1 = e >= b;
 >r4e1 : boolean
+>     : ^^^^^^^
 >e >= b : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
 var r4e1 = e >= c;
 >r4e1 : boolean
+>     : ^^^^^^^
 >e >= c : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >c : string
+>  : ^^^^^^
 
 var r4e1 = e >= d;
 >r4e1 : boolean
+>     : ^^^^^^^
 >e >= d : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >d : void
+>  : ^^^^
 
 // operator ==
 var r5a1 = a == b;
 >r5a1 : boolean
+>     : ^^^^^^^
 >a == b : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r5a1 = a == c;
 >r5a1 : boolean
+>     : ^^^^^^^
 >a == c : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r5a1 = a == d;
 >r5a1 : boolean
+>     : ^^^^^^^
 >a == d : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r5a1 = a == e; // no error, expected
 >r5a1 : boolean
+>     : ^^^^^^^
 >a == e : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r5b1 = b == a;
 >r5b1 : boolean
+>     : ^^^^^^^
 >b == a : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r5b1 = b == c;
 >r5b1 : boolean
+>     : ^^^^^^^
 >b == c : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r5b1 = b == d;
 >r5b1 : boolean
+>     : ^^^^^^^
 >b == d : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >d : void
+>  : ^^^^
 
 var r5b1 = b == e;
 >r5b1 : boolean
+>     : ^^^^^^^
 >b == e : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >e : E
+>  : ^
 
 var r5c1 = c == a;
 >r5c1 : boolean
+>     : ^^^^^^^
 >c == a : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r5c1 = c == b;
 >r5c1 : boolean
+>     : ^^^^^^^
 >c == b : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r5c1 = c == d;
 >r5c1 : boolean
+>     : ^^^^^^^
 >c == d : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r5c1 = c == e;
 >r5c1 : boolean
+>     : ^^^^^^^
 >c == e : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r5d1 = d == a;
 >r5d1 : boolean
+>     : ^^^^^^^
 >d == a : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >a : number
+>  : ^^^^^^
 
 var r5d1 = d == b;
 >r5d1 : boolean
+>     : ^^^^^^^
 >d == b : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r5d1 = d == c;
 >r5d1 : boolean
+>     : ^^^^^^^
 >d == c : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >c : string
+>  : ^^^^^^
 
 var r5d1 = d == e;
 >r5d1 : boolean
+>     : ^^^^^^^
 >d == e : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >e : E
+>  : ^
 
 var r5e1 = e == a; // no error, expected
 >r5e1 : boolean
+>     : ^^^^^^^
 >e == a : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var r5e1 = e == b;
 >r5e1 : boolean
+>     : ^^^^^^^
 >e == b : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
 var r5e1 = e == c;
 >r5e1 : boolean
+>     : ^^^^^^^
 >e == c : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >c : string
+>  : ^^^^^^
 
 var r5e1 = e == d;
 >r5e1 : boolean
+>     : ^^^^^^^
 >e == d : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >d : void
+>  : ^^^^
 
 // operator !=
 var r6a1 = a != b;
 >r6a1 : boolean
+>     : ^^^^^^^
 >a != b : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r6a1 = a != c;
 >r6a1 : boolean
+>     : ^^^^^^^
 >a != c : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r6a1 = a != d;
 >r6a1 : boolean
+>     : ^^^^^^^
 >a != d : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r6a1 = a != e; // no error, expected
 >r6a1 : boolean
+>     : ^^^^^^^
 >a != e : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r6b1 = b != a;
 >r6b1 : boolean
+>     : ^^^^^^^
 >b != a : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r6b1 = b != c;
 >r6b1 : boolean
+>     : ^^^^^^^
 >b != c : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r6b1 = b != d;
 >r6b1 : boolean
+>     : ^^^^^^^
 >b != d : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >d : void
+>  : ^^^^
 
 var r6b1 = b != e;
 >r6b1 : boolean
+>     : ^^^^^^^
 >b != e : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >e : E
+>  : ^
 
 var r6c1 = c != a;
 >r6c1 : boolean
+>     : ^^^^^^^
 >c != a : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r6c1 = c != b;
 >r6c1 : boolean
+>     : ^^^^^^^
 >c != b : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r6c1 = c != d;
 >r6c1 : boolean
+>     : ^^^^^^^
 >c != d : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r6c1 = c != e;
 >r6c1 : boolean
+>     : ^^^^^^^
 >c != e : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r6d1 = d != a;
 >r6d1 : boolean
+>     : ^^^^^^^
 >d != a : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >a : number
+>  : ^^^^^^
 
 var r6d1 = d != b;
 >r6d1 : boolean
+>     : ^^^^^^^
 >d != b : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r6d1 = d != c;
 >r6d1 : boolean
+>     : ^^^^^^^
 >d != c : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >c : string
+>  : ^^^^^^
 
 var r6d1 = d != e;
 >r6d1 : boolean
+>     : ^^^^^^^
 >d != e : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >e : E
+>  : ^
 
 var r6e1 = e != a; // no error, expected
 >r6e1 : boolean
+>     : ^^^^^^^
 >e != a : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var r6e1 = e != b;
 >r6e1 : boolean
+>     : ^^^^^^^
 >e != b : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
 var r6e1 = e != c;
 >r6e1 : boolean
+>     : ^^^^^^^
 >e != c : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >c : string
+>  : ^^^^^^
 
 var r6e1 = e != d;
 >r6e1 : boolean
+>     : ^^^^^^^
 >e != d : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >d : void
+>  : ^^^^
 
 // operator ===
 var r7a1 = a === b;
 >r7a1 : boolean
+>     : ^^^^^^^
 >a === b : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r7a1 = a === c;
 >r7a1 : boolean
+>     : ^^^^^^^
 >a === c : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r7a1 = a === d;
 >r7a1 : boolean
+>     : ^^^^^^^
 >a === d : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r7a1 = a === e; // no error, expected
 >r7a1 : boolean
+>     : ^^^^^^^
 >a === e : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r7b1 = b === a;
 >r7b1 : boolean
+>     : ^^^^^^^
 >b === a : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r7b1 = b === c;
 >r7b1 : boolean
+>     : ^^^^^^^
 >b === c : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r7b1 = b === d;
 >r7b1 : boolean
+>     : ^^^^^^^
 >b === d : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >d : void
+>  : ^^^^
 
 var r7b1 = b === e;
 >r7b1 : boolean
+>     : ^^^^^^^
 >b === e : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >e : E
+>  : ^
 
 var r7c1 = c === a;
 >r7c1 : boolean
+>     : ^^^^^^^
 >c === a : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r7c1 = c === b;
 >r7c1 : boolean
+>     : ^^^^^^^
 >c === b : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r7c1 = c === d;
 >r7c1 : boolean
+>     : ^^^^^^^
 >c === d : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r7c1 = c === e;
 >r7c1 : boolean
+>     : ^^^^^^^
 >c === e : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r7d1 = d === a;
 >r7d1 : boolean
+>     : ^^^^^^^
 >d === a : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >a : number
+>  : ^^^^^^
 
 var r7d1 = d === b;
 >r7d1 : boolean
+>     : ^^^^^^^
 >d === b : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r7d1 = d === c;
 >r7d1 : boolean
+>     : ^^^^^^^
 >d === c : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >c : string
+>  : ^^^^^^
 
 var r7d1 = d === e;
 >r7d1 : boolean
+>     : ^^^^^^^
 >d === e : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >e : E
+>  : ^
 
 var r7e1 = e === a; // no error, expected
 >r7e1 : boolean
+>     : ^^^^^^^
 >e === a : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var r7e1 = e === b;
 >r7e1 : boolean
+>     : ^^^^^^^
 >e === b : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
 var r7e1 = e === c;
 >r7e1 : boolean
+>     : ^^^^^^^
 >e === c : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >c : string
+>  : ^^^^^^
 
 var r7e1 = e === d;
 >r7e1 : boolean
+>     : ^^^^^^^
 >e === d : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >d : void
+>  : ^^^^
 
 // operator !==
 var r8a1 = a !== b;
 >r8a1 : boolean
+>     : ^^^^^^^
 >a !== b : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r8a1 = a !== c;
 >r8a1 : boolean
+>     : ^^^^^^^
 >a !== c : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r8a1 = a !== d;
 >r8a1 : boolean
+>     : ^^^^^^^
 >a !== d : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r8a1 = a !== e; // no error, expected
 >r8a1 : boolean
+>     : ^^^^^^^
 >a !== e : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r8b1 = b !== a;
 >r8b1 : boolean
+>     : ^^^^^^^
 >b !== a : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r8b1 = b !== c;
 >r8b1 : boolean
+>     : ^^^^^^^
 >b !== c : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 var r8b1 = b !== d;
 >r8b1 : boolean
+>     : ^^^^^^^
 >b !== d : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >d : void
+>  : ^^^^
 
 var r8b1 = b !== e;
 >r8b1 : boolean
+>     : ^^^^^^^
 >b !== e : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >e : E
+>  : ^
 
 var r8c1 = c !== a;
 >r8c1 : boolean
+>     : ^^^^^^^
 >c !== a : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var r8c1 = c !== b;
 >r8c1 : boolean
+>     : ^^^^^^^
 >c !== b : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r8c1 = c !== d;
 >r8c1 : boolean
+>     : ^^^^^^^
 >c !== d : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : void
+>  : ^^^^
 
 var r8c1 = c !== e;
 >r8c1 : boolean
+>     : ^^^^^^^
 >c !== e : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
 var r8d1 = d !== a;
 >r8d1 : boolean
+>     : ^^^^^^^
 >d !== a : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >a : number
+>  : ^^^^^^
 
 var r8d1 = d !== b;
 >r8d1 : boolean
+>     : ^^^^^^^
 >d !== b : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r8d1 = d !== c;
 >r8d1 : boolean
+>     : ^^^^^^^
 >d !== c : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >c : string
+>  : ^^^^^^
 
 var r8d1 = d !== e;
 >r8d1 : boolean
+>     : ^^^^^^^
 >d !== e : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >e : E
+>  : ^
 
 var r8e1 = e !== a; // no error, expected
 >r8e1 : boolean
+>     : ^^^^^^^
 >e !== a : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var r8e1 = e !== b;
 >r8e1 : boolean
+>     : ^^^^^^^
 >e !== b : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
 var r8e1 = e !== c;
 >r8e1 : boolean
+>     : ^^^^^^^
 >e !== c : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >c : string
+>  : ^^^^^^
 
 var r8e1 = e !== d;
 >r8e1 : boolean
+>     : ^^^^^^^
 >e !== d : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >d : void
+>  : ^^^^
 

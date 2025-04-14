@@ -1,16 +1,25 @@
-=== tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts ===
+//// [tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts] ////
+
+=== objectCreationExpressionInFunctionParameter.ts ===
 class A {
 >A : A
+>  : ^
 
     constructor(public a1: string) {
 >a1 : string
+>   : ^^^^^^
     }
 }
 function foo(x = new A(123)) { //should error, 123 is not string
 >foo : (x?: A) => void
+>    : ^ ^^^^^^^^^^^^^
 >x : A
+>  : ^
 >new A(123) : A
+>           : ^
 >A : typeof A
+>  : ^^^^^^^^
 >123 : 123
+>    : ^^^
 
 }}

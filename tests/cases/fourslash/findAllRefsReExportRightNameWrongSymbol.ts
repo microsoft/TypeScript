@@ -16,10 +16,9 @@
 
 verify.noErrors();
 const [aDef, a, bDef, b, cFromBDef, cFromB, cFromADef, cFromA, cUse, dDef, d] = test.ranges();
-verify.renameLocations(a, [a, cFromA, cUse]);
-verify.renameLocations([cFromA, cUse], [{ range: cFromA, prefixText: "x as " }, cUse]);
-verify.renameLocations(b, [b, { range: cFromB, suffixText: " as x" }]);
-verify.renameLocations(cFromB, [{ range: cFromB, prefixText: "x as " }, d]);
-verify.renameLocations(d, [{ range: d, prefixText: "x as " }]);
-
-verify.baselineFindAllReferences('a', 'b', 'cFromB', 'cFromA', 'cUse', 'd')
+verify.baselineFindAllReferences('a', 'b', 'cFromB', 'cFromA', 'cUse', 'd');
+verify.baselineRename(a);
+verify.baselineRename([cFromA, cUse]);
+verify.baselineRename(b);
+verify.baselineRename(cFromB);
+verify.baselineRename(d);

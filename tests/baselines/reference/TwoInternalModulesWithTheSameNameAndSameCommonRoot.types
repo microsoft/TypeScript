@@ -1,114 +1,180 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesWithTheSameNameAndSameCommonRoot.ts] ////
+
+=== part1.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export interface Point {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 
     export module Utils {
 >Utils : typeof Utils
+>      : ^^^^^^^^^^^^
 
         export function mirror<T extends Point>(p: T) {
 >mirror : <T extends Point>(p: T) => { x: number; y: number; }
+>       : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : T
+>  : ^
 
             return { x: p.y, y: p.x };
 >{ x: p.y, y: p.x } : { x: number; y: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >p.y : number
+>    : ^^^^^^
 >p : T
+>  : ^
 >y : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >p.x : number
+>    : ^^^^^^
 >p : T
+>  : ^
 >x : number
+>  : ^^^^^^
         }
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
+=== part2.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
+>       : ^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     export module Utils {
 >Utils : typeof Utils
+>      : ^^^^^^^^^^^^
 
         export class Plane {
 >Plane : Plane
+>      : ^^^^^
 
             constructor(public tl: Point, public br: Point) { }
 >tl : Point
+>   : ^^^^^
 >br : Point
+>   : ^^^^^
         }
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/part3.ts ===
+=== part3.ts ===
 // test the merging actually worked
 
 var o: { x: number; y: number };
 >o : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var o: A.Point;
 >o : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >A : any
+>  : ^^^
 
 var o = A.Origin;
 >o : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >A.Origin : A.Point
+>         : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >Origin : A.Point
+>       : ^^^^^^^
 
 var o = A.Utils.mirror(o);
 >o : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >A.Utils.mirror(o) : { x: number; y: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >A.Utils.mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
+>               : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >A.Utils : typeof A.Utils
+>        : ^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >Utils : typeof A.Utils
+>      : ^^^^^^^^^^^^^^
 >mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
+>       : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 
 var p: { tl: A.Point; br: A.Point };
 >p : { tl: A.Point; br: A.Point; }
+>  : ^^^^^^       ^^^^^^       ^^^
 >tl : A.Point
+>   : ^^^^^^^
 >A : any
+>  : ^^^
 >br : A.Point
+>   : ^^^^^^^
 >A : any
+>  : ^^^
 
 var p: A.Utils.Plane;
 >p : { tl: A.Point; br: A.Point; }
+>  : ^^^^^^       ^^^^^^       ^^^
 >A : any
+>  : ^^^
 >Utils : any
+>      : ^^^
 
 var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 >p : { tl: A.Point; br: A.Point; }
+>  : ^^^^^^       ^^^^^^       ^^^
 >new A.Utils.Plane(o, { x: 1, y: 1 }) : A.Utils.Plane
+>                                     : ^^^^^^^^^^^^^
 >A.Utils.Plane : typeof A.Utils.Plane
+>              : ^^^^^^^^^^^^^^^^^^^^
 >A.Utils : typeof A.Utils
+>        : ^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >Utils : typeof A.Utils
+>      : ^^^^^^^^^^^^^^
 >Plane : typeof A.Utils.Plane
+>      : ^^^^^^^^^^^^^^^^^^^^
 >o : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >{ x: 1, y: 1 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 

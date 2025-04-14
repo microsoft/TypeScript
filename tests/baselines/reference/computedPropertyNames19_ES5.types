@@ -1,16 +1,26 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts] ////
+
+=== computedPropertyNames19_ES5.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var obj = {
 >obj : { [x: number]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{        [this.bar]: 0    } : { [x: number]: number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         [this.bar]: 0
 >[this.bar] : number
+>           : ^^^^^^
 >this.bar : any
+>         : ^^^
 >this : any
+>     : ^^^
 >bar : any
+>    : ^^^
 >0 : 0
+>  : ^
     }
 }

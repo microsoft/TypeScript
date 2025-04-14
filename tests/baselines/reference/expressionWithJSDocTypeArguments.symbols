@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/expressionWithJSDocTypeArguments.ts] ////
+
+=== expressionWithJSDocTypeArguments.ts ===
+// Repro from #51802
+
+function foo<T>(x: T): T { return x }
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+>T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 2, 13))
+>x : Symbol(x, Decl(expressionWithJSDocTypeArguments.ts, 2, 16))
+>T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 2, 13))
+>T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 2, 13))
+>x : Symbol(x, Decl(expressionWithJSDocTypeArguments.ts, 2, 16))
+
+class Bar<T> { constructor(public x: T) { } }
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+>T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 4, 10))
+>x : Symbol(Bar.x, Decl(expressionWithJSDocTypeArguments.ts, 4, 27))
+>T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 4, 10))
+
+// Errors expected on all of the following
+
+const WhatFoo = foo<?>;
+>WhatFoo : Symbol(WhatFoo, Decl(expressionWithJSDocTypeArguments.ts, 8, 5))
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+
+const HuhFoo = foo<string?>;
+>HuhFoo : Symbol(HuhFoo, Decl(expressionWithJSDocTypeArguments.ts, 9, 5))
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+
+const NopeFoo = foo<?string>;
+>NopeFoo : Symbol(NopeFoo, Decl(expressionWithJSDocTypeArguments.ts, 10, 5))
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+
+const ComeOnFoo = foo<?string?>;
+>ComeOnFoo : Symbol(ComeOnFoo, Decl(expressionWithJSDocTypeArguments.ts, 11, 5))
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+
+type TWhatFoo = typeof foo<?>;
+>TWhatFoo : Symbol(TWhatFoo, Decl(expressionWithJSDocTypeArguments.ts, 11, 32))
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+
+type THuhFoo = typeof foo<string?>;
+>THuhFoo : Symbol(THuhFoo, Decl(expressionWithJSDocTypeArguments.ts, 13, 30))
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+
+type TNopeFoo = typeof foo<?string>;
+>TNopeFoo : Symbol(TNopeFoo, Decl(expressionWithJSDocTypeArguments.ts, 14, 35))
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+
+type TComeOnFoo = typeof foo<?string?>;
+>TComeOnFoo : Symbol(TComeOnFoo, Decl(expressionWithJSDocTypeArguments.ts, 15, 36))
+>foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
+
+const WhatBar = Bar<?>;
+>WhatBar : Symbol(WhatBar, Decl(expressionWithJSDocTypeArguments.ts, 18, 5))
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+
+const HuhBar = Bar<string?>;
+>HuhBar : Symbol(HuhBar, Decl(expressionWithJSDocTypeArguments.ts, 19, 5))
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+
+const NopeBar = Bar<?string>;
+>NopeBar : Symbol(NopeBar, Decl(expressionWithJSDocTypeArguments.ts, 20, 5))
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+
+const ComeOnBar = Bar<?string?>;
+>ComeOnBar : Symbol(ComeOnBar, Decl(expressionWithJSDocTypeArguments.ts, 21, 5))
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+
+type TWhatBar = typeof Bar<?>;
+>TWhatBar : Symbol(TWhatBar, Decl(expressionWithJSDocTypeArguments.ts, 21, 32))
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+
+type THuhBar = typeof Bar<string?>;
+>THuhBar : Symbol(THuhBar, Decl(expressionWithJSDocTypeArguments.ts, 23, 30))
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+
+type TNopeBar = typeof Bar<?string>;
+>TNopeBar : Symbol(TNopeBar, Decl(expressionWithJSDocTypeArguments.ts, 24, 35))
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+
+type TComeOnBar = typeof Bar<?string?>;
+>TComeOnBar : Symbol(TComeOnBar, Decl(expressionWithJSDocTypeArguments.ts, 25, 36))
+>Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+

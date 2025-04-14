@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts] ////
+
+=== typeofClassWithPrivates.ts ===
 class C<T> {
 >C : Symbol(C, Decl(typeofClassWithPrivates.ts, 0, 0))
 >T : Symbol(T, Decl(typeofClassWithPrivates.ts, 0, 8))

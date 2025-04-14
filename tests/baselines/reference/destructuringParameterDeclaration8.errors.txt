@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(4,5): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(5,15): error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(17,8): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(18,8): error TS2322: Type '"one"' is not assignable to type '"x" | "y"'.
+destructuringParameterDeclaration8.ts(4,5): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
+destructuringParameterDeclaration8.ts(5,15): error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
+destructuringParameterDeclaration8.ts(17,8): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
+destructuringParameterDeclaration8.ts(18,8): error TS2322: Type '"one"' is not assignable to type '"x" | "y"'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts (4 errors) ====
+==== destructuringParameterDeclaration8.ts (4 errors) ====
     // explicit type annotation should cause `method` to have type 'x' | 'y'
     // both inside and outside `test`.
     function test({
@@ -28,9 +28,9 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(
     test({ method: 'z', nested: { p: 'b' } })
            ~~~~~~
 !!! error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
-!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'
+!!! related TS6500 destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'
     test({ method: 'one', nested: { p: 'a' } })
            ~~~~~~
 !!! error TS2322: Type '"one"' is not assignable to type '"x" | "y"'.
-!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'
+!!! related TS6500 destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'
     

@@ -1,34 +1,52 @@
-=== tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts ===
+//// [tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts] ////
+
+=== decoratorChecksFunctionBodies.ts ===
 // from #2971
 function func(s: string): void {
 >func : (s: string) => void
+>     : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
 }
 
 class A {
 >A : A
+>  : ^
 
-    @((x, p) => {
->((x, p) => {        var a = 3;        func(a);        return x;     }) : (x: any, p: any) => any
->(x, p) => {        var a = 3;        func(a);        return x;     } : (x: any, p: any) => any
->x : any
->p : any
+    @((x, p, d) => {
+>((x, p, d) => {        var a = 3;        func(a);        return d;    }) : (x: A, p: "m", d: TypedPropertyDescriptor<() => void>) => TypedPropertyDescriptor<() => void>
+>                                                                         : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x, p, d) => {        var a = 3;        func(a);        return d;    } : (x: A, p: "m", d: TypedPropertyDescriptor<() => void>) => TypedPropertyDescriptor<() => void>
+>                                                                       : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : A
+>  : ^
+>p : "m"
+>  : ^^^
+>d : TypedPropertyDescriptor<() => void>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         var a = 3;
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
         func(a);
 >func(a) : void
+>        : ^^^^
 >func : (s: string) => void
+>     : ^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 
-        return x; 
->x : any
+        return d;
+>d : TypedPropertyDescriptor<() => void>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     })
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
     }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/assignmentOperator/assignmentTypeNarrowing.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentTypeNarrowing.ts] ////
+
+=== assignmentTypeNarrowing.ts ===
 let x: string | number | boolean | RegExp;
 >x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
 >RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

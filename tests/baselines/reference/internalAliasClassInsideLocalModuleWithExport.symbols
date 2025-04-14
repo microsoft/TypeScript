@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasClassInsideLocalModuleWithExport.ts ===
+//// [tests/cases/compiler/internalAliasClassInsideLocalModuleWithExport.ts] ////
+
+=== internalAliasClassInsideLocalModuleWithExport.ts ===
 export module x {
 >x : Symbol(x, Decl(internalAliasClassInsideLocalModuleWithExport.ts, 0, 0))
 

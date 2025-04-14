@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts(5,13): error TS2741: Property 'x' is missing in type 'Baz' but required in type 'Foo'.
+generatorTypeCheck20.ts(5,13): error TS2741: Property 'x' is missing in type 'Baz' but required in type 'Foo'.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts (1 errors) ====
+==== generatorTypeCheck20.ts (1 errors) ====
     class Foo { x: number }
     class Baz { z: number }
     function* g(): IterableIterator<Foo> {
@@ -9,5 +9,5 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts(5,13): erro
         yield * [new Baz];
                 ~~~~~~~~~
 !!! error TS2741: Property 'x' is missing in type 'Baz' but required in type 'Foo'.
-!!! related TS2728 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts:1:13: 'x' is declared here.
+!!! related TS2728 generatorTypeCheck20.ts:1:13: 'x' is declared here.
     }

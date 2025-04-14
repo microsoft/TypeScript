@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reboundIdentifierOnImportAlias.ts] ////
+
 //// [reboundIdentifierOnImportAlias.ts]
 module Foo {
     export var x = "hello";

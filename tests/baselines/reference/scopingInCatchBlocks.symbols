@@ -1,4 +1,6 @@
-=== tests/cases/compiler/scopingInCatchBlocks.ts ===
+//// [tests/cases/compiler/scopingInCatchBlocks.ts] ////
+
+=== scopingInCatchBlocks.ts ===
 try { } catch(ex1) { 
 >ex1 : Symbol(ex1, Decl(scopingInCatchBlocks.ts, 0, 14))
 

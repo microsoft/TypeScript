@@ -1,63 +1,97 @@
-=== tests/cases/compiler/typeInferenceCacheInvalidation.ts ===
+//// [tests/cases/compiler/typeInferenceCacheInvalidation.ts] ////
+
+=== typeInferenceCacheInvalidation.ts ===
 // Repro from #32230
 
 type Callback<TFoo, TBar> = (foo: TFoo, bar: TBar) => any
 >Callback : Callback<TFoo, TBar>
+>         : ^^^^^^^^^^^^^^^^^^^^
 >foo : TFoo
+>    : ^^^^
 >bar : TBar
+>    : ^^^^
 
 declare function example<TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(
 >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
+>        : ^    ^^    ^^         ^^^^^^^^^                    ^^   ^^    ^^        ^^         ^^   ^^    ^^^^^         
 
     foo: TFoo,
 >foo : TFoo
+>    : ^^^^
 
     callback: TCallback,
 >callback : TCallback
+>         : ^^^^^^^^^
 
     bar: TBar,
 >bar : TBar
+>    : ^^^^
 
 ): TCallback
 
 example(42, (foo, bar) => ({
 >example(42, (foo, bar) => ({    t: () => {        let s: string = bar;    }}), '42') : (foo: number, bar: string) => { t: () => void; }
+>                                                                                     : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
+>        : ^    ^^    ^^         ^^^^^^^^^                    ^^   ^^    ^^        ^^         ^^   ^^    ^^^^^         
 >42 : 42
+>   : ^^
 >(foo, bar) => ({    t: () => {        let s: string = bar;    }}) : (foo: number, bar: string) => { t: () => void; }
+>                                                                  : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 >({    t: () => {        let s: string = bar;    }}) : { t: () => void; }
+>                                                    : ^^^^^^^^^^^^^^^^^^
 >{    t: () => {        let s: string = bar;    }} : { t: () => void; }
+>                                                  : ^^^^^^^^^^^^^^^^^^
 
     t: () => {
 >t : () => void
+>  : ^^^^^^^^^^
 >() => {        let s: string = bar;    } : () => void
+>                                         : ^^^^^^^^^^
 
         let s: string = bar;
 >s : string
+>  : ^^^^^^
 >bar : string
+>    : ^^^^^^
     }
 }), '42');
 >'42' : "42"
+>     : ^^^^
 
 example(42, (foo, bar) => ({
 >example(42, (foo, bar) => ({    t() {        let s: string = bar;    }}), '42') : (foo: number, bar: string) => { t(): void; }
+>                                                                                : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
+>        : ^    ^^    ^^         ^^^^^^^^^                    ^^   ^^    ^^        ^^         ^^   ^^    ^^^^^         
 >42 : 42
+>   : ^^
 >(foo, bar) => ({    t() {        let s: string = bar;    }}) : (foo: number, bar: string) => { t(): void; }
+>                                                             : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 >({    t() {        let s: string = bar;    }}) : { t(): void; }
+>                                               : ^^^^^^^^^^^^^^
 >{    t() {        let s: string = bar;    }} : { t(): void; }
+>                                             : ^^^^^^^^^^^^^^
 
     t() {
 >t : () => void
+>  : ^^^^^^^^^^
 
         let s: string = bar;
 >s : string
+>  : ^^^^^^
 >bar : string
+>    : ^^^^^^
     }
 }), '42');
 >'42' : "42"
+>     : ^^^^
 

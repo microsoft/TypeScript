@@ -6,7 +6,7 @@ sources: optionsSourcemapInlineSourcesSourceRoot.ts
 sourcesContent: ["var a = 10;"]
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/optionsSourcemapInlineSourcesSourceRoot.js
+emittedFile:optionsSourcemapInlineSourcesSourceRoot.js
 sourceFile:optionsSourcemapInlineSourcesSourceRoot.ts
 -------------------------------------------------------------------
 >>>var a = 10;

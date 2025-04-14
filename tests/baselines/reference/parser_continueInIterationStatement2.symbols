@@ -1,6 +1,8 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueInIterationStatement2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueInIterationStatement2.ts] ////
+
+=== parser_continueInIterationStatement2.ts ===
+
 do {
-No type information for this code.  continue;
-No type information for this code.}
-No type information for this code.while (true);
-No type information for this code.
+  continue;
+}
+while (true);

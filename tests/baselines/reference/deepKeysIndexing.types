@@ -1,17 +1,22 @@
-=== tests/cases/compiler/deepKeysIndexing.ts ===
+//// [tests/cases/compiler/deepKeysIndexing.ts] ////
+
+=== deepKeysIndexing.ts ===
 // regression test from https://github.com/Microsoft/TypeScript/issues/29692
 interface DeepObject {
   [k1: string]: {
 >k1 : string
+>   : ^^^^^^
 
     [k2: string]: any;
 >k2 : string
+>   : ^^^^^^
 
   };
 }
 
 type keys2broken<
 >keys2broken : keys2broken<O, K1>
+>            : ^^^^^^^^^^^^^^^^^^
 
   O extends DeepObject,
   K1 extends keyof O
@@ -19,6 +24,7 @@ type keys2broken<
 
 type keys2working<
 >keys2working : keys2working<O, K1>
+>             : ^^^^^^^^^^^^^^^^^^^
 
   O extends DeepObject,
   K1 extends keyof O
@@ -26,6 +32,7 @@ type keys2working<
 
 type keys2workaround<O extends DeepObject, K1 extends keyof O> = Extract<
 >keys2workaround : keys2workaround<O, K1>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
   O[K1] extends object ? keyof O[K1] : never,
   string
@@ -34,86 +41,127 @@ type keys2workaround<O extends DeepObject, K1 extends keyof O> = Extract<
 interface Foo extends DeepObject {
   a: {
 >a : { "1": 123; "2": string; "3": boolean; }
+>  : ^^^^^^^   ^^^^^^^      ^^^^^^^       ^^^
 
     "1": 123;
 >"1" : 123
+>    : ^^^
 
     "2": string;
 >"2" : string
+>    : ^^^^^^
 
     "3": boolean;
 >"3" : boolean
+>    : ^^^^^^^
 
   };
 }
 
 class Bar<O extends DeepObject> {
 >Bar : Bar<O>
+>    : ^^^^^^
 
   broken<
 >broken : <K1 extends keyof O, K2 extends keys2broken<O, K1>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>       : ^  ^^^^^^^^^       ^^  ^^^^^^^^^                  ^^ ^^^^^^^^^         ^^  ^^  ^^  ^^  ^^     ^^ ^^^^^^^^^
 
     K1 extends keyof O,
     K2 extends keys2broken<O, K1>,
     V extends O[K1][K2]
   >(k1: K1, k2: K2, value: V) {}
 >k1 : K1
+>   : ^^
 >k2 : K2
+>   : ^^
 >value : V
+>      : ^
 
   working<
 >working : <K1 extends keyof O, K2 extends keys2working<O, K1>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>        : ^  ^^^^^^^^^       ^^  ^^^^^^^^^                   ^^ ^^^^^^^^^         ^^  ^^  ^^  ^^  ^^     ^^ ^^^^^^^^^
 
     K1 extends keyof O,
     K2 extends keys2working<O, K1>,
     V extends O[K1][K2]
   >(k1: K1, k2: K2, value: V) {}
 >k1 : K1
+>   : ^^
 >k2 : K2
+>   : ^^
 >value : V
+>      : ^
 
   workaround<
->workaround : <K1 extends keyof O, K2 extends Extract<O[K1] extends object ? keyof O[K1] : never, string>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>workaround : <K1 extends keyof O, K2 extends keys2workaround<O, K1>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>           : ^  ^^^^^^^^^       ^^  ^^^^^^^^^                      ^^ ^^^^^^^^^         ^^  ^^  ^^  ^^  ^^     ^^ ^^^^^^^^^
 
     K1 extends keyof O,
     K2 extends keys2workaround<O, K1>,
     V extends O[K1][K2]
   >(k1: K1, k2: K2, value: V) {}
 >k1 : K1
+>   : ^^
 >k2 : K2
+>   : ^^
 >value : V
+>      : ^
 }
 
 const bar = new Bar<Foo>();
 >bar : Bar<Foo>
+>    : ^^^^^^^^
 >new Bar<Foo>() : Bar<Foo>
+>               : ^^^^^^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
 // all 3 of the below should error on passing `true` for `"1"`
 bar.broken("a", "1", true); // was broken in the past - with 2nd argument incorrectly of type "1" | "2" | "3".
 >bar.broken("a", "1", true) : void
+>                           : ^^^^
 >bar.broken : <K1 extends keyof Foo, K2 extends keys2broken<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>           : ^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^     ^^^^^^^^^^^^
 >bar : Bar<Foo>
+>    : ^^^^^^^^
 >broken : <K1 extends keyof Foo, K2 extends keys2broken<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>       : ^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^     ^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 >"1" : "1"
+>    : ^^^
 >true : true
+>     : ^^^^
 
 bar.working("a", "1", true); // ok - true is not allowed
 >bar.working("a", "1", true) : void
+>                            : ^^^^
 >bar.working : <K1 extends keyof Foo, K2 extends keys2working<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>            : ^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^     ^^^^^^^^^^^^
 >bar : Bar<Foo>
+>    : ^^^^^^^^
 >working : <K1 extends keyof Foo, K2 extends keys2working<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>        : ^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^     ^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 >"1" : "1"
+>    : ^^^
 >true : true
+>     : ^^^^
 
 bar.workaround("a", "1", true); // ok - true is not allowed
 >bar.workaround("a", "1", true) : void
+>                               : ^^^^
 >bar.workaround : <K1 extends keyof Foo, K2 extends Extract<Foo[K1] extends object ? keyof Foo[K1] : never, string>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>               : ^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^     ^^^^^^^^^^^^
 >bar : Bar<Foo>
+>    : ^^^^^^^^
 >workaround : <K1 extends keyof Foo, K2 extends Extract<Foo[K1] extends object ? keyof Foo[K1] : never, string>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>           : ^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^     ^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 >"1" : "1"
+>    : ^^^
 >true : true
+>     : ^^^^
 

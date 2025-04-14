@@ -1,14 +1,21 @@
-=== tests/cases/conformance/jsdoc/bug25127.js ===
+//// [tests/cases/conformance/jsdoc/returnTagTypeGuard.ts] ////
+
+=== bug25127.js ===
 class Entry {
 >Entry : Entry
+>      : ^^^^^
 
     constructor() {
         this.c = 1
 >this.c = 1 : 1
+>           : ^
 >this.c : any
 >this : this
+>     : ^^^^
 >c : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
     /**
      * @param {any} x
@@ -16,22 +23,29 @@ class Entry {
      */
     isInit(x) {
 >isInit : (x: any) => this is Entry
+>       : ^ ^^   ^^^^^             
 >x : any
 
         return true
 >true : true
+>     : ^^^^
     }
 }
 class Group {
 >Group : Group
+>      : ^^^^^
 
     constructor() {
         this.d = 'no'
 >this.d = 'no' : "no"
+>              : ^^^^
 >this.d : any
 >this : this
+>     : ^^^^
 >d : any
+>  : ^^^
 >'no' : "no"
+>     : ^^^^
     }
     /**
      * @param {any} x
@@ -39,34 +53,52 @@ class Group {
      */
     isInit(x) {
 >isInit : (x: any) => false
+>       : ^ ^^   ^^^^^     
 >x : any
 
         return false
 >false : false
+>      : ^^^^^
     }
 }
 /** @param {Entry | Group} chunk */
 function f(chunk) {
 >f : (chunk: Entry | Group) => string | number
+>  : ^     ^^             ^^^^^^^^^^^^^^^^^^^^
 >chunk : Entry | Group
+>      : ^^^^^^^^^^^^^
 
     let x = chunk.isInit(chunk) ? chunk.c : chunk.d
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >chunk.isInit(chunk) ? chunk.c : chunk.d : string | number
+>                                        : ^^^^^^^^^^^^^^^
 >chunk.isInit(chunk) : boolean
+>                    : ^^^^^^^
 >chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
+>             : ^^ ^^   ^^^^^             ^^^^^^ ^^   ^^^^^     ^
 >chunk : Entry | Group
+>      : ^^^^^^^^^^^^^
 >isInit : ((x: any) => this is Entry) | ((x: any) => false)
+>       : ^^ ^^   ^^^^^             ^^^^^^ ^^   ^^^^^     ^
 >chunk : Entry | Group
+>      : ^^^^^^^^^^^^^
 >chunk.c : number
+>        : ^^^^^^
 >chunk : Entry
+>      : ^^^^^
 >c : number
+>  : ^^^^^^
 >chunk.d : string
+>        : ^^^^^^
 >chunk : Group
+>      : ^^^^^
 >d : string
+>  : ^^^^^^
 
     return x
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 /**
@@ -75,27 +107,37 @@ function f(chunk) {
  */
 function isBoolean(value) {
 >isBoolean : (value: any) => value is boolean
+>          : ^     ^^   ^^^^^                
 >value : any
 
     return typeof value === "boolean";
 >typeof value === "boolean" : boolean
+>                           : ^^^^^^^
 >typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
 >"boolean" : "boolean"
+>          : ^^^^^^^^^
 }
 
 /** @param {boolean | number} val */
 function foo(val) {
 >foo : (val: boolean | number) => void
+>    : ^   ^^                ^^^^^^^^^
 >val : number | boolean
+>    : ^^^^^^^^^^^^^^^^
 
     if (isBoolean(val)) {
 >isBoolean(val) : boolean
+>               : ^^^^^^^
 >isBoolean : (value: any) => value is boolean
+>          : ^     ^^   ^^^^^                
 >val : number | boolean
+>    : ^^^^^^^^^^^^^^^^
 
         val;
 >val : boolean
+>    : ^^^^^^^
     }
 }
 
@@ -108,26 +150,40 @@ function foo(val) {
 /** @type {Cb} */
 function isNumber(x) { return typeof x === "number" }
 >isNumber : (x: unknown) => x is number
+>         : ^ ^^       ^^^^^           
 >x : unknown
+>  : ^^^^^^^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
 /** @param {unknown} x */
 function g(x) {
 >g : (x: unknown) => void
+>  : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (isNumber(x)) {
 >isNumber(x) : boolean
+>            : ^^^^^^^
 >isNumber : (x: unknown) => x is number
+>         : ^ ^^       ^^^^^           
 >x : unknown
+>  : ^^^^^^^
 
         x * 2;
 >x * 2 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
     }
 }
 

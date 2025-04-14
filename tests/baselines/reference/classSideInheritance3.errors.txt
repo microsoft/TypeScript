@@ -1,12 +1,14 @@
-tests/cases/compiler/classSideInheritance3.ts(16,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+classSideInheritance3.ts(16,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
   Types of construct signatures are incompatible.
     Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
-tests/cases/compiler/classSideInheritance3.ts(17,5): error TS2322: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
+      Target signature provides too few arguments. Expected 2 or more, but got 1.
+classSideInheritance3.ts(17,5): error TS2322: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
   Types of construct signatures are incompatible.
     Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
+      Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== tests/cases/compiler/classSideInheritance3.ts (2 errors) ====
+==== classSideInheritance3.ts (2 errors) ====
     class A {
         constructor(public x: string) {
         }
@@ -27,9 +29,11 @@ tests/cases/compiler/classSideInheritance3.ts(17,5): error TS2322: Type 'typeof 
 !!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
 !!! error TS2322:   Types of construct signatures are incompatible.
 !!! error TS2322:     Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
+!!! error TS2322:       Target signature provides too few arguments. Expected 2 or more, but got 1.
     var r2: new (x: string) => A = B; // error
         ~~
 !!! error TS2322: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
 !!! error TS2322:   Types of construct signatures are incompatible.
 !!! error TS2322:     Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
+!!! error TS2322:       Target signature provides too few arguments. Expected 2 or more, but got 1.
     var r3: typeof A = C; // ok

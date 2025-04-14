@@ -1,11 +1,15 @@
+//// [tests/cases/compiler/declarationEmitHasTypesRefOnNamespaceUse.ts] ////
+
 === /src/index.ts ===
 class Src implements NS.Dep { }
 >Src : Src
+>    : ^^^
 >NS : any
+>   : ^^^
 
 === /deps/dep/dep.d.ts ===
+
 declare namespace NS {
-No type information for this code.    interface Dep {
-No type information for this code.    }
-No type information for this code.}
-No type information for this code.
+    interface Dep {
+    }
+}

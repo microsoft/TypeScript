@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts] ////
+
 //// [classAbstractGeneric.ts]
 abstract class A<T> {
     t: T;

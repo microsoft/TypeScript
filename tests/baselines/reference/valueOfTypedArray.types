@@ -1,92 +1,168 @@
-=== tests/cases/compiler/valueOfTypedArray.ts ===
+//// [tests/cases/compiler/valueOfTypedArray.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== valueOfTypedArray.ts ===
 // All declarations should pass, as valueOf has been specialized for all TypedArrays
 const typedArray0: Int8Array = (new Int8Array()).valueOf();
->typedArray0 : Int8Array
->(new Int8Array()).valueOf() : Int8Array
->(new Int8Array()).valueOf : () => Int8Array
->(new Int8Array()) : Int8Array
->new Int8Array() : Int8Array
+>typedArray0 : Int8Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Int8Array()).valueOf() : Int8Array<ArrayBuffer>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^
+>(new Int8Array()).valueOf : () => Int8Array<ArrayBuffer>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Int8Array()) : Int8Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
+>new Int8Array() : Int8Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
->valueOf : () => Int8Array
+>          : ^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => Int8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray1: Uint8Array = (new Uint8Array()).valueOf();
->typedArray1 : Uint8Array
->(new Uint8Array()).valueOf() : Uint8Array
->(new Uint8Array()).valueOf : () => Uint8Array
->(new Uint8Array()) : Uint8Array
->new Uint8Array() : Uint8Array
+>typedArray1 : Uint8Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint8Array()).valueOf() : Uint8Array<ArrayBuffer>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint8Array()).valueOf : () => Uint8Array<ArrayBuffer>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint8Array()) : Uint8Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8Array() : Uint8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
->valueOf : () => Uint8Array
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => Uint8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray2: Int16Array = (new Int16Array()).valueOf();
->typedArray2 : Int16Array
->(new Int16Array()).valueOf() : Int16Array
->(new Int16Array()).valueOf : () => Int16Array
->(new Int16Array()) : Int16Array
->new Int16Array() : Int16Array
+>typedArray2 : Int16Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Int16Array()).valueOf() : Int16Array<ArrayBuffer>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>(new Int16Array()).valueOf : () => Int16Array<ArrayBuffer>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Int16Array()) : Int16Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Int16Array() : Int16Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
->valueOf : () => Int16Array
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => Int16Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray3: Uint16Array = (new Uint16Array()).valueOf();
->typedArray3 : Uint16Array
->(new Uint16Array()).valueOf() : Uint16Array
->(new Uint16Array()).valueOf : () => Uint16Array
->(new Uint16Array()) : Uint16Array
->new Uint16Array() : Uint16Array
+>typedArray3 : Uint16Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint16Array()).valueOf() : Uint16Array<ArrayBuffer>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint16Array()).valueOf : () => Uint16Array<ArrayBuffer>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint16Array()) : Uint16Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint16Array() : Uint16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
->valueOf : () => Uint16Array
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => Uint16Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray4: Int32Array = (new Int32Array()).valueOf();
->typedArray4 : Int32Array
->(new Int32Array()).valueOf() : Int32Array
->(new Int32Array()).valueOf : () => Int32Array
->(new Int32Array()) : Int32Array
->new Int32Array() : Int32Array
+>typedArray4 : Int32Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Int32Array()).valueOf() : Int32Array<ArrayBuffer>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>(new Int32Array()).valueOf : () => Int32Array<ArrayBuffer>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Int32Array()) : Int32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Int32Array() : Int32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
->valueOf : () => Int32Array
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => Int32Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray5: Uint32Array = (new Uint32Array()).valueOf();
->typedArray5 : Uint32Array
->(new Uint32Array()).valueOf() : Uint32Array
->(new Uint32Array()).valueOf : () => Uint32Array
->(new Uint32Array()) : Uint32Array
->new Uint32Array() : Uint32Array
+>typedArray5 : Uint32Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint32Array()).valueOf() : Uint32Array<ArrayBuffer>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint32Array()).valueOf : () => Uint32Array<ArrayBuffer>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Uint32Array()) : Uint32Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint32Array() : Uint32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
->valueOf : () => Uint32Array
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => Uint32Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray6: Float32Array = (new Float32Array()).valueOf();
->typedArray6 : Float32Array
->(new Float32Array()).valueOf() : Float32Array
->(new Float32Array()).valueOf : () => Float32Array
->(new Float32Array()) : Float32Array
->new Float32Array() : Float32Array
+>typedArray6 : Float32Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Float32Array()).valueOf() : Float32Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Float32Array()).valueOf : () => Float32Array<ArrayBuffer>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Float32Array()) : Float32Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Float32Array() : Float32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
->valueOf : () => Float32Array
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => Float32Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray7: Float64Array = (new Float64Array()).valueOf();
->typedArray7 : Float64Array
->(new Float64Array()).valueOf() : Float64Array
->(new Float64Array()).valueOf : () => Float64Array
->(new Float64Array()) : Float64Array
->new Float64Array() : Float64Array
+>typedArray7 : Float64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Float64Array()).valueOf() : Float64Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Float64Array()).valueOf : () => Float64Array<ArrayBuffer>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Float64Array()) : Float64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Float64Array() : Float64Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
->valueOf : () => Float64Array
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => Float64Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray8: BigInt64Array = (new BigInt64Array()).valueOf();
->typedArray8 : BigInt64Array
->(new BigInt64Array()).valueOf() : BigInt64Array
->(new BigInt64Array()).valueOf : () => BigInt64Array
->(new BigInt64Array()) : BigInt64Array
->new BigInt64Array() : BigInt64Array
+>typedArray8 : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new BigInt64Array()).valueOf() : BigInt64Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new BigInt64Array()).valueOf : () => BigInt64Array<ArrayBuffer>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new BigInt64Array()) : BigInt64Array<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array() : BigInt64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
->valueOf : () => BigInt64Array
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => BigInt64Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const typedArray9: BigUint64Array = (new BigUint64Array()).valueOf();
->typedArray9 : BigUint64Array
->(new BigUint64Array()).valueOf() : BigUint64Array
->(new BigUint64Array()).valueOf : () => BigUint64Array
->(new BigUint64Array()) : BigUint64Array
->new BigUint64Array() : BigUint64Array
+>typedArray9 : BigUint64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new BigUint64Array()).valueOf() : BigUint64Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new BigUint64Array()).valueOf : () => BigUint64Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new BigUint64Array()) : BigUint64Array<ArrayBuffer>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array() : BigUint64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
->valueOf : () => BigUint64Array
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>valueOf : () => BigUint64Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

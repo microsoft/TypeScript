@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceMemberAccessorOverridingAccessor.ts] ////
+
 //// [inheritanceMemberAccessorOverridingAccessor.ts]
 class a {
     get x() {

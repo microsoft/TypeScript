@@ -1,12 +1,12 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(15,32): error TS2339: Property 'notHere' does not exist on type 'U'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(25,16): error TS2339: Property 'notHere' does not exist on type 'B'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(32,22): error TS2339: Property 'notHere' does not exist on type 'A'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(38,9): error TS2322: Type 'string' is not assignable to type 'U'.
+propertyAccessOnTypeParameterWithConstraints5.ts(15,32): error TS2339: Property 'notHere' does not exist on type 'U'.
+propertyAccessOnTypeParameterWithConstraints5.ts(25,16): error TS2339: Property 'notHere' does not exist on type 'B'.
+propertyAccessOnTypeParameterWithConstraints5.ts(32,22): error TS2339: Property 'notHere' does not exist on type 'A'.
+propertyAccessOnTypeParameterWithConstraints5.ts(38,9): error TS2322: Type 'string' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'string'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(38,22): error TS2339: Property 'notHere' does not exist on type 'U'.
+propertyAccessOnTypeParameterWithConstraints5.ts(38,22): error TS2339: Property 'notHere' does not exist on type 'U'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts (5 errors) ====
+==== propertyAccessOnTypeParameterWithConstraints5.ts (5 errors) ====
     class A {
         foo(): string { return ''; }
     }
@@ -51,7 +51,7 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOn
         foo: <U extends T, T extends A>(x: U): U => {
             var a = x['foo'](); // should be string
             return a + x.notHere();
-            ~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'string'.
                          ~~~~~~~

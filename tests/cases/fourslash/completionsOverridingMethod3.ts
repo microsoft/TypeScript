@@ -25,6 +25,7 @@ verify.completions({
             name: "boo",
             sortText: completion.SortText.LocationPriority,
             insertText: "boo(): string;",
+            filterText: "boo",
         }
     ],
 });

@@ -1,13 +1,13 @@
-tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(1,5): error TS2300: Duplicate identifier 'v'.
-tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(3,14): error TS2300: Duplicate identifier 'v'.
-tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(6,10): error TS2300: Duplicate identifier 'w'.
-tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(8,9): error TS2300: Duplicate identifier 'w'.
-tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(12,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(13,14): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(16,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
+duplicateIdentifierInCatchBlock.ts(1,5): error TS2300: Duplicate identifier 'v'.
+duplicateIdentifierInCatchBlock.ts(3,14): error TS2300: Duplicate identifier 'v'.
+duplicateIdentifierInCatchBlock.ts(6,10): error TS2300: Duplicate identifier 'w'.
+duplicateIdentifierInCatchBlock.ts(8,9): error TS2300: Duplicate identifier 'w'.
+duplicateIdentifierInCatchBlock.ts(12,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierInCatchBlock.ts(13,14): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierInCatchBlock.ts(16,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
 
 
-==== tests/cases/compiler/duplicateIdentifierInCatchBlock.ts (7 errors) ====
+==== duplicateIdentifierInCatchBlock.ts (7 errors) ====
     var v;
         ~
 !!! error TS2300: Duplicate identifier 'v'.
@@ -38,5 +38,5 @@ tests/cases/compiler/duplicateIdentifierInCatchBlock.ts(16,9): error TS2403: Sub
         var p: number; // error
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
-!!! related TS6203 tests/cases/compiler/duplicateIdentifierInCatchBlock.ts:15:9: 'p' was also declared here.
+!!! related TS6203 duplicateIdentifierInCatchBlock.ts:15:9: 'p' was also declared here.
     }

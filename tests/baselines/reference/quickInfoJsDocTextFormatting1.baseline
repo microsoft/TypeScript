@@ -1,3 +1,77 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/quickInfoJsDocTextFormatting1.ts ===
+// /**
+//  * @param {number} var1 **Highlighted text**
+//  * @param {string} var2 Another **Highlighted text**
+// */
+// function f1(var1, var2) { }
+// 
+// /**
+//  * @param {number} var1 *Regular text with an asterisk
+//  * @param {string} var2 Another *Regular text with an asterisk
+// */
+// function f2(var1, var2) { }
+// 
+// /**
+//  * @param {number} var1 
+//  * *Regular text with an asterisk
+//  * @param {string} var2 
+//  * Another *Regular text with an asterisk
+// */
+// function f3(var1, var2) { }
+// 
+// /**
+//  * @param {number} var1 
+//  * **Highlighted text**
+//  * @param {string} var2 
+//  * Another **Highlighted text**
+// */
+// function f4(var1, var2) { }
+// 
+// /**
+//  * @param {number} var1 
+//    **Highlighted text**
+//  * @param {string} var2 
+//    Another **Highlighted text**
+// */
+// function f5(var1, var2) { }
+// 
+// f1();
+//    ^
+// | ----------------------------------------------------------------------
+// | f1(**var1: any**, var2: any): void
+// | @param var1 **Highlighted text**
+// | @param var2 Another **Highlighted text**
+// | ----------------------------------------------------------------------
+// f2();
+//    ^
+// | ----------------------------------------------------------------------
+// | f2(**var1: any**, var2: any): void
+// | @param var1 *Regular text with an asterisk
+// | @param var2 Another *Regular text with an asterisk
+// | ----------------------------------------------------------------------
+// f3();
+//    ^
+// | ----------------------------------------------------------------------
+// | f3(**var1: any**, var2: any): void
+// | @param var1 *Regular text with an asterisk
+// | @param var2 Another *Regular text with an asterisk
+// | ----------------------------------------------------------------------
+// f4();
+//    ^
+// | ----------------------------------------------------------------------
+// | f4(**var1: any**, var2: any): void
+// | @param var1 **Highlighted text**
+// | @param var2 Another **Highlighted text**
+// | ----------------------------------------------------------------------
+// f5();
+//    ^
+// | ----------------------------------------------------------------------
+// | f5(**var1: any**, var2: any): void
+// | @param var1 **Highlighted text**
+// | @param var2 Another **Highlighted text**
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +79,7 @@
       "position": 737,
       "name": "1"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -161,7 +235,7 @@
       "position": 743,
       "name": "2"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -317,7 +391,7 @@
       "position": 749,
       "name": "3"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -473,7 +547,7 @@
       "position": 755,
       "name": "4"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -629,7 +703,7 @@
       "position": 761,
       "name": "5"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

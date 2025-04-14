@@ -17,11 +17,11 @@ export class Test1 {
 
 //// [classMemberInitializerWithLamdaScoping3_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.field1 = void 0;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test1 = void 0;
 var Test1 = /** @class */ (function () {
     function Test1(field1) {

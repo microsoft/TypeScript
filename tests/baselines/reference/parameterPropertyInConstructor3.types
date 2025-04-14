@@ -1,8 +1,12 @@
-=== tests/cases/compiler/parameterPropertyInConstructor3.ts ===
+//// [tests/cases/compiler/parameterPropertyInConstructor3.ts] ////
+
+=== parameterPropertyInConstructor3.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   constructor(public constructor: string) {}
 >constructor : string
+>            : ^^^^^^
 }
 

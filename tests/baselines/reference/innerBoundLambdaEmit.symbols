@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerBoundLambdaEmit.ts ===
+//// [tests/cases/compiler/innerBoundLambdaEmit.ts] ////
+
+=== innerBoundLambdaEmit.ts ===
 module M {
 >M : Symbol(M, Decl(innerBoundLambdaEmit.ts, 0, 0))
 

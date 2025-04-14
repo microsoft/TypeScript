@@ -1,107 +1,177 @@
-=== tests/cases/compiler/overloadingOnConstants1.ts ===
+//// [tests/cases/compiler/overloadingOnConstants1.ts] ////
+
+=== overloadingOnConstants1.ts ===
 class Base { foo() { } }
 >Base : Base
+>     : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 class Derived1 extends Base { bar() { } }
 >Derived1 : Derived1
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 
 class Derived2 extends Base { baz() { } }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >baz : () => void
+>    : ^^^^^^^^^^
 
 class Derived3 extends Base { biz() { } }
 >Derived3 : Derived3
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >biz : () => void
+>    : ^^^^^^^^^^
 
 interface Document2 {
     createElement(tagName: 'canvas'): Derived1;
->createElement : { (tagName: 'canvas'): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "canvas"
+>        : ^^^^^^^^
 
     createElement(tagName: 'div'): Derived2;
->createElement : { (tagName: "canvas"): Derived1; (tagName: 'div'): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "div"
+>        : ^^^^^
 
     createElement(tagName: 'span'): Derived3;
->createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }
+>createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "span"
+>        : ^^^^^^
 
     createElement(tagName: string): Base;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : string
+>        : ^^^^^^
 }
 
 var d2: Document2;
 >d2 : Document2
+>   : ^^^^^^^^^
 
 // these are ok
 var htmlElement: Base = d2.createElement("yo")
 >htmlElement : Base
+>            : ^^^^
 >d2.createElement("yo") : Base
+>                       : ^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
+>   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"yo" : "yo"
+>     : ^^^^
 
 var htmlCanvasElement: Derived1 = d2.createElement("canvas");
 >htmlCanvasElement : Derived1
+>                  : ^^^^^^^^
 >d2.createElement("canvas") : Derived1
+>                           : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
+>   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"canvas" : "canvas"
+>         : ^^^^^^^^
 
 var htmlDivElement: Derived2 = d2.createElement("div");
 >htmlDivElement : Derived2
+>               : ^^^^^^^^
 >d2.createElement("div") : Derived2
+>                        : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
+>   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"div" : "div"
+>      : ^^^^^
 
 var htmlSpanElement: Derived3 = d2.createElement("span");
 >htmlSpanElement : Derived3
+>                : ^^^^^^^^
 >d2.createElement("span") : Derived3
+>                         : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
+>   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"span" : "span"
+>       : ^^^^^^
 
 // these are errors
 var htmlElement2: Derived1 = d2.createElement("yo")
 >htmlElement2 : Derived1
+>             : ^^^^^^^^
 >d2.createElement("yo") : Base
+>                       : ^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
+>   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"yo" : "yo"
+>     : ^^^^
 
 var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
 >htmlCanvasElement2 : Derived3
+>                   : ^^^^^^^^
 >d2.createElement("canvas") : Derived1
+>                           : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
+>   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"canvas" : "canvas"
+>         : ^^^^^^^^
 
 var htmlDivElement2: Derived1 = d2.createElement("div");
 >htmlDivElement2 : Derived1
+>                : ^^^^^^^^
 >d2.createElement("div") : Derived2
+>                        : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
+>   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"div" : "div"
+>      : ^^^^^
 
 var htmlSpanElement2: Derived1 = d2.createElement("span");
 >htmlSpanElement2 : Derived1
+>                 : ^^^^^^^^
 >d2.createElement("span") : Derived3
+>                         : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
+>   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"span" : "span"
+>       : ^^^^^^
 

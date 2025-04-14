@@ -1,48 +1,81 @@
-=== tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.2.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.2.ts] ////
+
+=== elementAccessChain.2.ts ===
 declare const o1: undefined | { b: string };
 >o1 : { b: string; }
+>   : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 
 o1?.["b"];
 >o1?.["b"] : string
+>          : ^^^^^^
 >o1 : { b: string; }
+>   : ^^^^^      ^^^
 >"b" : "b"
+>    : ^^^
 
 declare const o2: undefined | { b: { c: string } };
->o2 : { b: {    c: string;}; }
+>o2 : { b: { c: string; }; }
+>   : ^^^^^              ^^^
 >b : { c: string; }
+>  : ^^^^^      ^^^
 >c : string
+>  : ^^^^^^
 
 o2?.["b"].c;
 >o2?.["b"].c : string
+>            : ^^^^^^
 >o2?.["b"] : { c: string; }
+>          : ^^^^^      ^^^
 >o2 : { b: { c: string; }; }
+>   : ^^^^^              ^^^
 >"b" : "b"
+>    : ^^^
 >c : string
+>  : ^^^^^^
 
 o2?.b["c"];
 >o2?.b["c"] : string
+>           : ^^^^^^
 >o2?.b : { c: string; }
+>      : ^^^^^      ^^^
 >o2 : { b: { c: string; }; }
+>   : ^^^^^              ^^^
 >b : { c: string; }
+>  : ^^^^^      ^^^
 >"c" : "c"
+>    : ^^^
 
 declare const o3: { b: undefined | { c: string } };
->o3 : { b: undefined | {    c: string;}; }
+>o3 : { b: undefined | { c: string; }; }
+>   : ^^^^^                          ^^^
 >b : { c: string; }
+>  : ^^^^^      ^^^
 >c : string
+>  : ^^^^^^
 
 o3["b"]?.c;
 >o3["b"]?.c : string
+>           : ^^^^^^
 >o3["b"] : { c: string; }
->o3 : { b: { c: string; }; }
+>        : ^^^^^      ^^^
+>o3 : { b: undefined | { c: string; }; }
+>   : ^^^^^                          ^^^
 >"b" : "b"
+>    : ^^^
 >c : string
+>  : ^^^^^^
 
 o3.b?.["c"];
 >o3.b?.["c"] : string
+>            : ^^^^^^
 >o3.b : { c: string; }
->o3 : { b: { c: string; }; }
+>     : ^^^^^      ^^^
+>o3 : { b: undefined | { c: string; }; }
+>   : ^^^^^                          ^^^
 >b : { c: string; }
+>  : ^^^^^      ^^^
 >"c" : "c"
+>    : ^^^
 

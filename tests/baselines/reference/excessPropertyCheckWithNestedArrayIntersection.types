@@ -1,52 +1,66 @@
-=== tests/cases/compiler/excessPropertyCheckWithNestedArrayIntersection.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithNestedArrayIntersection.ts] ////
+
+=== excessPropertyCheckWithNestedArrayIntersection.ts ===
 interface ValueOnlyFields {
     fields: Array<{
 >fields : { value: number | null; }[]
+>       : ^^^^^^^^^             ^^^^^
 
         value: number | null;
 >value : number
->null : null
+>      : ^^^^^^
 
     }>;
 }
 interface ValueAndKeyFields {
     fields: Array<{
 >fields : { key: string | null; value: number | null; }[]
+>       : ^^^^^^^             ^^^^^^^^^             ^^^^^
 
         key: string | null;
 >key : string
->null : null
+>    : ^^^^^^
 
         value: number | null;
 >value : number
->null : null
+>      : ^^^^^^
 
     }>;
 }
 interface BugRepro {
   dataType: ValueAndKeyFields & ValueOnlyFields;
 >dataType : ValueAndKeyFields & ValueOnlyFields
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 const repro: BugRepro = {
 >repro : BugRepro
+>      : ^^^^^^^^
 >{  dataType: {    fields: [{      key: 'bla', // should be OK: Not excess      value: null,    }],  }} : { dataType: { fields: { key: string; value: null; }[]; }; }
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   dataType: {
 >dataType : { fields: { key: string; value: null; }[]; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    fields: [{      key: 'bla', // should be OK: Not excess      value: null,    }],  } : { fields: { key: string; value: null; }[]; }
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fields: [{
 >fields : { key: string; value: null; }[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{      key: 'bla', // should be OK: Not excess      value: null,    }] : { key: string; value: null; }[]
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      key: 'bla', // should be OK: Not excess      value: null,    } : { key: string; value: null; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       key: 'bla', // should be OK: Not excess
 >key : string
+>    : ^^^^^^
 >'bla' : "bla"
+>      : ^^^^^
 
       value: null,
 >value : null
->null : null
+>      : ^^^^
 
     }],
   }

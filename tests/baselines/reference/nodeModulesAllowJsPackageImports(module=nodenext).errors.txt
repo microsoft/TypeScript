@@ -1,8 +1,8 @@
-tests/cases/conformance/node/allowJs/index.cjs(3,22): error TS1471: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1471: Module '#type' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 
 
-==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
+!!! error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+==== index.js (0 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
@@ -10,7 +10,7 @@ tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1471: Module '#typ
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/allowJs/index.mjs (0 errors) ====
+==== index.mjs (0 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
@@ -18,19 +18,15 @@ tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1471: Module '#typ
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/allowJs/index.cjs (2 errors) ====
+==== index.cjs (0 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
-                         ~~~~~~
-!!! error TS1471: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import * as type from "#type";
-                          ~~~~~~~
-!!! error TS1471: Module '#type' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,

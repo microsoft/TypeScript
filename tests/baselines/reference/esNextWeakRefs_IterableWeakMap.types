@@ -1,382 +1,604 @@
-=== tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts ===
+//// [tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== esNextWeakRefs_IterableWeakMap.ts ===
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
 >IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
+>                        : ^            ^^                                                                      ^^^^^^^^^
 >({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => {    set.delete(ref);} : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
+>                                                                                                                      : ^            ^^                                                                      ^^^^^^^^^
 >ref : WeakRef<object>
+>    : ^^^^^^^^^^^^^^^
 >set : Set<WeakRef<object>>
+>    : ^^^^^^^^^^^^^^^^^^^^
 
     readonly ref: WeakRef<object>;
 >ref : WeakRef<object>
+>    : ^^^^^^^^^^^^^^^
 
     readonly set: Set<WeakRef<object>>;
 >set : Set<WeakRef<object>>
+>    : ^^^^^^^^^^^^^^^^^^^^
 
 }) => {
     set.delete(ref);
 >set.delete(ref) : boolean
+>                : ^^^^^^^
 >set.delete : (value: WeakRef<object>) => boolean
+>           : ^     ^^^^^^^^^^^^^^^^^^^^^^       
 >set : Set<WeakRef<object>>
+>    : ^^^^^^^^^^^^^^^^^^^^
 >delete : (value: WeakRef<object>) => boolean
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^       
 >ref : WeakRef<object>
+>    : ^^^^^^^^^^^^^^^
 
 };
 
 // Based on: https://github.com/tc39/proposal-weakrefs/blob/master/README.md#iterable-weakmaps
 export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >IterableWeakMap : IterableWeakMap<K, V>
+>                : ^^^^^^^^^^^^^^^^^^^^^
 
     declare readonly [Symbol.toStringTag]: "IterableWeakMap";
 >[Symbol.toStringTag] : "IterableWeakMap"
+>                     : ^^^^^^^^^^^^^^^^^
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 
     #weakMap = new WeakMap<K, { readonly ref: WeakRef<K>; value: V }>();
 >#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >new WeakMap<K, { readonly ref: WeakRef<K>; value: V }>() : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >WeakMap : WeakMapConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 >value : V
+>      : ^
 
     #refSet = new Set<WeakRef<K>>();
 >#refSet : Set<WeakRef<K>>
+>        : ^^^^^^^^^^^^^^^
 >new Set<WeakRef<K>>() : Set<WeakRef<K>>
+>                      : ^^^^^^^^^^^^^^^
 >Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
 
     #finalizationGroup = new FinalizationRegistry(IterableWeakMap_cleanup);
 >#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^                    ^^^^
 >new FinalizationRegistry(IterableWeakMap_cleanup) : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^                    ^^^^
 >FinalizationRegistry : FinalizationRegistryConstructor
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
+>                        : ^            ^^                                                                      ^^^^^^^^^
 
     constructor(iterable: Iterable<[key: K, value: V]> | null = null) {
 >iterable : Iterable<[key: K, value: V]> | null
->null : null
->null : null
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (iterable !== null) {
 >iterable !== null : boolean
+>                  : ^^^^^^^
 >iterable : Iterable<[key: K, value: V]> | null
->null : null
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             for (const { 0: key, 1: value } of iterable) {
 >key : K
+>    : ^
 >value : V
+>      : ^
 >iterable : Iterable<[key: K, value: V]>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 this.set(key, value);
 >this.set(key, value) : this
+>                     : ^^^^
 >this.set : (key: K, value: V) => this
+>         : ^   ^^ ^^     ^^ ^^^^^    
 >this : this
+>     : ^^^^
 >set : (key: K, value: V) => this
+>    : ^   ^^ ^^     ^^ ^^^^^    
 >key : K
+>    : ^
 >value : V
+>      : ^
             }
         }
     }
 
     set(key: K, value: V): this {
 >set : (key: K, value: V) => this
+>    : ^   ^^ ^^     ^^ ^^^^^    
 >key : K
+>    : ^
 >value : V
+>      : ^
 
         const entry = this.#weakMap.get(key);
 >entry : { readonly ref: WeakRef<K>; value: V; } | undefined
+>      : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
+>                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
+>     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 
         if (entry !== undefined) {
 >entry !== undefined : boolean
+>                    : ^^^^^^^
 >entry : { readonly ref: WeakRef<K>; value: V; } | undefined
+>      : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
             entry.value = value;
 >entry.value = value : V
+>                    : ^
 >entry.value : V
+>            : ^
 >entry : { readonly ref: WeakRef<K>; value: V; }
+>      : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^
 >value : V
+>      : ^
 >value : V
+>      : ^
 
         } else {
             const ref = new WeakRef(key);
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 >new WeakRef(key) : WeakRef<K>
+>                 : ^^^^^^^^^^
 >WeakRef : WeakRefConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 
             this.#weakMap.set(key, { ref, value });
 >this.#weakMap.set(key, { ref, value }) : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this.#weakMap.set : (key: K, value: { readonly ref: WeakRef<K>; value: V; }) => WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>                  : ^   ^^^^^     ^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
+>     : ^^^^
 >set : (key: K, value: { readonly ref: WeakRef<K>; value: V; }) => WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>    : ^   ^^^^^     ^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >key : K
+>    : ^
 >{ ref, value } : { ref: WeakRef<K>; value: V; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 >value : V
+>      : ^
 
             this.#refSet.add(ref);
 >this.#refSet.add(ref) : Set<WeakRef<K>>
+>                      : ^^^^^^^^^^^^^^^
 >this.#refSet.add : (value: WeakRef<K>) => Set<WeakRef<K>>
+>                 : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#refSet : Set<WeakRef<K>>
+>             : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >add : (value: WeakRef<K>) => Set<WeakRef<K>>
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 
             this.#finalizationGroup.register(key, {
 >this.#finalizationGroup.register(key, {                set: this.#refSet,                ref,            }, ref) : void
->this.#finalizationGroup.register : (target: object, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: object | undefined) => void
+>                                                                                                                 : ^^^^
+>this.#finalizationGroup.register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey) => void
+>                                 : ^      ^^       ^^         ^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^                    ^^^^^               ^^^       ^^^^^    
 >this.#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^                    ^^^^
 >this : this
->register : (target: object, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: object | undefined) => void
+>     : ^^^^
+>register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey) => void
+>         : ^      ^^       ^^         ^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^                    ^^^^^               ^^^       ^^^^^    
 >key : K
+>    : ^
 >{                set: this.#refSet,                ref,            } : { set: Set<WeakRef<K>>; ref: WeakRef<K>; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 set: this.#refSet,
 >set : Set<WeakRef<K>>
+>    : ^^^^^^^^^^^^^^^
 >this.#refSet : Set<WeakRef<K>>
+>             : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
                 ref,
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 
             }, ref);
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
         }
         return this;
 >this : this
+>     : ^^^^
     }
 
     has(key: K): boolean {
 >has : (key: K) => boolean
+>    : ^   ^^ ^^^^^       
 >key : K
+>    : ^
 
         return this.#weakMap.has(key);
 >this.#weakMap.has(key) : boolean
+>                       : ^^^^^^^
 >this.#weakMap.has : (key: K) => boolean
+>                  : ^   ^^^^^^^^       
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
+>     : ^^^^
 >has : (key: K) => boolean
+>    : ^   ^^^^^^^^       
 >key : K
+>    : ^
     }
 
     get(key: K): V | undefined {
 >get : (key: K) => V | undefined
+>    : ^   ^^ ^^^^^             
 >key : K
+>    : ^
 
         return this.#weakMap.get(key)?.value;
 >this.#weakMap.get(key)?.value : V | undefined
+>                              : ^^^^^^^^^^^^^
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
+>                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
+>     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 >value : V | undefined
+>      : ^^^^^^^^^^^^^
     }
 
     delete(key: K): boolean {
 >delete : (key: K) => boolean
+>       : ^   ^^ ^^^^^       
 >key : K
+>    : ^
 
         const entry = this.#weakMap.get(key);
 >entry : { readonly ref: WeakRef<K>; value: V; } | undefined
+>      : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
+>                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
+>     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 
         if (entry === undefined) {
 >entry === undefined : boolean
+>                    : ^^^^^^^
 >entry : { readonly ref: WeakRef<K>; value: V; } | undefined
+>      : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
             return false;
 >false : false
+>      : ^^^^^
         }
 
         const { ref } = entry;
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 >entry : { readonly ref: WeakRef<K>; value: V; }
+>      : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^
 
         this.#weakMap.delete(key);
 >this.#weakMap.delete(key) : boolean
+>                          : ^^^^^^^
 >this.#weakMap.delete : (key: K) => boolean
+>                     : ^   ^^^^^^^^       
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
+>     : ^^^^
 >delete : (key: K) => boolean
+>       : ^   ^^^^^^^^       
 >key : K
+>    : ^
 
         this.#refSet.delete(ref);
 >this.#refSet.delete(ref) : boolean
+>                         : ^^^^^^^
 >this.#refSet.delete : (value: WeakRef<K>) => boolean
+>                    : ^     ^^^^^^^^^^^^^^^^^       
 >this.#refSet : Set<WeakRef<K>>
+>             : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >delete : (value: WeakRef<K>) => boolean
+>       : ^     ^^^^^^^^^^^^^^^^^       
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 
         this.#finalizationGroup.unregister(ref);
->this.#finalizationGroup.unregister(ref) : void
->this.#finalizationGroup.unregister : (unregisterToken: object) => void
+>this.#finalizationGroup.unregister(ref) : boolean
+>                                        : ^^^^^^^
+>this.#finalizationGroup.unregister : (unregisterToken: WeakKey) => boolean
+>                                   : ^               ^^       ^^^^^       
 >this.#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^                    ^^^^
 >this : this
->unregister : (unregisterToken: object) => void
+>     : ^^^^
+>unregister : (unregisterToken: WeakKey) => boolean
+>           : ^               ^^       ^^^^^       
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 
         return true;
 >true : true
+>     : ^^^^
     }
 
     declare [Symbol.iterator]: this["entries"];
 >[Symbol.iterator] : this["entries"]
+>                  : ^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
     *entries(): Generator<[key: K, value: V], void> {
 >entries : () => Generator<[key: K, value: V], void>
+>        : ^^^^^^                                   
 
         for (const ref of this.#refSet) {
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 >this.#refSet : Set<WeakRef<K>>
+>             : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
             const key = ref.deref();
 >key : K | undefined
+>    : ^^^^^^^^^^^^^
 >ref.deref() : K | undefined
+>            : ^^^^^^^^^^^^^
 >ref.deref : () => K | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 >ref : WeakRef<K>
+>    : ^^^^^^^^^^
 >deref : () => K | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
 
             if (key === undefined) continue;
 >key === undefined : boolean
+>                  : ^^^^^^^
 >key : K | undefined
+>    : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
             const { value } = this.#weakMap.get(key)!;
 >value : V
+>      : ^
 >this.#weakMap.get(key)! : { readonly ref: WeakRef<K>; value: V; }
+>                        : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
+>                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
+>     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 
             yield [key, value];
->yield [key, value] : unknown
+>yield [key, value] : any
 >[key, value] : [K, V]
+>             : ^^^^^^
 >key : K
+>    : ^
 >value : V
+>      : ^
         }
     }
 
     *keys() {
 >keys : () => Generator<K, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         for (const { 0: key } of this) {
 >key : K
+>    : ^
 >this : this
+>     : ^^^^
 
             yield key;
 >yield key : any
 >key : K
+>    : ^
         }
     }
 
     *values() {
 >values : () => Generator<V, void, unknown>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         for (const { 1: value } of this) {
 >value : V
+>      : ^
 >this : this
+>     : ^^^^
 
             yield value;
 >yield value : any
 >value : V
+>      : ^
         }
     }
 }
 
 Object.defineProperties(IterableWeakMap.prototype, {
 >Object.defineProperties(IterableWeakMap.prototype, {    [Symbol.iterator]: {        configurable: true,        enumerable: false,        writable: true,        value: Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value,    },    [Symbol.toStringTag]: {        configurable: true,        enumerable: false,        writable: false,        value: "IterableWeakMap",    },}) : IterableWeakMap<any, any>
+>                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.defineProperties : <T>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
+>                        : ^ ^^ ^^ ^^          ^^                                     ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperties : <T>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
+>                 : ^ ^^ ^^ ^^          ^^                                     ^^^^^ 
 >IterableWeakMap.prototype : IterableWeakMap<any, any>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >IterableWeakMap : typeof IterableWeakMap
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >prototype : IterableWeakMap<any, any>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Symbol.iterator]: {        configurable: true,        enumerable: false,        writable: true,        value: Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value,    },    [Symbol.toStringTag]: {        configurable: true,        enumerable: false,        writable: false,        value: "IterableWeakMap",    },} : { [Symbol.iterator]: { configurable: true; enumerable: false; writable: true; value: any; }; [Symbol.toStringTag]: { configurable: true; enumerable: false; writable: false; value: string; }; }
+>                                                                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.iterator]: {
 >[Symbol.iterator] : { configurable: true; enumerable: false; writable: true; value: any; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 >{        configurable: true,        enumerable: false,        writable: true,        value: Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value,    } : { configurable: true; enumerable: false; writable: true; value: any; }
+>                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         configurable: true,
 >configurable : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 
         enumerable: false,
 >enumerable : false
+>           : ^^^^^
 >false : false
+>      : ^^^^^
 
         writable: true,
 >writable : true
+>         : ^^^^
 >true : true
+>     : ^^^^
 
         value: Object.getOwnPropertyDescriptor(
 >value : any
 >Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value : any
 >Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )! : PropertyDescriptor
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^
 >Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        ) : PropertyDescriptor | undefined
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.getOwnPropertyDescriptor : (o: any, p: PropertyKey) => PropertyDescriptor | undefined
+>                                : ^ ^^   ^^ ^^           ^^^^^                              
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >getOwnPropertyDescriptor : (o: any, p: PropertyKey) => PropertyDescriptor | undefined
+>                         : ^ ^^   ^^ ^^           ^^^^^                              
 
             IterableWeakMap.prototype,
 >IterableWeakMap.prototype : IterableWeakMap<any, any>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >IterableWeakMap : typeof IterableWeakMap
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >prototype : IterableWeakMap<any, any>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
             "entries",
 >"entries" : "entries"
+>          : ^^^^^^^^^
 
         )!.value,
 >value : any
+>      : ^^^
 
     },
     [Symbol.toStringTag]: {
 >[Symbol.toStringTag] : { configurable: true; enumerable: false; writable: false; value: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 >{        configurable: true,        enumerable: false,        writable: false,        value: "IterableWeakMap",    } : { configurable: true; enumerable: false; writable: false; value: string; }
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         configurable: true,
 >configurable : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 
         enumerable: false,
 >enumerable : false
+>           : ^^^^^
 >false : false
+>      : ^^^^^
 
         writable: false,
 >writable : false
+>         : ^^^^^
 >false : false
+>      : ^^^^^
 
         value: "IterableWeakMap",
 >value : string
+>      : ^^^^^^
 >"IterableWeakMap" : "IterableWeakMap"
+>                  : ^^^^^^^^^^^^^^^^^
 
     },
 });

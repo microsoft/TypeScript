@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrowFunctionErrorSpan.ts ===
+//// [tests/cases/compiler/arrowFunctionErrorSpan.ts] ////
+
+=== arrowFunctionErrorSpan.ts ===
 function f(a: () => number) { }
 >f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
 >a : Symbol(a, Decl(arrowFunctionErrorSpan.ts, 0, 11))

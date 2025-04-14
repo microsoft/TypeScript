@@ -1,14 +1,20 @@
-=== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment9.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment9.ts] ////
+
+=== parserExportAssignment9.ts ===
 namespace Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
   export default foo;
 >foo : any
+>    : ^^^
 }
 
 module Bar {
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
   export default bar;
 >bar : any
+>    : ^^^
 }

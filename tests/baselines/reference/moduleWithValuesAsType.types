@@ -1,12 +1,18 @@
-=== tests/cases/compiler/moduleWithValuesAsType.ts ===
+//// [tests/cases/compiler/moduleWithValuesAsType.ts] ////
+
+=== moduleWithValuesAsType.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     var b = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 var a: A; // no error
 >a : A
+>  : ^
 

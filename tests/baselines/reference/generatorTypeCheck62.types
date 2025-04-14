@@ -1,93 +1,140 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts] ////
+
+=== generatorTypeCheck62.ts ===
 export interface StrategicState {
     lastStrategyApplied?: string;
 >lastStrategyApplied : string
+>                    : ^^^^^^
 }
 
-export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>) => (a: T) => IterableIterator<T | undefined>
+export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
+>         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                               ^^^^^                                               
 >stratName : string
->gen : (a: T) => IterableIterator<T | undefined>
+>          : ^^^^^^
+>gen : (a: T) => IterableIterator<T | undefined, void>
+>    : ^ ^^ ^^^^^                                     
 >a : T
+>  : ^
 >a : T
+>  : ^
 
     return function*(state) {
->function*(state) {        for (const next of gen(state)) {            if (next) {                next.lastStrategyApplied = stratName;            }            yield next;        }    } : (state: T) => Generator<T, void, undefined>
+>function*(state) {        for (const next of gen(state)) {            if (next) {                next.lastStrategyApplied = stratName;            }            yield next;        }    } : (state: T) => Generator<T, void, any>
+>                                                                                                                                                                                         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : T
+>      : ^
 
         for (const next of gen(state)) {
 >next : T
->gen(state) : IterableIterator<T>
->gen : (a: T) => IterableIterator<T>
+>     : ^
+>gen(state) : IterableIterator<T, void>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen : (a: T) => IterableIterator<T | undefined, void>
+>    : ^ ^^ ^^^^^                                     
 >state : T
+>      : ^
 
             if (next) {
 >next : T
+>     : ^
 
                 next.lastStrategyApplied = stratName;
 >next.lastStrategyApplied = stratName : string
+>                                     : ^^^^^^
 >next.lastStrategyApplied : string
+>                         : ^^^^^^
 >next : T
+>     : ^
 >lastStrategyApplied : string
+>                    : ^^^^^^
 >stratName : string
+>          : ^^^^^^
             }
             yield next;
->yield next : undefined
+>yield next : any
+>           : ^^^
 >next : T
+>     : ^
         }
     }
 }
 
 export interface Strategy<T> {
-    (a: T): IterableIterator<T | undefined>;
+    (a: T): IterableIterator<T | undefined, void>;
 >a : T
+>  : ^
 }
 
 export interface State extends StrategicState {
     foo: number;
 >foo : number
+>    : ^^^^^^
 }
 
 export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: State) {
 >Nothing1 : Strategy<State>
->strategy("Nothing", function*(state: State) {    return state;}) : (a: State) => IterableIterator<State>
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
+>         : ^^^^^^^^^^^^^^^
+>strategy("Nothing", function*(state: State) {    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.}) : (a: State) => IterableIterator<State, void>
+>                                                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
+>         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                               ^^^^^                                               
 >"Nothing" : "Nothing"
->function*(state: State) {    return state;} : (state: State) => Generator<never, State, undefined>
+>          : ^^^^^^^^^
+>function*(state: State) {    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<never, State, any>
+>                                                                                                                       : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
+>      : ^^^^^
 
-    return state;
+    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 >state : State
+>      : ^^^^^
 
 });
 
 export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: State) {
 >Nothing2 : Strategy<State>
->strategy("Nothing", function*(state: State) {    yield state;}) : (a: State) => IterableIterator<State>
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
+>         : ^^^^^^^^^^^^^^^
+>strategy("Nothing", function*(state: State) {    yield state;}) : (a: State) => IterableIterator<State, void>
+>                                                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
+>         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                               ^^^^^                                               
 >"Nothing" : "Nothing"
->function*(state: State) {    yield state;} : (state: State) => Generator<State, void, undefined>
+>          : ^^^^^^^^^
+>function*(state: State) {    yield state;} : (state: State) => Generator<State, void, any>
+>                                           : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
+>      : ^^^^^
 
     yield state;
->yield state : undefined
+>yield state : any
+>            : ^^^
 >state : State
+>      : ^^^^^
 
 });
 
 export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing3 : Strategy<State>
->strategy("Nothing", function* (state: State) {    yield ;    return state;}) : (a: any) => IterableIterator<any>
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
+>         : ^^^^^^^^^^^^^^^
+>strategy("Nothing", function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.}) : (a: State) => IterableIterator<State, void>
+>                                                                                                                                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
+>         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                               ^^^^^                                               
 >"Nothing" : "Nothing"
->function* (state: State) {    yield ;    return state;} : (state: State) => Generator<any, State, undefined>
+>          : ^^^^^^^^^
+>function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<any, State, any>
+>                                                                                                                                   : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
+>      : ^^^^^
 
     yield ;
->yield : undefined
+>yield : any
+>      : ^^^
 
-    return state;
+    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 >state : State
+>      : ^^^^^
 
 });
  

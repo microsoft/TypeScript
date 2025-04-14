@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts ===
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts] ////
+
+=== contextuallyTypedBindingInitializerNegative.ts ===
 interface Show {
 >Show : Symbol(Show, Decl(contextuallyTypedBindingInitializerNegative.ts, 0, 0))
 

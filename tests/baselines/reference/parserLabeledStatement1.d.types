@@ -1,8 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserLabeledStatement1.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserLabeledStatement1.d.ts] ////
+
+=== parserLabeledStatement1.d.ts ===
 foo:
 >foo : any
+>    : ^^^
 
   bar();
 >bar() : any
+>      : ^^^
 >bar : any
+>    : ^^^
 

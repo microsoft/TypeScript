@@ -15,9 +15,9 @@ if (x) {
     "b": "hello"
 }
 
-//// [tests/cases/compiler/file1.js]
+//// [file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b1 = require("./b.json");
 var x = b1.a;
 var b2 = require("./b.json");

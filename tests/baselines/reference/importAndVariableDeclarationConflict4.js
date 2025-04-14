@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAndVariableDeclarationConflict4.ts] ////
+
 //// [importAndVariableDeclarationConflict4.ts]
 module m {
   export var m = '';

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParametersWithUnderscore.ts] ////
+
 //// [unusedTypeParametersWithUnderscore.ts]
 function f<_T, U>() { }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newOperator.ts ===
+//// [tests/cases/compiler/newOperator.ts] ////
+
+=== newOperator.ts ===
 interface ifc { }
 >ifc : Symbol(ifc, Decl(newOperator.ts, 0, 0))
 

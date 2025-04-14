@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedClassesinNamespace1.ts(2,11): error TS6196: 'c1' is declared but never used.
+unusedClassesinNamespace1.ts(2,11): error TS6196: 'c1' is declared but never used.
 
 
-==== tests/cases/compiler/unusedClassesinNamespace1.ts (1 errors) ====
+==== unusedClassesinNamespace1.ts (1 errors) ====
     namespace Validation {
         class c1 {
               ~~

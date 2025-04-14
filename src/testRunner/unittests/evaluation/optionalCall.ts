@@ -1,3 +1,5 @@
+import * as evaluator from "../../_namespaces/evaluator.js";
+
 describe("unittests:: evaluation:: optionalCall", () => {
     it("f?.()", async () => {
         const result = evaluator.evaluateTypeScript(`

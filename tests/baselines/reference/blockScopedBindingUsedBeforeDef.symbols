@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts ===
+//// [tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts] ////
+
+=== blockScopedBindingUsedBeforeDef.ts ===
 // 1:
 for (let {[a]: a} of [{ }]) continue;
 >a : Symbol(a, Decl(blockScopedBindingUsedBeforeDef.ts, 1, 10))

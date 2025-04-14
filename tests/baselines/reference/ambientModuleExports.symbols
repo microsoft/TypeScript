@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientModuleExports.ts ===
+//// [tests/cases/compiler/ambientModuleExports.ts] ////
+
+=== ambientModuleExports.ts ===
 declare module Foo {
 >Foo : Symbol(Foo, Decl(ambientModuleExports.ts, 0, 0))
 
