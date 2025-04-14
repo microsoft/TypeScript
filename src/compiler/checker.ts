@@ -34335,24 +34335,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-        function isInPropertyInitializerOrClassStaticBlock(node: Node, ignoreArrowFunctions?: boolean): boolean {
-            return !!findAncestor(node, node => {
-                switch (node.kind) {
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.ClassStaticBlockDeclaration:
-                        return true;
-                    case SyntaxKind.TypeQuery:
-                    case SyntaxKind.JsxClosingElement:  // already reported in JsxOpeningElement
-                        return "quit";
-                    case SyntaxKind.ArrowFunction:
-                        return ignoreArrowFunctions ? false : "quit";
-                    case SyntaxKind.Block:
-                        return isFunctionLikeDeclaration(node.parent) && node.parent.kind !== SyntaxKind.ArrowFunction ? "quit" : false;
-                    default:
-                        return false;
-                }
-            });
-        }
+    function isInPropertyInitializerOrClassStaticBlock(node: Node, ignoreArrowFunctions?: boolean): boolean {
+        return !!findAncestor(node, node => {
+            switch (node.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return true;
+                case SyntaxKind.TypeQuery:
+                case SyntaxKind.JsxClosingElement: // already reported in JsxOpeningElement
+                    return "quit";
+                case SyntaxKind.ArrowFunction:
+                    return ignoreArrowFunctions ? false : "quit";
+                case SyntaxKind.Block:
+                    return isFunctionLikeDeclaration(node.parent) && node.parent.kind !== SyntaxKind.ArrowFunction ? "quit" : false;
+                default:
+                    return false;
+            }
+        });
+    }
 
     /**
      * It's possible that "prop.valueDeclaration" is a local declaration, but the property was also declared in a superclass.
