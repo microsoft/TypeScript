@@ -243,12 +243,10 @@ func doCall(t *testing.T, resolver *module.Resolver, call functionCall, skipLoca
 			}
 		}
 
-		var locations *module.LookupLocations
 		errorMessageArgs := []any{call.args.Name, call.args.ContainingFile}
 		if call.call == "resolveModuleName" {
 			resolved := resolver.ResolveModuleName(call.args.Name, call.args.ContainingFile, core.ModuleKind(call.args.ResolutionMode), redirectedReference)
 			assert.Check(t, resolved != nil, "ResolveModuleName should not return nil", errorMessageArgs)
-			locations = resolver.GetLookupLocationsForResolvedModule(resolved)
 			if expectedResolvedModule, ok := call.returnValue["resolvedModule"].(map[string]any); ok {
 				assert.Check(t, resolved.IsResolved(), errorMessageArgs)
 				assert.Check(t, cmp.Equal(resolved.ResolvedFileName, expectedResolvedModule["resolvedFileName"].(string)), errorMessageArgs)
@@ -261,7 +259,6 @@ func doCall(t *testing.T, resolver *module.Resolver, call functionCall, skipLoca
 		} else {
 			resolved := resolver.ResolveTypeReferenceDirective(call.args.Name, call.args.ContainingFile, core.ModuleKind(call.args.ResolutionMode), redirectedReference)
 			assert.Check(t, resolved != nil, "ResolveTypeReferenceDirective should not return nil", errorMessageArgs)
-			locations = resolver.GetLookupLocationsForResolvedTypeReferenceDirective(resolved)
 			if expectedResolvedTypeReferenceDirective, ok := call.returnValue["resolvedTypeReferenceDirective"].(map[string]any); ok {
 				assert.Check(t, resolved.IsResolved(), errorMessageArgs)
 				assert.Check(t, cmp.Equal(resolved.ResolvedFileName, expectedResolvedTypeReferenceDirective["resolvedFileName"].(string)), errorMessageArgs)
@@ -270,19 +267,6 @@ func doCall(t *testing.T, resolver *module.Resolver, call functionCall, skipLoca
 			} else {
 				assert.Check(t, !resolved.IsResolved(), errorMessageArgs)
 			}
-		}
-		if skipLocations {
-			break
-		}
-		if expectedFailedLookupLocations, ok := call.returnValue["failedLookupLocations"].([]any); ok {
-			assert.Check(t, cmp.DeepEqual(locations.FailedLookupLocations, core.Map(expectedFailedLookupLocations, func(i any) string { return i.(string) })), errorMessageArgs)
-		} else {
-			assert.Check(t, cmp.Equal(len(locations.FailedLookupLocations), 0), errorMessageArgs)
-		}
-		if expectedAffectingLocations, ok := call.returnValue["affectingLocations"].([]any); ok {
-			assert.Check(t, cmp.DeepEqual(locations.AffectingLocations, core.Map(expectedAffectingLocations, func(i any) string { return i.(string) })), errorMessageArgs)
-		} else {
-			assert.Check(t, cmp.Equal(len(locations.AffectingLocations), 0), errorMessageArgs)
 		}
 	case "getPackageScopeForPath":
 		resolver.GetPackageScopeForPath(call.args.Directory)

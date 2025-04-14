@@ -169,7 +169,7 @@ func runMain() int {
 
 	currentDirectory = tspath.GetDirectoryPath(configFileName)
 	// !!! is the working directory actually the config path?
-	host := ts.NewCompilerHost(compilerOptions, currentDirectory, fs, defaultLibraryPath)
+	host := ts.NewCachedFSCompilerHost(compilerOptions, currentDirectory, fs, defaultLibraryPath)
 
 	parseStart := time.Now()
 	program := ts.NewProgram(ts.ProgramOptions{

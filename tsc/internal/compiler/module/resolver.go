@@ -30,10 +30,6 @@ func (r *resolved) isResolved() bool {
 	return r != nil && r.path != ""
 }
 
-func unresolved() *resolved {
-	return &resolved{}
-}
-
 func continueSearching() *resolved {
 	return nil
 }
@@ -52,10 +48,8 @@ type resolutionState struct {
 	conditions          []string
 	extensions          extensions
 	compilerOptions     *core.CompilerOptions
-	redirectedReference *ResolvedProjectReference
 
 	// state fields
-	resultFromCache                 *ResolvedModule
 	candidateIsFromPackageJsonField bool
 	resolvedPackageDirectory        bool
 	failedLookupLocations           []string
@@ -129,14 +123,6 @@ func NewResolver(
 	}
 }
 
-func (r *Resolver) GetLookupLocationsForResolvedModule(resolvedModule *ResolvedModule) *LookupLocations {
-	return r.moduleNameCache.getLookupLocations(resolvedModule)
-}
-
-func (r *Resolver) GetLookupLocationsForResolvedTypeReferenceDirective(resolvedTypeReferenceDirective *ResolvedTypeReferenceDirective) *LookupLocations {
-	return r.typeReferenceDirectiveCache.getLookupLocations(resolvedTypeReferenceDirective)
-}
-
 func (r *Resolver) traceEnabled() bool {
 	return r.compilerOptions.TraceResolution == core.TSTrue
 }
@@ -176,19 +162,6 @@ func (r *Resolver) ResolveTypeReferenceDirective(typeReferenceDirectiveName stri
 	}
 
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
-	result, _ := r.typeReferenceDirectiveCache.getFromDirectoryCache(ModeAwareCacheKey{typeReferenceDirectiveName, resolutionMode}, containingDirectory, redirectedReference)
-
-	if result != nil {
-		if traceEnabled {
-			r.host.Trace(diagnostics.Resolving_type_reference_directive_0_containing_file_1.Format(typeReferenceDirectiveName, containingFile))
-			if redirectedReference != nil {
-				r.host.Trace(diagnostics.Using_compiler_options_of_project_reference_redirect_0.Format(redirectedReference.SourceFile.FileName()))
-			}
-			r.host.Trace(diagnostics.Resolution_for_type_reference_directive_0_was_found_in_cache_from_location_1.Format(typeReferenceDirectiveName, containingDirectory))
-			r.traceTypeReferenceDirectiveResult(typeReferenceDirectiveName, result)
-		}
-		return result
-	}
 
 	typeRoots, fromConfig := compilerOptions.GetEffectiveTypeRoots(r.host.GetCurrentDirectory())
 	if traceEnabled {
@@ -199,15 +172,7 @@ func (r *Resolver) ResolveTypeReferenceDirective(typeReferenceDirectiveName stri
 	}
 
 	state := newResolutionState(typeReferenceDirectiveName, containingDirectory, true /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r)
-	result = state.resolveTypeReferenceDirective(typeRoots, fromConfig, strings.HasSuffix(containingFile, InferredTypesContainingFile))
-
-	if !r.typeReferenceDirectiveCache.isReadonly {
-		key := ModeAwareCacheKey{typeReferenceDirectiveName, resolutionMode}
-		r.typeReferenceDirectiveCache.setInDirectoryCache(key, containingDirectory, result, redirectedReference)
-		if !tspath.IsExternalModuleNameRelative(typeReferenceDirectiveName) {
-			r.typeReferenceDirectiveCache.setInNonRelativeNameCache(key, containingDirectory, result, redirectedReference)
-		}
-	}
+	result := state.resolveTypeReferenceDirective(typeRoots, fromConfig, strings.HasSuffix(containingFile, InferredTypesContainingFile))
 
 	if traceEnabled {
 		r.traceTypeReferenceDirectiveResult(typeReferenceDirectiveName, result)
@@ -230,40 +195,26 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 		}
 	}
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
-	result, _ := r.moduleNameCache.getFromDirectoryCache(ModeAwareCacheKey{moduleName, resolutionMode}, containingDirectory, redirectedReference)
 
-	if result != nil {
+	moduleResolution := compilerOptions.ModuleResolution
+	if moduleResolution == core.ModuleResolutionKindUnknown {
+		moduleResolution = compilerOptions.GetModuleResolutionKind()
 		if traceEnabled {
-			r.host.Trace(diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1.Format(moduleName, containingDirectory))
+			r.host.Trace(diagnostics.Module_resolution_kind_is_not_specified_using_0.Format(moduleResolution.String()))
 		}
 	} else {
-		moduleResolution := compilerOptions.ModuleResolution
-		if moduleResolution == core.ModuleResolutionKindUnknown {
-			moduleResolution = compilerOptions.GetModuleResolutionKind()
-			if traceEnabled {
-				r.host.Trace(diagnostics.Module_resolution_kind_is_not_specified_using_0.Format(moduleResolution.String()))
-			}
-		} else {
-			if traceEnabled {
-				r.host.Trace(diagnostics.Explicitly_specified_module_resolution_kind_Colon_0.Format(moduleResolution.String()))
-			}
+		if traceEnabled {
+			r.host.Trace(diagnostics.Explicitly_specified_module_resolution_kind_Colon_0.Format(moduleResolution.String()))
 		}
+	}
 
-		switch moduleResolution {
-		case core.ModuleResolutionKindNode16, core.ModuleResolutionKindNodeNext, core.ModuleResolutionKindBundler:
-			state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r)
-			result = state.resolveNodeLike()
-		default:
-			panic(fmt.Sprintf("Unexpected moduleResolution: %d", moduleResolution))
-		}
-
-		if !r.moduleNameCache.isReadonly {
-			key := ModeAwareCacheKey{moduleName, resolutionMode}
-			r.moduleNameCache.setInDirectoryCache(key, containingDirectory, result, redirectedReference)
-			if !tspath.IsExternalModuleNameRelative(moduleName) {
-				r.moduleNameCache.setInNonRelativeNameCache(key, containingDirectory, result, redirectedReference)
-			}
-		}
+	var result *ResolvedModule
+	switch moduleResolution {
+	case core.ModuleResolutionKindNode16, core.ModuleResolutionKindNodeNext, core.ModuleResolutionKindBundler:
+		state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r)
+		result = state.resolveNodeLike()
+	default:
+		panic(fmt.Sprintf("Unexpected moduleResolution: %d", moduleResolution))
 	}
 
 	if traceEnabled {
@@ -386,10 +337,6 @@ func (r *resolutionState) getPackageScopeForPath(directory string) *packagejson.
 	return result
 }
 
-func (r *resolutionState) getResolvedPackageDirectory() bool {
-	return r.resolvedPackageDirectory
-}
-
 func (r *resolutionState) resolveNodeLike() *ResolvedModule {
 	if r.resolver.traceEnabled() {
 		conditions := strings.Join(core.Map(r.conditions, func(c string) string { return `'` + c + `'` }), ", ")
@@ -400,8 +347,7 @@ func (r *resolutionState) resolveNodeLike() *ResolvedModule {
 		}
 	}
 	result := r.resolveNodeLikeWorker()
-	if r.resultFromCache == nil &&
-		r.resolvedPackageDirectory &&
+	if r.resolvedPackageDirectory &&
 		!r.isConfigLookup &&
 		r.features&NodeResolutionFeaturesExports != 0 &&
 		r.extensions&(extensionsTypeScript|extensionsDeclaration) != 0 &&
@@ -420,7 +366,6 @@ func (r *resolutionState) resolveNodeLike() *ResolvedModule {
 			result.AlternateResult = diagnosticResult.ResolvedFileName
 		}
 		r.diagnostics = r.diagnostics[:diagnosticsCount]
-		r.resolver.moduleNameCache.setLookupLocations(result, r.failedLookupLocations, r.affectingLocations, r.diagnostics)
 	}
 	return result
 }
@@ -814,11 +759,6 @@ func (r *resolutionState) loadModuleFromNearestNodeModulesDirectoryWorker(ext ex
 		func(directory string) (result *resolved, stop bool) {
 			// !!! stop at global cache
 			if tspath.GetBaseFileName(directory) != "node_modules" {
-				if resolutionFromCache := r.tryFindNonRelativeModuleNameInCache(ModeAwareCacheKey{r.name, mode}, directory); !resolutionFromCache.shouldContinueSearching() {
-					if !resolutionFromCache.isResolved() || extensionIsOk(ext, resolutionFromCache.extension) {
-						return resolutionFromCache, true
-					}
-				}
 				result := r.loadModuleFromImmediateNodeModulesDirectory(ext, directory, typesScopeOnly)
 				return result, !result.shouldContinueSearching()
 			}
@@ -935,32 +875,9 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 	return loader(ext, candidate, !nodeModulesDirectoryExists)
 }
 
-func (r *resolutionState) tryFindNonRelativeModuleNameInCache(nameAndMode ModeAwareCacheKey, directory string) *resolved {
-	if result, ok := r.resolver.moduleNameCache.getFromNonRelativeNameCache(nameAndMode, directory, r.redirectedReference); ok {
-		if r.resolver.traceEnabled() {
-			r.resolver.host.Trace(diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1.Format(nameAndMode.Name, directory))
-		}
-		r.resultFromCache = result
-		if result.IsResolved() {
-			// !!! wtf are these types
-			return &resolved{
-				path:                     result.ResolvedFileName,
-				extension:                result.Extension,
-				packageId:                result.PackageId,
-				originalPath:             result.OriginalPath,
-				resolvedUsingTsExtension: result.ResolvedUsingTsExtension,
-			}
-		}
-		return unresolved()
-	}
-
-	return continueSearching()
-}
-
 func (r *resolutionState) createResolvedModuleHandlingSymlink(resolved *resolved) *ResolvedModule {
 	isExternalLibraryImport := resolved != nil && strings.Contains(resolved.path, "/node_modules/")
-	if r.resultFromCache == nil &&
-		r.compilerOptions.PreserveSymlinks != core.TSTrue &&
+	if r.compilerOptions.PreserveSymlinks != core.TSTrue &&
 		isExternalLibraryImport &&
 		resolved.originalPath == "" &&
 		!tspath.IsExternalModuleNameRelative(r.name) {
@@ -974,36 +891,32 @@ func (r *resolutionState) createResolvedModuleHandlingSymlink(resolved *resolved
 }
 
 func (r *resolutionState) createResolvedModule(resolved *resolved, isExternalLibraryImport bool) *ResolvedModule {
-	if r.resultFromCache != nil {
-		var result *ResolvedModule
-		if !r.resolver.moduleNameCache.isReadonly {
-			result = r.resultFromCache
-			r.resolver.moduleNameCache.appendLookupLocations(result, r.failedLookupLocations, r.affectingLocations, r.diagnostics)
-		} else {
-			cloned := *r.resultFromCache
-			result = &cloned
-			r.resolver.moduleNameCache.setLookupLocations(result, r.failedLookupLocations, r.affectingLocations, r.diagnostics)
-		}
-		return result
+	var resolvedModule ResolvedModule
+	resolvedModule.LookupLocations = LookupLocations{
+		FailedLookupLocations: r.failedLookupLocations,
+		AffectingLocations:    r.affectingLocations,
+		ResolutionDiagnostics: r.diagnostics,
 	}
 
-	var resolvedModule ResolvedModule
 	if resolved != nil {
-		resolvedModule = ResolvedModule{
-			ResolvedFileName:         resolved.path,
-			OriginalPath:             resolved.originalPath,
-			IsExternalLibraryImport:  isExternalLibraryImport,
-			ResolvedUsingTsExtension: resolved.resolvedUsingTsExtension,
-			Extension:                resolved.extension,
-			PackageId:                resolved.packageId,
-		}
+		resolvedModule.ResolvedFileName = resolved.path
+		resolvedModule.OriginalPath = resolved.originalPath
+		resolvedModule.IsExternalLibraryImport = isExternalLibraryImport
+		resolvedModule.ResolvedUsingTsExtension = resolved.resolvedUsingTsExtension
+		resolvedModule.Extension = resolved.extension
+		resolvedModule.PackageId = resolved.packageId
 	}
-	r.resolver.moduleNameCache.setLookupLocations(&resolvedModule, r.failedLookupLocations, r.affectingLocations, r.diagnostics)
 	return &resolvedModule
 }
 
 func (r *resolutionState) createResolvedTypeReferenceDirective(resolved *resolved, primary bool) *ResolvedTypeReferenceDirective {
 	var resolvedTypeReferenceDirective ResolvedTypeReferenceDirective
+	resolvedTypeReferenceDirective.LookupLocations = LookupLocations{
+		FailedLookupLocations: r.failedLookupLocations,
+		AffectingLocations:    r.affectingLocations,
+		ResolutionDiagnostics: r.diagnostics,
+	}
+
 	if resolved.isResolved() {
 		if !tspath.ExtensionIsTs(resolved.extension) {
 			panic("expected a TypeScript file extension")
@@ -1021,7 +934,6 @@ func (r *resolutionState) createResolvedTypeReferenceDirective(resolved *resolve
 			}
 		}
 	}
-	r.resolver.typeReferenceDirectiveCache.setLookupLocations(&resolvedTypeReferenceDirective, r.failedLookupLocations, r.affectingLocations, r.diagnostics)
 	return &resolvedTypeReferenceDirective
 }
 

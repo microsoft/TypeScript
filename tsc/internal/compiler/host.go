@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/cachedvfs"
 )
 
 type CompilerHost interface {
@@ -30,6 +31,10 @@ type compilerHost struct {
 	currentDirectory   string
 	fs                 vfs.FS
 	defaultLibraryPath string
+}
+
+func NewCachedFSCompilerHost(options *core.CompilerOptions, currentDirectory string, fs vfs.FS, defaultLibraryPath string) CompilerHost {
+	return NewCompilerHost(options, currentDirectory, cachedvfs.From(fs), defaultLibraryPath)
 }
 
 func NewCompilerHost(options *core.CompilerOptions, currentDirectory string, fs vfs.FS, defaultLibraryPath string) CompilerHost {

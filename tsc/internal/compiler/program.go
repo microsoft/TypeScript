@@ -268,6 +268,10 @@ func (p *Program) GetResolvedModule(file *ast.SourceFile, moduleReference string
 	return nil
 }
 
+func (p *Program) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule] {
+	return p.resolvedModules
+}
+
 func (p *Program) findSourceFile(candidate string, reason FileIncludeReason) *ast.SourceFile {
 	path := tspath.ToPath(candidate, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
 	return p.filesByPath[path]

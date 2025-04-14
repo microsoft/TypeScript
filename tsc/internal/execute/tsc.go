@@ -175,7 +175,7 @@ func getParsedCommandLineOfConfigFile(configFileName string, options *core.Compi
 }
 
 func performCompilation(sys System, cb cbType, config *tsoptions.ParsedCommandLine, reportDiagnostic diagnosticReporter) ExitStatus {
-	host := compiler.NewCompilerHost(config.CompilerOptions(), sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath())
+	host := compiler.NewCachedFSCompilerHost(config.CompilerOptions(), sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath())
 	// todo: cache, statistics, tracing
 	program := compiler.NewProgramFromParsedCommandLine(config, host)
 

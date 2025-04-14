@@ -68,6 +68,7 @@ type LookupLocations struct {
 }
 
 type ResolvedModule struct {
+	LookupLocations
 	ResolvedFileName         string
 	OriginalPath             string
 	Extension                string
@@ -82,6 +83,7 @@ func (r *ResolvedModule) IsResolved() bool {
 }
 
 type ResolvedTypeReferenceDirective struct {
+	LookupLocations
 	Primary                 bool
 	ResolvedFileName        string
 	OriginalPath            string
