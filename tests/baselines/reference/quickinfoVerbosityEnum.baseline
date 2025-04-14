@@ -1,5 +1,6 @@
 // === QuickInfo ===
-=== /tests/cases/fourslash/quickinfoVerbosityEnum.ts ===
+=== /tests/cases/fourslash/a.ts ===
+// export {};
 // enum Color {
 //      ^^^^^
 // | ----------------------------------------------------------------------
@@ -80,18 +81,36 @@
 //     IsSymlink = 1 << 2,
 // }
 
+=== /tests/cases/fourslash/c.ts ===
+// import { Color } from "./b";
+// const c: Color = Color.Red;
+//          ^^^^^
+// | ----------------------------------------------------------------------
+// | (alias) enum Color {
+// |     Red = "red"
+// | }
+// | import Color
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//          ^^^^^
+// | ----------------------------------------------------------------------
+// | (alias) enum Color
+// | import Color
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 10,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 21,
       "name": "c"
     },
     "item": {
       "kind": "enum",
       "kindModifiers": "",
       "textSpan": {
-        "start": 5,
+        "start": 16,
         "length": 5
       },
       "displayParts": [
@@ -115,15 +134,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 10,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 21,
       "name": "c"
     },
     "item": {
       "kind": "enum",
       "kindModifiers": "",
       "textSpan": {
-        "start": 5,
+        "start": 16,
         "length": 5
       },
       "displayParts": [
@@ -255,15 +274,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 52,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 63,
       "name": "x"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 51,
+        "start": 62,
         "length": 1
       },
       "displayParts": [
@@ -299,15 +318,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 52,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 63,
       "name": "x"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 51,
+        "start": 62,
         "length": 1
       },
       "displayParts": [
@@ -399,15 +418,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 93,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 104,
       "name": "d"
     },
     "item": {
       "kind": "enum",
       "kindModifiers": "",
       "textSpan": {
-        "start": 84,
+        "start": 95,
         "length": 9
       },
       "displayParts": [
@@ -439,15 +458,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 93,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 104,
       "name": "d"
     },
     "item": {
       "kind": "enum",
       "kindModifiers": "",
       "textSpan": {
-        "start": 84,
+        "start": 95,
         "length": 9
       },
       "displayParts": [
@@ -555,15 +574,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 123,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 134,
       "name": "y"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 122,
+        "start": 133,
         "length": 1
       },
       "displayParts": [
@@ -599,15 +618,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 123,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 134,
       "name": "y"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 122,
+        "start": 133,
         "length": 1
       },
       "displayParts": [
@@ -675,15 +694,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 161,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 172,
       "name": "f"
     },
     "item": {
       "kind": "enum",
       "kindModifiers": "",
       "textSpan": {
-        "start": 156,
+        "start": 167,
         "length": 5
       },
       "displayParts": [
@@ -707,15 +726,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
-      "position": 161,
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 172,
       "name": "f"
     },
     "item": {
       "kind": "enum",
       "kindModifiers": "",
       "textSpan": {
-        "start": 156,
+        "start": 167,
         "length": 5
       },
       "displayParts": [
@@ -918,6 +937,178 @@
         {
           "text": "}",
           "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/c.ts",
+      "position": 43,
+      "name": "a"
+    },
+    "item": {
+      "kind": "alias",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 38,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Color",
+          "kind": "aliasName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Color",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/c.ts",
+      "position": 43,
+      "name": "a"
+    },
+    "item": {
+      "kind": "alias",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 38,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Color",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "Red",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"red\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Color",
+          "kind": "aliasName"
         }
       ],
       "documentation": [],

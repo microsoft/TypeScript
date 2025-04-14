@@ -8760,7 +8760,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
-            const hashPrivateName = getHashPrivateName(symbol);
+            const hashPrivateName = getClonedHashPrivateName(symbol);
             if (hashPrivateName) {
                 return hashPrivateName;
             }
@@ -9895,7 +9895,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let initializer: Expression | undefined;
                     let initializerLength: number;
                     if (isExpanding(context) && memberDecl && memberDecl.initializer) {
-                        initializer = visitNode(memberDecl.initializer, factory.cloneNode, isExpression);
+                        initializer = memberDecl.initializer;
                         initializerLength = memberDecl.initializer.end - memberDecl.initializer.pos;
                     }
                     else {
@@ -10626,7 +10626,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             Debug.assert(!!setter);
                             const paramSymbol = isFunctionLikeDeclaration(setter) ? getSignatureFromDeclaration(setter).parameters[0] : undefined;
                             const setterDeclaration = p.declarations?.find(isSetAccessor);
-                            context.approximateLength += modifiersLength(flag) + 7 + (paramSymbol ? symbolName(paramSymbol).length : 5) + (omitType ? 0 : 1); // `modifiers set name(param);`, approximate name
+                            context.approximateLength += modifiersLength(flag) + 7 + (paramSymbol ? symbolName(paramSymbol).length : 5) + (omitType ? 0 : 2); // `modifiers set name(param);`, approximate name
                             result.push(setTextRange(
                                 context,
                                 factory.createSetAccessorDeclaration(
@@ -10646,7 +10646,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         if (p.flags & SymbolFlags.GetAccessor) {
                             const getterDeclaration = p.declarations?.find(isGetAccessor);
-                            context.approximateLength += modifiersLength(flag) + 9 + (omitType ? 0 : 1); // `modifiers get name(): ;`, approximate name
+                            context.approximateLength += modifiersLength(flag) + 8 + (omitType ? 0 : 2); // `modifiers get name(): ;`, approximate name
                             result.push(setTextRange(
                                 context,
                                 factory.createGetAccessorDeclaration(
@@ -10665,7 +10665,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // If this happens, we assume the accessor takes priority, as it imposes more constraints
                     else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable | SymbolFlags.Accessor)) {
                         const modifierFlags = (isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag;
-                        context.approximateLength += 1 + (omitType ? 0 : 1) + modifiersLength(modifierFlags); // `modifiers name: ;`, approximate name
+                        context.approximateLength += 2 + (omitType ? 0 : 2) + modifiersLength(modifierFlags); // `modifiers name: ;`, approximate name
                         return setTextRange(
                             context,
                             createProperty(
@@ -10725,21 +10725,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function modifiersLength(flags: ModifierFlags): number {
                 let result = 0;
-                if (flags & ModifierFlags.Export) result += 6;
-                if (flags & ModifierFlags.Ambient) result += 7;
-                if (flags & ModifierFlags.Default) result += 7;
-                if (flags & ModifierFlags.Const) result += 5;
-                if (flags & ModifierFlags.Public) result += 6;
-                if (flags & ModifierFlags.Private) result += 7;
-                if (flags & ModifierFlags.Protected) result += 9;
-                if (flags & ModifierFlags.Abstract) result += 8;
-                if (flags & ModifierFlags.Static) result += 6;
-                if (flags & ModifierFlags.Override) result += 8;
-                if (flags & ModifierFlags.Readonly) result += 8;
-                if (flags & ModifierFlags.Accessor) result += 8;
-                if (flags & ModifierFlags.Async) result += 5;
-                if (flags & ModifierFlags.In) result += 2;
-                if (flags & ModifierFlags.Out) result += 3;
+                // Include the trailing space after the modifier keyword.
+                if (flags & ModifierFlags.Export) result += 7;
+                if (flags & ModifierFlags.Ambient) result += 8;
+                if (flags & ModifierFlags.Default) result += 8;
+                if (flags & ModifierFlags.Const) result += 6;
+                if (flags & ModifierFlags.Public) result += 7;
+                if (flags & ModifierFlags.Private) result += 8;
+                if (flags & ModifierFlags.Protected) result += 10;
+                if (flags & ModifierFlags.Abstract) result += 9;
+                if (flags & ModifierFlags.Static) result += 7;
+                if (flags & ModifierFlags.Override) result += 9;
+                if (flags & ModifierFlags.Readonly) result += 9;
+                if (flags & ModifierFlags.Accessor) result += 9;
+                if (flags & ModifierFlags.Async) result += 6;
+                if (flags & ModifierFlags.In) result += 3;
+                if (flags & ModifierFlags.Out) result += 4;
                 return result;
             }
 
@@ -10925,7 +10926,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return !!s.valueDeclaration && isNamedDeclaration(s.valueDeclaration) && isPrivateIdentifier(s.valueDeclaration.name);
         }
 
-        function getHashPrivateName(s: Symbol): PrivateIdentifier | undefined {
+        function getClonedHashPrivateName(s: Symbol): PrivateIdentifier | undefined {
             if (s.valueDeclaration && isNamedDeclaration(s.valueDeclaration) && isPrivateIdentifier(s.valueDeclaration.name)) {
                 return factory.cloneNode(s.valueDeclaration.name);
             }

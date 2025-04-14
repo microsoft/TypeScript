@@ -889,7 +889,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                 const printer = getPrinter();
                 nodes.forEach((node, i) => {
                     if (i > 0) writer.writeLine();
-                    printer.writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+                    printer.writeNode(EmitHint.Unspecified, node, /*sourceFile*/ undefined, writer);
                 });
             });
             addRange(displayParts, expandedDisplayParts);
