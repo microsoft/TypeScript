@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - main
+  merge_group:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -47,19 +50,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
+        config:
           - os: ubuntu-latest
             coverage: true
           - os: windows-latest
             coverage: true
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: macos-latest
             coverage: true
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: ubuntu-latest
             name: 'no submodules'
             no-submodules: true
           - os: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=mariner-2.0']
             name: 'race mode'
             race: true
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: ubuntu-latest
             name: 'noembed'
             noembed: true
@@ -67,28 +73,31 @@ jobs:
             name: 'concurrent test programs'
             concurrent-test-programs: true
             coverage: true
+        exclude:
+          - config:
+              skip: true
 
-    name: test (${{ matrix.name || matrix.os }})
+    name: test (${{ matrix.config.name || matrix.config.os }})
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.config.os }}
 
     permissions:
       id-token: write
       contents: read
 
     env:
-      TSGO_HEREBY_RACE: ${{ (matrix.race && 'true') || 'false' }}
-      TSGO_HEREBY_NOEMBED: ${{ (matrix.noembed && 'true') || 'false' }}
-      TSGO_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.concurrent-test-programs && 'true') || 'false' }}
-      TSGO_HEREBY_COVERAGE: ${{ (matrix.coverage && 'true') || 'false' }}
+      TSGO_HEREBY_RACE: ${{ (matrix.config.race && 'true') || 'false' }}
+      TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
+      TSGO_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.config.concurrent-test-programs && 'true') || 'false' }}
+      TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && 'true') || 'false' }}
 
     steps:
       - run: git config --system core.longpaths true
-        if: ${{ matrix.os == 'windows-latest' }}
+        if: ${{ matrix.config.os == 'windows-latest' }}
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          submodules: ${{ !matrix.no-submodules }}
+          submodules: ${{ !matrix.config.no-submodules }}
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 'lts/*'
@@ -102,7 +111,7 @@ jobs:
       - run: go install gotest.tools/gotestsum@latest
         # Installing gotestsum is super slow on Windows.
         # Also, avoid using it in race mode so we get the full output.
-        if: ${{ matrix.os != 'windows-latest' && !matrix.race }}
+        if: ${{ matrix.config.os != 'windows-latest' && !matrix.config.race }}
 
       - name: Tests
         id: test
@@ -120,10 +129,10 @@ jobs:
       - run: git add .
 
       - uses: codecov/codecov-action@0565863a31f2c772f9f0395002a31e3f06189574 # v5.4.0
-        if: ${{ always() && matrix.coverage }}
+        if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
         with:
           use_oidc: true
-          name: ${{ matrix.name || matrix.os }}
+          name: ${{ matrix.config.name || matrix.config.os }}
           directory: ./coverage
 
       - run: git diff --staged --exit-code --stat
@@ -137,27 +146,33 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
         with:
-          name: ${{ matrix.os }}-${{ (matrix.race && 'race') || 'norace' }}-new-baselines-artifact
+          name: ${{ matrix.config.os }}-${{ (matrix.config.race && 'race') || 'norace' }}-new-baselines-artifact
           path: testdata/baselines/local
 
   lint:
     strategy:
       fail-fast: false
       matrix:
-        include:
+        config:
           - os: ubuntu-latest
           - os: windows-latest
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: macos-latest
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: ubuntu-latest
             name: 'noembed'
             noembed: true
+            skip: ${{ github.event_name == 'merge_group' }}
+        exclude:
+          - config:
+              skip: true
 
-    name: lint (${{ matrix.name || matrix.os }})
+    name: lint (${{ matrix.config.name || matrix.config.os }})
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.config.os }}
 
     env:
-      TSGO_HEREBY_NOEMBED: ${{ (matrix.noembed && 'true') || 'false' }}
+      TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -165,7 +180,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
       - uses: ./.github/actions/setup-go
         with:
-          cache-name: lint${{ (matrix.noembed && '-noembed') || ''}}
+          cache-name: lint${{ (matrix.config.noembed && '-noembed') || ''}}
 
       - run: npm ci
 
@@ -308,17 +323,20 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ always() }}
     needs:
+      - baselines
       - build
-      - test
-      - lint
+      - extension
       - format
       - generate
-      - tidy
+      - lint
+      - misc
       - smoke
+      - test
+      - tidy
 
     steps:
       - name: Check required jobs
         env:
           NEEDS: ${{ toJson(needs) }}
         run: |
-          ! echo $NEEDS | jq -e 'to_entries[] | { job: .key, result: .value.result } | select(.result != "success")'
+          ! echo $NEEDS | jq -e 'to_entries[] | { job: .key, result: .value.result } | select((.result == "success" or .result == "skipped") | not)'
