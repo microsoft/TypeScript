@@ -64,9 +64,7 @@
 // |     property9: string;
 // |     property10: number;
 // |     property11: boolean;
-// |     property12: Date;
-// |     property13: string | number;
-// |     ... 6 more ... ;
+// |     ... 8 more ... ;
 // |     property20: () => void;
 // | }
 // | (verbosity level: 1)
@@ -1005,79 +1003,7 @@
           "kind": "space"
         },
         {
-          "text": "property12",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Date",
-          "kind": "localName"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "property13",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "... 6 more ... ",
+          "text": "... 8 more ... ",
           "kind": "propertyName"
         },
         {

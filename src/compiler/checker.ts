@@ -374,6 +374,7 @@ import {
     getStrictOptionValue,
     getSuperContainer,
     getSymbolNameForPrivateIdentifier,
+    getSynthesizedDeepClone,
     getTextOfIdentifierOrLiteral,
     getTextOfJSDocComment,
     getTextOfJsxAttributeName,
@@ -9895,7 +9896,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let initializer: Expression | undefined;
                     let initializerLength: number;
                     if (isExpanding(context) && memberDecl && memberDecl.initializer) {
-                        initializer = memberDecl.initializer;
+                        initializer = getSynthesizedDeepClone(memberDecl.initializer);
                         initializerLength = memberDecl.initializer.end - memberDecl.initializer.pos;
                     }
                     else {
