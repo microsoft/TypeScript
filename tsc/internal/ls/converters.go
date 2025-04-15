@@ -88,10 +88,10 @@ func (c *Converters) FromLSPLocation(location lsproto.Location) (Location, error
 	}, nil
 }
 
-func (c *Converters) ToLSPDiagnostic(diagnostic *ast.Diagnostic) (lsproto.Diagnostic, error) {
+func (c *Converters) ToLSPDiagnostic(diagnostic *ast.Diagnostic) (*lsproto.Diagnostic, error) {
 	textRange, err := c.ToLSPRange(diagnostic.File().FileName(), diagnostic.Loc())
 	if err != nil {
-		return lsproto.Diagnostic{}, fmt.Errorf("error converting diagnostic range: %w", err)
+		return nil, fmt.Errorf("error converting diagnostic range: %w", err)
 	}
 
 	var severity lsproto.DiagnosticSeverity
@@ -106,13 +106,13 @@ func (c *Converters) ToLSPDiagnostic(diagnostic *ast.Diagnostic) (lsproto.Diagno
 		severity = lsproto.DiagnosticSeverityError
 	}
 
-	relatedInformation := make([]lsproto.DiagnosticRelatedInformation, 0, len(diagnostic.RelatedInformation()))
+	relatedInformation := make([]*lsproto.DiagnosticRelatedInformation, 0, len(diagnostic.RelatedInformation()))
 	for _, related := range diagnostic.RelatedInformation() {
 		relatedRange, err := c.ToLSPRange(related.File().FileName(), related.Loc())
 		if err != nil {
-			return lsproto.Diagnostic{}, fmt.Errorf("error converting related info range: %w", err)
+			return nil, fmt.Errorf("error converting related info range: %w", err)
 		}
-		relatedInformation = append(relatedInformation, lsproto.DiagnosticRelatedInformation{
+		relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
 			Location: lsproto.Location{
 				Uri:   FileNameToDocumentURI(related.File().FileName()),
 				Range: relatedRange,
@@ -121,7 +121,7 @@ func (c *Converters) ToLSPDiagnostic(diagnostic *ast.Diagnostic) (lsproto.Diagno
 		})
 	}
 
-	return lsproto.Diagnostic{
+	return &lsproto.Diagnostic{
 		Range: textRange,
 		Code: &lsproto.IntegerOrString{
 			Integer: ptrTo(diagnostic.Code()),

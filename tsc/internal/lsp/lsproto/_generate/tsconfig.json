@@ -7,7 +7,9 @@
         "strict": true,
         "noEmit": true,
         "allowImportingTsExtensions": true,
-        "types": ["node"]
+        "types": ["node"],
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
     },
     "include": [
         "*.mts",
