@@ -6127,7 +6127,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             isOptionalParameter,
             isUndefinedIdentifierExpression(node: Identifier) {
-                Debug.assert(isExpressionNode(node));
                 return getSymbolAtLocation(node) === undefinedSymbol;
             },
             isEntityNameVisible(context, entityName, shouldComputeAliasToMakeVisible) {

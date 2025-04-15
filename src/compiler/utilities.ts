@@ -3647,7 +3647,6 @@ export function isInExpressionContext(node: Node): boolean {
         case SyntaxKind.SwitchStatement:
         case SyntaxKind.CaseClause:
         case SyntaxKind.ThrowStatement:
-        case SyntaxKind.ExportAssignment:
             return (parent as ExpressionStatement).expression === node;
         case SyntaxKind.ForStatement:
             const forStatement = parent as ForStatement;
