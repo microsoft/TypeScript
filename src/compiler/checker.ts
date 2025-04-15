@@ -374,6 +374,7 @@ import {
     getStrictOptionValue,
     getSuperContainer,
     getSymbolNameForPrivateIdentifier,
+    getSynthesizedDeepClone,
     getTextOfIdentifierOrLiteral,
     getTextOfJSDocComment,
     getTextOfJsxAttributeName,
@@ -881,6 +882,7 @@ import {
     moduleExportNameTextUnescaped,
     ModuleInstanceState,
     ModuleKind,
+    ModuleName,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     moduleSupportsImportAttributes,
@@ -1132,6 +1134,7 @@ import {
     WhileStatement,
     WideningContext,
     WithStatement,
+    WriterContextOut,
     YieldExpression,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
@@ -1716,11 +1719,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typePredicateToString: (predicate, enclosingDeclaration, flags) => {
             return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags);
         },
-        writeSignature: (signature, enclosingDeclaration, flags, kind, writer) => {
-            return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
+        writeSignature: (signature, enclosingDeclaration, flags, kind, writer, verbosityLevel, out) => {
+            return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer, verbosityLevel, out);
         },
-        writeType: (type, enclosingDeclaration, flags, writer) => {
-            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
+        writeType: (type, enclosingDeclaration, flags, writer, verbosityLevel, out) => {
+            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel, out);
         },
         writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
             return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
@@ -1932,6 +1935,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typeHasCallOrConstructSignatures,
         getSymbolFlags,
         getTypeArgumentsForResolvedSignature,
+        isLibType,
     };
 
     function getTypeArgumentsForResolvedSignature(signature: Signature) {
@@ -6027,7 +6031,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags = TypeFormatFlags.None, kind?: SignatureKind, writer?: EmitTextWriter): string {
+    function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags = TypeFormatFlags.None, kind?: SignatureKind, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string {
         return writer ? signatureToStringWorker(writer).getText() : usingSingleLineStringWriter(signatureToStringWorker);
 
         function signatureToStringWorker(writer: EmitTextWriter) {
@@ -6038,7 +6042,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 sigOutput = kind === SignatureKind.Construct ? SyntaxKind.ConstructSignature : SyntaxKind.CallSignature;
             }
-            const sig = nodeBuilder.signatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+            const sig = nodeBuilder.signatureToSignatureDeclaration(
+                signature,
+                sigOutput,
+                enclosingDeclaration,
+                toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName,
+                /*internalFlags*/ undefined,
+                /*tracker*/ undefined,
+                verbosityLevel,
+                out,
+            );
             const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, getTrailingSemicolonDeferringWriter(writer)); // TODO: GH#18217
@@ -6046,9 +6059,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
-        const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
-        const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : NodeBuilderFlags.None), /*internalFlags*/ undefined);
+    function typeToString(
+        type: Type,
+        enclosingDeclaration?: Node,
+        flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+        writer: EmitTextWriter = createTextWriter(""),
+        verbosityLevel?: number,
+        out?: WriterContextOut,
+    ): string {
+        const noTruncation = compilerOptions.noErrorTruncation ||
+            flags & TypeFormatFlags.NoTruncation;
+        const typeNode = nodeBuilder.typeToTypeNode(
+            type,
+            enclosingDeclaration,
+            toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0),
+            /*internalFlags*/ undefined,
+            /*tracker*/ undefined,
+            verbosityLevel,
+            out,
+        );
         if (typeNode === undefined) return Debug.fail("should always get typenode");
         // The unresolved type gets a synthesized comment on `any` to hint to users that it's not a plain `any`.
         // Otherwise, we always strip comments out.
@@ -6270,20 +6299,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         };
         return {
             syntacticBuilderResolver,
-            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => typeToTypeNodeHelper(type, context)),
-            typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
-            serializeTypeForExpression: (expr: Expression, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => syntacticNodeBuilder.serializeTypeOfExpression(expr, context)),
-            serializeTypeForDeclaration: (declaration: HasInferredType, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, symbol, context)),
-            serializeReturnTypeForSignature: (signature: SignatureDeclaration, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => syntacticNodeBuilder.serializeReturnTypeForSignature(signature, getSymbolOfDeclaration(signature), context)),
-            indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
-            signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
-            symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
-            symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => symbolToExpression(symbol, context, meaning)),
-            symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => typeParametersToTypeParameterDeclarations(symbol, context)),
-            symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => symbolToParameterDeclaration(symbol, context)),
-            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => typeParameterToDeclaration(parameter, context)),
-            symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => symbolTableToDeclarationStatements(symbolTable, context)),
-            symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, context => symbolToNode(symbol, context, meaning)),
+            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeToTypeNodeHelper(type, context), out),
+            typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
+            serializeTypeForDeclaration: (declaration: HasInferredType, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, symbol, context)),
+            serializeReturnTypeForSignature: (signature: SignatureDeclaration, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeReturnTypeForSignature(signature, getSymbolOfDeclaration(signature), context)),
+            serializeTypeForExpression: (expr: Expression, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeTypeOfExpression(expr, context)),
+            indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
+            signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => signatureToSignatureDeclarationHelper(signature, kind, context), out),
+            symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
+            symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToExpression(symbol, context, meaning)),
+            symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => typeParametersToTypeParameterDeclarations(symbol, context)),
+            symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToParameterDeclaration(symbol, context)),
+            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeParameterToDeclaration(parameter, context), out),
+            symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolTableToDeclarationStatements(symbolTable, context)),
+            symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToNode(symbol, context, meaning)),
+            symbolToDeclarations,
         };
 
         function getTypeFromTypeNode(context: NodeBuilderContext, node: TypeNode, noMappedTypes?: false): Type;
@@ -6343,7 +6373,85 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return symbolToExpression(symbol, context, meaning);
         }
 
-        function withContext<T>(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags: InternalNodeBuilderFlags | undefined, tracker: SymbolTracker | undefined, cb: (context: NodeBuilderContext) => T): T | undefined {
+        function symbolToDeclarations(symbol: Symbol, meaning: SymbolFlags, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration[] {
+            const nodes = withContext(
+                /*enclosingDeclaration*/ undefined,
+                flags,
+                /*internalFlags*/ undefined,
+                /*tracker*/ undefined,
+                verbosityLevel,
+                context => symbolToDeclarationsWorker(symbol, context),
+                out,
+            );
+            return mapDefined(nodes, node => {
+                switch (node.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                        return simplifyClassDeclaration(node as ClassDeclaration, symbol);
+                    case SyntaxKind.EnumDeclaration:
+                        return simplifyModifiers(node as EnumDeclaration, isEnumDeclaration, symbol);
+                    case SyntaxKind.InterfaceDeclaration:
+                        return simplifyInterfaceDeclaration(node as InterfaceDeclaration, symbol, meaning);
+                    case SyntaxKind.ModuleDeclaration:
+                        return simplifyModifiers(node as ModuleDeclaration, isModuleDeclaration, symbol);
+                    default:
+                        return undefined;
+                }
+            });
+        }
+
+        function simplifyClassDeclaration(classDecl: ClassDeclaration, symbol: Symbol): Declaration {
+            const classDeclarations = filter(symbol.declarations, isClassLike);
+            const originalClassDecl = classDeclarations && classDeclarations.length > 0 ? classDeclarations[0] : classDecl;
+            const modifiers = getEffectiveModifierFlags(originalClassDecl) & ~(ModifierFlags.Export | ModifierFlags.Ambient);
+            const isAnonymous = isClassExpression(originalClassDecl);
+            if (isAnonymous) {
+                classDecl = factory.updateClassDeclaration(
+                    classDecl,
+                    classDecl.modifiers,
+                    /*name*/ undefined,
+                    classDecl.typeParameters,
+                    classDecl.heritageClauses,
+                    classDecl.members,
+                );
+            }
+            return factory.replaceModifiers(classDecl, modifiers);
+        }
+
+        function simplifyModifiers(newDecl: Declaration & HasModifiers, isDeclKind: (d: Declaration) => boolean, symbol: Symbol): Declaration & HasModifiers {
+            const decls = filter(symbol.declarations, isDeclKind);
+            const declWithModifiers = decls && decls.length > 0 ? decls[0] : newDecl;
+            const modifiers = getEffectiveModifierFlags(declWithModifiers) & ~(ModifierFlags.Export | ModifierFlags.Ambient);
+            return factory.replaceModifiers(newDecl, modifiers);
+        }
+
+        function simplifyInterfaceDeclaration(interfaceDecl: InterfaceDeclaration, symbol: Symbol, meaning: SymbolFlags): Declaration | undefined {
+            if (!(meaning & SymbolFlags.Interface)) {
+                return undefined;
+            }
+            return simplifyModifiers(interfaceDecl, isInterfaceDeclaration, symbol);
+        }
+
+        function symbolToDeclarationsWorker(symbol: Symbol, context: NodeBuilderContext): Statement[] {
+            // We're already expanding the type: set it in the stack to avoid expanding it again.
+            const type = getDeclaredTypeOfSymbol(symbol);
+            context.typeStack.push(type.id);
+            context.typeStack.push(-1);
+            const table = createSymbolTable([symbol]);
+            const statements = symbolTableToDeclarationStatements(table, context);
+            context.typeStack.pop();
+            context.typeStack.pop();
+            return statements;
+        }
+
+        function withContext<T>(
+            enclosingDeclaration: Node | undefined,
+            flags: NodeBuilderFlags | undefined,
+            internalFlags: InternalNodeBuilderFlags | undefined,
+            tracker: SymbolTracker | undefined,
+            verbosityLevel: number | undefined,
+            cb: (context: NodeBuilderContext) => T,
+            out?: WriterContextOut,
+        ): T | undefined {
             const moduleResolverHost = tracker?.trackSymbol ? tracker.moduleResolverHost :
                 (internalFlags || InternalNodeBuilderFlags.None) & InternalNodeBuilderFlags.DoNotIncludeSymbolChain ? createBasicNodeBuilderModuleSpecifierResolutionHost(host) :
                 undefined;
@@ -6353,6 +6461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 flags: flags || NodeBuilderFlags.None,
                 internalFlags: internalFlags || InternalNodeBuilderFlags.None,
                 tracker: undefined!,
+                maxExpansionDepth: verbosityLevel ?? -1,
                 encounteredError: false,
                 suppressReportInferenceFallback: false,
                 reportedDiagnostic: false,
@@ -6375,11 +6484,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameterNamesByTextNextNameCount: undefined,
                 enclosingSymbolTypes: new Map(),
                 mapper: undefined,
+                depth: 0,
+                typeStack: [],
+                out: {
+                    canIncreaseExpansionDepth: false,
+                    truncated: false,
+                },
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
             if (context.truncating && context.flags & NodeBuilderFlags.NoTruncation) {
                 context.tracker.reportTruncationError();
+            }
+            if (out) {
+                out.canIncreaseExpansionDepth = context.out.canIncreaseExpansionDepth;
+                out.truncated = context.out.truncated;
             }
             return context.encounteredError ? undefined : resultingNode;
         }
@@ -6401,13 +6520,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function saveRestoreFlags(context: NodeBuilderContext) {
             const flags = context.flags;
             const internalFlags = context.internalFlags;
+            const depth = context.depth;
 
             return restore;
 
             function restore() {
                 context.flags = flags;
                 context.internalFlags = internalFlags;
+                context.depth = depth;
             }
+        }
+
+        function checkTruncationLengthIfExpanding(context: NodeBuilderContext): boolean {
+            return context.maxExpansionDepth >= 0 && checkTruncationLength(context);
         }
 
         function checkTruncationLength(context: NodeBuilderContext): boolean {
@@ -6415,9 +6540,45 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return context.truncating = context.approximateLength > ((context.flags & NodeBuilderFlags.NoTruncation) ? noTruncationMaximumTruncationLength : defaultMaximumTruncationLength);
         }
 
+        /**
+         * Returns true if it's possible the type or one of its components can be expanded.
+         */
+        function canPossiblyExpandType(type: Type, context: NodeBuilderContext): boolean {
+            for (let i = 0; i < context.typeStack.length - 1; i++) {
+                if (context.typeStack[i] === type.id) {
+                    return false;
+                }
+            }
+            return context.depth < context.maxExpansionDepth ||
+                context.depth === context.maxExpansionDepth && !context.out.canIncreaseExpansionDepth;
+        }
+
+        /**
+         * Determines if the input type should be expanded, based on how many layers of names we're allowed to expand.
+         * @param isAlias - Whether we're expanding a type alias or not.
+         */
+        function shouldExpandType(type: Type, context: NodeBuilderContext, isAlias = false): boolean {
+            if (!isAlias && isLibType(type)) {
+                return false;
+            }
+            for (let i = 0; i < context.typeStack.length - 1; i++) {
+                if (context.typeStack[i] === type.id) {
+                    return false;
+                }
+            }
+            const result = context.depth < context.maxExpansionDepth;
+            if (!result) {
+                // This type would have been expanded if `maxExpansionDepth` was increased.
+                context.out.canIncreaseExpansionDepth = true;
+            }
+            return result;
+        }
+
         function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
             const restoreFlags = saveRestoreFlags(context);
+            if (type) context.typeStack.push(type.id);
             const typeNode = typeToTypeNodeWorker(type, context);
+            if (type) context.typeStack.pop();
             restoreFlags();
             return typeNode;
         }
@@ -6428,6 +6589,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const inTypeAlias = context.flags & NodeBuilderFlags.InTypeAlias;
             context.flags &= ~NodeBuilderFlags.InTypeAlias;
+            let expandingEnum = false;
 
             if (!type) {
                 if (!(context.flags & NodeBuilderFlags.AllowEmptyUnionOrIntersection)) {
@@ -6496,7 +6658,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return Debug.fail("Unhandled type node kind returned from `symbolToTypeNode`.");
                     }
                 }
-                return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
+                if (!shouldExpandType(type, context)) {
+                    return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
+                }
+                else {
+                    expandingEnum = true;
+                }
             }
             if (type.flags & TypeFlags.StringLiteral) {
                 context.approximateLength += (type as StringLiteralType).value.length + 2;
@@ -6564,18 +6731,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
-                if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
-                    return factory.createArrayTypeNode(typeArgumentNodes![0]);
+                if (!shouldExpandType(type, context, /*isAlias*/ true)) {
+                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
+                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
+                    if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
+                        return factory.createArrayTypeNode(typeArgumentNodes![0]);
+                    }
+                    return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
-                return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
+                context.depth += 1;
             }
 
             const objectFlags = getObjectFlags(type);
 
             if (objectFlags & ObjectFlags.Reference) {
                 Debug.assert(!!(type.flags & TypeFlags.Object));
+                if (shouldExpandType(type, context)) {
+                    context.depth += 1;
+                    return createAnonymousTypeNode(type as TypeReference, /*forceClassExpansion*/ true, /*forceExpansion*/ true);
+                }
                 return (type as TypeReference).node ? visitAndTransformType(type as TypeReference, typeReferenceToTypeNode) : typeReferenceToTypeNode(type as TypeReference);
             }
             if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
@@ -6604,6 +6778,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.approximateLength += idText(name).length;
                     return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
                 }
+                if (objectFlags & ObjectFlags.ClassOrInterface && shouldExpandType(type, context)) {
+                    context.depth += 1;
+                    return createAnonymousTypeNode(type as InterfaceType, /*forceClassExpansion*/ true, /*forceExpansion*/ true);
+                }
                 // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                 if (type.symbol) {
                     return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
@@ -6616,7 +6794,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 type = (type as UnionType).origin!;
             }
             if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
-                const types = type.flags & TypeFlags.Union ? formatUnionTypes((type as UnionType).types) : (type as IntersectionType).types;
+                const types = type.flags & TypeFlags.Union ? formatUnionTypes((type as UnionType).types, expandingEnum) : (type as IntersectionType).types;
                 if (length(types) === 1) {
                     return typeToTypeNodeHelper(types[0], context);
                 }
@@ -6811,7 +6989,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return result;
             }
 
-            function createAnonymousTypeNode(type: ObjectType): TypeNode {
+            function createAnonymousTypeNode(type: ObjectType, forceClassExpansion = false, forceExpansion = false): TypeNode {
                 const typeId = type.id;
                 const symbol = type.symbol;
                 if (symbol) {
@@ -6844,15 +7022,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     // Always use 'typeof T' for type of class, enum, and module objects
                     else if (
-                        symbol.flags & SymbolFlags.Class
-                            && !getBaseTypeVariableOfClass(symbol)
-                            && !(symbol.valueDeclaration && isClassLike(symbol.valueDeclaration) && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral && (!isClassDeclaration(symbol.valueDeclaration) || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible)) ||
-                        symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
-                        shouldWriteTypeOfFunctionSymbol()
+                        !forceExpansion &&
+                        (symbol.flags & SymbolFlags.Class
+                                && !forceClassExpansion
+                                && !getBaseTypeVariableOfClass(symbol)
+                                && !(symbol.valueDeclaration
+                                    && isClassLike(symbol.valueDeclaration)
+                                    && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
+                                    && (!isClassDeclaration(symbol.valueDeclaration)
+                                        || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible))
+                            || symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)
+                            || shouldWriteTypeOfFunctionSymbol())
                     ) {
-                        return symbolToTypeNode(symbol, context, isInstanceType);
+                        if (shouldExpandType(type, context)) {
+                            context.depth += 1;
+                        }
+                        else {
+                            return symbolToTypeNode(symbol, context, isInstanceType);
+                        }
                     }
-                    else if (context.visitedTypes?.has(typeId)) {
+                    if (context.visitedTypes?.has(typeId)) {
                         // If type is an anonymous type literal in a type alias declaration, use type alias name
                         const typeAlias = getTypeAliasForTypeLiteral(type);
                         if (typeAlias) {
@@ -6901,7 +7090,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.symbolDepth = new Map();
                 }
 
-                const links = context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
+                // Don't rely on type cache if we're expand a type, because we need to compute `canIncreaseExpansionDepth`.
+                const links = context.maxExpansionDepth >= 0 ? undefined : context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
                 const key = `${getTypeId(type)}|${context.flags}|${context.internalFlags}`;
                 if (links) {
                     links.serializedTypes ||= new Map();
@@ -6980,7 +7170,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isGenericMappedType(type) || (type as MappedType).containsError) {
                     return createMappedTypeNodeFromType(type as MappedType);
                 }
-
                 const resolved = resolveStructuredTypeMembers(type);
                 if (!resolved.properties.length && !resolved.indexInfos.length) {
                     if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
@@ -7262,11 +7451,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                 if (checkTruncationLength(context)) {
+                    context.out.truncated = true;
                     if (context.flags & NodeBuilderFlags.NoTruncation) {
                         return [addSyntheticTrailingComment(factory.createNotEmittedTypeElement(), SyntaxKind.MultiLineCommentTrivia, "elided")];
                     }
                     return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                 }
+                context.typeStack.push(-1);
                 const typeElements: TypeElement[] = [];
                 for (const signature of resolvedType.callSignatures) {
                     typeElements.push(signatureToSignatureDeclarationHelper(signature, SyntaxKind.CallSignature, context) as CallSignatureDeclaration);
@@ -7281,11 +7472,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const properties = resolvedType.properties;
                 if (!properties) {
+                    context.typeStack.pop();
                     return typeElements;
                 }
 
                 let i = 0;
                 for (const propertySymbol of properties) {
+                    if (isExpanding(context) && propertySymbol.flags & SymbolFlags.Prototype) {
+                        continue;
+                    }
                     i++;
                     if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) {
                         if (propertySymbol.flags & SymbolFlags.Prototype) {
@@ -7296,6 +7491,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
+                        context.out.truncated = true;
                         if (context.flags & NodeBuilderFlags.NoTruncation) {
                             const typeElement = typeElements.pop()!;
                             typeElements.push(addSyntheticTrailingComment(typeElement, SyntaxKind.MultiLineCommentTrivia, `... ${properties.length - i} more elided ...`));
@@ -7308,6 +7504,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     addPropertyToElementList(propertySymbol, context, typeElements);
                 }
+                context.typeStack.pop();
                 return typeElements.length ? typeElements : undefined;
             }
         }
@@ -7477,6 +7674,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function mapToTypeNodes(types: readonly Type[] | undefined, context: NodeBuilderContext, isBareList?: boolean): TypeNode[] | undefined {
             if (some(types)) {
                 if (checkTruncationLength(context)) {
+                    context.out.truncated = true;
                     if (!isBareList) {
                         return [
                             context.flags & NodeBuilderFlags.NoTruncation
@@ -7502,6 +7700,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const type of types) {
                     i++;
                     if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
+                        context.out.truncated = true;
                         result.push(
                             context.flags & NodeBuilderFlags.NoTruncation
                                 ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - i} more elided ...`)
@@ -7928,7 +8127,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function typeToTypeNodeHelperWithPossibleReusableTypeNode(type: Type, typeNode: TypeNode | undefined, context: NodeBuilderContext) {
-            return typeNode && getTypeFromTypeNode(context, typeNode) === type && syntacticNodeBuilder.tryReuseExistingTypeNode(context, typeNode)
+            return !canPossiblyExpandType(type, context) && typeNode && getTypeFromTypeNode(context, typeNode) === type && syntacticNodeBuilder.tryReuseExistingTypeNode(context, typeNode)
                 || typeToTypeNodeHelper(type, context);
         }
 
@@ -8501,13 +8700,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let firstChar = symbolName.charCodeAt(0);
 
                 if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                    return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
+                    const specifier = getSpecifierForModuleSymbol(symbol, context);
+                    context.approximateLength += 2 + specifier.length; // "specifier"
+                    return factory.createStringLiteral(specifier);
                 }
                 if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                     if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                     identifier.symbol = symbol;
-
+                    context.approximateLength += 1 + symbolName.length; // .symbolName
                     return index > 0 ? factory.createPropertyAccessExpression(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }
                 else {
@@ -8517,17 +8718,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     let expression: Expression | undefined;
                     if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
-                        expression = factory.createStringLiteral(stripQuotes(symbolName).replace(/\\./g, s => s.substring(1)), firstChar === CharacterCodes.singleQuote);
+                        const literalText = stripQuotes(symbolName).replace(/\\./g, s => s.substring(1));
+                        context.approximateLength += literalText.length + 2; // "literalText"
+                        expression = factory.createStringLiteral(literalText, firstChar === CharacterCodes.singleQuote);
                     }
                     else if (("" + +symbolName) === symbolName) {
+                        context.approximateLength += symbolName.length; // +symbolName
                         expression = factory.createNumericLiteral(+symbolName);
                     }
                     if (!expression) {
                         const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                         if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                         identifier.symbol = symbol;
+                        context.approximateLength += symbolName.length; // symbolName
                         expression = identifier;
                     }
+                    context.approximateLength += 2; // []
                     return factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
                 }
             }
@@ -8555,6 +8761,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
+            const hashPrivateName = getClonedHashPrivateName(symbol);
+            if (hashPrivateName) {
+                return hashPrivateName;
+            }
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
             const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
             const isMethod = !!(symbol.flags & SymbolFlags.Method);
@@ -8667,7 +8877,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result;
             const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration, context.enclosingDeclaration);
             const decl = declaration ?? symbol.valueDeclaration ?? getDeclarationWithTypeAnnotation(symbol) ?? symbol.declarations?.[0];
-            if (decl) {
+            if (!canPossiblyExpandType(type, context) && decl) {
                 const restore = addSymbolTypeToContext(context, symbol, type);
                 if (isAccessor(decl)) {
                     result = syntacticNodeBuilder.serializeTypeOfAccessor(decl, symbol, context);
@@ -8717,7 +8927,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const returnType = getReturnTypeOfSignature(signature);
             if (!(suppressAny && isTypeAny(returnType))) {
-                if (signature.declaration && !nodeIsSynthesized(signature.declaration)) {
+                if (signature.declaration && !nodeIsSynthesized(signature.declaration) && !canPossiblyExpandType(returnType, context)) {
                     const declarationSymbol = getSymbolOfDeclaration(signature.declaration);
                     const restore = addSymbolTypeToContext(context, declarationSymbol, returnType);
                     returnTypeNode = syntacticNodeBuilder.serializeReturnTypeForSignature(signature.declaration, declarationSymbol, context);
@@ -9146,9 +9356,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!suppressNewPrivateContext) {
                     deferredPrivatesStack.push(new Map());
                 }
-                symbolTable.forEach((symbol: Symbol) => {
+                let i = 0;
+                const symbols = Array.from(symbolTable.values());
+                for (const symbol of symbols) {
+                    i++;
+                    if (checkTruncationLengthIfExpanding(context) && (i + 2 < symbolTable.size - 1)) {
+                        context.out.truncated = true;
+                        results.push(createTruncationStatement(`... (${symbolTable.size - i} more ...)`));
+                        serializeSymbol(symbols[symbols.length - 1], /*isPrivate*/ false, !!propertyAsAlias);
+                        break;
+                    }
                     serializeSymbol(symbol, /*isPrivate*/ false, !!propertyAsAlias);
-                });
+                }
                 if (!suppressNewPrivateContext) {
                     // deferredPrivates will be filled up by visiting the symbol table
                     // And will continue to iterate as elements are added while visited `deferredPrivates`
@@ -9274,6 +9493,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 && type.symbol?.valueDeclaration && isSourceFile(type.symbol.valueDeclaration)
                             ) {
                                 const alias = localName === propertyAccessRequire.parent.right.escapedText ? undefined : propertyAccessRequire.parent.right;
+                                context.approximateLength += 12 + ((alias?.escapedText as string | undefined)?.length ?? 0); // `export { alias };`
                                 addResult(
                                     factory.createExportDeclaration(
                                         /*modifiers*/ undefined,
@@ -9295,6 +9515,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     ),
                                     textRange,
                                 );
+                                context.approximateLength += 7 + name.length; // `var name: ;`
                                 addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
                                 if (name !== localName && !isPrivate) {
                                     // We rename the variable declaration we generate for Property symbols since they may have a name which
@@ -9318,6 +9539,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     // export { g_1 as g };
                                     // ```
                                     // To create an export named `g` that does _not_ shadow the local `g`
+                                    context.approximateLength += 16 + name.length + localName.length; // `export { name as localName };`
                                     addResult(
                                         factory.createExportDeclaration(
                                             /*modifiers*/ undefined,
@@ -9372,19 +9594,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         for (const node of symbol.declarations) {
                             const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
                             if (!resolvedModule) continue;
-                            addResult(factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ (node as ExportDeclaration).isTypeOnly, /*exportClause*/ undefined, factory.createStringLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
+                            const isTypeOnly = (node as ExportDeclaration).isTypeOnly;
+                            const specifier = getSpecifierForModuleSymbol(resolvedModule, context);
+                            context.approximateLength += 17 + specifier.length; // `export * from "specifier";`
+                            addResult(factory.createExportDeclaration(/*modifiers*/ undefined, isTypeOnly, /*exportClause*/ undefined, factory.createStringLiteral(specifier)), ModifierFlags.None);
                         }
                     }
                 }
                 if (needsPostExportDefault) {
-                    addResult(factory.createExportAssignment(/*modifiers*/ undefined, /*isExportEquals*/ false, factory.createIdentifier(getInternalSymbolName(symbol, symbolName))), ModifierFlags.None);
+                    const internalSymbolName = getInternalSymbolName(symbol, symbolName);
+                    context.approximateLength += 16 + internalSymbolName.length; // `export default internalName;`
+                    addResult(factory.createExportAssignment(/*modifiers*/ undefined, /*isExportEquals*/ false, factory.createIdentifier(internalSymbolName)), ModifierFlags.None);
                 }
                 else if (needsExportDeclaration) {
+                    const internalSymbolName = getInternalSymbolName(symbol, symbolName);
+                    context.approximateLength += 22 + symbolName.length + internalSymbolName.length; // `export { internalName as symbolName };`
                     addResult(
                         factory.createExportDeclaration(
                             /*modifiers*/ undefined,
                             /*isTypeOnly*/ false,
-                            factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, getInternalSymbolName(symbol, symbolName), symbolName)]),
+                            factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, internalSymbolName, symbolName)]),
                         ),
                         ModifierFlags.None,
                     );
@@ -9415,6 +9644,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Prepends a `declare` and/or `export` modifier if the context requires it, and then adds `node` to `result` and returns `node`
             function addResult(node: Statement, additionalModifierFlags: ModifierFlags) {
                 if (canHaveModifiers(node)) {
+                    const oldModifierFlags = getEffectiveModifierFlags(node);
                     let newModifierFlags: ModifierFlags = ModifierFlags.None;
                     const enclosingDeclaration = context.enclosingDeclaration &&
                         (isJSDocTypeAlias(context.enclosingDeclaration) ? getSourceFileOfNode(context.enclosingDeclaration) : context.enclosingDeclaration);
@@ -9438,8 +9668,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         newModifierFlags |= ModifierFlags.Default;
                     }
                     if (newModifierFlags) {
-                        node = factory.replaceModifiers(node, newModifierFlags | getEffectiveModifierFlags(node));
+                        node = factory.replaceModifiers(node, newModifierFlags | oldModifierFlags);
                     }
+                    context.approximateLength += modifiersLength(newModifierFlags | oldModifierFlags);
                 }
                 results.push(node);
             }
@@ -9458,9 +9689,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         && isJSDocTypeExpression(jsdocAliasDecl.typeExpression)
                         && syntacticNodeBuilder.tryReuseExistingTypeNode(context, jsdocAliasDecl.typeExpression.type)
                     || typeToTypeNodeHelper(aliasType, context);
+                const internalSymbolName = getInternalSymbolName(symbol, symbolName);
+                context.approximateLength += 8 + (commentText?.length ?? 0) + internalSymbolName.length; // `/* comment */ type name = ...`
                 addResult(
                     setSyntheticLeadingComments(
-                        factory.createTypeAliasDeclaration(/*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeNode),
+                        factory.createTypeAliasDeclaration(/*modifiers*/ undefined, internalSymbolName, typeParamDecls, typeNode),
                         !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }],
                     ),
                     modifierFlags,
@@ -9470,12 +9703,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeInterface(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
+                const internalSymbolName = getInternalSymbolName(symbol, symbolName);
+                context.approximateLength += 14 + internalSymbolName.length; // `interface name { }`
                 const interfaceType = getDeclaredTypeOfClassOrInterface(symbol);
                 const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                 const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
                 const baseTypes = getBaseTypes(interfaceType);
                 const baseType = length(baseTypes) ? getIntersectionType(baseTypes) : undefined;
-                const members = flatMap<Symbol, TypeElement>(getPropertiesOfType(interfaceType), p => serializePropertySymbolForInterface(p, baseType));
+                const members = serializePropertySymbolsForClassOrInterface(getPropertiesOfType(interfaceType), /*isClass*/ false, baseType);
                 const callSignatures = serializeSignatures(SignatureKind.Call, interfaceType, baseType, SyntaxKind.CallSignature) as CallSignatureDeclaration[];
                 const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, baseType, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
                 const indexSignatures = serializeIndexSignatures(interfaceType, baseType);
@@ -9484,13 +9719,70 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 addResult(
                     factory.createInterfaceDeclaration(
                         /*modifiers*/ undefined,
-                        getInternalSymbolName(symbol, symbolName),
+                        internalSymbolName,
                         typeParamDecls,
                         heritageClauses,
                         [...indexSignatures, ...constructSignatures, ...callSignatures, ...members],
                     ),
                     modifierFlags,
                 );
+            }
+
+            function serializePropertySymbolsForClassOrInterface(props: readonly Symbol[], isClass: false, baseType: Type | undefined): TypeElement[];
+            function serializePropertySymbolsForClassOrInterface(props: readonly Symbol[], isClass: true, baseType: Type | undefined, isStatic: boolean): ClassElement[];
+            function serializePropertySymbolsForClassOrInterface(props: readonly Symbol[], isClass: boolean, baseType: Type | undefined, isStatic?: boolean): (ClassElement | TypeElement)[] {
+                const elements: (ClassElement | TypeElement)[] = [];
+                let i = 0;
+                for (const prop of props) {
+                    i++;
+                    if (checkTruncationLengthIfExpanding(context) && (i + 2 < props.length - 1)) {
+                        context.out.truncated = true;
+                        const placeholder = createTruncationProperty(`... ${props.length - i} more ... `, isClass);
+                        elements.push(placeholder);
+                        const result = isClass ?
+                            serializePropertySymbolForClass(props[props.length - 1], isStatic!, baseType) :
+                            serializePropertySymbolForInterface(props[props.length - 1], baseType);
+                        if (isArray(result)) {
+                            elements.push(...result);
+                        }
+                        else {
+                            elements.push(result);
+                        }
+                        break;
+                    }
+
+                    context.approximateLength += 1; // separator
+                    const result = isClass ?
+                        serializePropertySymbolForClass(prop, isStatic!, baseType) :
+                        serializePropertySymbolForInterface(prop, baseType);
+                    if (isArray(result)) {
+                        elements.push(...result);
+                    }
+                    else {
+                        elements.push(result);
+                    }
+                }
+                return elements;
+            }
+
+            function createTruncationProperty(dotDotDotText: string, isClass: boolean): TypeElement | ClassElement {
+                if (context.flags & NodeBuilderFlags.NoTruncation) {
+                    return addSyntheticLeadingComment(factory.createNotEmittedTypeElement(), SyntaxKind.MultiLineCommentTrivia, dotDotDotText);
+                }
+                return isClass ?
+                    factory.createPropertyDeclaration(
+                        /*modifiers*/ undefined,
+                        dotDotDotText,
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        /*initializer*/ undefined,
+                    ) :
+                    factory.createPropertySignature(
+                        /*modifiers*/ undefined,
+                        dotDotDotText,
+                        /*questionToken*/ undefined,
+                        /*type*/ undefined,
+                    );
             }
 
             function getNamespaceMembersForSerialization(symbol: Symbol) {
@@ -9514,15 +9806,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
                 const members = getNamespaceMembersForSerialization(symbol);
+                const expanding = isExpanding(context);
                 // Split NS members up by declaration - members whose parent symbol is the ns symbol vs those whose is not (but were added in later via merging)
-                const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol ? "real" : "merged");
+                const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol || expanding ? "real" : "merged");
                 const realMembers = locationMap.get("real") || emptyArray;
                 const mergedMembers = locationMap.get("merged") || emptyArray;
                 // TODO: `suppressNewPrivateContext` is questionable -we need to simply be emitting privates in whatever scope they were declared in, rather
                 // than whatever scope we traverse to them in. That's a bit of a complex rewrite, since we're not _actually_ tracking privates at all in advance,
                 // so we don't even have placeholders to fill in.
-                if (length(realMembers)) {
-                    const localName = getInternalSymbolName(symbol, symbolName);
+                if (length(realMembers) || expanding) {
+                    let localName: ModuleName;
+                    if (expanding) {
+                        // Use the same name as symbol display.
+                        const oldFlags = context.flags;
+                        context.flags |= NodeBuilderFlags.WriteTypeParametersInQualifiedName | SymbolFormatFlags.UseOnlyExternalAliasing;
+                        localName = symbolToNode(symbol, context, /*meaning*/ SymbolFlags.All) as ModuleName;
+                        context.flags = oldFlags;
+                    }
+                    else {
+                        const localText = getInternalSymbolName(symbol, symbolName);
+                        localName = factory.createIdentifier(localText);
+                        context.approximateLength += localText.length;
+                    }
                     serializeAsNamespaceDeclaration(realMembers, localName, modifierFlags, !!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Assignment)));
                 }
                 if (length(mergedMembers)) {
@@ -9558,23 +9863,62 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeEnum(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
+                const internalSymbolName = getInternalSymbolName(symbol, symbolName);
+                context.approximateLength += 9 + internalSymbolName.length; // `enum internalName { }`
+                const members: EnumMember[] = [];
+                const memberProps = filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember));
+                let i = 0;
+                for (const p of memberProps) {
+                    i++;
+                    if (checkTruncationLengthIfExpanding(context) && (i + 2 < memberProps.length - 1)) {
+                        context.out.truncated = true;
+                        members.push(factory.createEnumMember(` ... ${memberProps.length - i} more ... `));
+                        const last = memberProps[memberProps.length - 1];
+                        const initializedValue = last.declarations && last.declarations[0] && isEnumMember(last.declarations[0]) ? getConstantValue(last.declarations[0]) : undefined;
+                        const initializer = initializedValue === undefined ? undefined :
+                            typeof initializedValue === "string" ? factory.createStringLiteral(initializedValue) :
+                            factory.createNumericLiteral(initializedValue);
+                        const memberName = unescapeLeadingUnderscores(last.escapedName);
+                        const member = factory.createEnumMember(
+                            memberName,
+                            initializer,
+                        );
+                        members.push(member);
+                        break;
+                    }
+                    // TODO: Handle computed names
+                    // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
+                    // other way to get the possible const value of an enum member that I'm aware of, as the value is cached
+                    // _on the declaration_, not on the declaration's symbol...
+                    const memberDecl = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) ?
+                        p.declarations[0] :
+                        undefined;
+                    let initializer: Expression | undefined;
+                    let initializerLength: number;
+                    if (isExpanding(context) && memberDecl && memberDecl.initializer) {
+                        initializer = getSynthesizedDeepClone(memberDecl.initializer);
+                        initializerLength = memberDecl.initializer.end - memberDecl.initializer.pos;
+                    }
+                    else {
+                        const initializedValue = memberDecl && getConstantValue(memberDecl);
+                        initializer = initializedValue === undefined ? undefined :
+                            typeof initializedValue === "string" ? factory.createStringLiteral(initializedValue) :
+                            factory.createNumericLiteral(initializedValue);
+                        initializerLength = (initializer as StringLiteral | NumericLiteral | undefined)?.text.length ?? 0;
+                    }
+                    const memberName = unescapeLeadingUnderscores(p.escapedName);
+                    context.approximateLength += 4 + memberName.length + initializerLength; // `member = initializer,`
+                    const member = factory.createEnumMember(
+                        memberName,
+                        initializer,
+                    );
+                    members.push(member);
+                }
                 addResult(
                     factory.createEnumDeclaration(
                         factory.createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
-                        getInternalSymbolName(symbol, symbolName),
-                        map(filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember)), p => {
-                            // TODO: Handle computed names
-                            // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
-                            // other way to get the possible const value of an enum member that I'm aware of, as the value is cached
-                            // _on the declaration_, not on the declaration's symbol...
-                            const initializedValue = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) ? getConstantValue(p.declarations[0]) : undefined;
-                            return factory.createEnumMember(
-                                unescapeLeadingUnderscores(p.escapedName),
-                                initializedValue === undefined ? undefined :
-                                    typeof initializedValue === "string" ? factory.createStringLiteral(initializedValue) :
-                                    factory.createNumericLiteral(initializedValue),
-                            );
-                        }),
+                        internalSymbolName,
+                        members,
                     ),
                     modifierFlags,
                 );
@@ -9583,6 +9927,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             function serializeAsFunctionNamespaceMerge(type: Type, symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                 const signatures = getSignaturesOfType(type, SignatureKind.Call);
                 for (const sig of signatures) {
+                    context.approximateLength += 1; // ;
                     // Each overload becomes a separate function declaration, in order
                     const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context, { name: factory.createIdentifier(localName) }) as FunctionDeclaration;
                     addResult(setTextRange(context, decl, getSignatureTextRangeLocation(sig)), modifierFlags);
@@ -9590,8 +9935,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Module symbol emit will take care of module-y members, provided it has exports
                 if (!(symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) && !!symbol.exports && !!symbol.exports.size)) {
                     const props = filter(getPropertiesOfType(type), isNamespaceMember);
-                    serializeAsNamespaceDeclaration(props, localName, modifierFlags, /*suppressNewPrivateContext*/ true);
+                    context.approximateLength += localName.length;
+                    serializeAsNamespaceDeclaration(props, factory.createIdentifier(localName), modifierFlags, /*suppressNewPrivateContext*/ true);
                 }
+            }
+
+            function createTruncationStatement(dotDotDotText: string): Statement {
+                if (context.flags & NodeBuilderFlags.NoTruncation) {
+                    return addSyntheticLeadingComment(factory.createEmptyStatement(), SyntaxKind.MultiLineCommentTrivia, dotDotDotText);
+                }
+                return factory.createExpressionStatement(factory.createIdentifier(dotDotDotText));
             }
 
             function getSignatureTextRangeLocation(signature: Signature) {
@@ -9607,9 +9960,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return signature.declaration;
             }
 
-            function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: string, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
+            function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: ModuleName, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
+                const nodeFlags = isIdentifier(localName) ? NodeFlags.Namespace : NodeFlags.None;
+                const expanding = isExpanding(context);
                 if (length(props)) {
-                    const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) || some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) ? "local" : "remote");
+                    context.approximateLength += 14; // "namespace { }"
+                    const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) || some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) || expanding ? "local" : "remote");
                     const localProps = localVsRemoteMap.get("local") || emptyArray;
                     // handle remote props first - we need to make an `import` declaration that points at the module containing each remote
                     // prop in the outermost scope (TODO: a namespace within a namespace would need to be appropriately handled by this)
@@ -9628,7 +9984,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                     // Add a namespace
                     // Create namespace as non-synthetic so it is usable as an enclosing declaration
-                    let fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, factory.createIdentifier(localName), factory.createModuleBlock([]), NodeFlags.Namespace);
+                    let fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, localName, factory.createModuleBlock([]), nodeFlags);
                     setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
                     fakespace.locals = createSymbolTable(props);
                     fakespace.symbol = props[0].parent!;
@@ -9661,6 +10017,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         factory.createModuleBlock(exportModifierStripped),
                     );
                     addResult(fakespace, modifierFlags); // namespaces can never be default exported
+                }
+                else if (expanding) {
+                    context.approximateLength += 14; // "namespace { }"
+                    addResult(
+                        factory.createModuleDeclaration(
+                            /*modifiers*/ undefined,
+                            localName,
+                            factory.createModuleBlock([]),
+                            nodeFlags,
+                        ),
+                        modifierFlags,
+                    );
                 }
             }
 
@@ -9703,11 +10071,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeAsClass(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
+                context.approximateLength += 9 + localName.length; // `class localName { }`
                 const originalDecl = symbol.declarations?.find(isClassLike);
                 const oldEnclosing = context.enclosingDeclaration;
                 context.enclosingDeclaration = originalDecl || oldEnclosing;
                 const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                 const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
+                forEach(localParams, p => context.approximateLength += symbolName(p.symbol).length);
                 const classType = getTypeWithThisArgument(getDeclaredTypeOfClassOrInterface(symbol)) as InterfaceType;
                 const baseTypes = getBaseTypes(classType);
                 const originalImplements = originalDecl && getEffectiveImplementsTypeNodes(originalDecl);
@@ -9718,40 +10088,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const staticBaseType = isClass
                     ? getBaseConstructorTypeOfClass(staticType as InterfaceType)
                     : anyType;
+                context.approximateLength += (length(baseTypes) ? 8 : 0) + (length(implementsExpressions) ? 11 : 0); // `extends ` and `implements `
                 const heritageClauses = [
                     ...!length(baseTypes) ? [] : [factory.createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))],
                     ...!length(implementsExpressions) ? [] : [factory.createHeritageClause(SyntaxKind.ImplementsKeyword, implementsExpressions)],
                 ];
                 const symbolProps = getNonInheritedProperties(classType, baseTypes, getPropertiesOfType(classType));
-                const publicSymbolProps = filter(symbolProps, s => {
-                    // `valueDeclaration` could be undefined if inherited from
-                    // a union/intersection base type, but inherited properties
-                    // don't matter here.
-                    const valueDecl = s.valueDeclaration;
-                    return !!valueDecl && !(isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name));
-                });
-                const hasPrivateIdentifier = some(symbolProps, s => {
-                    // `valueDeclaration` could be undefined if inherited from
-                    // a union/intersection base type, but inherited properties
-                    // don't matter here.
-                    const valueDecl = s.valueDeclaration;
-                    return !!valueDecl && isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name);
-                });
+                const publicSymbolProps = filter(symbolProps, s => !isHashPrivate(s));
+                const hasPrivateIdentifier = some(symbolProps, isHashPrivate);
                 // Boil down all private properties into a single one.
                 const privateProperties = hasPrivateIdentifier ?
-                    [factory.createPropertyDeclaration(
-                        /*modifiers*/ undefined,
-                        factory.createPrivateIdentifier("#private"),
-                        /*questionOrExclamationToken*/ undefined,
-                        /*type*/ undefined,
-                        /*initializer*/ undefined,
-                    )] :
+                    isExpanding(context) ?
+                        serializePropertySymbolsForClassOrInterface(filter(symbolProps, isHashPrivate), /*isClass*/ true, baseTypes[0], /*isStatic*/ false) :
+                        [factory.createPropertyDeclaration(
+                            /*modifiers*/ undefined,
+                            factory.createPrivateIdentifier("#private"),
+                            /*questionOrExclamationToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined,
+                        )] :
                     emptyArray;
-                const publicProperties = flatMap<Symbol, ClassElement>(publicSymbolProps, p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
+                if (hasPrivateIdentifier && !isExpanding(context)) {
+                    context.approximateLength += 9; // `#private;`
+                }
+                const publicProperties = serializePropertySymbolsForClassOrInterface(publicSymbolProps, /*isClass*/ true, baseTypes[0], /*isStatic*/ false);
                 // Consider static members empty if symbol also has function or module meaning - function namespacey emit will handle statics
-                const staticMembers = flatMap(
+                const staticMembers = serializePropertySymbolsForClassOrInterface(
                     filter(getPropertiesOfType(staticType), p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && !isNamespaceMember(p)),
-                    p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType),
+                    /*isClass*/ true,
+                    staticBaseType,
+                    /*isStatic*/ true,
                 );
                 // When we encounter an `X.prototype.y` assignment in a JS file, we bind `X` as a class regardless as to whether
                 // the value is ever initialized with a class or function-like value. For cases where `X` could never be
@@ -9760,6 +10126,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !!symbol.valueDeclaration &&
                     isInJSFile(symbol.valueDeclaration) &&
                     !some(getSignaturesOfType(staticType, SignatureKind.Construct));
+                if (isNonConstructableClassLikeInJsFile) context.approximateLength += 21; // `private constructor()`
                 const constructors = isNonConstructableClassLikeInJsFile ?
                     [factory.createConstructorDeclaration(factory.createModifiersFromModifierFlags(ModifierFlags.Private), [], /*body*/ undefined)] :
                     serializeSignatures(SignatureKind.Construct, staticType, staticBaseType, SyntaxKind.Constructor) as ConstructorDeclaration[];
@@ -9828,6 +10195,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // const { SomeClass } = require('./lib');
                             const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // './lib'
                             const { propertyName } = node as BindingElement;
+                            const propertyNameText = propertyName && isIdentifier(propertyName) ? idText(propertyName) : undefined;
+                            context.approximateLength += 24 + localName.length + specifier.length + (propertyNameText?.length ?? 0); // `import { propertyName as name } from "specifier";`
                             addResult(
                                 factory.createImportDeclaration(
                                     /*modifiers*/ undefined,
@@ -9836,7 +10205,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         /*name*/ undefined,
                                         factory.createNamedImports([factory.createImportSpecifier(
                                             /*isTypeOnly*/ false,
-                                            propertyName && isIdentifier(propertyName) ? factory.createIdentifier(idText(propertyName)) : undefined,
+                                            propertyNameText ? factory.createIdentifier(propertyNameText) : undefined,
                                             factory.createIdentifier(localName),
                                         )]),
                                     ),
@@ -9867,6 +10236,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             const uniqueName = factory.createUniqueName(localName); // _x
                             const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // 'y'
                             // import _x = require('y');
+                            context.approximateLength += 22 + specifier.length + idText(uniqueName).length; // `import uniqueName = require("specifier");`
                             addResult(
                                 factory.createImportEqualsDeclaration(
                                     /*modifiers*/ undefined,
@@ -9877,6 +10247,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 ModifierFlags.None,
                             );
                             // import x = _x.z
+                            context.approximateLength += 12 + localName.length + idText(uniqueName).length + idText(initializer.name).length; // `import localName = uniqueName.initializerName;`
                             addResult(
                                 factory.createImportEqualsDeclaration(
                                     /*modifiers*/ undefined,
@@ -9899,6 +10270,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // Could be a local `import localName = ns.member` or
                         // an external `import localName = require("whatever")`
                         const isLocalImport = !(target.flags & SymbolFlags.ValueModule) && !isVariableDeclaration(node);
+                        context.approximateLength += 11 + localName.length + unescapeLeadingUnderscores(target.escapedName).length; // `import localName = target;`
                         addResult(
                             factory.createImportEqualsDeclaration(
                                 /*modifiers*/ undefined,
@@ -9922,6 +10294,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const specifier = context.bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportClause).parent.moduleSpecifier;
                         const attributes = isImportDeclaration(node.parent) ? node.parent.attributes : undefined;
                         const isTypeOnly = isJSDocImportTag((node as ImportClause).parent);
+                        context.approximateLength += 14 + localName.length + 3 + (isTypeOnly ? 4 : 0); // `import localName from specifier;`, approximate specifier
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
@@ -9937,6 +10310,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = context.bundled ? factory.createStringLiteral(generatedSpecifier) : (node as NamespaceImport).parent.parent.moduleSpecifier;
                         const isTypeOnly = isJSDocImportTag((node as NamespaceImport).parent.parent);
+                        context.approximateLength += 19 + localName.length + 3 + (isTypeOnly ? 4 : 0); // `import * as localName from specifier;`, approximate specifier
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
@@ -9949,6 +10323,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         break;
                     }
                     case SyntaxKind.NamespaceExport:
+                        context.approximateLength += 19 + localName.length + 3; // `export * as localName from specifier;`, approximate specifier
                         addResult(
                             factory.createExportDeclaration(
                                 /*modifiers*/ undefined,
@@ -9963,6 +10338,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = context.bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportSpecifier).parent.parent.parent.moduleSpecifier;
                         const isTypeOnly = isJSDocImportTag((node as ImportSpecifier).parent.parent.parent);
+                        context.approximateLength += 19 + localName.length + 3 + (isTypeOnly ? 4 : 0); // `import { localName } from specifier;`, approximate specifier
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
@@ -10024,6 +10400,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeExportSpecifier(localName: string, targetName: string, specifier?: Expression) {
+                context.approximateLength += 16 + localName.length + (localName !== targetName ? targetName.length : 0); // `export { targetName as localName };`
                 addResult(
                     factory.createExportDeclaration(
                         /*modifiers*/ undefined,
@@ -10072,6 +10449,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const prevDisableTrackSymbol = context.tracker.disableTrackSymbol;
                     context.tracker.disableTrackSymbol = true;
                     if (isExportAssignmentCompatibleSymbolName) {
+                        context.approximateLength += 10; // `export = ;`
                         results.push(factory.createExportAssignment(
                             /*modifiers*/ undefined,
                             isExportEquals,
@@ -10089,6 +10467,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else {
                             // serialize as `import _Ref = t.arg.et; export { _Ref as name }`
                             const varName = getUnusedName(name, symbol);
+                            context.approximateLength += varName.length + 10; // `import name = ;`
                             addResult(
                                 factory.createImportEqualsDeclaration(
                                     /*modifiers*/ undefined,
@@ -10116,6 +10495,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     else {
                         const flags = context.enclosingDeclaration?.kind === SyntaxKind.ModuleDeclaration && (!(symbol.flags & SymbolFlags.Accessor) || symbol.flags & SymbolFlags.SetAccessor) ? NodeFlags.Let : NodeFlags.Const;
+                        context.approximateLength += varName.length + 5; // `var name: ;`
                         const statement = factory.createVariableStatement(
                             /*modifiers*/ undefined,
                             factory.createVariableDeclarationList([
@@ -10132,6 +10512,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         );
                     }
                     if (isExportAssignmentCompatibleSymbolName) {
+                        context.approximateLength += varName.length + 10; // `export = name;`
                         results.push(factory.createExportAssignment(
                             /*modifiers*/ undefined,
                             isExportEquals,
@@ -10208,7 +10589,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => T | AccessorDeclaration | (T | AccessorDeclaration)[] {
                 return function serializePropertySymbol(p: Symbol, isStatic: boolean, baseType: Type | undefined): T | AccessorDeclaration | (T | AccessorDeclaration)[] {
                     const modifierFlags = getDeclarationModifierFlagsFromSymbol(p);
-                    const isPrivate = !!(modifierFlags & ModifierFlags.Private);
+                    const omitType = !!(modifierFlags & ModifierFlags.Private) && !isExpanding(context);
                     if (isStatic && (p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias))) {
                         // Only value-only-meaning symbols can be correctly encoded as class statics, type/namespace/alias meaning symbols
                         // need to be merged namespace members
@@ -10246,6 +10627,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             Debug.assert(!!setter);
                             const paramSymbol = isFunctionLikeDeclaration(setter) ? getSignatureFromDeclaration(setter).parameters[0] : undefined;
                             const setterDeclaration = p.declarations?.find(isSetAccessor);
+                            context.approximateLength += modifiersLength(flag) + 7 + (paramSymbol ? symbolName(paramSymbol).length : 5) + (omitType ? 0 : 2); // `modifiers set name(param);`, approximate name
                             result.push(setTextRange(
                                 context,
                                 factory.createSetAccessorDeclaration(
@@ -10256,7 +10638,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         /*dotDotDotToken*/ undefined,
                                         paramSymbol ? parameterToParameterDeclarationName(paramSymbol, getEffectiveParameterDeclaration(paramSymbol), context) : "value",
                                         /*questionToken*/ undefined,
-                                        isPrivate ? undefined : serializeTypeForDeclaration(context, setterDeclaration, getWriteTypeOfSymbol(p), p),
+                                        omitType ? undefined : serializeTypeForDeclaration(context, setterDeclaration, getWriteTypeOfSymbol(p), p),
                                     )],
                                     /*body*/ undefined,
                                 ),
@@ -10264,15 +10646,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             ));
                         }
                         if (p.flags & SymbolFlags.GetAccessor) {
-                            const isPrivate = modifierFlags & ModifierFlags.Private;
                             const getterDeclaration = p.declarations?.find(isGetAccessor);
+                            context.approximateLength += modifiersLength(flag) + 8 + (omitType ? 0 : 2); // `modifiers get name(): ;`, approximate name
                             result.push(setTextRange(
                                 context,
                                 factory.createGetAccessorDeclaration(
                                     factory.createModifiersFromModifierFlags(flag),
                                     name,
                                     [],
-                                    isPrivate ? undefined : serializeTypeForDeclaration(context, getterDeclaration, getTypeOfSymbol(p), p),
+                                    omitType ? undefined : serializeTypeForDeclaration(context, getterDeclaration, getTypeOfSymbol(p), p),
                                     /*body*/ undefined,
                                 ),
                                 getterDeclaration ?? firstPropertyLikeDecl,
@@ -10283,13 +10665,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // This is an else/if as accessors and properties can't merge in TS, but might in JS
                     // If this happens, we assume the accessor takes priority, as it imposes more constraints
                     else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable | SymbolFlags.Accessor)) {
+                        const modifierFlags = (isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag;
+                        context.approximateLength += 2 + (omitType ? 0 : 2) + modifiersLength(modifierFlags); // `modifiers name: ;`, approximate name
                         return setTextRange(
                             context,
                             createProperty(
-                                factory.createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag),
+                                factory.createModifiersFromModifierFlags(modifierFlags),
                                 name,
                                 p.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                                isPrivate ? undefined : serializeTypeForDeclaration(context, p.declarations?.find(isSetAccessorDeclaration), getWriteTypeOfSymbol(p), p),
+                                omitType ? undefined : serializeTypeForDeclaration(context, p.declarations?.find(isSetAccessorDeclaration), getWriteTypeOfSymbol(p), p),
                                 // TODO: https://github.com/microsoft/TypeScript/pull/32372#discussion_r328386357
                                 // interface members can't have initializers, however class members _can_
                                 /*initializer*/ undefined,
@@ -10300,11 +10684,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (p.flags & (SymbolFlags.Method | SymbolFlags.Function)) {
                         const type = getTypeOfSymbol(p);
                         const signatures = getSignaturesOfType(type, SignatureKind.Call);
-                        if (flag & ModifierFlags.Private) {
+                        if (omitType) {
+                            const modifierFlags = (isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag;
+                            context.approximateLength += 1 + modifiersLength(modifierFlags); // `modifiers name;`, approximate name
                             return setTextRange(
                                 context,
                                 createProperty(
-                                    factory.createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag),
+                                    factory.createModifiersFromModifierFlags(modifierFlags),
                                     name,
                                     p.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                                     /*type*/ undefined,
@@ -10316,6 +10702,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         const results = [];
                         for (const sig of signatures) {
+                            context.approximateLength += 1; // ;
                             // Each overload becomes a separate method declaration, in order
                             const decl = signatureToSignatureDeclarationHelper(
                                 sig,
@@ -10335,6 +10722,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // The `Constructor`'s symbol isn't in the class's properties lists, obviously, since it's a signature on the static
                     return Debug.fail(`Unhandled class member kind! ${(p as any).__debugFlags || p.flags}`);
                 };
+            }
+
+            function modifiersLength(flags: ModifierFlags): number {
+                let result = 0;
+                // Include the trailing space after the modifier keyword.
+                if (flags & ModifierFlags.Export) result += 7;
+                if (flags & ModifierFlags.Ambient) result += 8;
+                if (flags & ModifierFlags.Default) result += 8;
+                if (flags & ModifierFlags.Const) result += 6;
+                if (flags & ModifierFlags.Public) result += 7;
+                if (flags & ModifierFlags.Private) result += 8;
+                if (flags & ModifierFlags.Protected) result += 10;
+                if (flags & ModifierFlags.Abstract) result += 9;
+                if (flags & ModifierFlags.Static) result += 7;
+                if (flags & ModifierFlags.Override) result += 9;
+                if (flags & ModifierFlags.Readonly) result += 9;
+                if (flags & ModifierFlags.Accessor) result += 9;
+                if (flags & ModifierFlags.Async) result += 6;
+                if (flags & ModifierFlags.In) result += 3;
+                if (flags & ModifierFlags.Out) result += 4;
+                return result;
             }
 
             function serializePropertySymbolForInterface(p: Symbol, baseType: Type | undefined) {
@@ -10387,6 +10795,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const results = [];
                 for (const sig of signatures) {
+                    context.approximateLength += 1; // ;
                     // Each overload becomes a separate constructor declaration, in order
                     const decl = signatureToSignatureDeclarationHelper(sig, outputKind, context);
                     results.push(setTextRange(context, decl, sig.declaration));
@@ -10506,6 +10915,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return localName;
             }
         }
+
+        function isExpanding(context: NodeBuilderContext) {
+            return context.maxExpansionDepth !== -1;
+        }
+
+        function isHashPrivate(s: Symbol): boolean {
+            // `valueDeclaration` could be undefined if inherited from
+            // a union/intersection base type, but inherited properties
+            // don't matter here.
+            return !!s.valueDeclaration && isNamedDeclaration(s.valueDeclaration) && isPrivateIdentifier(s.valueDeclaration.name);
+        }
+
+        function getClonedHashPrivateName(s: Symbol): PrivateIdentifier | undefined {
+            if (s.valueDeclaration && isNamedDeclaration(s.valueDeclaration) && isPrivateIdentifier(s.valueDeclaration.name)) {
+                return factory.cloneNode(s.valueDeclaration.name);
+            }
+            return undefined;
+        }
+    }
+
+    /** Returns true if a type is declared in a lib file. */
+    // Don't expand types like `Array` or `Promise`, instead treating them as opaque.
+    function isLibType(type: Type): boolean {
+        const symbol = (getObjectFlags(type) & ObjectFlags.Reference) !== 0 ? (type as TypeReference).target.symbol : type.symbol;
+        return isTupleType(type) || !!(symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))));
     }
 
     function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer?: EmitTextWriter): string {
@@ -10521,14 +10955,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function formatUnionTypes(types: readonly Type[]): Type[] {
+    function formatUnionTypes(types: readonly Type[], expandingEnum: boolean): Type[] {
         const result: Type[] = [];
         let flags = 0 as TypeFlags;
         for (let i = 0; i < types.length; i++) {
             const t = types[i];
             flags |= t.flags;
             if (!(t.flags & TypeFlags.Nullable)) {
-                if (t.flags & (TypeFlags.BooleanLiteral | TypeFlags.EnumLike)) {
+                if (t.flags & (TypeFlags.BooleanLiteral) || !expandingEnum && (t.flags | TypeFlags.EnumLike)) {
                     const baseType = t.flags & TypeFlags.BooleanLiteral ? booleanType : getBaseTypeOfEnumLikeType(t as LiteralType);
                     if (baseType.flags & TypeFlags.Union) {
                         const count = (baseType as UnionType).types.length;
@@ -15507,6 +15941,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isInJSFile(declaration) &&
                 isValueSignatureDeclaration(declaration) &&
                 !hasJSDocParameterTags(declaration) &&
+                !some(declaration.parameters, p => !!getJSDocType(p)) &&
                 !getJSDocType(declaration) &&
                 !getContextualSignatureForFunctionLikeDeclaration(declaration);
             if (isUntypedSignatureInJSFile) {
@@ -50576,6 +51011,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             },
+            symbolToDeclarations: (symbol, meaning, flags, verbosityLevel, out) => {
+                return nodeBuilder.symbolToDeclarations(symbol, meaning, flags, verbosityLevel, out);
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
@@ -52910,6 +53348,8 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     flags: NodeBuilderFlags;
     internalFlags: InternalNodeBuilderFlags;
     tracker: SymbolTrackerImpl;
+    /* Maximum depth we're allowed to expand names. */
+    readonly maxExpansionDepth: number;
 
     // State
     encounteredError: boolean;
@@ -52933,7 +53373,13 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     reverseMappedStack: ReverseMappedSymbol[] | undefined;
     bundled: boolean;
     mapper: TypeMapper | undefined;
+    /* How many levels of nested names we have expanded so far. */
+    depth: number;
     suppressReportInferenceFallback: boolean;
+    typeStack: number[];
+
+    // Output
+    out: WriterContextOut;
 }
 
 class SymbolTrackerImpl implements SymbolTracker {

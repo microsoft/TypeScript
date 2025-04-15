@@ -2392,10 +2392,10 @@ export class Session<TMessage = string> implements EventSender {
         return languageService.isValidBraceCompletionAtPosition(file, position, args.openingBrace.charCodeAt(0));
     }
 
-    private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo | undefined {
+    private getQuickInfoWorker(args: protocol.QuickInfoRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo | undefined {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-        const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo));
+        const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo), args.verbosityLevel);
         if (!quickInfo) {
             return undefined;
         }
@@ -2411,6 +2411,7 @@ export class Session<TMessage = string> implements EventSender {
                 displayString,
                 documentation: useDisplayParts ? this.mapDisplayParts(quickInfo.documentation, project) : displayPartsToString(quickInfo.documentation),
                 tags: this.mapJSDocTagInfo(quickInfo.tags, project, useDisplayParts),
+                canIncreaseVerbosityLevel: quickInfo.canIncreaseVerbosityLevel,
             };
         }
         else {
