@@ -2478,7 +2478,7 @@ export namespace Core {
             cancellationToken.throwIfCancellationRequested();
             return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
                 if (isStringLiteralLike(ref) && ref.text === node.text) {
-                    if (type) {
+                    if (type && !isStringLiteralPropertyReference(node, checker)) {
                         const refType = getContextualTypeFromParentOrAncestorTypeNode(ref, checker);
                         if (type !== checker.getStringType() && (type === refType || isStringLiteralPropertyReference(ref, checker))) {
                             return nodeEntry(ref, EntryKind.StringLiteral);
