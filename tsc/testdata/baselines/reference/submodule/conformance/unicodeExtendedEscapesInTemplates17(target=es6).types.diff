@@ -1,9 +1,0 @@
---- old.unicodeExtendedEscapesInTemplates17(target=es6).types
-+++ new.unicodeExtendedEscapesInTemplates17(target=es6).types
-@@= skipped -2, +2 lines =@@
- === unicodeExtendedEscapesInTemplates17.ts ===
- var x = `\u{r}\u{n}\u{t}`;
- >x : string
-->`\u{r}\u{n}\u{t}` : "\\u{r}\\u{n}\\u{t}"
-+>`\u{r}\u{n}\u{t}` : "\u{r}\u{n}\u{t}"
- 

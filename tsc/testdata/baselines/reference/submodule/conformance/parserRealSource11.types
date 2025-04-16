@@ -717,7 +717,7 @@ module TypeScript {
 >name : string
 >charAt : (pos: number) => string
 >i : number
->'\\' : "\"
+>'\\' : "\\"
 >name.charAt(i+1) == 'u' : boolean
 >name.charAt(i+1) : string
 >name.charAt : (pos: number) => string

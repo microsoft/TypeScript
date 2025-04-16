@@ -1,9 +1,0 @@
---- old.unicodeExtendedEscapesInStrings07(target=es6).types
-+++ new.unicodeExtendedEscapesInStrings07(target=es6).types
-@@= skipped -4, +4 lines =@@
- //  1. Assert: 0 ≤ cp ≤ 0x10FFFF.
- var x = "\u{110000}";
- >x : string
-->"\u{110000}" : "\\u{110000}"
-+>"\u{110000}" : "\u{110000}"
- 

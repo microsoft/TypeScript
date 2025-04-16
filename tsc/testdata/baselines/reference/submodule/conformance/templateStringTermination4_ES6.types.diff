@@ -1,9 +1,0 @@
---- old.templateStringTermination4_ES6.types
-+++ new.templateStringTermination4_ES6.types
-@@= skipped -1, +1 lines =@@
- 
- === templateStringTermination4_ES6.ts ===
- `\\\\`
-->`\\\\` : "\\\\"
-+>`\\\\` : "\\"
- 

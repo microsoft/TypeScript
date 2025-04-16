@@ -1,9 +1,0 @@
---- old.unicodeExtendedEscapesInTemplates12(target=es5).types
-+++ new.unicodeExtendedEscapesInTemplates12(target=es5).types
-@@= skipped -2, +2 lines =@@
- === unicodeExtendedEscapesInTemplates12.ts ===
- var x = `\u{FFFFFFFF}`;
- >x : string
-->`\u{FFFFFFFF}` : "\\u{FFFFFFFF}"
-+>`\u{FFFFFFFF}` : "\u{FFFFFFFF}"
- 

@@ -1,9 +1,0 @@
---- old.unicodeExtendedEscapesInStrings21(target=es5).types
-+++ new.unicodeExtendedEscapesInStrings21(target=es5).types
-@@= skipped -2, +2 lines =@@
- === unicodeExtendedEscapesInStrings21.ts ===
- var x = "\u{67";
- >x : string
-->"\u{67" : "\\u{67"
-+>"\u{67" : "\u{67"
- 

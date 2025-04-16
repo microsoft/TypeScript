@@ -15,7 +15,7 @@ try {
 >$ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx)) : any
 >$ERROR : any
 >'#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx) : string
->'#6.1: var \\u0078x = 1; xx === 6. Actual: ' : "#6.1: var \u0078x = 1; xx === 6. Actual: "
+>'#6.1: var \\u0078x = 1; xx === 6. Actual: ' : "#6.1: var \\u0078x = 1; xx === 6. Actual: "
 >(xx) : number
 >xx : number
   }
@@ -27,7 +27,7 @@ catch (e) {
 >$ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx)) : any
 >$ERROR : any
 >'#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx) : string
->'#6.2: var \\u0078x = 1; xx === 6. Actual: ' : "#6.2: var \u0078x = 1; xx === 6. Actual: "
+>'#6.2: var \\u0078x = 1; xx === 6. Actual: ' : "#6.2: var \\u0078x = 1; xx === 6. Actual: "
 >(xx) : number
 >xx : number
 

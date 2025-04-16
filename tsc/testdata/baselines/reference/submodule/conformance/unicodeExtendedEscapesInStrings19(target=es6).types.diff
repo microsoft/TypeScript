@@ -1,9 +1,0 @@
---- old.unicodeExtendedEscapesInStrings19(target=es6).types
-+++ new.unicodeExtendedEscapesInStrings19(target=es6).types
-@@= skipped -2, +2 lines =@@
- === unicodeExtendedEscapesInStrings19.ts ===
- var x = "\u{}";
- >x : string
-->"\u{}" : "\\u{}"
-+>"\u{}" : "\u{}"
- 

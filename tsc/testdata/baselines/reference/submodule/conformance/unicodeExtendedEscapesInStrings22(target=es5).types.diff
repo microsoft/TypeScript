@@ -1,9 +1,0 @@
---- old.unicodeExtendedEscapesInStrings22(target=es5).types
-+++ new.unicodeExtendedEscapesInStrings22(target=es5).types
-@@= skipped -2, +2 lines =@@
- === unicodeExtendedEscapesInStrings22.ts ===
- var x = "\u{00000000000067";
- >x : string
-->"\u{00000000000067" : "\\u{00000000000067"
-+>"\u{00000000000067" : "\u{00000000000067"
- 

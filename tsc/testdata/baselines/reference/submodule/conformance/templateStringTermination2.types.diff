@@ -1,9 +1,0 @@
---- old.templateStringTermination2.types
-+++ new.templateStringTermination2.types
-@@= skipped -1, +1 lines =@@
- 
- === templateStringTermination2.ts ===
- `\\`
-->`\\` : "\\"
-+>`\\` : "\"
- 

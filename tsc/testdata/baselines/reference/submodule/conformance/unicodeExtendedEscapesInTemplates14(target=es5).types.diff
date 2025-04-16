@@ -1,9 +1,0 @@
---- old.unicodeExtendedEscapesInTemplates14(target=es5).types
-+++ new.unicodeExtendedEscapesInTemplates14(target=es5).types
-@@= skipped -3, +3 lines =@@
- // Shouldn't work, negatives are not allowed.
- var x = `\u{-DDDD}`;
- >x : string
-->`\u{-DDDD}` : "\\u{-DDDD}"
-+>`\u{-DDDD}` : "\u{-DDDD}"
- 

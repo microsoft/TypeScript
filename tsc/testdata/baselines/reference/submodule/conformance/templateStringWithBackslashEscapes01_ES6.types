@@ -7,13 +7,13 @@ var a = `hello\world`;
 
 var b = `hello\\world`;
 >b : string
->`hello\\world` : "hello\world"
+>`hello\\world` : "hello\\world"
 
 var c = `hello\\\world`;
 >c : string
->`hello\\\world` : "hello\world"
+>`hello\\\world` : "hello\\world"
 
 var d = `hello\\\\world`;
 >d : string
->`hello\\\\world` : "hello\\world"
+>`hello\\\\world` : "hello\\\\world"
 

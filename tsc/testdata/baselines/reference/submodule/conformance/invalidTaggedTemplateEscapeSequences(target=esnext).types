@@ -33,8 +33,8 @@ const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uwor
 >300 : 300
 
 const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`; // should error with NoSubstitutionTemplate
->y : "\u{hello} 100 \xtraordinary 200 wonderful 300 \uworld"
->`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld` : "\u{hello} 100 \xtraordinary 200 wonderful 300 \uworld"
+>y : "\\u{hello} 100 \\xtraordinary 200 wonderful 300 \\uworld"
+>`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld` : "\\u{hello} 100 \\xtraordinary 200 wonderful 300 \\uworld"
 >100 : 100
 >200 : 200
 >300 : 300
@@ -43,7 +43,7 @@ const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tag
 >z : any
 >tag`\u{hello} \xtraordinary wonderful \uworld` : any
 >tag : (str: any, ...args: any[]) => any
->`\u{hello} \xtraordinary wonderful \uworld` : "\u{hello} \xtraordinary wonderful \uworld"
+>`\u{hello} \xtraordinary wonderful \uworld` : "\\u{hello} \\xtraordinary wonderful \\uworld"
 
 const a1 = tag`${ 100 }\0` // \0
 >a1 : any

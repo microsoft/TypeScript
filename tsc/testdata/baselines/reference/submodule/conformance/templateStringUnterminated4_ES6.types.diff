@@ -1,9 +1,0 @@
---- old.templateStringUnterminated4_ES6.types
-+++ new.templateStringUnterminated4_ES6.types
-@@= skipped -1, +1 lines =@@
- 
- === templateStringUnterminated4_ES6.ts ===
- `\\\`
-->`\\\` : "\\`"
-+>`\\\` : "\`"
- 

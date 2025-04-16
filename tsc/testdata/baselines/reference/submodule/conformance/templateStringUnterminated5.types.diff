@@ -1,9 +1,0 @@
---- old.templateStringUnterminated5.types
-+++ new.templateStringUnterminated5.types
-@@= skipped -1, +1 lines =@@
- 
- === templateStringUnterminated5.ts ===
- `\\\\\`
-->`\\\\\` : "\\\\`"
-+>`\\\\\` : "\\`"
- 

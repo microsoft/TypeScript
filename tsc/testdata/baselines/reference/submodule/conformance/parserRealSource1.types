@@ -375,7 +375,7 @@ module TypeScript {
                     result += "\\t";
 >result += "\\t" : string
 >result : string
->"\\t" : "\t"
+>"\\t" : "\\t"
 
                     break;
                 case 0x0a: // line feed
@@ -384,7 +384,7 @@ module TypeScript {
                     result += "\\n";
 >result += "\\n" : string
 >result : string
->"\\n" : "\n"
+>"\\n" : "\\n"
 
                     break;
                 case 0x0b: // vertical tab
@@ -393,7 +393,7 @@ module TypeScript {
                     result += "\\v";
 >result += "\\v" : string
 >result : string
->"\\v" : "\v"
+>"\\v" : "\\v"
 
                     break;
                 case 0x0c: // form feed
@@ -402,7 +402,7 @@ module TypeScript {
                     result += "\\f";
 >result += "\\f" : string
 >result : string
->"\\f" : "\f"
+>"\\f" : "\\f"
 
                     break;
                 case 0x0d: // carriage return
@@ -411,7 +411,7 @@ module TypeScript {
                     result += "\\r";
 >result += "\\r" : string
 >result : string
->"\\r" : "\r"
+>"\\r" : "\\r"
 
                     break;
                 case 0x22:  // double quote
@@ -420,7 +420,7 @@ module TypeScript {
                     result += "\\\"";
 >result += "\\\"" : string
 >result : string
->"\\\"" : "\\""
+>"\\\"" : "\\\""
 
                     break;
                 case 0x27: // single quote
@@ -429,7 +429,7 @@ module TypeScript {
                     result += "\\\'";
 >result += "\\\'" : string
 >result : string
->"\\\'" : "\'"
+>"\\\'" : "\\'"
 
                     break;
                 case 0x5c: // Backslash
@@ -438,7 +438,7 @@ module TypeScript {
                     result += "\\";
 >result += "\\" : string
 >result : string
->"\\" : "\"
+>"\\" : "\\"
 
                     break;
                 default:
