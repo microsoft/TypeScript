@@ -29342,27 +29342,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We first attempt to filter the current type, narrowing constituents as appropriate and removing
             // constituents that are unrelated to the candidate.
             const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
-            const keyPropertyName = type.flags & TypeFlags.Union ? getKeyPropertyName(type as UnionType) : undefined;
-            const narrowedType = mapType(candidate, c => {
-                // If a discriminant property is available, use that to reduce the type.
-                const discriminant = keyPropertyName && getTypeOfPropertyOfType(c, keyPropertyName);
-                const matching = discriminant && getConstituentTypeForKeyType(type as UnionType, discriminant);
-                // For each constituent t in the current type, if t and and c are directly related, pick the most
-                // specific of the two. When t and c are related in both directions, we prefer c for type predicates
-                // because that is the asserted type, but t for `instanceof` because generics aren't reflected in
-                // prototype object types.
-                const directlyRelated = mapType(
-                    matching || type,
-                    checkDerived ?
-                        t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
-                        t => isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType,
-                );
-                // If no constituents are directly related, create intersections for any generic constituents that
-                // are related by constraint.
-                return directlyRelated.flags & TypeFlags.Never ?
-                    mapType(type, t => maybeTypeOfKind(t, TypeFlags.Instantiable) && isRelated(c, getBaseConstraintOfType(t) || unknownType) ? getIntersectionType([t, c]) : neverType) :
-                    directlyRelated;
-            });
+            let matchedCandidates: Type[] = [];
+            let narrowedType = mapType(type, t =>
+                mapType(
+                    candidate,
+                    c => {
+                        const directlyRelated = checkDerived ?
+                            (isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType) :
+                            (isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType);
+                        if (!(directlyRelated.flags & TypeFlags.Never)) {
+                            matchedCandidates = appendIfUnique(matchedCandidates, c);
+                        }
+                        return directlyRelated;
+                    },
+                ));
+            if (matchedCandidates.length !== countTypes(candidate)) {
+                narrowedType = getUnionType([
+                    narrowedType,
+                    mapType(candidate, c => {
+                        return !containsType(matchedCandidates, c)
+                            ? mapType(type, t => maybeTypeOfKind(t, TypeFlags.Instantiable) && isRelated(c, getBaseConstraintOfType(t) || unknownType) ? getIntersectionType([t, c]) : neverType)
+                            : neverType;
+                    }),
+                ]);
+            }
             // If filtering produced a non-empty type, return that. Otherwise, pick the most specific of the two
             // based on assignability, or as a last resort produce an intersection.
             return !(narrowedType.flags & TypeFlags.Never) ? narrowedType :

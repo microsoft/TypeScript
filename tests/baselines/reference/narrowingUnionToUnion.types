@@ -557,8 +557,8 @@ if (isEmpty(test)) {
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     test;  // EmptyString
->test : EmptyString
->     : ^^^^^^^^^^^
+>test : "" | null | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #43825
