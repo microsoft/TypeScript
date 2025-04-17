@@ -116,3 +116,26 @@ test.tags();
 >tags : () => void
 >     : ^^^^^^    
 
+export var noPrivates2 = class {
+>noPrivates2 : typeof noPrivates2
+>            : ^^^^^^^^^^^^^^^^^^
+>class {    static getTags() { }    tags() { }    #p = -1} : typeof noPrivates2
+>                                                          : ^^^^^^^^^^^^^^^^^^
+
+    static getTags() { }
+>getTags : () => void
+>        : ^^^^^^^^^^
+
+    tags() { }
+>tags : () => void
+>     : ^^^^^^^^^^
+
+    #p = -1
+>#p : number
+>   : ^^^^^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+}
+
