@@ -29342,17 +29342,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We first attempt to filter the current type, narrowing constituents as appropriate and removing
             // constituents that are unrelated to the candidate.
             const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
-            const keyPropertyName = type.flags & TypeFlags.Union ? getKeyPropertyName(type as UnionType) : undefined;
-            const discriminantMatchingType = keyPropertyName ?
-                mapType(candidate, c => {
-                    const discriminant = keyPropertyName && getTypeOfPropertyOfType(c, keyPropertyName);
-                    return (discriminant && getConstituentTypeForKeyType(type as UnionType, discriminant)) ?? neverType;
-                }) :
-                neverType;
             let matchedCandidates: Type[] = [];
-            let narrowedType = mapType(
-                !(discriminantMatchingType.flags & TypeFlags.Never) ? discriminantMatchingType : type,
-                t => mapType(
+            let narrowedType = mapType(type, t =>
+                mapType(
                     candidate,
                     c => {
                         const directlyRelated = checkDerived ?
@@ -29363,8 +29355,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return directlyRelated;
                     },
-                ),
-            );
+                ));
             if (matchedCandidates.length !== countTypes(candidate)) {
                 narrowedType = getUnionType([
                     narrowedType,
