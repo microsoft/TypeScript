@@ -133,9 +133,9 @@ const compileOnSaveCommandLineOption: CommandLineOption = {
 const jsxOptionMap = new Map(Object.entries({
     "preserve": JsxEmit.Preserve,
     "react-native": JsxEmit.ReactNative,
-    "react": JsxEmit.React,
     "react-jsx": JsxEmit.ReactJSX,
     "react-jsxdev": JsxEmit.ReactJSXDev,
+    "react": JsxEmit.React,
 }));
 
 /** @internal */
