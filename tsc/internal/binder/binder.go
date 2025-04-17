@@ -324,7 +324,7 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			}
 			return GetSymbolNameForPrivateIdentifier(containingClass.Symbol(), name.Text())
 		}
-		if ast.IsPropertyNameLiteral(name) {
+		if ast.IsPropertyNameLiteral(name) || ast.IsJsxNamespacedName(name) {
 			return name.Text()
 		}
 		if ast.IsComputedPropertyName(name) {
@@ -339,9 +339,6 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			}
 			panic("Only computed properties with literal names have declaration names")
 		}
-		// if isJsxNamespacedName(name) {
-		// 	return getEscapedTextOfJsxNamespacedName(name)
-		// }
 		return ast.InternalSymbolNameMissing
 	}
 	switch node.Kind {

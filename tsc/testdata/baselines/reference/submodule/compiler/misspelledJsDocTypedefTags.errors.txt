@@ -1,9 +1,10 @@
 a.js(2,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 a.js(4,48): error TS2304: Cannot find name 'B'.
+a.js(4,49): error TS8020: JSDoc types can only be used inside documentation comments.
 a.js(5,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 
 
-==== a.js (3 errors) ====
+==== a.js (4 errors) ====
     /** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
     Animation.AnimationModel.ScreenshotCapture.Request;
               ~~~~~~~~~~~~~~
@@ -12,6 +13,8 @@ a.js(5,11): error TS2339: Property 'AnimationModel' does not exist on type '{ ne
     /** @typedef {{ endTime: number, screenshots: !B.<string>}} */
                                                    ~
 !!! error TS2304: Cannot find name 'B'.
+                                                    ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
     Animation.AnimationModel.ScreenshotCapture.Request;
               ~~~~~~~~~~~~~~
 !!! error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.

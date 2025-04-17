@@ -7,7 +7,10 @@ const x = "oops";
 
 const y = + <1234> x;
 >y : number
->+ <1234> x : number
-><1234> x : 1234
+>+ < : number
+>< : any
+> : any
+>1234> x : boolean
+>1234 : 1234
 >x : "oops"
 

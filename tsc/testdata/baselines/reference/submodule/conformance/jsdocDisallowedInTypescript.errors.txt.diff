@@ -12,11 +12,6 @@
 -jsdocDisallowedInTypescript.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
 -jsdocDisallowedInTypescript.ts(16,11): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
 -jsdocDisallowedInTypescript.ts(17,17): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
--jsdocDisallowedInTypescript.ts(18,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
--jsdocDisallowedInTypescript.ts(18,17): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
--jsdocDisallowedInTypescript.ts(20,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
--jsdocDisallowedInTypescript.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
--jsdocDisallowedInTypescript.ts(22,17): error TS8020: JSDoc types can only be used inside documentation comments.
 +jsdocDisallowedInTypescript.ts(7,10): error TS7010: 'hof', which lacks return-type annotation, implicitly has an 'any' return type.
 +jsdocDisallowedInTypescript.ts(7,20): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +jsdocDisallowedInTypescript.ts(7,28): error TS1005: ',' expected.
@@ -42,15 +37,15 @@
 +jsdocDisallowedInTypescript.ts(15,34): error TS2693: 'number' only refers to a type, but is being used as a value here.
 +jsdocDisallowedInTypescript.ts(15,44): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +jsdocDisallowedInTypescript.ts(15,46): error TS7006: Parameter 'm' implicitly has an 'any' type.
-+jsdocDisallowedInTypescript.ts(17,23): error TS1005: ',' expected.
-+jsdocDisallowedInTypescript.ts(17,25): error TS1109: Expression expected.
-+jsdocDisallowedInTypescript.ts(18,23): error TS1005: ',' expected.
-+jsdocDisallowedInTypescript.ts(18,25): error TS1134: Variable declaration expected.
-+jsdocDisallowedInTypescript.ts(18,27): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+ jsdocDisallowedInTypescript.ts(18,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+-jsdocDisallowedInTypescript.ts(18,17): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
+-jsdocDisallowedInTypescript.ts(20,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+-jsdocDisallowedInTypescript.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+-jsdocDisallowedInTypescript.ts(22,17): error TS8020: JSDoc types can only be used inside documentation comments.
  
  
 -==== jsdocDisallowedInTypescript.ts (16 errors) ====
-+==== jsdocDisallowedInTypescript.ts (30 errors) ====
++==== jsdocDisallowedInTypescript.ts (26 errors) ====
      // grammar error from checker
      var ara: Array.<number> = [1,2,3];
 -                  ~
@@ -143,21 +138,11 @@
      var postfixdef: number! = 101;
 -                    ~~~~~~~
 -!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
-+                          ~
-+!!! error TS1005: ',' expected.
-+                            ~
-+!!! error TS1109: Expression expected.
      var postfixopt: number? = undefined;
--        ~~~~~~~~~~
--!!! error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+         ~~~~~~~~~~
+ !!! error TS2322: Type 'undefined' is not assignable to type 'number | null'.
 -                    ~~~~~~~
 -!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
-+                          ~
-+!!! error TS1005: ',' expected.
-+                            ~
-+!!! error TS1134: Variable declaration expected.
-+                              ~~~~~~~~~
-+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
      
      var nns: Array<?number>;
 -                   ~~~~~~~

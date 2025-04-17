@@ -29,7 +29,7 @@ type T08 = [...string];  // Error
 >T08 : any[]
 
 type T09 = [...string?];  // Error
->T09 : [...any[], any]
+>T09 : any[]
 
 type T10 = [string, ...[...string[]]];
 >T10 : T10

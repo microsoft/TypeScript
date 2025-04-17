@@ -58,7 +58,7 @@ var postfixdef: number! = 101;
 
 var postfixopt: number? = undefined;
 >postfixopt : Symbol(postfixopt, Decl(jsdocDisallowedInTypescript.ts, 17, 3))
->undefined : Symbol(undefined, Decl(jsdocDisallowedInTypescript.ts, 17, 25))
+>undefined : Symbol(undefined)
 
 var nns: Array<?number>;
 >nns : Symbol(nns, Decl(jsdocDisallowedInTypescript.ts, 19, 3))

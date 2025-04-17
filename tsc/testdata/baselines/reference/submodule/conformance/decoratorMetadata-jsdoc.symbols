@@ -23,4 +23,5 @@ class X {
 >decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
 
     c?: *;
+>c : Symbol(c, Decl(decoratorMetadata-jsdoc.ts, 6, 16))
 }

@@ -30,7 +30,6 @@ type T08 = [...string];  // Error
 
 type T09 = [...string?];  // Error
 >T09 : Symbol(T09, Decl(restTupleElements1.ts, 8, 23))
-> : Symbol(unknown)
 
 type T10 = [string, ...[...string[]]];
 >T10 : Symbol(T10, Decl(restTupleElements1.ts, 9, 24))

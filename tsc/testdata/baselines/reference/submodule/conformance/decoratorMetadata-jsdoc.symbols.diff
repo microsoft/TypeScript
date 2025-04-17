@@ -19,4 +19,5 @@
  
      c?: *;
 ->c : Symbol(X.c, Decl(decoratorMetadata-jsdoc.ts, 6, 16))
++>c : Symbol(c, Decl(decoratorMetadata-jsdoc.ts, 6, 16))
  }

@@ -41,14 +41,10 @@ class Bar {
 }
 // Errors expected on all of the following
 const WhatFoo = foo;
-const HuhFoo = foo < string ?  >  : ;
+const HuhFoo = foo;
 const NopeFoo = foo;
-const ComeOnFoo = foo <  ? string ?  >  :  : ;
- > ;
- > ;
+const ComeOnFoo = foo;
 const WhatBar = Bar;
-const HuhBar = Bar < string ?  >  : ;
+const HuhBar = Bar;
 const NopeBar = Bar;
-const ComeOnBar = Bar <  ? string ?  >  :  : ;
- > ;
- > ;
+const ComeOnBar = Bar;

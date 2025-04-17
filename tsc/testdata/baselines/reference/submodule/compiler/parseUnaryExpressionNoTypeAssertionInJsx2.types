@@ -7,7 +7,6 @@ const x = "oops";
 
 const y = + <> x;
 >y : number
->+ <> x : number
-><> x : any
->x : "oops"
+>+ <> x; : number
+><> x; : any
 

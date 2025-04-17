@@ -5,46 +5,31 @@
  /** @param {???!?number?=} a */
  function g(a) {
 ->g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
-->a : number | null | undefined
-+>g : (a: any) => void
-+>a : any
++>g : (a?: number | null | undefined) => void
+ >a : number | null | undefined
  
      a = 1
- >a = 1 : 1
-->a : number | null | undefined
-+>a : any
- >1 : 1
- 
-     a = null
- >a = null : null
-->a : number | null | undefined
-+>a : any
- 
-     a = undefined
- >a = undefined : undefined
-->a : number | null | undefined
-+>a : any
- >undefined : undefined
+@@= skipped -19, +19 lines =@@
  }
  g()
  >g() : void
 ->g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
-+>g : (a: any) => void
++>g : (a?: number | null | undefined) => void
  
  g(null)
  >g(null) : void
 ->g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
-+>g : (a: any) => void
++>g : (a?: number | null | undefined) => void
  
  g(undefined)
  >g(undefined) : void
 ->g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
-+>g : (a: any) => void
++>g : (a?: number | null | undefined) => void
  >undefined : undefined
  
  g(1)
  >g(1) : void
 ->g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
-+>g : (a: any) => void
++>g : (a?: number | null | undefined) => void
  >1 : 1
  

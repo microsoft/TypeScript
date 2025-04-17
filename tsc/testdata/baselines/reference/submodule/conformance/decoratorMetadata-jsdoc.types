@@ -20,18 +20,11 @@ class X {
 
     b?: string!;
 >b : string
->! : boolean
-> : any
 
     @decorator()
 >decorator() : any
 >decorator : any
 
     c?: *;
->c?: * : any
 >c : any
-> : any
->* : number
-> : any
-> : any
 }

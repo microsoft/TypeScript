@@ -1,14 +1,6 @@
 --- old.restTupleElements1.symbols
 +++ new.restTupleElements1.symbols
-@@= skipped -29, +29 lines =@@
- 
- type T09 = [...string?];  // Error
- >T09 : Symbol(T09, Decl(restTupleElements1.ts, 8, 23))
-+> : Symbol(unknown)
- 
- type T10 = [string, ...[...string[]]];
- >T10 : Symbol(T10, Decl(restTupleElements1.ts, 9, 24))
-@@= skipped -166, +167 lines =@@
+@@= skipped -195, +195 lines =@@
  >x : Symbol(x, Decl(restTupleElements1.ts, 66, 4))
  >x : Symbol(x, Decl(restTupleElements1.ts, 66, 4))
  >x : Symbol(x, Decl(restTupleElements1.ts, 66, 15))

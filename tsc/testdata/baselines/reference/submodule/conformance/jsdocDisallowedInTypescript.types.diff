@@ -77,19 +77,3 @@
  
  var most: !string = 'definite';
  >most : string
-@@= skipped -14, +20 lines =@@
- 
- var postfixdef: number! = 101;
- >postfixdef : number
-+>! : boolean
-+> : any
- >101 : 101
- 
- var postfixopt: number? = undefined;
-->postfixopt : number | null
-->undefined : undefined
-+>postfixopt : number
-+>undefined : any
- 
- var nns: Array<?number>;
- >nns : (number | null)[]

@@ -6,5 +6,4 @@ const x = "oops";
 
 const y = + <number> x;
 >y : Symbol(y, Decl(index.js, 1, 5))
->x : Symbol(x, Decl(index.js, 0, 5))
 

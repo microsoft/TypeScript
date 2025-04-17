@@ -2588,6 +2588,18 @@ func (p *Parser) parsePostfixTypeOrHigher() *ast.Node {
 	typeNode := p.parseNonArrayType()
 	for !p.hasPrecedingLineBreak() {
 		switch p.token {
+		case ast.KindExclamationToken:
+			p.nextToken()
+			typeNode = p.factory.NewJSDocNonNullableType(typeNode)
+			p.finishNode(typeNode, pos)
+		case ast.KindQuestionToken:
+			// If next token is start of a type we have a conditional type
+			if p.lookAhead((*Parser).nextIsStartOfType) {
+				return typeNode
+			}
+			p.nextToken()
+			typeNode = p.factory.NewJSDocNullableType(typeNode)
+			p.finishNode(typeNode, pos)
 		case ast.KindOpenBracketToken:
 			p.parseExpected(ast.KindOpenBracketToken)
 			if p.isStartOfType(false /*isStartOfParameter*/) {
@@ -3553,11 +3565,11 @@ func (p *Parser) parseTupleElementType() *ast.TypeNode {
 		return result
 	}
 	typeNode := p.parseType()
-	// If next token is start of a type we have a conditional type and not an optional type
-	if p.token == ast.KindQuestionToken && !p.lookAhead((*Parser).nextIsStartOfType) {
-		p.nextToken()
-		typeNode = p.factory.NewOptionalTypeNode(typeNode)
-		p.finishNode(typeNode, pos)
+	if ast.IsJSDocNullableType(typeNode) && typeNode.Pos() == typeNode.Type().Pos() {
+		node := p.factory.NewOptionalTypeNode(typeNode.Type())
+		node.Flags = typeNode.Flags
+		node.Loc = typeNode.Loc
+		return node
 	}
 	return typeNode
 }
@@ -5001,12 +5013,11 @@ func (p *Parser) parseSimpleUnaryExpression() *ast.Expression {
 	case ast.KindVoidKeyword:
 		return p.parseVoidExpression()
 	case ast.KindLessThanToken:
-		// !!!
-		// // Just like in parseUpdateExpression, we need to avoid parsing type assertions when
-		// // in JSX and we see an expression like "+ <foo> bar".
-		// if (languageVariant == core.LanguageVariant.JSX) {
-		// 	return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true, /*topInvalidNodePosition*/ undefined, /*openingTag*/ undefined, /*mustBeUnary*/ true);
-		// }
+		// Just like in parseUpdateExpression, we need to avoid parsing type assertions when
+		// in JSX and we see an expression like "+ <foo> bar".
+		if p.languageVariant == core.LanguageVariantJSX {
+			return p.parseJsxElementOrSelfClosingElementOrFragment(true /*inExpressionContext*/, -1 /*topInvalidNodePosition*/, nil /*openingTag*/, true /*mustBeUnary*/)
+		}
 		// // This is modified UnaryExpression grammar in TypeScript
 		// //  UnaryExpression (modified):
 		// //      < type > UnaryExpression
@@ -6415,7 +6426,7 @@ func getCommentPragmas(f *ast.NodeFactory, sourceText string) (pragmas []ast.Pra
 }
 
 func extractPragmas(commentRange ast.CommentRange, text string) []ast.Pragma {
-	if commentRange.Kind == ast.KindSingleLineCommentTrivia && match(text, 0, "//") {
+	if commentRange.Kind == ast.KindSingleLineCommentTrivia {
 		pos := 2
 		tripleSlash := match(text, pos, "/")
 		if tripleSlash {
@@ -6473,6 +6484,7 @@ func extractPragmas(commentRange ast.CommentRange, text string) []ast.Pragma {
 		}
 	}
 	if commentRange.Kind == ast.KindMultiLineCommentTrivia {
+		text = text[:len(text)-2]
 		pos := 2
 		var pragmas []ast.Pragma
 		for {
@@ -6613,7 +6625,6 @@ func (p *Parser) processPragmasIntoFields(context *ast.SourceFile) {
 					}
 				}
 			}
-
 		case "jsx", "jsxfrag", "jsximportsource", "jsxruntime":
 			// Nothing to do here
 		default:

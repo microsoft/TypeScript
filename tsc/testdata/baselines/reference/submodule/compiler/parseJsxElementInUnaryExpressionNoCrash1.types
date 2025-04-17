@@ -2,8 +2,10 @@
 
 === a.js ===
 ~< <
->~< < : number
->< < : () => any
+>~< < : boolean
+>~< : number
+>< : any
+> : any
 
 > : any
 

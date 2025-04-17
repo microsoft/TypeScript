@@ -2208,6 +2208,8 @@ func (c *Checker) checkSourceElementWorker(node *ast.Node) {
 		c.checkGrammarStatementInAmbientContext(node)
 	case ast.KindMissingDeclaration:
 		c.checkMissingDeclaration(node)
+	case ast.KindJSDocNonNullableType, ast.KindJSDocNullableType, ast.KindJSDocAllType, ast.KindJSDocTypeLiteral:
+		c.checkJSDocType(node)
 	}
 }
 
@@ -2324,6 +2326,30 @@ func (c *Checker) resolveJSDocMemberName(name *ast.Node, location *ast.Node) *as
 		}
 	}
 	return nil
+}
+
+func (c *Checker) checkJSDocType(node *ast.Node) {
+	c.checkJSDocTypeIsInJsFile(node)
+	node.ForEachChild(c.checkSourceElement)
+}
+
+func (c *Checker) checkJSDocTypeIsInJsFile(node *ast.Node) {
+	if !ast.IsInJSFile(node) {
+		if ast.IsJSDocNonNullableType(node) || ast.IsJSDocNullableType(node) {
+			token := core.IfElse(ast.IsJSDocNonNullableType(node), "!", "?")
+			postfix := node.Pos() == node.Type().Pos()
+			message := core.IfElse(postfix,
+				diagnostics.X_0_at_the_end_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1,
+				diagnostics.X_0_at_the_start_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1)
+			t := c.getTypeFromTypeNode(node.Type())
+			if ast.IsJSDocNullableType(node) && t != c.neverType && t != c.voidType {
+				t = c.getNullableType(t, core.IfElse(postfix, TypeFlagsUndefined, TypeFlagsNullable))
+			}
+			c.grammarErrorOnNode(node, message, token, c.TypeToString(t))
+		} else {
+			c.grammarErrorOnNode(node, diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments)
+		}
+	}
 }
 
 func (c *Checker) checkTypeParameter(node *ast.Node) {
@@ -6598,7 +6624,7 @@ func (c *Checker) checkUnusedLocalsAndParameters(node *ast.Node) {
 					importClauses[importClause] = append(importClauses[importClause], declaration)
 				}
 			default:
-				if !ast.IsAmbientModule(declaration) {
+				if !ast.IsTypeParameterDeclaration(declaration) && !ast.IsAmbientModule(declaration) {
 					c.reportUnusedLocal(declaration, ast.SymbolName(local))
 				}
 			}

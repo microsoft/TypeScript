@@ -16,9 +16,8 @@ class X {
 class X {
     @decorator()
     a;
-    ;
     @decorator()
     b;
+    @decorator()
+    c;
 }
-!;
-c ?  :  * ;

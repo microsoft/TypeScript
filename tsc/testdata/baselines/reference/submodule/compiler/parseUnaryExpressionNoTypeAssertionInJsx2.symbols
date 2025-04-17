@@ -6,6 +6,4 @@ const x = "oops";
 
 const y = + <> x;
 >y : Symbol(y, Decl(index.js, 1, 5))
-> : Symbol(unknown)
->x : Symbol(x, Decl(index.js, 0, 5))
 

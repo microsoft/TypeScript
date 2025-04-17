@@ -84,13 +84,11 @@ var most: !string = 'definite';
 
 var postfixdef: number! = 101;
 >postfixdef : number
->! : boolean
-> : any
 >101 : 101
 
 var postfixopt: number? = undefined;
->postfixopt : number
->undefined : any
+>postfixopt : number | null
+>undefined : undefined
 
 var nns: Array<?number>;
 >nns : (number | null)[]

@@ -1,41 +1,7 @@
 --- old.expressionWithJSDocTypeArguments.types
 +++ new.expressionWithJSDocTypeArguments.types
-@@= skipped -19, +19 lines =@@
+@@= skipped -34, +34 lines =@@
  >foo : <T>(x: T) => T
- 
- const HuhFoo = foo<string?>;
-->HuhFoo : (x: string | null) => string | null
-->foo<string?> : (x: string | null) => string | null
-+>HuhFoo : any
-+>foo<string?> : any
-+>foo<string : boolean
- >foo : <T>(x: T) => T
-+>string : any
-+>> : boolean
-+> : any
-+> : any
-+> : any
- 
- const NopeFoo = foo<?string>;
- >NopeFoo : (x: string | null) => string | null
-@@= skipped -10, +16 lines =@@
- >foo : <T>(x: T) => T
- 
- const ComeOnFoo = foo<?string?>;
-->ComeOnFoo : (x: string | null) => string | null
-->foo<?string?> : (x: string | null) => string | null
-+>ComeOnFoo : any
-+>foo<?string?> : any
-+>foo< : boolean
- >foo : <T>(x: T) => T
-+> : any
-+>string?> : any
-+>string : any
-+>> : boolean
-+> : any
-+> : any
-+> : any
-+> : any
  
  type TWhatFoo = typeof foo<?>;
 ->TWhatFoo : typeof foo<unknown>
@@ -44,11 +10,8 @@
  
  type THuhFoo = typeof foo<string?>;
 ->THuhFoo : typeof foo<string | null>
-+>THuhFoo : (x: string) => string
++>THuhFoo : (x: string | null) => string | null
  >foo : <T>(x: T) => T
-+>> : boolean
-+> : any
-+> : any
  
  type TNopeFoo = typeof foo<?string>;
 ->TNopeFoo : typeof foo<string | null>
@@ -59,48 +22,10 @@
 ->TComeOnFoo : typeof foo<(string | null) | null>
 +>TComeOnFoo : (x: string | null) => string | null
  >foo : <T>(x: T) => T
-+>> : boolean
-+> : any
-+> : any
  
  const WhatBar = Bar<?>;
- >WhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
-@@= skipped -26, +41 lines =@@
+@@= skipped -36, +36 lines =@@
  >Bar : typeof Bar
- 
- const HuhBar = Bar<string?>;
-->HuhBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
-->Bar<string?> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
-+>HuhBar : any
-+>Bar<string?> : any
-+>Bar<string : boolean
- >Bar : typeof Bar
-+>string : any
-+>> : boolean
-+> : any
-+> : any
-+> : any
- 
- const NopeBar = Bar<?string>;
- >NopeBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
-@@= skipped -10, +16 lines =@@
- >Bar : typeof Bar
- 
- const ComeOnBar = Bar<?string?>;
-->ComeOnBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
-->Bar<?string?> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
-+>ComeOnBar : any
-+>Bar<?string?> : any
-+>Bar< : boolean
- >Bar : typeof Bar
-+> : any
-+>string?> : any
-+>string : any
-+>> : boolean
-+> : any
-+> : any
-+> : any
-+> : any
  
  type TWhatBar = typeof Bar<?>;
 ->TWhatBar : typeof Bar<unknown>
@@ -109,11 +34,8 @@
  
  type THuhBar = typeof Bar<string?>;
 ->THuhBar : typeof Bar<string | null>
-+>THuhBar : { new (x: string): Bar<string>; prototype: Bar<any>; }
++>THuhBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
  >Bar : typeof Bar
-+>> : boolean
-+> : any
-+> : any
  
  type TNopeBar = typeof Bar<?string>;
 ->TNopeBar : typeof Bar<string | null>
@@ -124,7 +46,4 @@
 ->TComeOnBar : typeof Bar<(string | null) | null>
 +>TComeOnBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
  >Bar : typeof Bar
-+>> : boolean
-+> : any
-+> : any
  

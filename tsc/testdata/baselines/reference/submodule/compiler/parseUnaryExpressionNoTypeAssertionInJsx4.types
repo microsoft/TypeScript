@@ -7,19 +7,16 @@ const x = "oops";
 
 const a = + <number> x;
 >a : number
->+ <number> x : number
-><number> x : number
->x : "oops"
+>+ <number> x;const b = + <> x;const c = + <1234> x; : number
+><number> x;const b = + <> x;const c = + <1234> x; : any
+>number : any
 
 const b = + <> x;
->b : number
->+ <> x : number
-><> x : any
->x : "oops"
+><> x;const c = + <1234> x; : any
 
 const c = + <1234> x;
->c : number
->+ <1234> x : number
-><1234> x : 1234
->x : "oops"
+>< : any
+> : any
+
+> : any
 

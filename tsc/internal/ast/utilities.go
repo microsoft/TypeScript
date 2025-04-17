@@ -2602,17 +2602,17 @@ func IsUnterminatedLiteral(node *Node) bool {
 }
 
 func GetJSXImplicitImportBase(compilerOptions *core.CompilerOptions, file *SourceFile) string {
-	jsxImportSourcePragma := getPragmaFromSourceFile(file, "jsximportsource")
-	jsxRuntimePragma := getPragmaFromSourceFile(file, "jsxruntime")
-	if getPragmaArgument(jsxRuntimePragma, "factory") == "classic" {
+	jsxImportSourcePragma := GetPragmaFromSourceFile(file, "jsximportsource")
+	jsxRuntimePragma := GetPragmaFromSourceFile(file, "jsxruntime")
+	if GetPragmaArgument(jsxRuntimePragma, "factory") == "classic" {
 		return ""
 	}
 	if compilerOptions.Jsx == core.JsxEmitReactJSX ||
 		compilerOptions.Jsx == core.JsxEmitReactJSXDev ||
 		compilerOptions.JsxImportSource != "" ||
 		jsxImportSourcePragma != nil ||
-		getPragmaArgument(jsxRuntimePragma, "factory") == "automatic" {
-		result := getPragmaArgument(jsxImportSourcePragma, "factory")
+		GetPragmaArgument(jsxRuntimePragma, "factory") == "automatic" {
+		result := GetPragmaArgument(jsxImportSourcePragma, "factory")
 		if result == "" {
 			result = compilerOptions.JsxImportSource
 		}
@@ -2631,18 +2631,19 @@ func GetJSXRuntimeImport(base string, options *core.CompilerOptions) string {
 	return base + "/" + core.IfElse(options.Jsx == core.JsxEmitReactJSXDev, "jsx-dev-runtime", "jsx-runtime")
 }
 
-func getPragmaFromSourceFile(file *SourceFile, name string) *Pragma {
+func GetPragmaFromSourceFile(file *SourceFile, name string) *Pragma {
+	var result *Pragma
 	if file != nil {
 		for i := range file.Pragmas {
 			if file.Pragmas[i].Name == name {
-				return &file.Pragmas[i]
+				result = &file.Pragmas[i] // Last one wins
 			}
 		}
 	}
-	return nil
+	return result
 }
 
-func getPragmaArgument(pragma *Pragma, name string) string {
+func GetPragmaArgument(pragma *Pragma, name string) string {
 	if pragma != nil {
 		if arg, ok := pragma.Args[name]; ok {
 			return arg.Value

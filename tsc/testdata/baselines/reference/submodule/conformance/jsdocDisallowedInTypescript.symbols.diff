@@ -34,12 +34,3 @@
  >n : Symbol(n, Decl(jsdocDisallowedInTypescript.ts, 14, 43))
  >m : Symbol(m, Decl(jsdocDisallowedInTypescript.ts, 14, 45))
  >n : Symbol(n, Decl(jsdocDisallowedInTypescript.ts, 14, 43))
-@@= skipped -34, +37 lines =@@
- 
- var postfixopt: number? = undefined;
- >postfixopt : Symbol(postfixopt, Decl(jsdocDisallowedInTypescript.ts, 17, 3))
-->undefined : Symbol(undefined)
-+>undefined : Symbol(undefined, Decl(jsdocDisallowedInTypescript.ts, 17, 25))
- 
- var nns: Array<?number>;
- >nns : Symbol(nns, Decl(jsdocDisallowedInTypescript.ts, 19, 3))

@@ -70,6 +70,10 @@ exports.selfClosing = <img src="./image.png"/>;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime automatic */
+/* @jsxRuntime classic */
+const React = require("react");
 const HelloWorld = () => <h1>Hello world</h1>;
 exports.HelloWorld = HelloWorld;
 exports.frag = <><div></div></>;

@@ -113,6 +113,7 @@ func (f *NodeFactory) TextCount() int {
 
 func updateNode(updated *Node, original *Node, hooks NodeFactoryHooks) *Node {
 	if updated != original {
+		updated.Flags = original.Flags
 		updated.Loc = original.Loc
 		if hooks.OnUpdate != nil {
 			hooks.OnUpdate(updated, original)
@@ -8705,6 +8706,10 @@ func (node *JSDocNonNullableType) Clone(f *NodeFactory) *Node {
 	return cloneNode(f.NewJSDocNonNullableType(node.Type), node.AsNode(), f.hooks)
 }
 
+func IsJSDocNonNullableType(node *Node) bool {
+	return node.Kind == KindJSDocNonNullableType
+}
+
 // JSDocNullableType
 
 type JSDocNullableType struct {
@@ -8735,6 +8740,10 @@ func (node *JSDocNullableType) VisitEachChild(v *NodeVisitor) *Node {
 
 func (node *JSDocNullableType) Clone(f *NodeFactory) *Node {
 	return cloneNode(f.NewJSDocNullableType(node.Type), node.AsNode(), f.hooks)
+}
+
+func IsJSDocNullableType(node *Node) bool {
+	return node.Kind == KindJSDocNullableType
 }
 
 // JSDocAllType

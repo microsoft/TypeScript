@@ -40,38 +40,38 @@ f(1)
 
 /** @param {???!?number?=} a */
 function g(a) {
->g : (a: any) => void
->a : any
+>g : (a?: number | null | undefined) => void
+>a : number | null | undefined
 
     a = 1
 >a = 1 : 1
->a : any
+>a : number | null | undefined
 >1 : 1
 
     a = null
 >a = null : null
->a : any
+>a : number | null | undefined
 
     a = undefined
 >a = undefined : undefined
->a : any
+>a : number | null | undefined
 >undefined : undefined
 }
 g()
 >g() : void
->g : (a: any) => void
+>g : (a?: number | null | undefined) => void
 
 g(null)
 >g(null) : void
->g : (a: any) => void
+>g : (a?: number | null | undefined) => void
 
 g(undefined)
 >g(undefined) : void
->g : (a: any) => void
+>g : (a?: number | null | undefined) => void
 >undefined : undefined
 
 g(1)
 >g(1) : void
->g : (a: any) => void
+>g : (a?: number | null | undefined) => void
 >1 : 1
 

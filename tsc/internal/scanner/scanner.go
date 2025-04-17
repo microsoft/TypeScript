@@ -1012,7 +1012,6 @@ func (s *Scanner) ReScanSlashToken() ast.Kind {
 			switch {
 			case size == 0 || stringutil.IsLineBreak(ch):
 				s.tokenFlags |= ast.TokenFlagsUnterminated
-				s.error(diagnostics.Unterminated_regular_expression_literal)
 				break loop
 			case inEscape:
 				// Parsing an escape character;

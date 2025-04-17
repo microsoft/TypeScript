@@ -4,11 +4,8 @@
 function f1(a: string): a is string! {
 >f1 : (a: string) => a is string
 >a : string
->! {    return true;} : false
->{    return true;} : { return: boolean; }
 
     return true;
->return : boolean
 >true : true
 }
 
@@ -21,14 +18,12 @@ function f2(a: string): a is !string {
 }
 
 function f3(a: string!) {}
->f3 : (a: string, : any) => void
+>f3 : (a: string) => void
 >a : string
-> : any
 
 function f4(a: number!) {}
->f4 : (a: number, : any) => void
+>f4 : (a: number) => void
 >a : number
-> : any
 
 function f5(a: !string) {}
 >f5 : (a: string) => void
@@ -40,23 +35,17 @@ function f6(a: !number) {}
 
 function f7(): string! {}
 >f7 : () => string
->! {} : boolean
->{} : {}
 
 function f8(): !string {}
 >f8 : () => string
 
 const a = 1 as any!;
 >a : any
->1 as any : any
+>1 as any! : any
 >1 : 1
->! : boolean
-> : any
 
 const b: number! = 1;
 >b : number
->! : boolean
-> : any
 >1 : 1
 
 const c = 1 as !any;
