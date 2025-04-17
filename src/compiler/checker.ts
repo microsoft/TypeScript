@@ -29347,6 +29347,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 mapType(
                     candidate,
                     c => {
+                        // For each constituent t in the current type, if t and and c are directly related, pick the most
+                        // specific of the two. When t and c are related in both directions, we prefer c for type predicates
+                        // because that is the asserted type, but t for `instanceof` because generics aren't reflected in
+                        // prototype object types.
                         const directlyRelated = checkDerived ?
                             (isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType) :
                             (isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType);
@@ -29357,6 +29361,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     },
                 ));
             if (matchedCandidates.length !== countTypes(candidate)) {
+                // If there are leftover constituents not directly related, create intersections for any generic constituents that
+                // are related by constraint.
                 narrowedType = getUnionType([
                     narrowedType,
                     mapType(candidate, c => {
