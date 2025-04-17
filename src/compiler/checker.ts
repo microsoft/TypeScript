@@ -29342,11 +29342,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We first attempt to filter the current type, narrowing constituents as appropriate and removing
             // constituents that are unrelated to the candidate.
             const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
+            const keyPropertyName = type.flags & TypeFlags.Union ? getKeyPropertyName(type as UnionType) : undefined;
             let matchedCandidates: Type[] = [];
             let narrowedType = mapType(type, t =>
                 mapType(
                     candidate,
                     c => {
+                        if (keyPropertyName) {
+                            // If a discriminant property is available, use only matching constituents to reduce the type.
+                            const discriminant = keyPropertyName && getTypeOfPropertyOfType(c, keyPropertyName);
+                            if (!discriminant || getConstituentTypeForKeyType(type as UnionType, discriminant) !== t) {
+                                return neverType;
+                            }
+                        }
                         // For each constituent t in the current type, if t and and c are directly related, pick the most
                         // specific of the two. When t and c are related in both directions, we prefer c for type predicates
                         // because that is the asserted type, but t for `instanceof` because generics aren't reflected in
