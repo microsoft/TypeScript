@@ -33,6 +33,7 @@ declare const isResult: (u: unknown) => u is Result<any, any>;
 >u : unknown
 >  : ^^^^^^^
 
+// return type: Result<A, E> | "ok"
 export const fn = <A, E>(inp: Result<A, E> | string) =>
 >fn : <A, E>(inp: Result<A, E> | string) => Result<A, E> | "ok"
 >   : ^ ^^ ^^   ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^

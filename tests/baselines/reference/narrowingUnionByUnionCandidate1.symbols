@@ -32,17 +32,18 @@ declare const isResult: (u: unknown) => u is Result<any, any>;
 >u : Symbol(u, Decl(narrowingUnionByUnionCandidate1.ts, 12, 25))
 >Result : Symbol(Result, Decl(narrowingUnionByUnionCandidate1.ts, 0, 0))
 
+// return type: Result<A, E> | "ok"
 export const fn = <A, E>(inp: Result<A, E> | string) =>
->fn : Symbol(fn, Decl(narrowingUnionByUnionCandidate1.ts, 14, 12))
->A : Symbol(A, Decl(narrowingUnionByUnionCandidate1.ts, 14, 19))
->E : Symbol(E, Decl(narrowingUnionByUnionCandidate1.ts, 14, 21))
->inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 14, 25))
+>fn : Symbol(fn, Decl(narrowingUnionByUnionCandidate1.ts, 15, 12))
+>A : Symbol(A, Decl(narrowingUnionByUnionCandidate1.ts, 15, 19))
+>E : Symbol(E, Decl(narrowingUnionByUnionCandidate1.ts, 15, 21))
+>inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 15, 25))
 >Result : Symbol(Result, Decl(narrowingUnionByUnionCandidate1.ts, 0, 0))
->A : Symbol(A, Decl(narrowingUnionByUnionCandidate1.ts, 14, 19))
->E : Symbol(E, Decl(narrowingUnionByUnionCandidate1.ts, 14, 21))
+>A : Symbol(A, Decl(narrowingUnionByUnionCandidate1.ts, 15, 19))
+>E : Symbol(E, Decl(narrowingUnionByUnionCandidate1.ts, 15, 21))
 
   isResult(inp) ? inp : "ok";
 >isResult : Symbol(isResult, Decl(narrowingUnionByUnionCandidate1.ts, 12, 13))
->inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 14, 25))
->inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 14, 25))
+>inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 15, 25))
+>inp : Symbol(inp, Decl(narrowingUnionByUnionCandidate1.ts, 15, 25))
 
