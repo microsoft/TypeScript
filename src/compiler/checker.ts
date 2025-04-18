@@ -39252,7 +39252,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     return numberType;
                 }
-                return getUnaryResultType(operandType);
+                return getUnaryArithmeticResultType(operandType);
             case SyntaxKind.ExclamationToken:
                 checkTruthinessOfType(operandType, node.operand);
                 const facts = getTypeFacts(operandType, TypeFacts.Truthy | TypeFacts.Falsy);
@@ -39270,7 +39270,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         Diagnostics.The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access,
                     );
                 }
-                return getUnaryResultType(operandType);
+                return getUnaryArithmeticResultType(operandType);
         }
         return errorType;
     }
@@ -39293,11 +39293,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 Diagnostics.The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access,
             );
         }
-        return getUnaryResultType(operandType);
+        return getUnaryArithmeticResultType(operandType);
     }
 
-    function getUnaryResultType(operandType: Type): Type {
-        if (maybeTypeOfKind(operandType, TypeFlags.BigIntLike)) {
+    function getUnaryArithmeticResultType(operandType: Type): Type {
+        if (maybeTypeOfKindConsideringBaseConstraint(operandType, TypeFlags.BigIntLike)) {
             return isTypeAssignableToKind(operandType, TypeFlags.AnyOrUnknown) || maybeTypeOfKind(operandType, TypeFlags.NumberLike)
                 ? numberOrBigIntType
                 : bigintType;
@@ -40009,35 +40009,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // otherwise just check each operand separately and report errors as normal
                     const leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*isAwaitValid*/ true);
                     const rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*isAwaitValid*/ true);
-                    let resultType: Type;
-                    // If both are any or unknown, allow operation; assume it will resolve to number
-                    if (
-                        (isTypeAssignableToKind(leftType, TypeFlags.AnyOrUnknown) && isTypeAssignableToKind(rightType, TypeFlags.AnyOrUnknown)) ||
-                        // Or, if neither could be bigint, implicit coercion results in a number result
-                        !(maybeTypeOfKind(leftType, TypeFlags.BigIntLike) || maybeTypeOfKind(rightType, TypeFlags.BigIntLike))
-                    ) {
-                        resultType = numberType;
-                    }
-                    // At least one is assignable to bigint, so check that both are
-                    else if (bothAreBigIntLike(leftType, rightType)) {
-                        switch (operator) {
-                            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                                reportOperatorError();
-                                break;
-                            case SyntaxKind.AsteriskAsteriskToken:
-                            case SyntaxKind.AsteriskAsteriskEqualsToken:
-                                if (languageVersion < ScriptTarget.ES2016) {
-                                    error(errorNode, Diagnostics.Exponentiation_cannot_be_performed_on_bigint_values_unless_the_target_option_is_set_to_es2016_or_later);
-                                }
-                        }
-                        resultType = bigintType;
-                    }
-                    // Exactly one of leftType/rightType is assignable to bigint
-                    else {
-                        reportOperatorError(bothAreBigIntLike);
-                        resultType = errorType;
-                    }
+
+                    const resultType = getBinaryArithmeticResultType(leftType, rightType);
                     if (leftOk && rightOk) {
                         checkAssignmentOperator(resultType);
                         switch (operator) {
@@ -40226,6 +40199,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             default:
                 return Debug.fail();
+        }
+
+        function getBinaryArithmeticResultType(leftType: Type, rightType: Type): Type {
+            if (isTypeAssignableToKind(leftType, TypeFlags.AnyOrUnknown) && isTypeAssignableToKind(rightType, TypeFlags.AnyOrUnknown)) {
+                // If both are any or unknown, allow operation; assume it will resolve to number
+                // (This is unsound, but it is not practical for untyped programs to
+                // have `bigint|number` inferred everywhere; #41741)
+                return numberType;
+            }
+            else if (!maybeTypeOfKindConsideringBaseConstraint(leftType, TypeFlags.BigIntLike) && !maybeTypeOfKindConsideringBaseConstraint(rightType, TypeFlags.BigIntLike)) {
+                // If neither could be bigint, implicit coercion results in a number result
+                return numberType;
+            }
+            // At least one is assignable to bigint, so check that both are
+            else if (bothAreBigIntLike(leftType, rightType)) {
+                switch (operator) {
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                        reportOperatorError();
+                        break;
+                    case SyntaxKind.AsteriskAsteriskToken:
+                    case SyntaxKind.AsteriskAsteriskEqualsToken:
+                        if (languageVersion < ScriptTarget.ES2016) {
+                            error(errorNode, Diagnostics.Exponentiation_cannot_be_performed_on_bigint_values_unless_the_target_option_is_set_to_es2016_or_later);
+                        }
+                }
+                return bigintType;
+            }
+
+            // Exactly one of leftType/rightType is assignable to bigint
+            reportOperatorError(bothAreBigIntLike);
+            return errorType;
         }
 
         function bothAreBigIntLike(left: Type, right: Type): boolean {
