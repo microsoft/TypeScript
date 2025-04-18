@@ -29351,7 +29351,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (keyPropertyName) {
                             // If a discriminant property is available, use only matching constituents to reduce the type.
                             const discriminant = keyPropertyName && getTypeOfPropertyOfType(c, keyPropertyName);
-                            if (!discriminant || getConstituentTypeForKeyType(type as UnionType, discriminant) !== t) {
+                            if (discriminant && getConstituentTypeForKeyType(type as UnionType, discriminant) !== t) {
                                 return neverType;
                             }
                         }

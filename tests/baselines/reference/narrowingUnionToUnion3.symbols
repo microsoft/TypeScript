@@ -1,0 +1,273 @@
+//// [tests/cases/compiler/narrowingUnionToUnion3.ts] ////
+
+=== narrowingUnionToUnion3.ts ===
+interface NodeMap {
+>NodeMap : Symbol(NodeMap, Decl(narrowingUnionToUnion3.ts, 0, 0))
+
+  ClassBody: ClassBody;
+>ClassBody : Symbol(NodeMap.ClassBody, Decl(narrowingUnionToUnion3.ts, 0, 19))
+>ClassBody : Symbol(ClassBody, Decl(narrowingUnionToUnion3.ts, 70, 1))
+
+  Expression: Expression;
+>Expression : Symbol(NodeMap.Expression, Decl(narrowingUnionToUnion3.ts, 1, 23))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion3.ts, 38, 1))
+
+  Function: Function;
+>Function : Symbol(NodeMap.Function, Decl(narrowingUnionToUnion3.ts, 2, 25))
+>Function : Symbol(Function, Decl(narrowingUnionToUnion3.ts, 8, 35))
+
+  PropertyDefinition: PropertyDefinition;
+>PropertyDefinition : Symbol(NodeMap.PropertyDefinition, Decl(narrowingUnionToUnion3.ts, 3, 21))
+>PropertyDefinition : Symbol(PropertyDefinition, Decl(narrowingUnionToUnion3.ts, 44, 1))
+
+  Statement: Statement;
+>Statement : Symbol(NodeMap.Statement, Decl(narrowingUnionToUnion3.ts, 4, 41))
+>Statement : Symbol(Statement, Decl(narrowingUnionToUnion3.ts, 13, 28))
+}
+
+type Node = NodeMap[keyof NodeMap];
+>Node : Symbol(Node, Decl(narrowingUnionToUnion3.ts, 6, 1))
+>NodeMap : Symbol(NodeMap, Decl(narrowingUnionToUnion3.ts, 0, 0))
+>NodeMap : Symbol(NodeMap, Decl(narrowingUnionToUnion3.ts, 0, 0))
+
+type Function =
+>Function : Symbol(Function, Decl(narrowingUnionToUnion3.ts, 8, 35))
+
+  | FunctionDeclaration
+>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(narrowingUnionToUnion3.ts, 24, 1))
+
+  | FunctionExpression
+>FunctionExpression : Symbol(FunctionExpression, Decl(narrowingUnionToUnion3.ts, 49, 1))
+
+  | ArrowFunctionExpression;
+>ArrowFunctionExpression : Symbol(ArrowFunctionExpression, Decl(narrowingUnionToUnion3.ts, 65, 1))
+
+type Statement = BlockStatement | ReturnStatement;
+>Statement : Symbol(Statement, Decl(narrowingUnionToUnion3.ts, 13, 28))
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion3.ts, 15, 50))
+>ReturnStatement : Symbol(ReturnStatement, Decl(narrowingUnionToUnion3.ts, 20, 1))
+
+interface BlockStatement {
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion3.ts, 15, 50))
+
+  type: "BlockStatement";
+>type : Symbol(BlockStatement.type, Decl(narrowingUnionToUnion3.ts, 17, 26))
+
+  body: Statement[];
+>body : Symbol(BlockStatement.body, Decl(narrowingUnionToUnion3.ts, 18, 25))
+>Statement : Symbol(Statement, Decl(narrowingUnionToUnion3.ts, 13, 28))
+}
+
+interface ReturnStatement {
+>ReturnStatement : Symbol(ReturnStatement, Decl(narrowingUnionToUnion3.ts, 20, 1))
+
+  type: "ReturnStatement";
+>type : Symbol(ReturnStatement.type, Decl(narrowingUnionToUnion3.ts, 22, 27))
+}
+
+interface FunctionDeclaration {
+>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(narrowingUnionToUnion3.ts, 24, 1))
+
+  type: "FunctionDeclaration";
+>type : Symbol(FunctionDeclaration.type, Decl(narrowingUnionToUnion3.ts, 26, 31))
+
+  body: BlockStatement;
+>body : Symbol(FunctionDeclaration.body, Decl(narrowingUnionToUnion3.ts, 27, 30))
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion3.ts, 15, 50))
+}
+
+interface ExpressionMap {
+>ExpressionMap : Symbol(ExpressionMap, Decl(narrowingUnionToUnion3.ts, 29, 1))
+
+  ArrowFunctionExpression: ArrowFunctionExpression;
+>ArrowFunctionExpression : Symbol(ExpressionMap.ArrowFunctionExpression, Decl(narrowingUnionToUnion3.ts, 31, 25))
+>ArrowFunctionExpression : Symbol(ArrowFunctionExpression, Decl(narrowingUnionToUnion3.ts, 65, 1))
+
+  ClassExpression: ClassExpression;
+>ClassExpression : Symbol(ExpressionMap.ClassExpression, Decl(narrowingUnionToUnion3.ts, 32, 51))
+>ClassExpression : Symbol(ClassExpression, Decl(narrowingUnionToUnion3.ts, 75, 1))
+
+  FunctionExpression: FunctionExpression;
+>FunctionExpression : Symbol(ExpressionMap.FunctionExpression, Decl(narrowingUnionToUnion3.ts, 33, 35))
+>FunctionExpression : Symbol(FunctionExpression, Decl(narrowingUnionToUnion3.ts, 49, 1))
+
+  Identifier: Identifier;
+>Identifier : Symbol(ExpressionMap.Identifier, Decl(narrowingUnionToUnion3.ts, 34, 41))
+>Identifier : Symbol(Identifier, Decl(narrowingUnionToUnion3.ts, 60, 1))
+
+  NewExpression: NewExpression;
+>NewExpression : Symbol(ExpressionMap.NewExpression, Decl(narrowingUnionToUnion3.ts, 35, 25))
+>NewExpression : Symbol(NewExpression, Decl(narrowingUnionToUnion3.ts, 54, 1))
+
+  ObjectExpression: ObjectExpression;
+>ObjectExpression : Symbol(ExpressionMap.ObjectExpression, Decl(narrowingUnionToUnion3.ts, 36, 31))
+>ObjectExpression : Symbol(ObjectExpression, Decl(narrowingUnionToUnion3.ts, 40, 53))
+}
+
+type Expression = ExpressionMap[keyof ExpressionMap];
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion3.ts, 38, 1))
+>ExpressionMap : Symbol(ExpressionMap, Decl(narrowingUnionToUnion3.ts, 29, 1))
+>ExpressionMap : Symbol(ExpressionMap, Decl(narrowingUnionToUnion3.ts, 29, 1))
+
+interface ObjectExpression {
+>ObjectExpression : Symbol(ObjectExpression, Decl(narrowingUnionToUnion3.ts, 40, 53))
+
+  type: "ObjectExpression";
+>type : Symbol(ObjectExpression.type, Decl(narrowingUnionToUnion3.ts, 42, 28))
+}
+
+interface PropertyDefinition {
+>PropertyDefinition : Symbol(PropertyDefinition, Decl(narrowingUnionToUnion3.ts, 44, 1))
+
+  type: "PropertyDefinition";
+>type : Symbol(PropertyDefinition.type, Decl(narrowingUnionToUnion3.ts, 46, 30))
+
+  key: Expression;
+>key : Symbol(PropertyDefinition.key, Decl(narrowingUnionToUnion3.ts, 47, 29))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion3.ts, 38, 1))
+}
+
+interface FunctionExpression {
+>FunctionExpression : Symbol(FunctionExpression, Decl(narrowingUnionToUnion3.ts, 49, 1))
+
+  type: "FunctionExpression";
+>type : Symbol(FunctionExpression.type, Decl(narrowingUnionToUnion3.ts, 51, 30))
+
+  body: BlockStatement;
+>body : Symbol(FunctionExpression.body, Decl(narrowingUnionToUnion3.ts, 52, 29))
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion3.ts, 15, 50))
+}
+
+interface NewExpression {
+>NewExpression : Symbol(NewExpression, Decl(narrowingUnionToUnion3.ts, 54, 1))
+
+  type: "NewExpression";
+>type : Symbol(NewExpression.type, Decl(narrowingUnionToUnion3.ts, 56, 25))
+
+  callee: Expression;
+>callee : Symbol(NewExpression.callee, Decl(narrowingUnionToUnion3.ts, 57, 24))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion3.ts, 38, 1))
+
+  arguments: Array<Expression>;
+>arguments : Symbol(NewExpression.arguments, Decl(narrowingUnionToUnion3.ts, 58, 21))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion3.ts, 38, 1))
+}
+
+interface Identifier {
+>Identifier : Symbol(Identifier, Decl(narrowingUnionToUnion3.ts, 60, 1))
+
+  type: "Identifier";
+>type : Symbol(Identifier.type, Decl(narrowingUnionToUnion3.ts, 62, 22))
+
+  name: string;
+>name : Symbol(Identifier.name, Decl(narrowingUnionToUnion3.ts, 63, 21))
+}
+
+interface ArrowFunctionExpression {
+>ArrowFunctionExpression : Symbol(ArrowFunctionExpression, Decl(narrowingUnionToUnion3.ts, 65, 1))
+
+  type: "ArrowFunctionExpression";
+>type : Symbol(ArrowFunctionExpression.type, Decl(narrowingUnionToUnion3.ts, 67, 35))
+
+  body: BlockStatement | Expression;
+>body : Symbol(ArrowFunctionExpression.body, Decl(narrowingUnionToUnion3.ts, 68, 34))
+>BlockStatement : Symbol(BlockStatement, Decl(narrowingUnionToUnion3.ts, 15, 50))
+>Expression : Symbol(Expression, Decl(narrowingUnionToUnion3.ts, 38, 1))
+}
+
+interface ClassBody {
+>ClassBody : Symbol(ClassBody, Decl(narrowingUnionToUnion3.ts, 70, 1))
+
+  type: "ClassBody";
+>type : Symbol(ClassBody.type, Decl(narrowingUnionToUnion3.ts, 72, 21))
+
+  body: Array<PropertyDefinition>;
+>body : Symbol(ClassBody.body, Decl(narrowingUnionToUnion3.ts, 73, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PropertyDefinition : Symbol(PropertyDefinition, Decl(narrowingUnionToUnion3.ts, 44, 1))
+}
+
+interface ClassExpression {
+>ClassExpression : Symbol(ClassExpression, Decl(narrowingUnionToUnion3.ts, 75, 1))
+
+  type: "ClassExpression";
+>type : Symbol(ClassExpression.type, Decl(narrowingUnionToUnion3.ts, 77, 27))
+
+  body: ClassBody;
+>body : Symbol(ClassExpression.body, Decl(narrowingUnionToUnion3.ts, 78, 26))
+>ClassBody : Symbol(ClassBody, Decl(narrowingUnionToUnion3.ts, 70, 1))
+}
+
+export function getNestedReturnStatements(node: Node): Array<ReturnStatement> {
+>getNestedReturnStatements : Symbol(getNestedReturnStatements, Decl(narrowingUnionToUnion3.ts, 80, 1))
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+>Node : Symbol(Node, Decl(narrowingUnionToUnion3.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ReturnStatement : Symbol(ReturnStatement, Decl(narrowingUnionToUnion3.ts, 20, 1))
+
+  const returnStatements: Array<ReturnStatement> = [];
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion3.ts, 83, 7))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ReturnStatement : Symbol(ReturnStatement, Decl(narrowingUnionToUnion3.ts, 20, 1))
+
+  if (node.type === "ReturnStatement") {
+>node.type : Symbol(type, Decl(narrowingUnionToUnion3.ts, 72, 21), Decl(narrowingUnionToUnion3.ts, 67, 35), Decl(narrowingUnionToUnion3.ts, 77, 27), Decl(narrowingUnionToUnion3.ts, 51, 30), Decl(narrowingUnionToUnion3.ts, 62, 22) ... and 6 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+>type : Symbol(type, Decl(narrowingUnionToUnion3.ts, 72, 21), Decl(narrowingUnionToUnion3.ts, 67, 35), Decl(narrowingUnionToUnion3.ts, 77, 27), Decl(narrowingUnionToUnion3.ts, 51, 30), Decl(narrowingUnionToUnion3.ts, 62, 22) ... and 6 more)
+
+    returnStatements.push(node);
+>returnStatements.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion3.ts, 83, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+  }
+
+  if ("body" in node && node.body !== undefined && node.body !== null) {
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+>node.body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+>undefined : Symbol(undefined)
+>node.body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+
+    Array.isArray(node.body)
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>node.body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+
+      ? node.body.forEach((x) => {
+>node.body.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>node.body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingUnionToUnion3.ts, 91, 27))
+
+          returnStatements.push(...getNestedReturnStatements(x));
+>returnStatements.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion3.ts, 83, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>getNestedReturnStatements : Symbol(getNestedReturnStatements, Decl(narrowingUnionToUnion3.ts, 80, 1))
+>x : Symbol(x, Decl(narrowingUnionToUnion3.ts, 91, 27))
+
+        })
+      : returnStatements.push(...getNestedReturnStatements(node.body));
+>returnStatements.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion3.ts, 83, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>getNestedReturnStatements : Symbol(getNestedReturnStatements, Decl(narrowingUnionToUnion3.ts, 80, 1))
+>node.body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+>node : Symbol(node, Decl(narrowingUnionToUnion3.ts, 82, 42))
+>body : Symbol(body, Decl(narrowingUnionToUnion3.ts, 73, 20), Decl(narrowingUnionToUnion3.ts, 68, 34), Decl(narrowingUnionToUnion3.ts, 78, 26), Decl(narrowingUnionToUnion3.ts, 52, 29), Decl(narrowingUnionToUnion3.ts, 27, 30) ... and 1 more)
+  }
+
+  return returnStatements;
+>returnStatements : Symbol(returnStatements, Decl(narrowingUnionToUnion3.ts, 83, 7))
+}
+

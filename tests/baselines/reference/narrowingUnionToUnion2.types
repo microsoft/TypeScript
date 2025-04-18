@@ -1,0 +1,365 @@
+//// [tests/cases/compiler/narrowingUnionToUnion2.ts] ////
+
+=== narrowingUnionToUnion2.ts ===
+interface NodeMap {
+  ClassBody: ClassBody;
+>ClassBody : ClassBody
+>          : ^^^^^^^^^
+
+  Expression: Expression;
+>Expression : Expression
+>           : ^^^^^^^^^^
+
+  Function: Function;
+>Function : Function
+>         : ^^^^^^^^
+
+  PropertyDefinition: PropertyDefinition;
+>PropertyDefinition : PropertyDefinition
+>                   : ^^^^^^^^^^^^^^^^^^
+
+  Statement: Statement;
+>Statement : Statement
+>          : ^^^^^^^^^
+}
+
+type Node = NodeMap[keyof NodeMap];
+>Node : Node
+>     : ^^^^
+
+type Function =
+>Function : Function
+>         : ^^^^^^^^
+
+  | FunctionDeclaration
+  | FunctionExpression
+  | ArrowFunctionExpression;
+
+type Statement = BlockStatement | ReturnStatement;
+>Statement : Statement
+>          : ^^^^^^^^^
+
+interface BlockStatement {
+  type: "BlockStatement";
+>type : "BlockStatement"
+>     : ^^^^^^^^^^^^^^^^
+
+  body: Statement[];
+>body : Statement[]
+>     : ^^^^^^^^^^^
+}
+
+interface ReturnStatement {
+  type: "ReturnStatement";
+>type : "ReturnStatement"
+>     : ^^^^^^^^^^^^^^^^^
+}
+
+interface FunctionDeclaration {
+  type: "FunctionDeclaration";
+>type : "FunctionDeclaration"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+
+  body: BlockStatement;
+>body : BlockStatement
+>     : ^^^^^^^^^^^^^^
+}
+
+interface ExpressionMap {
+  ArrowFunctionExpression: ArrowFunctionExpression;
+>ArrowFunctionExpression : ArrowFunctionExpression
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  ClassExpression: ClassExpression;
+>ClassExpression : ClassExpression
+>                : ^^^^^^^^^^^^^^^
+
+  FunctionExpression: FunctionExpression;
+>FunctionExpression : FunctionExpression
+>                   : ^^^^^^^^^^^^^^^^^^
+
+  Identifier: Identifier;
+>Identifier : Identifier
+>           : ^^^^^^^^^^
+
+  Literal: Literal;
+>Literal : Literal
+>        : ^^^^^^^
+
+  NewExpression: NewExpression;
+>NewExpression : NewExpression
+>              : ^^^^^^^^^^^^^
+
+  ObjectExpression: ObjectExpression;
+>ObjectExpression : ObjectExpression
+>                 : ^^^^^^^^^^^^^^^^
+}
+
+type Expression = ExpressionMap[keyof ExpressionMap];
+>Expression : Expression
+>           : ^^^^^^^^^^
+
+interface ObjectExpression {
+  type: "ObjectExpression";
+>type : "ObjectExpression"
+>     : ^^^^^^^^^^^^^^^^^^
+}
+
+interface PropertyDefinition {
+  type: "PropertyDefinition";
+>type : "PropertyDefinition"
+>     : ^^^^^^^^^^^^^^^^^^^^
+
+  key: Expression;
+>key : Expression
+>    : ^^^^^^^^^^
+}
+
+interface FunctionExpression {
+  type: "FunctionExpression";
+>type : "FunctionExpression"
+>     : ^^^^^^^^^^^^^^^^^^^^
+
+  body: BlockStatement;
+>body : BlockStatement
+>     : ^^^^^^^^^^^^^^
+}
+
+interface NewExpression {
+  type: "NewExpression";
+>type : "NewExpression"
+>     : ^^^^^^^^^^^^^^^
+
+  callee: Expression;
+>callee : Expression
+>       : ^^^^^^^^^^
+
+  arguments: Array<Expression>;
+>arguments : Expression[]
+>          : ^^^^^^^^^^^^
+}
+
+interface Identifier {
+  type: "Identifier";
+>type : "Identifier"
+>     : ^^^^^^^^^^^^
+
+  name: string;
+>name : string
+>     : ^^^^^^
+}
+
+type Literal = SimpleLiteral | RegExpLiteral | BigIntLiteral;
+>Literal : Literal
+>        : ^^^^^^^
+
+interface SimpleLiteral {
+  type: "Literal";
+>type : "Literal"
+>     : ^^^^^^^^^
+
+  value: string | boolean | number | null;
+>value : string | number | boolean | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface RegExpLiteral {
+  type: "Literal";
+>type : "Literal"
+>     : ^^^^^^^^^
+
+  value: RegExp;
+>value : RegExp
+>      : ^^^^^^
+}
+
+interface BigIntLiteral {
+  type: "Literal";
+>type : "Literal"
+>     : ^^^^^^^^^
+
+  value: bigint;
+>value : bigint
+>      : ^^^^^^
+}
+
+interface ArrowFunctionExpression {
+  type: "ArrowFunctionExpression";
+>type : "ArrowFunctionExpression"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  body: BlockStatement | Expression;
+>body : Expression | BlockStatement
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface ClassBody {
+  type: "ClassBody";
+>type : "ClassBody"
+>     : ^^^^^^^^^^^
+
+  body: Array<PropertyDefinition>;
+>body : PropertyDefinition[]
+>     : ^^^^^^^^^^^^^^^^^^^^
+}
+
+interface ClassExpression {
+  type: "ClassExpression";
+>type : "ClassExpression"
+>     : ^^^^^^^^^^^^^^^^^
+
+  body: ClassBody;
+>body : ClassBody
+>     : ^^^^^^^^^
+}
+
+export function getNestedReturnStatements(node: Node): Array<ReturnStatement> {
+>getNestedReturnStatements : (node: Node) => Array<ReturnStatement>
+>                          : ^    ^^    ^^^^^                      
+>node : Node
+>     : ^^^^
+
+  const returnStatements: Array<ReturnStatement> = [];
+>returnStatements : ReturnStatement[]
+>                 : ^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+  if (node.type === "ReturnStatement") {
+>node.type === "ReturnStatement" : boolean
+>                                : ^^^^^^^
+>node.type : "ArrowFunctionExpression" | "ClassExpression" | "FunctionExpression" | "Identifier" | "Literal" | "NewExpression" | "ObjectExpression" | "ClassBody" | "PropertyDefinition" | "BlockStatement" | "ReturnStatement" | "FunctionDeclaration"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : Node
+>     : ^^^^
+>type : "ArrowFunctionExpression" | "ClassExpression" | "FunctionExpression" | "Identifier" | "Literal" | "NewExpression" | "ObjectExpression" | "ClassBody" | "PropertyDefinition" | "BlockStatement" | "ReturnStatement" | "FunctionDeclaration"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"ReturnStatement" : "ReturnStatement"
+>                  : ^^^^^^^^^^^^^^^^^
+
+    returnStatements.push(node);
+>returnStatements.push(node) : number
+>                            : ^^^^^^
+>returnStatements.push : (...items: ReturnStatement[]) => number
+>                      : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>returnStatements : ReturnStatement[]
+>                 : ^^^^^^^^^^^^^^^^^
+>push : (...items: ReturnStatement[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>node : ReturnStatement
+>     : ^^^^^^^^^^^^^^^
+  }
+
+  if ("body" in node && node.body !== undefined && node.body !== null) {
+>"body" in node && node.body !== undefined && node.body !== null : boolean
+>                                                                : ^^^^^^^
+>"body" in node && node.body !== undefined : boolean
+>                                          : ^^^^^^^
+>"body" in node : boolean
+>               : ^^^^^^^
+>"body" : "body"
+>       : ^^^^^^
+>node : Node
+>     : ^^^^
+>node.body !== undefined : boolean
+>                        : ^^^^^^^
+>node.body : ClassBody | Expression | BlockStatement | Statement[] | PropertyDefinition[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ClassBody | ArrowFunctionExpression | ClassExpression | FunctionExpression | FunctionDeclaration | BlockStatement
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>body : ClassBody | Expression | BlockStatement | Statement[] | PropertyDefinition[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>node.body !== null : boolean
+>                   : ^^^^^^^
+>node.body : ClassBody | Expression | BlockStatement | Statement[] | PropertyDefinition[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ClassBody | ArrowFunctionExpression | ClassExpression | FunctionExpression | FunctionDeclaration | BlockStatement
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>body : ClassBody | Expression | BlockStatement | Statement[] | PropertyDefinition[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Array.isArray(node.body)
+>Array.isArray(node.body)      ? node.body.forEach((x) => {          returnStatements.push(...getNestedReturnStatements(x));        })      : returnStatements.push(...getNestedReturnStatements(node.body)) : number | void
+>                                                                                                                                                                                                            : ^^^^^^^^^^^^^
+>Array.isArray(node.body) : boolean
+>                         : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>node.body : ClassBody | Expression | BlockStatement | Statement[] | PropertyDefinition[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ClassBody | ArrowFunctionExpression | ClassExpression | FunctionExpression | FunctionDeclaration | BlockStatement
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>body : ClassBody | Expression | BlockStatement | Statement[] | PropertyDefinition[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      ? node.body.forEach((x) => {
+>node.body.forEach((x) => {          returnStatements.push(...getNestedReturnStatements(x));        }) : void
+>                                                                                                      : ^^^^
+>node.body.forEach : ((callbackfn: (value: Statement, index: number, array: Statement[]) => void, thisArg?: any) => void) | ((callbackfn: (value: PropertyDefinition, index: number, array: PropertyDefinition[]) => void, thisArg?: any) => void)
+>                  : ^^          ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^
+>node.body : Statement[] | PropertyDefinition[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ClassBody | ArrowFunctionExpression | ClassExpression | FunctionExpression | FunctionDeclaration | BlockStatement
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>body : Statement[] | PropertyDefinition[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>forEach : ((callbackfn: (value: Statement, index: number, array: Statement[]) => void, thisArg?: any) => void) | ((callbackfn: (value: PropertyDefinition, index: number, array: PropertyDefinition[]) => void, thisArg?: any) => void)
+>        : ^^          ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^
+>(x) => {          returnStatements.push(...getNestedReturnStatements(x));        } : (x: PropertyDefinition | Statement) => void
+>                                                                                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : PropertyDefinition | Statement
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+          returnStatements.push(...getNestedReturnStatements(x));
+>returnStatements.push(...getNestedReturnStatements(x)) : number
+>                                                       : ^^^^^^
+>returnStatements.push : (...items: ReturnStatement[]) => number
+>                      : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>returnStatements : ReturnStatement[]
+>                 : ^^^^^^^^^^^^^^^^^
+>push : (...items: ReturnStatement[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>...getNestedReturnStatements(x) : ReturnStatement
+>                                : ^^^^^^^^^^^^^^^
+>getNestedReturnStatements(x) : ReturnStatement[]
+>                             : ^^^^^^^^^^^^^^^^^
+>getNestedReturnStatements : (node: Node) => Array<ReturnStatement>
+>                          : ^    ^^    ^^^^^                      
+>x : PropertyDefinition | Statement
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        })
+      : returnStatements.push(...getNestedReturnStatements(node.body));
+>returnStatements.push(...getNestedReturnStatements(node.body)) : number
+>                                                               : ^^^^^^
+>returnStatements.push : (...items: ReturnStatement[]) => number
+>                      : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>returnStatements : ReturnStatement[]
+>                 : ^^^^^^^^^^^^^^^^^
+>push : (...items: ReturnStatement[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>...getNestedReturnStatements(node.body) : ReturnStatement
+>                                        : ^^^^^^^^^^^^^^^
+>getNestedReturnStatements(node.body) : ReturnStatement[]
+>                                     : ^^^^^^^^^^^^^^^^^
+>getNestedReturnStatements : (node: Node) => Array<ReturnStatement>
+>                          : ^    ^^    ^^^^^                      
+>node.body : ClassBody | Expression | BlockStatement
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ClassBody | ArrowFunctionExpression | ClassExpression | FunctionExpression | FunctionDeclaration | BlockStatement
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>body : ClassBody | Expression | BlockStatement
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  }
+
+  return returnStatements;
+>returnStatements : ReturnStatement[]
+>                 : ^^^^^^^^^^^^^^^^^
+}
+
