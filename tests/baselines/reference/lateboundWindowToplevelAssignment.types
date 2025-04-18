@@ -18,5 +18,3 @@ window[UPDATE_MARKER_FUNC] = () => {};
 >() => {} : () => void
 >         : ^^^^^^^^^^
 
-// class C { [UPDATE_MARKER_FUNC] = 1 }
-
