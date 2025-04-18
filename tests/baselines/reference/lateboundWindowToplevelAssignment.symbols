@@ -8,3 +8,7 @@ window[UPDATE_MARKER_FUNC] = () => {};
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 >UPDATE_MARKER_FUNC : Symbol(UPDATE_MARKER_FUNC, Decl(lateboundWindowToplevelAssignment.js, 0, 5))
 
+window[UPDATE_MARKER_FUNC]();
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>UPDATE_MARKER_FUNC : Symbol(UPDATE_MARKER_FUNC, Decl(lateboundWindowToplevelAssignment.js, 0, 5))
+

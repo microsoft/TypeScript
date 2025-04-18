@@ -18,3 +18,11 @@ window[UPDATE_MARKER_FUNC] = () => {};
 >() => {} : () => void
 >         : ^^^^^^^^^^
 
+window[UPDATE_MARKER_FUNC]();
+>window[UPDATE_MARKER_FUNC]() : error
+>window[UPDATE_MARKER_FUNC] : error
+>window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>UPDATE_MARKER_FUNC : "updateMarkerPosition"
+>                   : ^^^^^^^^^^^^^^^^^^^^^^
+
