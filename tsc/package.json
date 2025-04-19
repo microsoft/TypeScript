@@ -23,12 +23,12 @@
         "@types/node": "latest",
         "@types/which": "^3.0.4",
         "chokidar": "^4.0.3",
-        "dprint": "^0.47.6",
-        "execa": "^9.5.1",
+        "dprint": "^0.49.1",
+        "execa": "^9.5.2",
         "glob": "^10.4.5",
         "hereby": "^1.10.0",
         "picocolors": "^1.1.1",
-        "typescript": "^5.7.3",
+        "typescript": "^5.8.3",
         "which": "^5.0.0"
     },
     "scripts": {
