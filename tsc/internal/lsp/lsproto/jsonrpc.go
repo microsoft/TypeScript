@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
 )
 
 type JSONRPCVersion struct{}
@@ -73,27 +72,9 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 
 	r.ID = raw.ID
 	r.Method = raw.Method
-	if r.Method == MethodShutdown || r.Method == MethodExit {
-		// These methods have no params.
-		return nil
-	}
 
-	if strings.HasPrefix(string(r.Method), "@ts/") {
-		r.Params = raw.Params
-		return nil
-	}
-
-	var params any
 	var err error
-
-	if unmarshalParams, ok := unmarshallers[raw.Method]; ok {
-		params, err = unmarshalParams(raw.Params)
-	} else {
-		// Fall back to default; it's probably an unknown message and we will probably not handle it.
-		err = json.Unmarshal(raw.Params, &params)
-	}
-	r.Params = params
-
+	r.Params, err = unmarshalParams(raw.Method, raw.Params)
 	if err != nil {
 		return fmt.Errorf("%w: %w", ErrInvalidRequest, err)
 	}

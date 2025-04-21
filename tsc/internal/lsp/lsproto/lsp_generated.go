@@ -262,7 +262,7 @@ type CallHierarchyItem struct {
 
 	// A data entry field that is preserved between a call hierarchy prepare and
 	// incoming calls or outgoing calls requests.
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Call hierarchy options used during static or dynamic registration.
@@ -588,7 +588,7 @@ type TypeHierarchyItem struct {
 	// supertypes or subtypes requests. It could also be used to identify the
 	// type hierarchy in the server, helping improve the performance on
 	// resolving supertypes and subtypes.
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Type hierarchy options used during static or dynamic registration.
@@ -705,7 +705,7 @@ type InlayHint struct {
 
 	// A data entry field that is preserved on an inlay hint between
 	// a `textDocument/inlayHint` and a `inlayHint/resolve` request.
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Inlay hint options used during static or dynamic registration.
@@ -989,7 +989,7 @@ type InitializedParams struct {
 // The parameters of a change configuration notification.
 type DidChangeConfigurationParams struct {
 	// The actual changed settings
-	Settings LSPAny `json:"settings"`
+	Settings any `json:"settings"`
 }
 
 type DidChangeConfigurationRegistrationOptions struct {
@@ -1282,7 +1282,7 @@ type CompletionItem struct {
 
 	// A data entry field that is preserved on a completion item between a
 	// CompletionRequest and a CompletionResolveRequest.
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Represents a collection of items to be presented
@@ -1579,7 +1579,7 @@ type Command struct {
 
 	// Arguments that the command handler should be
 	// invoked with.
-	Arguments *[]LSPAny `json:"arguments,omitempty"`
+	Arguments *[]any `json:"arguments,omitempty"`
 }
 
 // A code action represents a change that can be performed in code, e.g. to fix a problem or
@@ -1636,7 +1636,7 @@ type CodeAction struct {
 	// a `textDocument/codeAction` and a `codeAction/resolve` request.
 	//
 	// Since: 3.16.0
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 
 	// Tags for this code action.
 	//
@@ -1683,7 +1683,7 @@ type WorkspaceSymbol struct {
 
 	// A data entry field that is preserved on a workspace symbol between a
 	// workspace symbol request and a workspace symbol resolve request.
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Registration options for a WorkspaceSymbolRequest.
@@ -1714,7 +1714,7 @@ type CodeLens struct {
 
 	// A data entry field that is preserved on a code lens item between
 	// a CodeLensRequest and a CodeLensResolveRequest
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Registration options for a CodeLensRequest.
@@ -1752,7 +1752,7 @@ type DocumentLink struct {
 
 	// A data entry field that is preserved on a document link between a
 	// DocumentLinkRequest and a DocumentLinkResolveRequest.
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Registration options for a DocumentLinkRequest.
@@ -1877,7 +1877,7 @@ type ExecuteCommandParams struct {
 	Command string `json:"command"`
 
 	// Arguments that the command should be invoked with.
-	Arguments *[]LSPAny `json:"arguments,omitempty"`
+	Arguments *[]any `json:"arguments,omitempty"`
 }
 
 // Registration options for a ExecuteCommandRequest.
@@ -2004,7 +2004,7 @@ type ProgressParams struct {
 	Token ProgressToken `json:"token"`
 
 	// The progress data.
-	Value LSPAny `json:"value"`
+	Value any `json:"value"`
 }
 
 // A parameter literal used in requests to pass a text document and a position inside that
@@ -2596,7 +2596,7 @@ type NotebookDocument struct {
 	// document.
 	//
 	// Note: should always be an object literal (e.g. LSPObject)
-	Metadata *LSPObject `json:"metadata,omitempty"`
+	Metadata *map[string]any `json:"metadata,omitempty"`
 
 	// The cells of a notebook.
 	Cells []*NotebookCell `json:"cells"`
@@ -2659,7 +2659,7 @@ type NotebookDocumentChangeEvent struct {
 	// The changed meta data if any.
 	//
 	// Note: should always be an object literal (e.g. LSPObject)
-	Metadata *LSPObject `json:"metadata,omitempty"`
+	Metadata *map[string]any `json:"metadata,omitempty"`
 
 	// Changes to cells
 	Cells *NotebookDocumentCellChanges `json:"cells,omitempty"`
@@ -2734,7 +2734,7 @@ type Registration struct {
 	Method string `json:"method"`
 
 	// Options necessary for the registration.
-	RegisterOptions *LSPAny `json:"registerOptions,omitempty"`
+	RegisterOptions *any `json:"registerOptions,omitempty"`
 }
 
 // General parameters to unregister a request or notification.
@@ -2790,7 +2790,7 @@ type _InitializeParams struct {
 	Capabilities *ClientCapabilities `json:"capabilities"`
 
 	// User provided initialization options.
-	InitializationOptions *LSPAny `json:"initializationOptions,omitempty"`
+	InitializationOptions *any `json:"initializationOptions,omitempty"`
 
 	// The initial trace setting. If omitted trace is disabled ('off').
 	Trace *TraceValue `json:"trace,omitempty"`
@@ -2952,7 +2952,7 @@ type ServerCapabilities struct {
 	Workspace *WorkspaceOptions `json:"workspace,omitempty"`
 
 	// Experimental server capabilities.
-	Experimental *LSPAny `json:"experimental,omitempty"`
+	Experimental *any `json:"experimental,omitempty"`
 }
 
 // Information about the server
@@ -3044,7 +3044,7 @@ type Diagnostic struct {
 	// notification and `textDocument/codeAction` request.
 	//
 	// Since: 3.16.0
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Contains additional information about the context in which a completion request is triggered.
@@ -3123,7 +3123,7 @@ type CompletionItemDefaults struct {
 	// A default data value.
 	//
 	// Since: 3.17.0
-	Data *LSPAny `json:"data,omitempty"`
+	Data *any `json:"data,omitempty"`
 }
 
 // Specifies how fields from a completion item should be combined with those
@@ -3702,7 +3702,7 @@ type NotebookCell struct {
 	// Additional metadata stored with the cell.
 	//
 	// Note: should always be an object literal (e.g. LSPObject)
-	Metadata *LSPObject `json:"metadata,omitempty"`
+	Metadata *map[string]any `json:"metadata,omitempty"`
 
 	// Additional execution summary information
 	// if supported by the client.
@@ -3795,7 +3795,7 @@ type ClientCapabilities struct {
 	General *GeneralClientCapabilities `json:"general,omitempty"`
 
 	// Experimental client capabilities.
-	Experimental *LSPAny `json:"experimental,omitempty"`
+	Experimental *any `json:"experimental,omitempty"`
 }
 
 type TextDocumentSyncOptions struct {
@@ -6681,20 +6681,6 @@ type Definition = LocationOrLocations
 // the defining symbol
 type DefinitionLink = LocationLink
 
-// LSP arrays.
-//
-// Since: 3.17.0
-type LSPArray = []LSPAny
-
-// The LSP any type.
-// Please note that strictly speaking a property with the value `undefined`
-// can't be converted into JSON preserving the property name. However for
-// convenience it is allowed and assumed that all these properties are
-// optional as well.
-//
-// Since: 3.17.0
-type LSPAny any
-
 // The declaration of a symbol representation as one or many locations.
 type Declaration = LocationOrLocations
 
@@ -6769,11 +6755,6 @@ type MarkedString = StringOrMarkedStringWithLanguage
 // Since: 3.17.0 - support for NotebookCellTextDocumentFilter.
 type DocumentFilter = TextDocumentFilterOrNotebookCellTextDocumentFilter
 
-// LSP object definition.
-//
-// Since: 3.17.0
-type LSPObject = map[string]LSPAny
-
 // The glob pattern. Either a string pattern or a relative pattern.
 //
 // Since: 3.17.0
@@ -6817,87 +6798,204 @@ type Pattern = string
 
 type RegularExpressionEngineKind = string
 
-// Unmarshallers
-
-var unmarshallers = map[Method]func([]byte) (any, error){
-	MethodTextDocumentImplementation:          unmarshallerFor[ImplementationParams],
-	MethodTextDocumentTypeDefinition:          unmarshallerFor[TypeDefinitionParams],
-	MethodTextDocumentDocumentColor:           unmarshallerFor[DocumentColorParams],
-	MethodTextDocumentColorPresentation:       unmarshallerFor[ColorPresentationParams],
-	MethodTextDocumentFoldingRange:            unmarshallerFor[FoldingRangeParams],
-	MethodTextDocumentDeclaration:             unmarshallerFor[DeclarationParams],
-	MethodTextDocumentSelectionRange:          unmarshallerFor[SelectionRangeParams],
-	MethodTextDocumentPrepareCallHierarchy:    unmarshallerFor[CallHierarchyPrepareParams],
-	MethodCallHierarchyIncomingCalls:          unmarshallerFor[CallHierarchyIncomingCallsParams],
-	MethodCallHierarchyOutgoingCalls:          unmarshallerFor[CallHierarchyOutgoingCallsParams],
-	MethodTextDocumentSemanticTokensFull:      unmarshallerFor[SemanticTokensParams],
-	MethodTextDocumentSemanticTokensFullDelta: unmarshallerFor[SemanticTokensDeltaParams],
-	MethodTextDocumentSemanticTokensRange:     unmarshallerFor[SemanticTokensRangeParams],
-	MethodTextDocumentLinkedEditingRange:      unmarshallerFor[LinkedEditingRangeParams],
-	MethodWorkspaceWillCreateFiles:            unmarshallerFor[CreateFilesParams],
-	MethodWorkspaceWillRenameFiles:            unmarshallerFor[RenameFilesParams],
-	MethodWorkspaceWillDeleteFiles:            unmarshallerFor[DeleteFilesParams],
-	MethodTextDocumentMoniker:                 unmarshallerFor[MonikerParams],
-	MethodTextDocumentPrepareTypeHierarchy:    unmarshallerFor[TypeHierarchyPrepareParams],
-	MethodTypeHierarchySupertypes:             unmarshallerFor[TypeHierarchySupertypesParams],
-	MethodTypeHierarchySubtypes:               unmarshallerFor[TypeHierarchySubtypesParams],
-	MethodTextDocumentInlineValue:             unmarshallerFor[InlineValueParams],
-	MethodTextDocumentInlayHint:               unmarshallerFor[InlayHintParams],
-	MethodInlayHintResolve:                    unmarshallerFor[InlayHint],
-	MethodTextDocumentDiagnostic:              unmarshallerFor[DocumentDiagnosticParams],
-	MethodWorkspaceDiagnostic:                 unmarshallerFor[WorkspaceDiagnosticParams],
-	MethodTextDocumentInlineCompletion:        unmarshallerFor[InlineCompletionParams],
-	MethodWorkspaceTextDocumentContent:        unmarshallerFor[TextDocumentContentParams],
-	MethodInitialize:                          unmarshallerFor[InitializeParams],
-	MethodShutdown:                            unmarshallerFor[any],
-	MethodTextDocumentWillSaveWaitUntil:       unmarshallerFor[WillSaveTextDocumentParams],
-	MethodTextDocumentCompletion:              unmarshallerFor[CompletionParams],
-	MethodCompletionItemResolve:               unmarshallerFor[CompletionItem],
-	MethodTextDocumentHover:                   unmarshallerFor[HoverParams],
-	MethodTextDocumentSignatureHelp:           unmarshallerFor[SignatureHelpParams],
-	MethodTextDocumentDefinition:              unmarshallerFor[DefinitionParams],
-	MethodTextDocumentReferences:              unmarshallerFor[ReferenceParams],
-	MethodTextDocumentDocumentHighlight:       unmarshallerFor[DocumentHighlightParams],
-	MethodTextDocumentDocumentSymbol:          unmarshallerFor[DocumentSymbolParams],
-	MethodTextDocumentCodeAction:              unmarshallerFor[CodeActionParams],
-	MethodCodeActionResolve:                   unmarshallerFor[CodeAction],
-	MethodWorkspaceSymbol:                     unmarshallerFor[WorkspaceSymbolParams],
-	MethodWorkspaceSymbolResolve:              unmarshallerFor[WorkspaceSymbol],
-	MethodTextDocumentCodeLens:                unmarshallerFor[CodeLensParams],
-	MethodCodeLensResolve:                     unmarshallerFor[CodeLens],
-	MethodTextDocumentDocumentLink:            unmarshallerFor[DocumentLinkParams],
-	MethodDocumentLinkResolve:                 unmarshallerFor[DocumentLink],
-	MethodTextDocumentFormatting:              unmarshallerFor[DocumentFormattingParams],
-	MethodTextDocumentRangeFormatting:         unmarshallerFor[DocumentRangeFormattingParams],
-	MethodTextDocumentRangesFormatting:        unmarshallerFor[DocumentRangesFormattingParams],
-	MethodTextDocumentOnTypeFormatting:        unmarshallerFor[DocumentOnTypeFormattingParams],
-	MethodTextDocumentRename:                  unmarshallerFor[RenameParams],
-	MethodTextDocumentPrepareRename:           unmarshallerFor[PrepareRenameParams],
-	MethodWorkspaceExecuteCommand:             unmarshallerFor[ExecuteCommandParams],
-	MethodWorkspaceDidChangeWorkspaceFolders:  unmarshallerFor[DidChangeWorkspaceFoldersParams],
-	MethodWindowWorkDoneProgressCancel:        unmarshallerFor[WorkDoneProgressCancelParams],
-	MethodWorkspaceDidCreateFiles:             unmarshallerFor[CreateFilesParams],
-	MethodWorkspaceDidRenameFiles:             unmarshallerFor[RenameFilesParams],
-	MethodWorkspaceDidDeleteFiles:             unmarshallerFor[DeleteFilesParams],
-	MethodNotebookDocumentDidOpen:             unmarshallerFor[DidOpenNotebookDocumentParams],
-	MethodNotebookDocumentDidChange:           unmarshallerFor[DidChangeNotebookDocumentParams],
-	MethodNotebookDocumentDidSave:             unmarshallerFor[DidSaveNotebookDocumentParams],
-	MethodNotebookDocumentDidClose:            unmarshallerFor[DidCloseNotebookDocumentParams],
-	MethodInitialized:                         unmarshallerFor[InitializedParams],
-	MethodExit:                                unmarshallerFor[any],
-	MethodWorkspaceDidChangeConfiguration:     unmarshallerFor[DidChangeConfigurationParams],
-	MethodTextDocumentDidOpen:                 unmarshallerFor[DidOpenTextDocumentParams],
-	MethodTextDocumentDidChange:               unmarshallerFor[DidChangeTextDocumentParams],
-	MethodTextDocumentDidClose:                unmarshallerFor[DidCloseTextDocumentParams],
-	MethodTextDocumentDidSave:                 unmarshallerFor[DidSaveTextDocumentParams],
-	MethodTextDocumentWillSave:                unmarshallerFor[WillSaveTextDocumentParams],
-	MethodWorkspaceDidChangeWatchedFiles:      unmarshallerFor[DidChangeWatchedFilesParams],
-	MethodSetTrace:                            unmarshallerFor[SetTraceParams],
-	MethodCancelRequest:                       unmarshallerFor[CancelParams],
-	MethodProgress:                            unmarshallerFor[ProgressParams],
+func unmarshalParams(method Method, data []byte) (any, error) {
+	switch method {
+	case MethodTextDocumentImplementation:
+		return unmarshalPtrTo[ImplementationParams](data)
+	case MethodTextDocumentTypeDefinition:
+		return unmarshalPtrTo[TypeDefinitionParams](data)
+	case MethodWorkspaceWorkspaceFolders:
+		return unmarshalEmpty(data)
+	case MethodWorkspaceConfiguration:
+		return unmarshalPtrTo[ConfigurationParams](data)
+	case MethodTextDocumentDocumentColor:
+		return unmarshalPtrTo[DocumentColorParams](data)
+	case MethodTextDocumentColorPresentation:
+		return unmarshalPtrTo[ColorPresentationParams](data)
+	case MethodTextDocumentFoldingRange:
+		return unmarshalPtrTo[FoldingRangeParams](data)
+	case MethodWorkspaceFoldingRangeRefresh:
+		return unmarshalEmpty(data)
+	case MethodTextDocumentDeclaration:
+		return unmarshalPtrTo[DeclarationParams](data)
+	case MethodTextDocumentSelectionRange:
+		return unmarshalPtrTo[SelectionRangeParams](data)
+	case MethodWindowWorkDoneProgressCreate:
+		return unmarshalPtrTo[WorkDoneProgressCreateParams](data)
+	case MethodTextDocumentPrepareCallHierarchy:
+		return unmarshalPtrTo[CallHierarchyPrepareParams](data)
+	case MethodCallHierarchyIncomingCalls:
+		return unmarshalPtrTo[CallHierarchyIncomingCallsParams](data)
+	case MethodCallHierarchyOutgoingCalls:
+		return unmarshalPtrTo[CallHierarchyOutgoingCallsParams](data)
+	case MethodTextDocumentSemanticTokensFull:
+		return unmarshalPtrTo[SemanticTokensParams](data)
+	case MethodTextDocumentSemanticTokensFullDelta:
+		return unmarshalPtrTo[SemanticTokensDeltaParams](data)
+	case MethodTextDocumentSemanticTokensRange:
+		return unmarshalPtrTo[SemanticTokensRangeParams](data)
+	case MethodWorkspaceSemanticTokensRefresh:
+		return unmarshalEmpty(data)
+	case MethodWindowShowDocument:
+		return unmarshalPtrTo[ShowDocumentParams](data)
+	case MethodTextDocumentLinkedEditingRange:
+		return unmarshalPtrTo[LinkedEditingRangeParams](data)
+	case MethodWorkspaceWillCreateFiles:
+		return unmarshalPtrTo[CreateFilesParams](data)
+	case MethodWorkspaceWillRenameFiles:
+		return unmarshalPtrTo[RenameFilesParams](data)
+	case MethodWorkspaceWillDeleteFiles:
+		return unmarshalPtrTo[DeleteFilesParams](data)
+	case MethodTextDocumentMoniker:
+		return unmarshalPtrTo[MonikerParams](data)
+	case MethodTextDocumentPrepareTypeHierarchy:
+		return unmarshalPtrTo[TypeHierarchyPrepareParams](data)
+	case MethodTypeHierarchySupertypes:
+		return unmarshalPtrTo[TypeHierarchySupertypesParams](data)
+	case MethodTypeHierarchySubtypes:
+		return unmarshalPtrTo[TypeHierarchySubtypesParams](data)
+	case MethodTextDocumentInlineValue:
+		return unmarshalPtrTo[InlineValueParams](data)
+	case MethodWorkspaceInlineValueRefresh:
+		return unmarshalEmpty(data)
+	case MethodTextDocumentInlayHint:
+		return unmarshalPtrTo[InlayHintParams](data)
+	case MethodInlayHintResolve:
+		return unmarshalPtrTo[InlayHint](data)
+	case MethodWorkspaceInlayHintRefresh:
+		return unmarshalEmpty(data)
+	case MethodTextDocumentDiagnostic:
+		return unmarshalPtrTo[DocumentDiagnosticParams](data)
+	case MethodWorkspaceDiagnostic:
+		return unmarshalPtrTo[WorkspaceDiagnosticParams](data)
+	case MethodWorkspaceDiagnosticRefresh:
+		return unmarshalEmpty(data)
+	case MethodTextDocumentInlineCompletion:
+		return unmarshalPtrTo[InlineCompletionParams](data)
+	case MethodWorkspaceTextDocumentContent:
+		return unmarshalPtrTo[TextDocumentContentParams](data)
+	case MethodWorkspaceTextDocumentContentRefresh:
+		return unmarshalPtrTo[TextDocumentContentRefreshParams](data)
+	case MethodClientRegisterCapability:
+		return unmarshalPtrTo[RegistrationParams](data)
+	case MethodClientUnregisterCapability:
+		return unmarshalPtrTo[UnregistrationParams](data)
+	case MethodInitialize:
+		return unmarshalPtrTo[InitializeParams](data)
+	case MethodShutdown:
+		return unmarshalEmpty(data)
+	case MethodWindowShowMessageRequest:
+		return unmarshalPtrTo[ShowMessageRequestParams](data)
+	case MethodTextDocumentWillSaveWaitUntil:
+		return unmarshalPtrTo[WillSaveTextDocumentParams](data)
+	case MethodTextDocumentCompletion:
+		return unmarshalPtrTo[CompletionParams](data)
+	case MethodCompletionItemResolve:
+		return unmarshalPtrTo[CompletionItem](data)
+	case MethodTextDocumentHover:
+		return unmarshalPtrTo[HoverParams](data)
+	case MethodTextDocumentSignatureHelp:
+		return unmarshalPtrTo[SignatureHelpParams](data)
+	case MethodTextDocumentDefinition:
+		return unmarshalPtrTo[DefinitionParams](data)
+	case MethodTextDocumentReferences:
+		return unmarshalPtrTo[ReferenceParams](data)
+	case MethodTextDocumentDocumentHighlight:
+		return unmarshalPtrTo[DocumentHighlightParams](data)
+	case MethodTextDocumentDocumentSymbol:
+		return unmarshalPtrTo[DocumentSymbolParams](data)
+	case MethodTextDocumentCodeAction:
+		return unmarshalPtrTo[CodeActionParams](data)
+	case MethodCodeActionResolve:
+		return unmarshalPtrTo[CodeAction](data)
+	case MethodWorkspaceSymbol:
+		return unmarshalPtrTo[WorkspaceSymbolParams](data)
+	case MethodWorkspaceSymbolResolve:
+		return unmarshalPtrTo[WorkspaceSymbol](data)
+	case MethodTextDocumentCodeLens:
+		return unmarshalPtrTo[CodeLensParams](data)
+	case MethodCodeLensResolve:
+		return unmarshalPtrTo[CodeLens](data)
+	case MethodWorkspaceCodeLensRefresh:
+		return unmarshalEmpty(data)
+	case MethodTextDocumentDocumentLink:
+		return unmarshalPtrTo[DocumentLinkParams](data)
+	case MethodDocumentLinkResolve:
+		return unmarshalPtrTo[DocumentLink](data)
+	case MethodTextDocumentFormatting:
+		return unmarshalPtrTo[DocumentFormattingParams](data)
+	case MethodTextDocumentRangeFormatting:
+		return unmarshalPtrTo[DocumentRangeFormattingParams](data)
+	case MethodTextDocumentRangesFormatting:
+		return unmarshalPtrTo[DocumentRangesFormattingParams](data)
+	case MethodTextDocumentOnTypeFormatting:
+		return unmarshalPtrTo[DocumentOnTypeFormattingParams](data)
+	case MethodTextDocumentRename:
+		return unmarshalPtrTo[RenameParams](data)
+	case MethodTextDocumentPrepareRename:
+		return unmarshalPtrTo[PrepareRenameParams](data)
+	case MethodWorkspaceExecuteCommand:
+		return unmarshalPtrTo[ExecuteCommandParams](data)
+	case MethodWorkspaceApplyEdit:
+		return unmarshalPtrTo[ApplyWorkspaceEditParams](data)
+	case MethodWorkspaceDidChangeWorkspaceFolders:
+		return unmarshalPtrTo[DidChangeWorkspaceFoldersParams](data)
+	case MethodWindowWorkDoneProgressCancel:
+		return unmarshalPtrTo[WorkDoneProgressCancelParams](data)
+	case MethodWorkspaceDidCreateFiles:
+		return unmarshalPtrTo[CreateFilesParams](data)
+	case MethodWorkspaceDidRenameFiles:
+		return unmarshalPtrTo[RenameFilesParams](data)
+	case MethodWorkspaceDidDeleteFiles:
+		return unmarshalPtrTo[DeleteFilesParams](data)
+	case MethodNotebookDocumentDidOpen:
+		return unmarshalPtrTo[DidOpenNotebookDocumentParams](data)
+	case MethodNotebookDocumentDidChange:
+		return unmarshalPtrTo[DidChangeNotebookDocumentParams](data)
+	case MethodNotebookDocumentDidSave:
+		return unmarshalPtrTo[DidSaveNotebookDocumentParams](data)
+	case MethodNotebookDocumentDidClose:
+		return unmarshalPtrTo[DidCloseNotebookDocumentParams](data)
+	case MethodInitialized:
+		return unmarshalPtrTo[InitializedParams](data)
+	case MethodExit:
+		return unmarshalEmpty(data)
+	case MethodWorkspaceDidChangeConfiguration:
+		return unmarshalPtrTo[DidChangeConfigurationParams](data)
+	case MethodWindowShowMessage:
+		return unmarshalPtrTo[ShowMessageParams](data)
+	case MethodWindowLogMessage:
+		return unmarshalPtrTo[LogMessageParams](data)
+	case MethodTelemetryEvent:
+		return unmarshalAny(data)
+	case MethodTextDocumentDidOpen:
+		return unmarshalPtrTo[DidOpenTextDocumentParams](data)
+	case MethodTextDocumentDidChange:
+		return unmarshalPtrTo[DidChangeTextDocumentParams](data)
+	case MethodTextDocumentDidClose:
+		return unmarshalPtrTo[DidCloseTextDocumentParams](data)
+	case MethodTextDocumentDidSave:
+		return unmarshalPtrTo[DidSaveTextDocumentParams](data)
+	case MethodTextDocumentWillSave:
+		return unmarshalPtrTo[WillSaveTextDocumentParams](data)
+	case MethodWorkspaceDidChangeWatchedFiles:
+		return unmarshalPtrTo[DidChangeWatchedFilesParams](data)
+	case MethodTextDocumentPublishDiagnostics:
+		return unmarshalPtrTo[PublishDiagnosticsParams](data)
+	case MethodSetTrace:
+		return unmarshalPtrTo[SetTraceParams](data)
+	case MethodLogTrace:
+		return unmarshalPtrTo[LogTraceParams](data)
+	case MethodCancelRequest:
+		return unmarshalPtrTo[CancelParams](data)
+	case MethodProgress:
+		return unmarshalPtrTo[ProgressParams](data)
+	default:
+		return unmarshalAny(data)
+	}
 }
 
-// Requests
+// Methods
 const (
 	// A request to resolve the implementation locations of a symbol at a given text
 	// document position. The request's parameter is of type TextDocumentPositionParams
@@ -7196,10 +7294,6 @@ const (
 	MethodWorkspaceExecuteCommand Method = "workspace/executeCommand"
 	// A request sent from the server to the client to modified certain resources.
 	MethodWorkspaceApplyEdit Method = "workspace/applyEdit"
-)
-
-// Notifications
-const (
 	// The `workspace/didChangeWorkspaceFolders` notification is sent from the client to the server when the workspace
 	// folder configuration changes.
 	MethodWorkspaceDidChangeWorkspaceFolders Method = "workspace/didChangeWorkspaceFolders"

@@ -40,12 +40,27 @@ func (n *Nullable[T]) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &n.Value)
 }
 
-func unmarshallerFor[T any](data []byte) (any, error) {
+func unmarshalPtrTo[T any](data []byte) (*T, error) {
 	var v T
 	if err := json.Unmarshal(data, &v); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal %T: %w", (*T)(nil), err)
 	}
 	return &v, nil
+}
+
+func unmarshalAny(data []byte) (any, error) {
+	var v any
+	if err := json.Unmarshal(data, &v); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal any: %w", err)
+	}
+	return v, nil
+}
+
+func unmarshalEmpty(data []byte) (any, error) {
+	if len(data) != 0 {
+		return nil, fmt.Errorf("expected empty, got: %s", string(data))
+	}
+	return nil, nil
 }
 
 func assertOnlyOne(message string, values ...bool) {

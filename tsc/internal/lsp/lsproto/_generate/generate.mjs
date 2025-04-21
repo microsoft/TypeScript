@@ -7,7 +7,7 @@ import url from "node:url";
 import which from "which";
 
 /**
- * @import { MetaModel, OrType, Type, BaseTypes } from "./metaModelSchema.mts"
+ * @import { MetaModel, OrType, Type, Request, Notification } from "./metaModelSchema.mts"
  */
 void 0;
 
@@ -30,10 +30,6 @@ const model = JSON.parse(fs.readFileSync(metaModelPath, "utf-8"));
  * @typedef {Object} GoType
  * @property {string} name - Name of the type in Go
  * @property {boolean} needsPointer - Whether this type should be used with a pointer
- * @property {boolean} [isAlias] - Whether this type is an alias to another type
- * @property {string} [aliasFor] - If this is an alias, the name of the target type
- * @property {string} [importPath] - Import path if needed
- * @property {string} [jsonUnmarshaling] - Custom JSON unmarshaling code if required
  */
 
 /**
@@ -41,9 +37,6 @@ const model = JSON.parse(fs.readFileSync(metaModelPath, "utf-8"));
  * @property {Map<string, GoType>} types - Map of type names to types
  * @property {Map<string, string>} literalTypes - Map from literal values to type names
  * @property {Map<string, {name: string, type: Type}[]>} unionTypes - Map of union type names to their component types
- * @property {Set<string>} generatedTypes - Set of types that have been generated
- * @property {Map<string, {value: string; identifier: string, documentation: string | undefined, deprecated: string| undefined}[]>} enumValuesByType - Map of enum type names to their values
- * @property {Map<string, string>} unionTypeAliases - Map from union type name to alias name
  */
 
 /**
@@ -53,9 +46,6 @@ const typeInfo = {
     types: new Map(),
     literalTypes: new Map(),
     unionTypes: new Map(),
-    generatedTypes: new Set(),
-    enumValuesByType: new Map(),
-    unionTypeAliases: new Map(), // Map from union type name to alias name
 };
 
 /**
@@ -66,78 +56,46 @@ function titleCase(s) {
 }
 
 /**
- * @param {BaseTypes} baseType
- * @returns {GoType}
- */
-function mapBaseTypeToGo(baseType) {
-    switch (baseType) {
-        case "integer":
-            return { name: "int32", needsPointer: false };
-        case "uinteger":
-            return { name: "uint32", needsPointer: false };
-        case "string":
-            return { name: "string", needsPointer: false };
-        case "boolean":
-            return { name: "bool", needsPointer: false };
-        case "URI":
-            return { name: "URI", needsPointer: false };
-        case "DocumentUri":
-            return { name: "DocumentUri", needsPointer: false };
-        case "decimal":
-            return { name: "float64", needsPointer: false };
-        case "RegExp":
-            return { name: "string", needsPointer: false }; // Using string for RegExp
-        default:
-            throw new Error(`Unsupported base type: ${baseType}`);
-    }
-}
-
-/**
  * @param {Type} type
  * @returns {GoType}
  */
 function resolveType(type) {
-    // Special case for the LSP "any" type structure, which would normally become a complex union
-    if (
-        type.kind === "or" && type.items.length >= 6 &&
-        type.items.some(item => item.kind === "reference" && item.name === "LSPObject") &&
-        type.items.some(item => item.kind === "reference" && item.name === "LSPArray") &&
-        type.items.some(item => item.kind === "base" && item.name === "string") &&
-        type.items.some(item => item.kind === "base" && item.name === "integer") &&
-        type.items.some(item => item.kind === "base" && item.name === "boolean")
-    ) {
-        return { name: "LSPAny", needsPointer: false };
-    }
-
     switch (type.kind) {
         case "base":
-            return mapBaseTypeToGo(type.name);
-
-        case "reference":
-            // If it's a reference, we need to check if we know this type
-            if (typeInfo.types.has(type.name)) {
-                const refType = typeInfo.types.get(type.name);
-                if (refType !== undefined) {
-                    // Important: If this is an alias type, preserve the alias name rather than resolving it
-                    if (refType.isAlias) {
-                        return {
-                            name: type.name, // Use the alias name (reference name)
-                            needsPointer: refType.needsPointer,
-                        };
-                    }
-                    return refType;
-                }
+            switch (type.name) {
+                case "integer":
+                    return { name: "int32", needsPointer: false };
+                case "uinteger":
+                    return { name: "uint32", needsPointer: false };
+                case "string":
+                    return { name: "string", needsPointer: false };
+                case "boolean":
+                    return { name: "bool", needsPointer: false };
+                case "URI":
+                    return { name: "URI", needsPointer: false };
+                case "DocumentUri":
+                    return { name: "DocumentUri", needsPointer: false };
+                case "decimal":
+                    return { name: "float64", needsPointer: false };
+                default:
+                    throw new Error(`Unsupported base type: ${type.name}`);
             }
 
-            // By default, assume referenced types are structs that need pointers
-            // This will be updated as we process all types
-            const refType = { name: type.name, needsPointer: true };
-            typeInfo.types.set(type.name, refType);
+        case "reference":
+            const typeAliasOverride = typeAliasOverrides.get(type.name);
+            if (typeAliasOverride) {
+                return typeAliasOverride;
+            }
+
+            let refType = typeInfo.types.get(type.name);
+            if (!refType) {
+                refType = { name: type.name, needsPointer: true };
+                typeInfo.types.set(type.name, refType);
+            }
             return refType;
 
         case "array": {
             const elementType = resolveType(type.element);
-            // Arrays of structs should be arrays of pointers to structs
             const arrayTypeName = elementType.needsPointer
                 ? `[]*${elementType.name}`
                 : `[]${elementType.name}`;
@@ -148,15 +106,12 @@ function resolveType(type) {
         }
 
         case "map": {
-            const keyType = type.key.kind === "base"
-                ? mapBaseTypeToGo(type.key.name).name
-                : resolveType(type.key).name;
-
+            const keyType = resolveType(type.key);
             const valueType = resolveType(type.value);
             const valueTypeName = valueType.needsPointer ? `*${valueType.name}` : valueType.name;
 
             return {
-                name: `map[${keyType}]${valueTypeName}`,
+                name: `map[${keyType.name}]${valueTypeName}`,
                 needsPointer: false,
             };
         }
@@ -219,7 +174,7 @@ function handleOrType(orType) {
     // If it's nullable and only has one other type
     if (nullIndex !== -1) {
         if (types.length !== 2) {
-            throw new Error("Expected exactly two items in OR type for null handling");
+            throw new Error("Expected exactly two items in OR type for null handling: " + JSON.stringify(types));
         }
 
         const otherType = types[1 - nullIndex];
@@ -248,13 +203,7 @@ function handleOrType(orType) {
             type.kind === "array" &&
             (type.element.kind === "reference" || type.element.kind === "base")
         ) {
-            return `${
-                titleCase(
-                    type.element.kind === "reference"
-                        ? type.element.name
-                        : type.element.name,
-                )
-            }s`;
+            return `${titleCase(type.element.name)}s`;
         }
         else if (type.kind === "literal" && type.value.properties.length === 0) {
             return "EmptyObject";
@@ -267,7 +216,7 @@ function handleOrType(orType) {
         }
     });
 
-    const unionTypeName = memberNames.map(titleCase).join("Or");
+    const unionTypeName = memberNames.join("Or");
     const union = memberNames.map((name, i) => ({ name, type: types[i] }));
 
     typeInfo.unionTypes.set(unionTypeName, union);
@@ -278,54 +227,22 @@ function handleOrType(orType) {
     };
 }
 
+const typeAliasOverrides = new Map([
+    ["LSPAny", { name: "any", needsPointer: false }],
+    ["LSPArray", { name: "[]any", needsPointer: false }],
+    ["LSPObject", { name: "map[string]any", needsPointer: false }],
+]);
+
 /**
  * First pass: Resolve all type information
  */
 function collectTypeDefinitions() {
-    // Register built-in types
-    typeInfo.types.set("LSPAny", { name: "any", needsPointer: false });
-
-    // Keep track of used enum identifiers across all enums to avoid conflicts
-    const usedEnumIdentifiers = new Set();
-
     // Process all enumerations first to make them available for struct fields
     for (const enumeration of model.enumerations) {
         typeInfo.types.set(enumeration.name, {
             name: enumeration.name,
             needsPointer: false,
         });
-
-        const enumValues = [];
-
-        // Process values for this enum
-        for (const value of enumeration.values) {
-            // Generate a unique identifier for this enum constant
-            let identifier = `${enumeration.name}${value.name}`;
-
-            // If this identifier is already used, create a more unique one
-            if (usedEnumIdentifiers.has(identifier)) {
-                // Try with underscores
-                identifier = `${enumeration.name}_${value.name}`;
-
-                // If still not unique, add a numeric suffix
-                let counter = 1;
-                while (usedEnumIdentifiers.has(identifier)) {
-                    identifier = `${enumeration.name}_${value.name}_${counter++}`;
-                }
-            }
-
-            // Mark this identifier as used
-            usedEnumIdentifiers.add(identifier);
-            enumValues.push({
-                value: String(value.value),
-                identifier,
-                documentation: value.documentation,
-                deprecated: value.deprecated,
-            });
-        }
-
-        // Store the map of values for this enum
-        typeInfo.enumValuesByType.set(enumeration.name, enumValues);
     }
 
     const valueTypes = new Set([
@@ -349,26 +266,16 @@ function collectTypeDefinitions() {
         });
     }
 
-    // First pass - process all type aliases to capture union types
+    // Process all type aliases
     for (const typeAlias of model.typeAliases) {
-        if (typeAlias.type.kind === "or") {
-            // This is a union type - resolve it but don't yet store the alias
-            const resolvedType = resolveType(typeAlias.type);
-            typeInfo.unionTypeAliases.set(resolvedType.name, typeAlias.name);
+        if (typeAliasOverrides.has(typeAlias.name)) {
+            continue;
         }
-    }
 
-    // Process all type aliases now (including non-union ones)
-    for (const typeAlias of model.typeAliases) {
         const resolvedType = resolveType(typeAlias.type);
-
-        // Store the type with the alias name, but mark it as an alias
-        // This is critical for resolving references to this type
         typeInfo.types.set(typeAlias.name, {
-            name: typeAlias.name, // Use the alias name, not the resolved type name
+            name: typeAlias.name,
             needsPointer: resolvedType.needsPointer,
-            isAlias: true,
-            aliasFor: resolvedType.name,
         });
     }
 }
@@ -409,27 +316,34 @@ function formatDocumentation(s) {
     return lines.length > 0 ? "// " + lines.join("\n// ") + "\n" : "";
 }
 
-/** @type {string[]} */
-const parts = [];
-
 /**
- * @param {string} s
+ * @param {string} name
  */
-function write(s) {
-    parts.push(s);
-}
-
-/**
- * @param {string} s
- */
-function writeLine(s = "") {
-    parts.push(s + "\n");
+function methodNameIdentifier(name) {
+    return name.split("/").map(v => v === "$" ? "" : titleCase(v)).join("");
 }
 
 /**
  * Generate the Go code
  */
 function generateCode() {
+    /** @type {string[]} */
+    const parts = [];
+
+    /**
+     * @param {string} s
+     */
+    function write(s) {
+        parts.push(s);
+    }
+
+    /**
+     * @param {string} s
+     */
+    function writeLine(s = "") {
+        parts.push(s + "\n");
+    }
+
     // File header
     writeLine("// Code generated by generate.mjs; DO NOT EDIT.");
     writeLine("");
@@ -445,9 +359,6 @@ function generateCode() {
 
     // Generate structures
     writeLine("// Structures\n");
-
-    // Keep track of generated types to avoid duplicates
-    const generatedTypes = new Set();
 
     for (const structure of model.structures) {
         write(formatDocumentation(structure.documentation));
@@ -488,8 +399,6 @@ function generateCode() {
 
         writeLine("}");
         writeLine("");
-
-        generatedTypes.add(structure.name);
     }
 
     // Generate enumerations
@@ -510,17 +419,20 @@ function generateCode() {
                 baseType = "uint32";
                 break;
             default:
-                baseType = "string";
+                throw new Error(`Unsupported enum type: ${enumeration.type.name}`);
         }
 
         writeLine(`type ${enumeration.name} ${baseType}`);
         writeLine("");
 
         // Get the pre-processed enum entries map that avoids duplicates
-        const enumValues = typeInfo.enumValuesByType.get(enumeration.name);
-        if (!enumValues || !enumValues.length) {
-            continue; // Skip if no entries (shouldn't happen)
-        }
+
+        const enumValues = enumeration.values.map(value => ({
+            value: String(value.value),
+            identifier: `${enumeration.name}${value.name}`,
+            documentation: value.documentation,
+            deprecated: value.deprecated,
+        }));
 
         writeLine("const (");
 
@@ -553,127 +465,68 @@ function generateCode() {
         writeLine(`\treturn nil`);
         writeLine(`}`);
         writeLine("");
-
-        generatedTypes.add(enumeration.name);
     }
 
     // Generate type aliases
     writeLine("// Type aliases\n");
 
     for (const typeAlias of model.typeAliases) {
-        write(formatDocumentation(typeAlias.documentation));
-
-        if (typeAlias.name === "LSPAny") {
-            writeLine("type LSPAny any");
-            writeLine("");
+        if (typeAliasOverrides.has(typeAlias.name)) {
             continue;
         }
+
+        write(formatDocumentation(typeAlias.documentation));
 
         const resolvedType = resolveType(typeAlias.type);
         writeLine(`type ${typeAlias.name} = ${resolvedType.name}`);
         writeLine("");
-
-        typeInfo.generatedTypes.add(typeAlias.name);
     }
 
-    // Generate unmarshallers
-    writeLine("// Unmarshallers\n");
+    /** @type {(Request | Notification)[]} */
+    const requestsAndNotifications = [...model.requests, ...model.notifications];
 
-    // Note: The unmarshallerFor function already exists in lsp.go, so we don't generate it
+    // Generate unmarshalParams function
+    writeLine("func unmarshalParams(method Method, data []byte) (any, error) {");
+    writeLine("\tswitch method {");
 
-    // The unmarshallers map is expected by jsonrpc.go
-    writeLine("var unmarshallers = map[Method]func([]byte) (any, error){");
-
-    // Client-to-server requests
-    for (const request of model.requests) {
-        if (request.messageDirection === "serverToClient") {
-            continue;
-        }
-
-        const methodName = request.method.split("/")
-            .map(v => v === "$" ? "" : titleCase(v))
-            .join("");
+    // Requests and notifications
+    for (const request of requestsAndNotifications) {
+        const methodName = methodNameIdentifier(request.method);
 
         if (!request.params) {
-            // For requests without params (like shutdown), use any type
-            writeLine(`\tMethod${methodName}: unmarshallerFor[any],`);
+            writeLine(`\tcase Method${methodName}:`);
+            writeLine(`\t\treturn unmarshalEmpty(data)`);
             continue;
         }
-        let typeName;
         if (Array.isArray(request.params)) {
-            // This shouldn't typically happen in the LSP spec
-            typeName = "any";
+            throw new Error("Unexpected array type for request params: " + JSON.stringify(request.params));
         }
-        else if (request.params.kind === "reference") {
-            typeName = request.params.name;
+
+        const resolvedType = resolveType(request.params);
+
+        writeLine(`\tcase Method${methodName}:`);
+        if (resolvedType.name === "any") {
+            writeLine(`\t\treturn unmarshalAny(data)`);
         }
         else {
-            const resolvedType = resolveType(request.params);
-            typeName = resolvedType.name;
+            writeLine(`\t\treturn unmarshalPtrTo[${resolvedType.name}](data)`);
         }
-
-        writeLine(`\tMethod${methodName}: unmarshallerFor[${typeName}],`);
     }
 
-    // Client-to-server notifications
-    for (const notification of model.notifications) {
-        if (notification.messageDirection === "serverToClient") {
-            continue;
-        }
-
-        const methodName = notification.method.split("/")
-            .map(v => v === "$" ? "" : titleCase(v))
-            .join("");
-
-        if (!notification.params) {
-            // For notifications without params (like exit), use any type
-            writeLine(`\tMethod${methodName}: unmarshallerFor[any],`);
-            continue;
-        }
-        let typeName;
-        if (Array.isArray(notification.params)) {
-            // This shouldn't typically happen in the LSP spec
-            typeName = "any";
-        }
-        else if (notification.params.kind === "reference") {
-            typeName = notification.params.name;
-        }
-        else {
-            const resolvedType = resolveType(notification.params);
-            typeName = resolvedType.name;
-        }
-
-        writeLine(`\tMethod${methodName}: unmarshallerFor[${typeName}],`);
-    }
-
+    writeLine("\tdefault:");
+    writeLine(`\t\treturn unmarshalAny(data)`);
+    writeLine("\t}");
     writeLine("}");
     writeLine("");
 
-    // Method type exists in lsp.go, so skip declaring it
-    writeLine("// Requests");
+    writeLine("// Methods");
     writeLine("const (");
-    for (const request of model.requests) {
+    for (const request of requestsAndNotifications) {
         write(formatDocumentation(request.documentation));
 
-        const methodName = request.method.split("/")
-            .map(v => v === "$" ? "" : titleCase(v))
-            .join("");
+        const methodName = methodNameIdentifier(request.method);
 
         writeLine(`\tMethod${methodName} Method = "${request.method}"`);
-    }
-    writeLine(")");
-    writeLine("");
-
-    writeLine("// Notifications");
-    writeLine("const (");
-    for (const notification of model.notifications) {
-        write(formatDocumentation(notification.documentation));
-
-        const methodName = notification.method.split("/")
-            .map(v => v === "$" ? "" : titleCase(v))
-            .join("");
-
-        writeLine(`\tMethod${methodName} Method = "${notification.method}"`);
     }
     writeLine(")");
     writeLine("");
@@ -682,11 +535,6 @@ function generateCode() {
     writeLine("// Union types\n");
 
     for (const [name, members] of typeInfo.unionTypes.entries()) {
-        // Skip if already generated
-        if (typeInfo.generatedTypes.has(name)) {
-            continue;
-        }
-
         writeLine(`type ${name} struct {`);
         const uniqueTypeFields = new Map(); // Maps type name -> field name
 
@@ -747,19 +595,12 @@ function generateCode() {
         writeLine(`\treturn fmt.Errorf("invalid ${name}: %s", data)`);
         writeLine(`}`);
         writeLine("");
-
-        typeInfo.generatedTypes.add(name);
     }
 
     // Generate literal types
     writeLine("// Literal types\n");
 
     for (const [value, name] of typeInfo.literalTypes.entries()) {
-        // Skip if already generated
-        if (generatedTypes.has(name)) {
-            continue;
-        }
-
         const jsonValue = JSON.stringify(value);
 
         writeLine(`// ${name} is a literal type for ${jsonValue}`);
@@ -778,8 +619,6 @@ function generateCode() {
         writeLine(`\treturn nil`);
         writeLine(`}`);
         writeLine("");
-
-        generatedTypes.add(name);
     }
 
     return parts.join("");
