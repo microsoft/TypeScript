@@ -126,5 +126,5 @@ extends:
                     * [npm](https://www.npmjs.com/package/typescript)
                     -->
                   assets: $(Pipeline.Workspace)/tgz/**/typescript-*.tgz
-                  isDraft: ${{ eq(parameters.PUBLISH_TAG, 'latest') }}
+                  isDraft: ${{ not(eq(parameters.PUBLISH_TAG, 'latest')) }}
                   addChangeLog: false
