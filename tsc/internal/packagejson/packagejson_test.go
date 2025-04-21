@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	json2 "github.com/go-json-experiment/json"
-	"github.com/microsoft/typescript-go/internal/compiler/packagejson"
+	"github.com/microsoft/typescript-go/internal/packagejson"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/testutil/filefixture"

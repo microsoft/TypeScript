@@ -14,9 +14,9 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/bundled"
-	ts "github.com/microsoft/typescript-go/internal/compiler"
-	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/execute"
 	"github.com/microsoft/typescript-go/internal/pprof"
@@ -169,10 +169,10 @@ func runMain() int {
 
 	currentDirectory = tspath.GetDirectoryPath(configFileName)
 	// !!! is the working directory actually the config path?
-	host := ts.NewCachedFSCompilerHost(compilerOptions, currentDirectory, fs, defaultLibraryPath)
+	host := compiler.NewCachedFSCompilerHost(compilerOptions, currentDirectory, fs, defaultLibraryPath)
 
 	parseStart := time.Now()
-	program := ts.NewProgram(ts.ProgramOptions{
+	program := compiler.NewProgram(compiler.ProgramOptions{
 		ConfigFileName: configFileName,
 		Options:        compilerOptions,
 		SingleThreaded: opts.devel.singleThreaded,
@@ -226,7 +226,7 @@ func runMain() int {
 	var emitTime time.Duration
 	if compilerOptions.NoEmit.IsFalseOrUnknown() {
 		emitStart := time.Now()
-		result := program.Emit(ts.EmitOptions{})
+		result := program.Emit(compiler.EmitOptions{})
 		diagnostics = append(diagnostics, result.Diagnostics...)
 		emitTime = time.Since(emitStart)
 	}
@@ -242,7 +242,7 @@ func runMain() int {
 	exitCode := 0
 	if len(diagnostics) != 0 {
 		if !opts.devel.quiet {
-			printDiagnostics(ts.SortAndDeduplicateDiagnostics(diagnostics), host, compilerOptions)
+			printDiagnostics(compiler.SortAndDeduplicateDiagnostics(diagnostics), host, compilerOptions)
 		}
 		exitCode = 1
 	}
@@ -315,7 +315,7 @@ func formatDuration(d time.Duration) string {
 	return fmt.Sprintf("%.3fs", d.Seconds())
 }
 
-func identifierCount(p *ts.Program) int {
+func identifierCount(p *compiler.Program) int {
 	count := 0
 	for _, file := range p.SourceFiles() {
 		count += file.IdentifierCount
@@ -323,13 +323,13 @@ func identifierCount(p *ts.Program) int {
 	return count
 }
 
-func listFiles(p *ts.Program) {
+func listFiles(p *compiler.Program) {
 	for _, file := range p.SourceFiles() {
 		fmt.Println(file.FileName())
 	}
 }
 
-func getFormatOpts(host ts.CompilerHost) *diagnosticwriter.FormattingOptions {
+func getFormatOpts(host compiler.CompilerHost) *diagnosticwriter.FormattingOptions {
 	return &diagnosticwriter.FormattingOptions{
 		NewLine: host.NewLine(),
 		ComparePathsOptions: tspath.ComparePathsOptions{
@@ -339,7 +339,7 @@ func getFormatOpts(host ts.CompilerHost) *diagnosticwriter.FormattingOptions {
 	}
 }
 
-func printDiagnostics(diagnostics []*ast.Diagnostic, host ts.CompilerHost, compilerOptions *core.CompilerOptions) {
+func printDiagnostics(diagnostics []*ast.Diagnostic, host compiler.CompilerHost, compilerOptions *core.CompilerOptions) {
 	formatOpts := getFormatOpts(host)
 	if compilerOptions.Pretty.IsTrueOrUnknown() {
 		diagnosticwriter.FormatDiagnosticsWithColorAndContext(os.Stdout, diagnostics, formatOpts)
