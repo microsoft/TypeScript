@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/circularRefFromClassMember.ts] ////
+
+=== circularRefFromClassMember.ts ===
+// Test for #61606
+
+const result: boolean[] = [];
+>result : Symbol(result, Decl(circularRefFromClassMember.ts, 2, 5))
+
+class Test {
+>Test : Symbol(Test, Decl(circularRefFromClassMember.ts, 2, 29))
+
+    n: 42 | "" = 42 as any;
+>n : Symbol(Test.n, Decl(circularRefFromClassMember.ts, 3, 12))
+
+    foo(): void {
+>foo : Symbol(Test.foo, Decl(circularRefFromClassMember.ts, 4, 27))
+
+        if (this.n === "") {
+>this.n : Symbol(Test.n, Decl(circularRefFromClassMember.ts, 3, 12))
+>this : Symbol(Test, Decl(circularRefFromClassMember.ts, 2, 29))
+>n : Symbol(Test.n, Decl(circularRefFromClassMember.ts, 3, 12))
+
+            return;
+        }
+        for (let i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(circularRefFromClassMember.ts, 9, 16))
+>i : Symbol(i, Decl(circularRefFromClassMember.ts, 9, 16))
+>i : Symbol(i, Decl(circularRefFromClassMember.ts, 9, 16))
+
+            const localN = this.n;
+>localN : Symbol(localN, Decl(circularRefFromClassMember.ts, 10, 17))
+>this.n : Symbol(Test.n, Decl(circularRefFromClassMember.ts, 3, 12))
+>this : Symbol(Test, Decl(circularRefFromClassMember.ts, 2, 29))
+>n : Symbol(Test.n, Decl(circularRefFromClassMember.ts, 3, 12))
+
+            const localN_alias = localN;
+>localN_alias : Symbol(localN_alias, Decl(circularRefFromClassMember.ts, 11, 17))
+>localN : Symbol(localN, Decl(circularRefFromClassMember.ts, 10, 17))
+
+            result[localN_alias] = true;
+>result : Symbol(result, Decl(circularRefFromClassMember.ts, 2, 5))
+>localN_alias : Symbol(localN_alias, Decl(circularRefFromClassMember.ts, 11, 17))
+        }
+    }
+}
+

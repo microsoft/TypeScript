@@ -27184,9 +27184,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
                 if (sourcePropertyName !== undefined) {
-                    const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
-                    if (targetPropertyName !== undefined) {
-                        return targetPropertyName === sourcePropertyName && isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
+                    if (isAccessExpression(target) && isMatchingReference((source as AccessExpression).expression, target.expression)) {
+                        const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
+                        if (targetPropertyName !== undefined) {
+                            return targetPropertyName === sourcePropertyName;
+                        }
                     }
                 }
                 if (isElementAccessExpression(source) && isElementAccessExpression(target) && isIdentifier(source.argumentExpression) && isIdentifier(target.argumentExpression)) {
