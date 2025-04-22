@@ -1581,7 +1581,7 @@ func (node *NodeDefault) SubtreeFacts() SubtreeFacts {
 }
 
 func (node *NodeDefault) subtreeFactsWorker(self nodeData) SubtreeFacts {
-	// To avoid excessive conditonal checks, the default implementation of subtreeFactsWorker directly invokes
+	// To avoid excessive conditional checks, the default implementation of subtreeFactsWorker directly invokes
 	// computeSubtreeFacts. More complex nodes should implement CompositeNodeBase, which overrides this
 	// method to cache the result. `self` is passed along to ensure we lookup `computeSubtreeFacts` on the
 	// correct type, as `CompositeNodeBase` does not, itself, inherit from `Node`.
