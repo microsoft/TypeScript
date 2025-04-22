@@ -131,7 +131,7 @@ jobs:
       - uses: codecov/codecov-action@ad3126e916f78f00edff4ed0317cf185271ccc2d # v5.4.2
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
         with:
-          use_oidc: true
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
           name: ${{ matrix.config.name || matrix.config.os }}
           directory: ./coverage
 
