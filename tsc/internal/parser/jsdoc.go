@@ -502,22 +502,32 @@ loop:
 			p.nextTokenJSDoc()
 		}
 	}
+
 	p.jsdocCommentsSpace = comments[:0] // Reuse this slice for further parses
 	if commentsPos == -1 {
 		commentsPos = p.scanner.TokenFullStart()
 	}
+
 	trimmedComments := trimEnd(strings.Join(comments, ""))
 	if len(trimmedComments) > 0 {
 		jsdocText := p.factory.NewJSDocText(trimmedComments)
 		p.finishNodeWithEnd(jsdocText, linkEnd, commentsPos)
 		commentParts = append(commentParts, jsdocText)
 	}
+
 	if len(commentParts) > 0 && len(tags) > 0 && commentsPos == -1 {
 		panic("having parsed tags implies that the end of the comment span should be set")
 	}
+
+	var tagsNodeList *ast.NodeList
+	if tagsPos != -1 {
+		tagsNodeList = p.newNodeList(core.NewTextRange(tagsPos, tagsEnd), tags)
+	}
+
 	jsdocComment := p.factory.NewJSDoc(
 		p.newNodeList(core.NewTextRange(start, commentsPos), commentParts),
-		core.IfElse(tagsPos != -1, p.newNodeList(core.NewTextRange(tagsPos, tagsEnd), tags), nil))
+		tagsNodeList,
+	)
 	p.finishNodeWithEnd(jsdocComment, fullStart, end)
 	return jsdocComment
 }
