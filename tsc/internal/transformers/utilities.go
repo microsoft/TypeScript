@@ -10,88 +10,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type nameOptions struct {
-	allowComments   bool
-	allowSourceMaps bool
-}
-
-type assignedNameOptions struct {
-	allowComments      bool
-	allowSourceMaps    bool
-	ignoreAssignedName bool
-}
-
-func getName(emitContext *printer.EmitContext, node *ast.Declaration, emitFlags printer.EmitFlags, opts assignedNameOptions) *ast.IdentifierNode {
-	var nodeName *ast.IdentifierNode
-	if node != nil {
-		if opts.ignoreAssignedName {
-			nodeName = ast.GetNonAssignedNameOfDeclaration(node)
-		} else {
-			nodeName = ast.GetNameOfDeclaration(node)
-		}
-	}
-
-	if nodeName != nil {
-		name := nodeName.Clone(emitContext.Factory)
-		if !opts.allowComments {
-			emitFlags |= printer.EFNoComments
-		}
-		if !opts.allowSourceMaps {
-			emitFlags |= printer.EFNoSourceMap
-		}
-		emitContext.AddEmitFlags(name, emitFlags)
-		return name
-	}
-
-	return emitContext.NewGeneratedNameForNode(node, printer.AutoGenerateOptions{})
-}
-
-// Gets the local name of a declaration. This is primarily used for declarations that can be referred to by name in the
-// declaration's immediate scope (classes, enums, namespaces). A local name will *never* be prefixed with a module or
-// namespace export modifier like "exports." when emitted as an expression.
-//
-// The value of the allowComments parameter indicates whether comments may be emitted for the name.
-// The value of the allowSourceMaps parameter indicates whether source maps may be emitted for the name.
-// The value of the ignoreAssignedName parameter indicates whether the assigned name of a declaration shouldn't be considered.
-func getLocalName(emitContext *printer.EmitContext, node *ast.Declaration, opts assignedNameOptions) *ast.IdentifierNode {
-	return getName(emitContext, node, printer.EFLocalName, opts)
-}
-
-// Gets the export name of a declaration. This is primarily used for declarations that can be
-// referred to by name in the declaration's immediate scope (classes, enums, namespaces). An
-// export name will *always* be prefixed with an module or namespace export modifier like
-// `"exports."` when emitted as an expression if the name points to an exported symbol.
-//
-// @param node The declaration.
-// @param allowComments A value indicating whether comments may be emitted for the name.
-// @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
-func getExportName(emitContext *printer.EmitContext, node *ast.Declaration, opts assignedNameOptions) *ast.IdentifierNode {
-	return getName(emitContext, node, printer.EFExportName, opts)
-}
-
-// Gets the name of a declaration to use during emit.
-//
-// The value of the allowComments parameter indicates whether comments may be emitted for the name.
-// The value of the allowSourceMaps parameter indicates whether source maps may be emitted for the name.
-func getDeclarationName(emitContext *printer.EmitContext, node *ast.Declaration, opts nameOptions) *ast.IdentifierNode {
-	return getName(emitContext, node, printer.EFNone, assignedNameOptions{allowComments: opts.allowComments, allowSourceMaps: opts.allowSourceMaps})
-}
-
-func getNamespaceMemberName(emitContext *printer.EmitContext, ns *ast.IdentifierNode, name *ast.IdentifierNode, opts nameOptions) *ast.IdentifierNode {
-	if !emitContext.HasAutoGenerateInfo(name) {
-		name = name.Clone(emitContext.Factory)
-	}
-	qualifiedName := emitContext.Factory.NewPropertyAccessExpression(ns, nil /*questionDotToken*/, name, ast.NodeFlagsNone)
-	emitContext.AssignCommentAndSourceMapRanges(qualifiedName, name)
-	if !opts.allowComments {
-		emitContext.AddEmitFlags(qualifiedName, printer.EFNoComments)
-	}
-	if !opts.allowSourceMaps {
-		emitContext.AddEmitFlags(qualifiedName, printer.EFNoSourceMap)
-	}
-	return qualifiedName
-}
-
 func isGeneratedIdentifier(emitContext *printer.EmitContext, name *ast.IdentifierNode) bool {
 	return emitContext.HasAutoGenerateInfo(name)
 }
@@ -205,7 +123,7 @@ func isIdentifierReference(name *ast.IdentifierNode, parent *ast.Node) bool {
 	}
 }
 
-func constantExpression(value any, factory *ast.NodeFactory) *ast.Expression {
+func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression {
 	switch value := value.(type) {
 	case string:
 		return factory.NewStringLiteral(value)
@@ -227,39 +145,6 @@ func isInstantiatedModule(node *ast.ModuleDeclarationNode, preserveConstEnums bo
 		(preserveConstEnums && moduleState == ast.ModuleInstanceStateConstEnumOnly)
 }
 
-func flattenCommaElement(node *ast.Expression, expressions []*ast.Expression) []*ast.Expression {
-	if ast.IsBinaryExpression(node) && ast.NodeIsSynthesized(node) && node.AsBinaryExpression().OperatorToken.Kind == ast.KindCommaToken {
-		expressions = flattenCommaElement(node.AsBinaryExpression().Left, expressions)
-		expressions = flattenCommaElement(node.AsBinaryExpression().Right, expressions)
-	} else {
-		expressions = append(expressions, node)
-	}
-	return expressions
-}
-
-func flattenCommaElements(expressions []*ast.Expression) []*ast.Expression {
-	var result []*ast.Expression
-	for _, expression := range expressions {
-		result = flattenCommaElement(expression, result)
-	}
-	return result
-}
-
-func inlineExpressions(expressions []*ast.Expression, factory *ast.NodeFactory) *ast.Expression {
-	if len(expressions) == 0 {
-		return nil
-	}
-	if len(expressions) == 1 {
-		return expressions[0]
-	}
-	expressions = flattenCommaElements(expressions)
-	expression := expressions[0]
-	for _, next := range expressions[1:] {
-		expression = factory.NewBinaryExpression(expression, factory.NewToken(ast.KindCommaToken), next)
-	}
-	return expression
-}
-
 func convertBindingElementToArrayAssignmentElement(emitContext *printer.EmitContext, element *ast.BindingElement) *ast.Expression {
 	if element.Name() == nil {
 		elision := emitContext.Factory.NewOmittedExpression()
@@ -275,11 +160,7 @@ func convertBindingElementToArrayAssignmentElement(emitContext *printer.EmitCont
 	}
 	expression := convertBindingNameToAssignmentElementTarget(emitContext, element.Name())
 	if element.Initializer != nil {
-		assignment := emitContext.Factory.NewBinaryExpression(
-			expression,
-			emitContext.Factory.NewToken(ast.KindEqualsToken),
-			element.Initializer,
-		)
+		assignment := emitContext.Factory.NewAssignmentExpression(expression, element.Initializer)
 		emitContext.SetOriginal(assignment, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(assignment, element.AsNode())
 		return assignment
@@ -297,11 +178,7 @@ func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitCon
 	if element.PropertyName != nil {
 		expression := convertBindingNameToAssignmentElementTarget(emitContext, element.Name())
 		if element.Initializer != nil {
-			expression = emitContext.Factory.NewBinaryExpression(
-				expression,
-				emitContext.Factory.NewToken(ast.KindEqualsToken),
-				element.Initializer,
-			)
+			expression = emitContext.Factory.NewAssignmentExpression(expression, element.Initializer)
 		}
 		assignment := emitContext.Factory.NewPropertyAssignment(nil /*modifiers*/, element.PropertyName, nil /*postfixToken*/, expression)
 		emitContext.SetOriginal(assignment, element.AsNode())
@@ -373,11 +250,7 @@ func convertVariableDeclarationToAssignmentExpression(emitContext *printer.EmitC
 		return nil
 	}
 	expression := convertBindingNameToAssignmentElementTarget(emitContext, element.Name())
-	assignment := emitContext.Factory.NewBinaryExpression(
-		expression,
-		emitContext.Factory.NewToken(ast.KindEqualsToken),
-		element.Initializer,
-	)
+	assignment := emitContext.Factory.NewAssignmentExpression(expression, element.Initializer)
 	emitContext.SetOriginal(assignment, element.AsNode())
 	emitContext.AssignCommentAndSourceMapRanges(assignment, element.AsNode())
 	return assignment
@@ -402,7 +275,7 @@ func convertEntityNameToExpression(emitContext *printer.EmitContext, name *ast.E
 //     3- The containing SourceFile has an entry in renamedDependencies for the import as requested by some module loaders (e.g. System).
 //
 // Otherwise, a new StringLiteral node representing the module name will be returned.
-func getExternalModuleNameLiteral(factory *ast.NodeFactory, importNode *ast.Node /*ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall*/, sourceFile *ast.SourceFile, host any /*EmitHost*/, resolver printer.EmitResolver, compilerOptions *core.CompilerOptions) *ast.StringLiteralNode {
+func getExternalModuleNameLiteral(factory *printer.NodeFactory, importNode *ast.Node /*ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall*/, sourceFile *ast.SourceFile, host any /*EmitHost*/, resolver printer.EmitResolver, compilerOptions *core.CompilerOptions) *ast.StringLiteralNode {
 	moduleName := ast.GetExternalModuleName(importNode)
 	if moduleName != nil && ast.IsStringLiteral(moduleName) {
 		name := tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
@@ -423,7 +296,7 @@ func getExternalModuleNameLiteral(factory *ast.NodeFactory, importNode *ast.Node
 //  2. --out or --outFile is used, making the name relative to the rootDir
 //
 // Otherwise, a new StringLiteral node representing the module name will be returned.
-func tryGetModuleNameFromFile(factory *ast.NodeFactory, file *ast.SourceFile, host any /*EmitHost*/, options *core.CompilerOptions) *ast.StringLiteralNode {
+func tryGetModuleNameFromFile(factory *printer.NodeFactory, file *ast.SourceFile, host any /*EmitHost*/, options *core.CompilerOptions) *ast.StringLiteralNode {
 	if file == nil {
 		return nil
 	}
@@ -437,7 +310,7 @@ func tryGetModuleNameFromFile(factory *ast.NodeFactory, file *ast.SourceFile, ho
 	return nil
 }
 
-func tryGetModuleNameFromDeclaration(declaration *ast.Node /*ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ImportCall*/, host any /*EmitHost*/, factory *ast.NodeFactory, resolver printer.EmitResolver, compilerOptions *core.CompilerOptions) *ast.StringLiteralNode {
+func tryGetModuleNameFromDeclaration(declaration *ast.Node /*ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ImportCall*/, host any /*EmitHost*/, factory *printer.NodeFactory, resolver printer.EmitResolver, compilerOptions *core.CompilerOptions) *ast.StringLiteralNode {
 	if resolver == nil {
 		return nil
 	}
@@ -452,7 +325,7 @@ func getExternalModuleNameFromPath(host any /*ResolveModuleNameResolutionHost*/,
 
 // Some bundlers (SystemJS builder) sometimes want to rename dependencies.
 // Here we check if alternative name was provided for a given moduleName and return it if possible.
-func tryRenameExternalModule(factory *ast.NodeFactory, moduleName *ast.LiteralExpression, sourceFile *ast.SourceFile) *ast.StringLiteralNode {
+func tryRenameExternalModule(factory *printer.NodeFactory, moduleName *ast.LiteralExpression, sourceFile *ast.SourceFile) *ast.StringLiteralNode {
 	// !!!
 	return nil
 }
@@ -476,7 +349,7 @@ func shouldRewriteModuleSpecifier(specifier string, compilerOptions *core.Compil
 	return compilerOptions.RewriteRelativeImportExtensions.IsTrue() && tspath.PathIsRelative(specifier) && !tspath.IsDeclarationFileName(specifier) && tspath.HasTSFileExtension(specifier)
 }
 
-func singleOrMany(nodes []*ast.Node, factory *ast.NodeFactory) *ast.Node {
+func singleOrMany(nodes []*ast.Node, factory *printer.NodeFactory) *ast.Node {
 	if len(nodes) == 1 {
 		return nodes[0]
 	}
@@ -491,7 +364,7 @@ func isFileLevelReservedGeneratedIdentifier(emitContext *printer.EmitContext, na
 		info.Flags.IsReservedInNestedScopes()
 }
 
-func createEmptyImports(factory *ast.NodeFactory) *ast.Statement {
+func createEmptyImports(factory *printer.NodeFactory) *ast.Statement {
 	return factory.NewExportDeclaration(
 		nil,   /*modifiers*/
 		false, /*isTypeOnly*/

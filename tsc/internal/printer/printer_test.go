@@ -2361,7 +2361,7 @@ func TestNameGeneration(t *testing.T) {
 		ec.Factory.NewVariableStatement(nil, ec.Factory.NewVariableDeclarationList(
 			ast.NodeFlagsNone,
 			ec.Factory.NewNodeList([]*ast.Node{
-				ec.Factory.NewVariableDeclaration(ec.NewTempVariable(printer.AutoGenerateOptions{}), nil, nil, nil),
+				ec.Factory.NewVariableDeclaration(ec.Factory.NewTempVariable(), nil, nil, nil),
 			}),
 		)),
 		ec.Factory.NewFunctionDeclaration(
@@ -2375,7 +2375,7 @@ func TestNameGeneration(t *testing.T) {
 				ec.Factory.NewVariableStatement(nil, ec.Factory.NewVariableDeclarationList(
 					ast.NodeFlagsNone,
 					ec.Factory.NewNodeList([]*ast.Node{
-						ec.Factory.NewVariableDeclaration(ec.NewTempVariable(printer.AutoGenerateOptions{}), nil, nil, nil),
+						ec.Factory.NewVariableDeclaration(ec.Factory.NewTempVariable(), nil, nil, nil),
 					}),
 				)),
 			}), true),

@@ -7,7 +7,7 @@ import (
 
 type Transformer struct {
 	emitContext *printer.EmitContext
-	factory     *ast.NodeFactory
+	factory     *printer.NodeFactory
 	visitor     *ast.NodeVisitor
 }
 

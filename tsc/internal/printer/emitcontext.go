@@ -1,10 +1,8 @@
 package printer
 
 import (
-	"fmt"
 	"maps"
 	"slices"
-	"strings"
 	"sync/atomic"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -16,7 +14,7 @@ import (
 //
 // NOTE: EmitContext is not guaranteed to be thread-safe.
 type EmitContext struct {
-	Factory       *ast.NodeFactory // Required. The NodeFactory to use to create new nodes
+	Factory       *NodeFactory // Required. The NodeFactory to use to create new nodes
 	autoGenerate  map[*ast.MemberName]*AutoGenerateInfo
 	textSource    map[*ast.StringLiteralNode]*ast.Node
 	original      map[*ast.Node]*ast.Node
@@ -37,11 +35,7 @@ type varScope struct {
 
 func NewEmitContext() *EmitContext {
 	c := &EmitContext{}
-	c.Factory = ast.NewNodeFactory(ast.NodeFactoryHooks{
-		OnCreate: c.onCreate,
-		OnUpdate: c.onUpdate,
-		OnClone:  c.onClone,
-	})
+	c.Factory = NewNodeFactory(c)
 	c.isCustomPrologue = c.isCustomPrologueWorker
 	c.isHoistedFunction = c.isHoistedFunctionWorker
 	c.isHoistedVariableStatement = c.isHoistedVariableStatementWorker
@@ -67,7 +61,7 @@ func (c *EmitContext) onClone(updated *ast.Node, original *ast.Node) {
 
 // Creates a new NodeVisitor attached to this EmitContext
 func (c *EmitContext) NewNodeVisitor(visit func(node *ast.Node) *ast.Node) *ast.NodeVisitor {
-	return ast.NewNodeVisitor(visit, c.Factory, ast.NodeVisitorHooks{
+	return ast.NewNodeVisitor(visit, c.Factory.AsNodeFactory(), ast.NodeVisitorHooks{
 		VisitParameters:         c.VisitParameters,
 		VisitFunctionBody:       c.VisitFunctionBody,
 		VisitIterationBody:      c.VisitIterationBody,
@@ -338,148 +332,9 @@ func (c *EmitContext) isHoistedVariableStatementWorker(node *ast.Statement) bool
 		core.Every(node.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes, isHoistedVariable)
 }
 
-// Ensures `"use strict"` is the first statement of a slice of statements.
-func (c *EmitContext) EnsureUseStrict(statements []*ast.Statement) []*ast.Statement {
-	foundUseStrict := false
-	for _, statement := range statements {
-		if ast.IsPrologueDirective(statement) && statement.AsExpressionStatement().Expression.Text() == "use strict" {
-			foundUseStrict = true
-		} else {
-			break
-		}
-	}
-	if !foundUseStrict {
-		useStrictPrologue := c.Factory.NewExpressionStatement(c.Factory.NewStringLiteral("use strict"))
-		statements = append([]*ast.Statement{useStrictPrologue}, statements...)
-	}
-	return statements
-}
-
-// Splits a slice of statements into two parts: standard prologue statements and the rest of the statements
-func (c *EmitContext) SplitStandardPrologue(source []*ast.Statement) (prologue []*ast.Statement, rest []*ast.Statement) {
-	for i, statement := range source {
-		if !ast.IsPrologueDirective(statement) {
-			return source[:i], source[i:]
-		}
-	}
-	return nil, source
-}
-
-// Splits a slice of statements into two parts: custom prologue statements (e.g., with `EFCustomPrologue` set) and the rest of the statements
-func (c *EmitContext) SplitCustomPrologue(source []*ast.Statement) (prologue []*ast.Statement, rest []*ast.Statement) {
-	for i, statement := range source {
-		if ast.IsPrologueDirective(statement) || c.EmitFlags(statement)&EFCustomPrologue == 0 {
-			return source[:i], source[i:]
-		}
-	}
-	return nil, source
-}
-
 //
 // Name Generation
 //
-
-func (c *EmitContext) newGeneratedIdentifier(kind GeneratedIdentifierFlags, text string, node *ast.Node, options AutoGenerateOptions) *ast.IdentifierNode {
-	id := AutoGenerateId(nextAutoGenerateId.Add(1))
-
-	if len(text) == 0 {
-		switch {
-		case node == nil:
-			text = fmt.Sprintf("(auto@%d)", id)
-		case ast.IsMemberName(node):
-			text = node.Text()
-		default:
-			text = fmt.Sprintf("(generated@%v)", ast.GetNodeId(c.getNodeForGeneratedNameWorker(node, id)))
-		}
-		text = FormatGeneratedName(false /*privateName*/, options.Prefix, text, options.Suffix)
-	}
-
-	name := c.Factory.NewIdentifier(text)
-	autoGenerate := &AutoGenerateInfo{
-		Id:     id,
-		Flags:  kind | (options.Flags & ^GeneratedIdentifierFlagsKindMask),
-		Prefix: options.Prefix,
-		Suffix: options.Suffix,
-		Node:   node,
-	}
-	if c.autoGenerate == nil {
-		c.autoGenerate = make(map[*ast.MemberName]*AutoGenerateInfo)
-	}
-	c.autoGenerate[name] = autoGenerate
-	return name
-}
-
-// Allocates a new temp variable name, but does not record it in the environment. It is recommended to pass this to either
-// `AddVariableDeclaration` or `AddLexicalDeclaration` to ensure it is properly tracked, if you are not otherwise handling
-// it yourself.
-func (c *EmitContext) NewTempVariable(options AutoGenerateOptions) *ast.IdentifierNode {
-	return c.newGeneratedIdentifier(GeneratedIdentifierFlagsAuto, "", nil /*node*/, options)
-}
-
-// Allocates a new loop variable name.
-func (c *EmitContext) NewLoopVariable(options AutoGenerateOptions) *ast.IdentifierNode {
-	return c.newGeneratedIdentifier(GeneratedIdentifierFlagsLoop, "", nil /*node*/, options)
-}
-
-// Allocates a new unique name based on the provided text.
-func (c *EmitContext) NewUniqueName(text string, options AutoGenerateOptions) *ast.IdentifierNode {
-	return c.newGeneratedIdentifier(GeneratedIdentifierFlagsUnique, text, nil /*node*/, options)
-}
-
-// Allocates a new unique name based on the provided node.
-func (c *EmitContext) NewGeneratedNameForNode(node *ast.Node, options AutoGenerateOptions) *ast.IdentifierNode {
-	if len(options.Prefix) > 0 || len(options.Suffix) > 0 {
-		options.Flags |= GeneratedIdentifierFlagsOptimistic
-	}
-
-	return c.newGeneratedIdentifier(GeneratedIdentifierFlagsNode, "", node, options)
-}
-
-func (c *EmitContext) newGeneratedPrivateIdentifier(kind GeneratedIdentifierFlags, text string, node *ast.Node, options AutoGenerateOptions) *ast.PrivateIdentifierNode {
-	id := AutoGenerateId(nextAutoGenerateId.Add(1))
-
-	if len(text) == 0 {
-		switch {
-		case node == nil:
-			text = fmt.Sprintf("(auto@%d)", id)
-		case ast.IsMemberName(node):
-			text = node.Text()
-		default:
-			text = fmt.Sprintf("(generated@%v)", ast.GetNodeId(c.getNodeForGeneratedNameWorker(node, id)))
-		}
-		text = FormatGeneratedName(true /*privateName*/, options.Prefix, text, options.Suffix)
-	} else if !strings.HasPrefix(text, "#") {
-		panic("First character of private identifier must be #: " + text)
-	}
-
-	name := c.Factory.NewPrivateIdentifier(text)
-	autoGenerate := &AutoGenerateInfo{
-		Id:     id,
-		Flags:  kind | (options.Flags &^ GeneratedIdentifierFlagsKindMask),
-		Prefix: options.Prefix,
-		Suffix: options.Suffix,
-		Node:   node,
-	}
-	if c.autoGenerate == nil {
-		c.autoGenerate = make(map[*ast.MemberName]*AutoGenerateInfo)
-	}
-	c.autoGenerate[name] = autoGenerate
-	return name
-}
-
-// Allocates a new unique private name based on the provided text.
-func (c *EmitContext) NewUniquePrivateName(text string, options AutoGenerateOptions) *ast.PrivateIdentifierNode {
-	return c.newGeneratedPrivateIdentifier(GeneratedIdentifierFlagsUnique, text, nil /*node*/, options)
-}
-
-// Allocates a new unique private name based on the provided node.
-func (c *EmitContext) NewGeneratedPrivateNameForNode(node *ast.Node, options AutoGenerateOptions) *ast.PrivateIdentifierNode {
-	if len(options.Prefix) > 0 || len(options.Suffix) > 0 {
-		options.Flags |= GeneratedIdentifierFlagsOptimistic
-	}
-
-	return c.newGeneratedPrivateIdentifier(GeneratedIdentifierFlagsNode, "", node, options)
-}
 
 // Gets whether a given name has an associated AutoGenerateInfo entry.
 func (c *EmitContext) HasAutoGenerateInfo(node *ast.MemberName) bool {
@@ -542,87 +397,6 @@ type AutoGenerateInfo struct {
 	Prefix string                   // Optional prefix to apply to the start of the generated name
 	Suffix string                   // Optional suffix to apply to the end of the generated name
 	Node   *ast.Node                // For a GeneratedIdentifierFlagsNode, the node from which to generate an identifier
-}
-
-//
-// Factory Utilities
-//
-
-// Allocates a new StringLiteral whose source text is derived from the provided node. This is often used to create a
-// string representation of an Identifier or NumericLiteral.
-func (c *EmitContext) NewStringLiteralFromNode(textSourceNode *ast.Node) *ast.Node {
-	var text string
-	if ast.IsMemberName(textSourceNode) || ast.IsJsxNamespacedName(textSourceNode) {
-		text = textSourceNode.Text()
-	}
-	node := c.Factory.NewStringLiteral(text)
-	if c.textSource == nil {
-		c.textSource = make(map[*ast.StringLiteralNode]*ast.Node)
-	}
-	c.textSource[node] = textSourceNode
-	return node
-}
-
-// Allocates a new Identifier representing a reference to a helper function.
-func (c *EmitContext) NewUnscopedHelperName(name string) *ast.IdentifierNode {
-	node := c.Factory.NewIdentifier(name)
-	c.SetEmitFlags(node, EFHelperName)
-	return node
-}
-
-// Allocates a new Call expression to the `__importDefault` helper.
-func (c *EmitContext) NewImportDefaultHelper(expression *ast.Expression) *ast.Expression {
-	c.RequestEmitHelper(importDefaultHelper)
-	return c.Factory.NewCallExpression(
-		c.NewUnscopedHelperName("__importDefault"),
-		nil, /*questionDotToken*/
-		nil, /*typeArguments*/
-		c.Factory.NewNodeList([]*ast.Expression{expression}),
-		ast.NodeFlagsNone,
-	)
-}
-
-// Allocates a new Call expression to the `__importStar` helper.
-func (c *EmitContext) NewImportStarHelper(expression *ast.Expression) *ast.Expression {
-	c.RequestEmitHelper(importStarHelper)
-	return c.Factory.NewCallExpression(
-		c.NewUnscopedHelperName("__importStar"),
-		nil, /*questionDotToken*/
-		nil, /*typeArguments*/
-		c.Factory.NewNodeList([]*ast.Expression{expression}),
-		ast.NodeFlagsNone,
-	)
-}
-
-// Allocates a new Call expression to the `__exportStar` helper.
-func (c *EmitContext) NewExportStarHelper(moduleExpression *ast.Expression, exportsExpression *ast.Expression) *ast.Expression {
-	c.RequestEmitHelper(exportStarHelper)
-	c.RequestEmitHelper(createBindingHelper)
-	return c.Factory.NewCallExpression(
-		c.NewUnscopedHelperName("__exportStar"),
-		nil, /*questionDotToken*/
-		nil, /*typeArguments*/
-		c.Factory.NewNodeList([]*ast.Expression{moduleExpression, exportsExpression}),
-		ast.NodeFlagsNone,
-	)
-}
-
-// Allocates a new Call expression to the `__rewriteRelativeImportExtension` helper.
-func (c *EmitContext) NewRewriteRelativeImportExtensionsHelper(firstArgument *ast.Node, preserveJsx bool) *ast.Expression {
-	c.RequestEmitHelper(rewriteRelativeImportExtensionsHelper)
-	var arguments []*ast.Expression
-	if preserveJsx {
-		arguments = []*ast.Expression{firstArgument, c.Factory.NewToken(ast.KindTrueKeyword)}
-	} else {
-		arguments = []*ast.Expression{firstArgument}
-	}
-	return c.Factory.NewCallExpression(
-		c.NewUnscopedHelperName("__rewriteRelativeImportExtension"),
-		nil, /*questionDotToken*/
-		nil, /*typeArguments*/
-		c.Factory.NewNodeList(arguments),
-		ast.NodeFlagsNone,
-	)
 }
 
 //

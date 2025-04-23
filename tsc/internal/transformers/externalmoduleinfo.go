@@ -129,7 +129,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 					if !c.hasExportDefault {
 						name := n.Name()
 						if name == nil {
-							name = c.emitContext.NewGeneratedNameForNode(node, printer.AutoGenerateOptions{})
+							name = c.emitContext.Factory.NewGeneratedNameForNode(node)
 						}
 						c.addExportedBinding(node, name)
 						c.hasExportDefault = true
@@ -207,7 +207,7 @@ func (c *externalModuleInfoCollector) addExportedFunctionDeclaration(node *ast.F
 		// function x() { } + export { x as default };
 		if !c.hasExportDefault {
 			if name == nil {
-				name = c.emitContext.NewGeneratedNameForNode(node.AsNode(), printer.AutoGenerateOptions{})
+				name = c.emitContext.Factory.NewGeneratedNameForNode(node.AsNode())
 			}
 			c.addExportedBinding(node.AsNode(), name)
 			c.hasExportDefault = true
@@ -272,7 +272,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 					if printer.IsFileLevelUniqueName(sourceFile, name, nil /*hasGlobalName*/) {
 						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, nil /*propertyName*/, emitContext.Factory.NewIdentifier(name))
 					} else {
-						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, emitContext.Factory.NewIdentifier(name), emitContext.NewUnscopedHelperName(name))
+						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, emitContext.Factory.NewIdentifier(name), emitContext.Factory.NewUnscopedHelperName(name))
 					}
 				})
 				namedBindings := emitContext.Factory.NewNamedImports(emitContext.Factory.NewNodeList(importSpecifiers))
@@ -328,7 +328,7 @@ func getOrCreateExternalHelpersModuleNameIfNeeded(emitContext *printer.EmitConte
 			ast.GetEmitModuleFormatOfFileWorker(node, compilerOptions, sourceFileMetaData) < core.ModuleKindSystem
 
 	if create {
-		externalHelpersModuleName = emitContext.NewUniqueName(externalHelpersModuleNameText, printer.AutoGenerateOptions{})
+		externalHelpersModuleName = emitContext.Factory.NewUniqueName(externalHelpersModuleNameText)
 		emitContext.SetExternalHelpersModuleName(node, externalHelpersModuleName)
 	}
 
