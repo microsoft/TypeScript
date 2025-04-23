@@ -83,7 +83,7 @@ func baselineTokens(t *testing.T, testName string, includeEOF bool, getTSTokens 
 			fileText, err := os.ReadFile(fileName)
 			assert.NilError(t, err)
 
-			positions := make([]int, len(fileText))
+			positions := make([]int, len(fileText)+core.IfElse(includeEOF, 1, 0))
 			for i := range positions {
 				positions[i] = i
 			}
@@ -350,6 +350,60 @@ func TestFindPrecedingToken(t *testing.T) {
 			},
 		)
 	})
+}
+
+func TestUnitFindPrecedingToken(t *testing.T) {
+	t.Parallel()
+	fileContent := `import {
+    CharacterCodes,
+    compareStringsCaseInsensitive,
+    compareStringsCaseSensitive,
+    compareValues,
+    Comparison,
+    Debug,
+    endsWith,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
+    GetCanonicalFileName,
+    getDeclarationFileExtension,
+    getStringComparer,
+    identity,
+    lastOrUndefined,
+    Path,
+    some,
+    startsWith,
+} from "./_namespaces/ts.js";
+
+/**
+ * Internally, we represent paths as strings with '/' as the directory separator.
+ * When we make system calls (eg: LanguageServiceHost.getDirectory()),
+ * we expect the host to correctly handle paths in our specified format.
+ *
+ * @internal
+ */
+export const directorySeparator = "/";
+/** @internal */
+export const altDirectorySeparator = "\\";
+const urlSchemeSeparator = "://";
+const backslashRegExp = /\\/g;
+
+
+backslashRegExp.
+
+//Path Tests
+
+/**
+ * Determines whether a charCode corresponds to '/' or '\'.
+ *
+ * @internal
+ */
+export function isAnyDirectorySeparator(charCode: number): boolean {
+    return charCode === CharacterCodes.slash || charCode === CharacterCodes.backslash;
+}`
+	file := parser.ParseSourceFile("/file.ts", "/file.ts", fileContent, core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
+	position := 839
+	token := astnav.FindPrecedingToken(file, position)
+	assert.Equal(t, token.Kind, ast.KindDotToken)
 }
 
 func tsFindPrecedingTokens(t *testing.T, fileText string, positions []int) []*tokenInfo {

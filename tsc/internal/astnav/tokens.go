@@ -428,26 +428,26 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 		}
 
 		var rightmostValidNode *ast.Node
-		var rightmostVisitedNode *ast.Node
+		rightmostVisitedNodes := make([]*ast.Node, 0, 1) // Nodes after the last valid node.
 		hasChildren := false
-		test := func(node *ast.Node) bool {
-			if node.Flags&ast.NodeFlagsReparsed != 0 ||
-				node.End() > endPos || getStartOfNode(node, sourceFile, !excludeJSDoc /*includeJSDoc*/) >= position {
-				return false
-			}
-			rightmostVisitedNode = node
-			if isValidPrecedingNode(node, sourceFile) {
-				rightmostValidNode = node
-				return true
-			}
-			return false
+		shouldVisitNode := func(node *ast.Node) bool {
+			// Node is synthetic or out of the desired range: don't visit it.
+			return !(node.Flags&ast.NodeFlagsReparsed != 0 ||
+				node.End() > endPos || getStartOfNode(node, sourceFile, !excludeJSDoc /*includeJSDoc*/) >= position)
 		}
 		visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
 			if node == nil {
 				return node
 			}
 			hasChildren = true
-			test(node)
+			if !shouldVisitNode(node) {
+				return node
+			}
+			rightmostVisitedNodes = append(rightmostVisitedNodes, node)
+			if isValidPrecedingNode(node, sourceFile) {
+				rightmostValidNode = node
+				rightmostVisitedNodes = rightmostVisitedNodes[:0]
+			}
 			return node
 		}
 		visitNodes := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
@@ -462,10 +462,22 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 					}
 					return comparisonLessThan
 				})
+				validIndex := -1
 				for i := index - 1; i >= 0; i-- {
-					if test(nodeList.Nodes[i]) {
+					if !shouldVisitNode(nodeList.Nodes[i]) {
+						continue
+					}
+					if isValidPrecedingNode(nodeList.Nodes[i], sourceFile) {
+						validIndex = i
+						rightmostValidNode = nodeList.Nodes[i]
 						break
 					}
+				}
+				for i := validIndex + 1; i < index; i++ {
+					if !shouldVisitNode(nodeList.Nodes[i]) {
+						continue
+					}
+					rightmostVisitedNodes = append(rightmostVisitedNodes, nodeList.Nodes[i])
 				}
 			}
 			return nodeList
@@ -485,19 +497,37 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 
 		// Three cases:
 		// 1. The answer is a token of `rightmostValidNode`.
-		// 2. The answer is one of the unvisited tokens that occur after the last visited node.
+		// 2. The answer is one of the unvisited tokens that occur after the rightmost valid node.
 		// 3. The current node is a childless, token-less node. The answer is the current node.
 
-		// Case 2: Look at trailing tokens.
+		// Case 2: Look at unvisited trailing tokens that occur in between the rightmost visited nodes.
 		if !ast.IsJSDocCommentContainingNode(n) { // JSDoc nodes don't include trivia tokens as children.
 			var startPos int
-			if rightmostVisitedNode != nil {
-				startPos = rightmostVisitedNode.End()
+			if rightmostValidNode != nil {
+				startPos = rightmostValidNode.End()
 			} else {
 				startPos = n.Pos()
 			}
 			scanner := scanner.GetScannerForSourceFile(sourceFile, startPos)
 			var tokens []*ast.Node
+			for _, visitedNode := range rightmostVisitedNodes {
+				// Trailing tokens that occur before this node.
+				for startPos < min(visitedNode.Pos(), position) {
+					tokenStart := scanner.TokenStart()
+					if tokenStart >= position {
+						break
+					}
+					token := scanner.Token()
+					tokenFullStart := scanner.TokenFullStart()
+					tokenEnd := scanner.TokenEnd()
+					startPos = tokenEnd
+					tokens = append(tokens, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, n))
+					scanner.Scan()
+				}
+				startPos = visitedNode.End()
+				scanner.ResetPos(startPos)
+			}
+			// Trailing tokens after last visited node.
 			for startPos < min(endPos, position) {
 				tokenStart := scanner.TokenStart()
 				if tokenStart >= position {
@@ -510,6 +540,7 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 				tokens = append(tokens, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, n))
 				scanner.Scan()
 			}
+
 			lastToken := len(tokens) - 1
 			// Find preceding valid token.
 			for i := lastToken; i >= 0; i-- {
