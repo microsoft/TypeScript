@@ -6315,6 +6315,10 @@ declare namespace ts {
          */
         getNeverType(): Type;
         /**
+         * Gets the intrinsic `object` type.
+         */
+        getNonPrimitiveType(): Type;
+        /**
          * Returns true if the "source" type is assignable to the "target" type.
          *
          * ```ts

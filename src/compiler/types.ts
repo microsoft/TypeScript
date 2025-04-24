@@ -5296,6 +5296,10 @@ export interface TypeChecker {
      * is `never`. Instead, use `type.flags & TypeFlags.Never`.
      */
     getNeverType(): Type;
+    /**
+     * Gets the intrinsic `object` type.
+     */
+    getNonPrimitiveType(): Type;
     /** @internal */ getOptionalType(): Type;
     /** @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
     /** @internal */ createArrayType(elementType: Type): Type;
