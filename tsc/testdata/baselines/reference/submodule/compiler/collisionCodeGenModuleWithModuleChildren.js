@@ -54,7 +54,7 @@ var M;
         var p = M_1.x;
     })(m1 || (m1 = {}));
 })(M || (M = {}));
-(function (M_1) {
+(function (M_2) {
     let m2;
     (function (m2) {
         class M {
@@ -63,7 +63,7 @@ var M;
         var p2 = new M();
     })(m2 || (m2 = {}));
 })(M || (M = {}));
-(function (M_1) {
+(function (M_3) {
     let m3;
     (function (m3) {
         function M() {
@@ -79,7 +79,7 @@ var M;
         var p2;
     })(m3 || (m3 = {}));
 })(M || (M = {}));
-(function (M_1) {
+(function (M_4) {
     let m4;
     (function (m4) {
         let M;

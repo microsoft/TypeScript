@@ -205,7 +205,8 @@ func TestUniqueNameScoped(t *testing.T) {
 	assert.Equal(t, "foo_1", g.GenerateName(name1))
 
 	g.PushScope(false)
-	assert.Equal(t, "foo_1", g.GenerateName(name2))
+	assert.Equal(t, "foo_2", g.GenerateName(name2)) // Matches Strada, but is incorrect
+	// assert.Equal(t, "foo_1", g.GenerateName(name2)) // TODO: Fix after Strada port is complete.
 	g.PopScope(false)
 }
 
@@ -393,7 +394,8 @@ func TestGeneratedNameForNamespace4(t *testing.T) {
 	g.PopScope(false)
 
 	assert.Equal(t, "foo_1", text1)
-	assert.Equal(t, "foo_1", text2)
+	assert.Equal(t, "foo_2", text2) // Matches Strada, but is incorrect
+	// assert.Equal(t, "foo_1", text2) // TODO: Fix after Strada port is complete.
 }
 
 func TestGeneratedNameForNodeCached(t *testing.T) {

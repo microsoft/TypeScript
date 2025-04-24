@@ -22,10 +22,9 @@
 -    }());
 +    }
  })(M || (M = {}));
--(function (M_2) {
+ (function (M_2) {
 -    var d = /** @class */ (function () {
 -        function d() {
-+(function (M_1) {
 +    class d {
 +        y;
 +        set Z(p) {
@@ -63,10 +62,9 @@
 -    }());
 +    }
  })(M || (M = {}));
--(function (M_3) {
+ (function (M_3) {
 -    var f = /** @class */ (function () {
 -        function f() {
-+(function (M_1) {
 +    class f {
 +        get Z() {
 +            var M = 10;

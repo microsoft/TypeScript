@@ -391,3 +391,16 @@ func isSimpleCopiableExpression(expression *ast.Expression) bool {
 func isSimpleInlineableExpression(expression *ast.Expression) bool {
 	return !ast.IsIdentifier(expression) && isSimpleCopiableExpression(expression)
 }
+
+func convertClassDeclarationToClassExpression(emitContext *printer.EmitContext, node *ast.ClassDeclaration) *ast.Expression {
+	updated := emitContext.Factory.NewClassExpression(
+		extractModifiers(emitContext, node.Modifiers(), ^ast.ModifierFlagsExportDefault),
+		node.Name(),
+		node.TypeParameters,
+		node.HeritageClauses,
+		node.Members,
+	)
+	emitContext.SetOriginal(updated, node.AsNode())
+	updated.Loc = node.Loc
+	return updated
+}

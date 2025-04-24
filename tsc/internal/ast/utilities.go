@@ -75,6 +75,10 @@ func NodeIsSynthesized(node *Node) bool {
 	return PositionIsSynthesized(node.Loc.Pos()) || PositionIsSynthesized(node.Loc.End())
 }
 
+func RangeIsSynthesized(loc core.TextRange) bool {
+	return PositionIsSynthesized(loc.Pos()) || PositionIsSynthesized(loc.End())
+}
+
 // Determines whether a position is synthetic
 func PositionIsSynthesized(pos int) bool {
 	return pos < 0

@@ -34,7 +34,7 @@ var M;
         }
     }
 })(M || (M = {}));
-(function (M_1) {
+(function (M_2) {
     class d {
         M;
         constructor(M, p = x) {
@@ -42,7 +42,7 @@ var M;
         }
     }
 })(M || (M = {}));
-(function (M_1) {
+(function (M_3) {
     class d2 {
         constructor() {
             var M = 10;

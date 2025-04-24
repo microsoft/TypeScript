@@ -1,13 +1,15 @@
 --- old.usingDeclarationsWithESClassDecorators.1(module=commonjs,target=es2015).js
 +++ new.usingDeclarationsWithESClassDecorators.1(module=commonjs,target=es2015).js
-@@= skipped -14, +14 lines =@@
+@@= skipped -13, +13 lines =@@
+ 
  //// [usingDeclarationsWithESClassDecorators.1.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--var before, C;
--const env_1 = { stack: [], error: void 0, hasError: false };
--try {
--    before = __addDisposableResource(env_1, null, false);
+-Object.defineProperty(exports, "__esModule", { value: true });
+ var before, C;
++Object.defineProperty(exports, "__esModule", { value: true });
+ const env_1 = { stack: [], error: void 0, hasError: false };
+ try {
+     before = __addDisposableResource(env_1, null, false);
 -    C = (() => {
 -        let _classDecorators = [dec];
 -        let _classDescriptor;
@@ -25,14 +27,10 @@
 -        })();
 -        return C = _classThis;
 -    })();
-+using before = null;
-+@dec
-+class C {
++    C = 
++    @dec
++    class C {
++    };
  }
--catch (e_1) {
--    env_1.error = e_1;
--    env_1.hasError = true;
--}
--finally {
--    __disposeResources(env_1);
--}
+ catch (e_1) {
+     env_1.error = e_1;

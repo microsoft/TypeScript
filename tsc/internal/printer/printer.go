@@ -4321,22 +4321,6 @@ func (p *Printer) emitPrologueDirectives(statements *ast.StatementList) int {
 	return len(statements.Nodes)
 }
 
-func compareEmitHelpers(x *EmitHelper, y *EmitHelper) int {
-	if x == y {
-		return 0
-	}
-	if x.Priority == y.Priority {
-		return 0
-	}
-	if x.Priority == nil {
-		return 1
-	}
-	if y.Priority == nil {
-		return -1
-	}
-	return x.Priority.Value - y.Priority.Value
-}
-
 func (p *Printer) emitHelpers(node *ast.Node) bool {
 	helpersEmitted := false
 	sourceFile := p.currentSourceFile

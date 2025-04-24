@@ -58,7 +58,7 @@ var M;
         }
     }
 })(M || (M = {}));
-(function (M_1) {
+(function (M_2) {
     class d {
         y;
         set Z(p) {
@@ -75,7 +75,7 @@ var M;
         }
     }
 })(M || (M = {}));
-(function (M_1) {
+(function (M_3) {
     class f {
         get Z() {
             var M = 10;

@@ -1,7 +1,10 @@
 --- old.usingDeclarationsWithLegacyClassDecorators.12(module=commonjs,target=es5).js
 +++ new.usingDeclarationsWithLegacyClassDecorators.12(module=commonjs,target=es5).js
-@@= skipped -17, +17 lines =@@
+@@= skipped -15, +15 lines =@@
+ 
+ //// [usingDeclarationsWithLegacyClassDecorators.12.js]
  "use strict";
++var after;
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.D = void 0;
 -var C = /** @class */ (function () {
@@ -12,20 +15,13 @@
 -    ], C);
 -    return C;
 -}());
--exports.D = C;
--var after;
--var env_1 = { stack: [], error: void 0, hasError: false };
--try {
--    after = __addDisposableResource(env_1, null, false);
 +@dec
 +class C {
++}
+ exports.D = C;
+-var after;
+-var env_1 = { stack: [], error: void 0, hasError: false };
++const env_1 = { stack: [], error: void 0, hasError: false };
+ try {
+     after = __addDisposableResource(env_1, null, false);
  }
--catch (e_1) {
--    env_1.error = e_1;
--    env_1.hasError = true;
--}
--finally {
--    __disposeResources(env_1);
--}
-+exports.D = C;
-+using after = null;

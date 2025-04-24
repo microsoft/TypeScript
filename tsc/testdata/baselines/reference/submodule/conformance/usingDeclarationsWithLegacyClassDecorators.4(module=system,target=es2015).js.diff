@@ -29,12 +29,24 @@
 -                __disposeResources(env_1);
 -            }
 -        }
--    };
--});
 +"use strict";
++var before, _default;
 +Object.defineProperty(exports, "__esModule", { value: true });
-+using before = null;
-+@dec
-+class default_1 {
++exports.default = void 0;
++const env_1 = { stack: [], error: void 0, hasError: false };
++try {
++    before = __addDisposableResource(env_1, null, false);
++    exports.default = _default = 
++    @dec
++    class {
++        static { __setFunctionName(this, "default"); }
+     };
+-});
 +}
-+exports.default = default_1;
++catch (e_1) {
++    env_1.error = e_1;
++    env_1.hasError = true;
++}
++finally {
++    __disposeResources(env_1);
++}

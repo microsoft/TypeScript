@@ -14,11 +14,10 @@
 -    }());
 +    }
  })(M || (M = {}));
--(function (M_2) {
+ (function (M_2) {
 -    var d = /** @class */ (function () {
 -        function d(M, p) {
 -            if (p === void 0) { p = M_2.x; }
-+(function (M_1) {
 +    class d {
 +        M;
 +        constructor(M, p = x) {
@@ -28,10 +27,9 @@
 -    }());
 +    }
  })(M || (M = {}));
--(function (M_3) {
+ (function (M_3) {
 -    var d2 = /** @class */ (function () {
 -        function d2() {
-+(function (M_1) {
 +    class d2 {
 +        constructor() {
              var M = 10;

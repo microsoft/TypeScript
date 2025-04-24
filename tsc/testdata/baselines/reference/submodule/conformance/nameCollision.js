@@ -82,15 +82,15 @@ var X;
     })(Y = X_1.Y || (X_1.Y = {}));
 })(X || (X = {}));
 var Y;
-(function (Y_1) {
+(function (Y_2) {
     let Y;
-    (function (Y_1) {
+    (function (Y_3) {
         let Y;
         (function (Y) {
             Y[Y["Red"] = 0] = "Red";
             Y[Y["Blue"] = 1] = "Blue";
-        })(Y = Y_1.Y || (Y_1.Y = {}));
-    })(Y = Y_1.Y || (Y_1.Y = {}));
+        })(Y = Y_3.Y || (Y_3.Y = {}));
+    })(Y = Y_2.Y || (Y_2.Y = {}));
 })(Y || (Y = {}));
 // no collision, since interface doesn't
 // generate code.

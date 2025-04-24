@@ -5,10 +5,12 @@
  
  //// [usingDeclarationsWithESClassDecorators.6.js]
 -export { C as D };
--var before, C;
+ var before, C;
 -var env_1 = { stack: [], error: void 0, hasError: false };
--try {
--    before = __addDisposableResource(env_1, null, false);
++export { C as D };
++const env_1 = { stack: [], error: void 0, hasError: false };
+ try {
+     before = __addDisposableResource(env_1, null, false);
 -    C = function () {
 -        var _classDecorators = [dec];
 -        var _classDescriptor;
@@ -29,15 +31,10 @@
 -        })();
 -        return C = _classThis;
 -    }();
-+using before = null;
-+@dec
-+class C {
++    C = 
++    @dec
++    class C {
++    };
  }
--catch (e_1) {
--    env_1.error = e_1;
--    env_1.hasError = true;
--}
--finally {
--    __disposeResources(env_1);
--}
-+export { C as D };
+ catch (e_1) {
+     env_1.error = e_1;

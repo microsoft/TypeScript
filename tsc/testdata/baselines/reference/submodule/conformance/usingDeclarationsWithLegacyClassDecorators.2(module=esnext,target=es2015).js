@@ -13,7 +13,20 @@ export class C {
 
 
 //// [usingDeclarationsWithLegacyClassDecorators.2.js]
-using before = null;
-@dec
-export class C {
+var before, C;
+export { C };
+const env_1 = { stack: [], error: void 0, hasError: false };
+try {
+    before = __addDisposableResource(env_1, null, false);
+    C = 
+    @dec
+    class C {
+    };
+}
+catch (e_1) {
+    env_1.error = e_1;
+    env_1.hasError = true;
+}
+finally {
+    __disposeResources(env_1);
 }

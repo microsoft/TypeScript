@@ -19,6 +19,8 @@ type EmitContext struct {
 	textSource    map[*ast.StringLiteralNode]*ast.Node
 	original      map[*ast.Node]*ast.Node
 	emitNodes     core.LinkStore[*ast.Node, emitNode]
+	assignedName  map[*ast.Node]*ast.Expression
+	classThis     map[*ast.Node]*ast.IdentifierNode
 	varScopeStack core.Stack[*varScope]
 	letScopeStack core.Stack[*varScope]
 	emitHelpers   collections.OrderedSet[*EmitHelper]
@@ -575,6 +577,28 @@ func (c *EmitContext) SetTokenSourceMapRange(node *ast.Node, kind ast.Kind, loc 
 	emitNode.tokenSourceMapRanges[kind] = loc
 }
 
+func (c *EmitContext) AssignedName(node *ast.Node) *ast.Expression {
+	return c.assignedName[node]
+}
+
+func (c *EmitContext) SetAssignedName(node *ast.Node, name *ast.Expression) {
+	if c.assignedName == nil {
+		c.assignedName = make(map[*ast.Node]*ast.Expression)
+	}
+	c.assignedName[node] = name
+}
+
+func (c *EmitContext) ClassThis(node *ast.Node) *ast.Expression {
+	return c.classThis[node]
+}
+
+func (c *EmitContext) SetClassThis(node *ast.Node, classThis *ast.IdentifierNode) {
+	if c.classThis == nil {
+		c.classThis = make(map[*ast.Node]*ast.Expression)
+	}
+	c.classThis[node] = classThis
+}
+
 func (c *EmitContext) RequestEmitHelper(helper *EmitHelper) {
 	if helper.Scoped {
 		panic("Cannot request a scoped emit helper")
@@ -657,6 +681,13 @@ func (c *EmitContext) HasRecordedExternalHelpers(node *ast.SourceFile) bool {
 		return emitNode != nil && (emitNode.externalHelpersModuleName != nil || emitNode.emitFlags&EFExternalHelpers != 0)
 	}
 	return false
+}
+
+func (c *EmitContext) IsCallToHelper(firstSegment *ast.Expression, helperName string) bool {
+	return ast.IsCallExpression(firstSegment) &&
+		ast.IsIdentifier(firstSegment.Expression()) &&
+		(c.EmitFlags(firstSegment.Expression())&EFHelperName) != 0 &&
+		firstSegment.Expression().Text() == helperName
 }
 
 //

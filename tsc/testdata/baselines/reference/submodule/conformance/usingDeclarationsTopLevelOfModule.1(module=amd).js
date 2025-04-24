@@ -17,12 +17,22 @@ console.log(w, x, y, z);
 
 //// [usingDeclarationsTopLevelOfModule.1.js]
 "use strict";
+var z, y, _default;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.w = exports.y = exports.x = void 0;
+exports.w = exports.default = exports.y = exports.x = void 0;
 exports.x = 1;
-using z = { [Symbol.dispose]() { } };
-const y = 2;
-exports.y = y;
-exports.w = 3;
-exports.default = 4;
-console.log(exports.w, exports.x, y, z);
+const env_1 = { stack: [], error: void 0, hasError: false };
+try {
+    z = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false);
+    exports.y = y = 2;
+    exports.w = 3;
+    exports.default = _default = 4;
+    console.log(exports.w, exports.x, y, z);
+}
+catch (e_1) {
+    env_1.error = e_1;
+    env_1.hasError = true;
+}
+finally {
+    __disposeResources(env_1);
+}

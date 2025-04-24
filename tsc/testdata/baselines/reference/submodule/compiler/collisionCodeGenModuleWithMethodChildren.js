@@ -42,7 +42,7 @@ var M;
         fn(M, p = M_1.x) { }
     }
 })(M || (M = {}));
-(function (M_1) {
+(function (M_2) {
     class d {
         fn2() {
             var M;
@@ -50,7 +50,7 @@ var M;
         }
     }
 })(M || (M = {}));
-(function (M_1) {
+(function (M_3) {
     class e {
         fn3() {
             function M() {

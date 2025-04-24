@@ -1,8 +1,10 @@
 --- old.usingDeclarationsWithESClassDecorators.9(module=commonjs,target=es5).js
 +++ new.usingDeclarationsWithESClassDecorators.9(module=commonjs,target=es5).js
-@@= skipped -17, +17 lines =@@
+@@= skipped -16, +16 lines =@@
+ 
  //// [usingDeclarationsWithESClassDecorators.9.js]
  "use strict";
++var after;
  Object.defineProperty(exports, "__esModule", { value: true });
 -var C = function () {
 -    var _classDecorators = [dec];
@@ -31,14 +33,7 @@
  void C;
 -var after;
 -var env_1 = { stack: [], error: void 0, hasError: false };
--try {
--    after = __addDisposableResource(env_1, null, false);
--}
--catch (e_1) {
--    env_1.error = e_1;
--    env_1.hasError = true;
--}
--finally {
--    __disposeResources(env_1);
--}
-+using after = null;
++const env_1 = { stack: [], error: void 0, hasError: false };
+ try {
+     after = __addDisposableResource(env_1, null, false);
+ }

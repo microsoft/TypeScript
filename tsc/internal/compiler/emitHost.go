@@ -7,28 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type WriteFileData struct {
-	SourceMapUrlPos int
-	// BuildInfo BuildInfo
-	Diagnostics      []*ast.Diagnostic
-	DiffersOnlyInMap bool
-	SkippedDtsWrite  bool
-}
-
-// NOTE: EmitHost operations must be thread-safe
-type EmitHost interface {
-	Options() *core.CompilerOptions
-	SourceFiles() []*ast.SourceFile
-	UseCaseSensitiveFileNames() bool
-	GetCurrentDirectory() string
-	CommonSourceDirectory() string
-	IsEmitBlocked(file string) bool
-	WriteFile(fileName string, text string, writeByteOrderMark bool, relatedSourceFiles []*ast.SourceFile, data *WriteFileData) error
-	GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData
-	GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) printer.EmitResolver
-}
-
-var _ EmitHost = (*emitHost)(nil)
+var _ printer.EmitHost = (*emitHost)(nil)
 
 // NOTE: emitHost operations must be thread-safe
 type emitHost struct {
@@ -48,7 +27,7 @@ func (host *emitHost) IsEmitBlocked(file string) bool {
 	return false
 }
 
-func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark bool, _ []*ast.SourceFile, _ *WriteFileData) error {
+func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark bool, _ []*ast.SourceFile, _ *printer.WriteFileData) error {
 	return host.program.host.FS().WriteFile(fileName, text, writeByteOrderMark)
 }
 

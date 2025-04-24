@@ -16,12 +16,11 @@
 +        fn(M, p = M_1.x) { }
 +    }
  })(M || (M = {}));
--(function (M_2) {
+ (function (M_2) {
 -    var d = /** @class */ (function () {
 -        function d() {
 -        }
 -        d.prototype.fn2 = function () {
-+(function (M_1) {
 +    class d {
 +        fn2() {
              var M;
@@ -29,16 +28,15 @@
 -        };
 -        return d;
 -    }());
--})(M || (M = {}));
--(function (M_3) {
++            var p = x;
++        }
++    }
+ })(M || (M = {}));
+ (function (M_3) {
 -    var e = /** @class */ (function () {
 -        function e() {
-+            var p = x;
-         }
+-        }
 -        e.prototype.fn3 = function () {
-+    }
-+})(M || (M = {}));
-+(function (M_1) {
 +    class e {
 +        fn3() {
              function M() {

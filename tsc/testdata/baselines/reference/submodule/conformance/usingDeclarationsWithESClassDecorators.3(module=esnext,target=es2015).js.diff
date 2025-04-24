@@ -5,10 +5,11 @@
  
  //// [usingDeclarationsWithESClassDecorators.3.js]
 -export { _default as default };
--var before, C, _default;
--const env_1 = { stack: [], error: void 0, hasError: false };
--try {
--    before = __addDisposableResource(env_1, null, false);
+ var before, C, _default;
++export { _default as default };
+ const env_1 = { stack: [], error: void 0, hasError: false };
+ try {
+     before = __addDisposableResource(env_1, null, false);
 -    _default = C = (() => {
 -        let _classDecorators = [dec];
 -        let _classDescriptor;
@@ -26,16 +27,10 @@
 -        })();
 -        return C = _classThis;
 -    })();
--    void C;
-+using before = null;
-+@dec
-+export default class C {
++    _default = C = 
++    @dec
++    class C {
++    };
+     void C;
  }
--catch (e_1) {
--    env_1.error = e_1;
--    env_1.hasError = true;
--}
--finally {
--    __disposeResources(env_1);
--}
-+void C;
+ catch (e_1) {

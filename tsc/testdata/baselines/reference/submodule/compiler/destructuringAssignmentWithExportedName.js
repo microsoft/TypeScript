@@ -36,17 +36,17 @@ let nonexportedFoo;
 exports.foo = exports.exportedFoo = null;
 exports.nfoo = exports.nonexportedFoo = nonexportedFoo = null;
 if (null) {
-    ({ exportedFoo: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, nonexportedFoo: { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value } = null);
+    ({ exportedFoo: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, nonexportedFoo: { set value(value_1) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_1; } }.value } = null);
 }
 else if (null) {
-    ({ foo: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, bar: { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value } = null);
+    ({ foo: { set value(value_2) { exports.foo = exports.exportedFoo = value_2; } }.value, bar: { set value(value_3) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_3; } }.value } = null);
 }
 else if (null) {
-    ({ foo: { bar: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, baz: { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value } } = null);
+    ({ foo: { bar: { set value(value_4) { exports.foo = exports.exportedFoo = value_4; } }.value, baz: { set value(value_5) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_5; } }.value } } = null);
 }
 else if (null) {
-    ([{ set value(value) { exports.foo = exports.exportedFoo = value; } }.value, { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value] = null);
+    ([{ set value(value_6) { exports.foo = exports.exportedFoo = value_6; } }.value, { set value(value_7) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_7; } }.value] = null);
 }
 else {
-    ([[{ set value(value) { exports.foo = exports.exportedFoo = value; } }.value, { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value]] = null);
+    ([[{ set value(value_8) { exports.foo = exports.exportedFoo = value_8; } }.value, { set value(value_9) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_9; } }.value]] = null);
 }

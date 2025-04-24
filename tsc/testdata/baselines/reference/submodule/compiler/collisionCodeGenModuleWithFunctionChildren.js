@@ -27,13 +27,13 @@ var M;
     M_1.x = 3;
     function fn(M, p = M_1.x) { }
 })(M || (M = {}));
-(function (M_1) {
+(function (M_2) {
     function fn2() {
         var M;
         var p = x;
     }
 })(M || (M = {}));
-(function (M_1) {
+(function (M_3) {
     function fn3() {
         function M() {
             var p = x;

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 type NodeFactory struct {
@@ -271,6 +272,58 @@ func (f *NodeFactory) InlineExpressions(expressions []*ast.Expression) *ast.Expr
 // Utilities
 //
 
+// Determines whether a node is a parenthesized expression that can be ignored when recreating outer expressions.
+//
+// A parenthesized expression can be ignored when all of the following are true:
+//
+// - It's `pos` and `end` are not -1
+// - It does not have a custom source map range
+// - It does not have a custom comment range
+// - It does not have synthetic leading or trailing comments
+//
+// If an outermost parenthesized expression is ignored, but the containing expression requires a parentheses around
+// the expression to maintain precedence, a new parenthesized expression should be created automatically when
+// the containing expression is created/updated.
+func (f *NodeFactory) isIgnorableParen(node *ast.Expression) bool {
+	return ast.IsParenthesizedExpression(node) &&
+		ast.NodeIsSynthesized(node) &&
+		ast.RangeIsSynthesized(f.emitContext.SourceMapRange(node)) &&
+		ast.RangeIsSynthesized(f.emitContext.CommentRange(node)) // &&
+	// len(emitContext.SyntheticLeadingComments(node)) == 0 &&
+	// len(emitContext.SyntheticTrailingComments(node)) == 0
+}
+
+func (f *NodeFactory) updateOuterExpression(outerExpression *ast.Expression /*OuterExpression*/, expression *ast.Expression) *ast.Expression {
+	switch outerExpression.Kind {
+	case ast.KindParenthesizedExpression:
+		return f.UpdateParenthesizedExpression(outerExpression.AsParenthesizedExpression(), expression)
+	case ast.KindTypeAssertionExpression:
+		return f.UpdateTypeAssertion(outerExpression.AsTypeAssertion(), outerExpression.Type(), expression)
+	case ast.KindAsExpression:
+		return f.UpdateAsExpression(outerExpression.AsAsExpression(), expression, outerExpression.Type())
+	case ast.KindSatisfiesExpression:
+		return f.UpdateSatisfiesExpression(outerExpression.AsSatisfiesExpression(), expression, outerExpression.Type())
+	case ast.KindNonNullExpression:
+		return f.UpdateNonNullExpression(outerExpression.AsNonNullExpression(), expression)
+	case ast.KindExpressionWithTypeArguments:
+		return f.UpdateExpressionWithTypeArguments(outerExpression.AsExpressionWithTypeArguments(), expression, outerExpression.TypeArgumentList())
+	case ast.KindPartiallyEmittedExpression:
+		return f.UpdatePartiallyEmittedExpression(outerExpression.AsPartiallyEmittedExpression(), expression)
+	default:
+		panic(fmt.Sprintf("Unexpected outer expression kind: %s", outerExpression.Kind))
+	}
+}
+
+func (f *NodeFactory) RestoreOuterExpressions(outerExpression *ast.Expression, innerExpression *ast.Expression, kinds ast.OuterExpressionKinds) *ast.Expression {
+	if outerExpression != nil && ast.IsOuterExpression(outerExpression, kinds) && !f.isIgnorableParen(outerExpression) {
+		return f.updateOuterExpression(
+			outerExpression,
+			f.RestoreOuterExpressions(outerExpression.Expression(), innerExpression, ast.OEKAll),
+		)
+	}
+	return innerExpression
+}
+
 // Ensures `"use strict"` is the first statement of a slice of statements.
 func (f *NodeFactory) EnsureUseStrict(statements []*ast.Statement) []*ast.Statement {
 	for _, statement := range statements {
@@ -411,6 +464,69 @@ func (f *NodeFactory) NewUnscopedHelperName(name string) *ast.IdentifierNode {
 	return node
 }
 
+// !!! TypeScript Helpers
+
+// ESNext Helpers
+
+func (f *NodeFactory) NewAddDisposableResourceHelper(envBinding *ast.Expression, value *ast.Expression, async bool) *ast.Expression {
+	f.emitContext.RequestEmitHelper(addDisposableResourceHelper)
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__addDisposableResource"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{envBinding, value, f.NewKeywordExpression(core.IfElse(async, ast.KindTrueKeyword, ast.KindFalseKeyword))}),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewDisposeResourcesHelper(envBinding *ast.Expression) *ast.Expression {
+	f.emitContext.RequestEmitHelper(disposeResourcesHelper)
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__disposeResources"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{envBinding}),
+		ast.NodeFlagsNone,
+	)
+}
+
+// !!! Class Fields Helpers
+// !!! ES2018 Helpers
+// !!! ES2018 Destructuring Helpers
+// !!! ES2017 Helpers
+
+// ES2015 Helpers
+
+func (f *NodeFactory) NewPropKeyHelper(expr *ast.Expression) *ast.Expression {
+	f.emitContext.RequestEmitHelper(propKeyHelper)
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__propKey"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{expr}),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewSetFunctionNameHelper(fn *ast.Expression, name *ast.Expression, prefix string) *ast.Expression {
+	f.emitContext.RequestEmitHelper(setFunctionNameHelper)
+	var arguments []*ast.Expression
+	if len(prefix) > 0 {
+		arguments = []*ast.Expression{fn, name, f.NewStringLiteral(prefix)}
+	} else {
+		arguments = []*ast.Expression{fn, name}
+	}
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__setFunctionName"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList(arguments),
+		ast.NodeFlagsNone,
+	)
+}
+
+// ES Module Helpers
+
 // Allocates a new Call expression to the `__importDefault` helper.
 func (f *NodeFactory) NewImportDefaultHelper(expression *ast.Expression) *ast.Expression {
 	f.emitContext.RequestEmitHelper(importDefaultHelper)
@@ -438,7 +554,6 @@ func (f *NodeFactory) NewImportStarHelper(expression *ast.Expression) *ast.Expre
 // Allocates a new Call expression to the `__exportStar` helper.
 func (f *NodeFactory) NewExportStarHelper(moduleExpression *ast.Expression, exportsExpression *ast.Expression) *ast.Expression {
 	f.emitContext.RequestEmitHelper(exportStarHelper)
-	f.emitContext.RequestEmitHelper(createBindingHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__exportStar"),
 		nil, /*questionDotToken*/
