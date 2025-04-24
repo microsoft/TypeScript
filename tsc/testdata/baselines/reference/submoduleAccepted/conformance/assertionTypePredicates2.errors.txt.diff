@@ -4,10 +4,9 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +assertionTypePredicates2.js(21,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-+assertionTypePredicates2.js(21,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 +
 +
-+==== assertionTypePredicates2.js (2 errors) ====
++==== assertionTypePredicates2.js (1 errors) ====
 +    /**
 +     * @typedef {{ x: number }} A
 +     */
@@ -32,7 +31,5 @@
 +        ~~~
 +!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 +!!! related TS2782 assertionTypePredicates2.js:13:7: 'foo' needs an explicit type annotation.
-+        ~~~
-+!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 +    };
 +    

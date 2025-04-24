@@ -394,9 +394,42 @@ func isCommentOrBlankLine(text string, pos int) bool {
 }
 
 func SortAndDeduplicateDiagnostics(diagnostics []*ast.Diagnostic) []*ast.Diagnostic {
-	result := slices.Clone(diagnostics)
-	slices.SortFunc(result, ast.CompareDiagnostics)
-	return slices.CompactFunc(result, ast.EqualDiagnostics)
+	diagnostics = slices.Clone(diagnostics)
+	slices.SortFunc(diagnostics, ast.CompareDiagnostics)
+	return compactAndMergeRelatedInfos(diagnostics)
+}
+
+// Remove duplicate diagnostics and, for sequences of diagnostics that differ only by related information,
+// create a single diagnostic with sorted and deduplicated related information.
+func compactAndMergeRelatedInfos(diagnostics []*ast.Diagnostic) []*ast.Diagnostic {
+	if len(diagnostics) < 2 {
+		return diagnostics
+	}
+	i := 0
+	j := 0
+	for i < len(diagnostics) {
+		d := diagnostics[i]
+		n := 1
+		for i+n < len(diagnostics) && ast.EqualDiagnosticsNoRelatedInfo(d, diagnostics[i+n]) {
+			n++
+		}
+		if n > 1 {
+			var relatedInfos []*ast.Diagnostic
+			for k := range n {
+				relatedInfos = append(relatedInfos, diagnostics[i+k].RelatedInformation()...)
+			}
+			if relatedInfos != nil {
+				slices.SortFunc(relatedInfos, ast.CompareDiagnostics)
+				relatedInfos = slices.CompactFunc(relatedInfos, ast.EqualDiagnostics)
+				d = d.Clone().SetRelatedInfo(relatedInfos)
+			}
+		}
+		diagnostics[j] = d
+		i += n
+		j++
+	}
+	clear(diagnostics[j:])
+	return diagnostics[:j]
 }
 
 func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, ensureChecked bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {

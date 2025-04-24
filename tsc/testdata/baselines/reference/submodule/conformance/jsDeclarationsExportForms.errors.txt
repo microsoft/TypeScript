@@ -1,6 +1,4 @@
 cjs.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
-cjs.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
-cjs.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
 cjs.js(1,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 cjs.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 cjs2.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
@@ -43,16 +41,12 @@ cjs4.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install ty
     import * as ns from "./cls";
     export { ns as classContainer };
     
-==== cjs.js (5 errors) ====
+==== cjs.js (3 errors) ====
     const ns = require("./cls");
           ~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
 !!! related TS6203 cjs2.js:1:7: 'ns' was also declared here.
-          ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
 !!! related TS6203 cjs3.js:1:7: 'ns' was also declared here.
-          ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
 !!! related TS6203 cjs4.js:1:7: 'ns' was also declared here.
                ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

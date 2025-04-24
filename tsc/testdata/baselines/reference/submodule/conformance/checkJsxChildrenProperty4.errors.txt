@@ -1,11 +1,11 @@
 file.tsx(24,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
-file.tsx(32,10): error TS2322: Type '{ children: (((user: any) => Element) | ((user: any) => Element))[]; }' is not assignable to type 'IFetchUserProps'.
-  Types of property 'children' are incompatible.
-    Type '(((user: any) => Element) | ((user: any) => Element))[]' is not assignable to type '(user: IUser) => Element'.
-      Type '(((user: any) => Element) | ((user: any) => Element))[]' provides no match for the signature '(user: IUser): Element'.
+file.tsx(36,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
+  Type '(user: IUser) => Element' is not assignable to type 'any[] | ReactElement<any>'.
+file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
+  Type '(user: IUser) => Element' is not assignable to type 'any[] | ReactElement<any>'.
 
 
-==== file.tsx (2 errors) ====
+==== file.tsx (3 errors) ====
     import React = require('react');
     
     interface IUser {
@@ -41,20 +41,27 @@ file.tsx(32,10): error TS2322: Type '{ children: (((user: any) => Element) | ((u
     function UserName1() {
         return (
             <FetchUser>
-             ~~~~~~~~~
-!!! error TS2322: Type '{ children: (((user: any) => Element) | ((user: any) => Element))[]; }' is not assignable to type 'IFetchUserProps'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '(((user: any) => Element) | ((user: any) => Element))[]' is not assignable to type '(user: IUser) => Element'.
-!!! error TS2322:       Type '(((user: any) => Element) | ((user: any) => Element))[]' provides no match for the signature '(user: IUser): Element'.
     
     
                 
                 { user => (
+                  ~~~~~~~~~
                     <h1>{ user.Name }</h1>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ) }
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
+!!! error TS2322:   Type '(user: IUser) => Element' is not assignable to type 'any[] | ReactElement<any>'.
+!!! related TS6212 file.tsx:36:15: Did you mean to call this expression?
                 { user => (
+                  ~~~~~~~~~
                     <h1>{ user.Name }</h1>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ) }
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
+!!! error TS2322:   Type '(user: IUser) => Element' is not assignable to type 'any[] | ReactElement<any>'.
+!!! related TS6212 file.tsx:39:15: Did you mean to call this expression?
             </FetchUser>
         );
     }

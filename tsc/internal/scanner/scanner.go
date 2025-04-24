@@ -920,18 +920,28 @@ func (s *Scanner) processCommentDirective(start int, end int, multiline bool) {
 	// Skip starting slashes and whitespace
 	pos := start
 	if multiline {
-		for pos < len(s.text) && (s.text[pos] == '*' || s.text[pos] == '/') {
+		// Skip whitespace
+		for pos < end && (s.text[pos] == ' ' || s.text[pos] == '\t') {
+			pos++
+		}
+		// Skip combinations of / and *
+		for pos < end && (s.text[pos] == '/' || s.text[pos] == '*') {
 			pos++
 		}
 	} else {
-		// Skip "//" for single line comments
+		// Skip opening //
 		pos += 2
+		// Skip another / if present
+		for pos < end && s.text[pos] == '/' {
+			pos++
+		}
 	}
-	for pos < len(s.text) && (s.text[pos] == ' ' || s.text[pos] == '\t') {
+	// Skip whitespace
+	for pos < end && (s.text[pos] == ' ' || s.text[pos] == '\t') {
 		pos++
 	}
 	// Directive must start with '@'
-	if !(pos < len(s.text) && s.text[pos] == '@') {
+	if !(pos < end && s.text[pos] == '@') {
 		return
 	}
 	pos++

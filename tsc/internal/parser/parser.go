@@ -1883,7 +1883,6 @@ func (p *Parser) parseErrorForMissingSemicolonAfter(node *ast.Node) {
 	if node.Kind == ast.KindIdentifier {
 		expressionText = node.AsIdentifier().Text
 	}
-	// !!! Also call isIdentifierText(expressionText, languageVersion)
 	if expressionText == "" {
 		p.parseErrorAtCurrentToken(diagnostics.X_0_expected, scanner.TokenToString(ast.KindSemicolonToken))
 		return

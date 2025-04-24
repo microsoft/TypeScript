@@ -2846,7 +2846,7 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		return scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos())
 	}
 	pos := errorNode.Pos()
-	if !ast.NodeIsMissing(errorNode) {
+	if !ast.NodeIsMissing(errorNode) && !ast.IsJsxText(errorNode) {
 		pos = scanner.SkipTrivia(sourceFile.Text(), pos)
 	}
 	return core.NewTextRange(pos, errorNode.End())

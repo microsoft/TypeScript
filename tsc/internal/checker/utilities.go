@@ -290,7 +290,6 @@ func nodeCanBeDecorated(useLegacyDecorators bool, node *ast.Node, parent *ast.No
 	if useLegacyDecorators && node.Name() != nil && ast.IsPrivateIdentifier(node.Name()) {
 		return false
 	}
-
 	switch node.Kind {
 	case ast.KindClassDeclaration:
 		// class declarations are valid targets
@@ -300,19 +299,21 @@ func nodeCanBeDecorated(useLegacyDecorators bool, node *ast.Node, parent *ast.No
 		return !useLegacyDecorators
 	case ast.KindPropertyDeclaration:
 		// property declarations are valid if their parent is a class declaration.
-		return parent != nil && (ast.IsClassDeclaration(parent) || !useLegacyDecorators && ast.IsClassExpression(parent) && !hasAbstractModifier(node) && !hasAmbientModifier(node))
-	case ast.KindGetAccessor,
-		ast.KindSetAccessor,
-		ast.KindMethodDeclaration:
+		return parent != nil && (useLegacyDecorators && ast.IsClassDeclaration(parent) ||
+			!useLegacyDecorators && ast.IsClassLike(parent) && !hasAbstractModifier(node) && !hasAmbientModifier(node))
+	case ast.KindGetAccessor, ast.KindSetAccessor, ast.KindMethodDeclaration:
 		// if this method has a body and its parent is a class declaration, this is a valid target.
-		return node.BodyData() != nil && parent != nil && (ast.IsClassDeclaration(parent) || !useLegacyDecorators && ast.IsClassExpression(parent))
+		return parent != nil && node.Body() != nil && (useLegacyDecorators && ast.IsClassDeclaration(parent) ||
+			!useLegacyDecorators && ast.IsClassLike(parent))
 	case ast.KindParameter:
 		// TODO(rbuckton): Parameter decorator support for ES decorators must wait until it is standardized
 		if !useLegacyDecorators {
 			return false
 		}
 		// if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target.
-		return parent != nil && parent.BodyData() != nil && (parent.BodyData()).Body != nil && (parent.Kind == ast.KindConstructor || parent.Kind == ast.KindMethodDeclaration || parent.Kind == ast.KindSetAccessor) && getThisParameter(parent) != node && grandparent != nil && grandparent.Kind == ast.KindClassDeclaration
+		return parent != nil && parent.Body() != nil &&
+			(parent.Kind == ast.KindConstructor || parent.Kind == ast.KindMethodDeclaration || parent.Kind == ast.KindSetAccessor) &&
+			getThisParameter(parent) != node && grandparent != nil && grandparent.Kind == ast.KindClassDeclaration
 	}
 
 	return false

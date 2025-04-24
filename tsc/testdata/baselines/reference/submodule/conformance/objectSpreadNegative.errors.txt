@@ -10,7 +10,6 @@ objectSpreadNegative.ts(28,36): error TS1117: An object literal cannot have mult
 objectSpreadNegative.ts(28,53): error TS1117: An object literal cannot have multiple properties with the same name.
 objectSpreadNegative.ts(32,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 objectSpreadNegative.ts(39,14): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 objectSpreadNegative.ts(41,53): error TS2783: 'd' is specified more than once, so this usage will be overwritten.
 objectSpreadNegative.ts(43,7): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
@@ -27,7 +26,7 @@ objectSpreadNegative.ts(69,9): error TS2339: Property 'm' does not exist on type
 objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
 
 
-==== objectSpreadNegative.ts (23 errors) ====
+==== objectSpreadNegative.ts (22 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -91,8 +90,6 @@ objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on typ
           ~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 !!! related TS2785 objectSpreadNegative.ts:37:16: This spread always overwrites this property.
-          ~~~~~~~
-!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 !!! related TS2785 objectSpreadNegative.ts:37:23: This spread always overwrites this property.
     let combinedMid: { a: number, b: string, c: boolean } =
         { ...o3, b: 'ok', ...o4 }

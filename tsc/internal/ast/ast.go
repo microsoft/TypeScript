@@ -9501,6 +9501,10 @@ func (node *JSDocImportTag) Clone(f NodeFactoryCoercible) *Node {
 	return cloneNode(f.AsNodeFactory().NewJSDocImportTag(node.TagName, node.ImportClause, node.ModuleSpecifier, node.Attributes, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
+func IsJSDocImportTag(node *Node) bool {
+	return node.Kind == KindJSDocImportTag
+}
+
 // JSDocCallbackTag
 type JSDocCallbackTag struct {
 	JSDocTagBase

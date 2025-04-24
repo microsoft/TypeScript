@@ -1,8 +1,7 @@
 for-of16.ts(8,11): error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-for-of16.ts(8,11): error TS2489: An iterator must have a 'next()' method.
 
 
-==== for-of16.ts (2 errors) ====
+==== for-of16.ts (1 errors) ====
     class MyStringIterator {
         [Symbol.iterator]() {
             return this;
@@ -13,7 +12,6 @@ for-of16.ts(8,11): error TS2489: An iterator must have a 'next()' method.
     for (v of new MyStringIterator) { } // Should fail
               ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-              ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2489: An iterator must have a 'next()' method.
+!!! related TS2489 for-of16.ts:8:11: An iterator must have a 'next()' method.
     
     for (v of new MyStringIterator) { } // Should still fail (related errors should still be shown even though type is cached).

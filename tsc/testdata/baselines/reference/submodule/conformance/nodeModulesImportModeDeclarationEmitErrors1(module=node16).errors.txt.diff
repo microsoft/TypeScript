@@ -2,7 +2,8 @@
 +++ new.nodeModulesImportModeDeclarationEmitErrors1(module=node16).errors.txt
 @@= skipped -0, +0 lines =@@
  /index.ts(2,45): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
--/index.ts(2,73): error TS1453: `resolution-mode` should be either `require` or `import`.
++/index.ts(2,45): error TS2822: Import assertions cannot be used with type-only imports or exports.
+ /index.ts(2,73): error TS1453: `resolution-mode` should be either `require` or `import`.
 -/index.ts(4,10): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
 +/index.ts(4,10): error TS2305: Module '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 +/index.ts(4,39): error TS1454: `resolution-mode` can only be set for type-only imports.
@@ -12,13 +13,15 @@
  
  
 -==== /index.ts (5 errors) ====
-+==== /index.ts (6 errors) ====
++==== /index.ts (8 errors) ====
      // incorrect mode
      import type { RequireInterface } from "pkg" assert { "resolution-mode": "foobar" };
                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
--                                                                            ~~~~~~~~
--!!! error TS1453: `resolution-mode` should be either `require` or `import`.
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2822: Import assertions cannot be used with type-only imports or exports.
+                                                                             ~~~~~~~~
+ !!! error TS1453: `resolution-mode` should be either `require` or `import`.
      // not type-only
      import { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
               ~~~~~~~~~~~~~~~

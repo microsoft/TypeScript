@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"iter"
 	"math"
 	"slices"
 
@@ -293,66 +294,168 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 		}
 	}
 	if ast.IsJsxOpeningElement(node.Parent) && ast.IsJsxElement(node.Parent.Parent) {
-		// containingElement := node.Parent.Parent
-		// childrenPropName := c.getJsxElementChildrenPropertyName(c.getJsxNamespaceAt(node))
-		// if childrenPropName == ast.InternalSymbolNameMissing {
-		// 	childrenPropName = "children"
-		// }
-		// childrenNameType := c.getStringLiteralType(childrenPropName)
-		// childrenTargetType := c.getIndexedAccessType(target, childrenNameType)
-		// validChildren := getSemanticJsxChildren(containingElement.Children().Nodes)
-		// if len(validChildren) == 0 {
-		// 	return reportedError
-		// }
-		// moreThanOneRealChildren := len(validChildren) > 1
-		// var arrayLikeTargetParts *Type
-		// var nonArrayLikeTargetParts *Type
-		// iterableType := c.getGlobalIterableType()
-		// if iterableType != c.emptyGenericType {
-		// 	anyIterable := c.createIterableType(c.anyType)
-		// 	arrayLikeTargetParts = c.filterType(childrenTargetType, func(t *Type) bool {
-		// 		return c.isTypeAssignableTo(t, anyIterable)
-		// 	})
-		// 	nonArrayLikeTargetParts = c.filterType(childrenTargetType, func(t *Type) bool {
-		// 		return !c.isTypeAssignableTo(t, anyIterable)
-		// 	})
-		// } else {
-		// 	arrayLikeTargetParts = c.filterType(childrenTargetType, c.isArrayOrTupleLikeType)
-		// 	nonArrayLikeTargetParts = c.filterType(childrenTargetType, func(t *Type) bool {
-		// 		return !c.isArrayOrTupleLikeType(t)
-		// 	})
-		// }
-		// if moreThanOneRealChildren {
-		// 	if arrayLikeTargetParts != c.neverType {
-		// 		realSource := c.createTupleType(c.checkJsxChildren(containingElement, CheckModeNormal))
-		// 		children := c.generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic)
-		// 		result = c.elaborateIterableOrArrayLikeTargetElementwise(children, realSource, arrayLikeTargetParts, relation, containingMessageChain, errorOutputContainer) || result
-		// 	} else if !c.isTypeRelatedTo(c.getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) {
-		// 		// arity mismatch
-		// 		result = true
-		// 		diag := c.error(containingElement.OpeningElement.TagName, Diagnostics.This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided, childrenPropName, c.typeToString(childrenTargetType))
-		// 		if errorOutputContainer != nil && errorOutputContainer.skipLogging {
-		// 			(errorOutputContainer.errors || ( /* TODO(TS-TO-GO) EqualsToken BinaryExpression: errorOutputContainer.errors = [] */ TODO)).push(diag)
-		// 		}
-		// 	}
-		// } else {
-		// 	if nonArrayLikeTargetParts != c.neverType {
-		// 		child := validChildren[0]
-		// 		elem := c.getElaborationElementForJsxChild(child, childrenNameType, getInvalidTextualChildDiagnostic)
-		// 		if elem != nil {
-		// 			result = c.elaborateElementwise((func /* generator */ () /* TODO(TS-TO-GO) inferred type Generator<{ errorNode: JsxExpression; innerExpression: Expression | undefined; nameType: LiteralType; errorMessage?: undefined; } | { errorNode: JsxText; innerExpression: undefined; nameType: LiteralType; errorMessage: DiagnosticMessage; } | { errorNode: JsxElement | JsxSelfClosingElement | JsxFragment; innerExpression: JsxElement | JsxSelfClosingElement | JsxFragment; nameType: LiteralType; errorMessage?: undefined; }, void, any> */ any {
-		// 				yield(elem)
-		// 			})(), source, target, relation, containingMessageChain, errorOutputContainer) || result
-		// 		}
-		// 	} else if !c.isTypeRelatedTo(c.getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) {
-		// 		// arity mismatch
-		// 		result = true
-		// 		diag := c.error(containingElement.OpeningElement.TagName, Diagnostics.This_JSX_tag_s_0_prop_expects_type_1_which_requires_multiple_children_but_only_a_single_child_was_provided, childrenPropName, c.typeToString(childrenTargetType))
-		// 		if errorOutputContainer != nil && errorOutputContainer.skipLogging {
-		// 			(errorOutputContainer.errors || ( /* TODO(TS-TO-GO) EqualsToken BinaryExpression: errorOutputContainer.errors = [] */ TODO)).push(diag)
-		// 		}
-		// 	}
-		// }
+		containingElement := node.Parent.Parent // Containing JSXElement
+		childrenPropName := c.getJsxElementChildrenPropertyName(c.getJsxNamespaceAt(node))
+		if childrenPropName == ast.InternalSymbolNameMissing {
+			childrenPropName = "children"
+		}
+		childrenNameType := c.getStringLiteralType(childrenPropName)
+		childrenTargetType := c.getIndexedAccessType(target, childrenNameType)
+		validChildren := getSemanticJsxChildren(containingElement.Children().Nodes)
+		if len(validChildren) == 0 {
+			return reportedError
+		}
+		moreThanOneRealChildren := len(validChildren) > 1
+		var arrayLikeTargetParts *Type
+		var nonArrayLikeTargetParts *Type
+		iterableType := c.getGlobalIterableType()
+		if iterableType != c.emptyGenericType {
+			anyIterable := c.createIterableType(c.anyType)
+			arrayLikeTargetParts = c.filterType(childrenTargetType, func(t *Type) bool { return c.isTypeAssignableTo(t, anyIterable) })
+			nonArrayLikeTargetParts = c.filterType(childrenTargetType, func(t *Type) bool { return !c.isTypeAssignableTo(t, anyIterable) })
+		} else {
+			arrayLikeTargetParts = c.filterType(childrenTargetType, c.isArrayOrTupleLikeType)
+			nonArrayLikeTargetParts = c.filterType(childrenTargetType, func(t *Type) bool { return !c.isArrayOrTupleLikeType(t) })
+		}
+		var invalidTextDiagnostic *diagnostics.Message
+		getInvalidTextualChildDiagnostic := func() *diagnostics.Message {
+			if invalidTextDiagnostic == nil {
+				tagNameText := scanner.GetTextOfNode(node.Parent.TagName())
+				diagnostic := diagnostics.X_0_components_don_t_accept_text_as_child_elements_Text_in_JSX_has_the_type_string_but_the_expected_type_of_1_is_2
+				invalidTextDiagnostic = diagnostics.FormatMessage(diagnostic, tagNameText, childrenPropName, c.TypeToString(childrenTargetType))
+			}
+			return invalidTextDiagnostic
+		}
+		if moreThanOneRealChildren {
+			if arrayLikeTargetParts != c.neverType {
+				realSource := c.createTupleType(c.checkJsxChildren(containingElement, CheckModeNormal))
+				children := c.generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic)
+				reportedError = c.elaborateIterableOrArrayLikeTargetElementwise(children, realSource, arrayLikeTargetParts, relation, diagnosticOutput) || reportedError
+			} else if !c.isTypeRelatedTo(c.getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) {
+				// arity mismatch
+				diag := c.error(containingElement.AsJsxElement().OpeningElement.TagName(), diagnostics.This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided, childrenPropName, c.TypeToString(childrenTargetType))
+				c.reportDiagnostic(diag, diagnosticOutput)
+				reportedError = true
+			}
+		} else {
+			if nonArrayLikeTargetParts != c.neverType {
+				child := validChildren[0]
+				e := c.getElaborationElementForJsxChild(child, childrenNameType, getInvalidTextualChildDiagnostic)
+				if e.errorNode != nil {
+					reportedError = c.elaborateElement(source, target, relation, e.errorNode, e.innerExpression, e.nameType, e.errorMessage, diagnosticOutput) || reportedError
+				}
+			} else if !c.isTypeRelatedTo(c.getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) {
+				// arity mismatch
+				diag := c.error(containingElement.AsJsxElement().OpeningElement.TagName(), diagnostics.This_JSX_tag_s_0_prop_expects_type_1_which_requires_multiple_children_but_only_a_single_child_was_provided, childrenPropName, c.TypeToString(childrenTargetType))
+				c.reportDiagnostic(diag, diagnosticOutput)
+				reportedError = true
+			}
+		}
+	}
+	return reportedError
+}
+
+type JsxElaborationElement struct {
+	errorNode       *ast.Node
+	innerExpression *ast.Node
+	nameType        *Type
+	errorMessage    *diagnostics.Message
+}
+
+func (c *Checker) generateJsxChildren(node *ast.Node, getInvalidTextDiagnostic func() *diagnostics.Message) iter.Seq[JsxElaborationElement] {
+	return func(yield func(JsxElaborationElement) bool) {
+		memberOffset := 0
+		for i, child := range node.Children().Nodes {
+			nameType := c.getNumberLiteralType(jsnum.Number(i - memberOffset))
+			e := c.getElaborationElementForJsxChild(child, nameType, getInvalidTextDiagnostic)
+			if e.errorNode != nil {
+				if !yield(e) {
+					return
+				}
+			} else {
+				memberOffset++
+			}
+		}
+	}
+}
+
+func (c *Checker) getElaborationElementForJsxChild(child *ast.Node, nameType *Type, getInvalidTextDiagnostic func() *diagnostics.Message) JsxElaborationElement {
+	switch child.Kind {
+	case ast.KindJsxExpression:
+		// child is of the type of the expression
+		return JsxElaborationElement{errorNode: child, innerExpression: child.Expression(), nameType: nameType}
+	case ast.KindJsxText:
+		if child.AsJsxText().ContainsOnlyTriviaWhiteSpaces {
+			// Whitespace only jsx text isn't real jsx text
+			return JsxElaborationElement{}
+		}
+		// child is a string
+		return JsxElaborationElement{errorNode: child, innerExpression: nil, nameType: nameType, errorMessage: getInvalidTextDiagnostic()}
+	case ast.KindJsxElement, ast.KindJsxSelfClosingElement, ast.KindJsxFragment:
+		// child is of type JSX.Element
+		return JsxElaborationElement{errorNode: child, innerExpression: child, nameType: nameType}
+	}
+	panic("Unhandled case in getElaborationElementForJsxChild")
+}
+
+func (c *Checker) elaborateIterableOrArrayLikeTargetElementwise(iterator iter.Seq[JsxElaborationElement], source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
+	tupleOrArrayLikeTargetParts := c.filterType(target, c.isArrayOrTupleLikeType)
+	nonTupleOrArrayLikeTargetParts := c.filterType(target, func(t *Type) bool { return !c.isArrayOrTupleLikeType(t) })
+	// If `nonTupleOrArrayLikeTargetParts` is not `never`, then that should mean `Iterable` is defined.
+	var iterationType *Type
+	if nonTupleOrArrayLikeTargetParts != c.neverType {
+		iterationType = c.getIterationTypeOfIterable(IterationUseForOf, IterationTypeKindYield, nonTupleOrArrayLikeTargetParts, nil /*errorNode*/)
+	}
+	reportedError := false
+	for e := range iterator {
+		prop := e.errorNode
+		next := e.innerExpression
+		nameType := e.nameType
+		targetPropType := iterationType
+		var targetIndexedPropType *Type
+		if tupleOrArrayLikeTargetParts != c.neverType {
+			targetIndexedPropType = c.getBestMatchIndexedAccessTypeOrUndefined(source, tupleOrArrayLikeTargetParts, nameType)
+		}
+		if targetIndexedPropType != nil && targetIndexedPropType.flags&TypeFlagsIndexedAccess == 0 {
+			if iterationType != nil {
+				targetPropType = c.getUnionType([]*Type{iterationType, targetIndexedPropType})
+			} else {
+				targetPropType = targetIndexedPropType
+			}
+		}
+		if targetPropType == nil {
+			continue
+		}
+		sourcePropType := c.getIndexedAccessTypeOrUndefined(source, nameType, AccessFlagsNone, nil, nil)
+		if sourcePropType == nil {
+			continue
+		}
+		propName := c.getPropertyNameFromIndex(nameType, nil /*accessNode*/)
+		if !c.checkTypeRelatedTo(sourcePropType, targetPropType, relation, nil /*errorNode*/) {
+			elaborated := next != nil && c.elaborateError(next, sourcePropType, targetPropType, relation, nil /*headMessage*/, diagnosticOutput)
+			reportedError = true
+			if !elaborated {
+				// Issue error on the prop itself, since the prop couldn't elaborate the error. Use the expression type, if available.
+				specificSource := sourcePropType
+				if next != nil {
+					specificSource = c.checkExpressionForMutableLocationWithContextualType(next, sourcePropType)
+				}
+				if c.exactOptionalPropertyTypes && c.isExactOptionalPropertyMismatch(specificSource, targetPropType) {
+					diag := createDiagnosticForNode(prop, diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, c.TypeToString(specificSource), c.TypeToString(targetPropType))
+					c.reportDiagnostic(diag, diagnosticOutput)
+				} else {
+					targetIsOptional := propName != ast.InternalSymbolNameMissing && core.OrElse(c.getPropertyOfType(tupleOrArrayLikeTargetParts, propName), c.unknownSymbol).Flags&ast.SymbolFlagsOptional != 0
+					sourceIsOptional := propName != ast.InternalSymbolNameMissing && core.OrElse(c.getPropertyOfType(source, propName), c.unknownSymbol).Flags&ast.SymbolFlagsOptional != 0
+					targetPropType = c.removeMissingType(targetPropType, targetIsOptional)
+					sourcePropType = c.removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional)
+					result := c.checkTypeRelatedToEx(specificSource, targetPropType, relation, prop, e.errorMessage, diagnosticOutput)
+					if result && specificSource != sourcePropType {
+						// If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
+						c.checkTypeRelatedToEx(sourcePropType, targetPropType, relation, prop, e.errorMessage, diagnosticOutput)
+					}
+				}
+			}
+		}
 	}
 	return reportedError
 }
@@ -626,9 +729,9 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 				links.resolvedType = c.createArrayType(c.getUnionType(childTypes))
 			}
 			// Fake up a property declaration for the children
-			// childrenPropSymbol.ValueDeclaration = c.factory.NewPropertySignatureDeclaration(nil, jsxChildrenPropertyName, nil /*postfixToken*/, nil /*type*/, nil /*initializer*/)
-			// setParent(childrenPropSymbol.ValueDeclaration, attributes)
-			// childrenPropSymbol.ValueDeclaration.Symbol = childrenPropSymbol
+			childrenPropSymbol.ValueDeclaration = c.factory.NewPropertySignatureDeclaration(nil, c.factory.NewIdentifier(jsxChildrenPropertyName), nil /*postfixToken*/, nil /*type*/, nil /*initializer*/)
+			childrenPropSymbol.ValueDeclaration.Parent = attributes
+			childrenPropSymbol.ValueDeclaration.AsPropertySignatureDeclaration().Symbol = childrenPropSymbol
 			childPropMap := make(ast.SymbolTable)
 			childPropMap[jsxChildrenPropertyName] = childrenPropSymbol
 			spread = c.getSpreadType(spread, c.newAnonymousType(attributes.Symbol(), childPropMap, nil, nil, nil), attributes.Symbol(), objectFlags, false /*readonly*/)

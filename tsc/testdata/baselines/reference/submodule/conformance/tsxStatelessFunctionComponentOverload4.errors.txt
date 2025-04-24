@@ -32,9 +32,12 @@ file.tsx(34,29): error TS2769: No overload matches this call.
 file.tsx(35,29): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type 'string' is not assignable to type 'boolean'.
+file.tsx(36,29): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'string' is not assignable to type 'boolean'.
 
 
-==== file.tsx (10 errors) ====
+==== file.tsx (11 errors) ====
     import React = require('react')
     declare function OneThing(): JSX.Element;
     declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
@@ -132,4 +135,10 @@ file.tsx(35,29): error TS2769: No overload matches this call.
 !!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
 !!! related TS2771 file.tsx:30:18: The last overload is declared here.
     const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
+                                ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
+!!! related TS2771 file.tsx:30:18: The last overload is declared here.
     

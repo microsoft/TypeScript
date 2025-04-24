@@ -54,3 +54,9 @@ func (m *Message) Format(args ...any) string {
 	}
 	return text
 }
+
+func FormatMessage(m *Message, args ...any) *Message {
+	result := *m
+	result.text = stringutil.Format(m.text, args)
+	return &result
+}

@@ -92,15 +92,12 @@
 -  Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
 -    'TestingOptional' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element'.
 -  Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
--    Type 'string' is not assignable to type 'boolean'.
++file.tsx(36,29): error TS2769: No overload matches this call.
++  The last overload gave the following error.
+     Type 'string' is not assignable to type 'boolean'.
  
  
--==== file.tsx (11 errors) ====
-+==== file.tsx (10 errors) ====
-     import React = require('react')
-     declare function OneThing(): JSX.Element;
-     declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
-@@= skipped -92, +48 lines =@@
+@@= skipped -92, +51 lines =@@
      const c0 = <OneThing extraProp />;  // extra property;
                           ~~~~~~~~~
  !!! error TS2769: No overload matches this call.
@@ -238,14 +235,17 @@
 +!!! related TS2771 file.tsx:30:18: The last overload is declared here.
      const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
 -                ~~~~~~~~~~~~~~~
--!!! error TS2769: No overload matches this call.
++                                ~~
+ !!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
 -!!! error TS2769:     Type '{ y1: string; y2: number; children: string; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
 -!!! error TS2769:       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
 -!!! error TS2769:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
 -!!! error TS2769:     'TestingOptional' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element'.
 -!!! error TS2769:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
--!!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
 -!!! related TS6500 file.tsx:29:64: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
--!!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
+ !!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
++!!! related TS2771 file.tsx:30:18: The last overload is declared here.
      

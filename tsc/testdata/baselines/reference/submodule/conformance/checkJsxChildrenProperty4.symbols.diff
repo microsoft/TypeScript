@@ -76,9 +76,11 @@
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
 ->user.Name : Symbol(IUser.Name, Decl(file.tsx, 2, 17))
 +>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
++>user.Name : Symbol(Name, Decl(file.tsx, 2, 17))
  >user : Symbol(user, Decl(file.tsx, 35, 13))
 ->Name : Symbol(IUser.Name, Decl(file.tsx, 2, 17))
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
++>Name : Symbol(Name, Decl(file.tsx, 2, 17))
 +>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
  
              ) }
@@ -89,9 +91,11 @@
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
 ->user.Name : Symbol(IUser.Name, Decl(file.tsx, 2, 17))
 +>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
++>user.Name : Symbol(Name, Decl(file.tsx, 2, 17))
  >user : Symbol(user, Decl(file.tsx, 38, 13))
 ->Name : Symbol(IUser.Name, Decl(file.tsx, 2, 17))
 ->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
++>Name : Symbol(Name, Decl(file.tsx, 2, 17))
 +>h1 : Symbol(h1, Decl(react.d.ts, 2410, 47))
  
              ) }

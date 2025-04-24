@@ -1257,7 +1257,7 @@ func (c *Checker) initializeChecker() {
 		c.autoArrayType = c.newAnonymousType(nil, nil, nil, nil, nil)
 	}
 	c.globalReadonlyArrayType = c.getGlobalType("ReadonlyArray", 1 /*arity*/, false /*reportErrors*/)
-	if c.globalReadonlyArrayType == nil {
+	if c.globalReadonlyArrayType == c.emptyGenericType {
 		c.globalReadonlyArrayType = c.globalArrayType
 	}
 	c.anyReadonlyArrayType = c.createTypeFromGenericGlobalType(c.globalReadonlyArrayType, []*Type{c.anyType})
@@ -5028,7 +5028,7 @@ func (c *Checker) checkImportAttributes(declaration *ast.Node) {
 	if importAttributesType != c.emptyObjectType {
 		c.checkTypeAssignableTo(c.getTypeFromImportAttributes(node), c.getNullableType(importAttributesType, TypeFlagsUndefined), node, nil)
 	}
-	isTypeOnly := ast.IsTypeOnlyImportOrExportDeclaration(declaration)
+	isTypeOnly := isExclusivelyTypeOnlyImportOrExport(declaration)
 	override := c.getResolutionModeOverride(node.AsImportAttributes(), isTypeOnly)
 	isImportAttributes := node.AsImportAttributes().Token == ast.KindWithKeyword
 	if isTypeOnly && override != core.ResolutionModeNone {
@@ -5064,6 +5064,22 @@ func (c *Checker) checkImportAttributes(declaration *ast.Node) {
 	if override != core.ResolutionModeNone {
 		c.grammarErrorOnNode(node, diagnostics.X_resolution_mode_can_only_be_set_for_type_only_imports)
 	}
+}
+
+func isExclusivelyTypeOnlyImportOrExport(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindExportDeclaration:
+		return node.AsExportDeclaration().IsTypeOnly
+	case ast.KindImportDeclaration:
+		if importClause := node.AsImportDeclaration().ImportClause; importClause != nil {
+			return importClause.AsImportClause().IsTypeOnly
+		}
+	case ast.KindJSDocImportTag:
+		if importClause := node.AsJSDocImportTag().ImportClause; importClause != nil {
+			return importClause.AsImportClause().IsTypeOnly
+		}
+	}
+	return false
 }
 
 func (c *Checker) getTypeFromImportAttributes(node *ast.Node) *Type {
@@ -5787,7 +5803,7 @@ func (c *Checker) getIterationTypesOfGeneratorFunctionReturnType(t *Type, isAsyn
 	if result.hasTypes() {
 		return result
 	}
-	return c.getIterationTypesOfIterator(t, resolver, nil /*errorNode*/)
+	return c.getIterationTypesOfIterator(t, resolver, nil /*errorNode*/, nil /*diagnosticOutput*/)
 }
 
 // Gets the requested "iteration type" from an `Iterable`-like or `AsyncIterable`-like type.
@@ -5853,14 +5869,15 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 			return iterationTypes
 		}
 	}
+	var diags []*ast.Diagnostic
 	if use&IterationUseAllowsAsyncIterablesFlag != 0 {
-		iterationTypes := c.getIterationTypesOfIterableSlow(t, c.asyncIterationTypesResolver, errorNode)
+		iterationTypes := c.getIterationTypesOfIterableSlow(t, c.asyncIterationTypesResolver, errorNode, &diags)
 		if iterationTypes.hasTypes() {
 			return iterationTypes
 		}
 	}
 	if use&IterationUseAllowsSyncIterablesFlag != 0 {
-		iterationTypes := c.getIterationTypesOfIterableSlow(t, c.syncIterationTypesResolver, errorNode)
+		iterationTypes := c.getIterationTypesOfIterableSlow(t, c.syncIterationTypesResolver, errorNode, &diags)
 		if iterationTypes.hasTypes() {
 			if use&IterationUseAllowsAsyncIterablesFlag != 0 {
 				return c.getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
@@ -5869,7 +5886,10 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 		}
 	}
 	if errorNode != nil {
-		c.reportTypeNotIterableError(errorNode, t, use&IterationUseAllowsAsyncIterablesFlag != 0)
+		diagnostic := c.reportTypeNotIterableError(errorNode, t, use&IterationUseAllowsAsyncIterablesFlag != 0)
+		for _, d := range diags {
+			diagnostic.AddRelatedInfo(d)
+		}
 	}
 	return IterationTypes{}
 }
@@ -5977,7 +5997,7 @@ func (c *Checker) getAsyncFromSyncIterationTypes(iterationTypes IterationTypes, 
 //
 // NOTE: You probably don't want to call this directly and should be calling
 // `getIterationTypesOfIterable` instead.
-func (c *Checker) getIterationTypesOfIterableSlow(t *Type, r *IterationTypesResolver, errorNode *ast.Node) IterationTypes {
+func (c *Checker) getIterationTypesOfIterableSlow(t *Type, r *IterationTypesResolver, errorNode *ast.Node, diagnosticOutput *[]*ast.Diagnostic) IterationTypes {
 	if method := c.getPropertyOfType(t, c.getPropertyNameForKnownSymbolName(r.iteratorSymbolName)); method != nil && method.Flags&ast.SymbolFlagsOptional == 0 {
 		methodType := c.getTypeOfSymbol(method)
 		if IsTypeAny(methodType) {
@@ -5985,7 +6005,7 @@ func (c *Checker) getIterationTypesOfIterableSlow(t *Type, r *IterationTypesReso
 		}
 		if signatures := c.getSignaturesOfType(methodType, SignatureKindCall); len(signatures) != 0 {
 			iteratorType := c.getIntersectionType(core.Map(signatures, c.getReturnTypeOfSignature))
-			return c.getIterationTypesOfIteratorWorker(iteratorType, r, errorNode)
+			return c.getIterationTypesOfIteratorWorker(iteratorType, r, errorNode, diagnosticOutput)
 		}
 	}
 	return IterationTypes{}
@@ -5995,8 +6015,8 @@ func (c *Checker) getIterationTypesOfIterableSlow(t *Type, r *IterationTypesReso
 //
 // If we successfully found the *yield*, *return*, and *next* types, an `IterationTypes` with non-nil
 // members is returned. Otherwise, a default `IterationTypes{}` is returned.
-func (c *Checker) getIterationTypesOfIterator(t *Type, r *IterationTypesResolver, errorNode *ast.Node) IterationTypes {
-	return c.getIterationTypesOfIteratorWorker(t, r, errorNode)
+func (c *Checker) getIterationTypesOfIterator(t *Type, r *IterationTypesResolver, errorNode *ast.Node, diagnosticOutput *[]*ast.Diagnostic) IterationTypes {
+	return c.getIterationTypesOfIteratorWorker(t, r, errorNode, diagnosticOutput)
 }
 
 // Gets the *yield*, *return*, and *next* types from an `Iterator`-like or `AsyncIterator`-like type.
@@ -6005,7 +6025,7 @@ func (c *Checker) getIterationTypesOfIterator(t *Type, r *IterationTypesResolver
 // members is returned. Otherwise, a default `IterationTypes{}` is returned.
 //
 // NOTE: You probably don't want to call this directly and should be calling `getIterationTypesOfIterator` instead.
-func (c *Checker) getIterationTypesOfIteratorWorker(t *Type, r *IterationTypesResolver, errorNode *ast.Node) IterationTypes {
+func (c *Checker) getIterationTypesOfIteratorWorker(t *Type, r *IterationTypesResolver, errorNode *ast.Node, diagnosticOutput *[]*ast.Diagnostic) IterationTypes {
 	if IsTypeAny(t) {
 		return IterationTypes{c.anyType, c.anyType, c.anyType}
 	}
@@ -6013,7 +6033,7 @@ func (c *Checker) getIterationTypesOfIteratorWorker(t *Type, r *IterationTypesRe
 	if iterationTypes.hasTypes() {
 		return iterationTypes
 	}
-	return c.getIterationTypesOfIteratorSlow(t, r, errorNode)
+	return c.getIterationTypesOfIteratorSlow(t, r, errorNode, diagnosticOutput)
 }
 
 func (c *Checker) getIterationTypesOfIteratorFast(t *Type, r *IterationTypesResolver) IterationTypes {
@@ -6043,15 +6063,15 @@ func (c *Checker) getIterationTypesOfIteratorFast(t *Type, r *IterationTypesReso
 	return IterationTypes{}
 }
 
-func (c *Checker) getIterationTypesOfIteratorSlow(t *Type, r *IterationTypesResolver, errorNode *ast.Node) IterationTypes {
+func (c *Checker) getIterationTypesOfIteratorSlow(t *Type, r *IterationTypesResolver, errorNode *ast.Node, diagnosticOutput *[]*ast.Diagnostic) IterationTypes {
 	return c.combineIterationTypes([]IterationTypes{
-		c.getIterationTypesOfMethod(t, r, "next", errorNode),
-		c.getIterationTypesOfMethod(t, r, "return", errorNode),
-		c.getIterationTypesOfMethod(t, r, "throw", errorNode),
+		c.getIterationTypesOfMethod(t, r, "next", errorNode, diagnosticOutput),
+		c.getIterationTypesOfMethod(t, r, "return", errorNode, diagnosticOutput),
+		c.getIterationTypesOfMethod(t, r, "throw", errorNode, diagnosticOutput),
 	})
 }
 
-func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesResolver, methodName string, errorNode *ast.Node) IterationTypes {
+func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesResolver, methodName string, errorNode *ast.Node, diagnosticOutput *[]*ast.Diagnostic) IterationTypes {
 	method := c.getPropertyOfType(t, methodName)
 	// Ignore 'return' or 'throw' if they are missing.
 	if method == nil && methodName != "next" {
@@ -6076,7 +6096,7 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 	if len(methodSignatures) == 0 {
 		if errorNode != nil {
 			diagnostic := core.IfElse(methodName == "next", resolver.mustHaveANextMethodDiagnostic, resolver.mustBeAMethodDiagnostic)
-			c.error(errorNode, diagnostic, methodName)
+			c.reportDiagnostic(NewDiagnosticForNode(errorNode, diagnostic, methodName), diagnosticOutput)
 		}
 		return IterationTypes{}
 	}
@@ -6143,7 +6163,7 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 	iterationTypes := c.getIterationTypesOfIteratorResult(resolvedMethodReturnType)
 	if !iterationTypes.hasTypes() {
 		if errorNode != nil {
-			c.error(errorNode, resolver.mustHaveAValueDiagnostic, methodName)
+			c.reportDiagnostic(NewDiagnosticForNode(errorNode, resolver.mustHaveAValueDiagnostic, methodName), diagnosticOutput)
 		}
 		yieldType = c.anyType
 		returnTypes = append(returnTypes, c.anyType)
@@ -6209,7 +6229,7 @@ func (c *Checker) isIteratorResult(t *Type, kind IterationTypeKind) bool {
 	return c.isTypeAssignableTo(core.IfElse(kind == IterationTypeKindYield, c.falseType, c.trueType), doneType)
 }
 
-func (c *Checker) reportTypeNotIterableError(errorNode *ast.Node, t *Type, allowAsyncIterables bool) {
+func (c *Checker) reportTypeNotIterableError(errorNode *ast.Node, t *Type, allowAsyncIterables bool) *ast.Diagnostic {
 	var message *diagnostics.Message
 	if allowAsyncIterables {
 		message = diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
@@ -6221,7 +6241,7 @@ func (c *Checker) reportTypeNotIterableError(errorNode *ast.Node, t *Type, allow
 		errorNode.Parent.Expression() == errorNode &&
 		c.getGlobalAsyncIterableType() != c.emptyGenericType &&
 		c.isTypeAssignableTo(t, c.createTypeFromGenericGlobalType(c.getGlobalAsyncIterableType(), []*Type{c.anyType, c.anyType, c.anyType})))
-	c.errorAndMaybeSuggestAwait(errorNode, suggestAwait, message, c.TypeToString(t))
+	return c.errorAndMaybeSuggestAwait(errorNode, suggestAwait, message, c.TypeToString(t))
 }
 
 func (c *Checker) getIterationDiagnosticDetails(use IterationUse, inputType *Type, allowsStrings bool, downlevelIteration bool) (*diagnostics.Message, bool) {
@@ -13129,11 +13149,12 @@ func (c *Checker) errorOrSuggestion(isError bool, location *ast.Node, message *d
 	c.addErrorOrSuggestion(isError, NewDiagnosticForNode(location, message, args...))
 }
 
-func (c *Checker) errorAndMaybeSuggestAwait(location *ast.Node, maybeMissingAwait bool, message *diagnostics.Message, args ...any) {
+func (c *Checker) errorAndMaybeSuggestAwait(location *ast.Node, maybeMissingAwait bool, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 	diagnostic := c.error(location, message, args...)
 	if maybeMissingAwait {
 		diagnostic.AddRelatedInfo(createDiagnosticForNode(location, diagnostics.Did_you_forget_to_use_await))
 	}
+	return diagnostic
 }
 
 func (c *Checker) addErrorOrSuggestion(isError bool, diagnostic *ast.Diagnostic) {
@@ -13656,8 +13677,8 @@ func (c *Checker) checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(nod
 			diagnostics.X_0_was_imported_here)
 		// TODO: how to get name for export *?
 		name := "*"
-		if typeOnlyDeclaration.Kind == ast.KindImportDeclaration {
-			name = getNameFromImportDeclaration(typeOnlyDeclaration).AsIdentifier().Text
+		if !ast.IsExportDeclaration(typeOnlyDeclaration) {
+			name = getNameFromImportDeclaration(typeOnlyDeclaration).Text()
 		}
 		c.error(decl.ModuleReference, message).AddRelatedInfo(createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name))
 	}
