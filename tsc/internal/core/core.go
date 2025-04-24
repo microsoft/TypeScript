@@ -539,3 +539,21 @@ func levenshteinWithMax(s1 []rune, s2 []rune, maxValue float64) float64 {
 func Identity[T any](t T) T {
 	return t
 }
+
+func CheckEachDefined[S any](s []*S, msg string) []*S {
+	for _, value := range s {
+		if value == nil {
+			panic(msg)
+		}
+	}
+	return s
+}
+
+func StripQuotes(name string) string {
+	firstChar, _ := utf8.DecodeRuneInString(name)
+	lastChar, _ := utf8.DecodeLastRuneInString(name)
+	if firstChar == lastChar && (firstChar == '\'' || firstChar == '"' || firstChar == '`') {
+		return name[1 : len(name)-1]
+	}
+	return name
+}

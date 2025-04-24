@@ -48,12 +48,12 @@ func DeclarationNameToString(name *ast.Node) string {
 
 func IsIdentifierText(name string, languageVersion core.ScriptTarget) bool {
 	ch, size := utf8.DecodeRuneInString(name)
-	if !isIdentifierStart(ch, languageVersion) {
+	if !IsIdentifierStart(ch, languageVersion) {
 		return false
 	}
 	for i := size; i < len(name); {
 		ch, size = utf8.DecodeRuneInString(name[i:])
-		if !isIdentifierPart(ch, languageVersion) {
+		if !IsIdentifierPart(ch, languageVersion) {
 			return false
 		}
 		i += size

@@ -256,7 +256,7 @@ func (c *Checker) isSimpleTypeRelatedTo(source *Type, target *Type, relation *Re
 	if s&TypeFlagsNull != 0 && (!c.strictNullChecks && t&TypeFlagsUnionOrIntersection == 0 || t&TypeFlagsNull != 0) {
 		return true
 	}
-	if s&TypeFlagsObject != 0 && t&TypeFlagsNonPrimitive != 0 && !(relation == c.strictSubtypeRelation && c.isEmptyAnonymousObjectType(source) && source.objectFlags&ObjectFlagsFreshLiteral == 0) {
+	if s&TypeFlagsObject != 0 && t&TypeFlagsNonPrimitive != 0 && !(relation == c.strictSubtypeRelation && c.IsEmptyAnonymousObjectType(source) && source.objectFlags&ObjectFlagsFreshLiteral == 0) {
 		return true
 	}
 	if relation == c.assignableRelation || relation == c.comparableRelation {
@@ -1533,10 +1533,10 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 			var sourceSig *Signature
 			var targetSig *Signature
 			if checkMode&SignatureCheckModeCallback == 0 && !c.isInstantiatedGenericParameter(source, i) {
-				sourceSig = c.getSingleCallSignature(c.getNonNullableType(sourceType))
+				sourceSig = c.getSingleCallSignature(c.GetNonNullableType(sourceType))
 			}
 			if checkMode&SignatureCheckModeCallback == 0 && !c.isInstantiatedGenericParameter(target, i) {
-				targetSig = c.getSingleCallSignature(c.getNonNullableType(targetType))
+				targetSig = c.getSingleCallSignature(c.GetNonNullableType(targetType))
 			}
 			callbacks := sourceSig != nil && targetSig != nil && c.getTypePredicateOfSignature(sourceSig) == nil && c.getTypePredicateOfSignature(targetSig) == nil &&
 				c.getTypeFacts(sourceType, TypeFactsIsUndefinedOrNull) == c.getTypeFacts(targetType, TypeFactsIsUndefinedOrNull)
@@ -2266,7 +2266,7 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 					constraints = append(constraints, t)
 				}
 			}
-		} else if t.flags&TypeFlagsDisjointDomains != 0 || c.isEmptyAnonymousObjectType(t) {
+		} else if t.flags&TypeFlagsDisjointDomains != 0 || c.IsEmptyAnonymousObjectType(t) {
 			hasDisjointDomainType = true
 		}
 	}
@@ -2277,7 +2277,7 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 			// We add any types belong to one of the disjoint domains because they might cause the final
 			// intersection operation to reduce the union constraints.
 			for _, t := range types {
-				if t.flags&TypeFlagsDisjointDomains != 0 || c.isEmptyAnonymousObjectType(t) {
+				if t.flags&TypeFlagsDisjointDomains != 0 || c.IsEmptyAnonymousObjectType(t) {
 					constraints = append(constraints, t)
 				}
 			}
@@ -4885,10 +4885,10 @@ func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
 			constraint = c.unknownType
 		}
 		return c.isTypeDerivedFrom(constraint, target)
-	case c.isEmptyAnonymousObjectType(target):
+	case c.IsEmptyAnonymousObjectType(target):
 		return source.flags&(TypeFlagsObject|TypeFlagsNonPrimitive) != 0
 	case target == c.globalObjectType:
-		return source.flags&(TypeFlagsObject|TypeFlagsNonPrimitive) != 0 && !c.isEmptyAnonymousObjectType(source)
+		return source.flags&(TypeFlagsObject|TypeFlagsNonPrimitive) != 0 && !c.IsEmptyAnonymousObjectType(source)
 	case target == c.globalFunctionType:
 		return source.flags&TypeFlagsObject != 0 && c.isFunctionObjectType(source)
 	default:

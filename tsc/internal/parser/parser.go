@@ -199,7 +199,7 @@ func (p *Parser) initializeState(fileName string, path tspath.Path, sourceText s
 	p.sourceText = sourceText
 	p.languageVersion = languageVersion
 	p.scriptKind = ensureScriptKind(fileName, scriptKind)
-	p.languageVariant = getLanguageVariant(p.scriptKind)
+	p.languageVariant = ast.GetLanguageVariant(p.scriptKind)
 	switch p.scriptKind {
 	case core.ScriptKindJS, core.ScriptKindJSX:
 		p.contextFlags = ast.NodeFlagsJavaScriptFile
@@ -5931,7 +5931,7 @@ func (p *Parser) scanClassMemberStart() bool {
 		//      public foo() ...     // true
 		//      public @dec blah ... // true; we will then report an error later
 		//      export public ...    // true; we will then report an error later
-		if isClassMemberModifier(idToken) {
+		if ast.IsClassMemberModifier(idToken) {
 			return true
 		}
 		p.nextToken()
@@ -6340,14 +6340,6 @@ func (p *Parser) inAwaitContext() bool {
 
 func (p *Parser) skipRangeTrivia(textRange core.TextRange) core.TextRange {
 	return core.NewTextRange(scanner.SkipTrivia(p.sourceText, textRange.Pos()), textRange.End())
-}
-
-func isClassMemberModifier(token ast.Kind) bool {
-	return isParameterPropertyModifier(token) || token == ast.KindStaticKeyword || token == ast.KindOverrideKeyword || token == ast.KindAccessorKeyword
-}
-
-func isParameterPropertyModifier(kind ast.Kind) bool {
-	return ast.ModifierToFlag(kind)&ast.ModifierFlagsParameterPropertyModifier != 0
 }
 
 func isKeyword(token ast.Kind) bool {

@@ -834,7 +834,7 @@ func (s *Scanner) Scan() ast.Kind {
 			s.token = ast.KindAtToken
 		case '\\':
 			cp := s.peekUnicodeEscape()
-			if cp >= 0 && isIdentifierStart(cp, s.languageVersion) {
+			if cp >= 0 && IsIdentifierStart(cp, s.languageVersion) {
 				s.tokenValue = string(s.scanUnicodeEscape(true)) + s.scanIdentifierParts()
 				s.token = GetIdentifierToken(s.tokenValue)
 			} else {
@@ -857,7 +857,7 @@ func (s *Scanner) Scan() ast.Kind {
 			if s.charAt(1) == '\\' {
 				s.pos++
 				cp := s.peekUnicodeEscape()
-				if cp >= 0 && isIdentifierStart(cp, s.languageVersion) {
+				if cp >= 0 && IsIdentifierStart(cp, s.languageVersion) {
 					s.tokenValue = "#" + string(s.scanUnicodeEscape(true)) + s.scanIdentifierParts()
 					s.token = ast.KindPrivateIdentifier
 					break
@@ -1082,7 +1082,7 @@ func (s *Scanner) ReScanSlashToken() ast.Kind {
 			s.pos++
 			for {
 				ch, size := s.charAndSize()
-				if size == 0 || !isIdentifierPart(ch, s.languageVersion) {
+				if size == 0 || !IsIdentifierPart(ch, s.languageVersion) {
 					break
 				}
 				s.pos += size
@@ -1349,7 +1349,7 @@ func (s *Scanner) ScanJSDocToken() ast.Kind {
 	case '\\':
 		s.pos--
 		cp := s.peekUnicodeEscape()
-		if cp >= 0 && isIdentifierStart(cp, s.languageVersion) {
+		if cp >= 0 && IsIdentifierStart(cp, s.languageVersion) {
 			s.tokenValue = string(s.scanUnicodeEscape(true)) + s.scanIdentifierParts()
 			s.token = GetIdentifierToken(s.tokenValue)
 		} else {
@@ -1358,14 +1358,14 @@ func (s *Scanner) ScanJSDocToken() ast.Kind {
 		return s.token
 	}
 
-	if isIdentifierStart(ch, s.languageVersion) {
+	if IsIdentifierStart(ch, s.languageVersion) {
 		char := ch
 		for {
 			if s.pos >= len(s.text) {
 				break
 			}
 			char, size = s.charAndSize()
-			if !isIdentifierPart(char, s.languageVersion) && char != '-' {
+			if !IsIdentifierPart(char, s.languageVersion) && char != '-' {
 				break
 			}
 			s.pos += size
@@ -1402,11 +1402,11 @@ func (s *Scanner) scanIdentifier(prefixLength int) bool {
 		s.pos = start + prefixLength
 	}
 	ch, size := s.charAndSize()
-	if isIdentifierStart(ch, s.languageVersion) {
+	if IsIdentifierStart(ch, s.languageVersion) {
 		for {
 			s.pos += size
 			ch, size = s.charAndSize()
-			if !isIdentifierPart(ch, s.languageVersion) {
+			if !IsIdentifierPart(ch, s.languageVersion) {
 				break
 			}
 		}
@@ -1424,13 +1424,13 @@ func (s *Scanner) scanIdentifierParts() string {
 	start := s.pos
 	for {
 		ch, size := s.charAndSize()
-		if isIdentifierPart(ch, s.languageVersion) {
+		if IsIdentifierPart(ch, s.languageVersion) {
 			s.pos += size
 			continue
 		}
 		if ch == '\\' {
 			escaped := s.peekUnicodeEscape()
-			if escaped >= 0 && isIdentifierPart(escaped, s.languageVersion) {
+			if escaped >= 0 && IsIdentifierPart(escaped, s.languageVersion) {
 				sb.WriteString(s.text[start:s.pos])
 				sb.WriteRune(s.scanUnicodeEscape(true))
 				start = s.pos
@@ -1631,7 +1631,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 		// case CharacterCodes.paragraphSeparator !!!
 		return ""
 	default:
-		if flags&EscapeSequenceScanningFlagsAnyUnicodeMode != 0 || flags&EscapeSequenceScanningFlagsRegularExpression != 0 && flags&EscapeSequenceScanningFlagsAnnexB == 0 && isIdentifierPart(ch, s.languageVersion) {
+		if flags&EscapeSequenceScanningFlagsAnyUnicodeMode != 0 || flags&EscapeSequenceScanningFlagsRegularExpression != 0 && flags&EscapeSequenceScanningFlagsAnnexB == 0 && IsIdentifierPart(ch, s.languageVersion) {
 			s.errorAt(diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, s.pos-2, 2)
 		}
 		return string(ch)
@@ -1774,7 +1774,7 @@ func (s *Scanner) scanNumber() ast.Kind {
 		result = ast.KindNumericLiteral
 	}
 	ch, _ := s.charAndSize()
-	if isIdentifierStart(ch, s.languageVersion) {
+	if IsIdentifierStart(ch, s.languageVersion) {
 		idStart := s.pos
 		id := s.scanIdentifierParts()
 		if result != ast.KindBigIntLiteral && len(id) == 1 && s.text[idStart] == 'n' {
@@ -1948,7 +1948,7 @@ func IsValidIdentifier(s string, languageVersion core.ScriptTarget) bool {
 		return false
 	}
 	for i, ch := range s {
-		if i == 0 && !isIdentifierStart(ch, languageVersion) || i != 0 && !isIdentifierPart(ch, languageVersion) {
+		if i == 0 && !IsIdentifierStart(ch, languageVersion) || i != 0 && !IsIdentifierPart(ch, languageVersion) {
 			return false
 		}
 	}
@@ -1960,11 +1960,11 @@ func isWordCharacter(ch rune) bool {
 	return stringutil.IsASCIILetter(ch) || stringutil.IsDigit(ch) || ch == '_'
 }
 
-func isIdentifierStart(ch rune, languageVersion core.ScriptTarget) bool {
+func IsIdentifierStart(ch rune, languageVersion core.ScriptTarget) bool {
 	return stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$' || ch >= utf8.RuneSelf && isUnicodeIdentifierStart(ch, languageVersion)
 }
 
-func isIdentifierPart(ch rune, languageVersion core.ScriptTarget) bool {
+func IsIdentifierPart(ch rune, languageVersion core.ScriptTarget) bool {
 	return isWordCharacter(ch) || ch == '$' || ch >= utf8.RuneSelf && isUnicodeIdentifierPart(ch, languageVersion)
 }
 
@@ -2014,6 +2014,14 @@ func init() {
 
 func TokenToString(token ast.Kind) string {
 	return tokenToText[token]
+}
+
+func StringToToken(s string) ast.Kind {
+	kind, ok := textToToken[s]
+	if ok {
+		return kind
+	}
+	return ast.KindUnknown
 }
 
 func GetViableKeywordSuggestions() []string {

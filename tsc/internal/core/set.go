@@ -39,6 +39,15 @@ func (s *Set[T]) Clear() {
 	clear(s.M)
 }
 
+// Returns true if the key was not already present in the set.
+func (s *Set[T]) AddIfAbsent(key T) bool {
+	if s.Has(key) {
+		return false
+	}
+	s.Add(key)
+	return true
+}
+
 func NewSetFromItems[T comparable](items ...T) *Set[T] {
 	s := &Set[T]{}
 	for _, item := range items {

@@ -510,7 +510,7 @@ func IsFunctionLikeDeclaration(node *Node) bool {
 	return node != nil && isFunctionLikeDeclarationKind(node.Kind)
 }
 
-func isFunctionLikeKind(kind Kind) bool {
+func IsFunctionLikeKind(kind Kind) bool {
 	switch kind {
 	case KindMethodSignature,
 		KindCallSignature,
@@ -527,7 +527,7 @@ func isFunctionLikeKind(kind Kind) bool {
 // Determines if a node is function- or signature-like.
 func IsFunctionLike(node *Node) bool {
 	// TODO(rbuckton): Move `node != nil` test to call sites
-	return node != nil && isFunctionLikeKind(node.Kind)
+	return node != nil && IsFunctionLikeKind(node.Kind)
 }
 
 func IsFunctionLikeOrClassStaticBlockDeclaration(node *Node) bool {
@@ -926,6 +926,13 @@ const (
 	FindAncestorTrue
 	FindAncestorQuit
 )
+
+func ToFindAncestorResult(b bool) FindAncestorResult {
+	if b {
+		return FindAncestorTrue
+	}
+	return FindAncestorFalse
+}
 
 // Walks up the parents of a node to find the ancestor that matches the callback
 func FindAncestorOrQuit(node *Node, callback func(*Node) FindAncestorResult) *Node {
@@ -1966,6 +1973,7 @@ func TryGetTextOfPropertyName(name *Node) (string, bool) {
 	return "", false
 }
 
+// True if node is of a JSDoc kind that may contain comment text.
 func IsJSDocCommentContainingNode(node *Node) bool {
 	return node.Kind == KindJSDoc ||
 		node.Kind == KindJSDocText ||
@@ -2650,4 +2658,128 @@ func GetPragmaArgument(pragma *Pragma, name string) string {
 		}
 	}
 	return ""
+}
+
+func IsCheckJSEnabledForFile(sourceFile *SourceFile, compilerOptions *core.CompilerOptions) bool {
+	if sourceFile.CheckJsDirective != nil {
+		return sourceFile.CheckJsDirective.Enabled
+	}
+	return compilerOptions.CheckJs == core.TSTrue
+}
+
+func GetLeftmostAccessExpression(expr *Node) *Node {
+	for IsAccessExpression(expr) {
+		expr = expr.Expression()
+	}
+	return expr
+}
+
+func IsTypeOnlyImportDeclaration(node *Node) bool {
+	switch node.Kind {
+	case KindImportSpecifier:
+		return node.AsImportSpecifier().IsTypeOnly || node.Parent.Parent.AsImportClause().IsTypeOnly
+	case KindNamespaceImport:
+		return node.Parent.AsImportClause().IsTypeOnly
+	case KindImportClause:
+		return node.AsImportClause().IsTypeOnly
+	case KindImportEqualsDeclaration:
+		return node.AsImportEqualsDeclaration().IsTypeOnly
+	}
+	return false
+}
+
+func isTypeOnlyExportDeclaration(node *Node) bool {
+	switch node.Kind {
+	case KindExportSpecifier:
+		return node.AsExportSpecifier().IsTypeOnly || node.Parent.Parent.AsExportDeclaration().IsTypeOnly
+	case KindExportDeclaration:
+		d := node.AsExportDeclaration()
+		return d.IsTypeOnly && d.ModuleSpecifier != nil && d.ExportClause == nil
+	case KindNamespaceExport:
+		return node.Parent.AsExportDeclaration().IsTypeOnly
+	}
+	return false
+}
+
+func IsTypeOnlyImportOrExportDeclaration(node *Node) bool {
+	return IsTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node)
+}
+
+func GetSourceFileOfModule(module *Symbol) *SourceFile {
+	declaration := module.ValueDeclaration
+	if declaration == nil {
+		declaration = getNonAugmentationDeclaration(module)
+	}
+	return GetSourceFileOfNode(declaration)
+}
+
+func getNonAugmentationDeclaration(symbol *Symbol) *Node {
+	return core.Find(symbol.Declarations, func(d *Node) bool {
+		return !IsExternalModuleAugmentation(d) && !IsGlobalScopeAugmentation(d)
+	})
+}
+
+func IsExternalModuleAugmentation(node *Node) bool {
+	return IsAmbientModule(node) && IsModuleAugmentationExternal(node)
+}
+
+func GetClassLikeDeclarationOfSymbol(symbol *Symbol) *Node {
+	return core.Find(symbol.Declarations, IsClassLike)
+}
+
+func GetLanguageVariant(scriptKind core.ScriptKind) core.LanguageVariant {
+	switch scriptKind {
+	case core.ScriptKindTSX, core.ScriptKindJSX, core.ScriptKindJS, core.ScriptKindJSON:
+		// .tsx and .jsx files are treated as jsx language variant.
+		return core.LanguageVariantJSX
+	}
+	return core.LanguageVariantStandard
+}
+
+func IsCallLikeExpression(node *Node) bool {
+	switch node.Kind {
+	case KindJsxOpeningElement, KindJsxSelfClosingElement, KindCallExpression, KindNewExpression,
+		KindTaggedTemplateExpression, KindDecorator:
+		return true
+	}
+	return false
+}
+
+func IsCallLikeOrFunctionLikeExpression(node *Node) bool {
+	return IsCallLikeExpression(node) || IsFunctionExpressionOrArrowFunction(node)
+}
+
+func NodeHasKind(node *Node, kind Kind) bool {
+	if node == nil {
+		return false
+	}
+	return node.Kind == kind
+}
+
+func IsContextualKeyword(token Kind) bool {
+	return KindFirstContextualKeyword <= token && token <= KindLastContextualKeyword
+}
+
+func IsThisInTypeQuery(node *Node) bool {
+	if !IsThisIdentifier(node) {
+		return false
+	}
+	for IsQualifiedName(node.Parent) && node.Parent.AsQualifiedName().Left == node {
+		node = node.Parent
+	}
+	return node.Parent.Kind == KindTypeQuery
+}
+
+// Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `let` declaration.
+func IsLet(node *Node) bool {
+	return GetCombinedNodeFlags(node)&NodeFlagsBlockScoped == NodeFlagsLet
+}
+
+func IsClassMemberModifier(token Kind) bool {
+	return IsParameterPropertyModifier(token) || token == KindStaticKeyword ||
+		token == KindOverrideKeyword || token == KindAccessorKeyword
+}
+
+func IsParameterPropertyModifier(kind Kind) bool {
+	return ModifierToFlag(kind)&ModifierFlagsParameterPropertyModifier != 0
 }

@@ -344,7 +344,7 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 			// 1) `position` precedes `child`'s tokens or `child` has no tokens (ie: in a comment or whitespace preceding `child`):
 			// we need to find the last token in a previous child node or child tokens.
 			// 2) `position` is within the same span: we recurse on `child`.
-			start := getStartOfNode(foundChild, sourceFile, !excludeJSDoc /*includeJSDoc*/)
+			start := GetStartOfNode(foundChild, sourceFile, !excludeJSDoc /*includeJSDoc*/)
 			lookInPreviousChild := start >= position || // cursor in the leading trivia or preceding tokens
 				!isValidPrecedingNode(foundChild, sourceFile)
 			if lookInPreviousChild {
@@ -398,12 +398,12 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 }
 
 func isValidPrecedingNode(node *ast.Node, sourceFile *ast.SourceFile) bool {
-	start := getStartOfNode(node, sourceFile, false /*includeJSDoc*/)
+	start := GetStartOfNode(node, sourceFile, false /*includeJSDoc*/)
 	width := node.End() - start
 	return !(ast.IsWhitespaceOnlyJsxText(node) || width == 0)
 }
 
-func getStartOfNode(node *ast.Node, file *ast.SourceFile, includeJSDoc bool) int {
+func GetStartOfNode(node *ast.Node, file *ast.SourceFile, includeJSDoc bool) int {
 	return scanner.GetTokenPosOfNode(node, file, includeJSDoc)
 }
 
@@ -433,7 +433,7 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 		shouldVisitNode := func(node *ast.Node) bool {
 			// Node is synthetic or out of the desired range: don't visit it.
 			return !(node.Flags&ast.NodeFlagsReparsed != 0 ||
-				node.End() > endPos || getStartOfNode(node, sourceFile, !excludeJSDoc /*includeJSDoc*/) >= position)
+				node.End() > endPos || GetStartOfNode(node, sourceFile, !excludeJSDoc /*includeJSDoc*/) >= position)
 		}
 		visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
 			if node == nil {
@@ -559,4 +559,9 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 	}
 
 	return find(containingNode)
+}
+
+// !!!
+func FindNextToken(previousToken *ast.Node, parent *ast.Node, file *ast.SourceFile) *ast.Node {
+	return nil
 }

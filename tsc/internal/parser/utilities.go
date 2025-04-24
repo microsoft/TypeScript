@@ -24,15 +24,6 @@ func ensureScriptKind(fileName string, scriptKind core.ScriptKind) core.ScriptKi
 	return scriptKind
 }
 
-func getLanguageVariant(scriptKind core.ScriptKind) core.LanguageVariant {
-	switch scriptKind {
-	case core.ScriptKindTSX, core.ScriptKindJSX, core.ScriptKindJS, core.ScriptKindJSON:
-		// .tsx and .jsx files are treated as jsx language variant.
-		return core.LanguageVariantJSX
-	}
-	return core.LanguageVariantStandard
-}
-
 func tokenIsIdentifierOrKeyword(token ast.Kind) bool {
 	return token >= ast.KindIdentifier
 }

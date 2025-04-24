@@ -749,6 +749,18 @@ func (n *Node) Children() *NodeList {
 	panic("Unhandled case in Node.Children: " + n.Kind.String())
 }
 
+func (n *Node) ModuleSpecifier() *Expression {
+	switch n.Kind {
+	case KindImportDeclaration:
+		return n.AsImportDeclaration().ModuleSpecifier
+	case KindExportDeclaration:
+		return n.AsExportDeclaration().ModuleSpecifier
+	case KindJSDocImportTag:
+		return n.AsJSDocImportTag().ModuleSpecifier
+	}
+	panic("Unhandled case in Node.ModuleSpecifier: " + n.Kind.String())
+}
+
 // Determines if `n` contains `descendant` by walking up the `Parent` pointers from `descendant`. This method panics if
 // `descendant` or one of its ancestors is not parented except when that node is a `SourceFile`.
 func (n *Node) Contains(descendant *Node) bool {
@@ -1655,6 +1667,10 @@ type (
 	JSDocComment                = Node // JSDocText | JSDocLink | JSDocLinkCode | JSDocLinkPlain;
 	JSDocTag                    = Node // Node with JSDocTagBase
 	SignatureDeclaration        = Node // CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | AccessorDeclaration | FunctionExpression | ArrowFunction;
+	StringLiteralLike           = Node // StringLiteral | NoSubstitutionTemplateLiteral
+	AnyValidImportOrReExport    = Node // (ImportDeclaration | ExportDeclaration | JSDocImportTag) & { moduleSpecifier: StringLiteral } | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral }} | RequireOrImportCall | ValidImportTypeNode
+	ValidImportTypeNode         = Node // ImportTypeNode & { argument: LiteralTypeNode & { literal: StringLiteral } }
+	NumericOrStringLikeLiteral  = Node // StringLiteralLike | NumericLiteral
 )
 
 // Aliases for node singletons
@@ -1673,6 +1689,7 @@ type (
 	CatchClauseNode                 = Node
 	CaseBlockNode                   = Node
 	CaseOrDefaultClauseNode         = Node
+	CaseClauseNode                  = Node
 	VariableDeclarationNode         = Node
 	VariableDeclarationListNode     = Node
 	BindingElementNode              = Node
@@ -1695,6 +1712,7 @@ type (
 	JsxOpeningFragmentNode          = Node
 	JsxClosingFragmentNode          = Node
 	SourceFileNode                  = Node
+	PropertyAccessExpressionNode    = Node
 )
 
 type (
@@ -8219,6 +8237,10 @@ func (node *JsxFragment) computeSubtreeFacts() SubtreeFacts {
 		SubtreeContainsJsx
 }
 
+func IsJsxFragment(node *Node) bool {
+	return node.Kind == KindJsxFragment
+}
+
 /// The opening element of a <>...</> JsxFragment
 
 type JsxOpeningFragment struct {
@@ -9446,7 +9468,7 @@ func (node *JSDocThisTag) Clone(f NodeFactoryCoercible) *Node {
 type JSDocImportTag struct {
 	JSDocTagBase
 	ImportClause    *Declaration
-	ModuleSpecifier *Node
+	ModuleSpecifier *Expression
 	Attributes      *Node
 }
 
@@ -9947,7 +9969,7 @@ func (node *SourceFile) GetOrCreateToken(
 			panic(fmt.Sprintf("Token cache mismatch: %v != %v", token.Kind, kind))
 		}
 		if token.Parent != parent {
-			panic("Token cache mismatch: parent")
+			panic(fmt.Sprintf("Token cache mismatch: parent. Expected parent of kind %v, got %v", token.Parent.Kind, parent.Kind))
 		}
 		return token
 	}

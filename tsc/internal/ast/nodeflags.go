@@ -43,6 +43,8 @@ const (
 	NodeFlagsJsonFile        NodeFlags = 1 << 25 // If node was parsed in a Json
 	NodeFlagsDeprecated      NodeFlags = 1 << 26 // If has '@deprecated' JSDoc tag
 
+	NodeFlagsSkipDirectInference NodeFlags = 1 << 27 // If the node should skip direct type inference.
+
 	NodeFlagsBlockScoped = NodeFlagsLet | NodeFlagsConst | NodeFlagsUsing
 	NodeFlagsConstant    = NodeFlagsConst | NodeFlagsUsing
 	NodeFlagsAwaitUsing  = NodeFlagsConst | NodeFlagsUsing // Variable declaration (NOTE: on a single node these flags would otherwise be mutually exclusive)

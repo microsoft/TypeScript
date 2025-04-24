@@ -5,6 +5,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
@@ -110,18 +111,11 @@ func isVariableDeclarationInitializedWithRequireHelper(node *ast.Node, allowAcce
 	if node.Kind == ast.KindVariableDeclaration && node.AsVariableDeclaration().Initializer != nil {
 		initializer := node.AsVariableDeclaration().Initializer
 		if allowAccessedRequire {
-			initializer = getLeftmostAccessExpression(initializer)
+			initializer = ast.GetLeftmostAccessExpression(initializer)
 		}
 		return isRequireCall(initializer, true /*requireStringLiteralLikeArgument*/)
 	}
 	return false
-}
-
-func getLeftmostAccessExpression(expr *ast.Node) *ast.Node {
-	for ast.IsAccessExpression(expr) {
-		expr = expr.Expression()
-	}
-	return expr
 }
 
 func isRequireCall(node *ast.Node, requireStringLiteralLikeArgument bool) bool {
@@ -230,7 +224,7 @@ func isTypeReferenceIdentifier(node *ast.Node) bool {
 	return ast.IsTypeReferenceNode(node.Parent)
 }
 
-func isInTypeQuery(node *ast.Node) bool {
+func IsInTypeQuery(node *ast.Node) bool {
 	// TypeScript 1.0 spec (April 2014): 3.6.3
 	// A type query consists of the keyword typeof followed by an expression.
 	// The expression is restricted to a single identifier or a sequence of identifiers separated by periods
@@ -243,37 +237,6 @@ func isInTypeQuery(node *ast.Node) bool {
 		}
 		return ast.FindAncestorQuit
 	}) != nil
-}
-
-func isTypeOnlyImportDeclaration(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindImportSpecifier:
-		return node.AsImportSpecifier().IsTypeOnly || node.Parent.Parent.AsImportClause().IsTypeOnly
-	case ast.KindNamespaceImport:
-		return node.Parent.AsImportClause().IsTypeOnly
-	case ast.KindImportClause:
-		return node.AsImportClause().IsTypeOnly
-	case ast.KindImportEqualsDeclaration:
-		return node.AsImportEqualsDeclaration().IsTypeOnly
-	}
-	return false
-}
-
-func isTypeOnlyExportDeclaration(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindExportSpecifier:
-		return node.AsExportSpecifier().IsTypeOnly || node.Parent.Parent.AsExportDeclaration().IsTypeOnly
-	case ast.KindExportDeclaration:
-		d := node.AsExportDeclaration()
-		return d.IsTypeOnly && d.ModuleSpecifier != nil && d.ExportClause == nil
-	case ast.KindNamespaceExport:
-		return node.Parent.AsExportDeclaration().IsTypeOnly
-	}
-	return false
-}
-
-func isTypeOnlyImportOrExportDeclaration(node *ast.Node) bool {
-	return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node)
 }
 
 func getNameFromImportDeclaration(node *ast.Node) *ast.Node {
@@ -460,7 +423,7 @@ func isSideEffectImport(node *ast.Node) bool {
 
 func getExternalModuleRequireArgument(node *ast.Node) *ast.Node {
 	if isVariableDeclarationInitializedToBareOrAccessedRequire(node) {
-		return getLeftmostAccessExpression(node.AsVariableDeclaration().Initializer).AsCallExpression().Arguments.Nodes[0]
+		return ast.GetLeftmostAccessExpression(node.AsVariableDeclaration().Initializer).AsCallExpression().Arguments.Nodes[0]
 	}
 	return nil
 }
@@ -483,26 +446,8 @@ func isRightSideOfQualifiedNameOrPropertyAccess(node *ast.Node) bool {
 	return false
 }
 
-func getSourceFileOfModule(module *ast.Symbol) *ast.SourceFile {
-	declaration := module.ValueDeclaration
-	if declaration == nil {
-		declaration = getNonAugmentationDeclaration(module)
-	}
-	return ast.GetSourceFileOfNode(declaration)
-}
-
-func getNonAugmentationDeclaration(symbol *ast.Symbol) *ast.Node {
-	return core.Find(symbol.Declarations, func(d *ast.Node) bool {
-		return !isExternalModuleAugmentation(d) && !ast.IsGlobalScopeAugmentation(d)
-	})
-}
-
-func isExternalModuleAugmentation(node *ast.Node) bool {
-	return ast.IsAmbientModule(node) && ast.IsModuleAugmentationExternal(node)
-}
-
 func isTopLevelInExternalModuleAugmentation(node *ast.Node) bool {
-	return node != nil && node.Parent != nil && ast.IsModuleBlock(node.Parent) && isExternalModuleAugmentation(node.Parent.Parent)
+	return node != nil && node.Parent != nil && ast.IsModuleBlock(node.Parent) && ast.IsExternalModuleAugmentation(node.Parent.Parent)
 }
 
 func isSyntacticDefault(node *ast.Node) bool {
@@ -957,20 +902,6 @@ func compareTypeMappers(m1, m2 *TypeMapper) int {
 	return 0
 }
 
-func getClassLikeDeclarationOfSymbol(symbol *ast.Symbol) *ast.Node {
-	return core.Find(symbol.Declarations, ast.IsClassLike)
-}
-
-func isThisInTypeQuery(node *ast.Node) bool {
-	if !ast.IsThisIdentifier(node) {
-		return false
-	}
-	for ast.IsQualifiedName(node.Parent) && node.Parent.AsQualifiedName().Left == node {
-		node = node.Parent
-	}
-	return node.Parent.Kind == ast.KindTypeQuery
-}
-
 func getDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 	return getDeclarationModifierFlagsFromSymbolEx(s, false /*isWrite*/)
 }
@@ -1248,7 +1179,7 @@ func isVariableDeclarationInVariableStatement(node *ast.Node) bool {
 	return ast.IsVariableDeclarationList(node.Parent) && ast.IsVariableStatement(node.Parent.Parent)
 }
 
-func isKnownSymbol(symbol *ast.Symbol) bool {
+func IsKnownSymbol(symbol *ast.Symbol) bool {
 	return isLateBoundName(symbol.Name)
 }
 
@@ -1292,15 +1223,6 @@ func getContainingClassExcludingClassDecorators(node *ast.Node) *ast.ClassLikeDe
 
 func isThisTypeParameter(t *Type) bool {
 	return t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isThisType
-}
-
-func isCallLikeExpression(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindJsxOpeningElement, ast.KindJsxSelfClosingElement, ast.KindCallExpression, ast.KindNewExpression,
-		ast.KindTaggedTemplateExpression, ast.KindDecorator:
-		return true
-	}
-	return false
 }
 
 func isCallOrNewExpression(node *ast.Node) bool {
@@ -1790,7 +1712,7 @@ func canIncludeBindAndCheckDiagnostics(sourceFile *ast.SourceFile, options *core
 	}
 
 	isJS := sourceFile.ScriptKind == core.ScriptKindJS || sourceFile.ScriptKind == core.ScriptKindJSX
-	isCheckJS := isJS && isCheckJSEnabledForFile(sourceFile, options)
+	isCheckJS := isJS && ast.IsCheckJSEnabledForFile(sourceFile, options)
 	isPlainJS := isPlainJSFile(sourceFile, options.CheckJs)
 
 	// By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
@@ -1798,13 +1720,6 @@ func canIncludeBindAndCheckDiagnostics(sourceFile *ast.SourceFile, options *core
 	// - check JS: .js files with either // ts-check or checkJs: true
 	// - external: files that are added by plugins
 	return isPlainJS || isCheckJS || sourceFile.ScriptKind == core.ScriptKindDeferred
-}
-
-func isCheckJSEnabledForFile(sourceFile *ast.SourceFile, compilerOptions *core.CompilerOptions) bool {
-	if sourceFile.CheckJsDirective != nil {
-		return sourceFile.CheckJsDirective.Enabled
-	}
-	return compilerOptions.CheckJs == core.TSTrue
 }
 
 func isPlainJSFile(file *ast.SourceFile, checkJs core.Tristate) bool {
@@ -2156,4 +2071,51 @@ func allDeclarationsInSameSourceFile(symbol *ast.Symbol) bool {
 		}
 	}
 	return true
+}
+
+// A reserved member name consists of the byte 0xFE (which is an invalid UTF-8 encoding) followed by one or more
+// characters where the first character is not '@' or '#'. The '@' character indicates that the name is denoted by
+// a well known ES Symbol instance and the '#' character indicates that the name is a PrivateIdentifier.
+func isReservedMemberName(name string) bool {
+	return len(name) >= 2 && name[0] == '\xFE' && name[1] != '@' && name[1] != '#'
+}
+
+func introducesArgumentsExoticObject(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor,
+		ast.KindSetAccessor, ast.KindFunctionDeclaration, ast.KindFunctionExpression:
+		return true
+	}
+	return false
+}
+
+func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
+	var result []*ast.Symbol
+	for id, symbol := range symbols {
+		if !isReservedMemberName(id) {
+			result = append(result, symbol)
+		}
+	}
+	return result
+}
+
+// See comment on `declareModuleMember` in `binder.go`.
+func GetCombinedLocalAndExportSymbolFlags(symbol *ast.Symbol) ast.SymbolFlags {
+	if symbol.ExportSymbol != nil {
+		return symbol.Flags | symbol.ExportSymbol.Flags
+	}
+	return symbol.Flags
+}
+
+func SkipAlias(symbol *ast.Symbol, checker *Checker) *ast.Symbol {
+	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+		return checker.GetAliasedSymbol(symbol)
+	}
+	return symbol
+}
+
+// True if the symbol is for an external module, as opposed to a namespace.
+func IsExternalModuleSymbol(moduleSymbol *ast.Symbol) bool {
+	firstRune, _ := utf8.DecodeRuneInString(moduleSymbol.Name)
+	return moduleSymbol.Flags&ast.SymbolFlagsModule != 0 && firstRune == '"'
 }
