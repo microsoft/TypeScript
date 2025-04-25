@@ -305,7 +305,6 @@ loop:
 		}
 	}
 	if result == nil {
-		// TODO: Move this to the next == nil block, or move the other up here.
 		if lastLocation != nil &&
 			lastLocation.Kind == ast.KindSourceFile &&
 			lastLocation.AsSourceFile().CommonJSModuleIndicator != nil &&
