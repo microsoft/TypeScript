@@ -163,7 +163,7 @@ func DocumentURIToFileName(uri lsproto.DocumentUri) string {
 		if len(path) >= 4 {
 			if nextSlash := strings.IndexByte(path[1:], '/'); nextSlash != -1 {
 				if possibleDrive, _ := url.PathUnescape(path[1 : nextSlash+2]); strings.HasSuffix(possibleDrive, ":/") {
-					return possibleDrive + path[len(possibleDrive)+1:]
+					return possibleDrive + path[nextSlash+2:]
 				}
 			}
 		}
