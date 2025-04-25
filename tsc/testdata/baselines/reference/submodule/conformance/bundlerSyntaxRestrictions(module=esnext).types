@@ -37,15 +37,15 @@ import("./a");
 >"./a" : "./a"
 
 const _ = require("./a");
->_ : any
->require("./a") : any
+>_ : typeof import("/a")
+>require("./a") : typeof import("/a")
 >require : (...args: any[]) => any
 >"./a" : "./a"
 
 _.a; // any
->_.a : any
->_ : any
->a : any
+>_.a : "a"
+>_ : typeof import("/a")
+>a : "a"
 
 === /main.ts ===
 import {} from "./a";

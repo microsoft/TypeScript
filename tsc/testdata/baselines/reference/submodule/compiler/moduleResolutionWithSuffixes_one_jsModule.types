@@ -2,7 +2,7 @@
 
 === /index.ts ===
 import { ios } from "./foo.js";
->ios : any
+>ios : () => void
 
 === /foo.ios.js ===
 "use strict";
@@ -10,9 +10,9 @@ import { ios } from "./foo.js";
 
 exports.__esModule = true;
 >exports.__esModule = true : true
->exports.__esModule : any
->exports : any
->__esModule : any
+>exports.__esModule : true
+>exports : typeof import("/foo.ios")
+>__esModule : true
 >true : true
 
 function ios() {}
@@ -20,9 +20,9 @@ function ios() {}
 
 exports.ios = ios;
 >exports.ios = ios : () => void
->exports.ios : any
->exports : any
->ios : any
+>exports.ios : () => void
+>exports : typeof import("/foo.ios")
+>ios : () => void
 >ios : () => void
 
 === /foo.js ===
@@ -31,9 +31,9 @@ exports.ios = ios;
 
 exports.__esModule = true;
 >exports.__esModule = true : true
->exports.__esModule : any
->exports : any
->__esModule : any
+>exports.__esModule : true
+>exports : typeof import("/foo")
+>__esModule : true
 >true : true
 
 function base() {}
@@ -41,8 +41,8 @@ function base() {}
 
 exports.base = base;
 >exports.base = base : () => void
->exports.base : any
->exports : any
->base : any
+>exports.base : () => void
+>exports : typeof import("/foo")
+>base : () => void
 >base : () => void
 

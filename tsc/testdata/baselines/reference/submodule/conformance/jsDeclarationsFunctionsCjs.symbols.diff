@@ -1,14 +1,16 @@
 --- old.jsDeclarationsFunctionsCjs.symbols
 +++ new.jsDeclarationsFunctionsCjs.symbols
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === index.js ===
  module.exports.a = function a() {}
-->module.exports.a : Symbol(a, Decl(index.js, 0, 0))
+ >module.exports.a : Symbol(a, Decl(index.js, 0, 0))
 ->module.exports : Symbol(a, Decl(index.js, 0, 0))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->a : Symbol(a, Decl(index.js, 0, 0))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >a : Symbol(a, Decl(index.js, 0, 0))
  >a : Symbol(a, Decl(index.js, 0, 18))
  
  module.exports.b = function b() {}
@@ -17,6 +19,11 @@
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->b : Symbol(b, Decl(index.js, 0, 34), Decl(index.js, 3, 15))
++>module.exports.b : Symbol(b, Decl(index.js, 0, 34))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
++>b : Symbol(b, Decl(index.js, 0, 34))
  >b : Symbol(b, Decl(index.js, 2, 18))
  
  module.exports.b.cat = "cat";
@@ -27,6 +34,11 @@
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->b : Symbol(b, Decl(index.js, 0, 34), Decl(index.js, 3, 15))
 ->cat : Symbol(b.cat, Decl(index.js, 2, 34))
++>module.exports.b : Symbol(b, Decl(index.js, 0, 34))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
++>b : Symbol(b, Decl(index.js, 0, 34))
  
  module.exports.c = function c() {}
 ->module.exports.c : Symbol(c, Decl(index.js, 3, 29), Decl(index.js, 6, 15))
@@ -34,6 +46,11 @@
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->c : Symbol(c, Decl(index.js, 3, 29), Decl(index.js, 6, 15))
++>module.exports.c : Symbol(c, Decl(index.js, 3, 29))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
++>c : Symbol(c, Decl(index.js, 3, 29))
  >c : Symbol(c, Decl(index.js, 5, 18))
  
  module.exports.c.Cls = class {}
@@ -44,34 +61,41 @@
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->c : Symbol(c, Decl(index.js, 3, 29), Decl(index.js, 6, 15))
 ->Cls : Symbol(c.Cls, Decl(index.js, 5, 34))
++>module.exports.c : Symbol(c, Decl(index.js, 3, 29))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
++>c : Symbol(c, Decl(index.js, 3, 29))
  
  /**
   * @param {number} a
-@@= skipped -47, +18 lines =@@
-  * @return {string} 
+@@= skipped -47, +43 lines =@@
   */
  module.exports.d = function d(a, b) { return /** @type {*} */(null); }
-->module.exports.d : Symbol(d, Decl(index.js, 6, 31))
+ >module.exports.d : Symbol(d, Decl(index.js, 6, 31))
 ->module.exports : Symbol(d, Decl(index.js, 6, 31))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->d : Symbol(d, Decl(index.js, 6, 31))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >d : Symbol(d, Decl(index.js, 6, 31))
  >d : Symbol(d, Decl(index.js, 13, 18))
  >a : Symbol(a, Decl(index.js, 13, 30))
- >b : Symbol(b, Decl(index.js, 13, 32))
-@@= skipped -16, +11 lines =@@
-  * @return {T & U} 
+@@= skipped -16, +16 lines =@@
   */
  module.exports.e = function e(a, b) { return /** @type {*} */(null); }
-->module.exports.e : Symbol(e, Decl(index.js, 13, 70))
+ >module.exports.e : Symbol(e, Decl(index.js, 13, 70))
 ->module.exports : Symbol(e, Decl(index.js, 13, 70))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->e : Symbol(e, Decl(index.js, 13, 70))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >e : Symbol(e, Decl(index.js, 13, 70))
  >e : Symbol(e, Decl(index.js, 21, 18))
  >a : Symbol(a, Decl(index.js, 21, 30))
- >b : Symbol(b, Decl(index.js, 21, 32))
-@@= skipped -14, +9 lines =@@
+@@= skipped -13, +13 lines =@@
   * @param {T} a
   */
  module.exports.f = function f(a) {
@@ -80,10 +104,15 @@
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->f : Symbol(f, Decl(index.js, 21, 70), Decl(index.js, 30, 15))
++>module.exports.f : Symbol(f, Decl(index.js, 21, 70))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
++>f : Symbol(f, Decl(index.js, 21, 70))
  >f : Symbol(f, Decl(index.js, 27, 18))
  >a : Symbol(a, Decl(index.js, 27, 30))
  
-@@= skipped -12, +7 lines =@@
+@@= skipped -12, +12 lines =@@
  >a : Symbol(a, Decl(index.js, 27, 30))
  }
  module.exports.f.self = module.exports.f;
@@ -99,70 +128,101 @@
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->f : Symbol(f, Decl(index.js, 21, 70), Decl(index.js, 30, 15))
++>module.exports.f : Symbol(f, Decl(index.js, 21, 70))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
++>f : Symbol(f, Decl(index.js, 21, 70))
++>module.exports.f : Symbol(f, Decl(index.js, 21, 70))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
++>f : Symbol(f, Decl(index.js, 21, 70))
  
  /**
   * @param {{x: string}} a
-@@= skipped -32, +20 lines =@@
- }
+@@= skipped -33, +31 lines =@@
  
  module.exports.g = g;
-->module.exports.g : Symbol(g, Decl(index.js, 38, 1))
+ >module.exports.g : Symbol(g, Decl(index.js, 38, 1))
 ->module.exports : Symbol(g, Decl(index.js, 38, 1))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->g : Symbol(g, Decl(index.js, 38, 1))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >g : Symbol(g, Decl(index.js, 38, 1))
  >g : Symbol(g, Decl(index.js, 30, 41))
  
- /**
-@@= skipped -26, +21 lines =@@
- }
+@@= skipped -26, +26 lines =@@
  
  module.exports.h = hh;
-->module.exports.h : Symbol(h, Decl(index.js, 48, 1))
+ >module.exports.h : Symbol(h, Decl(index.js, 48, 1))
 ->module.exports : Symbol(h, Decl(index.js, 48, 1))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->h : Symbol(h, Decl(index.js, 48, 1))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >h : Symbol(h, Decl(index.js, 48, 1))
  >hh : Symbol(hh, Decl(index.js, 40, 21))
  
  module.exports.i = function i() {}
-->module.exports.i : Symbol(i, Decl(index.js, 50, 22))
+ >module.exports.i : Symbol(i, Decl(index.js, 50, 22))
 ->module.exports : Symbol(i, Decl(index.js, 50, 22))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->i : Symbol(i, Decl(index.js, 50, 22))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >i : Symbol(i, Decl(index.js, 50, 22))
  >i : Symbol(i, Decl(index.js, 52, 18))
  
  module.exports.ii = module.exports.i;
-->module.exports.ii : Symbol(ii, Decl(index.js, 52, 34))
+ >module.exports.ii : Symbol(ii, Decl(index.js, 52, 34))
 ->module.exports : Symbol(ii, Decl(index.js, 52, 34))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->ii : Symbol(ii, Decl(index.js, 52, 34))
-->module.exports.i : Symbol(i, Decl(index.js, 50, 22))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >ii : Symbol(ii, Decl(index.js, 52, 34))
+ >module.exports.i : Symbol(i, Decl(index.js, 50, 22))
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->i : Symbol(i, Decl(index.js, 50, 22))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >i : Symbol(i, Decl(index.js, 50, 22))
  
  // note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
  module.exports.jj = module.exports.j;
-->module.exports.jj : Symbol(jj, Decl(index.js, 53, 37))
+ >module.exports.jj : Symbol(jj, Decl(index.js, 53, 37))
 ->module.exports : Symbol(jj, Decl(index.js, 53, 37))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->jj : Symbol(jj, Decl(index.js, 53, 37))
-->module.exports.j : Symbol(j, Decl(index.js, 56, 37))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >jj : Symbol(jj, Decl(index.js, 53, 37))
+ >module.exports.j : Symbol(j, Decl(index.js, 56, 37))
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->j : Symbol(j, Decl(index.js, 56, 37))
--
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >j : Symbol(j, Decl(index.js, 56, 37))
+ 
  module.exports.j = function j() {}
-->module.exports.j : Symbol(j, Decl(index.js, 56, 37))
+ >module.exports.j : Symbol(j, Decl(index.js, 56, 37))
 ->module.exports : Symbol(j, Decl(index.js, 56, 37))
 ->module : Symbol(module, Decl(index.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-->j : Symbol(j, Decl(index.js, 56, 37))
++>module.exports : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("index", Decl(index.js, 0, 0))
+ >j : Symbol(j, Decl(index.js, 56, 37))
  >j : Symbol(j, Decl(index.js, 57, 18))
  

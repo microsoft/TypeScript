@@ -7,9 +7,9 @@
 ->module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->module : Symbol(export=, Decl(mod1.js, 0, 0))
 ->exports : Symbol(export=, Decl(mod1.js, 0, 0))
-+>module.exports : Symbol(exports, Decl(commonjs.d.ts, 0, 21))
-+>module : Symbol(module, Decl(commonjs.d.ts, 0, 11))
-+>exports : Symbol(exports, Decl(commonjs.d.ts, 0, 21))
++>module.exports : Symbol(C, Decl(mod1.js, 4, 18))
++>module : Symbol(module.exports)
++>exports : Symbol(C, Decl(mod1.js, 4, 18))
  >C : Symbol(C, Decl(mod1.js, 4, 18))
  
  function C() {
@@ -32,17 +32,14 @@
  }
  
  === mod3.js ===
-+
- /// <reference path="./commonjs.d.ts"/>
- /** @typedef {{ type: "a", x: 1 }} A */
- /** @typedef {{ type: "b", y: 1 }} B */
- /** @typedef {A | B} Both */
+@@= skipped -13, +10 lines =@@
  
  exports.C = function() {
-->exports.C : Symbol(C, Decl(mod3.js, 0, 0))
+ >exports.C : Symbol(C, Decl(mod3.js, 0, 0))
 ->exports : Symbol(C, Decl(mod3.js, 0, 0))
-->C : Symbol(C, Decl(mod3.js, 0, 0))
--
++>exports : Symbol("mod3", Decl(mod3.js, 0, 0))
+ >C : Symbol(C, Decl(mod3.js, 0, 0))
+ 
      this.p = 1
 ->this.p : Symbol(C.p, Decl(mod3.js, 5, 24))
 ->this : Symbol(C, Decl(mod3.js, 5, 11))

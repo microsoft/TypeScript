@@ -1,0 +1,36 @@
+use.js(3,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+use.js(4,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== use.js (2 errors) ====
+    /// <reference path='./types.d.ts'/>
+    var mod = require('./mod');
+    var a = new mod.A()
+            ~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    var b = new mod.B()
+            ~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    a.m('nope')
+    b.m('not really')
+    
+==== types.d.ts (0 errors) ====
+    declare function require(name: string): any;
+    declare var exports: any;
+==== mod.js (0 errors) ====
+    /// <reference path='./types.d.ts'/>
+    var A = function A() {
+        this.a = 1
+    }
+    var B = function B() {
+        this.b = 2
+    }
+    exports.A = A
+    exports.B = B
+    A.prototype = B.prototype = {
+        /** @param {number} n */
+        m(n) {
+            return n + 1
+        }
+    }
+    

@@ -18,3 +18,20 @@ console.log(value)
 >log : (...data: any[]) => void
 >value : any
 
+=== mod.js ===
+module.exports = {
+>module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }
+>module.exports : { x: { y: string; }; }
+>module : { export=: { x: { y: string; }; }; }
+>exports : { x: { y: string; }; }
+>{    x: {        y: "value"    }} : { x: { y: string; }; }
+
+    x: {
+>x : { y: string; }
+>{        y: "value"    } : { y: string; }
+
+        y: "value"
+>y : string
+>"value" : "value"
+    }
+}

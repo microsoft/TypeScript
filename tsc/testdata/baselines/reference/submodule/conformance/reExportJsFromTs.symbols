@@ -2,6 +2,10 @@
 
 === /lib/constants.js ===
 module.exports = {
+>module.exports : Symbol(export=, Decl(constants.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(constants.js, 0, 0))
+
   str: 'x',
 >str : Symbol(str, Decl(constants.js, 0, 18))
 

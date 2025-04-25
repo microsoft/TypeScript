@@ -15,9 +15,9 @@ class Foo {
 
 module.exports = new Foo();
 >module.exports = new Foo() : Foo
->module.exports : any
->module : any
->exports : any
+>module.exports : Foo
+>module : { export=: Foo; }
+>exports : Foo
 >new Foo() : Foo
 >Foo : typeof Foo
 

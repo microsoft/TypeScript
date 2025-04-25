@@ -76,6 +76,7 @@ type Parser struct {
 	jsdocCommentRangesSpace []ast.CommentRange
 	jsdocTagCommentsSpace   []string
 	reparseList             []*ast.Node
+	commonJSModuleIndicator *ast.Node
 }
 
 var viableKeywordSuggestions = scanner.GetViableKeywordSuggestions()
@@ -346,6 +347,7 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	p.processPragmasIntoFields(result)
 	result.SetDiagnostics(attachFileToDiagnostics(p.diagnostics, result))
 	result.ExternalModuleIndicator = isFileProbablyExternalModule(result) // !!!
+	result.CommonJSModuleIndicator = p.commonJSModuleIndicator
 	result.IsDeclarationFile = isDeclarationFile
 	result.LanguageVersion = p.languageVersion
 	result.LanguageVariant = p.languageVariant
@@ -1400,6 +1402,7 @@ func (p *Parser) parseExpressionOrLabeledStatement() *ast.Statement {
 	result := p.factory.NewExpressionStatement(expression)
 	p.finishNode(result, pos)
 	p.withJSDoc(result, hasJSDoc && !hasParen)
+	p.reparseCommonJS(result)
 	return result
 }
 

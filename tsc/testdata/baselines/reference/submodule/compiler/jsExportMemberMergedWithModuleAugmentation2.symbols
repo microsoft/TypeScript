@@ -2,6 +2,10 @@
 
 === /test.js ===
 module.exports = {
+>module.exports : Symbol(export=, Decl(test.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(test.js, 0, 0))
+
   a: "ok"
 >a : Symbol(a, Decl(test.js, 0, 18))
 

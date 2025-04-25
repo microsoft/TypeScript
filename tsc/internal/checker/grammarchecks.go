@@ -601,6 +601,7 @@ func (c *Checker) findFirstIllegalModifier(node *ast.Node) *ast.Node {
 		ast.KindImportEqualsDeclaration,
 		ast.KindExportDeclaration,
 		ast.KindExportAssignment,
+		ast.KindJSExportAssignment,
 		ast.KindFunctionExpression,
 		ast.KindArrowFunction,
 		ast.KindParameter,
@@ -2020,7 +2021,7 @@ func (c *Checker) checkGrammarTopLevelElementForRequiredDeclareModifier(node *as
 	//     export_opt   AmbientDeclaration
 	//
 	// TODO: The spec needs to be amended to reflect this grammar.
-	if node.Kind == ast.KindInterfaceDeclaration || node.Kind == ast.KindTypeAliasDeclaration || node.Kind == ast.KindImportDeclaration || node.Kind == ast.KindImportEqualsDeclaration || node.Kind == ast.KindExportDeclaration || node.Kind == ast.KindExportAssignment || node.Kind == ast.KindNamespaceExportDeclaration || ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient|ast.ModifierFlagsExport|ast.ModifierFlagsDefault) {
+	if node.Kind == ast.KindInterfaceDeclaration || node.Kind == ast.KindTypeAliasDeclaration || node.Kind == ast.KindImportDeclaration || node.Kind == ast.KindImportEqualsDeclaration || node.Kind == ast.KindExportDeclaration || node.Kind == ast.KindExportAssignment || node.Kind == ast.KindJSExportAssignment || node.Kind == ast.KindNamespaceExportDeclaration || ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient|ast.ModifierFlagsExport|ast.ModifierFlagsDefault) {
 		return false
 	}
 

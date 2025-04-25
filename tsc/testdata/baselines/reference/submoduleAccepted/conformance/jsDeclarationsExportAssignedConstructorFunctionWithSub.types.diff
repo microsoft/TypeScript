@@ -11,9 +11,9 @@
 ->function (p) {    this.t = 12 + p;} : typeof exports
 ->p : number
 +>module.exports = function (p) {    this.t = 12 + p;} : (p: any) => void
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : (p: any) => void
++>module : { export=: (p: any) => void; }
++>exports : (p: any) => void
 +>function (p) {    this.t = 12 + p;} : (p: any) => void
 +>p : any
  
@@ -40,9 +40,9 @@
 ->function() {    this.instance = new module.exports(10);} : typeof Sub
 +>module.exports.Sub = function() {    this.instance = new module.exports(10);} : () => void
 +>module.exports.Sub : any
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : (p: any) => void
++>module : { export=: (p: any) => void; }
++>exports : (p: any) => void
 +>Sub : any
 +>function() {    this.instance = new module.exports(10);} : () => void
  
@@ -58,9 +58,9 @@
 ->module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
 ->exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
 +>new module.exports(10) : any
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : (p: any) => void
++>module : { export=: (p: any) => void; }
++>exports : (p: any) => void
  >10 : 10
  }
  module.exports.Sub.prototype = { }
@@ -74,9 +74,9 @@
 ->prototype : {}
 +>module.exports.Sub.prototype : any
 +>module.exports.Sub : any
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : (p: any) => void
++>module : { export=: (p: any) => void; }
++>exports : (p: any) => void
 +>Sub : any
 +>prototype : any
  >{ } : {}

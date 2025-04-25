@@ -10,3 +10,13 @@ foo.bar();
 >foo : any
 >bar : any
 
+=== /node_modules/foo/index.js ===
+exports.default = { bar() { return 0; } }
+>exports.default = { bar() { return 0; } } : { bar: () => number; }
+>exports.default : any
+>exports : typeof import("/node_modules/foo/index")
+>default : any
+>{ bar() { return 0; } } : { bar: () => number; }
+>bar : () => number
+>0 : 0
+

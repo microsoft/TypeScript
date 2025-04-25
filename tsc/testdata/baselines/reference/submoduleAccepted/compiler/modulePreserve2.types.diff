@@ -8,10 +8,8 @@
 +>esm : any
  
  const cjs = require("dep");
-->cjs : "cjs"
-->require("dep") : "cjs"
-+>cjs : any
-+>require("dep") : any
+ >cjs : "cjs"
+@@= skipped -8, +8 lines =@@
  >require : any
  >"dep" : "dep"
  

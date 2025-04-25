@@ -3,7 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+mixed.js(14,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++mixed.js(14,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
 +==== index.js (0 errors) ====
@@ -49,11 +49,14 @@
 +        z = "ok"
 +    }
 +    module.exports = {
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    ~~~~~~~~~~~~~~~~~~
 +        doTheThing,
++    ~~~~~~~~~~~~~~~
 +        ExportedThing,
++    ~~~~~~~~~~~~~~~~~~
 +    };
++    ~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    class LocalThing {
 +        y = "ok"
 +    }

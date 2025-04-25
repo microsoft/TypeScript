@@ -1,16 +1,6 @@
 --- old.nodeModulesAllowJsCjsFromJs(module=nodenext).types
 +++ new.nodeModulesAllowJsCjsFromJs(module=nodenext).types
-@@= skipped -2, +2 lines =@@
- === foo.cjs ===
- exports.foo = "foo"
- >exports.foo = "foo" : "foo"
-->exports.foo : "foo"
-->exports : typeof import("foo")
-->foo : "foo"
-+>exports.foo : any
-+>exports : any
-+>foo : any
- >"foo" : "foo"
+@@= skipped -9, +9 lines =@@
  
  === bar.ts ===
  import foo from "./foo.cjs"

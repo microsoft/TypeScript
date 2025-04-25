@@ -23,17 +23,17 @@ axios.m()
 
 module.exports = axios;
 >module.exports = axios : Axios
->module.exports : any
->module : any
->exports : any
+>module.exports : Axios
+>module : { axios: Axios; }
+>exports : Axios
 >axios : Axios
 
 module.exports.default = axios;
 >module.exports.default = axios : Axios
 >module.exports.default : any
->module.exports : any
->module : any
->exports : any
+>module.exports : Axios
+>module : { axios: Axios; }
+>exports : Axios
 >default : any
 >axios : Axios
 

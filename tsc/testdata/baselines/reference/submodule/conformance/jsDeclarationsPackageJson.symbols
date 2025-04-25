@@ -3,8 +3,13 @@
 === index.js ===
 const j = require("./package.json");
 >j : Symbol(j, Decl(index.js, 0, 5))
+>require : Symbol(require)
+>"./package.json" : Symbol("package", Decl(package.json, 0, 0))
 
 module.exports = j;
+>module.exports : Symbol(export=, Decl(package.json, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(package.json, 0, 0))
 >j : Symbol(j, Decl(index.js, 0, 5))
 
 === package.json ===

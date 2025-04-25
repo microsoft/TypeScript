@@ -3,6 +3,8 @@
 === cls.js ===
 const Bar = require("./bar");
 >Bar : Symbol(Bar, Decl(cls.js, 0, 5))
+>require : Symbol(require)
+>"./bar" : Symbol("bar", Decl(bar.js, 0, 0))
 
 const Strings = {
 >Strings : Symbol(Strings, Decl(cls.js, 1, 5))
@@ -19,8 +21,24 @@ class Foo extends Bar {}
 >Bar : Symbol(Bar, Decl(cls.js, 0, 5))
 
 module.exports = Foo;
+>module.exports : Symbol(Foo, Decl(cls.js, 4, 2))
+>module : Symbol(module.exports)
+>exports : Symbol(Foo, Decl(cls.js, 4, 2))
 >Foo : Symbol(Foo, Decl(cls.js, 4, 2))
 
 module.exports.Strings = Strings;
+>module.exports : Symbol(Foo, Decl(cls.js, 4, 2))
+>module : Symbol(module.exports)
+>exports : Symbol(Foo, Decl(cls.js, 4, 2))
 >Strings : Symbol(Strings, Decl(cls.js, 1, 5))
+
+=== bar.js ===
+class Bar {}
+>Bar : Symbol(Bar, Decl(bar.js, 0, 0))
+
+module.exports = Bar;
+>module.exports : Symbol(Bar, Decl(bar.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(Bar, Decl(bar.js, 0, 0))
+>Bar : Symbol(Bar, Decl(bar.js, 0, 0))
 

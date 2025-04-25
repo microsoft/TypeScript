@@ -88,9 +88,9 @@ function foo() {
  */
 module.exports = {
 >module.exports = {    color: "red"} : { color: string; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { color: string; }
+>module : { export=: { color: string; }; }
+>exports : { color: string; }
 >{    color: "red"} : { color: string; }
 
     color: "red"
@@ -101,9 +101,9 @@ module.exports = {
 expectLiteral({ props: module.exports });
 >expectLiteral({ props: module.exports }) : void
 >expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
->{ props: module.exports } : { props: any; }
->props : any
->module.exports : any
->module : any
->exports : any
+>{ props: module.exports } : { props: { color: string; }; }
+>props : { color: string; }
+>module.exports : { color: string; }
+>module : { export=: { color: string; }; }
+>exports : { color: string; }
 

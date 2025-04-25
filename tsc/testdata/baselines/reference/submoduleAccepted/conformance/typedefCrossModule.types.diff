@@ -10,9 +10,9 @@
 ->exports : typeof C
 ->C : typeof C
 +>module.exports = C : () => void
-+>module.exports : any
-+>module : { exports: any; }
-+>exports : any
++>module.exports : () => void
++>module : { C: () => void; }
++>exports : () => void
 +>C : () => void
  
  function C() {
@@ -48,12 +48,11 @@
  exports.C = function() {
 ->exports.C = function() {    this.p = 1} : typeof C
 ->exports.C : typeof C
-->exports : typeof import("mod3")
-->C : typeof C
-->function() {    this.p = 1} : typeof C
 +>exports.C = function() {    this.p = 1} : () => void
 +>exports.C : any
-+>exports : any
+ >exports : typeof import("mod3")
+->C : typeof C
+->function() {    this.p = 1} : typeof C
 +>C : any
 +>function() {    this.p = 1} : () => void
  
@@ -70,25 +69,29 @@
  /** @type {import('./mod1').Both} */
  var both1 = { type: 'a', x: 1 };
 ->both1 : import("mod1").Both
-+>both1 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
- >{ type: 'a', x: 1 } : { type: "a"; x: 1; }
- >type : "a"
+->{ type: 'a', x: 1 } : { type: "a"; x: 1; }
+->type : "a"
++>both1 : any
++>{ type: 'a', x: 1 } : { type: string; x: number; }
++>type : string
  >'a' : "a"
-@@= skipped -9, +9 lines =@@
+->x : 1
++>x : number
+ >1 : 1
  
  /** @type {import('./mod2').Both} */
  var both2 = both1;
 ->both2 : import("mod2").Both
 ->both1 : import("mod1").A
 +>both2 : Both
-+>both1 : { type: "a"; x: 1; }
++>both1 : any
  
  /** @type {import('./mod3').Both} */
  var both3 = both2;
 ->both3 : import("mod3").Both
 ->both2 : import("mod2").A
 +>both3 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
-+>both2 : A
++>both2 : Both
  
  
  

@@ -3,18 +3,15 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+async.js(1,1): error TS2304: Cannot find name 'exports'.
-+async.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+async.js(2,18): error TS2304: Cannot find name 'exports'.
++async.js(1,9): error TS2339: Property 'default' does not exist on type 'typeof import("async")'.
++async.js(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
-+==== async.js (3 errors) ====
++==== async.js (2 errors) ====
 +    exports.default = { m: 1, a: 1 }
-+    ~~~~~~~
-+!!! error TS2304: Cannot find name 'exports'.
++            ~~~~~~~
++!!! error TS2339: Property 'default' does not exist on type 'typeof import("async")'.
 +    module.exports = exports['default'];
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+                     ~~~~~~~
-+!!! error TS2304: Cannot find name 'exports'.
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    

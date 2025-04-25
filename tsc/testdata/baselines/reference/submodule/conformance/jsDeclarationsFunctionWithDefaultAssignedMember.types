@@ -20,8 +20,8 @@ foo.default = foo;
 
 module.exports = foo;
 >module.exports = foo : { (): void; foo: ???; default: ???; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { (): void; foo: ???; default: ???; }
+>module : { foo: { (): void; foo: ???; default: ???; }; }
+>exports : { (): void; foo: ???; default: ???; }
 >foo : { (): void; foo: ???; default: ???; }
 

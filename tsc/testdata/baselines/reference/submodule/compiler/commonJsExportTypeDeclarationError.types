@@ -3,9 +3,9 @@
 === test.js ===
 module.exports = {
 >module.exports = {   message: ""} : { message: string; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { message: string; }
+>module : { export=: { message: string; }; }
+>exports : { message: string; }
 >{   message: ""} : { message: string; }
 
    message: ""
@@ -15,22 +15,22 @@ module.exports = {
 
 === types1.ts ===
 import test from "./test";
->test : any
+>test : { message: string; }
 
 export type test
 >test : any
 
 === types2.ts ===
 import test from "./test";
->test : any
+>test : { message: string; }
 
 export type test = 
 >test : any
 
 === types3.ts ===
 import test from "./test";
->test : any
+>test : { message: string; }
 
 export type test = test;
->test : test
+>test : any
 

@@ -13,7 +13,7 @@ declare var module: any, exports: any;
 exports.A = function () {
 >exports.A = function () {    this.x = 1;} : () => void
 >exports.A : any
->exports : any
+>exports : typeof import("a-ext")
 >A : any
 >function () {    this.x = 1;} : () => void
 
@@ -29,7 +29,7 @@ exports.A = function () {
 === a.js ===
 const { A } = require("./a-ext");
 >A : any
->require("./a-ext") : any
+>require("./a-ext") : typeof import("a-ext")
 >require : (id: string) => any
 >"./a-ext" : "./a-ext"
 
@@ -44,9 +44,9 @@ function a(p) { p.x; }
 === b-ext.js ===
 exports.B = class {
 >exports.B = class {    constructor() {        this.x = 1;    }} : typeof B
->exports.B : any
->exports : any
->B : any
+>exports.B : typeof B
+>exports : typeof import("b-ext")
+>B : typeof B
 >class {    constructor() {        this.x = 1;    }} : typeof B
 
     constructor() {
@@ -61,8 +61,8 @@ exports.B = class {
 
 === b.js ===
 const { B } = require("./b-ext");
->B : any
->require("./b-ext") : any
+>B : typeof B
+>require("./b-ext") : typeof import("b-ext")
 >require : (id: string) => any
 >"./b-ext" : "./b-ext"
 
@@ -88,8 +88,8 @@ export function C() {
 
 === c.js ===
 const { C } = require("./c-ext");
->C : any
->require("./c-ext") : any
+>C : () => void
+>require("./c-ext") : typeof import("c-ext")
 >require : (id: string) => any
 >"./c-ext" : "./c-ext"
 
@@ -117,8 +117,8 @@ export var D = function() {
 
 === d.js ===
 const { D } = require("./d-ext");
->D : any
->require("./d-ext") : any
+>D : () => void
+>require("./d-ext") : typeof import("d-ext")
 >require : (id: string) => any
 >"./d-ext" : "./d-ext"
 
@@ -146,8 +146,8 @@ export class E {
 
 === e.js ===
 const { E } = require("./e-ext");
->E : any
->require("./e-ext") : any
+>E : typeof E
+>require("./e-ext") : typeof import("e-ext")
 >require : (id: string) => any
 >"./e-ext" : "./e-ext"
 

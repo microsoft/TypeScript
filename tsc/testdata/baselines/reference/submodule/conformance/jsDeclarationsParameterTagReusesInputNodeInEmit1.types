@@ -26,9 +26,9 @@ BaseFactory.Base = Base;
 
 module.exports = BaseFactory;
 >module.exports = BaseFactory : { (): Base; Base: typeof Base; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { (): Base; Base: typeof Base; }
+>module : { readonly BaseFactory: { (): Base; Base: typeof Base; }; }
+>exports : { (): Base; Base: typeof Base; }
 >BaseFactory : { (): Base; Base: typeof Base; }
 
 === file.js ===

@@ -9,9 +9,9 @@
 ->module : { exports: { m(): void; default: Axios; }; }
 ->exports : { m(): void; default: Axios; }
 +>module.exports = axios : Axios
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : Axios
++>module : { axios: Axios; }
++>exports : Axios
  >axios : Axios
  
  module.exports.default = axios;
@@ -22,9 +22,9 @@
 ->exports : { m(): void; default: Axios; }
 ->default : Axios
 +>module.exports.default : any
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : Axios
++>module : { axios: Axios; }
++>exports : Axios
 +>default : any
  >axios : Axios
  

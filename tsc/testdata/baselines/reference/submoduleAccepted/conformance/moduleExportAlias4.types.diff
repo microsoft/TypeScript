@@ -6,8 +6,8 @@
  var wat = require('./bug24024')
 ->wat : typeof wat
 ->require('./bug24024') : typeof wat
-+>wat : any
-+>require('./bug24024') : any
++>wat : typeof C
++>require('./bug24024') : typeof C
  >require : any
  >'./bug24024' : "./bug24024"
  
@@ -19,9 +19,9 @@
 ->class C {} : typeof wat
 ->C : typeof wat
 +>module.exports = class C {} : typeof C
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : typeof C
++>module : { C: typeof C; }
++>exports : typeof C
 +>class C {} : typeof C
 +>C : typeof C
  
@@ -36,9 +36,9 @@
 ->D : typeof wat.D
 +>module.exports.D = class D { } : typeof D
 +>module.exports.D : any
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : typeof C
++>module : { C: typeof C; }
++>exports : typeof C
 +>D : any
 +>class D { } : typeof D
 +>D : typeof D

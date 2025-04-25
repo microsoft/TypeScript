@@ -19,17 +19,17 @@ class Foo {}
 
 module.exports = Foo;
 >module.exports = Foo : typeof Foo
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof Foo
+>module : { Foo: typeof Foo; }
+>exports : typeof Foo
 >Foo : typeof Foo
 
 module.exports.Strings = Strings;
 >module.exports.Strings = Strings : { a: string; b: string; }
 >module.exports.Strings : any
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof Foo
+>module : { Foo: typeof Foo; }
+>exports : typeof Foo
 >Strings : any
 >Strings : { a: string; b: string; }
 

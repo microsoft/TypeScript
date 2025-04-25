@@ -1,15 +1,6 @@
 --- old.jsdocReferenceGlobalTypeInCommonJs.types
 +++ new.jsdocReferenceGlobalTypeInCommonJs.types
-@@= skipped -1, +1 lines =@@
- 
- === a.js ===
- const other = require('./other');
-->other : () => string
-->require('./other') : () => string
-+>other : any
-+>require('./other') : any
- >require : any
- >'./other' : "./other"
+@@= skipped -8, +8 lines =@@
  
  /** @type {Puppeteer.Keyboard} */
  var ppk;

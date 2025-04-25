@@ -25,7 +25,7 @@ func tryGetImportFromModuleSpecifier(node *ast.StringLiteralLike) *ast.Node {
 	case ast.KindExternalModuleReference:
 		return node.Parent.Parent
 	case ast.KindCallExpression:
-		if ast.IsImportCall(node.Parent) || ast.IsRequireCall(node.Parent, false /*requireStringLiteralLikeArgument*/) {
+		if ast.IsImportCall(node.Parent) || ast.IsRequireCall(node.Parent) {
 			return node.Parent
 		}
 		return nil

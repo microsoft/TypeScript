@@ -4,7 +4,7 @@ b.js(3,13): error TS2749: 'B' refers to a value, but is being used as a type her
 c.js(3,13): error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
 d.js(3,13): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
 e-ext.js(3,14): error TS2339: Property 'x' does not exist on type 'E'.
-e.js(3,13): error TS2749: 'E' refers to a value, but is being used as a type here. Did you mean 'typeof E'?
+e.js(4,19): error TS2339: Property 'x' does not exist on type 'E'.
 f.js(5,13): error TS2749: 'F' refers to a value, but is being used as a type here. Did you mean 'typeof F'?
 g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type here. Did you mean 'typeof G'?
 h.js(3,14): error TS2339: Property 'x' does not exist on type 'H'.
@@ -84,9 +84,9 @@ h.js(8,19): error TS2339: Property 'x' does not exist on type 'H'.
     const { E } = require("./e-ext");
     
     /** @param {E} p */
-                ~
-!!! error TS2749: 'E' refers to a value, but is being used as a type here. Did you mean 'typeof E'?
     function e(p) { p.x; }
+                      ~
+!!! error TS2339: Property 'x' does not exist on type 'E'.
     
 ==== f.js (1 errors) ====
     var F = function () {

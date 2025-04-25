@@ -12,6 +12,10 @@ const Strings = {
 
 };
 module.exports = {
+>module.exports : Symbol(export=, Decl(index.js, 3, 2))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(index.js, 3, 2))
+
     thing: "ok",
 >thing : Symbol(thing, Decl(index.js, 4, 18))
 
@@ -26,5 +30,8 @@ module.exports = {
     }
 };
 module.exports.Strings = Strings;
+>module.exports : Symbol(export=, Decl(index.js, 3, 2))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(index.js, 3, 2))
 >Strings : Symbol(Strings, Decl(index.js, 0, 5))
 

@@ -9,9 +9,9 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports = {} : {}
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : {}
++>module : { export=: {}; }
++>exports : {}
  >{} : {}
  
  /**

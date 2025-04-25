@@ -1,25 +1,18 @@
 --- old.jsDeclarationsTypedefAndLatebound.symbols
 +++ new.jsDeclarationsTypedefAndLatebound.symbols
-@@= skipped -2, +2 lines =@@
- === index.js ===
- const LazySet = require("./LazySet");
- >LazySet : Symbol(LazySet, Decl(index.js, 0, 5))
-->require : Symbol(require)
-->"./LazySet" : Symbol("LazySet", Decl(LazySet.js, 0, 0))
- 
- /** @type {LazySet} */
- const stringSet = undefined;
-@@= skipped -9, +7 lines =@@
+@@= skipped -11, +11 lines =@@
  >undefined : Symbol(undefined)
  
  stringSet.addAll(stringSet);
 ->stringSet.addAll : Symbol(LazySet.addAll, Decl(LazySet.js, 4, 15))
++>stringSet.addAll : Symbol(addAll, Decl(LazySet.js, 4, 15))
  >stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
 ->addAll : Symbol(LazySet.addAll, Decl(LazySet.js, 4, 15))
++>addAll : Symbol(addAll, Decl(LazySet.js, 4, 15))
  >stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
  
  
-@@= skipped -18, +16 lines =@@
+@@= skipped -18, +18 lines =@@
       * @param {LazySet} iterable
       */
      addAll(iterable) {}
@@ -41,5 +34,8 @@
 ->module.exports : Symbol(module.exports, Decl(LazySet.js, 0, 0))
 ->module : Symbol(export=, Decl(LazySet.js, 10, 1))
 ->exports : Symbol(export=, Decl(LazySet.js, 10, 1))
++>module.exports : Symbol(LazySet, Decl(LazySet.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol(LazySet, Decl(LazySet.js, 0, 0))
  >LazySet : Symbol(LazySet, Decl(LazySet.js, 0, 0))
  

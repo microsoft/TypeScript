@@ -17,9 +17,9 @@ const a = {};
 
 module.exports = a;
 >module.exports = a : {}
->module.exports : any
->module : any
->exports : any
+>module.exports : {}
+>module : { readonly a: {}; }
+>exports : {}
 >a : {}
 
 === index.js ===
@@ -40,8 +40,8 @@ const a = {};
 
 module.exports = a;
 >module.exports = a : {}
->module.exports : any
->module : any
->exports : any
+>module.exports : {}
+>module : { readonly a: {}; }
+>exports : {}
 >a : {}
 

@@ -96,40 +96,6 @@ func hasReadonlyModifier(node *ast.Node) bool {
 	return hasModifier(node, ast.ModifierFlagsReadonly)
 }
 
-func isBindingElementOfBareOrAccessedRequire(node *ast.Node) bool {
-	return ast.IsBindingElement(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node.Parent.Parent)
-}
-
-/**
- * Like {@link isVariableDeclarationInitializedToRequire} but allows things like `require("...").foo.bar` or `require("...")["baz"]`.
- */
-func isVariableDeclarationInitializedToBareOrAccessedRequire(node *ast.Node) bool {
-	return isVariableDeclarationInitializedWithRequireHelper(node, true /*allowAccessedRequire*/)
-}
-
-func isVariableDeclarationInitializedWithRequireHelper(node *ast.Node, allowAccessedRequire bool) bool {
-	if node.Kind == ast.KindVariableDeclaration && node.AsVariableDeclaration().Initializer != nil {
-		initializer := node.AsVariableDeclaration().Initializer
-		if allowAccessedRequire {
-			initializer = ast.GetLeftmostAccessExpression(initializer)
-		}
-		return isRequireCall(initializer, true /*requireStringLiteralLikeArgument*/)
-	}
-	return false
-}
-
-func isRequireCall(node *ast.Node, requireStringLiteralLikeArgument bool) bool {
-	if ast.IsCallExpression(node) {
-		callExpression := node.AsCallExpression()
-		if len(callExpression.Arguments.Nodes) == 1 {
-			if ast.IsIdentifier(callExpression.Expression) && callExpression.Expression.AsIdentifier().Text == "require" {
-				return !requireStringLiteralLikeArgument || ast.IsStringLiteralLike(callExpression.Arguments.Nodes[0])
-			}
-		}
-	}
-	return false
-}
-
 func isStaticPrivateIdentifierProperty(s *ast.Symbol) bool {
 	return s.ValueDeclaration != nil && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration) && ast.IsStatic(s.ValueDeclaration)
 }
@@ -342,7 +308,7 @@ func canHaveSymbol(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindArrowFunction, ast.KindBinaryExpression, ast.KindBindingElement, ast.KindCallExpression, ast.KindCallSignature,
 		ast.KindClassDeclaration, ast.KindClassExpression, ast.KindClassStaticBlockDeclaration, ast.KindConstructor, ast.KindConstructorType,
-		ast.KindConstructSignature, ast.KindElementAccessExpression, ast.KindEnumDeclaration, ast.KindEnumMember, ast.KindExportAssignment,
+		ast.KindConstructSignature, ast.KindElementAccessExpression, ast.KindEnumDeclaration, ast.KindEnumMember, ast.KindExportAssignment, ast.KindJSExportAssignment,
 		ast.KindExportDeclaration, ast.KindExportSpecifier, ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindFunctionType,
 		ast.KindGetAccessor, ast.KindIdentifier, ast.KindImportClause, ast.KindImportEqualsDeclaration, ast.KindImportSpecifier,
 		ast.KindIndexSignature, ast.KindInterfaceDeclaration, ast.KindJSDocSignature, ast.KindJSDocTypeLiteral,
@@ -382,7 +348,7 @@ func isShorthandAmbientModule(node *ast.Node) bool {
 
 func getAliasDeclarationFromName(node *ast.Node) *ast.Node {
 	switch node.Parent.Kind {
-	case ast.KindImportClause, ast.KindImportSpecifier, ast.KindNamespaceImport, ast.KindExportSpecifier, ast.KindExportAssignment,
+	case ast.KindImportClause, ast.KindImportSpecifier, ast.KindNamespaceImport, ast.KindExportSpecifier, ast.KindExportAssignment, ast.KindJSExportAssignment,
 		ast.KindImportEqualsDeclaration, ast.KindNamespaceExport:
 		return node.Parent
 	case ast.KindQualifiedName:
@@ -423,8 +389,8 @@ func isSideEffectImport(node *ast.Node) bool {
 }
 
 func getExternalModuleRequireArgument(node *ast.Node) *ast.Node {
-	if isVariableDeclarationInitializedToBareOrAccessedRequire(node) {
-		return ast.GetLeftmostAccessExpression(node.AsVariableDeclaration().Initializer).AsCallExpression().Arguments.Nodes[0]
+	if ast.IsVariableDeclarationInitializedToRequire(node) {
+		return node.AsVariableDeclaration().Initializer.AsCallExpression().Arguments.Nodes[0]
 	}
 	return nil
 }
@@ -1523,30 +1489,13 @@ func getFunctionFlags(node *ast.Node) FunctionFlags {
 	return flags
 }
 
-func getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide *ast.EntityName) *ast.Node {
-	for nodeOnRightSide.Parent.Kind == ast.KindQualifiedName {
-		nodeOnRightSide = nodeOnRightSide.Parent
-	}
-
-	if nodeOnRightSide.Parent.Kind == ast.KindImportEqualsDeclaration {
-		if nodeOnRightSide.Parent.AsImportEqualsDeclaration().ModuleReference == nodeOnRightSide {
-			return nodeOnRightSide.Parent
-		}
-		return nil
-	}
-
-	if nodeOnRightSide.Parent.Kind == ast.KindExportAssignment {
-		if nodeOnRightSide.Parent.AsExportAssignment().Expression == nodeOnRightSide {
-			return nodeOnRightSide.Parent
-		}
-		return nil
-	}
-
-	return nil
-}
-
 func isInRightSideOfImportOrExportAssignment(node *ast.EntityName) bool {
-	return getLeftSideOfImportEqualsOrExportAssignment(node) != nil
+	for node.Parent.Kind == ast.KindQualifiedName {
+		node = node.Parent
+	}
+
+	return node.Parent.Kind == ast.KindImportEqualsDeclaration && node.Parent.AsImportEqualsDeclaration().ModuleReference == node ||
+		(node.Parent.Kind == ast.KindExportAssignment || node.Parent.Kind == ast.KindJSExportAssignment) && node.Parent.AsExportAssignment().Expression == node
 }
 
 func isJsxIntrinsicTagName(tagName *ast.Node) bool {
@@ -1584,12 +1533,6 @@ func isInNameOfExpressionWithTypeArguments(node *ast.Node) bool {
 	}
 
 	return node.Parent.Kind == ast.KindExpressionWithTypeArguments
-}
-
-func getTypeParameterFromJSDoc(node *ast.Node) *ast.Node {
-	name := node.Name().Text()
-	typeParameters := node.Parent.Parent.Parent.TypeParameters()
-	return core.Find(typeParameters, func(p *ast.Node) bool { return p.Name().Text() == name })
 }
 
 func isTypeDeclarationName(name *ast.Node) bool {

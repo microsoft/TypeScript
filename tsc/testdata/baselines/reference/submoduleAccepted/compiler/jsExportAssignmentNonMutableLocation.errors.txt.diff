@@ -3,8 +3,8 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+file.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+file.js(8,1): error TS2304: Cannot find name 'exports'.
++file.js(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
++file.js(8,9): error TS2339: Property 'customSymbol2' does not exist on type 'typeof import("file")'.
 +
 +
 +==== file.js (2 errors) ====
@@ -12,11 +12,13 @@
 +    
 +    // This is a common pattern in Node’s built-in modules:
 +    module.exports = {
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    ~~~~~~~~~~~~~~~~~~
 +        customSymbol,
++    ~~~~~~~~~~~~~~~~~
 +    };
++    ~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    
 +    exports.customSymbol2 = Symbol("custom");
-+    ~~~~~~~
-+!!! error TS2304: Cannot find name 'exports'.
++            ~~~~~~~~~~~~~
++!!! error TS2339: Property 'customSymbol2' does not exist on type 'typeof import("file")'.

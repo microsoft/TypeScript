@@ -5,20 +5,20 @@ function fn() {}
 >fn : () => void
 
 if (typeof module === 'object' && module.exports) {
->typeof module === 'object' && module.exports : any
+>typeof module === 'object' && module.exports : false | (() => void)
 >typeof module === 'object' : boolean
 >typeof module : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >module : any
 >'object' : "object"
->module.exports : any
->module : any
->exports : any
+>module.exports : () => void
+>module : { fn: () => void; }
+>exports : () => void
 
     module.exports = fn;
 >module.exports = fn : () => void
->module.exports : any
->module : any
->exports : any
+>module.exports : () => void
+>module : { fn: () => void; }
+>exports : () => void
 >fn : () => void
 }
 

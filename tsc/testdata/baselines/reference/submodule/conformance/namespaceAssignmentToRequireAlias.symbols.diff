@@ -1,10 +1,20 @@
 --- old.namespaceAssignmentToRequireAlias.symbols
 +++ new.namespaceAssignmentToRequireAlias.symbols
-@@= skipped -2, +2 lines =@@
- === bug40140.js ===
+@@= skipped -3, +3 lines =@@
  const u = require('untyped');
  >u : Symbol(u, Decl(bug40140.js, 0, 5))
-->require : Symbol(require)
+ >require : Symbol(require)
++>'untyped' : Symbol("node_modules/untyped/index", Decl(index.js, 0, 0))
  
  u.assignment.nested = true
  >u : Symbol(u, Decl(bug40140.js, 0, 5))
+@@= skipped -8, +9 lines =@@
+ >u : Symbol(u, Decl(bug40140.js, 0, 5))
+ 
+ 
++=== node_modules/untyped/index.js ===
++module.exports = {}
++>module.exports : Symbol(export=, Decl(index.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol(export=, Decl(index.js, 0, 0))
++

@@ -3,7 +3,7 @@
 === file2.js ===
 const {myTypes} = require('./file.js');
 >myTypes : any
->require('./file.js') : any
+>require('./file.js') : typeof import("file")
 >require : any
 >'./file.js' : "./file.js"
 
@@ -49,10 +49,40 @@ function testFn(input) {
 
 module.exports = {testFn, testFnTypes};
 >module.exports = {testFn, testFnTypes} : { testFn: (input: input) => number; testFnTypes: any; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { testFn: (input: input) => number; testFnTypes: any; }
+>module : { export=: { testFn: (input: input) => number; testFnTypes: any; }; }
+>exports : { testFn: (input: input) => number; testFnTypes: any; }
 >{testFn, testFnTypes} : { testFn: (input: input) => number; testFnTypes: any; }
 >testFn : (input: input) => number
 >testFnTypes : any
+
+=== file.js ===
+/**
+ * @namespace myTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+const myTypes = {
+>myTypes : any
+>{    // SOME PROPS HERE} : {}
+
+    // SOME PROPS HERE
+};
+
+/** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
+
+/**
+ * @typedef myTypes.typeB
+ * @property {myTypes.typeA}    prop1 - Prop 1.
+ * @property {string}           prop2 - Prop 2.
+ */
+
+/** @typedef {myTypes.typeB|Function} myTypes.typeC */
+
+exports.myTypes = myTypes;
+>exports.myTypes = myTypes : any
+>exports.myTypes : any
+>exports : typeof import("file")
+>myTypes : any
+>myTypes : any
 

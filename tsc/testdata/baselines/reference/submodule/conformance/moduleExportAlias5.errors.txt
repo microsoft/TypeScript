@@ -1,20 +1,18 @@
-bug24754.js(4,1): error TS2304: Cannot find name 'exports'.
-bug24754.js(4,11): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-bug24754.js(5,1): error TS2304: Cannot find name 'exports'.
+bug24754.js(4,1): error TS2631: Cannot assign to '"bug24754"' because it is a namespace.
+bug24754.js(4,11): error TS2741: Property 'version' is missing in type '{ (): void; WebpackOptionsDefaulter: number; }' but required in type 'typeof import("bug24754")'.
 
 
-==== bug24754.js (3 errors) ====
+==== bug24754.js (2 errors) ====
     // #24754
     const webpack = function (){
     }
     exports = module.exports = webpack;
     ~~~~~~~
-!!! error TS2304: Cannot find name 'exports'.
-              ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+!!! error TS2631: Cannot assign to '"bug24754"' because it is a namespace.
+              ~~~~~~~~~~~~~~
+!!! error TS2741: Property 'version' is missing in type '{ (): void; WebpackOptionsDefaulter: number; }' but required in type 'typeof import("bug24754")'.
+!!! related TS2728 bug24754.js:5:1: 'version' is declared here.
     exports.version = 1001;
-    ~~~~~~~
-!!! error TS2304: Cannot find name 'exports'.
     
     webpack.WebpackOptionsDefaulter = 1111;
     

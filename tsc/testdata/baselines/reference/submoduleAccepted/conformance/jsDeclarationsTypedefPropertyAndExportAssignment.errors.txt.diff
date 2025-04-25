@@ -3,19 +3,19 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+index.js(1,39): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+index.js(3,22): error TS2307: Cannot find module './module.js' or its corresponding type declarations.
-+index.js(21,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(3,37): error TS2694: Namespace '"module".export=' has no exported member 'TaskGroup'.
++index.js(21,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
++module.js(11,38): error TS2304: Cannot find name 'P'.
++module.js(24,12): error TS2315: Type 'Object' is not generic.
++module.js(27,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
-+==== index.js (3 errors) ====
++==== index.js (2 errors) ====
 +    const {taskGroups, taskNameToGroup} = require('./module.js');
-+                                          ~~~~~~~
-+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +    
 +    /** @typedef {import('./module.js').TaskGroup} TaskGroup */
-+                         ~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './module.js' or its corresponding type declarations.
++                                        ~~~~~~~~~
++!!! error TS2694: Namespace '"module".export=' has no exported member 'TaskGroup'.
 +    
 +    /**
 +     * @typedef TaskNode
@@ -34,9 +34,9 @@
 +    }
 +    
 +    module.exports = MainThreadTasks;
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+==== module.js (0 errors) ====
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
++==== module.js (3 errors) ====
 +    /** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
 +    
 +    /**
@@ -48,6 +48,8 @@
 +    
 +    /**
 +     * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
++                                         ~
++!!! error TS2304: Cannot find name 'P'.
 +     */
 +    const taskGroups = {
 +        parseHTML: {
@@ -61,9 +63,16 @@
 +    }
 +    
 +    /** @type {Object<string, TaskGroup>} */
++               ~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
 +    const taskNameToGroup = {};
 +    
 +    module.exports = {
++    ~~~~~~~~~~~~~~~~~~
 +        taskGroups,
++    ~~~~~~~~~~~~~~~
 +        taskNameToGroup,
++    ~~~~~~~~~~~~~~~~~~~~
 +    };
++    ~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

@@ -1,10 +1,9 @@
 --- old.moduleExportDuplicateAlias3.symbols
 +++ new.moduleExportDuplicateAlias3.symbols
-@@= skipped -2, +2 lines =@@
- === test.js ===
+@@= skipped -3, +3 lines =@@
  const { apply } = require('./moduleExportAliasDuplicateAlias')
  >apply : Symbol(apply, Decl(test.js, 0, 7))
-->require : Symbol(require)
+ >require : Symbol(require)
 ->'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
  
  const result = apply.toFixed()

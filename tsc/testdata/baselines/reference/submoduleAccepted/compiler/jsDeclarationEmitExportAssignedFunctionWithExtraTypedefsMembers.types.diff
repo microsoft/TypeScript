@@ -12,9 +12,9 @@
 ->loader : (options: Options) => void
 ->options : Options
 +>module.exports = function loader(options) {} : (options: any) => void
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : (options: any) => void
++>module : { export=: (options: any) => void; }
++>exports : (options: any) => void
 +>function loader(options) {} : (options: any) => void
 +>loader : (options: any) => void
 +>options : any

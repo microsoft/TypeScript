@@ -3,6 +3,8 @@
 === /user.js ===
 const json0 = require("./json.json");
 >json0 : Symbol(json0, Decl(user.js, 0, 5))
+>require : Symbol(require)
+>"./json.json" : Symbol("/json", Decl(json.json, 0, 0))
 
 json0.b; // Error (good)
 >json0 : Symbol(json0, Decl(user.js, 0, 5))
@@ -18,6 +20,7 @@ json1.b; // No error (OK since that's the type annotation)
 
 const js0 = require("./js.js");
 >js0 : Symbol(js0, Decl(user.js, 7, 5))
+>require : Symbol(require)
 
 json0.b; // Error (good)
 >json0 : Symbol(json0, Decl(user.js, 0, 5))

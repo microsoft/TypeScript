@@ -1,14 +1,11 @@
 --- old.jsFileCompilationExternalPackageError.symbols
 +++ new.jsFileCompilationExternalPackageError.symbols
-@@= skipped -17, +17 lines =@@
- >a : Symbol(a, Decl(b.ts, 0, 3))
- 
+@@= skipped -19, +19 lines =@@
  === node_modules/c.js ===
--exports.a = 10;
-->exports.a : Symbol(a, Decl(c.js, 0, 0))
+ exports.a = 10;
+ >exports.a : Symbol(a, Decl(c.js, 0, 0))
 ->exports : Symbol(a, Decl(c.js, 0, 0))
-->a : Symbol(a, Decl(c.js, 0, 0))
++>exports : Symbol("node_modules/c", Decl(c.js, 0, 0))
+ >a : Symbol(a, Decl(c.js, 0, 0))
  
-+exports.a = 10;
  c = 10;
- 

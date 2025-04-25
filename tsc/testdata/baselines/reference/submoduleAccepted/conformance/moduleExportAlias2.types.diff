@@ -6,8 +6,8 @@
  const C = require("./semver")
 ->C : typeof C
 ->require("./semver") : typeof C
-+>C : any
-+>require("./semver") : any
++>C : typeof import("semver")
++>require("./semver") : typeof import("semver")
  >require : (name: string) => any
  >"./semver" : "./semver"
  
@@ -18,7 +18,7 @@
 ->C : typeof C
 ->f : (n: any) => any
 +>C.f : any
-+>C : any
++>C : typeof import("semver")
 +>f : any
  >1 : 1
  
@@ -28,17 +28,14 @@
 ->C : typeof C
 +>c : any
 +>new C : any
-+>C : any
++>C : typeof import("semver")
  
  === node.d.ts ===
  declare function require(name: string): any;
-@@= skipped -30, +30 lines =@@
- >module : { exports: any; }
- >exports : any
- 
--=== semver.js ===
--/// <reference path='node.d.ts' />
--exports = module.exports = C
+@@= skipped -33, +33 lines =@@
+ === semver.js ===
+ /// <reference path='node.d.ts' />
+ exports = module.exports = C
 ->exports = module.exports = C : typeof C
 ->exports : typeof C
 ->module.exports = C : typeof C
@@ -46,25 +43,37 @@
 ->module : { exports: typeof C; }
 ->exports : typeof C
 ->C : typeof C
--
--exports.f = n => n + 1
-->exports.f = n => n + 1 : (n: any) => any
++>exports = module.exports = C : () => void
++>exports : any
++>module.exports = C : () => void
++>module.exports : typeof import("semver")
++>module : { "semver": typeof import("semver"); }
++>exports : typeof import("semver")
++>C : () => void
+ 
+ exports.f = n => n + 1
+ >exports.f = n => n + 1 : (n: any) => any
 ->exports.f : (n: any) => any
 ->exports : typeof C
 ->f : (n: any) => any
-->n => n + 1 : (n: any) => any
-->n : any
-->n + 1 : any
-->n : any
-->1 : 1
--
--function C() {
++>exports.f : any
++>exports : typeof import("semver")
++>f : any
+ >n => n + 1 : (n: any) => any
+ >n : any
+ >n + 1 : any
+@@= skipped -20, +20 lines =@@
+ >1 : 1
+ 
+ function C() {
 ->C : typeof C
--
--    this.p = 1
-->this.p = 1 : 1
-->this.p : any
++>C : () => void
+ 
+     this.p = 1
+ >this.p = 1 : 1
+ >this.p : any
 ->this : this
-->p : any
-->1 : 1
--}
++>this : any
+ >p : any
+ >1 : 1
+ }

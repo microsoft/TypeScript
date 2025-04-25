@@ -3,7 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+index.js(9,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(9,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +index.js(9,34): error TS7006: Parameter 'options' implicitly has an 'any' type.
 +
 +
@@ -17,8 +17,8 @@
 +     * @param {Options} options
 +     */
 +    module.exports = function loader(options) {}
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +                                     ~~~~~~~
 +!!! error TS7006: Parameter 'options' implicitly has an 'any' type.
 +    

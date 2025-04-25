@@ -1,0 +1,12 @@
+--- old.conflictingCommonJSES2015Exports.symbols
++++ new.conflictingCommonJSES2015Exports.symbols
+@@= skipped -7, +7 lines =@@
+ >c : Symbol(c, Decl(bug24934.js, 0, 25))
+ 
+ module.exports = { abc };
++>module.exports : Symbol(export=, Decl(bug24934.js, 0, 42))
++>module : Symbol(module.exports)
++>exports : Symbol(export=, Decl(bug24934.js, 0, 42))
+ >abc : Symbol(abc, Decl(bug24934.js, 1, 18))
+ 
+ === use.js ===

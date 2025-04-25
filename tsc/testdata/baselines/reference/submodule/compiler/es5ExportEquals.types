@@ -2,8 +2,8 @@
 
 === es5ExportEquals.ts ===
 export function f() { }
->f : typeof f
+>f : () => void
 
 export = f;
->f : typeof f
+>f : () => void
 

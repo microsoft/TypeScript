@@ -4,16 +4,35 @@
 const {
     chalk: { grey }
 >chalk : any
->grey : any
+>grey : {}
 
 } = require('./mod1');
->require('./mod1') : any
+>require('./mod1') : typeof import("mod1")
 >require : any
 >'./mod1' : "./mod1"
 
 grey
->grey : any
+>grey : {}
 
 chalk
 >chalk : any
+
+=== mod1.js ===
+const chalk = {
+>chalk : { grey: {}; }
+>{    grey: {}} : { grey: {}; }
+
+    grey: {}
+>grey : {}
+>{} : {}
+
+};
+module.exports.chalk = chalk
+>module.exports.chalk = chalk : { grey: {}; }
+>module.exports.chalk : { grey: {}; }
+>module.exports : typeof import("mod1")
+>module : { "mod1": typeof import("mod1"); }
+>exports : typeof import("mod1")
+>chalk : { grey: {}; }
+>chalk : { grey: {}; }
 

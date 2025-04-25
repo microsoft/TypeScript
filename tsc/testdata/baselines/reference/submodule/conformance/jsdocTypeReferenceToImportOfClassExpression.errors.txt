@@ -1,23 +1,26 @@
-MC.js(1,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-MC.js(5,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+MC.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+MW.js(8,10): error TS2339: Property 'compiler' does not exist on type 'MW'.
+MW.js(12,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-==== MC.js (2 errors) ====
+==== MC.js (1 errors) ====
     const MW = require("./MW");
-               ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
     /** @typedef {number} Cictema */
     
     module.exports = class MC {
-    ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
       watch() {
+    ~~~~~~~~~~~
         return new MW(this);
+    ~~~~~~~~~~~~~~~~~~~~~~~~
       }
+    ~~~
     };
+    ~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     
-==== MW.js (0 errors) ====
+==== MW.js (2 errors) ====
     /** @typedef {import("./MC")} MC */
     
     class MW {
@@ -26,8 +29,12 @@ MC.js(5,1): error TS2580: Cannot find name 'module'. Do you need to install type
        */
       constructor(compiler) {
         this.compiler = compiler;
+             ~~~~~~~~
+!!! error TS2339: Property 'compiler' does not exist on type 'MW'.
       }
     }
     
     module.exports = MW;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     

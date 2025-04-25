@@ -30,8 +30,8 @@
 +>util : any
 +>existy : any
  
--=== mod.js ===
--const util = exports = module.exports = {}
+ === mod.js ===
+ const util = exports = module.exports = {}
 ->util : typeof module.exports
 ->exports = module.exports = {} : typeof module.exports
 ->exports : typeof import("mod")
@@ -39,18 +39,26 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-->{} : {}
--
--if (!!false) {
-->!!false : boolean
-->!false : true
-->false : false
--
--    util.existy = function () { }
-->util.existy = function () { } : () => void
++>util : {}
++>exports = module.exports = {} : {}
++>exports : any
++>module.exports = {} : {}
++>module.exports : any
++>module : any
++>exports : any
+ >{} : {}
+ 
+ if (!!false) {
+@@= skipped -27, +27 lines =@@
+ 
+     util.existy = function () { }
+ >util.existy = function () { } : () => void
 ->util.existy : () => void
 ->util : typeof module.exports
 ->existy : () => void
-->function () { } : () => void
--}
--
++>util.existy : any
++>util : {}
++>existy : any
+ >function () { } : () => void
+ }
+ 

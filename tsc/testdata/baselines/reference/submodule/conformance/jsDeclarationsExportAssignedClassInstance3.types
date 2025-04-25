@@ -15,18 +15,18 @@ class Foo {
 
 module.exports = new Foo();
 >module.exports = new Foo() : Foo
->module.exports : any
->module : any
->exports : any
+>module.exports : Foo
+>module : { export=: Foo; }
+>exports : Foo
 >new Foo() : Foo
 >Foo : typeof Foo
 
 module.exports.additional = 20;
 >module.exports.additional = 20 : 20
 >module.exports.additional : any
->module.exports : any
->module : any
->exports : any
+>module.exports : Foo
+>module : { export=: Foo; }
+>exports : Foo
 >additional : any
 >20 : 20
 

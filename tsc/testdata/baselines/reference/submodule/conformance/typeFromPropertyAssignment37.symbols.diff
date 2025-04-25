@@ -1,10 +1,9 @@
 --- old.typeFromPropertyAssignment37.symbols
 +++ new.typeFromPropertyAssignment37.symbols
-@@= skipped -2, +2 lines =@@
- === use.js ===
+@@= skipped -3, +3 lines =@@
  const util = require('./mod')
  >util : Symbol(util, Decl(use.js, 0, 5))
-->require : Symbol(require)
+ >require : Symbol(require)
 ->'./mod' : Symbol(util, Decl(mod.js, 0, 0))
  
  function n() {
@@ -20,18 +19,18 @@
  >util : Symbol(util, Decl(use.js, 0, 5))
 ->existy : Symbol(util.existy, Decl(mod.js, 1, 14))
  
--=== mod.js ===
--const util = exports = module.exports = {}
-->util : Symbol(util, Decl(mod.js, 0, 5))
+ === mod.js ===
+ const util = exports = module.exports = {}
+ >util : Symbol(util, Decl(mod.js, 0, 5))
 ->exports : Symbol("mod", Decl(mod.js, 0, 0))
 ->module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 ->module : Symbol(module, Decl(mod.js, 0, 22))
 ->exports : Symbol(module.exports, Decl(mod.js, 0, 0))
--
--if (!!false) {
--    util.existy = function () { }
+ 
+ if (!!false) {
+     util.existy = function () { }
 ->util.existy : Symbol(existy, Decl(mod.js, 1, 14))
-->util : Symbol(util, Decl(mod.js, 0, 5))
+ >util : Symbol(util, Decl(mod.js, 0, 5))
 ->existy : Symbol(existy, Decl(mod.js, 1, 14))
--}
--
+ }
+ 

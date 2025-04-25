@@ -3,9 +3,9 @@
 === /test.js ===
 module.exports = {
 >module.exports = {  a: "ok"} : { a: string; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { a: string; }
+>module : { export=: { a: string; }; }
+>exports : { a: string; }
 >{  a: "ok"} : { a: string; }
 
   a: "ok"
@@ -16,7 +16,7 @@ module.exports = {
 
 === /index.ts ===
 import { a } from "./test";
->a : any
+>a : string
 
 declare module "./test" {
 >"./test" : typeof import("./test")
@@ -28,6 +28,6 @@ declare module "./test" {
 a.toFixed();
 >a.toFixed() : any
 >a.toFixed : any
->a : any
+>a : string
 >toFixed : any
 

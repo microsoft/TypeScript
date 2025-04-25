@@ -1,12 +1,15 @@
-bug40140.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+bug40140.js(2,3): error TS2339: Property 'assignment' does not exist on type '{}'.
+bug40140.js(3,3): error TS2339: Property 'noError' does not exist on type '{}'.
 
 
-==== bug40140.js (1 errors) ====
+==== bug40140.js (2 errors) ====
     const u = require('untyped');
-              ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     u.assignment.nested = true
+      ~~~~~~~~~~
+!!! error TS2339: Property 'assignment' does not exist on type '{}'.
     u.noError()
+      ~~~~~~~
+!!! error TS2339: Property 'noError' does not exist on type '{}'.
     
     
 ==== node_modules/untyped/index.js (0 errors) ====

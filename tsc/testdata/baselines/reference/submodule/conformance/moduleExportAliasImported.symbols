@@ -2,10 +2,15 @@
 
 === bug28014.js ===
 exports.version = 1
+>exports : Symbol("bug28014", Decl(bug28014.js, 0, 0))
+
 function alias() { }
 >alias : Symbol(alias, Decl(bug28014.js, 0, 19))
 
 module.exports = alias
+>module.exports : Symbol(alias, Decl(bug28014.js, 0, 19))
+>module : Symbol(module.exports)
+>exports : Symbol(alias, Decl(bug28014.js, 0, 19))
 >alias : Symbol(alias, Decl(bug28014.js, 0, 19))
 
 === importer.js ===

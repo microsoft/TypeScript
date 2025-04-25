@@ -5,10 +5,9 @@
  exports.formatters = {}
  >exports.formatters = {} : {}
 ->exports.formatters : {}
-->exports : typeof import("mod")
-->formatters : {}
 +>exports.formatters : any
-+>exports : any
+ >exports : typeof import("mod")
+->formatters : {}
 +>formatters : any
  >{} : {}
  
@@ -59,7 +58,7 @@
  === use.js ===
  import * as debug from './mod'
 ->debug : typeof debug
-+>debug : any
++>debug : typeof import("mod")
  
  debug.formatters.j
  >debug.formatters.j : any
@@ -67,7 +66,7 @@
 ->debug : typeof debug
 ->formatters : {}
 +>debug.formatters : any
-+>debug : any
++>debug : typeof import("mod")
 +>formatters : any
  >j : any
  
@@ -79,7 +78,7 @@
 ->debug : typeof debug
 ->formatters : {}
 +>debug.formatters : any
-+>debug : any
++>debug : typeof import("mod")
 +>formatters : any
  >o : any
  >1 : 1

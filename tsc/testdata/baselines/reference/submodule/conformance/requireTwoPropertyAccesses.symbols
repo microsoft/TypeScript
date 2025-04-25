@@ -10,3 +10,16 @@ console.log(value)
 >log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >value : Symbol(value, Decl(requireTwoPropertyAccesses.js, 0, 5))
 
+=== mod.js ===
+module.exports = {
+>module.exports : Symbol(export=, Decl(mod.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(mod.js, 0, 0))
+
+    x: {
+>x : Symbol(x, Decl(mod.js, 0, 18))
+
+        y: "value"
+>y : Symbol(y, Decl(mod.js, 1, 8))
+    }
+}

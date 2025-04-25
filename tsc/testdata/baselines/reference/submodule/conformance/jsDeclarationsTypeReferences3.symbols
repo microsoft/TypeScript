@@ -7,7 +7,19 @@ const Something = require("fs").Something;
 >Something : Symbol(Something, Decl(index.js, 2, 5))
 
 module.exports.A = {}
+>module.exports.A : Symbol(A, Decl(index.js, 2, 42))
+>module.exports : Symbol("index", Decl(index.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol("index", Decl(index.js, 0, 0))
+>A : Symbol(A, Decl(index.js, 2, 42))
+
 module.exports.A.B = {
+>module.exports.A : Symbol(A, Decl(index.js, 2, 42))
+>module.exports : Symbol("index", Decl(index.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol("index", Decl(index.js, 0, 0))
+>A : Symbol(A, Decl(index.js, 2, 42))
+
     thing: new Something()
 >thing : Symbol(thing, Decl(index.js, 4, 22))
 >Something : Symbol(Something, Decl(index.js, 2, 5))

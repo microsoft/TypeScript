@@ -1,31 +1,22 @@
 --- old.truthinessCallExpressionCoercion4.types
 +++ new.truthinessCallExpressionCoercion4.types
-@@= skipped -4, +4 lines =@@
- >fn : () => void
- 
- if (typeof module === 'object' && module.exports) {
-->typeof module === 'object' && module.exports : false | (() => void)
-+>typeof module === 'object' && module.exports : any
+@@= skipped -7, +7 lines =@@
+ >typeof module === 'object' && module.exports : false | (() => void)
  >typeof module === 'object' : boolean
  >typeof module : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->module : { exports: () => void; }
 +>module : any
  >'object' : "object"
-->module.exports : () => void
+ >module.exports : () => void
 ->module : { exports: () => void; }
-->exports : () => void
-+>module.exports : any
-+>module : any
-+>exports : any
++>module : { fn: () => void; }
+ >exports : () => void
  
      module.exports = fn;
  >module.exports = fn : () => void
-->module.exports : () => void
+ >module.exports : () => void
 ->module : { exports: () => void; }
-->exports : () => void
-+>module.exports : any
-+>module : any
-+>exports : any
++>module : { fn: () => void; }
+ >exports : () => void
  >fn : () => void
  }
- 

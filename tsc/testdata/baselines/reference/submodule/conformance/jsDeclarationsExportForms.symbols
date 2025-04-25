@@ -49,30 +49,54 @@ export { ns as classContainer };
 === cjs.js ===
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs.js, 0, 5))
+>require : Symbol(require)
+>"./cls" : Symbol("cls", Decl(cls.js, 0, 0))
 
 module.exports = { ns };
+>module.exports : Symbol(export=, Decl(cjs.js, 0, 28))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(cjs.js, 0, 28))
 >ns : Symbol(ns, Decl(cjs.js, 1, 18))
 
 === cjs2.js ===
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs2.js, 0, 5))
+>require : Symbol(require)
+>"./cls" : Symbol("cls", Decl(cls.js, 0, 0))
 
 module.exports = ns;
->ns : Symbol(ns, Decl(cjs.js, 0, 5))
+>module.exports : Symbol("cls", Decl(cls.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol("cls", Decl(cls.js, 0, 0))
+>ns : Symbol(ns, Decl(cjs2.js, 0, 5))
 
 === cjs3.js ===
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs3.js, 0, 5))
+>require : Symbol(require)
+>"./cls" : Symbol("cls", Decl(cls.js, 0, 0))
 
 module.exports.ns = ns;
->ns : Symbol(ns, Decl(cjs.js, 0, 5))
+>module.exports.ns : Symbol(ns, Decl(cjs3.js, 0, 28))
+>module.exports : Symbol("cjs3", Decl(cjs3.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol("cjs3", Decl(cjs3.js, 0, 0))
+>ns : Symbol(ns, Decl(cjs3.js, 0, 28))
+>ns : Symbol(ns, Decl(cjs3.js, 0, 5))
 
 === cjs4.js ===
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs4.js, 0, 5))
+>require : Symbol(require)
+>"./cls" : Symbol("cls", Decl(cls.js, 0, 0))
 
 module.exports.names = ns;
->ns : Symbol(ns, Decl(cjs.js, 0, 5))
+>module.exports.names : Symbol(names, Decl(cjs4.js, 0, 28))
+>module.exports : Symbol("cjs4", Decl(cjs4.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol("cjs4", Decl(cjs4.js, 0, 0))
+>names : Symbol(names, Decl(cjs4.js, 0, 28))
+>ns : Symbol(ns, Decl(cjs4.js, 0, 5))
 
 === includeAll.js ===
 

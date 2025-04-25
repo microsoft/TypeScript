@@ -17,11 +17,13 @@
 ->module.exports : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
 ->module : Symbol(module, Decl(test.js, 3, 1))
 ->exports : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
--
++>module.exports : Symbol(export=, Decl(test.js, 3, 1))
++>module : Symbol(module.exports)
++>exports : Symbol(export=, Decl(test.js, 3, 1))
+ 
    Abcde
  >Abcde : Symbol(Abcde, Decl(test.js, 5, 18))
- 
-@@= skipped -22, +18 lines =@@
+@@= skipped -22, +22 lines =@@
  >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
  
  declare module "./test" {
@@ -37,8 +39,16 @@
  
  new Abcde().x;
 ->new Abcde().x : Symbol(Abcde.x, Decl(test.js, 0, 13))
++>new Abcde().x : Symbol(x, Decl(test.js, 0, 13))
  >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
 ->x : Symbol(Abcde.x, Decl(test.js, 0, 13))
++>x : Symbol(x, Decl(test.js, 0, 13))
  
  // Bug: the type meaning from /test.js does not
  // propagate through the object literal export.
+ const x: Abcde = { b: "" };
+ >x : Symbol(x, Decl(index.ts, 10, 5))
+->Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
++>Abcde : Symbol(Abcde)
+ >b : Symbol(b, Decl(index.ts, 10, 18))
+ 

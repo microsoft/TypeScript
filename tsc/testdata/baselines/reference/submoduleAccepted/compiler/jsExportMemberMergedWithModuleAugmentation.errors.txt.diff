@@ -2,41 +2,35 @@
 +++ new.jsExportMemberMergedWithModuleAugmentation.errors.txt
 @@= skipped -0, +0 lines =@@
 -/index.ts(11,7): error TS2741: Property 'x' is missing in type '{ b: string; }' but required in type 'Abcde'.
-+/index.ts(1,23): error TS2306: File '/test.js' is not a module.
-+/index.ts(3,16): error TS2306: File '/test.js' is not a module.
-+/test.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++/index.ts(1,23): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
++/index.ts(3,16): error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
++/index.ts(11,10): error TS2749: 'Abcde' refers to a value, but is being used as a type here. Did you mean 'typeof Abcde'?
  
  
--==== /test.js (0 errors) ====
-+==== /test.js (1 errors) ====
-     class Abcde {
-       /** @type {string} */
-       x;
-     }
-     
-     module.exports = {
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ ==== /test.js (0 errors) ====
+@@= skipped -10, +12 lines =@@
        Abcde
      };
      
 -==== /index.ts (1 errors) ====
-+==== /index.ts (2 errors) ====
++==== /index.ts (3 errors) ====
      import { Abcde } from "./test";
 +                          ~~~~~~~~
-+!!! error TS2306: File '/test.js' is not a module.
++!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
      
      declare module "./test" {
 +                   ~~~~~~~~
-+!!! error TS2306: File '/test.js' is not a module.
++!!! error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
        interface Abcde { b: string }
      }
      
-@@= skipped -22, +30 lines =@@
+@@= skipped -12, +16 lines =@@
      // Bug: the type meaning from /test.js does not
      // propagate through the object literal export.
      const x: Abcde = { b: "" };
 -          ~
 -!!! error TS2741: Property 'x' is missing in type '{ b: string; }' but required in type 'Abcde'.
 -!!! related TS2728 /test.js:3:3: 'x' is declared here.
++             ~~~~~
++!!! error TS2749: 'Abcde' refers to a value, but is being used as a type here. Did you mean 'typeof Abcde'?
      

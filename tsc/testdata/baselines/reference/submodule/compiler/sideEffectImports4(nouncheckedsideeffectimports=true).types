@@ -4,3 +4,8 @@
 
 import "server-only";
 
+=== node_modules/server-only/index.js ===
+throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+

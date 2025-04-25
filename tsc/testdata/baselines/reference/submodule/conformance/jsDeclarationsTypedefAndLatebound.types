@@ -2,8 +2,8 @@
 
 === index.js ===
 const LazySet = require("./LazySet");
->LazySet : any
->require("./LazySet") : any
+>LazySet : typeof LazySet
+>require("./LazySet") : typeof LazySet
 >require : any
 >"./LazySet" : "./LazySet"
 
@@ -13,10 +13,10 @@ const stringSet = undefined;
 >undefined : undefined
 
 stringSet.addAll(stringSet);
->stringSet.addAll(stringSet) : any
->stringSet.addAll : any
+>stringSet.addAll(stringSet) : void
+>stringSet.addAll : (iterable: LazySet) => void
 >stringSet : LazySet
->addAll : any
+>addAll : (iterable: LazySet) => void
 >stringSet : LazySet
 
 
@@ -44,8 +44,8 @@ class LazySet {
 
 module.exports = LazySet;
 >module.exports = LazySet : typeof LazySet
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof LazySet
+>module : { LazySet: typeof LazySet; }
+>exports : typeof LazySet
 >LazySet : typeof LazySet
 

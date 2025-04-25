@@ -5,26 +5,26 @@
 /** @typedef {import("./mod1")} C
  * @type {C} */
 var c;
->c : any
+>c : Chunk
 
 c.chunk;
 >c.chunk : any
->c : any
+>c : Chunk
 >chunk : any
 
 const D = require("./mod1");
->D : any
->require("./mod1") : any
+>D : typeof Chunk
+>require("./mod1") : typeof Chunk
 >require : (name: string) => any
 >"./mod1" : "./mod1"
 
 /** @type {D} */
 var d;
->d : D
+>d : Chunk
 
 d.chunk;
 >d.chunk : any
->d : D
+>d : Chunk
 >chunk : any
 
 === types.d.ts ===
@@ -38,4 +38,24 @@ declare var exports: any;
 declare var module: { exports: any };
 >module : { exports: any; }
 >exports : any
+
+=== mod1.js ===
+/// <reference path='./types.d.ts'/>
+module.exports = class Chunk {
+>module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
+>module.exports : typeof Chunk
+>module : { Chunk: typeof Chunk; }
+>exports : typeof Chunk
+>class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
+>Chunk : typeof Chunk
+
+    constructor() {
+        this.chunk = 1;
+>this.chunk = 1 : 1
+>this.chunk : any
+>this : this
+>chunk : any
+>1 : 1
+    }
+}
 

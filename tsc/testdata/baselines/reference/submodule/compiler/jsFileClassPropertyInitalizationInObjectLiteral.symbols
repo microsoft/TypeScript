@@ -2,6 +2,10 @@
 
 === foo.js ===
 module.exports = function () {
+>module.exports : Symbol(export=, Decl(foo.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(foo.js, 0, 0))
+
   class A { }
 >A : Symbol(A, Decl(foo.js, 0, 30))
 

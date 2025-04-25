@@ -9,9 +9,9 @@
 ->module : { exports: string; }
 ->exports : string
 +>module.exports = 'anything' : "anything"
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : "anything"
++>module : { export=: "anything"; }
++>exports : "anything"
  >'anything' : "anything"
  
  

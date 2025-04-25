@@ -17,7 +17,7 @@ type externalModuleInfo struct {
 	exportedBindings             core.MultiMap[*ast.Declaration, *ast.ModuleExportName] // Maps local declarations to their associated export aliases
 	exportedNames                []*ast.ModuleExportName                                // all exported names in the module, both local and re-exported, excluding the names of locally exported function declarations
 	exportedFunctions            collections.OrderedSet[*ast.FunctionDeclarationNode]   // all of the top-level exported function declarations
-	exportEquals                 *ast.ExportAssignment                                  // an export= declaration if one was present
+	exportEquals                 *ast.ExportAssignment                                  // an export=/module.exports= declaration if one was present
 	hasExportStarsToExportValues bool                                                   // whether this module contains export*
 }
 
@@ -105,6 +105,11 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 			if n.IsExportEquals && c.output.exportEquals == nil {
 				// export = x
 				c.output.exportEquals = n
+			}
+		case ast.KindJSExportAssignment:
+			if c.output.exportEquals == nil {
+				// module.exports = x
+				c.output.exportEquals = node.AsExportAssignment()
 			}
 
 		case ast.KindVariableStatement:

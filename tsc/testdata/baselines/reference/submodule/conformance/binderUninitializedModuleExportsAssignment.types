@@ -12,7 +12,7 @@ var loop2 = loop1;
 module.exports = loop2;
 >module.exports = loop2 : any
 >module.exports : any
->module : any
+>module : { loop2: any; }
 >exports : any
 >loop2 : any
 

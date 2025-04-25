@@ -8,7 +8,7 @@
 ->exports : typeof alias
 ->version : 1
 +>exports.version : any
-+>exports : any
++>exports : typeof import("bug28014")
 +>version : any
  >1 : 1
  
@@ -23,14 +23,14 @@
 ->exports : typeof alias
 ->alias : typeof alias
 +>module.exports = alias : () => void
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : () => void
++>module : { alias: () => void; }
++>exports : () => void
 +>alias : () => void
  
  === importer.js ===
  import('./bug28014')
 ->import('./bug28014') : Promise<{ (): void; version: 1; }>
-+>import('./bug28014') : Promise<any>
++>import('./bug28014') : Promise<() => void>
  >'./bug28014' : "./bug28014"
  

@@ -4,8 +4,8 @@
 /** @enum {string} */
 module.exports = {};
 >module.exports = {} : {}
->module.exports : any
->module : any
->exports : any
+>module.exports : {}
+>module : { export=: {}; }
+>exports : {}
 >{} : {}
 

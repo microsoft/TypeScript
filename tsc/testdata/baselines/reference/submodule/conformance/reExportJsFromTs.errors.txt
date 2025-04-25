@@ -1,16 +1,13 @@
-/lib/constants.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-/src/constants.ts(1,30): error TS2306: File '/lib/constants.js' is not a module.
+/src/constants.ts(1,30): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 
 
-==== /lib/constants.js (1 errors) ====
+==== /lib/constants.js (0 errors) ====
     module.exports = {
-    ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
       str: 'x',
     };
     
 ==== /src/constants.ts (1 errors) ====
     import * as tsConstants from "../lib/constants";
                                  ~~~~~~~~~~~~~~~~~~
-!!! error TS2306: File '/lib/constants.js' is not a module.
+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     export { tsConstants };

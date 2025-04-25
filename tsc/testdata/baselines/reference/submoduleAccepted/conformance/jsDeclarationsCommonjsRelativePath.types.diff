@@ -23,9 +23,9 @@
 ->{ Thing } : { Thing: typeof Thing; }
 ->Thing : typeof Thing
 +>module.exports = { Thing } : { Thing: any; }
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : { Thing: any; }
++>module : { export=: { Thing: any; }; }
++>exports : { Thing: any; }
 +>{ Thing } : { Thing: any; }
 +>Thing : any
  

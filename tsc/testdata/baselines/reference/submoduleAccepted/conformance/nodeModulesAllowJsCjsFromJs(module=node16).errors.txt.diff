@@ -3,16 +3,13 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+bar.ts(1,17): error TS2306: File 'foo.cjs' is not a module.
-+foo.cjs(1,1): error TS2304: Cannot find name 'exports'.
++bar.ts(1,8): error TS2613: Module '"foo"' has no default export. Did you mean to use 'import { foo } from "foo"' instead?
 +
 +
-+==== foo.cjs (1 errors) ====
++==== foo.cjs (0 errors) ====
 +    exports.foo = "foo"
-+    ~~~~~~~
-+!!! error TS2304: Cannot find name 'exports'.
 +==== bar.ts (1 errors) ====
 +    import foo from "./foo.cjs"
-+                    ~~~~~~~~~~~
-+!!! error TS2306: File 'foo.cjs' is not a module.
++           ~~~
++!!! error TS2613: Module '"foo"' has no default export. Did you mean to use 'import { foo } from "foo"' instead?
 +    foo.foo;

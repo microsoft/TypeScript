@@ -6,12 +6,12 @@
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 1, 26))
-->exports : Symbol(export=, Decl(index.js, 1, 26))
--
++>module.exports : Symbol(export=, Decl(index.js, 1, 26))
++>module : Symbol(module.exports)
+ >exports : Symbol(export=, Decl(index.js, 1, 26))
+ 
      [TopLevelSym](x = 12) {
- >[TopLevelSym] : Symbol([TopLevelSym], Decl(index.js, 2, 18))
- >TopLevelSym : Symbol(TopLevelSym, Decl(index.js, 0, 5))
-@@= skipped -40, +36 lines =@@
+@@= skipped -40, +40 lines =@@
  >MyClass : Symbol(MyClass, Decl(index2.js, 1, 26))
  
      static [TopLevelSym] = 12;

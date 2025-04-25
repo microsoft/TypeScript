@@ -10,6 +10,10 @@ const InnerSym = Symbol();
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 module.exports = {
+>module.exports : Symbol(export=, Decl(index.js, 1, 26))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(index.js, 1, 26))
+
     [TopLevelSym](x = 12) {
 >[TopLevelSym] : Symbol([TopLevelSym], Decl(index.js, 2, 18))
 >TopLevelSym : Symbol(TopLevelSym, Decl(index.js, 0, 5))

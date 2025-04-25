@@ -6,8 +6,8 @@
  var f = require('./first');
 ->f : <T>(x: T, k: (t: T) => void) => void
 ->require('./first') : <T>(x: T, k: (t: T) => void) => void
-+>f : any
-+>require('./first') : any
++>f : (x: any, k: any) => any
++>require('./first') : (x: any, k: any) => any
  >require : any
  >'./first' : "./first"
  
@@ -15,19 +15,19 @@
 ->f(1, n => { }) : void
 ->f : <T>(x: T, k: (t: T) => void) => void
 +>f(1, n => { }) : any
-+>f : any
++>f : (x: any, k: any) => any
  >1 : 1
 ->n => { } : (n: number) => void
 ->n : number
 +>n => { } : (n: any) => void
 +>n : any
  
--=== first.js ===
--/** @template T
-- * @param {T} x
-- * @param {(t: T) => void} k
-- */
--module.exports = function (x, k) { return k(x) }
+ === first.js ===
+ /** @template T
+@@= skipped -18, +18 lines =@@
+  * @param {(t: T) => void} k
+  */
+ module.exports = function (x, k) { return k(x) }
 ->module.exports = function (x, k) { return k(x) } : <T>(x: T, k: (t: T) => void) => void
 ->module.exports : <T>(x: T, k: (t: T) => void) => void
 ->module : { exports: <T>(x: T, k: (t: T) => void) => void; }
@@ -38,4 +38,14 @@
 ->k(x) : void
 ->k : (t: T) => void
 ->x : T
--
++>module.exports = function (x, k) { return k(x) } : (x: any, k: any) => any
++>module.exports : (x: any, k: any) => any
++>module : { export=: (x: any, k: any) => any; }
++>exports : (x: any, k: any) => any
++>function (x, k) { return k(x) } : (x: any, k: any) => any
++>x : any
++>k : any
++>k(x) : any
++>k : any
++>x : any
+ 

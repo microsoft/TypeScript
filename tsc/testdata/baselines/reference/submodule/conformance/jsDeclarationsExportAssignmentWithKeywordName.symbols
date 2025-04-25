@@ -5,6 +5,10 @@ var x = 12;
 >x : Symbol(x, Decl(index.js, 0, 3))
 
 module.exports = {
+>module.exports : Symbol(export=, Decl(index.js, 0, 11))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(index.js, 0, 11))
+
     extends: 'base',
 >extends : Symbol(extends, Decl(index.js, 1, 18))
 

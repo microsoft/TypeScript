@@ -3,9 +3,9 @@
 === /lib/constants.js ===
 module.exports = {
 >module.exports = {  str: 'x',} : { str: string; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { str: string; }
+>module : { export=: { str: string; }; }
+>exports : { str: string; }
 >{  str: 'x',} : { str: string; }
 
   str: 'x',
@@ -16,8 +16,8 @@ module.exports = {
 
 === /src/constants.ts ===
 import * as tsConstants from "../lib/constants";
->tsConstants : any
+>tsConstants : { str: string; }
 
 export { tsConstants };
->tsConstants : any
+>tsConstants : { str: string; }
 

@@ -15,6 +15,8 @@
  module.exports = new Foo();
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 3, 1))
-->exports : Symbol(export=, Decl(index.js, 3, 1))
++>module.exports : Symbol(export=, Decl(index.js, 3, 1))
++>module : Symbol(module.exports)
+ >exports : Symbol(export=, Decl(index.js, 3, 1))
  >Foo : Symbol(Foo, Decl(index.js, 0, 0))
  

@@ -5,10 +5,14 @@ class Foo {}
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
 module.exports = Foo;
+>module.exports : Symbol(Foo, Decl(cls.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(Foo, Decl(cls.js, 0, 0))
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
 === usage.js ===
 import {default as Fooa} from "./cls";
+>default : Symbol(Foo, Decl(cls.js, 0, 12))
 >Fooa : Symbol(Fooa, Decl(usage.js, 0, 8))
 
 export const x = new Fooa();
@@ -16,5 +20,6 @@ export const x = new Fooa();
 >Fooa : Symbol(Fooa, Decl(usage.js, 0, 8))
 
 export {default as Foob} from "./cls";
+>default : Symbol(Foo, Decl(cls.js, 0, 12))
 >Foob : Symbol(Foob, Decl(usage.js, 4, 8))
 

@@ -99,7 +99,7 @@ class Thing {
 exports.x = {
 >exports.x = {    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
 >exports.x : any
->exports : any
+>exports : typeof import("test")
 >x : any
 >{    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
 
@@ -113,16 +113,16 @@ exports.x = {
 }
 exports.x
 >exports.x : any
->exports : any
+>exports : typeof import("test")
 >x : any
 
 /** @type {DoneStatus} */
 module.exports.y = {
 >module.exports.y = {    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
 >module.exports.y : any
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof import("test")
+>module : { "test": typeof import("test"); }
+>exports : typeof import("test")
 >y : any
 >{    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
 
@@ -136,9 +136,9 @@ module.exports.y = {
 }
 module.exports.y
 >module.exports.y : any
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof import("test")
+>module : { "test": typeof import("test"); }
+>exports : typeof import("test")
 >y : any
 
 // prototype-property assignment
@@ -193,9 +193,9 @@ F.prototype = {
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
 >module.exports = {    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { status: string; m: (n: any) => void; }
+>module : { export=: { status: string; m: (n: any) => void; }; }
+>exports : { status: string; m: (n: any) => void; }
 >{    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
 
     status: "done",

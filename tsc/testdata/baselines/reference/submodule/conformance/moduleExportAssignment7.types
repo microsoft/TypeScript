@@ -22,9 +22,9 @@ function bar() { return 4 }
 /** @typedef {() => number} buz */
 module.exports = {
 >module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
+>module : { export=: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }; }
+>exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
 >{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
 
     Thing,
@@ -59,13 +59,13 @@ module.exports = {
  * @param {import("./mod").literal} g
  */
 function jstypes(a, b, c, d, e, f, g) {
->jstypes : (a: any, b: any, c: any, d: any, e: any, f: () => number, g: any) => any
+>jstypes : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
 >a : any
 >b : any
 >c : any
 >d : any
 >e : any
->f : () => number
+>f : any
 >g : any
 
     return a.x + b.y + c() + d() + e() + f() + g.length
@@ -87,8 +87,8 @@ function jstypes(a, b, c, d, e, f, g) {
 >d : any
 >e() : any
 >e : any
->f() : number
->f : () => number
+>f() : any
+>f : any
 >g.length : any
 >g : any
 >length : any
@@ -104,44 +104,44 @@ function jstypes(a, b, c, d, e, f, g) {
  * @param {typeof import("./mod").literal} g
  */
 function jsvalues(a, b, c, d, e, f, g) {
->jsvalues : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
->a : any
->b : any
->c : any
->d : any
->e : any
+>jsvalues : (a: typeof Thing, b: typeof AnotherThing, c: () => number, d: () => number, e: () => number, f: any, g: string) => any
+>a : typeof Thing
+>b : typeof AnotherThing
+>c : () => number
+>d : () => number
+>e : () => number
 >f : any
->g : any
+>g : string
 
     return a.length + b.length + c() + d() + e() + f() + g.length
 >a.length + b.length + c() + d() + e() + f() + g.length : any
 >a.length + b.length + c() + d() + e() + f() : any
->a.length + b.length + c() + d() + e() : any
->a.length + b.length + c() + d() : any
->a.length + b.length + c() : any
->a.length + b.length : any
->a.length : any
->a : any
->length : any
->b.length : any
->b : any
->length : any
->c() : any
->c : any
->d() : any
->d : any
->e() : any
->e : any
+>a.length + b.length + c() + d() + e() : number
+>a.length + b.length + c() + d() : number
+>a.length + b.length + c() : number
+>a.length + b.length : number
+>a.length : number
+>a : typeof Thing
+>length : number
+>b.length : number
+>b : typeof AnotherThing
+>length : number
+>c() : number
+>c : () => number
+>d() : number
+>d : () => number
+>e() : number
+>e : () => number
 >f() : any
 >f : any
->g.length : any
->g : any
->length : any
+>g.length : number
+>g : string
+>length : number
 }
 
 === index.ts ===
 function types(
->types : (a: any, b: any, c: any, d: any, e: any, f: () => number, g: any) => any
+>types : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
 
     a: import('./mod').Thing,
 >a : any
@@ -159,7 +159,7 @@ function types(
 >e : any
 
     f: import('./mod').buz,
->f : () => number
+>f : any
 
     g: import('./mod').literal,
 >g : any
@@ -184,34 +184,34 @@ function types(
 >d : any
 >e() : any
 >e : any
->f() : number
->f : () => number
+>f() : any
+>f : any
 >g.length : any
 >g : any
 >length : any
 }
 
 function values(
->values : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+>values : (a: typeof Thing, b: typeof AnotherThing, c: () => number, d: () => number, e: () => number, f: any, g: string) => any
 
     a: typeof import('./mod').Thing,
->a : any
+>a : typeof Thing
 >Thing : any
 
     b: typeof import('./mod').AnotherThing,
->b : any
+>b : typeof AnotherThing
 >AnotherThing : any
 
     c: typeof import('./mod').foo,
->c : any
+>c : () => number
 >foo : any
 
     d: typeof import('./mod').qux,
->d : any
+>d : () => number
 >qux : any
 
     e: typeof import('./mod').baz,
->e : any
+>e : () => number
 >baz : any
 
     f: typeof import('./mod').buz,
@@ -219,33 +219,33 @@ function values(
 >buz : any
 
     g: typeof import('./mod').literal,
->g : any
+>g : string
 >literal : any
 
 ) {
     return a.length + b.length + c() + d() + e() + f() + g.length
 >a.length + b.length + c() + d() + e() + f() + g.length : any
 >a.length + b.length + c() + d() + e() + f() : any
->a.length + b.length + c() + d() + e() : any
->a.length + b.length + c() + d() : any
->a.length + b.length + c() : any
->a.length + b.length : any
->a.length : any
->a : any
->length : any
->b.length : any
->b : any
->length : any
->c() : any
->c : any
->d() : any
->d : any
->e() : any
->e : any
+>a.length + b.length + c() + d() + e() : number
+>a.length + b.length + c() + d() : number
+>a.length + b.length + c() : number
+>a.length + b.length : number
+>a.length : number
+>a : typeof Thing
+>length : number
+>b.length : number
+>b : typeof AnotherThing
+>length : number
+>c() : number
+>c : () => number
+>d() : number
+>d : () => number
+>e() : number
+>e : () => number
 >f() : any
 >f : any
->g.length : any
->g : any
->length : any
+>g.length : number
+>g : string
+>length : number
 }
 

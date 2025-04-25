@@ -13,6 +13,7 @@ declare var module: any, exports: any;
 const A = require("./other");
 >A : Symbol(A, Decl(index.js, 0, 5))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./other" : Symbol("other", Decl(other.js, 0, 0))
 
 const a = new A().id;
 >a : Symbol(a, Decl(index.js, 1, 5))
@@ -41,6 +42,8 @@ function A() { this.id = 1; }
 >A : Symbol(A, Decl(other.js, 0, 0))
 
 module.exports = A;
->module : Symbol(module, Decl(node.d.ts, 1, 11))
->A : Symbol(A, Decl(index.js, 0, 5))
+>module.exports : Symbol(A, Decl(other.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(A, Decl(other.js, 0, 0))
+>A : Symbol(A, Decl(other.js, 0, 0))
 

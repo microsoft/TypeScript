@@ -6,8 +6,8 @@
  var mod = require('./mod');
 ->mod : typeof mod
 ->require('./mod') : typeof mod
-+>mod : any
-+>require('./mod') : any
++>mod : typeof import("mod")
++>require('./mod') : typeof import("mod")
  >require : (name: string) => any
  >'./mod' : "./mod"
  
@@ -19,9 +19,9 @@
 ->A : typeof A
 +>a : any
 +>new mod.A() : any
-+>mod.A : any
-+>mod : any
-+>A : any
++>mod.A : () => void
++>mod : typeof import("mod")
++>A : () => void
  
  var b = new mod.B()
 ->b : B
@@ -31,9 +31,9 @@
 ->B : typeof B
 +>b : any
 +>new mod.B() : any
-+>mod.B : any
-+>mod : any
-+>B : any
++>mod.B : () => void
++>mod : typeof import("mod")
++>B : () => void
  
  a.m('nope')
 ->a.m('nope') : number
@@ -58,51 +58,64 @@
  >'not really' : "not really"
  
  === types.d.ts ===
-@@= skipped -41, +41 lines =@@
- declare var exports: any;
- >exports : any
- 
--=== mod.js ===
--/// <reference path='./types.d.ts'/>
--var A = function A() {
+@@= skipped -44, +44 lines =@@
+ === mod.js ===
+ /// <reference path='./types.d.ts'/>
+ var A = function A() {
 ->A : typeof A
 ->function A() {    this.a = 1} : typeof A
 ->A : typeof A
--
--    this.a = 1
-->this.a = 1 : 1
-->this.a : any
++>A : () => void
++>function A() {    this.a = 1} : () => void
++>A : () => void
+ 
+     this.a = 1
+ >this.a = 1 : 1
+ >this.a : any
 ->this : this
-->a : any
-->1 : 1
--}
--var B = function B() {
++>this : any
+ >a : any
+ >1 : 1
+ }
+ var B = function B() {
 ->B : typeof B
 ->function B() {    this.b = 2} : typeof B
 ->B : typeof B
--
--    this.b = 2
-->this.b = 2 : 2
-->this.b : any
++>B : () => void
++>function B() {    this.b = 2} : () => void
++>B : () => void
+ 
+     this.b = 2
+ >this.b = 2 : 2
+ >this.b : any
 ->this : this
-->b : any
-->2 : 2
--}
--exports.A = A
++>this : any
+ >b : any
+ >2 : 2
+ }
+ exports.A = A
 ->exports.A = A : typeof A
 ->exports.A : typeof A
-->exports : typeof import("mod")
++>exports.A = A : () => void
++>exports.A : () => void
+ >exports : typeof import("mod")
 ->A : typeof A
 ->A : typeof A
--
--exports.B = B
++>A : () => void
++>A : () => void
+ 
+ exports.B = B
 ->exports.B = B : typeof B
 ->exports.B : typeof B
-->exports : typeof import("mod")
++>exports.B = B : () => void
++>exports.B : () => void
+ >exports : typeof import("mod")
 ->B : typeof B
 ->B : typeof B
--
--A.prototype = B.prototype = {
++>B : () => void
++>B : () => void
+ 
+ A.prototype = B.prototype = {
 ->A.prototype = B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
 ->A.prototype : { m(n: number): number; }
 ->A : typeof A
@@ -112,16 +125,15 @@
 ->B : typeof B
 ->prototype : { m(n: number): number; }
 ->{    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
--
--    /** @param {number} n */
--    m(n) {
-->m : (n: number) => number
-->n : number
--
--        return n + 1
-->n + 1 : number
-->n : number
-->1 : 1
--    }
--}
--
++>A.prototype = B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m: (n: number) => number; }
++>A.prototype : any
++>A : () => void
++>prototype : any
++>B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m: (n: number) => number; }
++>B.prototype : any
++>B : () => void
++>prototype : any
++>{    /** @param {number} n */    m(n) {        return n + 1    }} : { m: (n: number) => number; }
+ 
+     /** @param {number} n */
+     m(n) {

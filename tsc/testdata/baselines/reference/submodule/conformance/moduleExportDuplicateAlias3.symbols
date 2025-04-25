@@ -3,6 +3,7 @@
 === test.js ===
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : Symbol(apply, Decl(test.js, 0, 7))
+>require : Symbol(require)
 
 const result = apply.toFixed()
 >result : Symbol(result, Decl(test.js, 1, 5))

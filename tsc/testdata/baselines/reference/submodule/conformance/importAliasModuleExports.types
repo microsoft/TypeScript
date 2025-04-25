@@ -10,30 +10,30 @@ class Alias {
 }
 module.exports = Alias;
 >module.exports = Alias : typeof Alias
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof Alias
+>module : { Alias: typeof Alias; }
+>exports : typeof Alias
 >Alias : typeof Alias
 
 === main.js ===
 import A from './mod1'
->A : any
+>A : typeof Alias
 
 A.prototype.foo = 0
 >A.prototype.foo = 0 : 0
 >A.prototype.foo : any
->A.prototype : any
->A : any
->prototype : any
+>A.prototype : Alias
+>A : typeof Alias
+>prototype : Alias
 >foo : any
 >0 : 0
 
 A.prototype.func = function() { this._func = 0; }
 >A.prototype.func = function() { this._func = 0; } : () => void
 >A.prototype.func : any
->A.prototype : any
->A : any
->prototype : any
+>A.prototype : Alias
+>A : typeof Alias
+>prototype : Alias
 >func : any
 >function() { this._func = 0; } : () => void
 >this._func = 0 : 0
@@ -43,40 +43,40 @@ A.prototype.func = function() { this._func = 0; }
 >0 : 0
 
 Object.defineProperty(A.prototype, "def", { value: 0 });
->Object.defineProperty(A.prototype, "def", { value: 0 }) : any
+>Object.defineProperty(A.prototype, "def", { value: 0 }) : Alias
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->A.prototype : any
->A : any
->prototype : any
+>A.prototype : Alias
+>A : typeof Alias
+>prototype : Alias
 >"def" : "def"
 >{ value: 0 } : { value: number; }
 >value : number
 >0 : 0
 
 new A().bar
->new A().bar : any
->new A() : any
->A : any
->bar : any
+>new A().bar : () => number
+>new A() : Alias
+>A : typeof Alias
+>bar : () => number
 
 new A().foo
 >new A().foo : any
->new A() : any
->A : any
+>new A() : Alias
+>A : typeof Alias
 >foo : any
 
 new A().func()
 >new A().func() : any
 >new A().func : any
->new A() : any
->A : any
+>new A() : Alias
+>A : typeof Alias
 >func : any
 
 new A().def
 >new A().def : any
->new A() : any
->A : any
+>new A() : Alias
+>A : typeof Alias
 >def : any
 

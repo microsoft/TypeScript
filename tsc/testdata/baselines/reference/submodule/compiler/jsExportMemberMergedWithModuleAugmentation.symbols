@@ -10,6 +10,10 @@ class Abcde {
 }
 
 module.exports = {
+>module.exports : Symbol(export=, Decl(test.js, 3, 1))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(test.js, 3, 1))
+
   Abcde
 >Abcde : Symbol(Abcde, Decl(test.js, 5, 18))
 
@@ -28,12 +32,14 @@ declare module "./test" {
 }
 
 new Abcde().x;
+>new Abcde().x : Symbol(x, Decl(test.js, 0, 13))
 >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
+>x : Symbol(x, Decl(test.js, 0, 13))
 
 // Bug: the type meaning from /test.js does not
 // propagate through the object literal export.
 const x: Abcde = { b: "" };
 >x : Symbol(x, Decl(index.ts, 10, 5))
->Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
+>Abcde : Symbol(Abcde)
 >b : Symbol(b, Decl(index.ts, 10, 18))
 

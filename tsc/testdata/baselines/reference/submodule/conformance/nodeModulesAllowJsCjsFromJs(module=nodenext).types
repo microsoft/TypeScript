@@ -3,9 +3,9 @@
 === foo.cjs ===
 exports.foo = "foo"
 >exports.foo = "foo" : "foo"
->exports.foo : any
->exports : any
->foo : any
+>exports.foo : "foo"
+>exports : typeof import("foo")
+>foo : "foo"
 >"foo" : "foo"
 
 === bar.ts ===

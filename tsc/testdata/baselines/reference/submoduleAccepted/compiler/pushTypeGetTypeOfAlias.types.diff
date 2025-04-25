@@ -9,19 +9,19 @@
 ->module : { exports: { (): void; blah: any; }; }
 ->exports : { (): void; blah: any; }
 +>module.exports = function () {} : () => void
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : () => void
++>module : { export=: () => void; }
++>exports : () => void
  >function () {} : () => void
  
  exports.blah = exports.someProp;
  >exports.blah = exports.someProp : any
  >exports.blah : any
 ->exports : { (): void; blah: any; }
-+>exports : any
++>exports : typeof import("bar")
  >blah : any
  >exports.someProp : any
 ->exports : { (): void; blah: any; }
-+>exports : any
++>exports : typeof import("bar")
  >someProp : any
  

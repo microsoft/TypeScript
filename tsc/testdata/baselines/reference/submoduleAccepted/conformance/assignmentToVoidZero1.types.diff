@@ -5,38 +5,21 @@
  exports.y = exports.x = void 0;
  >exports.y = exports.x = void 0 : undefined
 ->exports.y : 2
-->exports : typeof import("assignmentToVoidZero1")
++>exports.y : undefined
+ >exports : typeof import("assignmentToVoidZero1")
 ->y : 2
-+>exports.y : any
-+>exports : any
-+>y : any
++>y : undefined
  >exports.x = void 0 : undefined
-->exports.x : 1
-->exports : typeof import("assignmentToVoidZero1")
-->x : 1
-+>exports.x : any
-+>exports : any
-+>x : any
- >void 0 : undefined
- >0 : 0
- 
- exports.x = 1;
- >exports.x = 1 : 1
-->exports.x : 1
-->exports : typeof import("assignmentToVoidZero1")
-->x : 1
-+>exports.x : any
-+>exports : any
-+>x : any
- >1 : 1
+ >exports.x : 1
+ >exports : typeof import("assignmentToVoidZero1")
+@@= skipped -19, +19 lines =@@
  
  exports.y = 2;
  >exports.y = 2 : 2
 ->exports.y : 2
-->exports : typeof import("assignmentToVoidZero1")
++>exports.y : undefined
+ >exports : typeof import("assignmentToVoidZero1")
 ->y : 2
-+>exports.y : any
-+>exports : any
-+>y : any
++>y : undefined
  >2 : 2
  

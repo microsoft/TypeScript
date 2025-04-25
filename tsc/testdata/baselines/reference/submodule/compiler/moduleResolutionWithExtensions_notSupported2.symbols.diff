@@ -1,0 +1,8 @@
+--- old.moduleResolutionWithExtensions_notSupported2.symbols
++++ new.moduleResolutionWithExtensions_notSupported2.symbols
+@@= skipped -3, +3 lines =@@
+ import jsx from "./jsx";
+ >jsx : Symbol(jsx, Decl(a.ts, 0, 6))
+ 
++=== /jsx.jsx ===
++

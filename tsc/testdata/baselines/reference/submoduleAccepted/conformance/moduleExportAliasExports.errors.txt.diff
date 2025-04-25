@@ -3,25 +3,19 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+Eloquent.js(3,1): error TS2304: Cannot find name 'exports'.
-+Eloquent.js(4,1): error TS2304: Cannot find name 'exports'.
-+Eloquent.js(5,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+Eloquent.js(5,18): error TS2304: Cannot find name 'exports'.
++Eloquent.js(5,1): error TS1231: An export assignment must be at the top level of a file or module declaration.
++Eloquent.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
-+==== Eloquent.js (4 errors) ====
++==== Eloquent.js (2 errors) ====
 +    // bug #27365, crashes from github.com/marijnh/Eloquent-JavaScript
 +    (function() {
 +    exports.bigOak = 1
-+    ~~~~~~~
-+!!! error TS2304: Cannot find name 'exports'.
 +    exports.everywhere = 2
-+    ~~~~~~~
-+!!! error TS2304: Cannot find name 'exports'.
 +    module.exports = exports
 +    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+                     ~~~~~~~
-+!!! error TS2304: Cannot find name 'exports'.
++!!! error TS1231: An export assignment must be at the top level of a file or module declaration.
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    })()
 +    

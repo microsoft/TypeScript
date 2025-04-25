@@ -23,6 +23,9 @@
 ->module.exports : Symbol(module.exports, Decl(axios.js, 0, 0))
 ->module : Symbol(export=, Decl(axios.js, 7, 9))
 ->exports : Symbol(export=, Decl(axios.js, 7, 9))
++>module.exports : Symbol(axios, Decl(axios.js, 5, 3))
++>module : Symbol(module.exports)
++>exports : Symbol(axios, Decl(axios.js, 5, 3))
  >axios : Symbol(axios, Decl(axios.js, 5, 3))
  
  module.exports.default = axios;
@@ -31,5 +34,8 @@
 ->module : Symbol(module, Decl(axios.js, 7, 9))
 ->exports : Symbol(module.exports, Decl(axios.js, 0, 0))
 ->default : Symbol(default, Decl(axios.js, 8, 23))
++>module.exports : Symbol(axios, Decl(axios.js, 5, 3))
++>module : Symbol(module.exports)
++>exports : Symbol(axios, Decl(axios.js, 5, 3))
  >axios : Symbol(axios, Decl(axios.js, 5, 3))
  

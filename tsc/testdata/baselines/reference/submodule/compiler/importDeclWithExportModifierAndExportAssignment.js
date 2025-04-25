@@ -10,4 +10,4 @@ export = x;
 
 //// [importDeclWithExportModifierAndExportAssignment.js]
 "use strict";
-module.exports = x;
+Object.defineProperty(exports, "__esModule", { value: true });

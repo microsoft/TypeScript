@@ -1,14 +1,17 @@
-mod3.js(6,1): error TS2304: Cannot find name 'exports'.
+mod1.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+use.js(1,29): error TS2694: Namespace 'C' has no exported member 'Both'.
 
 
 ==== commonjs.d.ts (0 errors) ====
     declare var module: { exports: any};
-==== mod1.js (0 errors) ====
+==== mod1.js (1 errors) ====
     /// <reference path="./commonjs.d.ts"/>
     /** @typedef {{ type: "a", x: 1 }} A */
     /** @typedef {{ type: "b", y: 1 }} B */
     /** @typedef {A | B} Both */
     module.exports = C
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     function C() {
         this.p = 1
     }
@@ -23,20 +26,20 @@ mod3.js(6,1): error TS2304: Cannot find name 'exports'.
         this.p = 1
     }
     
-==== mod3.js (1 errors) ====
+==== mod3.js (0 errors) ====
     /// <reference path="./commonjs.d.ts"/>
     /** @typedef {{ type: "a", x: 1 }} A */
     /** @typedef {{ type: "b", y: 1 }} B */
     /** @typedef {A | B} Both */
     
     exports.C = function() {
-    ~~~~~~~
-!!! error TS2304: Cannot find name 'exports'.
         this.p = 1
     }
     
-==== use.js (0 errors) ====
+==== use.js (1 errors) ====
     /** @type {import('./mod1').Both} */
+                                ~~~~
+!!! error TS2694: Namespace 'C' has no exported member 'Both'.
     var both1 = { type: 'a', x: 1 };
     /** @type {import('./mod2').Both} */
     var both2 = both1;

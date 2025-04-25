@@ -3,13 +3,12 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+usage.js(1,38): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(10,12): error TS2749: 'Thing' refers to a value, but is being used as a type here. Did you mean 'typeof Thing'?
++index.js(17,16): error TS2749: 'Thing' refers to a value, but is being used as a type here. Did you mean 'typeof Thing'?
 +
 +
-+==== usage.js (1 errors) ====
++==== usage.js (0 errors) ====
 +    const { Thing, useThing, cbThing } = require("./index");
-+                                         ~~~~~~~
-+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +    
 +    useThing(Thing.a);
 +    
@@ -27,7 +26,7 @@
 +        };
 +    });
 +    
-+==== index.js (0 errors) ====
++==== index.js (2 errors) ====
 +    /** @enum {string} */
 +    const Thing = Object.freeze({
 +        a: "thing",
@@ -38,6 +37,8 @@
 +    
 +    /**
 +     * @param {Thing} x
++               ~~~~~
++!!! error TS2749: 'Thing' refers to a value, but is being used as a type here. Did you mean 'typeof Thing'?
 +     */
 +    function useThing(x) {}
 +    
@@ -45,6 +46,8 @@
 +    
 +    /**
 +     * @param {(x: Thing) => void} x
++                   ~~~~~
++!!! error TS2749: 'Thing' refers to a value, but is being used as a type here. Did you mean 'typeof Thing'?
 +     */
 +    function cbThing(x) {}
 +    

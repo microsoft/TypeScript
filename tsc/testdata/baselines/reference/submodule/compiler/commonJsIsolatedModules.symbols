@@ -2,6 +2,10 @@
 
 === index.js ===
 module.exports = {}
+>module.exports : Symbol(export=, Decl(index.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(index.js, 0, 0))
+
 var x = 1
 >x : Symbol(x, Decl(index.js, 1, 3))
 

@@ -2,10 +2,22 @@
 
 === mod.js ===
 exports.n = {};
+>exports.n : Symbol(n, Decl(mod.js, 0, 0))
+>exports : Symbol("mod", Decl(mod.js, 0, 0))
+>n : Symbol(n, Decl(mod.js, 0, 0))
+
 exports.n.K = function () {
+>exports.n : Symbol(n, Decl(mod.js, 0, 0))
+>exports : Symbol("mod", Decl(mod.js, 0, 0))
+>n : Symbol(n, Decl(mod.js, 0, 0))
+
     this.x = 10;
 }
 exports.Classic = class {
+>exports.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+>exports : Symbol("mod", Decl(mod.js, 0, 0))
+>Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+
     constructor() {
         this.p = 1
 >this : Symbol(Classic, Decl(mod.js, 4, 17))
@@ -18,14 +30,18 @@ import * as s from './mod'
 
 var k = new s.n.K()
 >k : Symbol(k, Decl(use.js, 2, 3))
+>s.n : Symbol(n, Decl(mod.js, 0, 0))
 >s : Symbol(s, Decl(use.js, 0, 6))
+>n : Symbol(n, Decl(mod.js, 0, 0))
 
 k.x
 >k : Symbol(k, Decl(use.js, 2, 3))
 
 var classic = new s.Classic()
 >classic : Symbol(classic, Decl(use.js, 4, 3))
+>s.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 >s : Symbol(s, Decl(use.js, 0, 6))
+>Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 
 
 /** @param {s.n.K} c

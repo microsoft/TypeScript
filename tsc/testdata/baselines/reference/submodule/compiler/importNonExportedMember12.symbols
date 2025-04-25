@@ -1,8 +1,10 @@
 //// [tests/cases/compiler/importNonExportedMember12.ts] ////
 
 === /node_modules/foo/src/index.js ===
-
 module.exports = 1;
+>module.exports : Symbol(export=, Decl(index.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(index.js, 0, 0))
 
 === /a.js ===
 export const A = require("foo");

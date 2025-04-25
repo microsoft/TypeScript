@@ -5,6 +5,11 @@ export const x = 0;
 >x : Symbol(x, Decl(a.js, 0, 12))
 
 module.exports.y = 0; // Error
+>module.exports.y : Symbol(y, Decl(a.js, 0, 19))
+>module.exports : Symbol("/a", Decl(a.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol("/a", Decl(a.js, 0, 0))
+>y : Symbol(y, Decl(a.js, 0, 19))
 
 === /b.ts ===
 
@@ -30,8 +35,10 @@ export = 0;
 export default 0;
 
 === /g.js ===
-
 exports.default = 0;
+>exports.default : Symbol(default, Decl(g.js, 0, 0))
+>exports : Symbol("/g", Decl(g.js, 0, 0))
+>default : Symbol(default, Decl(g.js, 0, 0))
 
 === /main1.ts ===
 import { x, y } from "./a"; // No y
@@ -129,7 +136,9 @@ import g2 = require("./g"); // { default: 0 }
 >g2 : Symbol(g2, Decl(main1.ts, 29, 11))
 
 g2.default;
+>g2.default : Symbol(default, Decl(g.js, 0, 0))
 >g2 : Symbol(g2, Decl(main1.ts, 29, 11))
+>default : Symbol(default, Decl(g.js, 0, 0))
 
 === /main2.mts ===
 import { x, y } from "./a"; // No y
@@ -196,46 +205,62 @@ import a1 = require("./a"); // Error in JS
 
 const a2 = require("./a"); // { x: 0 }
 >a2 : Symbol(a2, Decl(main3.cjs, 2, 5))
+>require : Symbol(require)
+>"./a" : Symbol("/a", Decl(a.js, 0, 0))
 
 import b1 from "./b"; // 0
 >b1 : Symbol(b1, Decl(main3.cjs, 4, 6))
 
 const b2 = require("./b"); // { default: 0 }
 >b2 : Symbol(b2, Decl(main3.cjs, 5, 5))
+>require : Symbol(require)
+>"./b" : Symbol("/b", Decl(b.ts, 0, 0))
 
 import c1 from "./c"; // { default: [Function: default] }
 >c1 : Symbol(c1, Decl(main3.cjs, 7, 6))
 
 const c2 = require("./c"); // { default: [Function: default] }
 >c2 : Symbol(c2, Decl(main3.cjs, 8, 5))
+>require : Symbol(require)
+>"./c" : Symbol("/c", Decl(c.ts, 0, 0))
 
 import d1 from "./d"; // [Function: default]
 >d1 : Symbol(d1, Decl(main3.cjs, 9, 6))
 
 const d2 = require("./d"); // [Function: default]
 >d2 : Symbol(d2, Decl(main3.cjs, 10, 5))
+>require : Symbol(require)
+>"./d" : Symbol("/d", Decl(d.ts, 0, 0))
 
 import e1 from "./e.mjs"; // 0
 >e1 : Symbol(e1, Decl(main3.cjs, 11, 6))
 
 const e2 = require("./e.mjs"); // 0
 >e2 : Symbol(e2, Decl(main3.cjs, 12, 5))
+>require : Symbol(require)
+>"./e.mjs" : Symbol("/e", Decl(e.mts, 0, 0))
 
 import f1 from "./f.cjs"; // 0
 >f1 : Symbol(f1, Decl(main3.cjs, 13, 6))
 
 const f2 = require("./f.cjs"); // { default: 0 }
 >f2 : Symbol(f2, Decl(main3.cjs, 14, 5))
+>require : Symbol(require)
+>"./f.cjs" : Symbol("/f", Decl(f.cts, 0, 0))
 
 import g1 from "./g"; // { default: 0 }
 >g1 : Symbol(g1, Decl(main3.cjs, 16, 6))
 
 const g2 = require("./g"); // { default: 0 }
 >g2 : Symbol(g2, Decl(main3.cjs, 17, 5))
+>require : Symbol(require)
+>"./g" : Symbol("/g", Decl(g.js, 0, 0))
 
 === /main4.cjs ===
-
 exports.x = require("./g");
+>exports.x : Symbol(x, Decl(main4.cjs, 0, 0))
+>exports : Symbol("/main4", Decl(main4.cjs, 0, 0))
+>x : Symbol(x, Decl(main4.cjs, 0, 0))
 
 === /dummy.ts ===
 

@@ -3,8 +3,8 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+cls.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+cls.js(7,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++cls.js(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
++cls.js(7,16): error TS2339: Property 'Strings' does not exist on type 'typeof Foo'.
 +
 +
 +==== cls.js (2 errors) ====
@@ -14,8 +14,8 @@
 +    };
 +    class Foo {}
 +    module.exports = Foo;
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    module.exports.Strings = Strings;
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++                   ~~~~~~~
++!!! error TS2339: Property 'Strings' does not exist on type 'typeof Foo'.

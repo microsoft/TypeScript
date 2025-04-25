@@ -9,15 +9,16 @@
 -  Property 'my-fake-sym' does not exist on type 'F'.
 -usage.js(4,11): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'F'.
 -  Property '[_sym]' does not exist on type 'F'.
-+usage.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++lateBoundAssignmentDeclarationSupport5.js(11,15): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++usage.js(2,15): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
  
  
 -==== usage.js (2 errors) ====
 +==== usage.js (1 errors) ====
      const x = require("./lateBoundAssignmentDeclarationSupport5.js");
-+              ~~~~~~~
-+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
      const inst =  new x.F();
++                  ~~~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
      const y = inst["my-fake-sym"];
 -              ~~~~~~~~~~~~~~~~~~~
 -!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'F'.
@@ -28,13 +29,16 @@
 -!!! error TS7053:   Property '[_sym]' does not exist on type 'F'.
      
 -==== lateBoundAssignmentDeclarationSupport5.js (2 errors) ====
-+==== lateBoundAssignmentDeclarationSupport5.js (0 errors) ====
++==== lateBoundAssignmentDeclarationSupport5.js (1 errors) ====
      // currently unsupported
      const _sym = Symbol();
      const _str = "my-fake-sym";
-@@= skipped -32, +21 lines =@@
+@@= skipped -31, +21 lines =@@
+         [_str]: "ok"
      }
      const inst =  new F();
++                  ~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
      const _y = inst[_str];
 -               ~~~~~~~~~~
 -!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'F'.

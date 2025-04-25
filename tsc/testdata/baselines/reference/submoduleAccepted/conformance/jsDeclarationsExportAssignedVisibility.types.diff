@@ -1,57 +1,28 @@
 --- old.jsDeclarationsExportAssignedVisibility.types
 +++ new.jsDeclarationsExportAssignedVisibility.types
-@@= skipped -1, +1 lines =@@
- 
- === index.js ===
- const Obj = require("./obj");
-->Obj : typeof Obj
-->require("./obj") : typeof Obj
-+>Obj : any
-+>require("./obj") : any
- >require : any
- >"./obj" : "./obj"
- 
-@@= skipped -10, +10 lines =@@
- 
-     constructor() {
-         this.usage = new Obj();
-->this.usage = new Obj() : Obj
-+>this.usage = new Obj() : any
- >this.usage : any
- >this : this
- >usage : any
-->new Obj() : Obj
-->Obj : typeof Obj
-+>new Obj() : any
-+>Obj : any
-     }
- }
- 
+@@= skipped -23, +23 lines =@@
  module.exports = Container;
  >module.exports = Container : typeof Container
-->module.exports : typeof Container
+ >module.exports : typeof Container
 ->module : { exports: typeof Container; }
-->exports : typeof Container
-+>module.exports : any
-+>module : any
-+>exports : any
++>module : { Container: typeof Container; }
+ >exports : typeof Container
  >Container : typeof Container
  
--=== obj.js ===
--module.exports = class Obj {
+ === obj.js ===
+ module.exports = class Obj {
 ->module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("obj")
 ->module.exports : typeof import("obj")
 ->module : { exports: typeof import("obj"); }
 ->exports : typeof import("obj")
 ->class Obj {    constructor() {        this.x = 12;    }} : typeof import("obj")
 ->Obj : typeof import("obj")
--
--    constructor() {
--        this.x = 12;
-->this.x = 12 : 12
-->this.x : any
-->this : this
-->x : any
-->12 : 12
--    }
--}
++>module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof Obj
++>module.exports : typeof Obj
++>module : { Obj: typeof Obj; }
++>exports : typeof Obj
++>class Obj {    constructor() {        this.x = 12;    }} : typeof Obj
++>Obj : typeof Obj
+ 
+     constructor() {
+         this.x = 12;

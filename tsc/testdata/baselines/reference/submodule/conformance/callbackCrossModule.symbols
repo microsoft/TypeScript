@@ -6,6 +6,9 @@
  * @return {any} I don't even know what this should return
  */
 module.exports = C
+>module.exports : Symbol(C, Decl(mod1.js, 4, 18))
+>module : Symbol(module.exports)
+>exports : Symbol(C, Decl(mod1.js, 4, 18))
 >C : Symbol(C, Decl(mod1.js, 4, 18))
 
 function C() {

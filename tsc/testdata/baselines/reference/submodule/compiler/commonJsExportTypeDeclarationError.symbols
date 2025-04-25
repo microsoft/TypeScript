@@ -2,6 +2,10 @@
 
 === test.js ===
 module.exports = {
+>module.exports : Symbol(export=, Decl(test.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(test.js, 0, 0))
+
    message: ""
 >message : Symbol(message, Decl(test.js, 0, 18))
 }
@@ -30,5 +34,5 @@ import test from "./test";
 
 export type test = test;
 >test : Symbol(test, Decl(types3.ts, 0, 26))
->test : Symbol(test, Decl(types3.ts, 0, 6), Decl(types3.ts, 0, 26))
+>test : Symbol(test, Decl(types3.ts, 0, 26))
 

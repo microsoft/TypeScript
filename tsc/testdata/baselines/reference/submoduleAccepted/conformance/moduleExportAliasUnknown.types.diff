@@ -5,7 +5,16 @@
  >module.exports = window.nonprop : any
  >module.exports : any
 ->module : { exports: any; }
-+>module : any
++>module : { unknown: any; }
  >exports : any
  >window.nonprop : any
  >window : Window & typeof globalThis
+@@= skipped -9, +9 lines =@@
+ exports.foo = bar;
+ >exports.foo = bar : any
+ >exports.foo : any
+->exports : any
++>exports : typeof import("bug27025")
+ >foo : any
+ >bar : any
+ 

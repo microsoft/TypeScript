@@ -12,9 +12,9 @@ declare var module: { exports: any};
 /** @typedef {A | B} Both */
 module.exports = C
 >module.exports = C : () => void
->module.exports : any
->module : { exports: any; }
->exports : any
+>module.exports : () => void
+>module : { C: () => void; }
+>exports : () => void
 >C : () => void
 
 function C() {
@@ -54,7 +54,7 @@ export function C() {
 exports.C = function() {
 >exports.C = function() {    this.p = 1} : () => void
 >exports.C : any
->exports : any
+>exports : typeof import("mod3")
 >C : any
 >function() {    this.p = 1} : () => void
 
@@ -69,22 +69,22 @@ exports.C = function() {
 === use.js ===
 /** @type {import('./mod1').Both} */
 var both1 = { type: 'a', x: 1 };
->both1 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
->{ type: 'a', x: 1 } : { type: "a"; x: 1; }
->type : "a"
+>both1 : any
+>{ type: 'a', x: 1 } : { type: string; x: number; }
+>type : string
 >'a' : "a"
->x : 1
+>x : number
 >1 : 1
 
 /** @type {import('./mod2').Both} */
 var both2 = both1;
 >both2 : Both
->both1 : { type: "a"; x: 1; }
+>both1 : any
 
 /** @type {import('./mod3').Both} */
 var both3 = both2;
 >both3 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
->both2 : A
+>both2 : Both
 
 
 

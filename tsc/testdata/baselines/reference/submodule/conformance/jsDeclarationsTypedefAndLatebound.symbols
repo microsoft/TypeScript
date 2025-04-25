@@ -3,6 +3,8 @@
 === index.js ===
 const LazySet = require("./LazySet");
 >LazySet : Symbol(LazySet, Decl(index.js, 0, 5))
+>require : Symbol(require)
+>"./LazySet" : Symbol("LazySet", Decl(LazySet.js, 0, 0))
 
 /** @type {LazySet} */
 const stringSet = undefined;
@@ -10,7 +12,9 @@ const stringSet = undefined;
 >undefined : Symbol(undefined)
 
 stringSet.addAll(stringSet);
+>stringSet.addAll : Symbol(addAll, Decl(LazySet.js, 4, 15))
 >stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
+>addAll : Symbol(addAll, Decl(LazySet.js, 4, 15))
 >stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
 
 
@@ -37,5 +41,8 @@ class LazySet {
 }
 
 module.exports = LazySet;
+>module.exports : Symbol(LazySet, Decl(LazySet.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(LazySet, Decl(LazySet.js, 0, 0))
 >LazySet : Symbol(LazySet, Decl(LazySet.js, 0, 0))
 

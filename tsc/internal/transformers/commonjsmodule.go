@@ -69,6 +69,8 @@ func (tx *CommonJSModuleTransformer) visitTopLevel(node *ast.Node) *ast.Node {
 		node = tx.visitTopLevelExportDeclaration(node.AsExportDeclaration())
 	case ast.KindExportAssignment:
 		node = tx.visitTopLevelExportAssignment(node.AsExportAssignment())
+	case ast.KindJSExportAssignment:
+		node = nil
 	case ast.KindFunctionDeclaration:
 		node = tx.visitTopLevelFunctionDeclaration(node.AsFunctionDeclaration())
 	case ast.KindClassDeclaration:
@@ -1632,7 +1634,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 	needsRewrite := false
 	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		if ast.IsImportCall(node.AsNode()) && len(node.Arguments.Nodes) > 0 ||
-			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode(), false /*requireStringLiteralLikeArgument*/) {
+			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode()) {
 			needsRewrite = true
 		}
 	}

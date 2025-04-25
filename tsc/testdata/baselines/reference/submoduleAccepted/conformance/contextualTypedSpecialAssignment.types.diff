@@ -126,12 +126,11 @@
  exports.x = {
 ->exports.x = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 ->exports.x : DoneStatus
-->exports : typeof import("test")
-->x : DoneStatus
-->{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 +>exports.x = {    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
 +>exports.x : any
-+>exports : any
+ >exports : typeof import("test")
+->x : DoneStatus
+->{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 +>x : any
 +>{    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
  
@@ -148,10 +147,9 @@
  }
  exports.x
 ->exports.x : DoneStatus
-->exports : typeof import("test")
-->x : DoneStatus
 +>exports.x : any
-+>exports : any
+ >exports : typeof import("test")
+->x : DoneStatus
 +>x : any
  
  /** @type {DoneStatus} */
@@ -165,9 +163,9 @@
 ->{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 +>module.exports.y = {    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
 +>module.exports.y : any
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : typeof import("test")
++>module : { "test": typeof import("test"); }
++>exports : typeof import("test")
 +>y : any
 +>{    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
  
@@ -189,9 +187,9 @@
 ->exports : typeof module.exports
 ->y : DoneStatus
 +>module.exports.y : any
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : typeof import("test")
++>module : { "test": typeof import("test"); }
++>exports : typeof import("test")
 +>y : any
  
  // prototype-property assignment
@@ -269,9 +267,9 @@
 ->exports : { status: "done"; m(n: number): void; }
 ->{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 +>module.exports = {    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : { status: string; m: (n: any) => void; }
++>module : { export=: { status: string; m: (n: any) => void; }; }
++>exports : { status: string; m: (n: any) => void; }
 +>{    status: "done",    m(n) { }} : { status: string; m: (n: any) => void; }
  
      status: "done",

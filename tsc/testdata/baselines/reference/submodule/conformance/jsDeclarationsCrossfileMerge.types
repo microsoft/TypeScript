@@ -2,26 +2,26 @@
 
 === index.js ===
 const m = require("./exporter");
->m : any
->require("./exporter") : any
+>m : typeof import("exporter")
+>require("./exporter") : typeof import("exporter")
 >require : any
 >"./exporter" : "./exporter"
 
 module.exports = m.default;
->module.exports = m.default : any
->module.exports : any
->module : any
->exports : any
->m.default : any
->m : any
->default : any
+>module.exports = m.default : () => void
+>module.exports : () => void
+>module : { validate: () => void; }
+>exports : () => void
+>m.default : () => void
+>m : typeof import("exporter")
+>default : () => void
 
 module.exports.memberName = "thing";
 >module.exports.memberName = "thing" : "thing"
 >module.exports.memberName : any
->module.exports : any
->module : any
->exports : any
+>module.exports : () => void
+>module : { validate: () => void; }
+>exports : () => void
 >memberName : any
 >"thing" : "thing"
 

@@ -24,3 +24,34 @@ foo.y // ignored from shortid/index.js
 >y : any
 
 
+=== /node_modules/shortid/node_modules/z/index.js ===
+// z will not be found because maxNodeModulesJsDepth: 0
+module.exports = { z: 'no' };
+>module.exports = { z: 'no' } : { z: string; }
+>module.exports : { z: string; }
+>module : { export=: { z: string; }; }
+>exports : { z: string; }
+>{ z: 'no' } : { z: string; }
+>z : string
+>'no' : "no"
+
+=== /node_modules/shortid/index.js ===
+var z = require('z');
+>z : { z: string; }
+>require('z') : { z: string; }
+>require : any
+>'z' : "z"
+
+var y = { y: 'foo' };
+>y : { y: string; }
+>{ y: 'foo' } : { y: string; }
+>y : string
+>'foo' : "foo"
+
+module.exports = y;
+>module.exports = y : { y: string; }
+>module.exports : { y: string; }
+>module : { y: { y: string; }; }
+>exports : { y: string; }
+>y : { y: string; }
+

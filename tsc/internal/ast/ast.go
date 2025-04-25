@@ -357,7 +357,7 @@ func (n *Node) Expression() *Node {
 		return n.AsThrowStatement().Expression
 	case KindExternalModuleReference:
 		return n.AsExternalModuleReference().Expression
-	case KindExportAssignment:
+	case KindExportAssignment, KindJSExportAssignment:
 		return n.AsExportAssignment().Expression
 	case KindDecorator:
 		return n.AsDecorator().Expression
@@ -532,7 +532,7 @@ func (n *Node) Type() *Node {
 		return n.AsJSDocNonNullableType().Type
 	case KindJSDocOptionalType:
 		return n.AsJSDocOptionalType().Type
-	case KindEnumMember, KindBindingElement, KindExportAssignment, KindBinaryExpression:
+	case KindEnumMember, KindBindingElement, KindExportAssignment, KindJSExportAssignment, KindBinaryExpression, KindCommonJSExport:
 		return nil
 	default:
 		funcLike := n.FunctionLikeData()
@@ -905,6 +905,10 @@ func (n *Node) AsVariableDeclaration() *VariableDeclaration {
 
 func (n *Node) AsExportAssignment() *ExportAssignment {
 	return n.data.(*ExportAssignment)
+}
+
+func (n *Node) AsCommonJSExport() *CommonJSExport {
+	return n.data.(*CommonJSExport)
 }
 
 func (n *Node) AsObjectLiteralExpression() *ObjectLiteralExpression {
@@ -4314,6 +4318,7 @@ func IsNamedImports(node *Node) bool {
 
 // This is either an `export =` or an `export default` declaration.
 // Unless `isExportEquals` is set, this node was parsed as an `export default`.
+// If Kind is KindJSExportAssignment, it is a synthetic declaration for `module.exports =`.
 type ExportAssignment struct {
 	StatementBase
 	DeclarationBase
@@ -4323,17 +4328,25 @@ type ExportAssignment struct {
 	Expression     *Expression // Expression
 }
 
-func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEquals bool, expression *Expression) *Node {
+func (f *NodeFactory) newExportOrJSExportAssignment(kind Kind, modifiers *ModifierList, isExportEquals bool, expression *Expression) *Node {
 	data := &ExportAssignment{}
 	data.modifiers = modifiers
 	data.IsExportEquals = isExportEquals
 	data.Expression = expression
-	return f.newNode(KindExportAssignment, data)
+	return f.newNode(kind, data)
+}
+
+func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEquals bool, expression *Expression) *Node {
+	return f.newExportOrJSExportAssignment(KindExportAssignment, modifiers, isExportEquals, expression)
+}
+
+func (f *NodeFactory) NewJSExportAssignment(expression *Expression) *Node {
+	return f.newExportOrJSExportAssignment(KindJSExportAssignment, nil /*modifiers*/, true, expression)
 }
 
 func (f *NodeFactory) UpdateExportAssignment(node *ExportAssignment, modifiers *ModifierList, expression *Expression) *Node {
 	if modifiers != node.modifiers || expression != node.Expression {
-		return updateNode(f.NewExportAssignment(modifiers, node.IsExportEquals, expression), node.AsNode(), f.hooks)
+		return updateNode(f.newExportOrJSExportAssignment(node.Kind, modifiers, node.IsExportEquals, expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
@@ -4347,7 +4360,7 @@ func (node *ExportAssignment) VisitEachChild(v *NodeVisitor) *Node {
 }
 
 func (node *ExportAssignment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewExportAssignment(node.Modifiers(), node.IsExportEquals, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().newExportOrJSExportAssignment(node.Kind, node.Modifiers(), node.IsExportEquals, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ExportAssignment) computeSubtreeFacts() SubtreeFacts {
@@ -4356,6 +4369,60 @@ func (node *ExportAssignment) computeSubtreeFacts() SubtreeFacts {
 
 func IsExportAssignment(node *Node) bool {
 	return node.Kind == KindExportAssignment
+}
+
+func IsJSExportAssignment(node *Node) bool {
+	return node.Kind == KindJSExportAssignment
+}
+
+func IsAnyExportAssignment(node *Node) bool {
+	return node.Kind == KindExportAssignment || node.Kind == KindJSExportAssignment
+}
+
+// CommonJSExport
+
+type CommonJSExport struct {
+	StatementBase
+	DeclarationBase
+	ExportableBase
+	ModifiersBase
+	name        *IdentifierNode
+	Initializer *Expression
+}
+
+func (f *NodeFactory) NewCommonJSExport(modifiers *ModifierList, name *IdentifierNode, initializer *Expression) *Node {
+	data := &CommonJSExport{}
+	data.modifiers = modifiers
+	data.name = name
+	data.Initializer = initializer
+	return newNode(KindCommonJSExport, data, f.hooks)
+}
+
+func (f *NodeFactory) UpdateCommonJSExport(node *CommonJSExport, modifiers *ModifierList, name *IdentifierNode, initializer *Expression) *Node {
+	if modifiers != node.modifiers || initializer != node.Initializer || name != node.name {
+		return updateNode(f.NewCommonJSExport(node.modifiers, name, initializer), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func (node *CommonJSExport) ForEachChild(v Visitor) bool {
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.Initializer)
+}
+
+func (node *CommonJSExport) VisitEachChild(v *NodeVisitor) *Node {
+	return v.Factory.UpdateCommonJSExport(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.Initializer))
+}
+
+func (node *CommonJSExport) Clone(f NodeFactoryCoercible) *Node {
+	return cloneNode(f.AsNodeFactory().NewCommonJSExport(node.Modifiers(), node.name, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func IsCommonJSExport(node *Node) bool {
+	return node.Kind == KindCommonJSExport
+}
+
+func (node *CommonJSExport) Name() *DeclarationName {
+	return node.name
 }
 
 // NamespaceExportDeclaration

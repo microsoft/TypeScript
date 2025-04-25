@@ -71,7 +71,7 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 			return nil
 		}
 		return node
-	case ast.KindExportAssignment:
+	case ast.KindExportAssignment, ast.KindJSExportAssignment:
 		if !tx.isElisionBlocked(node) && !tx.compilerOptions.VerbatimModuleSyntax.IsTrue() && !tx.isValueAliasDeclaration(node) {
 			// elide unused import
 			return nil

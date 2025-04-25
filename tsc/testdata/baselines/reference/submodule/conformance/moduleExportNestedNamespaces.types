@@ -4,9 +4,9 @@
 module.exports.n = {};
 >module.exports.n = {} : {}
 >module.exports.n : any
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof import("mod")
+>module : { "mod": typeof import("mod"); }
+>exports : typeof import("mod")
 >n : any
 >{} : {}
 
@@ -14,9 +14,9 @@ module.exports.n.K = function C() {
 >module.exports.n.K = function C() {    this.x = 10;} : () => void
 >module.exports.n.K : any
 >module.exports.n : any
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof import("mod")
+>module : { "mod": typeof import("mod"); }
+>exports : typeof import("mod")
 >n : any
 >K : any
 >function C() {    this.x = 10;} : () => void
@@ -31,11 +31,11 @@ module.exports.n.K = function C() {
 }
 module.exports.Classic = class {
 >module.exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
->module.exports.Classic : any
->module.exports : any
->module : any
->exports : any
->Classic : any
+>module.exports.Classic : typeof Classic
+>module.exports : typeof import("mod")
+>module : { "mod": typeof import("mod"); }
+>exports : typeof import("mod")
+>Classic : typeof Classic
 >class {    constructor() {        this.p = 1    }} : typeof Classic
 
     constructor() {
@@ -50,14 +50,14 @@ module.exports.Classic = class {
 
 === use.js ===
 import * as s from './mod'
->s : any
+>s : typeof import("mod")
 
 var k = new s.n.K()
 >k : any
 >new s.n.K() : any
 >s.n.K : any
 >s.n : any
->s : any
+>s : typeof import("mod")
 >n : any
 >K : any
 
@@ -67,11 +67,11 @@ k.x
 >x : any
 
 var classic = new s.Classic()
->classic : any
->new s.Classic() : any
->s.Classic : any
->s : any
->Classic : any
+>classic : Classic
+>new s.Classic() : Classic
+>s.Classic : typeof Classic
+>s : typeof import("mod")
+>Classic : typeof Classic
 
 
 /** @param {s.n.K} c

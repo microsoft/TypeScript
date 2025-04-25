@@ -3,19 +3,19 @@
 === a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')
->mod1 : any
->require('./mod1') : any
+>mod1 : () => void
+>require('./mod1') : () => void
 >require : (name: string) => any
 >'./mod1' : "./mod1"
 
 mod1()
->mod1() : any
->mod1 : any
+>mod1() : void
+>mod1 : () => void
 
 mod1.f() // error, not enough arguments
 >mod1.f() : any
 >mod1.f : any
->mod1 : any
+>mod1 : () => void
 >f : any
 
 === requires.d.ts ===
@@ -26,4 +26,24 @@ declare var module: { exports: any };
 declare function require(name: string): any;
 >require : (name: string) => any
 >name : string
+
+=== mod1.js ===
+/// <reference path='./requires.d.ts' />
+module.exports = function () { }
+>module.exports = function () { } : () => void
+>module.exports : () => void
+>module : { export=: () => void; }
+>exports : () => void
+>function () { } : () => void
+
+/** @param {number} a */
+module.exports.f = function (a) { }
+>module.exports.f = function (a) { } : (a: any) => void
+>module.exports.f : any
+>module.exports : () => void
+>module : { export=: () => void; }
+>exports : () => void
+>f : any
+>function (a) { } : (a: any) => void
+>a : any
 

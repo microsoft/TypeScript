@@ -1,48 +1,55 @@
 --- old.lateBoundAssignmentDeclarationSupport2.symbols
 +++ new.lateBoundAssignmentDeclarationSupport2.symbols
-@@= skipped -2, +2 lines =@@
- === usage.js ===
+@@= skipped -3, +3 lines =@@
  const x = require("./lateBoundAssignmentDeclarationSupport2.js");
  >x : Symbol(x, Decl(usage.js, 0, 5))
-->require : Symbol(require)
+ >require : Symbol(require)
 ->"./lateBoundAssignmentDeclarationSupport2.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
++>"./lateBoundAssignmentDeclarationSupport2.js" : Symbol("lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
  
  const y = x["my-fake-sym"];
  >y : Symbol(y, Decl(usage.js, 1, 5))
-@@= skipped -10, +8 lines =@@
+@@= skipped -9, +9 lines =@@
  const z = x[x.S];
  >z : Symbol(z, Decl(usage.js, 2, 5))
  >x : Symbol(x, Decl(usage.js, 0, 5))
 ->x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
++>x.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
  >x : Symbol(x, Decl(usage.js, 0, 5))
 ->S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
++>S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
  
--=== lateBoundAssignmentDeclarationSupport2.js ===
--// currently unsupported
--const _sym = Symbol();
-->_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
--
--const _str = "my-fake-sym";
-->_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport2.js, 2, 5))
--
--module.exports[_sym] = "ok";
+ === lateBoundAssignmentDeclarationSupport2.js ===
+ // currently unsupported
+@@= skipped -14, +14 lines =@@
+ >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport2.js, 2, 5))
+ 
+ module.exports[_sym] = "ok";
 ->module.exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
 ->module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 ->exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
-->_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))
--
--module.exports[_str] = "ok";
++>module.exports : Symbol("lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+ >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))
+ 
+ module.exports[_str] = "ok";
 ->module.exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
 ->module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 ->exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
-->_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport2.js, 2, 5))
--
--module.exports.S = _sym;
-->module.exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
++>module.exports : Symbol("lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+ >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport2.js, 2, 5))
+ 
+ module.exports.S = _sym;
+ >module.exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 ->module.exports : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 ->module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 ->exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
-->S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
-->_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))
--
++>module.exports : Symbol("lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+ >S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
+ >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))
+ 

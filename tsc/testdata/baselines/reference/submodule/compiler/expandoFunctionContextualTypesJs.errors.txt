@@ -1,6 +1,8 @@
 input.js(5,48): error TS2304: Cannot find name 'P'.
-input.js(48,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-input.js(52,24): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+input.js(48,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+input.js(52,17): error TS2322: Type '{ color: string; }' is not assignable to type '{ color: "blue" | "red"; }'.
+  Types of property 'color' are incompatible.
+    Type 'string' is not assignable to type '"blue" | "red"'.
 
 
 ==== input.js (3 errors) ====
@@ -54,12 +56,17 @@ input.js(52,24): error TS2580: Cannot find name 'module'. Do you need to install
      * @type {MyComponentProps}
      */
     module.exports = {
-    ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    ~~~~~~~~~~~~~~~~~~
         color: "red"
+    ~~~~~~~~~~~~~~~~
     }
+    ~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     
     expectLiteral({ props: module.exports });
-                           ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                    ~~~~~
+!!! error TS2322: Type '{ color: string; }' is not assignable to type '{ color: "blue" | "red"; }'.
+!!! error TS2322:   Types of property 'color' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type '"blue" | "red"'.
+!!! related TS6500 input.js:32:14: The expected type comes from property 'props' which is declared here on type '{ props: { color: "blue" | "red"; }; }'
     

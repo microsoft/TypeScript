@@ -16,10 +16,13 @@
 ->module.exports : Symbol(module.exports, Decl(conn.js, 0, 0))
 ->module : Symbol(export=, Decl(conn.js, 8, 1))
 ->exports : Symbol(export=, Decl(conn.js, 8, 1))
++>module.exports : Symbol(Conn, Decl(conn.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol(Conn, Decl(conn.js, 0, 0))
  >Conn : Symbol(Conn, Decl(conn.js, 0, 0))
  
  === usage.js ===
-@@= skipped -27, +24 lines =@@
+@@= skipped -27, +27 lines =@@
  >c : Symbol(c, Decl(usage.js, 8, 16))
  
          this.connItem = c.item;
@@ -27,8 +30,10 @@
  >this : Symbol(Wrap, Decl(usage.js, 0, 0))
 ->connItem : Symbol(Wrap.connItem, Decl(usage.js, 8, 20))
 ->c.item : Symbol(Conn.item, Decl(conn.js, 5, 20))
++>c.item : Symbol(item, Decl(conn.js, 5, 20))
  >c : Symbol(c, Decl(usage.js, 8, 16))
 ->item : Symbol(Conn.item, Decl(conn.js, 5, 20))
++>item : Symbol(item, Decl(conn.js, 5, 20))
  
          /** @type {import("./conn").Whatever} */
          this.another = "";
@@ -42,7 +47,9 @@
 ->module.exports : Symbol(module.exports, Decl(usage.js, 0, 0))
 ->module : Symbol(module, Decl(usage.js, 13, 1))
 ->exports : Symbol(module.exports, Decl(usage.js, 0, 0))
--
++>module.exports : Symbol(export=, Decl(usage.js, 13, 1))
++>module : Symbol(module.exports)
++>exports : Symbol(export=, Decl(usage.js, 13, 1))
+ 
      Wrap
  >Wrap : Symbol(Wrap, Decl(usage.js, 15, 18))
- 

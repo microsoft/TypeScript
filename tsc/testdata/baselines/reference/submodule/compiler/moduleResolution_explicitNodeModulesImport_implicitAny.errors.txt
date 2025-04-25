@@ -1,10 +1,10 @@
-/src/index.ts(1,19): error TS2307: Cannot find module '../node_modules/foo' or its corresponding type declarations.
+/src/index.ts(1,10): error TS2305: Module '"/node_modules/foo/index"' has no exported member 'y'.
 
 
 ==== /src/index.ts (1 errors) ====
     import { y } from "../node_modules/foo";
-                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module '../node_modules/foo' or its corresponding type declarations.
+             ~
+!!! error TS2305: Module '"/node_modules/foo/index"' has no exported member 'y'.
     
 ==== /node_modules/foo/index.js (0 errors) ====
     exports.x = 0;

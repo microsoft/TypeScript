@@ -19,8 +19,8 @@ const items = [];
 
 module.exports = items;
 >module.exports = items : Item[]
->module.exports : any
->module : any
->exports : any
+>module.exports : Item[]
+>module : { readonly items: Item[]; }
+>exports : Item[]
 >items : Item[]
 

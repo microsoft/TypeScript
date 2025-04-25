@@ -3,8 +3,8 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+index.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+index.js(8,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
++index.js(8,16): error TS2339: Property 'additional' does not exist on type 'Foo'.
 +
 +
 +==== index.js (2 errors) ====
@@ -14,9 +14,9 @@
 +    }
 +    
 +    module.exports = new Foo();
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    
 +    module.exports.additional = 20;
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++                   ~~~~~~~~~~
++!!! error TS2339: Property 'additional' does not exist on type 'Foo'.

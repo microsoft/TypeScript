@@ -23,13 +23,10 @@
  >1 : 1
  
  === types.d.ts ===
-@@= skipped -20, +20 lines =@@
- declare var module: any;
- >module : any
- 
--=== semver.js ===
--/// <reference path='./types.d.ts'/>
--exports = module.exports = C
+@@= skipped -23, +23 lines =@@
+ === semver.js ===
+ /// <reference path='./types.d.ts'/>
+ exports = module.exports = C
 ->exports = module.exports = C : typeof C
 ->exports : typeof C
 ->module.exports = C : typeof C
@@ -37,25 +34,34 @@
 ->module : { exports: typeof C; }
 ->exports : typeof C
 ->C : typeof C
--
--C.f = n => n + 1
-->C.f = n => n + 1 : (n: any) => any
-->C.f : (n: any) => any
++>exports = module.exports = C : { (): void; f: (n: any) => any; }
++>exports : any
++>module.exports = C : { (): void; f: (n: any) => any; }
++>module.exports : any
++>module : any
++>exports : any
++>C : { (): void; f: (n: any) => any; }
+ 
+ C.f = n => n + 1
+ >C.f = n => n + 1 : (n: any) => any
+ >C.f : (n: any) => any
 ->C : typeof C
-->f : (n: any) => any
-->n => n + 1 : (n: any) => any
-->n : any
-->n + 1 : any
-->n : any
-->1 : 1
--
--function C() {
++>C : { (): void; f: (n: any) => any; }
+ >f : (n: any) => any
+ >n => n + 1 : (n: any) => any
+ >n : any
+@@= skipped -20, +20 lines =@@
+ >1 : 1
+ 
+ function C() {
 ->C : typeof C
--
--    this.p = 1
-->this.p = 1 : 1
-->this.p : any
++>C : { (): void; f: (n: any) => any; }
+ 
+     this.p = 1
+ >this.p = 1 : 1
+ >this.p : any
 ->this : this
-->p : any
-->1 : 1
--}
++>this : any
+ >p : any
+ >1 : 1
+ }

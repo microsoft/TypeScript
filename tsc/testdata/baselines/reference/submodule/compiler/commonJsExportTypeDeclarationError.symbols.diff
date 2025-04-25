@@ -8,8 +8,10 @@
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(test.js, 0, 0))
 ->module : Symbol(export=, Decl(test.js, 0, 0))
-->exports : Symbol(export=, Decl(test.js, 0, 0))
--
++>module.exports : Symbol(export=, Decl(test.js, 0, 0))
++>module : Symbol(module.exports)
+ >exports : Symbol(export=, Decl(test.js, 0, 0))
+ 
     message: ""
  >message : Symbol(message, Decl(test.js, 0, 18))
  }
@@ -19,7 +21,7 @@
  import test from "./test";
  >test : Symbol(test, Decl(types1.ts, 0, 6), Decl(types1.ts, 0, 26))
  
-@@= skipped -18, +14 lines =@@
+@@= skipped -18, +18 lines =@@
  
  > : Symbol(unknown)
  
@@ -36,9 +38,4 @@
 +=== types3.ts ===
  import test from "./test";
  >test : Symbol(test, Decl(types3.ts, 0, 6), Decl(types3.ts, 0, 26))
- 
- export type test = test;
- >test : Symbol(test, Decl(types3.ts, 0, 26))
-->test : Symbol(test, Decl(types3.ts, 0, 26))
-+>test : Symbol(test, Decl(types3.ts, 0, 6), Decl(types3.ts, 0, 26))
  

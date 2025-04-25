@@ -43,6 +43,8 @@ func (tx *ESModuleTransformer) visit(node *ast.Node) *ast.Node {
 		node = tx.visitImportEqualsDeclaration(node.AsImportEqualsDeclaration())
 	case ast.KindExportAssignment:
 		node = tx.visitExportAssignment(node.AsExportAssignment())
+	case ast.KindJSExportAssignment:
+		node = nil
 	case ast.KindExportDeclaration:
 		node = tx.visitExportDeclaration(node.AsExportDeclaration())
 	case ast.KindCallExpression:
@@ -244,7 +246,7 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 func (tx *ESModuleTransformer) visitCallExpression(node *ast.CallExpression) *ast.Node {
 	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		if ast.IsImportCall(node.AsNode()) && len(node.Arguments.Nodes) > 0 ||
-			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode(), false /*requireStringLiteralLikeArgument*/) {
+			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode()) {
 			return tx.visitImportOrRequireCall(node)
 		}
 	}

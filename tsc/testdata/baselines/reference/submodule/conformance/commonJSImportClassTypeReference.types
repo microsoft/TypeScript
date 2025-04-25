@@ -2,8 +2,8 @@
 
 === main.js ===
 const { K } = require("./mod1");
->K : any
->require("./mod1") : any
+>K : typeof K
+>require("./mod1") : typeof import("mod1")
 >require : any
 >"./mod1" : "./mod1"
 
@@ -24,17 +24,17 @@ class K {
 >K : K
 
     values() {
->values : () => any
+>values : () => K
 
         return new K()
->new K() : any
->K : any
+>new K() : K
+>K : typeof K
     }
 }
 exports.K = K;
->exports.K = K : any
->exports.K : any
->exports : any
->K : any
->K : any
+>exports.K = K : typeof K
+>exports.K : typeof K
+>exports : typeof import("mod1")
+>K : typeof K
+>K : typeof K
 

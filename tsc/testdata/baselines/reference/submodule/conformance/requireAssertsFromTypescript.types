@@ -2,14 +2,14 @@
 
 === 38379.js ===
 const { art } = require('./ex')
->art : any
->require('./ex') : any
+>art : (value: any, message?: string | Error) => asserts value
+>require('./ex') : typeof import("ex")
 >require : any
 >'./ex' : "./ex"
 
 const artoo = require('./ex2')
->artoo : any
->require('./ex2') : any
+>artoo : (value: any, message?: string | Error) => asserts value
+>require('./ex2') : (value: any, message?: string | Error) => asserts value
 >require : any
 >'./ex2' : "./ex2"
 
@@ -18,8 +18,8 @@ let x = 1
 >1 : 1
 
 art(x)
->art(x) : any
->art : any
+>art(x) : void
+>art : (value: any, message?: string | Error) => asserts value
 >x : number
 
 let y = 1
@@ -27,8 +27,8 @@ let y = 1
 >1 : 1
 
 artoo(y)
->artoo(y) : any
->artoo : any
+>artoo(y) : void
+>artoo : (value: any, message?: string | Error) => asserts value
 >y : number
 
 === ex.d.ts ===

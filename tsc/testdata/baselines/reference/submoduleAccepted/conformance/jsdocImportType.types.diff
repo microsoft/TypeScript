@@ -5,58 +5,45 @@
   * @type {C} */
  var c;
 ->c : D
-+>c : any
++>c : Chunk
  
  c.chunk;
 ->c.chunk : number
 ->c : D
 ->chunk : number
 +>c.chunk : any
-+>c : any
++>c : Chunk
 +>chunk : any
  
  const D = require("./mod1");
 ->D : typeof D
 ->require("./mod1") : typeof D
-+>D : any
-+>require("./mod1") : any
++>D : typeof Chunk
++>require("./mod1") : typeof Chunk
  >require : (name: string) => any
  >"./mod1" : "./mod1"
  
-@@= skipped -18, +18 lines =@@
- >d : D
+ /** @type {D} */
+ var d;
+->d : D
++>d : Chunk
  
  d.chunk;
 ->d.chunk : number
-+>d.chunk : any
- >d : D
+->d : D
 ->chunk : number
++>d.chunk : any
++>d : Chunk
 +>chunk : any
  
  === types.d.ts ===
  declare function require(name: string): any;
-@@= skipped -16, +16 lines =@@
- >module : { exports: any; }
- >exports : any
- 
--=== mod1.js ===
--/// <reference path='./types.d.ts'/>
--class Chunk {
-->Chunk : Chunk
--
--    constructor() {
--        this.chunk = 1;
-->this.chunk = 1 : 1
-->this.chunk : any
-->this : this
-->chunk : any
-->1 : 1
--    }
--}
--module.exports = Chunk;
-->module.exports = Chunk : typeof Chunk
-->module.exports : typeof Chunk
+@@= skipped -51, +51 lines =@@
+ module.exports = Chunk;
+ >module.exports = Chunk : typeof Chunk
+ >module.exports : typeof Chunk
 ->module : { exports: typeof Chunk; }
-->exports : typeof Chunk
-->Chunk : typeof Chunk
--
++>module : { Chunk: typeof Chunk; }
+ >exports : typeof Chunk
+ >Chunk : typeof Chunk
+ 

@@ -1,16 +1,15 @@
 --- old.jsDeclarationsJson.symbols
 +++ new.jsDeclarationsJson.symbols
-@@= skipped -2, +2 lines =@@
- === index.js ===
- const j = require("./obj.json");
- >j : Symbol(j, Decl(index.js, 0, 5))
-->require : Symbol(require)
-->"./obj.json" : Symbol("obj", Decl(obj.json, 0, 0))
+@@= skipped -6, +6 lines =@@
+ >"./obj.json" : Symbol("obj", Decl(obj.json, 0, 0))
  
  module.exports = j;
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 0, 32))
 ->exports : Symbol(export=, Decl(index.js, 0, 32))
++>module.exports : Symbol(export=, Decl(obj.json, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol(export=, Decl(obj.json, 0, 0))
  >j : Symbol(j, Decl(index.js, 0, 5))
  
  === obj.json ===

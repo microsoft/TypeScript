@@ -5,10 +5,9 @@
  exports.a = {};
  >exports.a = {} : {}
 ->exports.a : typeof a
-->exports : typeof import("enumTagOnExports")
-->a : typeof a
 +>exports.a : any
-+>exports : any
+ >exports : typeof import("enumTagOnExports")
+->a : typeof a
 +>a : any
  >{} : {}
  
@@ -21,9 +20,9 @@
 ->exports : typeof module.exports
 ->b : typeof b
 +>module.exports.b : any
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : typeof import("enumTagOnExports")
++>module : { "enumTagOnExports": typeof import("enumTagOnExports"); }
++>exports : typeof import("enumTagOnExports")
 +>b : any
  >{} : {}
  

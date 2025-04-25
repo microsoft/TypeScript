@@ -26,9 +26,9 @@ BaseFactory.Base = Base;
 
 module.exports = BaseFactory;
 >module.exports = BaseFactory : { (): Base; Base: typeof Base; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { (): Base; Base: typeof Base; }
+>module : { readonly BaseFactory: { (): Base; Base: typeof Base; }; }
+>exports : { (): Base; Base: typeof Base; }
 >BaseFactory : { (): Base; Base: typeof Base; }
 
 === file.js ===
@@ -40,12 +40,12 @@ module.exports = BaseFactory;
  * @returns {InstanceType<BaseFactory["Base"]>}
  */
 const test = (base) => {
->test : (base: any) => any
->(base) => {    return base;} : (base: any) => any
->base : any
+>test : (base: Base) => Base
+>(base) => {    return base;} : (base: Base) => Base
+>base : Base
 
     return base;
->base : any
+>base : Base
 
 };
 

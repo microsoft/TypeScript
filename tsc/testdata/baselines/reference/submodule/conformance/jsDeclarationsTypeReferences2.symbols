@@ -11,6 +11,10 @@ const thing = a + m
 >m : Symbol(m, Decl(index.js, 0, 9))
 
 module.exports = {
+>module.exports : Symbol(export=, Decl(index.js, 2, 19))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(index.js, 2, 19))
+
     thing
 >thing : Symbol(thing, Decl(index.js, 4, 18))
 

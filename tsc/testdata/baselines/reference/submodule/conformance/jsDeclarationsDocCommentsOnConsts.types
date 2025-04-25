@@ -26,9 +26,9 @@ function b() {
 
 module.exports = {x, b}
 >module.exports = {x, b} : { x: (a: any) => string; b: () => number; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { x: (a: any) => string; b: () => number; }
+>module : { export=: { x: (a: any) => string; b: () => number; }; }
+>exports : { x: (a: any) => string; b: () => number; }
 >{x, b} : { x: (a: any) => string; b: () => number; }
 >x : (a: any) => string
 >b : () => number

@@ -1,11 +1,8 @@
-index.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 index.js(6,14): error TS2339: Property 't' does not exist on type 'Thing'.
 
 
-==== index.js (2 errors) ====
+==== index.js (1 errors) ====
     module.exports = class Thing {
-    ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
         /**
          * @param {number} p
          */

@@ -3,6 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
++ExtendedClass.js(17,5): error TS1231: An export assignment must be at the top level of a file or module declaration.
 +ExtendedClass.js(17,12): error TS2339: Property 'exports' does not exist on type '{}'.
 +ExtendedClass.js(18,19): error TS2339: Property 'exports' does not exist on type '{}'.
 +
@@ -16,7 +17,7 @@
 +        }
 +        export = BaseClass;
 +    }
-+==== ExtendedClass.js (2 errors) ====
++==== ExtendedClass.js (3 errors) ====
 +    define("lib/ExtendedClass", ["deps/BaseClass"], 
 +    /**
 +     * {typeof import("deps/BaseClass")}
@@ -34,6 +35,8 @@
 +        // Exports the module in a way tsc recognize class export 
 +        const module = {};
 +        module.exports = ExtendedClass
++        ~~~~~~
++!!! error TS1231: An export assignment must be at the top level of a file or module declaration.
 +               ~~~~~~~
 +!!! error TS2339: Property 'exports' does not exist on type '{}'.
 +        return module.exports;

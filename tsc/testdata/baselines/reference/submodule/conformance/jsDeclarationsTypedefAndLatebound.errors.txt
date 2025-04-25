@@ -1,16 +1,10 @@
-LazySet.js(13,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-index.js(1,17): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-index.js(3,12): error TS2749: 'LazySet' refers to a value, but is being used as a type here. Did you mean 'typeof LazySet'?
+LazySet.js(13,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-==== index.js (2 errors) ====
+==== index.js (0 errors) ====
     const LazySet = require("./LazySet");
-                    ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
     /** @type {LazySet} */
-               ~~~~~~~
-!!! error TS2749: 'LazySet' refers to a value, but is being used as a type here. Did you mean 'typeof LazySet'?
     const stringSet = undefined;
     stringSet.addAll(stringSet);
     
@@ -29,6 +23,6 @@ index.js(3,12): error TS2749: 'LazySet' refers to a value, but is being used as 
     }
     
     module.exports = LazySet;
-    ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     

@@ -37,17 +37,17 @@ const Strings = {
 
 module.exports = Handler;
 >module.exports = Handler : typeof Handler
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof Handler
+>module : { Handler: typeof Handler; }
+>exports : typeof Handler
 >Handler : typeof Handler
 
 module.exports.Strings = Strings
 >module.exports.Strings = Strings : { a: string; b: string; }
 >module.exports.Strings : any
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof Handler
+>module : { Handler: typeof Handler; }
+>exports : typeof Handler
 >Strings : any
 >Strings : { a: string; b: string; }
 

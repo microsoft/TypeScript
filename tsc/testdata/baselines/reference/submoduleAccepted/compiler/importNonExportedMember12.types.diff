@@ -9,9 +9,9 @@
 ->module : { exports: number; }
 ->exports : number
 +>module.exports = 1 : 1
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : 1
++>module : { export=: 1; }
++>exports : 1
  >1 : 1
  
  === /a.js ===

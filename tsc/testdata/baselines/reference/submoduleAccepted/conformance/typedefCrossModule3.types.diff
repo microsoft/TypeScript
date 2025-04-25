@@ -25,9 +25,9 @@
 ->exports : typeof ns
 ->ns : typeof ns
 +>module.exports = ns : {}
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : {}
++>module : { readonly ns: {}; }
++>exports : {}
 +>ns : {}
  
  

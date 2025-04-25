@@ -11,7 +11,7 @@ const items = require("./some-mod")();
 module.exports = items;
 >module.exports = items : any
 >module.exports : any
->module : any
+>module : { readonly items: any; }
 >exports : any
 >items : any
 

@@ -2,9 +2,9 @@
 
 === index.js ===
 const {taskGroups, taskNameToGroup} = require('./module.js');
->taskGroups : any
+>taskGroups : { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }
 >taskNameToGroup : any
->require('./module.js') : any
+>require('./module.js') : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
 >require : any
 >'./module.js' : "./module.js"
 
@@ -32,8 +32,72 @@ class MainThreadTasks {
 
 module.exports = MainThreadTasks;
 >module.exports = MainThreadTasks : typeof MainThreadTasks
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof MainThreadTasks
+>module : { MainThreadTasks: typeof MainThreadTasks; }
+>exports : typeof MainThreadTasks
 >MainThreadTasks : typeof MainThreadTasks
 
+=== module.js ===
+/** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
+
+/**
+ * @typedef TaskGroup
+ * @property {TaskGroupIds} id
+ * @property {string} label
+ * @property {string[]} traceEventNames
+ */
+
+/**
+ * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
+ */
+const taskGroups = {
+>taskGroups : { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }
+>{    parseHTML: {        id: 'parseHTML',        label: 'Parse HTML & CSS'    },    styleLayout: {        id: 'styleLayout',        label: 'Style & Layout'    },} : { parseHTML: { id: string; label: string; }; styleLayout: { id: string; label: string; }; }
+
+    parseHTML: {
+>parseHTML : { id: string; label: string; }
+>{        id: 'parseHTML',        label: 'Parse HTML & CSS'    } : { id: string; label: string; }
+
+        id: 'parseHTML',
+>id : string
+>'parseHTML' : "parseHTML"
+
+        label: 'Parse HTML & CSS'
+>label : string
+>'Parse HTML & CSS' : "Parse HTML & CSS"
+
+    },
+    styleLayout: {
+>styleLayout : { id: string; label: string; }
+>{        id: 'styleLayout',        label: 'Style & Layout'    } : { id: string; label: string; }
+
+        id: 'styleLayout',
+>id : string
+>'styleLayout' : "styleLayout"
+
+        label: 'Style & Layout'
+>label : string
+>'Style & Layout' : "Style & Layout"
+
+    },
+}
+
+/** @type {Object<string, TaskGroup>} */
+const taskNameToGroup = {};
+>taskNameToGroup : any
+>{} : {}
+
+module.exports = {
+>module.exports = {    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
+>module.exports : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
+>module : { export=: { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }; }
+>exports : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
+>{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
+
+    taskGroups,
+>taskGroups : { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }
+
+    taskNameToGroup,
+>taskNameToGroup : any
+
+};

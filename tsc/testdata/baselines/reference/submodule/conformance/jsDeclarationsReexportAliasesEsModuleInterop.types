@@ -6,22 +6,22 @@ class Foo {}
 
 module.exports = Foo;
 >module.exports = Foo : typeof Foo
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof Foo
+>module : { Foo: typeof Foo; }
+>exports : typeof Foo
 >Foo : typeof Foo
 
 === usage.js ===
 import {default as Fooa} from "./cls";
->default : any
->Fooa : any
+>default : typeof Foo
+>Fooa : typeof Foo
 
 export const x = new Fooa();
->x : any
->new Fooa() : any
->Fooa : any
+>x : Foo
+>new Fooa() : Foo
+>Fooa : typeof Foo
 
 export {default as Foob} from "./cls";
->default : any
->Foob : any
+>default : typeof Foo
+>Foob : typeof Foo
 

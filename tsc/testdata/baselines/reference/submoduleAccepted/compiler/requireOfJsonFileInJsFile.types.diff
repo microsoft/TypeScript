@@ -1,22 +1,6 @@
 --- old.requireOfJsonFileInJsFile.types
 +++ new.requireOfJsonFileInJsFile.types
-@@= skipped -1, +1 lines =@@
- 
- === /user.js ===
- const json0 = require("./json.json");
-->json0 : { a: number; }
-->require("./json.json") : { a: number; }
-+>json0 : any
-+>require("./json.json") : any
- >require : any
- >"./json.json" : "./json.json"
- 
- json0.b; // Error (good)
- >json0.b : any
-->json0 : { a: number; }
-+>json0 : any
- >b : any
- 
+@@= skipped -14, +14 lines =@@
  /** @type {{ b: number }} */
  const json1 = require("./json.json"); // No error (bad)
  >json1 : { b: number; }
@@ -25,7 +9,7 @@
  >require : any
  >"./json.json" : "./json.json"
  
-@@= skipped -23, +23 lines =@@
+@@= skipped -10, +10 lines =@@
  >b : number
  
  const js0 = require("./js.js");
@@ -36,12 +20,7 @@
  >require : any
  >"./js.js" : "./js.js"
  
- json0.b; // Error (good)
- >json0.b : any
-->json0 : { a: number; }
-+>json0 : any
- >b : any
- 
+@@= skipped -13, +13 lines =@@
  /** @type {{ b: number }} */
  const js1 = require("./js.js"); // Error (good)
  >js1 : { b: number; }
@@ -50,7 +29,7 @@
  >require : any
  >"./js.js" : "./js.js"
  
-@@= skipped -28, +28 lines =@@
+@@= skipped -15, +15 lines =@@
  >"a" : number
  >0 : 0
  

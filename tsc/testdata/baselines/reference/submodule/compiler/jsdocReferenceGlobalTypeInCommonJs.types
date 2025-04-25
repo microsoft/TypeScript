@@ -2,8 +2,8 @@
 
 === a.js ===
 const other = require('./other');
->other : any
->require('./other') : any
+>other : () => string
+>require('./other') : () => string
 >require : any
 >'./other' : "./other"
 

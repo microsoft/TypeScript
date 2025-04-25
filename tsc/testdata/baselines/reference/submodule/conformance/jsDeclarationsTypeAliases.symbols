@@ -52,6 +52,10 @@ class ExportedThing {
 >z : Symbol(z, Decl(mixed.js, 10, 21))
 }
 module.exports = {
+>module.exports : Symbol(export=, Decl(mixed.js, 12, 1))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(mixed.js, 12, 1))
+
     doTheThing,
 >doTheThing : Symbol(doTheThing, Decl(mixed.js, 13, 18))
 

@@ -11,9 +11,9 @@ class Abcde {
 
 module.exports = {
 >module.exports = {  Abcde} : { Abcde: typeof Abcde; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { Abcde: typeof Abcde; }
+>module : { export=: { Abcde: typeof Abcde; }; }
+>exports : { Abcde: typeof Abcde; }
 >{  Abcde} : { Abcde: typeof Abcde; }
 
   Abcde
@@ -23,7 +23,7 @@ module.exports = {
 
 === /index.ts ===
 import { Abcde } from "./test";
->Abcde : any
+>Abcde : typeof Abcde
 
 declare module "./test" {
 >"./test" : any
@@ -33,10 +33,10 @@ declare module "./test" {
 }
 
 new Abcde().x;
->new Abcde().x : any
->new Abcde() : any
->Abcde : any
->x : any
+>new Abcde().x : string
+>new Abcde() : Abcde
+>Abcde : typeof Abcde
+>x : string
 
 // Bug: the type meaning from /test.js does not
 // propagate through the object literal export.

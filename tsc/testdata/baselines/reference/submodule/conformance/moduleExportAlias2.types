@@ -3,8 +3,8 @@
 === index.js ===
 /// <reference path='node.d.ts' />
 const C = require("./semver")
->C : any
->require("./semver") : any
+>C : typeof import("semver")
+>require("./semver") : typeof import("semver")
 >require : (name: string) => any
 >"./semver" : "./semver"
 
@@ -12,14 +12,14 @@ var two = C.f(1)
 >two : any
 >C.f(1) : any
 >C.f : any
->C : any
+>C : typeof import("semver")
 >f : any
 >1 : 1
 
 var c = new C
 >c : any
 >new C : any
->C : any
+>C : typeof import("semver")
 
 === node.d.ts ===
 declare function require(name: string): any;
@@ -33,3 +33,35 @@ declare var module: { exports: any };
 >module : { exports: any; }
 >exports : any
 
+=== semver.js ===
+/// <reference path='node.d.ts' />
+exports = module.exports = C
+>exports = module.exports = C : () => void
+>exports : any
+>module.exports = C : () => void
+>module.exports : typeof import("semver")
+>module : { "semver": typeof import("semver"); }
+>exports : typeof import("semver")
+>C : () => void
+
+exports.f = n => n + 1
+>exports.f = n => n + 1 : (n: any) => any
+>exports.f : any
+>exports : typeof import("semver")
+>f : any
+>n => n + 1 : (n: any) => any
+>n : any
+>n + 1 : any
+>n : any
+>1 : 1
+
+function C() {
+>C : () => void
+
+    this.p = 1
+>this.p = 1 : 1
+>this.p : any
+>this : any
+>p : any
+>1 : 1
+}

@@ -6,20 +6,15 @@
 +first.js(1,1): error TS2304: Cannot find name 'exports'.
 +first.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +first.js(2,1): error TS2304: Cannot find name 'exports'.
-+mod.js(2,1): error TS2304: Cannot find name 'exports'.
 +second.js(1,1): error TS2304: Cannot find name 'exports'.
 +second.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +second.js(2,1): error TS2304: Cannot find name 'exports'.
-+use.js(1,24): error TS2306: File 'mod.js' is not a module.
  
  
--==== mod.js (0 errors) ====
-+==== mod.js (1 errors) ====
+ ==== mod.js (0 errors) ====
      // Based on a pattern from adonis
      exports.formatters = {}
 -==== first.js (1 errors) ====
-+    ~~~~~~~
-+!!! error TS2304: Cannot find name 'exports'.
 +==== first.js (3 errors) ====
      exports = require('./mod')
 +    ~~~~~~~
@@ -48,11 +43,3 @@
          return v
      }
      
--==== use.js (0 errors) ====
-+==== use.js (1 errors) ====
-     import * as debug from './mod'
-+                           ~~~~~~~
-+!!! error TS2306: File 'mod.js' is not a module.
-     
-     debug.formatters.j
-     var one = debug.formatters.o(1)

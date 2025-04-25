@@ -11,8 +11,8 @@ declare var module: any, exports: any;
 
 === index.js ===
 const A = require("./other");
->A : any
->require("./other") : any
+>A : () => void
+>require("./other") : () => void
 >require : (id: string) => any
 >"./other" : "./other"
 
@@ -20,7 +20,7 @@ const a = new A().id;
 >a : any
 >new A().id : any
 >new A() : any
->A : any
+>A : () => void
 >id : any
 
 const B = function() { this.id = 1; }
@@ -71,9 +71,9 @@ function A() { this.id = 1; }
 >1 : 1
 
 module.exports = A;
->module.exports = A : any
->module.exports : any
->module : any
->exports : any
->A : any
+>module.exports = A : () => void
+>module.exports : () => void
+>module : { A: () => void; }
+>exports : () => void
+>A : () => void
 

@@ -9,7 +9,12 @@
 ->module : Symbol(module, Decl(mod.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 ->n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
--
++>module.exports.n : Symbol(n, Decl(mod.js, 0, 0))
++>module.exports : Symbol("mod", Decl(mod.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("mod", Decl(mod.js, 0, 0))
++>n : Symbol(n, Decl(mod.js, 0, 0))
+ 
  module.exports.n.K = function C() {
 ->module.exports.n.K : Symbol(n.K, Decl(mod.js, 0, 22))
 ->module.exports.n : Symbol(n.K, Decl(mod.js, 0, 22))
@@ -18,6 +23,11 @@
 ->exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 ->n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
 ->K : Symbol(n.K, Decl(mod.js, 0, 22))
++>module.exports.n : Symbol(n, Decl(mod.js, 0, 0))
++>module.exports : Symbol("mod", Decl(mod.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("mod", Decl(mod.js, 0, 0))
++>n : Symbol(n, Decl(mod.js, 0, 0))
  >C : Symbol(C, Decl(mod.js, 1, 20))
  
      this.x = 10;
@@ -26,12 +36,15 @@
 ->x : Symbol(C.x, Decl(mod.js, 1, 35))
  }
  module.exports.Classic = class {
-->module.exports.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+ >module.exports.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 ->module.exports : Symbol(Classic, Decl(mod.js, 3, 1))
 ->module : Symbol(module, Decl(mod.js, 0, 0))
 ->exports : Symbol(module.exports, Decl(mod.js, 0, 0))
-->Classic : Symbol(Classic, Decl(mod.js, 3, 1))
--
++>module.exports : Symbol("mod", Decl(mod.js, 0, 0))
++>module : Symbol(module.exports)
++>exports : Symbol("mod", Decl(mod.js, 0, 0))
+ >Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+ 
      constructor() {
          this.p = 1
 ->this.p : Symbol(Classic.p, Decl(mod.js, 5, 19))
@@ -40,15 +53,17 @@
      }
  }
  
-@@= skipped -42, +18 lines =@@
+@@= skipped -42, +35 lines =@@
  
  var k = new s.n.K()
  >k : Symbol(k, Decl(use.js, 2, 3))
 ->s.n.K : Symbol(s.n.K, Decl(mod.js, 0, 22))
 ->s.n : Symbol(s.n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
++>s.n : Symbol(n, Decl(mod.js, 0, 0))
  >s : Symbol(s, Decl(use.js, 0, 6))
 ->n : Symbol(s.n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
 ->K : Symbol(s.n.K, Decl(mod.js, 0, 22))
++>n : Symbol(n, Decl(mod.js, 0, 0))
  
  k.x
 ->k.x : Symbol(C.x, Decl(mod.js, 1, 35))
@@ -58,12 +73,14 @@
  var classic = new s.Classic()
  >classic : Symbol(classic, Decl(use.js, 4, 3))
 ->s.Classic : Symbol(s.Classic, Decl(mod.js, 3, 1))
++>s.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
  >s : Symbol(s, Decl(use.js, 0, 6))
 ->Classic : Symbol(s.Classic, Decl(mod.js, 3, 1))
++>Classic : Symbol(Classic, Decl(mod.js, 3, 1))
  
  
  /** @param {s.n.K} c
-@@= skipped -26, +18 lines =@@
+@@= skipped -26, +22 lines =@@
  >classic : Symbol(classic, Decl(use.js, 9, 13))
  
      c.x

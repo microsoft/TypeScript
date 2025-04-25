@@ -3,16 +3,16 @@
 === assignmentToVoidZero2.js ===
 exports.j = 1;
 >exports.j = 1 : 1
->exports.j : any
->exports : any
->j : any
+>exports.j : 1
+>exports : typeof import("assignmentToVoidZero2")
+>j : 1
 >1 : 1
 
 exports.k = void 0;
 >exports.k = void 0 : undefined
->exports.k : any
->exports : any
->k : any
+>exports.k : undefined
+>exports : typeof import("assignmentToVoidZero2")
+>k : undefined
 >void 0 : undefined
 >0 : 0
 
@@ -78,11 +78,11 @@ c.p + c.q
 
 === importer.js ===
 import { j, k } from './assignmentToVoidZero2'
->j : any
->k : any
+>j : 1
+>k : undefined
 
 j + k
 >j + k : any
->j : any
->k : any
+>j : 1
+>k : undefined
 

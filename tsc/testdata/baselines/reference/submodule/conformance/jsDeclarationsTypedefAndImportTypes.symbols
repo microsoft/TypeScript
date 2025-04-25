@@ -17,6 +17,9 @@ class Conn {
 }
 
 module.exports = Conn;
+>module.exports : Symbol(Conn, Decl(conn.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(Conn, Decl(conn.js, 0, 0))
 >Conn : Symbol(Conn, Decl(conn.js, 0, 0))
 
 === usage.js ===
@@ -35,7 +38,9 @@ class Wrap {
 
         this.connItem = c.item;
 >this : Symbol(Wrap, Decl(usage.js, 0, 0))
+>c.item : Symbol(item, Decl(conn.js, 5, 20))
 >c : Symbol(c, Decl(usage.js, 8, 16))
+>item : Symbol(item, Decl(conn.js, 5, 20))
 
         /** @type {import("./conn").Whatever} */
         this.another = "";
@@ -44,6 +49,10 @@ class Wrap {
 }
 
 module.exports = {
+>module.exports : Symbol(export=, Decl(usage.js, 13, 1))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(usage.js, 13, 1))
+
     Wrap
 >Wrap : Symbol(Wrap, Decl(usage.js, 15, 18))
 

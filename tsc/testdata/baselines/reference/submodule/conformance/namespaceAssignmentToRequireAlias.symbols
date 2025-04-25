@@ -3,6 +3,8 @@
 === bug40140.js ===
 const u = require('untyped');
 >u : Symbol(u, Decl(bug40140.js, 0, 5))
+>require : Symbol(require)
+>'untyped' : Symbol("node_modules/untyped/index", Decl(index.js, 0, 0))
 
 u.assignment.nested = true
 >u : Symbol(u, Decl(bug40140.js, 0, 5))
@@ -10,4 +12,10 @@ u.assignment.nested = true
 u.noError()
 >u : Symbol(u, Decl(bug40140.js, 0, 5))
 
+
+=== node_modules/untyped/index.js ===
+module.exports = {}
+>module.exports : Symbol(export=, Decl(index.js, 0, 0))
+>module : Symbol(module.exports)
+>exports : Symbol(export=, Decl(index.js, 0, 0))
 

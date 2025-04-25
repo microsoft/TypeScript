@@ -3,9 +3,9 @@
 === foo.js ===
 module.exports = function () {
 >module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
->module.exports : any
->module : any
->exports : any
+>module.exports : () => { c: number; }
+>module : { export=: () => { c: number; }; }
+>exports : () => { c: number; }
 >function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
 
   class A { }

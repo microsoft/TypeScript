@@ -1,14 +1,15 @@
-validator.ts(3,25): error TS2307: Cannot find module './mod1' or its corresponding type declarations.
+mod1.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+validator.ts(5,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
 ==== validator.ts (1 errors) ====
     import "./";
     
     import Person = require("./mod1");
-                            ~~~~~~~~
-!!! error TS2307: Cannot find module './mod1' or its corresponding type declarations.
     
     const m1 = new Person("Name")
+               ~~~~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     
     m1.thing;
     m1.readonlyProp;
@@ -29,13 +30,15 @@ validator.ts(3,25): error TS2307: Cannot find module './mod1' or its correspondi
     m1.setonlyAccessor = 0;
     
     
-==== mod1.js (0 errors) ====
+==== mod1.js (1 errors) ====
     /**
      * @constructor
      * @param {string} name
      */
     function Person(name) {
         this.name = name;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     Person.prototype.describe = function () {
         return "Person called " + this.name;
