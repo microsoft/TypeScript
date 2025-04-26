@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/inferFromAnnotatedReturn1.ts] ////
+
+=== inferFromAnnotatedReturn1.ts ===
+declare function test<T>(cb: (arg: T) => T): T;
+>test : <T>(cb: (arg: T) => T) => T
+>     : ^ ^^  ^^             ^^^^^ 
+>cb : (arg: T) => T
+>   : ^   ^^ ^^^^^ 
+>arg : T
+>    : ^
+
+const res1 = test((arg): number => 1); // ok
+>res1 : number
+>     : ^^^^^^
+>test((arg): number => 1) : number
+>                         : ^^^^^^
+>test : <T>(cb: (arg: T) => T) => T
+>     : ^ ^^  ^^             ^^^^^ 
+>(arg): number => 1 : (arg: number) => number
+>                   : ^   ^^^^^^^^^^^^^      
+>arg : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+const res2 = test((arg): number => 'foo'); // error
+>res2 : number
+>     : ^^^^^^
+>test((arg): number => 'foo') : number
+>                             : ^^^^^^
+>test : <T>(cb: (arg: T) => T) => T
+>     : ^ ^^  ^^             ^^^^^ 
+>(arg): number => 'foo' : (arg: number) => number
+>                       : ^   ^^^^^^^^^^^^^      
+>arg : number
+>    : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+export declare function linkedSignal<S, D>(options: {
+>linkedSignal : <S, D>(options: { source: () => S; computation: (source: NoInfer<D>) => D; }) => D
+>             : ^ ^^ ^^       ^^                                                            ^^^^^ 
+>options : { source: () => S; computation: (source: NoInfer<D>) => D; }
+>        : ^^^^^^^^^^       ^^^^^^^^^^^^^^^                         ^^^
+
+  source: () => S;
+>source : () => S
+>       : ^^^^^^ 
+
+  computation: (source: NoInfer<D>) => D;
+>computation : (source: NoInfer<D>) => D
+>            : ^      ^^          ^^^^^ 
+>source : NoInfer<D>
+>       : ^^^^^^^^^^
+
+}): D;
+
+const signal = linkedSignal({
+>signal : number
+>       : ^^^^^^
+>linkedSignal({  source: () => 3,  computation: (s): number => 3,}) : number
+>                                                                   : ^^^^^^
+>linkedSignal : <S, D>(options: { source: () => S; computation: (source: NoInfer<D>) => D; }) => D
+>             : ^ ^^ ^^       ^^                                                            ^^^^^ 
+>{  source: () => 3,  computation: (s): number => 3,} : { source: () => number; computation: (s: number) => number; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^
+
+  source: () => 3,
+>source : () => number
+>       : ^^^^^^^^^^^^
+>() => 3 : () => number
+>        : ^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+  computation: (s): number => 3,
+>computation : (s: number) => number
+>            : ^ ^^^^^^^^^^^^^      
+>(s): number => 3 : (s: number) => number
+>                 : ^ ^^^^^^^^^^^^^      
+>s : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+
+});
+
+class Foo<T, R> {
+>Foo : Foo<T, R>
+>    : ^^^^^^^^^
+
+  constructor(readonly cb: (t: T, _: { x: number; other: NoInfer<R> }) => R) {}
+>cb : (t: T, _: { x: number; other: NoInfer<R>; }) => R
+>   : ^ ^^ ^^ ^^                                 ^^^^^ 
+>t : T
+>  : ^
+>_ : { x: number; other: NoInfer<R>; }
+>  : ^^^^^      ^^^^^^^^^          ^^^
+>x : number
+>  : ^^^^^^
+>other : NoInfer<R>
+>      : ^^^^^^^^^^
+}
+
+const _1 = new Foo((name: string, { x }): { name: string; x: number } => ({
+>_1 : Foo<string, { name: string; x: number; }>
+>   : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^
+>new Foo((name: string, { x }): { name: string; x: number } => ({  name,  x,})) : Foo<string, { name: string; x: number; }>
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>(name: string, { x }): { name: string; x: number } => ({  name,  x,}) : (name: string, { x }: { x: number; other: NoInfer<{ name: string; x: number; }>; }) => { name: string; x: number; }
+>                                                                      : ^    ^^      ^^     ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^                            
+>name : string
+>     : ^^^^^^
+>x : number
+>  : ^^^^^^
+>name : string
+>     : ^^^^^^
+>x : number
+>  : ^^^^^^
+>({  name,  x,}) : { name: string; x: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  name,  x,} : { name: string; x: number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  name,
+>name : string
+>     : ^^^^^^
+
+  x,
+>x : number
+>  : ^^^^^^
+
+}));
+

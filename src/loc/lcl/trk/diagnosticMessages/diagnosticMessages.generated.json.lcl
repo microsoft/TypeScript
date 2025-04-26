@@ -5732,6 +5732,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript_6721" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Do not allow runtime constructs that are not part of ECMAScript.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ECMAScript'in parçası olmayan çalışma zamanı yapılarına izin verme.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Do_not_emit_comments_to_output_6009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Do not emit comments to output.]]></Val>
@@ -5989,12 +5998,12 @@
       </Item>
       <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dinamik içe aktarma yalnızca '--module' bayrağı 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16' veya 'nodenext' olarak ayarlandığında desteklenir.]]></Val>
+            <Val><![CDATA[Dinamik içeri aktarma yalnızca '--module' bayrağı 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18' veya 'nodenext' olarak ayarlandığında desteklenir.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -6008,11 +6017,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_nodene_1324" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_1324" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dinamik içe aktarmalar yalnızca '--module' seçeneği; 'esnext', 'node16', 'nodenext' veya 'preserve' olarak ayarlandığında ikinci bir argümanı destekler.]]></Val>
+            <Val><![CDATA[Dinamik içeri aktarmalar yalnızca '--module' seçeneği; 'esnext', 'node16', 'node18', 'nodenext' veya 'preserve' olarak ayarlandığında ikinci bir bağımsız değişkeni destekler.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6317,6 +6326,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Enable importing .json files]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Enable_lib_replacement_6808" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable lib replacement.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kitaplık değişimini etkinleştir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8222,11 +8240,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve_2821" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_pres_2821" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[İçeri aktarma onayları, yalnızca '--module' seçeneği 'esnext' veya 'nodenext' olarak ayarlandığında desteklenir.]]></Val>
+            <Val><![CDATA[İçeri aktarma onayları, yalnızca '--module' seçeneği 'esnext', 'node18', 'nodenext' veya 'preserve' olarak ayarlandığında desteklenir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8236,6 +8254,15 @@
           <Val><![CDATA[Import assertions cannot be used with type-only imports or exports.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[İçeri aktarma onayları, yalnızca tür içeri aktarmaları veya dışarı aktarmaları ile kullanılamaz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert_2880" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[İçeri aktarma onaylamaları içeri aktarma öznitelikleriyle değiştirildi. 'assert' yerine 'with' kullanın.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8267,11 +8294,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve_2823" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_pres_2823" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[İçeri aktarma öznitelikleri, yalnızca '--module' seçeneği 'esnext', 'nodenext' veya 'preserve' olarak ayarlandığında desteklenir.]]></Val>
+            <Val><![CDATA[İçeri aktarma öznitelikleri, yalnızca '--module' seçeneği 'esnext', 'node18', 'nodenext' veya 'preserve' olarak ayarlandığında desteklenir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11357,12 +11384,18 @@
       <Item ItemId=";Project_0_can_t_be_built_because_its_dependency_1_has_errors_6363" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' can't be built because its dependency '{1}' has errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' projesinin '{1}' bağımlılığında hatalar olduğundan proje derlenemiyor]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Project_0_can_t_be_built_because_its_dependency_1_was_not_built_6383" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' can't be built because its dependency '{1}' was not built]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' projesinin '{1}' bağımlılığı derlenmediğinden proje derlenemiyor]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -13316,12 +13349,18 @@
       <Item ItemId=";Skipping_build_of_project_0_because_its_dependency_1_has_errors_6362" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' has errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' projesinin '{1}' bağımlılığında hatalar olduğundan projenin derlenmesi atlanıyor]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Skipping_build_of_project_0_because_its_dependency_1_was_not_built_6382" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' was not built]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' projesinin '{1}' bağımlılığı derlenmediğinden projenin derlenmesi atlanıyor]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -14386,12 +14425,12 @@
       </Item>
       <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['import.meta' meta özelliğine yalnızca '--module' seçeneği 'es2020', 'es2022', 'esnext', 'system', 'node16' veya 'nodenext' olduğunda izin verilir.]]></Val>
+            <Val><![CDATA['import.meta' meta özelliğine yalnızca '--module' seçeneği 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18' veya 'nodenext' olduğunda izin verilir.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -15236,6 +15275,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_expression_is_never_nullish_2881" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This expression is never nullish.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu ifade hiçbir zaman boş gibi değildir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_expression_is_not_callable_2349" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This expression is not callable.]]></Val>
@@ -15353,6 +15401,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic_4128" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This member cannot have a JSDoc comment with an '@override' tag because its name is dynamic.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ad dinamik olduğundan bu üye '@override' etiketi içeren bir JSDoc yorumuna sahip olamaz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_4113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.]]></Val>
@@ -15376,6 +15433,15 @@
           <Val><![CDATA[This member cannot have an 'override' modifier because its containing class '{0}' does not extend another class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Kapsayan '{0}' sınıfı başka bir sınıfı genişletmediğinden bu üye 'override' değiştiricisine sahip olamaz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_member_cannot_have_an_override_modifier_because_its_name_is_dynamic_4127" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This member cannot have an 'override' modifier because its name is dynamic.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Adı dinamik olduğundan bu üyenin 'override' değiştiricisi olamaz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15515,6 +15581,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled_1294" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is not allowed when 'erasableSyntaxOnly' is enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['erasableSyntaxOnly' etkinleştirildiğinde bu söz dizimi kullanılamaz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_cons_7060" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.]]></Val>
@@ -15616,22 +15691,25 @@
       </Item>
       <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_n_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Üst düzey 'await' ifadelerine yalnızca 'module' seçeneği; 'es2022', 'esnext', 'system', 'node16', 'nodenext' veya 'preserve' olarak ayarlandığında ve 'target' seçeneği; 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
+            <Val><![CDATA[Üst düzey 'await' ifadelerine yalnızca 'module' seçeneği; 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext' veya 'preserve' olarak ayarlandığında ve 'target' seçeneği; 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+            <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_sys_2854" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Üst düzey 'await using' ifadelerine yalnızca 'module' seçeneği; 'es2022', 'esnext', 'system', 'node16', 'nodenext' veya 'preserve' olarak ayarlandığında ve 'target' seçeneği; 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
+            <Val><![CDATA[Üst düzey 'await using' ifadelerine yalnızca 'module' seçeneği; 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext' veya 'preserve' olarak ayarlandığında ve 'target' seçeneği; 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15646,12 +15724,12 @@
       </Item>
       <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_nod_1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Üst düzey 'for await' döngülerine yalnızca 'module' seçeneği; 'es2022', 'esnext', 'system', 'node16', 'nodenext' veya 'preserve' olarak ayarlandığında ve 'target' seçeneği; 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
+            <Val><![CDATA[Üst düzey 'for await' döngülerine yalnızca 'module' seçeneği; 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext' veya 'preserve' olarak ayarlandığında ve 'target' seçeneği; 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+            <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />

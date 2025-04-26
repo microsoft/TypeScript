@@ -13,6 +13,7 @@ import {
     PackageJsonInfo,
     PackageJsonInfoCache,
     Pattern,
+    ProgramDiagnostics,
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts.js";
@@ -2735,6 +2736,10 @@ export interface ConditionalExpression extends Expression {
     readonly whenTrue: Expression;
     readonly colonToken: ColonToken;
     readonly whenFalse: Expression;
+    /** @internal*/
+    flowNodeWhenTrue: FlowNode | undefined;
+    /** @internal */
+    flowNodeWhenFalse: FlowNode | undefined;
 }
 
 export type FunctionBody = Block;
@@ -4888,6 +4893,7 @@ export interface Program extends ScriptReferenceHost {
      * @internal
      */
     resolvedLibReferences: Map<string, LibResolution> | undefined;
+    /** @internal */ getProgramDiagnosticsContainer: () => ProgramDiagnostics;
     /** @internal */ getCurrentPackagesMap(): Map<string, boolean> | undefined;
     /**
      * Is the file emitted file
@@ -5040,6 +5046,15 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
 
     typesPackageExists(packageName: string): boolean;
     packageBundlesTypes(packageName: string): boolean;
+
+    isSourceFileDefaultLibrary(file: SourceFile): boolean;
+}
+
+/** @internal */
+export interface WriterContextOut {
+    /** Whether increasing the expansion depth will cause us to expand more types. */
+    canIncreaseExpansionDepth: boolean;
+    truncated: boolean;
 }
 
 export interface TypeChecker {
@@ -5128,6 +5143,7 @@ export interface TypeChecker {
     symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): ParameterDeclaration | undefined;
     /** Note that the resulting nodes cannot be checked. */
     typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeParameterDeclaration | undefined;
+    /** @internal */ typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut): TypeParameterDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 
     getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
     getSymbolAtLocation(node: Node): Symbol | undefined;
@@ -5159,8 +5175,8 @@ export interface TypeChecker {
     symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
     typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
 
-    /** @internal */ writeSignature(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string;
-    /** @internal */ writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
+    /** @internal */ writeSignature(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string;
+    /** @internal */ writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string;
     /** @internal */ writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
     /** @internal */ writeTypePredicate(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
 
@@ -5251,6 +5267,7 @@ export interface TypeChecker {
     getBigIntType(): Type;
     getBigIntLiteralType(value: PseudoBigInt): BigIntLiteralType;
     getBooleanType(): Type;
+    getUnknownType(): Type;
     /* eslint-disable @typescript-eslint/unified-signatures */
     /** @internal */
     getFalseType(fresh?: boolean): Type;
@@ -5279,6 +5296,10 @@ export interface TypeChecker {
      * is `never`. Instead, use `type.flags & TypeFlags.Never`.
      */
     getNeverType(): Type;
+    /**
+     * Gets the intrinsic `object` type.
+     */
+    getNonPrimitiveType(): Type;
     /** @internal */ getOptionalType(): Type;
     /** @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
     /** @internal */ createArrayType(elementType: Type): Type;
@@ -5426,6 +5447,9 @@ export interface TypeChecker {
     /** @internal */ typeHasCallOrConstructSignatures(type: Type): boolean;
     /** @internal */ getSymbolFlags(symbol: Symbol): SymbolFlags;
     /** @internal */ fillMissingTypeArguments(typeArguments: readonly Type[], typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
+
+    getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
+    /** @internal */ isLibType(type: Type): boolean;
 }
 
 /** @internal */
@@ -5871,7 +5895,8 @@ export interface EmitResolver {
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
-    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): IndexSignatureDeclaration[] | undefined;
+    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): (IndexSignatureDeclaration | PropertyDeclaration)[] | undefined;
+    symbolToDeclarations(symbol: Symbol, meaning: SymbolFlags, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration[];
 }
 
 // dprint-ignore
@@ -6243,6 +6268,7 @@ export interface NodeLinks {
     potentialUnusedRenamedBindingElementsInTypes?: BindingElement[];
     externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
     instantiationExpressionTypes?: Map<number, Type>; // Cache of instantiation expression types for the node
+    nonExistentPropCheckCache?: Set<string>;
 }
 
 /** @internal */
@@ -6997,11 +7023,14 @@ export const enum IndexKind {
     Number,
 }
 
+export type ElementWithComputedPropertyName = (ClassElement | ObjectLiteralElement) & { name: ComputedPropertyName; };
+
 export interface IndexInfo {
     keyType: Type;
     type: Type;
     isReadonly: boolean;
     declaration?: IndexSignatureDeclaration;
+    components?: ElementWithComputedPropertyName[];
 }
 
 /** @internal */
@@ -7388,6 +7417,7 @@ export interface CompilerOptions {
     /** @deprecated */
     keyofStringsOnly?: boolean;
     lib?: string[];
+    libReplacement?: boolean;
     /** @internal */ listEmittedFiles?: boolean;
     /** @internal */ listFiles?: boolean;
     /** @internal */ explainFiles?: boolean;
@@ -7481,6 +7511,7 @@ export interface CompilerOptions {
     /** Paths used to compute primary types search locations */
     typeRoots?: string[];
     verbatimModuleSyntax?: boolean;
+    erasableSyntaxOnly?: boolean;
     /** @internal */ version?: boolean;
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;
@@ -7527,6 +7558,7 @@ export enum ModuleKind {
 
     // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
     Node16 = 100,
+    Node18 = 101,
     NodeNext = 199,
 
     // Emit as written
@@ -7580,8 +7612,8 @@ export const enum ScriptKind {
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-//       lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
@@ -8389,8 +8421,8 @@ export type LanugageFeatures =
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-    //       lib/esnext.*.d.ts file.
+    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+    //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
     | "UsingAndAwaitUsing" // `using x = y`, `await using x = y`
     | "ClassAndClassElementDecorators" // `@dec class C {}`, `class C { @dec m() {} }`
 ;
@@ -8551,8 +8583,9 @@ export const enum OuterExpressionKinds {
     NonNullAssertions = 1 << 2,
     PartiallyEmittedExpressions = 1 << 3,
     ExpressionsWithTypeArguments = 1 << 4,
+    Satisfies = 1 << 5,
 
-    Assertions = TypeAssertions | NonNullAssertions,
+    Assertions = TypeAssertions | NonNullAssertions | Satisfies,
     All = Parentheses | Assertions | PartiallyEmittedExpressions | ExpressionsWithTypeArguments,
 
     ExcludeJSDocTypeAssertion = 1 << 31,
@@ -10536,7 +10569,7 @@ export interface SyntacticTypeNodeBuilderResolver {
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
     isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
-    serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature): TypeNode | undefined;
+    serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature, symbol: Symbol | undefined): TypeNode | undefined;
     serializeTypeOfExpression(context: SyntacticTypeNodeBuilderContext, expr: Expression): TypeNode;
     serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType | GetAccessorDeclaration | SetAccessorDeclaration, symbol: Symbol | undefined): TypeNode | undefined;
     serializeNameOfParameter(context: SyntacticTypeNodeBuilderContext, parameter: ParameterDeclaration): BindingName | string;

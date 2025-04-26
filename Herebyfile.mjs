@@ -1,7 +1,6 @@
 // @ts-check
 import { CancelToken } from "@esfx/canceltoken";
 import assert from "assert";
-import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
 import { EventEmitter } from "events";
@@ -9,6 +8,7 @@ import fs from "fs";
 import { glob } from "glob";
 import { task } from "hereby";
 import path from "path";
+import pc from "picocolors";
 
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
@@ -399,7 +399,7 @@ function entrypointBuildTask(options) {
             // allowing them to operate as regular tasks, while creating unresolved promises
             // in the background that keep the process running after all tasks have exited.
             if (!printedWatchWarning) {
-                console.error(chalk.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."));
+                console.error(pc.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."));
                 printedWatchWarning = true;
             }
 
@@ -604,14 +604,6 @@ export const knip = task({
     run: () => exec(process.execPath, ["node_modules/knip/bin/knip.js", "--tags=+internal,-knipignore", "--exclude=duplicates,enumMembers", ...(cmdLineOptions.fix ? ["--fix"] : [])]),
 });
 
-const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
-    name: "cancellation-token",
-    project: "src/cancellationToken",
-    srcEntrypoint: "./src/cancellationToken/cancellationToken.ts",
-    builtEntrypoint: "./built/local/cancellationToken/cancellationToken.js",
-    output: "./built/local/cancellationToken.js",
-});
-
 const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuildTask({
     name: "typings-installer",
     buildDeps: [generateDiagnostics],
@@ -661,14 +653,14 @@ const copyBuiltLocalDiagnosticMessages = task({
 export const otherOutputs = task({
     name: "other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
-    dependencies: [cancellationToken, typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const watchOtherOutputs = task({
     name: "watch-other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
     hiddenFromTaskList: true,
-    dependencies: [watchCancellationToken, watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const local = task({
@@ -715,7 +707,7 @@ export const runTestsAndWatch = task({
     dependencies: [watchTests],
     run: async () => {
         if (!cmdLineOptions.tests && !cmdLineOptions.failed) {
-            console.log(chalk.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
+            console.log(pc.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
             return;
         }
 
@@ -727,9 +719,8 @@ export const runTestsAndWatch = task({
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
         const testCaseWatcher = chokidar.watch([
-            "tests/cases/**/*.*",
-            "tests/lib/**/*.*",
-            "tests/projects/**/*.*",
+            "tests/cases",
+            "tests/lib",
         ], {
             ignorePermissionErrors: true,
             alwaysStat: true,
@@ -754,7 +745,7 @@ export const runTestsAndWatch = task({
                 running = false;
             }
             if (watching) {
-                console.log(chalk.yellowBright(`[watch] test run complete, waiting for changes...`));
+                console.log(pc.yellowBright(`[watch] test run complete, waiting for changes...`));
                 await promise;
             }
         }
@@ -764,7 +755,7 @@ export const runTestsAndWatch = task({
         }
 
         /**
-         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'} eventName
+         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir' | 'all' | 'ready' | 'raw' | 'error'} eventName
          * @param {string} path
          * @param {fs.Stats | undefined} stats
          */
@@ -791,9 +782,9 @@ export const runTestsAndWatch = task({
          */
         function beginRunTests(path) {
             if (testsChangedDebouncer.empty) {
-                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
+                console.log(pc.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
                 if (running) {
-                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
+                    console.log(pc.yellowBright("[watch] aborting in-progress test run..."));
                 }
                 testsChangedCancelSource.cancel();
                 testsChangedCancelSource = CancelToken.source();
@@ -811,7 +802,7 @@ export const runTestsAndWatch = task({
         function endWatchMode() {
             if (watching) {
                 watching = false;
-                console.log(chalk.yellowBright("[watch] exiting watch mode..."));
+                console.log(pc.yellowBright("[watch] exiting watch mode..."));
                 testsChangedCancelSource.cancel();
                 testCaseWatcher.close();
                 watchTestsEmitter.off("rebuild", onRebuild);
@@ -916,7 +907,6 @@ export const produceLKG = task({
         }
 
         const expectedFiles = [
-            "built/local/cancellationToken.js",
             "built/local/tsc.js",
             "built/local/_tsc.js",
             "built/local/tsserver.js",

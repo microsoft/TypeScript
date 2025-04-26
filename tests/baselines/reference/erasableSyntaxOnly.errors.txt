@@ -1,0 +1,180 @@
+error TS2318: Cannot find global type 'IterableIterator'.
+commonjs.cts(1,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+commonjs.cts(2,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(6,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(10,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(16,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(17,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(22,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(26,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(67,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(68,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(69,7): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(72,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(73,7): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(74,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(79,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(81,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(86,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(89,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(90,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(94,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+!!! error TS2318: Cannot find global type 'IterableIterator'.
+==== index.ts (20 errors) ====
+    class MyClassErr {
+        // No parameter properties
+        constructor(public foo: string) { }
+                    ~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    
+    namespace IllegalBecauseInstantiated {
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export const m = 1;
+    }
+    
+    namespace AlsoIllegalBecauseInstantiated {
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class PrivateClass {
+    
+        }
+    }
+    
+    namespace IllegalBecauseNestedInstantiated {
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        namespace Nested {
+                  ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export const m = 1;
+        }
+    }
+    
+    enum NotLegalEnum {
+         ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        B = 1
+    }
+    
+    import NoGoodAlias = NotLegalEnum.B;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    const enum NotLegalConstEnum {
+               ~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        C = 2
+    }
+    
+    // No errors after this point
+    class MyClassOk {
+        // Not a parameter property, ok
+        constructor(foo: string) { }
+    }
+    
+    // Note for implementors: This should not be an error
+    // as this entire namespace block is fully erased
+    namespace NotInstantiated {
+        export interface JustAType { }
+        export type ATypeInANamespace = {};
+        namespace Nested {
+            export type ATypeInANamespace = {};
+        }
+    }
+    declare namespace AmbientIsNotInstantiated {
+        export const stillOk = 12;
+    }
+    
+    declare enum LegalEnum {
+        A = 1
+    }
+    
+    declare namespace AmbientStuff {
+        namespace Nested {
+            export const stillOk = 12;
+        }
+        enum EnumInAmbientContext {
+            B = 1
+        }
+    
+        import FineAlias = EnumInAmbientContext.B;
+    }
+    
+    // Not erasable
+    (()=><any>{})();
+         ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    (()=>< any >{})();
+         ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    (()=> < any > {})();
+          ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    // Erasable
+    (()=><any>({}))();
+         ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    (()=>(<any>{}))();
+          ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    <any>{};
+    ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    
+    // return and yield ASI
+    function *gen() {
+        yield <any>
+              ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            1;
+        return <any>
+               ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            1;
+    }
+    
+    // at the start of an ExpressionStatement if followed by an object literal; though I'm not sure why one would use it there
+    <unknown>{foo() {}}.foo();
+    ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    // at the start of an ExpressionStatement if followed by function keyword
+    <unknown>function() {}();
+    ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    <unknown>function() {};
+    ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    // at the start of an ExpressionStatement if followed by an anonymous class expression
+    // note that this exact syntax currently emits invalid JS (no parenthesis added like for function above)
+    <unknown>class {}
+    ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+==== commonjs.cts (2 errors) ====
+    import foo = require("./other.cjs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    export = foo;
+    ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    
+==== other.d.cts (0 errors) ====
+    declare function foo(): void;
+    export = foo;
+    
+    
+==== esm.mts (0 errors) ====
+    const foo = 1234;
+    export default foo;
+    

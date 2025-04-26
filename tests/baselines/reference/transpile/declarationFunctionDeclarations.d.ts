@@ -45,6 +45,14 @@ export class InClassMethodOk1 { o(array: number[] = [], rParam: string): void { 
 export class InClassMethodOk2 { o(array: T | undefined = [], rParam: string): void { } };
 export class InClassMethodBad { o(array: T = [], rParam: string): void { } };
 
+// https://github.com/microsoft/TypeScript/issues/60976
+class Bar {}
+export class ClsWithRequiredInitializedParameter {
+  constructor(
+    private arr: Bar = new Bar(),
+    private bool: boolean,
+  ) {}
+}
 //// [fnDecl.d.ts] ////
 type T = number[];
 export declare function fnDeclBasic1(p: number[] | string[] | [T] | undefined, rParam: string): void;
@@ -121,6 +129,13 @@ export declare class InClassMethodOk2 {
 export declare class InClassMethodBad {
     o(array: T | undefined, rParam: string): void;
 }
+declare class Bar {
+}
+export declare class ClsWithRequiredInitializedParameter {
+    private arr;
+    private bool;
+    constructor(arr: Bar | undefined, bool: boolean);
+}
 export {};
 
 
@@ -134,9 +149,10 @@ fnDecl.ts(32,45): error TS9025: Declaration emit for this parameter requires imp
 fnDecl.ts(37,47): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 fnDecl.ts(41,37): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 fnDecl.ts(45,35): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(51,5): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 
 
-==== fnDecl.ts (9 errors) ====
+==== fnDecl.ts (10 errors) ====
     type T = number[]
     export function fnDeclBasic1(p: number[] | string[] | [T] = [], rParam: string): void { };
     export function fnDeclBasic2(p: (n: T) => T = () => null!, rParam: string): void { };
@@ -210,4 +226,14 @@ fnDecl.ts(45,35): error TS9025: Declaration emit for this parameter requires imp
 !!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:45:35: Add a type annotation to the parameter array.
     
-    
+    // https://github.com/microsoft/TypeScript/issues/60976
+    class Bar {}
+    export class ClsWithRequiredInitializedParameter {
+      constructor(
+        private arr: Bar = new Bar(),
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+!!! related TS9028 fnDecl.ts:51:5: Add a type annotation to the parameter arr.
+        private bool: boolean,
+      ) {}
+    }
