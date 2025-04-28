@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/typeTagForMultipleVariableDeclarations.ts] ////
+
+=== typeTagForMultipleVariableDeclarations.js ===
+/** @type {number} */
+var x,y,z;
+>x : number
+>y : any
+>z : any
+
+x
+>x : number
+
+y
+>y : any
+
+z
+>z : any
+

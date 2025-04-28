@@ -126,6 +126,7 @@ func (p *Parser) reparseTags(parent *ast.Node, jsDoc []*ast.Node) {
 					for _, declaration := range parent.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
 						if declaration.AsVariableDeclaration().Type == nil {
 							declaration.AsVariableDeclaration().Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, declaration)
+							break
 						}
 					}
 				} else if parent.Kind == ast.KindVariableDeclaration {
