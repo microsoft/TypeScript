@@ -209,7 +209,6 @@ func (p *Parser) initializeState(fileName string, path tspath.Path, sourceText s
 	default:
 		p.contextFlags = ast.NodeFlagsNone
 	}
-	p.hasParseError = false
 	p.scanner.SetText(p.sourceText)
 	p.scanner.SetOnError(p.scanError)
 	p.scanner.SetScriptTarget(p.languageVersion)
@@ -335,8 +334,6 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 			p.finishSourceFile(result, isDeclarationFile)
 		}
 	}
-	p.jsdocCache = nil
-	p.possibleAwaitSpans = []int{}
 	collectExternalModuleReferences(result)
 	return result
 }
@@ -358,8 +355,6 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	result.TextCount = p.factory.TextCount()
 	result.IdentifierCount = p.identifierCount
 	result.SetJSDocCache(p.jsdocCache)
-	p.jsdocCache = nil
-	p.identifiers = nil
 }
 
 func (p *Parser) parseToplevelStatement(i int) *ast.Node {
