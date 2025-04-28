@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"runtime/debug"
 	"slices"
 	"strconv"
 	"strings"
@@ -59,6 +60,7 @@ type cliOptions struct {
 		listFiles     tristateFlag
 		listFilesOnly tristateFlag
 		showConfig    tristateFlag
+		version       bool
 	}
 
 	devel struct {
@@ -103,6 +105,7 @@ func parseArgs() *cliOptions {
 	flag.Var(&opts.tsc.listFiles, "listFiles", diagnostics.Print_all_of_the_files_read_during_the_compilation.Format())
 	flag.Var(&opts.tsc.listFilesOnly, "listFilesOnly", diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing.Format())
 	flag.Var(&opts.tsc.showConfig, "showConfig", diagnostics.Print_the_final_configuration_instead_of_building.Format())
+	flag.BoolVar(&opts.tsc.version, "version", false, diagnostics.Print_the_compiler_s_version.Format())
 
 	flag.BoolVar(&opts.devel.quiet, "q", false, "Do not print diagnostics.")
 	flag.BoolVar(&opts.devel.quiet, "quiet", false, "Do not print diagnostics.")
@@ -142,6 +145,21 @@ func runMain() int {
 	if opts.devel.pprofDir != "" {
 		profileSession := pprof.BeginProfiling(opts.devel.pprofDir, os.Stdout)
 		defer profileSession.Stop()
+	}
+
+	if opts.tsc.version {
+		// Get build info to extract the commit SHA
+		buildInfo, _ := debug.ReadBuildInfo()
+		version := core.Version
+		for _, setting := range buildInfo.Settings {
+			if setting.Key == "vcs.revision" {
+				version += "-" + setting.Value
+				break
+			}
+		}
+
+		fmt.Println(diagnostics.Version_0.Format(version))
+		return 0
 	}
 
 	startTime := time.Now()
