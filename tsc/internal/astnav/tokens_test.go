@@ -354,7 +354,15 @@ func TestFindPrecedingToken(t *testing.T) {
 
 func TestUnitFindPrecedingToken(t *testing.T) {
 	t.Parallel()
-	fileContent := `import {
+	testCases := []struct {
+		name         string
+		fileContent  string
+		position     int
+		expectedKind ast.Kind
+	}{
+		{
+			name: "after dot in jsdoc",
+			fileContent: `import {
     CharacterCodes,
     compareStringsCaseInsensitive,
     compareStringsCaseSensitive,
@@ -399,11 +407,25 @@ backslashRegExp.
  */
 export function isAnyDirectorySeparator(charCode: number): boolean {
     return charCode === CharacterCodes.slash || charCode === CharacterCodes.backslash;
-}`
-	file := parser.ParseSourceFile("/file.ts", "/file.ts", fileContent, core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
-	position := 839
-	token := astnav.FindPrecedingToken(file, position)
-	assert.Equal(t, token.Kind, ast.KindDotToken)
+}`,
+			position:     839,
+			expectedKind: ast.KindDotToken,
+		},
+		{
+			name:         "after comma in parameter list",
+			fileContent:  `takesCb((n, s, ))`,
+			position:     15,
+			expectedKind: ast.KindCommaToken,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+			file := parser.ParseSourceFile("/file.ts", "/file.ts", testCase.fileContent, core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
+			token := astnav.FindPrecedingToken(file, testCase.position)
+			assert.Equal(t, token.Kind, testCase.expectedKind)
+		})
+	}
 }
 
 func tsFindPrecedingTokens(t *testing.T, fileText string, positions []int) []*tokenInfo {

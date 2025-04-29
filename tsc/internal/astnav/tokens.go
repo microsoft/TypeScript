@@ -418,8 +418,8 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 	if position == -1 {
 		position = containingNode.End()
 	}
-	var find func(n *ast.Node) *ast.Node
-	find = func(n *ast.Node) *ast.Node {
+	var find func(n *ast.Node, endPos int) *ast.Node
+	find = func(n *ast.Node, endPos int) *ast.Node {
 		if n == nil {
 			return nil
 		}
@@ -555,10 +555,13 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 			return n
 		}
 		// Case 1: recur on rightmostValidNode.
-		return find(rightmostValidNode)
+		if rightmostValidNode != nil {
+			endPos = rightmostValidNode.End()
+		}
+		return find(rightmostValidNode, endPos)
 	}
 
-	return find(containingNode)
+	return find(containingNode, endPos)
 }
 
 // !!!
