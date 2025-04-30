@@ -66,7 +66,7 @@ func (l *LanguageService) tryGetProgramAndFile(fileName string) (*compiler.Progr
 func (l *LanguageService) getProgramAndFile(fileName string) (*compiler.Program, *ast.SourceFile) {
 	program, file := l.tryGetProgramAndFile(fileName)
 	if file == nil {
-		panic("file not found")
+		panic("file not found: " + fileName)
 	}
 	return program, file
 }

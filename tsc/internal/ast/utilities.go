@@ -2792,3 +2792,12 @@ func IsClassMemberModifier(token Kind) bool {
 func IsParameterPropertyModifier(kind Kind) bool {
 	return ModifierToFlag(kind)&ModifierFlagsParameterPropertyModifier != 0
 }
+
+func ForEachChildAndJSDoc(node *Node, sourceFile *SourceFile, v Visitor) bool {
+	if node.Flags&NodeFlagsHasJSDoc != 0 {
+		if visitNodes(v, node.JSDoc(sourceFile)) {
+			return true
+		}
+	}
+	return node.ForEachChild(v)
+}

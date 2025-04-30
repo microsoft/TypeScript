@@ -121,7 +121,7 @@ const (
 	SortTextJavascriptIdentifiers            sortText = "18"
 )
 
-func deprecateSortText(original sortText) sortText {
+func DeprecateSortText(original sortText) sortText {
 	return "z" + original
 }
 
@@ -910,6 +910,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	closestSymbolDeclaration := getClosestSymbolDeclaration(data.contextToken, data.location)
 	useSemicolons := probablyUsesSemicolons(file)
 	typeChecker := program.GetTypeChecker()
+	isMemberCompletion := isMemberCompletionKind(data.completionKind)
 	// Tracks unique names.
 	// Value is set to false for global variables or completions from external module exports, because we can have multiple of those;
 	// true otherwise. Based on the order we add things we will always see locals first, then globals, then module exports.
@@ -944,7 +945,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 
 		var sortText sortText
 		if isDeprecated(symbol, typeChecker) {
-			sortText = deprecateSortText(originalSortText)
+			sortText = DeprecateSortText(originalSortText)
 		} else {
 			sortText = originalSortText
 		}
@@ -963,12 +964,13 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 			compilerOptions,
 			preferences,
 			clientOptions,
+			isMemberCompletion,
 		)
 		if entry == nil {
 			continue
 		}
 
-		/** True for locals; false for globals, module exports from other files, `this.` completions. */
+		// True for locals; false for globals, module exports from other files, `this.` completions.
 		shouldShadowLaterSymbols := (origin == nil || originIsTypeOnlyAlias(origin)) &&
 			!(symbol.Parent == nil &&
 				!core.Some(symbol.Declarations, func(d *ast.Node) bool { return ast.GetSourceFileOfNode(d) == file }))
@@ -1028,6 +1030,7 @@ func (l *LanguageService) createCompletionItem(
 	compilerOptions *core.CompilerOptions,
 	preferences *UserPreferences,
 	clientOptions *lsproto.CompletionClientCapabilities,
+	isMemberCompletion bool,
 ) *lsproto.CompletionItem {
 	contextToken := data.contextToken
 	var insertText string
@@ -1250,6 +1253,8 @@ func (l *LanguageService) createCompletionItem(
 		}
 	}
 
+	// Commit characters
+
 	elementKind := getSymbolKind(typeChecker, symbol, data.location)
 	kind := getCompletionsSymbolKind(elementKind)
 	var commitCharacters *[]string
@@ -1262,10 +1267,77 @@ func (l *LanguageService) createCompletionItem(
 		// Otherwise use the completion list default.
 	}
 
+	// Text edit
+
+	var textEdit *lsproto.TextEditOrInsertReplaceEdit
+	if replacementSpan != nil {
+		textEdit = &lsproto.TextEditOrInsertReplaceEdit{
+			TextEdit: &lsproto.TextEdit{
+				NewText: core.IfElse(insertText == "", name, insertText),
+				Range:   *replacementSpan,
+			},
+		}
+	} else {
+		// Ported from vscode ts extension.
+		optionalReplacementSpan := getOptionalReplacementSpan(data.location, file)
+		if optionalReplacementSpan != nil && ptrIsTrue(clientOptions.CompletionItem.InsertReplaceSupport) {
+			insertRange := l.createLspRangeFromBounds(optionalReplacementSpan.Pos(), position, file)
+			replaceRange := l.createLspRangeFromBounds(optionalReplacementSpan.Pos(), optionalReplacementSpan.End(), file)
+			textEdit = &lsproto.TextEditOrInsertReplaceEdit{
+				InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+					NewText: core.IfElse(insertText == "", name, insertText),
+					Insert:  *insertRange,
+					Replace: *replaceRange,
+				},
+			}
+		}
+	}
+
+	// Filter text
+
+	// Ported from vscode ts extension.
+	wordRange, wordStart := getWordRange(file, position)
+	if filterText == "" {
+		filterText = getFilterText(file, position, insertText, name, isMemberCompletion, isSnippet, wordStart)
+	}
+	if isMemberCompletion && !isSnippet {
+		accessorRange, accessorText := getDotAccessorContext(file, position)
+		if accessorText != "" {
+			filterText = accessorText + core.IfElse(insertText != "", insertText, name)
+			if textEdit == nil {
+				insertText = filterText
+				if wordRange != nil && ptrIsTrue(clientOptions.CompletionItem.InsertReplaceSupport) {
+					textEdit = &lsproto.TextEditOrInsertReplaceEdit{
+						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+							NewText: insertText,
+							Insert: *l.createLspRangeFromBounds(
+								accessorRange.Pos(),
+								accessorRange.End(),
+								file),
+							Replace: *l.createLspRangeFromBounds(
+								min(accessorRange.Pos(), wordRange.Pos()),
+								accessorRange.End(),
+								file),
+						},
+					}
+				} else {
+					textEdit = &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: insertText,
+							Range:   *l.createLspRangeFromBounds(accessorRange.Pos(), accessorRange.End(), file),
+						},
+					}
+				}
+			}
+		}
+	}
+
+	// Adjustements based on kind modifiers.
+
 	kindModifiers := getSymbolModifiers(typeChecker, symbol)
 	var tags *[]lsproto.CompletionItemTag
 	var detail *string
-	// Copied from vscode ts extension.
+	// Copied from vscode ts extension: `MyCompletionItem.constructor`.
 	if kindModifiers.Has(ScriptElementKindModifierOptional) {
 		if insertText == "" {
 			insertText = name
@@ -1302,17 +1374,6 @@ func (l *LanguageService) createCompletionItem(
 		insertTextFormat = ptrTo(lsproto.InsertTextFormatPlainText)
 	}
 
-	var textEdit *lsproto.TextEditOrInsertReplaceEdit
-	if replacementSpan != nil {
-		textEdit = &lsproto.TextEditOrInsertReplaceEdit{
-			TextEdit: &lsproto.TextEdit{
-				NewText: core.IfElse(insertText == "", name, insertText),
-				Range:   *replacementSpan,
-			},
-		}
-	}
-	// !!! adjust text edit like vscode does when Strada's `isMemberCompletion` is true
-
 	return &lsproto.CompletionItem{
 		Label:            name,
 		LabelDetails:     labelDetails,
@@ -1338,6 +1399,118 @@ func supportsDefaultCommitCharacters(clientOptions *lsproto.CompletionClientCapa
 func isRecommendedCompletionMatch(localSymbol *ast.Symbol, recommendedCompletion *ast.Symbol, typeChecker *checker.Checker) bool {
 	return localSymbol == recommendedCompletion ||
 		localSymbol.Flags&ast.SymbolFlagsExportValue != 0 && typeChecker.GetExportSymbolOfSymbol(localSymbol) == recommendedCompletion
+}
+
+// Ported from vscode's `USUAL_WORD_SEPARATORS`.
+var wordSeparators = core.NewSetFromItems(
+	'`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', '[', '{', ']', '}', '\\', '|',
+	';', ':', '\'', '"', ',', '.', '<', '>', '/', '?',
+)
+
+// Finds the range of the word that ends at the given position.
+// e.g. for "abc def.ghi|jkl", the word range is "ghi" and the word start is 'g'.
+func getWordRange(sourceFile *ast.SourceFile, position int) (wordRange *core.TextRange, wordStart rune) {
+	// !!! Port other case of vscode's `DEFAULT_WORD_REGEXP` that covers words that start like numbers, e.g. -123.456abcd.
+	text := sourceFile.Text()[:position]
+	totalSize := 0
+	var firstRune rune
+	for r, size := utf8.DecodeLastRuneInString(text); size != 0; r, size = utf8.DecodeLastRuneInString(text[:len(text)-size]) {
+		if wordSeparators.Has(r) || unicode.IsSpace(r) {
+			break
+		}
+		totalSize += size
+		firstRune = r
+	}
+	// If word starts with `@`, disregard this first character.
+	if firstRune == '@' {
+		totalSize -= 1
+		firstRune, _ = utf8.DecodeRuneInString(text[len(text)-totalSize:])
+	}
+	if totalSize == 0 {
+		return nil, firstRune
+	}
+	textRange := core.NewTextRange(position-totalSize, position)
+	return &textRange, firstRune
+}
+
+// Ported from vscode ts extension: `getFilterText`.
+func getFilterText(
+	file *ast.SourceFile,
+	position int,
+	insertText string,
+	label string,
+	isMemberCompletion bool,
+	isSnippet bool,
+	wordStart rune,
+) string {
+	// Private field completion.
+	if strings.HasPrefix(label, "#") {
+		// !!! document theses cases
+		if insertText != "" {
+			if strings.HasPrefix(insertText, "this.#") {
+				if wordStart == '#' {
+					return insertText
+				} else {
+					return strings.TrimPrefix(insertText, "this.#")
+				}
+			}
+		} else {
+			if wordStart == '#' {
+				return ""
+			} else {
+				return strings.TrimPrefix(label, "#")
+			}
+		}
+	}
+
+	// For `this.` completions, generally don't set the filter text since we don't want them to be overly prioritized. microsoft/vscode#74164
+	if strings.HasPrefix(insertText, "this.") {
+		return ""
+	}
+
+	// Handle the case:
+	// ```
+	// const xyz = { 'ab c': 1 };
+	// xyz.ab|
+	// ```
+	// In which case we want to insert a bracket accessor but should use `.abc` as the filter text instead of
+	// the bracketed insert text.
+	if strings.HasPrefix(insertText, "[") {
+		if strings.HasPrefix(insertText, `['`) && strings.HasSuffix(insertText, `']`) {
+			return "." + strings.TrimPrefix(strings.TrimSuffix(insertText, `']`), `['`)
+		}
+		if strings.HasPrefix(insertText, `["`) && strings.HasSuffix(insertText, `"]`) {
+			return "." + strings.TrimPrefix(strings.TrimSuffix(insertText, `"]`), `["`)
+		}
+		return insertText
+	}
+
+	// In all other cases, fall back to using the insertText.
+	return insertText
+}
+
+// Ported from vscode's `provideCompletionItems`.
+func getDotAccessorContext(file *ast.SourceFile, position int) (acessorRange *core.TextRange, accessorText string) {
+	text := file.Text()[:position]
+	totalSize := 0
+	for r, size := utf8.DecodeLastRuneInString(text); size != 0; r, size = utf8.DecodeLastRuneInString(text[:len(text)-size]) {
+		if !unicode.IsSpace(r) {
+			break
+		}
+		totalSize += size
+		text = text[:len(text)-size]
+	}
+	if strings.HasSuffix(text, "?.") {
+		totalSize += 2
+		newRange := core.NewTextRange(position-totalSize, position)
+		return &newRange, file.Text()[position-totalSize : position]
+	}
+	if strings.HasSuffix(text, ".") {
+		totalSize += 1
+		newRange := core.NewTextRange(position-totalSize, position)
+		return &newRange, file.Text()[position-totalSize : position]
+	}
+	return nil, ""
 }
 
 func strPtrTo(v string) *string {
@@ -2318,4 +2491,20 @@ func getJSCompletionEntries(
 		}
 	}
 	return sortedEntries
+}
+
+func getOptionalReplacementSpan(location *ast.Node, file *ast.SourceFile) *core.TextRange {
+	// StringLiteralLike locations are handled separately in stringCompletions.ts
+	if location != nil && location.Kind == ast.KindIdentifier {
+		start := astnav.GetStartOfNode(location, file, false /*includeJSDoc*/)
+		textRange := core.NewTextRange(start, location.End())
+		return &textRange
+	}
+	return nil
+}
+
+func isMemberCompletionKind(kind CompletionKind) bool {
+	return kind == CompletionKindObjectPropertyDeclaration ||
+		kind == CompletionKindMemberLike ||
+		kind == CompletionKindPropertyAccess
 }

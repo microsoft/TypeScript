@@ -82,23 +82,73 @@ func assertHasRealPosition(node *ast.Node) {
 	}
 }
 
-// !!!
-func findChildOfKind(node *ast.Node, kind ast.Kind, sourceFile *ast.SourceFile) *ast.Node {
+func findChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.SourceFile) *ast.Node {
+	lastNodePos := containingNode.Pos()
+	scanner := scanner.GetScannerForSourceFile(sourceFile, lastNodePos)
+
+	var foundChild *ast.Node
+	visitNode := func(node *ast.Node) bool {
+		if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
+			return false
+		}
+		// Look for child in preceding tokens.
+		startPos := lastNodePos
+		for startPos < node.Pos() {
+			tokenKind := scanner.Token()
+			tokenFullStart := scanner.TokenFullStart()
+			tokenEnd := scanner.TokenEnd()
+			token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, containingNode)
+			if tokenKind == kind {
+				foundChild = token
+				return true
+			}
+			startPos = tokenEnd
+			scanner.Scan()
+		}
+		if node.Kind == kind {
+			foundChild = node
+			return true
+		}
+
+		lastNodePos = node.End()
+		scanner.ResetPos(lastNodePos)
+		return false
+	}
+
+	ast.ForEachChildAndJSDoc(containingNode, sourceFile, visitNode)
+
+	if foundChild != nil {
+		return foundChild
+	}
+
+	// Look for child in trailing tokens.
+	startPos := lastNodePos
+	for startPos < containingNode.End() {
+		tokenKind := scanner.Token()
+		tokenFullStart := scanner.TokenFullStart()
+		tokenEnd := scanner.TokenEnd()
+		token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, containingNode)
+		if tokenKind == kind {
+			return token
+		}
+		startPos = tokenEnd
+		scanner.Scan()
+	}
 	return nil
 }
 
-// !!!
+// !!! signature help
 type PossibleTypeArgumentInfo struct {
 	called         *ast.IdentifierNode
 	nTypeArguments int
 }
 
-// !!!
+// !!! signature help
 func getPossibleTypeArgumentsInfo(tokenIn *ast.Node, sourceFile *ast.SourceFile) *PossibleTypeArgumentInfo {
 	return nil
 }
 
-// !!!
+// !!! signature help
 func getPossibleGenericSignatures(called *ast.Expression, typeArgumentCount int, checker *checker.Checker) []*checker.Signature {
 	return nil
 }
