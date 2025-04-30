@@ -11,22 +11,29 @@ import {
 } from "vscode-languageclient/node";
 
 let client: LanguageClient;
+let statusBarItem: vscode.StatusBarItem;
+
+const BUILTIN_TS_EXTENSION_ID = "vscode.typescript-language-features";
 
 export function activate(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.commands.registerCommand("typescript-go.restart", () => {
-        client.restart();
-    }));
+    const tsExtension = vscode.extensions.getExtension(BUILTIN_TS_EXTENSION_ID);
+    if (tsExtension?.isActive && !vscode.workspace.getConfiguration("typescript").get<boolean>("experimental.useTsgo")) {
+        return;
+    }
 
     const output = vscode.window.createOutputChannel("typescript-go", "log");
     const traceOutput = vscode.window.createOutputChannel("typescript-go (LSP)");
 
-    const exe = context.asAbsolutePath(
+    setupStatusBar(context);
+    registerCommands(context, output, traceOutput);
+
+    const config = vscode.workspace.getConfiguration("typescript-go");
+
+    const exe = config.get<string>("executablePath") || context.asAbsolutePath(
         path.join("../", "built", "local", `tsgo${process.platform === "win32" ? ".exe" : ""}`),
     );
 
     output.appendLine(`Resolved to ${exe}`);
-
-    const config = vscode.workspace.getConfiguration("typescript-go");
 
     // Get pprofDir
     const pprofDir = config.get<string>("pprofDir");
@@ -115,13 +122,86 @@ export function activate(context: vscode.ExtensionContext) {
 
     output.appendLine(`Starting language server...`);
     client.start();
+    vscode.commands.executeCommand("setContext", "typescript-go.serverRunning", true);
 }
 
-export function deactivate(): Thenable<void> | undefined {
-    if (!client) {
-        return undefined;
+/**
+ * Sets up the status bar item for TypeScript Go
+ * @param context Extension context
+ */
+function setupStatusBar(context: vscode.ExtensionContext): void {
+    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    statusBarItem.text = "$(beaker) tsgo";
+    statusBarItem.tooltip = "TypeScript Go Language Server";
+    statusBarItem.command = "typescript-go.showMenu";
+    statusBarItem.backgroundColor = new vscode.ThemeColor("statusBarItem.warningBackground");
+    statusBarItem.show();
+    context.subscriptions.push(statusBarItem);
+}
+
+/**
+ * Registers all commands for the extension
+ * @param context Extension context
+ */
+function registerCommands(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel, traceOutputChannel: vscode.OutputChannel): void {
+    context.subscriptions.push(vscode.commands.registerCommand("typescript-go.restart", async () => {
+        await client.restart();
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("typescript-go.output.focus", () => {
+        outputChannel.show();
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("typescript-go.lsp-trace.focus", () => {
+        traceOutputChannel.show();
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("typescript-go.showMenu", showQuickPickMenu));
+}
+
+/**
+ * Shows the quick pick menu for TypeScript Go options
+ */
+async function showQuickPickMenu(): Promise<void> {
+    const selected = await vscode.window.showQuickPick([
+        { label: "$(refresh) Restart Server", description: "Restart the TypeScript Go language server" },
+        { label: "$(output) Show TS Server Log", description: "Show the TypeScript Go server log" },
+        { label: "$(debug-console) Show LSP Messages", description: "Show the LSP communication trace" },
+        { label: "$(stop-circle) Disable TypeScript Go", description: "Switch back to the built-in TypeScript extension" },
+    ], {
+        placeHolder: "TypeScript Go Options",
+    });
+
+    if (selected) {
+        if (selected.label.includes("Restart Server")) {
+            await vscode.commands.executeCommand("typescript-go.restart");
+        }
+        else if (selected.label.includes("Show TS Server Log")) {
+            await vscode.commands.executeCommand("typescript-go.output.focus");
+        }
+        else if (selected.label.includes("Show LSP Messages")) {
+            await vscode.commands.executeCommand("typescript-go.lsp-trace.focus");
+        }
+        else if (selected.label.includes("Disable TypeScript Go")) {
+            // Fire and forget, because this command will restart the whole extension host
+            // and awaiting it shows a weird cancellation error.
+            vscode.commands.executeCommand("typescript.experimental.disableTsgo");
+        }
     }
-    return client.stop();
+}
+
+export async function deactivate(): Promise<void> {
+    // Dispose of status bar item
+    if (statusBarItem) {
+        statusBarItem.dispose();
+    }
+
+    if (!client) {
+        return;
+    }
+
+    await client.stop();
+    return vscode.commands.executeCommand("setContext", "typescript-go.serverRunning", false);
 }
 
 function getLanguageForUri(uri: vscode.Uri): string | undefined {

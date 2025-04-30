@@ -7,6 +7,10 @@
     "private": true,
     "version": "0.0.0",
     "type": "commonjs",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/microsoft/typescript-go"
+    },
     "engines": {
         "vscode": "^1.91.0"
     },
@@ -34,6 +38,10 @@
                     "typescript-go.pprofDir": {
                         "type": "string",
                         "description": "Directory to write pprof profiles to."
+                    },
+                    "typescript-go.executablePath": {
+                        "type": "string",
+                        "description": "Path to the tsgo binary. If not specified, the extension will look for it in the default location."
                     }
                 }
             }
@@ -41,26 +49,37 @@
         "commands": [
             {
                 "command": "typescript-go.restart",
-                "title": "TypeScript Go: Restart Language Server"
+                "title": "TypeScript Go: Restart Language Server",
+                "enablement": "typescript-go.serverRunning"
             }
         ],
         "menus": {
             "commandPalette": [
                 {
-                    "command": "typescript-go.restart"
+                    "command": "typescript-go.restart",
+                    "when": "typescript-go.serverRunning"
                 }
             ]
         }
     },
     "main": "./dist/extension.js",
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "build": "tsc",
-        "watch": "tsc --watch"
+        "watch": "tsc --watch",
+        "build:prod": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.js --minify",
+        "package": "vsce package --skip-license --no-dependencies --out typescript-lsp.vsix",
+        "install-extension": "code --install-extension typescript-lsp.vsix",
+        "vscode:prepublish": "npm run build:prod"
     },
     "dependencies": {
         "vscode-languageclient": "^9.0.1"
     },
     "devDependencies": {
-        "@types/vscode": "^1.96.0"
+        "@types/vscode": "^1.91.0",
+        "@vscode/vsce": "^3.3.2",
+        "esbuild": "^0.25.2"
     }
 }

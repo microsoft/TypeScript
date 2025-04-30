@@ -55,6 +55,8 @@ const { values: options } = parseArgs({
         fix: { type: "boolean" },
         debug: { type: "boolean" },
 
+        insiders: { type: "boolean" },
+
         race: { type: "boolean", default: parseEnvBoolean("RACE") },
         noembed: { type: "boolean", default: parseEnvBoolean("NOEMBED") },
         concurrentTestPrograms: { type: "boolean", default: parseEnvBoolean("CONCURRENT_TEST_PROGRAMS") },
@@ -345,6 +347,17 @@ export const testAll = task({
         await runTestBenchmarks();
         await runTestTools();
         await runTestAPI();
+    },
+});
+
+export const installExtension = task({
+    name: "install-extension",
+    run: async () => {
+        await $({ cwd: path.join(__dirname, "_extension") })`npm run package`;
+        await $({ cwd: path.join(__dirname, "_extension") })`${options.insiders ? "code-insiders" : "code"} --install-extension typescript-lsp.vsix`;
+        console.log(pc.yellowBright("\nExtension installed. ") + "Add the following to your workspace or user settings.json:\n");
+        console.log(pc.whiteBright(`    "typescript-go.executablePath": "${path.join(__dirname, "built", "local", process.platform === "win32" ? "tsgo.exe" : "tsgo")}"\n`));
+        console.log("Select 'TypeScript: Use TypeScript Go (Experimental)' in the command palette to enable the extension and disable built-in TypeScript support.\n");
     },
 });
 
