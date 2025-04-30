@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/declarationEmitMultipleComputedNamesSameDomain.ts] ////
+
+=== declarationEmitMultipleComputedNamesSameDomain.ts ===
+declare const x: string;
+>x : Symbol(x, Decl(declarationEmitMultipleComputedNamesSameDomain.ts, 0, 13))
+
+declare const y: "y";
+>y : Symbol(y, Decl(declarationEmitMultipleComputedNamesSameDomain.ts, 1, 13))
+
+export class Test {
+>Test : Symbol(Test, Decl(declarationEmitMultipleComputedNamesSameDomain.ts, 1, 21))
+
+    [x] = 10;
+>[x] : Symbol(Test[x], Decl(declarationEmitMultipleComputedNamesSameDomain.ts, 3, 19))
+>x : Symbol(x, Decl(declarationEmitMultipleComputedNamesSameDomain.ts, 0, 13))
+
+    [y] = 10;
+>[y] : Symbol(Test[y], Decl(declarationEmitMultipleComputedNamesSameDomain.ts, 4, 13))
+>y : Symbol(y, Decl(declarationEmitMultipleComputedNamesSameDomain.ts, 1, 13))
+}

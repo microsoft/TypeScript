@@ -1,12 +1,26 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionAwait3.ts ===
 // class C {
-//     notAsync() {
+//     <|[|notAsync|]() {
 //       /*GOTO DEF*/await Promise.resolve(0);
-//     }
+//     }|>
 // 
 //     async foo() {
-// --- (line: 7) skipped ---
+//       await Promise.resolve(0);
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "notAsync",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
 
 
 

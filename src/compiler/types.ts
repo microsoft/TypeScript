@@ -5046,11 +5046,15 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
 
     typesPackageExists(packageName: string): boolean;
     packageBundlesTypes(packageName: string): boolean;
+
+    isSourceFileDefaultLibrary(file: SourceFile): boolean;
 }
 
 /** @internal */
 export interface WriterContextOut {
-    couldUnfoldMore: boolean;
+    /** Whether increasing the expansion depth will cause us to expand more types. */
+    canIncreaseExpansionDepth: boolean;
+    truncated: boolean;
 }
 
 export interface TypeChecker {
@@ -5139,7 +5143,7 @@ export interface TypeChecker {
     symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): ParameterDeclaration | undefined;
     /** Note that the resulting nodes cannot be checked. */
     typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeParameterDeclaration | undefined;
-    /** @internal */ typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number): TypeParameterDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    /** @internal */ typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut): TypeParameterDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 
     getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
     getSymbolAtLocation(node: Node): Symbol | undefined;
@@ -5171,7 +5175,7 @@ export interface TypeChecker {
     symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
     typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
 
-    /** @internal */ writeSignature(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string;
+    /** @internal */ writeSignature(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string;
     /** @internal */ writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string;
     /** @internal */ writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
     /** @internal */ writeTypePredicate(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
@@ -5292,6 +5296,10 @@ export interface TypeChecker {
      * is `never`. Instead, use `type.flags & TypeFlags.Never`.
      */
     getNeverType(): Type;
+    /**
+     * Gets the intrinsic `object` type.
+     */
+    getNonPrimitiveType(): Type;
     /** @internal */ getOptionalType(): Type;
     /** @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
     /** @internal */ createArrayType(elementType: Type): Type;
@@ -5439,6 +5447,9 @@ export interface TypeChecker {
     /** @internal */ typeHasCallOrConstructSignatures(type: Type): boolean;
     /** @internal */ getSymbolFlags(symbol: Symbol): SymbolFlags;
     /** @internal */ fillMissingTypeArguments(typeArguments: readonly Type[], typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
+
+    getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
+    /** @internal */ isLibType(type: Type): boolean;
 }
 
 /** @internal */
@@ -5884,7 +5895,8 @@ export interface EmitResolver {
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
-    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): IndexSignatureDeclaration[] | undefined;
+    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): (IndexSignatureDeclaration | PropertyDeclaration)[] | undefined;
+    symbolToDeclarations(symbol: Symbol, meaning: SymbolFlags, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration[];
 }
 
 // dprint-ignore
@@ -6247,7 +6259,6 @@ export interface NodeLinks {
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
-    contextualReturnType?: Type;        // If the node is a return statement's expression, then this is the contextual return type.
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
     potentialThisCollisions?: Node[];
@@ -6515,8 +6526,6 @@ export const enum ObjectFlags {
     IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
     /** @internal */
     IsGenericType = IsGenericObjectType | IsGenericIndexType,
-    /** @internal */
-    IsNarrowingType = 1 << 24, // Substitution type that comes from type narrowing
 
     // Flags that require TypeFlags.Union
     /** @internal */
@@ -6916,16 +6925,12 @@ export interface StringMappingType extends InstantiableType {
 }
 
 // Type parameter substitution (TypeFlags.Substitution)
-// - Substitution types are created for type parameters or indexed access types that occur in the
+// Substitution types are created for type parameters or indexed access types that occur in the
 // true branch of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the
 // reference to T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T.
 // Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it.
-// - Substitution types are also created for NoInfer<T> types. Those are represented as substitution
+// Substitution type are also created for NoInfer<T> types. Those are represented as substitution
 // types where the constraint is type 'unknown' (which is never generated for the case above).
-// - Substitution types are also created for return type narrowing:
-// if a type parameter `T` is linked to a parameter `x` and `x`'s narrowed type is `S`,
-// we represent that with a substitution type with base `T` and constraint `S`.
-// The resulting substitution type has `ObjectFlags.IsNarrowedType` set.
 export interface SubstitutionType extends InstantiableType {
     objectFlags: ObjectFlags;
     baseType: Type; // Target type
@@ -7018,11 +7023,14 @@ export const enum IndexKind {
     Number,
 }
 
+export type ElementWithComputedPropertyName = (ClassElement | ObjectLiteralElement) & { name: ComputedPropertyName; };
+
 export interface IndexInfo {
     keyType: Type;
     type: Type;
     isReadonly: boolean;
     declaration?: IndexSignatureDeclaration;
+    components?: ElementWithComputedPropertyName[];
 }
 
 /** @internal */
@@ -7409,6 +7417,7 @@ export interface CompilerOptions {
     /** @deprecated */
     keyofStringsOnly?: boolean;
     lib?: string[];
+    libReplacement?: boolean;
     /** @internal */ listEmittedFiles?: boolean;
     /** @internal */ listFiles?: boolean;
     /** @internal */ explainFiles?: boolean;
@@ -7502,6 +7511,7 @@ export interface CompilerOptions {
     /** Paths used to compute primary types search locations */
     typeRoots?: string[];
     verbatimModuleSyntax?: boolean;
+    erasableSyntaxOnly?: boolean;
     /** @internal */ version?: boolean;
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;
@@ -10559,7 +10569,7 @@ export interface SyntacticTypeNodeBuilderResolver {
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
     isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
-    serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature): TypeNode | undefined;
+    serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature, symbol: Symbol | undefined): TypeNode | undefined;
     serializeTypeOfExpression(context: SyntacticTypeNodeBuilderContext, expr: Expression): TypeNode;
     serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType | GetAccessorDeclaration | SetAccessorDeclaration, symbol: Symbol | undefined): TypeNode | undefined;
     serializeNameOfParameter(context: SyntacticTypeNodeBuilderContext, parameter: ParameterDeclaration): BindingName | string;

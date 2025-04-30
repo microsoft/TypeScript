@@ -2,6 +2,7 @@ import {
     __String,
     AccessExpression,
     AccessorDeclaration,
+    addEmitFlags,
     addRange,
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
@@ -511,6 +512,8 @@ import {
     ScriptTarget,
     semanticDiagnosticsOptionDeclarations,
     SetAccessorDeclaration,
+    setOriginalNode,
+    setTextRange,
     ShorthandPropertyAssignment,
     shouldAllowImportingTsExtension,
     Signature,
@@ -592,6 +595,7 @@ import {
     VariableDeclarationList,
     VariableLikeDeclaration,
     VariableStatement,
+    visitEachChild,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -12207,4 +12211,122 @@ export function getOptionsSyntaxByValue(optionsObject: ObjectLiteralExpression |
 /** @internal */
 export function forEachOptionsSyntaxByName<T>(optionsObject: ObjectLiteralExpression | undefined, name: string, callback: (prop: PropertyAssignment) => T | undefined): T | undefined {
     return forEachPropertyAssignment(optionsObject, name, callback);
+}
+
+/**
+ * Creates a deep, memberwise clone of a node with no source map location.
+ *
+ * WARNING: This is an expensive operation and is only intended to be used in refactorings
+ * and code fixes (because those are triggered by explicit user actions).
+ *
+ * @internal
+ */
+// Moved here to compiler utilities for usage in node builder for quickinfo.
+export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
+    const clone = node && getSynthesizedDeepCloneWorker(node);
+    if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+    return setParentRecursive(clone, /*incremental*/ false);
+}
+
+/** @internal */
+export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
+    node: T,
+    includeTrivia: boolean,
+    replaceNode: (node: Node) => Node | undefined,
+): T {
+    let clone = replaceNode(node);
+    if (clone) {
+        setOriginalNode(clone, node);
+    }
+    else {
+        clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, replaceNode);
+    }
+
+    if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+    return clone as T;
+}
+
+function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
+    const nodeClone: <T extends Node>(n: T) => T = replaceNode
+        ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
+        : getSynthesizedDeepClone;
+    const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
+        ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
+        : ns => ns && getSynthesizedDeepClones(ns);
+    const visited = visitEachChild(node, nodeClone, /*context*/ undefined, nodesClone, nodeClone);
+
+    if (visited === node) {
+        // This only happens for leaf nodes - internal nodes always see their children change.
+        const clone = isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
+            isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
+            factory.cloneNode(node);
+        return setTextRange(clone, node);
+    }
+
+    // PERF: As an optimization, rather than calling factory.cloneNode, we'll update
+    // the new node created by visitEachChild with the extra changes factory.cloneNode
+    // would have made.
+    (visited as Mutable<T>).parent = undefined!;
+    return visited;
+}
+
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
+    if (nodes) {
+        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        setTextRange(cloned, nodes);
+        return cloned;
+    }
+    return nodes;
+}
+
+/** @internal */
+export function getSynthesizedDeepClonesWithReplacements<T extends Node>(
+    nodes: NodeArray<T>,
+    includeTrivia: boolean,
+    replaceNode: (node: Node) => Node | undefined,
+): NodeArray<T> {
+    return factory.createNodeArray(nodes.map(n => getSynthesizedDeepCloneWithReplacements(n, includeTrivia, replaceNode)), nodes.hasTrailingComma);
+}
+
+/**
+ * Sets EmitFlags to suppress leading and trailing trivia on the node.
+ *
+ * @internal
+ */
+export function suppressLeadingAndTrailingTrivia(node: Node): void {
+    suppressLeadingTrivia(node);
+    suppressTrailingTrivia(node);
+}
+
+/**
+ * Sets EmitFlags to suppress leading trivia on the node.
+ *
+ * @internal
+ */
+export function suppressLeadingTrivia(node: Node): void {
+    addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+}
+
+/**
+ * Sets EmitFlags to suppress trailing trivia on the node.
+ *
+ * @internal @knipignore
+ */
+export function suppressTrailingTrivia(node: Node): void {
+    addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+}
+
+function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
+    addEmitFlags(node, flag);
+    const child = getChild(node);
+    if (child) addEmitFlagsRecursively(child, flag, getChild);
+}
+
+function getFirstChild(node: Node): Node | undefined {
+    return forEachChild(node, child => child);
 }

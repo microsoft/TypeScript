@@ -1487,7 +1487,10 @@ declare namespace ts {
                 arguments: FileLocationRequestArgs;
             }
             export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-                /** TODO */
+                /**
+                 * This controls how many levels of definitions will be expanded in the quick info response.
+                 * The default value is 0.
+                 */
                 verbosityLevel?: number;
             }
             /**
@@ -1524,7 +1527,7 @@ declare namespace ts {
                  */
                 tags: JSDocTagInfo[];
                 /**
-                 * TODO
+                 * Whether the verbosity level can be increased for this quick info response.
                  */
                 canIncreaseVerbosityLevel?: boolean;
             }
@@ -3642,7 +3645,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.8";
+    const versionMajorMinor = "5.9";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -6312,6 +6315,10 @@ declare namespace ts {
          */
         getNeverType(): Type;
         /**
+         * Gets the intrinsic `object` type.
+         */
+        getNonPrimitiveType(): Type;
+        /**
          * Returns true if the "source" type is assignable to the "target" type.
          *
          * ```ts
@@ -6348,6 +6355,7 @@ declare namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
     }
     enum NodeBuilderFlags {
         None = 0,
@@ -6851,11 +6859,15 @@ declare namespace ts {
         String = 0,
         Number = 1,
     }
+    type ElementWithComputedPropertyName = (ClassElement | ObjectLiteralElement) & {
+        name: ComputedPropertyName;
+    };
     interface IndexInfo {
         keyType: Type;
         type: Type;
         isReadonly: boolean;
         declaration?: IndexSignatureDeclaration;
+        components?: ElementWithComputedPropertyName[];
     }
     enum InferencePriority {
         None = 0,
@@ -7026,6 +7038,7 @@ declare namespace ts {
         /** @deprecated */
         keyofStringsOnly?: boolean;
         lib?: string[];
+        libReplacement?: boolean;
         locale?: string;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
@@ -7102,6 +7115,7 @@ declare namespace ts {
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
         verbatimModuleSyntax?: boolean;
+        erasableSyntaxOnly?: boolean;
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;

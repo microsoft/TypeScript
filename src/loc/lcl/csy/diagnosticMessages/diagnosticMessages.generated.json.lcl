@@ -5748,6 +5748,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript_6721" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Do not allow runtime constructs that are not part of ECMAScript.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nepovolit konstruktory modulu runtime, které nejsou součástí ECMAScriptu]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Do_not_emit_comments_to_output_6009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Do not emit comments to output.]]></Val>
@@ -6333,6 +6342,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Enable importing .json files]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Enable_lib_replacement_6808" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable lib replacement.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Povolit nahrazení knihovny]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8252,6 +8270,15 @@
           <Val><![CDATA[Import assertions cannot be used with type-only imports or exports.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Kontrolní výrazy importu se nedají použít s importy nebo exporty, které jsou jenom typ.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert_2880" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kontrolní výrazy importu byly nahrazeny atributy importu. Místo assert použijte with.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11373,12 +11400,18 @@
       <Item ItemId=";Project_0_can_t_be_built_because_its_dependency_1_has_errors_6363" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' can't be built because its dependency '{1}' has errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Projekt {0} nejde sestavit, protože jeho závislost {1} obsahuje chyby.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Project_0_can_t_be_built_because_its_dependency_1_was_not_built_6383" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' can't be built because its dependency '{1}' was not built]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Projekt {0} nejde sestavit, protože se nesestavila jeho závislost {1}.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -13332,12 +13365,18 @@
       <Item ItemId=";Skipping_build_of_project_0_because_its_dependency_1_has_errors_6362" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' has errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sestavení projektu {0} se přeskakuje, protože jeho závislost {1} obsahuje chyby.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Skipping_build_of_project_0_because_its_dependency_1_was_not_built_6382" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' was not built]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sestavení projektu {0} se přeskakuje, protože se nesestavila jeho závislost {1}.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15252,6 +15291,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_expression_is_never_nullish_2881" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This expression is never nullish.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento výraz nikdy nemá hodnotu null.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_expression_is_not_callable_2349" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This expression is not callable.]]></Val>
@@ -15545,6 +15593,15 @@
           <Val><![CDATA[This spread always overwrites this property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tento rozsah vždy přepíše tuto vlastnost.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled_1294" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is not allowed when 'erasableSyntaxOnly' is enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tato syntaxe není povolená, pokud je povolená možnost erasableSyntaxOnly.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

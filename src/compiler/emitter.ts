@@ -1168,6 +1168,7 @@ export const notImplementedResolver: EmitResolver = {
     isImportRequiredByAugmentation: notImplemented,
     isDefinitelyReferenceToGlobalSymbolObject: notImplemented,
     createLateBoundIndexSignatures: notImplemented,
+    symbolToDeclarations: notImplemented,
 };
 
 const enum PipelinePhase {
