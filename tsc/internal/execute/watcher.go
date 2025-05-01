@@ -23,13 +23,16 @@ type watcher struct {
 }
 
 func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, reportDiagnostic diagnosticReporter) *watcher {
-	return &watcher{
+	w := &watcher{
 		sys:              sys,
-		configFileName:   configParseResult.ConfigFile.SourceFile.FileName(),
 		options:          configParseResult,
 		reportDiagnostic: reportDiagnostic,
 		// reportWatchStatus: createWatchStatusReporter(sys, configParseResult.CompilerOptions().Pretty),
 	}
+	if configParseResult.ConfigFile != nil {
+		w.configFileName = configParseResult.ConfigFile.SourceFile.FileName()
+	}
+	return w
 }
 
 func (w *watcher) compileAndEmit() {

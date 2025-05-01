@@ -27,6 +27,7 @@ func verifyWatch(t *testing.T, test *tscInput, scenario string, edits []*testTsc
 			baselineBuilder.WriteString("\n\n")
 
 			// build initial state
+			execute.StartForTest(watcher)
 			execute.RunWatchCycle(watcher)
 			test.sys.serializeState(baselineBuilder)
 
@@ -42,6 +43,29 @@ func verifyWatch(t *testing.T, test *tscInput, scenario string, edits []*testTsc
 			baseline.Run(t, name, baselineBuilder.String(), options)
 		})
 	})
+}
+
+func TestWatch(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		// Without embedding, we'd need to read all of the lib files out from disk into the MapFS.
+		// Just skip this for now.
+		t.Skip("bundled files are not embedded")
+	}
+
+	testCases := []*tscInput{
+		{
+			subScenario: "watch with no tsconfig",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/project/index.ts": "",
+			}, "/home/src/workspaces/project"),
+			commandLineArgs: []string{"index.ts", "--watch"},
+		},
+	}
+
+	for _, test := range testCases {
+		verifyWatch(t, test, "commandLineWatch", nil)
+	}
 }
 
 func listToTsconfig(base string, tsconfigOpts ...string) (string, string) {
