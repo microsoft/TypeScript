@@ -30286,7 +30286,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // can explicitly bound arguments objects
         if (symbol === argumentsSymbol) {
             if (isInPropertyInitializerOrClassStaticBlock(node, /*ignoreArrowFunctions*/ true)) {
-                error(node, Diagnostics.arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_block);
+                error(node, Diagnostics.arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_blocks);
                 return;
             }
 
