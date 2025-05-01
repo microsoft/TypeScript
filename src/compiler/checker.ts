@@ -37144,7 +37144,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return [Diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression];
 
             case SyntaxKind.PropertyDeclaration:
-                return [Diagnostics.Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression];
+                return [Diagnostics.Expression_type_is_not_assignable_to_decorator_type_PropertyDecorator_Ensure_0_has_a_type_assignable_to_PropertyDecorator, getTextOfNode(node)];
 
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
