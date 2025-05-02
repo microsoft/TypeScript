@@ -1649,6 +1649,12 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "string",
         defaultValueDescription: undefined,
     },
+    {
+        name: "strictSpreadCheck",
+        type: "boolean",
+        default: false,
+        description: "Enables strict checking for object spread expressions."
+    },
 ];
 
 // Do not delete this without updating the website's tsconfig generation.
