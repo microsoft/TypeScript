@@ -8,8 +8,8 @@ var a₁ = "hello"; alert(a₁)
 >        : ^^^^^^^
 >alert(a₁) : void
 >          : ^^^^
->alert : (message?: any) => void
->      : ^       ^^^   ^^^^^    
+>alert : (message?: string) => void
+>      : ^       ^^^      ^^^^^    
 >a : any
 >  : ^^^
 
