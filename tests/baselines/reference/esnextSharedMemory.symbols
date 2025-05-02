@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/esnext/esnextSharedMemory.ts] ////
+
+=== esnextSharedMemory.ts ===
+Atomics.pause();
+>Atomics.pause : Symbol(Atomics.pause, Decl(lib.esnext.sharedmemory.d.ts, --, --))
+>Atomics : Symbol(Atomics, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.esnext.sharedmemory.d.ts, --, --))
+>pause : Symbol(Atomics.pause, Decl(lib.esnext.sharedmemory.d.ts, --, --))
+
+Atomics.pause(1);
+>Atomics.pause : Symbol(Atomics.pause, Decl(lib.esnext.sharedmemory.d.ts, --, --))
+>Atomics : Symbol(Atomics, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.esnext.sharedmemory.d.ts, --, --))
+>pause : Symbol(Atomics.pause, Decl(lib.esnext.sharedmemory.d.ts, --, --))
+
