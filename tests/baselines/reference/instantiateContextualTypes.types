@@ -37,8 +37,8 @@ fn(handlers, value => alert(value));
 >      : ^^^^^^
 >alert(value) : void
 >             : ^^^^
->alert : (message?: string) => void
->      : ^       ^^^      ^^^^^    
+>alert : (message?: any) => void
+>      : ^       ^^^   ^^^^^    
 >value : number
 >      : ^^^^^^
 
@@ -209,7 +209,6 @@ const NON_VOID_ACTION: ActionType<number> = 'NON_VOID_ACTION'
 
 createReducer(
 >createReducer(    defaultState,    handler(NON_VOID_ACTION, (state, _payload) => state),    handler(VOID_ACTION, state => state)) : any
->                                                                                                                                  : ^^^
 >createReducer : <S>(defaultState: S, ...actionHandlers: ActionHandler<S, any>[]) => any
 >              : ^ ^^            ^^ ^^^^^              ^^                       ^^^^^   
 
@@ -377,7 +376,6 @@ class InferFunctionTypes extends Component<{children: (foo: number) => string}> 
 
 createElement(InferFunctionTypes, (foo) => "" + foo);
 >createElement(InferFunctionTypes, (foo) => "" + foo) : any
->                                                     : ^^^
 >createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
 >              : ^ ^^^^^^^^^  ^^    ^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >InferFunctionTypes : typeof InferFunctionTypes
@@ -395,7 +393,6 @@ createElement(InferFunctionTypes, (foo) => "" + foo);
 
 createElement2(InferFunctionTypes, [(foo) => "" + foo]);
 >createElement2(InferFunctionTypes, [(foo) => "" + foo]) : any
->                                                        : ^^^
 >createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
 >               : ^ ^^^^^^^^^  ^^    ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >InferFunctionTypes : typeof InferFunctionTypes

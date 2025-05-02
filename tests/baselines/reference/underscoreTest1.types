@@ -11,8 +11,8 @@ declare var $;
 >  : ^^^
 
 declare function alert(x: string): void;
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >x : string
 >  : ^^^^^^
 
@@ -39,8 +39,8 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >    : ^^^^^^
 >alert(num.toString()) : void
 >                      : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >num.toString() : string
 >               : ^^^^^^
 >num.toString : (radix?: number) => string
@@ -81,8 +81,8 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >    : ^^^^^^
 >alert(value.toString()) : void
 >                        : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >value.toString() : string
 >                 : ^^^^^^
 >value.toString : (radix?: number) => string
@@ -1516,8 +1516,8 @@ var buttonView = {
 >                                                 : ^^^^^^^^^^
 >alert('clicked: ' + this.label) : void
 >                                : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >'clicked: ' + this.label : string
 >                         : ^^^^^^
 >'clicked: ' : "clicked: "
@@ -1536,8 +1536,8 @@ var buttonView = {
 >                                                  : ^^^^^^^^^^
 >alert('hovering: ' + this.label) : void
 >                                 : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >'hovering: ' + this.label : string
 >                          : ^^^^^^
 >'hovering: ' : "hovering: "
@@ -1685,8 +1685,8 @@ _.defer(function () { alert('deferred'); });
 >                                   : ^^^^^^^^^^
 >alert('deferred') : void
 >                  : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >'deferred' : "deferred"
 >           : ^^^^^^^^^^
 
@@ -1697,8 +1697,8 @@ var updatePosition = () => alert('updating position...');
 >                                    : ^^^^^^^^^^
 >alert('updating position...') : void
 >                              : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >'updating position...' : "updating position..."
 >                       : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1739,8 +1739,8 @@ var calculateLayout = () => alert('calculating layout...');
 >                                     : ^^^^^^^^^^
 >alert('calculating layout...') : void
 >                               : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >'calculating layout...' : "calculating layout..."
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1781,8 +1781,8 @@ var createApplication = () => alert('creating application...');
 >                                       : ^^^^^^^^^^
 >alert('creating application...') : void
 >                                 : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >'creating application...' : "creating application..."
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1823,8 +1823,8 @@ var render = () => alert("rendering...");
 >                            : ^^^^^^^^^^
 >alert("rendering...") : void
 >                      : ^^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 >"rendering..." : "rendering..."
 >               : ^^^^^^^^^^^^^^
 
@@ -2281,8 +2281,8 @@ _.chain([1, 2, 3, 200])
 >    : ^           ^^^      ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><any>alert : any
 >           : ^^^
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 
     .map(function (num) { return num * num })
 >map : <U>(iterator: Iterator_<number, U>, context?: any) => Underscore.ChainedArray<U>
@@ -2529,8 +2529,8 @@ _.isFunction(alert);
 >  : ^^^^^^^^^^^^^^^^^
 >isFunction : (object: any) => boolean
 >           : ^      ^^   ^^^^^       
->alert : { (message?: string): void; (x: string): void; }
->      : ^^^       ^^^      ^^^    ^^^ ^^      ^^^    ^^^
+>alert : { (message?: any): void; (x: string): void; }
+>      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
 
 _.isString("moe");
 >_.isString("moe") : boolean
