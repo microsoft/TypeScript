@@ -3068,13 +3068,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return isForInOrOfStatement(grandparent) && isSameScopeDescendentOf(usage, grandparent.expression, declContainer);
         }
 
-        function isUsedInFunctionOrInstanceProperty(usage: Node, declaration: Node): boolean {
+        function isUsedInFunctionOrInstanceProperty(usage: Node, declaration: Node) {
+            return isUsedInFunctionOrInstancePropertyWorker(usage, declaration);
+        }
+
+        function isUsedInFunctionOrInstancePropertyWorker(usage: Node, declaration: Node): boolean {
             return !!findAncestor(usage, current => {
                 if (current === declContainer) {
                     return "quit";
                 }
                 if (isFunctionLike(current)) {
-                    return true;
+                    return !getImmediatelyInvokedFunctionExpression(current);
                 }
                 if (isClassStaticBlockDeclaration(current)) {
                     return declaration.pos < usage.pos;
@@ -3107,6 +3111,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                 }
+
+                const decorator = tryCast(current.parent, isDecorator);
+                if (decorator && decorator.expression === current) {
+                    if (isParameter(decorator.parent)) {
+                        return isUsedInFunctionOrInstancePropertyWorker(decorator.parent.parent.parent, declaration) ? true : "quit";
+                    }
+                    if (isMethodDeclaration(decorator.parent)) {
+                        return isUsedInFunctionOrInstancePropertyWorker(decorator.parent.parent, declaration) ? true : "quit";
+                    }
+                }
+
                 return false;
             });
         }
