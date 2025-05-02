@@ -1,47 +1,65 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution16.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface Address {
   street: string;
 >street : string
+>       : ^^^^^^
 
   country: string;
 >country : string
+>        : ^^^^^^
 }
 
 interface CanadianAddress extends Address {
     postalCode: string;
 >postalCode : string
+>           : ^^^^^^
 }
 
 interface AmericanAddress extends Address {
     zipCode: string;
 >zipCode : string
+>        : ^^^^^^
 }
 
 type Properties = CanadianAddress | AmericanAddress;
->Properties : CanadianAddress | AmericanAddress
+>Properties : Properties
+>           : ^^^^^^^^^^
 
 export class AddressComp extends React.Component<Properties, void> {
 >AddressComp : AddressComp
+>            : ^^^^^^^^^^^
 >React.Component : React.Component<Properties, void>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
   public render() {
 >render : () => any
+>       : ^^^^^^^^^
 
     return null;
->null : null
   }
 }
 
 let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" /> : JSX.Element
+>                                                                     : ^^^^^^^^^^^
 >AddressComp : typeof AddressComp
+>            : ^^^^^^^^^^^^^^^^^^
 >postalCode : string
+>           : ^^^^^^
 >street : string
+>       : ^^^^^^
 >country : string
+>        : ^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInSuperCall.ts ===
+//// [tests/cases/compiler/thisInSuperCall.ts] ////
+
+=== thisInSuperCall.ts ===
 class Base { 
 >Base : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
 

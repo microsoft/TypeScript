@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericRecursiveImplicitConstructorErrors2.ts ===
+//// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors2.ts] ////
+
+=== genericRecursiveImplicitConstructorErrors2.ts ===
 module TypeScript2 {
 >TypeScript2 : Symbol(TypeScript2, Decl(genericRecursiveImplicitConstructorErrors2.ts, 0, 0))
 

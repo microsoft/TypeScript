@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/promiseWithResolvers.ts] ////
+
+=== promiseWithResolvers.ts ===
+type T = {};
+>T : Symbol(T, Decl(promiseWithResolvers.ts, 0, 0))
+
+const { promise, resolve, reject } = Promise.withResolvers<T>();
+>promise : Symbol(promise, Decl(promiseWithResolvers.ts, 1, 7))
+>resolve : Symbol(resolve, Decl(promiseWithResolvers.ts, 1, 16))
+>reject : Symbol(reject, Decl(promiseWithResolvers.ts, 1, 25))
+>Promise.withResolvers : Symbol(PromiseConstructor.withResolvers, Decl(lib.es2024.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>withResolvers : Symbol(PromiseConstructor.withResolvers, Decl(lib.es2024.promise.d.ts, --, --))
+>T : Symbol(T, Decl(promiseWithResolvers.ts, 0, 0))
+

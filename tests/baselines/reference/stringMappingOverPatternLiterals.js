@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts] ////
+
 //// [stringMappingOverPatternLiterals.ts]
 // non-template
 type A = "aA";

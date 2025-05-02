@@ -1,17 +1,17 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /a.ts
+// @Filename: /home/src/workspaces/project/a.ts
 //// export const /*end*/a = 'a';
 
-// @Filename: /a.d.ts
+// @Filename: /home/src/workspaces/project/a.d.ts
 //// export declare const a: string;
 
-// @Filename: /a.js
+// @Filename: /home/src/workspaces/project/a.js
 //// export const a = 'a';
 
-// @Filename: /b.ts
+// @Filename: /home/src/workspaces/project/b.ts
 //// import { a } from './a';
 //// [|a/*start*/|]
 
-verify.goToDefinition("start", "end");
-verify.goToSourceDefinition("start", "end");
+verify.baselineGoToSourceDefinition("start");
+verify.baselineGoToDefinition("start");

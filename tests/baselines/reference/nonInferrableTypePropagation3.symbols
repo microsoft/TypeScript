@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/nonInferrableTypePropagation3.ts] ////
+
+=== nonInferrableTypePropagation3.ts ===
+// Repro from #53748
+
+declare type Callback<Args extends any[], Out, R> = (...args: Args) => (data: Out) => R;
+>Callback : Symbol(Callback, Decl(nonInferrableTypePropagation3.ts, 0, 0))
+>Args : Symbol(Args, Decl(nonInferrableTypePropagation3.ts, 2, 22))
+>Out : Symbol(Out, Decl(nonInferrableTypePropagation3.ts, 2, 41))
+>R : Symbol(R, Decl(nonInferrableTypePropagation3.ts, 2, 46))
+>args : Symbol(args, Decl(nonInferrableTypePropagation3.ts, 2, 53))
+>Args : Symbol(Args, Decl(nonInferrableTypePropagation3.ts, 2, 22))
+>data : Symbol(data, Decl(nonInferrableTypePropagation3.ts, 2, 72))
+>Out : Symbol(Out, Decl(nonInferrableTypePropagation3.ts, 2, 41))
+>R : Symbol(R, Decl(nonInferrableTypePropagation3.ts, 2, 46))
+
+declare function factory<Out>(): <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R;
+>factory : Symbol(factory, Decl(nonInferrableTypePropagation3.ts, 2, 88))
+>Out : Symbol(Out, Decl(nonInferrableTypePropagation3.ts, 3, 25))
+>Args : Symbol(Args, Decl(nonInferrableTypePropagation3.ts, 3, 34))
+>R : Symbol(R, Decl(nonInferrableTypePropagation3.ts, 3, 53))
+>callback : Symbol(callback, Decl(nonInferrableTypePropagation3.ts, 3, 57))
+>Callback : Symbol(Callback, Decl(nonInferrableTypePropagation3.ts, 0, 0))
+>Args : Symbol(Args, Decl(nonInferrableTypePropagation3.ts, 3, 34))
+>Out : Symbol(Out, Decl(nonInferrableTypePropagation3.ts, 3, 25))
+>R : Symbol(R, Decl(nonInferrableTypePropagation3.ts, 3, 53))
+>args : Symbol(args, Decl(nonInferrableTypePropagation3.ts, 3, 95))
+>Args : Symbol(Args, Decl(nonInferrableTypePropagation3.ts, 3, 34))
+>R : Symbol(R, Decl(nonInferrableTypePropagation3.ts, 3, 53))
+
+const make = factory<{id: string, age: number}[]>();
+>make : Symbol(make, Decl(nonInferrableTypePropagation3.ts, 5, 5))
+>factory : Symbol(factory, Decl(nonInferrableTypePropagation3.ts, 2, 88))
+>id : Symbol(id, Decl(nonInferrableTypePropagation3.ts, 5, 22))
+>age : Symbol(age, Decl(nonInferrableTypePropagation3.ts, 5, 33))
+
+const usersOverAge = make((age: number) => data => {
+>usersOverAge : Symbol(usersOverAge, Decl(nonInferrableTypePropagation3.ts, 7, 5))
+>make : Symbol(make, Decl(nonInferrableTypePropagation3.ts, 5, 5))
+>age : Symbol(age, Decl(nonInferrableTypePropagation3.ts, 7, 27))
+>data : Symbol(data, Decl(nonInferrableTypePropagation3.ts, 7, 42))
+
+    return data.filter(user => user.age >= age);
+>data.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(nonInferrableTypePropagation3.ts, 7, 42))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>user : Symbol(user, Decl(nonInferrableTypePropagation3.ts, 8, 23))
+>user.age : Symbol(age, Decl(nonInferrableTypePropagation3.ts, 5, 33))
+>user : Symbol(user, Decl(nonInferrableTypePropagation3.ts, 8, 23))
+>age : Symbol(age, Decl(nonInferrableTypePropagation3.ts, 5, 33))
+>age : Symbol(age, Decl(nonInferrableTypePropagation3.ts, 7, 27))
+
+});
+

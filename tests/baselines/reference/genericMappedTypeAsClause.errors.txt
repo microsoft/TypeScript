@@ -1,0 +1,54 @@
+genericMappedTypeAsClause.ts(11,36): error TS2322: Type 'string' is not assignable to type 'number'.
+genericMappedTypeAsClause.ts(14,11): error TS2322: Type 'number' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(15,11): error TS2322: Type 'string' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(16,11): error TS2322: Type 'number[]' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(17,11): error TS2322: Type 'boolean' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(18,34): error TS2353: Object literal may only specify known properties, and 'a' does not exist in type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(19,11): error TS2322: Type 'undefined' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(25,60): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+
+
+==== genericMappedTypeAsClause.ts (8 errors) ====
+    type Model = {
+        a: string;
+        b: number;
+    };
+    
+    type MappedModel<Suffix extends string> = {
+        [K in keyof Model as `${K}${Suffix}`]: Model[K];
+    };
+    
+    const foo1: MappedModel<'Foo'> = { aFoo: 'test', bFoo: 42 };
+    const foo2: MappedModel<'Foo'> = { bFoo: 'bar' };  // Error
+                                       ~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 genericMappedTypeAsClause.ts:6:43: The expected type comes from property 'bFoo' which is declared here on type 'MappedModel<"Foo">'
+    
+    function f1<T extends string>() {
+        const x1: MappedModel<T> = 42;  // Error
+              ~~
+!!! error TS2322: Type 'number' is not assignable to type 'MappedModel<T>'.
+        const x2: MappedModel<T> = 'test';  // Error
+              ~~
+!!! error TS2322: Type 'string' is not assignable to type 'MappedModel<T>'.
+        const x3: MappedModel<T> = [1, 2, 3];  // Error
+              ~~
+!!! error TS2322: Type 'number[]' is not assignable to type 'MappedModel<T>'.
+        const x4: MappedModel<T> = false;  // Error
+              ~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'MappedModel<T>'.
+        const x5: MappedModel<T> = { a: 'bar', b: 42 };  // Error
+                                     ~
+!!! error TS2353: Object literal may only specify known properties, and 'a' does not exist in type 'MappedModel<T>'.
+        const x6: MappedModel<T> = undefined;  // Error
+              ~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'MappedModel<T>'.
+    }
+    
+    // repro from #43189
+    
+    type RemapRecord<K extends keyof any, V> = { [_ in never as K]: V }
+    interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} // should error
+                                                               ~~~~~~~~~~~~~~~~~
+!!! error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+    

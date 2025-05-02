@@ -1,11 +1,11 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts(4,17): error TS2741: Property 'hello' is missing in type 'Generator<number, any, undefined>' but required in type 'WeirdIter'.
+generatorTypeCheck7.ts(4,17): error TS2741: Property 'hello' is missing in type 'Generator<number, any, any>' but required in type 'WeirdIter'.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts (1 errors) ====
+==== generatorTypeCheck7.ts (1 errors) ====
     interface WeirdIter extends IterableIterator<number> {
         hello: string;
     }
     function* g1(): WeirdIter { }
                     ~~~~~~~~~
-!!! error TS2741: Property 'hello' is missing in type 'Generator<number, any, undefined>' but required in type 'WeirdIter'.
-!!! related TS2728 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts:2:5: 'hello' is declared here.
+!!! error TS2741: Property 'hello' is missing in type 'Generator<number, any, any>' but required in type 'WeirdIter'.
+!!! related TS2728 generatorTypeCheck7.ts:2:5: 'hello' is declared here.

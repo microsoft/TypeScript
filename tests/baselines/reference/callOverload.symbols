@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/callOverload.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callOverload.ts] ////
+
+=== callOverload.ts ===
 declare function fn(x: any): void;
 >fn : Symbol(fn, Decl(callOverload.ts, 0, 0))
 >x : Symbol(x, Decl(callOverload.ts, 0, 20))

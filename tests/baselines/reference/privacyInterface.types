@@ -1,127 +1,169 @@
-=== tests/cases/compiler/privacyInterface.ts ===
+//// [tests/cases/compiler/privacyInterface.ts] ////
+
+=== privacyInterface.ts ===
 export module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     export class C1_public {
 >C1_public : C1_public
+>          : ^^^^^^^^^
 
         private f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
         }
     }
 
 
     class C2_private {
 >C2_private : C2_private
+>           : ^^^^^^^^^^
     }
 
     export interface C3_public {
         (c1: C1_public);
 >c1 : C1_public
+>   : ^^^^^^^^^
 
         (c1: C2_private);
 >c1 : C2_private
+>   : ^^^^^^^^^^
 
         (): C1_public;
         (c2: number): C2_private;
 >c2 : number
+>   : ^^^^^^
 
         new (c1: C1_public);
 >c1 : C1_public
+>   : ^^^^^^^^^
 
         new (c1: C2_private);
 >c1 : C2_private
+>   : ^^^^^^^^^^
 
         new (): C1_public;
         new (c2: number): C2_private;
 >c2 : number
+>   : ^^^^^^
 
         [c: number]: C1_public;
 >c : number
+>  : ^^^^^^
 
         [c: string]: C2_private;
 >c : string
+>  : ^^^^^^
 
         x: C1_public;
 >x : C1_public
+>  : ^^^^^^^^^
 
         y: C2_private;
 >y : C2_private
+>  : ^^^^^^^^^^
 
         a?: C1_public;
 >a : C1_public
+>  : ^^^^^^^^^
 
         b?: C2_private;
 >b : C2_private
+>  : ^^^^^^^^^^
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
+>   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
+>   : ^  ^^          ^^^^^^^^
 >a1 : C2_private
+>   : ^^^^^^^^^^
 
         f3(): C1_public;
 >f3 : () => C1_public
+>   : ^^^^^^         
 
         f4(): C2_private;
 >f4 : () => C2_private
+>   : ^^^^^^          
 
     }
 
     interface C4_private {
         (c1: C1_public);
 >c1 : C1_public
+>   : ^^^^^^^^^
 
         (c1: C2_private);
 >c1 : C2_private
+>   : ^^^^^^^^^^
 
         (): C1_public;
         (c2: number): C2_private;
 >c2 : number
+>   : ^^^^^^
 
         new (c1: C1_public);
 >c1 : C1_public
+>   : ^^^^^^^^^
 
         new (c1: C2_private);
 >c1 : C2_private
+>   : ^^^^^^^^^^
 
         new (): C1_public;
         new (c2: number): C2_private;
 >c2 : number
+>   : ^^^^^^
 
         [c: number]: C1_public;
 >c : number
+>  : ^^^^^^
 
         [c: string]: C2_private;
 >c : string
+>  : ^^^^^^
 
         x: C1_public;
 >x : C1_public
+>  : ^^^^^^^^^
 
         y: C2_private;
 >y : C2_private
+>  : ^^^^^^^^^^
 
         a?: C1_public;
 >a : C1_public
+>  : ^^^^^^^^^
 
         b?: C2_private;
 >b : C2_private
+>  : ^^^^^^^^^^
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
+>   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
+>   : ^  ^^          ^^^^^^^^
 >a1 : C2_private
+>   : ^^^^^^^^^^
 
         f3(): C1_public;
 >f3 : () => C1_public
+>   : ^^^^^^         
 
         f4(): C2_private;
 >f4 : () => C2_private
+>   : ^^^^^^          
 
     }
 }
@@ -129,251 +171,330 @@ export module m1 {
 
 module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     export class C1_public {
 >C1_public : C1_public
+>          : ^^^^^^^^^
 
         private f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
         }
     }
 
 
     class C2_private {
 >C2_private : C2_private
+>           : ^^^^^^^^^^
     }
 
     export interface C3_public {
         (c1: C1_public);
 >c1 : C1_public
+>   : ^^^^^^^^^
 
         (c1: C2_private);
 >c1 : C2_private
+>   : ^^^^^^^^^^
 
         (): C1_public;
         (c2: number): C2_private;
 >c2 : number
+>   : ^^^^^^
 
         new (c1: C1_public);
 >c1 : C1_public
+>   : ^^^^^^^^^
 
         new (c1: C2_private);
 >c1 : C2_private
+>   : ^^^^^^^^^^
 
         new (): C1_public;
         new (c2: number): C2_private;
 >c2 : number
+>   : ^^^^^^
 
         [c: number]: C1_public;
 >c : number
+>  : ^^^^^^
 
         [c: string]: C2_private;
 >c : string
+>  : ^^^^^^
 
         x: C1_public;
 >x : C1_public
+>  : ^^^^^^^^^
 
         y: C2_private;
 >y : C2_private
+>  : ^^^^^^^^^^
 
         a?: C1_public;
 >a : C1_public
+>  : ^^^^^^^^^
 
         b?: C2_private;
 >b : C2_private
+>  : ^^^^^^^^^^
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
+>   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
+>   : ^  ^^^^^^^^^^^^^^^^^^^^
 >a1 : C2_private
+>   : ^^^^^^^^^^
 
         f3(): C1_public;
 >f3 : () => C1_public
+>   : ^^^^^^         
 
         f4(): C2_private;
 >f4 : () => C2_private
+>   : ^^^^^^^^^^^^^^^^
 
     }
 
     interface C4_private {
         (c1: C1_public);
 >c1 : C1_public
+>   : ^^^^^^^^^
 
         (c1: C2_private);
 >c1 : C2_private
+>   : ^^^^^^^^^^
 
         (): C1_public;
         (c2: number): C2_private;
 >c2 : number
+>   : ^^^^^^
 
         new (c1: C1_public);
 >c1 : C1_public
+>   : ^^^^^^^^^
 
         new (c1: C2_private);
 >c1 : C2_private
+>   : ^^^^^^^^^^
 
         new (): C1_public;
         new (c2: number): C2_private;
 >c2 : number
+>   : ^^^^^^
 
         [c: number]: C1_public;
 >c : number
+>  : ^^^^^^
 
         [c: string]: C2_private;
 >c : string
+>  : ^^^^^^
 
         x: C1_public;
 >x : C1_public
+>  : ^^^^^^^^^
 
         y: C2_private;
 >y : C2_private
+>  : ^^^^^^^^^^
 
         a?: C1_public;
 >a : C1_public
+>  : ^^^^^^^^^
 
         b?: C2_private;
 >b : C2_private
+>  : ^^^^^^^^^^
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
+>   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
+>   : ^  ^^^^^^^^^^^^^^^^^^^^
 >a1 : C2_private
+>   : ^^^^^^^^^^
 
         f3(): C1_public;
 >f3 : () => C1_public
+>   : ^^^^^^         
 
         f4(): C2_private;
 >f4 : () => C2_private
+>   : ^^^^^^^^^^^^^^^^
 
     }
 }
 
 export class C5_public {
 >C5_public : C5_public
+>          : ^^^^^^^^^
 
     private f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
     }
 }
 
 
 class C6_private {
 >C6_private : C6_private
+>           : ^^^^^^^^^^
 }
 
 export interface C7_public {
     (c1: C5_public);
 >c1 : C5_public
+>   : ^^^^^^^^^
 
     (c1: C6_private);
 >c1 : C6_private
+>   : ^^^^^^^^^^
 
     (): C5_public;
     (c2: number): C6_private;
 >c2 : number
+>   : ^^^^^^
 
     new (c1: C5_public);
 >c1 : C5_public
+>   : ^^^^^^^^^
 
     new (c1: C6_private);
 >c1 : C6_private
+>   : ^^^^^^^^^^
 
     new (): C5_public;
     new (c2: number): C6_private;
 >c2 : number
+>   : ^^^^^^
 
     [c: number]: C5_public;
 >c : number
+>  : ^^^^^^
 
     [c: string]: C6_private;
 >c : string
+>  : ^^^^^^
 
     x: C5_public;
 >x : C5_public
+>  : ^^^^^^^^^
 
     y: C6_private;
 >y : C6_private
+>  : ^^^^^^^^^^
 
     a?: C5_public;
 >a : C5_public
+>  : ^^^^^^^^^
 
     b?: C6_private;
 >b : C6_private
+>  : ^^^^^^^^^^
 
     f1(a1: C5_public);
 >f1 : (a1: C5_public) => any
+>   : ^  ^^         ^^^^^^^^
 >a1 : C5_public
+>   : ^^^^^^^^^
 
     f2(a1: C6_private);
 >f2 : (a1: C6_private) => any
+>   : ^  ^^          ^^^^^^^^
 >a1 : C6_private
+>   : ^^^^^^^^^^
 
     f3(): C5_public;
 >f3 : () => C5_public
+>   : ^^^^^^         
 
     f4(): C6_private;
 >f4 : () => C6_private
+>   : ^^^^^^          
 
 }
 
 interface C8_private {
     (c1: C5_public);
 >c1 : C5_public
+>   : ^^^^^^^^^
 
     (c1: C6_private);
 >c1 : C6_private
+>   : ^^^^^^^^^^
 
     (): C5_public;
     (c2: number): C6_private;
 >c2 : number
+>   : ^^^^^^
 
     new (c1: C5_public);
 >c1 : C5_public
+>   : ^^^^^^^^^
 
     new (c1: C6_private);
 >c1 : C6_private
+>   : ^^^^^^^^^^
 
     new (): C5_public;
     new (c2: number): C6_private;
 >c2 : number
+>   : ^^^^^^
 
     [c: number]: C5_public;
 >c : number
+>  : ^^^^^^
 
     [c: string]: C6_private;
 >c : string
+>  : ^^^^^^
 
     x: C5_public;
 >x : C5_public
+>  : ^^^^^^^^^
 
     y: C6_private;
 >y : C6_private
+>  : ^^^^^^^^^^
 
     a?: C5_public;
 >a : C5_public
+>  : ^^^^^^^^^
 
     b?: C6_private;
 >b : C6_private
+>  : ^^^^^^^^^^
 
     f1(a1: C5_public);
 >f1 : (a1: C5_public) => any
+>   : ^  ^^         ^^^^^^^^
 >a1 : C5_public
+>   : ^^^^^^^^^
 
     f2(a1: C6_private);
 >f2 : (a1: C6_private) => any
+>   : ^  ^^          ^^^^^^^^
 >a1 : C6_private
+>   : ^^^^^^^^^^
 
     f3(): C5_public;
 >f3 : () => C5_public
+>   : ^^^^^^         
 
     f4(): C6_private;
 >f4 : () => C6_private
+>   : ^^^^^^          
 
 }
 
@@ -381,11 +502,13 @@ export module m3 {
     export interface m3_i_public {
         f1(): number;
 >f1 : () => number
+>   : ^^^^^^      
     }
 
     interface m3_i_private {
         f2(): string;
 >f2 : () => string
+>   : ^^^^^^      
     }
 
     interface m3_C1_private extends m3_i_public {
@@ -408,11 +531,13 @@ module m4 {
     export interface m4_i_public {
         f1(): number;
 >f1 : () => number
+>   : ^^^^^^      
     }
 
     interface m4_i_private {
         f2(): string;
 >f2 : () => string
+>   : ^^^^^^      
     }
 
     interface m4_C1_private extends m4_i_public {
@@ -433,11 +558,13 @@ module m4 {
 export interface glo_i_public {
     f1(): number;
 >f1 : () => number
+>   : ^^^^^^      
 }
 
 interface glo_i_private {
     f2(): string;
 >f2 : () => string
+>   : ^^^^^^      
 }
 
 interface glo_C1_private extends glo_i_public {

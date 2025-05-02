@@ -33,20 +33,20 @@ let y = x.map(x => x + 1);
 
 //// [observable.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Observable = void 0;
 var Observable;
 (function (Observable) {
     var someValue;
-})(Observable = exports.Observable || (exports.Observable = {}));
+})(Observable || (exports.Observable = Observable = {}));
 //// [map.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./map");
 var x;
 var y = x.map(function (x) { return x + 1; });

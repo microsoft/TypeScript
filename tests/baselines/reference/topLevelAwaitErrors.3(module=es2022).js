@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.3.ts] ////
+
 //// [topLevelAwaitErrors.3.ts]
 export {};
 

@@ -1,37 +1,61 @@
-=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts] ////
+
+=== incrementOperatorWithEnumType.ts ===
 // ++ operator on enum type
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
+>      : ^^^^^
 >A : ENUM1.A
+>  : ^^^^^^^
 >B : ENUM1.B
+>  : ^^^^^^^
 >"" : (typeof ENUM1)[""]
+>   : ^^^^^^^^^^^^^^^^^^
 
 // expression
 var ResultIsNumber1 = ++ENUM1["B"];
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >++ENUM1["B"] : number
+>             : ^^^^^^
 >ENUM1["B"] : any
+>           : ^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 
 var ResultIsNumber2 = ENUM1.B++;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >ENUM1.B++ : number
+>          : ^^^^^^
 >ENUM1.B : any
+>        : ^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >B : any
+>  : ^^^
 
 // miss assignment operator
 ++ENUM1["B"];
 >++ENUM1["B"] : number
+>             : ^^^^^^
 >ENUM1["B"] : any
+>           : ^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 
 ENUM1.B++;
 >ENUM1.B++ : number
+>          : ^^^^^^
 >ENUM1.B : any
+>        : ^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >B : any
+>  : ^^^
 

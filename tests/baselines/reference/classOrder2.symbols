@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classOrder2.ts ===
+//// [tests/cases/compiler/classOrder2.ts] ////
+
+=== classOrder2.ts ===
 class A extends B {
 >A : Symbol(A, Decl(classOrder2.ts, 0, 0))
 >B : Symbol(B, Decl(classOrder2.ts, 4, 1))

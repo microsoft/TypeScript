@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt3.ts ===
+//// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt3.ts] ////
+
+=== moduleSharesNameWithImportDeclarationInsideIt3.ts ===
 module Z {
 >Z : Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 0, 0))
 

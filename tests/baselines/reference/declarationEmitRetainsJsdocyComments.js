@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitRetainsJsdocyComments.ts] ////
+
 //// [declarationEmitRetainsJsdocyComments.ts]
 /**
  * comment1
@@ -46,7 +48,7 @@ declare global {
 
 //// [declarationEmitRetainsJsdocyComments.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someMethod = exports.Foo = exports.foo = void 0;
 /**
  * comment1
@@ -63,7 +65,7 @@ var foo = function (p) {
          * comment3
          * @param s
          */
-        bar2: function (s) { }
+        bar2: function (s) { },
     };
 };
 exports.foo = foo;

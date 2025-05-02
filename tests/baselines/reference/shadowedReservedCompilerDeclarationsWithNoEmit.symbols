@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shadowedReservedCompilerDeclarationsWithNoEmit.ts ===
+//// [tests/cases/compiler/shadowedReservedCompilerDeclarationsWithNoEmit.ts] ////
+
+=== shadowedReservedCompilerDeclarationsWithNoEmit.ts ===
 // Shadowed captured this and super
 class Base { }
 >Base : Symbol(Base, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 0, 0))

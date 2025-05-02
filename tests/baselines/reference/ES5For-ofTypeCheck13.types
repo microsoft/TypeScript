@@ -1,24 +1,41 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts] ////
+
+=== ES5For-ofTypeCheck13.ts ===
 const strSet: Set<string> = new Set()
 >strSet : Set<string>
+>       : ^^^^^^^^^^^
 >new Set() : Set<string>
+>          : ^^^^^^^^^^^
 >Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
 
 strSet.add('Hello')
 >strSet.add('Hello') : Set<string>
+>                    : ^^^^^^^^^^^
 >strSet.add : (value: string) => Set<string>
+>           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >strSet : Set<string>
+>       : ^^^^^^^^^^^
 >add : (value: string) => Set<string>
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >'Hello' : "Hello"
+>        : ^^^^^^^
 
 strSet.add('World')
 >strSet.add('World') : Set<string>
+>                    : ^^^^^^^^^^^
 >strSet.add : (value: string) => Set<string>
+>           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >strSet : Set<string>
+>       : ^^^^^^^^^^^
 >add : (value: string) => Set<string>
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >'World' : "World"
+>        : ^^^^^^^
 
 for (const str of strSet) { }
 >str : any
+>    : ^^^
 >strSet : Set<string>
+>       : ^^^^^^^^^^^
 

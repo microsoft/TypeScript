@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type 'boolean' is not assignable to type 'never'.
+file.tsx(12,10): error TS2322: Type 'true' is not assignable to type 'never'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     import React = require('react');
     
     function SFC1(prop: { x: number }) {
@@ -15,4 +15,4 @@ tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type 'boolean' is not
     var SFCComp = SFC1 || SFC2;
     <SFCComp x />
              ~
-!!! error TS2322: Type 'boolean' is not assignable to type 'never'.
+!!! error TS2322: Type 'true' is not assignable to type 'never'.

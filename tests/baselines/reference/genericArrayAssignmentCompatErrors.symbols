@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericArrayAssignmentCompatErrors.ts ===
+//// [tests/cases/compiler/genericArrayAssignmentCompatErrors.ts] ////
+
+=== genericArrayAssignmentCompatErrors.ts ===
 var myCars=new Array(); 
 >myCars : Symbol(myCars, Decl(genericArrayAssignmentCompatErrors.ts, 0, 3))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

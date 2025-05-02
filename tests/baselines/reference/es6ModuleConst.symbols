@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ModuleConst.ts ===
+//// [tests/cases/compiler/es6ModuleConst.ts] ////
+
+=== es6ModuleConst.ts ===
 export const a = "hello";
 >a : Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
 

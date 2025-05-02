@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cachedModuleResolution9.ts] ////
+
 === /a/b/c/lib.ts ===
 import {x} from "foo";
 >x : Symbol(x, Decl(lib.ts, 0, 8))

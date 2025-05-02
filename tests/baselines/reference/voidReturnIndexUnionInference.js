@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidReturnIndexUnionInference.ts] ////
+
 //// [voidReturnIndexUnionInference.ts]
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
 export function safeInvoke<A1, R>(
@@ -26,8 +28,8 @@ function bad<P extends Props>(props: Readonly<P>) {
 
 //// [voidReturnIndexUnionInference.js]
 "use strict";
-exports.__esModule = true;
-exports.safeInvoke = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.safeInvoke = safeInvoke;
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
 function safeInvoke(func, arg1) {
     if (func) {
@@ -37,7 +39,6 @@ function safeInvoke(func, arg1) {
         return undefined;
     }
 }
-exports.safeInvoke = safeInvoke;
 function bad(props) {
     safeInvoke(props.onFoo, "blah");
     // ERROR HERE!!!

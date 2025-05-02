@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritSameNamePrivatePropertiesFromSameOrigin.ts ===
+//// [tests/cases/compiler/inheritSameNamePrivatePropertiesFromSameOrigin.ts] ////
+
+=== inheritSameNamePrivatePropertiesFromSameOrigin.ts ===
 class B {
 >B : Symbol(B, Decl(inheritSameNamePrivatePropertiesFromSameOrigin.ts, 0, 0))
 

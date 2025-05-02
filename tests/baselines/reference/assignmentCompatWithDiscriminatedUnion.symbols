@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts] ////
+
+=== assignmentCompatWithDiscriminatedUnion.ts ===
 // see 'typeRelatedToDiscriminatedType' in checker.ts:
 
 // IteratorResult
@@ -513,5 +515,85 @@ namespace GH39357 {
 >b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
 >b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
 >b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+}
+
+// https://github.com/microsoft/TypeScript/issues/58603
+namespace GH58603 {
+>GH58603 : Symbol(GH58603, Decl(assignmentCompatWithDiscriminatedUnion.ts, 200, 1))
+
+    enum MyEnum { A = 1, B = 2 }
+>MyEnum : Symbol(MyEnum, Decl(assignmentCompatWithDiscriminatedUnion.ts, 203, 19))
+>A : Symbol(MyEnum.A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 17))
+>B : Symbol(MyEnum.B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 24))
+
+    type TypeA = { kind: MyEnum.A, id?: number };
+>TypeA : Symbol(TypeA, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 32))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 206, 18))
+>MyEnum : Symbol(MyEnum, Decl(assignmentCompatWithDiscriminatedUnion.ts, 203, 19))
+>A : Symbol(MyEnum.A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 17))
+>id : Symbol(id, Decl(assignmentCompatWithDiscriminatedUnion.ts, 206, 34))
+    
+    type TypeB = { kind: MyEnum.B } & ({ id?: undefined } | { id: number });
+>TypeB : Symbol(TypeB, Decl(assignmentCompatWithDiscriminatedUnion.ts, 206, 49))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 208, 18))
+>MyEnum : Symbol(MyEnum, Decl(assignmentCompatWithDiscriminatedUnion.ts, 203, 19))
+>B : Symbol(MyEnum.B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 24))
+>id : Symbol(id, Decl(assignmentCompatWithDiscriminatedUnion.ts, 208, 40))
+>id : Symbol(id, Decl(assignmentCompatWithDiscriminatedUnion.ts, 208, 61))
+    
+    type MyType = TypeA | TypeB;
+>MyType : Symbol(MyType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 208, 76))
+>TypeA : Symbol(TypeA, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 32))
+>TypeB : Symbol(TypeB, Decl(assignmentCompatWithDiscriminatedUnion.ts, 206, 49))
+    
+    function something(a: MyType): void {}
+>something : Symbol(something, Decl(assignmentCompatWithDiscriminatedUnion.ts, 210, 32))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 212, 23))
+>MyType : Symbol(MyType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 208, 76))
+    
+    function indirect(kind: MyEnum, id?: number): void {
+>indirect : Symbol(indirect, Decl(assignmentCompatWithDiscriminatedUnion.ts, 212, 42))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 214, 22))
+>MyEnum : Symbol(MyEnum, Decl(assignmentCompatWithDiscriminatedUnion.ts, 203, 19))
+>id : Symbol(id, Decl(assignmentCompatWithDiscriminatedUnion.ts, 214, 35))
+
+        something({ kind, id });
+>something : Symbol(something, Decl(assignmentCompatWithDiscriminatedUnion.ts, 210, 32))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 215, 19))
+>id : Symbol(id, Decl(assignmentCompatWithDiscriminatedUnion.ts, 215, 25))
+    }
+    
+    type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
+>Foo : Symbol(Foo, Decl(assignmentCompatWithDiscriminatedUnion.ts, 216, 5))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 218, 16))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 218, 33))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 218, 53))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 218, 64))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 218, 87))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 218, 98))
+    
+    function test(obj: { kind: "a" | "b", value: number | undefined }) {
+>test : Symbol(test, Decl(assignmentCompatWithDiscriminatedUnion.ts, 218, 118))
+>obj : Symbol(obj, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 18))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 24))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 41))
+
+        let x1: Foo = obj;
+>x1 : Symbol(x1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 221, 11))
+>Foo : Symbol(Foo, Decl(assignmentCompatWithDiscriminatedUnion.ts, 216, 5))
+>obj : Symbol(obj, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 18))
+
+        let x2: Foo = { kind: obj.kind, value: obj.value };
+>x2 : Symbol(x2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 222, 11))
+>Foo : Symbol(Foo, Decl(assignmentCompatWithDiscriminatedUnion.ts, 216, 5))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 222, 23))
+>obj.kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 24))
+>obj : Symbol(obj, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 18))
+>kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 24))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 222, 39))
+>obj.value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 41))
+>obj : Symbol(obj, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 18))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 220, 41))
+    }
 }
 

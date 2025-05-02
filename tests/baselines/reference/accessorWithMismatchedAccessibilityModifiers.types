@@ -1,60 +1,82 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts] ////
+
+=== accessorWithMismatchedAccessibilityModifiers.ts ===
 class C {
 >C : C
+>  : ^
 
     get x() {
 >x : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     private set x(v) {
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
     }
 }
 
 class D {
 >D : D
+>  : ^
 
     protected get x() {
 >x : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     private set x(v) {
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
     }
 }
 
 class E {
 >E : E
+>  : ^
 
     protected set x(v) {
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
     }
     get x() {
 >x : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }
 
 class F {
 >F : F
+>  : ^
 
     protected static set x(v) {
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
     }
     static get x() {
 >x : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }

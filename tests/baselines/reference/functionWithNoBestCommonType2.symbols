@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionWithNoBestCommonType2.ts ===
+//// [tests/cases/compiler/functionWithNoBestCommonType2.ts] ////
+
+=== functionWithNoBestCommonType2.ts ===
 var v = function () {
 >v : Symbol(v, Decl(functionWithNoBestCommonType2.ts, 0, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithComplexConstraints.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithComplexConstraints.ts] ////
+
+=== objectTypesIdentityWithComplexConstraints.ts ===
 interface A {
 >A : Symbol(A, Decl(objectTypesIdentityWithComplexConstraints.ts, 0, 0))
 

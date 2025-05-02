@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts] ////
+
 //// [deleteOperatorWithStringType.ts]
 // delete  operator on string type
 var STRING: string;

@@ -1,7 +1,7 @@
-tests/cases/compiler/recursiveTypeComparison2.ts(13,80): error TS2304: Cannot find name 'StateValue'.
+recursiveTypeComparison2.ts(13,80): error TS2304: Cannot find name 'StateValue'.
 
 
-==== tests/cases/compiler/recursiveTypeComparison2.ts (1 errors) ====
+==== recursiveTypeComparison2.ts (1 errors) ====
     // Before fix this would cause compiler to hang (#1170)
     
     declare module Bacon {

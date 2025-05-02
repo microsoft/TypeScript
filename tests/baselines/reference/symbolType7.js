@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType7.ts] ////
+
 //// [symbolType7.ts]
 var s = Symbol.for("shift");
 s << s;

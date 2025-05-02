@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumAssignmentCompat3.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat3.ts] ////
+
+=== enumAssignmentCompat3.ts ===
 namespace First {
 >First : Symbol(First, Decl(enumAssignmentCompat3.ts, 0, 0))
 
@@ -198,7 +200,7 @@ abc = nope; // nope!
 >abc : Symbol(abc, Decl(enumAssignmentCompat3.ts, 56, 3))
 >nope : Symbol(nope, Decl(enumAssignmentCompat3.ts, 61, 3))
 
-abc = decl; // ok
+abc = decl; // bad - value of 'c' differs between these enums
 >abc : Symbol(abc, Decl(enumAssignmentCompat3.ts, 56, 3))
 >decl : Symbol(decl, Decl(enumAssignmentCompat3.ts, 63, 3))
 
@@ -222,7 +224,7 @@ nope = abc; // nope!
 >nope : Symbol(nope, Decl(enumAssignmentCompat3.ts, 61, 3))
 >abc : Symbol(abc, Decl(enumAssignmentCompat3.ts, 56, 3))
 
-decl = abc; // ok
+decl = abc; // bad - value of 'c' differs between these enums
 >decl : Symbol(decl, Decl(enumAssignmentCompat3.ts, 63, 3))
 >abc : Symbol(abc, Decl(enumAssignmentCompat3.ts, 56, 3))
 
@@ -244,7 +246,7 @@ abc = merged; // missing 'd'
 >abc : Symbol(abc, Decl(enumAssignmentCompat3.ts, 56, 3))
 >merged : Symbol(merged, Decl(enumAssignmentCompat3.ts, 64, 3))
 
-merged = abc; // ok
+merged = abc; // bad - value of 'c' differs between these enums
 >merged : Symbol(merged, Decl(enumAssignmentCompat3.ts, 64, 3))
 >abc : Symbol(abc, Decl(enumAssignmentCompat3.ts, 56, 3))
 

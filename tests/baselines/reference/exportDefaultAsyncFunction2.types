@@ -1,59 +1,90 @@
-=== tests/cases/compiler/asyncawait.ts ===
+//// [tests/cases/compiler/exportDefaultAsyncFunction2.ts] ////
+
+=== asyncawait.ts ===
 export function async<T>(...args: any[]): any { }
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 >args : any[]
+>     : ^^^^^
 
 export function await(...args: any[]): any { }
 >await : (...args: any[]) => any
+>      : ^^^^    ^^     ^^^^^   
 >args : any[]
+>     : ^^^^^
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import { async, await } from 'asyncawait';
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
+>      : ^^^^    ^^     ^^^^^   
 
 export default async(() => await(Promise.resolve(1)));
 >async(() => await(Promise.resolve(1))) : any
+>                                       : ^^^
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 >() => await(Promise.resolve(1)) : () => any
+>                                : ^^^^^^^^^
 >await(Promise.resolve(1)) : any
+>                          : ^^^
 >await : (...args: any[]) => any
+>      : ^^^^    ^^     ^^^^^   
 >Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >1 : 1
+>  : ^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export default async () => { return 0; };
 >async () => { return 0; } : () => Promise<number>
+>                          : ^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 import { async, await } from 'asyncawait';
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
+>      : ^^^^    ^^     ^^^^^   
 
 export default async<number>();
 >async<number>() : any
+>                : ^^^
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 
-=== tests/cases/compiler/d.ts ===
+=== d.ts ===
 import { async, await } from 'asyncawait';
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
+>      : ^^^^    ^^     ^^^^^   
 
 export default async;
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 
-=== tests/cases/compiler/e.ts ===
+=== e.ts ===
 import { async, await } from 'asyncawait';
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
+>      : ^^^^    ^^     ^^^^^   
 
 export default async
 >async : <T>(...args: any[]) => any
+>      : ^ ^^^^^    ^^     ^^^^^   
 
 export function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 

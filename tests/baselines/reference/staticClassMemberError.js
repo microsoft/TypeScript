@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticClassMemberError.ts] ////
+
 //// [staticClassMemberError.ts]
 class C {
 	static s;

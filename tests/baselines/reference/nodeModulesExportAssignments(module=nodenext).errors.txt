@@ -1,23 +1,23 @@
-tests/cases/conformance/node/index.ts(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+index.ts(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== tests/cases/conformance/node/subfolder/index.ts (0 errors) ====
+==== subfolder/index.ts (0 errors) ====
     // cjs format file
     const a = {};
     export = a;
-==== tests/cases/conformance/node/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     // esm format file
     const a = {};
     export = a;
     ~~~~~~~~~~~
 !!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/subfolder/package.json (0 errors) ====
+==== subfolder/package.json (0 errors) ====
     {
         "type": "commonjs"
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts ===
+//// [tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts] ////
+
+=== inferTypeConstraintInstantiationCircularity.ts ===
 type AMappedType<T> = { [KeyType in keyof T]: number };
 >AMappedType : Symbol(AMappedType, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 0))
 >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 17))
@@ -204,3 +206,51 @@ type MyObject<T> = T extends ZodObject<infer U>
 
     : never
   : never;
+
+// Repro from #50479
+
+type Cell<Value extends BaseValue = any, BaseValue = unknown> = {
+>Cell : Symbol(Cell, Decl(inferTypeConstraintInstantiationCircularity.ts, 71, 10))
+>Value : Symbol(Value, Decl(inferTypeConstraintInstantiationCircularity.ts, 75, 10))
+>BaseValue : Symbol(BaseValue, Decl(inferTypeConstraintInstantiationCircularity.ts, 75, 40))
+>BaseValue : Symbol(BaseValue, Decl(inferTypeConstraintInstantiationCircularity.ts, 75, 40))
+
+  id: string
+>id : Symbol(id, Decl(inferTypeConstraintInstantiationCircularity.ts, 75, 65))
+}
+
+type Items<Type extends Cell = Cell> = {
+>Items : Symbol(Items, Decl(inferTypeConstraintInstantiationCircularity.ts, 77, 1))
+>Type : Symbol(Type, Decl(inferTypeConstraintInstantiationCircularity.ts, 79, 11))
+>Cell : Symbol(Cell, Decl(inferTypeConstraintInstantiationCircularity.ts, 71, 10))
+>Cell : Symbol(Cell, Decl(inferTypeConstraintInstantiationCircularity.ts, 71, 10))
+
+  type: Type
+>type : Symbol(type, Decl(inferTypeConstraintInstantiationCircularity.ts, 79, 40))
+>Type : Symbol(Type, Decl(inferTypeConstraintInstantiationCircularity.ts, 79, 11))
+
+  name: string
+>name : Symbol(name, Decl(inferTypeConstraintInstantiationCircularity.ts, 80, 12))
+}
+
+type InferIOItemToJSType<T extends Items> =
+>InferIOItemToJSType : Symbol(InferIOItemToJSType, Decl(inferTypeConstraintInstantiationCircularity.ts, 82, 1))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 84, 25))
+>Items : Symbol(Items, Decl(inferTypeConstraintInstantiationCircularity.ts, 77, 1))
+
+  T extends { type: infer U }
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 84, 25))
+>type : Symbol(type, Decl(inferTypeConstraintInstantiationCircularity.ts, 85, 13))
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 85, 25))
+
+    ? U extends Cell<infer V/**, infer _ or unknown, or any valid type **/>
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 85, 25))
+>Cell : Symbol(Cell, Decl(inferTypeConstraintInstantiationCircularity.ts, 71, 10))
+>V : Symbol(V, Decl(inferTypeConstraintInstantiationCircularity.ts, 86, 26))
+
+      ? V
+>V : Symbol(V, Decl(inferTypeConstraintInstantiationCircularity.ts, 86, 26))
+
+      : never
+    : never
+

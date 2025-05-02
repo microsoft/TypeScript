@@ -1,84 +1,128 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag5.ts] ////
+
+=== test.js ===
 // all 6 should error on return statement/expression
 /** @type {(x: number) => string} */
 function h(x) { return x }
 >h : (x: number) => string
+>  : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 /** @type {(x: number) => string} */
 var f = x => x
 >f : (x: number) => string
+>  : ^ ^^      ^^^^^      
 >x => x : (x: number) => string
+>       : ^ ^^^^^^^^^^^^^      
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 /** @type {(x: number) => string} */
 var g = function (x) { return x }
 >g : (x: number) => string
+>  : ^ ^^      ^^^^^      
 >function (x) { return x } : (x: number) => string
+>                          : ^ ^^^^^^^^^^^^^      
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 /** @type {{ (x: number): string }} */
 function i(x) { return x }
 >i : (x: number) => string
+>  : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 /** @type {{ (x: number): string }} */
 var j = x => x
 >j : (x: number) => string
+>  : ^ ^^      ^^^^^      
 >x => x : (x: number) => string
+>       : ^ ^^^^^^^^^^^^^      
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 /** @type {{ (x: number): string }} */
 var k = function (x) { return x }
 >k : (x: number) => string
+>  : ^ ^^      ^^^^^      
 >function (x) { return x } : (x: number) => string
+>                          : ^ ^^^^^^^^^^^^^      
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 
 /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
 /** @type {Argle} */
 function blargle(s) {
->blargle : (x: 'hi' | 'bye') => 0 | 1 | 2
+>blargle : (x: "hi" | "bye") => 0 | 1 | 2
+>        : ^ ^^            ^^^^^         
 >s : "hi" | "bye"
+>  : ^^^^^^^^^^^^
 
     return 0;
 >0 : 0
+>  : ^
 }
 
 /** @type {0 | 1 | 2} - assignment should not error */
 var zeroonetwo = blargle('hi')
 >zeroonetwo : 0 | 1 | 2
+>           : ^^^^^^^^^
 >blargle('hi') : 0 | 1 | 2
+>              : ^^^^^^^^^
 >blargle : (x: "hi" | "bye") => 0 | 1 | 2
+>        : ^ ^^            ^^^^^         
 >'hi' : "hi"
+>     : ^^^^
 
 /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */
 
 /** @type {Gioconda} */
 function monaLisa(sb) {
 >monaLisa : (sb: any) => 1 | 2
+>         : ^  ^^^^^^^^^^^^^^^
 >sb : any
+>   : ^^^
 
     return typeof sb === 'string' ? 1 : 2;
 >typeof sb === 'string' ? 1 : 2 : 1 | 2
+>                               : ^^^^^
 >typeof sb === 'string' : boolean
+>                       : ^^^^^^^
 >typeof sb : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sb : any
+>   : ^^^
 >'string' : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 }
 
 /** @type {2 | 3} - overloads are not supported, so there will be an error */
 var twothree = monaLisa(false);
 >twothree : 2 | 3
+>         : ^^^^^
 >monaLisa(false) : 1 | 2
+>                : ^^^^^
 >monaLisa : (sb: any) => 1 | 2
+>         : ^  ^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 

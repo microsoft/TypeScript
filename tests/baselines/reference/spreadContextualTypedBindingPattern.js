@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadContextualTypedBindingPattern.ts] ////
+
 //// [spreadContextualTypedBindingPattern.ts]
 // #18308
 interface Person {

@@ -1,226 +1,353 @@
-=== tests/cases/conformance/jsdoc/a.ts ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeTagCast.ts] ////
+
+=== a.ts ===
 var W: string;
 >W : string
+>  : ^^^^^^
 
-=== tests/cases/conformance/jsdoc/b.js ===
+=== b.js ===
 // @ts-check
 var W = /** @type {string} */(/** @type {*} */ (4));
 >W : string
+>  : ^^^^^^
 >(/** @type {*} */ (4)) : string
+>                       : ^^^^^^
 >(4) : any
+>    : ^^^
 >4 : 4
+>  : ^
 
 var W = /** @type {string} */(4); // Error
 >W : string
+>  : ^^^^^^
 >(4) : string
+>    : ^^^^^^
 >4 : 4
+>  : ^
 
 /** @type {*} */
 var a;
 >a : any
+>  : ^^^
 
 /** @type {string} */
 var s;
 >s : string
+>  : ^^^^^^
 
 var a = /** @type {*} */("" + 4);
 >a : any
+>  : ^^^
 >("" + 4) : any
+>         : ^^^
 >"" + 4 : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >4 : 4
+>  : ^
 
 var s = "" + /** @type {*} */(4);
 >s : string
+>  : ^^^^^^
 >"" + /** @type {*} */(4) : string
+>                         : ^^^^^^
 >"" : ""
+>   : ^^
 >(4) : any
+>    : ^^^
 >4 : 4
+>  : ^
 
 class SomeBase {
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     constructor() {
         this.p = 42;
 >this.p = 42 : 42
+>            : ^^
 >this.p : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >42 : 42
+>   : ^^
     }
 }
 class SomeDerived extends SomeBase {
 >SomeDerived : SomeDerived
+>            : ^^^^^^^^^^^
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof SomeBase
+>      : ^^^^^^^^^^^^^^^
 
         this.x = 42;
 >this.x = 42 : 42
+>            : ^^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >42 : 42
+>   : ^^
     }
 }
 class SomeOther {
 >SomeOther : SomeOther
+>          : ^^^^^^^^^
 
     constructor() {
         this.q = 42;
 >this.q = 42 : 42
+>            : ^^
 >this.q : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >q : any
+>  : ^^^
 >42 : 42
+>   : ^^
     }
 }
 
 function SomeFakeClass() {
 >SomeFakeClass : typeof SomeFakeClass
+>              : ^^^^^^^^^^^^^^^^^^^^
 
     /** @type {string|number} */
     this.p = "bar";
 >this.p = "bar" : "bar"
+>               : ^^^^^
 >this.p : string | number
+>       : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >p : string | number
+>  : ^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 }
 
 // Type assertion should check for assignability in either direction
 var someBase = new SomeBase();
 >someBase : SomeBase
+>         : ^^^^^^^^
 >new SomeBase() : SomeBase
+>               : ^^^^^^^^
 >SomeBase : typeof SomeBase
+>         : ^^^^^^^^^^^^^^^
 
 var someDerived = new SomeDerived();
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 >new SomeDerived() : SomeDerived
+>                  : ^^^^^^^^^^^
 >SomeDerived : typeof SomeDerived
+>            : ^^^^^^^^^^^^^^^^^^
 
 var someOther = new SomeOther();
 >someOther : SomeOther
+>          : ^^^^^^^^^
 >new SomeOther() : SomeOther
+>                : ^^^^^^^^^
 >SomeOther : typeof SomeOther
+>          : ^^^^^^^^^^^^^^^^
 
 var someFakeClass = new SomeFakeClass();
 >someFakeClass : SomeFakeClass
+>              : ^^^^^^^^^^^^^
 >new SomeFakeClass() : SomeFakeClass
+>                    : ^^^^^^^^^^^^^
 >SomeFakeClass : typeof SomeFakeClass
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 someBase = /** @type {SomeBase} */(someDerived);
 >someBase = /** @type {SomeBase} */(someDerived) : SomeBase
+>                                                : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 >(someDerived) : SomeBase
+>              : ^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 
 someBase = /** @type {SomeBase} */(someBase);
 >someBase = /** @type {SomeBase} */(someBase) : SomeBase
+>                                             : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 >(someBase) : SomeBase
+>           : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 
 someBase = /** @type {SomeBase} */(someOther); // Error
 >someBase = /** @type {SomeBase} */(someOther) : SomeBase
+>                                              : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 >(someOther) : SomeBase
+>            : ^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 
 someDerived = /** @type {SomeDerived} */(someDerived);
 >someDerived = /** @type {SomeDerived} */(someDerived) : SomeDerived
+>                                                      : ^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 >(someDerived) : SomeDerived
+>              : ^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 
 someDerived = /** @type {SomeDerived} */(someBase);
 >someDerived = /** @type {SomeDerived} */(someBase) : SomeDerived
+>                                                   : ^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 >(someBase) : SomeDerived
+>           : ^^^^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 
 someDerived = /** @type {SomeDerived} */(someOther); // Error
 >someDerived = /** @type {SomeDerived} */(someOther) : SomeDerived
+>                                                    : ^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 >(someOther) : SomeDerived
+>            : ^^^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 
 someOther = /** @type {SomeOther} */(someDerived); // Error
 >someOther = /** @type {SomeOther} */(someDerived) : SomeOther
+>                                                  : ^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 >(someDerived) : SomeOther
+>              : ^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 
 someOther = /** @type {SomeOther} */(someBase); // Error
 >someOther = /** @type {SomeOther} */(someBase) : SomeOther
+>                                               : ^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 >(someBase) : SomeOther
+>           : ^^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 
 someOther = /** @type {SomeOther} */(someOther);
 >someOther = /** @type {SomeOther} */(someOther) : SomeOther
+>                                                : ^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 >(someOther) : SomeOther
+>            : ^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 
 someFakeClass = someBase;
 >someFakeClass = someBase : SomeBase
+>                         : ^^^^^^^^
 >someFakeClass : SomeFakeClass
+>              : ^^^^^^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 
 someFakeClass = someDerived;
 >someFakeClass = someDerived : SomeDerived
+>                            : ^^^^^^^^^^^
 >someFakeClass : SomeFakeClass
+>              : ^^^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 
 someBase = someFakeClass; // Error
 >someBase = someFakeClass : SomeFakeClass
+>                         : ^^^^^^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 >someFakeClass : SomeFakeClass
+>              : ^^^^^^^^^^^^^
 
 someBase = /** @type {SomeBase} */(someFakeClass);
 >someBase = /** @type {SomeBase} */(someFakeClass) : SomeBase
+>                                                  : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 >(someFakeClass) : SomeBase
+>                : ^^^^^^^^
 >someFakeClass : SomeFakeClass
+>              : ^^^^^^^^^^^^^
 
 // Type assertion cannot be a type-predicate type
 /** @type {number | string} */
 var numOrStr;
 >numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
 
 /** @type {string} */
 var str;
 >str : string
+>    : ^^^^^^
 
 if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
 >(numOrStr === undefined) : boolean
+>                         : ^^^^^^^
 >numOrStr === undefined : boolean
+>                       : ^^^^^^^
 >numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 	str = numOrStr; // Error, no narrowing occurred
 >str = numOrStr : string | number
+>               : ^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
 >numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
 }
 
 
 var asConst1 = /** @type {const} */(1);
 >asConst1 : 1
+>         : ^
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 
 var asConst2 = /** @type {const} */({
 >asConst2 : { readonly x: 1; }
+>         : ^^^^^^^^^^^^^^^^^^
 >({    x: 1}) : { readonly x: 1; }
+>             : ^^^^^^^^^^^^^^^^^^
 >{    x: 1} : { readonly x: 1; }
+>           : ^^^^^^^^^^^^^^^^^^
 
     x: 1
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 });

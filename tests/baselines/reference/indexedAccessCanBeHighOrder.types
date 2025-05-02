@@ -1,56 +1,96 @@
-=== tests/cases/compiler/indexedAccessCanBeHighOrder.ts ===
+//// [tests/cases/compiler/indexedAccessCanBeHighOrder.ts] ////
+
+=== indexedAccessCanBeHighOrder.ts ===
 declare function get<U, Y extends keyof U>(x: U, y: Y): U[Y];
 >get : <U, Y extends keyof U>(x: U, y: Y) => U[Y]
+>    : ^ ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^    
 >x : U
+>  : ^
 >y : Y
+>  : ^
 
 declare function find<T, K extends keyof T>(o: T[K]): [T, K];
 >find : <T, K extends keyof T>(o: T[K]) => [T, K]
+>     : ^ ^^ ^^^^^^^^^       ^^ ^^    ^^^^^      
 >o : T[K]
+>  : ^^^^
 
 function impl<A, B extends keyof A>(a: A, b: B) {
 >impl : <A, B extends keyof A>(a: A, b: B) => [A, B]
+>     : ^ ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
     const item = get(a, b);
 >item : A[B]
+>     : ^^^^
 >get(a, b) : A[B]
+>          : ^^^^
 >get : <U, Y extends keyof U>(x: U, y: Y) => U[Y]
+>    : ^ ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^    
 >a : A
+>  : ^
 >b : B
+>  : ^
 
     return find(item);
 >find(item) : [A, B]
+>           : ^^^^^^
 >find : <T, K extends keyof T>(o: T[K]) => [T, K]
+>     : ^ ^^ ^^^^^^^^^       ^^ ^^    ^^^^^      
 >item : A[B]
+>     : ^^^^
 }
 
 const o = {x: 42};
 >o : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{x: 42} : { x: number; }
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 const r = impl(o, "x");
 >r : [{ x: number; }, "x"]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >impl(o, "x") : [{ x: number; }, "x"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >impl : <A, B extends keyof A>(a: A, b: B) => [A, B]
+>     : ^ ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >o : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >"x" : "x"
+>    : ^^^
 
 r[0][r[1]] = o[r[1]];
 >r[0][r[1]] = o[r[1]] : number
+>                     : ^^^^^^
 >r[0][r[1]] : number
+>           : ^^^^^^
 >r[0] : { x: number; }
+>     : ^^^^^^^^^^^^^^
 >r : [{ x: number; }, "x"]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >r[1] : "x"
+>     : ^^^
 >r : [{ x: number; }, "x"]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >o[r[1]] : number
+>        : ^^^^^^
 >o : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >r[1] : "x"
+>     : ^^^
 >r : [{ x: number; }, "x"]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 

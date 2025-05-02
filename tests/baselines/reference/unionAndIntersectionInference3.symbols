@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts] ////
+
+=== unionAndIntersectionInference3.ts ===
 // Repro from #30720
 
 type Maybe<T> = T | undefined;
@@ -27,7 +29,7 @@ const g: <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Pro
 >R : Symbol(R, Decl(unionAndIntersectionInference3.ts, 8, 12))
 >S : Symbol(S, Decl(unionAndIntersectionInference3.ts, 8, 15))
 >com : Symbol(com, Decl(unionAndIntersectionInference3.ts, 8, 19))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 >S : Symbol(S, Decl(unionAndIntersectionInference3.ts, 8, 15))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 8, 10))
 >R : Symbol(R, Decl(unionAndIntersectionInference3.ts, 8, 12))
@@ -41,7 +43,7 @@ const g: <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Pro
 >R : Symbol(R, Decl(unionAndIntersectionInference3.ts, 8, 99))
 >S : Symbol(S, Decl(unionAndIntersectionInference3.ts, 8, 102))
 >com : Symbol(com, Decl(unionAndIntersectionInference3.ts, 8, 106))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 >S : Symbol(S, Decl(unionAndIntersectionInference3.ts, 8, 102))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 8, 97))
 >R : Symbol(R, Decl(unionAndIntersectionInference3.ts, 8, 99))
@@ -308,4 +310,20 @@ let z = foo(ab);  // [AB<string>, string]
 >z : Symbol(z, Decl(unionAndIntersectionInference3.ts, 86, 3))
 >foo : Symbol(foo, Decl(unionAndIntersectionInference3.ts, 80, 33))
 >ab : Symbol(ab, Decl(unionAndIntersectionInference3.ts, 84, 11))
+
+// Repro from #51399
+
+declare let a: <T>() => (T extends true ? true : false) & boolean;
+>a : Symbol(a, Decl(unionAndIntersectionInference3.ts, 90, 11))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 90, 16))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 90, 16))
+
+declare let b: <T>() => (T extends true ? true : false) & boolean;
+>b : Symbol(b, Decl(unionAndIntersectionInference3.ts, 91, 11))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 91, 16))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 91, 16))
+
+a = b;
+>a : Symbol(a, Decl(unionAndIntersectionInference3.ts, 90, 11))
+>b : Symbol(b, Decl(unionAndIntersectionInference3.ts, 91, 11))
 

@@ -177,16 +177,4 @@
 ////
 
 
-function verifyOccurrencesAtMarker(marker: string, count: number) {
-    goTo.marker(marker);
-    verify.occurrencesAtPositionCount(count);
-}
-
-verifyOccurrencesAtMarker("1", 5);
-verifyOccurrencesAtMarker("2", 6);
-verifyOccurrencesAtMarker("3", 1);
-verifyOccurrencesAtMarker("4", 5);
-verifyOccurrencesAtMarker("5", 6);
-verifyOccurrencesAtMarker("6", 0);
-verifyOccurrencesAtMarker("7", 6);
-verifyOccurrencesAtMarker("8", 5);
+verify.baselineDocumentHighlights(test.markers());

@@ -1,268 +1,401 @@
-=== tests/cases/compiler/enumAssignmentCompat3.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat3.ts] ////
+
+=== enumAssignmentCompat3.ts ===
 namespace First {
 >First : typeof First
+>      : ^^^^^^^^^^^^
 
     export enum E {
 >E : E
+>  : ^
 
         a, b, c,
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
     }
 }
 namespace Abc {
 >Abc : typeof Abc
+>    : ^^^^^^^^^^
 
     export enum E {
 >E : E
+>  : ^
 
         a, b, c,
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
     }
     export enum Nope {
 >Nope : Nope
+>     : ^^^^
 
         a, b, c,
 >a : Nope.a
+>  : ^^^^^^
 >b : Nope.b
+>  : ^^^^^^
 >c : Nope.c
+>  : ^^^^^^
     }
 }
 namespace Abcd {
 >Abcd : typeof Abcd
+>     : ^^^^^^^^^^^
 
     export enum E {
 >E : E
+>  : ^
 
         a, b, c, d,
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 >d : E.d
+>  : ^^^
     }
 }
 namespace Ab {
 >Ab : typeof Ab
+>   : ^^^^^^^^^
 
     export enum E {
 >E : E
+>  : ^
 
         a, b,
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
     }
 }
 namespace Cd {
 >Cd : typeof Cd
+>   : ^^^^^^^^^
 
     export enum E {
 >E : E
+>  : ^
 
         c, d,
 >c : E.c
+>  : ^^^
 >d : E.d
+>  : ^^^
     }
 }
 namespace Const {
     export const enum E {
 >E : E
+>  : ^
 
         a, b, c,
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
     }
 }
 namespace Decl {
 >Decl : typeof Decl
+>     : ^^^^^^^^^^^
 
     export declare enum E {
 >E : E
+>  : ^
 
         a, b, c = 3,
->a : E
->b : E
->c : E
+>a : E.a
+>  : ^^^
+>b : E.b
+>  : ^^^
+>c : E.c
+>  : ^^^
 >3 : 3
+>  : ^
     }
 }
 namespace Merged {
 >Merged : typeof Merged
+>       : ^^^^^^^^^^^^^
 
     export enum E {
 >E : E
+>  : ^
 
         a, b, 
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
     }
     export enum E {
 >E : E
+>  : ^
 
         c = 3, d,
 >c : E.c
+>  : ^^^
 >3 : 3
+>  : ^
 >d : E.d
+>  : ^^^
     }
 }
 
 namespace Merged2 {
 >Merged2 : typeof Merged2
+>        : ^^^^^^^^^^^^^^
 
     export enum E {
 >E : E
+>  : ^
 
         a, b, c
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
     }
     export module E {
 >E : typeof E
+>  : ^^^^^^^^
 
         export let d = 5;
 >d : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
     }
 }
 
 var abc: First.E;
 >abc : First.E
+>    : ^^^^^^^
 >First : any
+>      : ^^^
 
 var secondAbc: Abc.E;
 >secondAbc : Abc.E
+>          : ^^^^^
 >Abc : any
+>    : ^^^
 
 var secondAbcd: Abcd.E;
 >secondAbcd : Abcd.E
+>           : ^^^^^^
 >Abcd : any
+>     : ^^^
 
 var secondAb: Ab.E;
 >secondAb : Ab.E
+>         : ^^^^
 >Ab : any
+>   : ^^^
 
 var secondCd: Cd.E;
 >secondCd : Cd.E
+>         : ^^^^
 >Cd : any
+>   : ^^^
 
 var nope: Abc.Nope;
 >nope : Abc.Nope
+>     : ^^^^^^^^
 >Abc : any
+>    : ^^^
 
 var k: Const.E;
 >k : Const.E
+>  : ^^^^^^^
 >Const : any
+>      : ^^^
 
 var decl: Decl.E;
 >decl : Decl.E
+>     : ^^^^^^
 >Decl : any
+>     : ^^^
 
 var merged: Merged.E;
 >merged : Merged.E
+>       : ^^^^^^^^
 >Merged : any
+>       : ^^^
 
 var merged2: Merged2.E;
 >merged2 : Merged2.E
+>        : ^^^^^^^^^
 >Merged2 : any
+>        : ^^^
 
 abc = secondAbc; // ok
 >abc = secondAbc : Abc.E
+>                : ^^^^^
 >abc : First.E
+>    : ^^^^^^^
 >secondAbc : Abc.E
+>          : ^^^^^
 
 abc = secondAbcd; // missing 'd'
 >abc = secondAbcd : Abcd.E
+>                 : ^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 >secondAbcd : Abcd.E
+>           : ^^^^^^
 
 abc = secondAb; // ok
 >abc = secondAb : Ab.E
+>               : ^^^^
 >abc : First.E
+>    : ^^^^^^^
 >secondAb : Ab.E
+>         : ^^^^
 
 abc = secondCd; // missing 'd'
 >abc = secondCd : Cd.E
+>               : ^^^^
 >abc : First.E
+>    : ^^^^^^^
 >secondCd : Cd.E
+>         : ^^^^
 
 abc = nope; // nope!
 >abc = nope : Abc.Nope
+>           : ^^^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 >nope : Abc.Nope
+>     : ^^^^^^^^
 
-abc = decl; // ok
+abc = decl; // bad - value of 'c' differs between these enums
 >abc = decl : Decl.E
+>           : ^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 >decl : Decl.E
+>     : ^^^^^^
 
 secondAbc = abc; // ok
 >secondAbc = abc : First.E
+>                : ^^^^^^^
 >secondAbc : Abc.E
+>          : ^^^^^
 >abc : First.E
+>    : ^^^^^^^
 
 secondAbcd = abc; // ok
 >secondAbcd = abc : First.E
+>                 : ^^^^^^^
 >secondAbcd : Abcd.E
+>           : ^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 
 secondAb = abc; // missing 'c'
 >secondAb = abc : First.E
+>               : ^^^^^^^
 >secondAb : Ab.E
+>         : ^^^^
 >abc : First.E
+>    : ^^^^^^^
 
 secondCd = abc; // missing 'a' and 'b'
 >secondCd = abc : First.E
+>               : ^^^^^^^
 >secondCd : Cd.E
+>         : ^^^^
 >abc : First.E
+>    : ^^^^^^^
 
 nope = abc; // nope!
 >nope = abc : First.E
+>           : ^^^^^^^
 >nope : Abc.Nope
+>     : ^^^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 
-decl = abc; // ok
+decl = abc; // bad - value of 'c' differs between these enums
 >decl = abc : First.E
+>           : ^^^^^^^
 >decl : Decl.E
+>     : ^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 
 // const is only assignable to itself
 k = k;
 >k = k : Const.E
+>      : ^^^^^^^
 >k : Const.E
+>  : ^^^^^^^
 >k : Const.E
+>  : ^^^^^^^
 
 abc = k; // error
 >abc = k : Const.E
+>        : ^^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 >k : Const.E
+>  : ^^^^^^^
 
 k = abc;
 >k = abc : First.E
+>        : ^^^^^^^
 >k : Const.E
+>  : ^^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 
 // merged enums compare all their members
 abc = merged; // missing 'd'
 >abc = merged : Merged.E
+>             : ^^^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 >merged : Merged.E
+>       : ^^^^^^^^
 
-merged = abc; // ok
+merged = abc; // bad - value of 'c' differs between these enums
 >merged = abc : First.E
+>             : ^^^^^^^
 >merged : Merged.E
+>       : ^^^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 
 abc = merged2; // ok
 >abc = merged2 : Merged2.E
+>              : ^^^^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 >merged2 : Merged2.E
+>        : ^^^^^^^^^
 
 merged2 = abc; // ok
 >merged2 = abc : First.E
+>              : ^^^^^^^
 >merged2 : Merged2.E
+>        : ^^^^^^^^^
 >abc : First.E
+>    : ^^^^^^^
 

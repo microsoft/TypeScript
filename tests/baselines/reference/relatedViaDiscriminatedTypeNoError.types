@@ -1,26 +1,39 @@
-=== tests/cases/compiler/relatedViaDiscriminatedTypeNoError.ts ===
+//// [tests/cases/compiler/relatedViaDiscriminatedTypeNoError.ts] ////
+
+=== relatedViaDiscriminatedTypeNoError.ts ===
 class Model {
 >Model : Model
+>      : ^^^^^
 
     constructor(public flag: boolean) {}
 >flag : boolean
+>     : ^^^^^^^
 }
 
 type DiscriminatedUnion = { flag: true } | { flag: false };
->DiscriminatedUnion : { flag: true; } | { flag: false; }
+>DiscriminatedUnion : DiscriminatedUnion
+>                   : ^^^^^^^^^^^^^^^^^^
 >flag : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >flag : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 
 class A<T extends DiscriminatedUnion> {
 >A : A<T>
+>  : ^^^^
 
     constructor(public model: T) { }
 >model : T
+>      : ^
 }
 
 class B extends A<Model> { }
 >B : B
+>  : ^
 >A : A<Model>
+>  : ^^^^^^^^
 

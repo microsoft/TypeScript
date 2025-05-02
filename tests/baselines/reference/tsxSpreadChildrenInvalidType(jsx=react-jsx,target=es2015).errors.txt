@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx(17,12): error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
+tsxSpreadChildrenInvalidType.tsx(17,12): error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
 
 
-==== tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx (2 errors) ====
+==== tsxSpreadChildrenInvalidType.tsx (2 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -21,7 +21,7 @@ tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609
     function Todo(prop: { key: number, todo: string }) {
         return <div>{prop.key.toString() + prop.todo}</div>;
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     }
     function TodoList({ todos }: TodoListProps) {
         return <div>

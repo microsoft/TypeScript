@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts] ////
+
 //// [compoundAssignmentLHSIsValue.ts]
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value: any;

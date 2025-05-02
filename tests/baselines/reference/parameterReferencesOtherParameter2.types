@@ -1,20 +1,30 @@
-=== tests/cases/compiler/parameterReferencesOtherParameter2.ts ===
+//// [tests/cases/compiler/parameterReferencesOtherParameter2.ts] ////
+
+=== parameterReferencesOtherParameter2.ts ===
 class Model {
 >Model : Model
+>      : ^^^^^
 
     public name: string;
 >name : string
+>     : ^^^^^^
 }
 
 class UI {
 >UI : UI
+>   : ^^
 
     constructor(model: Model, foo = model.name)
 >model : Model
+>      : ^^^^^
 >foo : string
+>    : ^^^^^^
 >model.name : string
+>           : ^^^^^^
 >model : Model
+>      : ^^^^^
 >name : string
+>     : ^^^^^^
     {
     }
 }

@@ -1,6 +1,8 @@
-=== tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts ===
+//// [tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts] ////
+
+=== restPropertyWithBindingPattern.ts ===
+
 ({...{}} = {});
-No type information for this code.({...({})} = {});
-No type information for this code.({...[]} = {});
-No type information for this code.({...([])} = {});
-No type information for this code.
+({...({})} = {});
+({...[]} = {});
+({...([])} = {});

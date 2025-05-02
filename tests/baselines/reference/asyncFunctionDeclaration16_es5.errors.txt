@@ -1,0 +1,73 @@
+/a.js(21,14): error TS1055: Type 'string' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+/a.js(27,12): error TS1065: The return type of an async function or method must be the global Promise<T> type.
+/a.js(45,12): error TS1065: The return type of an async function or method must be the global Promise<T> type.
+  Type 'typeof Thenable' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+    Construct signature return types 'Thenable' and 'PromiseLike<T>' are incompatible.
+      The types returned by 'then(...)' are incompatible between these types.
+        Type 'void' is not assignable to type 'PromiseLike<TResult1 | TResult2>'.
+
+
+==== /types.d.ts (0 errors) ====
+    declare class Thenable { then(): void; }
+    
+==== /a.js (3 errors) ====
+    /**
+     * @callback T1
+     * @param {string} str
+     * @returns {string}
+     */
+    
+    /**
+     * @callback T2
+     * @param {string} str
+     * @returns {Promise<string>}
+     */
+    
+    /**
+     * @callback T3
+     * @param {string} str
+     * @returns {Thenable}
+     */
+    
+    /**
+     * @param {string} str
+     * @returns {string}
+                 ~~~~~~
+!!! error TS1055: Type 'string' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+     */
+    const f1 = async str => {
+        return str;
+    }
+    
+    /** @type {T1} */
+               ~~
+!!! error TS1065: The return type of an async function or method must be the global Promise<T> type.
+!!! related TS1055 /a.js:4:14: Type 'string' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+    const f2 = async str => {
+        return str;
+    }
+    
+    /**
+     * @param {string} str
+     * @returns {Promise<string>}
+     */
+    const f3 = async str => {
+        return str;
+    }
+    
+    /** @type {T2} */
+    const f4 = async str => {
+        return str;
+    }
+    
+    /** @type {T3} */
+               ~~
+!!! error TS1065: The return type of an async function or method must be the global Promise<T> type.
+!!! error TS1065:   Type 'typeof Thenable' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
+!!! error TS1065:     Construct signature return types 'Thenable' and 'PromiseLike<T>' are incompatible.
+!!! error TS1065:       The types returned by 'then(...)' are incompatible between these types.
+!!! error TS1065:         Type 'void' is not assignable to type 'PromiseLike<TResult1 | TResult2>'.
+    const f5 = async str => {
+        return str;
+    }
+    

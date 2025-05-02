@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadModifiersMustAgree.ts] ////
+
 //// [overloadModifiersMustAgree.ts]
 class baz {
     public foo();
@@ -17,7 +19,7 @@ interface I {
 
 //// [overloadModifiersMustAgree.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var baz = /** @class */ (function () {
     function baz() {
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportClassNameWithObjectSystem.ts] ////
+
 //// [exportClassNameWithObjectSystem.ts]
 export class Object {}
 

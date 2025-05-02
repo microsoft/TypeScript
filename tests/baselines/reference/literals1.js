@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/literals1.ts] ////
+
 //// [literals1.ts]
 var a = 42;
 var b = 0xFA34;

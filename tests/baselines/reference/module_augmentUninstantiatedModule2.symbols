@@ -1,4 +1,6 @@
-=== tests/cases/compiler/module_augmentUninstantiatedModule2.ts ===
+//// [tests/cases/compiler/module_augmentUninstantiatedModule2.ts] ////
+
+=== module_augmentUninstantiatedModule2.ts ===
 declare var ng: ng.IAngularStatic;
 >ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
 >ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))

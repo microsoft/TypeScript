@@ -1,11 +1,11 @@
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(2,7): error TS2571: Object is of type 'unknown'.
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(3,9): error TS2339: Property 'p1' does not exist on type 'unknown'.
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2461: Type 'unknown' is not an array type.
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2571: Object is of type 'unknown'.
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(5,7): error TS2461: Type 'unknown' is not an array type.
+bindingPatternCannotBeOnlyInferenceSource.ts(2,7): error TS2571: Object is of type 'unknown'.
+bindingPatternCannotBeOnlyInferenceSource.ts(3,9): error TS2339: Property 'p1' does not exist on type 'unknown'.
+bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2461: Type 'unknown' is not an array type.
+bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2571: Object is of type 'unknown'.
+bindingPatternCannotBeOnlyInferenceSource.ts(5,7): error TS2461: Type 'unknown' is not an array type.
 
 
-==== tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts (5 errors) ====
+==== bindingPatternCannotBeOnlyInferenceSource.ts (5 errors) ====
     declare function f<T>(): T;
     const {} = f();       // error (only in strictNullChecks)
           ~~

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionWithObjectLiteralBody5.ts] ////
+
 //// [arrowFunctionWithObjectLiteralBody5.ts]
 var a = () => <Error>{ name: "foo", message: "bar" };      
 

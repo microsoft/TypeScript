@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedGetterInClass.ts ===
+//// [tests/cases/compiler/unusedGetterInClass.ts] ////
+
+=== unusedGetterInClass.ts ===
 class Employee {
 >Employee : Symbol(Employee, Decl(unusedGetterInClass.ts, 0, 0))
 

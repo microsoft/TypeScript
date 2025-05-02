@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName27.ts(3,6): error TS2304: Cannot find name 'e'.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName27.ts(4,6): error TS2304: Cannot find name 'e2'.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName27.ts(4,9): error TS1005: ';' expected.
+parserComputedPropertyName27.ts(3,6): error TS2304: Cannot find name 'e'.
+parserComputedPropertyName27.ts(4,6): error TS2304: Cannot find name 'e2'.
+parserComputedPropertyName27.ts(4,9): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName27.ts (3 errors) ====
+==== parserComputedPropertyName27.ts (3 errors) ====
     class C {
         // No ASI
         [e]: number = 0

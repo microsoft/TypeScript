@@ -1,4 +1,6 @@
-=== tests/cases/compiler/consumer.ts ===
+//// [tests/cases/compiler/exportImportNonInstantiatedModule2.ts] ////
+
+=== consumer.ts ===
 import e = require('./exporter');
 >e : Symbol(e, Decl(consumer.ts, 0, 0))
 
@@ -10,7 +12,7 @@ export function w(): e.w { // Should be OK
     return {name: 'value' };
 >name : Symbol(name, Decl(consumer.ts, 3, 12))
 }
-=== tests/cases/compiler/w1.ts ===
+=== w1.ts ===
 export = Widget1
 >Widget1 : Symbol(Widget1, Decl(w1.ts, 0, 16))
 
@@ -18,7 +20,7 @@ interface Widget1 { name: string; }
 >Widget1 : Symbol(Widget1, Decl(w1.ts, 0, 16))
 >name : Symbol(Widget1.name, Decl(w1.ts, 1, 19))
 
-=== tests/cases/compiler/exporter.ts ===
+=== exporter.ts ===
 export import w = require('./w1');
 >w : Symbol(w, Decl(exporter.ts, 0, 0))
 

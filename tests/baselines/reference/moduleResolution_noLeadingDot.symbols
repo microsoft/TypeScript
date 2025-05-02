@@ -1,4 +1,6 @@
+//// [tests/cases/compiler/moduleResolution_noLeadingDot.ts] ////
+
 === /a.ts ===
+
 true;
-No type information for this code.
-No type information for this code.
+

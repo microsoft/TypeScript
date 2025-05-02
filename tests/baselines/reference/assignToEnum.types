@@ -1,35 +1,60 @@
-=== tests/cases/compiler/assignToEnum.ts ===
+//// [tests/cases/compiler/assignToEnum.ts] ////
+
+=== assignToEnum.ts ===
 enum A { foo, bar }
 >A : A
+>  : ^
 >foo : A.foo
+>    : ^^^^^
 >bar : A.bar
+>    : ^^^^^
 
 A = undefined;  // invalid LHS
 >A = undefined : undefined
+>              : ^^^^^^^^^
 >A : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 A = A.bar;      // invalid LHS
 >A = A.bar : A.bar
+>          : ^^^^^
 >A : any
+>  : ^^^
 >A.bar : A.bar
+>      : ^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >bar : A.bar
+>    : ^^^^^
 
 A.foo = 1;      // invalid LHS
 >A.foo = 1 : 1
+>          : ^
 >A.foo : any
+>      : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : any
+>    : ^^^
 >1 : 1
+>  : ^
 
 A.foo = A.bar;  // invalid LHS
 >A.foo = A.bar : A.bar
+>              : ^^^^^
 >A.foo : any
+>      : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : any
+>    : ^^^
 >A.bar : A.bar
+>      : ^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >bar : A.bar
+>    : ^^^^^
 
 

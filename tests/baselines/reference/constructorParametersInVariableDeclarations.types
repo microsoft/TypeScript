@@ -1,48 +1,73 @@
-=== tests/cases/compiler/constructorParametersInVariableDeclarations.ts ===
+//// [tests/cases/compiler/constructorParametersInVariableDeclarations.ts] ////
+
+=== constructorParametersInVariableDeclarations.ts ===
 class A {
 >A : A
+>  : ^
 
     private a = x;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private b = { p: x };
 >b : { p: any; }
+>  : ^^^^^^^^^^^
 >{ p: x } : { p: any; }
+>         : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private c = () => x;
 >c : () => any
+>  : ^^^^^^^^^
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     constructor(x: number) {
 >x : number
+>  : ^^^^^^
     }
 }
 
 class B {
 >B : B
+>  : ^
 
     private a = x;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private b = { p: x };
 >b : { p: any; }
+>  : ^^^^^^^^^^^
 >{ p: x } : { p: any; }
+>         : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private c = () => x;
 >c : () => any
+>  : ^^^^^^^^^
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     constructor() {
         var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }

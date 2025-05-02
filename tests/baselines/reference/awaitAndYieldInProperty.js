@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/awaitAndYieldInProperty.ts] ////
+
 //// [awaitAndYieldInProperty.ts]
 async function* test(x: Promise<string>) {
     class C {

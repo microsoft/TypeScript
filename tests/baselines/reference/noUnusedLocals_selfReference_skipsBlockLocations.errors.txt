@@ -1,9 +1,9 @@
-tests/cases/compiler/noUnusedLocals_selfReference_skipsBlockLocations.ts(2,14): error TS6133: 'f' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference_skipsBlockLocations.ts(8,22): error TS6133: 'g' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference_skipsBlockLocations.ts(12,22): error TS6133: 'h' is declared but its value is never read.
+noUnusedLocals_selfReference_skipsBlockLocations.ts(2,14): error TS6133: 'f' is declared but its value is never read.
+noUnusedLocals_selfReference_skipsBlockLocations.ts(8,22): error TS6133: 'g' is declared but its value is never read.
+noUnusedLocals_selfReference_skipsBlockLocations.ts(12,22): error TS6133: 'h' is declared but its value is never read.
 
 
-==== tests/cases/compiler/noUnusedLocals_selfReference_skipsBlockLocations.ts (3 errors) ====
+==== noUnusedLocals_selfReference_skipsBlockLocations.ts (3 errors) ====
     namespace n {
         function f() {
                  ~

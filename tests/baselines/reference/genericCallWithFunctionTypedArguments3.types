@@ -1,47 +1,64 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments3.ts] ////
+
+=== genericCallWithFunctionTypedArguments3.ts ===
 // No inference is made from function typed arguments which have multiple call signatures
 
 var a: {
 >a : { (x: boolean): boolean; (x: string): any; }
+>  : ^^^ ^^       ^^^       ^^^ ^^      ^^^   ^^^
 
     (x: boolean): boolean;
 >x : boolean
+>  : ^^^^^^^
 
     (x: string): any;
 >x : string
+>  : ^^^^^^
 }
 
 function foo4<T, U>(cb: (x: T) => U) {
 >foo4 : <T, U>(cb: (x: T) => U) => U
+>     : ^ ^^ ^^  ^^           ^^^^^^
 >cb : (x: T) => U
+>   : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     var u: U;
 >u : U
+>  : ^
 
     return u;
 >u : U
+>  : ^
 }
 
 var r = foo4(a); // T is {} (candidates boolean and string), U is any (candidates any and boolean)
 >r : any
 >foo4(a) : any
 >foo4 : <T, U>(cb: (x: T) => U) => U
+>     : ^ ^^ ^^  ^^           ^^^^^^
 >a : { (x: boolean): boolean; (x: string): any; }
+>  : ^^^ ^^       ^^^       ^^^ ^^      ^^^   ^^^
 
 var b: {
 >b : { <T>(x: boolean): T; <T>(x: T): any; }
+>  : ^^^ ^^ ^^       ^^^ ^^^ ^^ ^^ ^^^   ^^^
 
     <T>(x: boolean): T;
 >x : boolean
+>  : ^^^^^^^
 
     <T>(x: T): any;
 >x : T
+>  : ^
 }
 
 var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})
 >r2 : any
 >foo4(b) : any
 >foo4 : <T, U>(cb: (x: T) => U) => U
+>     : ^ ^^ ^^  ^^           ^^^^^^
 >b : { <T>(x: boolean): T; <T>(x: T): any; }
+>  : ^^^ ^^ ^^       ^^^ ^^^ ^^ ^^ ^^^   ^^^
 

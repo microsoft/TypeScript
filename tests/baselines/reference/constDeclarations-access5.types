@@ -1,193 +1,323 @@
-=== tests/cases/compiler/constDeclarations_access_2.ts ===
+//// [tests/cases/compiler/constDeclarations-access5.ts] ////
+
+=== constDeclarations_access_2.ts ===
 ///<reference path='constDeclarations_access_1.ts'/>
 import m = require('constDeclarations_access_1');
 >m : typeof m
+>  : ^^^^^^^^
 
 // Errors
 m.x = 1;
 >m.x = 1 : 1
+>        : ^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 m.x += 2;
 >m.x += 2 : any
+>         : ^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
+>  : ^
 
 m.x -= 3;
 >m.x -= 3 : number
+>         : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >3 : 3
+>  : ^
 
 m.x *= 4;
 >m.x *= 4 : number
+>         : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >4 : 4
+>  : ^
 
 m.x /= 5;
 >m.x /= 5 : number
+>         : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >5 : 5
+>  : ^
 
 m.x %= 6;
 >m.x %= 6 : number
+>         : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >6 : 6
+>  : ^
 
 m.x <<= 7;
 >m.x <<= 7 : number
+>          : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >7 : 7
+>  : ^
 
 m.x >>= 8;
 >m.x >>= 8 : number
+>          : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >8 : 8
+>  : ^
 
 m.x >>>= 9;
 >m.x >>>= 9 : number
+>           : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >9 : 9
+>  : ^
 
 m.x &= 10;
 >m.x &= 10 : number
+>          : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >10 : 10
+>   : ^^
 
 m.x |= 11;
 >m.x |= 11 : number
+>          : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >11 : 11
+>   : ^^
 
 m.x ^= 12;
 >m.x ^= 12 : number
+>          : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 >12 : 12
+>   : ^^
 
 m
 >m : typeof m
+>  : ^^^^^^^^
 
 m.x++;
 >m.x++ : number
+>      : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 m.x--;
 >m.x-- : number
+>      : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 ++m.x;
 >++m.x : number
+>      : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 --m.x;
 >--m.x : number
+>      : ^^^^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 ++((m.x));
 >++((m.x)) : number
+>          : ^^^^^^
 >((m.x)) : any
+>        : ^^^
 >(m.x) : any
+>      : ^^^
 >m.x : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 m["x"] = 0;
 >m["x"] = 0 : 0
+>           : ^
 >m["x"] : any
+>       : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >"x" : "x"
+>    : ^^^
 >0 : 0
+>  : ^
 
 // OK
 var a = m.x + 1;
 >a : number
+>  : ^^^^^^
 >m.x + 1 : number
+>        : ^^^^^^
 >m.x : 0
+>    : ^
 >m : typeof m
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 >1 : 1
+>  : ^
 
 function f(v: number) { }
 >f : (v: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >v : number
+>  : ^^^^^^
 
 f(m.x);
 >f(m.x) : void
+>       : ^^^^
 >f : (v: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >m.x : 0
+>    : ^
 >m : typeof m
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 
 if (m.x) { }
 >m.x : 0
+>    : ^
 >m : typeof m
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 
 m.x;
 >m.x : 0
+>    : ^
 >m : typeof m
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 
 (m.x);
 >(m.x) : 0
+>      : ^
 >m.x : 0
+>    : ^
 >m : typeof m
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 
 -m.x;
 >-m.x : number
+>     : ^^^^^^
 >m.x : 0
+>    : ^
 >m : typeof m
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 
 +m.x;
 >+m.x : number
+>     : ^^^^^^
 >m.x : 0
+>    : ^
 >m : typeof m
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 
 m.x.toString();
 >m.x.toString() : string
+>               : ^^^^^^
 >m.x.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >m.x : 0
+>    : ^
 >m : typeof m
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
-=== tests/cases/compiler/constDeclarations_access_1.ts ===
+=== constDeclarations_access_1.ts ===
 export const x = 0;
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 

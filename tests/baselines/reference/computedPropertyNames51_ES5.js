@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames51_ES5.ts] ////
+
 //// [computedPropertyNames51_ES5.ts]
 function f<T, K extends keyof T>() {
     var t: T;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superPropertyAccess2.ts] ////
+
 //// [superPropertyAccess2.ts]
 class C {
     public static foo() { }

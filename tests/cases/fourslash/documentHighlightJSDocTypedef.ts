@@ -17,4 +17,4 @@
 ////   [|bar|]: 42,
 //// };
 
-verify.rangesWithSameTextAreDocumentHighlights();
+verify.baselineDocumentHighlights();

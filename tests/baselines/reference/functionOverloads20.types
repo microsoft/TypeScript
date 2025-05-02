@@ -1,17 +1,29 @@
-=== tests/cases/compiler/functionOverloads20.ts ===
+//// [tests/cases/compiler/functionOverloads20.ts] ////
+
+=== functionOverloads20.ts ===
 function foo(bar:{a:number;}): number;
->foo : { (bar: {    a: number;}): number; (bar: { a: string; }): string; }
+>foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
+>    : ^^^   ^^              ^^^      ^^^   ^^              ^^^      ^^^
 >bar : { a: number; }
+>    : ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 function foo(bar:{a:string;}): string;
->foo : { (bar: { a: number; }): number; (bar: {    a: string;}): string; }
+>foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
+>    : ^^^   ^^              ^^^      ^^^   ^^              ^^^      ^^^
 >bar : { a: string; }
+>    : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 function foo(bar:{a:any;}): string {return ""}
 >foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
+>    : ^^^   ^^              ^^^      ^^^   ^^              ^^^      ^^^
 >bar : { a: any; }
+>    : ^^^^^   ^^^
 >a : any
+>  : ^^^
 >"" : ""
+>   : ^^
 

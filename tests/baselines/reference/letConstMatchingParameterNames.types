@@ -1,41 +1,60 @@
-=== tests/cases/compiler/letConstMatchingParameterNames.ts ===
+//// [tests/cases/compiler/letConstMatchingParameterNames.ts] ////
+
+=== letConstMatchingParameterNames.ts ===
 let parent = true;
 >parent : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
 const parent2 = true;
 >parent2 : true
+>        : ^^^^
 >true : true
+>     : ^^^^
 
 declare function use(a: any);
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >a : any
 
 function a() {
 >a : () => void
+>  : ^^^^^^^^^^
     
     let parent = 1;
 >parent : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     const parent2 = 2;
 >parent2 : 2
+>        : ^
 >2 : 2
+>  : ^
 
     function b(parent: string, parent2: number) {
 >b : (parent: string, parent2: number) => void
+>  : ^      ^^      ^^       ^^      ^^^^^^^^^
 >parent : string
+>       : ^^^^^^
 >parent2 : number
+>        : ^^^^^^
 
         use(parent);
 >use(parent) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >parent : string
+>       : ^^^^^^
 
         use(parent2);
 >use(parent2) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >parent2 : number
+>        : ^^^^^^
     }
 }
 

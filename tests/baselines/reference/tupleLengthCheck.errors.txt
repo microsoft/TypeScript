@@ -1,8 +1,8 @@
-tests/cases/conformance/types/tuple/tupleLengthCheck.ts(5,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/tupleLengthCheck.ts(6,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '1000'.
+tupleLengthCheck.ts(5,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
+tupleLengthCheck.ts(6,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '1000'.
 
 
-==== tests/cases/conformance/types/tuple/tupleLengthCheck.ts (2 errors) ====
+==== tupleLengthCheck.ts (2 errors) ====
     declare const a: [number, string]
     declare const rest: [number, string, ...boolean[]]
     

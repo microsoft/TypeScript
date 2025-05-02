@@ -1,14 +1,14 @@
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(9,17): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(12,5): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(17,13): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(19,17): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(22,18): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(26,9): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(27,12): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(30,5): error TS2806: Private accessor was defined without a getter.
+privateWriteOnlyAccessorRead.ts(9,17): error TS2806: Private accessor was defined without a getter.
+privateWriteOnlyAccessorRead.ts(12,5): error TS2806: Private accessor was defined without a getter.
+privateWriteOnlyAccessorRead.ts(17,13): error TS2806: Private accessor was defined without a getter.
+privateWriteOnlyAccessorRead.ts(19,17): error TS2806: Private accessor was defined without a getter.
+privateWriteOnlyAccessorRead.ts(22,18): error TS2806: Private accessor was defined without a getter.
+privateWriteOnlyAccessorRead.ts(26,9): error TS2806: Private accessor was defined without a getter.
+privateWriteOnlyAccessorRead.ts(27,12): error TS2806: Private accessor was defined without a getter.
+privateWriteOnlyAccessorRead.ts(30,5): error TS2806: Private accessor was defined without a getter.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts (8 errors) ====
+==== privateWriteOnlyAccessorRead.ts (8 errors) ====
     class Test {
       set #value(v: { foo: { bar: number } }) {}
       set #valueRest(v: number[]) {}

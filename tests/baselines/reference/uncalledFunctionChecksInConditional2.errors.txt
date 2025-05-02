@@ -1,8 +1,9 @@
-tests/cases/compiler/uncalledFunctionChecksInConditional2.ts(20,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional2.ts(38,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional2.ts(20,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional2.ts(30,7): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional2.ts(49,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== tests/cases/compiler/uncalledFunctionChecksInConditional2.ts (2 errors) ====
+==== uncalledFunctionChecksInConditional2.ts (3 errors) ====
     {
       const perf = window.performance
     
@@ -25,6 +26,19 @@ tests/cases/compiler/uncalledFunctionChecksInConditional2.ts(38,5): error TS2774
         perf.measure || !!true
         ~~~~~~~~~~~~
 !!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+      ) {
+        perf.mark("");
+      }
+    
+      // With ??
+      if (
+        (
+          perf &&
+          perf.mark &&
+          perf.measure
+          ~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        ) ?? !!true
       ) {
         perf.mark("");
       }
@@ -55,4 +69,16 @@ tests/cases/compiler/uncalledFunctionChecksInConditional2.ts(38,5): error TS2774
         }
       }
     };
+    
+    let _isMobile: boolean;
+    function isMobile() {
+      if (_isMobile === undefined) {
+        const isMobileMatch =
+          typeof window !== 'undefined' &&
+          window.matchMedia && // no error
+          window.matchMedia('(max-device-width: 680px)');
+        _isMobile = isMobileMatch && isMobileMatch.matches;
+      }
+      return _isMobile;
+    }
     

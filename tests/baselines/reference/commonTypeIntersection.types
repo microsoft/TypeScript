@@ -1,21 +1,35 @@
-=== tests/cases/conformance/types/intersection/commonTypeIntersection.ts ===
+//// [tests/cases/conformance/types/intersection/commonTypeIntersection.ts] ////
+
+=== commonTypeIntersection.ts ===
 declare let x1: { __typename?: 'TypeTwo' } & { a: boolean };
->x1 : { __typename?: 'TypeTwo'; } & { a: boolean; }
+>x1 : { __typename?: "TypeTwo"; } & { a: boolean; }
+>   : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^       ^^^
 >__typename : "TypeTwo"
+>           : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 let y1: { __typename?: 'TypeOne' } & { a: boolean} = x1;  // should error here
->y1 : { __typename?: 'TypeOne'; } & { a: boolean; }
+>y1 : { __typename?: "TypeOne"; } & { a: boolean; }
+>   : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^       ^^^
 >__typename : "TypeOne"
+>           : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >x1 : { __typename?: "TypeTwo"; } & { a: boolean; }
+>   : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^       ^^^
 
 declare let x2: { __typename?: 'TypeTwo' } & string;
->x2 : { __typename?: 'TypeTwo'; } & string
+>x2 : { __typename?: "TypeTwo"; } & string
+>   : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^^
 >__typename : "TypeTwo"
+>           : ^^^^^^^^^
 
 let y2: { __typename?: 'TypeOne' } & string = x2;  // should error here
->y2 : { __typename?: 'TypeOne'; } & string
+>y2 : { __typename?: "TypeOne"; } & string
+>   : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^^
 >__typename : "TypeOne"
+>           : ^^^^^^^^^
 >x2 : { __typename?: "TypeTwo"; } & string
+>   : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^^
 

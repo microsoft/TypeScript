@@ -20,6 +20,32 @@ function f3<K extends string>(obj: Mapped3<K>, key: Uppercase<K>) {
     const x: { a: K } = obj[key];  // Error
 }
 
+type Mapped4<K extends `_${string}`> = {
+  [P in K]: P;
+};
+
+function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
+  let s: `_${string}` = obj[key];
+}
+
+type Mapped5<K extends string> = {
+  [P in K as P extends `_${string}` ? P : never]: P;
+};
+
+function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
+  let s: `_${string}` = obj[key];
+}
+
+// repro from #53066#issuecomment-1913384757
+
+type Mapped6<K extends string> = {
+  [P in K as `_${P}`]: P;
+};
+
+function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) {
+  let s: `_${string}` = obj[key]; // Error
+}
+
 // Repro from #47794
 
 type Foo<T extends string> = {
@@ -48,4 +74,14 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
         }
     }
     return true;
+}
+
+// repro from #50030
+
+type ObjectWithUnderscoredKeys<K extends string> = {
+    [k in K as `_${k}`]: true;
+};
+
+function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`]; // assignability fails here, but ideally should not
 }

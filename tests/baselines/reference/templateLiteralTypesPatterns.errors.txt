@@ -1,63 +1,64 @@
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(7,7): error TS2322: Type '"no slash"' is not assignable to type '`/${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(14,10): error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(16,10): error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(26,7): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"false" | "true"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(35,11): error TS2345: Argument of type '"0"' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(36,11): error TS2345: Argument of type '"false"' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(37,11): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(38,11): error TS2345: Argument of type '""' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(39,11): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(60,9): error TS2345: Argument of type '"?"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(61,9): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(62,9): error TS2345: Argument of type '"Infinity"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(63,9): error TS2345: Argument of type '"+Infinity"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(64,9): error TS2345: Argument of type '"-Infinity"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(65,9): error TS2345: Argument of type '"1_000"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(68,9): error TS2345: Argument of type '"a10"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(69,9): error TS2345: Argument of type '"10a"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(72,9): error TS2345: Argument of type '"- 1"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(73,9): error TS2345: Argument of type '"-/**/1"' is not assignable to parameter of type '`${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(85,9): error TS2345: Argument of type '"1e21"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(86,9): error TS2345: Argument of type '"1E21"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(87,9): error TS2345: Argument of type '"1e-21"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(88,9): error TS2345: Argument of type '"1E-21"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(91,9): error TS2345: Argument of type '"1.0"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(92,9): error TS2345: Argument of type '"1.1"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(93,9): error TS2345: Argument of type '"-1.1"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(94,9): error TS2345: Argument of type '"-1.1e-10"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(95,9): error TS2345: Argument of type '"-1.1E-10"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(96,9): error TS2345: Argument of type '"1.1e-10"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(99,9): error TS2345: Argument of type '"?"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(100,9): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(101,9): error TS2345: Argument of type '"Infinity"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(102,9): error TS2345: Argument of type '"+Infinity"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(103,9): error TS2345: Argument of type '"-Infinity"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(104,9): error TS2345: Argument of type '"1_000"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(107,9): error TS2345: Argument of type '"- 1"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(108,9): error TS2345: Argument of type '"-/**/1"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(111,9): error TS2345: Argument of type '"a10n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(112,9): error TS2345: Argument of type '"10an"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(115,9): error TS2345: Argument of type '"1n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(116,9): error TS2345: Argument of type '"-1n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(117,9): error TS2345: Argument of type '"0n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(118,9): error TS2345: Argument of type '"0b1n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(119,9): error TS2345: Argument of type '"0x1n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(120,9): error TS2345: Argument of type '"0o1n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(121,9): error TS2345: Argument of type '"1e21n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(122,9): error TS2345: Argument of type '"1E21n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(123,9): error TS2345: Argument of type '"1e-21n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(124,9): error TS2345: Argument of type '"1E-21n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(125,9): error TS2345: Argument of type '"1.1n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(126,9): error TS2345: Argument of type '"-1.1n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(127,9): error TS2345: Argument of type '"-1.1e-10n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(128,9): error TS2345: Argument of type '"-1.1E-10n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(129,9): error TS2345: Argument of type '"1.1e-10n"' is not assignable to parameter of type '`${bigint}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(140,1): error TS2322: Type '`a${string}`' is not assignable to type '`a${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(141,1): error TS2322: Type '"bno"' is not assignable to type '`a${any}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(160,7): error TS2322: Type '"anything"' is not assignable to type '`${number} ${number}`'.
+templateLiteralTypesPatterns.ts(7,7): error TS2322: Type '"no slash"' is not assignable to type '`/${string}`'.
+templateLiteralTypesPatterns.ts(14,10): error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+templateLiteralTypesPatterns.ts(16,10): error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+templateLiteralTypesPatterns.ts(26,7): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"false" | "true"'.
+templateLiteralTypesPatterns.ts(35,11): error TS2345: Argument of type '"0"' is not assignable to parameter of type '"undefined" | "null"'.
+templateLiteralTypesPatterns.ts(36,11): error TS2345: Argument of type '"false"' is not assignable to parameter of type '"undefined" | "null"'.
+templateLiteralTypesPatterns.ts(37,11): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"undefined" | "null"'.
+templateLiteralTypesPatterns.ts(38,11): error TS2345: Argument of type '""' is not assignable to parameter of type '"undefined" | "null"'.
+templateLiteralTypesPatterns.ts(39,11): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"undefined" | "null"'.
+templateLiteralTypesPatterns.ts(60,9): error TS2345: Argument of type '"?"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(61,9): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(62,9): error TS2345: Argument of type '"Infinity"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(63,9): error TS2345: Argument of type '"+Infinity"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(64,9): error TS2345: Argument of type '"-Infinity"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(65,9): error TS2345: Argument of type '"1_000"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(68,9): error TS2345: Argument of type '"a10"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(69,9): error TS2345: Argument of type '"10a"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(72,9): error TS2345: Argument of type '"- 1"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(73,9): error TS2345: Argument of type '"-/**/1"' is not assignable to parameter of type '`${number}`'.
+templateLiteralTypesPatterns.ts(85,9): error TS2345: Argument of type '"1e21"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(86,9): error TS2345: Argument of type '"1E21"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(87,9): error TS2345: Argument of type '"1e-21"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(88,9): error TS2345: Argument of type '"1E-21"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(91,9): error TS2345: Argument of type '"1.0"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(92,9): error TS2345: Argument of type '"1.1"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(93,9): error TS2345: Argument of type '"-1.1"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(94,9): error TS2345: Argument of type '"-1.1e-10"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(95,9): error TS2345: Argument of type '"-1.1E-10"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(96,9): error TS2345: Argument of type '"1.1e-10"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(99,9): error TS2345: Argument of type '"?"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(100,9): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(101,9): error TS2345: Argument of type '"Infinity"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(102,9): error TS2345: Argument of type '"+Infinity"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(103,9): error TS2345: Argument of type '"-Infinity"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(104,9): error TS2345: Argument of type '"1_000"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(107,9): error TS2345: Argument of type '"- 1"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(108,9): error TS2345: Argument of type '"-/**/1"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(111,9): error TS2345: Argument of type '"a10n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(112,9): error TS2345: Argument of type '"10an"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(115,9): error TS2345: Argument of type '"1n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(116,9): error TS2345: Argument of type '"-1n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(117,9): error TS2345: Argument of type '"0n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(118,9): error TS2345: Argument of type '"0b1n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(119,9): error TS2345: Argument of type '"0x1n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(120,9): error TS2345: Argument of type '"0o1n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(121,9): error TS2345: Argument of type '"1e21n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(122,9): error TS2345: Argument of type '"1E21n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(123,9): error TS2345: Argument of type '"1e-21n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(124,9): error TS2345: Argument of type '"1E-21n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(125,9): error TS2345: Argument of type '"1.1n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(126,9): error TS2345: Argument of type '"-1.1n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(127,9): error TS2345: Argument of type '"-1.1e-10n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(128,9): error TS2345: Argument of type '"-1.1E-10n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(129,9): error TS2345: Argument of type '"1.1e-10n"' is not assignable to parameter of type '`${bigint}`'.
+templateLiteralTypesPatterns.ts(140,1): error TS2322: Type '`a${string}`' is not assignable to type '`a${number}`'.
+templateLiteralTypesPatterns.ts(141,1): error TS2322: Type '"bno"' is not assignable to type '`a${any}`'.
+templateLiteralTypesPatterns.ts(160,7): error TS2322: Type '"anything"' is not assignable to type '`${number} ${number}`'.
+templateLiteralTypesPatterns.ts(215,5): error TS2345: Argument of type '"abcTest"' is not assignable to parameter of type '`${`a${string}` & `${string}a`}Test`'.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts (57 errors) ====
+==== templateLiteralTypesPatterns.ts (58 errors) ====
     type RequiresLeadingSlash = `/${string}`;
     
     // ok
@@ -374,3 +375,18 @@ tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(160,7): er
         }
     }
     
+    // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
+    function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
+    conversionTest("testDowncast");
+    function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
+    conversionTest2("testDowncast");
+    function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+    conversionTest3("testDowncast");
+    function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+    conversionTest4("testDowncast");
+    
+    function foo(str: `${`a${string}` & `${string}a`}Test`) {}
+    foo("abaTest"); // ok
+    foo("abcTest"); // error
+        ~~~~~~~~~
+!!! error TS2345: Argument of type '"abcTest"' is not assignable to parameter of type '`${`a${string}` & `${string}a`}Test`'.

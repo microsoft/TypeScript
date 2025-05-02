@@ -1,141 +1,186 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts] ////
+
+=== strictPropertyInitialization.ts ===
 // Properties with non-undefined types require initialization
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     a: number;  // Error
 >a : number
+>  : ^^^^^^
 
     b: number | undefined;
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     c: number | null;  // Error
 >c : number | null
->null : null
+>  : ^^^^^^^^^^^^^
 
     d?: number;
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     #f: number; //Error
 >#f : number
+>   : ^^^^^^
 
     #g: number | undefined;
 >#g : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
     #h: number | null; //Error
 >#h : number | null
->null : null
+>   : ^^^^^^^^^^^^^
 
     #i?: number;
 >#i : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 }
 
 // No strict initialization checks in ambient contexts
 
 declare class C2 {
 >C2 : C2
+>   : ^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     b: number | undefined;
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     c: number | null;
 >c : number | null
->null : null
+>  : ^^^^^^^^^^^^^
 
     d?: number;
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     
     #f: number;
 >#f : number
+>   : ^^^^^^
 
     #g: number | undefined;
 >#g : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
     #h: number | null;
 >#h : number | null
->null : null
+>   : ^^^^^^^^^^^^^
 
     #i?: number;
 >#i : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 }
 
 // No strict initialization checks for static members
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     static a: number;
 >a : number
+>  : ^^^^^^
 
     static b: number | undefined;
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     static c: number | null;
 >c : number | null
->null : null
+>  : ^^^^^^^^^^^^^
 
     static d?: number;
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 // Initializer satisfies strict initialization check
 
 class C4 {
 >C4 : C4
+>   : ^^
 
     a = 0;
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     b: number = 0;
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     c: string = "abc";
 >c : string
+>  : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     #d = 0
 >#d : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     #e: number = 0
 >#e : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     #f: string= "abc"
 >#f : string
+>   : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 }
 
 // Assignment in constructor satisfies strict initialization check
 
 class C5 {
 >C5 : C5
+>   : ^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     #b: number;
 >#b : number
+>   : ^^^^^^
 
     constructor() {
         this.a = 0;
 >this.a = 0 : 0
+>           : ^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
         this.#b = 0;
 >this.#b = 0 : 0
+>            : ^
 >this.#b : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >0 : 0
+>  : ^
     }
 }
 
@@ -143,78 +188,115 @@ class C5 {
 
 class C6 {
 >C6 : C6
+>   : ^^
 
     a: number;  // Error
 >a : number
+>  : ^^^^^^
 
     #b: number
 >#b : number
+>   : ^^^^^^
 
     constructor(cond: boolean) {
 >cond : boolean
+>     : ^^^^^^^
 
         if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
             return;
         }
         this.a = 0;
 >this.a = 0 : 0
+>           : ^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
         this.#b = 0;
 >this.#b = 0 : 0
+>            : ^
 >this.#b : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >0 : 0
+>  : ^
     }
 }
 
 class C7 {
 >C7 : C7
+>   : ^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     #b: number;
 >#b : number
+>   : ^^^^^^
 
     constructor(cond: boolean) {
 >cond : boolean
+>     : ^^^^^^^
 
         if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
             this.a = 1;
 >this.a = 1 : 1
+>           : ^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
             this.#b = 1;
 >this.#b = 1 : 1
+>            : ^
 >this.#b : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >1 : 1
+>  : ^
 
             return;
         }
         this.a = 0;
 >this.a = 0 : 0
+>           : ^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
         this.#b = 1;
 >this.#b = 1 : 1
+>            : ^
 >this.#b : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >1 : 1
+>  : ^
     }
 }
 
@@ -222,34 +304,42 @@ class C7 {
 
 class C8 {
 >C8 : C8
+>   : ^^
 
     a: number;  // Error
 >a : number
+>  : ^^^^^^
 
     "b": number;
 >"b" : number
+>    : ^^^^^^
 
     0: number;
 >0 : number
+>  : ^^^^^^
 }
 
 // No strict initialization checks for abstract members
 
 abstract class C9 {
 >C9 : C9
+>   : ^^
 
     abstract a: number;
 >a : number
+>  : ^^^^^^
 
     abstract b: number | undefined;
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     abstract c: number | null;
 >c : number | null
->null : null
+>  : ^^^^^^^^^^^^^
 
     abstract d?: number;
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 // Properties with non-undefined types must be assigned before they can be accessed
@@ -257,61 +347,96 @@ abstract class C9 {
 
 class C10 {
 >C10 : C10
+>    : ^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 
     c?: number;
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     #d: number;
 >#d : number
+>   : ^^^^^^
 
     constructor() {
         let x = this.a;  // Error
 >x : number
+>  : ^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 
         this.a = this.b;  // Error
 >this.a = this.b : number
+>                : ^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
 
         this.b = this.#d //Error
 >this.b = this.#d : number
+>                 : ^^^^^^
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
 >this.#d : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 
         this.b = x;
 >this.b = x : number
+>           : ^^^^^^
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
         this.#d = x;
 >this.#d = x : number
+>            : ^^^^^^
 >this.#d : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 
         let y = this.c;
 >y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >this.c : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -319,79 +444,170 @@ class C10 {
 
 declare function someValue(): any;
 >someValue : () => any
+>          : ^^^^^^   
 
 class C11 {
 >C11 : C11
+>    : ^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     #b: number;
 >#b : number
+>   : ^^^^^^
 
     constructor() {
         this.a = someValue();
 >this.a = someValue() : any
+>                     : ^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >someValue() : any
+>            : ^^^
 >someValue : () => any
+>          : ^^^^^^   
 
         this.#b = someValue();
 >this.#b = someValue() : any
+>                      : ^^^
 >this.#b : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >someValue() : any
+>            : ^^^
 >someValue : () => any
+>          : ^^^^^^   
     }
 }
 
 const a = 'a';
 >a : "a"
+>  : ^^^
 >'a' : "a"
+>    : ^^^
 
 const b = Symbol();
 >b : unique symbol
+>  : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 class C12 {
 >C12 : C12
+>    : ^^^
 
     [a]: number;
 >[a] : number
+>    : ^^^^^^
 >a : "a"
+>  : ^^^
 
     [b]: number;
 >[b] : number
+>    : ^^^^^^
 >b : unique symbol
+>  : ^^^^^^^^^^^^^
 
     ['c']: number;
 >['c'] : number
+>      : ^^^^^^
 >'c' : "c"
+>    : ^^^
 
     constructor() {
         this[a] = 1;
 >this[a] = 1 : 1
+>            : ^
 >this[a] : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >a : "a"
+>  : ^^^
 >1 : 1
+>  : ^
 
         this[b] = 1;
 >this[b] = 1 : 1
+>            : ^
 >this[b] : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >b : unique symbol
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         this['c'] = 1;
 >this['c'] = 1 : 1
+>              : ^
 >this['c'] : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >'c' : "c"
+>    : ^^^
 >1 : 1
+>  : ^
+    }
+}
+
+enum E {
+>E : E
+>  : ^
+
+    A = "A",
+>A : E.A
+>  : ^^^
+>"A" : "A"
+>    : ^^^
+
+    B = "B"
+>B : E.B
+>  : ^^^
+>"B" : "B"
+>    : ^^^
+}
+class C13 {
+>C13 : C13
+>    : ^^^
+
+    [E.A]: number;
+>[E.A] : number
+>      : ^^^^^^
+>E.A : E.A
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>A : E.A
+>  : ^^^
+
+    constructor() {
+        this[E.A] = 1;
+>this[E.A] = 1 : 1
+>              : ^
+>this[E.A] : number
+>          : ^^^^^^
+>this : this
+>     : ^^^^
+>E.A : E.A
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>A : E.A
+>  : ^^^
+>1 : 1
+>  : ^
     }
 }
 

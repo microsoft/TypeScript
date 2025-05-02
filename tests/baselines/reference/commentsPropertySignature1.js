@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsPropertySignature1.ts] ////
+
 //// [commentsPropertySignature1.ts]
 var a = {
     /** own x*/

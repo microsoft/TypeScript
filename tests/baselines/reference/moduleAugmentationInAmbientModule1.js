@@ -29,11 +29,10 @@ x.foo().x;
 //// [main.js]
 "use strict";
 /// <reference path="O.d.ts" />
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var x;
 x.foo().x;
 
 
 //// [main.d.ts]
-/// <reference path="O.d.ts" />
 export {};

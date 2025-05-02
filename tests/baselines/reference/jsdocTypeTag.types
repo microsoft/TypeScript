@@ -1,71 +1,100 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeTag.ts] ////
+
+=== a.js ===
 /** @type {String} */
 var S;
 >S : string
+>  : ^^^^^^
 
 /** @type {string} */
 var s;
 >s : string
+>  : ^^^^^^
 
 /** @type {Number} */
 var N;
 >N : number
+>  : ^^^^^^
 
 /** @type {number} */
 var n;
 >n : number
+>  : ^^^^^^
+
+/** @type {BigInt} */
+var BI;
+>BI : bigint
+>   : ^^^^^^
+
+/** @type {bigint} */
+var bi;
+>bi : bigint
+>   : ^^^^^^
 
 /** @type {Boolean} */
 var B;
 >B : boolean
+>  : ^^^^^^^
 
 /** @type {boolean} */
 var b;
 >b : boolean
+>  : ^^^^^^^
 
 /** @type {Void} */
 var V;
 >V : void
+>  : ^^^^
 
 /** @type {void} */
 var v;
 >v : void
+>  : ^^^^
 
 /** @type {Undefined} */
 var U;
 >U : undefined
+>  : ^^^^^^^^^
 
 /** @type {undefined} */
 var u;
 >u : undefined
+>  : ^^^^^^^^^
 
 /** @type {Null} */
 var Nl;
 >Nl : null
+>   : ^^^^
 
 /** @type {null} */
 var nl;
 >nl : null
+>   : ^^^^
 
 /** @type {Array} */
 var A;
 >A : any[]
+>  : ^^^^^
 
 /** @type {array} */
 var a;
 >a : any[]
+>  : ^^^^^
 
 /** @type {Promise} */
 var P;
 >P : Promise<any>
+>  : ^^^^^^^^^^^^
 
 /** @type {promise} */
 var p;
 >p : Promise<any>
+>  : ^^^^^^^^^^^^
 
 /** @type {?number} */
 var nullable;
 >nullable : number | null
+>         : ^^^^^^^^^^^^^
 
 /** @type {Object} */
 var Obj;
@@ -78,69 +107,94 @@ var obj;
 /** @type {Function} */
 var Func;
 >Func : Function
+>     : ^^^^^^^^
 
 /** @type {(s: string) => number} */
 var f;
 >f : (s: string) => number
+>  : ^ ^^      ^^^^^      
 
 /** @type {new (s: string) => { s: string }} */
 var ctor;
 >ctor : new (s: string) => { s: string; }
+>     : ^^^^^ ^^      ^^^^^              
 
-=== tests/cases/conformance/jsdoc/b.ts ===
+=== b.ts ===
 var S: string;
 >S : string
+>  : ^^^^^^
 
 var s: string;
 >s : string
+>  : ^^^^^^
 
 var N: number;
 >N : number
+>  : ^^^^^^
 
 var n: number
 >n : number
+>  : ^^^^^^
 
 var B: boolean;
 >B : boolean
+>  : ^^^^^^^
 
 var b: boolean;
 >b : boolean
+>  : ^^^^^^^
+
+var BI: bigint;
+>BI : bigint
+>   : ^^^^^^
+
+var bi: bigint;
+>bi : bigint
+>   : ^^^^^^
 
 var V :void;
 >V : void
+>  : ^^^^
 
 var v: void;
 >v : void
+>  : ^^^^
 
 var U: undefined;
 >U : undefined
+>  : ^^^^^^^^^
 
 var u: undefined;
 >u : undefined
+>  : ^^^^^^^^^
 
 var Nl: null;
 >Nl : null
->null : null
+>   : ^^^^
 
 var nl: null;
 >nl : null
->null : null
+>   : ^^^^
 
 var A: any[];
 >A : any[]
+>  : ^^^^^
 
 var a: any[];
 >a : any[]
+>  : ^^^^^
 
 var P: Promise<any>;
 >P : Promise<any>
+>  : ^^^^^^^^^^^^
 
 var p: Promise<any>;
 >p : Promise<any>
+>  : ^^^^^^^^^^^^
 
 var nullable: number | null;
 >nullable : number | null
->null : null
+>         : ^^^^^^^^^^^^^
 
 var Obj: any;
 >Obj : any
@@ -150,13 +204,19 @@ var obj: any;
 
 var Func: Function;
 >Func : Function
+>     : ^^^^^^^^
 
 var f: (s: string) => number;
 >f : (s: string) => number
+>  : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 
 var ctor: new (s: string) => { s: string };
 >ctor : new (s: string) => { s: string; }
+>     : ^^^^^ ^^      ^^^^^              
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 

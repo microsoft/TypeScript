@@ -1,14 +1,23 @@
-=== tests/cases/compiler/accessorWithInitializer.ts ===
+//// [tests/cases/compiler/accessorWithInitializer.ts] ////
+
+=== accessorWithInitializer.ts ===
 class C {
 >C : C
+>  : ^
 
     set X(v = 0) { }
 >X : any
+>  : ^^^
 >v : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     static set X(v2 = 0) { }
 >X : any
+>  : ^^^
 >v2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 }

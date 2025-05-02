@@ -1,61 +1,92 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts] ////
+
+=== classAbstractGeneric.ts ===
 abstract class A<T> {
 >A : A<T>
+>  : ^^^^
 
     t: T;
 >t : T
+>  : ^
     
     abstract foo(): T;
 >foo : () => T
+>    : ^^^^^^ 
 
     abstract bar(t: T);
 >bar : (t: T) => any
+>    : ^ ^^ ^^^^^^^^
 >t : T
+>  : ^
 }
 
 abstract class B<T> extends A<T> {}
 >B : B<T>
+>  : ^^^^
 >A : A<T>
+>  : ^^^^
 
 class C<T> extends A<T> {} // error -- inherits abstract methods
 >C : C<T>
+>  : ^^^^
 >A : A<T>
+>  : ^^^^
 
 class D extends A<number> {} // error -- inherits abstract methods
 >D : D
+>  : ^
 >A : A<number>
+>  : ^^^^^^^^^
 
 class E<T> extends A<T> { // error -- doesn't implement bar
 >E : E<T>
+>  : ^^^^
 >A : A<T>
+>  : ^^^^
 
     foo() { return this.t; }
 >foo : () => T
+>    : ^^^^^^^
 >this.t : T
+>       : ^
 >this : this
+>     : ^^^^
 >t : T
+>  : ^
 }
 
 class F<T> extends A<T> { // error -- doesn't implement foo
 >F : F<T>
+>  : ^^^^
 >A : A<T>
+>  : ^^^^
 
     bar(t : T) {}
 >bar : (t: T) => void
+>    : ^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 }
 
 class G<T> extends A<T> {
 >G : G<T>
+>  : ^^^^
 >A : A<T>
+>  : ^^^^
 
     foo() { return this.t; }
 >foo : () => T
+>    : ^^^^^^^
 >this.t : T
+>       : ^
 >this : this
+>     : ^^^^
 >t : T
+>  : ^
 
     bar(t: T) { }
 >bar : (t: T) => void
+>    : ^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 }

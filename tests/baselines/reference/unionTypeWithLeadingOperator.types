@@ -1,21 +1,29 @@
-=== tests/cases/compiler/unionTypeWithLeadingOperator.ts ===
+//// [tests/cases/compiler/unionTypeWithLeadingOperator.ts] ////
+
+=== unionTypeWithLeadingOperator.ts ===
 type A = | string;
 >A : string
+>  : ^^^^^^
 
 type B =
->B : { type: "INCREMENT"; } | { type: "DECREMENT"; }
+>B : B
+>  : ^
 
   | { type: "INCREMENT" }
 >type : "INCREMENT"
+>     : ^^^^^^^^^^^
 
   | { type: "DECREMENT" };
 >type : "DECREMENT"
+>     : ^^^^^^^^^^^
 
 type C = [| 0 | 1, | "foo" | "bar"];
->C : [0 | 1, "foo" | "bar"]
+>C : C
+>  : ^
 
 export type D = 
->D : 1 | 2
+>D : D
+>  : ^
 
   /*leading0*/
   | /*leading1*/ 1 /*trailing1*/ 

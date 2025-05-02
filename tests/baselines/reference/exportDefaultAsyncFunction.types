@@ -1,8 +1,13 @@
-=== tests/cases/compiler/exportDefaultAsyncFunction.ts ===
+//// [tests/cases/compiler/exportDefaultAsyncFunction.ts] ////
+
+=== exportDefaultAsyncFunction.ts ===
 export default async function foo(): Promise<void> {}
 >foo : () => Promise<void>
+>    : ^^^^^^             
 
 foo();
 >foo() : Promise<void>
+>      : ^^^^^^^^^^^^^
 >foo : () => Promise<void>
+>    : ^^^^^^             
 

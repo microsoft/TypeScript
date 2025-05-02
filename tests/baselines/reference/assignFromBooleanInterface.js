@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface.ts] ////
+
 //// [assignFromBooleanInterface.ts]
 var x = true;
 var a: Boolean;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts ===
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts] ////
+
+=== keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
 >f1 : Symbol(f1, Decl(keyofAndIndexedAccess2.ts, 0, 0))
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
@@ -90,7 +92,9 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
 
     b.x;
+>b.x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 >b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 
     c.x;
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
@@ -105,7 +109,9 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
 
     b.x = 1;
+>b.x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 >b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 
     c.x = 1;  // Error, cannot write to index signature through constraint
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
@@ -440,9 +446,9 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 >fn : Symbol(fn, Decl(keyofAndIndexedAccess2.ts, 115, 69))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 12))
 >elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 119, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 119, 51))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 119, 77))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 12))
 >cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 119, 86))
@@ -459,7 +465,7 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
 >fn2 : Symbol(fn2, Decl(keyofAndIndexedAccess2.ts, 121, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 123, 13))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 123, 38))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 123, 13))
 >cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 123, 47))
@@ -476,7 +482,7 @@ function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void
 function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
 >fn3 : Symbol(fn3, Decl(keyofAndIndexedAccess2.ts, 125, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 129, 13))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
 >param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 129, 46))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 129, 13))
 >cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 129, 55))
@@ -494,12 +500,12 @@ function fn4<K extends number>() {
 
     let x: Array<string>[K] = 'abc';
 >x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 134, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 133, 13))
 
     let y: ReadonlyArray<string>[K] = 'abc';
 >y : Symbol(y, Decl(keyofAndIndexedAccess2.ts, 135, 7))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
 >K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 133, 13))
 }
 

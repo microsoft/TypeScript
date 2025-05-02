@@ -1,4 +1,6 @@
-=== tests/cases/compiler/autolift4.ts ===
+//// [tests/cases/compiler/autolift4.ts] ////
+
+=== autolift4.ts ===
 class Point {
 >Point : Symbol(Point, Decl(autolift4.ts, 0, 0))
 

@@ -1,163 +1,228 @@
-=== tests/cases/compiler/narrowByEquality.ts ===
+//// [tests/cases/compiler/narrowByEquality.ts] ////
+
+=== narrowByEquality.ts ===
 declare let x: number | string | boolean
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let n: number;
 >n : number
+>  : ^^^^^^
 
 declare let s: string;
 >s : string
+>  : ^^^^^^
 
 declare let b: boolean;
 >b : boolean
+>  : ^^^^^^^
 
 declare let xUnknown: unknown;
 >xUnknown : unknown
+>         : ^^^^^^^
 
 if (x == n) {
 >x == n : boolean
+>       : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     x;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 if (x == s) {
 >x == s : boolean
+>       : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     x;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 if (x == b) {
 >x == b : boolean
+>       : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
     x;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     x;
 >x : 1
+>  : ^
 }
 
 if (x == "") {
 >x == "" : boolean
+>        : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     x;
 >x : ""
+>  : ^^
 }
 
 if (x == "foo") {
 >x == "foo" : boolean
+>           : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     x;
 >x : "foo"
+>  : ^^^^^
 }
 
 if (x == true) {
 >x == true : boolean
+>          : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     x;
 >x : true
+>  : ^^^^
 }
 
 if (x == false) {
 >x == false : boolean
+>           : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     x;
 >x : false
+>  : ^^^^^
 }
 
 declare let xAndObj: number | string | boolean | object
 >xAndObj : string | number | boolean | object
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (xAndObj == {}) {
 >xAndObj == {} : boolean
+>              : ^^^^^^^
 >xAndObj : string | number | boolean | object
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
     xAndObj;
 >xAndObj : object
+>        : ^^^^^^
 }
 
 if (x == xAndObj) {
 >x == xAndObj : boolean
+>             : ^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >xAndObj : string | number | boolean | object
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     xAndObj;
 >xAndObj : string | number | boolean
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #24991
 
 function test(level: number | string):number {
 >test : (level: number | string) => number
+>     : ^     ^^               ^^^^^      
 >level : string | number
+>      : ^^^^^^^^^^^^^^^
 
     if (level == +level) {
 >level == +level : boolean
+>                : ^^^^^^^
 >level : string | number
+>      : ^^^^^^^^^^^^^^^
 >+level : number
+>       : ^^^^^^
 >level : string | number
+>      : ^^^^^^^^^^^^^^^
 
         const q2: number = level; // error
 >q2 : number
+>   : ^^^^^^
 >level : string | number
+>      : ^^^^^^^^^^^^^^^
 
         return level;
 >level : string | number
+>      : ^^^^^^^^^^^^^^^
     }
     return 0;
 >0 : 0
+>  : ^
 }
 
 // From issue #32798
 if (xUnknown == null) {
 >xUnknown == null : boolean
+>                 : ^^^^^^^
 >xUnknown : unknown
->null : null
+>         : ^^^^^^^
 
     xUnknown;
 >xUnknown : null | undefined
+>         : ^^^^^^^^^^^^^^^^
 
 } else {
     xUnknown
 >xUnknown : {}
+>         : ^^
 }
 
 if (xUnknown != null) {
 >xUnknown != null : boolean
+>                 : ^^^^^^^
 >xUnknown : unknown
->null : null
+>         : ^^^^^^^
 
     xUnknown;
 >xUnknown : {}
+>         : ^^
 
 } else {
     xUnknown;
 >xUnknown : null | undefined
+>         : ^^^^^^^^^^^^^^^^
 }
 
 

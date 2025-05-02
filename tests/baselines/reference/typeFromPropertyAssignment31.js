@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts] ////
+
 //// [typeFromPropertyAssignment31.ts]
 function ExpandoMerge(n: number) {
     return n;

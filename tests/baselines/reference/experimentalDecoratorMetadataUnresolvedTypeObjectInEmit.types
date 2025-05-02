@@ -1,23 +1,34 @@
-=== tests/cases/compiler/types.d.ts ===
+//// [tests/cases/compiler/experimentalDecoratorMetadataUnresolvedTypeObjectInEmit.ts] ////
+
+=== types.d.ts ===
+
 declare namespace A {
-No type information for this code.    export namespace B {
-No type information for this code.        export namespace C {
-No type information for this code.            export namespace D {
-No type information for this code.            }
-No type information for this code.        }
-No type information for this code.    }
-No type information for this code.}
-No type information for this code.=== tests/cases/compiler/usage.ts ===
+    export namespace B {
+        export namespace C {
+            export namespace D {
+            }
+        }
+    }
+}
+=== usage.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     f(@decorate user: A.B.C.D.E): void {}
 >f : (user: A.B.C.D.E) => void
+>  : ^    ^^         ^^^^^    
 >decorate : any
+>         : ^^^
 >user : A.B.C.D.E
+>     : ^^^^^^^^^
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 >C : any
+>  : ^^^
 >D : any
+>  : ^^^
 }
 

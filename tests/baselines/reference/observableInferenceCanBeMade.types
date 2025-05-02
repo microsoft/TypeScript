@@ -1,57 +1,89 @@
-=== tests/cases/compiler/observableInferenceCanBeMade.ts ===
+//// [tests/cases/compiler/observableInferenceCanBeMade.ts] ////
+
+=== observableInferenceCanBeMade.ts ===
 // Repro from #33131
 
 declare function of<T>(a: T): Observable<T>;
 >of : <T>(a: T) => Observable<T>
+>   : ^ ^^ ^^ ^^^^^             
 >a : T
+>  : ^
 
 declare function from<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
+>     : ^ ^^^^^^^^^                    ^^     ^^ ^^^^^                              
 >input : O
+>      : ^
 
 type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
 >ObservedValueOf : ObservedValueOf<O>
+>                : ^^^^^^^^^^^^^^^^^^
 
 interface Subscribable<T> {
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
->subscribe : (next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: () => void) => void
+>subscribe : (next?: (value: T) => void, error?: (error: any) => void, complete?: () => void) => void
+>          : ^    ^^^                  ^^     ^^^                    ^^        ^^^          ^^^^^    
 >next : ((value: T) => void) | undefined
+>     : ^^     ^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
+>      : ^
 >error : ((error: any) => void) | undefined
+>      : ^^     ^^   ^^^^^    ^^^^^^^^^^^^^
 >error : any
 >complete : (() => void) | undefined
+>         : ^^^^^^^    ^^^^^^^^^^^^^
 }
 type ObservableInput<T> = Subscribable<T> | Subscribable<never>;
 >ObservableInput : ObservableInput<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
 
 declare class Observable<T> implements Subscribable<T> {
 >Observable : Observable<T>
+>           : ^^^^^^^^^^^^^
 
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
->subscribe : (next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: () => void) => void
+>subscribe : (next?: (value: T) => void, error?: (error: any) => void, complete?: () => void) => void
+>          : ^    ^^^                  ^^     ^^^                    ^^        ^^^          ^^^^^    
 >next : ((value: T) => void) | undefined
+>     : ^^     ^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
+>      : ^
 >error : ((error: any) => void) | undefined
+>      : ^^     ^^   ^^^^^    ^^^^^^^^^^^^^
 >error : any
 >complete : (() => void) | undefined
+>         : ^^^^^^^    ^^^^^^^^^^^^^
 }
 
 function asObservable(input: string | ObservableInput<string>): Observable<string> {
 >asObservable : (input: string | ObservableInput<string>) => Observable<string>
+>             : ^     ^^                                ^^^^^                  
 >input : string | ObservableInput<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return typeof input === 'string' ? of(input) : from(input)
 >typeof input === 'string' ? of(input) : from(input) : Observable<string>
+>                                                    : ^^^^^^^^^^^^^^^^^^
 >typeof input === 'string' : boolean
+>                          : ^^^^^^^
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : string | ObservableInput<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 >of(input) : Observable<string>
+>          : ^^^^^^^^^^^^^^^^^^
 >of : <T>(a: T) => Observable<T>
+>   : ^ ^^ ^^ ^^^^^             
 >input : string
+>      : ^^^^^^
 >from(input) : Observable<string>
+>            : ^^^^^^^^^^^^^^^^^^
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
+>     : ^ ^^^^^^^^^                    ^^     ^^ ^^^^^                              
 >input : ObservableInput<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 

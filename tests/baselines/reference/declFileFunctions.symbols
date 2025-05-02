@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileFunctions_0.ts ===
+//// [tests/cases/compiler/declFileFunctions.ts] ////
+
+=== declFileFunctions_0.ts ===
 /** This comment should appear for foo*/
 export function foo() {
 >foo : Symbol(foo, Decl(declFileFunctions_0.ts, 0, 0))
@@ -135,7 +137,7 @@ function nonExportedFooWithOverloads(a: any): any {
 >a : Symbol(a, Decl(declFileFunctions_0.ts, 52, 37))
 }
 
-=== tests/cases/compiler/declFileFunctions_1.ts ===
+=== declFileFunctions_1.ts ===
 /** This comment should appear for foo*/
 function globalfoo() {
 >globalfoo : Symbol(globalfoo, Decl(declFileFunctions_1.ts, 0, 0))

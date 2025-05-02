@@ -11,4 +11,4 @@
 ////    }
 ////}
 
-verify.goToDefinitionForMarkers("interface");
+verify.baselineGetDefinitionAtPosition("interfaceReference");

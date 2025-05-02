@@ -8,5 +8,5 @@
 ////import { T } from "./foo";
 ////let x: [|/*reference*/T|];
 
-verify.goToType("reference", []);
-verify.goToDefinition("reference", ["def0", "def1"]);
+verify.baselineGoToType("reference");
+verify.baselineGoToDefinition("reference");

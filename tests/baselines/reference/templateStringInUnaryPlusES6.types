@@ -1,7 +1,13 @@
-=== tests/cases/conformance/es6/templates/templateStringInUnaryPlusES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInUnaryPlusES6.ts] ////
+
+=== templateStringInUnaryPlusES6.ts ===
 var x = +`abc${ 123 }def`;
 >x : number
+>  : ^^^^^^
 >+`abc${ 123 }def` : number
->`abc${ 123 }def` : string
+>                  : ^^^^^^
+>`abc${ 123 }def` : "abc123def"
+>                 : ^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 

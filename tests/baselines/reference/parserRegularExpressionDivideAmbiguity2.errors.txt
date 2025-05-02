@@ -1,11 +1,11 @@
-tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity2.ts(1,6): error TS2552: Cannot find name 'notregexp'. Did you mean 'RegExp'?
-tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity2.ts(1,16): error TS2304: Cannot find name 'a'.
+parserRegularExpressionDivideAmbiguity2.ts(1,6): error TS2552: Cannot find name 'notregexp'. Did you mean 'RegExp'?
+parserRegularExpressionDivideAmbiguity2.ts(1,16): error TS2304: Cannot find name 'a'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity2.ts (2 errors) ====
+==== parserRegularExpressionDivideAmbiguity2.ts (2 errors) ====
     (1) /notregexp/a.foo();
          ~~~~~~~~~
 !!! error TS2552: Cannot find name 'notregexp'. Did you mean 'RegExp'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1045:13: 'RegExp' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'RegExp' is declared here.
                    ~
 !!! error TS2304: Cannot find name 'a'.

@@ -1,23 +1,35 @@
+//// [tests/cases/conformance/externalModules/typeOnly/renamed.ts] ////
+
 === /a.ts ===
 class A { a!: string }
 >A : A
+>  : ^
 >a : string
+>  : ^^^^^^
 
 export type { A as B };
 >A : typeof A
+>  : ^^^^^^^^
 >B : A
+>  : ^
 
 === /b.ts ===
 export type { B as C } from './a';
 >B : typeof import("/a").B
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >C : import("/a").B
+>  : ^^^^^^^^^^^^^^
 
 === /c.ts ===
 import type { C as D } from './b';
 >C : typeof D
+>  : ^^^^^^^^
 >D : D
+>  : ^
 
 const d: D = {};
 >d : D
+>  : ^
 >{} : {}
+>   : ^^
 

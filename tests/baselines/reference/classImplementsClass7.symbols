@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classImplementsClass7.ts ===
+//// [tests/cases/compiler/classImplementsClass7.ts] ////
+
+=== classImplementsClass7.ts ===
 class A {
 >A : Symbol(A, Decl(classImplementsClass7.ts, 0, 0))
 

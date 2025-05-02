@@ -1,271 +1,179 @@
-undefined
-
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts ===
-// let o = { ["/*FIND ALL REFS*/[|foo|]"]: 12 };
+// let o = { /*FIND ALL REFS*/["foo"]: 12 };
+// let y = o.foo;
+// let z = o['foo'];
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts ===
+// let o = { <|["/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|]"]: 12|> };
 // let y = o.[|foo|];
 // let z = o['[|foo|]'];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-      "kind": "property",
-      "name": "(property) [\"foo\"]: number",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "[\"foo\"]",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 10,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "contextSpan": {
-          "start": 10,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 35,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 51,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts ===
+  // let o = { <|["/*FIND ALL REFS*/[|foo|]"]: 12|> };
+  // let y = o.foo;
+  // let z = o['foo'];
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) [\"foo\"]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "[\"foo\"]",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts ===
-// let o = { ["[|foo|]"]: 12 };
+// let o = { <|["[|{| isWriteAccess: true |}foo|]"]: 12|> };
 // let y = o./*FIND ALL REFS*/[|foo|];
 // let z = o['[|foo|]'];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-      "kind": "property",
-      "name": "(property) [\"foo\"]: number",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "[\"foo\"]",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 10,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "contextSpan": {
-          "start": 10,
-          "length": 11
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 35,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 51,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts ===
+  // let o = { <|["[|foo|]"]: 12|> };
+  // let y = o./*FIND ALL REFS*/foo;
+  // let z = o['foo'];
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) [\"foo\"]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "[\"foo\"]",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts ===
-// let o = { ["[|foo|]"]: 12 };
+// let o = { <|["[|{| isWriteAccess: true |}foo|]"]: 12|> };
 // let y = o.[|foo|];
 // let z = o['/*FIND ALL REFS*/[|foo|]'];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-      "kind": "property",
-      "name": "(property) [\"foo\"]: number",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "[\"foo\"]",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 10,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "contextSpan": {
-          "start": 10,
-          "length": 11
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 35,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 51,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts ===
+  // let o = { <|["[|foo|]"]: 12|> };
+  // let y = o.foo;
+  // let z = o['/*FIND ALL REFS*/foo'];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) [\"foo\"]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "[\"foo\"]",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

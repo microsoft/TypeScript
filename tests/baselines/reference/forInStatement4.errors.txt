@@ -1,7 +1,7 @@
-tests/cases/compiler/forInStatement4.ts(2,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
+forInStatement4.ts(2,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
 
 
-==== tests/cases/compiler/forInStatement4.ts (1 errors) ====
+==== forInStatement4.ts (1 errors) ====
     var expr: any;
     for (var a: number in expr) {
              ~

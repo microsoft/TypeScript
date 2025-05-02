@@ -1,12 +1,15 @@
-=== tests/cases/compiler/recursiveTupleTypeInference.ts ===
+//// [tests/cases/compiler/recursiveTupleTypeInference.ts] ////
+
+=== recursiveTupleTypeInference.ts ===
 // Repro from #37475
 
 export type A = "number" | "null" | A[];
->A : "number" | "null" | A[]
+>A : A
+>  : ^
 
 export type F<T> = null extends T
 >F : F<T>
->null : null
+>  : ^^^^
 
     ? [F<NonNullable<T>>, "null"]
     : T extends number
@@ -15,32 +18,46 @@ export type F<T> = null extends T
 
 export type G<T> = { [k in keyof T]: F<T[k]> };
 >G : G<T>
+>  : ^^^^
 
 interface K {
     b: number | null;
 >b : number | null
->null : null
+>  : ^^^^^^^^^^^^^
 }
 
 const gK: { [key in keyof K]: A } = { b: ["number", "null"] };
 >gK : { b: A; }
+>   : ^^^^^^^^^
 >{ b: ["number", "null"] } : { b: ("number" | "null")[]; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : ("number" | "null")[]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >["number", "null"] : ("number" | "null")[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 >"null" : "null"
+>       : ^^^^^^
 
 function foo<T>(g: G<T>): T {
 >foo : <T>(g: G<T>) => T
+>    : ^ ^^ ^^    ^^^^^ 
 >g : G<T>
+>  : ^^^^
 
     return {} as any;
 >{} as any : any
+>          : ^^^
 >{} : {}
+>   : ^^
 }
 
 foo(gK);
 >foo(gK) : { b: unknown; }
+>        : ^^^^^^^^^^^^^^^
 >foo : <T>(g: G<T>) => T
+>    : ^ ^^ ^^    ^^^^^ 
 >gK : { b: A; }
+>   : ^^^^^^^^^
 

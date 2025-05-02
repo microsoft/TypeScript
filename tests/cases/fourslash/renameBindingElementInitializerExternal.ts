@@ -14,4 +14,4 @@
 ////    oldName: newName = [|external|]
 ////} = obj;
 
-verify.rangesWithSameTextAreRenameLocations("external");
+verify.baselineRenameAtRangesWithText("external");

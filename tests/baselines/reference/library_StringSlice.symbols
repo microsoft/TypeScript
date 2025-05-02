@@ -1,4 +1,6 @@
-=== tests/cases/compiler/library_StringSlice.ts ===
+//// [tests/cases/compiler/library_StringSlice.ts] ////
+
+=== library_StringSlice.ts ===
 // String.prototype.slice can have zero, one, or two arguments
 String.prototype.slice();
 >String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))

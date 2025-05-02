@@ -1,6 +1,10 @@
-=== tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction2_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction2_es5.ts] ////
+
+=== asyncArrowFunction2_es5.ts ===
 var f = (await) => {
 >f : (await: any) => void
+>  : ^     ^^^^^^^^^^^^^^
 >(await) => {} : (await: any) => void
+>              : ^     ^^^^^^^^^^^^^^
 >await : any
 }

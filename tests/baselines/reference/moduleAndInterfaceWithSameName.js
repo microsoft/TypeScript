@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAndInterfaceWithSameName.ts] ////
+
 //// [moduleAndInterfaceWithSameName.ts]
 module Foo1 {
     export module Bar {

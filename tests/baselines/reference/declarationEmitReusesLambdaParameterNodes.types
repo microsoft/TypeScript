@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/declarationEmitReusesLambdaParameterNodes.ts] ////
+
+=== node_modules/react-select/index.d.ts ===
+export type Whatever = {x: string, y: number};
+>Whatever : Whatever
+>         : ^^^^^^^^
+>x : string
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+
+export type Props<T, TThing = Whatever> = Omit<TThing, "y"> & Partial<TThing> & T;
+>Props : Props<T, TThing>
+>      : ^^^^^^^^^^^^^^^^
+
+=== index.ts ===
+import { Props } from "react-select";
+>Props : any
+>      : ^^^
+
+export const CustomSelect1 = <Option,>(x: Props<Option> & {}) => {}
+>CustomSelect1 : <Option>(x: Props<Option> & {}) => void
+>              : ^      ^^ ^^                  ^^^^^^^^^
+><Option,>(x: Props<Option> & {}) => {} : <Option>(x: Props<Option> & {}) => void
+>                                       : ^      ^^ ^^                  ^^^^^^^^^
+>x : Omit<import("node_modules/react-select/index").Whatever, "y"> & Partial<import("node_modules/react-select/index").Whatever> & Option
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export function CustomSelect2<Option,>(x: Props<Option> & {}) {}
+>CustomSelect2 : <Option>(x: Props<Option> & {}) => void
+>              : ^      ^^ ^^                  ^^^^^^^^^
+>x : Omit<import("node_modules/react-select/index").Whatever, "y"> & Partial<import("node_modules/react-select/index").Whatever> & Option
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

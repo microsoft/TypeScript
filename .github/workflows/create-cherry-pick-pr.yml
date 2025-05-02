@@ -1,0 +1,189 @@
+name: Create cherry pick PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: PR number to cherry-pick
+        required: true
+        type: number
+      target_branch:
+        description: Target branch to cherry-pick to
+        required: true
+        type: string
+
+      # Inputs provided by the bot
+      distinct_id:
+        description: '(bot) A distinct ID'
+        required: false
+        default: ''
+      source_issue:
+        description: '(bot) The issue that triggered this workflow'
+        required: false
+        default: ''
+      requesting_user:
+        description: '(bot) The user who requested this workflow'
+        required: false
+        default: ''
+      status_comment:
+        description: '(bot) The comment to update with the status of this workflow'
+        required: false
+        default: ''
+
+run-name: ${{ github.workflow }}${{ inputs.distinct_id && format(' (bot run {0})', inputs.distinct_id) || '' }}
+
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
+          fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        id: open-pr
+        env:
+          PR: ${{ inputs.pr }}
+          TARGET_BRANCH: ${{ inputs.target_branch }}
+          DISTINCT_ID: ${{ inputs.distinct_id }}
+          SOURCE_ISSUE: ${{ inputs.source_issue }}
+          REQUESTING_USER: ${{ inputs.requesting_user }}
+          STATUS_COMMENT: ${{ inputs.status_comment }}
+        with:
+          retries: 3
+          github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            const {
+              PR,
+              TARGET_BRANCH,
+              DISTINCT_ID,
+              SOURCE_ISSUE,
+              REQUESTING_USER,
+              STATUS_COMMENT,
+            } = process.env;
+
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: +PR,
+            });
+
+            if (!pr.data.merge_commit_sha) throw new Error("No merge commit sha found");
+
+            const pickBranch = `cherry-pick/${PR}/${TARGET_BRANCH}`;
+
+            const title = `🤖 Pick PR #${PR} (${pr.data.title.substring(0, 35)}${pr.data.title.length > 35 ? "..." : ""}) into ${TARGET_BRANCH}`;
+
+            await exec.exec("git", ["config", "user.email", "typescriptbot@microsoft.com"]);
+            await exec.exec("git", ["config", "user.name", "TypeScript Bot"]);
+            await exec.exec("git", ["switch", "--detach", `origin/${TARGET_BRANCH}`]);
+            await exec.exec("git", ["switch", "-c", pickBranch]);
+
+            let updatedBaselinesMessage = "";
+            try {
+              await exec.exec("git", ["cherry-pick", "-m", "1", pr.data.merge_commit_sha]);
+            } catch (e) {
+              console.log(e);
+
+              // The cherry-pick failed. If all of the conflicts are in tests/baselines,
+              // try to run the tests and accept the new baselines.
+
+              await exec.exec("git", ["add", "tests/baselines"]);
+              // This will fail if any other files were modified.
+              await exec.exec("git", ["-c", "core.editor=true", "cherry-pick", "--continue"]);
+
+              await exec.exec("npm", ["ci"]);
+
+              try {
+                await exec.exec("npm", ["test", "--", "--no-lint"]);
+              } catch {
+                // Expected to fail.
+              }
+
+              await exec.exec("npx", ["hereby", "baseline-accept"]);
+              await exec.exec("git", ["add", "tests/baselines"]);
+              await exec.exec("git", ["commit", "-m", "Update baselines"]);
+
+              updatedBaselinesMessage = " This involved updating baselines; please check the diff.";
+            }
+
+            await exec.exec("git", ["push", "--force", "--set-upstream", "origin", pickBranch]);
+
+            const existingPulls = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${pickBranch}`,
+            });
+
+            let commentBody;
+
+            if (existingPulls.data.length === 0) {
+              console.log(`No existing PRs found for ${pickBranch}`);
+
+              const body = `This cherry-pick was triggered by a request on #${PR}.\n\nPlease review the diff and merge if no changes are unexpected.${updatedBaselinesMessage}`;
+
+              const newPr = await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                base: TARGET_BRANCH,
+                head: pickBranch,
+                title,
+                body,
+              });
+
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: newPr.data.number,
+                assignees: ["DanielRosenwasser"],
+              });
+
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: newPr.data.number,
+                reviewers: ["DanielRosenwasser", REQUESTING_USER],
+              });
+
+              commentBody = `I've created #${newPr.data.number} for you.${updatedBaselinesMessage}`;
+            }
+            else {
+              const existing = existingPulls.data[0];
+              console.log(`Found existing PR #${existing.number} for ${pickBranch}`);
+
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: existing.number,
+                title,
+              });
+
+              commentBody = `I've updated #${existing.number} for you.${updatedBaselinesMessage}`;
+            }
+
+            return commentBody;
+
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@master
+        if: ${{ !cancelled() && inputs.distinct_id }}
+        with:
+          success_comment: ${{ steps.open-pr.outputs.result }}
+          failure_comment: 'I was unable to cherry-pick this PR.'
+          github_token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          distinct_id: ${{ inputs.distinct_id }}
+          source_issue: ${{ inputs.source_issue }}
+          requesting_user: ${{ inputs.requesting_user }}
+          status_comment: ${{ inputs.status_comment }}

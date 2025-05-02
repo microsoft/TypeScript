@@ -1,18 +1,28 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportNameSpaceImportWithExport.ts] ////
+
+=== server.ts ===
 export var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 export import * as nameSpaceBinding from "server";
 >nameSpaceBinding : typeof nameSpaceBinding
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export var x = nameSpaceBinding.a;
 >x : number
+>  : ^^^^^^
 >nameSpaceBinding.a : number
+>                   : ^^^^^^
 >nameSpaceBinding : typeof nameSpaceBinding
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 export import * as nameSpaceBinding2 from "server"; // Not referenced imports
 >nameSpaceBinding2 : typeof nameSpaceBinding
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,75 +1,119 @@
-=== tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts ===
+//// [tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts] ////
+
+=== conditionallyDuplicateOverloadsCausedByOverloadResolution.ts ===
 declare function foo(func: (x: string, y: string) => any): boolean;
 >foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
+>    : ^^^    ^^                             ^^^       ^^^    ^^                             ^^^      ^^^
 >func : (x: string, y: string) => any
+>     : ^ ^^      ^^ ^^      ^^^^^   
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 declare function foo(func: (x: string, y: number) => any): string;
 >foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
+>    : ^^^    ^^                             ^^^       ^^^    ^^                             ^^^      ^^^
 >func : (x: string, y: number) => any
+>     : ^ ^^      ^^ ^^      ^^^^^   
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var out = foo((x, y) => {
 >out : boolean
+>    : ^^^^^^^
 >foo((x, y) => {    function bar(a: typeof x): void;    function bar(b: typeof y): void;    function bar() { }    return bar;}) : boolean
+>                                                                                                                               : ^^^^^^^
 >foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
->(x, y) => {    function bar(a: typeof x): void;    function bar(b: typeof y): void;    function bar() { }    return bar;} : (x: string, y: string) => { (a: string): void; (b: string): void; }
+>    : ^^^    ^^                             ^^^       ^^^    ^^                             ^^^      ^^^
+>(x, y) => {    function bar(a: typeof x): void;    function bar(b: typeof y): void;    function bar() { }    return bar;} : (x: string, y: string) => { (a: typeof x): void; (b: typeof y): void; }
+>                                                                                                                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^        ^^^    ^^^ ^^        ^^^    ^^^
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     function bar(a: typeof x): void;
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: typeof x): void; (b: typeof y): void; }
+>    : ^^^ ^^        ^^^    ^^^ ^^        ^^^    ^^^
 >a : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
     function bar(b: typeof y): void;
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: typeof x): void; (b: typeof y): void; }
+>    : ^^^ ^^        ^^^    ^^^ ^^        ^^^    ^^^
 >b : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     function bar() { }
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: typeof x): void; (b: typeof y): void; }
+>    : ^^^ ^^        ^^^    ^^^ ^^        ^^^    ^^^
 
     return bar;
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: typeof x): void; (b: typeof y): void; }
+>    : ^^^ ^^        ^^^    ^^^ ^^        ^^^    ^^^
 
 });
 
 declare function foo2(func: (x: string, y: string) => any): boolean;
 >foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
+>     : ^^^    ^^                             ^^^       ^^^    ^^                             ^^^      ^^^
 >func : (x: string, y: string) => any
+>     : ^ ^^      ^^ ^^      ^^^^^   
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 declare function foo2(func: (x: string, y: number) => any): string;
 >foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
+>     : ^^^    ^^                             ^^^       ^^^    ^^                             ^^^      ^^^
 >func : (x: string, y: number) => any
+>     : ^ ^^      ^^ ^^      ^^^^^   
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var out2 = foo2((x, y) => {
 >out2 : boolean
+>     : ^^^^^^^
 >foo2((x, y) => {    var bar: {        (a: typeof x): void;        (b: typeof y): void;    };    return bar;}) : boolean
+>                                                                                                              : ^^^^^^^
 >foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
->(x, y) => {    var bar: {        (a: typeof x): void;        (b: typeof y): void;    };    return bar;} : (x: string, y: string) => { (a: string): void; (b: string): void; }
+>     : ^^^    ^^                             ^^^       ^^^    ^^                             ^^^      ^^^
+>(x, y) => {    var bar: {        (a: typeof x): void;        (b: typeof y): void;    };    return bar;} : (x: string, y: string) => { (a: typeof x): void; (b: typeof y): void; }
+>                                                                                                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^        ^^^    ^^^ ^^        ^^^    ^^^
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     var bar: {
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: typeof x): void; (b: typeof y): void; }
+>    : ^^^ ^^        ^^^    ^^^ ^^        ^^^    ^^^
 
         (a: typeof x): void;
 >a : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
         (b: typeof y): void;
 >b : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     };
     return bar;
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: typeof x): void; (b: typeof y): void; }
+>    : ^^^ ^^        ^^^    ^^^ ^^        ^^^    ^^^
 
 });

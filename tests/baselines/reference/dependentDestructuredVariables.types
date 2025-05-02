@@ -1,357 +1,645 @@
-=== tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts ===
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
+
+=== Performance Stats ===
+Type Count: 2,500
+Instantiation count: 5,000
+
+=== dependentDestructuredVariables.ts ===
 type Action =
->Action : { kind: 'A'; payload: number; } | { kind: 'B'; payload: string; }
+>Action : Action
+>       : ^^^^^^
 
     | { kind: 'A', payload: number }
 >kind : "A"
+>     : ^^^
 >payload : number
+>        : ^^^^^^
 
     | { kind: 'B', payload: string };
 >kind : "B"
+>     : ^^^
 >payload : string
+>        : ^^^^^^
 
 function f10({ kind, payload }: Action) {
 >f10 : ({ kind, payload }: Action) => void
+>    : ^                 ^^      ^^^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : string | number
+>        : ^^^^^^^^^^^^^^^
 
     if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
         payload.toUpperCase();
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 }
 
 function f11(action: Action) {
 >f11 : (action: Action) => void
+>    : ^      ^^      ^^^^^^^^^
 >action : Action
+>       : ^^^^^^
 
     const { kind, payload } = action;
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : string | number
+>        : ^^^^^^^^^^^^^^^
 >action : Action
+>       : ^^^^^^
 
     if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
         payload.toUpperCase();
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 }
 
 function f12({ kind, payload }: Action) {
 >f12 : ({ kind, payload }: Action) => void
+>    : ^                 ^^      ^^^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : string | number
+>        : ^^^^^^^^^^^^^^^
 
     switch (kind) {
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 
         case 'A':
 >'A' : "A"
+>    : ^^^
 
             payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
             break;
         case 'B':
 >'B' : "B"
+>    : ^^^
 
             payload.toUpperCase();
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
 
             break;
         default:
             payload;  // never
 >payload : never
+>        : ^^^^^
+    }
+}
+
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+>f13 : <T extends Action>({ kind, payload }: T) => void
+>    : ^ ^^^^^^^^^      ^^                 ^^ ^^^^^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>payload : string | number
+>        : ^^^^^^^^^^^^^^^
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>             : ^^^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+
+        payload.toFixed();
+>payload.toFixed() : string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
+>payload : number
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>             : ^^^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>'B' : "B"
+>    : ^^^
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>                      : ^^^^^^
+>payload.toUpperCase : () => string
+>                    : ^^^^^^      
+>payload : string
+>        : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
+    }
+}
+
+function f14<T extends Action>(t: T) {
+>f14 : <T extends Action>(t: T) => void
+>    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
+>t : T
+>  : ^
+
+    const { kind, payload } = t;
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>payload : string | number
+>        : ^^^^^^^^^^^^^^^
+>t : Action
+>  : ^^^^^^
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>             : ^^^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+
+        payload.toFixed();
+>payload.toFixed() : string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
+>payload : number
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>             : ^^^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>'B' : "B"
+>    : ^^^
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>                      : ^^^^^^
+>payload.toUpperCase : () => string
+>                    : ^^^^^^      
+>payload : string
+>        : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
     }
 }
 
 type Action2 =
->Action2 : { kind: 'A'; payload: number | undefined; } | { kind: 'B'; payload: string | undefined; }
+>Action2 : Action2
+>        : ^^^^^^^
 
     | { kind: 'A', payload: number | undefined }
 >kind : "A"
+>     : ^^^
 >payload : number | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 
     | { kind: 'B', payload: string | undefined };
 >kind : "B"
+>     : ^^^
 >payload : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 
 function f20({ kind, payload }: Action2) {
 >f20 : ({ kind, payload }: Action2) => void
+>    : ^                 ^^       ^^^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (payload) {
 >payload : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
             payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
             payload.toUpperCase();
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
         }
     }
 }
 
 function f21(action: Action2) {
 >f21 : (action: Action2) => void
+>    : ^      ^^       ^^^^^^^^^
 >action : Action2
+>       : ^^^^^^^
 
     const { kind, payload } = action;
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >action : Action2
+>       : ^^^^^^^
 
     if (payload) {
 >payload : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
             payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
             payload.toUpperCase();
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
         }
     }
 }
 
 function f22(action: Action2) {
 >f22 : (action: Action2) => void
+>    : ^      ^^       ^^^^^^^^^
 >action : Action2
+>       : ^^^^^^^
 
     if (action.payload) {
 >action.payload : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >action : Action2
+>       : ^^^^^^^
 >payload : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         const { kind, payload } = action;
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : string | number
+>        : ^^^^^^^^^^^^^^^
 >action : Action2
+>       : ^^^^^^^
 
         if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
             payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
             payload.toUpperCase();
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
         }
     }
 }
 
 function f23({ kind, payload }: Action2) {
 >f23 : ({ kind, payload }: Action2) => void
+>    : ^                 ^^       ^^^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (payload) {
 >payload : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         switch (kind) {
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 
             case 'A':
 >'A' : "A"
+>    : ^^^
 
                 payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
                 break;
             case 'B':
 >'B' : "B"
+>    : ^^^
 
                 payload.toUpperCase();
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
 
                 break;
             default:
                 payload;  // never
 >payload : never
+>        : ^^^^^
         }
     }
 }
 
 type Foo =
->Foo : { kind: 'A'; isA: true; } | { kind: 'B'; isA: false; } | { kind: 'C'; isA: false; }
+>Foo : Foo
+>    : ^^^
 
     | { kind: 'A', isA: true }
 >kind : "A"
+>     : ^^^
 >isA : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 
     | { kind: 'B', isA: false }
 >kind : "B"
+>     : ^^^
 >isA : false
+>    : ^^^^^
 >false : false
+>      : ^^^^^
 
     | { kind: 'C', isA: false };
 >kind : "C"
+>     : ^^^
 >isA : false
+>    : ^^^^^
 >false : false
+>      : ^^^^^
 
 function f30({ kind, isA }: Foo) {
 >f30 : ({ kind, isA }: Foo) => void
+>    : ^             ^^   ^^^^^^^^^
 >kind : "A" | "B" | "C"
+>     : ^^^^^^^^^^^^^^^
 >isA : boolean
+>    : ^^^^^^^
 
     if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B" | "C"
+>     : ^^^^^^^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
         isA;   // true
 >isA : true
+>    : ^^^^
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B" | "C"
+>     : ^^^^^^^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
         isA;   // false
 >isA : false
+>    : ^^^^^
     }
     if (kind === 'C') {
 >kind === 'C' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B" | "C"
+>     : ^^^^^^^^^^^^^^^
 >'C' : "C"
+>    : ^^^
 
         isA;   // false
 >isA : false
+>    : ^^^^^
     }
     if (isA) {
 >isA : boolean
+>    : ^^^^^^^
 
         kind;  // 'A'
 >kind : "A"
+>     : ^^^
     }
     else {
         kind;  // 'B' | 'C'
 >kind : "B" | "C"
+>     : ^^^^^^^^^
     }
 }
 
 type Args = ['A', number] | ['B', string]
->Args : ["A", number] | ["B", string]
+>Args : Args
+>     : ^^^^
 
 function f40(...[kind, data]: Args) {
 >f40 : (...[kind, data]: Args) => void
+>    : ^^^^            ^^    ^^^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >data : string | number
+>     : ^^^^^^^^^^^^^^^
 
     if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
         data.toFixed();
 >data.toFixed() : string
->data.toFixed : (fractionDigits?: number | undefined) => string
+>               : ^^^^^^
+>data.toFixed : (fractionDigits?: number) => string
+>             : ^              ^^^      ^^^^^      
 >data : number
->toFixed : (fractionDigits?: number | undefined) => string
+>     : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
         data.toUpperCase();
 >data.toUpperCase() : string
+>                   : ^^^^^^
 >data.toUpperCase : () => string
+>                 : ^^^^^^      
 >data : string
+>     : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 }
 
@@ -359,295 +647,460 @@ function f40(...[kind, data]: Args) {
 
 interface A<T> { variant: 'a', value: T }
 >variant : "a"
+>        : ^^^
 >value : T
+>      : ^
 
 interface B<T> { variant: 'b', value: Array<T> }
 >variant : "b"
+>        : ^^^
 >value : T[]
+>      : ^^^
 
 type AB<T> = A<T> | B<T>;
 >AB : AB<T>
+>   : ^^^^^
 
 declare function printValue<T>(t: T): void;
 >printValue : <T>(t: T) => void
+>           : ^ ^^ ^^ ^^^^^    
 >t : T
+>  : ^
 
 declare function printValueList<T>(t: Array<T>): void;
 >printValueList : <T>(t: Array<T>) => void
+>               : ^ ^^ ^^        ^^^^^    
 >t : T[]
+>  : ^^^
 
 function unrefined1<T>(ab: AB<T>): void {
 >unrefined1 : <T>(ab: AB<T>) => void
+>           : ^ ^^  ^^     ^^^^^    
 >ab : AB<T>
+>   : ^^^^^
 
     const { variant, value } = ab;
 >variant : "a" | "b"
+>        : ^^^^^^^^^
 >value : T | T[]
+>      : ^^^^^^^
 >ab : AB<T>
+>   : ^^^^^
 
     if (variant === 'a') {
 >variant === 'a' : boolean
+>                : ^^^^^^^
 >variant : "a" | "b"
+>        : ^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
         printValue<T>(value);
 >printValue<T>(value) : void
->printValue : <T>(t: T) => void
+>                     : ^^^^
+>printValue : <T_1>(t: T_1) => void
+>           : ^^^^^^ ^^   ^^^^^    
 >value : T
+>      : ^
     }
     else {
         printValueList<T>(value);
 >printValueList<T>(value) : void
->printValueList : <T>(t: T[]) => void
+>                         : ^^^^
+>printValueList : <T_1>(t: Array<T_1>) => void
+>               : ^^^^^^ ^^          ^^^^^    
 >value : T[]
+>      : ^^^
     }
 }
 
 // Repro from #38020
 
 type Action3 =
->Action3 : { type: 'add'; payload: {    toAdd: number;}; } | { type: 'remove'; payload: {    toRemove: number;}; }
+>Action3 : Action3
+>        : ^^^^^^^
 
     | {type: 'add', payload: { toAdd: number } }
 >type : "add"
+>     : ^^^^^
 >payload : { toAdd: number; }
+>        : ^^^^^^^^^      ^^^
 >toAdd : number
+>      : ^^^^^^
 
     | {type: 'remove', payload: { toRemove: number } };
 >type : "remove"
+>     : ^^^^^^^^
 >payload : { toRemove: number; }
+>        : ^^^^^^^^^^^^      ^^^
 >toRemove : number
+>         : ^^^^^^
 
 const reducerBroken = (state: number, { type, payload }: Action3) => {
 >reducerBroken : (state: number, { type, payload }: Action3) => number
+>              : ^     ^^      ^^                 ^^       ^^^^^^^^^^^
 >(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, { type, payload }: Action3) => number
+>                                                                                                                                                                                                        : ^     ^^      ^^                 ^^       ^^^^^^^^^^^
 >state : number
+>      : ^^^^^^
 >type : "add" | "remove"
+>     : ^^^^^^^^^^^^^^^^
 >payload : { toAdd: number; } | { toRemove: number; }
+>        : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^
 
     switch (type) {
 >type : "add" | "remove"
+>     : ^^^^^^^^^^^^^^^^
 
         case 'add':
 >'add' : "add"
+>      : ^^^^^
 
             return state + payload.toAdd;
 >state + payload.toAdd : number
+>                      : ^^^^^^
 >state : number
+>      : ^^^^^^
 >payload.toAdd : number
+>              : ^^^^^^
 >payload : { toAdd: number; }
+>        : ^^^^^^^^^      ^^^
 >toAdd : number
+>      : ^^^^^^
 
         case 'remove':
 >'remove' : "remove"
+>         : ^^^^^^^^
 
             return state - payload.toRemove;
 >state - payload.toRemove : number
+>                         : ^^^^^^
 >state : number
+>      : ^^^^^^
 >payload.toRemove : number
+>                 : ^^^^^^
 >payload : { toRemove: number; }
+>        : ^^^^^^^^^^^^      ^^^
 >toRemove : number
+>         : ^^^^^^
     }
 }
 
 // Repro from #46143
 
 declare var it: Iterator<number>;
->it : Iterator<number, any, undefined>
+>it : Iterator<number, any, any>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { value, done } = it.next();
 >value : any
+>      : ^^^
 >done : boolean | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
 >it.next() : IteratorResult<number, any>
->it.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->it : Iterator<number, any, undefined>
->next : (...args: [] | [undefined]) => IteratorResult<number, any>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>it.next : (...[value]: [] | [any]) => IteratorResult<number, any>
+>        : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>it : Iterator<number, any, any>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [any]) => IteratorResult<number, any>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (!done) {
 >!done : boolean
+>      : ^^^^^^^
 >done : boolean | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
 
     value;  // number
 >value : number
+>      : ^^^^^^
 }
 
 // Repro from #46658
 
 declare function f50(cb: (...args: Args) => void): void
 >f50 : (cb: (...args: Args) => void) => void
+>    : ^  ^^                       ^^^^^    
 >cb : (...args: Args) => void
+>   : ^^^^    ^^    ^^^^^    
 >args : Args
+>     : ^^^^
 
 f50((kind, data) => {
 >f50((kind, data) => {    if (kind === 'A') {        data.toFixed();    }    if (kind === 'B') {        data.toUpperCase();    }}) : void
+>                                                                                                                                  : ^^^^
 >f50 : (cb: (...args: Args) => void) => void
+>    : ^  ^^                       ^^^^^    
 >(kind, data) => {    if (kind === 'A') {        data.toFixed();    }    if (kind === 'B') {        data.toUpperCase();    }} : (kind: "A" | "B", data: string | number) => void
+>                                                                                                                             : ^    ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >data : string | number
+>     : ^^^^^^^^^^^^^^^
 
     if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
         data.toFixed();
 >data.toFixed() : string
->data.toFixed : (fractionDigits?: number | undefined) => string
+>               : ^^^^^^
+>data.toFixed : (fractionDigits?: number) => string
+>             : ^              ^^^      ^^^^^      
 >data : number
->toFixed : (fractionDigits?: number | undefined) => string
+>     : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
         data.toUpperCase();
 >data.toUpperCase() : string
+>                   : ^^^^^^
 >data.toUpperCase : () => string
+>                 : ^^^^^^      
 >data : string
+>     : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 });
 
 const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) => {
->f51 : (...args: ['A', number] | ['B', string]) => void
+>f51 : (...args: ["A", number] | ["B", string]) => void
+>    : ^^^^    ^^                             ^^^^^    
 >args : ["A", number] | ["B", string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(kind, payload) => {    if (kind === 'A') {        payload.toFixed();    }    if (kind === 'B') {        payload.toUpperCase();    }} : (kind: "A" | "B", payload: string | number) => void
+>                                                                                                                                      : ^    ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : string | number
+>        : ^^^^^^^^^^^^^^^
 
     if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
         payload.toUpperCase();
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 };
 
 const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
->f52 : (...args: ['A', number] | ['B']) => void
+>f52 : (...args: ["A", number] | ["B"]) => void
+>    : ^^^^    ^^                     ^^^^^    
 >args : ["A", number] | ["B"]
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >(kind, payload?) => {    if (kind === 'A') {        payload.toFixed();    }    else {        payload;  // undefined    }} : (kind: "A" | "B", payload?: number | undefined) => void
+>                                                                                                                          : ^    ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >payload : number | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 
     if (kind === 'A') {
 >kind === 'A' : boolean
+>             : ^^^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     else {
         payload;  // undefined
 >payload : undefined
+>        : ^^^^^^^^^
     }
 };
 
 declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
 >readFile : (path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void) => void
+>         : ^    ^^      ^^        ^^                                                                               ^^^^^    
 >path : string
+>     : ^^^^^^
 >callback : (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void
+>         : ^^^^    ^^                                                            ^^^^^    
 >args : [err: null, data: unknown[]] | [err: Error, data: undefined]
->null : null
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 readFile('hello', (err, data) => {
 >readFile('hello', (err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }}) : void
+>                                                                                                                        : ^^^^
 >readFile : (path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void) => void
+>         : ^    ^^      ^^        ^^                                                                               ^^^^^    
 >'hello' : "hello"
+>        : ^^^^^^^
 >(err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }} : (err: Error | null, data: unknown[] | undefined) => void
+>                                                                                                     : ^   ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >err : Error | null
+>    : ^^^^^^^^^^^^
 >data : unknown[] | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
     if (err === null) {
 >err === null : boolean
+>             : ^^^^^^^
 >err : Error | null
->null : null
+>    : ^^^^^^^^^^^^
 
         data.length;
 >data.length : number
+>            : ^^^^^^
 >data : unknown[]
+>     : ^^^^^^^^^
 >length : number
+>       : ^^^^^^
     }
     else {
         err.message;
 >err.message : string
+>            : ^^^^^^
 >err : Error
+>    : ^^^^^
 >message : string
+>        : ^^^^^^
     }
 });
 
 type ReducerArgs = ["add", { a: number, b: number }] | ["concat", { firstArr: any[], secondArr: any[] }];
->ReducerArgs : ["add", { a: number; b: number; }] | ["concat", { firstArr: any[]; secondArr: any[]; }]
+>ReducerArgs : ReducerArgs
+>            : ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >firstArr : any[]
+>         : ^^^^^
 >secondArr : any[]
+>          : ^^^^^
 
 const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >reducer : (...args: ReducerArgs) => void
+>        : ^^^^    ^^           ^^^^^    
 >args : ReducerArgs
+>     : ^^^^^^^^^^^
 >(op, args) => {    switch (op) {        case "add":            console.log(args.a + args.b);            break;        case "concat":            console.log(args.firstArr.concat(args.secondArr));            break;    }} : (op: "add" | "concat", args: { a: number; b: number; } | { firstArr: any[]; secondArr: any[]; }) => void
+>                                                                                                                                                                                                                           : ^  ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^     ^^^^^^^^^^^^
 >op : "add" | "concat"
+>   : ^^^^^^^^^^^^^^^^
 >args : { a: number; b: number; } | { firstArr: any[]; secondArr: any[]; }
+>     : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^     ^^^
 
     switch (op) {
 >op : "add" | "concat"
+>   : ^^^^^^^^^^^^^^^^
 
         case "add":
 >"add" : "add"
+>      : ^^^^^
 
             console.log(args.a + args.b);
 >console.log(args.a + args.b) : void
+>                             : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >args.a + args.b : number
+>                : ^^^^^^
 >args.a : number
+>       : ^^^^^^
 >args : { a: number; b: number; }
+>     : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >args.b : number
+>       : ^^^^^^
 >args : { a: number; b: number; }
+>     : ^^^^^      ^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 
             break;
         case "concat":
 >"concat" : "concat"
+>         : ^^^^^^^^
 
             console.log(args.firstArr.concat(args.secondArr));
 >console.log(args.firstArr.concat(args.secondArr)) : void
+>                                                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >args.firstArr.concat(args.secondArr) : any[]
+>                                     : ^^^^^
 >args.firstArr.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
 >args.firstArr : any[]
+>              : ^^^^^
 >args : { firstArr: any[]; secondArr: any[]; }
+>     : ^^^^^^^^^^^^     ^^^^^^^^^^^^^     ^^^
 >firstArr : any[]
+>         : ^^^^^
 >concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
 >args.secondArr : any[]
+>               : ^^^^^
 >args : { firstArr: any[]; secondArr: any[]; }
+>     : ^^^^^^^^^^^^     ^^^^^^^^^^^^^     ^^^
 >secondArr : any[]
+>          : ^^^^^
 
             break;
     }
@@ -655,202 +1108,298 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 
 reducer("add", { a: 1, b: 3 });
 >reducer("add", { a: 1, b: 3 }) : void
+>                               : ^^^^
 >reducer : (...args: ReducerArgs) => void
+>        : ^^^^    ^^           ^^^^^    
 >"add" : "add"
+>      : ^^^^^
 >{ a: 1, b: 3 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 >reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] }) : void
+>                                                           : ^^^^
 >reducer : (...args: ReducerArgs) => void
+>        : ^^^^    ^^           ^^^^^    
 >"concat" : "concat"
+>         : ^^^^^^^^
 >{ firstArr: [1, 2], secondArr: [3, 4] } : { firstArr: number[]; secondArr: number[]; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >firstArr : number[]
+>         : ^^^^^^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >secondArr : number[]
+>          : ^^^^^^^^
 >[3, 4] : number[]
+>       : ^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 // repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
 
 type FooMethod = {
->FooMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): void; }
+>FooMethod : FooMethod
+>          : ^^^^^^^^^
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => void
+>       : ^^^^    ^^                                                                               ^^^^^    
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+>     : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^
 
     [type: "str", cb: (e: string) => void] |
 >e : string
+>  : ^^^^^^
 
     [type: "num", cb: (e: number) => void]
 >e : number
+>  : ^^^^^^
 
   ): void;
 }
 
 let fooM: FooMethod = {
 >fooM : FooMethod
+>     : ^^^^^^^^^
 >{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): void; }
+>                                                                                               : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^
 
   method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => void
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^
 >type : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
+>   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
 
     if (type == 'num') {
 >type == 'num' : boolean
+>              : ^^^^^^^
 >type : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >'num' : "num"
+>      : ^^^^^
 
       cb(123)
 >cb(123) : void
+>        : ^^^^
 >cb : (e: number) => void
+>   : ^ ^^      ^^^^^    
 >123 : 123
+>    : ^^^
 
     } else {
       cb("abc")
 >cb("abc") : void
+>          : ^^^^
 >cb : (e: string) => void
+>   : ^ ^^      ^^^^^    
 >"abc" : "abc"
+>      : ^^^^^
     }
   }
 };
 
 type FooAsyncMethod = {
->FooAsyncMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): Promise<any>; }
+>FooAsyncMethod : FooAsyncMethod
+>               : ^^^^^^^^^^^^^^
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
+>       : ^^^^    ^^                                                                               ^^^^^            
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+>     : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^
 
     [type: "str", cb: (e: string) => void] |
 >e : string
+>  : ^^^^^^
 
     [type: "num", cb: (e: number) => void]
 >e : number
+>  : ^^^^^^
 
   ): Promise<any>;
 }
 
 let fooAsyncM: FooAsyncMethod = {
 >fooAsyncM : FooAsyncMethod
+>          : ^^^^^^^^^^^^^^
 >{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
+>                                                                                                     : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^
 
   async method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
+>   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
 
     if (type == 'num') {
 >type == 'num' : boolean
+>              : ^^^^^^^
 >type : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >'num' : "num"
+>      : ^^^^^
 
       cb(123)
 >cb(123) : void
+>        : ^^^^
 >cb : (e: number) => void
+>   : ^ ^^      ^^^^^    
 >123 : 123
+>    : ^^^
 
     } else {
       cb("abc")
 >cb("abc") : void
+>          : ^^^^
 >cb : (e: string) => void
+>   : ^ ^^      ^^^^^    
 >"abc" : "abc"
+>      : ^^^^^
     }
   }
 };
 
 type FooGenMethod = {
->FooGenMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): Generator<any, any, any>; }
+>FooGenMethod : FooGenMethod
+>             : ^^^^^^^^^^^^
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
+>       : ^^^^    ^^                                                                               ^^^^^                        
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+>     : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^
 
     [type: "str", cb: (e: string) => void] |
 >e : string
+>  : ^^^^^^
 
     [type: "num", cb: (e: number) => void]
 >e : number
+>  : ^^^^^^
 
   ): Generator<any, any, any>;
 }
 
 let fooGenM: FooGenMethod = {
 >fooGenM : FooGenMethod
+>        : ^^^^^^^^^^^^
 >{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
+>                                                                                                : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   *method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
+>   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
 
     if (type == 'num') {
 >type == 'num' : boolean
+>              : ^^^^^^^
 >type : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >'num' : "num"
+>      : ^^^^^
 
       cb(123)
 >cb(123) : void
+>        : ^^^^
 >cb : (e: number) => void
+>   : ^ ^^      ^^^^^    
 >123 : 123
+>    : ^^^
 
     } else {
       cb("abc")
 >cb("abc") : void
+>          : ^^^^
 >cb : (e: string) => void
+>   : ^ ^^      ^^^^^    
 >"abc" : "abc"
+>      : ^^^^^
     }
   }
 };
 
 type FooAsyncGenMethod = {
->FooAsyncGenMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): AsyncGenerator<any, any, any>; }
+>FooAsyncGenMethod : FooAsyncGenMethod
+>                  : ^^^^^^^^^^^^^^^^^
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
+>       : ^^^^    ^^                                                                               ^^^^^                             
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+>     : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^
 
     [type: "str", cb: (e: string) => void] |
 >e : string
+>  : ^^^^^^
 
     [type: "num", cb: (e: number) => void]
 >e : number
+>  : ^^^^^^
 
   ): AsyncGenerator<any, any, any>;
 }
 
 let fooAsyncGenM: FooAsyncGenMethod = {
 >fooAsyncGenM : FooAsyncGenMethod
+>             : ^^^^^^^^^^^^^^^^^
 >{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
+>                                                                                                      : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   async *method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
+>   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
 
     if (type == 'num') {
 >type == 'num' : boolean
+>              : ^^^^^^^
 >type : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >'num' : "num"
+>      : ^^^^^
 
       cb(123)
 >cb(123) : void
+>        : ^^^^
 >cb : (e: number) => void
+>   : ^ ^^      ^^^^^    
 >123 : 123
+>    : ^^^
 
     } else {
       cb("abc")
 >cb("abc") : void
+>          : ^^^^
 >cb : (e: string) => void
+>   : ^ ^^      ^^^^^    
 >"abc" : "abc"
+>      : ^^^^^
     }
   }
 };
@@ -858,36 +1407,56 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 // Repro from #48345
 
 type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
->Func : <T extends ["a", number] | ["b", string]>(...args: T) => void
+>Func : Func
+>     : ^^^^
 >args : T
+>     : ^
 
 const f60: Func = (kind, payload) => {
 >f60 : Func
+>    : ^^^^
 >(kind, payload) => {    if (kind === "a") {        payload.toFixed();  // error    }    if (kind === "b") {        payload.toUpperCase();  // error    }} : <T extends ["a", number] | ["b", string]>(kind: T[0], payload: T[1]) => void
+>                                                                                                                                                          : ^ ^^^^^^^^^                             ^^    ^^^^^^^^       ^^^^^^^^^^^^^^^
 >kind : T[0]
+>     : ^^^^
 >payload : T[1]
+>        : ^^^^
 
     if (kind === "a") {
 >kind === "a" : boolean
+>             : ^^^^^^^
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
         payload.toFixed();  // error
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === "b") {
 >kind === "b" : boolean
+>             : ^^^^^^^
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 
         payload.toUpperCase();  // error
 >payload.toUpperCase() : string
+>                      : ^^^^^^
 >payload.toUpperCase : () => string
+>                    : ^^^^^^      
 >payload : string
+>        : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 };
 
@@ -895,63 +1464,101 @@ const f60: Func = (kind, payload) => {
 
 function foo({
 >foo : ({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: { value1: any; test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; }) => void
+>    : ^                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     value1,
 >value1 : any
+>       : ^^^
 
     test1 = value1.test1,
 >test1 : any
+>      : ^^^
 >value1.test1 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test1 : any
+>      : ^^^
 
     test2 = value1.test2,
 >test2 : any
+>      : ^^^
 >value1.test2 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test2 : any
+>      : ^^^
 
     test3 = value1.test3,
 >test3 : any
+>      : ^^^
 >value1.test3 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test3 : any
+>      : ^^^
 
     test4 = value1.test4,
 >test4 : any
+>      : ^^^
 >value1.test4 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test4 : any
+>      : ^^^
 
     test5 = value1.test5,
 >test5 : any
+>      : ^^^
 >value1.test5 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test5 : any
+>      : ^^^
 
     test6 = value1.test6,
 >test6 : any
+>      : ^^^
 >value1.test6 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test6 : any
+>      : ^^^
 
     test7 = value1.test7,
 >test7 : any
+>      : ^^^
 >value1.test7 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test7 : any
+>      : ^^^
 
     test8 = value1.test8,
 >test8 : any
+>      : ^^^
 >value1.test8 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test8 : any
+>      : ^^^
 
     test9 = value1.test9
 >test9 : any
+>      : ^^^
 >value1.test9 : any
+>             : ^^^
 >value1 : any
+>       : ^^^
 >test9 : any
+>      : ^^^
 
 }) {}
 
@@ -959,96 +1566,504 @@ function foo({
 
 function fa1(x: [true, number] | [false, string]) {
 >fa1 : (x: [true, number] | [false, string]) => void
+>    : ^ ^^                                ^^^^^^^^^
 >x : [true, number] | [false, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     const [guard, value] = x;
 >guard : boolean
+>      : ^^^^^^^
 >value : string | number
+>      : ^^^^^^^^^^^^^^^
 >x : [true, number] | [false, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (guard) {
 >guard : boolean
+>      : ^^^^^^^
 
         for (;;) {
             value;  // number
 >value : number
+>      : ^^^^^^
         }
     }
     else {
         while (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
             value;  // string
 >value : string
+>      : ^^^^^^
         }
     }
 }
 
 function fa2(x: { guard: true, value: number } | { guard: false, value: string }) {
->fa2 : (x: {    guard: true;    value: number;} | {    guard: false;    value: string;}) => void
+>fa2 : (x: { guard: true; value: number; } | { guard: false; value: string; }) => void
+>    : ^ ^^                                                                  ^^^^^^^^^
 >x : { guard: true; value: number; } | { guard: false; value: string; }
+>  : ^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^
 >guard : true
+>      : ^^^^
 >true : true
+>     : ^^^^
 >value : number
+>      : ^^^^^^
 >guard : false
+>      : ^^^^^
 >false : false
+>      : ^^^^^
 >value : string
+>      : ^^^^^^
 
     const { guard, value } = x;
 >guard : boolean
+>      : ^^^^^^^
 >value : string | number
+>      : ^^^^^^^^^^^^^^^
 >x : { guard: true; value: number; } | { guard: false; value: string; }
+>  : ^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^
 
     if (guard) {
 >guard : boolean
+>      : ^^^^^^^
 
         for (;;) {
             value;  // number
 >value : number
+>      : ^^^^^^
         }
     }
     else {
         while (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
             value;  // string
 >value : string
+>      : ^^^^^^
         }
     }
 }
 
 const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
 >fa3 : (...args: [true, number] | [false, string]) => void
+>    : ^^^^    ^^                                ^^^^^    
 >args : [true, number] | [false, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 >(guard, value) => {    if (guard) {        for (;;) {            value;  // number        }    }    else {        while (!!true) {            value;  // string        }    }} : (guard: boolean, value: string | number) => void
+>                                                                                                                                                                               : ^     ^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >guard : boolean
+>      : ^^^^^^^
 >value : string | number
+>      : ^^^^^^^^^^^^^^^
 
     if (guard) {
 >guard : boolean
+>      : ^^^^^^^
 
         for (;;) {
             value;  // number
 >value : number
+>      : ^^^^^^
         }
     }
     else {
         while (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
             value;  // string
 >value : string
+>      : ^^^^^^
         }
     }
+}
+
+// Repro from #52152
+
+interface ClientEvents {
+    warn: [message: string];
+>warn : [message: string]
+>     : ^^^^^^^^^^^^^^^^^
+
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+>shardDisconnect : [closeEvent: CloseEvent, shardId: number]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+  
+declare class Client {
+>Client : Client
+>       : ^^^^^^
+
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>event : K
+>      : ^
+>listener : (...args: ClientEvents[K]) => void
+>         : ^^^^    ^^               ^^^^^    
+>args : ClientEvents[K]
+>     : ^^^^^^^^^^^^^^^
+}
+
+const bot = new Client();
+>bot : Client
+>    : ^^^^^^
+>new Client() : Client
+>             : ^^^^^^
+>Client : typeof Client
+>       : ^^^^^^^^^^^^^
+
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+>bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`)) : void
+>                                                                                                                                           : ^^^^
+>bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>       : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>bot : Client
+>    : ^^^^^^
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>"shardDisconnect" : "shardDisconnect"
+>                  : ^^^^^^^^^^^^^^^^^
+>(event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : (event: CloseEvent, shard: number) => void
+>                                                                                                                : ^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>event : CloseEvent
+>      : ^^^^^^^^^^
+>shard : number
+>      : ^^^^^^
+>console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : void
+>                                                                                              : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}` : string
+>                                                                                 : ^^^^^^
+>shard : number
+>      : ^^^^^^
+>event.code : number
+>           : ^^^^^^
+>event : CloseEvent
+>      : ^^^^^^^^^^
+>code : number
+>     : ^^^^^^
+>event.wasClean : boolean
+>               : ^^^^^^^
+>event : CloseEvent
+>      : ^^^^^^^^^^
+>wasClean : boolean
+>         : ^^^^^^^
+>event.reason : string
+>             : ^^^^^^
+>event : CloseEvent
+>      : ^^^^^^^^^^
+>reason : string
+>       : ^^^^^^
+
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+>bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`)) : void
+>                                                                                                   : ^^^^
+>bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>       : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>bot : Client
+>    : ^^^^^^
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>"shardDisconnect" : "shardDisconnect"
+>                  : ^^^^^^^^^^^^^^^^^
+>event => console.log(`${event.code} ${event.wasClean} ${event.reason}`) : (event: CloseEvent) => void
+>                                                                        : ^     ^^^^^^^^^^^^^^^^^^^^^
+>event : CloseEvent
+>      : ^^^^^^^^^^
+>console.log(`${event.code} ${event.wasClean} ${event.reason}`) : void
+>                                                               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>`${event.code} ${event.wasClean} ${event.reason}` : string
+>                                                  : ^^^^^^
+>event.code : number
+>           : ^^^^^^
+>event : CloseEvent
+>      : ^^^^^^^^^^
+>code : number
+>     : ^^^^^^
+>event.wasClean : boolean
+>               : ^^^^^^^
+>event : CloseEvent
+>      : ^^^^^^^^^^
+>wasClean : boolean
+>         : ^^^^^^^
+>event.reason : string
+>             : ^^^^^^
+>event : CloseEvent
+>      : ^^^^^^^^^^
+>reason : string
+>       : ^^^^^^
+
+// Destructuring tuple types with different arities
+
+function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+>fz1 : ([x, y]: [1, 2] | [3, 4] | [5]) => void
+>    : ^      ^^                     ^^^^^^^^^
+>x : 1 | 3 | 5
+>  : ^^^^^^^^^
+>y : 2 | 4 | undefined
+>  : ^^^^^^^^^^^^^^^^^
+
+    if (y === 2) {
+>y === 2 : boolean
+>        : ^^^^^^^
+>y : 2 | 4 | undefined
+>  : ^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+
+        x;  // 1
+>x : 1
+>  : ^
+    }
+    if (y === 4) {
+>y === 4 : boolean
+>        : ^^^^^^^
+>y : 2 | 4 | undefined
+>  : ^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+
+        x;  // 3
+>x : 3
+>  : ^
+    }
+    if (y === undefined) {
+>y === undefined : boolean
+>                : ^^^^^^^
+>y : 2 | 4 | undefined
+>  : ^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        x;  // 5
+>x : 5
+>  : ^
+    }
+    if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : 1 | 3 | 5
+>  : ^^^^^^^^^
+>1 : 1
+>  : ^
+
+        y;  // 2
+>y : 2
+>  : ^
+    }
+    if (x === 3) {
+>x === 3 : boolean
+>        : ^^^^^^^
+>x : 1 | 3 | 5
+>  : ^^^^^^^^^
+>3 : 3
+>  : ^
+
+        y;  // 4
+>y : 4
+>  : ^
+    }
+    if (x === 5) {
+>x === 5 : boolean
+>        : ^^^^^^^
+>x : 1 | 3 | 5
+>  : ^^^^^^^^^
+>5 : 5
+>  : ^
+
+        y;  // undefined
+>y : undefined
+>  : ^^^^^^^^^
+    }
+}
+
+// Repro from #55661
+
+function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+>tooNarrow : ([x, y]: [1, 1] | [1, 2] | [1]) => void
+>          : ^      ^^                     ^^^^^^^^^
+>x : 1
+>  : ^
+>y : 2 | 1 | undefined
+>  : ^^^^^^^^^^^^^^^^^
+
+    if (y === undefined) {
+>y === undefined : boolean
+>                : ^^^^^^^
+>y : 2 | 1 | undefined
+>  : ^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        const shouldNotBeOk: never = x;  // Error
+>shouldNotBeOk : never
+>              : ^^^^^
+>x : 1
+>  : ^
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/56312
+
+function parameterReassigned1([x, y]: [1, 2] | [3, 4]) {
+>parameterReassigned1 : ([x, y]: [1, 2] | [3, 4]) => void
+>                     : ^      ^^               ^^^^^^^^^
+>x : 1 | 3
+>  : ^^^^^
+>y : 2 | 4
+>  : ^^^^^
+
+  if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    x = 1;
+>x = 1 : 1
+>      : ^
+>x : 1 | 3
+>  : ^^^^^
+>1 : 1
+>  : ^
+  }
+  if (y === 2) {
+>y === 2 : boolean
+>        : ^^^^^^^
+>y : 2 | 4
+>  : ^^^^^
+>2 : 2
+>  : ^
+
+    x; // 1 | 3
+>x : 1 | 3
+>  : ^^^^^
+  }
+}
+
+function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
+>parameterReassigned2 : ([x, y]: [1, 2] | [3, 4]) => void
+>                     : ^      ^^               ^^^^^^^^^
+>x : 1 | 3
+>  : ^^^^^
+>y : 2 | 4
+>  : ^^^^^
+
+  if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    y = 2;
+>y = 2 : 2
+>      : ^
+>y : 2 | 4
+>  : ^^^^^
+>2 : 2
+>  : ^
+  }
+  if (y === 2) {
+>y === 2 : boolean
+>        : ^^^^^^^
+>y : 2 | 4
+>  : ^^^^^
+>2 : 2
+>  : ^
+
+    x; // 1 | 3
+>x : 1 | 3
+>  : ^^^^^
+  }
+}
+
+// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
+
+const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (x, y) => {
+>parameterReassignedContextualRest1 : (...args: [1, 2] | [3, 4]) => void
+>                                   : ^^^^    ^^               ^^^^^    
+>args : [1, 2] | [3, 4]
+>     : ^^^^^^^^^^^^^^^
+>(x, y) => {  if (Math.random()) {    y = 2;  }  if (y === 2) {    x; // 1 | 3  }} : (x: 1 | 3, y: 2 | 4) => void
+>                                                                                  : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>x : 1 | 3
+>  : ^^^^^
+>y : 2 | 4
+>  : ^^^^^
+
+  if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    y = 2;
+>y = 2 : 2
+>      : ^
+>y : 2 | 4
+>  : ^^^^^
+>2 : 2
+>  : ^
+  }
+  if (y === 2) {
+>y === 2 : boolean
+>        : ^^^^^^^
+>y : 2 | 4
+>  : ^^^^^
+>2 : 2
+>  : ^
+
+    x; // 1 | 3
+>x : 1 | 3
+>  : ^^^^^
+  }
 }
 

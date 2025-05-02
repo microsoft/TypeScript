@@ -1,0 +1,24 @@
+index.js(1,25): error TS7006: Parameter 'f' implicitly has an 'any' type.
+index.js(13,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[f?: any, ...any[]]'.
+
+
+==== index.js (2 errors) ====
+    const format = function(f) {
+                            ~
+!!! error TS7006: Parameter 'f' implicitly has an 'any' type.
+      var str = '';
+      var i = 1;
+      var args = arguments;
+      var len = args.length;
+      for (var x = args[i]; i < len; x = args[++i]) {
+        str += ' ' + x;
+      }
+      return str;
+    };
+    
+    const debuglog = function() {
+      return format.apply(null, arguments);
+                                ~~~~~~~~~
+!!! error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[f?: any, ...any[]]'.
+    };
+    

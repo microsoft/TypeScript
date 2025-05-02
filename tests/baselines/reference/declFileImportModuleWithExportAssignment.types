@@ -1,22 +1,28 @@
-=== tests/cases/compiler/declFileImportModuleWithExportAssignment_1.ts ===
+//// [tests/cases/compiler/declFileImportModuleWithExportAssignment.ts] ////
+
+=== declFileImportModuleWithExportAssignment_1.ts ===
 /**This is on import declaration*/
 import a1 = require("./declFileImportModuleWithExportAssignment_0");
 >a1 : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export var a = a1;
 >a : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 a.test1(null, null, null);
 >a.test1(null, null, null) : void
+>                          : ^^^^
 >a.test1 : a1.connectModule
+>        : ^^^^^^^^^^^^^^^^
 >a : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test1 : a1.connectModule
->null : null
->null : null
->null : null
+>      : ^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/declFileImportModuleWithExportAssignment_0.ts ===
+=== declFileImportModuleWithExportAssignment_0.ts ===
 module m2 {
     export interface connectModule {
         (res, req, next): void;
@@ -27,29 +33,40 @@ module m2 {
     export interface connectExport {
         use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
+>    : ^   ^^             ^^^^^             
 >mod : connectModule
+>    : ^^^^^^^^^^^^^
 
         listen: (port: number) => void;
 >listen : (port: number) => void
+>       : ^    ^^      ^^^^^    
 >port : number
+>     : ^^^^^^
     }
 
 }
 var m2: {
 >m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
+>   : ^^^^^^                ^^^^^^^^^                ^^^^^^^^^^^                ^^^
 
     (): m2.connectExport;
 >m2 : any
+>   : ^^^
 
     test1: m2.connectModule;
 >test1 : m2.connectModule
+>      : ^^^^^^^^^^^^^^^^
 >m2 : any
+>   : ^^^
 
     test2(): m2.connectModule;
 >test2 : () => m2.connectModule
+>      : ^^^^^^                
 >m2 : any
+>   : ^^^
 
 };
 export = m2;
 >m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
+>   : ^^^^^^                ^^^^^^^^^                ^^^^^^^^^^^                ^^^
 

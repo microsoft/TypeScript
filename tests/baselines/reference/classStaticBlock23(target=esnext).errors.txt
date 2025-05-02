@@ -1,15 +1,15 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts(5,9): error TS18038: 'For await' loops cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts(14,11): error TS18038: 'For await' loops cannot be used inside a class static block.
+classStaticBlock23.ts(5,9): error TS18038: 'for await' loops cannot be used inside a class static block.
+classStaticBlock23.ts(14,11): error TS18038: 'for await' loops cannot be used inside a class static block.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts (2 errors) ====
+==== classStaticBlock23.ts (2 errors) ====
     const nums = [1, 2, 3].map(n => Promise.resolve(n))
     
     class C {
       static {
         for await (const nn of nums) {
             ~~~~~
-!!! error TS18038: 'For await' loops cannot be used inside a class static block.
+!!! error TS18038: 'for await' loops cannot be used inside a class static block.
             console.log(nn)
         }
       }
@@ -20,7 +20,7 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts(14,11): e
         static {
           for await (const nn of nums) {
               ~~~~~
-!!! error TS18038: 'For await' loops cannot be used inside a class static block.
+!!! error TS18038: 'for await' loops cannot be used inside a class static block.
               console.log(nn)
           }
         }

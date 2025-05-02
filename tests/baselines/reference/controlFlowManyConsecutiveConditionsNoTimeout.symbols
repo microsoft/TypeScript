@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowManyConsecutiveConditionsNoTimeout.ts ===
+//// [tests/cases/compiler/controlFlowManyConsecutiveConditionsNoTimeout.ts] ////
+
+=== controlFlowManyConsecutiveConditionsNoTimeout.ts ===
 export enum Choice {
 >Choice : Symbol(Choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 0))
 

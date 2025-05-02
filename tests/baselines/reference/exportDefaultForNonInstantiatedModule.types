@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultForNonInstantiatedModule.ts ===
+//// [tests/cases/compiler/exportDefaultForNonInstantiatedModule.ts] ////
+
+=== exportDefaultForNonInstantiatedModule.ts ===
 module m {
     export interface foo {
     }
@@ -6,4 +8,5 @@ module m {
 // Should not be emitted
 export default m;
 >m : any
+>  : ^^^
 

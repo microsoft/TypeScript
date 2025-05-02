@@ -1,29 +1,48 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/jsExportAssignmentNonMutableLocation.ts] ////
+
+=== file.js ===
 const customSymbol = Symbol("custom");
 >customSymbol : unique symbol
+>             : ^^^^^^^^^^^^^
 >Symbol("custom") : unique symbol
+>                 : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"custom" : "custom"
+>         : ^^^^^^^^
 
 // This is a common pattern in Node’s built-in modules:
 module.exports = {
 >module.exports = {    customSymbol,} : typeof module.exports
+>                                     : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{    customSymbol,} : { customSymbol: symbol; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     customSymbol,
 >customSymbol : symbol
+>             : ^^^^^^
 
 };
 
 exports.customSymbol2 = Symbol("custom");
 >exports.customSymbol2 = Symbol("custom") : unique symbol
+>                                         : ^^^^^^^^^^^^^
 >exports.customSymbol2 : unique symbol
->exports : typeof import("tests/cases/compiler/file")
+>                      : ^^^^^^^^^^^^^
+>exports : typeof import("file")
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >customSymbol2 : unique symbol
+>              : ^^^^^^^^^^^^^
 >Symbol("custom") : unique symbol
+>                 : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"custom" : "custom"
+>         : ^^^^^^^^
 

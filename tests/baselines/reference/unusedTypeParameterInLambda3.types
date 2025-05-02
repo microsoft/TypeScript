@@ -1,12 +1,18 @@
-=== tests/cases/compiler/unusedTypeParameterInLambda3.ts ===
+//// [tests/cases/compiler/unusedTypeParameterInLambda3.ts] ////
+
+=== unusedTypeParameterInLambda3.ts ===
 class A<T> {
 >A : A<T>
+>  : ^^^^
 
     public x: T;
 >x : T
+>  : ^
 }
 
 var y: new <T,U>(a:T)=>void;
 >y : new <T, U>(a: T) => void
+>  : ^^^^^ ^^ ^^ ^^ ^^^^^    
 >a : T
+>  : ^
 

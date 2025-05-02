@@ -1,12 +1,12 @@
-tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(4,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
-tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(8,14): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
-tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(27,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
-tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(37,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+invalidWhileBreakStatements.ts(4,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
+invalidWhileBreakStatements.ts(8,14): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+invalidWhileBreakStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
+invalidWhileBreakStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
+invalidWhileBreakStatements.ts(27,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+invalidWhileBreakStatements.ts(37,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 
 
-==== tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts (6 errors) ====
+==== invalidWhileBreakStatements.ts (6 errors) ====
     // All errors
     
     // naked break not allowed

@@ -1,10 +1,16 @@
+//// [tests/cases/conformance/jsdoc/jsdocAugments_errorInExtendsExpression.ts] ////
+
 === /a.js ===
 class A {}
 >A : A
+>  : ^
 
 /** @augments A */
 class B extends err() {}
 >B : B
+>  : ^
 >err() : A
+>      : ^
 >err : any
+>    : ^^^
 

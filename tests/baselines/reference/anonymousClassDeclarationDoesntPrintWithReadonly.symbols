@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anonymousClassDeclarationDoesntPrintWithReadonly.ts ===
+//// [tests/cases/compiler/anonymousClassDeclarationDoesntPrintWithReadonly.ts] ////
+
+=== anonymousClassDeclarationDoesntPrintWithReadonly.ts ===
 export class X {
 >X : Symbol(X, Decl(anonymousClassDeclarationDoesntPrintWithReadonly.ts, 0, 0))
 

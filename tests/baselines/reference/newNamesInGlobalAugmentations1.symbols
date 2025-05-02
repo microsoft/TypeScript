@@ -1,4 +1,6 @@
-=== tests/cases/compiler/f1.d.ts ===
+//// [tests/cases/compiler/newNamesInGlobalAugmentations1.ts] ////
+
+=== f1.d.ts ===
 export {};
 
 declare module M.M1 {
@@ -32,7 +34,7 @@ declare global {
 >x : Symbol(X, Decl(f1.d.ts, 3, 14))
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 Symbol.observable;
 >Symbol.observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

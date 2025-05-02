@@ -1,10 +1,14 @@
-=== tests/cases/compiler/importedModuleClassNameClash.ts ===
+//// [tests/cases/compiler/importedModuleClassNameClash.ts] ////
+
+=== importedModuleClassNameClash.ts ===
 import foo = m1;
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >m1 : error
  
 export module m1 { }
  
 class foo { }
 >foo : foo
+>    : ^^^
 

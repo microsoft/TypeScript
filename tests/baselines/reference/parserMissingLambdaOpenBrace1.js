@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts] ////
+
 //// [parserMissingLambdaOpenBrace1.ts]
 class C {
     where(filter: Iterator<T, boolean>): Query<T> {

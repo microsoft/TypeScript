@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticInheritance.ts ===
+//// [tests/cases/compiler/staticInheritance.ts] ////
+
+=== staticInheritance.ts ===
 function doThing(x: { n: string }) { }
 >doThing : Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
 >x : Symbol(x, Decl(staticInheritance.ts, 0, 17))

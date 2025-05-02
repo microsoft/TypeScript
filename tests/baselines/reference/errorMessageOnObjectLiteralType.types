@@ -1,24 +1,36 @@
-=== tests/cases/compiler/errorMessageOnObjectLiteralType.ts ===
+//// [tests/cases/compiler/errorMessageOnObjectLiteralType.ts] ////
+
+=== errorMessageOnObjectLiteralType.ts ===
 var x: {
 >x : { a: string; b: number; }
+>  : ^^^^^      ^^^^^      ^^^
 
     a: string;
 >a : string
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 
 };
 x.getOwnPropertyNamess();
 >x.getOwnPropertyNamess() : any
+>                         : ^^^
 >x.getOwnPropertyNamess : any
+>                       : ^^^
 >x : { a: string; b: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >getOwnPropertyNamess : any
+>                     : ^^^
 
 Object.getOwnPropertyNamess(null);
 >Object.getOwnPropertyNamess(null) : any
+>                                  : ^^^
 >Object.getOwnPropertyNamess : any
+>                            : ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >getOwnPropertyNamess : any
->null : null
+>                     : ^^^
 

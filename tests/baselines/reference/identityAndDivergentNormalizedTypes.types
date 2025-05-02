@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/identityAndDivergentNormalizedTypes.ts] ////
+
+=== identityAndDivergentNormalizedTypes.ts ===
+// Repros from #53998
+
+type ApiPost =
+>ApiPost : ApiPost
+>        : ^^^^^^^
+
+    | {
+        path: "/login";
+>path : "/login"
+>     : ^^^^^^^^
+
+        body: {};
+>body : {}
+>     : ^^
+    }
+    | {
+        path: "/user";
+>path : "/user"
+>     : ^^^^^^^
+
+        body: { name: string; };
+>body : { name: string; }
+>     : ^^^^^^^^      ^^^
+>name : string
+>     : ^^^^^^
+    }
+
+type PostPath = ApiPost["path"];
+>PostPath : "/login" | "/user"
+>         : ^^^^^^^^^^^^^^^^^^
+
+type PostBody<PATH extends PostPath> = Extract<ApiPost, { path: PATH }>["body"];
+>PostBody : PostBody<PATH>
+>         : ^^^^^^^^^^^^^^
+>path : PATH
+>     : ^^^^
+
+const post = <PATH extends PostPath>(
+>post : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
+>     : ^    ^^^^^^^^^        ^^    ^^    ^^                    ^^                                                     ^^^^^^^^^
+><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
+>                                                                                                                         : ^    ^^^^^^^^^        ^^    ^^    ^^                    ^^                                                     ^^^^^^^^^
+
+    path: PATH,
+>path : PATH
+>     : ^^^^
+
+    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}
+>body : PostBody<PATH>
+>     : ^^^^^^^^^^^^^^
+>options : { cache?: RequestCache | undefined; credentials?: RequestCredentials | undefined; headers?: HeadersInit | undefined; integrity?: string | undefined; keepalive?: boolean | undefined; method?: string | undefined; mode?: RequestMode | undefined; priority?: RequestPriority | undefined; redirect?: RequestRedirect | undefined; referrer?: string | undefined; referrerPolicy?: ReferrerPolicy | undefined; signal?: (AbortSignal | null) | undefined; window?: null | undefined; }
+>        : ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>body : PostBody<PATH>
+>     : ^^^^^^^^^^^^^^
+
+) => {
+}
+
+const tmp = <PATH extends PostPath>(
+>tmp : <PATH extends PostPath>(path: PATH, body: PostBody<PATH>) => void
+>    : ^    ^^^^^^^^^        ^^    ^^    ^^    ^^              ^^^^^^^^^
+><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends PostPath>(path: PATH, body: PostBody<PATH>) => void
+>                                                                                               : ^    ^^^^^^^^^        ^^    ^^    ^^    ^^              ^^^^^^^^^
+
+  path: PATH,
+>path : PATH
+>     : ^^^^
+
+  body: PostBody<PATH>
+>body : PostBody<PATH>
+>     : ^^^^^^^^^^^^^^
+
+) => {
+  post<PATH>(path, { body })
+>post<PATH>(path, { body }) : void
+>                           : ^^^^
+>post : <PATH_1 extends PostPath>(path: PATH_1, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH_1>; }) => void
+>     : ^^^^^^^^^^^^^^^^        ^^    ^^      ^^                    ^^                                                       ^^^^^^^^^
+>path : PATH
+>     : ^^^^
+>{ body } : { body: PostBody<PATH>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>body : PostBody<PATH>
+>     : ^^^^^^^^^^^^^^
+}
+
+function fx1<P extends PostPath>(x: { body: PostBody<P> }, y: { body: PostBody<P> }) {
+>fx1 : <P extends PostPath>(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void
+>    : ^ ^^^^^^^^^        ^^ ^^                      ^^ ^^                      ^^^^^^^^^
+>x : { body: PostBody<P>; }
+>  : ^^^^^^^^           ^^^
+>body : PostBody<P>
+>     : ^^^^^^^^^^^
+>y : { body: PostBody<P>; }
+>  : ^^^^^^^^           ^^^
+>body : PostBody<P>
+>     : ^^^^^^^^^^^
+
+    x = y;
+>x = y : { body: PostBody<P>; }
+>      : ^^^^^^^^           ^^^
+>x : { body: PostBody<P>; }
+>  : ^^^^^^^^           ^^^
+>y : { body: PostBody<P>; }
+>  : ^^^^^^^^           ^^^
+}
+

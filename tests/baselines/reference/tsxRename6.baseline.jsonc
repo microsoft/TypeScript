@@ -1,0 +1,87 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: string
+//     optional?: boolean
+// }
+// <|declare function /*RENAME*/[|OptRENAME|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <|<[|OptRENAME|] />|>;
+// let opt1 = <|<[|OptRENAME|] propx={100} propString />|>;
+// let opt2 = <|<[|OptRENAME|] propx={100} optional/>|>;
+// let opt3 = <|<[|OptRENAME|] wrong />|>;
+// let opt4 = <|<[|OptRENAME|] propx={100} propString="hi" />|>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: string
+//     optional?: boolean
+// }
+// <|declare function [|OptRENAME|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <|</*RENAME*/[|OptRENAME|] />|>;
+// let opt1 = <|<[|OptRENAME|] propx={100} propString />|>;
+// let opt2 = <|<[|OptRENAME|] propx={100} optional/>|>;
+// let opt3 = <|<[|OptRENAME|] wrong />|>;
+// let opt4 = <|<[|OptRENAME|] propx={100} propString="hi" />|>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: string
+//     optional?: boolean
+// }
+// <|declare function [|OptRENAME|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <|<[|OptRENAME|] />|>;
+// let opt1 = <|</*RENAME*/[|OptRENAME|] propx={100} propString />|>;
+// let opt2 = <|<[|OptRENAME|] propx={100} optional/>|>;
+// let opt3 = <|<[|OptRENAME|] wrong />|>;
+// let opt4 = <|<[|OptRENAME|] propx={100} propString="hi" />|>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: string
+//     optional?: boolean
+// }
+// <|declare function [|OptRENAME|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <|<[|OptRENAME|] />|>;
+// let opt1 = <|<[|OptRENAME|] propx={100} propString />|>;
+// let opt2 = <|</*RENAME*/[|OptRENAME|] propx={100} optional/>|>;
+// let opt3 = <|<[|OptRENAME|] wrong />|>;
+// let opt4 = <|<[|OptRENAME|] propx={100} propString="hi" />|>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: string
+//     optional?: boolean
+// }
+// <|declare function [|OptRENAME|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <|<[|OptRENAME|] />|>;
+// let opt1 = <|<[|OptRENAME|] propx={100} propString />|>;
+// let opt2 = <|<[|OptRENAME|] propx={100} optional/>|>;
+// let opt3 = <|</*RENAME*/[|OptRENAME|] wrong />|>;
+// let opt4 = <|<[|OptRENAME|] propx={100} propString="hi" />|>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: string
+//     optional?: boolean
+// }
+// <|declare function [|OptRENAME|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <|<[|OptRENAME|] />|>;
+// let opt1 = <|<[|OptRENAME|] propx={100} propString />|>;
+// let opt2 = <|<[|OptRENAME|] propx={100} optional/>|>;
+// let opt3 = <|<[|OptRENAME|] wrong />|>;
+// let opt4 = <|</*RENAME*/[|OptRENAME|] propx={100} propString="hi" />|>;

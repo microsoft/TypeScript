@@ -1,18 +1,23 @@
-=== tests/cases/compiler/test1.d.ts ===
+//// [tests/cases/compiler/importUsedInGenericImportResolves.ts] ////
+
+=== test1.d.ts ===
 export interface T<P> {
     a: P;
 >a : P
+>  : ^
 }
 
-=== tests/cases/compiler/test2.d.ts ===
+=== test2.d.ts ===
 export declare const theme: { a: string }
 >theme : { a: string; }
+>      : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
-=== tests/cases/compiler/test3.ts ===
+=== test3.ts ===
 export const a: import("./test1").T<typeof import("./test2").theme> = null as any;
->a : import("tests/cases/compiler/test1").T<{ a: string; }>
+>a : import("test1").T<{ a: string; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >theme : error
 >null as any : any
->null : null
 

@@ -1,107 +1,152 @@
-=== tests/cases/conformance/types/primitives/undefined/invalidUndefinedValues.ts ===
+//// [tests/cases/conformance/types/primitives/undefined/invalidUndefinedValues.ts] ////
+
+=== invalidUndefinedValues.ts ===
 var x: typeof undefined;
 >x : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
 x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
 
 x = '';
 >x = '' : ""
+>       : ^^
 >x : any
 >'' : ""
+>   : ^^
 
 x = true;
 >x = true : true
+>         : ^^^^
 >x : any
 >true : true
+>     : ^^^^
 
 var a: void;
 >a : void
+>  : ^^^^
 
 x = a;
 >x = a : void
+>      : ^^^^
 >x : any
 >a : void
+>  : ^^^^
 
 x = null;
 >x = null : null
+>         : ^^^^
 >x : any
->null : null
 
 class C { foo: string }
 >C : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 var b: C;
 >b : C
+>  : ^
 
 x = C;
 >x = C : typeof C
+>      : ^^^^^^^^
 >x : any
 >C : typeof C
+>  : ^^^^^^^^
 
 x = b;
 >x = b : C
+>      : ^
 >x : any
 >b : C
+>  : ^
 
 interface I { foo: string }
 >foo : string
+>    : ^^^^^^
 
 var c: I;
 >c : I
+>  : ^
 
 x = c;
 >x = c : I
+>      : ^
 >x : any
 >c : I
+>  : ^
 
 module M { export var x = 1; }
 >M : typeof M
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 x = M;
 >x = M : typeof M
+>      : ^^^^^^^^
 >x : any
 >M : typeof M
+>  : ^^^^^^^^
 
 x = { f() { } }
 >x = { f() { } } : { f(): void; }
+>                : ^^^^^^^^^^^^^^
 >x : any
 >{ f() { } } : { f(): void; }
+>            : ^^^^^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
 function f<T>(a: T) {
 >f : <T>(a: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
     x = a;
 >x = a : T
+>      : ^
 >x : any
 >a : T
+>  : ^
 }
 x = f;
 >x = f : <T>(a: T) => void
+>      : ^ ^^ ^^ ^^^^^^^^^
 >x : any
 >f : <T>(a: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 x = E;
 >x = E : typeof E
+>      : ^^^^^^^^
 >x : any
 >E : typeof E
+>  : ^^^^^^^^
 
 x = E.A;
 >x = E.A : E
+>        : ^
 >x : any
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 

@@ -1,231 +1,153 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts ===
-// /*FIND ALL REFS*/type [|Alias|]= number;
+// /*FIND ALL REFS*/<|type [|{| isWriteAccess: true, isDefinition: true |}Alias|]= number;|>
 // let n: [|Alias|] = 12;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-      "kind": "type",
-      "name": "type Alias = number",
-      "textSpan": {
-        "start": 5,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Alias",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts ===
+  // /*FIND ALL REFS*/<|type [|Alias|]= number;|>
+  // let n: Alias = 12;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Alias = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Alias",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts ===
-// type /*FIND ALL REFS*/[|Alias|]= number;
+// <|type /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Alias|]= number;|>
 // let n: [|Alias|] = 12;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-      "kind": "type",
-      "name": "type Alias = number",
-      "textSpan": {
-        "start": 5,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Alias",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts ===
+  // <|type /*FIND ALL REFS*/[|Alias|]= number;|>
+  // let n: Alias = 12;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Alias = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Alias",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts ===
-// type [|Alias|]= number;
+// <|type [|{| isWriteAccess: true |}Alias|]= number;|>
 // let n: /*FIND ALL REFS*/[|Alias|] = 12;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-      "kind": "type",
-      "name": "type Alias = number",
-      "textSpan": {
-        "start": 5,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Alias",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts ===
+  // <|type [|Alias|]= number;|>
+  // let n: /*FIND ALL REFS*/Alias = 12;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Alias = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Alias",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

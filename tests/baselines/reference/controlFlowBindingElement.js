@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowBindingElement.ts] ////
+
 //// [controlFlowBindingElement.ts]
 {
     const data =  { param: 'value' };

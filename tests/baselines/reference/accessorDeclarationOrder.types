@@ -1,76 +1,112 @@
-=== tests/cases/compiler/accessorDeclarationOrder.ts ===
+//// [tests/cases/compiler/accessorDeclarationOrder.ts] ////
+
+=== accessorDeclarationOrder.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     #name: string;
 >#name : string
+>      : ^^^^^^
 
     public get name() {
 >name : string
+>     : ^^^^^^
 
         return this.#name;
 >this.#name : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
     }
 
     private set name(name: string) {
 >name : string
+>     : ^^^^^^
 >name : string
+>     : ^^^^^^
 
         this.#name = name;
 >this.#name = name : string
+>                  : ^^^^^^
 >this.#name : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >name : string
+>     : ^^^^^^
     }
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     #name: string;
 >#name : string
+>      : ^^^^^^
 
     private set name(name: string) {
 >name : string
+>     : ^^^^^^
 >name : string
+>     : ^^^^^^
 
         this.#name = name;
 >this.#name = name : string
+>                  : ^^^^^^
 >this.#name : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >name : string
+>     : ^^^^^^
     }
 
     public get name() {
 >name : string
+>     : ^^^^^^
 
         return this.#name;
 >this.#name : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 const c1 = new C1();
 >c1 : C1
+>   : ^^
 >new C1() : C1
+>         : ^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
 const c2 = new C2();
 >c2 : C2
+>   : ^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 
 // no error
 c1.name;
 >c1.name : string
+>        : ^^^^^^
 >c1 : C1
+>   : ^^
 >name : string
+>     : ^^^^^^
 
 // no error
 c2.name;
 >c2.name : string
+>        : ^^^^^^
 >c2 : C2
+>   : ^^
 >name : string
+>     : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeofFunction.ts] ////
+
 //// [declFileTypeofFunction.ts]
 function f(n: typeof f): string;
 function f(n: typeof g): string;
@@ -68,6 +70,6 @@ declare function b1(): typeof b1;
 declare function foo(): typeof foo;
 declare var foo1: typeof foo;
 declare var foo2: typeof foo;
-declare var foo3: () => any;
-declare var x: () => any;
+declare var foo3: () => () => /*elided*/ any;
+declare var x: () => () => /*elided*/ any;
 declare function foo5(x: number): (x: number) => number;

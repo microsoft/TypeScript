@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/inexistentPropertyInsideToStringType.ts] ////
+
+=== index.js ===
+function toString() {
+>toString : Symbol(toString, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))
+
+    this.yadda
+>this : Symbol(toString, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))
+
+    this.someValue = "";
+>this.someValue : Symbol(toString.someValue, Decl(index.js, 1, 14))
+>this : Symbol(toString, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))
+>someValue : Symbol(toString.someValue, Decl(index.js, 1, 14))
+}

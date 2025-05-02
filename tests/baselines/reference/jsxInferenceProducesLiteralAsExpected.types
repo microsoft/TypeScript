@@ -1,55 +1,90 @@
-=== tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx ===
+//// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
+
+=== Performance Stats ===
+Type Count: 2,500
+Instantiation count: 2,500
+
+=== jsxInferenceProducesLiteralAsExpected.tsx ===
 import React = require("react");
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 >FunctionPropertyNames : FunctionPropertyNames<T>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 class TestObject {
 >TestObject : TestObject
+>           : ^^^^^^^^^^
 
     a: string = '';
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
     b: number = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     c: () => void = () => { };
 >c : () => void
+>  : ^^^^^^    
 >() => { } : () => void
+>          : ^^^^^^^^^^
 }
 interface TestProps<T> {
     model: T;
 >model : T
+>      : ^
 
     foo: FunctionPropertyNames<T>;
 >foo : FunctionPropertyNames<T>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 function Test<T>(props: TestProps<T>) { return <></>; }
 >Test : <T>(props: TestProps<T>) => JSX.Element
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >props : TestProps<T>
+>      : ^^^^^^^^^^^^
 ><></> : JSX.Element
+>      : ^^^^^^^^^^^
 
 const model = new TestObject();
 >model : TestObject
+>      : ^^^^^^^^^^
 >new TestObject() : TestObject
+>                 : ^^^^^^^^^^
 >TestObject : typeof TestObject
+>           : ^^^^^^^^^^^^^^^^^
 
 const el1 = <Test model={model} foo="c" />;
 >el1 : JSX.Element
+>    : ^^^^^^^^^^^
 ><Test model={model} foo="c" /> : JSX.Element
+>                               : ^^^^^^^^^^^
 >Test : <T>(props: TestProps<T>) => JSX.Element
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >model : TestObject
+>      : ^^^^^^^^^^
 >model : TestObject
+>      : ^^^^^^^^^^
 >foo : "c"
+>    : ^^^
 
 const el2 = <Test<TestObject> model={model} foo="c" />;
 >el2 : JSX.Element
+>    : ^^^^^^^^^^^
 ><Test<TestObject> model={model} foo="c" /> : JSX.Element
+>                                           : ^^^^^^^^^^^
 >Test : <T>(props: TestProps<T>) => JSX.Element
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >model : TestObject
+>      : ^^^^^^^^^^
 >model : TestObject
+>      : ^^^^^^^^^^
 >foo : "c"
+>    : ^^^
 

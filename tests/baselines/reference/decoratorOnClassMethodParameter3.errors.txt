@@ -1,7 +1,7 @@
-tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter3.ts(5,23): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+decoratorOnClassMethodParameter3.ts(5,23): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 
 
-==== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter3.ts (1 errors) ====
+==== decoratorOnClassMethodParameter3.ts (1 errors) ====
     // https://github.com/microsoft/TypeScript/issues/48509
     declare function dec(a: any): any;
     function fn(value: Promise<number>): any {

@@ -1,132 +1,227 @@
-=== tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx ===
+//// [tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx] ////
+
+=== booleanLiteralsContextuallyTypedFromUnion.tsx ===
 interface A { isIt: true; text: string; }
 >isIt : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >text : string
+>     : ^^^^^^
 
 interface B { isIt: false; value: number; }
 >isIt : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 >value : number
+>      : ^^^^^^
 
 type C = A | B;
->C : A | B
+>C : C
+>  : ^
 
 const isIt = Math.random() > 0.5;
 >isIt : boolean
+>     : ^^^^^^^
 >Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >0.5 : 0.5
+>    : ^^^
 
 const c: C = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
 >c : C
+>  : ^
 >isIt ? { isIt, text: 'hey' } : { isIt, value: 123 } : { isIt: true; text: string; } | { isIt: false; value: number; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isIt : boolean
+>     : ^^^^^^^
 >{ isIt, text: 'hey' } : { isIt: true; text: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isIt : true
+>     : ^^^^
 >text : string
+>     : ^^^^^^
 >'hey' : "hey"
+>      : ^^^^^
 >{ isIt, value: 123 } : { isIt: false; value: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isIt : false
+>     : ^^^^^
 >value : number
+>      : ^^^^^^
 >123 : 123
+>    : ^^^
 
 const cc: C = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };
 >cc : C
+>   : ^
 >isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 } : { isIt: true; text: string; } | { isIt: false; value: number; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isIt : boolean
+>     : ^^^^^^^
 >{ isIt: isIt, text: 'hey' } : { isIt: true; text: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isIt : true
+>     : ^^^^
 >isIt : true
+>     : ^^^^
 >text : string
+>     : ^^^^^^
 >'hey' : "hey"
+>      : ^^^^^
 >{ isIt: isIt, value: 123 } : { isIt: false; value: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isIt : false
+>     : ^^^^^
 >isIt : false
+>     : ^^^^^
 >value : number
+>      : ^^^^^^
 >123 : 123
+>    : ^^^
 
 type ComponentProps =
->ComponentProps : { optionalBool: true; mandatoryFn: () => void; } | { optionalBool: false; }
+>ComponentProps : ComponentProps
+>               : ^^^^^^^^^^^^^^
 
     | {
         optionalBool: true;
 >optionalBool : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 
         mandatoryFn: () => void;
 >mandatoryFn : () => void
+>            : ^^^^^^    
     }
     | {
         optionalBool: false;
 >optionalBool : false
+>             : ^^^^^
 >false : false
+>      : ^^^^^
 
     };
 
 let Funk = (_props: ComponentProps) => <div>Hello</div>;
 >Funk : (_props: ComponentProps) => JSX.Element
+>     : ^      ^^              ^^^^^^^^^^^^^^^^
 >(_props: ComponentProps) => <div>Hello</div> : (_props: ComponentProps) => JSX.Element
+>                                             : ^      ^^              ^^^^^^^^^^^^^^^^
 >_props : ComponentProps
+>       : ^^^^^^^^^^^^^^
 ><div>Hello</div> : JSX.Element
+>                 : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
 >Fail1 : () => JSX.Element
+>      : ^^^^^^^^^^^^^^^^^
 >() => <Funk mandatoryFn={() => { }} optionalBool={true} /> : () => JSX.Element
+>                                                           : ^^^^^^^^^^^^^^^^^
 ><Funk mandatoryFn={() => { }} optionalBool={true} /> : JSX.Element
+>                                                     : ^^^^^^^^^^^
 >Funk : (_props: ComponentProps) => JSX.Element
+>     : ^      ^^              ^^^^^^^^^^^^^^^^
 >mandatoryFn : () => void
+>            : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 >optionalBool : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 
 let Fail2 = () => <Funk mandatoryFn={() => { }} optionalBool={true as true} />
 >Fail2 : () => JSX.Element
+>      : ^^^^^^^^^^^^^^^^^
 >() => <Funk mandatoryFn={() => { }} optionalBool={true as true} /> : () => JSX.Element
+>                                                                   : ^^^^^^^^^^^^^^^^^
 ><Funk mandatoryFn={() => { }} optionalBool={true as true} /> : JSX.Element
+>                                                             : ^^^^^^^^^^^
 >Funk : (_props: ComponentProps) => JSX.Element
+>     : ^      ^^              ^^^^^^^^^^^^^^^^
 >mandatoryFn : () => void
+>            : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 >optionalBool : true
+>             : ^^^^
 >true as true : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
 let True = true as true;
 >True : true
+>     : ^^^^
 >true as true : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
 let Fail3 = () => <Funk mandatoryFn={() => { }} optionalBool={True} />
 >Fail3 : () => JSX.Element
+>      : ^^^^^^^^^^^^^^^^^
 >() => <Funk mandatoryFn={() => { }} optionalBool={True} /> : () => JSX.Element
+>                                                           : ^^^^^^^^^^^^^^^^^
 ><Funk mandatoryFn={() => { }} optionalBool={True} /> : JSX.Element
+>                                                     : ^^^^^^^^^^^
 >Funk : (_props: ComponentProps) => JSX.Element
+>     : ^      ^^              ^^^^^^^^^^^^^^^^
 >mandatoryFn : () => void
+>            : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 >optionalBool : true
+>             : ^^^^
 >True : true
+>     : ^^^^
 
 let attrs2 = { optionalBool: true as true, mandatoryFn: () => { } }
 >attrs2 : { optionalBool: true; mandatoryFn: () => void; }
+>       : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ optionalBool: true as true, mandatoryFn: () => { } } : { optionalBool: true; mandatoryFn: () => void; }
+>                                                       : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalBool : true
+>             : ^^^^
 >true as true : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >mandatoryFn : () => void
+>            : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 let Success = () => <Funk {...attrs2} />
 >Success : () => JSX.Element
+>        : ^^^^^^^^^^^^^^^^^
 >() => <Funk {...attrs2} /> : () => JSX.Element
+>                           : ^^^^^^^^^^^^^^^^^
 ><Funk {...attrs2} /> : JSX.Element
+>                     : ^^^^^^^^^^^
 >Funk : (_props: ComponentProps) => JSX.Element
+>     : ^      ^^              ^^^^^^^^^^^^^^^^
 >attrs2 : { optionalBool: true; mandatoryFn: () => void; }
+>       : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

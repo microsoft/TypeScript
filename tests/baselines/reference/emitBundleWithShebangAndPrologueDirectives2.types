@@ -1,27 +1,38 @@
-=== tests/cases/compiler/test.ts ===
+//// [tests/cases/compiler/emitBundleWithShebangAndPrologueDirectives2.ts] ////
+
+=== test.ts ===
 #!/usr/bin/env gjs
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 class Doo {}
 >Doo : Doo
+>    : ^^^
 
 class Scooby extends Doo {}
 >Scooby : Scooby
+>       : ^^^^^^
 >Doo : Doo
+>    : ^^^
 
-=== tests/cases/compiler/test1.ts ===
+=== test1.ts ===
 #!/usr/bin/env gjs
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 "Another prologue"
 >"Another prologue" : "Another prologue"
+>                   : ^^^^^^^^^^^^^^^^^^
 
 class Dood {}
 >Dood : Dood
+>     : ^^^^
 
 class Scoobyd extends Dood {}
 >Scoobyd : Scoobyd
+>        : ^^^^^^^
 >Dood : Dood
+>     : ^^^^
 

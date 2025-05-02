@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esnext/logicalAssignment/logicalAssignment11.ts] ////
+
 //// [logicalAssignment11.ts]
 let x: string | undefined;
 

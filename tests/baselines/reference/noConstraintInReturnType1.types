@@ -1,9 +1,12 @@
-=== tests/cases/compiler/noConstraintInReturnType1.ts ===
+//// [tests/cases/compiler/noConstraintInReturnType1.ts] ////
+
+=== noConstraintInReturnType1.ts ===
 class List<T extends {}> {
 >List : List<T>
+>     : ^^^^^^^
 
     static empty<T extends {}>(): List<T> { return null; }
 >empty : <T extends {}>() => List<T>
->null : null
+>      : ^ ^^^^^^^^^  ^^^^^^^       
 }
 

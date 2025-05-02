@@ -1,13 +1,13 @@
-tests/cases/compiler/interfaceAssignmentCompat.ts(32,18): error TS2345: Argument of type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter of type '(a: IEye, b: IEye) => number'.
+interfaceAssignmentCompat.ts(32,18): error TS2345: Argument of type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter of type '(a: IEye, b: IEye) => number'.
   Types of parameters 'a' and 'a' are incompatible.
     Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
-tests/cases/compiler/interfaceAssignmentCompat.ts(37,29): error TS2339: Property '_map' does not exist on type 'typeof Color'.
-tests/cases/compiler/interfaceAssignmentCompat.ts(42,13): error TS2322: Type 'IEye' is not assignable to type 'IFrenchEye'.
-tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEye[]' is not assignable to type 'IFrenchEye[]'.
-  Type 'IEye' is not assignable to type 'IFrenchEye'.
+interfaceAssignmentCompat.ts(37,29): error TS2339: Property '_map' does not exist on type 'typeof Color'.
+interfaceAssignmentCompat.ts(42,13): error TS2741: Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
+interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEye[]' is not assignable to type 'IFrenchEye[]'.
+  Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
 
 
-==== tests/cases/compiler/interfaceAssignmentCompat.ts (4 errors) ====
+==== interfaceAssignmentCompat.ts (4 errors) ====
     module M {
         export enum Color {
             Green,
@@ -44,7 +44,7 @@ tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEy
 !!! error TS2345: Argument of type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter of type '(a: IEye, b: IEye) => number'.
 !!! error TS2345:   Types of parameters 'a' and 'a' are incompatible.
 !!! error TS2345:     Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
-!!! related TS2728 tests/cases/compiler/interfaceAssignmentCompat.ts:13:9: 'coleur' is declared here.
+!!! related TS2728 interfaceAssignmentCompat.ts:13:9: 'coleur' is declared here.
             // type of z inferred from specialized array type
             var z=x.sort(CompareEyes); // ok
     
@@ -58,12 +58,14 @@ tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEy
             for (var j=z.length=1;j>=0;j--) {
                 eeks[j]=z[j];  // nope: element assignment
                 ~~~~~~~
-!!! error TS2322: Type 'IEye' is not assignable to type 'IFrenchEye'.
+!!! error TS2741: Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
+!!! related TS2728 interfaceAssignmentCompat.ts:13:9: 'coleur' is declared here.
             }
             eeks=z; // nope: array assignment
             ~~~~
 !!! error TS2322: Type 'IEye[]' is not assignable to type 'IFrenchEye[]'.
-!!! error TS2322:   Type 'IEye' is not assignable to type 'IFrenchEye'.
+!!! error TS2322:   Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
+!!! related TS2728 interfaceAssignmentCompat.ts:13:9: 'coleur' is declared here.
             return result;
         }
     }

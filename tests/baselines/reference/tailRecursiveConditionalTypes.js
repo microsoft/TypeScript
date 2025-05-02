@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tailRecursiveConditionalTypes.ts] ////
+
 //// [tailRecursiveConditionalTypes.ts]
 type Trim<S extends string> =
     S extends ` ${infer T}` ? Trim<T> :

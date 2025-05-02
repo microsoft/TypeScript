@@ -1,205 +1,306 @@
-=== tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts ===
+//// [tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts] ////
+
+=== stringMappingOverPatternLiterals.ts ===
 // non-template
 type A = "aA";
 >A : "aA"
+>  : ^^^^
 
 type B = Uppercase<A>;
 >B : "AA"
+>  : ^^^^
 
 type C = Lowercase<A>;
 >C : "aa"
+>  : ^^^^
 
 // templated
 type ATemplate = `aA${string}`;
 >ATemplate : `aA${string}`
+>          : ^^^^^^^^^^^^^
 
 type BTemplate = Uppercase<ATemplate>;
 >BTemplate : `AA${Uppercase<string>}`
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 type CTemplate = Lowercase<ATemplate>;
 >CTemplate : `aa${Lowercase<string>}`
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f1(
 >f1 : (a: A, b: B, c: C, a_template: ATemplate, b_template: BTemplate, c_template: CTemplate) => void
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^          ^^         ^^          ^^         ^^          ^^         ^^^^^^^^^
 
     a: A,
 >a : "aA"
+>  : ^^^^
 
     b: B,
 >b : "AA"
+>  : ^^^^
 
     c: C,
 >c : "aa"
+>  : ^^^^
 
     a_template: ATemplate,
 >a_template : `aA${string}`
+>           : ^^^^^^^^^^^^^
 
     b_template: BTemplate,
 >b_template : `AA${Uppercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     c_template: CTemplate
 >c_template : `aa${Lowercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 ) {
     // non-template versions should be assignable to templated versions (empty string matches string)
     a_template = a;
 >a_template = a : "aA"
+>               : ^^^^
 >a_template : `aA${string}`
+>           : ^^^^^^^^^^^^^
 >a : "aA"
+>  : ^^^^
 
     b_template = b;
 >b_template = b : "AA"
+>               : ^^^^
 >b_template : `AA${Uppercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : "AA"
+>  : ^^^^
 
     c_template = c;
 >c_template = c : "aa"
+>               : ^^^^
 >c_template : `aa${Lowercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c : "aa"
+>  : ^^^^
 
     // not the other way around
     a = a_template;
 >a = a_template : `aA${string}`
+>               : ^^^^^^^^^^^^^
 >a : "aA"
+>  : ^^^^
 >a_template : `aA${string}`
+>           : ^^^^^^^^^^^^^
 
     b = b_template;
 >b = b_template : `AA${Uppercase<string>}`
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : "AA"
+>  : ^^^^
 >b_template : `AA${Uppercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     c = c_template;
 >c = c_template : `aa${Lowercase<string>}`
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c : "aa"
+>  : ^^^^
 >c_template : `aa${Lowercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Additionally, all the template versions should be mutually incompatible (they describe differing sets)
     a_template = b_template;
 >a_template = b_template : `AA${Uppercase<string>}`
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a_template : `aA${string}`
+>           : ^^^^^^^^^^^^^
 >b_template : `AA${Uppercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     a_template = c_template;
 >a_template = c_template : `aa${Lowercase<string>}`
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a_template : `aA${string}`
+>           : ^^^^^^^^^^^^^
 >c_template : `aa${Lowercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     b_template = a_template;
 >b_template = a_template : `aA${string}`
+>                        : ^^^^^^^^^^^^^
 >b_template : `AA${Uppercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a_template : `aA${string}`
+>           : ^^^^^^^^^^^^^
 
     b_template = c_template;
 >b_template = c_template : `aa${Lowercase<string>}`
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b_template : `AA${Uppercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c_template : `aa${Lowercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     c_template = a_template;
 >c_template = a_template : `aA${string}`
+>                        : ^^^^^^^^^^^^^
 >c_template : `aa${Lowercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a_template : `aA${string}`
+>           : ^^^^^^^^^^^^^
 
     c_template = b_template;
 >c_template = b_template : `AA${Uppercase<string>}`
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c_template : `aa${Lowercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b_template : `AA${Uppercase<string>}`
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Raw string mapping assignability
 
 function f2(x1: string, x2: Uppercase<string>, x3: Lowercase<string>) {
 >f2 : (x1: string, x2: Uppercase<string>, x3: Lowercase<string>) => void
+>   : ^  ^^      ^^  ^^                 ^^  ^^                 ^^^^^^^^^
 >x1 : string
+>   : ^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x3 : Lowercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     // ok
     x1 = x2;
 >x1 = x2 : Uppercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x1 : string
+>   : ^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x1 = x3;
 >x1 = x3 : Lowercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x1 : string
+>   : ^^^^^^
 >x3 : Lowercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x2 = "ABC";
 >x2 = "ABC" : "ABC"
+>           : ^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >"ABC" : "ABC"
+>      : ^^^^^
 
     x3 = "abc";
 >x3 = "abc" : "abc"
+>           : ^^^^^
 >x3 : Lowercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     // should fail (sets do not match)
     x2 = x1;
 >x2 = x1 : string
+>        : ^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x1 : string
+>   : ^^^^^^
 
     x2 = x3;
 >x2 = x3 : Lowercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x3 : Lowercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x3 = x1;
 >x3 = x1 : string
+>        : ^^^^^^
 >x3 : Lowercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x1 : string
+>   : ^^^^^^
 
     x3 = x2;
 >x3 = x2 : Uppercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x3 : Lowercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x2 = "AbC";
 >x2 = "AbC" : "AbC"
+>           : ^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >"AbC" : "AbC"
+>      : ^^^^^
 
     x3 = "AbC";
 >x3 = "AbC" : "AbC"
+>           : ^^^^^
 >x3 : Lowercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >"AbC" : "AbC"
+>      : ^^^^^
 }
 
 // Mappings over mappings
 
 function f3(
 >f3 : (x1: Uppercase<string>, x2: Uppercase<Uppercase<string>>, x3: Uppercase<Lowercase<string>>) => void
+>   : ^  ^^                 ^^  ^^                            ^^  ^^                            ^^^^^^^^^
 
     x1: Uppercase<string>,
 >x1 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x2: Uppercase<Uppercase<string>>,
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x3: Uppercase<Lowercase<string>>) {
 >x3 : Uppercase<Lowercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // _ideally_ these would all be equivalent
     x1 = x2;
 >x1 = x2 : Uppercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x1 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x1 = x3;
 >x1 = x3 : Uppercase<Lowercase<string>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x1 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x3 : Uppercase<Lowercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x2 = x1;
 >x2 = x1 : Uppercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x1 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x2 = x3;
 >x2 = x3 : Uppercase<Lowercase<string>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x3 : Uppercase<Lowercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // you'd think these were equivalent - the outer `Uppercase` conceptually
     // makes the inner `Lowercase` effectively a noop - but that's not so;
@@ -207,229 +308,346 @@ function f3(
     // which then uppercases to SS), so arbitrary nestings of mappings make differing sets!
     x3 = x1;
 >x3 = x1 : Uppercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x3 : Uppercase<Lowercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x1 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x3 = x2;
 >x3 = x2 : Uppercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x3 : Uppercase<Lowercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     // and this should also not be equivlent to any others
     var x4: Lowercase<Uppercase<string>> = null as any;
 >x4 : Lowercase<Uppercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
     x1 = x4;
 >x1 = x4 : Lowercase<Uppercase<string>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x1 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x4 : Lowercase<Uppercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x2 = x4;
 >x2 = x4 : Lowercase<Uppercase<string>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 >x4 : Lowercase<Uppercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x3 = x4;
 >x3 = x4 : Lowercase<Uppercase<string>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x3 : Uppercase<Lowercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x4 : Lowercase<Uppercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x4 = x1;
 >x4 = x1 : Uppercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x4 : Lowercase<Uppercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x1 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x4 = x2;
 >x4 = x2 : Uppercase<string>
+>        : ^^^^^^^^^^^^^^^^^
 >x4 : Lowercase<Uppercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : Uppercase<string>
+>   : ^^^^^^^^^^^^^^^^^
 
     x4 = x3;
 >x4 = x3 : Uppercase<Lowercase<string>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x4 : Lowercase<Uppercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x3 : Uppercase<Lowercase<string>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // string mapping over non-string pattern literals is preserved
 
 type NonStringPat = Uppercase<`aA${number}${bigint}${boolean}`>;
 >NonStringPat : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type EquivalentNonStringPat = `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}${Uppercase<`${boolean}`>}`;
 >EquivalentNonStringPat : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f4(x1: NonStringPat, x2: EquivalentNonStringPat) {
 >f4 : (x1: NonStringPat, x2: EquivalentNonStringPat) => void
+>   : ^  ^^            ^^  ^^                      ^^^^^^^^^
 >x1 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Should both work
     x1 = x2;
 >x1 = x2 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x1 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x2 = x1;
 >x2 = x1 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x1 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Capitalize and uncapitalize on template literals
 
 function f5(
 >f5 : (cap_tem: `A${string}`, cap_str: Capitalize<string>, cap_tem_map: Capitalize<`A${string}`>, cap_tem_map2: Capitalize<`a${string}`>, uncap_tem: `a${string}`, uncap_str: Uncapitalize<string>, uncap_tem_map: Uncapitalize<`A${string}`>, uncap_tem_map2: Uncapitalize<`a${string}`>) => void
+>   : ^       ^^            ^^       ^^                  ^^           ^^                        ^^            ^^                        ^^         ^^            ^^         ^^                    ^^             ^^                          ^^              ^^                          ^^^^^^^^^
 
     cap_tem: `A${string}`,
 >cap_tem : `A${string}`
+>        : ^^^^^^^^^^^^
 
     cap_str: Capitalize<string>,
 >cap_str : Capitalize<string>
+>        : ^^^^^^^^^^^^^^^^^^
 
     cap_tem_map: Capitalize<`A${string}`>,
 >cap_tem_map : `A${string}`
+>            : ^^^^^^^^^^^^
 
     cap_tem_map2: Capitalize<`a${string}`>,
 >cap_tem_map2 : `A${string}`
+>             : ^^^^^^^^^^^^
 
     uncap_tem: `a${string}`,
 >uncap_tem : `a${string}`
+>          : ^^^^^^^^^^^^
 
     uncap_str: Uncapitalize<string>,
 >uncap_str : Uncapitalize<string>
+>          : ^^^^^^^^^^^^^^^^^^^^
 
     uncap_tem_map: Uncapitalize<`A${string}`>,
 >uncap_tem_map : `a${string}`
+>              : ^^^^^^^^^^^^
 
     uncap_tem_map2: Uncapitalize<`a${string}`>,
 >uncap_tem_map2 : `a${string}`
+>               : ^^^^^^^^^^^^
 
 ) {
     // All these are capitalized
     cap_str = cap_tem;
 >cap_str = cap_tem : `A${string}`
+>                  : ^^^^^^^^^^^^
 >cap_str : Capitalize<string>
+>        : ^^^^^^^^^^^^^^^^^^
 >cap_tem : `A${string}`
+>        : ^^^^^^^^^^^^
 
     cap_str = cap_tem_map;
 >cap_str = cap_tem_map : `A${string}`
+>                      : ^^^^^^^^^^^^
 >cap_str : Capitalize<string>
+>        : ^^^^^^^^^^^^^^^^^^
 >cap_tem_map : `A${string}`
+>            : ^^^^^^^^^^^^
 
     cap_str = cap_tem_map2;
 >cap_str = cap_tem_map2 : `A${string}`
+>                       : ^^^^^^^^^^^^
 >cap_str : Capitalize<string>
+>        : ^^^^^^^^^^^^^^^^^^
 >cap_tem_map2 : `A${string}`
+>             : ^^^^^^^^^^^^
 
     // these are all equivalent
     cap_tem = cap_tem_map;
 >cap_tem = cap_tem_map : `A${string}`
+>                      : ^^^^^^^^^^^^
 >cap_tem : `A${string}`
+>        : ^^^^^^^^^^^^
 >cap_tem_map : `A${string}`
+>            : ^^^^^^^^^^^^
 
     cap_tem = cap_tem_map2;
 >cap_tem = cap_tem_map2 : `A${string}`
+>                       : ^^^^^^^^^^^^
 >cap_tem : `A${string}`
+>        : ^^^^^^^^^^^^
 >cap_tem_map2 : `A${string}`
+>             : ^^^^^^^^^^^^
 
     cap_tem_map = cap_tem_map2;
 >cap_tem_map = cap_tem_map2 : `A${string}`
+>                           : ^^^^^^^^^^^^
 >cap_tem_map : `A${string}`
+>            : ^^^^^^^^^^^^
 >cap_tem_map2 : `A${string}`
+>             : ^^^^^^^^^^^^
 
     cap_tem_map = cap_tem;
 >cap_tem_map = cap_tem : `A${string}`
+>                      : ^^^^^^^^^^^^
 >cap_tem_map : `A${string}`
+>            : ^^^^^^^^^^^^
 >cap_tem : `A${string}`
+>        : ^^^^^^^^^^^^
 
     cap_tem_map2 = cap_tem_map;
 >cap_tem_map2 = cap_tem_map : `A${string}`
+>                           : ^^^^^^^^^^^^
 >cap_tem_map2 : `A${string}`
+>             : ^^^^^^^^^^^^
 >cap_tem_map : `A${string}`
+>            : ^^^^^^^^^^^^
 
     cap_tem_map2 = cap_tem;
 >cap_tem_map2 = cap_tem : `A${string}`
+>                       : ^^^^^^^^^^^^
 >cap_tem_map2 : `A${string}`
+>             : ^^^^^^^^^^^^
 >cap_tem : `A${string}`
+>        : ^^^^^^^^^^^^
 
     // meanwhile, these all require a `A` prefix
     cap_tem = cap_str;
 >cap_tem = cap_str : Capitalize<string>
+>                  : ^^^^^^^^^^^^^^^^^^
 >cap_tem : `A${string}`
+>        : ^^^^^^^^^^^^
 >cap_str : Capitalize<string>
+>        : ^^^^^^^^^^^^^^^^^^
 
     cap_tem_map = cap_str;
 >cap_tem_map = cap_str : Capitalize<string>
+>                      : ^^^^^^^^^^^^^^^^^^
 >cap_tem_map : `A${string}`
+>            : ^^^^^^^^^^^^
 >cap_str : Capitalize<string>
+>        : ^^^^^^^^^^^^^^^^^^
 
     cap_tem_map2 = cap_str;
 >cap_tem_map2 = cap_str : Capitalize<string>
+>                       : ^^^^^^^^^^^^^^^^^^
 >cap_tem_map2 : `A${string}`
+>             : ^^^^^^^^^^^^
 >cap_str : Capitalize<string>
+>        : ^^^^^^^^^^^^^^^^^^
 
     // All these are uncapitalized
     uncap_str = uncap_tem;
 >uncap_str = uncap_tem : `a${string}`
+>                      : ^^^^^^^^^^^^
 >uncap_str : Uncapitalize<string>
+>          : ^^^^^^^^^^^^^^^^^^^^
 >uncap_tem : `a${string}`
+>          : ^^^^^^^^^^^^
 
     uncap_str = uncap_tem_map;
 >uncap_str = uncap_tem_map : `a${string}`
+>                          : ^^^^^^^^^^^^
 >uncap_str : Uncapitalize<string>
+>          : ^^^^^^^^^^^^^^^^^^^^
 >uncap_tem_map : `a${string}`
+>              : ^^^^^^^^^^^^
 
     uncap_str = uncap_tem_map2;
 >uncap_str = uncap_tem_map2 : `a${string}`
+>                           : ^^^^^^^^^^^^
 >uncap_str : Uncapitalize<string>
+>          : ^^^^^^^^^^^^^^^^^^^^
 >uncap_tem_map2 : `a${string}`
+>               : ^^^^^^^^^^^^
 
     // these are all equivalent
     uncap_tem = uncap_tem_map;
 >uncap_tem = uncap_tem_map : `a${string}`
+>                          : ^^^^^^^^^^^^
 >uncap_tem : `a${string}`
+>          : ^^^^^^^^^^^^
 >uncap_tem_map : `a${string}`
+>              : ^^^^^^^^^^^^
 
     uncap_tem = uncap_tem_map2;
 >uncap_tem = uncap_tem_map2 : `a${string}`
+>                           : ^^^^^^^^^^^^
 >uncap_tem : `a${string}`
+>          : ^^^^^^^^^^^^
 >uncap_tem_map2 : `a${string}`
+>               : ^^^^^^^^^^^^
 
     uncap_tem_map = uncap_tem_map2;
 >uncap_tem_map = uncap_tem_map2 : `a${string}`
+>                               : ^^^^^^^^^^^^
 >uncap_tem_map : `a${string}`
+>              : ^^^^^^^^^^^^
 >uncap_tem_map2 : `a${string}`
+>               : ^^^^^^^^^^^^
 
     uncap_tem_map = uncap_tem;
 >uncap_tem_map = uncap_tem : `a${string}`
+>                          : ^^^^^^^^^^^^
 >uncap_tem_map : `a${string}`
+>              : ^^^^^^^^^^^^
 >uncap_tem : `a${string}`
+>          : ^^^^^^^^^^^^
 
     uncap_tem_map2 = uncap_tem_map;
 >uncap_tem_map2 = uncap_tem_map : `a${string}`
+>                               : ^^^^^^^^^^^^
 >uncap_tem_map2 : `a${string}`
+>               : ^^^^^^^^^^^^
 >uncap_tem_map : `a${string}`
+>              : ^^^^^^^^^^^^
 
     uncap_tem_map2 = uncap_tem;
 >uncap_tem_map2 = uncap_tem : `a${string}`
+>                           : ^^^^^^^^^^^^
 >uncap_tem_map2 : `a${string}`
+>               : ^^^^^^^^^^^^
 >uncap_tem : `a${string}`
+>          : ^^^^^^^^^^^^
 
     // meanwhile, these all require a `a` prefix
     uncap_tem = uncap_str;
 >uncap_tem = uncap_str : Uncapitalize<string>
+>                      : ^^^^^^^^^^^^^^^^^^^^
 >uncap_tem : `a${string}`
+>          : ^^^^^^^^^^^^
 >uncap_str : Uncapitalize<string>
+>          : ^^^^^^^^^^^^^^^^^^^^
 
     uncap_tem_map = uncap_str;
 >uncap_tem_map = uncap_str : Uncapitalize<string>
+>                          : ^^^^^^^^^^^^^^^^^^^^
 >uncap_tem_map : `a${string}`
+>              : ^^^^^^^^^^^^
 >uncap_str : Uncapitalize<string>
+>          : ^^^^^^^^^^^^^^^^^^^^
 
     uncap_tem_map2 = uncap_str;
 >uncap_tem_map2 = uncap_str : Uncapitalize<string>
+>                           : ^^^^^^^^^^^^^^^^^^^^
 >uncap_tem_map2 : `a${string}`
+>               : ^^^^^^^^^^^^
 >uncap_str : Uncapitalize<string>
+>          : ^^^^^^^^^^^^^^^^^^^^
 }

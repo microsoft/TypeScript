@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionSuperAndLocalFunctionInConstructor.ts ===
+//// [tests/cases/compiler/collisionSuperAndLocalFunctionInConstructor.ts] ////
+
+=== collisionSuperAndLocalFunctionInConstructor.ts ===
 function _super() { // No error
 >_super : Symbol(_super, Decl(collisionSuperAndLocalFunctionInConstructor.ts, 0, 0))
 }

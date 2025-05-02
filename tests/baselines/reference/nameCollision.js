@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/codeGeneration/nameCollision.ts] ////
+
 //// [nameCollision.ts]
 module A {
     // these 2 statements force an underscore before the 'A' 

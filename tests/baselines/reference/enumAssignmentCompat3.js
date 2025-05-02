@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat3.ts] ////
+
 //// [enumAssignmentCompat3.ts]
 namespace First {
     export enum E {
@@ -70,13 +72,13 @@ abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
 abc = secondCd; // missing 'd'
 abc = nope; // nope!
-abc = decl; // ok
+abc = decl; // bad - value of 'c' differs between these enums
 secondAbc = abc; // ok
 secondAbcd = abc; // ok
 secondAb = abc; // missing 'c'
 secondCd = abc; // missing 'a' and 'b'
 nope = abc; // nope!
-decl = abc; // ok
+decl = abc; // bad - value of 'c' differs between these enums
 
 // const is only assignable to itself
 k = k;
@@ -85,7 +87,7 @@ k = abc;
 
 // merged enums compare all their members
 abc = merged; // missing 'd'
-merged = abc; // ok
+merged = abc; // bad - value of 'c' differs between these enums
 abc = merged2; // ok
 merged2 = abc; // ok
 
@@ -182,19 +184,19 @@ abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
 abc = secondCd; // missing 'd'
 abc = nope; // nope!
-abc = decl; // ok
+abc = decl; // bad - value of 'c' differs between these enums
 secondAbc = abc; // ok
 secondAbcd = abc; // ok
 secondAb = abc; // missing 'c'
 secondCd = abc; // missing 'a' and 'b'
 nope = abc; // nope!
-decl = abc; // ok
+decl = abc; // bad - value of 'c' differs between these enums
 // const is only assignable to itself
 k = k;
 abc = k; // error
 k = abc;
 // merged enums compare all their members
 abc = merged; // missing 'd'
-merged = abc; // ok
+merged = abc; // bad - value of 'c' differs between these enums
 abc = merged2; // ok
 merged2 = abc; // ok

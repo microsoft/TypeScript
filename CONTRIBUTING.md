@@ -8,7 +8,7 @@ Issues that ask questions answered in the FAQ will be closed without elaboration
 
 ## 2. Search for Duplicates
 
-[Search the existing issues](https://github.com/Microsoft/TypeScript/search?type=Issues) before logging a new one.
+[Search the existing issues in GitHub](https://github.com/Microsoft/TypeScript/search?type=Issues) or by the query `site:github.com/microsoft/TypeScript <your keywords>` in your favorite search engine before logging a new one. Search engines generally list more relevant and accurate results at the top than the GitHub searching feature.
 
 Some search tips:
  * *Don't* restrict your search to only open issues. An issue with a title similar to yours may have been closed as a duplicate of one with a less-findable title.
@@ -54,19 +54,40 @@ In general, things we find useful when reviewing suggestions are:
 2. A copy of the TypeScript code. See the next steps for instructions.
 3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
 4. An editor. [VS Code](https://code.visualstudio.com) is the best place to start for TypeScript.
-5. The gulp command line tool, for building and testing changes. See the next steps for how to install it.
+5. The hereby command line tool, for building and testing changes. See the next steps for how to install it.
 
 ## Get Started
 
 1. Install node using the version you downloaded from [nodejs.org](https://nodejs.org).
 2. Open a terminal.
 3. Make a fork&mdash;your own copy&mdash;of TypeScript on your GitHub account, then make a clone&mdash;a local copy&mdash;on your computer. ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)). Add `--depth=1` to the end of the `git clone` command to save time.
-4. Install the gulp command line tool: `npm install -g gulp-cli`
+4. Install the hereby command line tool: `npm install -g hereby`
 5. Change to the TypeScript folder you made: `cd TypeScript`
 6. Install dependencies: `npm ci`
-7. Make sure everything builds and tests pass: `gulp runtests-parallel`
-8. Open the Typescript folder in your editor.
+7. Make sure everything builds and tests pass: `hereby runtests-parallel`
+8. Open the TypeScript folder in your editor.
 9. Follow the directions below to add and debug a test.
+
+## Helpful tasks
+
+Running `hereby --tasks` provides the full listing, but here are a few common tasks you might use.
+
+```
+hereby local             # Build the compiler into built/local.
+hereby clean             # Delete the built compiler.
+hereby LKG               # Replace the last known good with the built one.
+                         # Bootstrapping step to be executed when the built compiler reaches a stable state.
+hereby tests             # Build the test infrastructure using the built compiler.
+hereby runtests          # Run tests using the built compiler and test infrastructure.
+                         # You can override the specific suite runner used or specify a test for this command.
+                         # Use --tests=<testPath> for a specific test and/or --runner=<runnerName> for a specific suite.
+                         # Valid runners include conformance, compiler, fourslash, and project
+hereby runtests-parallel # Like runtests, but split across multiple threads. Uses a number of threads equal to the system
+                         # core count by default. Use --workers=<number> to adjust this.
+hereby baseline-accept   # This replaces the baseline test results with the results obtained from hereby runtests.
+hereby lint              # Runs eslint on the TypeScript source.
+hereby help              # List the above commands.
+```
 
 ## Tips
 
@@ -87,7 +108,7 @@ You might need to run `git config --global core.longpaths true` before cloning T
 
 ### Using local builds
 
-Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
+Run `hereby` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
 
 ## Contributing bug fixes
 
@@ -139,7 +160,7 @@ Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/
 Library files in `built/local/` are updated automatically by running the standard build task:
 
 ```sh
-gulp
+hereby
 ```
 
 The files in `lib/` are used to bootstrap compilation and usually **should not** be updated unless publishing a new version or updating the LKG.
@@ -154,36 +175,36 @@ If you need a head start understanding how the compiler works, or how the code i
 
 ## Running the Tests
 
-To run all tests, invoke the `runtests-parallel` target using gulp:
+To run all tests, invoke the `runtests-parallel` target using hereby:
 
 ```Shell
-gulp runtests-parallel
+hereby runtests-parallel
 ```
 
 This will run all tests; to run only a specific subset of tests, use:
 
 ```Shell
-gulp runtests --tests=<regex>
+hereby runtests --tests=<regex>
 ```
 
 e.g. to run all compiler baseline tests:
 
 ```Shell
-gulp runtests --tests=compiler
+hereby runtests --tests=compiler
 ```
 
 or to run a specific test: `tests\cases\compiler\2dArrays.ts`
 
 ```Shell
-gulp runtests --tests=2dArrays
+hereby runtests --tests=2dArrays
 ```
 
 ## Debugging the tests
 
-You can debug with VS Code or Node instead with `gulp runtests -i`:
+You can debug with VS Code or Node instead with `hereby runtests -i`:
 
 ```Shell
-gulp runtests --tests=2dArrays -i
+hereby runtests --tests=2dArrays -i
 ```
 
 You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).
@@ -233,12 +254,12 @@ When a change in the baselines is detected, the test will fail. To inspect chang
 git diff --diff-filter=AM --no-index ./tests/baselines/reference ./tests/baselines/local
 ```
 
-Alternatively, you can set the `DIFF` environment variable and run `gulp diff`, or manually run your favorite folder diffing tool between `tests/baselines/reference` and `tests/baselines/local`. Our team largely uses Beyond Compare and WinMerge.
+Alternatively, you can set the `DIFF` environment variable and run `hereby diff`, or manually run your favorite folder diffing tool between `tests/baselines/reference` and `tests/baselines/local`. Our team largely uses Beyond Compare and WinMerge.
 
 After verifying that the changes in the baselines are correct, run
 
 ```Shell
-gulp baseline-accept
+hereby baseline-accept
 ```
 
 This will change the files in `tests\baselines\reference`, which should be included as part of your commit.
@@ -247,6 +268,6 @@ Be sure to validate the changes carefully -- apparently unrelated changes to bas
 ## Localization
 
 All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
-If you make changes to it, run `gulp generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
+If you make changes to it, run `hereby generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
 
 See [coding guidelines on diagnostic messages](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#diagnostic-messages).

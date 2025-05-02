@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts] ////
+
 //// [nonObjectUnionNestedExcessPropertyCheck.ts]
 interface IProps {
     iconProp?: string;

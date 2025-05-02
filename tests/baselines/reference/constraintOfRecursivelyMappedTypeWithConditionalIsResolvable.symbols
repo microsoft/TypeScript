@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts ===
+//// [tests/cases/compiler/constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts] ////
+
+=== constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts ===
 // https://github.com/Microsoft/TypeScript/issues/25379
 
 interface Map<K, V> {

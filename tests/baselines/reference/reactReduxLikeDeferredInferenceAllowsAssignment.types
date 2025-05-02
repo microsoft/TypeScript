@@ -1,96 +1,120 @@
-=== tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
+//// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
+
+=== Performance Stats ===
+Instantiation count: 2,500
+
+=== reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
 declare class Component<P> {
 >Component : Component<P>
+>          : ^^^^^^^^^^^^
 
   constructor(props: Readonly<P>);
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 
   constructor(props: P, context?: any);
 >props : P
+>      : ^
 >context : any
+>        : ^^^
 
   readonly props: Readonly<P> & Readonly<{ children?: {} }>;
->props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
+>props : Readonly<P> & Readonly<{ children?: {}; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^
 >children : {} | undefined
+>         : ^^^^^^^^^^^^^^
 }
 interface ComponentClass<P = {}> {
   new (props: P, context?: any): Component<P>;
 >props : P
+>      : ^
 >context : any
+>        : ^^^
 
   propTypes?: WeakValidationMap<P>;
 >propTypes : WeakValidationMap<P> | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   defaultProps?: Partial<P>;
 >defaultProps : Partial<P> | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 
   displayName?: string;
 >displayName : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 }
 interface FunctionComponent<P = {}> {
   (props: P & { children?: {} }, context?: any): {} | null;
->props : P & { children?: {} | undefined; }
+>props : P & { children?: {}; }
+>      : ^^^^^^^^^^^^^^^^^  ^^^
 >children : {} | undefined
+>         : ^^^^^^^^^^^^^^
 >context : any
->null : null
+>        : ^^^
 
   propTypes?: WeakValidationMap<P>;
 >propTypes : WeakValidationMap<P> | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   defaultProps?: Partial<P>;
 >defaultProps : Partial<P> | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 
   displayName?: string;
 >displayName : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 }
 
 declare const nominalTypeHack: unique symbol;
 >nominalTypeHack : unique symbol
+>                : ^^^^^^^^^^^^^
 
 interface Validator<T> {
   (
     props: object,
 >props : object
+>      : ^^^^^^
 
     propName: string,
 >propName : string
+>         : ^^^^^^
 
     componentName: string,
 >componentName : string
+>              : ^^^^^^
 
     location: string,
 >location : string
+>         : ^^^^^^
 
     propFullName: string
 >propFullName : string
+>             : ^^^^^^
 
   ): Error | null;
->null : null
-
   [nominalTypeHack]?: T;
 >[nominalTypeHack] : T | undefined
+>                  : ^^^^^^^^^^^^^
 >nominalTypeHack : unique symbol
+>                : ^^^^^^^^^^^^^
 }
 type WeakValidationMap<T> = {
 >WeakValidationMap : WeakValidationMap<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof T]?: null extends T[K]
->null : null
-
     ? Validator<T[K] | null | undefined>
->null : null
-
     : undefined extends T[K]
     ? Validator<T[K] | null | undefined>
->null : null
-
     : Validator<T[K]>
 };
 type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
 >ComponentType : ComponentType<P>
+>              : ^^^^^^^^^^^^^^^^
 
 type Shared<
 >Shared : Shared<InjectedProps, DecorationTargetProps>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   InjectedProps,
   DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>
@@ -106,19 +130,23 @@ type Shared<
 // Infers prop type from component C
 type GetProps<C> = C extends ComponentType<infer P> ? P : never;
 >GetProps : GetProps<C>
+>         : ^^^^^^^^^^^
 
 type ConnectedComponentClass<C extends ComponentType<any>, P> = ComponentClass<
 >ConnectedComponentClass : ConnectedComponentClass<C, P>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   P
 > & {
   WrappedComponent: C;
 >WrappedComponent : C
+>                 : ^
 
 };
 
 type Matching<InjectedProps, DecorationTargetProps> = {
 >Matching : Matching<InjectedProps, DecorationTargetProps>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [P in keyof DecorationTargetProps]: P extends keyof InjectedProps
     ? InjectedProps[P] extends DecorationTargetProps[P]
@@ -129,14 +157,17 @@ type Matching<InjectedProps, DecorationTargetProps> = {
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Omit<T, K>
+>     : ^^^^^^^^^^
 
 type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> = <
 >InferableComponentEnhancerWithProps : InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   C extends ComponentType<Matching<TInjectedProps, GetProps<C>>>
 >(
   component: C
 >component : C
+>          : ^
 
 ) => ConnectedComponentClass<
   C,
@@ -145,14 +176,16 @@ type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> = <
 
 declare const connect: {
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
+>        : ^        ^^^^^^^              ^^^^^^^         ^^^^^^^               ^^                ^^                  ^^              ^^^^^                                                                             
 
   <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(
     mapStateToProps: null | undefined,
 >mapStateToProps : null | undefined
->null : null
+>                : ^^^^^^^^^^^^^^^^
 
     mapDispatchToProps: TDispatchProps
 >mapDispatchToProps : TDispatchProps
+>                   : ^^^^^^^^^^^^^^
 
   ): InferableComponentEnhancerWithProps<
     ResolveThunks<TDispatchProps>,
@@ -162,27 +195,34 @@ declare const connect: {
 
 type InferThunkActionCreatorType<
 >InferThunkActionCreatorType : InferThunkActionCreatorType<TActionCreator>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   TActionCreator extends (...args: any[]) => any
 >args : any[]
+>     : ^^^^^
 
 > = TActionCreator extends (
   ...args: infer TParams
 >args : TParams
+>     : ^^^^^^^
 
 ) => (...args: any[]) => infer TReturn
 >args : any[]
+>     : ^^^^^
 
   ? (...args: TParams) => TReturn
 >args : TParams
+>     : ^^^^^^^
 
   : TActionCreator;
 
 type HandleThunkActionCreator<TActionCreator> = TActionCreator extends (
 >HandleThunkActionCreator : HandleThunkActionCreator<TActionCreator>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   ...args: any[]
 >args : any[]
+>     : ^^^^^
 
 ) => any
   ? InferThunkActionCreatorType<TActionCreator>
@@ -190,9 +230,11 @@ type HandleThunkActionCreator<TActionCreator> = TActionCreator extends (
 
 type ResolveThunks<TDispatchProps> = TDispatchProps extends {
 >ResolveThunks : ResolveThunks<TDispatchProps>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [key: string]: any;
 >key : string
+>    : ^^^^^^
 }
   ? { [C in keyof TDispatchProps]: HandleThunkActionCreator<TDispatchProps[C]> }
   : TDispatchProps;
@@ -200,91 +242,128 @@ type ResolveThunks<TDispatchProps> = TDispatchProps extends {
 interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T;
 >action : T
+>       : ^
 }
 interface Action<T = any> {
   type: T;
 >type : T
+>     : ^
 }
 interface AnyAction extends Action {
   [extraProps: string]: any;
 >extraProps : string
+>           : ^^^^^^
 }
 
 const simpleAction = (payload: boolean) => ({
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(payload: boolean) => ({  type: "SIMPLE_ACTION",  payload}) : (payload: boolean) => { type: string; payload: boolean; }
+>                                                            : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >payload : boolean
+>        : ^^^^^^^
 >({  type: "SIMPLE_ACTION",  payload}) : { type: string; payload: boolean; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  type: "SIMPLE_ACTION",  payload} : { type: string; payload: boolean; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   type: "SIMPLE_ACTION",
 >type : string
+>     : ^^^^^^
 >"SIMPLE_ACTION" : "SIMPLE_ACTION"
+>                : ^^^^^^^^^^^^^^^
 
   payload
 >payload : boolean
+>        : ^^^^^^^
 
 });
 const thunkAction = (param1: number, param2: string) => async (
 >thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
+>            : ^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^
 >(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
+>                                                                                                        : ^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^
 >param1 : number
+>       : ^^^^^^
 >param2 : string
+>       : ^^^^^^
 >async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
+>                                                                    : ^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
 
   dispatch: Dispatch,
 >dispatch : Dispatch<AnyAction>
+>         : ^^^^^^^^^^^^^^^^^^^
 
   { foo }: OwnProps
 >foo : string
+>    : ^^^^^^
 
 ) => {
   return foo;
 >foo : string
+>    : ^^^^^^
 
 };
 interface OwnProps {
   foo: string;
 >foo : string
+>    : ^^^^^^
 }
 interface TestComponentProps extends OwnProps {
   simpleAction: typeof simpleAction;
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   thunkAction(param1: number, param2: string): Promise<string>;
 >thunkAction : (param1: number, param2: string) => Promise<string>
+>            : ^      ^^      ^^      ^^      ^^^^^               
 >param1 : number
+>       : ^^^^^^
 >param2 : string
+>       : ^^^^^^
 }
 class TestComponent extends Component<TestComponentProps> {}
 >TestComponent : TestComponent
+>              : ^^^^^^^^^^^^^
 >Component : Component<TestComponentProps>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const mapDispatchToProps = { simpleAction, thunkAction };
->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
->{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
+>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
+>                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^^^^
+>{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
+>                              : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^^^^
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
+>            : ^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^
 
 type Q = HandleThunkActionCreator<typeof simpleAction>;
 >Q : (payload: boolean) => { type: string; payload: boolean; }
+>  : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const Test1 = connect(
 >Test1 : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect(  null,  mapDispatchToProps)(TestComponent) : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
+>        : ^        ^^^^^^^              ^^^^^^^         ^^^^^^^               ^^                ^^                  ^^              ^^^^^                                                                             
 
   null,
->null : null
-
   mapDispatchToProps
->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
+>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
+>                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^^^^
 
 )(TestComponent);
 >TestComponent : typeof TestComponent
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 export {};
 

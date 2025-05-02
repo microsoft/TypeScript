@@ -1,0 +1,670 @@
+===================================================================
+JsFile: extendedEscapesForAstralsInVarsAndClasses.js
+mapUrl: extendedEscapesForAstralsInVarsAndClasses.js.map
+sourceRoot: 
+sources: extendedEscapesForAstralsInVarsAndClasses.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:extendedEscapesForAstralsInVarsAndClasses.js
+sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
+-------------------------------------------------------------------
+>>>// U+102A7 CARIAN LETTER A2
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >// U+102A7 CARIAN LETTER A2
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 28) Source(1, 28) + SourceIndex(0)
+---
+>>>var string;
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^
+5 >           ^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >var 𐊧: 
+3 >    string
+4 >          ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(2, 9) + SourceIndex(0)
+3 >Emitted(2, 11) Source(2, 15) + SourceIndex(0)
+4 >Emitted(2, 12) Source(2, 16) + SourceIndex(0)
+---
+>>>var u, A7 = (void 0)[102];
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^
+5 >       ^^
+6 >         ^^^^^^^^^^^^^^^^
+7 >                         ^
+1->
+  >var \
+2 >
+3 >    u
+4 >     {102
+5 >       A7
+6 >         
+7 >                         }: string;
+1->Emitted(3, 1) Source(3, 6) + SourceIndex(0)
+2 >Emitted(3, 5) Source(3, 6) + SourceIndex(0)
+3 >Emitted(3, 6) Source(3, 7) + SourceIndex(0)
+4 >Emitted(3, 8) Source(3, 11) + SourceIndex(0)
+5 >Emitted(3, 10) Source(3, 13) + SourceIndex(0)
+6 >Emitted(3, 26) Source(3, 13) + SourceIndex(0)
+7 >Emitted(3, 27) Source(3, 23) + SourceIndex(0)
+---
+>>>if (Math.random()) {
+1 >
+2 >^^^^
+3 >    ^^^^
+4 >        ^
+5 >         ^^^^^^
+6 >               ^^
+7 >                 ^^
+8 >                   ^
+1 >
+  >
+  >
+2 >if (
+3 >    Math
+4 >        .
+5 >         random
+6 >               ()
+7 >                 ) 
+8 >                   {
+1 >Emitted(4, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(5, 5) + SourceIndex(0)
+3 >Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+4 >Emitted(4, 10) Source(5, 10) + SourceIndex(0)
+5 >Emitted(4, 16) Source(5, 16) + SourceIndex(0)
+6 >Emitted(4, 18) Source(5, 18) + SourceIndex(0)
+7 >Emitted(4, 20) Source(5, 20) + SourceIndex(0)
+8 >Emitted(4, 21) Source(5, 21) + SourceIndex(0)
+---
+>>>    "hello";
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+1 >
+  >    𐊧 = 
+2 >    "hello"
+3 >           ;
+1 >Emitted(5, 5) Source(6, 10) + SourceIndex(0)
+2 >Emitted(5, 12) Source(6, 17) + SourceIndex(0)
+3 >Emitted(5, 13) Source(6, 18) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(6, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(7, 2) + SourceIndex(0)
+---
+>>>else {
+1->^^^^^
+2 >     ^
+3 >      ^->
+1->
+  >else 
+2 >     {
+1->Emitted(7, 6) Source(8, 6) + SourceIndex(0)
+2 >Emitted(7, 7) Source(8, 7) + SourceIndex(0)
+---
+>>>    u;
+1->^^^^
+2 >    ^
+3 >     ^
+1->
+  >    \
+2 >    u
+3 >     
+1->Emitted(8, 5) Source(9, 6) + SourceIndex(0)
+2 >Emitted(8, 6) Source(9, 7) + SourceIndex(0)
+3 >Emitted(8, 7) Source(9, 7) + SourceIndex(0)
+---
+>>>    {
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^->
+1 >
+2 >    {
+1 >Emitted(9, 5) Source(9, 7) + SourceIndex(0)
+2 >Emitted(9, 6) Source(9, 8) + SourceIndex(0)
+---
+>>>        102;
+1->^^^^^^^^
+2 >        ^^^
+3 >           ^
+1->
+2 >        102
+3 >           
+1->Emitted(10, 9) Source(9, 8) + SourceIndex(0)
+2 >Emitted(10, 12) Source(9, 11) + SourceIndex(0)
+3 >Emitted(10, 13) Source(9, 11) + SourceIndex(0)
+---
+>>>        A7;
+1 >^^^^^^^^
+2 >        ^^
+3 >          ^
+1 >
+2 >        A7
+3 >          
+1 >Emitted(11, 9) Source(9, 11) + SourceIndex(0)
+2 >Emitted(11, 11) Source(9, 13) + SourceIndex(0)
+3 >Emitted(11, 12) Source(9, 13) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^->
+1 >
+2 >    }
+1 >Emitted(12, 5) Source(9, 13) + SourceIndex(0)
+2 >Emitted(12, 6) Source(9, 14) + SourceIndex(0)
+---
+>>>    "hallo";
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+1-> = 
+2 >    "hallo"
+3 >           ;
+1->Emitted(13, 5) Source(9, 17) + SourceIndex(0)
+2 >Emitted(13, 12) Source(9, 24) + SourceIndex(0)
+3 >Emitted(13, 13) Source(9, 25) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(14, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(14, 2) Source(10, 2) + SourceIndex(0)
+---
+>>>var Foo = /** @class */ (function () {
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+1->Emitted(15, 1) Source(12, 1) + SourceIndex(0)
+---
+>>>    function Foo() {
+1->^^^^
+2 >    ^^->
+1->
+1->Emitted(16, 5) Source(12, 1) + SourceIndex(0)
+---
+>>>    }
+1->^^^^
+2 >    ^
+3 >     
+4 >     ^^^^^^^^^^^->
+1->class Foo {
+  >    \u
+2 >    {
+3 >     
+1->Emitted(17, 5) Source(13, 7) + SourceIndex(0)
+2 >Emitted(17, 6) Source(13, 8) + SourceIndex(0)
+3 >Emitted(17, 6) Source(13, 7) + SourceIndex(0)
+---
+>>>    return Foo;
+1->^^^^
+2 >    ^^^^^^^^^^
+1->
+2 >    {
+1->Emitted(18, 5) Source(13, 7) + SourceIndex(0)
+2 >Emitted(18, 15) Source(13, 8) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > 
+5 > ^^^^
+1 >
+2 >{
+3 > 
+4 > 
+5 > class Foo {
+  >     \u
+1 >Emitted(19, 1) Source(13, 7) + SourceIndex(0)
+2 >Emitted(19, 2) Source(13, 8) + SourceIndex(0)
+3 >Emitted(19, 2) Source(13, 7) + SourceIndex(0)
+4 >Emitted(19, 2) Source(12, 1) + SourceIndex(0)
+5 >Emitted(19, 6) Source(13, 7) + SourceIndex(0)
+---
+>>>{
+1 >
+2 >^
+3 > ^^^^^^^^->
+1 >
+2 >{
+1 >Emitted(20, 1) Source(13, 7) + SourceIndex(0)
+2 >Emitted(20, 2) Source(13, 8) + SourceIndex(0)
+---
+>>>    102;
+1->^^^^
+2 >    ^^^
+3 >       ^
+1->
+2 >    102
+3 >       
+1->Emitted(21, 5) Source(13, 8) + SourceIndex(0)
+2 >Emitted(21, 8) Source(13, 11) + SourceIndex(0)
+3 >Emitted(21, 9) Source(13, 11) + SourceIndex(0)
+---
+>>>    A7;
+1 >^^^^
+2 >    ^^
+3 >      ^
+1 >
+2 >    A7
+3 >      
+1 >Emitted(22, 5) Source(13, 11) + SourceIndex(0)
+2 >Emitted(22, 7) Source(13, 13) + SourceIndex(0)
+3 >Emitted(22, 8) Source(13, 13) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^->
+1 >
+2 >}
+1 >Emitted(23, 1) Source(13, 13) + SourceIndex(0)
+2 >Emitted(23, 2) Source(13, 14) + SourceIndex(0)
+---
+>>>string;
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^->
+1->: 
+2 >string
+3 >      ;
+1->Emitted(24, 1) Source(13, 16) + SourceIndex(0)
+2 >Emitted(24, 7) Source(13, 22) + SourceIndex(0)
+3 >Emitted(24, 8) Source(13, 23) + SourceIndex(0)
+---
+>>>constructor();
+1->
+2 >^^^^^^^^^^^
+3 >           ^^
+4 >             ^
+1->
+  >    
+2 >constructor
+3 >           ()
+4 >             
+1->Emitted(25, 1) Source(14, 5) + SourceIndex(0)
+2 >Emitted(25, 12) Source(14, 16) + SourceIndex(0)
+3 >Emitted(25, 14) Source(14, 18) + SourceIndex(0)
+4 >Emitted(25, 15) Source(14, 18) + SourceIndex(0)
+---
+>>>{
+1 >
+2 >^
+3 > ^^^^^^^^^^->
+1 > 
+2 >{
+1 >Emitted(26, 1) Source(14, 19) + SourceIndex(0)
+2 >Emitted(26, 2) Source(14, 20) + SourceIndex(0)
+---
+>>>    this.;
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^
+1->
+  >        
+2 >    this
+3 >        .
+4 >         
+1->Emitted(27, 5) Source(15, 9) + SourceIndex(0)
+2 >Emitted(27, 9) Source(15, 13) + SourceIndex(0)
+3 >Emitted(27, 10) Source(15, 14) + SourceIndex(0)
+4 >Emitted(27, 11) Source(15, 14) + SourceIndex(0)
+---
+>>>    u;
+1 >^^^^
+2 >    ^
+3 >     ^
+1 >\
+2 >    u
+3 >     
+1 >Emitted(28, 5) Source(15, 15) + SourceIndex(0)
+2 >Emitted(28, 6) Source(15, 16) + SourceIndex(0)
+3 >Emitted(28, 7) Source(15, 16) + SourceIndex(0)
+---
+>>>    {
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^->
+1 >
+2 >    {
+1 >Emitted(29, 5) Source(15, 16) + SourceIndex(0)
+2 >Emitted(29, 6) Source(15, 17) + SourceIndex(0)
+---
+>>>        102;
+1->^^^^^^^^
+2 >        ^^^
+3 >           ^
+1->
+2 >        102
+3 >           
+1->Emitted(30, 9) Source(15, 17) + SourceIndex(0)
+2 >Emitted(30, 12) Source(15, 20) + SourceIndex(0)
+3 >Emitted(30, 13) Source(15, 20) + SourceIndex(0)
+---
+>>>        A7;
+1 >^^^^^^^^
+2 >        ^^
+3 >          ^
+1 >
+2 >        A7
+3 >          
+1 >Emitted(31, 9) Source(15, 20) + SourceIndex(0)
+2 >Emitted(31, 11) Source(15, 22) + SourceIndex(0)
+3 >Emitted(31, 12) Source(15, 22) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^->
+1 >
+2 >    }
+1 >Emitted(32, 5) Source(15, 22) + SourceIndex(0)
+2 >Emitted(32, 6) Source(15, 23) + SourceIndex(0)
+---
+>>>    " world";
+1->^^^^
+2 >    ^^^^^^^^
+3 >            ^
+1-> = 
+2 >    " world"
+3 >            ;
+1->Emitted(33, 5) Source(15, 26) + SourceIndex(0)
+2 >Emitted(33, 13) Source(15, 34) + SourceIndex(0)
+3 >Emitted(33, 14) Source(15, 35) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^->
+1 >
+  >    
+2 >}
+1 >Emitted(34, 1) Source(16, 5) + SourceIndex(0)
+2 >Emitted(34, 2) Source(16, 6) + SourceIndex(0)
+---
+>>>methodA();
+1->
+2 >^^^^^^^
+3 >       ^^
+4 >         ^
+1->
+  >    
+2 >methodA
+3 >       ()
+4 >         
+1->Emitted(35, 1) Source(17, 5) + SourceIndex(0)
+2 >Emitted(35, 8) Source(17, 12) + SourceIndex(0)
+3 >Emitted(35, 10) Source(17, 14) + SourceIndex(0)
+4 >Emitted(35, 11) Source(17, 14) + SourceIndex(0)
+---
+>>>{
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^->
+1 > 
+2 >{
+1 >Emitted(36, 1) Source(17, 15) + SourceIndex(0)
+2 >Emitted(36, 2) Source(17, 16) + SourceIndex(0)
+---
+>>>    return this.𐊧;
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^
+4 >               ^
+5 >                ^^
+6 >                  ^
+1->
+  >        
+2 >    return 
+3 >           this
+4 >               .
+5 >                𐊧
+6 >                  ;
+1->Emitted(37, 5) Source(18, 9) + SourceIndex(0)
+2 >Emitted(37, 12) Source(18, 16) + SourceIndex(0)
+3 >Emitted(37, 16) Source(18, 20) + SourceIndex(0)
+4 >Emitted(37, 17) Source(18, 21) + SourceIndex(0)
+5 >Emitted(37, 19) Source(18, 23) + SourceIndex(0)
+6 >Emitted(37, 20) Source(18, 24) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^->
+1 >
+  >    
+2 >}
+1 >Emitted(38, 1) Source(19, 5) + SourceIndex(0)
+2 >Emitted(38, 2) Source(19, 6) + SourceIndex(0)
+---
+>>>export var _;
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^
+6 >            ^
+1->
+  >}
+  >
+  >
+2 >export
+3 >       
+4 >       var 
+5 >           _𐊧 =
+6 >            
+1->Emitted(39, 1) Source(22, 1) + SourceIndex(0)
+2 >Emitted(39, 7) Source(22, 7) + SourceIndex(0)
+3 >Emitted(39, 8) Source(22, 8) + SourceIndex(0)
+4 >Emitted(39, 12) Source(22, 12) + SourceIndex(0)
+5 >Emitted(39, 13) Source(22, 17) + SourceIndex(0)
+6 >Emitted(39, 14) Source(22, 17) + SourceIndex(0)
+---
+>>>new Foo().;
+1 >
+2 >^^^^
+3 >    ^^^
+4 >       ^^
+5 >         ^
+6 >          ^
+1 > 
+2 >new 
+3 >    Foo
+4 >       ()
+5 >         .
+6 >          
+1 >Emitted(40, 1) Source(22, 18) + SourceIndex(0)
+2 >Emitted(40, 5) Source(22, 22) + SourceIndex(0)
+3 >Emitted(40, 8) Source(22, 25) + SourceIndex(0)
+4 >Emitted(40, 10) Source(22, 27) + SourceIndex(0)
+5 >Emitted(40, 11) Source(22, 28) + SourceIndex(0)
+6 >Emitted(40, 12) Source(22, 28) + SourceIndex(0)
+---
+>>>u;
+1 >
+2 >^
+3 > ^
+1 >\
+2 >u
+3 > 
+1 >Emitted(41, 1) Source(22, 29) + SourceIndex(0)
+2 >Emitted(41, 2) Source(22, 30) + SourceIndex(0)
+3 >Emitted(41, 3) Source(22, 30) + SourceIndex(0)
+---
+>>>{
+1 >
+2 >^
+3 > ^^^^^^^^->
+1 >
+2 >{
+1 >Emitted(42, 1) Source(22, 30) + SourceIndex(0)
+2 >Emitted(42, 2) Source(22, 31) + SourceIndex(0)
+---
+>>>    102;
+1->^^^^
+2 >    ^^^
+3 >       ^
+1->
+2 >    102
+3 >       
+1->Emitted(43, 5) Source(22, 31) + SourceIndex(0)
+2 >Emitted(43, 8) Source(22, 34) + SourceIndex(0)
+3 >Emitted(43, 9) Source(22, 34) + SourceIndex(0)
+---
+>>>    A7;
+1 >^^^^
+2 >    ^^
+3 >      ^
+1 >
+2 >    A7
+3 >      
+1 >Emitted(44, 5) Source(22, 34) + SourceIndex(0)
+2 >Emitted(44, 7) Source(22, 36) + SourceIndex(0)
+3 >Emitted(44, 8) Source(22, 36) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+1 >Emitted(45, 1) Source(22, 36) + SourceIndex(0)
+2 >Emitted(45, 2) Source(22, 37) + SourceIndex(0)
+---
+>>>+new Foo().methodA();
+1->
+2 >^
+3 > ^^^^
+4 >     ^^^
+5 >        ^^
+6 >          ^
+7 >           ^^^^^^^
+8 >                  ^^
+9 >                    ^
+1-> 
+2 >+ 
+3 > new 
+4 >     Foo
+5 >        ()
+6 >          .
+7 >           methodA
+8 >                  ()
+9 >                    ;
+1->Emitted(46, 1) Source(22, 38) + SourceIndex(0)
+2 >Emitted(46, 2) Source(22, 40) + SourceIndex(0)
+3 >Emitted(46, 6) Source(22, 44) + SourceIndex(0)
+4 >Emitted(46, 9) Source(22, 47) + SourceIndex(0)
+5 >Emitted(46, 11) Source(22, 49) + SourceIndex(0)
+6 >Emitted(46, 12) Source(22, 50) + SourceIndex(0)
+7 >Emitted(46, 19) Source(22, 57) + SourceIndex(0)
+8 >Emitted(46, 21) Source(22, 59) + SourceIndex(0)
+9 >Emitted(46, 22) Source(22, 60) + SourceIndex(0)
+---
+>>>_;
+1 >
+2 >^
+3 > ^
+4 >  ^->
+1 >
+  >
+  >
+2 >_
+3 > 
+1 >Emitted(47, 1) Source(24, 1) + SourceIndex(0)
+2 >Emitted(47, 2) Source(24, 2) + SourceIndex(0)
+3 >Emitted(47, 3) Source(24, 2) + SourceIndex(0)
+---
+>>>u;
+1->
+2 >^
+3 > ^
+1->\
+2 >u
+3 > 
+1->Emitted(48, 1) Source(24, 3) + SourceIndex(0)
+2 >Emitted(48, 2) Source(24, 4) + SourceIndex(0)
+3 >Emitted(48, 3) Source(24, 4) + SourceIndex(0)
+---
+>>>{
+1 >
+2 >^
+3 > ^^^^^^^^->
+1 >
+2 >{
+1 >Emitted(49, 1) Source(24, 4) + SourceIndex(0)
+2 >Emitted(49, 2) Source(24, 5) + SourceIndex(0)
+---
+>>>    102;
+1->^^^^
+2 >    ^^^
+3 >       ^
+1->
+2 >    102
+3 >       
+1->Emitted(50, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(50, 8) Source(24, 8) + SourceIndex(0)
+3 >Emitted(50, 9) Source(24, 8) + SourceIndex(0)
+---
+>>>    A7;
+1 >^^^^
+2 >    ^^
+3 >      ^
+1 >
+2 >    A7
+3 >      
+1 >Emitted(51, 5) Source(24, 8) + SourceIndex(0)
+2 >Emitted(51, 7) Source(24, 10) + SourceIndex(0)
+3 >Emitted(51, 8) Source(24, 10) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^->
+1 >
+2 >}
+1 >Emitted(52, 1) Source(24, 10) + SourceIndex(0)
+2 >Emitted(52, 2) Source(24, 11) + SourceIndex(0)
+---
+>>>"!";
+1->
+2 >^^^
+3 >   ^
+4 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1-> += 
+2 >"!"
+3 >   ;
+1->Emitted(53, 1) Source(24, 15) + SourceIndex(0)
+2 >Emitted(53, 4) Source(24, 18) + SourceIndex(0)
+3 >Emitted(53, 5) Source(24, 19) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=extendedEscapesForAstralsInVarsAndClasses.js.map===================================================================
+JsFile: astralAsSurrogatePair.js
+mapUrl: astralAsSurrogatePair.js.map
+sourceRoot: 
+sources: astralAsSurrogatePair.ts
+===================================================================
+>>>export {};
+>>>//# sourceMappingURL=astralAsSurrogatePair.js.map

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyInterface.ts] ////
+
 //// [privacyInterface.ts]
 export module m1 {
     export class C1_public {
@@ -266,7 +268,7 @@ export interface glo_C6_public extends  glo_i_private, glo_i_public {
 
 //// [privacyInterface.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C5_public = exports.m1 = void 0;
 var m1;
 (function (m1) {
@@ -283,7 +285,7 @@ var m1;
         }
         return C2_private;
     }());
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
     var C1_public = /** @class */ (function () {

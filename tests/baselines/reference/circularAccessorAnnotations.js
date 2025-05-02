@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularAccessorAnnotations.ts] ////
+
 //// [circularAccessorAnnotations.ts]
 declare const c1: {
     get foo(): typeof c1.foo;

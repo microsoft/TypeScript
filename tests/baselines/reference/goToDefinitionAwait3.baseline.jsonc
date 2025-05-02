@@ -1,0 +1,49 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionAwait3.ts ===
+// class C {
+//     <|[|notAsync|]() {
+//       /*GOTO DEF*/await Promise.resolve(0);
+//     }|>
+// 
+//     async foo() {
+//       await Promise.resolve(0);
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "notAsync",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionAwait3.ts ===
+// class C {
+//     notAsync() {
+//       await Promise.resolve(0);
+//     }
+// 
+//     <|async [|foo|]() {
+//       /*GOTO DEF*/await Promise.resolve(0);
+//     }|>
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "foo",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

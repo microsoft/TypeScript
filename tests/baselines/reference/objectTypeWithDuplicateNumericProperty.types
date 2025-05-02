@@ -1,72 +1,98 @@
-=== tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts] ////
+
+=== objectTypeWithDuplicateNumericProperty.ts ===
 // numeric properties must be distinct after a ToNumber operation
 // so the below are all errors
 
 class C {
 >C : C
+>  : ^
 
     1;
 >1 : any
+>  : ^^^
 
     1.0;
 >1.0 : any
+>    : ^^^
 
     1.;
 >1. : any
+>   : ^^^
 
     1.00;
 >1.00 : any
+>     : ^^^
 }
 
 interface I {
     1;
 >1 : any
+>  : ^^^
 
     1.0;
 >1.0 : any
+>    : ^^^
 
     1.;
 >1. : any
+>   : ^^^
 
     1.00;
 >1.00 : any
+>     : ^^^
 }
 
 var a: {
 >a : { 1: any; }
+>  : ^^^^^^^^^^^
 
     1;
 >1 : any
+>  : ^^^
 
     1.0;
 >1.0 : any
+>    : ^^^
 
     1.;
 >1. : any
+>   : ^^^
 
     1.00;
 >1.00 : any
+>     : ^^^
 }
 
 var b = {
 >b : { 1: number; }
+>  : ^^^^^^^^^^^^^^
 >{    1: 1,    1.0: 1,    1.: 1,    1.00: 1} : { 1: number; }
+>                                            : ^^^^^^^^^^^^^^
 
     1: 1,
 >1 : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     1.0: 1,
 >1.0 : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     1.: 1,
 >1. : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     1.00: 1
 >1.00 : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 

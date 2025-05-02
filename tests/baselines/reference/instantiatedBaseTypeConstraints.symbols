@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instantiatedBaseTypeConstraints.ts ===
+//// [tests/cases/compiler/instantiatedBaseTypeConstraints.ts] ////
+
+=== instantiatedBaseTypeConstraints.ts ===
 interface Foo<T extends Foo<T, C>, C> {
 >Foo : Symbol(Foo, Decl(instantiatedBaseTypeConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(instantiatedBaseTypeConstraints.ts, 0, 14))

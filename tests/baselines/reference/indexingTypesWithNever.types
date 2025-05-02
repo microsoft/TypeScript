@@ -1,283 +1,405 @@
-=== tests/cases/compiler/indexingTypesWithNever.ts ===
+//// [tests/cases/compiler/indexingTypesWithNever.ts] ////
+
+=== indexingTypesWithNever.ts ===
 type TestObj = {
->TestObj : { a: string; b: number; }
+>TestObj : TestObj
+>        : ^^^^^^^
 
   a: string;
 >a : string
+>  : ^^^^^^
 
   b: number;
 >b : number
+>  : ^^^^^^
 
 };
 
 // Should be never but without an error
 type Result1 = TestObj[never];
 >Result1 : never
+>        : ^^^^^
 
 type EmptyObj = {};
->EmptyObj : {}
+>EmptyObj : EmptyObj
+>         : ^^^^^^^^
 
 // Should be never but without an error
 type Result2 = EmptyObj[keyof EmptyObj];
 >Result2 : never
+>        : ^^^^^
 
 declare function genericFn1<T>(obj: T): T[never];
 >genericFn1 : <T>(obj: T) => T[never]
+>           : ^ ^^   ^^ ^^^^^        
 >obj : T
+>    : ^
 
 // Should be never
 const result3 = genericFn1({ c: "ctest", d: "dtest" });
 >result3 : never
+>        : ^^^^^
 >genericFn1({ c: "ctest", d: "dtest" }) : never
+>                                       : ^^^^^
 >genericFn1 : <T>(obj: T) => T[never]
+>           : ^ ^^   ^^ ^^^^^        
 >{ c: "ctest", d: "dtest" } : { c: string; d: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : string
+>  : ^^^^^^
 >"ctest" : "ctest"
+>        : ^^^^^^^
 >d : string
+>  : ^^^^^^
 >"dtest" : "dtest"
+>        : ^^^^^^^
 
 declare function genericFn2<T extends { [ind: string]: string }>(
 >genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
+>           : ^ ^^^^^^^^^                          ^^   ^^ ^^^^^        
 >ind : string
+>    : ^^^^^^
 
   obj: T
 >obj : T
+>    : ^
 
 ): T[never];
 
 // Should be never
 const result4 = genericFn2({ e: "etest", f: "ftest" });
 >result4 : never
+>        : ^^^^^
 >genericFn2({ e: "etest", f: "ftest" }) : never
+>                                       : ^^^^^
 >genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
+>           : ^ ^^^^^^^^^                          ^^   ^^ ^^^^^        
 >{ e: "etest", f: "ftest" } : { e: string; f: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : string
+>  : ^^^^^^
 >"etest" : "etest"
+>        : ^^^^^^^
 >f : string
+>  : ^^^^^^
 >"ftest" : "ftest"
+>        : ^^^^^^^
 
 declare function genericFn3<
 >genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
+>           : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^       ^^ ^^^^^^^^^       ^^   ^^ ^^ ^^ ^^ ^^ ^^^^^        
 
   T extends { [K in keyof T]: T[K] },
   U extends keyof T,
   V extends keyof T
 >(obj: T, u: U, v: V): T[U & V];
 >obj : T
+>    : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
 // Should be never
 const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
 >result5 : never
+>        : ^^^^^
 >genericFn3({ g: "gtest", h: "htest" }, "g", "h") : never
+>                                                 : ^^^^^
 >genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
+>           : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^       ^^ ^^^^^^^^^       ^^   ^^ ^^ ^^ ^^ ^^ ^^^^^        
 >{ g: "gtest", h: "htest" } : { g: string; h: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : string
+>  : ^^^^^^
 >"gtest" : "gtest"
+>        : ^^^^^^^
 >h : string
+>  : ^^^^^^
 >"htest" : "htest"
+>        : ^^^^^^^
 >"g" : "g"
+>    : ^^^
 >"h" : "h"
+>    : ^^^
 
 
 declare const obj: {a: string, b: number}
 >obj : { a: string; b: number; }
+>    : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 declare const key: never
 >key : never
+>    : ^^^^^
 
 const result6 = obj[key]
 >result6 : never
+>        : ^^^^^
 >obj[key] : never
+>         : ^^^^^
 >obj : { a: string; b: number; }
+>    : ^^^^^      ^^^^^      ^^^
 >key : never
+>    : ^^^^^
 
 // Expanded examples from https://github.com/Microsoft/TypeScript/issues/21988
 type RequiredPropNames<T> = {
 >RequiredPropNames : RequiredPropNames<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
   [P in keyof T]-?: undefined extends T[P] ? never : P
 }[keyof T];
 
 type OptionalPropNames<T> = {
 >OptionalPropNames : OptionalPropNames<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
   [P in keyof T]-?: undefined extends T[P] ? P : never
 }[keyof T];
 
 type RequiredProps<T> = { [P in RequiredPropNames<T>]: T[P] };
 >RequiredProps : RequiredProps<T>
+>              : ^^^^^^^^^^^^^^^^
 
 type OptionalProps<T> = { [P in OptionalPropNames<T>]?: T[P] };
 >OptionalProps : OptionalProps<T>
+>              : ^^^^^^^^^^^^^^^^
 
 type Match<Exp, Act> = [Exp] extends [Act]
 >Match : Match<Exp, Act>
+>      : ^^^^^^^^^^^^^^^
 
   ? ([Act] extends [Exp] ? "Match" : "Did not match 2")
   : "Did not match 1";
 
 type ExpectType<Exp, Act> = Match<Exp, Act> extends "Match"
 >ExpectType : ExpectType<Exp, Act>
+>           : ^^^^^^^^^^^^^^^^^^^^
 
   ? ({} extends Exp ? Match<Required<Exp>, Required<Act>> : "Match")
   : "Did not match";
 
 type P3 = { a: string; b: number; c?: boolean };
->P3 : { a: string; b: number; c?: boolean | undefined; }
+>P3 : P3
+>   : ^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 type P2 = { a: string; c?: boolean };
->P2 : { a: string; c?: boolean | undefined; }
+>P2 : P2
+>   : ^^
 >a : string
+>  : ^^^^^^
 >c : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 type P1 = { c?: boolean };
->P1 : { c?: boolean | undefined; }
+>P1 : P1
+>   : ^^
 >c : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 type P0 = {};
->P0 : {}
+>P0 : P0
+>   : ^^
 
 type P3Names = RequiredPropNames<P3>; // expect 'a' | 'b'
->P3Names : "a" | "b"
+>P3Names : P3Names
+>        : ^^^^^^^
 
 type P2Names = RequiredPropNames<P2>; // expect 'a'
 >P2Names : "a"
+>        : ^^^
 
 type P1Names = RequiredPropNames<P1>; // expect never
 >P1Names : never
+>        : ^^^^^
 
 type P0Names = RequiredPropNames<P0>; // expect never
 >P0Names : never
+>        : ^^^^^
 
 declare const p3NameTest: ExpectType<"a" | "b", P3Names>;
 >p3NameTest : "Match"
+>           : ^^^^^^^
 
 declare const p2NameTest: ExpectType<"a", P2Names>;
 >p2NameTest : "Match"
+>           : ^^^^^^^
 
 declare const p1NameTest: ExpectType<never, P1Names>;
 >p1NameTest : "Match"
+>           : ^^^^^^^
 
 declare const p0NameTest: ExpectType<never, P0Names>;
 >p0NameTest : "Match"
+>           : ^^^^^^^
 
 type P3Props = RequiredProps<P3>; // expect { a: string; b: number }
->P3Props : { a: string; b: number; }
+>P3Props : P3Props
+>        : ^^^^^^^
 
 type P2Props = RequiredProps<P2>; // expect { a: string; }
->P2Props : { a: string; }
+>P2Props : P2Props
+>        : ^^^^^^^
 
 type P1Props = RequiredProps<P1>; // expect {}
->P1Props : {}
+>P1Props : P1Props
+>        : ^^^^^^^
 
 type P0Props = RequiredProps<P0>; // expect {}
->P0Props : {}
+>P0Props : P0Props
+>        : ^^^^^^^
 
 declare const p3Test: ExpectType<{ a: string; b: number }, P3Props>;
 >p3Test : "Match"
+>       : ^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 declare const p2Test: ExpectType<{ a: string }, P2Props>;
 >p2Test : "Match"
+>       : ^^^^^^^
 >a : string
+>  : ^^^^^^
 
 declare const p1Test: ExpectType<{}, P1Props>;
 >p1Test : "Match"
+>       : ^^^^^^^
 
 declare const p0Test: ExpectType<{}, P0Props>;
 >p0Test : "Match"
+>       : ^^^^^^^
 
 type O3 = { a?: string; b?: number; c: boolean };
->O3 : { a?: string | undefined; b?: number | undefined; c: boolean; }
+>O3 : O3
+>   : ^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
 type O2 = { a?: string; c: boolean };
->O2 : { a?: string | undefined; c: boolean; }
+>O2 : O2
+>   : ^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
 type O1 = { c: boolean };
->O1 : { c: boolean; }
+>O1 : O1
+>   : ^^
 >c : boolean
+>  : ^^^^^^^
 
 type O0 = {};
->O0 : {}
+>O0 : O0
+>   : ^^
 
 type O3Names = OptionalPropNames<O3>; // expect 'a' | 'b'
->O3Names : "a" | "b"
+>O3Names : O3Names
+>        : ^^^^^^^
 
 type O2Names = OptionalPropNames<O2>; // expect 'a'
 >O2Names : "a"
+>        : ^^^
 
 type O1Names = OptionalPropNames<O1>; // expect never
 >O1Names : never
+>        : ^^^^^
 
 type O0Names = OptionalPropNames<O0>; // expect never
 >O0Names : never
+>        : ^^^^^
 
 declare const o3NameTest: ExpectType<"a" | "b", O3Names>;
 >o3NameTest : "Match"
+>           : ^^^^^^^
 
 declare const o2NameTest: ExpectType<"a", O2Names>;
 >o2NameTest : "Match"
+>           : ^^^^^^^
 
 declare const o1NameTest: ExpectType<never, O1Names>;
 >o1NameTest : "Match"
+>           : ^^^^^^^
 
 declare const o0NameTest: ExpectType<never, O0Names>;
 >o0NameTest : "Match"
+>           : ^^^^^^^
 
 type O3Props = OptionalProps<O3>; // expect { a?: string | undefined; b?: number | undefined }
->O3Props : { a?: string | undefined; b?: number | undefined; }
+>O3Props : O3Props
+>        : ^^^^^^^
 
 type O2Props = OptionalProps<O2>; // expect { a?: string | undefined; }
->O2Props : { a?: string | undefined; }
+>O2Props : O2Props
+>        : ^^^^^^^
 
 type O1Props = OptionalProps<O1>; // expect {}
->O1Props : {}
+>O1Props : O1Props
+>        : ^^^^^^^
 
 type O0Props = OptionalProps<O0>; // expect {}
->O0Props : {}
+>O0Props : O0Props
+>        : ^^^^^^^
 
 declare const o3Test: ExpectType<{ a?: string; b?: number }, O3Props>;
 >o3Test : "Match"
+>       : ^^^^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare const o2Test: ExpectType<{ a?: string }, O2Props>;
 >o2Test : "Match"
+>       : ^^^^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare const o1Test: ExpectType<{}, O1Props>;
 >o1Test : "Match"
+>       : ^^^^^^^
 
 declare const o0Test: ExpectType<{}, O0Props>;
 >o0Test : "Match"
+>       : ^^^^^^^
 
 // Repro from #23005
 
 type Example<T extends Record<'a', string>> = T['a'];
 >Example : Example<T>
+>        : ^^^^^^^^^^
 
 type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
 >Res1 : "x" | "y"
+>     : ^^^^^^^^^
 >a : "x"
+>  : ^^^
 >a : "y"
+>  : ^^^
 
 type Res2 = Example<{ a: "x" }>;  // "x"
 >Res2 : "x"
+>     : ^^^
 >a : "x"
+>  : ^^^
 
 type Res3 = Example<never>;  // never 
 >Res3 : never
+>     : ^^^^^
 

@@ -1,35 +1,52 @@
-=== tests/cases/conformance/jsdoc/declarations/base.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsParameterTagReusesInputNodeInEmit2.ts] ////
+
+=== base.js ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor() {}
 }
 
 const BaseFactory = () => {
 >BaseFactory : { (): Base; Base: typeof Base; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    return new Base();} : { (): Base; Base: typeof Base; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Base();
 >new Base() : Base
+>           : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 };
 
 BaseFactory.Base = Base;
 >BaseFactory.Base = Base : typeof Base
+>                        : ^^^^^^^^^^^
 >BaseFactory.Base : typeof Base
+>                 : ^^^^^^^^^^^
 >BaseFactory : { (): Base; Base: typeof Base; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 module.exports = BaseFactory;
 >module.exports = BaseFactory : { (): Base; Base: typeof Base; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { (): Base; Base: typeof Base; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { (): Base; Base: typeof Base; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (): Base; Base: typeof Base; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseFactory : { (): Base; Base: typeof Base; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+=== file.js ===
 /** @typedef {typeof import('./base')} BaseFactory */
 
 /**
@@ -38,12 +55,16 @@ module.exports = BaseFactory;
  * @returns {InstanceType<BaseFactory["Base"]>}
  */
 const test = (base) => {
->test : (base: InstanceType<BaseFactory["Base"]>) => Base
->(base) => {    return base;} : (base: InstanceType<BaseFactory["Base"]>) => Base
+>test : (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>
+>     : ^    ^^                                 ^^^^^                                 
+>(base) => {    return base;} : (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>
+>                             : ^    ^^                                 ^^^^^                                 
 >base : Base
+>     : ^^^^
 
     return base;
 >base : Base
+>     : ^^^^
 
 };
 

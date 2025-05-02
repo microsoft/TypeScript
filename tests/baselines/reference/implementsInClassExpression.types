@@ -1,13 +1,19 @@
-=== tests/cases/compiler/implementsInClassExpression.ts ===
+//// [tests/cases/compiler/implementsInClassExpression.ts] ////
+
+=== implementsInClassExpression.ts ===
 interface Foo {
     doThing(): void;
 >doThing : () => void
+>        : ^^^^^^    
 }
 
 let cls = class implements Foo {
 >cls : typeof cls
+>    : ^^^^^^^^^^
 >class implements Foo {    doThing() { }} : typeof cls
+>                                         : ^^^^^^^^^^
 
     doThing() { }
 >doThing : () => void
+>        : ^^^^^^^^^^
 }

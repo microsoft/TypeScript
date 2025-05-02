@@ -1,6 +1,9 @@
-=== tests/cases/compiler/app.js ===
+//// [tests/cases/compiler/localRequireFunction.ts] ////
+
+=== app.js ===
 function require(a) {
 >require : (a: any) => any
+>        : ^ ^^^^^^^^^^^^^
 >a : any
 
     return a;
@@ -11,13 +14,18 @@ const fs = require("fs");
 >fs : error
 >require("fs") : any
 >require : (a: any) => any
+>        : ^ ^^^^^^^^^^^^^
 >"fs" : "fs"
+>     : ^^^^
 
 const text = fs.readFileSync("/a/b/c");
 >text : error
 >fs.readFileSync("/a/b/c") : error
 >fs.readFileSync : error
 >fs : any
+>   : ^^^
 >readFileSync : any
+>             : ^^^
 >"/a/b/c" : "/a/b/c"
+>         : ^^^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithAccessibleTypeInTypeAnnotation.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithAccessibleTypeInTypeAnnotation.ts] ////
+
+=== ExportVariableWithAccessibleTypeInTypeAnnotation.ts ===
 module A {
 >A : Symbol(A, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 0, 0))
 

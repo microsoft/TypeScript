@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/codeGeneration/exportCodeGen.ts] ////
+
 //// [exportCodeGen.ts]
 // should replace all refs to 'x' in the body,
 // with fully qualified

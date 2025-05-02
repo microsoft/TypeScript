@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/relatedViaDiscriminatedTypeNoError.ts] ////
+
 //// [relatedViaDiscriminatedTypeNoError.ts]
 class Model {
     constructor(public flag: boolean) {}

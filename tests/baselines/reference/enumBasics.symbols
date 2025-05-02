@@ -1,4 +1,6 @@
-=== tests/cases/conformance/enums/enumBasics.ts ===
+//// [tests/cases/conformance/enums/enumBasics.ts] ////
+
+=== enumBasics.ts ===
 // Enum without initializers have first member = 0 and successive members = N + 1
 enum E1 {
 >E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))

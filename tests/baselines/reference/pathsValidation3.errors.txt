@@ -1,7 +1,7 @@
-tests/cases/compiler/tsconfig.json(5,20): error TS5066: Substitutions for pattern 'foo' shouldn't be an empty array.
+tsconfig.json(5,20): error TS5066: Substitutions for pattern 'foo' shouldn't be an empty array.
 
 
-==== tests/cases/compiler/tsconfig.json (1 errors) ====
+==== tsconfig.json (1 errors) ====
     {
         "compilerOptions": {
             "baseUrl": ".",
@@ -13,5 +13,5 @@ tests/cases/compiler/tsconfig.json(5,20): error TS5066: Substitutions for patter
         }
     }
     
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     let x = 1;

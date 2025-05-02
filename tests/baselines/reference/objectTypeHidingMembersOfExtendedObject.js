@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts] ////
+
 //// [objectTypeHidingMembersOfExtendedObject.ts]
 class A {
     foo: string;

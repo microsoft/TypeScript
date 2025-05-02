@@ -1,68 +1,107 @@
-=== tests/cases/compiler/genericMemberFunction.ts ===
+//// [tests/cases/compiler/genericMemberFunction.ts] ////
+
+=== genericMemberFunction.ts ===
 export class BuildError<A, B, C>{
 >BuildError : BuildError<A, B, C>
+>           : ^^^^^^^^^^^^^^^^^^^
 
   public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {
 >parent : <A, B extends A, C>() => FileWithErrors<A, B, C>
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^                       
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
   }
 }
 export class FileWithErrors<A, B, C>{
 >FileWithErrors : FileWithErrors<A, B, C>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
   public errors<A, B extends A, C>(): BuildError<A, B, C>[] {
 >errors : <A, B extends A, C>() => BuildError<A, B, C>[]
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^                     
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
   }
   public parent<A, B extends A, C>(): BuildResult<A, B, C> {
 >parent : <A, B extends A, C>() => BuildResult<A, B, C>
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^                    
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
   }
 }
 export class BuildResult<A, B, C>{
 >BuildResult : BuildResult<A, B, C>
+>            : ^^^^^^^^^^^^^^^^^^^^
 
   public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
 >merge : <A, B extends A, C>(other: BuildResult<A, B, C>) => void
+>      : ^ ^^ ^^^^^^^^^ ^^ ^^     ^^                    ^^^^^    
 >other : BuildResult<A, B, C>
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     a.b.c.d.e.f.g = 0;
 >a.b.c.d.e.f.g = 0 : 0
+>                  : ^
 >a.b.c.d.e.f.g : any
+>              : ^^^
 >a.b.c.d.e.f : any
+>            : ^^^
 >a.b.c.d.e : any
+>          : ^^^
 >a.b.c.d : any
+>        : ^^^
 >a.b.c : any
+>      : ^^^
 >a.b : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 >f : any
+>  : ^^^
 >g : any
+>  : ^^^
 >0 : 0
+>  : ^
 
     removedFiles.forEach(<A, B extends A, C>(each: FileWithErrors<A, B, C>) => {
 >removedFiles.forEach(<A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    }) : any
+>                                                                                                               : ^^^
 >removedFiles.forEach : any
+>                     : ^^^
 >removedFiles : any
+>             : ^^^
 >forEach : any
-><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A, B extends A, C>(each: FileWithErrors<A, B, C>) => void
+>        : ^^^
+><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A_1, B_1 extends A_1, C_1>(each: FileWithErrors<A_1, B_1, C_1>) => void
+>                                                                                         : ^^^^^^^^^^^^^^^^^^   ^^^^^^^    ^^                             ^^^^^^^^^
 >each : FileWithErrors<A, B, C>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
       this.removeFile(each);
 >this.removeFile(each) : any
+>                      : ^^^
 >this.removeFile : any
+>                : ^^^
 >this : this
+>     : ^^^^
 >removeFile : any
+>           : ^^^
 >each : FileWithErrors<A, B, C>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
     });
   }

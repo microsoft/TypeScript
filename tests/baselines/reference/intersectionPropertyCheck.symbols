@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intersectionPropertyCheck.ts ===
+//// [tests/cases/compiler/intersectionPropertyCheck.ts] ////
+
+=== intersectionPropertyCheck.ts ===
 let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
 >obj : Symbol(obj, Decl(intersectionPropertyCheck.ts, 0, 3))
 >a : Symbol(a, Decl(intersectionPropertyCheck.ts, 0, 10))

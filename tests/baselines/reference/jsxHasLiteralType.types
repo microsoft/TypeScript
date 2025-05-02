@@ -1,20 +1,32 @@
-=== tests/cases/compiler/jsxHasLiteralType.tsx ===
+//// [tests/cases/compiler/jsxHasLiteralType.tsx] ////
+
+=== jsxHasLiteralType.tsx ===
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface Props {
     x?: "a" | "b";
 >x : "a" | "b" | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^
 }
 class MyComponent<P extends Props = Props> extends React.Component<P, {}> {}
 >MyComponent : MyComponent<P>
+>            : ^^^^^^^^^^^^^^
 >React.Component : React.Component<P, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
 const m = <MyComponent x="a"/>
 >m : JSX.Element
+>  : ^^^^^^^^^^^
 ><MyComponent x="a"/> : JSX.Element
+>                     : ^^^^^^^^^^^
 >MyComponent : typeof MyComponent
+>            : ^^^^^^^^^^^^^^^^^^
 >x : "a"
+>  : ^^^
 

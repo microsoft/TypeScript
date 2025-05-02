@@ -1,16 +1,24 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers2.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers2.ts] ////
+
+=== typeOfThisInStaticMembers2.ts ===
 class C {
 >C : C
+>  : ^
 
     static foo = this; // ok
 >foo : typeof C
+>    : ^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 }
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     static foo = this; // ok
 >foo : typeof C2
+>    : ^^^^^^^^^
 >this : typeof C2
+>     : ^^^^^^^^^
 }

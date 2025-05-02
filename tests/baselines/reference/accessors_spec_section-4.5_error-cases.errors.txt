@@ -1,52 +1,28 @@
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(3,48): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(5,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(5,47): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(6,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(8,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(9,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(9,52): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(11,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(11,51): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+accessors_spec_section-4.5_error-cases.ts(3,48): error TS2322: Type 'string' is not assignable to type 'number'.
+accessors_spec_section-4.5_error-cases.ts(5,47): error TS2322: Type 'string' is not assignable to type 'number'.
+accessors_spec_section-4.5_error-cases.ts(9,52): error TS2322: Type 'number' is not assignable to type 'string'.
+accessors_spec_section-4.5_error-cases.ts(11,51): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts (12 errors) ====
+==== accessors_spec_section-4.5_error-cases.ts (4 errors) ====
     class LanguageSpec_section_4_5_error_cases {
         public set AnnotatedSetter_SetterFirst(a: number) { }
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public get AnnotatedSetter_SetterFirst() { return ""; }
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                                                   ~~~~~~~~~~
+                                                   ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
         public get AnnotatedSetter_SetterLast() { return ""; }
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                                                  ~~~~~~~~~~
+                                                  ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
         public set AnnotatedSetter_SetterLast(a: number) { }
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         public get AnnotatedGetter_GetterFirst(): string { return ""; }
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set AnnotatedGetter_GetterFirst(aStr) { aStr = 0; }
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                                                        ~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     
         public set AnnotatedGetter_GetterLast(aStr) { aStr = 0; }
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                                                       ~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
         public get AnnotatedGetter_GetterLast(): string { return ""; }
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }

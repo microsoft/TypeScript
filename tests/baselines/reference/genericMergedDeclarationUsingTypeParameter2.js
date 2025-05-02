@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts] ////
+
 //// [genericMergedDeclarationUsingTypeParameter2.ts]
 class foo<T> { constructor(x: T) { } }
 module foo {

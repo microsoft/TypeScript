@@ -1,4 +1,6 @@
-=== tests/cases/compiler/wrapClass.ts ===
+//// [tests/cases/compiler/anonClassDeclarationEmitIsAnon.ts] ////
+
+=== wrapClass.ts ===
 export function wrapClass(param: any) {
 >wrapClass : Symbol(wrapClass, Decl(wrapClass.ts, 0, 0))
 >param : Symbol(param, Decl(wrapClass.ts, 0, 26))
@@ -40,7 +42,7 @@ export function Timestamped<TBase extends Constructor>(Base: TBase) {
     };
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { wrapClass, Timestamped } from "./wrapClass";
 >wrapClass : Symbol(wrapClass, Decl(index.ts, 0, 8))
 >Timestamped : Symbol(Timestamped, Decl(index.ts, 0, 19))

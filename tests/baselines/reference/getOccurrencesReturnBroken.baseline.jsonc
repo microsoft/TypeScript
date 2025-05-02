@@ -1,0 +1,137 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             if (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|{| kind: "none" |}return|];
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             if (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+// 
+//             if (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             if (false) {
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// ret/*HIGHLIGHTS*/urn;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+// --- (line: 5) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// retu/*HIGHLIGHTS*/rn;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// --- (line: 19) skipped ---
+// }
+// 
+// class A {
+//     <|[|{| kind: "reference" |}ret/*HIGHLIGHTS*/urn|];|>
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             () => return;
+//             return;
+//             return;
+// --- (line: 9) skipped ---
+
+// --- (line: 14) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+// }
+// 
+// class A {
+//     return;
+//     [|{| kind: "none" |}r/*HIGHLIGHTS*/eturn|] 8675309;
+// }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namedFunctionExpressionInModule.ts] ////
+
 //// [namedFunctionExpressionInModule.ts]
 module Variables{
     var x = function bar(a, b, c) {

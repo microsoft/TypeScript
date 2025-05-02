@@ -1,13 +1,21 @@
-=== /a/b/consumer.ts ===
-$.foo();
->$.foo() : void
->$.foo : () => void
->$ : { foo(): void; }
->foo : () => void
+//// [tests/cases/conformance/references/library-reference-13.ts] ////
 
 === /a/types/jquery/index.d.ts ===
 declare var $: { foo(): void };
 >$ : { foo(): void; }
+>  : ^^^^^^^^^    ^^^
 >foo : () => void
+>    : ^^^^^^    
 
+
+=== /a/b/consumer.ts ===
+$.foo();
+>$.foo() : void
+>        : ^^^^
+>$.foo : () => void
+>      : ^^^^^^    
+>$ : { foo(): void; }
+>  : ^^^^^^^^^    ^^^
+>foo : () => void
+>    : ^^^^^^    
 

@@ -33,12 +33,12 @@ export default function parseArgs(): minimist.ParsedArgs {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = parseArgs;
 var minimist = require("minimist");
 var process = require("process");
 function parseArgs() {
     return minimist(process.argv.slice(2));
 }
-exports.default = parseArgs;
 
 
 //// [index.d.ts]

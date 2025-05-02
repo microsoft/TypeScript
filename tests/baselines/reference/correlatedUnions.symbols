@@ -1,4 +1,6 @@
-=== tests/cases/compiler/correlatedUnions.ts ===
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
+=== correlatedUnions.ts ===
 // Various repros from #30581
 
 type RecordMap = { n: number, s: string, b: boolean };
@@ -647,7 +649,7 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
 >K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
 
-    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+    const func: Func<K> = funcs[key];
 >func : Symbol(func, Decl(correlatedUnions.ts, 175, 9))
 >Func : Symbol(Func, Decl(correlatedUnions.ts, 161, 39))
 >K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
@@ -823,4 +825,194 @@ type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
 >BarLookup : Symbol(BarLookup, Decl(correlatedUnions.ts, 230, 63))
 >BarLookup : Symbol(BarLookup, Decl(correlatedUnions.ts, 230, 63))
 >K : Symbol(K, Decl(correlatedUnions.ts, 234, 14))
+
+// repro from #43982
+
+interface Original {
+>Original : Symbol(Original, Decl(correlatedUnions.ts, 234, 60))
+
+  prop1: {
+>prop1 : Symbol(Original.prop1, Decl(correlatedUnions.ts, 238, 20))
+
+    subProp1: string;
+>subProp1 : Symbol(subProp1, Decl(correlatedUnions.ts, 239, 10))
+
+    subProp2: string;
+>subProp2 : Symbol(subProp2, Decl(correlatedUnions.ts, 240, 21))
+
+  };
+  prop2: {
+>prop2 : Symbol(Original.prop2, Decl(correlatedUnions.ts, 242, 4))
+
+    subProp3: string;
+>subProp3 : Symbol(subProp3, Decl(correlatedUnions.ts, 243, 10))
+
+    subProp4: string;
+>subProp4 : Symbol(subProp4, Decl(correlatedUnions.ts, 244, 21))
+
+  };
+}
+type KeyOfOriginal = keyof Original;
+>KeyOfOriginal : Symbol(KeyOfOriginal, Decl(correlatedUnions.ts, 247, 1))
+>Original : Symbol(Original, Decl(correlatedUnions.ts, 234, 60))
+
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+>NestedKeyOfOriginalFor : Symbol(NestedKeyOfOriginalFor, Decl(correlatedUnions.ts, 248, 36))
+>T : Symbol(T, Decl(correlatedUnions.ts, 249, 28))
+>KeyOfOriginal : Symbol(KeyOfOriginal, Decl(correlatedUnions.ts, 247, 1))
+>Original : Symbol(Original, Decl(correlatedUnions.ts, 234, 60))
+>T : Symbol(T, Decl(correlatedUnions.ts, 249, 28))
+
+type SameKeys<T> = {
+>SameKeys : Symbol(SameKeys, Decl(correlatedUnions.ts, 249, 73))
+>T : Symbol(T, Decl(correlatedUnions.ts, 251, 14))
+
+  [K in keyof T]: {
+>K : Symbol(K, Decl(correlatedUnions.ts, 252, 3))
+>T : Symbol(T, Decl(correlatedUnions.ts, 251, 14))
+
+    [K2 in keyof T[K]]: number;
+>K2 : Symbol(K2, Decl(correlatedUnions.ts, 253, 5))
+>T : Symbol(T, Decl(correlatedUnions.ts, 251, 14))
+>K : Symbol(K, Decl(correlatedUnions.ts, 252, 3))
+
+  };
+};
+
+type MappedFromOriginal = SameKeys<Original>;
+>MappedFromOriginal : Symbol(MappedFromOriginal, Decl(correlatedUnions.ts, 255, 2))
+>SameKeys : Symbol(SameKeys, Decl(correlatedUnions.ts, 249, 73))
+>Original : Symbol(Original, Decl(correlatedUnions.ts, 234, 60))
+
+const getStringAndNumberFromOriginalAndMapped = <
+>getStringAndNumberFromOriginalAndMapped : Symbol(getStringAndNumberFromOriginalAndMapped, Decl(correlatedUnions.ts, 259, 5))
+
+  K extends KeyOfOriginal,
+>K : Symbol(K, Decl(correlatedUnions.ts, 259, 49))
+>KeyOfOriginal : Symbol(KeyOfOriginal, Decl(correlatedUnions.ts, 247, 1))
+
+  N extends NestedKeyOfOriginalFor<K>
+>N : Symbol(N, Decl(correlatedUnions.ts, 260, 26))
+>NestedKeyOfOriginalFor : Symbol(NestedKeyOfOriginalFor, Decl(correlatedUnions.ts, 248, 36))
+>K : Symbol(K, Decl(correlatedUnions.ts, 259, 49))
+
+>(
+  original: Original,
+>original : Symbol(original, Decl(correlatedUnions.ts, 262, 2))
+>Original : Symbol(Original, Decl(correlatedUnions.ts, 234, 60))
+
+  mappedFromOriginal: MappedFromOriginal,
+>mappedFromOriginal : Symbol(mappedFromOriginal, Decl(correlatedUnions.ts, 263, 21))
+>MappedFromOriginal : Symbol(MappedFromOriginal, Decl(correlatedUnions.ts, 255, 2))
+
+  key: K,
+>key : Symbol(key, Decl(correlatedUnions.ts, 264, 41))
+>K : Symbol(K, Decl(correlatedUnions.ts, 259, 49))
+
+  nestedKey: N
+>nestedKey : Symbol(nestedKey, Decl(correlatedUnions.ts, 265, 9))
+>N : Symbol(N, Decl(correlatedUnions.ts, 260, 26))
+
+): [Original[K][N], MappedFromOriginal[K][N]] => {
+>Original : Symbol(Original, Decl(correlatedUnions.ts, 234, 60))
+>K : Symbol(K, Decl(correlatedUnions.ts, 259, 49))
+>N : Symbol(N, Decl(correlatedUnions.ts, 260, 26))
+>MappedFromOriginal : Symbol(MappedFromOriginal, Decl(correlatedUnions.ts, 255, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 259, 49))
+>N : Symbol(N, Decl(correlatedUnions.ts, 260, 26))
+
+  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
+>original : Symbol(original, Decl(correlatedUnions.ts, 262, 2))
+>key : Symbol(key, Decl(correlatedUnions.ts, 264, 41))
+>nestedKey : Symbol(nestedKey, Decl(correlatedUnions.ts, 265, 9))
+>mappedFromOriginal : Symbol(mappedFromOriginal, Decl(correlatedUnions.ts, 263, 21))
+>key : Symbol(key, Decl(correlatedUnions.ts, 264, 41))
+>nestedKey : Symbol(nestedKey, Decl(correlatedUnions.ts, 265, 9))
+
+};
+
+// repro from #31675
+interface Config {
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+
+  string: string;
+>string : Symbol(Config.string, Decl(correlatedUnions.ts, 272, 18))
+
+  number: number;
+>number : Symbol(Config.number, Decl(correlatedUnions.ts, 273, 17))
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+>getConfigOrDefault : Symbol(getConfigOrDefault, Decl(correlatedUnions.ts, 275, 1))
+>T : Symbol(T, Decl(correlatedUnions.ts, 277, 28))
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+
+  userConfig: Partial<Config>,
+>userConfig : Symbol(userConfig, Decl(correlatedUnions.ts, 277, 52))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+
+  key: T,
+>key : Symbol(key, Decl(correlatedUnions.ts, 278, 30))
+>T : Symbol(T, Decl(correlatedUnions.ts, 277, 28))
+
+  defaultValue: Config[T]
+>defaultValue : Symbol(defaultValue, Decl(correlatedUnions.ts, 279, 9))
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+>T : Symbol(T, Decl(correlatedUnions.ts, 277, 28))
+
+): Config[T] {
+>Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+>T : Symbol(T, Decl(correlatedUnions.ts, 277, 28))
+
+  const userValue = userConfig[key]; 
+>userValue : Symbol(userValue, Decl(correlatedUnions.ts, 282, 7))
+>userConfig : Symbol(userConfig, Decl(correlatedUnions.ts, 277, 52))
+>key : Symbol(key, Decl(correlatedUnions.ts, 278, 30))
+
+  const assertedCheck = userValue ? userValue! : defaultValue;
+>assertedCheck : Symbol(assertedCheck, Decl(correlatedUnions.ts, 283, 7))
+>userValue : Symbol(userValue, Decl(correlatedUnions.ts, 282, 7))
+>userValue : Symbol(userValue, Decl(correlatedUnions.ts, 282, 7))
+>defaultValue : Symbol(defaultValue, Decl(correlatedUnions.ts, 279, 9))
+
+  return assertedCheck;
+>assertedCheck : Symbol(assertedCheck, Decl(correlatedUnions.ts, 283, 7))
+}
+
+// repro from #47523
+
+type Foo1 = {
+>Foo1 : Symbol(Foo1, Decl(correlatedUnions.ts, 285, 1))
+
+  x: number;
+>x : Symbol(x, Decl(correlatedUnions.ts, 289, 13))
+
+  y: string;
+>y : Symbol(y, Decl(correlatedUnions.ts, 290, 12))
+
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+>getValueConcrete : Symbol(getValueConcrete, Decl(correlatedUnions.ts, 292, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 294, 26))
+>Foo1 : Symbol(Foo1, Decl(correlatedUnions.ts, 285, 1))
+
+  o: Partial<Foo1>,
+>o : Symbol(o, Decl(correlatedUnions.ts, 294, 48))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo1 : Symbol(Foo1, Decl(correlatedUnions.ts, 285, 1))
+
+  k: K
+>k : Symbol(k, Decl(correlatedUnions.ts, 295, 19))
+>K : Symbol(K, Decl(correlatedUnions.ts, 294, 26))
+
+): Foo1[K] | undefined {
+>Foo1 : Symbol(Foo1, Decl(correlatedUnions.ts, 285, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 294, 26))
+
+  return o[k];
+>o : Symbol(o, Decl(correlatedUnions.ts, 294, 48))
+>k : Symbol(k, Decl(correlatedUnions.ts, 295, 19))
+}
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyAccess7.ts ===
+//// [tests/cases/compiler/propertyAccess7.ts] ////
+
+=== propertyAccess7.ts ===
 var foo: string;
 >foo : Symbol(foo, Decl(propertyAccess7.ts, 0, 3))
 

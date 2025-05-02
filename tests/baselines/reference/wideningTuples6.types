@@ -1,18 +1,27 @@
-=== tests/cases/conformance/types/tuple/wideningTuples6.ts ===
+//// [tests/cases/conformance/types/tuple/wideningTuples6.ts] ////
+
+=== wideningTuples6.ts ===
 var [a, b] = [undefined, null];
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >[undefined, null] : [undefined, null]
+>                  : ^^^^^^^^^^^^^^^^^
 >undefined : undefined
->null : null
+>          : ^^^^^^^^^
 
 a = "";
 >a = "" : ""
+>       : ^^
 >a : any
 >"" : ""
+>   : ^^
 
 b = "";
 >b = "" : ""
+>       : ^^
 >b : any
 >"" : ""
+>   : ^^
 

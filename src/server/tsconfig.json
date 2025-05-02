@@ -1,9 +1,6 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "removeComments": false,
-        "outFile": "../../built/local/server.js",
-        "preserveConstEnums": true,
         "types": [
             "node"
         ]
@@ -11,20 +8,9 @@
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" },
-        { "path": "../services" }
+        { "path": "../typingsInstallerCore" },
+        { "path": "../services" },
+        { "path": "../deprecatedCompat" }
     ],
-    "files": [
-        "types.ts",
-        "utilitiesPublic.ts",
-        "utilities.ts",
-        "protocol.ts",
-        "scriptInfo.ts",
-        "typingsCache.ts",
-        "project.ts",
-        "editorServices.ts",
-        "moduleSpecifierCache.ts",
-        "packageJsonCache.ts",
-        "session.ts",
-        "scriptVersionCache.ts"
-    ]
+    "include": ["**/*"]
 }

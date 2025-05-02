@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypes2.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypes2.ts] ////
+
+=== mappedTypes2.ts ===
 function verifyLibTypes<T, K extends keyof T, U>() {
 >verifyLibTypes : Symbol(verifyLibTypes, Decl(mappedTypes2.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypes2.ts, 0, 24))

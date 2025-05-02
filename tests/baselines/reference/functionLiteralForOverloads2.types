@@ -1,14 +1,19 @@
-=== tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteralForOverloads2.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteralForOverloads2.ts] ////
+
+=== functionLiteralForOverloads2.ts ===
 // basic uses of function literals with constructor overloads
 
 class C {
 >C : C
+>  : ^
 
     constructor(x: string);
 >x : string
+>  : ^^^^^^
 
     constructor(x: number);
 >x : number
+>  : ^^^^^^
 
     constructor(x) { }
 >x : any
@@ -16,12 +21,15 @@ class C {
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     constructor(x: string);
 >x : string
+>  : ^^^^^^
 
     constructor(x: number);
 >x : number
+>  : ^^^^^^
 
     constructor(x) { }
 >x : any
@@ -29,37 +37,49 @@ class D<T> {
 
 var f: {
 >f : { new (x: string): C; new (x: number): C; }
+>  : ^^^^^^^ ^^      ^^^ ^^^^^^^ ^^      ^^^ ^^^
 
     new(x: string): C;
 >x : string
+>  : ^^^^^^
 
     new(x: number): C;
 >x : number
+>  : ^^^^^^
 
 } = C;
 >C : typeof C
+>  : ^^^^^^^^
 
 var f2: {
 >f2 : { new <T>(x: string): C; new <T>(x: number): C; }
+>   : ^^^^^^^ ^^ ^^      ^^^ ^^^^^^^ ^^ ^^      ^^^ ^^^
 
     new<T>(x: string): C;
 >x : string
+>  : ^^^^^^
 
     new<T>(x: number): C;
 >x : number
+>  : ^^^^^^
 
 } = C;
 >C : typeof C
+>  : ^^^^^^^^
 
 var f3: {
 >f3 : { new <T>(x: string): D<T>; new <T>(x: number): D<T>; }
+>   : ^^^^^^^ ^^ ^^      ^^^    ^^^^^^^ ^^ ^^      ^^^    ^^^
 
     new<T>(x: string): D<T>;
 >x : string
+>  : ^^^^^^
 
     new<T>(x: number): D<T>;
 >x : number
+>  : ^^^^^^
 
 } = D;
 >D : typeof D
+>  : ^^^^^^^^
 

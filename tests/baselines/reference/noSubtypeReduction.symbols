@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/noSubtypeReduction.ts] ////
+
+=== noSubtypeReduction.ts ===
+// Repro from #53425
+
+export interface IA {
+>IA : Symbol(IA, Decl(noSubtypeReduction.ts, 0, 0))
+
+    arr: { A: number; }[];
+>arr : Symbol(IA.arr, Decl(noSubtypeReduction.ts, 2, 21))
+>A : Symbol(A, Decl(noSubtypeReduction.ts, 3, 10))
+}
+
+export interface IAB {
+>IAB : Symbol(IAB, Decl(noSubtypeReduction.ts, 4, 1))
+
+    arr: { A: number; B: number; }[];
+>arr : Symbol(IAB.arr, Decl(noSubtypeReduction.ts, 6, 22))
+>A : Symbol(A, Decl(noSubtypeReduction.ts, 7, 10))
+>B : Symbol(B, Decl(noSubtypeReduction.ts, 7, 21))
+}
+
+export function F(x: IA | IAB) {
+>F : Symbol(F, Decl(noSubtypeReduction.ts, 8, 1))
+>x : Symbol(x, Decl(noSubtypeReduction.ts, 10, 18))
+>IA : Symbol(IA, Decl(noSubtypeReduction.ts, 0, 0))
+>IAB : Symbol(IAB, Decl(noSubtypeReduction.ts, 4, 1))
+
+    const useB = (t: number) => { };
+>useB : Symbol(useB, Decl(noSubtypeReduction.ts, 11, 9))
+>t : Symbol(t, Decl(noSubtypeReduction.ts, 11, 18))
+
+    for (const el of x.arr) {
+>el : Symbol(el, Decl(noSubtypeReduction.ts, 12, 14))
+>x.arr : Symbol(arr, Decl(noSubtypeReduction.ts, 2, 21), Decl(noSubtypeReduction.ts, 6, 22))
+>x : Symbol(x, Decl(noSubtypeReduction.ts, 10, 18))
+>arr : Symbol(arr, Decl(noSubtypeReduction.ts, 2, 21), Decl(noSubtypeReduction.ts, 6, 22))
+
+        if ('A' in el) { }
+>el : Symbol(el, Decl(noSubtypeReduction.ts, 12, 14))
+
+        if ('B' in el) {
+>el : Symbol(el, Decl(noSubtypeReduction.ts, 12, 14))
+
+            useB(el.B);
+>useB : Symbol(useB, Decl(noSubtypeReduction.ts, 11, 9))
+>el.B : Symbol(B, Decl(noSubtypeReduction.ts, 7, 21))
+>el : Symbol(el, Decl(noSubtypeReduction.ts, 12, 14))
+>B : Symbol(B, Decl(noSubtypeReduction.ts, 7, 21))
+        }
+    }
+}
+

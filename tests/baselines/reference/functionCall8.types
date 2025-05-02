@@ -1,25 +1,41 @@
-=== tests/cases/compiler/functionCall8.ts ===
+//// [tests/cases/compiler/functionCall8.ts] ////
+
+=== functionCall8.ts ===
 function foo(a?:string){}
 >foo : (a?: string) => void
+>    : ^ ^^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 foo('foo'); 
 >foo('foo') : void
+>           : ^^^^
 >foo : (a?: string) => void
+>    : ^ ^^^      ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 foo('foo', 'bar'); 
 >foo('foo', 'bar') : void
+>                  : ^^^^
 >foo : (a?: string) => void
+>    : ^ ^^^      ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 
 foo(4);
 >foo(4) : void
+>       : ^^^^
 >foo : (a?: string) => void
+>    : ^ ^^^      ^^^^^^^^^
 >4 : 4
+>  : ^
 
 foo();
 >foo() : void
+>      : ^^^^
 >foo : (a?: string) => void
+>    : ^ ^^^      ^^^^^^^^^
 

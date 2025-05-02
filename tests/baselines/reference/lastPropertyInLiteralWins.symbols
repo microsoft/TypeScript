@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lastPropertyInLiteralWins.ts ===
+//// [tests/cases/compiler/lastPropertyInLiteralWins.ts] ////
+
+=== lastPropertyInLiteralWins.ts ===
 interface Thing {
 >Thing : Symbol(Thing, Decl(lastPropertyInLiteralWins.ts, 0, 0))
 

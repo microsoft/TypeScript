@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedPrivateMembers.ts ===
+//// [tests/cases/compiler/unusedPrivateMembers.ts] ////
+
+=== unusedPrivateMembers.ts ===
 class Test1 {
 >Test1 : Symbol(Test1, Decl(unusedPrivateMembers.ts, 0, 0))
 
@@ -139,11 +141,6 @@ class Test6 {
 >x.a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
 >x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
 >a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
-
-        x.b++;
->x.b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
->x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
->b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
     }
 }
 

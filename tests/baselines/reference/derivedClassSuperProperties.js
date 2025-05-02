@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts] ////
+
 //// [derivedClassSuperProperties.ts]
 declare const decorate: any;
 
@@ -636,7 +638,7 @@ var DerivedWithFunctionExpression = /** @class */ (function (_super) {
 var DerivedWithParenthesis = /** @class */ (function (_super) {
     __extends(DerivedWithParenthesis, _super);
     function DerivedWithParenthesis() {
-        var _this = _super.call(this) || this;
+        var _this = (_this = _super.call(this) || this);
         _this.prop = true;
         return _this;
     }
@@ -647,7 +649,7 @@ var DerivedWithParenthesisAfterStatement = /** @class */ (function (_super) {
     function DerivedWithParenthesisAfterStatement() {
         var _this = this;
         _this.prop;
-        _this = _super.call(this) || this;
+        (_this = _super.call(this) || this);
         _this.prop = true;
         return _this;
     }
@@ -656,7 +658,7 @@ var DerivedWithParenthesisAfterStatement = /** @class */ (function (_super) {
 var DerivedWithParenthesisBeforeStatement = /** @class */ (function (_super) {
     __extends(DerivedWithParenthesisBeforeStatement, _super);
     function DerivedWithParenthesisBeforeStatement() {
-        var _this = _super.call(this) || this;
+        var _this = (_this = _super.call(this) || this);
         _this.prop = true;
         _this.prop;
         return _this;
@@ -812,9 +814,9 @@ var DerivedWithObjectAccessors = /** @class */ (function (_super) {
     return DerivedWithObjectAccessors;
 }(Base));
 var DerivedWithObjectAccessorsUsingThisInKeys = /** @class */ (function (_super) {
-    var _a;
     __extends(DerivedWithObjectAccessorsUsingThisInKeys, _super);
     function DerivedWithObjectAccessorsUsingThisInKeys() {
+        var _a;
         var _this = this;
         var obj = (_a = {
                 _prop: "prop"
@@ -873,13 +875,13 @@ var DerivedWithObjectComputedPropertyBody = /** @class */ (function (_super) {
     return DerivedWithObjectComputedPropertyBody;
 }(Base));
 var DerivedWithObjectComputedPropertyName = /** @class */ (function (_super) {
-    var _b;
     __extends(DerivedWithObjectComputedPropertyName, _super);
     function DerivedWithObjectComputedPropertyName() {
+        var _a;
         var _this = this;
-        var obj = (_b = {},
-            _b[_this.propName] = true,
-            _b);
+        var obj = (_a = {},
+            _a[_this.propName] = true,
+            _a);
         _this = _super.call(this) || this;
         _this.propName = "prop";
         return _this;

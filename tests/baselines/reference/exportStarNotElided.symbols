@@ -1,4 +1,6 @@
-=== tests/cases/compiler/register.ts ===
+//// [tests/cases/compiler/exportStarNotElided.ts] ////
+
+=== register.ts ===
 const r: any[] = [];
 >r : Symbol(r, Decl(register.ts, 0, 5))
 
@@ -12,14 +14,14 @@ export function register(data: any) {
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(register.ts, 1, 25))
 }
-=== tests/cases/compiler/data1.ts ===
+=== data1.ts ===
 import { register } from "./";
 >register : Symbol(register, Decl(data1.ts, 0, 8))
 
 register("ok");
 >register : Symbol(register, Decl(data1.ts, 0, 8))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 export * from "./register";
 export * from "./data1";
 export * as aliased from "./data1";

@@ -15,7 +15,7 @@ let a = Def.E.one;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var SomeEnum;
 (function (SomeEnum) {
     SomeEnum[SomeEnum["one"] = 0] = "one";
@@ -26,9 +26,9 @@ var SomeClass = /** @class */ (function () {
     SomeClass.E = SomeEnum;
     return SomeClass;
 }());
-exports["default"] = SomeClass;
+exports.default = SomeClass;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-var a = a_1["default"].E.one;
+var a = a_1.default.E.one;

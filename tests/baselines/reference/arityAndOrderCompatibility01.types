@@ -1,121 +1,180 @@
-=== tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts ===
+//// [tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts] ////
+
+=== arityAndOrderCompatibility01.ts ===
 interface StrNum extends Array<string|number> {
     0: string;
 >0 : string
+>  : ^^^^^^
 
     1: number;
 >1 : number
+>  : ^^^^^^
 
     length: 2;
 >length : 2
+>       : ^
 }
 
 var x: [string, number];
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var y: StrNum
 >y : StrNum
+>  : ^^^^^^
 
 var z: {
 >z : { 0: string; 1: number; length: 2; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
 
     0: string;
 >0 : string
+>  : ^^^^^^
 
     1: number;
 >1 : number
+>  : ^^^^^^
 
     length: 2;
 >length : 2
+>       : ^
 }
 
 var [a, b, c] = x;
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : undefined
+>  : ^^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var [d, e, f] = y;
 >d : string
+>  : ^^^^^^
 >e : number
+>  : ^^^^^^
 >f : string | number
+>  : ^^^^^^^^^^^^^^^
 >y : StrNum
+>  : ^^^^^^
 
 var [g, h, i] = z;
 >g : any
+>  : ^^^
 >h : any
+>  : ^^^
 >i : any
+>  : ^^^
 >z : { 0: string; 1: number; length: 2; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
 
 var j1: [number, number, number] = x;
 >j1 : [number, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var j2: [number, number, number] = y;
 >j2 : [number, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >y : StrNum
+>  : ^^^^^^
 
 var j3: [number, number, number] = z;
 >j3 : [number, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { 0: string; 1: number; length: 2; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
 
 var k1: [string, number, number] = x;
 >k1 : [string, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var k2: [string, number, number] = y;
 >k2 : [string, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >y : StrNum
+>  : ^^^^^^
 
 var k3: [string, number, number] = z;
 >k3 : [string, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { 0: string; 1: number; length: 2; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
 
 var l1: [number] = x;
 >l1 : [number]
+>   : ^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var l2: [number] = y;
 >l2 : [number]
+>   : ^^^^^^^^
 >y : StrNum
+>  : ^^^^^^
 
 var l3: [number] = z;
 >l3 : [number]
+>   : ^^^^^^^^
 >z : { 0: string; 1: number; length: 2; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
 
 var m1: [string] = x;
 >m1 : [string]
+>   : ^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var m2: [string] = y;
 >m2 : [string]
+>   : ^^^^^^^^
 >y : StrNum
+>  : ^^^^^^
 
 var m3: [string] = z;
 >m3 : [string]
+>   : ^^^^^^^^
 >z : { 0: string; 1: number; length: 2; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
 
 var n1: [number, string] = x;
 >n1 : [number, string]
+>   : ^^^^^^^^^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var n2: [number, string] = y;
 >n2 : [number, string]
+>   : ^^^^^^^^^^^^^^^^
 >y : StrNum
+>  : ^^^^^^
 
 var n3: [number, string] = z;
 >n3 : [number, string]
+>   : ^^^^^^^^^^^^^^^^
 >z : { 0: string; 1: number; length: 2; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
 
 var o1: [string, number] = x;
 >o1 : [string, number]
+>   : ^^^^^^^^^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var o2: [string, number] = y;
 >o2 : [string, number]
+>   : ^^^^^^^^^^^^^^^^
 >y : StrNum
+>  : ^^^^^^
 
 var o3: [string, number] = y;
 >o3 : [string, number]
+>   : ^^^^^^^^^^^^^^^^
 >y : StrNum
+>  : ^^^^^^
 

@@ -1,7 +1,13 @@
-=== tests/cases/conformance/es6/templates/templateStringInTypeOfES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInTypeOfES6.ts] ////
+
+=== templateStringInTypeOfES6.ts ===
 var x = typeof `abc${ 123 }def`;
 >x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof `abc${ 123 }def` : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->`abc${ 123 }def` : string
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>`abc${ 123 }def` : "abc123def"
+>                 : ^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 

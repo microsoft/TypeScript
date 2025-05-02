@@ -1,5 +1,29 @@
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/workspaces/solution/src/utils/index.ts]
+export const x = 10;
+
+//// [/home/src/workspaces/solution/src/utils/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": true
+  }
+}
+
+//// [/home/src/workspaces/solution/project/index.ts]
+import { x } from "../utils";
+
+//// [/home/src/workspaces/solution/project/tsconfig.json]
+{
+  "references": [
+    {
+      "path": "../utils"
+    }
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -14,35 +38,27 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/index.ts]
-import { x } from "../utils";
 
-//// [/src/project/tsconfig.json]
-{"references":[{"path":"../utils"}]}
-
-//// [/src/utils/index.ts]
-export const x = 10;
-
-//// [/src/utils/tsconfig.json]
-{"compilerOptions":{"composite":true,"noEmit":true}}
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js --p project
 Output::
-/lib/tsc --p src/project
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS6310: [0mReferenced project '/src/utils' may not disable emit.
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/solution/utils' not found.
 
-[7m1[0m {"references":[{"path":"../utils"}]}
-[7m [0m [91m               ~~~~~~~~~~~~~~~~~~~[0m
+[7m3[0m     {
+[7m [0m [91m    ~[0m
+[7m4[0m       "path": "../utils"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m5[0m     }
+[7m [0m [91m~~~~~[0m
 
 
-Found 1 error in src/project/tsconfig.json[90m:1[0m
+Found 1 error in project/tsconfig.json[90m:3[0m
+
+
+
+//// [/home/src/workspaces/solution/project/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-
-//// [/src/project/index.js]
-"use strict";
-exports.__esModule = true;
-
-

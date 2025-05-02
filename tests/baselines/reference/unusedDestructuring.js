@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedDestructuring.ts] ////
+
 //// [unusedDestructuring.ts]
 export {};
 declare const o: any;
@@ -15,7 +17,7 @@ function f({ a, b }, { c, d }, { e }) {
 
 //// [unusedDestructuring.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = o.a, b = o.b;
 var c = o.c, d = o.d;
 d;

@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/potentiallyUnassignedVariableInCatch.ts] ////
+
+=== potentiallyUnassignedVariableInCatch.ts ===
+let foo;
+>foo : any
+
+try {
+	if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+
+		foo = 1234;
+>foo = 1234 : 1234
+>           : ^^^^
+>foo : any
+>1234 : 1234
+>     : ^^^^
+	}
+} catch {
+	foo;
+>foo : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+}
+

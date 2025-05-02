@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-system2.ts] ////
+
 //// [es5-system2.ts]
 export var __esModule = 1;
 

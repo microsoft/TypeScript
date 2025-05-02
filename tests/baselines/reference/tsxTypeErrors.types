@@ -1,56 +1,78 @@
-=== tests/cases/conformance/jsx/tsxTypeErrors.tsx ===
+//// [tests/cases/conformance/jsx/tsxTypeErrors.tsx] ////
+
+=== tsxTypeErrors.tsx ===
 // A built-in element (OK)
 var a1 = <div id="foo" />;
 >a1 : error
 ><div id="foo" /> : error
 >div : any
+>    : ^^^
 >id : string
+>   : ^^^^^^
 
 // A built-in element with a mistyped property (error)
 var a2 = <img srce="foo.jpg" />
 >a2 : error
 ><img srce="foo.jpg" /> : error
 >img : any
+>    : ^^^
 >srce : string
+>     : ^^^^^^
 
 // A built-in element with a badly-typed attribute value (error)
 var thing = { oops: 100 };
 >thing : { oops: number; }
+>      : ^^^^^^^^^^^^^^^^^
 >{ oops: 100 } : { oops: number; }
+>              : ^^^^^^^^^^^^^^^^^
 >oops : number
+>     : ^^^^^^
 >100 : 100
+>    : ^^^
 
 var a3 = <div id={thing} />
 >a3 : error
 ><div id={thing} /> : error
 >div : any
+>    : ^^^
 >id : { oops: number; }
+>   : ^^^^^^^^^^^^^^^^^
 >thing : { oops: number; }
+>      : ^^^^^^^^^^^^^^^^^
 
 // Mistyped html name (error)
 var e1 = <imag src="bar.jpg" />
 >e1 : error
 ><imag src="bar.jpg" /> : error
 >imag : any
+>     : ^^^
 >src : string
+>    : ^^^^^^
 
 // A custom type
 class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
   props: {
->props : { pt?: {    x: number;    y: number;}; name?: string; reqd: boolean; }
+>props : { pt?: { x: number; y: number; }; name?: string; reqd: boolean; }
+>      : ^^^^^^^                         ^^^^^^^^^      ^^^^^^^^       ^^^
 
     pt?: { x: number; y: number; };
 >pt : { x: number; y: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 	name?: string;
 >name : string
+>     : ^^^^^^
 
 	reqd: boolean;
 >reqd : boolean
+>     : ^^^^^^^
   }
 }
 
@@ -60,8 +82,11 @@ var b1 = <MyClass reqd={true} />;
 >b1 : error
 ><MyClass reqd={true} /> : error
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >reqd : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
 // Mistyped attribute member
 // sample.tsx(23,22): error TS2322: Type '{ x: number; y: string; }' is not assignable to type '{ x: number; y: number; }'.
@@ -71,11 +96,18 @@ var b2 = <MyClass pt={{x: 4, y: 'oops'}} />;
 >b2 : error
 ><MyClass pt={{x: 4, y: 'oops'}} /> : error
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >pt : { x: number; y: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{x: 4, y: 'oops'} : { x: number; y: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >y : string
+>  : ^^^^^^
 >'oops' : "oops"
+>       : ^^^^^^
 
 

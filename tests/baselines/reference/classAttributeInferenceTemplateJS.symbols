@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/classAttributeInferenceTemplateJS.ts] ////
+
+=== index.js ===
 class MyClass {
 >MyClass : Symbol(MyClass, Decl(index.js, 0, 0))
 
@@ -28,3 +30,34 @@ class MyClass {
 >variable : Symbol(variable, Decl(index.js, 5, 13))
     }
 }
+
+class MyClass2 {
+>MyClass2 : Symbol(MyClass2, Decl(index.js, 12, 1))
+
+    accessor property;
+>property : Symbol(MyClass2.property, Decl(index.js, 14, 16))
+
+    accessor property2;
+>property2 : Symbol(MyClass2.property2, Decl(index.js, 15, 22))
+
+    constructor() {
+        const variable = 'something'
+>variable : Symbol(variable, Decl(index.js, 19, 13))
+
+        this.property = `foo`; // Correctly inferred as `string`
+>this.property : Symbol(MyClass2.property, Decl(index.js, 14, 16))
+>this : Symbol(MyClass2, Decl(index.js, 12, 1))
+>property : Symbol(MyClass2.property, Decl(index.js, 14, 16))
+
+        this.property2 = `foo-${variable}`; // Causes an error
+>this.property2 : Symbol(MyClass2.property2, Decl(index.js, 15, 22))
+>this : Symbol(MyClass2, Decl(index.js, 12, 1))
+>property2 : Symbol(MyClass2.property2, Decl(index.js, 15, 22))
+>variable : Symbol(variable, Decl(index.js, 19, 13))
+
+        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+>localProperty : Symbol(localProperty, Decl(index.js, 24, 13))
+>variable : Symbol(variable, Decl(index.js, 19, 13))
+    }
+}
+

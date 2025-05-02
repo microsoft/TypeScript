@@ -1,8 +1,7 @@
-tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS2322: Type '{ foo: string; jj: number; }' is not assignable to type 'Style'.
-  Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
+nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS2353: Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
 
 
-==== tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts (1 errors) ====
+==== nestedRecursiveArraysOrObjectsError01.ts (1 errors) ====
     type Style = StyleBase | StyleArray;
     interface StyleArray extends Array<Style> {}
     interface StyleBase {
@@ -13,9 +12,8 @@ tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS232
         [[{
             foo: 'asdf',
             jj: 1 // intentional error
-            ~~~~~
-!!! error TS2322: Type '{ foo: string; jj: number; }' is not assignable to type 'Style'.
-!!! error TS2322:   Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
+            ~~
+!!! error TS2353: Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
         }]]
     ];
     

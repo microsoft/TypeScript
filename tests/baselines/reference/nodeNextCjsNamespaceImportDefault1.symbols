@@ -1,8 +1,10 @@
-=== tests/cases/compiler/src/a.cts ===
+//// [tests/cases/compiler/nodeNextCjsNamespaceImportDefault1.ts] ////
+
+=== src/a.cts ===
 export const a: number = 1;
 >a : Symbol(a, Decl(a.cts, 0, 12))
 
-=== tests/cases/compiler/src/foo.mts ===
+=== src/foo.mts ===
 import d, {a} from './a.cjs';
 >d : Symbol(d, Decl(foo.mts, 0, 6))
 >a : Symbol(a, Decl(foo.mts, 0, 11))

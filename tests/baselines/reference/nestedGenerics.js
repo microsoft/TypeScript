@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedGenerics.ts] ////
+
 //// [nestedGenerics.ts]
 interface Foo<T> {
 	t: T;

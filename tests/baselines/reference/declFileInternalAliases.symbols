@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileInternalAliases.ts ===
+//// [tests/cases/compiler/declFileInternalAliases.ts] ////
+
+=== declFileInternalAliases.ts ===
 module m {
 >m : Symbol(m, Decl(declFileInternalAliases.ts, 0, 0))
 

@@ -1,774 +1,1253 @@
-=== tests/cases/conformance/types/literal/literalTypes2.ts ===
+//// [tests/cases/conformance/types/literal/literalTypes2.ts] ////
+
+=== literalTypes2.ts ===
 enum E {
 >E : E
+>  : ^
 
     A, B, C
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 >C : E.C
+>  : ^^^
 }
 
 let cond: boolean;
 >cond : boolean
+>     : ^^^^^^^
 
 function f1(p1 = 1, p2 = "abc", p3 = true, p4 = E.A) {
 >f1 : (p1?: number, p2?: string, p3?: boolean, p4?: E) => void
+>   : ^  ^^^^^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^
 >p1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 >p2 : string
+>   : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >p3 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 >p4 : E
+>   : ^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
     var v1 = 1;
 >v1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     var v2 = -123;
 >v2 : number
+>   : ^^^^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
     var v3 = 3 + 4;
 >v3 : number
+>   : ^^^^^^
 >3 + 4 : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
     var v4 = "abc";
 >v4 : string
+>   : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     var v5 = "";
 >v5 : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 
     var v6 = "abc" + "def";
 >v6 : string
+>   : ^^^^^^
 >"abc" + "def" : string
+>              : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >"def" : "def"
+>      : ^^^^^
 
     var v7 = true;
 >v7 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 
     var v8 = E.A;
 >v8 : E
+>   : ^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
     let x1 = 1;
 >x1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     let x2 = -123;
 >x2 : number
+>   : ^^^^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
     let x3 = 3 + 4;
 >x3 : number
+>   : ^^^^^^
 >3 + 4 : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
     let x4 = "abc";
 >x4 : string
+>   : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     let x5 = "";
 >x5 : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 
     let x6 = "abc" + "def";
 >x6 : string
+>   : ^^^^^^
 >"abc" + "def" : string
+>              : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >"def" : "def"
+>      : ^^^^^
 
     let x7 = true;
 >x7 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 
     var x8 = E.A;
 >x8 : E
+>   : ^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
     const c1 = 1;
 >c1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
     const c2 = -123;
 >c2 : -123
+>   : ^^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
     const c3 = 3 + 4;
 >c3 : number
+>   : ^^^^^^
 >3 + 4 : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
     const c4 = "abc";
 >c4 : "abc"
+>   : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     const c5 = "";
 >c5 : ""
+>   : ^^
 >"" : ""
+>   : ^^
 
     const c6 = "abc" + "def";
 >c6 : string
+>   : ^^^^^^
 >"abc" + "def" : string
+>              : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >"def" : "def"
+>      : ^^^^^
 
     const c7 = true;
 >c7 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 
     const c8 = E.A;
 >c8 : E.A
+>   : ^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 }
 
 function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 >f2 : (p1?: 1, p2?: "abc", p3?: true, p4?: E.A) => void
+>   : ^  ^^^ ^^  ^^^     ^^  ^^^    ^^  ^^^   ^^^^^^^^^
 >p1 : 1
+>   : ^
 >1 : 1
+>  : ^
 >p2 : "abc"
+>   : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >p3 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >p4 : E.A
+>   : ^^^
 >E : any
+>  : ^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
     var v1: 1 = 1;
 >v1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
     var v2: -123 = -123;
 >v2 : -123
+>   : ^^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
     var v3: "abc" = "abc";
 >v3 : "abc"
+>   : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     var v4: true = true;
 >v4 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
     var v5: E.A = E.A;
 >v5 : E.A
+>   : ^^^
 >E : any
+>  : ^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
     let x1: 1 = 1;
 >x1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
     let x2: -123 = -123;
 >x2 : -123
+>   : ^^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
     let x3: "abc" = "abc";
 >x3 : "abc"
+>   : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     let x4: true = true;
 >x4 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
     let x5: E.A = E.A;
 >x5 : E.A
+>   : ^^^
 >E : any
+>  : ^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     const c1 = cond ? 1 : 2;
 >c1 : 1 | 2
+>   : ^^^^^
 >cond ? 1 : 2 : 1 | 2
+>             : ^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     const c2 = cond ? 1 : "two";
 >c2 : 1 | "two"
+>   : ^^^^^^^^^
 >cond ? 1 : "two" : 1 | "two"
+>                 : ^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >1 : 1
+>  : ^
 >"two" : "two"
+>      : ^^^^^
 
     const c3 = cond ? E.A : cond ? true : 123;
 >c3 : true | E.A | 123
+>   : ^^^^^^^^^^^^^^^^
 >cond ? E.A : cond ? true : 123 : true | E.A | 123
+>                               : ^^^^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 >cond ? true : 123 : true | 123
+>                  : ^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
     const c4 = cond ? "abc" : null;
 >c4 : "abc"
+>   : ^^^^^
 >cond ? "abc" : null : "abc"
+>                    : ^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >"abc" : "abc"
->null : null
+>      : ^^^^^
 
     const c5 = cond ? 456 : undefined;
 >c5 : 456
+>   : ^^^
 >cond ? 456 : undefined : 456
+>                       : ^^^
 >cond : boolean
+>     : ^^^^^^^
 >456 : 456
+>    : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     const c6: { kind: 123 } = { kind: 123 };
 >c6 : { kind: 123; }
+>   : ^^^^^^^^   ^^^
 >kind : 123
+>     : ^^^
 >{ kind: 123 } : { kind: 123; }
+>              : ^^^^^^^^^^^^^^
 >kind : 123
+>     : ^^^
 >123 : 123
+>    : ^^^
 
     const c7: [1 | 2, "foo" | "bar"] = [1, "bar"];
 >c7 : [1 | 2, "foo" | "bar"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 >[1, "bar"] : [1, "bar"]
+>           : ^^^^^^^^^^
 >1 : 1
+>  : ^
 >"bar" : "bar"
+>      : ^^^^^
 
     const c8 = cond ? c6 : cond ? c7 : "hello";
 >c8 : { kind: 123; } | [1 | 2, "foo" | "bar"] | "hello"
+>   : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cond ? c6 : cond ? c7 : "hello" : { kind: 123; } | [1 | 2, "foo" | "bar"] | "hello"
+>                                : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >c6 : { kind: 123; }
+>   : ^^^^^^^^   ^^^
 >cond ? c7 : "hello" : [1 | 2, "foo" | "bar"] | "hello"
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >c7 : [1 | 2, "foo" | "bar"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     let x1 = c1;
 >x1 : number
+>   : ^^^^^^
 >c1 : 1 | 2
+>   : ^^^^^
 
     let x2 = c2;
 >x2 : string | number
+>   : ^^^^^^^^^^^^^^^
 >c2 : 1 | "two"
+>   : ^^^^^^^^^
 
     let x3 = c3;
 >x3 : number | boolean
+>   : ^^^^^^^^^^^^^^^^
 >c3 : true | E.A | 123
+>   : ^^^^^^^^^^^^^^^^
 
     let x4 = c4;
 >x4 : string
+>   : ^^^^^^
 >c4 : "abc"
+>   : ^^^^^
 
     let x5 = c5;
 >x5 : number
+>   : ^^^^^^
 >c5 : 456
+>   : ^^^
 
     let x6 = c6;
 >x6 : { kind: 123; }
+>   : ^^^^^^^^   ^^^
 >c6 : { kind: 123; }
+>   : ^^^^^^^^   ^^^
 
     let x7 = c7;
 >x7 : [1 | 2, "foo" | "bar"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 >c7 : [1 | 2, "foo" | "bar"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
     let x8 = c8;
 >x8 : string | { kind: 123; } | [1 | 2, "foo" | "bar"]
+>   : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c8 : { kind: 123; } | [1 | 2, "foo" | "bar"] | "hello"
+>   : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     x1 = 1;
 >x1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     x2 = -123;
 >x2 : number
+>   : ^^^^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
     x3 = 3 + 4;
 >x3 : number
+>   : ^^^^^^
 >3 + 4 : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
     x4 = "abc";
 >x4 : string
+>   : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     x5 = "";
 >x5 : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 
     x6 = "abc" + "def";
 >x6 : string
+>   : ^^^^^^
 >"abc" + "def" : string
+>              : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >"def" : "def"
+>      : ^^^^^
 
     x7 = true;
 >x7 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 
     x8 = E.A;
 >x8 : E
+>   : ^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
     readonly c1 = 1;
 >c1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
     readonly c2 = -123;
 >c2 : -123
+>   : ^^^^
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
     readonly c3 = 3 + 4;
 >c3 : number
+>   : ^^^^^^
 >3 + 4 : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
     readonly c4 = "abc";
 >c4 : "abc"
+>   : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     readonly c5 = "";
 >c5 : ""
+>   : ^^
 >"" : ""
+>   : ^^
 
     readonly c6 = "abc" + "def";
 >c6 : string
+>   : ^^^^^^
 >"abc" + "def" : string
+>              : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >"def" : "def"
+>      : ^^^^^
 
     readonly c7 = true;
 >c7 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 
     readonly c8 = E.A;
 >c8 : E.A
+>   : ^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     const c1 = { a: 1, b: "foo" };
 >c1 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: "foo" } : { a: number; b: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     const c2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
 >c2 : { a: 0 | 1; b: "foo" | "bar"; }
+>   : ^^^^^     ^^^^^             ^^^
 >a : 0 | 1
+>  : ^^^^^
 >b : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 >b : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     let x1 = { a: 1, b: "foo" };
 >x1 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: "foo" } : { a: number; b: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     let x2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
 >x2 : { a: 0 | 1; b: "foo" | "bar"; }
+>   : ^^^^^     ^^^^^             ^^^
 >a : 0 | 1
+>  : ^^^^^
 >b : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 >b : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 }
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     const c1 = [1, "foo"];
 >c1 : (string | number)[]
+>   : ^^^^^^^^^^^^^^^^^^^
 >[1, "foo"] : (string | number)[]
+>           : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
     const c2: (1 | "foo")[] = [1, "foo"];
 >c2 : (1 | "foo")[]
+>   : ^^^^^^^^^^^^^
 >[1, "foo"] : (1 | "foo")[]
+>           : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
     const c3: [1, "foo"] = [1, "foo"];
 >c3 : [1, "foo"]
+>   : ^^^^^^^^^^
 >[1, "foo"] : [1, "foo"]
+>           : ^^^^^^^^^^
 >1 : 1
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
     let x1 = [1, "foo"];
 >x1 : (string | number)[]
+>   : ^^^^^^^^^^^^^^^^^^^
 >[1, "foo"] : (string | number)[]
+>           : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
     let x2: (1 | "foo")[] = [1, "foo"];
 >x2 : (1 | "foo")[]
+>   : ^^^^^^^^^^^^^
 >[1, "foo"] : (1 | "foo")[]
+>           : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
     let x3: [1, "foo"] = [1, "foo"];
 >x3 : [1, "foo"]
+>   : ^^^^^^^^^^
 >[1, "foo"] : [1, "foo"]
+>           : ^^^^^^^^^^
 >1 : 1
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 }
 
 function f6() {
 >f6 : () => void
+>   : ^^^^^^^^^^
 
     const { c1 = true, c2 = 0, c3 = "foo" } = { c1: false, c2: 1, c3: "bar" };
 >c1 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 >c2 : 1 | 0
+>   : ^^^^^
 >0 : 0
+>  : ^
 >c3 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ c1: false, c2: 1, c3: "bar" } : { c1?: false; c2?: 1; c3?: "bar"; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c1 : false
+>   : ^^^^^
 >false : false
+>      : ^^^^^
 >c2 : 1
+>   : ^
 >1 : 1
+>  : ^
 >c3 : "bar"
+>   : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
     let { x1 = true, x2 = 0, x3 = "foo" } = { x1: false, x2: 1, x3: "bar" };
 >x1 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 >x2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 >x3 : string
+>   : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ x1: false, x2: 1, x3: "bar" } : { x1?: false; x2?: number; x3?: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x1 : false
+>   : ^^^^^
 >false : false
+>      : ^^^^^
 >x2 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 >x3 : string
+>   : ^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 }
 
 function f10() {
 >f10 : () => string
+>    : ^^^^^^^^^^^^
 
     return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 function f11() {
 >f11 : () => 1 | "two"
+>    : ^^^^^^^^^^^^^^^
 
     return cond ? 1 : "two";
 >cond ? 1 : "two" : 1 | "two"
+>                 : ^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >1 : 1
+>  : ^
 >"two" : "two"
+>      : ^^^^^
 }
 
 function f12() {
 >f12 : () => 1 | "two"
+>    : ^^^^^^^^^^^^^^^
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     else {
         return "two";
 >"two" : "two"
+>      : ^^^^^
     }
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     foo() {
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
     bar() {
 >bar : () => 1 | 0
+>    : ^^^^^^^^^^^
 
         return cond ? 0 : 1;
 >cond ? 0 : 1 : 0 | 1
+>             : ^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
     }
 }
 
 function f20() {
 >f20 : () => void
+>    : ^^^^^^^^^^
 
     const f1 = () => 0;
 >f1 : () => number
+>   : ^^^^^^^^^^^^
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     const f2 = () => "hello";
 >f2 : () => string
+>   : ^^^^^^^^^^^^
 >() => "hello" : () => string
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     const f3 = () => true;
 >f3 : () => boolean
+>   : ^^^^^^^^^^^^^
 >() => true : () => boolean
+>           : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     const f4 = () => E.C;
 >f4 : () => E
+>   : ^^^^^^^
 >() => E.C : () => E
+>          : ^^^^^^^
 >E.C : E.C
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >C : E.C
+>  : ^^^
 
     const f5 = (): "foo" => "foo";
 >f5 : () => "foo"
+>   : ^^^^^^     
 >(): "foo" => "foo" : () => "foo"
+>                   : ^^^^^^     
 >"foo" : "foo"
+>      : ^^^^^
 
     const f6: () => "foo" | "bar" = () => "bar";
 >f6 : () => "foo" | "bar"
+>   : ^^^^^^             
 >() => "bar" : () => "bar"
+>            : ^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
     const f7: (() => "foo") | (() => "bar") = () => "bar";
 >f7 : (() => "foo") | (() => "bar")
+>   : ^^^^^^^     ^^^^^^^^^^^     ^
 >() => "bar" : () => "bar"
+>            : ^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 }
 
 declare function g1<T>(x: T): T;
 >g1 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 declare function g2<T>(x: T, y: T): T;
 >g2 : <T>(x: T, y: T) => T
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : T
+>  : ^
 
 declare function g3<T, U>(x: T, y: U): T | U;
 >g3 : <T, U>(x: T, y: U) => T | U
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >x : T
+>  : ^
 >y : U
+>  : ^
 
 declare function g4<T>(x: T): T[];
 >g4 : <T>(x: T) => T[]
+>   : ^ ^^ ^^ ^^^^^   
 >x : T
+>  : ^
 
 declare function g5<T extends number>(x: T, y: T): T[];
 >g5 : <T extends number>(x: T, y: T) => T[]
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^   
 >x : T
+>  : ^
 >y : T
+>  : ^
 
 declare function g6<T>(x: T[]): T;
 >g6 : <T>(x: T[]) => T
+>   : ^ ^^ ^^   ^^^^^ 
 >x : T[]
+>  : ^^^
 
 declare function g7<T>(x: T[]): T[];
 >g7 : <T>(x: T[]) => T[]
+>   : ^ ^^ ^^   ^^^^^   
 >x : T[]
+>  : ^^^
 
 declare function g8<T>(x: T, f: (p: T) => T): T;
 >g8 : <T>(x: T, f: (p: T) => T) => T
+>   : ^ ^^ ^^ ^^ ^^           ^^^^^ 
 >x : T
+>  : ^
 >f : (p: T) => T
+>  : ^ ^^ ^^^^^ 
 >p : T
+>  : ^
 
 const a: (1 | 2)[] = [1, 2];
 >a : (1 | 2)[]
+>  : ^^^^^^^^^
 >[1, 2] : (1 | 2)[]
+>       : ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 const x1 = g1(1);  // Type 1
 >x1 : 1
+>   : ^
 >g1(1) : 1
+>      : ^
 >g1 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 
 const x2 = g2(1, 1);  // Type 1
 >x2 : 1
+>   : ^
 >g2(1, 1) : 1
+>         : ^
 >g2 : <T>(x: T, y: T) => T
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
 const x3 = g2(1, 2);  // Type 1 | 2
 >x3 : 1 | 2
+>   : ^^^^^
 >g2(1, 2) : 1 | 2
+>         : ^^^^^
 >g2 : <T>(x: T, y: T) => T
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 const x4 = g3(1, "two");  // Type 1 | "two"
 >x4 : 1 | "two"
+>   : ^^^^^^^^^
 >g3(1, "two") : 1 | "two"
+>             : ^^^^^^^^^
 >g3 : <T, U>(x: T, y: U) => T | U
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >1 : 1
+>  : ^
 >"two" : "two"
+>      : ^^^^^
 
 const x5 = g4(1);  // Type number[]
 >x5 : number[]
+>   : ^^^^^^^^
 >g4(1) : number[]
+>      : ^^^^^^^^
 >g4 : <T>(x: T) => T[]
+>   : ^ ^^ ^^ ^^^^^   
 >1 : 1
+>  : ^
 
 const x6 = g5(1, 2);  // Type (1 | 2)[]
 >x6 : (1 | 2)[]
+>   : ^^^^^^^^^
 >g5(1, 2) : (1 | 2)[]
+>         : ^^^^^^^^^
 >g5 : <T extends number>(x: T, y: T) => T[]
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^   
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 const x7 = g6([1, 2]);  // Type number
 >x7 : number
+>   : ^^^^^^
 >g6([1, 2]) : number
+>           : ^^^^^^
 >g6 : <T>(x: T[]) => T
+>   : ^ ^^ ^^   ^^^^^ 
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 const x8 = g6(a);  // Type 1 | 2
 >x8 : 1 | 2
+>   : ^^^^^
 >g6(a) : 1 | 2
+>      : ^^^^^
 >g6 : <T>(x: T[]) => T
+>   : ^ ^^ ^^   ^^^^^ 
 >a : (1 | 2)[]
+>  : ^^^^^^^^^
 
 const x9 = g7(a);  // Type (1 | 2)[]
 >x9 : (1 | 2)[]
+>   : ^^^^^^^^^
 >g7(a) : (1 | 2)[]
+>      : ^^^^^^^^^
 >g7 : <T>(x: T[]) => T[]
+>   : ^ ^^ ^^   ^^^^^   
 >a : (1 | 2)[]
+>  : ^^^^^^^^^
 
 const x10 = g8(1, x => x);  // Type number
 >x10 : number
+>    : ^^^^^^
 >g8(1, x => x) : number
+>              : ^^^^^^
 >g8 : <T>(x: T, f: (p: T) => T) => T
+>   : ^ ^^ ^^ ^^ ^^           ^^^^^ 
 >1 : 1
+>  : ^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 const x11 = g8(1, x => x + 1);  // Type number
 >x11 : number
+>    : ^^^^^^
 >g8(1, x => x + 1) : number
+>                  : ^^^^^^
 >g8 : <T>(x: T, f: (p: T) => T) => T
+>   : ^ ^^ ^^ ^^ ^^           ^^^^^ 
 >1 : 1
+>  : ^
 >x => x + 1 : (x: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 function makeArray<T>(x: T): T[] {
 >makeArray : <T>(x: T) => T[]
+>          : ^ ^^ ^^ ^^^^^   
 >x : T
+>  : ^
 
     return [x];
 >[x] : T[]
+>    : ^^^
 >x : T
+>  : ^
 }
 
 function append<T>(a: T[], x: T): T[] {
 >append : <T>(a: T[], x: T) => T[]
+>       : ^ ^^ ^^   ^^ ^^ ^^^^^   
 >a : T[]
+>  : ^^^
 >x : T
+>  : ^
 
     let result = a.slice();
 >result : T[]
+>       : ^^^
 >a.slice() : T[]
+>          : ^^^
 >a.slice : (start?: number, end?: number) => T[]
+>        : ^     ^^^      ^^   ^^^      ^^^^^^^^
 >a : T[]
+>  : ^^^
 >slice : (start?: number, end?: number) => T[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^
 
     result.push(x);
 >result.push(x) : number
+>               : ^^^^^^
 >result.push : (...items: T[]) => number
+>            : ^^^^     ^^^^^^^^^^      
 >result : T[]
+>       : ^^^
 >push : (...items: T[]) => number
+>     : ^^^^     ^^^^^^^^^^      
 >x : T
+>  : ^
 
     return result;
 >result : T[]
+>       : ^^^
 }
 
 type Bit = 0 | 1;
->Bit : 0 | 1
+>Bit : Bit
+>    : ^^^
 
 let aa = makeArray<Bit>(0);
 >aa : Bit[]
+>   : ^^^^^
 >makeArray<Bit>(0) : Bit[]
+>                  : ^^^^^
 >makeArray : <T>(x: T) => T[]
+>          : ^ ^^ ^^ ^^^^^   
 >0 : 0
+>  : ^
 
 aa = append(aa, 1);
 >aa = append(aa, 1) : Bit[]
+>                   : ^^^^^
 >aa : Bit[]
+>   : ^^^^^
 >append(aa, 1) : Bit[]
+>              : ^^^^^
 >append : <T>(a: T[], x: T) => T[]
+>       : ^ ^^ ^^   ^^ ^^ ^^^^^   
 >aa : Bit[]
+>   : ^^^^^
 >1 : 1
+>  : ^
 

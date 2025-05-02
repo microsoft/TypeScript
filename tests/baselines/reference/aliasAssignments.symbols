@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasAssignments_1.ts ===
+//// [tests/cases/compiler/aliasAssignments.ts] ////
+
+=== aliasAssignments_1.ts ===
 import moduleA = require("./aliasAssignments_moduleA");
 >moduleA : Symbol(moduleA, Decl(aliasAssignments_1.ts, 0, 0))
 
@@ -16,7 +18,7 @@ y = moduleA; // should be error
 >y : Symbol(y, Decl(aliasAssignments_1.ts, 3, 3))
 >moduleA : Symbol(moduleA, Decl(aliasAssignments_1.ts, 0, 0))
 
-=== tests/cases/compiler/aliasAssignments_moduleA.ts ===
+=== aliasAssignments_moduleA.ts ===
 export class someClass {
 >someClass : Symbol(someClass, Decl(aliasAssignments_moduleA.ts, 0, 0))
 

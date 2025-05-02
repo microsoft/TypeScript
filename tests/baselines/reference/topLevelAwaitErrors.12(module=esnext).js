@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.12.ts] ////
+
 //// [topLevelAwaitErrors.12.ts]
 export {};
 declare namespace foo { const await: any; }

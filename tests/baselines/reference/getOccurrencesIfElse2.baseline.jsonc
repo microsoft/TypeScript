@@ -1,0 +1,23 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse2.ts ===
+// if (true) {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}if|] (false) {
+//     }
+//     [|{| kind: "none" |}else|]{
+//     }
+//     if (true) {
+//     }
+// --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse2.ts ===
+// if (true) {
+//     [|{| kind: "none" |}if|] (false) {
+//     }
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}else|]{
+//     }
+//     if (true) {
+//     }
+// --- (line: 8) skipped ---

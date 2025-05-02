@@ -1,24 +1,37 @@
+//// [tests/cases/compiler/declarationEmitUnnessesaryTypeReferenceNotAdded.ts] ////
+
 === /index.ts ===
 import minimist = require('minimist');
 >minimist : (x: any) => minimist.ParsedArgs
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 
 import process = require('process');
 >process : any
+>        : ^^^
 
 export default function parseArgs(): minimist.ParsedArgs {
 >parseArgs : () => minimist.ParsedArgs
+>          : ^^^^^^                   
 >minimist : any
+>         : ^^^
 
   return minimist(process.argv.slice(2));
 >minimist(process.argv.slice(2)) : minimist.ParsedArgs
+>                                : ^^^^^^^^^^^^^^^^^^^
 >minimist : (x: any) => minimist.ParsedArgs
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >process.argv.slice(2) : any
 >process.argv.slice : any
 >process.argv : any
+>             : ^^^
 >process : any
+>        : ^^^
 >argv : any
+>     : ^^^
 >slice : any
+>      : ^^^
 >2 : 2
+>  : ^
 }
 
 === /node_modules/@types/minimist/minimist.d.ts ===
@@ -27,11 +40,14 @@ declare namespace thing {
 }
 declare function thing(x: any): thing.ParsedArgs;
 >thing : (x: any) => thing.ParsedArgs
+>      : ^ ^^   ^^^^^                
 >x : any
 >thing : any
+>      : ^^^
 
 export = thing;
 >thing : (x: any) => thing.ParsedArgs
+>      : ^ ^^   ^^^^^                
 
 === /node_modules/@types/process/process.d.ts ===
 declare const thing: any;
@@ -39,4 +55,5 @@ declare const thing: any;
 
 export = thing;
 >thing : any
+>      : ^^^
 

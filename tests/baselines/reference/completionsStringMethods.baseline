@@ -1,3 +1,31 @@
+// === Completions ===
+=== /tests/cases/fourslash/completionsStringMethods.ts ===
+// var s = "foo".
+//               ^
+// | ----------------------------------------------------------------------
+// | (method) String.charAt(pos: number): string
+// | (method) String.charCodeAt(index: number): number
+// | (method) String.concat(...strings: string[]): string
+// | (method) String.indexOf(searchString: string, position?: number): number
+// | (method) String.lastIndexOf(searchString: string, position?: number): number
+// | (property) String.length: number
+// | (method) String.localeCompare(that: string): number (+1 overload)
+// | (method) String.match(regexp: string | RegExp): RegExpMatchArray | null
+// | (method) String.replace(searchValue: string | RegExp, replaceValue: string): string (+1 overload)
+// | (method) String.search(regexp: string | RegExp): number
+// | (method) String.slice(start?: number, end?: number): string
+// | (method) String.split(separator: string | RegExp, limit?: number): string[]
+// | (method) String.substring(start: number, end?: number): string
+// | (method) String.toLocaleLowerCase(locales?: string | string[]): string
+// | (method) String.toLocaleUpperCase(locales?: string | string[]): string
+// | (method) String.toLowerCase(): string
+// | (method) String.toString(): string
+// | (method) String.toUpperCase(): string
+// | (method) String.trim(): string
+// | (method) String.valueOf(): string
+// | (method) String.substr(from: number, length?: number): string
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +33,7 @@
       "position": 14,
       "name": "1"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -862,6 +890,22 @@
             {
               "text": "RegExpMatchArray",
               "kind": "interfaceName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "null",
+              "kind": "keyword"
             }
           ],
           "documentation": [
@@ -1048,7 +1092,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to search for.",
+                  "text": "A string or regular expression to search for.",
                   "kind": "text"
                 }
               ]
@@ -1065,7 +1109,53 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string containing the text to replace for every successful match of searchValue in this string.",
+                  "text": "A string containing the text to replace. When the ",
+                  "kind": "text"
+                },
+                {
+                  "text": "{@linkcode ",
+                  "kind": "link"
+                },
+                {
+                  "text": "searchValue",
+                  "kind": "linkName",
+                  "target": {
+                    "fileName": "lib.d.ts",
+                    "textSpan": {
+                      "start": "--",
+                      "length": "--"
+                    }
+                  }
+                },
+                {
+                  "text": "}",
+                  "kind": "link"
+                },
+                {
+                  "text": " is a `RegExp`, all matches are replaced if the `g` flag is set (or only those matches at the beginning, if the `y` flag is also present). Otherwise, only the first match of ",
+                  "kind": "text"
+                },
+                {
+                  "text": "{@linkcode ",
+                  "kind": "link"
+                },
+                {
+                  "text": "searchValue",
+                  "kind": "linkName",
+                  "target": {
+                    "fileName": "lib.d.ts",
+                    "textSpan": {
+                      "start": "--",
+                      "length": "--"
+                    }
+                  }
+                },
+                {
+                  "text": "}",
+                  "kind": "link"
+                },
+                {
+                  "text": " is replaced.",
                   "kind": "text"
                 }
               ]
@@ -1324,7 +1414,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf this value is not specified, the substring continues to the end of stringObj.",
+                  "text": "The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.\nIf this value is not specified, the substring continues to the end of stringObj.",
                   "kind": "text"
                 }
               ]
@@ -1632,7 +1722,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf end is omitted, the characters from start through the end of the original string are returned.",
+                  "text": "Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.",
                   "kind": "text"
                 }
               ]
@@ -2312,6 +2402,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

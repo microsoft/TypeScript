@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mutrec.ts ===
+//// [tests/cases/compiler/mutrec.ts] ////
+
+=== mutrec.ts ===
 interface A {
 >A : Symbol(A, Decl(mutrec.ts, 0, 0))
 

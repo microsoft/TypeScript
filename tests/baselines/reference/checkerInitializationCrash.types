@@ -1,70 +1,94 @@
+//// [tests/cases/compiler/checkerInitializationCrash.ts] ////
+
 === /node_modules/@fullcalendar/react/index.d.ts ===
 import * as react from 'react';
 >react : typeof react
+>      : ^^^^^^^^^^^^
 
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
   namespace FullCalendarVDom {
 >FullCalendarVDom : typeof FullCalendarVDom
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
     export import VNode = react.ReactNode;
 >VNode : any
+>      : ^^^
 >react : typeof react
+>      : ^^^^^^^^^^^^
 >ReactNode : any
+>          : ^^^
   }
 }
 
 export default class FullCalendar {
 >FullCalendar : FullCalendar
+>             : ^^^^^^^^^^^^
 }
 
 === /node_modules/@fullcalendar/core/index.d.ts ===
 import * as preact from 'preact';
 >preact : typeof preact
+>       : ^^^^^^^^^^^^^
 
 declare global {
 >global : any
+>       : ^^^
 
   namespace FullCalendarVDom {
     type VNode = preact.VNode<any>;
->VNode : any
+>VNode : VNode
+>      : ^^^^^
 >preact : any
+>       : ^^^
   }
 }
 
 export type EventInput = any;
 >EventInput : any
+>           : ^^^
 
 === /node_modules/@types/react/index.d.ts ===
 export = React;
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 export as namespace React;
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 declare namespace React {
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
     type ReactNode = any;
 >ReactNode : any
+>          : ^^^
 
     function useMemo<T>(factory: () => T, deps: undefined): T;
 >useMemo : <T>(factory: () => T, deps: undefined) => T
+>        : ^ ^^       ^^       ^^    ^^         ^^^^^ 
 >factory : () => T
+>        : ^^^^^^ 
 >deps : undefined
+>     : ^^^^^^^^^
 }
 
 === /node_modules/preact/index.d.ts ===
 export as namespace preact;
 >preact : typeof import("/node_modules/preact/index")
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export interface VNode<P = {}> {}
 
 === /index.tsx ===
 import FullCalendar from "@fullcalendar/react";
 >FullCalendar : typeof FullCalendar
+>             : ^^^^^^^^^^^^^^^^^^^
 
 import { EventInput } from "@fullcalendar/core";
 >EventInput : any
+>           : ^^^
 

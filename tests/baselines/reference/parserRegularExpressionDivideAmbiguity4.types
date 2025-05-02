@@ -1,6 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts] ////
+
+=== parserRegularExpressionDivideAmbiguity4.ts ===
 foo(/notregexp);
->foo(/notregexp); : any
+>foo(/notregexp) : any
+>                : ^^^
 >foo : any
->/notregexp); : RegExp
+>    : ^^^
+>/notregexp : RegExp
+>           : ^^^^^^
 

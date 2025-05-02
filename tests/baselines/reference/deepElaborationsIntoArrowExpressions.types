@@ -1,49 +1,74 @@
-=== tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts ===
+//// [tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts] ////
+
+=== deepElaborationsIntoArrowExpressions.ts ===
 const a: {
 >a : { y(): "a"; }
+>  : ^^^^^^^   ^^^
 
     y(): "a"
 >y : () => "a"
+>  : ^^^^^^   
 
 } = {
 >{    y: () => "b"} : { y: () => "b"; }
+>                   : ^^^^^^^^^^^^^^^^^
 
     y: () => "b"
 >y : () => "b"
+>  : ^^^^^^^^^
 >() => "b" : () => "b"
+>          : ^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 
 };
 
 interface Foo {
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 function foo1(): () => Foo {
 >foo1 : () => () => Foo
+>     : ^^^^^^         
 
     return () => ({a: ''});
 >() => ({a: ''}) : () => { a: string; }
+>                : ^^^^^^^^^^^^^^^^^^^^
 >({a: ''}) : { a: string; }
+>          : ^^^^^^^^^^^^^^
 >{a: ''} : { a: string; }
+>        : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 }
 
 function foo3(): Foo[] {
 >foo3 : () => Foo[]
+>     : ^^^^^^     
 
     return [{a: ''}];
 >[{a: ''}] : { a: string; }[]
+>          : ^^^^^^^^^^^^^^^^
 >{a: ''} : { a: string; }
+>        : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 }
 var y: Foo[] = [{a: ''}]
 >y : Foo[]
+>  : ^^^^^
 >[{a: ''}] : { a: string; }[]
+>          : ^^^^^^^^^^^^^^^^
 >{a: ''} : { a: string; }
+>        : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 

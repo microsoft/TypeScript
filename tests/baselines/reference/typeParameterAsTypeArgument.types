@@ -1,32 +1,46 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterAsTypeArgument.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterAsTypeArgument.ts] ////
+
+=== typeParameterAsTypeArgument.ts ===
 // These are all errors because type parameters cannot reference other type parameters from the same list
 
 function foo<T, U>(x: T, y: U) {
 >foo : <T, U>(x: T, y: U) => C<U, T>
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     foo<U, U>(y, y);
 >foo<U, U>(y, y) : C<U, U>
+>                : ^^^^^^^
 >foo : <T, U>(x: T, y: U) => C<U, T>
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >y : U
+>  : ^
 >y : U
+>  : ^
 
     return new C<U,T>();
 >new C<U,T>() : C<U, T>
+>             : ^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 }
 
 class C<T, U> {
 >C : C<T, U>
+>  : ^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 }
 
 interface I<T, U> {
     x: C<U, T>;
 >x : C<U, T>
+>  : ^^^^^^^
 }
 
 //function foo<T, U extends T>(x: T, y: U) {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts] ////
+
 //// [isomorphicMappedTypeInference.ts]
 type Box<T> = {
     value: T;

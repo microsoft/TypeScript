@@ -1,286 +1,465 @@
-=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts ===
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts] ////
+
+=== renamingDestructuredPropertyInFunctionType.ts ===
 // GH#37454, GH#41044
 
 type O = { a?: string; b: number; c: number; };
->O : { a?: string; b: number; c: number; }
+>O : O
+>  : ^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type F1 = (arg: number) => any; // OK
->F1 : (arg: number) => any
+>F1 : F1
+>   : ^^
 >arg : number
+>    : ^^^^^^
 
 type F2 = ({ a: string }: O) => any; // Error
->F2 : ({ a }: O) => any
+>F2 : F2
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 type F3 = ({ a: string, b, c }: O) => any; // Error
->F3 : ({ a, b, c }: O) => any
+>F3 : F3
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type F4 = ({ a: string }: O) => any; // Error
->F4 : ({ a }: O) => any
+>F4 : F4
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 type F5 = ({ a: string, b, c }: O) => any; // Error
->F5 : ({ a, b, c }: O) => any
+>F5 : F5
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type F6 = ({ a: string }) => typeof string; // OK
->F6 : ({ a }: { a: any; }) => any
+>F6 : F6
+>   : ^^
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 >string : any
+>       : ^^^
 
 type F7 = ({ a: string, b: number }) => typeof number; // Error
->F7 : ({ a, b }: { a: any; b: any; }) => any
+>F7 : F7
+>   : ^^
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 >b : any
+>  : ^^^
 >number : any
+>       : ^^^
 >number : any
+>       : ^^^
 
 type F8 = ({ a, b: number }) => typeof number; // OK
->F8 : ({ a, b }: { a: any; b: any; }) => any
+>F8 : F8
+>   : ^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >number : any
+>       : ^^^
 >number : any
+>       : ^^^
 
 type F9 = ([a, b, c]) => void; // OK
->F9 : ([a, b, c]: [any, any, any]) => void
+>F9 : F9
+>   : ^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 type G1 = new (arg: number) => any; // OK
->G1 : new (arg: number) => any
+>G1 : G1
+>   : ^^
 >arg : number
+>    : ^^^^^^
 
 type G2 = new ({ a: string }: O) => any; // Error
->G2 : new ({ a }: O) => any
+>G2 : G2
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 type G3 = new ({ a: string, b, c }: O) => any; // Error
->G3 : new ({ a, b, c }: O) => any
+>G3 : G3
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type G4 = new ({ a: string }: O) => any; // Error
->G4 : new ({ a }: O) => any
+>G4 : G4
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 type G5 = new ({ a: string, b, c }: O) => any; // Error
->G5 : new ({ a, b, c }: O) => any
+>G5 : G5
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type G6 = new ({ a: string }) => typeof string; // OK
->G6 : new ({ a }: { a: any; }) => any
+>G6 : G6
+>   : ^^
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 >string : any
+>       : ^^^
 
 type G7 = new ({ a: string, b: number }) => typeof number; // Error
->G7 : new ({ a, b }: { a: any; b: any; }) => any
+>G7 : G7
+>   : ^^
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 >b : any
+>  : ^^^
 >number : any
+>       : ^^^
 >number : any
+>       : ^^^
 
 type G8 = new ({ a, b: number }) => typeof number; // OK
->G8 : new ({ a, b }: { a: any; b: any; }) => any
+>G8 : G8
+>   : ^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >number : any
+>       : ^^^
 >number : any
+>       : ^^^
 
 type G9 = new ([a, b, c]) => void; // OK
->G9 : new ([a, b, c]: [any, any, any]) => void
+>G9 : G9
+>   : ^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 // Below are Error but renaming is retained in declaration emit,
 // since elinding it would leave invalid syntax.
 type F10 = ({ "a": string }) => void; // Error
->F10 : ({ "a": string }: { a: any; }) => void
+>F10 : F10
+>    : ^^^
 >string : any
+>       : ^^^
 
 type F11 = ({ 2: string }) => void; // Error
->F11 : ({ 2: string }: { 2: any; }) => void
+>F11 : F11
+>    : ^^^
 >string : any
+>       : ^^^
 
 type F12 = ({ ["a"]: string }: O) => void; // Error
->F12 : ({ ["a"]: string }: O) => void
+>F12 : F12
+>    : ^^^
 >"a" : "a"
+>    : ^^^
 >string : string
+>       : ^^^^^^
 
 type F13 = ({ [2]: string }) => void; // Error
->F13 : ({ [2]: string }: { 2: any; }) => void
+>F13 : F13
+>    : ^^^
 >2 : 2
+>  : ^
 >string : any
+>       : ^^^
 
 type G10 = new ({ "a": string }) => void; // Error
->G10 : new ({ "a": string }: { a: any; }) => void
+>G10 : G10
+>    : ^^^
 >string : any
+>       : ^^^
 
 type G11 = new ({ 2: string }) => void; // Error
->G11 : new ({ 2: string }: { 2: any; }) => void
+>G11 : G11
+>    : ^^^
 >string : any
+>       : ^^^
 
 type G12 = new ({ ["a"]: string }: O) => void; // Error
->G12 : new ({ ["a"]: string }: O) => void
+>G12 : G12
+>    : ^^^
 >"a" : "a"
+>    : ^^^
 >string : string
+>       : ^^^^^^
 
 type G13 = new ({ [2]: string }) => void; // Error
->G13 : new ({ [2]: string }: { 2: any; }) => void
+>G13 : G13
+>    : ^^^
 >2 : 2
+>  : ^
 >string : any
+>       : ^^^
 
 interface I {
   method1(arg: number): any; // OK
 >method1 : (arg: number) => any
+>        : ^   ^^      ^^^^^   
 >arg : number
+>    : ^^^^^^
 
   method2({ a: string }): any; // Error
->method2 : ({ a }: { a: any; }) => any
+>method2 : ({ a: string }: { a: any; }) => any
+>        : ^             ^^^^^^^^^^^^^^^^^^   
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 
   (arg: number): any; // OK
 >arg : number
+>    : ^^^^^^
 
   ({ a: string }): any; // Error
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 
   new (arg: number): any; // OK
 >arg : number
+>    : ^^^^^^
 
   new ({ a: string }): any; // Error
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 }
 
 // Below are OK but renaming should be removed from declaration emit
 function f1({ a: string }: O) { }
->f1 : ({ a }: O) => void
+>f1 : ({ a: string }: O) => void
+>   : ^             ^^ ^^^^^^^^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 const f2 = function({ a: string }: O) { };
->f2 : ({ a }: O) => void
->function({ a: string }: O) { } : ({ a }: O) => void
+>f2 : ({ a: string }: O) => void
+>   : ^             ^^ ^^^^^^^^^
+>function({ a: string }: O) { } : ({ a: string }: O) => void
+>                               : ^             ^^ ^^^^^^^^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 const f3 = ({ a: string, b, c }: O) => { };
->f3 : ({ a, b, c }: O) => void
->({ a: string, b, c }: O) => { } : ({ a, b, c }: O) => void
+>f3 : ({ a: string, b, c }: O) => void
+>   : ^                   ^^ ^^^^^^^^^
+>({ a: string, b, c }: O) => { } : ({ a: string, b, c }: O) => void
+>                                : ^                   ^^ ^^^^^^^^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 const f4 = function({ a: string }: O): typeof string { return string; };
->f4 : ({ a }: O) => string
->function({ a: string }: O): typeof string { return string; } : ({ a }: O) => string
+>f4 : ({ a: string }: O) => typeof string
+>   : ^             ^^ ^^^^^             
+>function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => typeof string
+>                                                             : ^             ^^ ^^^^^             
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >string : string
+>       : ^^^^^^
 >string : string
+>       : ^^^^^^
 
 const f5 = ({ a: string, b, c }: O): typeof string => '';
->f5 : ({ a, b, c }: O) => string
->({ a: string, b, c }: O): typeof string => '' : ({ a, b, c }: O) => string
+>f5 : ({ a: string, b, c }: O) => typeof string
+>   : ^                   ^^ ^^^^^             
+>({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => typeof string
+>                                              : ^                   ^^ ^^^^^             
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >string : string
+>       : ^^^^^^
 >'' : ""
+>   : ^^
 
 const obj1 = {
->obj1 : { method({ a }: O): void; }
->{  method({ a: string }: O) { }} : { method({ a }: O): void; }
+>obj1 : { method({ a: string }: O): void; }
+>     : ^^^^^^^^^             ^^ ^^^^^^^^^^
+>{  method({ a: string }: O) { }} : { method({ a: string }: O): void; }
+>                                 : ^^^^^^^^^             ^^ ^^^^^^^^^^
 
   method({ a: string }: O) { }
->method : ({ a }: O) => void
+>method : ({ a: string }: O) => void
+>       : ^             ^^ ^^^^^^^^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 };
 const obj2 = {
->obj2 : { method({ a }: O): string; }
->{  method({ a: string }: O): typeof string { return string; }} : { method({ a }: O): string; }
+>obj2 : { method({ a: string }: O): typeof string; }
+>     : ^^^^^^^^^             ^^ ^^^             ^^^
+>{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): typeof string; }
+>                                                               : ^^^^^^^^^             ^^ ^^^             ^^^
 
   method({ a: string }: O): typeof string { return string; }
->method : ({ a }: O) => string
+>method : ({ a: string }: O) => typeof string
+>       : ^             ^^ ^^^^^             
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >string : string
+>       : ^^^^^^
 >string : string
+>       : ^^^^^^
 
 };
 function f6({ a: string = "" }: O) { }
->f6 : ({ a }: O) => void
+>f6 : ({ a: string }: O) => void
+>   : ^             ^^ ^^^^^^^^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 
 const f7 = ({ a: string = "", b, c }: O) => { };
->f7 : ({ a, b, c }: O) => void
->({ a: string = "", b, c }: O) => { } : ({ a, b, c }: O) => void
+>f7 : ({ a: string, b, c }: O) => void
+>   : ^                   ^^ ^^^^^^^^^
+>({ a: string = "", b, c }: O) => { } : ({ a: string, b, c }: O) => void
+>                                     : ^                   ^^ ^^^^^^^^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 const f8 = ({ "a": string }: O) => { };
 >f8 : ({ "a": string }: O) => void
+>   : ^               ^^ ^^^^^^^^^
 >({ "a": string }: O) => { } : ({ "a": string }: O) => void
+>                            : ^               ^^ ^^^^^^^^^
 >string : string
+>       : ^^^^^^
 
 function f9 ({ 2: string }) { };
 >f9 : ({ 2: string }: { 2: any; }) => void
+>   : ^             ^^^^^^^^^^^^^^^^^^^^^^
 >string : any
+>       : ^^^
 
 function f10 ({ ["a"]: string }: O) { };
 >f10 : ({ ["a"]: string }: O) => void
+>    : ^                 ^^ ^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 >string : string
+>       : ^^^^^^
 
 const f11 =  ({ [2]: string }) => { };
 >f11 : ({ [2]: string }: { 2: any; }) => void
+>    : ^               ^^^^^^^^^^^^^^^^^^^^^^
 >({ [2]: string }) => { } : ({ [2]: string }: { 2: any; }) => void
+>                         : ^               ^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >string : any
+>       : ^^^
 
 // In below case `string` should be kept because it is used
 function f12({ a: string = "" }: O): typeof string { return "a"; }
->f12 : ({ a }: O) => typeof string
+>f12 : ({ a: string }: O) => typeof string
+>    : ^             ^^ ^^^^^             
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >string : string
+>       : ^^^^^^
 >"a" : "a"
+>    : ^^^
 

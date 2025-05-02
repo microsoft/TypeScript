@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/assertionTypePredicates1.ts] ////
+
 //// [assertionTypePredicates1.ts]
 declare function isString(value: unknown): value is string;
 declare function isArrayOfStrings(value: unknown): value is string[];
@@ -195,6 +197,68 @@ function example1(things: Thing[]) {
     }
 }
 
+class TestPropertyDeclaration1 {
+  assert = (value: unknown): asserts value => {};
+  other(x: unknown) {
+    this.assert(x); // error
+    x;
+  }
+}
+
+class TestPropertyDeclaration2 {
+  assert: (v: unknown) => asserts v = (value) => {};
+  other(x: unknown) {
+    this.assert(x); // ok
+    x;
+  }
+}
+
+declare class ParentInheritedPropertyDeclaration {
+  assert: (value: unknown) => asserts value;
+}
+class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
+  other(x: unknown) {
+    this.assert(x); // ok
+    x;
+  }
+}
+
+interface TestPropertySignature {
+  assert: (value: unknown) => asserts value;
+}
+function testPropertySignature(
+  x: TestPropertySignature,
+  y: unknown,
+) {
+  x.assert(y); // ok
+  x;
+}
+function testFunctionThisParameter1(
+  this: TestPropertySignature,
+  x: unknown,
+) {
+  this.assert(x); // ok
+  x;
+}
+
+interface TestMethodSignature {
+  assert(value: unknown): asserts value;
+}
+function testMethodSignature(
+  x: TestMethodSignature,
+  y: unknown,
+) {
+  x.assert(y); // ok
+  x;
+}
+function testFunctionThisParameter2(
+  this: TestMethodSignature,
+  x: unknown,
+) {
+  this.assert(x); // ok
+  x;
+}
+
 
 //// [assertionTypePredicates1.js]
 "use strict";
@@ -384,6 +448,53 @@ function example1(things) {
         thing.good;
     }
 }
+var TestPropertyDeclaration1 = /** @class */ (function () {
+    function TestPropertyDeclaration1() {
+        this.assert = function (value) { };
+    }
+    TestPropertyDeclaration1.prototype.other = function (x) {
+        this.assert(x); // error
+        x;
+    };
+    return TestPropertyDeclaration1;
+}());
+var TestPropertyDeclaration2 = /** @class */ (function () {
+    function TestPropertyDeclaration2() {
+        this.assert = function (value) { };
+    }
+    TestPropertyDeclaration2.prototype.other = function (x) {
+        this.assert(x); // ok
+        x;
+    };
+    return TestPropertyDeclaration2;
+}());
+var ChildInheritedPropertyDeclaration = /** @class */ (function (_super) {
+    __extends(ChildInheritedPropertyDeclaration, _super);
+    function ChildInheritedPropertyDeclaration() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ChildInheritedPropertyDeclaration.prototype.other = function (x) {
+        this.assert(x); // ok
+        x;
+    };
+    return ChildInheritedPropertyDeclaration;
+}(ParentInheritedPropertyDeclaration));
+function testPropertySignature(x, y) {
+    x.assert(y); // ok
+    x;
+}
+function testFunctionThisParameter1(x) {
+    this.assert(x); // ok
+    x;
+}
+function testMethodSignature(x, y) {
+    x.assert(y); // ok
+    x;
+}
+function testFunctionThisParameter2(x) {
+    this.assert(x); // ok
+    x;
+}
 
 
 //// [assertionTypePredicates1.d.ts]
@@ -436,3 +547,27 @@ interface GoodThing {
     good: true;
 }
 declare function example1(things: Thing[]): void;
+declare class TestPropertyDeclaration1 {
+    assert: (value: unknown) => asserts value;
+    other(x: unknown): void;
+}
+declare class TestPropertyDeclaration2 {
+    assert: (v: unknown) => asserts v;
+    other(x: unknown): void;
+}
+declare class ParentInheritedPropertyDeclaration {
+    assert: (value: unknown) => asserts value;
+}
+declare class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
+    other(x: unknown): void;
+}
+interface TestPropertySignature {
+    assert: (value: unknown) => asserts value;
+}
+declare function testPropertySignature(x: TestPropertySignature, y: unknown): void;
+declare function testFunctionThisParameter1(this: TestPropertySignature, x: unknown): void;
+interface TestMethodSignature {
+    assert(value: unknown): asserts value;
+}
+declare function testMethodSignature(x: TestMethodSignature, y: unknown): void;
+declare function testFunctionThisParameter2(this: TestMethodSignature, x: unknown): void;

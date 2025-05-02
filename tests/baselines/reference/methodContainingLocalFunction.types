@@ -1,128 +1,177 @@
-=== tests/cases/compiler/methodContainingLocalFunction.ts ===
+//// [tests/cases/compiler/methodContainingLocalFunction.ts] ////
+
+=== methodContainingLocalFunction.ts ===
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 class BugExhibition<T> {
 >BugExhibition : BugExhibition<T>
+>              : ^^^^^^^^^^^^^^^^
 
     public exhibitBug() {
 >exhibitBug : () => void
+>           : ^^^^^^^^^^
 
         function localFunction() { }
 >localFunction : () => void
+>              : ^^^^^^^^^^
 
         var x: { (): void; };
 >x : () => void
+>  : ^^^^^^    
 
         x = localFunction;
 >x = localFunction : () => void
+>                  : ^^^^^^^^^^
 >x : () => void
+>  : ^^^^^^    
 >localFunction : () => void
+>              : ^^^^^^^^^^
     }
 }
 
 class BugExhibition2<T> {
 >BugExhibition2 : BugExhibition2<T>
+>               : ^^^^^^^^^^^^^^^^^
 
     private static get exhibitBug() {
 >exhibitBug : any
 
         function localFunction() { }
 >localFunction : () => void
+>              : ^^^^^^^^^^
 
         var x: { (): void; };
 >x : () => void
+>  : ^^^^^^    
 
         x = localFunction;
 >x = localFunction : () => void
+>                  : ^^^^^^^^^^
 >x : () => void
+>  : ^^^^^^    
 >localFunction : () => void
+>              : ^^^^^^^^^^
 
         return null;
->null : null
     }
 }
 
 class BugExhibition3<T> {
 >BugExhibition3 : BugExhibition3<T>
+>               : ^^^^^^^^^^^^^^^^^
 
     public exhibitBug() {
 >exhibitBug : () => void
+>           : ^^^^^^^^^^
 
         function localGenericFunction<U>(u?: U) { }
 >localGenericFunction : <U>(u?: U) => void
+>                     : ^ ^^ ^^^ ^^^^^^^^^
 >u : U
+>  : ^
 
         var x: { (): void; };
 >x : () => void
+>  : ^^^^^^    
 
         x = localGenericFunction;
 >x = localGenericFunction : <U>(u?: U) => void
+>                         : ^ ^^ ^^^ ^^^^^^^^^
 >x : () => void
+>  : ^^^^^^    
 >localGenericFunction : <U>(u?: U) => void
+>                     : ^ ^^ ^^^ ^^^^^^^^^
     }
 }
 
 class C {
 >C : C
+>  : ^
 
     exhibit() {
 >exhibit : () => void
+>        : ^^^^^^^^^^
 
         var funcExpr = <U>(u?: U) => { };
 >funcExpr : <U>(u?: U) => void
+>         : ^ ^^ ^^^ ^^^^^^^^^
 ><U>(u?: U) => { } : <U>(u?: U) => void
+>                  : ^ ^^ ^^^ ^^^^^^^^^
 >u : U
+>  : ^
 
         var x: { (): void; };
 >x : () => void
+>  : ^^^^^^    
 
         x = funcExpr;
 >x = funcExpr : <U>(u?: U) => void
+>             : ^ ^^ ^^^ ^^^^^^^^^
 >x : () => void
+>  : ^^^^^^    
 >funcExpr : <U>(u?: U) => void
+>         : ^ ^^ ^^^ ^^^^^^^^^
     }
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export function exhibitBug() {
 >exhibitBug : () => void
+>           : ^^^^^^^^^^
 
         function localFunction() { }
 >localFunction : () => void
+>              : ^^^^^^^^^^
 
         var x: { (): void; };
 >x : () => void
+>  : ^^^^^^    
 
         x = localFunction;
 >x = localFunction : () => void
+>                  : ^^^^^^^^^^
 >x : () => void
+>  : ^^^^^^    
 >localFunction : () => void
+>              : ^^^^^^^^^^
     }
 }
 
 enum E {
 >E : E
+>  : ^
 
     A = (() => {
->A : E
+>A : E.A
+>  : ^^^
 >(() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    })() : number
+>                                                                                                                             : ^^^^^^
 >(() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    }) : () => number
+>                                                                                                                           : ^^^^^^^^^^^^
 >() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    } : () => number
+>                                                                                                                         : ^^^^^^^^^^^^
 
         function localFunction() { }
 >localFunction : () => void
+>              : ^^^^^^^^^^
 
         var x: { (): void; };
 >x : () => void
+>  : ^^^^^^    
 
         x = localFunction;
 >x = localFunction : () => void
+>                  : ^^^^^^^^^^
 >x : () => void
+>  : ^^^^^^    
 >localFunction : () => void
+>              : ^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
 
     })()
 }

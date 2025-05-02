@@ -1,31 +1,39 @@
-=== tests/cases/conformance/declarationEmit/node_modules/ext/index.d.ts ===
-export interface A {}
-export function fa(): A;
->fa : () => A
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.ts] ////
 
-=== tests/cases/conformance/declarationEmit/node_modules/ext/other.d.ts ===
+=== main.ts ===
+import { fa } from "ext";
+>fa : () => import("node_modules/ext/other").A2
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
+
+import { fa as fa2 } from "ext/other";
+>fa : () => import("node_modules/ext/other").A2
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
+>fa2 : () => import("node_modules/ext/other").A2
+>    : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
+
+export const va = fa();
+>va : import("node_modules/ext/other").A2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fa() : import("node_modules/ext/other").A2
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fa : () => import("node_modules/ext/other").A2
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
+
+export const va2 = fa2();
+>va2 : import("node_modules/ext/other").A2
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fa2() : import("node_modules/ext/other").A2
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fa2 : () => import("node_modules/ext/other").A2
+>    : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
+
+=== node_modules/ext/other.d.ts ===
 export interface A2 {}
 export function fa(): A2;
 >fa : () => A2
+>   : ^^^^^^  
 
-=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts ===
+=== node_modules/ext/ts3.1/index.d.ts ===
+
 export * from "../other";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/declarationEmit/main.ts ===
-import { fa } from "ext";
->fa : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
-
-import { fa as fa2 } from "ext/other";
->fa : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
->fa2 : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
-
-export const va = fa();
->va : import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
->fa() : import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
->fa : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
-
-export const va2 = fa2();
->va2 : import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
->fa2() : import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
->fa2 : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").A2
 

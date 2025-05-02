@@ -1,0 +1,235 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+// --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+// --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+// --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+// --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+// --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             [|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+// --- (line: 35) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper.ts ===
+// --- (line: 7) skipped ---
+// }
+// 
+// class SubType extends SuperType {
+//     public  prop1 = [|{| kind: "reference" |}super|].superMethod;
+//     private prop2 = [|{| kind: "reference" |}super|].superMethod;
+// 
+//     constructor() {
+//         [|{| kind: "reference" |}super|]();
+//     }
+// 
+//     public method1() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     private method2() {
+//         return [|{| kind: "reference" |}super|].superMethod();
+//     }
+// 
+//     public method3() {
+//         var x = () => [|{| kind: "reference" |}super|].superMethod();
+// 
+//         // Bad but still gets highlighted
+//         function f() {
+//             /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superMethod();
+//         }
+//     }
+// 
+// --- (line: 35) skipped ---

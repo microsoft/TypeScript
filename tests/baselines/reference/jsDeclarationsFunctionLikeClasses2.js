@@ -79,7 +79,8 @@ export const origin = new Point2D(0, 0);
 //// [source.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Point2D = exports.Vec = void 0;
+exports.Vec = Vec;
+exports.Point2D = Point2D;
 /**
  * @param {number} len
  */
@@ -89,7 +90,6 @@ function Vec(len) {
      */
     this.storage = new Array(len);
 }
-exports.Vec = Vec;
 Vec.prototype = {
     /**
      * @param {Vec} other
@@ -124,7 +124,6 @@ function Point2D(x, y) {
     this.x = x;
     this.y = y;
 }
-exports.Point2D = Point2D;
 Point2D.prototype = {
     __proto__: Vec,
     get x() {
@@ -189,12 +188,12 @@ export class Point2D {
     /**
      * @param {number} x
      */
-    set x(arg: number);
+    set x(x: number);
     get x(): number;
     /**
      * @param {number} y
      */
-    set y(arg: number);
+    set y(y: number);
     get y(): number;
     __proto__: typeof Vec;
 }

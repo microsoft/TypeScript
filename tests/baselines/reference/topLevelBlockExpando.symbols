@@ -1,22 +1,20 @@
-=== tests/cases/compiler/check.ts ===
-// https://github.com/microsoft/TypeScript/issues/31972
+//// [tests/cases/compiler/topLevelBlockExpando.ts] ////
 
-
-
+=== check.ts ===
 // https://github.com/microsoft/TypeScript/issues/31972
 interface Person {
 >Person : Symbol(Person, Decl(check.ts, 0, 0))
 
   first: string;
->first : Symbol(Person.first, Decl(check.ts, 5, 18))
+>first : Symbol(Person.first, Decl(check.ts, 1, 18))
 
   last: string;
->last : Symbol(Person.last, Decl(check.ts, 6, 16))
+>last : Symbol(Person.last, Decl(check.ts, 2, 16))
 }
 
 {
   const dice = () => Math.floor(Math.random() * 6);
->dice : Symbol(dice, Decl(check.ts, 11, 7))
+>dice : Symbol(dice, Decl(check.ts, 7, 7))
 >Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
@@ -25,22 +23,22 @@ interface Person {
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
   dice.first = 'Rando';  
->dice.first : Symbol(dice.first, Decl(check.ts, 11, 51))
->dice : Symbol(dice, Decl(check.ts, 11, 7))
->first : Symbol(dice.first, Decl(check.ts, 11, 51))
+>dice.first : Symbol(dice.first, Decl(check.ts, 7, 51))
+>dice : Symbol(dice, Decl(check.ts, 7, 7))
+>first : Symbol(dice.first, Decl(check.ts, 7, 51))
 
   dice.last = 'Calrissian';
->dice.last : Symbol(dice.last, Decl(check.ts, 12, 23))
->dice : Symbol(dice, Decl(check.ts, 11, 7))
->last : Symbol(dice.last, Decl(check.ts, 12, 23))
+>dice.last : Symbol(dice.last, Decl(check.ts, 8, 23))
+>dice : Symbol(dice, Decl(check.ts, 7, 7))
+>last : Symbol(dice.last, Decl(check.ts, 8, 23))
 
   const diceP: Person = dice;  
->diceP : Symbol(diceP, Decl(check.ts, 14, 7))
+>diceP : Symbol(diceP, Decl(check.ts, 10, 7))
 >Person : Symbol(Person, Decl(check.ts, 0, 0))
->dice : Symbol(dice, Decl(check.ts, 11, 7))
+>dice : Symbol(dice, Decl(check.ts, 7, 7))
 }
 
-=== tests/cases/compiler/check.js ===
+=== check.js ===
 // Creates a type { first:string, last: string }
 /**
  * @typedef {Object} Human - creates a new type named 'SpecialType'

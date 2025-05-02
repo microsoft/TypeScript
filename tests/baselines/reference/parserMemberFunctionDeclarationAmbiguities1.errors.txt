@@ -1,14 +1,14 @@
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(2,3): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(3,3): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(5,10): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(6,10): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(8,17): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(9,17): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(11,10): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(12,10): error TS2393: Duplicate function implementation.
+parserMemberFunctionDeclarationAmbiguities1.ts(2,3): error TS2393: Duplicate function implementation.
+parserMemberFunctionDeclarationAmbiguities1.ts(3,3): error TS2393: Duplicate function implementation.
+parserMemberFunctionDeclarationAmbiguities1.ts(5,10): error TS2393: Duplicate function implementation.
+parserMemberFunctionDeclarationAmbiguities1.ts(6,10): error TS2393: Duplicate function implementation.
+parserMemberFunctionDeclarationAmbiguities1.ts(8,17): error TS2393: Duplicate function implementation.
+parserMemberFunctionDeclarationAmbiguities1.ts(9,17): error TS2393: Duplicate function implementation.
+parserMemberFunctionDeclarationAmbiguities1.ts(11,10): error TS2393: Duplicate function implementation.
+parserMemberFunctionDeclarationAmbiguities1.ts(12,10): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts (8 errors) ====
+==== parserMemberFunctionDeclarationAmbiguities1.ts (8 errors) ====
     class C {
       public() {}
       ~~~~~~

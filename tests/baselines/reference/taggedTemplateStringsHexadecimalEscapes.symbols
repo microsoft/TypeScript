@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplateStringsHexadecimalEscapes.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsHexadecimalEscapes.ts] ////
+
+=== taggedTemplateStringsHexadecimalEscapes.ts ===
 function f(...args: any[]) {
 >f : Symbol(f, Decl(taggedTemplateStringsHexadecimalEscapes.ts, 0, 0))
 >args : Symbol(args, Decl(taggedTemplateStringsHexadecimalEscapes.ts, 0, 11))

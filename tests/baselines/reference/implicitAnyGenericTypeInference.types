@@ -1,30 +1,184 @@
-=== tests/cases/compiler/implicitAnyGenericTypeInference.ts ===
+//// [tests/cases/compiler/implicitAnyGenericTypeInference.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== implicitAnyGenericTypeInference.ts ===
 interface Comparer<T> {
     compareTo<U>(x: T, y: U): U;
 >compareTo : <U>(x: T, y: U) => U
+>          : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : U
+>  : ^
 }
 
 var c: Comparer<any>;
 >c : Comparer<any>
+>  : ^^^^^^^^^^^^^
 
 c = { compareTo: (x, y) => { return y; } };
 >c = { compareTo: (x, y) => { return y; } } : { compareTo: <U>(x: any, y: U) => U; }
+>                                           : ^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^
 >c : Comparer<any>
+>  : ^^^^^^^^^^^^^
 >{ compareTo: (x, y) => { return y; } } : { compareTo: <U>(x: any, y: U) => U; }
+>                                       : ^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^
 >compareTo : <U>(x: any, y: U) => U
+>          : ^ ^^ ^^^^^^^ ^^^^^^^^^
 >(x, y) => { return y; } : <U>(x: any, y: U) => U
+>                        : ^ ^^ ^^^^^^^ ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : U
+>  : ^
 >y : U
+>  : ^
 
 var r = c.compareTo(1, '');
 >r : string
+>  : ^^^^^^
 >c.compareTo(1, '') : ""
+>                   : ^^
 >c.compareTo : <U>(x: any, y: U) => U
+>            : ^ ^^ ^^^^^^^ ^^^^^^^^^
 >c : Comparer<any>
+>  : ^^^^^^^^^^^^^
 >compareTo : <U>(x: any, y: U) => U
+>          : ^ ^^ ^^^^^^^ ^^^^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
+
+declare function f1<T>(cb: () => T): void;
+>f1 : <T>(cb: () => T) => void
+>   : ^ ^^  ^^       ^^^^^    
+>cb : () => T
+>   : ^^^^^^ 
+
+f1(() => null);
+>f1(() => null) : void
+>               : ^^^^
+>f1 : <T>(cb: () => T) => void
+>   : ^ ^^  ^^       ^^^^^    
+>() => null : () => any
+>           : ^^^^^^^^^
+
+declare function f2<T>(cb: () => PromiseLike<T>): void;
+>f2 : <T>(cb: () => PromiseLike<T>) => void
+>   : ^ ^^  ^^                    ^^^^^    
+>cb : () => PromiseLike<T>
+>   : ^^^^^^              
+
+f2(async () => null);
+>f2(async () => null) : void
+>                     : ^^^^
+>f2 : <T>(cb: () => PromiseLike<T>) => void
+>   : ^ ^^  ^^                    ^^^^^    
+>async () => null : () => Promise<any>
+>                 : ^^^^^^^^^^^^^^^^^^
+
+declare function f3<T>(cb: () => Generator<T>): void;
+>f3 : <T>(cb: () => Generator<T>) => void
+>   : ^ ^^  ^^                  ^^^^^    
+>cb : () => Generator<T>
+>   : ^^^^^^            
+
+f3(function* () { yield null; });
+>f3(function* () { yield null; }) : void
+>                                 : ^^^^
+>f3 : <T>(cb: () => Generator<T>) => void
+>   : ^ ^^  ^^                  ^^^^^    
+>function* () { yield null; } : () => Generator<any, void, any>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield null : any
+>           : ^^^
+
+declare function f4<T>(cb: () => Generator<unknown, T>): void;
+>f4 : <T>(cb: () => Generator<unknown, T>) => void
+>   : ^ ^^  ^^                           ^^^^^    
+>cb : () => Generator<unknown, T>
+>   : ^^^^^^                     
+
+f4(function* () { return null; });
+>f4(function* () { return null; }) : void
+>                                  : ^^^^
+>f4 : <T>(cb: () => Generator<unknown, T>) => void
+>   : ^ ^^  ^^                           ^^^^^    
+>function* () { return null; } : () => Generator<never, any, any>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function f5<T>(cb: () => AsyncGenerator<T>): void;
+>f5 : <T>(cb: () => AsyncGenerator<T>) => void
+>   : ^ ^^  ^^                       ^^^^^    
+>cb : () => AsyncGenerator<T>
+>   : ^^^^^^                 
+
+f5(async function* () { yield null; });
+>f5(async function* () { yield null; }) : void
+>                                       : ^^^^
+>f5 : <T>(cb: () => AsyncGenerator<T>) => void
+>   : ^ ^^  ^^                       ^^^^^    
+>async function* () { yield null; } : () => AsyncGenerator<any, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield null : any
+>           : ^^^
+
+declare function f6<T>(cb: () => AsyncGenerator<unknown, T>): void;
+>f6 : <T>(cb: () => AsyncGenerator<unknown, T>) => void
+>   : ^ ^^  ^^                                ^^^^^    
+>cb : () => AsyncGenerator<unknown, T>
+>   : ^^^^^^                          
+
+f6(async function* () { return null; });
+>f6(async function* () { return null; }) : void
+>                                        : ^^^^
+>f6 : <T>(cb: () => AsyncGenerator<unknown, T>) => void
+>   : ^ ^^  ^^                                ^^^^^    
+>async function* () { return null; } : () => AsyncGenerator<never, any, any>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/44913
+Promise.resolve().catch(e => null);
+>Promise.resolve().catch(e => null) : Promise<any>
+>                                   : ^^^^^^^^^^^^
+>Promise.resolve().catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
+>                        : ^       ^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve() : Promise<void>
+>                  : ^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
+>      : ^       ^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e => null : (e: any) => any
+>          : ^ ^^^^^^^^^^^^^
+>e : any
+>  : ^^^
+
+Promise.resolve().then(v => null);
+>Promise.resolve().then(v => null) : Promise<any>
+>                                  : ^^^^^^^^^^^^
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                       : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve() : Promise<void>
+>                  : ^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v => null : (v: void) => any
+>          : ^ ^^^^^^^^^^^^^^
+>v : void
+>  : ^^^^
 

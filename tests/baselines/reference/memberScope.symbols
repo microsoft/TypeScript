@@ -1,4 +1,6 @@
-=== tests/cases/compiler/memberScope.ts ===
+//// [tests/cases/compiler/memberScope.ts] ////
+
+=== memberScope.ts ===
 module Salt {
 >Salt : Symbol(Salt, Decl(memberScope.ts, 0, 0))
 

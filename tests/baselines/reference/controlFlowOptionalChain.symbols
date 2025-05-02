@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts] ////
+
+=== controlFlowOptionalChain.ts ===
 // assignments in shortcutting chain
 declare const o: undefined | {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 1, 13))
@@ -1832,3 +1834,48 @@ while (arr[i]?.tag === "left") {
     }
 }
 
+
+// Repro from #51941
+
+type Test5 = {
+>Test5 : Symbol(Test5, Decl(controlFlowOptionalChain.ts, 588, 1))
+
+  main?: {
+>main : Symbol(main, Decl(controlFlowOptionalChain.ts, 593, 14))
+
+    childs: Record<string, Test5>;
+>childs : Symbol(childs, Decl(controlFlowOptionalChain.ts, 594, 10))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Test5 : Symbol(Test5, Decl(controlFlowOptionalChain.ts, 588, 1))
+
+  };
+};
+
+function f50(obj: Test5) {
+>f50 : Symbol(f50, Decl(controlFlowOptionalChain.ts, 597, 2))
+>obj : Symbol(obj, Decl(controlFlowOptionalChain.ts, 599, 13))
+>Test5 : Symbol(Test5, Decl(controlFlowOptionalChain.ts, 588, 1))
+
+   for (const key in obj.main?.childs) {
+>key : Symbol(key, Decl(controlFlowOptionalChain.ts, 600, 13))
+>obj.main?.childs : Symbol(childs, Decl(controlFlowOptionalChain.ts, 594, 10))
+>obj.main : Symbol(main, Decl(controlFlowOptionalChain.ts, 593, 14))
+>obj : Symbol(obj, Decl(controlFlowOptionalChain.ts, 599, 13))
+>main : Symbol(main, Decl(controlFlowOptionalChain.ts, 593, 14))
+>childs : Symbol(childs, Decl(controlFlowOptionalChain.ts, 594, 10))
+
+      if (obj.main.childs[key] === obj) {
+>obj.main.childs : Symbol(childs, Decl(controlFlowOptionalChain.ts, 594, 10))
+>obj.main : Symbol(main, Decl(controlFlowOptionalChain.ts, 593, 14))
+>obj : Symbol(obj, Decl(controlFlowOptionalChain.ts, 599, 13))
+>main : Symbol(main, Decl(controlFlowOptionalChain.ts, 593, 14))
+>childs : Symbol(childs, Decl(controlFlowOptionalChain.ts, 594, 10))
+>key : Symbol(key, Decl(controlFlowOptionalChain.ts, 600, 13))
+>obj : Symbol(obj, Decl(controlFlowOptionalChain.ts, 599, 13))
+
+        return obj;
+>obj : Symbol(obj, Decl(controlFlowOptionalChain.ts, 599, 13))
+      }
+   }
+   return null;
+}

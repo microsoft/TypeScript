@@ -1,19 +1,29 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers6.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers6.ts] ////
+
+=== typeOfThisInStaticMembers6.ts ===
 class C {
 >C : C
+>  : ^
 
     static f = 1
 >f : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     static c = super();
 >c : void
+>  : ^^^^
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 }
 

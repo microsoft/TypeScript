@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment4.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment4.ts] ////
+
+=== parserShorthandPropertyAssignment4.ts ===
 var v = { 0 };
 >v : Symbol(v, Decl(parserShorthandPropertyAssignment4.ts, 0, 3))
 >0 : Symbol(0, Decl(parserShorthandPropertyAssignment4.ts, 0, 9))

@@ -1,9 +1,16 @@
-=== tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts ===
+//// [tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts] ////
+
+=== Performance Stats ===
+Instantiation count: 2,500
+
+=== circularlySimplifyingConditionalTypesNoCrash.ts ===
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Omit<T, K>
+>     : ^^^^^^^^^^
 
 type Shared< // Circularly self constraining type, defered thanks to mapping
 >Shared : Shared<InjectedProps, DecorationTargetProps>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     InjectedProps,
     DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>
@@ -14,15 +21,18 @@ type Shared< // Circularly self constraining type, defered thanks to mapping
 interface ComponentClass<P> {
     defaultProps?: Partial<P>; // Inference target is also mapped _and_ optional
 >defaultProps : Partial<P> | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> {
     <P extends Shared<TInjectedProps, P>>(
         component: ComponentClass<P>
 >component : ComponentClass<P>
+>          : ^^^^^^^^^^^^^^^^^
 
     ): ComponentClass<Omit<P, keyof Shared<TInjectedProps, P>> & TNeedsProps> & { WrappedComponent: ComponentClass<P> }
 >WrappedComponent : ComponentClass<P>
+>                 : ^^^^^^^^^^^^^^^^^
 
 } // Then intersected with and indexed via Omit and &
 
@@ -30,33 +40,39 @@ interface Connect { // Then strictly compared with another signature in its cont
     <TStateProps, TOwnProps>(
         mapStateToProps: unknown,
 >mapStateToProps : unknown
+>                : ^^^^^^^
 
     ): InferableComponentEnhancerWithProps<TStateProps, TOwnProps>;
 
     <TDispatchProps, TOwnProps>(
         mapStateToProps: null | undefined,
 >mapStateToProps : null | undefined
->null : null
+>                : ^^^^^^^^^^^^^^^^
 
         mapDispatchToProps: unknown,
 >mapDispatchToProps : unknown
+>                   : ^^^^^^^
 
         mergeProps: null | undefined,
 >mergeProps : null | undefined
->null : null
+>           : ^^^^^^^^^^^^^^^^
 
         options: unknown
 >options : unknown
+>        : ^^^^^^^
 
     ): InferableComponentEnhancerWithProps<TDispatchProps, TOwnProps>;
 }
 
 declare var connect: Connect;
 >connect : Connect
+>        : ^^^^^^^
 
 const myStoreConnect: Connect = function(
 >myStoreConnect : Connect
+>               : ^^^^^^^
 >function(    mapStateToProps?: any,    mapDispatchToProps?: any,    mergeProps?: any,    options: unknown = {},) {    return connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    );} : <TStateProps, TOwnProps>(mapStateToProps?: any, mapDispatchToProps?: any, mergeProps?: any, options?: unknown) => InferableComponentEnhancerWithProps<TStateProps, Omit<P, Extract<keyof TStateProps, keyof P>> & TOwnProps>
+>                                                                                                                                                                                                                                   : ^           ^^         ^^               ^^^   ^^                  ^^^   ^^          ^^^   ^^       ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     mapStateToProps?: any,
 >mapStateToProps : any
@@ -69,12 +85,16 @@ const myStoreConnect: Connect = function(
 
     options: unknown = {},
 >options : unknown
+>        : ^^^^^^^
 >{} : {}
+>   : ^^
 
 ) {
     return connect(
 >connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    ) : InferableComponentEnhancerWithProps<TStateProps, Omit<P, Extract<keyof TStateProps, keyof P>> & TOwnProps>
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect : Connect
+>        : ^^^^^^^
 
         mapStateToProps,
 >mapStateToProps : any
@@ -87,6 +107,7 @@ const myStoreConnect: Connect = function(
 
         options,
 >options : unknown
+>        : ^^^^^^^
 
     );
 };

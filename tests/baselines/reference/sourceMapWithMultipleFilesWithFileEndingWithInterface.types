@@ -1,34 +1,46 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/sourceMapWithMultipleFilesWithFileEndingWithInterface.ts] ////
+
+=== a.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var X = 1;
 >X : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 interface Navigator {
     getGamepads(func?: any): any;
->getGamepads : { (): Gamepad[]; (func?: any): any; }
+>getGamepads : { (): (Gamepad | null)[]; (func?: any): any; }
+>            : ^^^^^^                  ^^^    ^^^   ^^^   ^^^
 >func : any
 
     webkitGetGamepads(func?: any): any
 >webkitGetGamepads : (func?: any) => any
+>                  : ^    ^^^   ^^^^^   
 >func : any
 
     msGetGamepads(func?: any): any;
 >msGetGamepads : (func?: any) => any
+>              : ^    ^^^   ^^^^^   
 >func : any
 
     webkitGamepads(func?: any): any;
 >webkitGamepads : (func?: any) => any
+>               : ^    ^^^   ^^^^^   
 >func : any
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     export class c1 {
 >c1 : c1
+>   : ^^
     }
 }
+

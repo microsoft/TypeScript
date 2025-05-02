@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesModules3.ts] ////
+
 //// [augmentedTypesModules3.ts]
 //// module then class
 module m3 { }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedMethodsInInterface.ts ===
+//// [tests/cases/compiler/unusedMethodsInInterface.ts] ////
+
+=== unusedMethodsInInterface.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(unusedMethodsInInterface.ts, 0, 0))
 

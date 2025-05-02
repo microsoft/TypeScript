@@ -1,134 +1,223 @@
-=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors4.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors4.ts] ////
+
+=== fatarrowfunctionsOptionalArgsErrors4.ts ===
     false ? (arg?: number = 0) => 47 : null;
 >false ? (arg?: number = 0) => 47 : null : (arg?: number) => number
+>                                        : ^   ^^^      ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(arg?: number = 0) => 47 : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >47 : 47
->null : null
+>   : ^^
 
     false ? ((arg?: number = 0) => 57) : null;
 >false ? ((arg?: number = 0) => 57) : null : (arg?: number) => number
+>                                          : ^   ^^^      ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >((arg?: number = 0) => 57) : (arg?: number) => number
+>                           : ^   ^^^      ^^^^^^^^^^^
 >(arg?: number = 0) => 57 : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >57 : 57
->null : null
+>   : ^^
 
     false ? null : (arg?: number = 0) => 67;
 >false ? null : (arg?: number = 0) => 67 : (arg?: number) => number
+>                                        : ^   ^^^      ^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >(arg?: number = 0) => 67 : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >67 : 67
+>   : ^^
 
     ((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106);
 >((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106) : string
+>                                                           : ^^^^^^
 >((arg?:number = 1) => 0) + '' : string
+>                              : ^^^^^^
 >((arg?:number = 1) => 0) : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >(arg?:number = 1) => 0 : (arg?: number) => number
+>                       : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg?:number = 2) => 106) : (arg?: number) => number
+>                           : ^   ^^^      ^^^^^^^^^^^
 >(arg?:number = 2) => 106 : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 >106 : 106
+>    : ^^^
 
     foo(
 >foo(        (a) => 110,         ((a) => 111),         (a) => {            return 112;        },        (a? ) => 113,         (a, b? ) => 114,         (a: number) => 115,         (a: number = 0) => 116,         (a = 0) => 117,         (a?: number = 0) => 118,         (...a: number[]) => 119,         (a, b? = 0, ...c: number[]) => 120,        (a) => (b) => (c) => 121,        false? (a) => 0 : (b) => 122    ) : any
+>                                                                                                                                                                                                                                                                                                                                                                                                                          : ^^^
 >foo : any
+>    : ^^^
 
         (a) => 110, 
 >(a) => 110 : (a: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >110 : 110
+>    : ^^^
 
         ((a) => 111), 
 >((a) => 111) : (a: any) => number
+>             : ^ ^^^^^^^^^^^^^^^^
 >(a) => 111 : (a: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >111 : 111
+>    : ^^^
 
         (a) => {
 >(a) => {            return 112;        } : (a: any) => number
+>                                         : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
             return 112;
 >112 : 112
+>    : ^^^
 
         },
         (a? ) => 113, 
 >(a? ) => 113 : (a?: any) => number
+>             : ^ ^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >113 : 113
+>    : ^^^
 
         (a, b? ) => 114, 
 >(a, b? ) => 114 : (a: any, b?: any) => number
+>                : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >114 : 114
+>    : ^^^
 
         (a: number) => 115, 
 >(a: number) => 115 : (a: number) => number
+>                   : ^ ^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >115 : 115
+>    : ^^^
 
         (a: number = 0) => 116, 
 >(a: number = 0) => 116 : (a?: number) => number
+>                       : ^ ^^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >116 : 116
+>    : ^^^
 
         (a = 0) => 117, 
 >(a = 0) => 117 : (a?: number) => number
+>               : ^ ^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >117 : 117
+>    : ^^^
 
         (a?: number = 0) => 118, 
 >(a?: number = 0) => 118 : (a?: number) => number
+>                        : ^ ^^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >118 : 118
+>    : ^^^
 
         (...a: number[]) => 119, 
 >(...a: number[]) => 119 : (...a: number[]) => number
+>                        : ^^^^ ^^        ^^^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >119 : 119
+>    : ^^^
 
         (a, b? = 0, ...c: number[]) => 120,
 >(a, b? = 0, ...c: number[]) => 120 : (a: any, b?: number, ...c: number[]) => number
+>                                   : ^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^        ^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >c : number[]
+>  : ^^^^^^^^
 >120 : 120
+>    : ^^^
 
         (a) => (b) => (c) => 121,
 >(a) => (b) => (c) => 121 : (a: any) => (b: any) => (c: any) => number
+>                         : ^ ^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >(b) => (c) => 121 : (b: any) => (c: any) => number
+>                  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >(c) => 121 : (c: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >c : any
+>  : ^^^
 >121 : 121
+>    : ^^^
 
         false? (a) => 0 : (b) => 122
 >false? (a) => 0 : (b) => 122 : (a: any) => number
+>                             : ^ ^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(a) => 0 : (a: any) => number
+>         : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
+>  : ^
 >(b) => 122 : (b: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >122 : 122
+>    : ^^^
 
     );

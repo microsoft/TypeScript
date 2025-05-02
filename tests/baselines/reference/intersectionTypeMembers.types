@@ -1,208 +1,323 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeMembers.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeMembers.ts] ////
+
+=== intersectionTypeMembers.ts ===
 // An intersection type has those members that are present in any of its constituent types,
 // with types that are intersections of the respective members in the constituent types
 
 interface A { a: string }
 >a : string
+>  : ^^^^^^
 
 interface B { b: string }
 >b : string
+>  : ^^^^^^
 
 interface C { c: string }
 >c : string
+>  : ^^^^^^
 
 var abc: A & B & C;
 >abc : A & B & C
+>    : ^^^^^^^^^
 
 abc.a = "hello";
 >abc.a = "hello" : "hello"
+>                : ^^^^^^^
 >abc.a : string
+>      : ^^^^^^
 >abc : A & B & C
+>    : ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 abc.b = "hello";
 >abc.b = "hello" : "hello"
+>                : ^^^^^^^
 >abc.b : string
+>      : ^^^^^^
 >abc : A & B & C
+>    : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 abc.c = "hello";
 >abc.c = "hello" : "hello"
+>                : ^^^^^^^
 >abc.c : string
+>      : ^^^^^^
 >abc : A & B & C
+>    : ^^^^^^^^^
 >c : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 interface X { x: A }
 >x : A
+>  : ^
 
 interface Y { x: B }
 >x : B
+>  : ^
 
 interface Z { x: C }
 >x : C
+>  : ^
 
 var xyz: X & Y & Z;
 >xyz : X & Y & Z
+>    : ^^^^^^^^^
 
 xyz.x.a = "hello";
 >xyz.x.a = "hello" : "hello"
+>                  : ^^^^^^^
 >xyz.x.a : string
+>        : ^^^^^^
 >xyz.x : A & B & C
+>      : ^^^^^^^^^
 >xyz : X & Y & Z
+>    : ^^^^^^^^^
 >x : A & B & C
+>  : ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 xyz.x.b = "hello";
 >xyz.x.b = "hello" : "hello"
+>                  : ^^^^^^^
 >xyz.x.b : string
+>        : ^^^^^^
 >xyz.x : A & B & C
+>      : ^^^^^^^^^
 >xyz : X & Y & Z
+>    : ^^^^^^^^^
 >x : A & B & C
+>  : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 xyz.x.c = "hello";
 >xyz.x.c = "hello" : "hello"
+>                  : ^^^^^^^
 >xyz.x.c : string
+>        : ^^^^^^
 >xyz.x : A & B & C
+>      : ^^^^^^^^^
 >xyz : X & Y & Z
+>    : ^^^^^^^^^
 >x : A & B & C
+>  : ^^^^^^^^^
 >c : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 type F1 = (x: string) => string;
->F1 : (x: string) => string
+>F1 : F1
+>   : ^^
 >x : string
+>  : ^^^^^^
 
 type F2 = (x: number) => number;
->F2 : (x: number) => number
+>F2 : F2
+>   : ^^
 >x : number
+>  : ^^^^^^
 
 var f: F1 & F2;
 >f : F1 & F2
+>  : ^^^^^^^
 
 var s = f("hello");
 >s : string
+>  : ^^^^^^
 >f("hello") : string
+>           : ^^^^^^
 >f : F1 & F2
+>  : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 var n = f(42);
 >n : number
+>  : ^^^^^^
 >f(42) : number
+>      : ^^^^^^
 >f : F1 & F2
+>  : ^^^^^^^
 >42 : 42
+>   : ^^
 
 interface D {
     nested: { doublyNested: { d: string; }, different: { e: number } };
->nested : { doublyNested: {    d: string;}; different: {    e: number;}; }
+>nested : { doublyNested: { d: string; }; different: { e: number; }; }
+>       : ^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^              ^^^
 >doublyNested : { d: string; }
+>             : ^^^^^      ^^^
 >d : string
+>  : ^^^^^^
 >different : { e: number; }
+>          : ^^^^^      ^^^
 >e : number
+>  : ^^^^^^
 }
 interface E {
     nested: { doublyNested: { f: string; }, other: {g: number } };
->nested : { doublyNested: {    f: string;}; other: {    g: number;}; }
+>nested : { doublyNested: { f: string; }; other: { g: number; }; }
+>       : ^^^^^^^^^^^^^^^^              ^^^^^^^^^              ^^^
 >doublyNested : { f: string; }
+>             : ^^^^^      ^^^
 >f : string
+>  : ^^^^^^
 >other : { g: number; }
+>      : ^^^^^      ^^^
 >g : number
+>  : ^^^^^^
 }
 const de: D & E = {
 >de : D & E
+>   : ^^^^^
 >{    nested: {        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    }} : { nested: { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }; }
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     nested: {
 >nested : { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    } : { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }
+>                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         doublyNested: {
 >doublyNested : { d: string; f: string; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            d: 'yes',            f: 'no'        } : { d: string; f: string; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
             d: 'yes',
 >d : string
+>  : ^^^^^^
 >'yes' : "yes"
+>      : ^^^^^
 
             f: 'no'
 >f : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
         },
         different: { e: 12 },
 >different : { e: number; }
+>          : ^^^^^^^^^^^^^^
 >{ e: 12 } : { e: number; }
+>          : ^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
         other: { g: 101 }
 >other : { g: number; }
+>      : ^^^^^^^^^^^^^^
 >{ g: 101 } : { g: number; }
+>           : ^^^^^^^^^^^^^^
 >g : number
+>  : ^^^^^^
 >101 : 101
+>    : ^^^
     }
 }
 
 // Additional test case with >2 doubly nested members so fix for #31441 is tested w/ excess props
 interface F {
     nested: { doublyNested: { g: string; } }
->nested : { doublyNested: {    g: string;}; }
+>nested : { doublyNested: { g: string; }; }
+>       : ^^^^^^^^^^^^^^^^              ^^^
 >doublyNested : { g: string; }
+>             : ^^^^^      ^^^
 >g : string
+>  : ^^^^^^
 }
 
 interface G {
     nested: { doublyNested: { h: string; } }
->nested : { doublyNested: {    h: string;}; }
+>nested : { doublyNested: { h: string; }; }
+>       : ^^^^^^^^^^^^^^^^              ^^^
 >doublyNested : { h: string; }
+>             : ^^^^^      ^^^
 >h : string
+>  : ^^^^^^
 }
 
 const defg: D & E & F & G = {
 >defg : D & E & F & G
+>     : ^^^^^^^^^^^^^
 >{    nested: {        doublyNested: {            d: 'yes',            f: 'no',            g: 'ok',            h: 'affirmative'        },        different: { e: 12 },        other: { g: 101 }    }} : { nested: { doublyNested: { d: string; f: string; g: string; h: string; }; different: { e: number; }; other: { g: number; }; }; }
+>                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     nested: {
 >nested : { doublyNested: { d: string; f: string; g: string; h: string; }; different: { e: number; }; other: { g: number; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        doublyNested: {            d: 'yes',            f: 'no',            g: 'ok',            h: 'affirmative'        },        different: { e: 12 },        other: { g: 101 }    } : { doublyNested: { d: string; f: string; g: string; h: string; }; different: { e: number; }; other: { g: number; }; }
+>                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         doublyNested: {
 >doublyNested : { d: string; f: string; g: string; h: string; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            d: 'yes',            f: 'no',            g: 'ok',            h: 'affirmative'        } : { d: string; f: string; g: string; h: string; }
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             d: 'yes',
 >d : string
+>  : ^^^^^^
 >'yes' : "yes"
+>      : ^^^^^
 
             f: 'no',
 >f : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
             g: 'ok',
 >g : string
+>  : ^^^^^^
 >'ok' : "ok"
+>     : ^^^^
 
             h: 'affirmative'
 >h : string
+>  : ^^^^^^
 >'affirmative' : "affirmative"
+>              : ^^^^^^^^^^^^^
 
         },
         different: { e: 12 },
 >different : { e: number; }
+>          : ^^^^^^^^^^^^^^
 >{ e: 12 } : { e: number; }
+>          : ^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
         other: { g: 101 }
 >other : { g: number; }
+>      : ^^^^^^^^^^^^^^
 >{ g: 101 } : { g: number; }
+>           : ^^^^^^^^^^^^^^
 >g : number
+>  : ^^^^^^
 >101 : 101
+>    : ^^^
     }
 }
 

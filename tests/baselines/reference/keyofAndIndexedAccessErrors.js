@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts] ////
+
 //// [keyofAndIndexedAccessErrors.ts]
 class Shape {
     name: string;
@@ -153,6 +155,22 @@ function f31<T, K extends keyof T>() {
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 }
 
+// Repro from #51069
+
+class Test<T extends Record<string, number>> {
+  testy: T;
+
+  constructor(t: T) {
+    this.testy = t;
+  }
+
+  public t(key: keyof T): number {
+    this.testy[key] += 1; // Error
+
+    return this.testy[key];
+  }
+}
+
 
 //// [keyofAndIndexedAccessErrors.js]
 var Shape = /** @class */ (function () {
@@ -232,3 +250,14 @@ function f30() {
 function f31() {
     var x = "hello";
 }
+// Repro from #51069
+var Test = /** @class */ (function () {
+    function Test(t) {
+        this.testy = t;
+    }
+    Test.prototype.t = function (key) {
+        this.testy[key] += 1; // Error
+        return this.testy[key];
+    };
+    return Test;
+}());

@@ -1,62 +1,99 @@
-=== tests/cases/conformance/salsa/thisPropertyAssignmentCircular.js ===
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentCircular.ts] ////
+
+=== thisPropertyAssignmentCircular.js ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor() {
         this.foo = "Hello";
 >this.foo = "Hello" : "Hello"
+>                   : ^^^^^^^
 >this.foo : any
 >this : this
+>     : ^^^^
 >foo : any
+>    : ^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
     }
     slicey() {
 >slicey : () => void
+>       : ^^^^^^^^^^
 
         this.foo = this.foo.slice();
 >this.foo = this.foo.slice() : string
+>                            : ^^^^^^
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 >this.foo.slice() : string
+>                 : ^^^^^^
 >this.foo.slice : (start?: number, end?: number) => string
+>               : ^     ^^^      ^^   ^^^      ^^^^^      
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 >slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
     }
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.foo
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
     }
 }
 
 /** @class */
 function C() {
 >C : typeof C
+>  : ^^^^^^^^
 
     this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
 
     this.x = function() { this.x.toString(); }
 >this.x = function() { this.x.toString(); } : () => void
+>                                           : ^^^^^^^^^^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >function() { this.x.toString(); } : () => void
+>                                  : ^^^^^^^^^^
 >this.x.toString() : string
+>                  : ^^^^^^
 >this.x.toString : () => string
+>                : ^^^^^^      
 >this.x : () => void
+>       : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >x : () => void
+>  : ^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileCallSignatures_0.ts ===
+//// [tests/cases/compiler/declFileCallSignatures.ts] ////
+
+=== declFileCallSignatures_0.ts ===
 export interface ICallSignature {
 >ICallSignature : Symbol(ICallSignature, Decl(declFileCallSignatures_0.ts, 0, 0))
 
@@ -56,7 +58,7 @@ export interface ICallSignatureWithOwnTypeParametes {
 >T : Symbol(T, Decl(declFileCallSignatures_0.ts, 27, 5))
 }
 
-=== tests/cases/compiler/declFileCallSignatures_1.ts ===
+=== declFileCallSignatures_1.ts ===
 interface IGlobalCallSignature {
 >IGlobalCallSignature : Symbol(IGlobalCallSignature, Decl(declFileCallSignatures_1.ts, 0, 0))
 

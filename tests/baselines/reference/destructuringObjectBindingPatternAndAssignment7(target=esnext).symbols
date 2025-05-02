@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment7.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment7.ts] ////
+
+=== destructuringObjectBindingPatternAndAssignment7.ts ===
 enum K {
 >K : Symbol(K, Decl(destructuringObjectBindingPatternAndAssignment7.ts, 0, 0))
 

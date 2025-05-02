@@ -1,95 +1,155 @@
-=== tests/cases/compiler/noImplicitAnyForIn.ts ===
+//// [tests/cases/compiler/noImplicitAnyForIn.ts] ////
+
+=== noImplicitAnyForIn.ts ===
 var x: {}[] = [[1, 2, 3], ["hello"]];
 >x : {}[]
+>  : ^^^^
 >[[1, 2, 3], ["hello"]] : (number[] | string[])[]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >["hello"] : string[]
+>          : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 for (var i in x) {
 >i : string
+>  : ^^^^^^
 >x : {}[]
+>  : ^^^^
 
     for (var j in x[i]) {
 >j : string
+>  : ^^^^^^
 >x[i] : {}
+>     : ^^
 >x : {}[]
+>  : ^^^^
 >i : string
+>  : ^^^^^^
 
         //Should yield an implicit 'any' error
         var _j = x[i][j];
 >_j : any
+>   : ^^^
 >x[i][j] : any
+>        : ^^^
 >x[i] : {}
+>     : ^^
 >x : {}[]
+>  : ^^^^
 >i : string
+>  : ^^^^^^
 >j : string
+>  : ^^^^^^
     }
 
     for (var k in x[0]) {
 >k : string
+>  : ^^^^^^
 >x[0] : {}
+>     : ^^
 >x : {}[]
+>  : ^^^^
 >0 : 0
+>  : ^
 
         var k1 = x[0];
 >k1 : {}
+>   : ^^
 >x[0] : {}
+>     : ^^
 >x : {}[]
+>  : ^^^^
 >0 : 0
+>  : ^
 
         //Should yield an implicit 'any' error
         var k2 = k1[k];
 >k2 : any
+>   : ^^^
 >k1[k] : any
+>      : ^^^
 >k1 : {}
+>   : ^^
 >k : string
+>  : ^^^^^^
     }
 }
 
 for (var a in x) {
 >a : string
+>  : ^^^^^^
 >x : {}[]
+>  : ^^^^
 
     // Should yield an implicit 'any' error.
     var b;
 >b : any
+>  : ^^^
 
     var c = a || b;
 >c : string
+>  : ^^^^^^
 >a || b : string
+>       : ^^^^^^
 >a : string
+>  : ^^^^^^
 >b : undefined
+>  : ^^^^^^^^^
 }
 
 var idx = 0;
 >idx : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var m = [1, 2, 3, 4, 5];
 >m : number[]
+>  : ^^^^^^^^
 >[1, 2, 3, 4, 5] : number[]
+>                : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >5 : 5
+>  : ^
 
 // Should yield an implicit 'any' error.
 var n = [[]] || [];
 >n : any[][]
+>  : ^^^^^^^
 >[[]] || [] : undefined[][]
+>           : ^^^^^^^^^^^^^
 >[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 for (n[idx++] in m);
 >n[idx++] : any[]
+>         : ^^^^^
 >n : any[][]
+>  : ^^^^^^^
 >idx++ : number
+>      : ^^^^^^
 >idx : number
+>    : ^^^^^^
 >m : number[]
+>  : ^^^^^^^^
 

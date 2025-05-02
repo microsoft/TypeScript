@@ -1,8 +1,10 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/importHelpersOutFile.ts] ////
+
+=== a.ts ===
 export class A { }
 >A : Symbol(A, Decl(a.ts, 0, 0))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { A } from "./a";
 >A : Symbol(A, Decl(b.ts, 0, 8))
 
@@ -10,7 +12,7 @@ export class B extends A { }
 >B : Symbol(B, Decl(b.ts, 0, 24))
 >A : Symbol(A, Decl(b.ts, 0, 8))
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 import { A } from "./a";
 >A : Symbol(A, Decl(c.ts, 0, 8))
 
@@ -18,7 +20,7 @@ export class C extends A { }
 >C : Symbol(C, Decl(c.ts, 0, 24))
 >A : Symbol(A, Decl(c.ts, 0, 8))
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
 >d : Symbol(d, Decl(tslib.d.ts, --, --))

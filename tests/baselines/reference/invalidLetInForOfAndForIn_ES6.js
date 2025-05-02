@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidLetInForOfAndForIn_ES6.ts] ////
+
 //// [invalidLetInForOfAndForIn_ES6.ts]
 // This should be an error
 // More details: http://www.ecma-international.org/ecma-262/6.0/#sec-iteration-statements

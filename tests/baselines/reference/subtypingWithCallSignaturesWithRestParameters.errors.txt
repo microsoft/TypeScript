@@ -1,61 +1,61 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(18,11): error TS2430: Interface 'I1C' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(18,11): error TS2430: Interface 'I1C' incorrectly extends interface 'Base'.
   Types of property 'a' are incompatible.
     Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number'.
       Types of parameters 'args' and 'args' are incompatible.
         Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(34,11): error TS2430: Interface 'I3B' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(34,11): error TS2430: Interface 'I3B' incorrectly extends interface 'Base'.
   Types of property 'a' are incompatible.
     Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number'.
       Types of parameters 'x' and 'args' are incompatible.
         Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(60,11): error TS2430: Interface 'I6C' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(60,11): error TS2430: Interface 'I6C' incorrectly extends interface 'Base'.
   Types of property 'a2' are incompatible.
     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number'.
       Types of parameters 'args' and 'z' are incompatible.
         Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(90,11): error TS2430: Interface 'I10B' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(90,11): error TS2430: Interface 'I10B' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'y' and 'y' are incompatible.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(94,11): error TS2430: Interface 'I10C' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(94,11): error TS2430: Interface 'I10C' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: number, ...z: number[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'z' and 'y' are incompatible.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(98,11): error TS2430: Interface 'I10D' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(98,11): error TS2430: Interface 'I10D' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(102,11): error TS2430: Interface 'I10E' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(102,11): error TS2430: Interface 'I10E' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: number, ...z: string[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'z' and 'z' are incompatible.
         Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(110,11): error TS2430: Interface 'I12' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(110,11): error TS2430: Interface 'I12' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
     Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'y' and 'y' are incompatible.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(118,11): error TS2430: Interface 'I14' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(118,11): error TS2430: Interface 'I14' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
     Type '(x: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'y' and 'y' are incompatible.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(126,11): error TS2430: Interface 'I16' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(126,11): error TS2430: Interface 'I16' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'args' and 'z' are incompatible.
         Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(130,11): error TS2430: Interface 'I17' incorrectly extends interface 'Base'.
+subtypingWithCallSignaturesWithRestParameters.ts(130,11): error TS2430: Interface 'I17' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
     Type '(...args: number[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'args' and 'y' are incompatible.
         Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts (11 errors) ====
+==== subtypingWithCallSignaturesWithRestParameters.ts (11 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
     interface Base { 

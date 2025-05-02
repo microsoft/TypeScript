@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName41.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+parserComputedPropertyName41.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName41.ts (1 errors) ====
+==== parserComputedPropertyName41.ts (1 errors) ====
     var v = {
         [0 in []]: true
         ~~~~~~~~~

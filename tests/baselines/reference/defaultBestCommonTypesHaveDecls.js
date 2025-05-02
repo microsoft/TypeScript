@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts] ////
+
 //// [defaultBestCommonTypesHaveDecls.ts]
 var obj1: {};
 obj1.length;

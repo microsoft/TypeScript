@@ -1,8 +1,8 @@
-tests/cases/compiler/superCallsInConstructor.ts(12,9): error TS1101: 'with' statements are not allowed in strict mode.
-tests/cases/compiler/superCallsInConstructor.ts(12,9): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+superCallsInConstructor.ts(12,9): error TS1101: 'with' statements are not allowed in strict mode.
+superCallsInConstructor.ts(12,9): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/compiler/superCallsInConstructor.ts (2 errors) ====
+==== superCallsInConstructor.ts (2 errors) ====
     class C {
         foo() {}
         bar() {}

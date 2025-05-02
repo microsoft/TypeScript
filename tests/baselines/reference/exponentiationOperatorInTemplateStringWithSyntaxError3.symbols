@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError3.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError3.ts] ////
+
+=== exponentiationOperatorInTemplateStringWithSyntaxError3.ts ===
 var t1 = 10;
 >t1 : Symbol(t1, Decl(exponentiationOperatorInTemplateStringWithSyntaxError3.ts, 0, 3))
 

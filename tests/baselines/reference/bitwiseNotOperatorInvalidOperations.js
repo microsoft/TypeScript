@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts] ////
+
 //// [bitwiseNotOperatorInvalidOperations.ts]
 // Unary operator ~
 var q;

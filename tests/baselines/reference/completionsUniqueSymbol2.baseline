@@ -1,0 +1,371 @@
+// === Completions ===
+=== /tests/cases/fourslash/completionsUniqueSymbol2.ts ===
+// const a = {
+//     KEY_1: 'key_1',
+//     KEY_2: 'key_2',
+//     KEY_3: 'key_3',
+// } as const;
+// 
+// const b = {
+//     KEY_1: 'key_1',
+//     KEY_2: 'key_2',
+//     KEY_3: 'key_3',
+// } as const;
+// 
+// interface I {
+//     [b.KEY_1]: string,
+//     [a.KEY_2]: string,
+//     [a.KEY_3]: string
+// }
+// 
+// const foo: I = {
+//     key_1: 'value_1',
+//     key_2: 'value_2',
+//     key_3: 'value_3',
+// }
+// 
+// foo.
+//     ^
+// | ----------------------------------------------------------------------
+// | const a: {
+// |     readonly KEY_1: "key_1";
+// |     readonly KEY_2: "key_2";
+// |     readonly KEY_3: "key_3";
+// | }
+// | const b: {
+// |     readonly KEY_1: "key_1";
+// |     readonly KEY_2: "key_2";
+// |     readonly KEY_3: "key_3";
+// | }
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/completionsUniqueSymbol2.ts",
+      "position": 345,
+      "name": ""
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "a",
+          "kind": "const",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[a]",
+          "replacementSpan": {
+            "start": 344,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "a",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "KEY_1",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"key_1\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "KEY_2",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"key_2\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "KEY_3",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"key_3\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "b",
+          "kind": "const",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[b]",
+          "replacementSpan": {
+            "start": 344,
+            "length": 1
+          },
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "b",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "KEY_1",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"key_1\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "KEY_2",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"key_2\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "KEY_3",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"key_3\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

@@ -1,38 +1,52 @@
+//// [tests/cases/compiler/nodeNextImportModeImplicitIndexResolution2.ts] ////
+
 === /node_modules/@types/dedent/index.d.ts ===
+
 export {};
-No type information for this code.
-No type information for this code.=== /node_modules/@types/dedent2/index.d.ts ===
+
+=== /node_modules/@types/dedent2/index.d.ts ===
+
 export {};
-No type information for this code.
-No type information for this code.=== /node_modules/@types/dedent3/index.d.ts ===
+
+=== /node_modules/@types/dedent3/index.d.ts ===
+
 export {};
-No type information for this code.
-No type information for this code.=== /node_modules/@types/dedent4/index.d.ts ===
+
+=== /node_modules/@types/dedent4/index.d.ts ===
+
 export {};
-No type information for this code.
-No type information for this code.=== /index.mts ===
+
+=== /index.mts ===
 import dedent from "dedent";
 >dedent : typeof dedent
+>       : ^^^^^^^^^^^^^
 
 import dedent2 from "dedent2";
 >dedent2 : typeof dedent2
+>        : ^^^^^^^^^^^^^^
 
 import dedent3 from "dedent3";
 >dedent3 : typeof dedent3
+>        : ^^^^^^^^^^^^^^
 
 import dedent4 from "dedent4"; // Error
 >dedent4 : any
+>        : ^^^
 
 === /index.cts ===
 import dedent from "dedent";
 >dedent : typeof dedent
+>       : ^^^^^^^^^^^^^
 
 import dedent2 from "dedent2";
 >dedent2 : typeof dedent2
+>        : ^^^^^^^^^^^^^^
 
 import dedent3 from "dedent3";
 >dedent3 : typeof dedent3
+>        : ^^^^^^^^^^^^^^
 
 import dedent4 from "dedent4"; // Error
 >dedent4 : any
+>        : ^^^
 

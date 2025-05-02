@@ -1,36 +1,56 @@
-=== tests/cases/conformance/salsa/main.js ===
+//// [tests/cases/conformance/salsa/nestedDestructuringOfRequire.ts] ////
+
+=== main.js ===
 const {
     chalk: { grey }
 >chalk : any
+>      : ^^^
 >grey : {}
+>     : ^^
 
 } = require('./mod1');
->require('./mod1') : typeof import("tests/cases/conformance/salsa/mod1")
+>require('./mod1') : typeof import("mod1")
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
+>        : ^^^
 >'./mod1' : "./mod1"
+>         : ^^^^^^^^
 
 grey
 >grey : {}
+>     : ^^
 
 chalk
 >chalk : any
+>      : ^^^
 
-=== tests/cases/conformance/salsa/mod1.js ===
+=== mod1.js ===
 const chalk = {
 >chalk : { grey: {}; }
+>      : ^^^^^^^^^^^^^
 >{    grey: {}} : { grey: {}; }
+>               : ^^^^^^^^^^^^^
 
     grey: {}
 >grey : {}
+>     : ^^
 >{} : {}
+>   : ^^
 
 };
 module.exports.chalk = chalk
 >module.exports.chalk = chalk : { grey: {}; }
+>                             : ^^^^^^^^^^^^^
 >module.exports.chalk : { grey: {}; }
+>                     : ^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >chalk : { grey: {}; }
+>      : ^^^^^^^^^^^^^
 >chalk : { grey: {}; }
+>      : ^^^^^^^^^^^^^
 

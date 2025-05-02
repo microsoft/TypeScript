@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfacedeclWithIndexerErrors.ts] ////
+
 //// [interfacedeclWithIndexerErrors.ts]
 interface a0 {
     (): string;

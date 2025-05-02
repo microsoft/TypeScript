@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/yieldExpressionInFlowLoop.ts] ////
+
 //// [yieldExpressionInFlowLoop.ts]
 function* f() {
     let result;

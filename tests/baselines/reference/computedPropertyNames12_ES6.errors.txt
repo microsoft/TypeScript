@@ -1,24 +1,19 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(5,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(6,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(7,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(8,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(9,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(12,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(13,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(15,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+computedPropertyNames12_ES6.ts(7,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+computedPropertyNames12_ES6.ts(8,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+computedPropertyNames12_ES6.ts(9,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+computedPropertyNames12_ES6.ts(9,5): error TS2411: Property '[+s]' of type 'string' is not assignable to 'number' index type 'number'.
+computedPropertyNames12_ES6.ts(9,5): error TS2411: Property '[+s]' of type 'string' is not assignable to 'string' index type 'number'.
+computedPropertyNames12_ES6.ts(13,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+computedPropertyNames12_ES6.ts(15,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts (8 errors) ====
+==== computedPropertyNames12_ES6.ts (7 errors) ====
     var s: string;
     var n: number;
     var a: any;
     class C {
         [s]: number;
-        ~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         [n] = n;
-        ~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         static [s + s]: string;
                ~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -28,11 +23,13 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts(15
         [+s]: typeof s;
         ~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        ~~~~
+!!! error TS2411: Property '[+s]' of type 'string' is not assignable to 'number' index type 'number'.
+        ~~~~
+!!! error TS2411: Property '[+s]' of type 'string' is not assignable to 'string' index type 'number'.
         static [""]: number;
         [0]: number;
         [a]: number;
-        ~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         static [<any>true]: number;
                ~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

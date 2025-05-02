@@ -1,7 +1,7 @@
-tests/cases/compiler/privateAccessInSubclass1.ts(7,10): error TS2341: Property 'options' is private and only accessible within class 'Base'.
+privateAccessInSubclass1.ts(7,10): error TS2341: Property 'options' is private and only accessible within class 'Base'.
 
 
-==== tests/cases/compiler/privateAccessInSubclass1.ts (1 errors) ====
+==== privateAccessInSubclass1.ts (1 errors) ====
     class Base {
       private options: any;
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts ===
+//// [tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts] ////
+
+=== inferTypeArgumentsInSignatureWithRestParameters.ts ===
 function f<T>(array: T[], ...args) { }
 >f : Symbol(f, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 0))
 >T : Symbol(T, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 11))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeErrors.ts] ////
+
 //// [mappedTypeErrors.ts]
 interface Shape {
     name: string;
@@ -230,7 +232,7 @@ var x3 = { a: 'no' }; // Error
 var o = { x: 5, y: false };
 var f = {
     pf: { x: 7 },
-    pt: { x: 7, y: false }
+    pt: { x: 7, y: false },
 };
 // Repro from #28170
 function test1(obj) {

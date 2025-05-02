@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/base.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsParameterTagReusesInputNodeInEmit2.ts] ////
+
+=== base.js ===
 class Base {
 >Base : Symbol(Base, Decl(base.js, 0, 0))
 
@@ -25,7 +27,7 @@ module.exports = BaseFactory;
 >exports : Symbol(export=, Decl(base.js, 8, 24))
 >BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5), Decl(base.js, 6, 2))
 
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+=== file.js ===
 /** @typedef {typeof import('./base')} BaseFactory */
 
 /**

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namedFunctionExpressionCallErrors.ts] ////
+
 //// [namedFunctionExpressionCallErrors.ts]
 var recurser = function foo() {
 };

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpressionInExtends3.ts] ////
+
 //// [declarationEmitExpressionInExtends3.ts]
 export class ExportedClass<T> {
 	x: T;
@@ -59,7 +61,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass4 = exports.MyClass3 = exports.MyClass2 = exports.MyClass = exports.ExportedClass = void 0;
 var ExportedClass = /** @class */ (function () {
     function ExportedClass() {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts] ////
+
+=== classPropertyAsPrivate.ts ===
 class C {
 >C : Symbol(C, Decl(classPropertyAsPrivate.ts, 0, 0))
 

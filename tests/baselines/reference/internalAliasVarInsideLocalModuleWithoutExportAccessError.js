@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExportAccessError.ts] ////
+
 //// [internalAliasVarInsideLocalModuleWithoutExportAccessError.ts]
 export module a {
     export var x = 10;
@@ -12,15 +14,15 @@ export var z = c.b;
 
 //// [internalAliasVarInsideLocalModuleWithoutExportAccessError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = exports.c = exports.a = void 0;
 var a;
 (function (a) {
     a.x = 10;
-})(a = exports.a || (exports.a = {}));
+})(a || (exports.a = a = {}));
 var c;
 (function (c) {
     var b = a.x;
     c.bVal = b;
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 exports.z = c.b;

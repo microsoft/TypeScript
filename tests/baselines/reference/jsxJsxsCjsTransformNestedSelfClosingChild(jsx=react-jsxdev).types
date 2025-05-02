@@ -1,77 +1,127 @@
-=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformNestedSelfClosingChild.tsx ===
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformNestedSelfClosingChild.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== jsxJsxsCjsTransformNestedSelfClosingChild.tsx ===
 /// <reference path="react16.d.ts" />
 import type * as React from 'react';
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 console.log(
 >console.log(  <div>    <div />  </div>) : void
+>                                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 
   <div>
 ><div>    <div />  </div> : JSX.Element
+>                         : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
   </div>
 >div : any
+>    : ^^^
 
 )
 
 console.log(
 >console.log(  <div>    <div />    <div />  </div>) : void
+>                                                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 
   <div>
 ><div>    <div />    <div />  </div> : JSX.Element
+>                                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
   </div>
 >div : any
+>    : ^^^
 
 )
 
 console.log(
 >console.log(  <div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div>) : void
+>                                                                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 
   <div>
 ><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : JSX.Element
+>                                                           : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     {[1, 2].map(i => <div key={i}>{i}</div>)}
 >[1, 2].map(i => <div key={i}>{i}</div>) : JSX.Element[]
+>                                        : ^^^^^^^^^^^^^
 >[1, 2].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>           : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >i => <div key={i}>{i}</div> : (i: number) => JSX.Element
+>                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 ><div key={i}>{i}</div> : JSX.Element
+>                       : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >key : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >div : any
+>    : ^^^
 
   </div>
 >div : any
+>    : ^^^
 
 )

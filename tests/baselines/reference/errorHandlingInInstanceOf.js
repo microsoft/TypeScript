@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorHandlingInInstanceOf.ts] ////
+
 //// [errorHandlingInInstanceOf.ts]
 if (x instanceof String) {
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitForDefaultExportClassExtendingExpression01.ts ===
+//// [tests/cases/compiler/declarationEmitForDefaultExportClassExtendingExpression01.ts] ////
+
+=== declarationEmitForDefaultExportClassExtendingExpression01.ts ===
 interface Greeter {
 >Greeter : Symbol(Greeter, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 0))
 

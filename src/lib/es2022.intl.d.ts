@@ -1,9 +1,8 @@
 declare namespace Intl {
-
     /**
      * An object with some or all properties of the `Intl.Segmenter` constructor `options` parameter.
      *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter#parameters)
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter#parameters)
      */
     interface SegmenterOptions {
         /** The locale matching algorithm to use. For information about this option, see [Intl page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation). */
@@ -29,6 +28,10 @@ declare namespace Intl {
         granularity: "grapheme" | "word" | "sentence";
     }
 
+    interface SegmentIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+        [Symbol.iterator](): SegmentIterator<T>;
+    }
+
     interface Segments {
         /**
          * Returns an object describing the segment in the original string that includes the code unit at a specified index.
@@ -38,7 +41,7 @@ declare namespace Intl {
         containing(codeUnitIndex?: number): SegmentData;
 
         /** Returns an iterator to iterate over the segments. */
-        [Symbol.iterator](): IterableIterator<SegmentData>;
+        [Symbol.iterator](): SegmentIterator<SegmentData>;
     }
 
     interface SegmentData {
@@ -63,29 +66,38 @@ declare namespace Intl {
          *
          * @param locales - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646), or an array of such strings.
          *  For the general form and interpretation of the `locales` argument,
-         *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
+         *  see the [`Intl` page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
          *
-         * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter#parameters)
+         * @param options - An [object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter#parameters)
          *  with some or all options of `SegmenterOptions`.
          *
-         * @returns [Intl.Segmenter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segments) object.
+         * @returns [Intl.Segmenter](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segments) object.
          *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter).
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter).
          */
-        new(locales?: BCP47LanguageTag | BCP47LanguageTag[], options?: SegmenterOptions): Segmenter;
+        new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter;
 
         /**
          * Returns an array containing those of the provided locales that are supported without having to fall back to the runtime's default locale.
          *
          * @param locales - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646), or an array of such strings.
          *  For the general form and interpretation of the `locales` argument,
-         *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
+         *  see the [`Intl` page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
          *
-         * @param options An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/supportedLocalesOf#parameters).
+         * @param options An [object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/supportedLocalesOf#parameters).
          *  with some or all possible options.
          *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/supportedLocalesOf)
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/supportedLocalesOf)
          */
-        supportedLocalesOf(locales: BCP47LanguageTag | BCP47LanguageTag[], options?: Pick<SegmenterOptions, "localeMatcher">): BCP47LanguageTag[];
+        supportedLocalesOf(locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">): UnicodeBCP47LocaleIdentifier[];
     };
+
+    /**
+     * Returns a sorted array of the supported collation, calendar, currency, numbering system, timezones, and units by the implementation.
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/supportedValuesOf)
+     *
+     * @param key A string indicating the category of values to return.
+     * @returns A sorted array of the supported values.
+     */
+    function supportedValuesOf(key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"): string[];
 }

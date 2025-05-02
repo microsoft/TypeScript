@@ -1,69 +1,115 @@
-=== tests/cases/compiler/libMembers.ts ===
+//// [tests/cases/compiler/libMembers.ts] ////
+
+=== libMembers.ts ===
 var s="hello";
 >s : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 s.substring(0);
 >s.substring(0) : string
+>               : ^^^^^^
 >s.substring : (start: number, end?: number) => string
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 >substring : (start: number, end?: number) => string
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 s.substring(3,4);
 >s.substring(3,4) : string
+>                 : ^^^^^^
 >s.substring : (start: number, end?: number) => string
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 >substring : (start: number, end?: number) => string
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 s.subby(12);   // error unresolved
 >s.subby(12) : any
+>            : ^^^
 >s.subby : any
+>        : ^^^
 >s : string
+>  : ^^^^^^
 >subby : any
+>      : ^^^
 >12 : 12
+>   : ^^
 
 String.fromCharCode(12);
 >String.fromCharCode(12) : string
+>                        : ^^^^^^
 >String.fromCharCode : (...codes: number[]) => string
+>                    : ^^^^     ^^        ^^^^^      
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >fromCharCode : (...codes: number[]) => string
+>             : ^^^^     ^^        ^^^^^      
 >12 : 12
+>   : ^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class C {
 >C : C
+>  : ^
     }
     var a=new C[];
 >a : any
+>  : ^^^
 >new C[] : any
+>        : ^^^
 >C[] : any
+>    : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 > : any
+> : ^^^
 
     a.length;
 >a.length : any
+>         : ^^^
 >a : any
+>  : ^^^
 >length : any
+>       : ^^^
 
     a.push(new C());
 >a.push(new C()) : any
+>                : ^^^
 >a.push : any
+>       : ^^^
 >a : any
+>  : ^^^
 >push : any
+>     : ^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
     (new C()).prototype;
 >(new C()).prototype : any
+>                    : ^^^
 >(new C()) : C
+>          : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 }
 
 

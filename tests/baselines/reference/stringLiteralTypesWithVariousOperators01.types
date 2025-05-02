@@ -1,151 +1,251 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators01.ts] ////
+
+=== stringLiteralTypesWithVariousOperators01.ts ===
 let abc: "ABC" = "ABC";
 >abc : "ABC"
+>    : ^^^^^
 >"ABC" : "ABC"
+>      : ^^^^^
 
 let xyz: "XYZ" = "XYZ";
 >xyz : "XYZ"
+>    : ^^^^^
 >"XYZ" : "XYZ"
+>      : ^^^^^
 
 let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 >abc || xyz : "ABC" | "XYZ"
+>           : ^^^^^^^^^^^^^
 >abc : "ABC"
+>    : ^^^^^
 >xyz : "XYZ"
+>    : ^^^^^
 
 let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >abcOrXyz || 100 : "ABC" | "XYZ" | 100
+>                : ^^^^^^^^^^^^^^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 >100 : 100
+>    : ^^^
 
 let a = "" + abc;
 >a : string
+>  : ^^^^^^
 >"" + abc : string
+>         : ^^^^^^
 >"" : ""
+>   : ^^
 >abc : "ABC"
+>    : ^^^^^
 
 let b = abc + "";
 >b : string
+>  : ^^^^^^
 >abc + "" : string
+>         : ^^^^^^
 >abc : "ABC"
+>    : ^^^^^
 >"" : ""
+>   : ^^
 
 let c = 10 + abc;
 >c : string
+>  : ^^^^^^
 >10 + abc : string
+>         : ^^^^^^
 >10 : 10
+>   : ^^
 >abc : "ABC"
+>    : ^^^^^
 
 let d = abc + 10;
 >d : string
+>  : ^^^^^^
 >abc + 10 : string
+>         : ^^^^^^
 >abc : "ABC"
+>    : ^^^^^
 >10 : 10
+>   : ^^
 
 let e = xyz + abc;
 >e : string
+>  : ^^^^^^
 >xyz + abc : string
+>          : ^^^^^^
 >xyz : "XYZ"
+>    : ^^^^^
 >abc : "ABC"
+>    : ^^^^^
 
 let f = abc + xyz;
 >f : string
+>  : ^^^^^^
 >abc + xyz : string
+>          : ^^^^^^
 >abc : "ABC"
+>    : ^^^^^
 >xyz : "XYZ"
+>    : ^^^^^
 
 let g = true + abc;
 >g : string
+>  : ^^^^^^
 >true + abc : string
+>           : ^^^^^^
 >true : true
+>     : ^^^^
 >abc : "ABC"
+>    : ^^^^^
 
 let h = abc + true;
 >h : string
+>  : ^^^^^^
 >abc + true : string
+>           : ^^^^^^
 >abc : "ABC"
+>    : ^^^^^
 >true : true
+>     : ^^^^
 
 let i = abc + abcOrXyz + xyz;
 >i : string
+>  : ^^^^^^
 >abc + abcOrXyz + xyz : string
+>                     : ^^^^^^
 >abc + abcOrXyz : string
+>               : ^^^^^^
 >abc : "ABC"
+>    : ^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 >xyz : "XYZ"
+>    : ^^^^^
 
 let j = abcOrXyz + abcOrXyz;
 >j : string
+>  : ^^^^^^
 >abcOrXyz + abcOrXyz : string
+>                    : ^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 
 let k = +abcOrXyz;
 >k : number
+>  : ^^^^^^
 >+abcOrXyz : number
+>          : ^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 
 let l = -abcOrXyz;
 >l : number
+>  : ^^^^^^
 >-abcOrXyz : number
+>          : ^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 
 let m = abcOrXyzOrNumber + "";
 >m : string
+>  : ^^^^^^
 >abcOrXyzOrNumber + "" : string
+>                      : ^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 let n = "" + abcOrXyzOrNumber;
 >n : string
+>  : ^^^^^^
 >"" + abcOrXyzOrNumber : string
+>                      : ^^^^^^
 >"" : ""
+>   : ^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 
 let o = abcOrXyzOrNumber + abcOrXyz;
 >o : string
+>  : ^^^^^^
 >abcOrXyzOrNumber + abcOrXyz : string
+>                            : ^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 
 let p = abcOrXyz + abcOrXyzOrNumber;
 >p : string
+>  : ^^^^^^
 >abcOrXyz + abcOrXyzOrNumber : string
+>                            : ^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 
 let q = !abcOrXyzOrNumber;
 >q : boolean
+>  : ^^^^^^^
 >!abcOrXyzOrNumber : boolean
+>                  : ^^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 
 let r = ~abcOrXyzOrNumber;
 >r : number
+>  : ^^^^^^
 >~abcOrXyzOrNumber : number
+>                  : ^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 
 let s = abcOrXyzOrNumber < abcOrXyzOrNumber;
 >s : boolean
+>  : ^^^^^^^
 >abcOrXyzOrNumber < abcOrXyzOrNumber : boolean
+>                                    : ^^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 
 let t = abcOrXyzOrNumber >= abcOrXyz;
 >t : boolean
+>  : ^^^^^^^
 >abcOrXyzOrNumber >= abcOrXyz : boolean
+>                             : ^^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 
 let u = abc === abcOrXyz;
 >u : boolean
+>  : ^^^^^^^
 >abc === abcOrXyz : boolean
+>                 : ^^^^^^^
 >abc : "ABC"
+>    : ^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 
 let v = abcOrXyz === abcOrXyzOrNumber;
 >v : boolean
+>  : ^^^^^^^
 >abcOrXyz === abcOrXyzOrNumber : boolean
+>                              : ^^^^^^^
 >abcOrXyz : "ABC" | "XYZ"
+>         : ^^^^^^^^^^^^^
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 

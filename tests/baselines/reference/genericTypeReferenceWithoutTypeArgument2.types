@@ -1,51 +1,78 @@
-=== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts] ////
+
+=== genericTypeReferenceWithoutTypeArgument2.ts ===
 // it is an error to use a generic type without type arguments
 // all of these are errors 
 
 interface I<T> {
     foo: T;
 >foo : T
+>    : ^
 }
 
 var c: I;
 >c : any
+>  : ^^^
 
 var a: { x: I };
->a : { x: any; }
+>a : { x: I; }
+>  : ^^^^^ ^^^
 >x : any
+>  : ^^^
 
 var b: { (x: I): I };
->b : (x: any) => any
+>b : (x: I) => I
+>  : ^ ^^ ^^^^^ 
 >x : any
+>  : ^^^
 
 var d: { [x: I]: I };
 >d : {}
+>  : ^^
 >x : any
+>  : ^^^
 
 var e = (x: I) => { var y: I; return y; }
->e : (x: any) => any
->(x: I) => { var y: I; return y; } : (x: any) => any
+>e : (x: I) => any
+>  : ^ ^^ ^^^^^^^^
+>(x: I) => { var y: I; return y; } : (x: I) => any
+>                                  : ^ ^^ ^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 function f(x: I): I { var y: I; return y; }
->f : (x: any) => any
+>f : (x: I) => I
+>  : ^ ^^ ^^^^^ 
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 var g = function f(x: I): I { var y: I; return y; }
->g : (x: any) => any
->function f(x: I): I { var y: I; return y; } : (x: any) => any
->f : (x: any) => any
+>g : (x: I) => I
+>  : ^ ^^ ^^^^^ 
+>function f(x: I): I { var y: I; return y; } : (x: I) => I
+>                                            : ^ ^^ ^^^^^ 
+>f : (x: I) => I
+>  : ^ ^^ ^^^^^ 
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 class D extends I {
 >D : D
+>  : ^
 >I : any
+>  : ^^^
 }
 
 interface U extends I {}
@@ -53,37 +80,52 @@ interface U extends I {}
 module M {
     export interface E<T> { foo: T }
 >foo : T
+>    : ^
 }
 
 class D2 extends M.C { }
 >D2 : D2
+>   : ^^
 >M.C : any
+>    : ^^^
 >M : any
+>  : ^^^
 >C : any
+>  : ^^^
 
 interface D3<T extends M.E> { }
 >M : any
+>  : ^^^
 
 interface I2 extends M.C { }
 >M : any
+>  : ^^^
 
 function h<T extends I>(x: T) { }
->h : <T extends any>(x: T) => void
+>h : <T extends I>(x: T) => void
+>  : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
 function i<T extends M.E>(x: T) { }
->i : <T extends any>(x: T) => void
+>i : <T extends M.E>(x: T) => void
+>  : ^ ^^^^^^^^^   ^^ ^^ ^^^^^^^^^
 >M : any
+>  : ^^^
 >x : T
+>  : ^
 
 var j = <C>null;
 >j : C
+>  : ^
 ><C>null : C
->null : null
+>        : ^
 
 var k = <M.E>null;
 >k : any
+>  : ^^^
 ><M.E>null : any
+>          : ^^^
 >M : any
->null : null
+>  : ^^^
 

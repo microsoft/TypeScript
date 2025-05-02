@@ -1,6 +1,6 @@
-/index.ts(6,50): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+/index.ts(6,50): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 /index.ts(7,14): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
-/index.ts(7,49): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+/index.ts(7,49): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 
 
 ==== /index.ts (3 errors) ====
@@ -11,12 +11,12 @@
     
     import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
                  ~~~~~~~~~~~~~~~
 !!! error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     export interface Loc extends Req, Imp {}
     
     export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };

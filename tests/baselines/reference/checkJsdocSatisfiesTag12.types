@@ -1,0 +1,121 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag12.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {Object} T1
+ * @property {number} a
+ */
+
+/**
+ * @typedef {Object} T2
+ * @property {string} a
+ */
+
+/**
+ * @typedef {Object} T3
+ * @property {"a" | "b"} a
+ */
+
+/**
+ * @satisfies {T1}
+ */
+const t1 = { a: 1 };
+>t1 : { a: number; }
+>   : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+/**
+ * @satisfies {T1}
+ */
+const t2 = { a: 1, b: 1 };
+>t2 : { a: number; b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 1, b: 1 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+/**
+ * @satisfies {T1}
+ */
+const t3 = {};
+>t3 : {}
+>   : ^^
+>{} : {}
+>   : ^^
+
+/**
+ * @satisfies {Array.<number, number>}
+ */
+const t4 = [1, 2];
+>t4 : number[]
+>   : ^^^^^^^^
+>[1, 2] : number[]
+>       : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+/**
+ * @satisfies {T2}
+ */
+const t5 = { a: 'test' };
+>t5 : { a: string; }
+>   : ^^^^^^^^^^^^^^
+>{ a: 'test' } : { a: string; }
+>              : ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>'test' : "test"
+>       : ^^^^^^
+
+/**
+ * @satisfies {T2}
+ */
+const t6 = { a: 'test', b: 'test' };
+>t6 : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 'test', b: 'test' } : { a: string; b: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>'test' : "test"
+>       : ^^^^^^
+>b : string
+>  : ^^^^^^
+>'test' : "test"
+>       : ^^^^^^
+
+/**
+ * @satisfies {T3}
+ */
+const t7 = { a: "a" };
+>t7 : { a: "a"; }
+>   : ^^^^^^^^^^^
+>{ a: "a" } : { a: "a"; }
+>           : ^^^^^^^^^^^
+>a : "a"
+>  : ^^^
+>"a" : "a"
+>    : ^^^
+
+/** @satisfies {string} */ const t8 = (1);
+>t8 : 1
+>   : ^
+>(1) : 1
+>    : ^
+>1 : 1
+>  : ^
+

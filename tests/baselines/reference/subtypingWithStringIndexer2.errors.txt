@@ -1,22 +1,23 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts(11,11): error TS2430: Interface 'B' incorrectly extends interface 'A'.
+subtypingWithStringIndexer2.ts(11,11): error TS2430: Interface 'B' incorrectly extends interface 'A'.
   'string' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts(24,27): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts(32,15): error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
+subtypingWithStringIndexer2.ts(24,27): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+  Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+subtypingWithStringIndexer2.ts(32,15): error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
   'string' index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts(36,15): error TS2430: Interface 'B4<T>' incorrectly extends interface 'A<T>'.
+subtypingWithStringIndexer2.ts(36,15): error TS2430: Interface 'B4<T>' incorrectly extends interface 'A<T>'.
   'string' index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts(40,15): error TS2430: Interface 'B5<T>' incorrectly extends interface 'A<T>'.
+subtypingWithStringIndexer2.ts(40,15): error TS2430: Interface 'B5<T>' incorrectly extends interface 'A<T>'.
   'string' index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts (5 errors) ====
+==== subtypingWithStringIndexer2.ts (5 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
     interface Base { foo: string; }
@@ -32,7 +33,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430: Interface 'B' incorrectly extends interface 'A'.
 !!! error TS2430:   'string' index signatures are incompatible.
 !!! error TS2430:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:4:34: 'bar' is declared here.
+!!! related TS2728 subtypingWithStringIndexer2.ts:4:34: 'bar' is declared here.
         [x: string]: Base; // error
     }
     
@@ -48,6 +49,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         interface B extends A<Base> {
                               ~~~~
 !!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+!!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 subtypingWithStringIndexer2.ts:4:34: 'bar' is declared here.
             [x: string]: Derived; // error
         }
     

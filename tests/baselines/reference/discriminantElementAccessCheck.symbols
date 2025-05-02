@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminantElementAccessCheck.ts ===
+//// [tests/cases/compiler/discriminantElementAccessCheck.ts] ////
+
+=== discriminantElementAccessCheck.ts ===
 type U = TypeA | TypeB;
 >U : Symbol(U, Decl(discriminantElementAccessCheck.ts, 0, 0))
 >TypeA : Symbol(TypeA, Decl(discriminantElementAccessCheck.ts, 0, 23))

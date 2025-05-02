@@ -1,31 +1,51 @@
-=== tests/cases/conformance/expressions/optionalChaining/callChain/callChain.2.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/callChain.2.ts] ////
+
+=== callChain.2.ts ===
 declare const o1: undefined | (() => number);
 >o1 : () => number
+>   : ^^^^^^      
 
 o1?.();
 >o1?.() : number
+>       : ^^^^^^
 >o1 : () => number
+>   : ^^^^^^      
 
 declare const o2: undefined | { b: () => number };
 >o2 : { b: () => number; }
+>   : ^^^^^            ^^^
 >b : () => number
+>  : ^^^^^^      
 
 o2?.b();
 >o2?.b() : number
+>        : ^^^^^^
 >o2?.b : () => number
+>      : ^^^^^^      
 >o2 : { b: () => number; }
+>   : ^^^^^            ^^^
 >b : () => number
+>  : ^^^^^^      
 
 declare const o3: { b: (() => { c: string }) | undefined };
->o3 : { b: (() => {    c: string;}) | undefined; }
->b : () => {    c: string;}
+>o3 : { b: (() => { c: string; }) | undefined; }
+>   : ^^^^^                                  ^^^
+>b : () => { c: string; }
+>  : ^^^^^^              
 >c : string
+>  : ^^^^^^
 
 o3.b?.().c;
 >o3.b?.().c : string
+>           : ^^^^^^
 >o3.b?.() : { c: string; }
+>         : ^^^^^      ^^^
 >o3.b : () => { c: string; }
->o3 : { b: () => { c: string; }; }
+>     : ^^^^^^              
+>o3 : { b: (() => { c: string; }) | undefined; }
+>   : ^^^^^                                  ^^^
 >b : () => { c: string; }
+>  : ^^^^^^              
 >c : string
+>  : ^^^^^^
 

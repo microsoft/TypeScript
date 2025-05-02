@@ -1,11 +1,11 @@
-tests/cases/compiler/hugeDeclarationOutputGetsTruncatedWithError.ts(5,14): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+hugeDeclarationOutputGetsTruncatedWithError.ts(5,14): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 
 
-==== tests/cases/compiler/hugeDeclarationOutputGetsTruncatedWithError.ts (1 errors) ====
+==== hugeDeclarationOutputGetsTruncatedWithError.ts (1 errors) ====
     type props = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
     
     type manyprops = `${props}${props}`;
     
-    export const c = null as any as {[K in manyprops]: {[K2 in manyprops]: `${K}.${K2}`}};
+    export const c = [null as any as {[K in manyprops]: {[K2 in manyprops]: `${K}.${K2}`}}][0];
                  ~
 !!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.

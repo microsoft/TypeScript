@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeConstraints.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints.ts] ////
+
+=== mappedTypeConstraints.ts ===
 function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b'>>) {
 >f0 : Symbol(f0, Decl(mappedTypeConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 0, 12))

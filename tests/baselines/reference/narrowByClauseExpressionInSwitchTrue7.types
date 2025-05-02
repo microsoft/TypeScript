@@ -1,0 +1,378 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue7.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue7.ts ===
+class Base {
+>Base : Base
+>     : ^^^^
+
+    basey: string = "";
+>basey : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+class Derived1 extends Base {
+>Derived1 : Derived1
+>         : ^^^^^^^^
+>Base : Base
+>     : ^^^^
+
+    d: string = "";
+>d : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+class Derived2 extends Base {
+>Derived2 : Derived2
+>         : ^^^^^^^^
+>Base : Base
+>     : ^^^^
+
+    d: string = "";
+>d : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+    other: string = "";
+>other : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+function classy(base: Base, someDerived: Derived1 | Derived2) {
+>classy : (base: Base, someDerived: Derived1 | Derived2) => void
+>       : ^    ^^    ^^           ^^                   ^^^^^^^^^
+>base : Base
+>     : ^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case base instanceof Derived1:
+>base instanceof Derived1 : boolean
+>                         : ^^^^^^^
+>base : Base
+>     : ^^^^
+>Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
+
+            base.d
+>base.d : string
+>       : ^^^^^^
+>base : Derived1
+>     : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            // fallthrough
+        default:
+            base.basey
+>base.basey : string
+>           : ^^^^^^
+>base : Base
+>     : ^^^^
+>basey : string
+>      : ^^^^^^
+    }
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case someDerived instanceof Derived1:
+>someDerived instanceof Derived1 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived1
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            break;
+        case someDerived instanceof Derived2:
+>someDerived instanceof Derived2 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            break
+        default:
+            const never: never = someDerived;
+>never : never
+>      : ^^^^^
+>someDerived : never
+>            : ^^^^^
+    }
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case someDerived instanceof Derived1:
+>someDerived instanceof Derived1 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived1
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            // fallthrough
+        case someDerived instanceof Derived2:
+>someDerived instanceof Derived2 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            break
+        default:
+            const never: never = someDerived;
+>never : never
+>      : ^^^^^
+>someDerived : never
+>            : ^^^^^
+    }
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        default:
+            const never: never = someDerived;
+>never : never
+>      : ^^^^^
+>someDerived : never
+>            : ^^^^^
+
+        case someDerived instanceof Derived1:
+>someDerived instanceof Derived1 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d;
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived1
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            someDerived.basey;
+>someDerived.basey : string
+>                  : ^^^^^^
+>someDerived : Derived1
+>            : ^^^^^^^^
+>basey : string
+>      : ^^^^^^
+
+            break
+        case someDerived instanceof Derived2:
+>someDerived instanceof Derived2 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d;
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            someDerived.other;
+>someDerived.other : string
+>                  : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>other : string
+>      : ^^^^^^
+    }
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case someDerived instanceof Derived1:
+>someDerived instanceof Derived1 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d;
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived1
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            someDerived.basey;
+>someDerived.basey : string
+>                  : ^^^^^^
+>someDerived : Derived1
+>            : ^^^^^^^^
+>basey : string
+>      : ^^^^^^
+
+            break
+        default:
+            const never: never = someDerived;
+>never : never
+>      : ^^^^^
+>someDerived : never
+>            : ^^^^^
+
+        case someDerived instanceof Derived2:
+>someDerived instanceof Derived2 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d;
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            someDerived.other;
+>someDerived.other : string
+>                  : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>other : string
+>      : ^^^^^^
+    }
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case someDerived instanceof Derived1:
+>someDerived instanceof Derived1 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d;
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived1
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            someDerived.basey;
+>someDerived.basey : string
+>                  : ^^^^^^
+>someDerived : Derived1
+>            : ^^^^^^^^
+>basey : string
+>      : ^^^^^^
+
+            break
+        case someDerived instanceof Derived2:
+>someDerived instanceof Derived2 : boolean
+>                                : ^^^^^^^
+>someDerived : Derived1 | Derived2
+>            : ^^^^^^^^^^^^^^^^^^^
+>Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
+
+            someDerived.d;
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            someDerived.other;
+>someDerived.other : string
+>                  : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>other : string
+>      : ^^^^^^
+
+        default:
+            someDerived.d;
+>someDerived.d : string
+>              : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>d : string
+>  : ^^^^^^
+
+            someDerived.other;
+>someDerived.other : string
+>                  : ^^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+>other : string
+>      : ^^^^^^
+
+            const never: never = someDerived;
+>never : never
+>      : ^^^^^
+>someDerived : Derived2
+>            : ^^^^^^^^
+    }
+
+}
+

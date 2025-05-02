@@ -1,419 +1,588 @@
-=== tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts ===
+//// [tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts] ////
+
+=== ifDoWhileStatements.ts ===
 interface I {
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class C implements I {
 >C : C
+>  : ^
 
     id: number;
 >id : number
+>   : ^^^^^^
 
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 class C2 extends C {
 >C2 : C2
+>   : ^^
 >C : C
+>  : ^
 
     valid: boolean;
 >valid : boolean
+>      : ^^^^^^^
 }
 
 class D<T>{
 >D : D<T>
+>  : ^^^^
 
     source: T;
 >source : T
+>       : ^
 
     recurse: D<T>;
 >recurse : D<T>
+>        : ^^^^
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
+>        : ^^^^^^^
 }
 
 function F(x: string): number { return 42; }
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 function F2(x: number): boolean { return x < 42; }
 >F2 : (x: number) => boolean
+>   : ^ ^^      ^^^^^       
 >x : number
+>  : ^^^^^^
 >x < 42 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class A {
 >A : A
+>  : ^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 }
 
 module N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export class A {
 >A : A
+>  : ^
 
         id: number;
 >id : number
+>   : ^^^^^^
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 }
 
 // literals
 if (true) { }
 >true : true
+>     : ^^^^
 
 while (true) { }
 >true : true
+>     : ^^^^
 
 do { }while(true)
 >true : true
+>     : ^^^^
 
 if (null) { }
->null : null
-
 while (null) { }
->null : null
-
 do { }while(null)
->null : null
 
 if (undefined) { }
 >undefined : undefined
+>          : ^^^^^^^^^
 
 while (undefined) { }
 >undefined : undefined
+>          : ^^^^^^^^^
 
 do { }while(undefined)
 >undefined : undefined
+>          : ^^^^^^^^^
 
 if (0.0) { }
 >0.0 : 0
+>    : ^
 
 while (0.0) { }
 >0.0 : 0
+>    : ^
 
 do { }while(0.0)
 >0.0 : 0
+>    : ^
 
 if ('a string') { }
 >'a string' : "a string"
+>           : ^^^^^^^^^^
 
 while ('a string') { }
 >'a string' : "a string"
+>           : ^^^^^^^^^^
 
 do { }while('a string')
 >'a string' : "a string"
+>           : ^^^^^^^^^^
 
 if ('') { }
 >'' : ""
+>   : ^^
 
 while ('') { }
 >'' : ""
+>   : ^^
 
 do { }while('')
 >'' : ""
+>   : ^^
 
 if (/[a-z]/) { }
 >/[a-z]/ : RegExp
+>        : ^^^^^^
 
 while (/[a-z]/) { }
 >/[a-z]/ : RegExp
+>        : ^^^^^^
 
 do { }while(/[a-z]/)
 >/[a-z]/ : RegExp
+>        : ^^^^^^
 
 if ([]) { }
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 while ([]) { }
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 do { }while([])
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 if ([1, 2]) { }
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 while ([1, 2]) { }
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 do { }while([1, 2])
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 if ({}) { }
 >{} : {}
+>   : ^^
 
 while ({}) { }
 >{} : {}
+>   : ^^
 
 do { }while({})
 >{} : {}
+>   : ^^
 
 if ({ x: 1, y: 'a' }) { }
 >{ x: 1, y: 'a' } : { x: number; y: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
 while ({ x: 1, y: 'a' }) { }
 >{ x: 1, y: 'a' } : { x: number; y: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
 do { }while({ x: 1, y: 'a' })
 >{ x: 1, y: 'a' } : { x: number; y: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
 if (() => 43) { }
 >() => 43 : () => number
+>         : ^^^^^^^^^^^^
 >43 : 43
+>   : ^^
 
 while (() => 43) { }
 >() => 43 : () => number
+>         : ^^^^^^^^^^^^
 >43 : 43
+>   : ^^
 
 do { }while(() => 43)
 >() => 43 : () => number
+>         : ^^^^^^^^^^^^
 >43 : 43
+>   : ^^
 
 if (new C()) { }
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 while (new C()) { }
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 do { }while(new C())
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 if (new D<C>()) { }
 >new D<C>() : D<C>
+>           : ^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 while (new D<C>()) { }
 >new D<C>() : D<C>
+>           : ^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 do { }while(new D<C>())
 >new D<C>() : D<C>
+>           : ^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 // references
 var a = true;
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 if (a) { }
 >a : boolean
+>  : ^^^^^^^
 
 while (a) { }
 >a : boolean
+>  : ^^^^^^^
 
 do { }while(a)
 >a : boolean
+>  : ^^^^^^^
 
 var b = null;
 >b : any
->null : null
+>  : ^^^
 
 if (b) { }
 >b : any
+>  : ^^^
 
 while (b) { }
 >b : any
+>  : ^^^
 
 do { }while(b)
 >b : any
+>  : ^^^
 
 var c = undefined;
 >c : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 if (c) { }
 >c : any
+>  : ^^^
 
 while (c) { }
 >c : any
+>  : ^^^
 
 do { }while(c)
 >c : any
+>  : ^^^
 
 var d = 0.0;
 >d : number
+>  : ^^^^^^
 >0.0 : 0
+>    : ^
 
 if (d) { }
 >d : number
+>  : ^^^^^^
 
 while (d) { }
 >d : number
+>  : ^^^^^^
 
 do { }while(d)
 >d : number
+>  : ^^^^^^
 
 var e = 'a string';
 >e : string
+>  : ^^^^^^
 >'a string' : "a string"
+>           : ^^^^^^^^^^
 
 if (e) { }
 >e : string
+>  : ^^^^^^
 
 while (e) { }
 >e : string
+>  : ^^^^^^
 
 do { }while(e)
 >e : string
+>  : ^^^^^^
 
 var f = '';
 >f : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 if (f) { }
 >f : string
+>  : ^^^^^^
 
 while (f) { }
 >f : string
+>  : ^^^^^^
 
 do { }while(f)
 >f : string
+>  : ^^^^^^
 
 var g = /[a-z]/
 >g : RegExp
+>  : ^^^^^^
 >/[a-z]/ : RegExp
+>        : ^^^^^^
 
 if (g) { }
 >g : RegExp
+>  : ^^^^^^
 
 while (g) { }
 >g : RegExp
+>  : ^^^^^^
 
 do { }while(g)
 >g : RegExp
+>  : ^^^^^^
 
 var h = [];
 >h : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 if (h) { }
 >h : any[]
+>  : ^^^^^
 
 while (h) { }
 >h : any[]
+>  : ^^^^^
 
 do { }while(h)
 >h : any[]
+>  : ^^^^^
 
 var i = [1, 2];
 >i : number[]
+>  : ^^^^^^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 if (i) { }
 >i : number[]
+>  : ^^^^^^^^
 
 while (i) { }
 >i : number[]
+>  : ^^^^^^^^
 
 do { }while(i)
 >i : number[]
+>  : ^^^^^^^^
 
 var j = {};
 >j : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 if (j) { }
 >j : {}
+>  : ^^
 
 while (j) { }
 >j : {}
+>  : ^^
 
 do { }while(j)
 >j : {}
+>  : ^^
 
 var k = { x: 1, y: 'a' };
 >k : { x: number; y: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: 'a' } : { x: number; y: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
 if (k) { }
 >k : { x: number; y: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 while (k) { }
 >k : { x: number; y: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 do { }while(k)
 >k : { x: number; y: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function fn(x?: string): I { return null; }
 >fn : (x?: string) => I
+>   : ^ ^^^      ^^^^^ 
 >x : string
->null : null
+>  : ^^^^^^
 
 if (fn()) { }
 >fn() : I
+>     : ^
 >fn : (x?: string) => I
+>   : ^ ^^^      ^^^^^ 
 
 while (fn()) { }
 >fn() : I
+>     : ^
 >fn : (x?: string) => I
+>   : ^ ^^^      ^^^^^ 
 
 do { }while(fn())
 >fn() : I
+>     : ^
 >fn : (x?: string) => I
+>   : ^ ^^^      ^^^^^ 
 
 if (fn) { }
 >fn : (x?: string) => I
+>   : ^ ^^^      ^^^^^ 
 
 while (fn) { }
 >fn : (x?: string) => I
+>   : ^ ^^^      ^^^^^ 
 
 do { }while(fn)
 >fn : (x?: string) => I
+>   : ^ ^^^      ^^^^^ 
 
 
 

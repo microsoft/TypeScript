@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/CatchClauses/parserCatchClauseWithTypeAnnotation1.ts(2,13): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+parserCatchClauseWithTypeAnnotation1.ts(2,13): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
 
 
-==== tests/cases/conformance/parser/ecmascript5/CatchClauses/parserCatchClauseWithTypeAnnotation1.ts (1 errors) ====
+==== parserCatchClauseWithTypeAnnotation1.ts (1 errors) ====
     try {
     } catch (e: Error) {
                 ~~~~~

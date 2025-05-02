@@ -1,8 +1,8 @@
-tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts(28,13): error TS2339: Property 'fn2' does not exist on type 'typeof A'.
-tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?
+ModuleWithExportedAndNonExportedFunctions.ts(28,13): error TS2339: Property 'fn2' does not exist on type 'typeof A'.
+ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?
 
 
-==== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts (2 errors) ====
+==== ModuleWithExportedAndNonExportedFunctions.ts (2 errors) ====
     module A {
     
         export function fn(s: string) {
@@ -36,4 +36,4 @@ tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAnd
     var fng2 = A.fng2;
                  ~~~~
 !!! error TS2551: Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?
-!!! related TS2728 tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts:7:21: 'fng' is declared here.
+!!! related TS2728 ModuleWithExportedAndNonExportedFunctions.ts:7:21: 'fng' is declared here.

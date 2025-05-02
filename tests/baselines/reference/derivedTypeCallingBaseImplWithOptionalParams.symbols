@@ -1,4 +1,6 @@
-=== tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts ===
+//// [tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts] ////
+
+=== derivedTypeCallingBaseImplWithOptionalParams.ts ===
 interface MyInterface {
 >MyInterface : Symbol(MyInterface, Decl(derivedTypeCallingBaseImplWithOptionalParams.ts, 0, 0))
 

@@ -1,235 +1,381 @@
-=== tests/cases/compiler/discriminantPropertyCheck.ts ===
+//// [tests/cases/compiler/discriminantPropertyCheck.ts] ////
+
+=== discriminantPropertyCheck.ts ===
 type Item = Item1 | Item2;
->Item : Item1 | Item2
+>Item : Item
+>     : ^^^^
 
 interface Base {
     bar: boolean;
 >bar : boolean
+>    : ^^^^^^^
 }
 
 interface Item1 extends Base {
     kind: "A";
 >kind : "A"
+>     : ^^^
 
     foo: string | undefined;
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     baz: boolean;
 >baz : boolean
+>    : ^^^^^^^
 
     qux: true;
 >qux : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 }
 
 interface Item2 extends Base {
     kind: "B";
 >kind : "B"
+>     : ^^^
 
     foo: string | undefined;
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     baz: boolean;
 >baz : boolean
+>    : ^^^^^^^
 
     qux: false;
 >qux : false
+>    : ^^^^^
 >false : false
+>      : ^^^^^
 }
 
 function goo1(x: Item) {
 >goo1 : (x: Item) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     if (x.kind === "A" && x.foo !== undefined) {
 >x.kind === "A" && x.foo !== undefined : boolean
+>                                      : ^^^^^^^
 >x.kind === "A" : boolean
+>               : ^^^^^^^
 >x.kind : "A" | "B"
+>       : ^^^^^^^^^
 >x : Item
+>  : ^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 >x.foo !== undefined : boolean
+>                    : ^^^^^^^
 >x.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >x : Item1
+>  : ^^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x.foo.length;
 >x.foo.length : number
+>             : ^^^^^^
 >x.foo : string
+>      : ^^^^^^
 >x : Item1
+>  : ^^^^^
 >foo : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function goo2(x: Item) {
 >goo2 : (x: Item) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     if (x.foo !== undefined && x.kind === "A") {
 >x.foo !== undefined && x.kind === "A" : boolean
+>                                      : ^^^^^^^
 >x.foo !== undefined : boolean
+>                    : ^^^^^^^
 >x.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x.kind === "A" : boolean
+>               : ^^^^^^^
 >x.kind : "A" | "B"
+>       : ^^^^^^^^^
 >x : Item
+>  : ^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
         x.foo.length;  // Error, intervening discriminant guard
 >x.foo.length : number
+>             : ^^^^^^
 >x.foo : string
+>      : ^^^^^^
 >x : Item1
+>  : ^^^^^
 >foo : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function foo1(x: Item) {
 >foo1 : (x: Item) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     if (x.bar && x.foo !== undefined) {
 >x.bar && x.foo !== undefined : boolean
+>                             : ^^^^^^^
 >x.bar : boolean
+>      : ^^^^^^^
 >x : Item
+>  : ^^^^
 >bar : boolean
+>    : ^^^^^^^
 >x.foo !== undefined : boolean
+>                    : ^^^^^^^
 >x.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x.foo.length;
 >x.foo.length : number
+>             : ^^^^^^
 >x.foo : string
+>      : ^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function foo2(x: Item) {
 >foo2 : (x: Item) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     if (x.foo !== undefined && x.bar) {
 >x.foo !== undefined && x.bar : boolean
+>                             : ^^^^^^^
 >x.foo !== undefined : boolean
+>                    : ^^^^^^^
 >x.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x.bar : boolean
+>      : ^^^^^^^
 >x : Item
+>  : ^^^^
 >bar : boolean
+>    : ^^^^^^^
 
         x.foo.length;
 >x.foo.length : number
+>             : ^^^^^^
 >x.foo : string
+>      : ^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function foo3(x: Item) {
 >foo3 : (x: Item) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     if (x.baz && x.foo !== undefined) {
 >x.baz && x.foo !== undefined : boolean
+>                             : ^^^^^^^
 >x.baz : boolean
+>      : ^^^^^^^
 >x : Item
+>  : ^^^^
 >baz : boolean
+>    : ^^^^^^^
 >x.foo !== undefined : boolean
+>                    : ^^^^^^^
 >x.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x.foo.length;
 >x.foo.length : number
+>             : ^^^^^^
 >x.foo : string
+>      : ^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function foo4(x: Item) {
 >foo4 : (x: Item) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     if (x.foo !== undefined && x.baz) {
 >x.foo !== undefined && x.baz : boolean
+>                             : ^^^^^^^
 >x.foo !== undefined : boolean
+>                    : ^^^^^^^
 >x.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x.baz : boolean
+>      : ^^^^^^^
 >x : Item
+>  : ^^^^
 >baz : boolean
+>    : ^^^^^^^
 
         x.foo.length;
 >x.foo.length : number
+>             : ^^^^^^
 >x.foo : string
+>      : ^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function foo5(x: Item) {
 >foo5 : (x: Item) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     if (x.qux && x.foo !== undefined) {
 >x.qux && x.foo !== undefined : boolean
+>                             : ^^^^^^^
 >x.qux : boolean
+>      : ^^^^^^^
 >x : Item
+>  : ^^^^
 >qux : boolean
+>    : ^^^^^^^
 >x.foo !== undefined : boolean
+>                    : ^^^^^^^
 >x.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >x : Item1
+>  : ^^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x.foo.length;
 >x.foo.length : number
+>             : ^^^^^^
 >x.foo : string
+>      : ^^^^^^
 >x : Item1
+>  : ^^^^^
 >foo : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function foo6(x: Item) {
 >foo6 : (x: Item) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     if (x.foo !== undefined && x.qux) {
 >x.foo !== undefined && x.qux : boolean
+>                             : ^^^^^^^
 >x.foo !== undefined : boolean
+>                    : ^^^^^^^
 >x.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x.qux : boolean
+>      : ^^^^^^^
 >x : Item
+>  : ^^^^
 >qux : boolean
+>    : ^^^^^^^
 
         x.foo.length;  // Error, intervening discriminant guard
 >x.foo.length : number
+>             : ^^^^^^
 >x.foo : string
+>      : ^^^^^^
 >x : Item1
+>  : ^^^^^
 >foo : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
@@ -237,72 +383,107 @@ function foo6(x: Item) {
 
 enum Types { Str = 1, Num = 2 }
 >Types : Types
+>      : ^^^^^
 >Str : Types.Str
+>    : ^^^^^^^^^
 >1 : 1
+>  : ^
 >Num : Types.Num
+>    : ^^^^^^^^^
 >2 : 2
+>  : ^
 
 type Instance = StrType | NumType;
->Instance : StrType | NumType
+>Instance : Instance
+>         : ^^^^^^^^
 
 interface StrType {
     type: Types.Str;
 >type : Types.Str
+>     : ^^^^^^^^^
 >Types : any
+>      : ^^^
 
     value: string;
 >value : string
+>      : ^^^^^^
 
     length: number;
 >length : number
+>       : ^^^^^^
 }
 
 interface NumType {
     type: Types.Num;
 >type : Types.Num
+>     : ^^^^^^^^^
 >Types : any
+>      : ^^^
 
     value: number;
 >value : number
+>      : ^^^^^^
 }
 
 function func2(inst: Instance) {
 >func2 : (inst: Instance) => void
+>      : ^    ^^        ^^^^^^^^^
 >inst : Instance
+>     : ^^^^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         switch (inst.type) {
 >inst.type : Types
+>          : ^^^^^
 >inst : Instance
+>     : ^^^^^^^^
 >type : Types
+>     : ^^^^^
 
             case Types.Str: {
 >Types.Str : Types.Str
+>          : ^^^^^^^^^
 >Types : typeof Types
+>      : ^^^^^^^^^^^^
 >Str : Types.Str
+>    : ^^^^^^^^^
 
                 inst.value.length;
 >inst.value.length : number
+>                  : ^^^^^^
 >inst.value : string
+>           : ^^^^^^
 >inst : StrType
+>     : ^^^^^^^
 >value : string
+>      : ^^^^^^
 >length : number
+>       : ^^^^^^
 
                 break;
             }
             case Types.Num: {
 >Types.Num : Types.Num
+>          : ^^^^^^^^^
 >Types : typeof Types
+>      : ^^^^^^^^^^^^
 >Num : Types.Num
+>    : ^^^^^^^^^
 
                 inst.value.toExponential;
->inst.value.toExponential : (fractionDigits?: number | undefined) => string
+>inst.value.toExponential : (fractionDigits?: number) => string
+>                         : ^              ^^^      ^^^^^      
 >inst.value : number
+>           : ^^^^^^
 >inst : NumType
+>     : ^^^^^^^
 >value : number
->toExponential : (fractionDigits?: number | undefined) => string
+>      : ^^^^^^
+>toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 
                 break;
             }
@@ -314,109 +495,168 @@ function func2(inst: Instance) {
 
 const f = (_a: string, _b: string): void => {};
 >f : (_a: string, _b: string) => void
+>  : ^  ^^      ^^  ^^      ^^^^^    
 >(_a: string, _b: string): void => {} : (_a: string, _b: string) => void
+>                                     : ^  ^^      ^^  ^^      ^^^^^    
 >_a : string
+>   : ^^^^^^
 >_b : string
+>   : ^^^^^^
 
 interface A {
   a?: string;
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
   b?: string;
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface B {
   a: string;
 >a : string
+>  : ^^^^^^
 
   b: string;
 >b : string
+>  : ^^^^^^
 }
 
 type U = A | B;
->U : A | B
+>U : U
+>  : ^
 
 const u: U = {} as any;
 >u : U
+>  : ^
 >{} as any : any
 >{} : {}
+>   : ^^
 
 u.a && u.b && f(u.a, u.b);
 >u.a && u.b && f(u.a, u.b) : void | "" | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^
 >u.a && u.b : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 >u.a : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >u : U
+>  : ^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >u.b : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >u : U
+>  : ^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >f(u.a, u.b) : void
+>            : ^^^^
 >f : (_a: string, _b: string) => void
+>  : ^  ^^      ^^  ^^      ^^^^^    
 >u.a : string
+>    : ^^^^^^
 >u : U
+>  : ^
 >a : string
+>  : ^^^^^^
 >u.b : string
+>    : ^^^^^^
 >u : U
+>  : ^
 >b : string
+>  : ^^^^^^
 
 u.b && u.a && f(u.a, u.b);
 >u.b && u.a && f(u.a, u.b) : void | "" | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^
 >u.b && u.a : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 >u.b : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >u : U
+>  : ^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >u.a : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >u : U
+>  : ^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >f(u.a, u.b) : void
+>            : ^^^^
 >f : (_a: string, _b: string) => void
+>  : ^  ^^      ^^  ^^      ^^^^^    
 >u.a : string
+>    : ^^^^^^
 >u : U
+>  : ^
 >a : string
+>  : ^^^^^^
 >u.b : string
+>    : ^^^^^^
 >u : U
+>  : ^
 >b : string
+>  : ^^^^^^
 
 // Repro from #29012
 
 type Additive = '+' | '-';
->Additive : "+" | "-"
+>Additive : Additive
+>         : ^^^^^^^^
 
 type Multiplicative = '*' | '/';
->Multiplicative : "*" | "/"
+>Multiplicative : Multiplicative
+>               : ^^^^^^^^^^^^^^
 
 interface AdditiveObj {
     key: Additive
 >key : Additive
+>    : ^^^^^^^^
 }
 
 interface MultiplicativeObj {
     key: Multiplicative
 >key : Multiplicative
+>    : ^^^^^^^^^^^^^^
 }
 
 type Obj = AdditiveObj | MultiplicativeObj
->Obj : AdditiveObj | MultiplicativeObj
+>Obj : Obj
+>    : ^^^
 
 export function foo(obj: Obj) {
 >foo : (obj: Obj) => void
+>    : ^   ^^   ^^^^^^^^^
 >obj : Obj
+>    : ^^^
 
     switch (obj.key) {
 >obj.key : Additive | Multiplicative
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
+>    : ^^^
 >key : Additive | Multiplicative
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case '+': {
 >'+' : "+"
+>    : ^^^
 
             onlyPlus(obj.key);
 >onlyPlus(obj.key) : "+"
+>                  : ^^^
 >onlyPlus : (arg: "+") => "+"
+>         : ^   ^^   ^^^^^^^^
 >obj.key : "+"
+>        : ^^^
 >obj : AdditiveObj
+>    : ^^^^^^^^^^^
 >key : "+"
+>    : ^^^
 
             return;
         }
@@ -424,79 +664,117 @@ export function foo(obj: Obj) {
 }
 
 function onlyPlus(arg: '+') {
->onlyPlus : (arg: '+') => "+"
+>onlyPlus : (arg: "+") => "+"
+>         : ^   ^^   ^^^^^^^^
 >arg : "+"
+>    : ^^^
 
   return arg;
 >arg : "+"
+>    : ^^^
 }
 
 // Repro from #29496
 
 declare function never(value: never): never;
 >never : (value: never) => never
+>      : ^     ^^     ^^^^^     
 >value : never
+>      : ^^^^^
 
 const enum BarEnum {
 >BarEnum : BarEnum
+>        : ^^^^^^^
 
     bar1 = 1,
 >bar1 : BarEnum.bar1
+>     : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     bar2 = 2,
 >bar2 : BarEnum.bar2
+>     : ^^^^^^^^^^^^
 >2 : 2
+>  : ^
 }
 
 type UnionOfBar = TypeBar1 | TypeBar2;
->UnionOfBar : TypeBar1 | TypeBar2
+>UnionOfBar : UnionOfBar
+>           : ^^^^^^^^^^
 
 type TypeBar1 = { type: BarEnum.bar1 };
->TypeBar1 : { type: BarEnum.bar1; }
+>TypeBar1 : TypeBar1
+>         : ^^^^^^^^
 >type : BarEnum.bar1
+>     : ^^^^^^^^^^^^
 >BarEnum : any
+>        : ^^^
 
 type TypeBar2 = { type: BarEnum.bar2 };
->TypeBar2 : { type: BarEnum.bar2; }
+>TypeBar2 : TypeBar2
+>         : ^^^^^^^^
 >type : BarEnum.bar2
+>     : ^^^^^^^^^^^^
 >BarEnum : any
+>        : ^^^
 
 function func3(value: Partial<UnionOfBar>) {
 >func3 : (value: Partial<UnionOfBar>) => void
+>      : ^     ^^                   ^^^^^^^^^
 >value : Partial<UnionOfBar>
+>      : ^^^^^^^^^^^^^^^^^^^
 
     if (value.type !== undefined) {
 >value.type !== undefined : boolean
+>                         : ^^^^^^^
 >value.type : BarEnum | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 >value : Partial<UnionOfBar>
+>      : ^^^^^^^^^^^^^^^^^^^
 >type : BarEnum | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         switch (value.type) {
 >value.type : BarEnum
+>           : ^^^^^^^
 >value : Partial<UnionOfBar>
+>      : ^^^^^^^^^^^^^^^^^^^
 >type : BarEnum
+>     : ^^^^^^^
 
             case BarEnum.bar1:
 >BarEnum.bar1 : BarEnum.bar1
+>             : ^^^^^^^^^^^^
 >BarEnum : typeof BarEnum
+>        : ^^^^^^^^^^^^^^
 >bar1 : BarEnum.bar1
+>     : ^^^^^^^^^^^^
 
                 break;
             case BarEnum.bar2:
 >BarEnum.bar2 : BarEnum.bar2
+>             : ^^^^^^^^^^^^
 >BarEnum : typeof BarEnum
+>        : ^^^^^^^^^^^^^^
 >bar2 : BarEnum.bar2
+>     : ^^^^^^^^^^^^
 
                 break;
             default:
                 never(value.type);
 >never(value.type) : never
+>                  : ^^^^^
 >never : (value: never) => never
+>      : ^     ^^     ^^^^^     
 >value.type : never
+>           : ^^^^^
 >value : Partial<UnionOfBar>
+>      : ^^^^^^^^^^^^^^^^^^^
 >type : never
+>     : ^^^^^
         }
     }
 }
@@ -506,66 +784,98 @@ function func3(value: Partial<UnionOfBar>) {
 interface TypeA {
     Name: "TypeA";
 >Name : "TypeA"
+>     : ^^^^^^^
 
     Value1: "Cool stuff!";
 >Value1 : "Cool stuff!"
+>       : ^^^^^^^^^^^^^
 }
 
 interface TypeB {
     Name: "TypeB";
 >Name : "TypeB"
+>     : ^^^^^^^
 
     Value2: 0;
 >Value2 : 0
+>       : ^
 }
 
 type Type = TypeA | TypeB;
->Type : TypeA | TypeB
+>Type : Type
+>     : ^^^^
 
 declare function isType(x: unknown): x is Type;
 >isType : (x: unknown) => x is Type
+>       : ^ ^^       ^^^^^         
 >x : unknown
+>  : ^^^^^^^
 
 function WorksProperly(data: Type) {
 >WorksProperly : (data: Type) => void
+>              : ^    ^^    ^^^^^^^^^
 >data : Type
+>     : ^^^^
 
     if (data.Name === "TypeA") {
 >data.Name === "TypeA" : boolean
+>                      : ^^^^^^^
 >data.Name : "TypeA" | "TypeB"
+>          : ^^^^^^^^^^^^^^^^^
 >data : Type
+>     : ^^^^
 >Name : "TypeA" | "TypeB"
+>     : ^^^^^^^^^^^^^^^^^
 >"TypeA" : "TypeA"
+>        : ^^^^^^^
 
         const value1 = data.Value1;
 >value1 : "Cool stuff!"
+>       : ^^^^^^^^^^^^^
 >data.Value1 : "Cool stuff!"
+>            : ^^^^^^^^^^^^^
 >data : TypeA
+>     : ^^^^^
 >Value1 : "Cool stuff!"
+>       : ^^^^^^^^^^^^^
     }
 }
 
 function DoesNotWork(data: unknown) {
 >DoesNotWork : (data: unknown) => void
+>            : ^    ^^       ^^^^^^^^^
 >data : unknown
+>     : ^^^^^^^
 
     if (isType(data)) {
 >isType(data) : boolean
+>             : ^^^^^^^
 >isType : (x: unknown) => x is Type
+>       : ^ ^^       ^^^^^         
 >data : unknown
+>     : ^^^^^^^
 
         if (data.Name === "TypeA") {
 >data.Name === "TypeA" : boolean
+>                      : ^^^^^^^
 >data.Name : "TypeA" | "TypeB"
+>          : ^^^^^^^^^^^^^^^^^
 >data : Type
+>     : ^^^^
 >Name : "TypeA" | "TypeB"
+>     : ^^^^^^^^^^^^^^^^^
 >"TypeA" : "TypeA"
+>        : ^^^^^^^
 
             const value1 = data.Value1;
 >value1 : "Cool stuff!"
+>       : ^^^^^^^^^^^^^
 >data.Value1 : "Cool stuff!"
+>            : ^^^^^^^^^^^^^
 >data : TypeA
+>     : ^^^^^
 >Value1 : "Cool stuff!"
+>       : ^^^^^^^^^^^^^
         }
     }
 }
@@ -573,87 +883,132 @@ function DoesNotWork(data: unknown) {
 // Repro from #36777
 
 type TestA = {
->TestA : { type: 'testA'; bananas: 3; }
+>TestA : TestA
+>      : ^^^^^
 
     type: 'testA';
 >type : "testA"
+>     : ^^^^^^^
 
     bananas: 3;
 >bananas : 3
+>        : ^
 }
   
 type TestB = {
->TestB : { type: 'testB'; apples: 5; }
+>TestB : TestB
+>      : ^^^^^
 
     type: 'testB';
 >type : "testB"
+>     : ^^^^^^^
 
     apples: 5;
 >apples : 5
+>       : ^
 }
   
 type AllTests = TestA | TestB;
->AllTests : TestA | TestB
+>AllTests : AllTests
+>         : ^^^^^^^^
 
 type MapOfAllTests = Record<string, AllTests>;
->MapOfAllTests : { [x: string]: AllTests; }
+>MapOfAllTests : MapOfAllTests
+>              : ^^^^^^^^^^^^^
 
 const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >doTestingStuff : (mapOfTests: MapOfAllTests, ids: string[]) => void
+>               : ^          ^^             ^^   ^^        ^^^^^^^^^
 >(mapOfTests: MapOfAllTests, ids: string[]) => {    ids.forEach(id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    });} : (mapOfTests: MapOfAllTests, ids: string[]) => void
+>                                                                                                                                                                                                                                                                                                                                        : ^          ^^             ^^   ^^        ^^^^^^^^^
 >mapOfTests : MapOfAllTests
+>           : ^^^^^^^^^^^^^
 >ids : string[]
+>    : ^^^^^^^^
 
     ids.forEach(id => {
 >ids.forEach(id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    }) : void
+>                                                                                                                                                                                                                                                                                   : ^^^^
 >ids.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>            : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >ids : string[]
+>    : ^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    } : (id: string) => void
+>                                                                                                                                                                                                                                                                      : ^  ^^^^^^^^^^^^^^^^^
 >id : string
+>   : ^^^^^^
 
         let test;
 >test : any
 
         test = mapOfTests[id];
 >test = mapOfTests[id] : AllTests
+>                      : ^^^^^^^^
 >test : any
 >mapOfTests[id] : AllTests
+>               : ^^^^^^^^
 >mapOfTests : MapOfAllTests
+>           : ^^^^^^^^^^^^^
 >id : string
+>   : ^^^^^^
 
         if (test.type === 'testA') {
 >test.type === 'testA' : boolean
+>                      : ^^^^^^^
 >test.type : "testA" | "testB"
+>          : ^^^^^^^^^^^^^^^^^
 >test : AllTests
+>     : ^^^^^^^^
 >type : "testA" | "testB"
+>     : ^^^^^^^^^^^^^^^^^
 >'testA' : "testA"
+>        : ^^^^^^^
 
             console.log(test.bananas);
 >console.log(test.bananas) : void
+>                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >test.bananas : 3
+>             : ^
 >test : TestA
+>     : ^^^^^
 >bananas : 3
+>        : ^
         }
         switch (test.type) {
 >test.type : "testA" | "testB"
+>          : ^^^^^^^^^^^^^^^^^
 >test : TestA | TestB
+>     : ^^^^^^^^^^^^^
 >type : "testA" | "testB"
+>     : ^^^^^^^^^^^^^^^^^
 
             case 'testA': {
 >'testA' : "testA"
+>        : ^^^^^^^
 
                 console.log(test.bananas);
 >console.log(test.bananas) : void
+>                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >test.bananas : 3
+>             : ^
 >test : TestA
+>     : ^^^^^
 >bananas : 3
+>        : ^
             }
         }
     });

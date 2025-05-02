@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mismatchedGenericArguments1.ts] ////
+
 //// [mismatchedGenericArguments1.ts]
 interface IFoo<T> {
    foo<T>(x: T): T;

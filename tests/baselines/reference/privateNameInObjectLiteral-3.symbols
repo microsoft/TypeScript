@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-3.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-3.ts] ////
+
+=== privateNameInObjectLiteral-3.ts ===
 const obj = {
 >obj : Symbol(obj, Decl(privateNameInObjectLiteral-3.ts, 0, 5))
 

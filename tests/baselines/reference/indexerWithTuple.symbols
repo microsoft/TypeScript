@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/indexerWithTuple.ts ===
+//// [tests/cases/conformance/types/tuple/indexerWithTuple.ts] ////
+
+=== indexerWithTuple.ts ===
 var strNumTuple: [string, number] = ["foo", 10];
 >strNumTuple : Symbol(strNumTuple, Decl(indexerWithTuple.ts, 0, 3))
 

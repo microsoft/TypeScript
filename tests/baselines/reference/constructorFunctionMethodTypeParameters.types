@@ -1,18 +1,26 @@
-=== tests/cases/conformance/salsa/constructorFunctionMethodTypeParameters.js ===
+//// [tests/cases/conformance/salsa/constructorFunctionMethodTypeParameters.ts] ////
+
+=== constructorFunctionMethodTypeParameters.js ===
 /**
  * @template {string} T
  * @param {T} t
  */
 function Cls(t) {
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >t : T
+>  : ^
 
     this.t = t;
 >this.t = t : T
+>           : ^
 >this.t : any
 >this : this
+>     : ^^^^
 >t : any
+>  : ^^^
 >t : T
+>  : ^
 }
 
 /**
@@ -23,27 +31,41 @@ function Cls(t) {
  */
 Cls.prototype.topLevelComment = function (t, v) {
 >Cls.prototype.topLevelComment = function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
+>                                                               : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^ 
 >Cls.prototype.topLevelComment : any
 >Cls.prototype : any
+>              : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >topLevelComment : any
+>                : ^^^
 >function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
+>                               : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^ 
 >t : T
+>  : ^
 >v : V
+>  : ^
 
     return v
 >v : V
+>  : ^
 
 };
 
 Cls.prototype.nestedComment =
 >Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
+>                                                                                                                                                                         : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^ 
 >Cls.prototype.nestedComment : any
 >Cls.prototype : any
+>              : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >nestedComment : any
+>              : ^^^
 
     /**
      * @template {string} U
@@ -53,36 +75,58 @@ Cls.prototype.nestedComment =
      */
     function (t, u) {
 >function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
+>                                       : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^ 
 >t : T
+>  : ^
 >u : U
+>  : ^
 
         return t
 >t : T
+>  : ^
 
     };
 
 var c = new Cls('a');
 >c : Cls<"a">
+>  : ^^^^^^^^
 >new Cls('a') : Cls<"a">
+>             : ^^^^^^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
 const s = c.topLevelComment('a', 'b');
 >s : "b"
+>  : ^^^
 >c.topLevelComment('a', 'b') : "b"
+>                            : ^^^
 >c.topLevelComment : <V extends string>(t: "a", v: V) => V
+>                  : ^ ^^^^^^^^^      ^^ ^^^^^^^ ^^^^^^^^^
 >c : Cls<"a">
+>  : ^^^^^^^^
 >topLevelComment : <V extends string>(t: "a", v: V) => V
+>                : ^ ^^^^^^^^^      ^^ ^^^^^^^ ^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 
 const t = c.nestedComment('a', 'b');
 >t : "a"
+>  : ^^^
 >c.nestedComment('a', 'b') : "a"
+>                          : ^^^
 >c.nestedComment : <U extends string>(t: "a", u: U) => "a"
+>                : ^ ^^^^^^^^^      ^^ ^^^^^^^ ^^^^^^^^^^^
 >c : Cls<"a">
+>  : ^^^^^^^^
 >nestedComment : <U extends string>(t: "a", u: U) => "a"
+>              : ^ ^^^^^^^^^      ^^ ^^^^^^^ ^^^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 
 

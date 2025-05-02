@@ -1,148 +1,229 @@
-=== tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts ===
+//// [tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts] ////
+
+=== implicitAnyFunctionInvocationWithAnyArguements.ts ===
 // this should be errors
 var arg0 = null;  // error at "arg0"
 >arg0 : any
->null : null
+>     : ^^^
 
 var anyArray = [null, undefined];  // error at array literal
 >anyArray : any[]
+>         : ^^^^^
 >[null, undefined] : null[]
->null : null
+>                  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var objL: { v; w; }             // error at "y,z"
 >objL : { v: any; w: any; }
+>     : ^^^^^^^^^^^^^^^^^^^
 >v : any
+>  : ^^^
 >w : any
+>  : ^^^
 
 var funcL: (y2) => number;
 >funcL : (y2: any) => number
+>      : ^  ^^^^^^^^^^      
 >y2 : any
+>   : ^^^
 
 function temp1(arg1) { }  // error at "temp1"
 >temp1 : (arg1: any) => void
+>      : ^    ^^^^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 
 function testFunctionExprC(subReplace: (s: string, ...arg: any[]) => string) { }
 >testFunctionExprC : (subReplace: (s: string, ...arg: any[]) => string) => void
+>                  : ^          ^^                                    ^^^^^^^^^
 >subReplace : (s: string, ...arg: any[]) => string
+>           : ^ ^^      ^^^^^   ^^     ^^^^^      
 >s : string
+>  : ^^^^^^
 >arg : any[]
+>    : ^^^^^
 
 function testFunctionExprC2(eq: (v1: any, v2: any) => number) { };
 >testFunctionExprC2 : (eq: (v1: any, v2: any) => number) => void
+>                   : ^  ^^                            ^^^^^^^^^
 >eq : (v1: any, v2: any) => number
+>   : ^  ^^   ^^  ^^   ^^^^^      
 >v1 : any
+>   : ^^^
 >v2 : any
+>   : ^^^
 
 function testObjLiteral(objLit: { v: any; w: any }) { }; 
->testObjLiteral : (objLit: {    v: any;    w: any;}) => void
+>testObjLiteral : (objLit: { v: any; w: any; }) => void
+>               : ^      ^^                   ^^^^^^^^^
 >objLit : { v: any; w: any; }
+>       : ^^^^^   ^^^^^   ^^^
 >v : any
+>  : ^^^
 >w : any
+>  : ^^^
 
 function testFuncLiteral(funcLit: (y2) => number) { };
 >testFuncLiteral : (funcLit: (y2: any) => number) => void
+>                : ^       ^^     ^^^           ^^^^^^^^^
 >funcLit : (y2: any) => number
+>        : ^  ^^^^^^^^^^      
 >y2 : any
+>   : ^^^
 
 // this should not be an error
 testFunctionExprC2((v1, v2) => 1);
 >testFunctionExprC2((v1, v2) => 1) : void
+>                                  : ^^^^
 >testFunctionExprC2 : (eq: (v1: any, v2: any) => number) => void
+>                   : ^  ^^                            ^^^^^^^^^
 >(v1, v2) => 1 : (v1: any, v2: any) => number
+>              : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^
 >v1 : any
+>   : ^^^
 >v2 : any
+>   : ^^^
 >1 : 1
+>  : ^
 
 testObjLiteral(objL);
 >testObjLiteral(objL) : void
+>                     : ^^^^
 >testObjLiteral : (objLit: { v: any; w: any; }) => void
+>               : ^      ^^                   ^^^^^^^^^
 >objL : { v: any; w: any; }
+>     : ^^^^^^^^^^^^^^^^^^^
 
 testFuncLiteral(funcL);
 >testFuncLiteral(funcL) : void
+>                       : ^^^^
 >testFuncLiteral : (funcLit: (y2: any) => number) => void
+>                : ^       ^^     ^^^           ^^^^^^^^^
 >funcL : (y2: any) => number
+>      : ^  ^^^^^^^^^^      
 
 var k = temp1(null);
 >k : void
+>  : ^^^^
 >temp1(null) : void
+>            : ^^^^
 >temp1 : (arg1: any) => void
->null : null
+>      : ^    ^^^^^^^^^^^^^^
 
 var result = temp1(arg0);
 >result : void
+>       : ^^^^
 >temp1(arg0) : void
+>            : ^^^^
 >temp1 : (arg1: any) => void
+>      : ^    ^^^^^^^^^^^^^^
 >arg0 : null
+>     : ^^^^
 
 var result1 = temp1(anyArray);
 >result1 : void
+>        : ^^^^
 >temp1(anyArray) : void
+>                : ^^^^
 >temp1 : (arg1: any) => void
+>      : ^    ^^^^^^^^^^^^^^
 >anyArray : any[]
+>         : ^^^^^
 
 function noError(variable: any, array?: any) { }
 >noError : (variable: any, array?: any) => void
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >variable : any
+>         : ^^^
 >array : any
+>      : ^^^
 
 noError(null, []);
 >noError(null, []) : void
+>                  : ^^^^
 >noError : (variable: any, array?: any) => void
->null : null
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 noError(undefined, <any>[]);
 >noError(undefined, <any>[]) : void
+>                            : ^^^^
 >noError : (variable: any, array?: any) => void
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 ><any>[] : any
+>        : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 noError(null, [null, undefined]);
 >noError(null, [null, undefined]) : void
+>                                 : ^^^^
 >noError : (variable: any, array?: any) => void
->null : null
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >[null, undefined] : null[]
->null : null
+>                  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 noError(undefined, anyArray);
 >noError(undefined, anyArray) : void
+>                             : ^^^^
 >noError : (variable: any, array?: any) => void
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >anyArray : any[]
+>         : ^^^^^
 
 class C {
 >C : C
+>  : ^
 
     constructor(emtpyArray: any, variable: any) {
 >emtpyArray : any
+>           : ^^^
 >variable : any
+>         : ^^^
     }
 }
 
 var newC = new C([], undefined);
 >newC : C
+>     : ^
 >new C([], undefined) : C
+>                     : ^
 >C : typeof C
+>  : ^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var newC1 = new C([], arg0);
 >newC1 : C
+>      : ^
 >new C([], arg0) : C
+>                : ^
 >C : typeof C
+>  : ^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >arg0 : null
+>     : ^^^^
 
 var newC2 = new C(<any>[], null) 
 >newC2 : C
+>      : ^
 >new C(<any>[], null) : C
+>                     : ^
 >C : typeof C
+>  : ^^^^^^^^
 ><any>[] : any
+>        : ^^^
 >[] : undefined[]
->null : null
+>   : ^^^^^^^^^^^
 

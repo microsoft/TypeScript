@@ -1,86 +1,113 @@
-=== tests/cases/compiler/nameCollisions.ts ===
+//// [tests/cases/compiler/nameCollisions.ts] ////
+
+=== nameCollisions.ts ===
 module T {
 >T : typeof T
+>  : ^^^^^^^^
 
     var x = 2;
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     module x { // error
 >x : typeof x
+>  : ^^^^^^^^
 
         export class Bar {
 >Bar : Bar
+>    : ^^^
 
             test: number;
 >test : number
+>     : ^^^^^^
         }
     }
 
     module z {
 >z : typeof z
+>  : ^^^^^^^^
 
         var t;
 >t : any
+>  : ^^^
     }
     var z; // error
 >z : any
+>  : ^^^
 
     module y {
 >y : typeof y
+>  : ^^^^^^^^
 
         var b;
 >b : any
+>  : ^^^
     }
 
     class y { } // error
 >y : y
+>  : ^
 
     var w;
 >w : any
+>  : ^^^
 
     module w { } //ok
 
     var f;
 >f : any
+>  : ^^^
 
     function f() { } //error
 >f : () => void
+>  : ^^^^^^^^^^
 
     function f2() { }
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     var f2; // error
 >f2 : any
+>   : ^^^
 
     var i;
 >i : any
+>  : ^^^
 
     interface i { } //ok
 
     class C { }
 >C : C
+>  : ^
 
     function C() { } // error
 >C : typeof C
+>  : ^^^^^^^^
 
     function C2() { }
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
     class C2 { } // error
 >C2 : C2
+>   : ^^
 
     function fi() { }
 >fi : () => void
+>   : ^^^^^^^^^^
 
     interface fi { } // ok
 
     class cli { }
 >cli : cli
+>    : ^^^
 
     interface cli { }
 
     interface cli2 { }
     class cli2 { }
 >cli2 : cli2
+>     : ^^^^
 }

@@ -1,8 +1,15 @@
-=== tests/cases/conformance/types/tuple/tupleElementTypes3.ts ===
+//// [tests/cases/conformance/types/tuple/tupleElementTypes3.ts] ////
+
+=== tupleElementTypes3.ts ===
 var [a, b] = [0, undefined];
 >a : number
+>  : ^^^^^^
 >b : any
+>  : ^^^
 >[0, undefined] : [number, undefined]
+>               : ^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 

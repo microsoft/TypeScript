@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteral2.ts ===
+//// [tests/cases/compiler/objectLiteral2.ts] ////
+
+=== objectLiteral2.ts ===
 var v30 = {a:1, b:2}, v31;
 >v30 : Symbol(v30, Decl(objectLiteral2.ts, 0, 3))
 >a : Symbol(a, Decl(objectLiteral2.ts, 0, 11))

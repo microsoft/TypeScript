@@ -1,13 +1,21 @@
-=== tests/cases/conformance/jsdoc/foo.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToValue.ts] ////
+
+=== foo.js ===
 /** @param {Image} image */
 function process(image) {
 >process : (image: new (width?: number, height?: number) => HTMLImageElement) => HTMLImageElement
+>        : ^     ^^^^^^^     ^^^      ^^      ^^^      ^^^^^                ^^^^^^^^^^^^^^^^^^^^^
 >image : new (width?: number, height?: number) => HTMLImageElement
+>      : ^^^^^     ^^^      ^^      ^^^      ^^^^^                
 
     return new image(1, 1)
 >new image(1, 1) : HTMLImageElement
+>                : ^^^^^^^^^^^^^^^^
 >image : new (width?: number, height?: number) => HTMLImageElement
+>      : ^^^^^     ^^^      ^^      ^^^      ^^^^^                
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 

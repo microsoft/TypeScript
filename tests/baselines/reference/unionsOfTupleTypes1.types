@@ -1,266 +1,426 @@
-=== tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts ===
+//// [tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts] ////
+
+=== unionsOfTupleTypes1.ts ===
 type T1 = [string, number];
->T1 : [string, number]
+>T1 : T1
+>   : ^^
 
 type T2 = [boolean] | [string, number];
->T2 : [boolean] | [string, number]
+>T2 : T2
+>   : ^^
 
 type T3 = [string, ...number[]];
->T3 : [string, ...number[]]
+>T3 : T3
+>   : ^^
 
 type T4 = [boolean] | [string, ...number[]];
->T4 : [boolean] | [string, ...number[]]
+>T4 : T4
+>   : ^^
 
 type T10 = T1[0];  // string
 >T10 : string
+>    : ^^^^^^
 
 type T11 = T1[1];  // number
 >T11 : number
+>    : ^^^^^^
 
 type T12 = T1[2];  // undefined
 >T12 : undefined
+>    : ^^^^^^^^^
 
 type T1N = T1[number];  // string | number
 >T1N : string | number
+>    : ^^^^^^^^^^^^^^^
 
 type T20 = T2[0];  // string | boolean
 >T20 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 
 type T21 = T2[1];  // number | undefined
 >T21 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
 type T22 = T2[2];  // undefined
 >T22 : undefined
+>    : ^^^^^^^^^
 
 type T2N = T2[number];  // string | number | boolean
 >T2N : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T30 = T3[0];  // string
 >T30 : string
+>    : ^^^^^^
 
 type T31 = T3[1];  // number
 >T31 : number
+>    : ^^^^^^
 
 type T32 = T3[2];  // number
 >T32 : number
+>    : ^^^^^^
 
 type T3N = T3[number];  // string | number
 >T3N : string | number
+>    : ^^^^^^^^^^^^^^^
 
 type T40 = T4[0];  // string | boolean
 >T40 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 
 type T41 = T4[1];  // number | undefined
 >T41 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
 type T42 = T4[2];  // number | undefined
 >T42 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
 type T4N = T4[number];  // string | number | boolean
 >T4N : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f1(t1: T1, t2: T2, t3: T3, t4: T4, x: number) {
 >f1 : (t1: T1, t2: T2, t3: T3, t4: T4, x: number) => void
+>   : ^  ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^ ^^      ^^^^^^^^^
 >t1 : T1
+>   : ^^
 >t2 : T2
+>   : ^^
 >t3 : T3
+>   : ^^
 >t4 : T4
+>   : ^^
 >x : number
+>  : ^^^^^^
 
     let [d10, d11, d12] = t1;  // string, number
 >d10 : string
+>    : ^^^^^^
 >d11 : number
+>    : ^^^^^^
 >d12 : undefined
+>    : ^^^^^^^^^
 >t1 : T1
+>   : ^^
 
     let [d20, d21, d22] = t2;  // string | boolean, number | undefined
 >d20 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >d21 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >d22 : undefined
+>    : ^^^^^^^^^
 >t2 : T2
+>   : ^^
 
     let [d30, d31, d32] = t3;  // string, number, number
 >d30 : string
+>    : ^^^^^^
 >d31 : number
+>    : ^^^^^^
 >d32 : number
+>    : ^^^^^^
 >t3 : T3
+>   : ^^
 
     let [d40, d41, d42] = t4;  // string | boolean, number | undefined, number | undefined
 >d40 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >d41 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >d42 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 
     [d10, d11, d12] = t1;
 >[d10, d11, d12] = t1 : T1
+>                     : ^^
 >[d10, d11, d12] : [string, number, undefined]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d10 : string
+>    : ^^^^^^
 >d11 : number
+>    : ^^^^^^
 >d12 : undefined
+>    : ^^^^^^^^^
 >t1 : T1
+>   : ^^
 
     [d20, d21, d22] = t2;
 >[d20, d21, d22] = t2 : T2
+>                     : ^^
 >[d20, d21, d22] : [string | boolean, number | undefined, undefined]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d20 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >d21 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >d22 : undefined
+>    : ^^^^^^^^^
 >t2 : T2
+>   : ^^
 
     [d30, d31, d32] = t3;
 >[d30, d31, d32] = t3 : T3
+>                     : ^^
 >[d30, d31, d32] : [string, number, number]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >d30 : string
+>    : ^^^^^^
 >d31 : number
+>    : ^^^^^^
 >d32 : number
+>    : ^^^^^^
 >t3 : T3
+>   : ^^
 
     [d40, d41, d42] = t4;
 >[d40, d41, d42] = t4 : T4
+>                     : ^^
 >[d40, d41, d42] : [string | boolean, number | undefined, number | undefined]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d40 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >d41 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >d42 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 
     let t10 = t1[0];  // string
 >t10 : string
+>    : ^^^^^^
 >t1[0] : string
+>      : ^^^^^^
 >t1 : T1
+>   : ^^
 >0 : 0
+>  : ^
 
     let t11 = t1[1];  // number
 >t11 : number
+>    : ^^^^^^
 >t1[1] : number
+>      : ^^^^^^
 >t1 : T1
+>   : ^^
 >1 : 1
+>  : ^
 
     let t12 = t1[2];  // undefined
 >t12 : undefined
+>    : ^^^^^^^^^
 >t1[2] : undefined
+>      : ^^^^^^^^^
 >t1 : T1
+>   : ^^
 >2 : 2
+>  : ^
 
     let t1x = t1[x];  // string | number
 >t1x : string | number
+>    : ^^^^^^^^^^^^^^^
 >t1[x] : string | number
+>      : ^^^^^^^^^^^^^^^
 >t1 : T1
+>   : ^^
 >x : number
+>  : ^^^^^^
 
     let t20 = t2[0];  // string | boolean
 >t20 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >t2[0] : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >t2 : T2
+>   : ^^
 >0 : 0
+>  : ^
 
     let t21 = t2[1];  // number | undefined
 >t21 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >t2[1] : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >t2 : T2
+>   : ^^
 >1 : 1
+>  : ^
 
     let t22 = t2[2];  // undefined
 >t22 : undefined
+>    : ^^^^^^^^^
 >t2[2] : undefined
+>      : ^^^^^^^^^
 >t2 : T2
+>   : ^^
 >2 : 2
+>  : ^
 
     let t2x = t2[x];  // string | number | boolean
 >t2x : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2[x] : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : T2
+>   : ^^
 >x : number
+>  : ^^^^^^
 
     let t30 = t3[0];  // string
 >t30 : string
+>    : ^^^^^^
 >t3[0] : string
+>      : ^^^^^^
 >t3 : T3
+>   : ^^
 >0 : 0
+>  : ^
 
     let t31 = t3[1];  // number
 >t31 : number
+>    : ^^^^^^
 >t3[1] : number
+>      : ^^^^^^
 >t3 : T3
+>   : ^^
 >1 : 1
+>  : ^
 
     let t32 = t3[2];  // number
 >t32 : number
+>    : ^^^^^^
 >t3[2] : number
+>      : ^^^^^^
 >t3 : T3
+>   : ^^
 >2 : 2
+>  : ^
 
     let t3x = t3[x];  // string | number
 >t3x : string | number
+>    : ^^^^^^^^^^^^^^^
 >t3[x] : string | number
+>      : ^^^^^^^^^^^^^^^
 >t3 : T3
+>   : ^^
 >x : number
+>  : ^^^^^^
 
     let t40 = t4[0];  // string | boolean
 >t40 : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >t4[0] : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >0 : 0
+>  : ^
 
     let t41 = t4[1];  // number | undefined
 >t41 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >t4[1] : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >1 : 1
+>  : ^
 
     let t42 = t4[2];  // number | undefined
 >t42 : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >t4[2] : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >2 : 2
+>  : ^
 
     let t4x = t4[x];  // string | number | boolean
 >t4x : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t4[x] : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >x : number
+>  : ^^^^^^
 
     t1[1] = 42;
 >t1[1] = 42 : 42
+>           : ^^
 >t1[1] : number
+>      : ^^^^^^
 >t1 : T1
+>   : ^^
 >1 : 1
+>  : ^
 >42 : 42
+>   : ^^
 
     t2[1] = 42;
 >t2[1] = 42 : 42
+>           : ^^
 >t2[1] : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >t2 : T2
+>   : ^^
 >1 : 1
+>  : ^
 >42 : 42
+>   : ^^
 
     t3[1] = 42;
 >t3[1] = 42 : 42
+>           : ^^
 >t3[1] : number
+>      : ^^^^^^
 >t3 : T3
+>   : ^^
 >1 : 1
+>  : ^
 >42 : 42
+>   : ^^
 
     t4[1] = 42;
 >t4[1] = 42 : 42
+>           : ^^
 >t4[1] : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >1 : 1
+>  : ^
 >42 : 42
+>   : ^^
 }
 
 // Repro from #27543
 
 type Unioned = [string] | [string, number];
->Unioned : [string, number] | [string]
+>Unioned : Unioned
+>        : ^^^^^^^
 
 const ex: Unioned = ["hi"] as Unioned;
 >ex : Unioned
+>   : ^^^^^^^
 >["hi"] as Unioned : Unioned
+>                  : ^^^^^^^
 >["hi"] : [string]
+>       : ^^^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
 const [x, y] = ex;
 >x : string
+>  : ^^^^^^
 >y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >ex : Unioned
+>   : ^^^^^^^
 

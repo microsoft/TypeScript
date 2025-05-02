@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts] ////
+
 //// [constructSignatureAssignabilityInInheritance3.ts]
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases

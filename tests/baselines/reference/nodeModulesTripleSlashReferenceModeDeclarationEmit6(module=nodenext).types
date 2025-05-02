@@ -1,25 +1,36 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit6.ts] ////
+
 === /index.ts ===
 import obj from "./uses.js"
 >obj : RequireInterface
+>    : ^^^^^^^^^^^^^^^^
 
 export default (obj as typeof obj);
 >(obj as typeof obj) : RequireInterface
+>                    : ^^^^^^^^^^^^^^^^
 >obj as typeof obj : RequireInterface
+>                  : ^^^^^^^^^^^^^^^^
 >obj : RequireInterface
+>    : ^^^^^^^^^^^^^^^^
 >obj : RequireInterface
+>    : ^^^^^^^^^^^^^^^^
 
 === /node_modules/pkg/require.d.ts ===
 export {};
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     interface RequireInterface {}
     function getInterR(): RequireInterface;
 >getInterR : () => RequireInterface
+>          : ^^^^^^                
 }
 === /uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 >getInterR() : RequireInterface
+>            : ^^^^^^^^^^^^^^^^
 >getInterR : () => RequireInterface
+>          : ^^^^^^                
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts] ////
+
 //// [assignFromStringInterface2.ts]
 interface String {
     doStuff(): string;

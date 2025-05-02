@@ -1,29 +1,45 @@
-=== tests/cases/compiler/implicitAnyInCatch.ts ===
+//// [tests/cases/compiler/implicitAnyInCatch.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+
+=== implicitAnyInCatch.ts ===
 // this should not be an error
 try { } catch (error) {
 >error : any
 
     if (error.number === -2147024809) { }
 >error.number === -2147024809 : boolean
+>                             : ^^^^^^^
 >error.number : any
 >error : any
+>      : ^^^
 >number : any
+>       : ^^^
 >-2147024809 : -2147024809
+>            : ^^^^^^^^^^^
 >2147024809 : 2147024809
+>           : ^^^^^^^^^^
 }
 for (var key in this) { }
 >key : string
+>    : ^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     public temp() {
 >temp : () => void
+>     : ^^^^^^^^^^
 
         for (var x in this) {
 >x : Extract<keyof this, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
         }
     }
 }

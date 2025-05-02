@@ -1,40 +1,56 @@
-=== tests/cases/compiler/indexSignatureTypeCheck.ts ===
+//// [tests/cases/compiler/indexSignatureTypeCheck.ts] ////
+
+=== indexSignatureTypeCheck.ts ===
 interface IPropertySet {
 
     [index: string]: any;
 >index : string
+>      : ^^^^^^
 
 }
 
 
 var ps: IPropertySet = null;
 >ps : IPropertySet
->null : null
+>   : ^^^^^^^^^^^^
 
 var index: any = "hello";
 >index : any
+>      : ^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 ps[index] = 12;
 >ps[index] = 12 : 12
+>               : ^^
 >ps[index] : any
+>          : ^^^
 >ps : IPropertySet
+>   : ^^^^^^^^^^^^
 >index : any
+>      : ^^^
 >12 : 12
+>   : ^^
 
 
 interface indexErrors {
     [p2?: string];
 >p2 : string
+>   : ^^^^^^
 
     [...p3: any[]];
 >p3 : any[]
+>   : ^^^^^
 
     [p4: string, p5?: string];
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     [p6: string, ...p7: any[]];
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 }

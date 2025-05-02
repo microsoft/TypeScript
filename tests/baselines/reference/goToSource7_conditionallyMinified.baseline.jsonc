@@ -1,0 +1,34 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/react/cjs/react.production.min.js ===
+// 'use strict';exports.[|{| defId: 0 |}useState|]=function(a){};exports.version='16.8.6';
+
+// === /home/src/workspaces/project/node_modules/react/cjs/react.development.js ===
+// 'use strict';
+// if (process.env.NODE_ENV !== 'production') {
+//   (function() {
+//     function useState(initialState) {}
+//     exports.[|{| defId: 1 |}useState|] = useState;
+//     exports.version = '16.8.6';
+//   }());
+// }
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/useState } from 'react';
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

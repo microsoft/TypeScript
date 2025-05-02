@@ -1,13 +1,13 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts(15,1): error TS2322: Type 'B' is not assignable to type 'A'.
+assignmentCompatWithGenericCallSignatures2.ts(15,1): error TS2322: Type 'B' is not assignable to type 'A'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'T[]' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'T[]'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts(16,1): error TS2322: Type 'A' is not assignable to type 'B'.
+assignmentCompatWithGenericCallSignatures2.ts(16,1): error TS2322: Type 'A' is not assignable to type 'B'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'S' is not assignable to type 'S[]'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts (2 errors) ====
+==== assignmentCompatWithGenericCallSignatures2.ts (2 errors) ====
     // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
     
     interface A {
@@ -33,5 +33,5 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A' is not assignable to type 'B'.
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:     Type 'S' is not assignable to type 'S[]'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts:8:6: This type parameter might need an `extends S[]` constraint.
+!!! related TS2208 assignmentCompatWithGenericCallSignatures2.ts:8:6: This type parameter might need an `extends S[]` constraint.
     

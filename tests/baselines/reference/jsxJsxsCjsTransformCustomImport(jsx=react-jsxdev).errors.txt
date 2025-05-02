@@ -1,11 +1,11 @@
-tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx(2,11): error TS2307: Cannot find module 'preact/jsx-dev-runtime' or its corresponding type declarations.
+jsxJsxsCjsTransformCustomImport.tsx(2,11): error TS2875: This JSX tag requires the module path 'preact/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 
 
-==== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx (1 errors) ====
+==== jsxJsxsCjsTransformCustomImport.tsx (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     const a = <>
               ~~
-!!! error TS2307: Cannot find module 'preact/jsx-dev-runtime' or its corresponding type declarations.
+!!! error TS2875: This JSX tag requires the module path 'preact/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
       <p></p>
       text
       <div className="foo"></div>

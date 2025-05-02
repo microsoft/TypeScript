@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/forAwait/types.forAwait.es2018.1.ts ===
+//// [tests/cases/conformance/types/forAwait/types.forAwait.es2018.1.ts] ////
+
+=== types.forAwait.es2018.1.ts ===
 declare const asyncIterable: AsyncIterable<number>;
 >asyncIterable : Symbol(asyncIterable, Decl(types.forAwait.es2018.1.ts, 0, 13))
 >AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))

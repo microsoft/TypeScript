@@ -1,0 +1,18 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionImplicitConstructor.ts ===
+// <|class [|ImplicitConstructor|] {
+// }|>
+// var implicitConstructor = new /*GOTO DEF POS*/ImplicitConstructor();
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "ImplicitConstructor",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

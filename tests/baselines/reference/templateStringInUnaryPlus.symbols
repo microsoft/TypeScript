@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInUnaryPlus.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInUnaryPlus.ts] ////
+
+=== templateStringInUnaryPlus.ts ===
 var x = +`abc${ 123 }def`;
 >x : Symbol(x, Decl(templateStringInUnaryPlus.ts, 0, 3))
 

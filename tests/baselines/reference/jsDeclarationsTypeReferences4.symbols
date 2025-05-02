@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences4.ts] ////
+
+=== index.js ===
 /// <reference types="node" />
 export const Something = 2; // to show conflict that can occur
 >Something : Symbol(Something, Decl(index.js, 1, 12))
@@ -28,7 +30,7 @@ export namespace A {
     }
 }
 
-=== tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
+=== node_modules/@types/node/index.d.ts ===
 declare module "fs" {
 >"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constraints0.ts] ////
+
 //// [constraints0.ts]
 interface A {
 	a: number;

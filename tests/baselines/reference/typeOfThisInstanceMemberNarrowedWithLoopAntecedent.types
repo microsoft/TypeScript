@@ -1,100 +1,153 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts] ////
+
+=== typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts ===
 // #31995
 type State = {
->State : { type: "numberVariant"; data: number; } | { type: "stringVariant"; data: string; }
+>State : State
+>      : ^^^^^
 
     type: "numberVariant";
 >type : "numberVariant"
+>     : ^^^^^^^^^^^^^^^
 
     data: number;
 >data : number
+>     : ^^^^^^
 
 } | {
     type: "stringVariant";
 >type : "stringVariant"
+>     : ^^^^^^^^^^^^^^^
 
     data: string;
 >data : string
+>     : ^^^^^^
 
 };
 
 class SomeClass {
 >SomeClass : SomeClass
+>          : ^^^^^^^^^
 
     state!: State;
 >state : State
+>      : ^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         while (0) { }
 >0 : 0
+>  : ^
 
         this.state.data;
 >this.state.data : string | number
+>                : ^^^^^^^^^^^^^^^
 >this.state : State
+>           : ^^^^^
 >this : this
+>     : ^^^^
 >state : State
+>      : ^^^^^
 >data : string | number
+>     : ^^^^^^^^^^^^^^^
 
         if (this.state.type === "stringVariant") {
 >this.state.type === "stringVariant" : boolean
+>                                    : ^^^^^^^
 >this.state.type : "numberVariant" | "stringVariant"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.state : State
+>           : ^^^^^
 >this : this
+>     : ^^^^
 >state : State
+>      : ^^^^^
 >type : "numberVariant" | "stringVariant"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"stringVariant" : "stringVariant"
+>                : ^^^^^^^^^^^^^^^
 
             const s: string = this.state.data;
 >s : string
+>  : ^^^^^^
 >this.state.data : string
+>                : ^^^^^^
 >this.state : { type: "stringVariant"; data: string; }
+>           : ^^^^^^^^               ^^^^^^^^      ^^^
 >this : this
+>     : ^^^^
 >state : { type: "stringVariant"; data: string; }
+>      : ^^^^^^^^               ^^^^^^^^      ^^^
 >data : string
+>     : ^^^^^^
         }
     }
 }
 
 class SomeClass2 {
 >SomeClass2 : SomeClass2
+>           : ^^^^^^^^^^
 
     state!: State;
 >state : State
+>      : ^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         const c = false;
 >c : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
         while (c) { }
 >c : false
+>  : ^^^^^
 
         if (this.state.type === "numberVariant") {
 >this.state.type === "numberVariant" : boolean
+>                                    : ^^^^^^^
 >this.state.type : "numberVariant" | "stringVariant"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.state : State
+>           : ^^^^^
 >this : this
+>     : ^^^^
 >state : State
+>      : ^^^^^
 >type : "numberVariant" | "stringVariant"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"numberVariant" : "numberVariant"
+>                : ^^^^^^^^^^^^^^^
 
             this.state.data;
 >this.state.data : number
+>                : ^^^^^^
 >this.state : { type: "numberVariant"; data: number; }
+>           : ^^^^^^^^               ^^^^^^^^      ^^^
 >this : this
+>     : ^^^^
 >state : { type: "numberVariant"; data: number; }
+>      : ^^^^^^^^               ^^^^^^^^      ^^^
 >data : number
+>     : ^^^^^^
         }
         let n: number = this.state?.data; // This should be an error
 >n : number
+>  : ^^^^^^
 >this.state?.data : string | number
+>                 : ^^^^^^^^^^^^^^^
 >this.state : State
+>           : ^^^^^
 >this : this
+>     : ^^^^
 >state : State
+>      : ^^^^^
 >data : string | number
+>     : ^^^^^^^^^^^^^^^
     }
 }

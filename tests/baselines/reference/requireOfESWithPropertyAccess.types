@@ -1,36 +1,58 @@
-=== tests/cases/conformance/salsa/main.js ===
+//// [tests/cases/conformance/salsa/requireOfESWithPropertyAccess.ts] ////
+
+=== main.js ===
 const x = require('./ch').x
 >x : { grey: {}; }
+>  : ^^^^^^^^^^^^^
 >require('./ch').x : { grey: {}; }
->require('./ch') : typeof import("tests/cases/conformance/salsa/ch")
+>                  : ^^^^^^^^^^^^^
+>require('./ch') : typeof import("ch")
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
+>        : ^^^
 >'./ch' : "./ch"
+>       : ^^^^^^
 >x : { grey: {}; }
+>  : ^^^^^^^^^^^^^
 
 x
 >x : { grey: {}; }
+>  : ^^^^^^^^^^^^^
 
 x.grey
 >x.grey : {}
+>       : ^^
 >x : { grey: {}; }
+>  : ^^^^^^^^^^^^^
 >grey : {}
+>     : ^^
 
 x.x.grey
 >x.x.grey : any
+>         : ^^^
 >x.x : any
+>    : ^^^
 >x : { grey: {}; }
+>  : ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >grey : any
+>     : ^^^
 
-=== tests/cases/conformance/salsa/ch.js ===
+=== ch.js ===
 const x = {
 >x : { grey: {}; }
+>  : ^^^^^^^^^^^^^
 >{  grey: {}} : { grey: {}; }
+>             : ^^^^^^^^^^^^^
 
   grey: {}
 >grey : {}
+>     : ^^
 >{} : {}
+>   : ^^
 }
 export { x }
 >x : { grey: {}; }
+>  : ^^^^^^^^^^^^^
 

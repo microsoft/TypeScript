@@ -1,205 +1,309 @@
-=== tests/cases/compiler/commentsInterface.ts ===
+//// [tests/cases/compiler/commentsInterface.ts] ////
+
+=== commentsInterface.ts ===
 /** this is interface 1*/
 interface i1 {
 }
 var i1_i: i1;
 >i1_i : i1
+>     : ^^
 
 interface nc_i1 {
 }
 var nc_i1_i: nc_i1;
 >nc_i1_i : nc_i1
+>        : ^^^^^
 
 /** this is interface 2 with memebers*/
 interface i2 {
     /** this is x*/
     x: number;
 >x : number
+>  : ^^^^^^
 
     /** this is foo*/
     foo: (/**param help*/b: number) => string;
 >foo : (b: number) => string
+>    : ^ ^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 
     /** this is indexer*/
     [/**string param*/i: string]: any;
 >i : string
+>  : ^^^^^^
 
     /**new method*/
     new (/** param*/i: i1);
 >i : i1
+>  : ^^
 
     nc_x: number;
 >nc_x : number
+>     : ^^^^^^
 
     nc_foo: (b: number) => string;
 >nc_foo : (b: number) => string
+>       : ^ ^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 
     [i: number]: number;
 >i : number
+>  : ^^^^^^
 
     /** this is call signature*/
     (/**paramhelp a*/a: number,/**paramhelp b*/ b: number) : number;
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     /** this is fnfoo*/
     fnfoo(/**param help*/b: number): string;
 >fnfoo : (b: number) => string
+>      : ^ ^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 
     nc_fnfoo(b: number): string;
 >nc_fnfoo : (b: number) => string
+>         : ^ ^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 
     // nc_y
     nc_y: number;
 >nc_y : number
+>     : ^^^^^^
 }
 var i2_i: i2;
 >i2_i : i2
+>     : ^^
 
 var i2_i_x = i2_i.x;
 >i2_i_x : number
+>       : ^^^^^^
 >i2_i.x : number
+>       : ^^^^^^
 >i2_i : i2
+>     : ^^
 >x : number
+>  : ^^^^^^
 
 var i2_i_foo = i2_i.foo;
 >i2_i_foo : (b: number) => string
+>         : ^ ^^      ^^^^^      
 >i2_i.foo : (b: number) => string
+>         : ^ ^^      ^^^^^      
 >i2_i : i2
+>     : ^^
 >foo : (b: number) => string
+>    : ^ ^^      ^^^^^      
 
 var i2_i_foo_r = i2_i.foo(30);
 >i2_i_foo_r : string
+>           : ^^^^^^
 >i2_i.foo(30) : string
+>             : ^^^^^^
 >i2_i.foo : (b: number) => string
+>         : ^ ^^      ^^^^^      
 >i2_i : i2
+>     : ^^
 >foo : (b: number) => string
+>    : ^ ^^      ^^^^^      
 >30 : 30
+>   : ^^
 
 var i2_i_i2_si = i2_i["hello"];
 >i2_i_i2_si : any
 >i2_i["hello"] : any
 >i2_i : i2
+>     : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 var i2_i_i2_ii = i2_i[30];
 >i2_i_i2_ii : number
+>           : ^^^^^^
 >i2_i[30] : number
+>         : ^^^^^^
 >i2_i : i2
+>     : ^^
 >30 : 30
+>   : ^^
 
 var i2_i_n = new i2_i(i1_i);
 >i2_i_n : any
 >new i2_i(i1_i) : any
 >i2_i : i2
+>     : ^^
 >i1_i : i1
+>     : ^^
 
 var i2_i_nc_x = i2_i.nc_x;
 >i2_i_nc_x : number
+>          : ^^^^^^
 >i2_i.nc_x : number
+>          : ^^^^^^
 >i2_i : i2
+>     : ^^
 >nc_x : number
+>     : ^^^^^^
 
 var i2_i_nc_foo = i2_i.nc_foo;
 >i2_i_nc_foo : (b: number) => string
+>            : ^ ^^      ^^^^^      
 >i2_i.nc_foo : (b: number) => string
+>            : ^ ^^      ^^^^^      
 >i2_i : i2
+>     : ^^
 >nc_foo : (b: number) => string
+>       : ^ ^^      ^^^^^      
 
 var i2_i_nc_foo_r = i2_i.nc_foo(30);
 >i2_i_nc_foo_r : string
+>              : ^^^^^^
 >i2_i.nc_foo(30) : string
+>                : ^^^^^^
 >i2_i.nc_foo : (b: number) => string
+>            : ^ ^^      ^^^^^      
 >i2_i : i2
+>     : ^^
 >nc_foo : (b: number) => string
+>       : ^ ^^      ^^^^^      
 >30 : 30
+>   : ^^
 
 var i2_i_r = i2_i(10, 20);
 >i2_i_r : number
+>       : ^^^^^^
 >i2_i(10, 20) : number
+>             : ^^^^^^
 >i2_i : i2
+>     : ^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 var i2_i_fnfoo = i2_i.fnfoo;
 >i2_i_fnfoo : (b: number) => string
+>           : ^ ^^      ^^^^^      
 >i2_i.fnfoo : (b: number) => string
+>           : ^ ^^      ^^^^^      
 >i2_i : i2
+>     : ^^
 >fnfoo : (b: number) => string
+>      : ^ ^^      ^^^^^      
 
 var i2_i_fnfoo_r = i2_i.fnfoo(10);
 >i2_i_fnfoo_r : string
+>             : ^^^^^^
 >i2_i.fnfoo(10) : string
+>               : ^^^^^^
 >i2_i.fnfoo : (b: number) => string
+>           : ^ ^^      ^^^^^      
 >i2_i : i2
+>     : ^^
 >fnfoo : (b: number) => string
+>      : ^ ^^      ^^^^^      
 >10 : 10
+>   : ^^
 
 var i2_i_nc_fnfoo = i2_i.nc_fnfoo;
 >i2_i_nc_fnfoo : (b: number) => string
+>              : ^ ^^      ^^^^^      
 >i2_i.nc_fnfoo : (b: number) => string
+>              : ^ ^^      ^^^^^      
 >i2_i : i2
+>     : ^^
 >nc_fnfoo : (b: number) => string
+>         : ^ ^^      ^^^^^      
 
 var i2_i_nc_fnfoo_r = i2_i.nc_fnfoo(10);
 >i2_i_nc_fnfoo_r : string
+>                : ^^^^^^
 >i2_i.nc_fnfoo(10) : string
+>                  : ^^^^^^
 >i2_i.nc_fnfoo : (b: number) => string
+>              : ^ ^^      ^^^^^      
 >i2_i : i2
+>     : ^^
 >nc_fnfoo : (b: number) => string
+>         : ^ ^^      ^^^^^      
 >10 : 10
+>   : ^^
 
 interface i3 {
     /** Comment i3 x*/
     x: number;
 >x : number
+>  : ^^^^^^
 
     /** Function i3 f*/
     f(/**number parameter*/a: number): string;
 >f : (a: number) => string
+>  : ^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 
     /** i3 l*/
     l: (/**comment i3 l b*/b: number) => string;
 >l : (b: number) => string
+>  : ^ ^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 
     nc_x: number;
 >nc_x : number
+>     : ^^^^^^
 
     nc_f(a: number): string;
 >nc_f : (a: number) => string
+>     : ^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 
     nc_l: (b: number) => string;
 >nc_l : (b: number) => string
+>     : ^ ^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 }
 var i3_i: i3;
 >i3_i : i3
+>     : ^^
 
 i3_i = {
 >i3_i = {    f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,    l: this.f,    /** own x*/    x: this.f(10),    nc_x: this.l(this.x),    nc_f: this.f,    nc_l: this.l} : { f: (a: number) => string; l: any; x: any; nc_x: any; nc_f: any; nc_l: any; }
+>                                                                                                                                                                           : ^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i3_i : i3
+>     : ^^
 >{    f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,    l: this.f,    /** own x*/    x: this.f(10),    nc_x: this.l(this.x),    nc_f: this.f,    nc_l: this.l} : { f: (a: number) => string; l: any; x: any; nc_x: any; nc_f: any; nc_l: any; }
+>                                                                                                                                                                    : ^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,
 >f : (a: number) => string
+>  : ^ ^^      ^^^^^^^^^^^
 >(/**i3_i a*/a: number) => "Hello" + a : (a: number) => string
+>                                      : ^ ^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >"Hello" + a : string
+>            : ^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 
     l: this.f,
 >l : any
 >this.f : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >f : any
+>  : ^^^
 
     /** own x*/
     x: this.f(10),
@@ -207,57 +311,88 @@ i3_i = {
 >this.f(10) : any
 >this.f : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >f : any
+>  : ^^^
 >10 : 10
+>   : ^^
 
     nc_x: this.l(this.x),
 >nc_x : any
 >this.l(this.x) : any
 >this.l : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >l : any
+>  : ^^^
 >this.x : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     nc_f: this.f,
 >nc_f : any
 >this.f : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >f : any
+>  : ^^^
 
     nc_l: this.l
 >nc_l : any
 >this.l : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >l : any
+>  : ^^^
 
 };
 i3_i.f(10);
 >i3_i.f(10) : string
+>           : ^^^^^^
 >i3_i.f : (a: number) => string
+>       : ^ ^^      ^^^^^      
 >i3_i : i3
+>     : ^^
 >f : (a: number) => string
+>  : ^ ^^      ^^^^^      
 >10 : 10
+>   : ^^
 
 i3_i.l(10);
 >i3_i.l(10) : string
+>           : ^^^^^^
 >i3_i.l : (b: number) => string
+>       : ^ ^^      ^^^^^      
 >i3_i : i3
+>     : ^^
 >l : (b: number) => string
+>  : ^ ^^      ^^^^^      
 >10 : 10
+>   : ^^
 
 i3_i.nc_f(10);
 >i3_i.nc_f(10) : string
+>              : ^^^^^^
 >i3_i.nc_f : (a: number) => string
+>          : ^ ^^      ^^^^^      
 >i3_i : i3
+>     : ^^
 >nc_f : (a: number) => string
+>     : ^ ^^      ^^^^^      
 >10 : 10
+>   : ^^
 
 i3_i.nc_l(10);
 >i3_i.nc_l(10) : string
+>              : ^^^^^^
 >i3_i.nc_l : (b: number) => string
+>          : ^ ^^      ^^^^^      
 >i3_i : i3
+>     : ^^
 >nc_l : (b: number) => string
+>     : ^ ^^      ^^^^^      
 >10 : 10
+>   : ^^
 

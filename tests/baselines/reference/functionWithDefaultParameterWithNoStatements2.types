@@ -1,6 +1,11 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements2.ts ===
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements2.ts] ////
+
+=== functionWithDefaultParameterWithNoStatements2.ts ===
 function foo(x = 0) {
 >foo : (x?: number) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }

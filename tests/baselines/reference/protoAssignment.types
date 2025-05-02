@@ -1,29 +1,47 @@
-=== tests/cases/compiler/protoAssignment.ts ===
+//// [tests/cases/compiler/protoAssignment.ts] ////
+
+=== protoAssignment.ts ===
 interface Number extends Comparable<number> {
 
     compareTo(other: number);
 >compareTo : (other: number) => any
+>          : ^     ^^      ^^^^^^^^
 >other : number
+>      : ^^^^^^
 
 }
 
 Number.prototype.compareTo = function (other: number) {
 >Number.prototype.compareTo = function (other: number) {   return this.valueOf() == other;} : (other: number) => boolean
+>                                                                                           : ^     ^^      ^^^^^^^^^^^^
 >Number.prototype.compareTo : (other: number) => any
+>                           : ^     ^^      ^^^^^^^^
 >Number.prototype : Number
+>                 : ^^^^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >prototype : Number
+>          : ^^^^^^
 >compareTo : (other: number) => any
+>          : ^     ^^      ^^^^^^^^
 >function (other: number) {   return this.valueOf() == other;} : (other: number) => boolean
+>                                                              : ^     ^^      ^^^^^^^^^^^^
 >other : number
+>      : ^^^^^^
 
    return this.valueOf() == other;
 >this.valueOf() == other : boolean
+>                        : ^^^^^^^
 >this.valueOf() : any
+>               : ^^^
 >this.valueOf : any
+>             : ^^^
 >this : any
+>     : ^^^
 >valueOf : any
+>        : ^^^
 >other : number
+>      : ^^^^^^
 
 }
 

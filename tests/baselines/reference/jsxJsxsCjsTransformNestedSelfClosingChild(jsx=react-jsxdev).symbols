@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformNestedSelfClosingChild.tsx ===
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformNestedSelfClosingChild.tsx] ////
+
+=== jsxJsxsCjsTransformNestedSelfClosingChild.tsx ===
 /// <reference path="react16.d.ts" />
 import type * as React from 'react';
 >React : Symbol(React, Decl(jsxJsxsCjsTransformNestedSelfClosingChild.tsx, 1, 11))

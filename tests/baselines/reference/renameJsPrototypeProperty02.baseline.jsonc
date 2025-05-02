@@ -1,0 +1,17 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// function bar() {
+// }
+// <|bar.prototype./*RENAME*/[|xRENAME|] = 10;|>
+// var t = new bar();
+// <|t.[|xRENAME|] = 11;|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// function bar() {
+// }
+// <|bar.prototype.[|xRENAME|] = 10;|>
+// var t = new bar();
+// <|t./*RENAME*/[|xRENAME|] = 11;|>

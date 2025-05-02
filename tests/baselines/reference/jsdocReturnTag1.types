@@ -1,12 +1,16 @@
-=== tests/cases/conformance/jsdoc/returns.js ===
+//// [tests/cases/conformance/jsdoc/jsdocReturnTag1.ts] ////
+
+=== returns.js ===
 /**
  * @returns {string} This comment is not currently exposed
  */
 function f() {
 >f : () => string
+>  : ^^^^^^      
 
     return 5;
 >5 : 5
+>  : ^
 }
 
 /**
@@ -14,9 +18,11 @@ function f() {
  */
 function f1() {
 >f1 : () => string | undefined
+>   : ^^^^^^         ^^^^^^^^^
 
     return 5;
 >5 : 5
+>  : ^
 }
 
 /**
@@ -24,9 +30,14 @@ function f1() {
  */
 function f2() {
 >f2 : () => string | number
+>   : ^^^^^^               
 
     return 5 || "hello";
 >5 || "hello" : 5 | "hello"
+>             : ^^^^^^^^^^^
 >5 : 5
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
+

@@ -1,97 +1,150 @@
-=== tests/cases/compiler/indirectTypeParameterReferences.ts ===
+//// [tests/cases/compiler/indirectTypeParameterReferences.ts] ////
+
+=== indirectTypeParameterReferences.ts ===
 // Repro from #19043
 
 type B = {b: string}
->B : { b: string; }
+>B : B
+>  : ^
 >b : string
+>  : ^^^^^^
 
 const flowtypes = <A>(b: B) => {
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+>          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^           ^^^^^         ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 ><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+>                                                                                                                                                                                       : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^           ^^^^^         ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 >b : B
+>  : ^
 
   type Combined = A & B
 >Combined : A & B
+>         : ^^^^^
 
   const combined = (fn: (combined: Combined) => void) => null
 >combined : (fn: (combined: A & B) => void) => any
+>         : ^  ^^           ^^^^^         ^^^^^^^^
 >(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => any
+>                                           : ^  ^^           ^^^^^         ^^^^^^^^
 >fn : (combined: A & B) => void
+>   : ^        ^^^^^^^^^^^^    
 >combined : A & B
->null : null
+>         : ^^^^^
 
   const literal = (fn: (aPlusB: A & B) => void) => null
 >literal : (fn: (aPlusB: A & B) => void) => any
+>        : ^  ^^                       ^^^^^^^^
 >(fn: (aPlusB: A & B) => void) => null : (fn: (aPlusB: A & B) => void) => any
+>                                      : ^  ^^                       ^^^^^^^^
 >fn : (aPlusB: A & B) => void
+>   : ^      ^^     ^^^^^    
 >aPlusB : A & B
->null : null
+>       : ^^^^^
 
   return {combined, literal}
 >{combined, literal} : { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+>                    : ^^^^^^^^^^^^^  ^^           ^^^^^         ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 >combined : (fn: (combined: A & B) => void) => any
+>         : ^  ^^           ^^^^^         ^^^^^^^^
 >literal : (fn: (aPlusB: A & B) => void) => any
+>        : ^  ^^                       ^^^^^^^^
 }
 
 const {combined, literal} = flowtypes<{a: string}>({b: 'b-value'})
 >combined : (fn: (combined: { a: string; } & B) => void) => any
+>         : ^  ^^^        ^^^^^^^      ^^^^^^^^^^^^    ^^^^^^^^
 >literal : (fn: (aPlusB: { a: string; } & B) => void) => any
+>        : ^  ^^^      ^^^^^^^      ^^^^^^^^^^^^    ^^^^^^^^
 >flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: { a: string; } & B) => void) => any; literal: (fn: (aPlusB: { a: string; } & B) => void) => any; }
+>                                       : ^^^^^^^^^^^^^  ^^^        ^^^^^^^      ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^  ^^^      ^^^^^^^      ^^^^^^^^^^^^    ^^^^^^^^^^^
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+>          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^           ^^^^^         ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >{b: 'b-value'} : { b: string; }
+>               : ^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'b-value' : "b-value"
+>          : ^^^^^^^^^
 
 literal(aPlusB => {
 >literal(aPlusB => {  aPlusB.b  aPlusB.a}) : any
 >literal : (fn: (aPlusB: { a: string; } & B) => void) => any
+>        : ^  ^^^      ^^^^^^^      ^^^^^^^^^^^^    ^^^^^^^^
 >aPlusB => {  aPlusB.b  aPlusB.a} : (aPlusB: { a: string; } & B) => void
+>                                 : ^      ^^^^^^^      ^^^^^^^^^^^^^^^^
 >aPlusB : { a: string; } & B
+>       : ^^^^^      ^^^^^^^
 
   aPlusB.b
 >aPlusB.b : string
+>         : ^^^^^^
 >aPlusB : { a: string; } & B
+>       : ^^^^^      ^^^^^^^
 >b : string
+>  : ^^^^^^
 
   aPlusB.a
 >aPlusB.a : string
+>         : ^^^^^^
 >aPlusB : { a: string; } & B
+>       : ^^^^^      ^^^^^^^
 >a : string
+>  : ^^^^^^
 
 })
 
 combined(comb => {
 >combined(comb => {  comb.b  comb.a}) : any
 >combined : (fn: (combined: { a: string; } & B) => void) => any
+>         : ^  ^^^        ^^^^^^^      ^^^^^^^^^^^^    ^^^^^^^^
 >comb => {  comb.b  comb.a} : (comb: { a: string; } & B) => void
+>                           : ^    ^^^^^^^      ^^^^^^^^^^^^^^^^
 >comb : { a: string; } & B
+>     : ^^^^^      ^^^^^^^
 
   comb.b
 >comb.b : string
+>       : ^^^^^^
 >comb : { a: string; } & B
+>     : ^^^^^      ^^^^^^^
 >b : string
+>  : ^^^^^^
 
   comb.a
 >comb.a : string
+>       : ^^^^^^
 >comb : { a: string; } & B
+>     : ^^^^^      ^^^^^^^
 >a : string
+>  : ^^^^^^
 
 })
 
 // Repro from #19091
 
 declare function f<T>(a: T): { a: typeof a };
->f : <T>(a: T) => {    a: typeof a;}
+>f : <T>(a: T) => { a: typeof a; }
+>  : ^ ^^ ^^ ^^^^^                
 >a : T
+>  : ^
 >a : T
+>  : ^
 >a : T
+>  : ^
 
 let n: number = f(2).a;
 >n : number
+>  : ^^^^^^
 >f(2).a : number
+>       : ^^^^^^
 >f(2) : { a: number; }
->f : <T>(a: T) => { a: T; }
+>     : ^^^^^^^^^^^^^^
+>f : <T>(a: T) => { a: typeof a; }
+>  : ^ ^^ ^^ ^^^^^                
 >2 : 2
+>  : ^
 >a : number
+>  : ^^^^^^
 

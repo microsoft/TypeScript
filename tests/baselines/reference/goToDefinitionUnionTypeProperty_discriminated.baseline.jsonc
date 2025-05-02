@@ -1,0 +1,163 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUnionTypeProperty_discriminated.ts ===
+// type U = A | B;
+// 
+// interface A {
+//   <|[|kind|]: "a";|>
+//   prop: number;
+// };
+// 
+// interface B {
+//   kind: "b";
+//   prop: string;
+// }
+// 
+// const u: U = {
+//   /*GOTO DEF*/kind: "a",
+//   prop: 0,
+// };
+// const u2: U = {
+// --- (line: 18) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "kind",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUnionTypeProperty_discriminated.ts ===
+// type U = A | B;
+// 
+// interface A {
+//   kind: "a";
+//   <|[|prop|]: number;|>
+// };
+// 
+// interface B {
+//   kind: "b";
+//   prop: string;
+// }
+// 
+// const u: U = {
+//   kind: "a",
+//   /*GOTO DEF*/prop: 0,
+// };
+// const u2: U = {
+//   kind: "bogus",
+//   prop: 0,
+// };
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "prop",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUnionTypeProperty_discriminated.ts ===
+// type U = A | B;
+// 
+// interface A {
+//   <|[|{| defId: 0 |}kind|]: "a";|>
+//   prop: number;
+// };
+// 
+// interface B {
+//   <|[|{| defId: 1 |}kind|]: "b";|>
+//   prop: string;
+// }
+// 
+// const u: U = {
+//   kind: "a",
+//   prop: 0,
+// };
+// const u2: U = {
+//   /*GOTO DEF*/kind: "bogus",
+//   prop: 0,
+// };
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "property",
+    "name": "kind",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   },
+   {
+    "defId": 1,
+    "kind": "property",
+    "name": "kind",
+    "containerName": "B",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUnionTypeProperty_discriminated.ts ===
+// type U = A | B;
+// 
+// interface A {
+//   kind: "a";
+//   <|[|{| defId: 0 |}prop|]: number;|>
+// };
+// 
+// interface B {
+//   kind: "b";
+//   <|[|{| defId: 1 |}prop|]: string;|>
+// }
+// 
+// const u: U = {
+//   kind: "a",
+//   prop: 0,
+// };
+// const u2: U = {
+//   kind: "bogus",
+//   /*GOTO DEF*/prop: 0,
+// };
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "property",
+    "name": "prop",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   },
+   {
+    "defId": 1,
+    "kind": "property",
+    "name": "prop",
+    "containerName": "B",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapSample.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapSample.js
+emittedFile:sourceMapSample.js
 sourceFile:sourceMapSample.ts
 -------------------------------------------------------------------
 >>>var Foo;
@@ -537,7 +537,8 @@ sourceFile:sourceMapSample.ts
 14>                                                      ^
 15>                                                       ^^
 16>                                                         ^^
-17>                                                           ^^^->
+17>                                                           ^
+18>                                                            ^^->
 1->
   >        
 2 >            for (
@@ -555,6 +556,7 @@ sourceFile:sourceMapSample.ts
 14>                                                      i
 15>                                                       ++
 16>                                                         ) 
+17>                                                           {
 1->Emitted(27, 13) Source(24, 9) + SourceIndex(0)
 2 >Emitted(27, 18) Source(24, 14) + SourceIndex(0)
 3 >Emitted(27, 22) Source(24, 18) + SourceIndex(0)
@@ -571,6 +573,7 @@ sourceFile:sourceMapSample.ts
 14>Emitted(27, 56) Source(24, 52) + SourceIndex(0)
 15>Emitted(27, 58) Source(24, 54) + SourceIndex(0)
 16>Emitted(27, 60) Source(24, 56) + SourceIndex(0)
+17>Emitted(27, 61) Source(24, 57) + SourceIndex(0)
 ---
 >>>                greeters.push(new Greeter(restGreetings[i]));
 1->^^^^^^^^^^^^^^^^
@@ -588,7 +591,7 @@ sourceFile:sourceMapSample.ts
 13>                                                          ^
 14>                                                           ^
 15>                                                            ^
-1->{
+1->
   >            
 2 >                greeters
 3 >                        .
@@ -621,11 +624,14 @@ sourceFile:sourceMapSample.ts
 15>Emitted(28, 62) Source(25, 58) + SourceIndex(0)
 ---
 >>>            }
-1 >^^^^^^^^^^^^^
-2 >             ^^^^^^^^^^^^^^^^->
+1 >^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^^^^^^^^^^->
 1 >
-  >        }
-1 >Emitted(29, 14) Source(26, 10) + SourceIndex(0)
+  >        
+2 >            }
+1 >Emitted(29, 13) Source(26, 9) + SourceIndex(0)
+2 >Emitted(29, 14) Source(26, 10) + SourceIndex(0)
 ---
 >>>            return greeters;
 1->^^^^^^^^^^^^
@@ -714,6 +720,7 @@ sourceFile:sourceMapSample.ts
 14>                                      ^
 15>                                       ^^
 16>                                         ^^
+17>                                           ^
 1->
   >    
 2 >        for (
@@ -731,6 +738,7 @@ sourceFile:sourceMapSample.ts
 14>                                      j
 15>                                       ++
 16>                                         ) 
+17>                                           {
 1->Emitted(33, 9) Source(32, 5) + SourceIndex(0)
 2 >Emitted(33, 14) Source(32, 10) + SourceIndex(0)
 3 >Emitted(33, 18) Source(32, 14) + SourceIndex(0)
@@ -747,6 +755,7 @@ sourceFile:sourceMapSample.ts
 14>Emitted(33, 40) Source(32, 36) + SourceIndex(0)
 15>Emitted(33, 42) Source(32, 38) + SourceIndex(0)
 16>Emitted(33, 44) Source(32, 40) + SourceIndex(0)
+17>Emitted(33, 45) Source(32, 41) + SourceIndex(0)
 ---
 >>>            b[j].greet();
 1 >^^^^^^^^^^^^
@@ -758,7 +767,7 @@ sourceFile:sourceMapSample.ts
 7 >                 ^^^^^
 8 >                      ^^
 9 >                        ^
-1 >{
+1 >
   >        
 2 >            b
 3 >             [
@@ -779,11 +788,14 @@ sourceFile:sourceMapSample.ts
 9 >Emitted(34, 26) Source(33, 22) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^^
-2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(35, 10) Source(34, 6) + SourceIndex(0)
+  >    
+2 >        }
+1 >Emitted(35, 9) Source(34, 5) + SourceIndex(0)
+2 >Emitted(35, 10) Source(34, 6) + SourceIndex(0)
 ---
 >>>    })(Bar = Foo.Bar || (Foo.Bar = {}));
 1->^^^^

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classExpressions/genericClassExpressionInFunction.ts] ////
+
 //// [genericClassExpressionInFunction.ts]
 class A<T> {
     genericVar: T

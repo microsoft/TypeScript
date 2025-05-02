@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unexportedInstanceClassVariables.ts] ////
+
 //// [unexportedInstanceClassVariables.ts]
 module M{
 	class A{

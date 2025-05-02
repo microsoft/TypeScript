@@ -1,8 +1,8 @@
-tests/cases/conformance/override/override20.ts(25,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'I1 & I2'.
-tests/cases/conformance/override/override20.ts(28,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'I1 & I2'.
+override20.ts(25,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'I1 & I2'.
+override20.ts(28,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'I1 & I2'.
 
 
-==== tests/cases/conformance/override/override20.ts (2 errors) ====
+==== override20.ts (2 errors) ====
     const Foo: C1 & C2 =
         class {
             m1() { }

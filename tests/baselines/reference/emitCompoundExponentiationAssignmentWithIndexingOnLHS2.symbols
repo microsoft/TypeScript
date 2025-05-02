@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts] ////
+
+=== emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts ===
 var globalCounter = 0;
 >globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 3))
 

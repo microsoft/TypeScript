@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface.ts ===
+//// [tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface.ts] ////
+
+=== assignFromBooleanInterface.ts ===
 var x = true;
 >x : Symbol(x, Decl(assignFromBooleanInterface.ts, 0, 3))
 

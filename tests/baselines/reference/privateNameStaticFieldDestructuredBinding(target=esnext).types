@@ -1,144 +1,252 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDestructuredBinding.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDestructuredBinding.ts] ////
+
+=== privateNameStaticFieldDestructuredBinding.ts ===
 class A {
 >A : A
+>  : ^
 
     static #field = 1;
 >#field : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     otherClass = A;
 >otherClass : typeof A
+>           : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
     testObject() {
 >testObject : () => { x: number; y: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return { x: 10, y: 6 };
 >{ x: 10, y: 6 } : { x: number; y: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >y : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
     }
     testArray() {
 >testArray : () => number[]
+>          : ^^^^^^^^^^^^^^
 
         return [10, 11];
 >[10, 11] : number[]
+>         : ^^^^^^^^
 >10 : 10
+>   : ^^
 >11 : 11
+>   : ^^
     }
     constructor() {
         let y: number;
 >y : number
+>  : ^^^^^^
 
         ({ x: A.#field, y } = this.testObject());
 >({ x: A.#field, y } = this.testObject()) : { x: number; y: number; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: A.#field, y } = this.testObject() : { x: number; y: number; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: A.#field, y } : { x: number; y: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >y : number
+>  : ^^^^^^
 >this.testObject() : { x: number; y: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.testObject : () => { x: number; y: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >testObject : () => { x: number; y: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ([A.#field, y] = this.testArray());
 >([A.#field, y] = this.testArray()) : number[]
+>                                   : ^^^^^^^^
 >[A.#field, y] = this.testArray() : number[]
+>                                 : ^^^^^^^^
 >[A.#field, y] : [number, number]
+>              : ^^^^^^^^^^^^^^^^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >y : number
+>  : ^^^^^^
 >this.testArray() : number[]
+>                 : ^^^^^^^^
 >this.testArray : () => number[]
+>               : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >testArray : () => number[]
+>          : ^^^^^^^^^^^^^^
 
         ({ a: A.#field, b: [A.#field] } = { a: 1, b: [2] });
 >({ a: A.#field, b: [A.#field] } = { a: 1, b: [2] }) : { a: number; b: [number]; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: A.#field, b: [A.#field] } = { a: 1, b: [2] } : { a: number; b: [number]; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: A.#field, b: [A.#field] } : { a: number; b: [number]; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >b : [number]
+>  : ^^^^^^^^
 >[A.#field] : [number]
+>           : ^^^^^^^^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >{ a: 1, b: [2] } : { a: number; b: [number]; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : [number]
+>  : ^^^^^^^^
 >[2] : [number]
+>    : ^^^^^^^^
 >2 : 2
+>  : ^
 
         [A.#field, [A.#field]] = [1, [2]];
 >[A.#field, [A.#field]] = [1, [2]] : [number, [number]]
+>                                  : ^^^^^^^^^^^^^^^^^^
 >[A.#field, [A.#field]] : [number, [number]]
+>                       : ^^^^^^^^^^^^^^^^^^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >[A.#field] : [number]
+>           : ^^^^^^^^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >[1, [2]] : [number, [number]]
+>         : ^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >[2] : [number]
+>    : ^^^^^^^^
 >2 : 2
+>  : ^
 
         ({ a: A.#field = 1, b: [A.#field = 1] } = { b: [] });
->({ a: A.#field = 1, b: [A.#field = 1] } = { b: [] }) : { b: []; a?: number; }
->{ a: A.#field = 1, b: [A.#field = 1] } = { b: [] } : { b: []; a?: number; }
+>({ a: A.#field = 1, b: [A.#field = 1] } = { b: [] }) : { b: []; }
+>                                                     : ^^^^^^^^^^
+>{ a: A.#field = 1, b: [A.#field = 1] } = { b: [] } : { b: []; }
+>                                                   : ^^^^^^^^^^
 >{ a: A.#field = 1, b: [A.#field = 1] } : { a?: number; b: [number]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >A.#field = 1 : 1
+>             : ^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >b : [number]
+>  : ^^^^^^^^
 >[A.#field = 1] : [number]
+>               : ^^^^^^^^
 >A.#field = 1 : 1
+>             : ^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >1 : 1
->{ b: [] } : { b: []; a?: number; }
+>  : ^
+>{ b: [] } : { b: []; }
+>          : ^^^^^^^^^^
 >b : []
+>  : ^^
 >[] : []
+>   : ^^
 
         [A.#field = 2] = [];
 >[A.#field = 2] = [] : []
+>                    : ^^
 >[A.#field = 2] : [number]
+>               : ^^^^^^^^
 >A.#field = 2 : 2
+>             : ^
 >A.#field : number
+>         : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >2 : 2
+>  : ^
 >[] : []
+>   : ^^
 
         [this.otherClass.#field = 2] = [];
 >[this.otherClass.#field = 2] = [] : []
+>                                  : ^^
 >[this.otherClass.#field = 2] : [number]
+>                             : ^^^^^^^^
 >this.otherClass.#field = 2 : 2
+>                           : ^
 >this.otherClass.#field : number
+>                       : ^^^^^^
 >this.otherClass : typeof A
+>                : ^^^^^^^^
 >this : this
+>     : ^^^^
 >otherClass : typeof A
+>           : ^^^^^^^^
 >2 : 2
+>  : ^
 >[] : []
+>   : ^^
     }
     static test(_a: typeof A) {
 >test : (_a: typeof A) => void
+>     : ^  ^^        ^^^^^^^^^
 >_a : typeof A
+>   : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
         [_a.#field] = [2];
 >[_a.#field] = [2] : [number]
+>                  : ^^^^^^^^
 >[_a.#field] : [number]
+>            : ^^^^^^^^
 >_a.#field : number
+>          : ^^^^^^
 >_a : typeof A
+>   : ^^^^^^^^
 >[2] : [number]
+>    : ^^^^^^^^
 >2 : 2
+>  : ^
     }
 }
 

@@ -1,19 +1,32 @@
-=== tests/cases/compiler/functionCall5.ts ===
+//// [tests/cases/compiler/functionCall5.ts] ////
+
+=== functionCall5.ts ===
 module m1 { export class c1 { public a; }} 
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >c1 : c1
+>   : ^^
 >a : any
 
 function foo():m1.c1{return new m1.c1();}; 
 >foo : () => m1.c1
+>    : ^^^^^^     
 >m1 : any
+>   : ^^^
 >new m1.c1() : m1.c1
+>            : ^^^^^
 >m1.c1 : typeof m1.c1
+>      : ^^^^^^^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >c1 : typeof m1.c1
+>   : ^^^^^^^^^^^^
 
 var x = foo();
 >x : m1.c1
+>  : ^^^^^
 >foo() : m1.c1
+>      : ^^^^^
 >foo : () => m1.c1
+>    : ^^^^^^     
 

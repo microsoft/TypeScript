@@ -1,31 +1,48 @@
-=== tests/cases/compiler/checkSwitchStatementIfCaseTypeIsString.ts ===
+//// [tests/cases/compiler/checkSwitchStatementIfCaseTypeIsString.ts] ////
+
+=== checkSwitchStatementIfCaseTypeIsString.ts ===
 declare function use(a: any): void;
 >use : (a: any) => void
+>    : ^ ^^   ^^^^^    
 >a : any
 
 class A {
 >A : A
+>  : ^
 
     doIt(x: Array<string>): void {
 >doIt : (x: Array<string>) => void
+>     : ^ ^^             ^^^^^    
 >x : string[]
+>  : ^^^^^^^^
 
         x.forEach((v) => {
 >x.forEach((v) => {            switch(v) {                case "test": use(this);            }        }) : void
+>                                                                                                        : ^^^^
 >x.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>          : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >x : string[]
+>  : ^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(v) => {            switch(v) {                case "test": use(this);            }        } : (v: string) => void
+>                                                                                             : ^ ^^^^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 
             switch(v) {
 >v : string
+>  : ^^^^^^
 
                 case "test": use(this);
 >"test" : "test"
+>       : ^^^^^^
 >use(this) : void
+>          : ^^^^
 >use : (a: any) => void
+>    : ^ ^^   ^^^^^    
 >this : this
+>     : ^^^^
             }
         });
     }

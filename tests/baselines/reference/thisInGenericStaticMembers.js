@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInGenericStaticMembers.ts] ////
+
 //// [thisInGenericStaticMembers.ts]
 // this.call in static generic method not resolved correctly
 

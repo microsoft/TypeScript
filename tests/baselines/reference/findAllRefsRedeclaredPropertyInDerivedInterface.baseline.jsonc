@@ -1,811 +1,565 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
 // interface A {
-//     readonly /*FIND ALL REFS*/[|x|]: number | string;
+//     <|readonly /*FIND ALL REFS*/[|{| defId: 0, isDefinition: true |}x|]: number | string;|>
 // }
 // interface B extends A {
-//     readonly [|x|]: number;
+//     <|readonly [|{| defId: 1 |}x|]: number;|>
 // }
-// const a: A = { [|x|]: 0 };
-// const b: B = { [|x|]: 0 };
+// const a: A = { <|[|{| defId: 0, isWriteAccess: true |}x|]: 0|> };
+// const b: B = { <|[|{| defId: 1, isWriteAccess: true |}x|]: 0|> };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-      "kind": "property",
-      "name": "(property) A.x: string | number",
-      "textSpan": {
-        "start": 27,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 114,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-      "kind": "property",
-      "name": "(property) B.x: number",
-      "textSpan": {
-        "start": 86,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 77,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 77,
-          "length": 19
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 137,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 137,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
+  // interface A {
+  //     <|readonly /*FIND ALL REFS*/[|{| defId: 0 |}x|]: number | string;|>
+  // }
+  // interface B extends A {
+  //     <|readonly [|{| defId: 1 |}x|]: number;|>
+  // }
+  // const a: A = { x: 0 };
+  // const b: B = { x: 0 };
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.x: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
 // interface A {
-//     readonly [|x|]: number | string;
+//     <|readonly [|{| defId: 0 |}x|]: number | string;|>
 // }
 // interface B extends A {
-//     readonly /*FIND ALL REFS*/[|x|]: number;
+//     <|readonly /*FIND ALL REFS*/[|{| defId: 1, isDefinition: true |}x|]: number;|>
 // }
-// const a: A = { [|x|]: 0 };
-// const b: B = { [|x|]: 0 };
+// const a: A = { <|[|{| defId: 0, isWriteAccess: true |}x|]: 0|> };
+// const b: B = { <|[|{| defId: 1, isWriteAccess: true |}x|]: 0|> };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-      "kind": "property",
-      "name": "(property) A.x: string | number",
-      "textSpan": {
-        "start": 27,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 114,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-      "kind": "property",
-      "name": "(property) B.x: number",
-      "textSpan": {
-        "start": 86,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 77,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 77,
-          "length": 19
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 137,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 137,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
+  // interface A {
+  //     <|readonly [|{| defId: 0 |}x|]: number | string;|>
+  // }
+  // interface B extends A {
+  //     <|readonly /*FIND ALL REFS*/[|{| defId: 1 |}x|]: number;|>
+  // }
+  // const a: A = { x: 0 };
+  // const b: B = { x: 0 };
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.x: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
 // interface A {
-//     readonly [|x|]: number | string;
+//     <|readonly [|{| defId: 0 |}x|]: number | string;|>
 // }
 // interface B extends A {
-//     readonly [|x|]: number;
+//     <|readonly [|{| defId: 1 |}x|]: number;|>
 // }
-// const a: A = { /*FIND ALL REFS*/[|x|]: 0 };
-// const b: B = { [|x|]: 0 };
+// const a: A = { /*FIND ALL REFS*/<|[|{| defId: 0, isWriteAccess: true, isDefinition: true |}x|]: 0|> };
+// const b: B = { <|[|{| defId: 1, isWriteAccess: true |}x|]: 0|> };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-      "kind": "property",
-      "name": "(property) A.x: string | number",
-      "textSpan": {
-        "start": 27,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 114,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-      "kind": "property",
-      "name": "(property) B.x: number",
-      "textSpan": {
-        "start": 86,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 77,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 77,
-          "length": 19
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 137,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 137,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
+  // interface A {
+  //     <|readonly [|{| defId: 0 |}x|]: number | string;|>
+  // }
+  // interface B extends A {
+  //     <|readonly [|{| defId: 1 |}x|]: number;|>
+  // }
+  // const a: A = { /*FIND ALL REFS*/x: 0 };
+  // const b: B = { x: 0 };
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.x: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
 // interface A {
-//     readonly [|x|]: number | string;
+//     <|readonly [|{| defId: 0 |}x|]: number | string;|>
 // }
 // interface B extends A {
-//     readonly [|x|]: number;
+//     <|readonly [|{| defId: 1 |}x|]: number;|>
 // }
-// const a: A = { [|x|]: 0 };
-// const b: B = { /*FIND ALL REFS*/[|x|]: 0 };
+// const a: A = { <|[|{| defId: 0, isWriteAccess: true |}x|]: 0|> };
+// const b: B = { /*FIND ALL REFS*/<|[|{| defId: 1, isWriteAccess: true, isDefinition: true |}x|]: 0|> };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-      "kind": "property",
-      "name": "(property) A.x: string | number",
-      "textSpan": {
-        "start": 27,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 114,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
+  // interface A {
+  //     <|readonly [|{| defId: 0 |}x|]: number | string;|>
+  // }
+  // interface B extends A {
+  //     <|readonly [|{| defId: 1 |}x|]: number;|>
+  // }
+  // const a: A = { x: 0 };
+  // const b: B = { /*FIND ALL REFS*/x: 0 };
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.x: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-      "kind": "property",
-      "name": "(property) B.x: number",
-      "textSpan": {
-        "start": 86,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 77,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 77,
-          "length": 19
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 137,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts",
-        "contextSpan": {
-          "start": 137,
-          "length": 4
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

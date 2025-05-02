@@ -1,25 +1,39 @@
-=== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter3.ts ===
+//// [tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter3.ts] ////
+
+=== decoratorOnClassMethodParameter3.ts ===
 // https://github.com/microsoft/TypeScript/issues/48509
 declare function dec(a: any): any;
 >dec : (a: any) => any
+>    : ^ ^^   ^^^^^   
 >a : any
+>  : ^^^
 
 function fn(value: Promise<number>): any {
 >fn : (value: Promise<number>) => any
+>   : ^     ^^               ^^^^^   
 >value : Promise<number>
+>      : ^^^^^^^^^^^^^^^
 
   class Class {
 >Class : Class
+>      : ^^^^^
 
     async method(@dec(await value) arg: number) {}
 >method : (arg: number) => Promise<void>
+>       : ^   ^^      ^^^^^^^^^^^^^^^^^^
 >dec(await value) : any
+>                 : ^^^
 >dec : (a: any) => any
+>    : ^ ^^   ^^^^^   
 >await value : number
+>            : ^^^^^^
 >value : Promise<number>
+>      : ^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
   }
   return Class
 >Class : typeof Class
+>      : ^^^^^^^^^^^^
 }
 

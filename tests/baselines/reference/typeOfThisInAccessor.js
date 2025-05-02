@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/typeOfThisInAccessor.ts] ////
+
 //// [typeOfThisInAccessor.ts]
 class C {
     get x() {

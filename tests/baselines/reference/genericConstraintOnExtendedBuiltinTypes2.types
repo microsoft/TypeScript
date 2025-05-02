@@ -1,55 +1,78 @@
-=== tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes2.ts ===
+//// [tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes2.ts] ////
+
+=== genericConstraintOnExtendedBuiltinTypes2.ts ===
 module EndGate {
     export interface ICloneable {
         Clone(): any;
 >Clone : () => any
+>      : ^^^^^^   
     }
 }
 
 interface Number extends EndGate.ICloneable { }
 >EndGate : typeof EndGate
+>        : ^^^^^^^^^^^^^^
 
 module EndGate.Tweening {
 >EndGate : typeof EndGate
+>        : ^^^^^^^^^^^^^^
 >Tweening : typeof Tweening
+>         : ^^^^^^^^^^^^^^^
 
     export class Tween<T extends ICloneable>{
 >Tween : Tween<T>
+>      : ^^^^^^^^
 
         private _from: T;
 >_from : T
+>      : ^
 
         constructor(from: T) {
 >from : T
+>     : ^
 
             this._from = from.Clone();
 >this._from = from.Clone() : any
 >this._from : T
+>           : ^
 >this : this
+>     : ^^^^
 >_from : T
+>      : ^
 >from.Clone() : any
 >from.Clone : () => any
+>           : ^^^^^^   
 >from : T
+>     : ^
 >Clone : () => any
+>      : ^^^^^^   
         }
     }
 }
 
 module EndGate.Tweening {
 >EndGate : typeof EndGate
+>        : ^^^^^^^^^^^^^^
 >Tweening : typeof Tweening
+>         : ^^^^^^^^^^^^^^^
 
     export class NumberTween extends Tween<Number>{
 >NumberTween : NumberTween
+>            : ^^^^^^^^^^^
 >Tween : Tween<Number>
+>      : ^^^^^^^^^^^^^
 
         constructor(from: number) {
 >from : number
+>     : ^^^^^^
 
             super(from);
 >super(from) : void
+>            : ^^^^
 >super : typeof Tween
+>      : ^^^^^^^^^^^^
 >from : number
+>     : ^^^^^^
         }
     }
 }

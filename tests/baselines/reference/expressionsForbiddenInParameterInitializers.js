@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expressionsForbiddenInParameterInitializers.ts] ////
+
 //// [bar.ts]
 export async function foo({ foo = await import("./bar") }) {
 }
@@ -18,12 +20,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -44,17 +46,31 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-exports.foo2 = exports.foo = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = foo;
+exports.foo2 = foo2;
 function foo(_a) {
-    var _b = _a.foo, foo = _b === void 0 ? yield Promise.resolve().then(function () { return require("./bar"); }) : _b;
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_c) {
-            return [2 /*return*/];
+    return __awaiter(this, arguments, void 0, function (_b) {
+        var _c, foo, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
+                case 0:
+                    _c = _b.foo;
+                    if (!(_c === void 0)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, Promise.resolve().then(function () { return require("./bar"); })];
+                case 1:
+                    _d = _e.sent();
+                    return [3 /*break*/, 3];
+                case 2:
+                    _d = _c;
+                    _e.label = 3;
+                case 3:
+                    foo = _d;
+                    return [2 /*return*/];
+            }
         });
     });
 }
-exports.foo = foo;
 function foo2(_a) {
     var _b, foo, _c;
     return __generator(this, function (_d) {
@@ -75,4 +91,3 @@ function foo2(_a) {
         }
     });
 }
-exports.foo2 = foo2;

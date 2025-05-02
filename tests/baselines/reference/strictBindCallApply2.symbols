@@ -1,4 +1,6 @@
-=== tests/cases/conformance/functions/strictBindCallApply2.ts ===
+//// [tests/cases/conformance/functions/strictBindCallApply2.ts] ////
+
+=== strictBindCallApply2.ts ===
 // Repro from #32964
 
 interface Foo { blub: string };
@@ -17,8 +19,8 @@ type Test = ThisParameterType<typeof fn>;
 
 const fb = fn.bind({ blub: "blub" });
 >fb : Symbol(fb, Decl(strictBindCallApply2.ts, 7, 5))
->fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >fn : Symbol(fn, Decl(strictBindCallApply2.ts, 2, 31))
->bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >blub : Symbol(blub, Decl(strictBindCallApply2.ts, 7, 20))
 

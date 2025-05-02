@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmit7.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
@@ -15,56 +17,56 @@ declare module JSX {
 
 var m = <div x-y="val"></div>;
 >m : Symbol(m, Decl(file.tsx, 7, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >x-y : Symbol(x-y, Decl(file.tsx, 7, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 var n = <div xx-y="val"></div>;
 >n : Symbol(n, Decl(file.tsx, 8, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >xx-y : Symbol(xx-y, Decl(file.tsx, 8, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 var o = <div x-yy="val"></div>;
 >o : Symbol(o, Decl(file.tsx, 9, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >x-yy : Symbol(x-yy, Decl(file.tsx, 9, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 var p = <div xx-yy="val"></div>;
 >p : Symbol(p, Decl(file.tsx, 10, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >xx-yy : Symbol(xx-yy, Decl(file.tsx, 10, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // Investigation
 var a = <div x="val"></div>;
 >a : Symbol(a, Decl(file.tsx, 13, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >x : Symbol(x, Decl(file.tsx, 13, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 var b = <div xx="val"></div>;
 >b : Symbol(b, Decl(file.tsx, 14, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >xx : Symbol(xx, Decl(file.tsx, 14, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 var c = <div xxx="val"></div>;
 >c : Symbol(c, Decl(file.tsx, 15, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >xxx : Symbol(xxx, Decl(file.tsx, 15, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 var d = <div xxxx="val"></div>;
 >d : Symbol(d, Decl(file.tsx, 16, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >xxxx : Symbol(xxxx, Decl(file.tsx, 16, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 var e = <div xxxxx="val"></div>;
 >e : Symbol(e, Decl(file.tsx, 17, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >xxxxx : Symbol(xxxxx, Decl(file.tsx, 17, 12))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 

@@ -1,699 +1,1155 @@
-=== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts] ////
+
+=== fatarrowfunctionsOptionalArgs.ts ===
 // valid
 
 // no params
 () => 1;
 >() => 1 : () => number
+>        : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 // one param, no type
 (arg) => 2;
 >(arg) => 2 : (arg: any) => number
+>           : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >2 : 2
+>  : ^
 
 // one param, no type
 arg => 2;
 >arg => 2 : (arg: any) => number
+>         : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >2 : 2
+>  : ^
 
 // one param, no type with default value
 (arg = 1) => 3;
 >(arg = 1) => 3 : (arg?: number) => number
+>               : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >3 : 3
+>  : ^
 
 // one param, no type, optional
 (arg?) => 4;
 >(arg?) => 4 : (arg?: any) => number
+>            : ^   ^^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >4 : 4
+>  : ^
 
 // typed param
 (arg: number) => 5;
 >(arg: number) => 5 : (arg: number) => number
+>                   : ^   ^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >5 : 5
+>  : ^
 
 // typed param with default value
 (arg: number = 0) => 6;
 >(arg: number = 0) => 6 : (arg?: number) => number
+>                       : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >6 : 6
+>  : ^
 
 // optional param
 (arg?: number) => 7;
 >(arg?: number) => 7 : (arg?: number) => number
+>                    : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >7 : 7
+>  : ^
 
 // var arg param
 (...arg: number[]) => 8;
 >(...arg: number[]) => 8 : (...arg: number[]) => number
+>                        : ^^^^   ^^        ^^^^^^^^^^^
 >arg : number[]
+>    : ^^^^^^^^
 >8 : 8
+>  : ^
 
 // multiple arguments
 (arg1, arg2) => 12;
 >(arg1, arg2) => 12 : (arg1: any, arg2: any) => number
+>                   : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 >arg2 : any
+>     : ^^^
 >12 : 12
+>   : ^^
 
 (arg1 = 1, arg2 =3) => 13;
 >(arg1 = 1, arg2 =3) => 13 : (arg1?: number, arg2?: number) => number
+>                          : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >arg1 : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 >arg2 : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 >13 : 13
+>   : ^^
 
 (arg1?, arg2?) => 14;
 >(arg1?, arg2?) => 14 : (arg1?: any, arg2?: any) => number
+>                     : ^    ^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 >arg2 : any
+>     : ^^^
 >14 : 14
+>   : ^^
 
 (arg1: number, arg2: number) => 15;
 >(arg1: number, arg2: number) => 15 : (arg1: number, arg2: number) => number
+>                                   : ^    ^^      ^^    ^^      ^^^^^^^^^^^
 >arg1 : number
+>     : ^^^^^^
 >arg2 : number
+>     : ^^^^^^
 >15 : 15
+>   : ^^
 
 (arg1: number = 0, arg2: number = 1) => 16;
 >(arg1: number = 0, arg2: number = 1) => 16 : (arg1?: number, arg2?: number) => number
+>                                           : ^    ^^^      ^^    ^^^      ^^^^^^^^^^^
 >arg1 : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 >arg2 : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 >16 : 16
+>   : ^^
 
 (arg1?: number, arg2?: number) => 17;
 >(arg1?: number, arg2?: number) => 17 : (arg1?: number, arg2?: number) => number
+>                                     : ^    ^^^      ^^    ^^^      ^^^^^^^^^^^
 >arg1 : number
+>     : ^^^^^^
 >arg2 : number
+>     : ^^^^^^
 >17 : 17
+>   : ^^
 
 (arg1, ...arg2: number[]) => 18;
 >(arg1, ...arg2: number[]) => 18 : (arg1: any, ...arg2: number[]) => number
+>                                : ^    ^^^^^^^^^^    ^^        ^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 >arg2 : number[]
+>     : ^^^^^^^^
 >18 : 18
+>   : ^^
 
 (arg1, arg2?: number) => 19;
 >(arg1, arg2?: number) => 19 : (arg1: any, arg2?: number) => number
+>                            : ^    ^^^^^^^    ^^^      ^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 >arg2 : number
+>     : ^^^^^^
 >19 : 19
+>   : ^^
 
 // in paren
 (() => 21);
 >(() => 21) : () => number
+>           : ^^^^^^^^^^^^
 >() => 21 : () => number
+>         : ^^^^^^^^^^^^
 >21 : 21
+>   : ^^
 
 ((arg) => 22);
 >((arg) => 22) : (arg: any) => number
+>              : ^   ^^^^^^^^^^^^^^^^
 >(arg) => 22 : (arg: any) => number
+>            : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >22 : 22
+>   : ^^
 
 ((arg = 1) => 23);
 >((arg = 1) => 23) : (arg?: number) => number
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^
 >(arg = 1) => 23 : (arg?: number) => number
+>                : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >23 : 23
+>   : ^^
 
 ((arg?) => 24);
 >((arg?) => 24) : (arg?: any) => number
+>               : ^   ^^^^^^^^^^^^^^^^^
 >(arg?) => 24 : (arg?: any) => number
+>             : ^   ^^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >24 : 24
+>   : ^^
 
 ((arg: number) => 25);
 >((arg: number) => 25) : (arg: number) => number
+>                      : ^   ^^      ^^^^^^^^^^^
 >(arg: number) => 25 : (arg: number) => number
+>                    : ^   ^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >25 : 25
+>   : ^^
 
 ((arg: number = 0) => 26);
 >((arg: number = 0) => 26) : (arg?: number) => number
+>                          : ^   ^^^      ^^^^^^^^^^^
 >(arg: number = 0) => 26 : (arg?: number) => number
+>                        : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >26 : 26
+>   : ^^
 
 ((arg?: number) => 27);
 >((arg?: number) => 27) : (arg?: number) => number
+>                       : ^   ^^^      ^^^^^^^^^^^
 >(arg?: number) => 27 : (arg?: number) => number
+>                     : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >27 : 27
+>   : ^^
 
 ((...arg: number[]) => 28);
 >((...arg: number[]) => 28) : (...arg: number[]) => number
+>                           : ^^^^   ^^        ^^^^^^^^^^^
 >(...arg: number[]) => 28 : (...arg: number[]) => number
+>                         : ^^^^   ^^        ^^^^^^^^^^^
 >arg : number[]
+>    : ^^^^^^^^
 >28 : 28
+>   : ^^
 
 // in multiple paren
 (((((arg) => { return 32; }))));
 >(((((arg) => { return 32; })))) : (arg: any) => number
+>                                : ^   ^^^^^^^^^^^^^^^^
 >((((arg) => { return 32; }))) : (arg: any) => number
+>                              : ^   ^^^^^^^^^^^^^^^^
 >(((arg) => { return 32; })) : (arg: any) => number
+>                            : ^   ^^^^^^^^^^^^^^^^
 >((arg) => { return 32; }) : (arg: any) => number
+>                          : ^   ^^^^^^^^^^^^^^^^
 >(arg) => { return 32; } : (arg: any) => number
+>                        : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >32 : 32
+>   : ^^
 
 // in ternary exression
 false ? () => 41 : null;
 >false ? () => 41 : null : () => number
+>                        : ^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >() => 41 : () => number
+>         : ^^^^^^^^^^^^
 >41 : 41
->null : null
+>   : ^^
 
 false ? (arg) => 42 : null;
 >false ? (arg) => 42 : null : (arg: any) => number
+>                           : ^   ^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(arg) => 42 : (arg: any) => number
+>            : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >42 : 42
->null : null
+>   : ^^
 
 false ? (arg = 1) => 43 : null;
 >false ? (arg = 1) => 43 : null : (arg?: number) => number
+>                               : ^   ^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(arg = 1) => 43 : (arg?: number) => number
+>                : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >43 : 43
->null : null
+>   : ^^
 
 false ? (arg?) => 44 : null;
 >false ? (arg?) => 44 : null : (arg?: any) => number
+>                            : ^   ^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(arg?) => 44 : (arg?: any) => number
+>             : ^   ^^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >44 : 44
->null : null
+>   : ^^
 
 false ? (arg: number) => 45 : null;
 >false ? (arg: number) => 45 : null : (arg: number) => number
+>                                   : ^   ^^      ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(arg: number) => 45 : (arg: number) => number
+>                    : ^   ^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >45 : 45
->null : null
+>   : ^^
 
 false ? (arg?: number) => 46 : null;
 >false ? (arg?: number) => 46 : null : (arg?: number) => number
+>                                    : ^   ^^^      ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(arg?: number) => 46 : (arg?: number) => number
+>                     : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >46 : 46
->null : null
+>   : ^^
 
 false ? (arg?: number = 0) => 47 : null;
 >false ? (arg?: number = 0) => 47 : null : (arg?: number) => number
+>                                        : ^   ^^^      ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(arg?: number = 0) => 47 : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >47 : 47
->null : null
+>   : ^^
 
 false ? (...arg: number[]) => 48 : null;
 >false ? (...arg: number[]) => 48 : null : (...arg: number[]) => number
+>                                        : ^^^^   ^^        ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(...arg: number[]) => 48 : (...arg: number[]) => number
+>                         : ^^^^   ^^        ^^^^^^^^^^^
 >arg : number[]
+>    : ^^^^^^^^
 >48 : 48
->null : null
+>   : ^^
 
 // in ternary exression within paren
 false ? (() => 51) : null;
 >false ? (() => 51) : null : () => number
+>                          : ^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(() => 51) : () => number
+>           : ^^^^^^^^^^^^
 >() => 51 : () => number
+>         : ^^^^^^^^^^^^
 >51 : 51
->null : null
+>   : ^^
 
 false ? ((arg) => 52) : null;
 >false ? ((arg) => 52) : null : (arg: any) => number
+>                             : ^   ^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >((arg) => 52) : (arg: any) => number
+>              : ^   ^^^^^^^^^^^^^^^^
 >(arg) => 52 : (arg: any) => number
+>            : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >52 : 52
->null : null
+>   : ^^
 
 false ? ((arg = 1) => 53) : null;
 >false ? ((arg = 1) => 53) : null : (arg?: number) => number
+>                                 : ^   ^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >((arg = 1) => 53) : (arg?: number) => number
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^
 >(arg = 1) => 53 : (arg?: number) => number
+>                : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >53 : 53
->null : null
+>   : ^^
 
 false ? ((arg?) => 54) : null;
 >false ? ((arg?) => 54) : null : (arg?: any) => number
+>                              : ^   ^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >((arg?) => 54) : (arg?: any) => number
+>               : ^   ^^^^^^^^^^^^^^^^^
 >(arg?) => 54 : (arg?: any) => number
+>             : ^   ^^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >54 : 54
->null : null
+>   : ^^
 
 false ? ((arg: number) => 55) : null;
 >false ? ((arg: number) => 55) : null : (arg: number) => number
+>                                     : ^   ^^      ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >((arg: number) => 55) : (arg: number) => number
+>                      : ^   ^^      ^^^^^^^^^^^
 >(arg: number) => 55 : (arg: number) => number
+>                    : ^   ^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >55 : 55
->null : null
+>   : ^^
 
 false ? ((arg?: number) => 56) : null;
 >false ? ((arg?: number) => 56) : null : (arg?: number) => number
+>                                      : ^   ^^^      ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >((arg?: number) => 56) : (arg?: number) => number
+>                       : ^   ^^^      ^^^^^^^^^^^
 >(arg?: number) => 56 : (arg?: number) => number
+>                     : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >56 : 56
->null : null
+>   : ^^
 
 false ? ((arg?: number = 0) => 57) : null;
 >false ? ((arg?: number = 0) => 57) : null : (arg?: number) => number
+>                                          : ^   ^^^      ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >((arg?: number = 0) => 57) : (arg?: number) => number
+>                           : ^   ^^^      ^^^^^^^^^^^
 >(arg?: number = 0) => 57 : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >57 : 57
->null : null
+>   : ^^
 
 false ? ((...arg: number[]) => 58) : null;
 >false ? ((...arg: number[]) => 58) : null : (...arg: number[]) => number
+>                                          : ^^^^   ^^        ^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >((...arg: number[]) => 58) : (...arg: number[]) => number
+>                           : ^^^^   ^^        ^^^^^^^^^^^
 >(...arg: number[]) => 58 : (...arg: number[]) => number
+>                         : ^^^^   ^^        ^^^^^^^^^^^
 >arg : number[]
+>    : ^^^^^^^^
 >58 : 58
->null : null
+>   : ^^
 
 // ternary exression's else clause
 false ? null : () => 61;
 >false ? null : () => 61 : () => number
+>                        : ^^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >() => 61 : () => number
+>         : ^^^^^^^^^^^^
 >61 : 61
+>   : ^^
 
 false ? null : (arg) => 62;
 >false ? null : (arg) => 62 : (arg: any) => number
+>                           : ^   ^^^^^^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >(arg) => 62 : (arg: any) => number
+>            : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >62 : 62
+>   : ^^
 
 false ? null : (arg = 1) => 63;
 >false ? null : (arg = 1) => 63 : (arg?: number) => number
+>                               : ^   ^^^^^^^^^^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >(arg = 1) => 63 : (arg?: number) => number
+>                : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >63 : 63
+>   : ^^
 
 false ? null : (arg?) => 64;
 >false ? null : (arg?) => 64 : (arg?: any) => number
+>                            : ^   ^^^^^^^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >(arg?) => 64 : (arg?: any) => number
+>             : ^   ^^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >64 : 64
+>   : ^^
 
 false ? null : (arg: number) => 65;
 >false ? null : (arg: number) => 65 : (arg: number) => number
+>                                   : ^   ^^      ^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >(arg: number) => 65 : (arg: number) => number
+>                    : ^   ^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >65 : 65
+>   : ^^
 
 false ? null : (arg?: number) => 66;
 >false ? null : (arg?: number) => 66 : (arg?: number) => number
+>                                    : ^   ^^^      ^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >(arg?: number) => 66 : (arg?: number) => number
+>                     : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >66 : 66
+>   : ^^
 
 false ? null : (arg?: number = 0) => 67;
 >false ? null : (arg?: number = 0) => 67 : (arg?: number) => number
+>                                        : ^   ^^^      ^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >(arg?: number = 0) => 67 : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >67 : 67
+>   : ^^
 
 false ? null : (...arg: number[]) => 68;
 >false ? null : (...arg: number[]) => 68 : (...arg: number[]) => number
+>                                        : ^^^^   ^^        ^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 >(...arg: number[]) => 68 : (...arg: number[]) => number
+>                         : ^^^^   ^^        ^^^^^^^^^^^
 >arg : number[]
+>    : ^^^^^^^^
 >68 : 68
+>   : ^^
 
 
 // nested ternary expressions
 ((a?) => { return a; }) ? (b? ) => { return b; } : (c? ) => { return c; };
 >((a?) => { return a; }) ? (b? ) => { return b; } : (c? ) => { return c; } : (b?: any) => any
+>                                                                          : ^ ^^^^^^^^^^^^^^
 >((a?) => { return a; }) : (a?: any) => any
+>                        : ^ ^^^^^^^^^^^^^^
 >(a?) => { return a; } : (a?: any) => any
+>                      : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 >(b? ) => { return b; } : (b?: any) => any
+>                       : ^ ^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 >(c? ) => { return c; } : (c?: any) => any
+>                       : ^ ^^^^^^^^^^^^^^
 >c : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 //multiple levels
 (a?) => { return a; } ? (b)=>(c)=>81 : (c)=>(d)=>82;
 >(a?) => { return a; } : (a?: any) => any
+>                      : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 >(b)=>(c)=>81 : (b: any) => (c: any) => number
+>             : ^ ^^^^^^^^^^^   ^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >(c)=>81 : (c: any) => number
+>        : ^ ^^^^^^^^^^^^^^^^
 >c : any
+>  : ^^^
 >81 : 81
+>   : ^^
 >(c)=>(d)=>82 : (c: any) => (d: any) => number
+>             : ^ ^^^^^^^^^^^   ^^^^^^^^^^^^^^
 >c : any
+>  : ^^^
 >(d)=>82 : (d: any) => number
+>        : ^ ^^^^^^^^^^^^^^^^
 >d : any
+>  : ^^^
 >82 : 82
+>   : ^^
 
 
 // In Expressions
 ((arg) => 90) instanceof Function;
 >((arg) => 90) instanceof Function : boolean
+>                                  : ^^^^^^^
 >((arg) => 90) : (arg: any) => number
+>              : ^   ^^^^^^^^^^^^^^^^
 >(arg) => 90 : (arg: any) => number
+>            : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >90 : 90
+>   : ^^
 >Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 
 ((arg = 1) => 91) instanceof Function;
 >((arg = 1) => 91) instanceof Function : boolean
+>                                      : ^^^^^^^
 >((arg = 1) => 91) : (arg?: number) => number
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^
 >(arg = 1) => 91 : (arg?: number) => number
+>                : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >91 : 91
+>   : ^^
 >Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 
 ((arg? ) => 92) instanceof Function;
 >((arg? ) => 92) instanceof Function : boolean
+>                                    : ^^^^^^^
 >((arg? ) => 92) : (arg?: any) => number
+>                : ^   ^^^^^^^^^^^^^^^^^
 >(arg? ) => 92 : (arg?: any) => number
+>              : ^   ^^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >92 : 92
+>   : ^^
 >Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 
 ((arg: number) => 93) instanceof Function;
 >((arg: number) => 93) instanceof Function : boolean
+>                                          : ^^^^^^^
 >((arg: number) => 93) : (arg: number) => number
+>                      : ^   ^^      ^^^^^^^^^^^
 >(arg: number) => 93 : (arg: number) => number
+>                    : ^   ^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >93 : 93
+>   : ^^
 >Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 
 ((arg: number = 1) => 94) instanceof Function;
 >((arg: number = 1) => 94) instanceof Function : boolean
+>                                              : ^^^^^^^
 >((arg: number = 1) => 94) : (arg?: number) => number
+>                          : ^   ^^^      ^^^^^^^^^^^
 >(arg: number = 1) => 94 : (arg?: number) => number
+>                        : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >94 : 94
+>   : ^^
 >Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 
 ((arg?: number) => 95) instanceof Function;
 >((arg?: number) => 95) instanceof Function : boolean
+>                                           : ^^^^^^^
 >((arg?: number) => 95) : (arg?: number) => number
+>                       : ^   ^^^      ^^^^^^^^^^^
 >(arg?: number) => 95 : (arg?: number) => number
+>                     : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >95 : 95
+>   : ^^
 >Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 
 ((...arg: number[]) => 96) instanceof Function;
 >((...arg: number[]) => 96) instanceof Function : boolean
+>                                               : ^^^^^^^
 >((...arg: number[]) => 96) : (...arg: number[]) => number
+>                           : ^^^^   ^^        ^^^^^^^^^^^
 >(...arg: number[]) => 96 : (...arg: number[]) => number
+>                         : ^^^^   ^^        ^^^^^^^^^^^
 >arg : number[]
+>    : ^^^^^^^^
 >96 : 96
+>   : ^^
 >Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 
 '' + ((arg) => 100);
 >'' + ((arg) => 100) : string
+>                    : ^^^^^^
 >'' : ""
+>   : ^^
 >((arg) => 100) : (arg: any) => number
+>               : ^   ^^^^^^^^^^^^^^^^
 >(arg) => 100 : (arg: any) => number
+>             : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >100 : 100
+>    : ^^^
 
 ((arg) => 0) + '' + ((arg) => 101);
 >((arg) => 0) + '' + ((arg) => 101) : string
+>                                   : ^^^^^^
 >((arg) => 0) + '' : string
+>                  : ^^^^^^
 >((arg) => 0) : (arg: any) => number
+>             : ^   ^^^^^^^^^^^^^^^^
 >(arg) => 0 : (arg: any) => number
+>           : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg) => 101) : (arg: any) => number
+>               : ^   ^^^^^^^^^^^^^^^^
 >(arg) => 101 : (arg: any) => number
+>             : ^   ^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >101 : 101
+>    : ^^^
 
 ((arg = 1) => 0) + '' + ((arg = 2) => 102);
 >((arg = 1) => 0) + '' + ((arg = 2) => 102) : string
+>                                           : ^^^^^^
 >((arg = 1) => 0) + '' : string
+>                      : ^^^^^^
 >((arg = 1) => 0) : (arg?: number) => number
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^
 >(arg = 1) => 0 : (arg?: number) => number
+>               : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg = 2) => 102) : (arg?: number) => number
+>                   : ^   ^^^^^^^^^^^^^^^^^^^^
 >(arg = 2) => 102 : (arg?: number) => number
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 >102 : 102
+>    : ^^^
 
 ((arg?) => 0) + '' + ((arg?) => 103);
 >((arg?) => 0) + '' + ((arg?) => 103) : string
+>                                     : ^^^^^^
 >((arg?) => 0) + '' : string
+>                   : ^^^^^^
 >((arg?) => 0) : (arg?: any) => number
+>              : ^   ^^^^^^^^^^^^^^^^^
 >(arg?) => 0 : (arg?: any) => number
+>            : ^   ^^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg?) => 103) : (arg?: any) => number
+>                : ^   ^^^^^^^^^^^^^^^^^
 >(arg?) => 103 : (arg?: any) => number
+>              : ^   ^^^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >103 : 103
+>    : ^^^
 
 ((arg:number) => 0) + '' + ((arg:number) => 104);
 >((arg:number) => 0) + '' + ((arg:number) => 104) : string
+>                                                 : ^^^^^^
 >((arg:number) => 0) + '' : string
+>                         : ^^^^^^
 >((arg:number) => 0) : (arg: number) => number
+>                    : ^   ^^      ^^^^^^^^^^^
 >(arg:number) => 0 : (arg: number) => number
+>                  : ^   ^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg:number) => 104) : (arg: number) => number
+>                      : ^   ^^      ^^^^^^^^^^^
 >(arg:number) => 104 : (arg: number) => number
+>                    : ^   ^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >104 : 104
+>    : ^^^
 
 ((arg:number = 1) => 0) + '' + ((arg:number = 2) => 105);
 >((arg:number = 1) => 0) + '' + ((arg:number = 2) => 105) : string
+>                                                         : ^^^^^^
 >((arg:number = 1) => 0) + '' : string
+>                             : ^^^^^^
 >((arg:number = 1) => 0) : (arg?: number) => number
+>                        : ^   ^^^      ^^^^^^^^^^^
 >(arg:number = 1) => 0 : (arg?: number) => number
+>                      : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg:number = 2) => 105) : (arg?: number) => number
+>                          : ^   ^^^      ^^^^^^^^^^^
 >(arg:number = 2) => 105 : (arg?: number) => number
+>                        : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 >105 : 105
+>    : ^^^
 
 ((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106);
 >((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106) : string
+>                                                           : ^^^^^^
 >((arg?:number = 1) => 0) + '' : string
+>                              : ^^^^^^
 >((arg?:number = 1) => 0) : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >(arg?:number = 1) => 0 : (arg?: number) => number
+>                       : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg?:number = 2) => 106) : (arg?: number) => number
+>                           : ^   ^^^      ^^^^^^^^^^^
 >(arg?:number = 2) => 106 : (arg?: number) => number
+>                         : ^   ^^^      ^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 >106 : 106
+>    : ^^^
 
 ((...arg:number[]) => 0) + '' + ((...arg:number[]) => 107);
 >((...arg:number[]) => 0) + '' + ((...arg:number[]) => 107) : string
+>                                                           : ^^^^^^
 >((...arg:number[]) => 0) + '' : string
+>                              : ^^^^^^
 >((...arg:number[]) => 0) : (...arg: number[]) => number
+>                         : ^^^^   ^^        ^^^^^^^^^^^
 >(...arg:number[]) => 0 : (...arg: number[]) => number
+>                       : ^^^^   ^^        ^^^^^^^^^^^
 >arg : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((...arg:number[]) => 107) : (...arg: number[]) => number
+>                           : ^^^^   ^^        ^^^^^^^^^^^
 >(...arg:number[]) => 107 : (...arg: number[]) => number
+>                         : ^^^^   ^^        ^^^^^^^^^^^
 >arg : number[]
+>    : ^^^^^^^^
 >107 : 107
+>    : ^^^
 
 ((arg1, arg2?) => 0) + '' + ((arg1,arg2?) => 108);
 >((arg1, arg2?) => 0) + '' + ((arg1,arg2?) => 108) : string
+>                                                  : ^^^^^^
 >((arg1, arg2?) => 0) + '' : string
+>                          : ^^^^^^
 >((arg1, arg2?) => 0) : (arg1: any, arg2?: any) => number
+>                     : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >(arg1, arg2?) => 0 : (arg1: any, arg2?: any) => number
+>                   : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 >arg2 : any
+>     : ^^^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg1,arg2?) => 108) : (arg1: any, arg2?: any) => number
+>                      : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >(arg1,arg2?) => 108 : (arg1: any, arg2?: any) => number
+>                    : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 >arg2 : any
+>     : ^^^
 >108 : 108
+>    : ^^^
 
 ((arg1, ...arg2:number[]) => 0) + '' + ((arg1, ...arg2:number[]) => 108);
 >((arg1, ...arg2:number[]) => 0) + '' + ((arg1, ...arg2:number[]) => 108) : string
+>                                                                         : ^^^^^^
 >((arg1, ...arg2:number[]) => 0) + '' : string
+>                                     : ^^^^^^
 >((arg1, ...arg2:number[]) => 0) : (arg1: any, ...arg2: number[]) => number
+>                                : ^    ^^^^^^^^^^    ^^        ^^^^^^^^^^^
 >(arg1, ...arg2:number[]) => 0 : (arg1: any, ...arg2: number[]) => number
+>                              : ^    ^^^^^^^^^^    ^^        ^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 >arg2 : number[]
+>     : ^^^^^^^^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 >((arg1, ...arg2:number[]) => 108) : (arg1: any, ...arg2: number[]) => number
+>                                  : ^    ^^^^^^^^^^    ^^        ^^^^^^^^^^^
 >(arg1, ...arg2:number[]) => 108 : (arg1: any, ...arg2: number[]) => number
+>                                : ^    ^^^^^^^^^^    ^^        ^^^^^^^^^^^
 >arg1 : any
+>     : ^^^
 >arg2 : number[]
+>     : ^^^^^^^^
 >108 : 108
+>    : ^^^
 
 
 // Function Parameters
 function foo(...arg: any[]) { }
 >foo : (...arg: any[]) => void
+>    : ^^^^   ^^     ^^^^^^^^^
 >arg : any[]
+>    : ^^^^^
 
 foo(
 >foo(    (a) => 110,     ((a) => 111),     (a) => {        return 112;    },    (a? ) => 113,     (a, b? ) => 114,     (a: number) => 115,     (a: number = 0) => 116,     (a = 0) => 117,     (a?: number = 0) => 118,     (...a: number[]) => 119,     (a, b? = 0, ...c: number[]) => 120,    (a) => (b) => (c) => 121,    false? (a) => 0 : (b) => 122) : void
+>                                                                                                                                                                                                                                                                                                                                                          : ^^^^
 >foo : (...arg: any[]) => void
+>    : ^^^^   ^^     ^^^^^^^^^
 
     (a) => 110, 
 >(a) => 110 : (a: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >110 : 110
+>    : ^^^
 
     ((a) => 111), 
 >((a) => 111) : (a: any) => number
+>             : ^ ^^^^^^^^^^^^^^^^
 >(a) => 111 : (a: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >111 : 111
+>    : ^^^
 
     (a) => {
 >(a) => {        return 112;    } : (a: any) => number
+>                                 : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
         return 112;
 >112 : 112
+>    : ^^^
 
     },
     (a? ) => 113, 
 >(a? ) => 113 : (a?: any) => number
+>             : ^ ^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >113 : 113
+>    : ^^^
 
     (a, b? ) => 114, 
 >(a, b? ) => 114 : (a: any, b?: any) => number
+>                : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >114 : 114
+>    : ^^^
 
     (a: number) => 115, 
 >(a: number) => 115 : (a: number) => number
+>                   : ^ ^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >115 : 115
+>    : ^^^
 
     (a: number = 0) => 116, 
 >(a: number = 0) => 116 : (a?: number) => number
+>                       : ^ ^^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >116 : 116
+>    : ^^^
 
     (a = 0) => 117, 
 >(a = 0) => 117 : (a?: number) => number
+>               : ^ ^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >117 : 117
+>    : ^^^
 
     (a?: number = 0) => 118, 
 >(a?: number = 0) => 118 : (a?: number) => number
+>                        : ^ ^^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >118 : 118
+>    : ^^^
 
     (...a: number[]) => 119, 
 >(...a: number[]) => 119 : (...a: number[]) => number
+>                        : ^^^^ ^^        ^^^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >119 : 119
+>    : ^^^
 
     (a, b? = 0, ...c: number[]) => 120,
 >(a, b? = 0, ...c: number[]) => 120 : (a: any, b?: number, ...c: number[]) => number
+>                                   : ^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^        ^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >c : number[]
+>  : ^^^^^^^^
 >120 : 120
+>    : ^^^
 
     (a) => (b) => (c) => 121,
 >(a) => (b) => (c) => 121 : (a: any) => (b: any) => (c: any) => number
+>                         : ^ ^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >(b) => (c) => 121 : (b: any) => (c: any) => number
+>                  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >(c) => 121 : (c: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >c : any
+>  : ^^^
 >121 : 121
+>    : ^^^
 
     false? (a) => 0 : (b) => 122
 >false? (a) => 0 : (b) => 122 : (a: any) => number
+>                             : ^ ^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(a) => 0 : (a: any) => number
+>         : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
+>  : ^
 >(b) => 122 : (b: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >122 : 122
+>    : ^^^
 
 );

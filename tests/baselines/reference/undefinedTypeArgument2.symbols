@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedTypeArgument2.ts ===
+//// [tests/cases/compiler/undefinedTypeArgument2.ts] ////
+
+=== undefinedTypeArgument2.ts ===
 // once caused stack overflow
 interface Query<T> {
 >Query : Symbol(Query, Decl(undefinedTypeArgument2.ts, 0, 0))

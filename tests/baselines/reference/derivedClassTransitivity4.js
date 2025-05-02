@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity4.ts] ////
+
 //// [derivedClassTransitivity4.ts]
 // subclassing is not transitive when you can remove required parameters and add optional parameters on protected members
 

@@ -1,27 +1,41 @@
-=== tests/cases/conformance/classes/classExpression.ts ===
+//// [tests/cases/conformance/classes/classExpression.ts] ////
+
+=== classExpression.ts ===
 var x = class C {
 >x : typeof C
+>  : ^^^^^^^^
 >class C {} : typeof C
+>           : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 }
 
 var y = {
 >y : { foo: typeof C2; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >{    foo: class C2 {    }} : { foo: typeof C2; }
+>                           : ^^^^^^^^^^^^^^^^^^^
 
     foo: class C2 {
 >foo : typeof C2
+>    : ^^^^^^^^^
 >class C2 {    } : typeof C2
+>                : ^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
     }
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var z = class C4 {
 >z : typeof C4
+>  : ^^^^^^^^^
 >class C4 {    } : typeof C4
+>                : ^^^^^^^^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
     }
 }

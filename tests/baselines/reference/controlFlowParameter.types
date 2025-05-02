@@ -1,93 +1,139 @@
-=== tests/cases/conformance/controlFlow/controlFlowParameter.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowParameter.ts] ////
+
+=== controlFlowParameter.ts ===
 function f1(
 >f1 : (required?: unknown) => void
+>   : ^        ^^^       ^^^^^^^^^
 
   required: unknown = (() => {
 >required : unknown
+>         : ^^^^^^^
 >(() => {    throw new Error("bad");  })() : never
+>                                          : ^^^^^
 >(() => {    throw new Error("bad");  }) : () => never
+>                                        : ^^^^^^^^^^^
 >() => {    throw new Error("bad");  } : () => never
+>                                      : ^^^^^^^^^^^
 
     throw new Error("bad");
 >new Error("bad") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bad" : "bad"
+>      : ^^^^^
 
   })()
 ) {
   console.log("ok"); // should not trigger 'Unreachable code detected.'
 >console.log("ok") : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"ok" : "ok"
+>     : ^^^^
 }
 
 function f2(
 >f2 : (a: number | string | undefined, required?: unknown) => void
+>   : ^ ^^                           ^^        ^^^       ^^^^^^^^^
 
   a: number | string | undefined,
 >a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   required: unknown = (() => {
 >required : unknown
+>         : ^^^^^^^
 >(() => {    a = 1;  })() : void
+>                         : ^^^^
 >(() => {    a = 1;  }) : () => void
+>                       : ^^^^^^^^^^
 >() => {    a = 1;  } : () => void
+>                     : ^^^^^^^^^^
 
     a = 1;
 >a = 1 : 1
+>      : ^
 >a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
   })()
 ) {
   a; // should be number | string | undefined
 >a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f3(
 >f3 : (a?: number | string | undefined, required?: unknown) => void
+>   : ^ ^^^                           ^^        ^^^       ^^^^^^^^^
 
   a: number | string | undefined = 1,
 >a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
   required: unknown = (() => {
 >required : unknown
+>         : ^^^^^^^
 >(() => {    a = "";  })() : void
+>                          : ^^^^
 >(() => {    a = "";  }) : () => void
+>                        : ^^^^^^^^^^
 >() => {    a = "";  } : () => void
+>                      : ^^^^^^^^^^
 
     a = "";
 >a = "" : ""
+>       : ^^
 >a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
   })()
 ) {
   a; // should be number | string
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function f4(
 >f4 : (a?: number | string | undefined, { [(a = "")]: b }?: any) => void
+>   : ^ ^^^                           ^^                 ^^^^^^^^^^^^^^^
 
   a: number | string | undefined = 1,
 >a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
   { [(a = "")]: b } = {} as any
 >(a = "") : ""
+>         : ^^
 >a = "" : ""
+>       : ^^
 >a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >b : any
+>  : ^^^
 >{} as any : any
 >{} : {}
+>   : ^^
 
 ) {
   a; // should be string
 >a : string
+>  : ^^^^^^
 }
 

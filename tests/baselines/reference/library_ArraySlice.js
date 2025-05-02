@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/library_ArraySlice.ts] ////
+
 //// [library_ArraySlice.ts]
 // Array.prototype.slice can have zero, one, or two arguments
 Array.prototype.slice();

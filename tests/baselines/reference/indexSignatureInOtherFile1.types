@@ -1,27 +1,37 @@
-=== tests/cases/compiler/other.ts ===
+//// [tests/cases/compiler/indexSignatureInOtherFile1.ts] ////
+
+=== other.ts ===
 interface Array1<T> {
   length: number;
 >length : number
+>       : ^^^^^^
 
   [n: number]: T;
 >n : number
+>  : ^^^^^^
 }
 
 interface ArrayConstructor1 {
   new(arrayLength?: number): Array1<any>;
 >arrayLength : number
+>            : ^^^^^^
 }
 
 declare var Array1: ArrayConstructor1;
 >Array1 : ArrayConstructor1
+>       : ^^^^^^^^^^^^^^^^^
 
 // iterable.d.ts
 interface Array1<T> {
   [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : () => IterableIterator<T>
+>                  : ^^^^^^                   
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 }
 
 // symbol.wellknown.d.ts
@@ -31,40 +41,54 @@ interface Array1<T> {
    * when they will be absent when used in a 'with' statement.
    */
   [Symbol.unscopables](): {
->[Symbol.unscopables] : () => {    copyWithin: boolean;    entries: boolean;    fill: boolean;    find: boolean;    findIndex: boolean;    keys: boolean;    values: boolean;}
+>[Symbol.unscopables] : () => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }
+>                     : ^^^^^^                                                                                                                            
 >Symbol.unscopables : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >unscopables : unique symbol
+>            : ^^^^^^^^^^^^^
 
       copyWithin: boolean;
 >copyWithin : boolean
+>           : ^^^^^^^
 
       entries: boolean;
 >entries : boolean
+>        : ^^^^^^^
 
       fill: boolean;
 >fill : boolean
+>     : ^^^^^^^
 
       find: boolean;
 >find : boolean
+>     : ^^^^^^^
 
       findIndex: boolean;
 >findIndex : boolean
+>          : ^^^^^^^
 
       keys: boolean;
 >keys : boolean
+>     : ^^^^^^^
 
       values: boolean;
 >values : boolean
+>       : ^^^^^^^
 
   };
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 class Test extends Array1 {
 >Test : Test
+>     : ^^^^
 >Array1 : Array1<any>
+>       : ^^^^^^^^^^^
 
   [key: symbol]: string
 >key : symbol
+>    : ^^^^^^
 }

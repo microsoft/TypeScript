@@ -5,4 +5,4 @@
 //// const [|hello|] = function() {};
 //// he/*function_call*/llo();
 
-verify.allRangesAppearInImplementationList("function_call");
+verify.baselineGoToImplementation("function_call");

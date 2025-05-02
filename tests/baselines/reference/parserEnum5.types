@@ -1,20 +1,35 @@
-=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum5.ts] ////
+
+=== parserEnum5.ts ===
 enum E2 { a, }
 >E2 : E2
+>   : ^^
 >a : E2.a
+>  : ^^^^
 
 enum E3 { a: 1, }
 >E3 : E3
+>   : ^^
 >a : E3.a
+>  : ^^^^
 >1 : (typeof E3)["1"]
+>  : ^^^^^^^^^^^^^^^^
 
 enum E1 { a, b: 1, c, d: 2 = 3 }
 >E1 : E1
+>   : ^^
 >a : E1.a
+>  : ^^^^
 >b : E1.b
+>  : ^^^^
 >1 : (typeof E1)["1"]
+>  : ^^^^^^^^^^^^^^^^
 >c : E1.c
+>  : ^^^^
 >d : E1.d
+>  : ^^^^
 >2 : E1.c
+>  : ^^^^
 >3 : 3
+>  : ^
 

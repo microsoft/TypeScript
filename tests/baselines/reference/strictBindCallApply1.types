@@ -1,589 +1,1033 @@
-=== tests/cases/conformance/functions/strictBindCallApply1.ts ===
+//// [tests/cases/conformance/functions/strictBindCallApply1.ts] ////
+
+=== strictBindCallApply1.ts ===
 declare function foo(a: number, b: string): string;
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 declare function overloaded(s: string): number;
 >overloaded : { (s: string): number; (n: number): string; }
+>           : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
+>  : ^^^^^^
 
 declare function overloaded(n: number): string;
 >overloaded : { (s: string): number; (n: number): string; }
+>           : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
 declare function generic<T>(x: T): T;
 >generic : <T>(x: T) => T
+>        : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 let f00 = foo.bind(undefined);
 >f00 : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >foo.bind(undefined) : (a: number, b: string) => string
->foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                    : ^ ^^      ^^ ^^      ^^^^^      
+>foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>         : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >foo : (a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let f01 = foo.bind(undefined, 10);
 >f01 : (b: string) => string
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >foo.bind(undefined, 10) : (b: string) => string
->foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^
+>foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>         : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >foo : (a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 
 let f02 = foo.bind(undefined, 10, "hello");
 >f02 : () => string
+>    : ^^^^^^^^^^^^
 >foo.bind(undefined, 10, "hello") : () => string
->foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                                 : ^^^^^^^^^^^^
+>foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>         : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >foo : (a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let f03 = foo.bind(undefined, 10, 20);  // Error
 >f03 : () => string
+>    : ^^^^^^^^^^^^
 >foo.bind(undefined, 10, 20) : () => string
->foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                            : ^^^^^^^^^^^^
+>foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>         : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >foo : (a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 let f04 = overloaded.bind(undefined);  // typeof overloaded
 >f04 : { (s: string): number; (n: number): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >overloaded.bind(undefined) : { (s: string): number; (n: number): string; }
->overloaded.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                           : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
+>overloaded.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>                : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >overloaded : { (s: string): number; (n: number): string; }
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>           : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let f05 = generic.bind(undefined);  // typeof generic
 >f05 : <T>(x: T) => T
+>    : ^ ^^ ^^ ^^^^^ 
 >generic.bind(undefined) : <T>(x: T) => T
->generic.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                        : ^ ^^ ^^ ^^^^^ 
+>generic.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>             : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >generic : <T>(x: T) => T
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>        : ^ ^^ ^^ ^^^^^ 
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let c00 = foo.call(undefined, 10, "hello");
 >c00 : string
+>    : ^^^^^^
 >foo.call(undefined, 10, "hello") : string
+>                                 : ^^^^^^
 >foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>         : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let c01 = foo.call(undefined, 10);  // Error
 >c01 : string
+>    : ^^^^^^
 >foo.call(undefined, 10) : string
+>                        : ^^^^^^
 >foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>         : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 
 let c02 = foo.call(undefined, 10, 20);  // Error
 >c02 : string
+>    : ^^^^^^
 >foo.call(undefined, 10, 20) : string
+>                            : ^^^^^^
 >foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>         : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 let c03 = foo.call(undefined, 10, "hello", 30);  // Error
 >c03 : string
+>    : ^^^^^^
 >foo.call(undefined, 10, "hello", 30) : string
+>                                     : ^^^^^^
 >foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>         : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >30 : 30
+>   : ^^
 
 let a00 = foo.apply(undefined, [10, "hello"]);
 >a00 : string
+>    : ^^^^^^
 >foo.apply(undefined, [10, "hello"]) : string
+>                                    : ^^^^^^
 >foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >[10, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let a01 = foo.apply(undefined, [10]);  // Error
 >a01 : string
+>    : ^^^^^^
 >foo.apply(undefined, [10]) : string
+>                           : ^^^^^^
 >foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >[10] : [number]
+>     : ^^^^^^^^
 >10 : 10
+>   : ^^
 
 let a02 = foo.apply(undefined, [10, 20]);  // Error
 >a02 : string
+>    : ^^^^^^
 >foo.apply(undefined, [10, 20]) : string
+>                               : ^^^^^^
 >foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >[10, 20] : [number, number]
+>         : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 let a03 = foo.apply(undefined, [10, "hello", 30]);  // Error
 >a03 : string
+>    : ^^^^^^
 >foo.apply(undefined, [10, "hello", 30]) : string
+>                                        : ^^^^^^
 >foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >[10, "hello", 30] : [number, string, number]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >30 : 30
+>   : ^^
 
 class C {
 >C : C
+>  : ^
 
     constructor(a: number, b: string) {}
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     foo(this: this, a: number, b: string): string { return "" }
 >foo : (this: this, a: number, b: string) => string
+>    : ^    ^^    ^^ ^^      ^^ ^^      ^^^^^      
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
     overloaded(s: string): number;
 >overloaded : { (s: string): number; (n: number): string; }
+>           : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
+>  : ^^^^^^
 
     overloaded(n: number): string;
 >overloaded : { (s: string): number; (n: number): string; }
+>           : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
     overloaded(x: any): any { return <any>undefined }
 >overloaded : { (s: string): number; (n: number): string; }
+>           : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : any
+>  : ^^^
 ><any>undefined : any
+>               : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     generic<T>(x: T): T { return x }
 >generic : <T>(x: T) => T
+>        : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >x : T
+>  : ^
 }
 
 declare let c: C;
 >c : C
+>  : ^
 
 declare let obj: {};
 >obj : {}
+>    : ^^
 
 let f10 = c.foo.bind(c);
 >f10 : (a: number, b: string) => string
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind(c) : (a: number, b: string) => string
->c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>           : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
+>  : ^
 
 let f11 = c.foo.bind(c, 10);
 >f11 : (b: string) => string
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind(c, 10) : (b: string) => string
->c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^
+>c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>           : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 
 let f12 = c.foo.bind(c, 10, "hello");
 >f12 : () => string
+>    : ^^^^^^^^^^^^
 >c.foo.bind(c, 10, "hello") : () => string
->c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                           : ^^^^^^^^^^^^
+>c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>           : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let f13 = c.foo.bind(c, 10, 20);  // Error
 >f13 : () => string
+>    : ^^^^^^^^^^^^
 >c.foo.bind(c, 10, 20) : () => string
->c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                      : ^^^^^^^^^^^^
+>c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>           : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 let f14 = c.foo.bind(undefined);  // Error
 >f14 : (a: number, b: string) => string
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind(undefined) : (a: number, b: string) => string
->c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>           : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let f15 = c.overloaded.bind(c);  // typeof C.prototype.overloaded
 >f15 : { (s: string): number; (n: number): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >c.overloaded.bind(c) : { (s: string): number; (n: number): string; }
->c.overloaded.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
+>c.overloaded.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>                  : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.overloaded : { (s: string): number; (n: number): string; }
+>             : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >c : C
+>  : ^
 >overloaded : { (s: string): number; (n: number): string; }
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>           : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
+>  : ^
 
 let f16 = c.generic.bind(c);  // typeof C.prototype.generic
 >f16 : <T>(x: T) => T
+>    : ^ ^^ ^^ ^^^^^ 
 >c.generic.bind(c) : <T>(x: T) => T
->c.generic.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                  : ^ ^^ ^^ ^^^^^ 
+>c.generic.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>               : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.generic : <T>(x: T) => T
+>          : ^ ^^ ^^ ^^^^^ 
 >c : C
+>  : ^
 >generic : <T>(x: T) => T
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>        : ^ ^^ ^^ ^^^^^ 
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
+>  : ^
 
 let c10 = c.foo.call(c, 10, "hello");
 >c10 : string
+>    : ^^^^^^
 >c.foo.call(c, 10, "hello") : string
+>                           : ^^^^^^
 >c.foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>           : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let c11 = c.foo.call(c, 10);  // Error
 >c11 : string
+>    : ^^^^^^
 >c.foo.call(c, 10) : string
+>                  : ^^^^^^
 >c.foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>           : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 
 let c12 = c.foo.call(c, 10, 20);  // Error
 >c12 : string
+>    : ^^^^^^
 >c.foo.call(c, 10, 20) : string
+>                      : ^^^^^^
 >c.foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>           : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 let c13 = c.foo.call(c, 10, "hello", 30);  // Error
 >c13 : string
+>    : ^^^^^^
 >c.foo.call(c, 10, "hello", 30) : string
+>                               : ^^^^^^
 >c.foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>           : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >30 : 30
+>   : ^^
 
 let c14 = c.foo.call(undefined, 10, "hello");  // Error
 >c14 : string
+>    : ^^^^^^
 >c.foo.call(undefined, 10, "hello") : string
+>                                   : ^^^^^^
 >c.foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>           : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let a10 = c.foo.apply(c, [10, "hello"]);
 >a10 : string
+>    : ^^^^^^
 >c.foo.apply(c, [10, "hello"]) : string
+>                              : ^^^^^^
 >c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c : C
+>  : ^
 >[10, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let a11 = c.foo.apply(c, [10]);  // Error
 >a11 : string
+>    : ^^^^^^
 >c.foo.apply(c, [10]) : string
+>                     : ^^^^^^
 >c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c : C
+>  : ^
 >[10] : [number]
+>     : ^^^^^^^^
 >10 : 10
+>   : ^^
 
 let a12 = c.foo.apply(c, [10, 20]);  // Error
 >a12 : string
+>    : ^^^^^^
 >c.foo.apply(c, [10, 20]) : string
+>                         : ^^^^^^
 >c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c : C
+>  : ^
 >[10, 20] : [number, number]
+>         : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 let a13 = c.foo.apply(c, [10, "hello", 30]);  // Error
 >a13 : string
+>    : ^^^^^^
 >c.foo.apply(c, [10, "hello", 30]) : string
+>                                  : ^^^^^^
 >c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c : C
+>  : ^
 >[10, "hello", 30] : [number, string, number]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >30 : 30
+>   : ^^
 
 let a14 = c.foo.apply(undefined, [10, "hello"]);  // Error
 >a14 : string
+>    : ^^^^^^
 >c.foo.apply(undefined, [10, "hello"]) : string
+>                                      : ^^^^^^
 >c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
+>      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
+>  : ^
 >foo : (this: C, a: number, b: string) => string
+>    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >[10, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let f20 = C.bind(undefined);
 >f20 : typeof C
+>    : ^^^^^^^^
 >C.bind(undefined) : typeof C
->C.bind : { <T>(this: T, thisArg: any): T; <A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R; <A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R; <A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R; <A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R; <AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R; }
+>                  : ^^^^^^^^
+>C.bind : { <T>(this: T, thisArg: any): T; <A extends any[], B extends any[], R>(this: new (...args: [...A, ...B]) => R, thisArg: any, ...args: A): new (...args: B) => R; }
+>       : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >C : typeof C
->bind : { <T>(this: T, thisArg: any): T; <A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R; <A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R; <A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R; <A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R; <AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R; }
+>  : ^^^^^^^^
+>bind : { <T>(this: T, thisArg: any): T; <A extends any[], B extends any[], R>(this: new (...args: [...A, ...B]) => R, thisArg: any, ...args: A): new (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let f21 = C.bind(undefined, 10);
 >f21 : new (b: string) => C
+>    : ^^^^^^^^^^^^^^^^^^^^
 >C.bind(undefined, 10) : new (b: string) => C
->C.bind : { <T>(this: T, thisArg: any): T; <A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R; <A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R; <A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R; <A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R; <AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R; }
+>                      : ^^^^^^^^^^^^^^^^^^^^
+>C.bind : { <T>(this: T, thisArg: any): T; <A extends any[], B extends any[], R>(this: new (...args: [...A, ...B]) => R, thisArg: any, ...args: A): new (...args: B) => R; }
+>       : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >C : typeof C
->bind : { <T>(this: T, thisArg: any): T; <A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R; <A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R; <A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R; <A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R; <AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R; }
+>  : ^^^^^^^^
+>bind : { <T>(this: T, thisArg: any): T; <A extends any[], B extends any[], R>(this: new (...args: [...A, ...B]) => R, thisArg: any, ...args: A): new (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 
 let f22 = C.bind(undefined, 10, "hello");
 >f22 : new () => C
+>    : ^^^^^^^^^^^
 >C.bind(undefined, 10, "hello") : new () => C
->C.bind : { <T>(this: T, thisArg: any): T; <A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R; <A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R; <A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R; <A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R; <AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R; }
+>                               : ^^^^^^^^^^^
+>C.bind : { <T>(this: T, thisArg: any): T; <A extends any[], B extends any[], R>(this: new (...args: [...A, ...B]) => R, thisArg: any, ...args: A): new (...args: B) => R; }
+>       : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >C : typeof C
->bind : { <T>(this: T, thisArg: any): T; <A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R; <A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R; <A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R; <A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R; <AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R; }
+>  : ^^^^^^^^
+>bind : { <T>(this: T, thisArg: any): T; <A extends any[], B extends any[], R>(this: new (...args: [...A, ...B]) => R, thisArg: any, ...args: A): new (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let f23 = C.bind(undefined, 10, 20);  // Error
 >f23 : new () => C
+>    : ^^^^^^^^^^^
 >C.bind(undefined, 10, 20) : new () => C
->C.bind : { <T>(this: T, thisArg: any): T; <A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R; <A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R; <A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R; <A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R; <AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R; }
+>                          : ^^^^^^^^^^^
+>C.bind : { <T>(this: T, thisArg: any): T; <A extends any[], B extends any[], R>(this: new (...args: [...A, ...B]) => R, thisArg: any, ...args: A): new (...args: B) => R; }
+>       : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >C : typeof C
->bind : { <T>(this: T, thisArg: any): T; <A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R; <A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R; <A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R; <A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R; <AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R; }
+>  : ^^^^^^^^
+>bind : { <T>(this: T, thisArg: any): T; <A extends any[], B extends any[], R>(this: new (...args: [...A, ...B]) => R, thisArg: any, ...args: A): new (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 C.call(c, 10, "hello");
 >C.call(c, 10, "hello") : void
+>                       : ^^^^
 >C.call : <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A) => void
+>       : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >C : typeof C
+>  : ^^^^^^^^
 >call : <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A) => void
+>     : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 C.call(c, 10);  // Error
 >C.call(c, 10) : void
+>              : ^^^^
 >C.call : <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A) => void
+>       : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >C : typeof C
+>  : ^^^^^^^^
 >call : <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A) => void
+>     : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 
 C.call(c, 10, 20);  // Error
 >C.call(c, 10, 20) : void
+>                  : ^^^^
 >C.call : <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A) => void
+>       : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >C : typeof C
+>  : ^^^^^^^^
 >call : <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A) => void
+>     : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 C.call(c, 10, "hello", 30);  // Error
 >C.call(c, 10, "hello", 30) : void
+>                           : ^^^^
 >C.call : <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A) => void
+>       : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >C : typeof C
+>  : ^^^^^^^^
 >call : <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A) => void
+>     : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >c : C
+>  : ^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >30 : 30
+>   : ^^
 
 C.apply(c, [10, "hello"]);
 >C.apply(c, [10, "hello"]) : void
+>                          : ^^^^
 >C.apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>        : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>      : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >c : C
+>  : ^
 >[10, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 C.apply(c, [10]);  // Error
 >C.apply(c, [10]) : void
+>                 : ^^^^
 >C.apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>        : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>      : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >c : C
+>  : ^
 >[10] : [number]
+>     : ^^^^^^^^
 >10 : 10
+>   : ^^
 
 C.apply(c, [10, 20]);  // Error
 >C.apply(c, [10, 20]) : void
+>                     : ^^^^
 >C.apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>        : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>      : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >c : C
+>  : ^
 >[10, 20] : [number, number]
+>         : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 C.apply(c, [10, "hello", 30]);  // Error
 >C.apply(c, [10, "hello", 30]) : void
+>                              : ^^^^
 >C.apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>        : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>      : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >c : C
+>  : ^
 >[10, "hello", 30] : [number, string, number]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >30 : 30
+>   : ^^
 
 function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 >bar : <T extends unknown[]>(callback: (this: 1, ...args: T) => void) => void
+>    : ^ ^^^^^^^^^         ^^        ^^                             ^^^^^^^^^
 >callback : (this: 1, ...args: T) => void
+>         : ^    ^^ ^^^^^    ^^ ^^^^^    
 >this : 1
+>     : ^
 >args : T
+>     : ^
 
     callback.bind(1);
 >callback.bind(1) : (...args: T) => void
->callback.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                 : ^^^^    ^^^^^^^^^^^^
+>callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T) => void
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>         : ^    ^^ ^^^^^    ^^ ^^^^^    
+>bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >1 : 1
+>  : ^
 
     callback.bind(2); // Error
 >callback.bind(2) : (...args: T) => void
->callback.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                 : ^^^^    ^^^^^^^^^^^^
+>callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T) => void
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>         : ^    ^^ ^^^^^    ^^ ^^^^^    
+>bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >2 : 2
+>  : ^
 }
 
 function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) {
->baz : <T extends 2 | 1>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) => void
+>baz : <T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) => void
+>    : ^ ^^^^^^^^^     ^^        ^^                                                                        ^^^^^^^^^
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
+>         : ^    ^^ ^^^^^    ^^                                            ^^^^^    
 >this : 1
+>     : ^
 >args : T extends 1 ? [unknown] : [unknown, unknown]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     callback.bind(1);
 >callback.bind(1) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->callback.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>         : ^    ^^ ^^^^^    ^^                                            ^^^^^    
+>bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >1 : 1
+>  : ^
 
     callback.bind(2); // Error
 >callback.bind(2) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->callback.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>         : ^    ^^ ^^^^^    ^^                                            ^^^^^    
+>bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >2 : 2
+>  : ^
 }
 
 // Repro from #32964
 class Foo<T extends unknown[]> {
 >Foo : Foo<T>
+>    : ^^^^^^
 
     constructor() {
         this.fn.bind(this);
 >this.fn.bind(this) : (...args: T) => void
->this.fn.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                   : ^^^^    ^^ ^^^^^    
+>this.fn.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>             : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >this.fn : (...args: T) => void
+>        : ^^^^    ^^ ^^^^^    
 >this : this
+>     : ^^^^
 >fn : (...args: T) => void
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>   : ^^^^    ^^ ^^^^^    
+>bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >this : this
+>     : ^^^^
     }
 
     fn(...args: T): void {}
 >fn : (...args: T) => void
+>   : ^^^^    ^^ ^^^^^    
 >args : T
+>     : ^
 }
 
 class Bar<T extends 1 | 2> {
 >Bar : Bar<T>
+>    : ^^^^^^
 
     constructor() {
         this.fn.bind(this);
 >this.fn.bind(this) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->this.fn.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>                   : ^^^^    ^^                                            ^^^^^^^^^
+>this.fn.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>             : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >this.fn : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
+>        : ^^^^    ^^                                            ^^^^^^^^^
 >this : this
+>     : ^^^^
 >fn : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R; <T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R; <T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R; <T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R; <T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R; }
+>   : ^^^^    ^^                                            ^^^^^^^^^
+>bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >this : this
+>     : ^^^^
     }
 
     fn(...args: T extends 1 ? [unknown] : [unknown, unknown]) {}
 >fn : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
+>   : ^^^^    ^^                                            ^^^^^^^^^
 >args : T extends 1 ? [unknown] : [unknown, unknown]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

@@ -1,8 +1,10 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.ts] ////
+
+=== index.js ===
 const _item = require("./namespacer");
 >_item : Symbol(_item, Decl(index.js, 0, 5))
 >require : Symbol(require)
->"./namespacer" : Symbol("tests/cases/compiler/namespacer", Decl(namespacer.js, 0, 0))
+>"./namespacer" : Symbol("namespacer", Decl(namespacer.js, 0, 0))
 
 module.exports = 12;
 >module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
@@ -17,7 +19,7 @@ Object.defineProperty(module, "exports", { value: "oh no" });
 >"exports" : Symbol(module.exports, Decl(index.js, 1, 20))
 >value : Symbol(value, Decl(index.js, 2, 42))
 
-=== tests/cases/compiler/namespacey.js ===
+=== namespacey.js ===
 const A = {}
 >A : Symbol(A, Decl(namespacey.js, 0, 5), Decl(namespacey.js, 0, 12))
 
@@ -33,7 +35,7 @@ module.exports = A;
 >exports : Symbol(export=, Decl(namespacey.js, 1, 18))
 >A : Symbol(A, Decl(namespacey.js, 0, 5), Decl(namespacey.js, 0, 12))
 
-=== tests/cases/compiler/namespacer.js ===
+=== namespacer.js ===
 const B = {}
 >B : Symbol(B, Decl(namespacer.js, 0, 5), Decl(namespacer.js, 0, 12), Decl(namespacer.js, 2, 22))
 
@@ -42,7 +44,7 @@ B.NS = require("./namespacey");
 >B : Symbol(B, Decl(namespacer.js, 0, 5), Decl(namespacer.js, 0, 12), Decl(namespacer.js, 2, 22))
 >NS : Symbol(B.NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
 >require : Symbol(require)
->"./namespacey" : Symbol("tests/cases/compiler/namespacey", Decl(namespacey.js, 0, 0))
+>"./namespacey" : Symbol("namespacey", Decl(namespacey.js, 0, 0))
 
 Object.defineProperty(B, "NS", { value: "why though", writable: true });
 >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))

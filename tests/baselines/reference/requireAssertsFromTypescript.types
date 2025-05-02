@@ -1,47 +1,70 @@
-=== tests/cases/conformance/salsa/38379.js ===
+//// [tests/cases/conformance/salsa/requireAssertsFromTypescript.ts] ////
+
+=== 38379.js ===
 const { art } = require('./ex')
 >art : (value: any, message?: string | Error) => asserts value
->require('./ex') : typeof import("tests/cases/conformance/salsa/ex")
+>    : ^     ^^   ^^       ^^^              ^^^^^             
+>require('./ex') : typeof import("ex")
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./ex' : "./ex"
+>       : ^^^^^^
 
 const artoo = require('./ex2')
 >artoo : (value: any, message?: string | Error) => asserts value
+>      : ^     ^^   ^^       ^^^              ^^^^^             
 >require('./ex2') : (value: any, message?: string | Error) => asserts value
+>                 : ^     ^^   ^^       ^^^              ^^^^^             
 >require : any
 >'./ex2' : "./ex2"
+>        : ^^^^^^^
 
 let x = 1
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 art(x)
 >art(x) : void
+>       : ^^^^
 >art : (value: any, message?: string | Error) => asserts value
+>    : ^     ^^   ^^       ^^^              ^^^^^             
 >x : number
+>  : ^^^^^^
 
 let y = 1
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 artoo(y)
 >artoo(y) : void
+>         : ^^^^
 >artoo : (value: any, message?: string | Error) => asserts value
+>      : ^     ^^   ^^       ^^^              ^^^^^             
 >y : number
+>  : ^^^^^^
 
-=== tests/cases/conformance/salsa/ex.d.ts ===
+=== ex.d.ts ===
 // based on assert in @types/node
 export function art(value: any, message?: string | Error): asserts value;
 >art : (value: any, message?: string | Error) => asserts value
+>    : ^     ^^   ^^       ^^^              ^^^^^             
 >value : any
 >message : string | Error
+>        : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/salsa/ex2.d.ts ===
+=== ex2.d.ts ===
 declare function art(value: any, message?: string | Error): asserts value;
 >art : (value: any, message?: string | Error) => asserts value
+>    : ^     ^^   ^^       ^^^              ^^^^^             
 >value : any
 >message : string | Error
+>        : ^^^^^^^^^^^^^^
 
 export = art;
 >art : (value: any, message?: string | Error) => asserts value
+>    : ^     ^^   ^^       ^^^              ^^^^^             
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts ===
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts] ////
+
+=== doYouNeedToChangeYourTargetLibraryES2015.ts ===
 // es2015
 const noOp = () => {};
 >noOp : Symbol(noOp, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 1, 5))

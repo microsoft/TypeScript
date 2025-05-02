@@ -10,11 +10,11 @@
 ////}
 ////
 ////abstract class B extends A {
-////    [|abstract|] /*a*/
+////    abstract /*a*/
 ////}
 ////
 ////abstract class B1 extends A {
-////    [|abstract override|] /*b*/
+////    abstract override /*b*/
 ////}
 
 verify.completions({
@@ -28,9 +28,11 @@ verify.completions({
     includes: [
         {
             name: "P",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[0],
-            insertText: "public abstract get P(): string;",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "abstract get P(): string;",
+            filterText: "P",
+            hasAction: true,
+            source: completion.CompletionSource.ClassMemberSnippet,
         },
     ],
 });
@@ -46,9 +48,36 @@ verify.completions({
     includes: [
         {
             name: "P",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[1],
-            insertText: "public abstract override get P(): string;",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "abstract override get P(): string;",
+            filterText: "P",
+            hasAction: true,
+            source: completion.CompletionSource.ClassMemberSnippet,
         },
     ],
+});
+
+verify.applyCodeActionFromCompletion("b", {
+    preferences: {
+      includeCompletionsWithInsertText: true,
+      includeCompletionsWithSnippetText: false,
+      includeCompletionsWithClassMemberSnippets: true,
+    },
+    name: "P",
+    source: completion.CompletionSource.ClassMemberSnippet,
+    description: "Update modifiers of 'P'",
+    newFileContent:
+`abstract class A {
+    public get P(): string {
+        return "";
+    }
+}
+
+abstract class B extends A {
+    abstract 
+}
+
+abstract class B1 extends A {
+    
+}`
 });

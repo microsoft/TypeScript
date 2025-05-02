@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias02.ts] ////
+
 //// [asiPreventsParsingAsTypeAlias02.ts]
 var type;
 var string;

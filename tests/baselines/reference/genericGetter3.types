@@ -1,31 +1,47 @@
-=== tests/cases/compiler/genericGetter3.ts ===
+//// [tests/cases/compiler/genericGetter3.ts] ////
+
+=== genericGetter3.ts ===
 class A<T> { }
 >A : A<T>
+>  : ^^^^
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     data: A<T>;
 >data : A<T>
+>     : ^^^^
 
     get x(): A<T> {
 >x : A<T>
+>  : ^^^^
 
         return this.data;
 >this.data : A<T>
+>          : ^^^^
 >this : this
+>     : ^^^^
 >data : A<T>
+>     : ^^^^
     }
 }
 
 var c = new C<number>();
 >c : C<number>
+>  : ^^^^^^^^^
 >new C<number>() : C<number>
+>                : ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r: string = c.x;
 >r : string
+>  : ^^^^^^
 >c.x : A<number>
+>    : ^^^^^^^^^
 >c : C<number>
+>  : ^^^^^^^^^
 >x : A<number>
+>  : ^^^^^^^^^
 

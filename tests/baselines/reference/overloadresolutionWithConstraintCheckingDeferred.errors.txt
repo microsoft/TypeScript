@@ -1,4 +1,4 @@
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,22): error TS2769: No overload matches this call.
+overloadresolutionWithConstraintCheckingDeferred.ts(14,22): error TS2769: No overload matches this call.
   Overload 1 of 3, '(arg: (x: D) => number): string', gave the following error.
     Type 'G<A>' is not assignable to type 'number'.
   Overload 2 of 3, '(arg: (x: C) => any): string', gave the following error.
@@ -9,36 +9,38 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,22):
     Argument of type '(x: D) => G<A>' is not assignable to parameter of type '(x: B) => any'.
       Types of parameters 'x' and 'x' are incompatible.
         Property 'q' is missing in type 'B' but required in type 'D'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
+overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
   Property 'x' is missing in type 'D' but required in type 'A'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,23): error TS2769: No overload matches this call.
+overloadresolutionWithConstraintCheckingDeferred.ts(16,23): error TS2769: No overload matches this call.
   Overload 1 of 3, '(arg: (x: D) => number): string', gave the following error.
     Type 'G<D>' is not assignable to type 'number'.
   Overload 2 of 3, '(arg: (x: C) => any): string', gave the following error.
     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: C) => any'.
       Types of parameters 'x' and 'x' are incompatible.
-        Type 'C' is not assignable to type 'D'.
+        Property 'q' is missing in type 'C' but required in type 'D'.
   Overload 3 of 3, '(arg: (x: B) => any): number', gave the following error.
     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
       Types of parameters 'x' and 'x' are incompatible.
-        Type 'B' is not assignable to type 'D'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2344: Type 'D' does not satisfy the constraint 'A'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2769: No overload matches this call.
+        Property 'q' is missing in type 'B' but required in type 'D'.
+overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2344: Type 'D' does not satisfy the constraint 'A'.
+  Property 'x' is missing in type 'D' but required in type 'A'.
+overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2769: No overload matches this call.
   Overload 1 of 3, '(arg: (x: D) => number): string', gave the following error.
     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: D) => number'.
       Type 'G<D>' is not assignable to type 'number'.
   Overload 2 of 3, '(arg: (x: C) => any): string', gave the following error.
     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: C) => any'.
       Types of parameters 'x' and 'x' are incompatible.
-        Type 'C' is not assignable to type 'D'.
+        Property 'q' is missing in type 'C' but required in type 'D'.
   Overload 3 of 3, '(arg: (x: B) => any): number', gave the following error.
     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
       Types of parameters 'x' and 'x' are incompatible.
-        Type 'B' is not assignable to type 'D'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type 'D' does not satisfy the constraint 'A'.
+        Property 'q' is missing in type 'B' but required in type 'D'.
+overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type 'D' does not satisfy the constraint 'A'.
+  Property 'x' is missing in type 'D' but required in type 'A'.
 
 
-==== tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts (6 errors) ====
+==== overloadresolutionWithConstraintCheckingDeferred.ts (6 errors) ====
     interface A { x }
     interface B { x; y }
     interface C { z }
@@ -53,7 +55,7 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14):
     declare function foo(arg: (x: B) => any): number;
     
     var result: number = foo(x => new G(x)); // x has type D, new G(x) fails, so first overload is picked.
-                         ~~~~~~~~~~~~~~~~~~
+                         ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(arg: (x: D) => number): string', gave the following error.
 !!! error TS2769:     Type 'G<A>' is not assignable to type 'number'.
@@ -65,30 +67,34 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14):
 !!! error TS2769:     Argument of type '(x: D) => G<A>' is not assignable to parameter of type '(x: B) => any'.
 !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
-!!! related TS6502 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:10:27: The expected type comes from the return type of this signature.
-!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
-!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS6502 overloadresolutionWithConstraintCheckingDeferred.ts:10:27: The expected type comes from the return type of this signature.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
                                         ~
 !!! error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
 !!! error TS2345:   Property 'x' is missing in type 'D' but required in type 'A'.
-!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
     
     var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(arg: (x: D) => number): string', gave the following error.
 !!! error TS2769:     Type 'G<D>' is not assignable to type 'number'.
 !!! error TS2769:   Overload 2 of 3, '(arg: (x: C) => any): string', gave the following error.
 !!! error TS2769:     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: C) => any'.
 !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2769:         Type 'C' is not assignable to type 'D'.
+!!! error TS2769:         Property 'q' is missing in type 'C' but required in type 'D'.
 !!! error TS2769:   Overload 3 of 3, '(arg: (x: B) => any): number', gave the following error.
 !!! error TS2769:     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
 !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2769:         Type 'B' is not assignable to type 'D'.
-!!! related TS6502 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:10:27: The expected type comes from the return type of this signature.
+!!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
+!!! related TS6502 overloadresolutionWithConstraintCheckingDeferred.ts:10:27: The expected type comes from the return type of this signature.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
                                          ~~~~~~~~
 !!! error TS2344: Type 'D' does not satisfy the constraint 'A'.
+!!! error TS2344:   Property 'x' is missing in type 'D' but required in type 'A'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
     
     var result3: string = foo(x => { // x has type D
                               ~~~~~~~~~~~~~~~~~~~~~~
@@ -99,14 +105,18 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14):
 !!! error TS2769:   Overload 2 of 3, '(arg: (x: C) => any): string', gave the following error.
 !!! error TS2769:     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: C) => any'.
 !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2769:         Type 'C' is not assignable to type 'D'.
+!!! error TS2769:         Property 'q' is missing in type 'C' but required in type 'D'.
 !!! error TS2769:   Overload 3 of 3, '(arg: (x: B) => any): number', gave the following error.
 !!! error TS2769:     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
 !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2769:         Type 'B' is not assignable to type 'D'.
+!!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
         var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
                  ~~~~~~~~
 !!! error TS2344: Type 'D' does not satisfy the constraint 'A'.
+!!! error TS2344:   Property 'x' is missing in type 'D' but required in type 'A'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
         return y;
     });
     

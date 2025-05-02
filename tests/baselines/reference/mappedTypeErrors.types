@@ -1,250 +1,381 @@
-=== tests/cases/conformance/types/mapped/mappedTypeErrors.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeErrors.ts] ////
+
+=== mappedTypeErrors.ts ===
 interface Shape {
     name: string;
 >name : string
+>     : ^^^^^^
 
     width: number;
 >width : number
+>      : ^^^^^^
 
     height: number;
 >height : number
+>       : ^^^^^^
 
     visible: boolean;
 >visible : boolean
+>        : ^^^^^^^
 }
 
 interface Named {
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 interface Point {
     x: number;
 >x : number
+>  : ^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 }
 
 // Constraint checking
 
 type T00 = { [P in P]: string };  // Error
->T00 : { [x: string]: string; }
+>T00 : T00
+>    : ^^^
 
 type T01 = { [P in number]: string };  // Error
->T01 : { [x: number]: string; }
+>T01 : T01
+>    : ^^^
 
 type T02 = { [P in Date]: number };  // Error
->T02 : {}
+>T02 : T02
+>    : ^^^
 
 type T03 = Record<Date, number>;  // Error
->T03 : {}
+>T03 : T03
+>    : ^^^
 
 type T10 = Pick<Shape, "name">;
->T10 : { name: string; }
+>T10 : T10
+>    : ^^^
 
 type T11 = Pick<Shape, "foo">;  // Error
->T11 : { foo: unknown; }
+>T11 : T11
+>    : ^^^
 
 type T12 = Pick<Shape, "name" | "foo">;  // Error
->T12 : { name: string; foo: unknown; }
+>T12 : T12
+>    : ^^^
 
 type T13 = Pick<Shape, keyof Named>;
->T13 : { name: string; }
+>T13 : T13
+>    : ^^^
 
 type T14 = Pick<Shape, keyof Point>;  // Error
->T14 : { x: unknown; y: unknown; }
+>T14 : T14
+>    : ^^^
 
 type T15 = Pick<Shape, never>;
->T15 : {}
+>T15 : T15
+>    : ^^^
 
 type T16 = Pick<Shape, undefined>;  // Error
->T16 : {}
+>T16 : T16
+>    : ^^^
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     let y: Pick<Shape, T>;  // Error
 >y : Pick<Shape, T>
+>  : ^^^^^^^^^^^^^^
 }
 
 function f2<T extends string | number>(x: T) {
 >f2 : <T extends string | number>(x: T) => void
+>   : ^ ^^^^^^^^^               ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     let y: Pick<Shape, T>;  // Error
 >y : Pick<Shape, T>
+>  : ^^^^^^^^^^^^^^
 }
 
 function f3<T extends keyof Shape>(x: T) {
 >f3 : <T extends keyof Shape>(x: T) => void
+>   : ^ ^^^^^^^^^           ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     let y: Pick<Shape, T>;
 >y : Pick<Shape, T>
+>  : ^^^^^^^^^^^^^^
 }
 
 function f4<T extends keyof Named>(x: T) {
->f4 : <T extends "name">(x: T) => void
+>f4 : <T extends keyof Named>(x: T) => void
+>   : ^ ^^^^^^^^^           ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     let y: Pick<Shape, T>;
 >y : Pick<Shape, T>
+>  : ^^^^^^^^^^^^^^
 }
 
 // Type identity checking
 
 function f10<T>() {
 >f10 : <T>() => void
+>    : ^ ^^^^^^^^^^^
 
     type K = keyof T;
 >K : keyof T
+>  : ^^^^^^^
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { [Q in keyof T]: T[Q] };
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { [R in K]: T[R] };
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f11<T>() {
 >f11 : <T>() => void
+>    : ^ ^^^^^^^^^^^
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { [P in keyof T]?: T[P] };  // Error
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { readonly [P in keyof T]: T[P] };  // Error
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { readonly [P in keyof T]?: T[P] };  // Error
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f12<T>() {
 >f12 : <T>() => void
+>    : ^ ^^^^^^^^^^^
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { [P in keyof T]: T[P][] };  // Error
 >x : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Check that inferences to mapped types are secondary
 
 declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
+>               : ^ ^^       ^^ ^^         ^^           ^^^^^ 
 >primary : T
+>        : ^
 >secondary : Readonly<T>
+>          : ^^^^^^^^^^^
 
 declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
+>              : ^ ^^       ^^ ^^         ^^          ^^^^^ 
 >primary : T
+>        : ^
 >secondary : Partial<T>
+>          : ^^^^^^^^^^
 
 function f20() {
 >f20 : () => void
+>    : ^^^^^^^^^^
 
     let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
 >x1 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly({ x: 0, y: 0 }, { x: 1 }) : { x: number; y: number; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
+>               : ^ ^^       ^^ ^^         ^^           ^^^^^ 
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
 >x2 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 }) : { x: number; y: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
+>               : ^ ^^       ^^ ^^         ^^           ^^^^^ 
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ x: 1, y: 1 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
 >x3 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }) : { x: number; y: number; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
+>               : ^ ^^       ^^ ^^         ^^           ^^^^^ 
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ x: 1, y: 1, z: 1 } : { x: number; y: number; z: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 function f21() {
 >f21 : () => void
+>    : ^^^^^^^^^^
 
     let x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
 >x1 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial({ x: 0, y: 0 }, { x: 1 }) : { x: number; y: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
+>              : ^ ^^       ^^ ^^         ^^          ^^^^^ 
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
 >x2 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 }) : { x: number; y: number; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
+>              : ^ ^^       ^^ ^^         ^^          ^^^^^ 
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ x: 1, y: 1 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
 >x3 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }) : { x: number; y: number; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
+>              : ^ ^^       ^^ ^^         ^^          ^^^^^ 
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ x: 1, y: 1, z: 1 } : { x: number; y: number; z: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // Verify use of Pick<T, K> for setState functions (#12793)
@@ -252,252 +383,416 @@ function f21() {
 interface Foo {
     a: string;
 >a : string
+>  : ^^^^^^
 
     b?: number;
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >obj : T
+>    : ^
 >props : Pick<T, K>
+>      : ^^^^^^^^^^
 
     for (let k in props) {
 >k : Extract<K, string>
+>  : ^^^^^^^^^^^^^^^^^^
 >props : Pick<T, K>
+>      : ^^^^^^^^^^
 
         obj[k] = props[k];
 >obj[k] = props[k] : Pick<T, K>[Extract<K, string>]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[k] : T[Extract<K, string>]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >obj : T
+>    : ^
 >k : Extract<K, string>
+>  : ^^^^^^^^^^^^^^^^^^
 >props[k] : Pick<T, K>[Extract<K, string>]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : Pick<T, K>
+>      : ^^^^^^^^^^
 >k : Extract<K, string>
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
 let foo: Foo = { a: "hello", b: 42 };
 >foo : Foo
+>    : ^^^
 >{ a: "hello", b: 42 } : { a: string; b: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 setState(foo, { a: "test", b: 43 })
 >setState(foo, { a: "test", b: 43 }) : void
+>                                    : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >{ a: "test", b: 43 } : { a: string; b: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >43 : 43
+>   : ^^
 
 setState(foo, { a: "hi" });
 >setState(foo, { a: "hi" }) : void
+>                           : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >{ a: "hi" } : { a: string; }
+>            : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
 setState(foo, { b: undefined });
 >setState(foo, { b: undefined }) : void
+>                                : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >{ b: undefined } : { b: undefined; }
+>                 : ^^^^^^^^^^^^^^^^^
 >b : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 setState(foo, { });
 >setState(foo, { }) : void
+>                   : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >{ } : {}
+>    : ^^
 
 setState(foo, foo);
 >setState(foo, foo) : void
+>                   : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >foo : Foo
+>    : ^^^
 
 setState(foo, { a: undefined });  // Error
 >setState(foo, { a: undefined }) : void
+>                                : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >{ a: undefined } : { a: undefined; }
+>                 : ^^^^^^^^^^^^^^^^^
 >a : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 setState(foo, { c: true });  // Error
 >setState(foo, { c: true }) : void
+>                           : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >{ c: true } : { c: boolean; }
+>            : ^^^^^^^^^^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     state: T;
 >state : T
+>      : ^
 
     setState<K extends keyof T>(props: Pick<T, K>) {
 >setState : <K extends keyof T>(props: Pick<T, K>) => void
+>         : ^ ^^^^^^^^^       ^^     ^^          ^^^^^^^^^
 >props : Pick<T, K>
+>      : ^^^^^^^^^^
 
         for (let k in props) {
 >k : Extract<K, string>
+>  : ^^^^^^^^^^^^^^^^^^
 >props : Pick<T, K>
+>      : ^^^^^^^^^^
 
             this.state[k] = props[k];
 >this.state[k] = props[k] : Pick<T, K>[Extract<K, string>]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.state[k] : T[Extract<K, string>]
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >this.state : T
+>           : ^
 >this : this
+>     : ^^^^
 >state : T
+>      : ^
 >k : Extract<K, string>
+>  : ^^^^^^^^^^^^^^^^^^
 >props[k] : Pick<T, K>[Extract<K, string>]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : Pick<T, K>
+>      : ^^^^^^^^^^
 >k : Extract<K, string>
+>  : ^^^^^^^^^^^^^^^^^^
         }
     }
 }
 
 let c = new C<Foo>();
 >c : C<Foo>
+>  : ^^^^^^
 >new C<Foo>() : C<Foo>
+>             : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 c.setState({ a: "test", b: 43 });
 >c.setState({ a: "test", b: 43 }) : void
+>                                 : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
+>  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "test", b: 43 } : { a: string; b: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >43 : 43
+>   : ^^
 
 c.setState({ a: "hi" });
 >c.setState({ a: "hi" }) : void
+>                        : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
+>  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "hi" } : { a: string; }
+>            : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
 c.setState({ b: undefined });
 >c.setState({ b: undefined }) : void
+>                             : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
+>  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: undefined } : { b: undefined; }
+>                 : ^^^^^^^^^^^^^^^^^
 >b : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 c.setState({ });
 >c.setState({ }) : void
+>                : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
+>  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ } : {}
+>    : ^^
 
 c.setState(foo);
 >c.setState(foo) : void
+>                : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
+>  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 
 c.setState({ a: undefined });  // Error
 >c.setState({ a: undefined }) : void
+>                             : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
+>  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: undefined } : { a: undefined; }
+>                 : ^^^^^^^^^^^^^^^^^
 >a : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 c.setState({ c: true });  // Error
 >c.setState({ c: true }) : void
+>                        : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
+>  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ c: true } : { c: boolean; }
+>            : ^^^^^^^^^^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 type T2 = { a?: number, [key: string]: any };
->T2 : { [key: string]: any; a?: number | undefined; }
+>T2 : T2
+>   : ^^
 >a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 let x1: T2 = { a: 'no' };  // Error
 >x1 : T2
+>   : ^^
 >{ a: 'no' } : { a: string; }
+>            : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 let x2: Partial<T2> = { a: 'no' }; // Error
 >x2 : Partial<T2>
+>   : ^^^^^^^^^^^
 >{ a: 'no' } : { a: string; }
+>            : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
 >x3 : { [x: string]: any; a?: number | undefined; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{ a: 'no' } : { a: string; }
+>            : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 // Repro from #13044
 
 type Foo2<T, F extends keyof T> = {
 >Foo2 : Foo2<T, F>
+>     : ^^^^^^^^^^
 
     pf: {[P in F]?: T[P]},
 >pf : { [P in F]?: T[P] | undefined; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     pt: {[P in T]?: T[P]}, // note: should be in keyof T
 >pt : { [P in T]?: T[P] | undefined; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 type O = {x: number, y: boolean};
->O : { x: number; y: boolean; }
+>O : O
+>  : ^
 >x : number
+>  : ^^^^^^
 >y : boolean
+>  : ^^^^^^^
 
 let o: O = {x: 5, y: false};
 >o : O
+>  : ^
 >{x: 5, y: false} : { x: number; y: false; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 let f: Foo2<O, 'x'> = {
 >f : Foo2<O, "x">
+>  : ^^^^^^^^^^^^
 >{    pf: {x: 7},    pt: {x: 7, y: false},} : { pf: { x: number; }; pt: { x: number; y: boolean; }; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     pf: {x: 7},
 >pf : { x: number; }
+>   : ^^^^^^^^^^^^^^
 >{x: 7} : { x: number; }
+>       : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >7 : 7
+>  : ^
 
     pt: {x: 7, y: false},
 >pt : { x: number; y: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{x: 7, y: false} : { x: number; y: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >7 : 7
+>  : ^
 >y : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 };
 
@@ -505,23 +800,35 @@ let f: Foo2<O, 'x'> = {
 
 function test1<T, K extends keyof T>(obj: Pick<T, K>) {
 >test1 : <T, K extends keyof T>(obj: Pick<T, K>) => void
+>      : ^ ^^ ^^^^^^^^^       ^^   ^^          ^^^^^^^^^
 >obj : Pick<T, K>
+>    : ^^^^^^^^^^
 
     let x = obj.foo;  // Error
 >x : any
+>  : ^^^
 >obj.foo : any
+>        : ^^^
 >obj : Pick<T, K>
+>    : ^^^^^^^^^^
 >foo : any
+>    : ^^^
 }
 
 function test2<T, K extends keyof T>(obj: Record<K, number>) {
 >test2 : <T, K extends keyof T>(obj: Record<K, number>) => void
+>      : ^ ^^ ^^^^^^^^^       ^^   ^^                 ^^^^^^^^^
 >obj : Record<K, number>
+>    : ^^^^^^^^^^^^^^^^^
 
     let x = obj.foo;  // Error
 >x : any
+>  : ^^^
 >obj.foo : any
+>        : ^^^
 >obj : Record<K, number>
+>    : ^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 }
 

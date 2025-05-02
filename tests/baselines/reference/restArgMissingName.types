@@ -1,5 +1,9 @@
-=== tests/cases/compiler/restArgMissingName.ts ===
+//// [tests/cases/compiler/restArgMissingName.ts] ////
+
+=== restArgMissingName.ts ===
 function sum (...) {} 
 >sum : (...: any[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^
 > : any[]
+> : ^^^^^
 

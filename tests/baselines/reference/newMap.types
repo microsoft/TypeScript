@@ -1,5 +1,9 @@
-=== tests/cases/compiler/newMap.ts ===
+//// [tests/cases/compiler/newMap.ts] ////
+
+=== newMap.ts ===
 new Map<string>();
 >new Map<string>() : Map<any, any>
+>                  : ^^^^^^^^^^^^^
 >Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 

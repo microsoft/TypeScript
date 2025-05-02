@@ -1,198 +1,260 @@
-=== tests/cases/conformance/types/literal/literalTypes1.ts ===
+//// [tests/cases/conformance/types/literal/literalTypes1.ts] ////
+
+=== literalTypes1.ts ===
 let zero: 0 = 0;
 >zero : 0
+>     : ^
 >0 : 0
+>  : ^
 
 let one: 1 = 1;
 >one : 1
+>    : ^
 >1 : 1
+>  : ^
 
 let two: 2 = 2;
 >two : 2
+>    : ^
 >2 : 2
+>  : ^
 
 let oneOrTwo: 1 | 2 = <1 | 2>1;
 >oneOrTwo : 1 | 2
+>         : ^^^^^
 ><1 | 2>1 : 1 | 2
+>         : ^^^^^
 >1 : 1
+>  : ^
 
 function f1(x: 0 | 1 | 2) {
 >f1 : (x: 0 | 1 | 2) => void
+>   : ^ ^^         ^^^^^^^^^
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 
     switch (x) {
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 
         case zero:
 >zero : 0
+>     : ^
 
             x;
 >x : 0
+>  : ^
 
             break;
         case one:
 >one : 1
+>    : ^
 
             x;
 >x : 1
+>  : ^
 
             break;
         case two:
 >two : 2
+>    : ^
 
             x;
 >x : 2
+>  : ^
 
             break;
         default:
             x;
 >x : never
+>  : ^^^^^
     }
 }
 
 function f2(x: 0 | 1 | 2) {
 >f2 : (x: 0 | 1 | 2) => void
+>   : ^ ^^         ^^^^^^^^^
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 
     switch (x) {
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 
         case zero:
 >zero : 0
+>     : ^
 
             x;
 >x : 0
+>  : ^
 
             break;
         case oneOrTwo:
 >oneOrTwo : 1 | 2
+>         : ^^^^^
 
             x;
 >x : 1 | 2
+>  : ^^^^^
 
             break;
         default:
             x;
 >x : 1 | 2
+>  : ^^^^^
     }
 }
 
 type Falsy = false | 0 | "" | null | undefined;
->Falsy : false | "" | 0 | null | undefined
+>Falsy : Falsy
+>      : ^^^^^
 >false : false
->null : null
+>      : ^^^^^
 
 function f3(x: Falsy) {
 >f3 : (x: Falsy) => void
+>   : ^ ^^     ^^^^^^^^^
 >x : Falsy
+>  : ^^^^^
 
     if (x) {
 >x : Falsy
+>  : ^^^^^
 
         x;
 >x : never
+>  : ^^^^^
     }
     else {
         x;
 >x : Falsy
+>  : ^^^^^
     }
 }
 
 function f4(x: 0 | 1 | true | string) {
 >f4 : (x: 0 | 1 | true | string) => void
+>   : ^ ^^                     ^^^^^^^^^
 >x : string | true | 0 | 1
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     switch (x) {
 >x : string | true | 0 | 1
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
         case 0:
 >0 : 0
+>  : ^
 
             x;
 >x : 0
+>  : ^
 
             break;
         case 1:
 >1 : 1
+>  : ^
 
             x;
 >x : 1
+>  : ^
 
             break;
         case "abc":
 >"abc" : "abc"
+>      : ^^^^^
 
         case "def":
 >"def" : "def"
+>      : ^^^^^
 
             x;
 >x : "abc" | "def"
+>  : ^^^^^^^^^^^^^
 
             break;
         case null:
->null : null
-
             x;
 >x : never
+>  : ^^^^^
 
             break;
         case undefined:
 >undefined : undefined
+>          : ^^^^^^^^^
 
             x;
 >x : never
+>  : ^^^^^
 
             break;
         default:
             x;
 >x : string | true
+>  : ^^^^^^^^^^^^^
     }
 }
 
 function f5(x: string | number | boolean) {
 >f5 : (x: string | number | boolean) => void
+>   : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case "abc":
 >"abc" : "abc"
+>      : ^^^^^
 
             x;
 >x : "abc"
+>  : ^^^^^
 
             break;
         case 0:
 >0 : 0
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             x;
 >x : 0 | 1
+>  : ^^^^^
 
             break;
         case true:
 >true : true
+>     : ^^^^
 
             x;
 >x : true
+>  : ^^^^
 
             break;
         case "hello":
 >"hello" : "hello"
+>        : ^^^^^^^
 
         case 123:
 >123 : 123
+>    : ^^^
 
             x;
 >x : "hello" | 123
+>  : ^^^^^^^^^^^^^
 
             break;
         default:
             x;
 >x : string | number | false
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

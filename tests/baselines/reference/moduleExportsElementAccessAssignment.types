@@ -1,98 +1,169 @@
-=== tests/cases/conformance/jsdoc/mod2.js ===
+//// [tests/cases/conformance/jsdoc/moduleExportsElementAccessAssignment.ts] ////
+
+=== mod2.js ===
 const mod1 = require("./mod1");
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >require("./mod1") : typeof mod1
+>                  : ^^^^^^^^^^^
 >require : any
 >"./mod1" : "./mod1"
+>         : ^^^^^^^^
 
 mod1.a;
 >mod1.a : { x: string; }
+>       : ^^^^^^^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >a : { x: string; }
+>  : ^^^^^^^^^^^^^^
 
 mod1.b;
 >mod1.b : { x: string; }
+>       : ^^^^^^^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >b : { x: string; }
+>  : ^^^^^^^^^^^^^^
 
 mod1.c;
 >mod1.c : { x: string; }
+>       : ^^^^^^^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >c : { x: string; }
+>  : ^^^^^^^^^^^^^^
 
 mod1.d;
 >mod1.d : typeof mod1."d"
+>       : ^^^^^^^^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >d : typeof mod1."d"
+>  : ^^^^^^^^^^^^^^^
 
 mod1.d.e;
 >mod1.d.e : number
+>         : ^^^^^^
 >mod1.d : typeof mod1."d"
+>       : ^^^^^^^^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >d : typeof mod1."d"
+>  : ^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 
 mod1.default;
 >mod1.default : { x: string; }
+>             : ^^^^^^^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >default : { x: string; }
+>        : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 exports.a = { x: "x" };
 >exports.a = { x: "x" } : { x: string; }
+>                       : ^^^^^^^^^^^^^^
 >exports.a : { x: string; }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>          : ^^^^^^^^^^^^^^
+>exports : typeof import("mod1")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
+>  : ^^^^^^^^^^^^^^
 >{ x: "x" } : { x: string; }
+>           : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 
 exports["b"] = { x: "x" };
 >exports["b"] = { x: "x" } : { x: string; }
+>                          : ^^^^^^^^^^^^^^
 >exports["b"] : { x: string; }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>             : ^^^^^^^^^^^^^^
+>exports : typeof import("mod1")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 >{ x: "x" } : { x: string; }
+>           : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 
 exports["default"] = { x: "x" };
 >exports["default"] = { x: "x" } : { x: string; }
+>                                : ^^^^^^^^^^^^^^
 >exports["default"] : { x: string; }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>                   : ^^^^^^^^^^^^^^
+>exports : typeof import("mod1")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"default" : "default"
+>          : ^^^^^^^^^
 >{ x: "x" } : { x: string; }
+>           : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 
 module.exports["c"] = { x: "x" };
 >module.exports["c"] = { x: "x" } : { x: string; }
+>                                 : ^^^^^^^^^^^^^^
 >module.exports["c"] : { x: string; }
+>                    : ^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 >{ x: "x" } : { x: string; }
+>           : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 
 module["exports"]["d"] = {};
 >module["exports"]["d"] = {} : typeof "d"
+>                            : ^^^^^^^^^^
 >module["exports"]["d"] : typeof "d"
+>                       : ^^^^^^^^^^
 >module["exports"] : typeof module.exports
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"exports" : "exports"
+>          : ^^^^^^^^^
 >"d" : "d"
+>    : ^^^
 >{} : {}
+>   : ^^
 
 module["exports"]["d"].e = 0;
 >module["exports"]["d"].e = 0 : 0
+>                             : ^
 >module["exports"]["d"].e : number
+>                         : ^^^^^^
 >module["exports"]["d"] : typeof "d"
+>                       : ^^^^^^^^^^
 >module["exports"] : typeof module.exports
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"exports" : "exports"
+>          : ^^^^^^^^^
 >"d" : "d"
+>    : ^^^
 >e : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 

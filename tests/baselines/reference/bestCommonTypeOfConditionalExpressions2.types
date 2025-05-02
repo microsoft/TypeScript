@@ -1,76 +1,120 @@
-=== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts] ////
+
+=== bestCommonTypeOfConditionalExpressions2.ts ===
 // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
 // these are errors
 
 class Base { foo: string; }
 >Base : Base
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 
 class Derived extends Base { bar: string; }
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 >bar : string
+>    : ^^^^^^
 
 class Derived2 extends Base { baz: string; }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >baz : string
+>    : ^^^^^^
 
 var base: Base;
 >base : Base
+>     : ^^^^
 
 var derived: Derived;
 >derived : Derived
+>        : ^^^^^^^
 
 var derived2: Derived2;
 >derived2 : Derived2
+>         : ^^^^^^^^
 
 var r2 = true ? 1 : '';
 >r2 : string | number
+>   : ^^^^^^^^^^^^^^^
 >true ? 1 : '' : "" | 1
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
 var r9 = true ? derived : derived2;
 >r9 : Derived | Derived2
+>   : ^^^^^^^^^^^^^^^^^^
 >true ? derived : derived2 : Derived | Derived2
+>                          : ^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >derived : Derived
+>        : ^^^^^^^
 >derived2 : Derived2
+>         : ^^^^^^^^
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => T | U
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     return true ? t : u;
 >true ? t : u : T | U
+>             : ^^^^^
 >true : true
+>     : ^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 }
 
 function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type parameter
 >foo2 : <T extends U, U>(t: T, u: U) => U
+>     : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     return true ? t : u; // Ok because BCT(T, U) = U
 >true ? t : u : U
+>             : ^
 >true : true
+>     : ^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 }
 
 function foo3<T extends U, U extends V, V>(t: T, u: U) {
 >foo3 : <T extends U, U extends V, V>(t: T, u: U) => U
+>     : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     return true ? t : u;
 >true ? t : u : U
+>             : ^
 >true : true
+>     : ^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 }

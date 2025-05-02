@@ -1,35 +1,52 @@
-=== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts] ////
+
+=== protectedClassPropertyAccessibleWithinSubclass3.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     protected x: string;
 >x : string
+>  : ^^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         this.x;            // OK, accessed within their declaring class
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     method1() {
 >method1 : () => void
+>        : ^^^^^^^^^^
 
         this.x;            // OK, accessed within a subclass of the declaring class
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 
         super.x;           // Error, x is not public
 >super.x : string
+>        : ^^^^^^
 >super : Base
+>      : ^^^^
 >x : string
+>  : ^^^^^^
     }
 }

@@ -1,239 +1,371 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsInModule.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInModule.ts] ////
+
+=== typeGuardsInModule.ts ===
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 
 // variables in global
 var num: number;
 >num : number
+>    : ^^^^^^
 
 var strOrNum: string | number;
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 
 var var1: string | number;
 >var1 : string | number
+>     : ^^^^^^^^^^^^^^^
 
 // Inside module
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
+>                                              : ^^^^^^
 >num : number
+>    : ^^^^^^
 >typeof var1 === "string" && var1.length : number
+>                                        : ^^^^^^
 >typeof var1 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var1 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >var1.length : number
+>            : ^^^^^^
 >var1 : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     // variables in module declaration
     var var2: string | number;
 >var2 : string | number
+>     : ^^^^^^^^^^^^^^^
 
     if (typeof var2 === "string") {
 >typeof var2 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var2 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         num = var2.length; // string
 >num = var2.length : number
+>                  : ^^^^^^
 >num : number
+>    : ^^^^^^
 >var2.length : number
+>            : ^^^^^^
 >var2 : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
     else {
         num = var2; // number
 >num = var2 : number
+>           : ^^^^^^
 >num : number
+>    : ^^^^^^
 >var2 : number
+>     : ^^^^^^
     }
 
     // exported variable in the module
     export var var3: string | number;
 >var3 : string | number
+>     : ^^^^^^^^^^^^^^^
 
     if (typeof var3 === "string") {
 >typeof var3 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var3 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         strOrNum = var3; // string | number
 >strOrNum = var3 : string
+>                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >var3 : string
+>     : ^^^^^^
     }
     else {
         strOrNum = var3; // string | number
 >strOrNum = var3 : number
+>                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >var3 : number
+>     : ^^^^^^
     }
 }
 // local module
 module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     var var2: string | number;
 >var2 : string | number
+>     : ^^^^^^^^^^^^^^^
 
     export var var3: string | number;
 >var3 : string | number
+>     : ^^^^^^^^^^^^^^^
 
     module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
+>                                              : ^^^^^^
 >num : number
+>    : ^^^^^^
 >typeof var1 === "string" && var1.length : number
+>                                        : ^^^^^^
 >typeof var1 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var1 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >var1.length : number
+>            : ^^^^^^
 >var1 : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         // local variables from outer module declaration
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
+>                                              : ^^^^^^
 >num : number
+>    : ^^^^^^
 >typeof var2 === "string" && var2.length : number
+>                                        : ^^^^^^
 >typeof var2 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var2 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >var2.length : number
+>            : ^^^^^^
 >var2 : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         // exported variable from outer the module
         strOrNum = typeof var3 === "string" && var3; // string | number
 >strOrNum = typeof var3 === "string" && var3 : string
+>                                            : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >typeof var3 === "string" && var3 : string
+>                                 : ^^^^^^
 >typeof var3 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var3 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >var3 : string
+>     : ^^^^^^
 
         // variables in module declaration
         var var4: string | number;
 >var4 : string | number
+>     : ^^^^^^^^^^^^^^^
 
         if (typeof var4 === "string") {
 >typeof var4 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var4 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var4 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
             num = var4.length; // string
 >num = var4.length : number
+>                  : ^^^^^^
 >num : number
+>    : ^^^^^^
 >var4.length : number
+>            : ^^^^^^
 >var4 : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
         }
         else {
             num = var4; // number
 >num = var4 : number
+>           : ^^^^^^
 >num : number
+>    : ^^^^^^
 >var4 : number
+>     : ^^^^^^
         }
 
         // exported variable in the module
         export var var5: string | number;
 >var5 : string | number
+>     : ^^^^^^^^^^^^^^^
 
         if (typeof var5 === "string") {
 >typeof var5 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var5 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var5 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
             strOrNum = var5; // string | number
 >strOrNum = var5 : string
+>                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >var5 : string
+>     : ^^^^^^
         }
         else {
             strOrNum = var5; // string | number
 >strOrNum = var5 : number
+>                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >var5 : number
+>     : ^^^^^^
         }
     }
 }
 // Dotted module
 module m3.m4 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
+>                                              : ^^^^^^
 >num : number
+>    : ^^^^^^
 >typeof var1 === "string" && var1.length : number
+>                                        : ^^^^^^
 >typeof var1 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var1 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >var1.length : number
+>            : ^^^^^^
 >var1 : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     // variables in module declaration
     var var2: string | number;
 >var2 : string | number
+>     : ^^^^^^^^^^^^^^^
 
     if (typeof var2 === "string") {
 >typeof var2 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var2 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         num = var2.length; // string
 >num = var2.length : number
+>                  : ^^^^^^
 >num : number
+>    : ^^^^^^
 >var2.length : number
+>            : ^^^^^^
 >var2 : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
     else {
         num = var2; // number
 >num = var2 : number
+>           : ^^^^^^
 >num : number
+>    : ^^^^^^
 >var2 : number
+>     : ^^^^^^
     }
 
     // exported variable in the module
     export var var3: string | number;
 >var3 : string | number
+>     : ^^^^^^^^^^^^^^^
 
     if (typeof var3 === "string") {
 >typeof var3 === "string" : boolean
+>                         : ^^^^^^^
 >typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var3 : string | number
+>     : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         strOrNum = var3; // string | number
 >strOrNum = var3 : string
+>                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >var3 : string
+>     : ^^^^^^
     }
     else {
         strOrNum = var3; // string | number
 >strOrNum = var3 : number
+>                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >var3 : number
+>     : ^^^^^^
     }
 }
 

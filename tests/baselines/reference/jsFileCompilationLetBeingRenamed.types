@@ -1,17 +1,28 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationLetBeingRenamed.ts] ////
+
+=== a.js ===
 function foo(a) {
 >foo : (a: any) => void
+>    : ^ ^^^^^^^^^^^^^^
 >a : any
 
     for (let a = 0; a < 10; a++) {
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >a < 10 : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >a++ : number
+>    : ^^^^^^
 >a : number
+>  : ^^^^^^
 
         // do something
     }
 }
+

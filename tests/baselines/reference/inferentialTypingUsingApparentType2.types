@@ -1,21 +1,36 @@
-=== tests/cases/compiler/inferentialTypingUsingApparentType2.ts ===
+//// [tests/cases/compiler/inferentialTypingUsingApparentType2.ts] ////
+
+=== inferentialTypingUsingApparentType2.ts ===
 function foo<T extends { m(p: string): number }>(x: T): T {
 >foo : <T extends { m(p: string): number; }>(x: T) => T
+>    : ^ ^^^^^^^^^                         ^^ ^^ ^^^^^ 
 >m : (p: string) => number
+>  : ^ ^^      ^^^^^      
 >p : string
+>  : ^^^^^^
 >x : T
+>  : ^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 foo({ m(x) { return x.length } });
 >foo({ m(x) { return x.length } }) : { m(x: string): number; }
+>                                  : ^^^^ ^^^^^^^^^^^^^^^^^^^^
 >foo : <T extends { m(p: string): number; }>(x: T) => T
+>    : ^ ^^^^^^^^^                         ^^ ^^ ^^^^^ 
 >{ m(x) { return x.length } } : { m(x: string): number; }
+>                             : ^^^^ ^^^^^^^^^^^^^^^^^^^^
 >m : (x: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 

@@ -1,0 +1,76 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceMethod_03.ts ===
+// interface Foo {
+//     hello (): void;
+// }
+// 
+// class Bar extends SuperBar {
+//     <|[|hello|]() {}|>
+// }
+// 
+// class SuperBar implements Foo {
+// --- (line: 10) skipped ---
+
+// --- (line: 13) skipped ---
+//     hello() {} // should not show up
+// }
+// 
+// new Bar().hel/*GOTO IMPL*/lo();
+// new Bar()["hello"]();
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]

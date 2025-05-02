@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/contextualThisType.ts ===
+//// [tests/cases/conformance/types/thisType/contextualThisType.ts] ////
+
+=== contextualThisType.ts ===
 interface X {
 >X : Symbol(X, Decl(contextualThisType.ts, 0, 0))
 

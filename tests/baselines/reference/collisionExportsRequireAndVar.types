@@ -1,66 +1,97 @@
-=== tests/cases/compiler/collisionExportsRequireAndVar_externalmodule.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndVar.ts] ////
+
+=== collisionExportsRequireAndVar_externalmodule.ts ===
 export function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 var exports = 1;
 >exports : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 var require = "require";
 >require : string
+>        : ^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     var exports = 0;
 >exports : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     var require = "require";
 >require : string
+>        : ^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 }
 module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     export var exports = 0;
 >exports : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     export var require = "require";
 >require : string
+>        : ^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndVar_globalFile.ts ===
+=== collisionExportsRequireAndVar_globalFile.ts ===
 var exports = 0;
 >exports : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
 var require = "require";
 >require : string
+>        : ^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 
 module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
     var exports = 0;
 >exports : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     var require = "require";
 >require : string
+>        : ^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 }
 module m4 {
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
     export var exports = 0;
 >exports : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     export var require = "require";
 >require : string
+>        : ^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 }

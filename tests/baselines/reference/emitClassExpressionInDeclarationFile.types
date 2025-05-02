@@ -1,81 +1,122 @@
-=== tests/cases/compiler/emitClassExpressionInDeclarationFile.ts ===
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile.ts] ////
+
+=== emitClassExpressionInDeclarationFile.ts ===
 export var simpleExample = class {
 >simpleExample : typeof simpleExample
+>              : ^^^^^^^^^^^^^^^^^^^^
 >class {    static getTags() { }    tags() { }} : typeof simpleExample
+>                                               : ^^^^^^^^^^^^^^^^^^^^
 
     static getTags() { }
 >getTags : () => void
+>        : ^^^^^^^^^^
 
     tags() { }
 >tags : () => void
+>     : ^^^^^^^^^^
 }
 export var circularReference = class C {
 >circularReference : typeof C
+>                  : ^^^^^^^^
 >class C {    static getTags(c: C): C { return c }    tags(c: C): C { return c }} : typeof C
+>                                                                                 : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     static getTags(c: C): C { return c }
 >getTags : (c: C) => C
+>        : ^ ^^^^^^^^^
 >c : C
+>  : ^
 >c : C
+>  : ^
 
     tags(c: C): C { return c }
 >tags : (c: C) => C
+>     : ^ ^^^^^^^^^
 >c : C
+>  : ^
 >c : C
+>  : ^
 }
 
 // repro from #15066
 export class FooItem {
 >FooItem : FooItem
+>        : ^^^^^^^
 
     foo(): void { }
 >foo : () => void
+>    : ^^^^^^    
 
     name?: string;
 >name : string
+>     : ^^^^^^
 }
 
 export type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 export function WithTags<T extends Constructor<FooItem>>(Base: T) {
 >WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
+>         : ^ ^^^^^^^^^                    ^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
 >Base : T
+>     : ^
 
     return class extends Base {
 >class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
+>                                                                                    : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
 >Base : FooItem
+>     : ^^^^^^^
 
         static getTags(): void { }
 >getTags : () => void
+>        : ^^^^^^    
 
         tags(): void { }
 >tags : () => void
+>     : ^^^^^^    
     }
 }
 
 export class Test extends WithTags(FooItem) {}
 >Test : Test
+>     : ^^^^
 >WithTags(FooItem) : WithTags<typeof FooItem>.(Anonymous class) & FooItem
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
+>         : ^ ^^^^^^^^^                    ^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
 >FooItem : typeof FooItem
+>        : ^^^^^^^^^^^^^^
 
 const test = new Test();
 >test : Test
+>     : ^^^^
 >new Test() : Test
+>           : ^^^^
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 
 Test.getTags()
 >Test.getTags() : void
+>               : ^^^^
 >Test.getTags : () => void
+>             : ^^^^^^    
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 >getTags : () => void
+>        : ^^^^^^    
 
 test.tags();
 >test.tags() : void
+>            : ^^^^
 >test.tags : () => void
+>          : ^^^^^^    
 >test : Test
+>     : ^^^^
 >tags : () => void
+>     : ^^^^^^    
 

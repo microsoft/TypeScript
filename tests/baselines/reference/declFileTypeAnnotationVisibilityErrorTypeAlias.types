@@ -1,78 +1,104 @@
-=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts] ////
+
+=== declFileTypeAnnotationVisibilityErrorTypeAlias.ts ===
 interface Window {
     someMethod();
 >someMethod : () => any
+>           : ^^^^^^^^^
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     type W = Window | string;
->W : string | Window
+>W : W
+>  : ^
 
     export module N {
 >N : typeof N
+>  : ^^^^^^^^
 
         export class Window { }
 >Window : Window
+>       : ^^^^^^
 
         export var p: W; // Should report error that W is private
 >p : W
+>  : ^
     }
 }
 
 module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     export type W = Window | string;
->W : string | Window
+>W : W
+>  : ^
 
     export module N {
 >N : typeof N
+>  : ^^^^^^^^
 
         export class Window { }
 >Window : Window
+>       : ^^^^^^
 
         export var p: W; // No error
 >p : W
+>  : ^
     }
 }
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     class private1 {
 >private1 : private1
+>         : ^^^^^^^^
     }
     class public1 {
 >public1 : public1
+>        : ^^^^^^^
     }
     module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
         export class public1 {
 >public1 : public1
+>        : ^^^^^^^
         }
     }
 
     type t1 = private1;
 >t1 : private1
+>   : ^^^^^^^^
 
     export type t2 = private1; // error
 >t2 : private1
+>   : ^^^^^^^^
 
     type t11 = public1;
 >t11 : public1
+>    : ^^^^^^^
 
     export type t12 = public1;
 >t12 : public1
+>    : ^^^^^^^
 
     type t111 = m3.public1;
 >t111 : m3.public1
+>     : ^^^^^^^^^^
 >m3 : any
+>   : ^^^
 
     export type t112 = m3.public1; // error
 >t112 : m3.public1
+>     : ^^^^^^^^^^
 >m3 : any
+>   : ^^^
 }
 

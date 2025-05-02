@@ -1,6 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration5.ts] ////
+
+=== parserMemberVariableDeclaration5.ts ===
 class C {
 >C : C
+>  : ^
 
   declare Foo;
 >Foo : any

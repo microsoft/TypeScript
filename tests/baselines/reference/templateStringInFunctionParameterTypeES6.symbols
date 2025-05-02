@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInFunctionParameterTypeES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInFunctionParameterTypeES6.ts] ////
+
+=== templateStringInFunctionParameterTypeES6.ts ===
 function f(`hello`);
 >f : Symbol(f, Decl(templateStringInFunctionParameterTypeES6.ts, 0, 0), Decl(templateStringInFunctionParameterTypeES6.ts, 0, 20), Decl(templateStringInFunctionParameterTypeES6.ts, 1, 22))
 > : Symbol((Missing), Decl(templateStringInFunctionParameterTypeES6.ts, 0, 11))

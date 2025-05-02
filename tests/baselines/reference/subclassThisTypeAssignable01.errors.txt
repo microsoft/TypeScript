@@ -1,24 +1,25 @@
-tests/cases/compiler/file1.js(2,7): error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
-tests/cases/compiler/tile1.ts(2,30): error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
-tests/cases/compiler/tile1.ts(6,81): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/tile1.ts(11,40): error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
-tests/cases/compiler/tile1.ts(21,2): error TS2416: Property 'view' in type 'C' is not assignable to the same property in base type 'ClassComponent<MyAttrs>'.
+file1.js(2,7): error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
+  Index signature for type 'number' is missing in type 'C'.
+tile1.ts(2,30): error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
+tile1.ts(6,81): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+tile1.ts(11,40): error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
+tile1.ts(21,2): error TS2416: Property 'view' in type 'C' is not assignable to the same property in base type 'ClassComponent<MyAttrs>'.
   Type '(v: Vnode<MyAttrs, Lifecycle<MyAttrs, any>>) => number' is not assignable to type '(vnode: Vnode<MyAttrs, this>) => number'.
     Types of parameters 'v' and 'vnode' are incompatible.
       Type 'Vnode<MyAttrs, this>' is not assignable to type 'Vnode<MyAttrs, Lifecycle<MyAttrs, any>>'.
         Type 'this' is not assignable to type 'Lifecycle<MyAttrs, any>'.
           Type 'C' is not assignable to type 'Lifecycle<MyAttrs, any>'.
             Index signature for type 'number' is missing in type 'C'.
-tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
+tile1.ts(24,7): error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
   Index signature for type 'number' is missing in type 'C'.
 
 
-==== tests/cases/compiler/tile1.ts (5 errors) ====
+==== tile1.ts (5 errors) ====
     interface Lifecycle<Attrs, State> {
     	oninit?(vnode: Vnode<Attrs, State>): number;
     	                            ~~~~~
 !!! error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
-!!! related TS2208 tests/cases/compiler/tile1.ts:1:28: This type parameter might need an `extends Lifecycle<Attrs, State>` constraint.
+!!! related TS2208 tile1.ts:1:28: This type parameter might need an `extends Lifecycle<Attrs, State>` constraint.
     	[_: number]: any;
     }
     
@@ -32,7 +33,7 @@ tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to
     	view(this: State, vnode: Vnode<Attrs, State>): number;
     	                                      ~~~~~
 !!! error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
-!!! related TS2208 tests/cases/compiler/tile1.ts:10:28: This type parameter might need an `extends Lifecycle<Attrs, State>` constraint.
+!!! related TS2208 tile1.ts:10:28: This type parameter might need an `extends Lifecycle<Attrs, State>` constraint.
     }
     
     interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
@@ -57,9 +58,10 @@ tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to
           ~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
 !!! error TS2322:   Index signature for type 'number' is missing in type 'C'.
-==== tests/cases/compiler/file1.js (1 errors) ====
+==== file1.js (1 errors) ====
     /** @type {ClassComponent<any>} */
     const test9 = new C();
           ~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
+!!! error TS2322:   Index signature for type 'number' is missing in type 'C'.
     

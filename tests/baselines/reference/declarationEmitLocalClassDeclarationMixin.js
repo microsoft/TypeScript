@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLocalClassDeclarationMixin.ts] ////
+
 //// [declarationEmitLocalClassDeclarationMixin.ts]
 interface Constructor<C> { new (...args: any[]): C; }
 
@@ -47,7 +49,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilteredThing = exports.Mixed = exports.Unmixed = void 0;
 function mixin(Base) {
     var PrivateMixed = /** @class */ (function (_super) {

@@ -1,106 +1,155 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsGetterSetter.ts] ////
+
+=== index.js ===
 export class A {
 >A : A
+>  : ^
 
     get x() {
 >x : number
+>  : ^^^^^^
 
         return 12;
 >12 : 12
+>   : ^^
     }
 }
 
 export class B {
 >B : B
+>  : ^
 
     /**
      * @param {number} _arg
      */
     set x(_arg) {
 >x : number
+>  : ^^^^^^
 >_arg : number
+>     : ^^^^^^
     }
 }
 
 export class C {
 >C : C
+>  : ^
 
     get x() {
 >x : number
+>  : ^^^^^^
 
         return 12;
 >12 : 12
+>   : ^^
     }
     set x(_arg) {
 >x : number
+>  : ^^^^^^
 >_arg : number
+>     : ^^^^^^
     }
 }
 
 export class D {}
 >D : D
+>  : ^
 
 Object.defineProperty(D.prototype, "x", {
 >Object.defineProperty(D.prototype, "x", {    get() {        return 12;    }}) : D
+>                                                                              : ^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >D.prototype : D
+>            : ^
 >D : typeof D
+>  : ^^^^^^^^
 >prototype : D
+>          : ^
 >"x" : "x"
+>    : ^^^
 >{    get() {        return 12;    }} : { get(): number; }
+>                                     : ^^^^^^^^^^^^^^^^^^
 
     get() {
 >get : () => number
+>    : ^^^^^^^^^^^^
 
         return 12;
 >12 : 12
+>   : ^^
     }
 });
 
 export class E {}
 >E : E
+>  : ^
 
 Object.defineProperty(E.prototype, "x", {
 >Object.defineProperty(E.prototype, "x", {    /**     * @param {number} _arg     */    set(_arg) {}}) : E
+>                                                                                                     : ^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >E.prototype : E
+>            : ^
 >E : typeof E
+>  : ^^^^^^^^
 >prototype : E
+>          : ^
 >"x" : "x"
+>    : ^^^
 >{    /**     * @param {number} _arg     */    set(_arg) {}} : { set(_arg: number): void; }
+>                                                            : ^^^^^^    ^^      ^^^^^^^^^^
 
     /**
      * @param {number} _arg
      */
     set(_arg) {}
 >set : (_arg: number) => void
+>    : ^    ^^      ^^^^^^^^^
 >_arg : number
+>     : ^^^^^^
 
 });
 
 export class F {}
 >F : F
+>  : ^
 
 Object.defineProperty(F.prototype, "x", {
 >Object.defineProperty(F.prototype, "x", {    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}}) : F
+>                                                                                                                                        : ^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >F.prototype : F
+>            : ^
 >F : typeof F
+>  : ^^^^^^^^
 >prototype : F
+>          : ^
 >"x" : "x"
+>    : ^^^
 >{    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}} : { get(): number; set(_arg: number): void; }
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^^^^^^
 
     get() {
 >get : () => number
+>    : ^^^^^^^^^^^^
 
         return 12;
 >12 : 12
+>   : ^^
 
     },
     /**
@@ -108,7 +157,353 @@ Object.defineProperty(F.prototype, "x", {
      */
     set(_arg) {}
 >set : (_arg: number) => void
+>    : ^    ^^      ^^^^^^^^^
 >_arg : number
+>     : ^^^^^^
+
+});
+
+export class G {}
+>G : G
+>  : ^
+
+Object.defineProperty(G.prototype, "x", {
+>Object.defineProperty(G.prototype, "x", {    /**     * @param {number[]} args     */    set(...args) {}}) : G
+>                                                                                                          : ^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>G.prototype : G
+>            : ^
+>G : typeof G
+>  : ^^^^^^^^
+>prototype : G
+>          : ^
+>"x" : "x"
+>    : ^^^
+>{    /**     * @param {number[]} args     */    set(...args) {}} : { set(...args: number[]): void; }
+>                                                                 : ^^^^^^^^^    ^^        ^^^^^^^^^^
+
+    /**
+     * @param {number[]} args
+     */
+    set(...args) {}
+>set : (...args: number[]) => void
+>    : ^^^^    ^^        ^^^^^^^^^
+>args : number[]
+>     : ^^^^^^^^
+
+});
+
+export class H {}
+>H : H
+>  : ^
+
+Object.defineProperty(H.prototype, "x", {
+>Object.defineProperty(H.prototype, "x", {    set() {}}) : H
+>                                                        : ^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>H.prototype : H
+>            : ^
+>H : typeof H
+>  : ^^^^^^^^
+>prototype : H
+>          : ^
+>"x" : "x"
+>    : ^^^
+>{    set() {}} : { set(): void; }
+>               : ^^^^^^^^^^^^^^^^
+
+    set() {}
+>set : () => void
+>    : ^^^^^^^^^^
+
+});
+
+
+export class I {}
+>I : I
+>  : ^
+
+Object.defineProperty(I.prototype, "x", {
+>Object.defineProperty(I.prototype, "x", {    /**     * @param {number} v     */    set: (v) => {}}) : I
+>                                                                                                    : ^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>I.prototype : I
+>            : ^
+>I : typeof I
+>  : ^^^^^^^^
+>prototype : I
+>          : ^
+>"x" : "x"
+>    : ^^^
+>{    /**     * @param {number} v     */    set: (v) => {}} : { set: (v: number) => void; }
+>                                                           : ^^^^^^^^ ^^      ^^^^^^^^^^^^
+
+    /**
+     * @param {number} v
+     */
+    set: (v) => {}
+>set : (v: number) => void
+>    : ^ ^^      ^^^^^^^^^
+>(v) => {} : (v: number) => void
+>          : ^ ^^      ^^^^^^^^^
+>v : number
+>  : ^^^^^^
+
+});
+
+/**
+ * @param {number} v
+ */
+const jSetter = (v) => {}
+>jSetter : (v: number) => void
+>        : ^ ^^      ^^^^^^^^^
+>(v) => {} : (v: number) => void
+>          : ^ ^^      ^^^^^^^^^
+>v : number
+>  : ^^^^^^
+
+export class J {}
+>J : J
+>  : ^
+
+Object.defineProperty(J.prototype, "x", {
+>Object.defineProperty(J.prototype, "x", {    set: jSetter}) : J
+>                                                            : ^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>J.prototype : J
+>            : ^
+>J : typeof J
+>  : ^^^^^^^^
+>prototype : J
+>          : ^
+>"x" : "x"
+>    : ^^^
+>{    set: jSetter} : { set: (v: number) => void; }
+>                   : ^^^^^^^^ ^^      ^^^^^^^^^^^^
+
+    set: jSetter
+>set : (v: number) => void
+>    : ^ ^^      ^^^^^^^^^
+>jSetter : (v: number) => void
+>        : ^ ^^      ^^^^^^^^^
+
+});
+
+/**
+ * @param {number} v
+ */
+const kSetter1 = (v) => {}
+>kSetter1 : (v: number) => void
+>         : ^ ^^      ^^^^^^^^^
+>(v) => {} : (v: number) => void
+>          : ^ ^^      ^^^^^^^^^
+>v : number
+>  : ^^^^^^
+
+/**
+ * @param {number} v
+ */
+const kSetter2 = (v) => {}
+>kSetter2 : (v: number) => void
+>         : ^ ^^      ^^^^^^^^^
+>(v) => {} : (v: number) => void
+>          : ^ ^^      ^^^^^^^^^
+>v : number
+>  : ^^^^^^
+
+export class K {}
+>K : K
+>  : ^
+
+Object.defineProperty(K.prototype, "x", {
+>Object.defineProperty(K.prototype, "x", {    set: Math.random() ? kSetter1 : kSetter2}) : K
+>                                                                                        : ^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>K.prototype : K
+>            : ^
+>K : typeof K
+>  : ^^^^^^^^
+>prototype : K
+>          : ^
+>"x" : "x"
+>    : ^^^
+>{    set: Math.random() ? kSetter1 : kSetter2} : { set: (v: number) => void; }
+>                                               : ^^^^^^^^ ^^      ^^^^^^^^^^^^
+
+    set: Math.random() ? kSetter1 : kSetter2
+>set : (v: number) => void
+>    : ^ ^^      ^^^^^^^^^
+>Math.random() ? kSetter1 : kSetter2 : (v: number) => void
+>                                    : ^ ^^      ^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>kSetter1 : (v: number) => void
+>         : ^ ^^      ^^^^^^^^^
+>kSetter2 : (v: number) => void
+>         : ^ ^^      ^^^^^^^^^
+
+});
+
+/**
+ * @param {number} v
+ */
+const lSetter1 = (v) => {}
+>lSetter1 : (v: number) => void
+>         : ^ ^^      ^^^^^^^^^
+>(v) => {} : (v: number) => void
+>          : ^ ^^      ^^^^^^^^^
+>v : number
+>  : ^^^^^^
+
+/**
+ * @param {string} v
+ */
+const lSetter2 = (v) => {}
+>lSetter2 : (v: string) => void
+>         : ^ ^^      ^^^^^^^^^
+>(v) => {} : (v: string) => void
+>          : ^ ^^      ^^^^^^^^^
+>v : string
+>  : ^^^^^^
+
+export class L {}
+>L : L
+>  : ^
+
+Object.defineProperty(L.prototype, "x", {
+>Object.defineProperty(L.prototype, "x", {    set: Math.random() ? lSetter1 : lSetter2}) : L
+>                                                                                        : ^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>L.prototype : L
+>            : ^
+>L : typeof L
+>  : ^^^^^^^^
+>prototype : L
+>          : ^
+>"x" : "x"
+>    : ^^^
+>{    set: Math.random() ? lSetter1 : lSetter2} : { set: ((v: number) => void) | ((v: string) => void); }
+>                                               : ^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
+
+    set: Math.random() ? lSetter1 : lSetter2
+>set : ((v: number) => void) | ((v: string) => void)
+>    : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>Math.random() ? lSetter1 : lSetter2 : ((v: number) => void) | ((v: string) => void)
+>                                    : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>lSetter1 : (v: number) => void
+>         : ^ ^^      ^^^^^^^^^
+>lSetter2 : (v: string) => void
+>         : ^ ^^      ^^^^^^^^^
+
+});
+
+/**
+ * @param {number | boolean} v
+ */
+const mSetter1 = (v) => {}
+>mSetter1 : (v: number | boolean) => void
+>         : ^ ^^                ^^^^^^^^^
+>(v) => {} : (v: number | boolean) => void
+>          : ^ ^^                ^^^^^^^^^
+>v : number | boolean
+>  : ^^^^^^^^^^^^^^^^
+
+/**
+ * @param {string | boolean} v
+ */
+const mSetter2 = (v) => {}
+>mSetter2 : (v: string | boolean) => void
+>         : ^ ^^                ^^^^^^^^^
+>(v) => {} : (v: string | boolean) => void
+>          : ^ ^^                ^^^^^^^^^
+>v : string | boolean
+>  : ^^^^^^^^^^^^^^^^
+
+export class M {}
+>M : M
+>  : ^
+
+Object.defineProperty(M.prototype, "x", {
+>Object.defineProperty(M.prototype, "x", {    set: Math.random() ? mSetter1 : mSetter2}) : M
+>                                                                                        : ^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>M.prototype : M
+>            : ^
+>M : typeof M
+>  : ^^^^^^^^
+>prototype : M
+>          : ^
+>"x" : "x"
+>    : ^^^
+>{    set: Math.random() ? mSetter1 : mSetter2} : { set: ((v: number | boolean) => void) | ((v: string | boolean) => void); }
+>                                               : ^^^^^^^^^ ^^                ^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^^^^
+
+    set: Math.random() ? mSetter1 : mSetter2
+>set : ((v: number | boolean) => void) | ((v: string | boolean) => void)
+>    : ^^ ^^                ^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^
+>Math.random() ? mSetter1 : mSetter2 : ((v: number | boolean) => void) | ((v: string | boolean) => void)
+>                                    : ^^ ^^                ^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>mSetter1 : (v: number | boolean) => void
+>         : ^ ^^                ^^^^^^^^^
+>mSetter2 : (v: string | boolean) => void
+>         : ^ ^^                ^^^^^^^^^
 
 });
 

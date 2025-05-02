@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/functionCalls.ts] ////
+
 //// [functionCalls.ts]
 // Invoke function call on value of type 'any' with no type arguments
 var anyVar: any;

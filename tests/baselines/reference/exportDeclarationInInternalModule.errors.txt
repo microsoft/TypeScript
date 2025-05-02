@@ -1,7 +1,7 @@
-tests/cases/compiler/exportDeclarationInInternalModule.ts(13,19): error TS1141: String literal expected.
+exportDeclarationInInternalModule.ts(13,19): error TS1141: String literal expected.
 
 
-==== tests/cases/compiler/exportDeclarationInInternalModule.ts (1 errors) ====
+==== exportDeclarationInInternalModule.ts (1 errors) ====
     class Bbb {
     }
     

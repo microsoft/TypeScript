@@ -1,707 +1,528 @@
+// === findAllReferences ===
 // === /node_modules/a/index.d.ts ===
-// import [|X|]/*FIND ALL REFS*/ from "x";
-// export function a(x: [|X|]): void;
-
-// === /node_modules/b/index.d.ts ===
-// import [|X|] from "x";
-// export const b: [|X|];
+// <|import [|{| defId: 0, isWriteAccess: true, isDefinition: true |}X|]/*FIND ALL REFS*/ from "x";|>
+// export function a(x: [|{| defId: 0 |}X|]): void;
 
 // === /node_modules/a/node_modules/x/index.d.ts ===
-// export default class [|X|] {
+// <|export default class [|{| defId: 1, isWriteAccess: true |}X|] {
 //     private x: number;
-// }
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "alias",
-      "name": "(alias) class X\nimport X",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/node_modules/x/index.d.ts",
-      "kind": "class",
-      "name": "class X",
-      "textSpan": {
-        "start": 21,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/node_modules/x/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/b/index.d.ts",
-      "kind": "alias",
-      "name": "(alias) class X\nimport X",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/node_modules/b/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 35,
-          "length": 1
-        },
-        "fileName": "/node_modules/b/index.d.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
-
-// === /node_modules/a/index.d.ts ===
-// import [|X|] from "x";
-// export function a(x: [|X|]): void;
+// }|>
 
 // === /node_modules/b/index.d.ts ===
-// import [|X|] from "x";
-// export const b: [|X|];
+// <|import [|{| defId: 2, isWriteAccess: true |}X|] from "x";|>
+// export const b: [|{| defId: 2 |}X|];
 
+  // === Definitions ===
+  // === /node_modules/a/index.d.ts ===
+  // <|import [|{| defId: 0 |}X|]/*FIND ALL REFS*/ from "x";|>
+  // export function a(x: X): void;
+
+  // === /node_modules/a/node_modules/x/index.d.ts ===
+  // <|export default class [|{| defId: 1 |}X|] {
+  //     private x: number;
+  // }|>
+
+  // === /node_modules/b/index.d.ts ===
+  // <|import [|{| defId: 2 |}X|] from "x";|>
+  // export const b: X;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class X\nimport X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class X",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class X\nimport X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /node_modules/a/node_modules/x/index.d.ts ===
-// export default class /*FIND ALL REFS*/[|X|] {
+// <|export default class /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}X|] {
 //     private x: number;
-// }
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/node_modules/x/index.d.ts",
-      "kind": "class",
-      "name": "class X",
-      "textSpan": {
-        "start": 21,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/node_modules/x/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "alias",
-      "name": "(alias) class X\nimport X",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/b/index.d.ts",
-      "kind": "alias",
-      "name": "(alias) class X\nimport X",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/node_modules/b/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 35,
-          "length": 1
-        },
-        "fileName": "/node_modules/b/index.d.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
-
-// === /node_modules/b/index.d.ts ===
-// import [|X|]/*FIND ALL REFS*/ from "x";
-// export const b: [|X|];
+// }|>
 
 // === /node_modules/a/index.d.ts ===
-// import [|X|] from "x";
-// export function a(x: [|X|]): void;
+// <|import [|{| defId: 1, isWriteAccess: true |}X|] from "x";|>
+// export function a(x: [|{| defId: 1 |}X|]): void;
+
+// === /node_modules/b/index.d.ts ===
+// <|import [|{| defId: 2, isWriteAccess: true |}X|] from "x";|>
+// export const b: [|{| defId: 2 |}X|];
+
+  // === Definitions ===
+  // === /node_modules/a/node_modules/x/index.d.ts ===
+  // <|export default class /*FIND ALL REFS*/[|{| defId: 0 |}X|] {
+  //     private x: number;
+  // }|>
+
+  // === /node_modules/a/index.d.ts ===
+  // <|import [|{| defId: 1 |}X|] from "x";|>
+  // export function a(x: X): void;
+
+  // === /node_modules/b/index.d.ts ===
+  // <|import [|{| defId: 2 |}X|] from "x";|>
+  // export const b: X;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class X",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class X\nimport X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class X\nimport X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /node_modules/b/index.d.ts ===
+// <|import [|{| defId: 0, isWriteAccess: true, isDefinition: true |}X|]/*FIND ALL REFS*/ from "x";|>
+// export const b: [|{| defId: 0 |}X|];
 
 // === /node_modules/a/node_modules/x/index.d.ts ===
-// export default class [|X|] {
+// <|export default class [|{| defId: 1, isWriteAccess: true |}X|] {
 //     private x: number;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/b/index.d.ts",
-      "kind": "alias",
-      "name": "(alias) class X\nimport X",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/node_modules/b/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 35,
-          "length": 1
-        },
-        "fileName": "/node_modules/b/index.d.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+// === /node_modules/a/index.d.ts ===
+// <|import [|{| defId: 2, isWriteAccess: true |}X|] from "x";|>
+// export function a(x: [|{| defId: 2 |}X|]): void;
+
+  // === Definitions ===
+  // === /node_modules/b/index.d.ts ===
+  // <|import [|{| defId: 0 |}X|]/*FIND ALL REFS*/ from "x";|>
+  // export const b: X;
+
+  // === /node_modules/a/node_modules/x/index.d.ts ===
+  // <|export default class [|{| defId: 1 |}X|] {
+  //     private x: number;
+  // }|>
+
+  // === /node_modules/a/index.d.ts ===
+  // <|import [|{| defId: 2 |}X|] from "x";|>
+  // export function a(x: X): void;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class X\nimport X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/node_modules/x/index.d.ts",
-      "kind": "class",
-      "name": "class X",
-      "textSpan": {
-        "start": 21,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/node_modules/x/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class X",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "className"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "alias",
-      "name": "(alias) class X\nimport X",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class X\nimport X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /node_modules/a/node_modules/x/index.d.ts ===
+// <|export default class [|X|] {
+//     private x: number;
+// }|>
+
+// === /node_modules/a/index.d.ts ===
+// import [|X|]/*GOTO DEF*/ from "x";
+// export function a(x: X): void;
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "X",
+    "containerName": "\"/node_modules/a/node_modules/x/index\"",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /node_modules/a/node_modules/x/index.d.ts ===
+// <|export default class [|X|] {
+//     private x: number;
+// }|>
+
+// === /node_modules/b/index.d.ts ===
+// import [|X|]/*GOTO DEF*/ from "x";
+// export const b: X;
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "X",
+    "containerName": "\"/node_modules/a/node_modules/x/index\"",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]

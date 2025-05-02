@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts ===
+//// [tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts] ////
+
+=== types.asyncGenerators.es2018.2.ts ===
 async function * inferReturnType1() {
 >inferReturnType1 : Symbol(inferReturnType1, Decl(types.asyncGenerators.es2018.2.ts, 0, 0))
 
@@ -140,7 +142,7 @@ async function * explicitReturnType11(): Iterable<number> {
 }
 async function * explicitReturnType12(): Iterator<number> {
 >explicitReturnType12 : Symbol(explicitReturnType12, Decl(types.asyncGenerators.es2018.2.ts, 68, 1))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 
     yield 1;
 }

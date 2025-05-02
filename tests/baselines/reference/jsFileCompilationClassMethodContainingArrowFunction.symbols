@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationClassMethodContainingArrowFunction.ts] ////
+
+=== a.js ===
 class c {
 >c : Symbol(c, Decl(a.js, 0, 0))
 
@@ -15,3 +17,4 @@ class c {
 >a : Symbol(a, Decl(a.js, 2, 15))
     }
 }
+

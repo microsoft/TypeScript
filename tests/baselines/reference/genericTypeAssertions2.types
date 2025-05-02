@@ -1,52 +1,81 @@
-=== tests/cases/compiler/genericTypeAssertions2.ts ===
+//// [tests/cases/compiler/genericTypeAssertions2.ts] ////
+
+=== genericTypeAssertions2.ts ===
 class A<T> { foo(x: T) { } }
 >A : A<T>
+>  : ^^^^
 >foo : (x: T) => void
+>    : ^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
 class B<T> extends A<T> {
 >B : B<T>
+>  : ^^^^
 >A : A<T>
+>  : ^^^^
 
     bar(): T {
 >bar : () => T
+>    : ^^^^^^ 
 
         return null;
->null : null
     }
 }
 
 var foo = new A<number>();
 >foo : A<number>
+>    : ^^^^^^^^^
 >new A<number>() : A<number>
+>                : ^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 var r: A<string> = <B<string>>new B();
 >r : A<string>
+>  : ^^^^^^^^^
 ><B<string>>new B() : B<string>
+>                   : ^^^^^^^^^
 >new B() : B<string>
+>        : ^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 var r2: A<number> = <B<string>>new B(); // error
 >r2 : A<number>
+>   : ^^^^^^^^^
 ><B<string>>new B() : B<string>
+>                   : ^^^^^^^^^
 >new B() : B<string>
+>        : ^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 var r3: B<number> = <A<number>>new B(); // error
 >r3 : B<number>
+>   : ^^^^^^^^^
 ><A<number>>new B() : A<number>
+>                   : ^^^^^^^^^
 >new B() : B<number>
+>        : ^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 var r4: A<number> = <A<number>>new A();
 >r4 : A<number>
+>   : ^^^^^^^^^
 ><A<number>>new A() : A<number>
+>                   : ^^^^^^^^^
 >new A() : A<number>
+>        : ^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 var r5: A<number> = <A<number>>[]; // error
 >r5 : A<number>
+>   : ^^^^^^^^^
 ><A<number>>[] : A<number>
+>              : ^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 

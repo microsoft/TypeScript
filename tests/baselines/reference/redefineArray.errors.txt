@@ -1,8 +1,8 @@
-tests/cases/compiler/redefineArray.ts(1,1): error TS2741: Property 'isArray' is missing in type '<T>(n: number, s: string) => number' but required in type 'ArrayConstructor'.
+redefineArray.ts(1,1): error TS2741: Property 'isArray' is missing in type '<T>(n: number, s: string) => number' but required in type 'ArrayConstructor'.
 
 
-==== tests/cases/compiler/redefineArray.ts (1 errors) ====
+==== redefineArray.ts (1 errors) ====
     Array = function (n:number, s:string) {return n;};
     ~~~~~
 !!! error TS2741: Property 'isArray' is missing in type '<T>(n: number, s: string) => number' but required in type 'ArrayConstructor'.
-!!! related TS2728 /.ts/lib.es5.d.ts:1486:5: 'isArray' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'isArray' is declared here.

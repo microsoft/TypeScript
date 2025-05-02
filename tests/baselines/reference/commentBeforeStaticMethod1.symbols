@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentBeforeStaticMethod1.ts ===
+//// [tests/cases/compiler/commentBeforeStaticMethod1.ts] ////
+
+=== commentBeforeStaticMethod1.ts ===
 class C {
 >C : Symbol(C, Decl(commentBeforeStaticMethod1.ts, 0, 0))
 

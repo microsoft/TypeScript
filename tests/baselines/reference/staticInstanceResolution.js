@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticInstanceResolution.ts] ////
+
 //// [staticInstanceResolution.ts]
 class Comment {
 

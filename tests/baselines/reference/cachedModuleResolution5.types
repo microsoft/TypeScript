@@ -1,12 +1,17 @@
+//// [tests/cases/compiler/cachedModuleResolution5.ts] ////
+
 === /a/b/node_modules/foo.d.ts ===
 export declare let x: number
 >x : number
+>  : ^^^^^^
 
 === /a/b/c/d/e/app.ts ===
 import {x} from "foo";
 >x : number
+>  : ^^^^^^
 
 === /a/b/lib.ts ===
 import {x} from "foo";
 >x : number
+>  : ^^^^^^
 

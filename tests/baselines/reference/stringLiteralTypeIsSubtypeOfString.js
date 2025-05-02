@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts] ////
+
 //// [stringLiteralTypeIsSubtypeOfString.ts]
 // string literal types are subtypes of string, any
 

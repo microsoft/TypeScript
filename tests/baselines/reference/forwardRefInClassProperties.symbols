@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forwardRefInClassProperties.ts ===
+//// [tests/cases/compiler/forwardRefInClassProperties.ts] ////
+
+=== forwardRefInClassProperties.ts ===
 class Test
 >Test : Symbol(Test, Decl(forwardRefInClassProperties.ts, 0, 0))
 {

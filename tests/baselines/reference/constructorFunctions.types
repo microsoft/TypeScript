@@ -1,172 +1,277 @@
-=== tests/cases/conformance/salsa/index.js ===
+//// [tests/cases/conformance/salsa/constructorFunctions.ts] ////
+
+=== index.js ===
 function C1() {
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
     if (!(this instanceof C1)) return new C1();
 >!(this instanceof C1) : boolean
+>                      : ^^^^^^^
 >(this instanceof C1) : boolean
+>                     : ^^^^^^^
 >this instanceof C1 : boolean
+>                   : ^^^^^^^
 >this : this
+>     : ^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >new C1() : C1
+>         : ^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
     this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 const c1_v1 = C1();
 >c1_v1 : C1
+>      : ^^
 >C1() : C1
+>     : ^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
 const c1_v2 = new C1();
 >c1_v2 : C1
+>      : ^^
 >new C1() : C1
+>         : ^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
 var C2 = function () {
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >function () {    if (!(this instanceof C2)) return new C2();    this.x = 1;} : typeof C2
+>                                                                             : ^^^^^^^^^
 
     if (!(this instanceof C2)) return new C2();
 >!(this instanceof C2) : boolean
+>                      : ^^^^^^^
 >(this instanceof C2) : boolean
+>                     : ^^^^^^^
 >this instanceof C2 : boolean
+>                   : ^^^^^^^
 >this : this
+>     : ^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
     this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 };
 
 const c2_v1 = C2();
 >c2_v1 : C2
+>      : ^^
 >C2() : C2
+>     : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 const c2_v2 = new C2();
 >c2_v2 : C2
+>      : ^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 /** @class */
 function C3() {
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
     if (!(this instanceof C3)) return new C3();
 >!(this instanceof C3) : boolean
+>                      : ^^^^^^^
 >(this instanceof C3) : boolean
+>                     : ^^^^^^^
 >this instanceof C3 : boolean
+>                   : ^^^^^^^
 >this : this
+>     : ^^^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 >new C3() : C3
+>         : ^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
 };
 
 const c3_v1 = C3(); // error: @class tag requires 'new'
 >c3_v1 : any
+>      : ^^^
 >C3() : any
+>     : ^^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
 const c3_v2 = new C3();
 >c3_v2 : C3
+>      : ^^
 >new C3() : C3
+>         : ^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
 /** @class */
 var C4 = function () {
 >C4 : typeof C4
+>   : ^^^^^^^^^
 >function () {    if (!(this instanceof C4)) return new C4();} : typeof C4
+>                                                              : ^^^^^^^^^
 
     if (!(this instanceof C4)) return new C4();
 >!(this instanceof C4) : boolean
+>                      : ^^^^^^^
 >(this instanceof C4) : boolean
+>                     : ^^^^^^^
 >this instanceof C4 : boolean
+>                   : ^^^^^^^
 >this : this
+>     : ^^^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
 >new C4() : C4
+>         : ^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
 
 };
 
 const c4_v1 = C4(); // error: @class tag requires 'new'
 >c4_v1 : any
+>      : ^^^
 >C4() : any
+>     : ^^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
 
 const c4_v2 = new C4();
 >c4_v2 : C4
+>      : ^^
 >new C4() : C4
+>         : ^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
 
 var c5_v1;
 >c5_v1 : any
+>      : ^^^
 
 c5_v1 = function f() { };
 >c5_v1 = function f() { } : () => void
+>                         : ^^^^^^^^^^
 >c5_v1 : any
+>      : ^^^
 >function f() { } : () => void
+>                 : ^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
 new c5_v1();
 >new c5_v1() : any
+>            : ^^^
 >c5_v1 : () => void
+>      : ^^^^^^^^^^
 
 var c5_v2;
 >c5_v2 : any
+>      : ^^^
 
 c5_v2 = class { };
 >c5_v2 = class { } : typeof c5_v2
+>                  : ^^^^^^^^^^^^
 >c5_v2 : any
+>      : ^^^
 >class { } : typeof c5_v2
+>          : ^^^^^^^^^^^^
 
 new c5_v2();
 >new c5_v2() : c5_v2
+>            : ^^^^^
 >c5_v2 : typeof c5_v2
+>      : ^^^^^^^^^^^^
 
 /** @class */
 function C6() {
 >C6 : typeof C6
+>   : ^^^^^^^^^
 
   this.functions = [x => x, x => x + 1, x => x - 1]
 >this.functions = [x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
+>                                                  : ^^ ^^^^^^^^^^^^^^^^
 >this.functions : any
+>               : ^^^
 >this : this
+>     : ^^^^
 >functions : any
+>          : ^^^
 >[x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
+>                                 : ^^ ^^^^^^^^^^^^^^^^
 >x => x : (x: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 >x => x + 1 : (x: any) => any
+>           : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x + 1 : any
+>      : ^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 >x => x - 1 : (x: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x - 1 : number
+>      : ^^^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 };
 
 var c6_v1 = new C6();
 >c6_v1 : C6
+>      : ^^
 >new C6() : C6
+>         : ^^
 >C6 : typeof C6
+>   : ^^^^^^^^^
 
 
 /**
@@ -175,10 +280,15 @@ var c6_v1 = new C6();
  */
 function C7(num) {}
 >C7 : typeof C7
+>   : ^^^^^^^^^
 >num : number
+>    : ^^^^^^
 
 var c7_v1 = new C7();
 >c7_v1 : C7
+>      : ^^
 >new C7() : C7
+>         : ^^
 >C7 : typeof C7
+>   : ^^^^^^^^^
 

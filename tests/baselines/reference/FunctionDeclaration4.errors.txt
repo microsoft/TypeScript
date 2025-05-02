@@ -1,7 +1,7 @@
-tests/cases/compiler/FunctionDeclaration4.ts(2,10): error TS2389: Function implementation name must be 'foo'.
+FunctionDeclaration4.ts(2,10): error TS2389: Function implementation name must be 'foo'.
 
 
-==== tests/cases/compiler/FunctionDeclaration4.ts (1 errors) ====
+==== FunctionDeclaration4.ts (1 errors) ====
     function foo();
     function bar() { }
              ~~~

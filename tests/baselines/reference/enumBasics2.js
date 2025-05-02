@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumBasics2.ts] ////
+
 //// [enumBasics2.ts]
 enum Foo {
   a = 2,

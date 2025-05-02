@@ -1,54 +1,91 @@
+//// [tests/cases/compiler/parseAssertEntriesError.ts] ////
+
 === /index.ts ===
 export type LocalInterface =
 >LocalInterface : any
+>               : ^^^
 
     & import("pkg", { assert: {1234, "resolution-mode": "require"} }).RequireInterface
 >1234, "resolution-mode" : "resolution-mode"
+>                        : ^^^^^^^^^^^^^^^^^
 >1234 : 1234
+>     : ^^^^
 >"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 >RequireInterface    & import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface : number
+>                                                                                                     : ^^^^^^
 >RequireInterface : any
+>                 : ^^^
 
     & import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface;
 >import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface : any
+>                                                                               : ^^^
 >import("pkg", { assert: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"pkg" : "pkg"
+>      : ^^^^^
 >{ assert: {1234, "resolution-mode": "import"} } : { assert: { 1234: any; "resolution-mode": string; }; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assert : { 1234: any; "resolution-mode": string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{1234, "resolution-mode": "import"} : { 1234: any; "resolution-mode": string; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1234 : any
+>     : ^^^
 > : any
+> : ^^^
 >"resolution-mode" : string
+>                  : ^^^^^^
 >"import" : "import"
+>         : ^^^^^^^^
 >ImportInterface : any
+>                : ^^^
 
 export const a = (null as any as import("pkg", { assert: {1234, "resolution-mode": "require"} }).RequireInterface);
 >a : any
+>  : ^^^
 >(null as any as import("pkg", { assert: { : any
+>                                          : ^^^
 >null as any as import("pkg", { assert: { : any
+>                                         : ^^^
 >null as any : any
->null : null
+>            : ^^^
 >1234, "resolution-mode" : "resolution-mode"
+>                        : ^^^^^^^^^^^^^^^^^
 >1234 : 1234
+>     : ^^^^
 >"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 >RequireInterface : any
+>                 : ^^^
 
 export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface);
 >b : any
+>  : ^^^
 >(null as any as import("pkg", { assert: { : any
+>                                          : ^^^
 >null as any as import("pkg", { assert: { : any
+>                                         : ^^^
 >null as any : any
->null : null
+>            : ^^^
 >1234, "resolution-mode" : "resolution-mode"
+>                        : ^^^^^^^^^^^^^^^^^
 >1234 : 1234
+>     : ^^^^
 >"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
 >"import" : "import"
+>         : ^^^^^^^^
 >ImportInterface : any
+>                : ^^^
 
 === /node_modules/pkg/import.d.ts ===
+
 export interface ImportInterface {}
-No type information for this code.=== /node_modules/pkg/require.d.ts ===
+=== /node_modules/pkg/require.d.ts ===
+
 export interface RequireInterface {}
-No type information for this code.

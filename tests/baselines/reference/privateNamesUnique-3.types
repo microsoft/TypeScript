@@ -1,14 +1,21 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts] ////
+
+=== privateNamesUnique-3.ts ===
 class A {
 >A : A
+>  : ^
 
     #foo = 1;
 >#foo : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
     static #foo = true; // error (duplicate)
 >#foo : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
                         // because static and instance private names
                         // share the same lexical scope
@@ -16,18 +23,25 @@ class A {
 }
 class B {
 >B : B
+>  : ^
 
     static #foo = true;
 >#foo : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     test(x: B) {
 >test : (x: B) => void
+>     : ^ ^^ ^^^^^^^^^
 >x : B
+>  : ^
 
         x.#foo; // error (#foo is a static property on B, not an instance property)
 >x.#foo : any
+>       : ^^^
 >x : B
+>  : ^
     }
 }
 

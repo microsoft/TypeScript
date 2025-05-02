@@ -1,88 +1,119 @@
-=== tests/cases/compiler/identicalTypesNoDifferByCheckOrder.ts ===
+//// [tests/cases/compiler/identicalTypesNoDifferByCheckOrder.ts] ////
+
+=== identicalTypesNoDifferByCheckOrder.ts ===
 interface SomeProps {
     x?: string;
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     y?: number;
 >y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     renderAs?: FunctionComponent1<SomeProps>
 >renderAs : FunctionComponent1<SomeProps> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type SomePropsX = Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x">;
->SomePropsX : Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x">
+>SomePropsX : SomePropsX
+>           : ^^^^^^^^^^
 
 interface SomePropsClone {
     x?: string;
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     y?: number;
 >y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     renderAs?: FunctionComponent2<SomeProps>
 >renderAs : FunctionComponent2<SomeProps> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type SomePropsCloneX = Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone, "x">;
->SomePropsCloneX : Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone, "x">
+>SomePropsCloneX : SomePropsCloneX
+>                : ^^^^^^^^^^^^^^^
 
 type Validator<T> = {(): boolean, opt?: T};
 >Validator : Validator<T>
+>          : ^^^^^^^^^^^^
 >opt : T | undefined
+>    : ^^^^^^^^^^^^^
 
 type WeakValidationMap<T> = {[K in keyof T]?: null extends T[K] ? Validator<T[K] | null | undefined> : Validator<T[K]>};
 >WeakValidationMap : WeakValidationMap<T>
->null : null
->null : null
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
 interface FunctionComponent1<P> {
     (props: P & { children?: unknown }): void;
 >props : P & { children?: unknown; }
+>      : ^^^^^^^^^^^^^^^^^       ^^^
 >children : unknown
+>         : ^^^^^^^
 
     propTypes?: WeakValidationMap<P>;
 >propTypes : WeakValidationMap<P> | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface FunctionComponent2<P> {
     (props: P & { children?: unknown }): void;
 >props : P & { children?: unknown; }
+>      : ^^^^^^^^^^^^^^^^^       ^^^
 >children : unknown
+>         : ^^^^^^^
 
     propTypes?: WeakValidationMap<P>;
 >propTypes : WeakValidationMap<P> | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function needsComponentOfSomeProps3(...x: SomePropsClone[]): void {}
 >needsComponentOfSomeProps3 : (...x: SomePropsClone[]) => void
+>                           : ^^^^ ^^                ^^^^^    
 >x : SomePropsClone[]
+>  : ^^^^^^^^^^^^^^^^
 
 const comp3: FunctionComponent2<SomePropsCloneX> = null as any;
 >comp3 : FunctionComponent2<SomePropsCloneX>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
 
 needsComponentOfSomeProps3({ renderAs: comp3 });
 >needsComponentOfSomeProps3({ renderAs: comp3 }) : void
+>                                                : ^^^^
 >needsComponentOfSomeProps3 : (...x: SomePropsClone[]) => void
+>                           : ^^^^ ^^                ^^^^^    
 >{ renderAs: comp3 } : { renderAs: FunctionComponent2<SomePropsCloneX>; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >renderAs : FunctionComponent2<SomePropsCloneX>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >comp3 : FunctionComponent2<SomePropsCloneX>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function needsComponentOfSomeProps2(...x: SomeProps[]): void {}
 >needsComponentOfSomeProps2 : (...x: SomeProps[]) => void
+>                           : ^^^^ ^^           ^^^^^    
 >x : SomeProps[]
+>  : ^^^^^^^^^^^
 
 const comp2: FunctionComponent1<SomePropsX> = null as any;
 >comp2 : FunctionComponent1<SomePropsX>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
 
 needsComponentOfSomeProps2({ renderAs: comp2 });
 >needsComponentOfSomeProps2({ renderAs: comp2 }) : void
+>                                                : ^^^^
 >needsComponentOfSomeProps2 : (...x: SomeProps[]) => void
+>                           : ^^^^ ^^           ^^^^^    
 >{ renderAs: comp2 } : { renderAs: FunctionComponent1<SomePropsX>; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >renderAs : FunctionComponent1<SomePropsX>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >comp2 : FunctionComponent1<SomePropsX>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

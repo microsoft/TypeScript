@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithLHSIsObject.ts] ////
+
 //// [instanceofOperatorWithLHSIsObject.ts]
 class C { }
 

@@ -1,24 +1,34 @@
-=== tests/cases/compiler/exportDeclareClass1.ts ===
+//// [tests/cases/compiler/exportDeclareClass1.ts] ////
+
+=== exportDeclareClass1.ts ===
     export declare class eaC {
 >eaC : eaC
+>    : ^^^
 
         static tF() { };
 >tF : () => void
+>   : ^^^^^^^^^^
 
         static tsF(param:any) { };
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     };
 	
 	export declare class eaC2 {
 >eaC2 : eaC2
+>     : ^^^^
 
         static tF();
 >tF : () => any
+>   : ^^^^^^^^^
 
         static tsF(param:any);
 >tsF : (param: any) => any
+>    : ^     ^^   ^^^^^^^^
 >param : any
+>      : ^^^
 
     };

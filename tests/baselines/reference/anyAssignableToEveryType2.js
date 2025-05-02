@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/anyAssignableToEveryType2.ts] ////
+
 //// [anyAssignableToEveryType2.ts]
 // any is not a subtype of any other types, but is assignable, all the below should work
 

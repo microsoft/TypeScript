@@ -1,0 +1,1060 @@
+//// [tests/cases/compiler/trackedSymbolsNoCrash.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 10,000
+
+=== ast.ts ===
+export enum SyntaxKind { Node0, Node1, Node2, Node3, Node4, Node5, Node6, Node7, Node8, Node9, Node10, Node11, Node12, Node13, Node14, Node15, Node16, Node17, Node18, Node19, Node20, Node21, Node22, Node23, Node24, Node25, Node26, Node27, Node28, Node29, Node30, Node31, Node32, Node33, Node34, Node35, Node36, Node37, Node38, Node39, Node40, Node41, Node42, Node43, Node44, Node45, Node46, Node47, Node48, Node49, Node50, Node51, Node52, Node53, Node54, Node55, Node56, Node57, Node58, Node59, Node60, Node61, Node62, Node63, Node64, Node65, Node66, Node67, Node68, Node69, Node70, Node71, Node72, Node73, Node74, Node75, Node76, Node77, Node78, Node79, Node80, Node81, Node82, Node83, Node84, Node85, Node86, Node87, Node88, Node89, Node90, Node91, Node92, Node93, Node94, Node95, Node96, Node97, Node98, Node99 }
+>SyntaxKind : SyntaxKind
+>           : ^^^^^^^^^^
+>Node0 : SyntaxKind.Node0
+>      : ^^^^^^^^^^^^^^^^
+>Node1 : SyntaxKind.Node1
+>      : ^^^^^^^^^^^^^^^^
+>Node2 : SyntaxKind.Node2
+>      : ^^^^^^^^^^^^^^^^
+>Node3 : SyntaxKind.Node3
+>      : ^^^^^^^^^^^^^^^^
+>Node4 : SyntaxKind.Node4
+>      : ^^^^^^^^^^^^^^^^
+>Node5 : SyntaxKind.Node5
+>      : ^^^^^^^^^^^^^^^^
+>Node6 : SyntaxKind.Node6
+>      : ^^^^^^^^^^^^^^^^
+>Node7 : SyntaxKind.Node7
+>      : ^^^^^^^^^^^^^^^^
+>Node8 : SyntaxKind.Node8
+>      : ^^^^^^^^^^^^^^^^
+>Node9 : SyntaxKind.Node9
+>      : ^^^^^^^^^^^^^^^^
+>Node10 : SyntaxKind.Node10
+>       : ^^^^^^^^^^^^^^^^^
+>Node11 : SyntaxKind.Node11
+>       : ^^^^^^^^^^^^^^^^^
+>Node12 : SyntaxKind.Node12
+>       : ^^^^^^^^^^^^^^^^^
+>Node13 : SyntaxKind.Node13
+>       : ^^^^^^^^^^^^^^^^^
+>Node14 : SyntaxKind.Node14
+>       : ^^^^^^^^^^^^^^^^^
+>Node15 : SyntaxKind.Node15
+>       : ^^^^^^^^^^^^^^^^^
+>Node16 : SyntaxKind.Node16
+>       : ^^^^^^^^^^^^^^^^^
+>Node17 : SyntaxKind.Node17
+>       : ^^^^^^^^^^^^^^^^^
+>Node18 : SyntaxKind.Node18
+>       : ^^^^^^^^^^^^^^^^^
+>Node19 : SyntaxKind.Node19
+>       : ^^^^^^^^^^^^^^^^^
+>Node20 : SyntaxKind.Node20
+>       : ^^^^^^^^^^^^^^^^^
+>Node21 : SyntaxKind.Node21
+>       : ^^^^^^^^^^^^^^^^^
+>Node22 : SyntaxKind.Node22
+>       : ^^^^^^^^^^^^^^^^^
+>Node23 : SyntaxKind.Node23
+>       : ^^^^^^^^^^^^^^^^^
+>Node24 : SyntaxKind.Node24
+>       : ^^^^^^^^^^^^^^^^^
+>Node25 : SyntaxKind.Node25
+>       : ^^^^^^^^^^^^^^^^^
+>Node26 : SyntaxKind.Node26
+>       : ^^^^^^^^^^^^^^^^^
+>Node27 : SyntaxKind.Node27
+>       : ^^^^^^^^^^^^^^^^^
+>Node28 : SyntaxKind.Node28
+>       : ^^^^^^^^^^^^^^^^^
+>Node29 : SyntaxKind.Node29
+>       : ^^^^^^^^^^^^^^^^^
+>Node30 : SyntaxKind.Node30
+>       : ^^^^^^^^^^^^^^^^^
+>Node31 : SyntaxKind.Node31
+>       : ^^^^^^^^^^^^^^^^^
+>Node32 : SyntaxKind.Node32
+>       : ^^^^^^^^^^^^^^^^^
+>Node33 : SyntaxKind.Node33
+>       : ^^^^^^^^^^^^^^^^^
+>Node34 : SyntaxKind.Node34
+>       : ^^^^^^^^^^^^^^^^^
+>Node35 : SyntaxKind.Node35
+>       : ^^^^^^^^^^^^^^^^^
+>Node36 : SyntaxKind.Node36
+>       : ^^^^^^^^^^^^^^^^^
+>Node37 : SyntaxKind.Node37
+>       : ^^^^^^^^^^^^^^^^^
+>Node38 : SyntaxKind.Node38
+>       : ^^^^^^^^^^^^^^^^^
+>Node39 : SyntaxKind.Node39
+>       : ^^^^^^^^^^^^^^^^^
+>Node40 : SyntaxKind.Node40
+>       : ^^^^^^^^^^^^^^^^^
+>Node41 : SyntaxKind.Node41
+>       : ^^^^^^^^^^^^^^^^^
+>Node42 : SyntaxKind.Node42
+>       : ^^^^^^^^^^^^^^^^^
+>Node43 : SyntaxKind.Node43
+>       : ^^^^^^^^^^^^^^^^^
+>Node44 : SyntaxKind.Node44
+>       : ^^^^^^^^^^^^^^^^^
+>Node45 : SyntaxKind.Node45
+>       : ^^^^^^^^^^^^^^^^^
+>Node46 : SyntaxKind.Node46
+>       : ^^^^^^^^^^^^^^^^^
+>Node47 : SyntaxKind.Node47
+>       : ^^^^^^^^^^^^^^^^^
+>Node48 : SyntaxKind.Node48
+>       : ^^^^^^^^^^^^^^^^^
+>Node49 : SyntaxKind.Node49
+>       : ^^^^^^^^^^^^^^^^^
+>Node50 : SyntaxKind.Node50
+>       : ^^^^^^^^^^^^^^^^^
+>Node51 : SyntaxKind.Node51
+>       : ^^^^^^^^^^^^^^^^^
+>Node52 : SyntaxKind.Node52
+>       : ^^^^^^^^^^^^^^^^^
+>Node53 : SyntaxKind.Node53
+>       : ^^^^^^^^^^^^^^^^^
+>Node54 : SyntaxKind.Node54
+>       : ^^^^^^^^^^^^^^^^^
+>Node55 : SyntaxKind.Node55
+>       : ^^^^^^^^^^^^^^^^^
+>Node56 : SyntaxKind.Node56
+>       : ^^^^^^^^^^^^^^^^^
+>Node57 : SyntaxKind.Node57
+>       : ^^^^^^^^^^^^^^^^^
+>Node58 : SyntaxKind.Node58
+>       : ^^^^^^^^^^^^^^^^^
+>Node59 : SyntaxKind.Node59
+>       : ^^^^^^^^^^^^^^^^^
+>Node60 : SyntaxKind.Node60
+>       : ^^^^^^^^^^^^^^^^^
+>Node61 : SyntaxKind.Node61
+>       : ^^^^^^^^^^^^^^^^^
+>Node62 : SyntaxKind.Node62
+>       : ^^^^^^^^^^^^^^^^^
+>Node63 : SyntaxKind.Node63
+>       : ^^^^^^^^^^^^^^^^^
+>Node64 : SyntaxKind.Node64
+>       : ^^^^^^^^^^^^^^^^^
+>Node65 : SyntaxKind.Node65
+>       : ^^^^^^^^^^^^^^^^^
+>Node66 : SyntaxKind.Node66
+>       : ^^^^^^^^^^^^^^^^^
+>Node67 : SyntaxKind.Node67
+>       : ^^^^^^^^^^^^^^^^^
+>Node68 : SyntaxKind.Node68
+>       : ^^^^^^^^^^^^^^^^^
+>Node69 : SyntaxKind.Node69
+>       : ^^^^^^^^^^^^^^^^^
+>Node70 : SyntaxKind.Node70
+>       : ^^^^^^^^^^^^^^^^^
+>Node71 : SyntaxKind.Node71
+>       : ^^^^^^^^^^^^^^^^^
+>Node72 : SyntaxKind.Node72
+>       : ^^^^^^^^^^^^^^^^^
+>Node73 : SyntaxKind.Node73
+>       : ^^^^^^^^^^^^^^^^^
+>Node74 : SyntaxKind.Node74
+>       : ^^^^^^^^^^^^^^^^^
+>Node75 : SyntaxKind.Node75
+>       : ^^^^^^^^^^^^^^^^^
+>Node76 : SyntaxKind.Node76
+>       : ^^^^^^^^^^^^^^^^^
+>Node77 : SyntaxKind.Node77
+>       : ^^^^^^^^^^^^^^^^^
+>Node78 : SyntaxKind.Node78
+>       : ^^^^^^^^^^^^^^^^^
+>Node79 : SyntaxKind.Node79
+>       : ^^^^^^^^^^^^^^^^^
+>Node80 : SyntaxKind.Node80
+>       : ^^^^^^^^^^^^^^^^^
+>Node81 : SyntaxKind.Node81
+>       : ^^^^^^^^^^^^^^^^^
+>Node82 : SyntaxKind.Node82
+>       : ^^^^^^^^^^^^^^^^^
+>Node83 : SyntaxKind.Node83
+>       : ^^^^^^^^^^^^^^^^^
+>Node84 : SyntaxKind.Node84
+>       : ^^^^^^^^^^^^^^^^^
+>Node85 : SyntaxKind.Node85
+>       : ^^^^^^^^^^^^^^^^^
+>Node86 : SyntaxKind.Node86
+>       : ^^^^^^^^^^^^^^^^^
+>Node87 : SyntaxKind.Node87
+>       : ^^^^^^^^^^^^^^^^^
+>Node88 : SyntaxKind.Node88
+>       : ^^^^^^^^^^^^^^^^^
+>Node89 : SyntaxKind.Node89
+>       : ^^^^^^^^^^^^^^^^^
+>Node90 : SyntaxKind.Node90
+>       : ^^^^^^^^^^^^^^^^^
+>Node91 : SyntaxKind.Node91
+>       : ^^^^^^^^^^^^^^^^^
+>Node92 : SyntaxKind.Node92
+>       : ^^^^^^^^^^^^^^^^^
+>Node93 : SyntaxKind.Node93
+>       : ^^^^^^^^^^^^^^^^^
+>Node94 : SyntaxKind.Node94
+>       : ^^^^^^^^^^^^^^^^^
+>Node95 : SyntaxKind.Node95
+>       : ^^^^^^^^^^^^^^^^^
+>Node96 : SyntaxKind.Node96
+>       : ^^^^^^^^^^^^^^^^^
+>Node97 : SyntaxKind.Node97
+>       : ^^^^^^^^^^^^^^^^^
+>Node98 : SyntaxKind.Node98
+>       : ^^^^^^^^^^^^^^^^^
+>Node99 : SyntaxKind.Node99
+>       : ^^^^^^^^^^^^^^^^^
+
+export interface Node0 { kind: SyntaxKind.Node0; propNode0: number; }
+>kind : SyntaxKind.Node0
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode0 : number
+>          : ^^^^^^
+
+export interface Node1 { kind: SyntaxKind.Node1; propNode1: number; }
+>kind : SyntaxKind.Node1
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode1 : number
+>          : ^^^^^^
+
+export interface Node2 { kind: SyntaxKind.Node2; propNode2: number; }
+>kind : SyntaxKind.Node2
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode2 : number
+>          : ^^^^^^
+
+export interface Node3 { kind: SyntaxKind.Node3; propNode3: number; }
+>kind : SyntaxKind.Node3
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode3 : number
+>          : ^^^^^^
+
+export interface Node4 { kind: SyntaxKind.Node4; propNode4: number; }
+>kind : SyntaxKind.Node4
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode4 : number
+>          : ^^^^^^
+
+export interface Node5 { kind: SyntaxKind.Node5; propNode5: number; }
+>kind : SyntaxKind.Node5
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode5 : number
+>          : ^^^^^^
+
+export interface Node6 { kind: SyntaxKind.Node6; propNode6: number; }
+>kind : SyntaxKind.Node6
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode6 : number
+>          : ^^^^^^
+
+export interface Node7 { kind: SyntaxKind.Node7; propNode7: number; }
+>kind : SyntaxKind.Node7
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode7 : number
+>          : ^^^^^^
+
+export interface Node8 { kind: SyntaxKind.Node8; propNode8: number; }
+>kind : SyntaxKind.Node8
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode8 : number
+>          : ^^^^^^
+
+export interface Node9 { kind: SyntaxKind.Node9; propNode9: number; }
+>kind : SyntaxKind.Node9
+>     : ^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode9 : number
+>          : ^^^^^^
+
+export interface Node10 { kind: SyntaxKind.Node10; propNode10: number; }
+>kind : SyntaxKind.Node10
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode10 : number
+>           : ^^^^^^
+
+export interface Node11 { kind: SyntaxKind.Node11; propNode11: number; }
+>kind : SyntaxKind.Node11
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode11 : number
+>           : ^^^^^^
+
+export interface Node12 { kind: SyntaxKind.Node12; propNode12: number; }
+>kind : SyntaxKind.Node12
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode12 : number
+>           : ^^^^^^
+
+export interface Node13 { kind: SyntaxKind.Node13; propNode13: number; }
+>kind : SyntaxKind.Node13
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode13 : number
+>           : ^^^^^^
+
+export interface Node14 { kind: SyntaxKind.Node14; propNode14: number; }
+>kind : SyntaxKind.Node14
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode14 : number
+>           : ^^^^^^
+
+export interface Node15 { kind: SyntaxKind.Node15; propNode15: number; }
+>kind : SyntaxKind.Node15
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode15 : number
+>           : ^^^^^^
+
+export interface Node16 { kind: SyntaxKind.Node16; propNode16: number; }
+>kind : SyntaxKind.Node16
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode16 : number
+>           : ^^^^^^
+
+export interface Node17 { kind: SyntaxKind.Node17; propNode17: number; }
+>kind : SyntaxKind.Node17
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode17 : number
+>           : ^^^^^^
+
+export interface Node18 { kind: SyntaxKind.Node18; propNode18: number; }
+>kind : SyntaxKind.Node18
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode18 : number
+>           : ^^^^^^
+
+export interface Node19 { kind: SyntaxKind.Node19; propNode19: number; }
+>kind : SyntaxKind.Node19
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode19 : number
+>           : ^^^^^^
+
+export interface Node20 { kind: SyntaxKind.Node20; propNode20: number; }
+>kind : SyntaxKind.Node20
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode20 : number
+>           : ^^^^^^
+
+export interface Node21 { kind: SyntaxKind.Node21; propNode21: number; }
+>kind : SyntaxKind.Node21
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode21 : number
+>           : ^^^^^^
+
+export interface Node22 { kind: SyntaxKind.Node22; propNode22: number; }
+>kind : SyntaxKind.Node22
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode22 : number
+>           : ^^^^^^
+
+export interface Node23 { kind: SyntaxKind.Node23; propNode23: number; }
+>kind : SyntaxKind.Node23
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode23 : number
+>           : ^^^^^^
+
+export interface Node24 { kind: SyntaxKind.Node24; propNode24: number; }
+>kind : SyntaxKind.Node24
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode24 : number
+>           : ^^^^^^
+
+export interface Node25 { kind: SyntaxKind.Node25; propNode25: number; }
+>kind : SyntaxKind.Node25
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode25 : number
+>           : ^^^^^^
+
+export interface Node26 { kind: SyntaxKind.Node26; propNode26: number; }
+>kind : SyntaxKind.Node26
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode26 : number
+>           : ^^^^^^
+
+export interface Node27 { kind: SyntaxKind.Node27; propNode27: number; }
+>kind : SyntaxKind.Node27
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode27 : number
+>           : ^^^^^^
+
+export interface Node28 { kind: SyntaxKind.Node28; propNode28: number; }
+>kind : SyntaxKind.Node28
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode28 : number
+>           : ^^^^^^
+
+export interface Node29 { kind: SyntaxKind.Node29; propNode29: number; }
+>kind : SyntaxKind.Node29
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode29 : number
+>           : ^^^^^^
+
+export interface Node30 { kind: SyntaxKind.Node30; propNode30: number; }
+>kind : SyntaxKind.Node30
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode30 : number
+>           : ^^^^^^
+
+export interface Node31 { kind: SyntaxKind.Node31; propNode31: number; }
+>kind : SyntaxKind.Node31
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode31 : number
+>           : ^^^^^^
+
+export interface Node32 { kind: SyntaxKind.Node32; propNode32: number; }
+>kind : SyntaxKind.Node32
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode32 : number
+>           : ^^^^^^
+
+export interface Node33 { kind: SyntaxKind.Node33; propNode33: number; }
+>kind : SyntaxKind.Node33
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode33 : number
+>           : ^^^^^^
+
+export interface Node34 { kind: SyntaxKind.Node34; propNode34: number; }
+>kind : SyntaxKind.Node34
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode34 : number
+>           : ^^^^^^
+
+export interface Node35 { kind: SyntaxKind.Node35; propNode35: number; }
+>kind : SyntaxKind.Node35
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode35 : number
+>           : ^^^^^^
+
+export interface Node36 { kind: SyntaxKind.Node36; propNode36: number; }
+>kind : SyntaxKind.Node36
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode36 : number
+>           : ^^^^^^
+
+export interface Node37 { kind: SyntaxKind.Node37; propNode37: number; }
+>kind : SyntaxKind.Node37
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode37 : number
+>           : ^^^^^^
+
+export interface Node38 { kind: SyntaxKind.Node38; propNode38: number; }
+>kind : SyntaxKind.Node38
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode38 : number
+>           : ^^^^^^
+
+export interface Node39 { kind: SyntaxKind.Node39; propNode39: number; }
+>kind : SyntaxKind.Node39
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode39 : number
+>           : ^^^^^^
+
+export interface Node40 { kind: SyntaxKind.Node40; propNode40: number; }
+>kind : SyntaxKind.Node40
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode40 : number
+>           : ^^^^^^
+
+export interface Node41 { kind: SyntaxKind.Node41; propNode41: number; }
+>kind : SyntaxKind.Node41
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode41 : number
+>           : ^^^^^^
+
+export interface Node42 { kind: SyntaxKind.Node42; propNode42: number; }
+>kind : SyntaxKind.Node42
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode42 : number
+>           : ^^^^^^
+
+export interface Node43 { kind: SyntaxKind.Node43; propNode43: number; }
+>kind : SyntaxKind.Node43
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode43 : number
+>           : ^^^^^^
+
+export interface Node44 { kind: SyntaxKind.Node44; propNode44: number; }
+>kind : SyntaxKind.Node44
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode44 : number
+>           : ^^^^^^
+
+export interface Node45 { kind: SyntaxKind.Node45; propNode45: number; }
+>kind : SyntaxKind.Node45
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode45 : number
+>           : ^^^^^^
+
+export interface Node46 { kind: SyntaxKind.Node46; propNode46: number; }
+>kind : SyntaxKind.Node46
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode46 : number
+>           : ^^^^^^
+
+export interface Node47 { kind: SyntaxKind.Node47; propNode47: number; }
+>kind : SyntaxKind.Node47
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode47 : number
+>           : ^^^^^^
+
+export interface Node48 { kind: SyntaxKind.Node48; propNode48: number; }
+>kind : SyntaxKind.Node48
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode48 : number
+>           : ^^^^^^
+
+export interface Node49 { kind: SyntaxKind.Node49; propNode49: number; }
+>kind : SyntaxKind.Node49
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode49 : number
+>           : ^^^^^^
+
+export interface Node50 { kind: SyntaxKind.Node50; propNode50: number; }
+>kind : SyntaxKind.Node50
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode50 : number
+>           : ^^^^^^
+
+export interface Node51 { kind: SyntaxKind.Node51; propNode51: number; }
+>kind : SyntaxKind.Node51
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode51 : number
+>           : ^^^^^^
+
+export interface Node52 { kind: SyntaxKind.Node52; propNode52: number; }
+>kind : SyntaxKind.Node52
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode52 : number
+>           : ^^^^^^
+
+export interface Node53 { kind: SyntaxKind.Node53; propNode53: number; }
+>kind : SyntaxKind.Node53
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode53 : number
+>           : ^^^^^^
+
+export interface Node54 { kind: SyntaxKind.Node54; propNode54: number; }
+>kind : SyntaxKind.Node54
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode54 : number
+>           : ^^^^^^
+
+export interface Node55 { kind: SyntaxKind.Node55; propNode55: number; }
+>kind : SyntaxKind.Node55
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode55 : number
+>           : ^^^^^^
+
+export interface Node56 { kind: SyntaxKind.Node56; propNode56: number; }
+>kind : SyntaxKind.Node56
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode56 : number
+>           : ^^^^^^
+
+export interface Node57 { kind: SyntaxKind.Node57; propNode57: number; }
+>kind : SyntaxKind.Node57
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode57 : number
+>           : ^^^^^^
+
+export interface Node58 { kind: SyntaxKind.Node58; propNode58: number; }
+>kind : SyntaxKind.Node58
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode58 : number
+>           : ^^^^^^
+
+export interface Node59 { kind: SyntaxKind.Node59; propNode59: number; }
+>kind : SyntaxKind.Node59
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode59 : number
+>           : ^^^^^^
+
+export interface Node60 { kind: SyntaxKind.Node60; propNode60: number; }
+>kind : SyntaxKind.Node60
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode60 : number
+>           : ^^^^^^
+
+export interface Node61 { kind: SyntaxKind.Node61; propNode61: number; }
+>kind : SyntaxKind.Node61
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode61 : number
+>           : ^^^^^^
+
+export interface Node62 { kind: SyntaxKind.Node62; propNode62: number; }
+>kind : SyntaxKind.Node62
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode62 : number
+>           : ^^^^^^
+
+export interface Node63 { kind: SyntaxKind.Node63; propNode63: number; }
+>kind : SyntaxKind.Node63
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode63 : number
+>           : ^^^^^^
+
+export interface Node64 { kind: SyntaxKind.Node64; propNode64: number; }
+>kind : SyntaxKind.Node64
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode64 : number
+>           : ^^^^^^
+
+export interface Node65 { kind: SyntaxKind.Node65; propNode65: number; }
+>kind : SyntaxKind.Node65
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode65 : number
+>           : ^^^^^^
+
+export interface Node66 { kind: SyntaxKind.Node66; propNode66: number; }
+>kind : SyntaxKind.Node66
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode66 : number
+>           : ^^^^^^
+
+export interface Node67 { kind: SyntaxKind.Node67; propNode67: number; }
+>kind : SyntaxKind.Node67
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode67 : number
+>           : ^^^^^^
+
+export interface Node68 { kind: SyntaxKind.Node68; propNode68: number; }
+>kind : SyntaxKind.Node68
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode68 : number
+>           : ^^^^^^
+
+export interface Node69 { kind: SyntaxKind.Node69; propNode69: number; }
+>kind : SyntaxKind.Node69
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode69 : number
+>           : ^^^^^^
+
+export interface Node70 { kind: SyntaxKind.Node70; propNode70: number; }
+>kind : SyntaxKind.Node70
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode70 : number
+>           : ^^^^^^
+
+export interface Node71 { kind: SyntaxKind.Node71; propNode71: number; }
+>kind : SyntaxKind.Node71
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode71 : number
+>           : ^^^^^^
+
+export interface Node72 { kind: SyntaxKind.Node72; propNode72: number; }
+>kind : SyntaxKind.Node72
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode72 : number
+>           : ^^^^^^
+
+export interface Node73 { kind: SyntaxKind.Node73; propNode73: number; }
+>kind : SyntaxKind.Node73
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode73 : number
+>           : ^^^^^^
+
+export interface Node74 { kind: SyntaxKind.Node74; propNode74: number; }
+>kind : SyntaxKind.Node74
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode74 : number
+>           : ^^^^^^
+
+export interface Node75 { kind: SyntaxKind.Node75; propNode75: number; }
+>kind : SyntaxKind.Node75
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode75 : number
+>           : ^^^^^^
+
+export interface Node76 { kind: SyntaxKind.Node76; propNode76: number; }
+>kind : SyntaxKind.Node76
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode76 : number
+>           : ^^^^^^
+
+export interface Node77 { kind: SyntaxKind.Node77; propNode77: number; }
+>kind : SyntaxKind.Node77
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode77 : number
+>           : ^^^^^^
+
+export interface Node78 { kind: SyntaxKind.Node78; propNode78: number; }
+>kind : SyntaxKind.Node78
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode78 : number
+>           : ^^^^^^
+
+export interface Node79 { kind: SyntaxKind.Node79; propNode79: number; }
+>kind : SyntaxKind.Node79
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode79 : number
+>           : ^^^^^^
+
+export interface Node80 { kind: SyntaxKind.Node80; propNode80: number; }
+>kind : SyntaxKind.Node80
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode80 : number
+>           : ^^^^^^
+
+export interface Node81 { kind: SyntaxKind.Node81; propNode81: number; }
+>kind : SyntaxKind.Node81
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode81 : number
+>           : ^^^^^^
+
+export interface Node82 { kind: SyntaxKind.Node82; propNode82: number; }
+>kind : SyntaxKind.Node82
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode82 : number
+>           : ^^^^^^
+
+export interface Node83 { kind: SyntaxKind.Node83; propNode83: number; }
+>kind : SyntaxKind.Node83
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode83 : number
+>           : ^^^^^^
+
+export interface Node84 { kind: SyntaxKind.Node84; propNode84: number; }
+>kind : SyntaxKind.Node84
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode84 : number
+>           : ^^^^^^
+
+export interface Node85 { kind: SyntaxKind.Node85; propNode85: number; }
+>kind : SyntaxKind.Node85
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode85 : number
+>           : ^^^^^^
+
+export interface Node86 { kind: SyntaxKind.Node86; propNode86: number; }
+>kind : SyntaxKind.Node86
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode86 : number
+>           : ^^^^^^
+
+export interface Node87 { kind: SyntaxKind.Node87; propNode87: number; }
+>kind : SyntaxKind.Node87
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode87 : number
+>           : ^^^^^^
+
+export interface Node88 { kind: SyntaxKind.Node88; propNode88: number; }
+>kind : SyntaxKind.Node88
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode88 : number
+>           : ^^^^^^
+
+export interface Node89 { kind: SyntaxKind.Node89; propNode89: number; }
+>kind : SyntaxKind.Node89
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode89 : number
+>           : ^^^^^^
+
+export interface Node90 { kind: SyntaxKind.Node90; propNode90: number; }
+>kind : SyntaxKind.Node90
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode90 : number
+>           : ^^^^^^
+
+export interface Node91 { kind: SyntaxKind.Node91; propNode91: number; }
+>kind : SyntaxKind.Node91
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode91 : number
+>           : ^^^^^^
+
+export interface Node92 { kind: SyntaxKind.Node92; propNode92: number; }
+>kind : SyntaxKind.Node92
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode92 : number
+>           : ^^^^^^
+
+export interface Node93 { kind: SyntaxKind.Node93; propNode93: number; }
+>kind : SyntaxKind.Node93
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode93 : number
+>           : ^^^^^^
+
+export interface Node94 { kind: SyntaxKind.Node94; propNode94: number; }
+>kind : SyntaxKind.Node94
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode94 : number
+>           : ^^^^^^
+
+export interface Node95 { kind: SyntaxKind.Node95; propNode95: number; }
+>kind : SyntaxKind.Node95
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode95 : number
+>           : ^^^^^^
+
+export interface Node96 { kind: SyntaxKind.Node96; propNode96: number; }
+>kind : SyntaxKind.Node96
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode96 : number
+>           : ^^^^^^
+
+export interface Node97 { kind: SyntaxKind.Node97; propNode97: number; }
+>kind : SyntaxKind.Node97
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode97 : number
+>           : ^^^^^^
+
+export interface Node98 { kind: SyntaxKind.Node98; propNode98: number; }
+>kind : SyntaxKind.Node98
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode98 : number
+>           : ^^^^^^
+
+export interface Node99 { kind: SyntaxKind.Node99; propNode99: number; }
+>kind : SyntaxKind.Node99
+>     : ^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>propNode99 : number
+>           : ^^^^^^
+
+export type Node = Node0 | Node1 | Node2 | Node3 | Node4 | Node5 | Node6 | Node7 | Node8 | Node9 | Node10 | Node11 | Node12 | Node13 | Node14 | Node15 | Node16 | Node17 | Node18 | Node19 | Node20 | Node21 | Node22 | Node23 | Node24 | Node25 | Node26 | Node27 | Node28 | Node29 | Node30 | Node31 | Node32 | Node33 | Node34 | Node35 | Node36 | Node37 | Node38 | Node39 | Node40 | Node41 | Node42 | Node43 | Node44 | Node45 | Node46 | Node47 | Node48 | Node49 | Node50 | Node51 | Node52 | Node53 | Node54 | Node55 | Node56 | Node57 | Node58 | Node59 | Node60 | Node61 | Node62 | Node63 | Node64 | Node65 | Node66 | Node67 | Node68 | Node69 | Node70 | Node71 | Node72 | Node73 | Node74 | Node75 | Node76 | Node77 | Node78 | Node79 | Node80 | Node81 | Node82 | Node83 | Node84 | Node85 | Node86 | Node87 | Node88 | Node89 | Node90 | Node91 | Node92 | Node93 | Node94 | Node95 | Node96 | Node97 | Node98 | Node99;
+>Node : Node
+>     : ^^^^
+
+=== index.ts ===
+import * as ast from "./ast";
+>ast : typeof ast
+>    : ^^^^^^^^^^
+
+export const isNodeOfType =
+>isNodeOfType : <NodeType extends ast.SyntaxKind>(nodeType: NodeType) => (node: ast.Node | null | undefined) => node is Extract<ast.Node, { kind: NodeType; }>
+>             : ^        ^^^^^^^^^              ^^        ^^        ^^^^^^                                 ^^^^^                                              
+
+  <NodeType extends ast.SyntaxKind>(nodeType: NodeType) =>
+><NodeType extends ast.SyntaxKind>(nodeType: NodeType) =>  (    node: ast.Node | null | undefined,  ): node is Extract<ast.Node, { kind: NodeType }> =>    node?.kind === nodeType : <NodeType extends ast.SyntaxKind>(nodeType: NodeType) => (node: ast.Node | null | undefined) => node is Extract<ast.Node, { kind: NodeType; }>
+>                                                                                                                                                                                  : ^        ^^^^^^^^^              ^^        ^^        ^^^^^^                                 ^^^^^                                              
+>ast : any
+>    : ^^^
+>nodeType : NodeType
+>         : ^^^^^^^^
+
+  (
+>(    node: ast.Node | null | undefined,  ): node is Extract<ast.Node, { kind: NodeType }> =>    node?.kind === nodeType : (node: ast.Node | null | undefined) => node is Extract<ast.Node, { kind: NodeType; }>
+>                                                                                                                        : ^    ^^                           ^^^^^                                              
+
+    node: ast.Node | null | undefined,
+>node : ast.Node | null | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ast : any
+>    : ^^^
+
+  ): node is Extract<ast.Node, { kind: NodeType }> =>
+>ast : any
+>    : ^^^
+>kind : NodeType
+>     : ^^^^^^^^
+
+    node?.kind === nodeType;
+>node?.kind === nodeType : boolean
+>                        : ^^^^^^^
+>node?.kind : ast.SyntaxKind | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ast.Node | null | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : ast.SyntaxKind | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nodeType : NodeType
+>         : ^^^^^^^^
+
+

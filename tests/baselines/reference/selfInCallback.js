@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfInCallback.ts] ////
+
 //// [selfInCallback.ts]
 class C {
 	public p1 = 0;

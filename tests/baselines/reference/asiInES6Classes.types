@@ -1,16 +1,23 @@
-=== tests/cases/compiler/asiInES6Classes.ts ===
+//// [tests/cases/compiler/asiInES6Classes.ts] ////
+
+=== asiInES6Classes.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
  
 
     defaults = {
 >defaults : { done: boolean; }
+>         : ^^^^^^^^^^^^^^^^^^
 >{        done: false    } : { done: boolean; }
+>                          : ^^^^^^^^^^^^^^^^^^
 
         done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
     }
 
@@ -18,9 +25,11 @@ class Foo {
 
     bar() {
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
         return 3;
 >3 : 3
+>  : ^
 
     }
 

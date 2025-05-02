@@ -1,73 +1,111 @@
-=== tests/cases/compiler/silentNeverPropagation.ts ===
+//// [tests/cases/compiler/silentNeverPropagation.ts] ////
+
+=== silentNeverPropagation.ts ===
 // Repro from #45041
 
 type ModuleWithState<TState> = {
 >ModuleWithState : ModuleWithState<TState>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 
     state: TState;
 >state : TState
+>      : ^^^^^^
 
 };
 
 type State = {
->State : { a: number; }
+>State : State
+>      : ^^^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
 };
 
 type MoreState = {
->MoreState : { z: string; }
+>MoreState : MoreState
+>          : ^^^^^^^^^
 
     z: string;
 >z : string
+>  : ^^^^^^
 
 };
 
 declare function createModule<TState, TActions>(state: TState, actions: TActions): ModuleWithState<TState> & TActions;
 >createModule : <TState, TActions>(state: TState, actions: TActions) => ModuleWithState<TState> & TActions
+>             : ^      ^^        ^^     ^^      ^^       ^^        ^^^^^                                  
 >state : TState
+>      : ^^^^^^
 >actions : TActions
+>        : ^^^^^^^^
 
 declare function convert<TState, TActions>(m: ModuleWithState<TState> & TActions): ModuleWithState<TState & MoreState> & TActions;
 >convert : <TState, TActions>(m: ModuleWithState<TState> & TActions) => ModuleWithState<TState & MoreState> & TActions
+>        : ^      ^^        ^^ ^^                                  ^^^^^                                              
 >m : ModuleWithState<TState> & TActions
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const breaks = convert(
 >breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >convert(    createModule({ a: 12 }, { foo() { return true } })) : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >convert : <TState, TActions>(m: ModuleWithState<TState> & TActions) => ModuleWithState<TState & MoreState> & TActions
+>        : ^      ^^        ^^ ^^                                  ^^^^^                                              
 
     createModule({ a: 12 }, { foo() { return true } })
 >createModule({ a: 12 }, { foo() { return true } }) : ModuleWithState<{ a: number; }> & { foo(): true; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createModule : <TState, TActions>(state: TState, actions: TActions) => ModuleWithState<TState> & TActions
+>             : ^      ^^        ^^     ^^      ^^       ^^        ^^^^^                                  
 >{ a: 12 } : { a: number; }
+>          : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >{ foo() { return true } } : { foo(): true; }
+>                          : ^^^^^^^^^^^^^^^^
 >foo : () => true
+>    : ^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 );
 
 breaks.state.a
 >breaks.state.a : number
+>               : ^^^^^^
 >breaks.state : { a: number; } & MoreState
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : { a: number; } & MoreState
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 breaks.state.z
 >breaks.state.z : string
+>               : ^^^^^^
 >breaks.state : { a: number; } & MoreState
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : { a: number; } & MoreState
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : string
+>  : ^^^^^^
 
 breaks.foo()
 >breaks.foo() : true
+>             : ^^^^
 >breaks.foo : () => true
+>           : ^^^^^^^^^^
 >breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => true
+>    : ^^^^^^^^^^
 

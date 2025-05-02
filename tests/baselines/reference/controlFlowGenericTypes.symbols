@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts] ////
+
+=== controlFlowGenericTypes.ts ===
 function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
 >f1 : Symbol(f1, Decl(controlFlowGenericTypes.ts, 0, 0))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 0, 12))
@@ -624,5 +626,31 @@ function update<T extends Control, K extends keyof T>(control : T | undefined, k
 >key : Symbol(key, Decl(controlFlowGenericTypes.ts, 206, 78))
 >value : Symbol(value, Decl(controlFlowGenericTypes.ts, 206, 86))
     }
+}
+
+// Repro from #50465
+
+type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
+>Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 210, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 214, 12))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 214, 12))
+>id : Symbol(id, Decl(controlFlowGenericTypes.ts, 214, 43))
+>id : Symbol(id, Decl(controlFlowGenericTypes.ts, 214, 70))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 214, 12))
+>title : Symbol(title, Decl(controlFlowGenericTypes.ts, 214, 83))
+
+function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
+>getColumnProperty : Symbol(getColumnProperty, Decl(controlFlowGenericTypes.ts, 214, 101))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 216, 27))
+>column : Symbol(column, Decl(controlFlowGenericTypes.ts, 216, 30))
+>Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 210, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 216, 27))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 216, 48))
+>Column : Symbol(Column, Decl(controlFlowGenericTypes.ts, 210, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 216, 27))
+
+  return column[key];
+>column : Symbol(column, Decl(controlFlowGenericTypes.ts, 216, 30))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 216, 48))
 }
 

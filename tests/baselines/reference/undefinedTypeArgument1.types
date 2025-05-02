@@ -1,6 +1,11 @@
-=== tests/cases/compiler/undefinedTypeArgument1.ts ===
+//// [tests/cases/compiler/undefinedTypeArgument1.ts] ////
+
+=== undefinedTypeArgument1.ts ===
 var cats = new Array<WAWA>();
 >cats : WAWA[]
+>     : ^^^^^^
 >new Array<WAWA>() : WAWA[]
+>                  : ^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 

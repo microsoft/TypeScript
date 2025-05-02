@@ -1,68 +1,107 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution10.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface OptionProp {
     x?: 2
 >x : 2
+>  : ^
 }
 
 class Opt extends React.Component<OptionProp, {}> {
 >Opt : Opt
+>    : ^^^
 >React.Component : React.Component<OptionProp, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <div>Hello</div>;
 ><div>Hello</div> : JSX.Element
+>                 : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
 }
 
 const obj: OptionProp = {};
 >obj : OptionProp
+>    : ^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 const obj1: OptionProp = {
 >obj1 : OptionProp
+>     : ^^^^^^^^^^
 >{    x: 2} : { x: 2; }
+>           : ^^^^^^^^^
 
     x: 2
 >x : 2
+>  : ^
 >2 : 2
+>  : ^
 }
 
 // Error
 let y = <Opt {...obj} x={3}/>;
 >y : JSX.Element
+>  : ^^^^^^^^^^^
 ><Opt {...obj} x={3}/> : JSX.Element
+>                      : ^^^^^^^^^^^
 >Opt : typeof Opt
+>    : ^^^^^^^^^^
 >obj : OptionProp
+>    : ^^^^^^^^^^
 >x : 3
+>  : ^
 >3 : 3
+>  : ^
 
 let y1 = <Opt {...obj1} x="Hi"/>;
 >y1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Opt {...obj1} x="Hi"/> : JSX.Element
+>                        : ^^^^^^^^^^^
 >Opt : typeof Opt
+>    : ^^^^^^^^^^
 >obj1 : OptionProp
+>     : ^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 let y2 = <Opt {...obj1} x={3}/>;
 >y2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Opt {...obj1} x={3}/> : JSX.Element
+>                       : ^^^^^^^^^^^
 >Opt : typeof Opt
+>    : ^^^^^^^^^^
 >obj1 : OptionProp
+>     : ^^^^^^^^^^
 >x : 3
+>  : ^
 >3 : 3
+>  : ^
 
 let y3 = <Opt x />;
 >y3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Opt x /> : JSX.Element
+>          : ^^^^^^^^^^^
 >Opt : typeof Opt
+>    : ^^^^^^^^^^
 >x : true
+>  : ^^^^
 

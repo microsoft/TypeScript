@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assertInWrapSomeTypeParameter.ts ===
+//// [tests/cases/compiler/assertInWrapSomeTypeParameter.ts] ////
+
+=== assertInWrapSomeTypeParameter.ts ===
 class C<T extends C<T>> {
 >C : Symbol(C, Decl(assertInWrapSomeTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(assertInWrapSomeTypeParameter.ts, 0, 8))

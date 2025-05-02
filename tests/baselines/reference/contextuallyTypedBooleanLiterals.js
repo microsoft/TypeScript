@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedBooleanLiterals.ts] ////
+
 //// [contextuallyTypedBooleanLiterals.ts]
 // Repro from #48363
 

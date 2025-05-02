@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralArraySpecialization.ts] ////
+
 //// [objectLiteralArraySpecialization.ts]
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 interface MyArrayWrapper<T> {

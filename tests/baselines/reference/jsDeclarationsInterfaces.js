@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsInterfaces.ts] ////
+
 //// [index.js]
 // Pretty much all of this should be an error, (since interfaces are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless
@@ -132,19 +134,19 @@ export interface A {
 export interface B {
     cat: string;
 }
-export interface C<T_1, U_1> {
+export interface C<T, U> {
     new (): string;
-    new (x: T_1): U_1;
-    new <Q_4>(x: Q_4): T_1 & Q_4;
+    new (x: T): U;
+    new <Q>(x: Q): T & Q;
     (): number;
-    (x: T_1): U_1;
-    <Q_3>(x: Q_3): T_1 & Q_3;
-    field: T_1 & U_1;
-    optionalField?: T_1;
-    readonly readonlyField: T_1 & U_1;
-    readonly readonlyOptionalField?: U_1;
-    method<Q_1 = number>(): number;
-    method<Q_2>(a: T_1 & Q_2): Q_2 & number;
+    (x: T): U;
+    <Q>(x: Q): T & Q;
+    field: T & U;
+    optionalField?: T;
+    readonly readonlyField: T & U;
+    readonly readonlyOptionalField?: U;
+    method<Q = number>(): number;
+    method<Q>(a: T & Q): Q & number;
     method(a?: number): number;
     method(...args: any[]): number;
     optMethod?(): number;
@@ -159,11 +161,11 @@ export interface K extends I, J {
 export interface L extends K {
     y: string;
 }
-export interface M<T_1> {
-    field: T_1;
+export interface M<T> {
+    field: T;
 }
-export interface N<U_1> extends M<U_1> {
-    other: U_1;
+export interface N<U> extends M<U> {
+    other: U;
 }
 export interface O {
     [idx: string]: string;

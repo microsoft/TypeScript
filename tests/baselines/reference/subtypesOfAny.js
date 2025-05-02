@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfAny.ts] ////
+
 //// [subtypesOfAny.ts]
 // every type is a subtype of any, no errors expected
 

@@ -1,0 +1,90 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|interface [|{| defId: 0 |}IFoo|] {
+//     instance1: number;
+// }|>
+
+// === /tests/cases/fourslash/b.ts ===
+// <|interface [|{| defId: 1 |}IFoo|] {
+//     instance2: number;
+// }|>
+// 
+// <|interface [|{| defId: 2 |}IFoo|] {
+//     instance3: number;
+// }|>
+// 
+// var ifoo: IFo/*GOTO DEF*/o;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "interface",
+    "name": "IFoo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "interface",
+    "name": "IFoo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "interface",
+    "name": "IFoo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/c.ts ===
+// <|module [|{| defId: 0 |}Module|] {
+//     export class c1 { }
+// }|>
+
+// === /tests/cases/fourslash/d.ts ===
+// <|module [|{| defId: 1 |}Module|] {
+//     export class c2 { }
+// }|>
+
+// === /tests/cases/fourslash/e.ts ===
+// [|Modul/*GOTO DEF*/e|];
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "module",
+    "name": "Module",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "module",
+    "name": "Module",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

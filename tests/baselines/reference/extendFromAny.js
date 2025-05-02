@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendFromAny.ts] ////
+
 //// [extendFromAny.ts]
 declare var Base: any;
 class C extends Base {

@@ -1,46 +1,72 @@
-=== tests/cases/compiler/child1.ts ===
+//// [tests/cases/compiler/declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts] ////
+
+=== child1.ts ===
 import { ParentThing } from './parent';
 >ParentThing : typeof ParentThing
+>            : ^^^^^^^^^^^^^^^^^^
 
 declare module './parent' {
->'./parent' : typeof import("tests/cases/compiler/parent")
+>'./parent' : typeof import("parent")
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface ParentThing {
         add: (a: number, b: number) => number;
 >add : (a: number, b: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
     }
 }
 
 export function child1(prototype: ParentThing) {
 >child1 : (prototype: ParentThing) => void
+>       : ^         ^^           ^^^^^^^^^
 >prototype : ParentThing
+>          : ^^^^^^^^^^^
 
     prototype.add = (a: number, b: number) => a + b;
 >prototype.add = (a: number, b: number) => a + b : (a: number, b: number) => number
+>                                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >prototype.add : (a: number, b: number) => number
+>              : ^ ^^      ^^ ^^      ^^^^^      
 >prototype : ParentThing
+>          : ^^^^^^^^^^^
 >add : (a: number, b: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >(a: number, b: number) => a + b : (a: number, b: number) => number
+>                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a + b : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/parent.ts ===
+=== parent.ts ===
 import { child1 } from './child1'; // this import should still exist in some form in the output, since it augments this module
 >child1 : (prototype: ParentThing) => void
+>       : ^         ^^           ^^^^^^^^^
 
 export class ParentThing implements ParentThing {}
 >ParentThing : ParentThing
+>            : ^^^^^^^^^^^
 
 child1(ParentThing.prototype);
 >child1(ParentThing.prototype) : void
+>                              : ^^^^
 >child1 : (prototype: ParentThing) => void
+>       : ^         ^^           ^^^^^^^^^
 >ParentThing.prototype : ParentThing
+>                      : ^^^^^^^^^^^
 >ParentThing : typeof ParentThing
+>            : ^^^^^^^^^^^^^^^^^^
 >prototype : ParentThing
+>          : ^^^^^^^^^^^
 

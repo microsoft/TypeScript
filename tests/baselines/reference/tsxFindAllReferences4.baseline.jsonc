@@ -1,359 +1,231 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
+// --- (line: 3) skipped ---
 //     }
 //     interface ElementAttributesProperty { props }
 // }
-// /*FIND ALL REFS*/class [|MyClass|] {
+// /*FIND ALL REFS*/<|class [|{| isWriteAccess: true, isDefinition: true |}MyClass|] {
 //   props: {
 //     name?: string;
 //     size?: number;
-// }
+// }|>
 // 
 // 
-// var x = <[|MyClass|] name='hello'></[|MyClass|]>;
+// var x = <|<|<[|{| contextId: 1 |}MyClass|] name='hello'></[|{| contextId: 2 |}MyClass|]>|>|>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "class",
-      "name": "class MyClass",
-      "textSpan": {
-        "start": 145,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MyClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 139,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 139,
-          "length": 66
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 217,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 216,
-          "length": 32
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 240,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 216,
-          "length": 32
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 3) skipped ---
+  //     }
+  //     interface ElementAttributesProperty { props }
+  // }
+  // /*FIND ALL REFS*/<|class [|MyClass|] {
+  //   props: {
+  //     name?: string;
+  //     size?: number;
+  // }|>
+  // 
+  // 
+  // var x = <MyClass name='hello'></MyClass>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class MyClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MyClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
+// --- (line: 3) skipped ---
 //     }
 //     interface ElementAttributesProperty { props }
 // }
-// class /*FIND ALL REFS*/[|MyClass|] {
+// <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}MyClass|] {
 //   props: {
 //     name?: string;
 //     size?: number;
+// }|>
+// 
+// 
+// var x = <|<|<[|{| contextId: 1 |}MyClass|] name='hello'></[|{| contextId: 2 |}MyClass|]>|>|>;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 3) skipped ---
+  //     }
+  //     interface ElementAttributesProperty { props }
+  // }
+  // <|class /*FIND ALL REFS*/[|MyClass|] {
+  //   props: {
+  //     name?: string;
+  //     size?: number;
+  // }|>
+  // 
+  // 
+  // var x = <MyClass name='hello'></MyClass>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class MyClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MyClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 10) skipped ---
 // }
 // 
 // 
-// var x = <[|MyClass|] name='hello'></[|MyClass|]>;
+// var x = /*FIND ALL REFS*/<MyClass name='hello'></MyClass>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "class",
-      "name": "class MyClass",
-      "textSpan": {
-        "start": 145,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MyClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 139,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 139,
-          "length": 66
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 217,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 216,
-          "length": 32
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 240,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 216,
-          "length": 32
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
 
-undefined
 
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
+// --- (line: 3) skipped ---
 //     }
 //     interface ElementAttributesProperty { props }
 // }
-// class [|MyClass|] {
+// <|class [|{| isWriteAccess: true |}MyClass|] {
 //   props: {
 //     name?: string;
 //     size?: number;
-// }
+// }|>
 // 
 // 
-// var x = </*FIND ALL REFS*/[|MyClass|] name='hello'></[|MyClass|]>;
+// var x = <|<|</*FIND ALL REFS*/[|{| contextId: 1 |}MyClass|] name='hello'></[|{| contextId: 2 |}MyClass|]>|>|>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "class",
-      "name": "class MyClass",
-      "textSpan": {
-        "start": 145,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MyClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 139,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 139,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 217,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 216,
-          "length": 32
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 240,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 216,
-          "length": 32
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 3) skipped ---
+  //     }
+  //     interface ElementAttributesProperty { props }
+  // }
+  // <|class [|MyClass|] {
+  //   props: {
+  //     name?: string;
+  //     size?: number;
+  // }|>
+  // 
+  // 
+  // var x = </*FIND ALL REFS*/MyClass name='hello'></MyClass>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class MyClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MyClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
+// --- (line: 3) skipped ---
 //     }
 //     interface ElementAttributesProperty { props }
 // }
-// class [|MyClass|] {
+// <|class [|{| isWriteAccess: true |}MyClass|] {
 //   props: {
 //     name?: string;
 //     size?: number;
-// }
+// }|>
 // 
 // 
-// var x = <[|MyClass|] name='hello'><//*FIND ALL REFS*/[|MyClass|]>;
+// var x = <|<|<[|{| contextId: 1 |}MyClass|] name='hello'><//*FIND ALL REFS*/[|{| contextId: 2 |}MyClass|]>|>|>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "class",
-      "name": "class MyClass",
-      "textSpan": {
-        "start": 145,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MyClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 139,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 139,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 217,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 216,
-          "length": 32
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 240,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 216,
-          "length": 32
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 3) skipped ---
+  //     }
+  //     interface ElementAttributesProperty { props }
+  // }
+  // <|class [|MyClass|] {
+  //   props: {
+  //     name?: string;
+  //     size?: number;
+  // }|>
+  // 
+  // 
+  // var x = <MyClass name='hello'><//*FIND ALL REFS*/MyClass>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class MyClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MyClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

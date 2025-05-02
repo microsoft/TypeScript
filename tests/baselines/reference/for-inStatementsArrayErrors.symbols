@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts ===
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts] ////
+
+=== for-inStatementsArrayErrors.ts ===
 let a: Date[];
 >a : Symbol(a, Decl(for-inStatementsArrayErrors.ts, 0, 3))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))

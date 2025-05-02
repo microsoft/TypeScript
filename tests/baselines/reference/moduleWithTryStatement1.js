@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleWithTryStatement1.ts] ////
+
 //// [moduleWithTryStatement1.ts]
 module M {
   try {

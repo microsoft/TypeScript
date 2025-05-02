@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializationsShouldNotAffectEachOther.ts ===
+//// [tests/cases/compiler/specializationsShouldNotAffectEachOther.ts] ////
+
+=== specializationsShouldNotAffectEachOther.ts ===
 interface Series  {
 >Series : Symbol(Series, Decl(specializationsShouldNotAffectEachOther.ts, 0, 0))
 

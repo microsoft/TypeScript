@@ -1,18 +1,18 @@
-tests/cases/compiler/assignmentCompatWithOverloads.ts(17,1): error TS2322: Type '(x: string) => string' is not assignable to type '(s1: string) => number'.
+assignmentCompatWithOverloads.ts(17,1): error TS2322: Type '(x: string) => string' is not assignable to type '(s1: string) => number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/assignmentCompatWithOverloads.ts(19,1): error TS2322: Type '(x: number) => number' is not assignable to type '(s1: string) => number'.
+assignmentCompatWithOverloads.ts(19,1): error TS2322: Type '(x: number) => number' is not assignable to type '(s1: string) => number'.
   Types of parameters 'x' and 's1' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/assignmentCompatWithOverloads.ts(21,1): error TS2322: Type '{ (x: string): string; (x: number): number; }' is not assignable to type '(s1: string) => number'.
+assignmentCompatWithOverloads.ts(21,1): error TS2322: Type '{ (x: string): string; (x: number): number; }' is not assignable to type '(s1: string) => number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/assignmentCompatWithOverloads.ts(30,1): error TS2322: Type 'typeof C' is not assignable to type 'new (x: number) => void'.
+assignmentCompatWithOverloads.ts(30,1): error TS2322: Type 'typeof C' is not assignable to type 'new (x: number) => void'.
   Types of construct signatures are incompatible.
     Type 'new (x: string) => C' is not assignable to type 'new (x: number) => void'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/assignmentCompatWithOverloads.ts (4 errors) ====
+==== assignmentCompatWithOverloads.ts (4 errors) ====
     function f1(x: string): number { return null; }
     
     function f2(x: string): string { return null; }

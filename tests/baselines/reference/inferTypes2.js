@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/inferTypes2.ts] ////
+
 //// [inferTypes2.ts]
 // Repros from #22755
 
@@ -25,16 +27,15 @@ const b: string = a;
 //// [inferTypes2.js]
 "use strict";
 // Repros from #22755
-exports.__esModule = true;
-exports.bar2 = exports.bar = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = bar;
+exports.bar2 = bar2;
 function bar(obj) {
     return foo(obj);
 }
-exports.bar = bar;
 function bar2(obj) {
     return foo2(obj);
 }
-exports.bar2 = bar2;
 var a = null;
 var b = a;
 

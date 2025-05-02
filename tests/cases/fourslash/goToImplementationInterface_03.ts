@@ -6,4 +6,4 @@
 ////
 //// var x = <Foo> [|{ hello: () => {} }|];
 
-verify.allRangesAppearInImplementationList("interface_definition");
+verify.baselineGoToImplementation("interface_definition");

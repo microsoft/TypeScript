@@ -1,32 +1,48 @@
-=== tests/cases/compiler/typing.d.ts ===
+//// [tests/cases/compiler/amdLikeInputDeclarationEmit.ts] ////
+
+=== typing.d.ts ===
 declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
 >define : <T = unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
+>       : ^ ^^^^^^^^^^^^    ^^      ^^       ^^        ^^     ^^                            ^^^^^^^^
 >name : string
+>     : ^^^^^^
 >modules : string[]
+>        : ^^^^^^^^
 >ready : (...modules: unknown[]) => T
+>      : ^^^^       ^^         ^^^^^ 
 >modules : unknown[]
+>        : ^^^^^^^^^
 
-=== tests/cases/compiler/deps/BaseClass.d.ts ===
+=== deps/BaseClass.d.ts ===
 declare module "deps/BaseClass" {
 >"deps/BaseClass" : typeof import("deps/BaseClass")
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     class BaseClass {
 >BaseClass : BaseClass
+>          : ^^^^^^^^^
 
         static extends<A>(a: A): new () => A & BaseClass;
 >extends : <A>(a: A) => new () => A & BaseClass
+>        : ^ ^^ ^^ ^^^^^                       
 >a : A
+>  : ^
     }
     export = BaseClass;
 >BaseClass : BaseClass
+>          : ^^^^^^^^^
 }
-=== tests/cases/compiler/ExtendedClass.js ===
+=== ExtendedClass.js ===
 define("lib/ExtendedClass", ["deps/BaseClass"], 
 >define("lib/ExtendedClass", ["deps/BaseClass"], /** * {typeof import("deps/BaseClass")} * @param  {typeof import("deps/BaseClass")} BaseClass  * @returns  */(BaseClass) => {            const ExtendedClass = BaseClass.extends({        f: function() {            return "something";        }    });    // Exports the module in a way tsc recognize class export     const module = {};    module.exports = ExtendedClass    return module.exports;}) : any
 >define : <T = unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
+>       : ^ ^^^^^^^^^^^^    ^^      ^^       ^^        ^^     ^^                            ^^^^^^^^
 >"lib/ExtendedClass" : "lib/ExtendedClass"
+>                    : ^^^^^^^^^^^^^^^^^^^
 >["deps/BaseClass"] : string[]
+>                   : ^^^^^^^^
 >"deps/BaseClass" : "deps/BaseClass"
+>                 : ^^^^^^^^^^^^^^^^
 
 /**
  * {typeof import("deps/BaseClass")}
@@ -35,40 +51,58 @@ define("lib/ExtendedClass", ["deps/BaseClass"],
  */
 (BaseClass) => {    
 >(BaseClass) => {            const ExtendedClass = BaseClass.extends({        f: function() {            return "something";        }    });    // Exports the module in a way tsc recognize class export     const module = {};    module.exports = ExtendedClass    return module.exports;} : (BaseClass: typeof import("deps/BaseClass")) => any
+>                                                                                                                                                                                                                                                                                             : ^         ^^                               ^^^^^^^^
 >BaseClass : typeof import("deps/BaseClass")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
     const ExtendedClass = BaseClass.extends({
 >ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseClass.extends({        f: function() {            return "something";        }    }) : new () => { f: () => "something"; } & import("deps/BaseClass")
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseClass.extends : <A>(a: A) => new () => A & import("deps/BaseClass")
+>                  : ^ ^^ ^^ ^^^^^                     ^^^^^^^^^^^^^^^^ 
 >BaseClass : typeof import("deps/BaseClass")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extends : <A>(a: A) => new () => A & import("deps/BaseClass")
+>        : ^ ^^ ^^ ^^^^^                     ^^^^^^^^^^^^^^^^ 
 >{        f: function() {            return "something";        }    } : { f: () => "something"; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         f: function() {
 >f : () => "something"
+>  : ^^^^^^^^^^^^^^^^^
 >function() {            return "something";        } : () => "something"
+>                                                     : ^^^^^^^^^^^^^^^^^
 
             return "something";
 >"something" : "something"
+>            : ^^^^^^^^^^^
         }
     });
 
     // Exports the module in a way tsc recognize class export 
     const module = {};
 >module : {}
+>       : ^^
 >{} : {}
+>   : ^^
 
     module.exports = ExtendedClass
 >module.exports = ExtendedClass : any
 >module.exports : any
 >module : {}
+>       : ^^
 >exports : any
+>        : ^^^
 >ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return module.exports;
 >module.exports : any
 >module : {}
+>       : ^^
 >exports : any
+>        : ^^^
 
 });

@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty11.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty11.ts ===
+enum E { A, B }
+>E : E
+>  : ^
+>A : E.A
+>  : ^^^
+>B : E.B
+>  : ^^^
+
+declare const m: { [K in E]: string | null };
+>m : { 0: string | null; 1: string | null; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+if (m[E.A] !== null) {
+>m[E.A] !== null : boolean
+>                : ^^^^^^^
+>m[E.A] : string | null
+>       : ^^^^^^^^^^^^^
+>m : { 0: string | null; 1: string | null; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>E.A : E.A
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>A : E.A
+>  : ^^^
+
+    m[E.A].toString(); // string
+>m[E.A].toString() : string
+>                  : ^^^^^^
+>m[E.A].toString : () => string
+>                : ^^^^^^      
+>m[E.A] : string
+>       : ^^^^^^
+>m : { 0: string | null; 1: string | null; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>E.A : E.A
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>A : E.A
+>  : ^^^
+>toString : () => string
+>         : ^^^^^^      
+}
+

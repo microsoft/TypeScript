@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overridingPrivateStaticMembers.ts ===
+//// [tests/cases/compiler/overridingPrivateStaticMembers.ts] ////
+
+=== overridingPrivateStaticMembers.ts ===
 class Base2 {
 >Base2 : Symbol(Base2, Decl(overridingPrivateStaticMembers.ts, 0, 0))
 

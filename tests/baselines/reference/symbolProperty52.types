@@ -1,26 +1,43 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty52.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty52.ts] ////
+
+=== symbolProperty52.ts ===
 var obj = {
->obj : { [x: number]: number; }
->{    [Symbol.nonsense]: 0} : { [x: number]: number; }
+>obj : { [Symbol.nonsense]: number; }
+>    : ^^                   ^^^^^^ ^^
+>{    [Symbol.nonsense]: 0} : { [Symbol.nonsense]: number; }
+>                           : ^^                   ^^^^^^ ^^
 
     [Symbol.nonsense]: 0
 >[Symbol.nonsense] : number
+>                  : ^^^^^^
 >Symbol.nonsense : any
+>                : ^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >nonsense : any
+>         : ^^^
 >0 : 0
+>  : ^
 
 };
 
 obj = {};
 >obj = {} : {}
->obj : { [x: number]: number; }
+>         : ^^
+>obj : { [Symbol.nonsense]: number; }
+>    : ^^                   ^^^^^^ ^^
 >{} : {}
+>   : ^^
 
 obj[Symbol.nonsense];
 >obj[Symbol.nonsense] : number
->obj : { [x: number]: number; }
+>                     : ^^^^^^
+>obj : { [Symbol.nonsense]: number; }
+>    : ^^                   ^^^^^^ ^^
 >Symbol.nonsense : any
+>                : ^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >nonsense : any
+>         : ^^^
 

@@ -1,35 +1,35 @@
-tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1.js(5,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-  Property '[_sym]' does not exist on type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1.js(6,1): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-  Property 'my-fake-sym' does not exist on type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-tests/cases/conformance/salsa/usage.js(2,11): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-  Property 'my-fake-sym' does not exist on type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-tests/cases/conformance/salsa/usage.js(3,11): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-  Property '[_sym]' does not exist on type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
+lateBoundAssignmentDeclarationSupport1.js(5,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+  Property '[_sym]' does not exist on type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+lateBoundAssignmentDeclarationSupport1.js(6,1): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+  Property 'my-fake-sym' does not exist on type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+usage.js(2,11): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+  Property 'my-fake-sym' does not exist on type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+usage.js(3,11): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+  Property '[_sym]' does not exist on type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
 
 
-==== tests/cases/conformance/salsa/usage.js (2 errors) ====
+==== usage.js (2 errors) ====
     const x = require("./lateBoundAssignmentDeclarationSupport1.js");
     const y = x["my-fake-sym"];
               ~~~~~~~~~~~~~~~~
-!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-!!! error TS7053:   Property 'my-fake-sym' does not exist on type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+!!! error TS7053:   Property 'my-fake-sym' does not exist on type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
     const z = x[x.S];
               ~~~~~~
-!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-!!! error TS7053:   Property '[_sym]' does not exist on type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
     
-==== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1.js (2 errors) ====
+==== lateBoundAssignmentDeclarationSupport1.js (2 errors) ====
     // currently unsupported
     const _sym = Symbol();
     const _str = "my-fake-sym";
     
     exports[_sym] = "ok";
     ~~~~~~~~~~~~~
-!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-!!! error TS7053:   Property '[_sym]' does not exist on type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
     exports[_str] = "ok";
     ~~~~~~~~~~~~~
-!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
-!!! error TS7053:   Property 'my-fake-sym' does not exist on type 'typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")'.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
+!!! error TS7053:   Property 'my-fake-sym' does not exist on type 'typeof import("lateBoundAssignmentDeclarationSupport1")'.
     exports.S = _sym;

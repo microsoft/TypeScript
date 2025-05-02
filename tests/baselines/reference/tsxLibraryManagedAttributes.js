@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx] ////
+
 //// [tsxLibraryManagedAttributes.tsx]
 type Defaultize<TProps, TDefaults> =
     & {[K in Extract<keyof TProps, keyof TDefaults>]?: TProps[K]}
@@ -150,10 +152,10 @@ var Component = /** @class */ (function (_super) {
     Component.propTypes = {
         foo: PropTypes.number,
         bar: PropTypes.node,
-        baz: PropTypes.string.isRequired
+        baz: PropTypes.string.isRequired,
     };
     Component.defaultProps = {
-        foo: 42
+        foo: 42,
     };
     return Component;
 }(ReactComponent));
@@ -170,7 +172,7 @@ var JustPropTypes = /** @class */ (function (_super) {
     }
     JustPropTypes.propTypes = {
         foo: PropTypes.number,
-        bar: PropTypes.node.isRequired
+        bar: PropTypes.node.isRequired,
     };
     return JustPropTypes;
 }(ReactComponent));
@@ -184,7 +186,7 @@ var JustDefaultProps = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     JustDefaultProps.defaultProps = {
-        foo: 42
+        foo: 42,
     };
     return JustDefaultProps;
 }(ReactComponent));
@@ -199,10 +201,10 @@ var BothWithSpecifiedGeneric = /** @class */ (function (_super) {
     BothWithSpecifiedGeneric.propTypes = {
         foo: PropTypes.string,
         bar: PropTypes.node,
-        baz: PropTypes.number.isRequired
+        baz: PropTypes.number.isRequired,
     };
     BothWithSpecifiedGeneric.defaultProps = {
-        foo: "yo"
+        foo: "yo",
     };
     return BothWithSpecifiedGeneric;
 }(ReactComponent));
@@ -219,7 +221,7 @@ var JustPropTypesWithSpecifiedGeneric = /** @class */ (function (_super) {
     }
     JustPropTypesWithSpecifiedGeneric.propTypes = {
         foo: PropTypes.string,
-        bar: PropTypes.node.isRequired
+        bar: PropTypes.node.isRequired,
     };
     return JustPropTypesWithSpecifiedGeneric;
 }(ReactComponent));
@@ -233,7 +235,7 @@ var JustDefaultPropsWithSpecifiedGeneric = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     JustDefaultPropsWithSpecifiedGeneric.defaultProps = {
-        foo: "no"
+        foo: "no",
     };
     return JustDefaultPropsWithSpecifiedGeneric;
 }(ReactComponent));

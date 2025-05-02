@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/genericTupleWithSimplifiableElements.ts] ////
+
+=== genericTupleWithSimplifiableElements.ts ===
+// repro from #52354
+
+type SS1 = string;
+>SS1 : Symbol(SS1, Decl(genericTupleWithSimplifiableElements.ts, 0, 0))
+
+let y: [t: "AAA", ...args: { [S in SS1]: [a: number]; }[SS1]] = ["AAA", 1];
+>y : Symbol(y, Decl(genericTupleWithSimplifiableElements.ts, 3, 3))
+>S : Symbol(S, Decl(genericTupleWithSimplifiableElements.ts, 3, 30))
+>SS1 : Symbol(SS1, Decl(genericTupleWithSimplifiableElements.ts, 0, 0))
+>SS1 : Symbol(SS1, Decl(genericTupleWithSimplifiableElements.ts, 0, 0))
+
+type SS2 = "1" | "2" | "3";
+>SS2 : Symbol(SS2, Decl(genericTupleWithSimplifiableElements.ts, 3, 75))
+
+let z: [t: "AAA", ...args: { [S in SS2]: [a: number]; }[SS2]] = ["AAA", 1];
+>z : Symbol(z, Decl(genericTupleWithSimplifiableElements.ts, 6, 3))
+>S : Symbol(S, Decl(genericTupleWithSimplifiableElements.ts, 6, 30))
+>SS2 : Symbol(SS2, Decl(genericTupleWithSimplifiableElements.ts, 3, 75))
+>SS2 : Symbol(SS2, Decl(genericTupleWithSimplifiableElements.ts, 3, 75))
+
+class I<SS extends string>{
+>I : Symbol(I, Decl(genericTupleWithSimplifiableElements.ts, 6, 75))
+>SS : Symbol(SS, Decl(genericTupleWithSimplifiableElements.ts, 8, 8))
+
+    f() {
+>f : Symbol(I.f, Decl(genericTupleWithSimplifiableElements.ts, 8, 27))
+
+        let w: [...args: { [S in SS]: [a: number]; }[SS]] = [1];
+>w : Symbol(w, Decl(genericTupleWithSimplifiableElements.ts, 10, 11))
+>S : Symbol(S, Decl(genericTupleWithSimplifiableElements.ts, 10, 28))
+>SS : Symbol(SS, Decl(genericTupleWithSimplifiableElements.ts, 8, 8))
+>SS : Symbol(SS, Decl(genericTupleWithSimplifiableElements.ts, 8, 8))
+
+        let x: [t: "AAA", ...args: { [S in SS]: [a: number]; }[SS]] = ["AAA", 1];
+>x : Symbol(x, Decl(genericTupleWithSimplifiableElements.ts, 12, 11))
+>S : Symbol(S, Decl(genericTupleWithSimplifiableElements.ts, 12, 38))
+>SS : Symbol(SS, Decl(genericTupleWithSimplifiableElements.ts, 8, 8))
+>SS : Symbol(SS, Decl(genericTupleWithSimplifiableElements.ts, 8, 8))
+    }
+}
+

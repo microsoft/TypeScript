@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/typeAliases.ts] ////
+
 //// [typeAliases.ts]
 // Writing a reference to a type alias has exactly the same effect as writing the aliased type itself.
 

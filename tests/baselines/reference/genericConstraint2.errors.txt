@@ -1,10 +1,10 @@
-tests/cases/compiler/genericConstraint2.ts(11,7): error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
+genericConstraint2.ts(11,7): error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<string>'.
-tests/cases/compiler/genericConstraint2.ts(21,17): error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<ComparableString>'.
+genericConstraint2.ts(21,17): error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<ComparableString>'.
   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
 
 
-==== tests/cases/compiler/genericConstraint2.ts (2 errors) ====
+==== genericConstraint2.ts (2 errors) ====
     interface Comparable<T> {
         comparer(other: T): number;
     }
@@ -19,7 +19,7 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2344: Type 'Comparabl
           ~~~~~~~~~~~~~~~~
 !!! error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
 !!! error TS2420:   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<string>'.
-!!! related TS2728 tests/cases/compiler/genericConstraint2.ts:2:5: 'comparer' is declared here.
+!!! related TS2728 genericConstraint2.ts:2:5: 'comparer' is declared here.
         constructor(public currentValue: string) { }
     
         localeCompare(other) {
@@ -33,4 +33,4 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2344: Type 'Comparabl
                     ~~~~~~~~~~~~~~~~
 !!! error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<ComparableString>'.
 !!! error TS2344:   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
-!!! related TS2728 tests/cases/compiler/genericConstraint2.ts:2:5: 'comparer' is declared here.
+!!! related TS2728 genericConstraint2.ts:2:5: 'comparer' is declared here.

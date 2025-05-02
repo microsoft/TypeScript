@@ -1,0 +1,21 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightDefaultInSwitch.ts ===
+// const foo = 'foo';
+// [|{| kind: "none" |}switch|] (foo) {
+//    /*HIGHLIGHTS*/[|{| kind: "none" |}case|] 'foo':
+//        [|{| kind: "none" |}break|];
+//    [|{| kind: "none" |}default|]:
+//        [|{| kind: "none" |}break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightDefaultInSwitch.ts ===
+// const foo = 'foo';
+// [|{| kind: "none" |}switch|] (foo) {
+//    [|{| kind: "none" |}case|] 'foo':
+//        [|{| kind: "none" |}break|];
+//    [|{| kind: "none" |}default|]:
+//        /*HIGHLIGHTS*/[|{| kind: "none" |}break|];
+// }

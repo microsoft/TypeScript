@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples2.ts] ////
+
 //// [variadicTuples2.ts]
 // Declarations
 
@@ -8,6 +10,11 @@ type V03 = [number, ...string[], number];
 type V10 = [number, ...string[], ...boolean[]];  // Error
 type V11 = [number, ...string[], boolean?];  // Error
 type V12 = [number, string?, boolean];  // Error
+
+type V15 = [...string[], ...number[]];  // Error
+type V16 = [...string[], ...Array<number>];  // Error
+type V17 = [...Array<string>, ...number[]];  // Error
+type V18 = [...Array<string>, ...Array<number>];  // Error
 
 // Normalization
 
@@ -75,6 +82,10 @@ function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [nu
     z = x;  // Error
 }
 
+// repro #50216
+declare let tt3: [number, string, ...any[]]
+let tt4: [number, ...number[]] = tt3  // Error
+
 // Inference
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
@@ -123,7 +134,7 @@ fn2([1, 'abc', true]);  // [number, boolean]
 // Repro from #39595
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
-    
+
 const a1 = foo('blah1', 1);
 const b1 = foo('blah1', 'blah2', 1);
 const c1 = foo(1);  // Error
@@ -173,6 +184,7 @@ function ft3(x, y, z) {
     y = x; // Error
     z = x; // Error
 }
+var tt4 = tt3; // Error
 // Inference
 function pipe() {
     var args = [];
@@ -235,6 +247,10 @@ type V03 = [number, ...string[], number];
 type V10 = [number, ...string[], ...boolean[]];
 type V11 = [number, ...string[], boolean?];
 type V12 = [number, string?, boolean];
+type V15 = [...string[], ...number[]];
+type V16 = [...string[], ...Array<number>];
+type V17 = [...Array<string>, ...number[]];
+type V18 = [...Array<string>, ...Array<number>];
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
 type V20 = Tup3<[number], string[], [number]>;
 type V21 = Tup3<[number], [string?], [boolean]>;
@@ -258,6 +274,8 @@ declare function ft1(...args: [...strs: string[], num: number]): void;
 declare let tt2: [number, ...string[], number];
 declare function ft2(n1: number, ...rest: [...strs: string[], n2: number]): void;
 declare function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]): void;
+declare let tt3: [number, string, ...any[]];
+declare let tt4: [number, ...number[]];
 declare function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]): void;
 declare const sa: string[];
 declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];

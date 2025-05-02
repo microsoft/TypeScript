@@ -1,720 +1,1051 @@
-=== tests/cases/conformance/types/unknown/unknownControlFlow.ts ===
-type T01 = {} & string;  // string
->T01 : string
+//// [tests/cases/conformance/types/unknown/unknownControlFlow.ts] ////
+
+=== unknownControlFlow.ts ===
+type T01 = {} & string;  // {} & string
+>T01 : T01
+>    : ^^^
 
 type T02 = {} & 'a';  // 'a'
 >T02 : "a"
+>    : ^^^
 
 type T03 = {} & object;  // object
 >T03 : object
+>    : ^^^^^^
 
 type T04 = {} & { x: number };  // { x: number }
 >T04 : { x: number; }
+>    : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 type T05 = {} & null;  // never
 >T05 : never
->null : null
+>    : ^^^^^
 
 type T06 = {} & undefined;  // never
 >T06 : never
+>    : ^^^^^
 
 type T07 = undefined & void;  // undefined
 >T07 : undefined
+>    : ^^^^^^^^^
 
 type T10 = string & {};  // Specially preserved
->T10 : string & {}
+>T10 : T10
+>    : ^^^
 
 type T11 = number & {};  // Specially preserved
->T11 : number & {}
+>T11 : T11
+>    : ^^^
 
 type T12 = bigint & {};  // Specially preserved
->T12 : bigint & {}
+>T12 : T12
+>    : ^^^
 
 type ThisNode = {};
->ThisNode : {}
+>ThisNode : ThisNode
+>         : ^^^^^^^^
 
 type ThatNode = {};
->ThatNode : {}
+>ThatNode : ThatNode
+>         : ^^^^^^^^
 
 type ThisOrThatNode = ThisNode | ThatNode;
->ThisOrThatNode : ThisNode | ThatNode
+>ThisOrThatNode : ThisOrThatNode
+>               : ^^^^^^^^^^^^^^
 
 function f01(u: unknown) {
 >f01 : (u: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >u : unknown
+>  : ^^^^^^^
 
     let x1: {} = u;  // Error
 >x1 : {}
+>   : ^^
 >u : unknown
+>  : ^^^^^^^
 
     let x2: {} | null | undefined = u;
 >x2 : {} | null | undefined
->null : null
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >u : unknown
+>  : ^^^^^^^
 
     let x3: {} | { x: string } | null | undefined = u;
 >x3 : {} | { x: string; } | null | undefined
+>   : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >x : string
->null : null
+>  : ^^^^^^
 >u : unknown
+>  : ^^^^^^^
 
     let x4: ThisOrThatNode | null | undefined = u;
 >x4 : ThisOrThatNode | null | undefined
->null : null
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >u : unknown
+>  : ^^^^^^^
 }
 
 function f10(x: unknown) {
 >f10 : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (x) {
 >x : unknown
+>  : ^^^^^^^
 
         x;  // {}
 >x : {}
+>  : ^^
     }
     else {
         x;  // unknown
 >x : unknown
+>  : ^^^^^^^
     }
     if (!x) {
 >!x : boolean
+>   : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
         x;  // unknown
 >x : unknown
+>  : ^^^^^^^
     }
     else {
         x;  // {}
 >x : {}
+>  : ^^
     }
 }
 
 function f11<T>(x: T) {
 >f11 : <T>(x: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (x) {
 >x : T
+>  : ^
 
         x;  // T & {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
     if (!x) {
 >!x : boolean
+>   : ^^^^^^^
 >x : T
+>  : ^
 
         x;  // T
 >x : T
+>  : ^
     }
     else {
         x;  // T & {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
 }
 
 function f12<T extends {}>(x: T) {
 >f12 : <T extends {}>(x: T) => void
+>    : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (x) {
 >x : T
+>  : ^
 
         x;  // T
 >x : T
+>  : ^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
 }
 
 function f20(x: unknown) {
 >f20 : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (x !== undefined) {
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x;  // {} | null
 >x : {} | null
+>  : ^^^^^^^^^
     }
     else {
         x;  // undefined
 >x : undefined
+>  : ^^^^^^^^^
     }
     if (x !== null) {
 >x !== null : boolean
+>           : ^^^^^^^
 >x : unknown
->null : null
+>  : ^^^^^^^
 
         x;  // {} | undefined
 >x : {} | undefined
+>  : ^^^^^^^^^^^^^^
     }
     else {
         x;  // null
 >x : null
+>  : ^^^^
     }
     if (x !== undefined && x !== null) {
 >x !== undefined && x !== null : boolean
+>                              : ^^^^^^^
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x !== null : boolean
+>           : ^^^^^^^
 >x : {} | null
->null : null
+>  : ^^^^^^^^^
 
         x;  // {}
 >x : {}
+>  : ^^
     }
     else {
         x;  // null | undefined
 >x : null | undefined
+>  : ^^^^^^^^^^^^^^^^
     }
     if (x != undefined) {
 >x != undefined : boolean
+>               : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x;  // {}
 >x : {}
+>  : ^^
     }
     else {
         x;  // null | undefined
 >x : null | undefined
+>  : ^^^^^^^^^^^^^^^^
     }
     if (x != null) {
 >x != null : boolean
+>          : ^^^^^^^
 >x : unknown
->null : null
+>  : ^^^^^^^
 
         x;  // {}
 >x : {}
+>  : ^^
     }
     else {
         x;  // null | undefined
 >x : null | undefined
+>  : ^^^^^^^^^^^^^^^^
     }
 }
 
 function f21<T>(x: T) {
 >f21 : <T>(x: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (x !== undefined) {
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x;  // T & ({} | null)
 >x : T & ({} | null)
+>  : ^^^^^^^^^^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
     if (x !== null) {
 >x !== null : boolean
+>           : ^^^^^^^
 >x : T
->null : null
+>  : ^
 
         x;  // T & ({} | undefined)
 >x : T & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
     if (x !== undefined && x !== null) {
 >x !== undefined && x !== null : boolean
+>                              : ^^^^^^^
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x !== null : boolean
+>           : ^^^^^^^
 >x : T & ({} | null)
->null : null
+>  : ^^^^^^^^^^^^^^^
 
         x;  // T & {}
 >x : T & {}
+>  : ^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
     if (x != undefined) {
 >x != undefined : boolean
+>               : ^^^^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x;  // T & {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
     if (x != null) {
 >x != null : boolean
+>          : ^^^^^^^
 >x : T
->null : null
+>  : ^
 
         x;  // T & {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
 }
 
 function f22<T extends {} | undefined>(x: T) {
 >f22 : <T extends {} | undefined>(x: T) => void
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (x !== undefined) {
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x;  // T & {}
 >x : T & {}
+>  : ^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
     if (x !== null) {
 >x !== null : boolean
+>           : ^^^^^^^
 >x : T
->null : null
+>  : ^
 
         x;  // T
 >x : T
+>  : ^
     }
     else {
         x;  // T
 >x : never
+>  : ^^^^^
     }
     if (x !== undefined && x !== null) {
 >x !== undefined && x !== null : boolean
+>                              : ^^^^^^^
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x !== null : boolean
+>           : ^^^^^^^
 >x : T & {}
->null : null
+>  : ^^^^^^
 
         x;  // T & {}
 >x : T & {}
+>  : ^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
     if (x != undefined) {
 >x != undefined : boolean
+>               : ^^^^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x;  // T & {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
     if (x != null) {
 >x != null : boolean
+>          : ^^^^^^^
 >x : T
->null : null
+>  : ^
 
         x;  // T & {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
     else {
         x;  // T
 >x : T
+>  : ^
     }
 }
 
 function f23<T>(x: T | undefined | null) {
 >f23 : <T>(x: T | undefined | null) => void
+>    : ^ ^^ ^^                    ^^^^^^^^^
 >x : T | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^
 
     if (x !== undefined) {
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : T | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x;  // T & {} | null
 >x : (T & {}) | null
+>  : ^^^^^^^^^^^^^^^
     }
     if (x !== null) {
 >x !== null : boolean
+>           : ^^^^^^^
 >x : T | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^
 
         x;  // T & {} | undefined
 >x : (T & {}) | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
     }
     if (x != undefined) {
 >x != undefined : boolean
+>               : ^^^^^^^
 >x : T | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x;  // T & {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
     if (x != null) {
 >x != null : boolean
+>          : ^^^^^^^
 >x : T | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^
 
         x;  // T & {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
 }
 
 function f30(x: {}) {
 >f30 : (x: {}) => void
+>    : ^ ^^  ^^^^^^^^^
 >x : {}
+>  : ^^
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 >"object" : "object"
+>         : ^^^^^^^^
 
         x;  // object
 >x : object
+>  : ^^^^^^
     }
 }
 
 function f31<T>(x: T) {
 >f31 : <T>(x: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >"object" : "object"
+>         : ^^^^^^^^
 
         x;  // T & object | T & null
 >x : (T & object) | (T & null)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     if (x && typeof x === "object") {
 >x && typeof x === "object" : boolean
+>                           : ^^^^^^^
 >x : T
+>  : ^
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
 >"object" : "object"
+>         : ^^^^^^^^
 
         x;  // T & object
 >x : T & object
+>  : ^^^^^^^^^^
     }
     if (typeof x === "object" && x) {
 >typeof x === "object" && x : false | (T & object) | (T & null)
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >"object" : "object"
+>         : ^^^^^^^^
 >x : (T & object) | (T & null)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x;  // T & object
 >x : T & object
+>  : ^^^^^^^^^^
     }
 }
 
 function f32<T extends {} | undefined>(x: T) {
 >f32 : <T extends {} | undefined>(x: T) => void
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >"object" : "object"
+>         : ^^^^^^^^
 
         x;  // T & object
 >x : T & object
+>  : ^^^^^^^^^^
     }
 }
 
 function possiblyNull<T>(x: T) {
 >possiblyNull : <T>(x: T) => T | null
+>             : ^ ^^ ^^ ^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     return !!true ? x : null;  // T | null
 >!!true ? x : null : T | null
+>                  : ^^^^^^^^
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >x : T
->null : null
+>  : ^
 }
 
 function possiblyUndefined<T>(x: T) {
 >possiblyUndefined : <T>(x: T) => T | undefined
+>                  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     return !!true ? x : undefined;  // T | undefined
 >!!true ? x : undefined : T | undefined
+>                       : ^^^^^^^^^^^^^
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 function possiblyNullOrUndefined<T>(x: T) {
 >possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
+>                        : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     return possiblyUndefined(possiblyNull(x));  // T | null | undefined
 >possiblyUndefined(possiblyNull(x)) : T | null | undefined
->possiblyUndefined : <T>(x: T) => T | undefined
+>                                   : ^^^^^^^^^^^^^^^^^^^^
+>possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
+>                  : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >possiblyNull(x) : T | null
->possiblyNull : <T>(x: T) => T | null
+>                : ^^^^^^^^
+>possiblyNull : <T_1>(x: T_1) => T_1 | null
+>             : ^^^^^^ ^^   ^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 }
 
 function ensureNotNull<T>(x: T) {
 >ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>              : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     if (x === null) throw Error();
 >x === null : boolean
+>           : ^^^^^^^
 >x : T
->null : null
+>  : ^
 >Error() : Error
+>        : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 
     return x;  // T & ({} | undefined)
 >x : T & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^
 }
 
 function ensureNotUndefined<T>(x: T) {
 >ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>                   : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     if (x === undefined) throw Error();
 >x === undefined : boolean
+>                : ^^^^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >Error() : Error
+>        : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 
     return x;  // T & ({} | null)
 >x : T & ({} | null)
+>  : ^^^^^^^^^^^^^^^
 }
 
 function ensureNotNullOrUndefined<T>(x: T) {
 >ensureNotNullOrUndefined : <T>(x: T) => T & {}
+>                         : ^ ^^ ^^ ^^^^^^^^^^^
 >x : T
+>  : ^
 
     return ensureNotUndefined(ensureNotNull(x));  // T & {}
 >ensureNotUndefined(ensureNotNull(x)) : T & {}
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>                                     : ^^^^^^
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
+>                   : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(x) : T & ({} | undefined)
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>                 : ^^^^^^^^^^^^^^^^^^^^
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
+>              : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 }
 
 function f40(a: string | undefined, b: number | null | undefined) {
 >f40 : (a: string | undefined, b: number | null | undefined) => void
+>    : ^ ^^                  ^^ ^^                         ^^^^^^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let a1 = ensureNotNullOrUndefined(a);  // string
 >a1 : string
+>   : ^^^^^^
 >ensureNotNullOrUndefined(a) : string
+>                            : ^^^^^^
 >ensureNotNullOrUndefined : <T>(x: T) => T & {}
+>                         : ^ ^^ ^^ ^^^^^^^^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let b1 = ensureNotNullOrUndefined(b);  // number
 >b1 : number
+>   : ^^^^^^
 >ensureNotNullOrUndefined(b) : number
+>                            : ^^^^^^
 >ensureNotNullOrUndefined : <T>(x: T) => T & {}
+>                         : ^ ^^ ^^ ^^^^^^^^^^^
 >b : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
 >QQ : QQ<T>
+>   : ^^^^^
 
 function f41<T>(a: T) {
 >f41 : <T>(a: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
     let a1 = ensureNotUndefined(ensureNotNull(a));  // T & {}
 >a1 : T & {}
+>   : ^^^^^^
 >ensureNotUndefined(ensureNotNull(a)) : T & {}
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>                                     : ^^^^^^
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
+>                   : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(a) : T & ({} | undefined)
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>                 : ^^^^^^^^^^^^^^^^^^^^
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
+>              : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 
     let a2 = ensureNotNull(ensureNotUndefined(a));  // T & {}
 >a2 : T & {}
+>   : ^^^^^^
 >ensureNotNull(ensureNotUndefined(a)) : T & {}
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>                                     : ^^^^^^
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
+>              : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotUndefined(a) : T & ({} | null)
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>                      : ^^^^^^^^^^^^^^^
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
+>                   : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 
     let a3 = ensureNotNull(ensureNotNull(a));  // T & {} | T & undefined
 >a3 : (T & undefined) | (T & {})
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(ensureNotNull(a)) : (T & undefined) | (T & {})
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
+>              : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(a) : T & ({} | undefined)
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>                 : ^^^^^^^^^^^^^^^^^^^^
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
+>              : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 
     let a4 = ensureNotUndefined(ensureNotUndefined(a));  // T & {} | T & null
 >a4 : (T & {}) | (T & null)
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >ensureNotUndefined(ensureNotUndefined(a)) : (T & {}) | (T & null)
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>                                          : ^^^^^^^^^^^^^^^^^^^^^
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
+>                   : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotUndefined(a) : T & ({} | null)
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>                      : ^^^^^^^^^^^^^^^
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
+>                   : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 
     let a5 = ensureNotNullOrUndefined(ensureNotNullOrUndefined(a));  // T & {}
 >a5 : T & {}
+>   : ^^^^^^
 >ensureNotNullOrUndefined(ensureNotNullOrUndefined(a)) : T & {}
->ensureNotNullOrUndefined : <T>(x: T) => T & {}
+>                                                      : ^^^^^^
+>ensureNotNullOrUndefined : <T_1>(x: T_1) => T_1 & {}
+>                         : ^^^^^^ ^^   ^^^^^^^^^^^^^
 >ensureNotNullOrUndefined(a) : T & {}
->ensureNotNullOrUndefined : <T>(x: T) => T & {}
+>                            : ^^^^^^
+>ensureNotNullOrUndefined : <T_1>(x: T_1) => T_1 & {}
+>                         : ^^^^^^ ^^   ^^^^^^^^^^^^^
 >a : T
+>  : ^
 
     let a6 = ensureNotNull(possiblyNullOrUndefined(a));  // T & {} | undefined
 >a6 : (T & {}) | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(possiblyNullOrUndefined(a)) : (T & {}) | undefined
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>                                          : ^^^^^^^^^^^^^^^^^^^^
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
+>              : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >possiblyNullOrUndefined(a) : T | null | undefined
->possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
+>                           : ^^^^^^^^^^^^^^^^^^^^
+>possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
+>                        : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 
     let a7 = ensureNotUndefined(possiblyNullOrUndefined(a));  // T & {} | null
 >a7 : (T & {}) | null
+>   : ^^^^^^^^^^^^^^^
 >ensureNotUndefined(possiblyNullOrUndefined(a)) : (T & {}) | null
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>                                               : ^^^^^^^^^^^^^^^
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
+>                   : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >possiblyNullOrUndefined(a) : T | null | undefined
->possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
+>                           : ^^^^^^^^^^^^^^^^^^^^
+>possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
+>                        : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 
     let a8 = ensureNotNull(possiblyUndefined(a));  // T & {} | undefined
 >a8 : (T & {}) | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(possiblyUndefined(a)) : (T & {}) | undefined
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>                                    : ^^^^^^^^^^^^^^^^^^^^
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
+>              : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >possiblyUndefined(a) : T | undefined
->possiblyUndefined : <T>(x: T) => T | undefined
+>                     : ^^^^^^^^^^^^^
+>possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
+>                  : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 
     let a9 = ensureNotUndefined(possiblyNull(a));  // T & {} | null
 >a9 : (T & {}) | null
+>   : ^^^^^^^^^^^^^^^
 >ensureNotUndefined(possiblyNull(a)) : (T & {}) | null
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>                                    : ^^^^^^^^^^^^^^^
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
+>                   : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >possiblyNull(a) : T | null
->possiblyNull : <T>(x: T) => T | null
+>                : ^^^^^^^^
+>possiblyNull : <T_1>(x: T_1) => T_1 | null
+>             : ^^^^^^ ^^   ^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 }
 
 // Repro from #48468
 
 function deepEquals<T>(a: T, b: T): boolean {
 >deepEquals : <T>(a: T, b: T) => boolean
+>           : ^ ^^ ^^ ^^ ^^ ^^^^^       
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     if (typeof a !== 'object' || typeof b !== 'object' || !a || !b) {
 >typeof a !== 'object' || typeof b !== 'object' || !a || !b : boolean
+>                                                           : ^^^^^^^
 >typeof a !== 'object' || typeof b !== 'object' || !a : boolean
+>                                                     : ^^^^^^^
 >typeof a !== 'object' || typeof b !== 'object' : boolean
+>                                               : ^^^^^^^
 >typeof a !== 'object' : boolean
+>                      : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 >'object' : "object"
+>         : ^^^^^^^^
 >typeof b !== 'object' : boolean
+>                      : ^^^^^^^
 >typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : T
+>  : ^
 >'object' : "object"
+>         : ^^^^^^^^
 >!a : boolean
+>   : ^^^^^^^
 >a : (T & object) | (T & null)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >!b : boolean
+>   : ^^^^^^^
 >b : (T & object) | (T & null)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return false;
 >false : false
+>      : ^^^^^
     }
     if (Array.isArray(a) || Array.isArray(b)) {
 >Array.isArray(a) || Array.isArray(b) : boolean
+>                                     : ^^^^^^^
 >Array.isArray(a) : boolean
+>                 : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >a : T & object
+>  : ^^^^^^^^^^
 >Array.isArray(b) : boolean
+>                 : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >b : T & object
+>  : ^^^^^^^^^^
 
         return false;
 >false : false
+>      : ^^^^^
     }
     if (Object.keys(a).length !== Object.keys(b).length) { // Error here
 >Object.keys(a).length !== Object.keys(b).length : boolean
+>                                                : ^^^^^^^
 >Object.keys(a).length : number
+>                      : ^^^^^^
 >Object.keys(a) : string[]
+>               : ^^^^^^^^
 >Object.keys : (o: object) => string[]
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
+>     : ^ ^^      ^^^^^        
 >a : T & object
+>  : ^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >Object.keys(b).length : number
+>                      : ^^^^^^
 >Object.keys(b) : string[]
+>               : ^^^^^^^^
 >Object.keys : (o: object) => string[]
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
+>     : ^ ^^      ^^^^^        
 >b : T & object
+>  : ^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 
         return false;
 >false : false
+>      : ^^^^^
     }
     return true;
 >true : true
+>     : ^^^^
 }
 
 // Repro from #49386
 
 function foo<T>(x: T | null) {
 >foo : <T>(x: T | null) => void
+>    : ^ ^^ ^^        ^^^^^^^^^
 >x : T | null
->null : null
+>  : ^^^^^^^^
 
     let y = x;
 >y : T | null
+>  : ^^^^^^^^
 >x : T | null
+>  : ^^^^^^^^
 
     if (y !== null) {
 >y !== null : boolean
+>           : ^^^^^^^
 >y : T | null
->null : null
+>  : ^^^^^^^^
 
         y;
 >y : T & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -724,81 +1055,565 @@ function foo<T>(x: T | null) {
 
 function ff1<T>(t: T, k: keyof T) {
 >ff1 : <T>(t: T, k: keyof T) => void
+>    : ^ ^^ ^^ ^^ ^^       ^^^^^^^^^
 >t : T
+>  : ^
 >k : keyof T
+>  : ^^^^^^^
 
     t[k];
 >t[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >t : T
+>  : ^
 >k : keyof T
+>  : ^^^^^^^
 }
 
 function ff2<T>(t: T & {}, k: keyof T) {
 >ff2 : <T>(t: T & {}, k: keyof T) => void
+>    : ^ ^^ ^^      ^^ ^^       ^^^^^^^^^
 >t : T & {}
+>  : ^^^^^^
 >k : keyof T
+>  : ^^^^^^^
 
     t[k];
 >t[k] : (T & {})[keyof T]
+>     : ^^^^^^^^^^^^^^^^^
 >t : T & {}
+>  : ^^^^^^
 >k : keyof T
+>  : ^^^^^^^
 }
 
 function ff3<T>(t: T, k: keyof (T & {})) {
 >ff3 : <T>(t: T, k: keyof (T & {})) => void
+>    : ^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >t : T
+>  : ^
 >k : keyof (T & {})
+>  : ^^^^^^^^^^^^^^
 
     t[k];  // Error
 >t[k] : any
+>     : ^^^
 >t : T
+>  : ^
 >k : keyof (T & {})
+>  : ^^^^^^^^^^^^^^
 }
 
 function ff4<T>(t: T & {}, k: keyof (T & {})) {
 >ff4 : <T>(t: T & {}, k: keyof (T & {})) => void
+>    : ^ ^^ ^^      ^^ ^^              ^^^^^^^^^
 >t : T & {}
+>  : ^^^^^^
 >k : keyof (T & {})
+>  : ^^^^^^^^^^^^^^
 
     t[k];
 >t[k] : (T & {})[keyof (T & {})]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T & {}
+>  : ^^^^^^
 >k : keyof (T & {})
+>  : ^^^^^^^^^^^^^^
 }
 
 ff1(null, 'foo');  // Error
 >ff1(null, 'foo') : void
+>                 : ^^^^
 >ff1 : <T>(t: T, k: keyof T) => void
->null : null
+>    : ^ ^^ ^^ ^^ ^^       ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 ff2(null, 'foo');  // Error
 >ff2(null, 'foo') : void
+>                 : ^^^^
 >ff2 : <T>(t: T & {}, k: keyof T) => void
->null : null
+>    : ^ ^^ ^^      ^^ ^^       ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 ff3(null, 'foo');
 >ff3(null, 'foo') : void
+>                 : ^^^^
 >ff3 : <T>(t: T, k: keyof (T & {})) => void
->null : null
+>    : ^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 ff4(null, 'foo');  // Error
 >ff4(null, 'foo') : void
+>                 : ^^^^
 >ff4 : <T>(t: T & {}, k: keyof (T & {})) => void
->null : null
+>    : ^ ^^ ^^      ^^ ^^              ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 // Repro from #49681
 
 type Foo = { [key: string]: unknown };
->Foo : { [key: string]: unknown; }
+>Foo : Foo
+>    : ^^^
 >key : string
+>    : ^^^^^^
 
 type NullableFoo = Foo | undefined;
->NullableFoo : Foo | undefined
+>NullableFoo : NullableFoo
+>            : ^^^^^^^^^^^
 
 type Bar<T extends NullableFoo> = NonNullable<T>[string];
 >Bar : Bar<T>
+>    : ^^^^^^
+
+// Generics and intersections with {}
+
+function fx0<T>(value: T & ({} | null)) {
+>fx0 : <T>(value: T & ({} | null)) => void
+>    : ^ ^^     ^^               ^^^^^^^^^
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+
+    if (value === 42) {
+>value === 42 : boolean
+>             : ^^^^^^^
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+        value;  // T & {}
+>value : T & {}
+>      : ^^^^^^
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+    }
+}
+
+function fx1<T extends unknown>(value: T & ({} | null)) {
+>fx1 : <T extends unknown>(value: T & ({} | null)) => void
+>    : ^ ^^^^^^^^^       ^^     ^^               ^^^^^^^^^
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+
+    if (value === 42) {
+>value === 42 : boolean
+>             : ^^^^^^^
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+        value;  // T & {}
+>value : T & {}
+>      : ^^^^^^
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+    }
+}
+
+function fx2<T extends {}>(value: T & ({} | null)) {
+>fx2 : <T extends {}>(value: T & ({} | null)) => void
+>    : ^ ^^^^^^^^^  ^^     ^^               ^^^^^^^^^
+>value : T
+>      : ^
+
+    if (value === 42) {
+>value === 42 : boolean
+>             : ^^^^^^^
+>value : T
+>      : ^
+>42 : 42
+>   : ^^
+
+        value;  // T & {}
+>value : never
+>      : ^^^^^
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T
+>      : ^
+    }
+}
+
+function fx3<T extends {} | undefined>(value: T & ({} | null)) {
+>fx3 : <T extends {} | undefined>(value: T & ({} | null)) => void
+>    : ^ ^^^^^^^^^              ^^     ^^               ^^^^^^^^^
+>value : T & {}
+>      : ^^^^^^
+
+    if (value === 42) {
+>value === 42 : boolean
+>             : ^^^^^^^
+>value : T & {}
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+
+        value;  // T & {}
+>value : T & {}
+>      : ^^^^^^
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & {}
+>      : ^^^^^^
+    }
+}
+
+function fx4<T extends {} | null>(value: T & ({} | null)) {
+>fx4 : <T extends {} | null>(value: T & ({} | null)) => void
+>    : ^ ^^^^^^^^^         ^^     ^^               ^^^^^^^^^
+>value : T
+>      : ^
+
+    if (value === 42) {
+>value === 42 : boolean
+>             : ^^^^^^^
+>value : T
+>      : ^
+>42 : 42
+>   : ^^
+
+        value;  // T & {}
+>value : never
+>      : ^^^^^
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T
+>      : ^
+    }
+}
+
+function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
+>fx5 : <T extends {} | null | undefined>(value: T & ({} | null)) => void
+>    : ^ ^^^^^^^^^                     ^^     ^^               ^^^^^^^^^
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+
+    if (value === 42) {
+>value === 42 : boolean
+>             : ^^^^^^^
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+        value;  // T & {}
+>value : T & {}
+>      : ^^^^^^
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+    }
+}
+
+// Double-equals narrowing
+
+function fx10(x: string | number, y: number) {
+>fx10 : (x: string | number, y: number) => void
+>     : ^ ^^               ^^ ^^      ^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+
+    if (x == y) {
+>x == y : boolean
+>       : ^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+
+        x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+    else {
+        x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+    if (x != y) {
+>x != y : boolean
+>       : ^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+
+        x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+    else {
+        x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+}
+
+// Repros from #50706
+
+function SendBlob(encoding: unknown) {
+>SendBlob : (encoding: unknown) => void
+>         : ^        ^^       ^^^^^^^^^
+>encoding : unknown
+>         : ^^^^^^^
+
+    if (encoding !== undefined && encoding !== 'utf8') {
+>encoding !== undefined && encoding !== 'utf8' : boolean
+>                                              : ^^^^^^^
+>encoding !== undefined : boolean
+>                       : ^^^^^^^
+>encoding : unknown
+>         : ^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>encoding !== 'utf8' : boolean
+>                    : ^^^^^^^
+>encoding : {} | null
+>         : ^^^^^^^^^
+>'utf8' : "utf8"
+>       : ^^^^^^
+
+        throw new Error('encoding');
+>new Error('encoding') : Error
+>                      : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>'encoding' : "encoding"
+>           : ^^^^^^^^^^
+    }
+    encoding;
+>encoding : "utf8" | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+};
+
+function doSomething1<T extends unknown>(value: T): T {
+>doSomething1 : <T extends unknown>(value: T) => T
+>             : ^ ^^^^^^^^^       ^^     ^^ ^^^^^ 
+>value : T
+>      : ^
+
+    if (value === undefined) {
+>value === undefined : boolean
+>                    : ^^^^^^^
+>value : T
+>      : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return value;
+>value : T
+>      : ^
+    }
+    if (value === 42) {
+>value === 42 : boolean
+>             : ^^^^^^^
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+        throw Error('Meaning of life value');
+>Error('Meaning of life value') : Error
+>                               : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>'Meaning of life value' : "Meaning of life value"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    return value;
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
+}
+
+function doSomething2(value: unknown): void {
+>doSomething2 : (value: unknown) => void
+>             : ^     ^^       ^^^^^    
+>value : unknown
+>      : ^^^^^^^
+
+    if (value === undefined) {
+>value === undefined : boolean
+>                    : ^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return;
+    }
+    if (value === 42) {
+>value === 42 : boolean
+>             : ^^^^^^^
+>value : {} | null
+>      : ^^^^^^^^^
+>42 : 42
+>   : ^^
+
+        value;
+>value : 42
+>      : ^^
+    }
+}
+
+// Repro from #51009
+
+type TypeA = {
+>TypeA : TypeA
+>      : ^^^^^
+
+    A: 'A',
+>A : "A"
+>  : ^^^
+
+    B: 'B',
+>B : "B"
+>  : ^^^
+}
+
+type TypeB = {
+>TypeB : TypeB
+>      : ^^^^^
+
+    A: 'A',
+>A : "A"
+>  : ^^^
+
+    B: 'B',
+>B : "B"
+>  : ^^^
+
+    C: 'C',
+>C : "C"
+>  : ^^^
+}
+
+type R<T extends keyof TypeA> =
+>R : R<T>
+>  : ^^^^
+
+    T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
+
+type R2<T extends PropertyKey> =
+>R2 : R2<T>
+>   : ^^^^^
+
+    T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
+
+// Repro from #51041
+
+type AB = "A" | "B";
+>AB : AB
+>   : ^^
+
+function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
+>x : <T_AB extends AB>(x: T_AB & undefined, y: any) => void
+>  : ^    ^^^^^^^^^  ^^ ^^                ^^ ^^   ^^^^^^^^^
+>x : never
+>  : ^^^^^
+>y : any
+>  : ^^^
+
+    let r2: never = y as T_AB & undefined;
+>r2 : never
+>   : ^^^^^
+>y as T_AB & undefined : never
+>                      : ^^^^^
+>y : any
+>  : ^^^
+} 
+
+// Repro from #51538
+
+type Left = 'left';
+>Left : "left"
+>     : ^^^^^^
+
+type Right = 'right' & { right: 'right' };
+>Right : Right
+>      : ^^^^^
+>right : "right"
+>      : ^^^^^^^
+
+type Either = Left | Right;
+>Either : Either
+>       : ^^^^^^
+
+function assertNever(v: never): never {
+>assertNever : (v: never) => never
+>            : ^ ^^     ^^^^^     
+>v : never
+>  : ^^^^^
+
+    throw new Error('never');
+>new Error('never') : Error
+>                   : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>'never' : "never"
+>        : ^^^^^^^
+}
+
+function fx20(value: Either) {
+>fx20 : (value: Either) => void
+>     : ^     ^^      ^^^^^^^^^
+>value : Either
+>      : ^^^^^^
+
+    if (value === 'left') {
+>value === 'left' : boolean
+>                 : ^^^^^^^
+>value : Either
+>      : ^^^^^^
+>'left' : "left"
+>       : ^^^^^^
+
+        const foo: 'left' = value;
+>foo : "left"
+>    : ^^^^^^
+>value : "left"
+>      : ^^^^^^
+    }
+    else if (value === 'right') {
+>value === 'right' : boolean
+>                  : ^^^^^^^
+>value : Right
+>      : ^^^^^
+>'right' : "right"
+>        : ^^^^^^^
+
+        const bar: 'right' = value;
+>bar : "right"
+>    : ^^^^^^^
+>value : Right
+>      : ^^^^^
+    }
+    else {
+        assertNever(value);
+>assertNever(value) : never
+>                   : ^^^^^
+>assertNever : (v: never) => never
+>            : ^ ^^     ^^^^^     
+>value : never
+>      : ^^^^^
+    }
+}
 

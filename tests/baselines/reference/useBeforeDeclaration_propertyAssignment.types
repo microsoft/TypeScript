@@ -1,80 +1,135 @@
-=== tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts ===
+//// [tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts] ////
+
+=== useBeforeDeclaration_propertyAssignment.ts ===
 export class C {
 >C : C
+>  : ^
 
     public a =  { b: this.b, ...this.c, [this.b]: `${this.c}`};
 >a : { c: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: this.b, ...this.c, [this.b]: `${this.c}`} : { c: number; b: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
 >this.c : { c: number; }
+>       : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >c : { c: number; }
+>  : ^^^^^^^^^^^^^^
 >[this.b] : string
+>         : ^^^^^^
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
 >`${this.c}` : string
+>            : ^^^^^^
 >this.c : { c: number; }
+>       : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >c : { c: number; }
+>  : ^^^^^^^^^^^^^^
 
     private b = 0;
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     public c = { c: this.b };
 >c : { c: number; }
+>  : ^^^^^^^^^^^^^^
 >{ c: this.b } : { c: number; }
+>              : ^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     static A = class extends D.B {
 >A : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class extends D.B {        [D.D]() {} // should be an error    } : typeof (Anonymous class)
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >D.B : (Anonymous class)
+>    : ^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >B : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         [D.D]() {} // should be an error
 >[D.D] : () => void
+>      : ^^^^^^^^^^
 >D.D : string
+>    : ^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >D : string
+>  : ^^^^^^
     }
     static B = class {}
 >B : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class {} : typeof (Anonymous class)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     static C = {
 >C : { [x: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{        [D.D]: 1,        ...{get [D.D]() {return 0;}} // should be an error    } : { [x: string]: number; }
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         [D.D]: 1,
 >[D.D] : number
+>      : ^^^^^^
 >D.D : string
+>    : ^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >D : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         ...{get [D.D]() {return 0;}} // should be an error
->{get [D.D]() {return 0;}} : { [x: string]: number; }
+>{get [D.D]() {return 0;}} : { [D.D]: number; }
+>                          : ^^       ^^^^^^ ^^
 >[D.D] : number
+>      : ^^^^^^
 >D.D : string
+>    : ^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >D : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     };
     static D = '';
 >D : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 }

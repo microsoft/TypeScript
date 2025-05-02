@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadEquivalenceWithStatics.ts ===
+//// [tests/cases/compiler/overloadEquivalenceWithStatics.ts] ////
+
+=== overloadEquivalenceWithStatics.ts ===
 class A1<T> {
 >A1 : Symbol(A1, Decl(overloadEquivalenceWithStatics.ts, 0, 0))
 >T : Symbol(T, Decl(overloadEquivalenceWithStatics.ts, 0, 9))

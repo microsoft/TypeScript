@@ -1,7 +1,11 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts] ////
+
+=== varianceAnnotationsWithCircularlyReferencesError.ts ===
 type T1<in in> = T1 // Error: circularly references 
 >T1 : any
+>   : ^^^
 
 type T2<out out> = T2 // Error: circularly references 
 >T2 : any
+>   : ^^^
 

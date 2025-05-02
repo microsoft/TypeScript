@@ -15,7 +15,7 @@
 ////import {/*reference1*/v2 as v3} from "./goToTypeDefinitioAliases_module2";
 /////*reference2*/v3;
 
-verify.goToType({
-    reference1: "definition",
-    reference2: "definition"
-});
+verify.baselineGoToType(
+    "reference1",
+    "reference2",
+);

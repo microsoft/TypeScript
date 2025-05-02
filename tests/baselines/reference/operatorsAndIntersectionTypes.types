@@ -1,130 +1,211 @@
-=== tests/cases/conformance/types/intersection/operatorsAndIntersectionTypes.ts ===
+//// [tests/cases/conformance/types/intersection/operatorsAndIntersectionTypes.ts] ////
+
+=== operatorsAndIntersectionTypes.ts ===
 type Guid = string & { $Guid };          // Tagged string type
->Guid : string & { $Guid: any; }
+>Guid : Guid
+>     : ^^^^
 >$Guid : any
 
 type SerialNo = number & { $SerialNo };  // Tagged number type
->SerialNo : number & { $SerialNo: any; }
+>SerialNo : SerialNo
+>         : ^^^^^^^^
 >$SerialNo : any
 
 function createGuid() {
 >createGuid : () => Guid
+>           : ^^^^^^    
 
     return "21EC2020-3AEA-4069-A2DD-08002B30309D" as Guid;
 >"21EC2020-3AEA-4069-A2DD-08002B30309D" as Guid : Guid
+>                                               : ^^^^
 >"21EC2020-3AEA-4069-A2DD-08002B30309D" : "21EC2020-3AEA-4069-A2DD-08002B30309D"
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function createSerialNo() {
 >createSerialNo : () => SerialNo
+>               : ^^^^^^        
 
     return 12345 as SerialNo;
 >12345 as SerialNo : SerialNo
+>                  : ^^^^^^^^
 >12345 : 12345
+>      : ^^^^^
 }
 
 let map1: { [x: string]: number } = {};
 >map1 : { [x: string]: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
 let guid = createGuid();
 >guid : Guid
+>     : ^^^^
 >createGuid() : Guid
+>             : ^^^^
 >createGuid : () => Guid
+>           : ^^^^^^    
 
 map1[guid] = 123;  // Can with tagged string
 >map1[guid] = 123 : 123
+>                 : ^^^
 >map1[guid] : number
+>           : ^^^^^^
 >map1 : { [x: string]: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >guid : Guid
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
 let map2: { [x: number]: string } = {};
 >map2 : { [x: number]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
 let serialNo = createSerialNo();
 >serialNo : SerialNo
+>         : ^^^^^^^^
 >createSerialNo() : SerialNo
+>                 : ^^^^^^^^
 >createSerialNo : () => SerialNo
+>               : ^^^^^^        
 
 map2[serialNo] = "hello";  // Can index with tagged number
 >map2[serialNo] = "hello" : "hello"
+>                         : ^^^^^^^
 >map2[serialNo] : string
+>               : ^^^^^^
 >map2 : { [x: number]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >serialNo : SerialNo
+>         : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 const s1 = "{" + guid + "}";
 >s1 : string
+>   : ^^^^^^
 >"{" + guid + "}" : string
+>                 : ^^^^^^
 >"{" + guid : string
+>           : ^^^^^^
 >"{" : "{"
+>    : ^^^
 >guid : Guid
+>     : ^^^^
 >"}" : "}"
+>    : ^^^
 
 const s2 = guid.toLowerCase();
 >s2 : string
+>   : ^^^^^^
 >guid.toLowerCase() : string
+>                   : ^^^^^^
 >guid.toLowerCase : () => string
+>                 : ^^^^^^      
 >guid : Guid
+>     : ^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
 const s3 = guid + guid;
 >s3 : string
+>   : ^^^^^^
 >guid + guid : string
+>            : ^^^^^^
 >guid : Guid
+>     : ^^^^
 >guid : Guid
+>     : ^^^^
 
 const s4 = guid + serialNo;
 >s4 : string
+>   : ^^^^^^
 >guid + serialNo : string
+>                : ^^^^^^
 >guid : Guid
+>     : ^^^^
 >serialNo : SerialNo
+>         : ^^^^^^^^
 
 const s5 = serialNo.toPrecision(0);
 >s5 : string
+>   : ^^^^^^
 >serialNo.toPrecision(0) : string
+>                        : ^^^^^^
 >serialNo.toPrecision : (precision?: number) => string
+>                     : ^         ^^^      ^^^^^      
 >serialNo : SerialNo
+>         : ^^^^^^^^
 >toPrecision : (precision?: number) => string
+>            : ^         ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 const n1 = serialNo * 3;
 >n1 : number
+>   : ^^^^^^
 >serialNo * 3 : number
+>             : ^^^^^^
 >serialNo : SerialNo
+>         : ^^^^^^^^
 >3 : 3
+>  : ^
 
 const n2 = serialNo + serialNo;
 >n2 : number
+>   : ^^^^^^
 >serialNo + serialNo : number
+>                    : ^^^^^^
 >serialNo : SerialNo
+>         : ^^^^^^^^
 >serialNo : SerialNo
+>         : ^^^^^^^^
 
 const b1 = guid === "";
 >b1 : boolean
+>   : ^^^^^^^
 >guid === "" : boolean
+>            : ^^^^^^^
 >guid : Guid
+>     : ^^^^
 >"" : ""
+>   : ^^
 
 const b2 = guid === guid;
 >b2 : boolean
+>   : ^^^^^^^
 >guid === guid : boolean
+>              : ^^^^^^^
 >guid : Guid
+>     : ^^^^
 >guid : Guid
+>     : ^^^^
 
 const b3 = serialNo === 0;
 >b3 : boolean
+>   : ^^^^^^^
 >serialNo === 0 : boolean
+>               : ^^^^^^^
 >serialNo : SerialNo
+>         : ^^^^^^^^
 >0 : 0
+>  : ^
 
 const b4 = serialNo === serialNo;
 >b4 : boolean
+>   : ^^^^^^^
 >serialNo === serialNo : boolean
+>                      : ^^^^^^^
 >serialNo : SerialNo
+>         : ^^^^^^^^
 >serialNo : SerialNo
+>         : ^^^^^^^^
 

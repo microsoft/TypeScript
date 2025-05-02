@@ -1,38 +1,66 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty3.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty3.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty3.ts ===
 type Foo = (number | undefined)[] | undefined;
->Foo : (number | undefined)[] | undefined
+>Foo : Foo
+>    : ^^^
 
 const foo: Foo = [1, 2, 3];
 >foo : Foo
+>    : ^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 const index = 1;
 >index : 1
+>      : ^
 >1 : 1
+>  : ^
 
 if (foo !== undefined && foo[index] !== undefined && foo[index] >= 0) {
 >foo !== undefined && foo[index] !== undefined && foo[index] >= 0 : boolean
+>                                                                 : ^^^^^^^
 >foo !== undefined && foo[index] !== undefined : boolean
+>                                              : ^^^^^^^
 >foo !== undefined : boolean
+>                  : ^^^^^^^
 >foo : (number | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >foo[index] !== undefined : boolean
+>                         : ^^^^^^^
 >foo[index] : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 >foo : (number | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >index : 1
+>      : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >foo[index] >= 0 : boolean
+>                : ^^^^^^^
 >foo[index] : number
+>           : ^^^^^^
 >foo : (number | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >index : 1
+>      : ^
 >0 : 0
+>  : ^
 
     foo[index] // number
 >foo[index] : number
+>           : ^^^^^^
 >foo : (number | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >index : 1
+>      : ^
 }
 

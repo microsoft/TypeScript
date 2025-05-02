@@ -1,14 +1,23 @@
-=== tests/cases/conformance/decorators/class/constructor/parameter/decoratorOnClassConstructorParameter1.ts ===
+//// [tests/cases/conformance/decorators/class/constructor/parameter/decoratorOnClassConstructorParameter1.ts] ////
+
+=== decoratorOnClassConstructorParameter1.ts ===
 declare function dec(target: Function, propertyKey: string | symbol, parameterIndex: number): void;
 >dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
+>    : ^      ^^        ^^           ^^               ^^              ^^      ^^^^^    
 >target : Function
+>       : ^^^^^^^^
 >propertyKey : string | symbol
+>            : ^^^^^^^^^^^^^^^
 >parameterIndex : number
+>               : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     constructor(@dec p: number) {}
 >dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
+>    : ^      ^^        ^^           ^^               ^^              ^^      ^^^^^    
 >p : number
+>  : ^^^^^^
 }

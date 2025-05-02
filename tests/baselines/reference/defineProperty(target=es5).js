@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts] ////
+
 //// [defineProperty.ts]
 var x: "p" = "p"
 class A {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringSpread.ts] ////
+
 //// [destructuringSpread.ts]
 const { x } = {
   ...{},
@@ -44,5 +46,5 @@ var x = __assign({}, { x: 0 }).x;
 var y = __assign({ y: 0 }, {}).y;
 var _a = __assign({ z: 0 }, { a: 0, b: 0 }), z = _a.z, a = _a.a, b = _a.b;
 var _b = __assign(__assign({}, __assign(__assign({}, __assign({
-    c: 0
+    c: 0,
 }, { d: 0 })), { e: 0 })), { f: 0 }), c = _b.c, d = _b.d, e = _b.e, f = _b.f, g = _b.g;

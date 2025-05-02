@@ -1,8 +1,8 @@
-tests/cases/compiler/inheritFromGenericTypeParameter.ts(1,20): error TS2304: Cannot find name 'T'.
-tests/cases/compiler/inheritFromGenericTypeParameter.ts(2,24): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+inheritFromGenericTypeParameter.ts(1,20): error TS2304: Cannot find name 'T'.
+inheritFromGenericTypeParameter.ts(2,24): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
 
 
-==== tests/cases/compiler/inheritFromGenericTypeParameter.ts (2 errors) ====
+==== inheritFromGenericTypeParameter.ts (2 errors) ====
     class C<T> extends T { }
                        ~
 !!! error TS2304: Cannot find name 'T'.

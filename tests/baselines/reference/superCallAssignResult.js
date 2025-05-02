@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallAssignResult.ts] ////
+
 //// [superCallAssignResult.ts]
 class E {
     constructor(arg: any) { }

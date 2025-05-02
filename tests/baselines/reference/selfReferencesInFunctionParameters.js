@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfReferencesInFunctionParameters.ts] ////
+
 //// [selfReferencesInFunctionParameters.ts]
 function foo(x: number = x) {
 }

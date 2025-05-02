@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap1_ES5.ts] ////
+
 //// [computedPropertyNamesSourceMap1_ES5.ts]
 class C {
     ["hello"]() {

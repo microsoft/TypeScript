@@ -1,8 +1,8 @@
-tests/cases/compiler/privateNameWeakMapCollision.ts(2,9): error TS18027: Compiler reserves name 'WeakMap' when emitting private identifier downlevel.
-tests/cases/compiler/privateNameWeakMapCollision.ts(3,9): error TS18027: Compiler reserves name 'WeakSet' when emitting private identifier downlevel.
+privateNameWeakMapCollision.ts(2,9): error TS18027: Compiler reserves name 'WeakMap' when emitting private identifier downlevel.
+privateNameWeakMapCollision.ts(3,9): error TS18027: Compiler reserves name 'WeakSet' when emitting private identifier downlevel.
 
 
-==== tests/cases/compiler/privateNameWeakMapCollision.ts (2 errors) ====
+==== privateNameWeakMapCollision.ts (2 errors) ====
     function test() {
         let WeakMap;
             ~~~~~~~

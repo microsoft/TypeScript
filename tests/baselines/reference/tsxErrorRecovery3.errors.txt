@@ -1,30 +1,30 @@
-tests/cases/conformance/jsx/file1.tsx(3,1): error TS2657: JSX expressions must have one parent element.
-tests/cases/conformance/jsx/file1.tsx(3,2): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file1.tsx(4,2): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file2.tsx(1,9): error TS2657: JSX expressions must have one parent element.
-tests/cases/conformance/jsx/file2.tsx(1,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file2.tsx(1,21): error TS2304: Cannot find name 'React'.
+file1.tsx(3,1): error TS2657: JSX expressions must have one parent element.
+file1.tsx(3,2): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file1.tsx(4,2): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file2.tsx(1,9): error TS2657: JSX expressions must have one parent element.
+file2.tsx(1,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+file2.tsx(1,21): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 
 
-==== tests/cases/conformance/jsx/file1.tsx (3 errors) ====
+==== file1.tsx (3 errors) ====
     declare namespace JSX { interface Element { } }
     
     <div></div>
     ~~~~~~~~~~~
      ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     <div></div>
     ~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
      ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     
-==== tests/cases/conformance/jsx/file2.tsx (3 errors) ====
+==== file2.tsx (3 errors) ====
     var x = <div></div><div></div>
             ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
              ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
                         ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     

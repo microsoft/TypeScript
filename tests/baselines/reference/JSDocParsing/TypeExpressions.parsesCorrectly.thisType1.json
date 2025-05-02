@@ -18,9 +18,7 @@
                 "pos": 10,
                 "end": 14,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "ThisKeyword",
                 "escapedText": "this"
             },
             "type": {
@@ -42,7 +40,6 @@
                         "pos": 15,
                         "end": 16,
                         "flags": "JSDoc",
-                        "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "escapedText": "a"
                     },
@@ -51,7 +48,6 @@
                         "pos": 17,
                         "end": 18,
                         "flags": "JSDoc",
-                        "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "escapedText": "b"
                     }

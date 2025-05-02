@@ -1,39 +1,56 @@
-=== tests/cases/compiler/omitTypeTests01.ts ===
+//// [tests/cases/compiler/omitTypeTests01.ts] ////
+
+=== omitTypeTests01.ts ===
 interface Foo {
     a: string;
 >a : string
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 
     c: boolean;
 >c : boolean
+>  : ^^^^^^^
 }
 
 export type Bar = Omit<Foo, "c">;
->Bar : { a: string; b: number; }
+>Bar : Bar
+>    : ^^^
 
 export type Baz = Omit<Foo, "b" | "c">;
->Baz : { a: string; }
+>Baz : Baz
+>    : ^^^
 
 export function getBarA(bar: Bar) {
 >getBarA : (bar: Bar) => string
+>        : ^   ^^   ^^^^^^^^^^^
 >bar : Bar
+>    : ^^^
 
     return bar.a;
 >bar.a : string
+>      : ^^^^^^
 >bar : Bar
+>    : ^^^
 >a : string
+>  : ^^^^^^
 }
 
 export function getBazA(baz: Baz) {
 >getBazA : (baz: Baz) => string
+>        : ^   ^^   ^^^^^^^^^^^
 >baz : Baz
+>    : ^^^
 
     return baz.a;
 >baz.a : string
+>      : ^^^^^^
 >baz : Baz
+>    : ^^^
 >a : string
+>  : ^^^^^^
 }
 
 

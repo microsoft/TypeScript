@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts] ////
+
 //// [typeParameterExplicitlyExtendsAny.ts]
 function fee<T>() {
     var t: T;

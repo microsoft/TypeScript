@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitReturnsInAsync1.ts ===
+//// [tests/cases/compiler/noImplicitReturnsInAsync1.ts] ////
+
+=== noImplicitReturnsInAsync1.ts ===
 async function test(isError: boolean = false) {
 >test : Symbol(test, Decl(noImplicitReturnsInAsync1.ts, 0, 0))
 >isError : Symbol(isError, Decl(noImplicitReturnsInAsync1.ts, 0, 20))

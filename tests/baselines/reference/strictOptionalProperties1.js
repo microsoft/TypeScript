@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictOptionalProperties1.ts] ////
+
 //// [strictOptionalProperties1.ts]
 function f1(obj: { a?: string, b?: string | undefined }) {
     let a = obj.a;  // string | undefined

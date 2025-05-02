@@ -1,76 +1,131 @@
-=== tests/cases/compiler/reservedWords2.ts ===
+//// [tests/cases/compiler/reservedWords2.ts] ////
+
+=== reservedWords2.ts ===
 import while = require("dfdf");
 > : any
+> : ^^^
 >= require("dfdf") : any
+>                  : ^^^
 > : any
+> : ^^^
 >require("dfdf") : any
+>                : ^^^
 >require : any
+>        : ^^^
 >"dfdf" : "dfdf"
+>       : ^^^^^^
 
 import * as  while from "foo"
 > : () => any
+> : ^^^^^^^^^
 > : any
+> : ^^^
 >from : any
+>     : ^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 var typeof = 10;
 >typeof : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : any
+> : ^^^
 >10 : 10
+>   : ^^
 
 function throw() {}
 > : () => any
+> : ^^^^^^^^^
 >() {} : () => void
+>      : ^^^^^^^^^^
 
 module void {}
 >module : any
+>       : ^^^
 >void {} : undefined
+>        : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var {while, return} = { while: 1, return: 2 };
 >while : any
+>      : ^^^
 > : number
+> : ^^^^^^
 >return : any
+>       : ^^^
 > : number
+> : ^^^^^^
 >{ while: 1, return: 2 } : { while: number; return: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >while : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >return : number
+>       : ^^^^^^
 >2 : 2
+>  : ^
 
 var {this, switch: { continue} } = { this: 1, switch: { continue: 2 }};
 >this : any
+>     : ^^^
 > : number
+> : ^^^^^^
 >switch : any
+>       : ^^^
 >continue : any
+>         : ^^^
 > : number
+> : ^^^^^^
 >{ this: 1, switch: { continue: 2 }} : { this: number; switch: { continue: number; }; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 >switch : { continue: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >{ continue: 2 } : { continue: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >continue : number
+>         : ^^^^^^
 >2 : 2
+>  : ^
 
 var [debugger, if] = [1, 2];
 > : any
+> : ^^^
 > : any
+> : ^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 enum void {}
 > : (Missing)
+> : ^^^^^^^^^
 >void {} : undefined
+>        : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 function f(default: number) {}
 >f : (: number) => void
+>  : ^^^      ^^^^^^^^^
 > : number
+> : ^^^^^^
 
 class C { m(null: string) {} }
 >C : C
+>  : ^
 >m : (: any, string: any) => void
+>  : ^^^^^^^^      ^^^^^^^^^^^^^^
 > : any
+> : ^^^
 >string : any
+>       : ^^^
 

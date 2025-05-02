@@ -1,51 +1,90 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts] ////
+
+=== genericCallWithObjectLiteralArgs.ts ===
 function foo<T>(x: { bar: T; baz: T }) {
->foo : <T>(x: {    bar: T;    baz: T;}) => { bar: T; baz: T; }
+>foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 >x : { bar: T; baz: T; }
+>  : ^^^^^^^ ^^^^^^^ ^^^
 >bar : T
+>    : ^
 >baz : T
+>    : ^
 
     return x;
 >x : { bar: T; baz: T; }
+>  : ^^^^^^^ ^^^^^^^ ^^^
 }
 
 var r = foo({ bar: 1, baz: '' }); // error
 >r : { bar: number; baz: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo({ bar: 1, baz: '' }) : { bar: number; baz: number; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 >{ bar: 1, baz: '' } : { bar: number; baz: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >baz : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r2 = foo({ bar: 1, baz: 1 }); // T = number
 >r2 : { bar: number; baz: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo({ bar: 1, baz: 1 }) : { bar: number; baz: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 >{ bar: 1, baz: 1 } : { bar: number; baz: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >baz : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 var r3 = foo({ bar: foo, baz: foo }); // T = typeof foo
 >r3 : { bar: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; baz: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; }
+>   : ^^^^^^^^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^
 >foo({ bar: foo, baz: foo }) : { bar: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; baz: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; }
+>                            : ^^^^^^^^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 >{ bar: foo, baz: foo } : { bar: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; baz: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; }
+>                       : ^^^^^^^^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^
 >bar : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 >baz : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 
 var r4 = foo<Object>({ bar: 1, baz: '' }); // T = Object
 >r4 : { bar: Object; baz: Object; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo<Object>({ bar: 1, baz: '' }) : { bar: Object; baz: Object; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
+>    : ^ ^^ ^^                   ^^^^^^^^^^^^ ^^^^^^^ ^^^
 >{ bar: 1, baz: '' } : { bar: number; baz: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >baz : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 

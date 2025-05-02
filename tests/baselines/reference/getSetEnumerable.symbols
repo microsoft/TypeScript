@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getSetEnumerable.ts ===
+//// [tests/cases/compiler/getSetEnumerable.ts] ////
+
+=== getSetEnumerable.ts ===
 class GetSetEnumerableClassGet {
 >GetSetEnumerableClassGet : Symbol(GetSetEnumerableClassGet, Decl(getSetEnumerable.ts, 0, 0))
 

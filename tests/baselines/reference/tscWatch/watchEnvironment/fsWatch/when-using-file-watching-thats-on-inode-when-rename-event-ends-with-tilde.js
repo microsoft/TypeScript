@@ -1,5 +1,23 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts] Inode:: 3
+//// [/user/username/projects/myproject/main.ts] Inode:: 5
+import { foo } from "./foo"; foo();
+
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 6
+export function foo(): string;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 7
+{
+  "watchOptions": {
+    "watchFile": "useFsEvents"
+  },
+  "files": [
+    "foo.d.ts",
+    "main.ts"
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -11,20 +29,13 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/main.ts] Inode:: 8
-import { foo } from "./foo"; foo();
-
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 9
-export function foo(): string;
-
-//// [/user/username/projects/myproject/tsconfig.json] Inode:: 10
-{"watchOptions":{"watchFile":"useFsEvents"},"files":["foo.d.ts","main.ts"]}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -w --extendedDiagnostics
 Output::
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFile":4} Config file
@@ -36,65 +47,74 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFile":4} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/foo.d.ts
-/user/username/projects/myproject/main.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/foo.d.ts
-/user/username/projects/myproject/main.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/foo.d.ts (used version)
-/user/username/projects/myproject/main.ts (used version)
-
-WatchedFiles::
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
-/user/username/projects/myproject/foo.d.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.d.ts","inode":9}
-/user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","inode":7}
-/a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts","inode":3}
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js] Inode:: 11
+//// [/user/username/projects/myproject/main.js] Inode:: 111
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("./foo");
 (0, foo_1.foo)();
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":13}
+/user/username/projects/myproject: *new*
+  {"inode":4}
+/user/username/projects/myproject/foo.d.ts: *new*
+  {"inode":6}
+/user/username/projects/myproject/main.ts: *new*
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"inode":7}
+
+Program root files: [
+  "/user/username/projects/myproject/foo.d.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/foo.d.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/foo.d.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/myproject/foo.d.ts (used version)
+/user/username/projects/myproject/main.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Replace file with rename event that introduces error
 
 Input::
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 12
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 112
 export function foo2(): string;
 
 
@@ -107,9 +127,10 @@ Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts~ :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts~ :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-Scheduling invalidateFailedLookup
+Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
@@ -123,12 +144,48 @@ Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to PresentFileSystemEntryWatcher
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts~ :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts~ :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":13}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/foo.d.ts:
+  {"inode":112} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":7}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/foo.d.ts:
+  {"inode":6}
+
+Timeout callback:: count: 2
+7: timerToUpdateProgram *new*
+9: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 2
+7: timerToUpdateProgram
+9: timerToInvalidateFailedLookupResolutions
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
-[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
@@ -143,15 +200,28 @@ CreatingProgramWith::
     [7m [0m [96m                ~~~~[0m
     'foo2' is declared here.
 
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 111
+
+Timeout callback:: count: 0
+9: timerToInvalidateFailedLookupResolutions *deleted*
+
+
+Program root files: [
+  "/user/username/projects/myproject/foo.d.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/foo.d.ts
 /user/username/projects/myproject/main.ts
 
@@ -163,32 +233,12 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.d.ts (used version)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
-/user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","inode":7}
-/a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts","inode":3}
-/user/username/projects/myproject/foo.d.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.d.ts","inode":12}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 11
 
 Change:: Replace file with rename event that fixes error
 
 Input::
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 13
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 113
 export function foo(): string;
 
 
@@ -201,9 +251,10 @@ Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts~ :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts~ :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-Scheduling invalidateFailedLookup
+Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
@@ -217,25 +268,74 @@ Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to PresentFileSystemEntryWatcher
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts~ :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts~ :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":13}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/foo.d.ts:
+  {"inode":113} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":7}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/foo.d.ts:
+  {"inode":112}
+
+Timeout callback:: count: 2
+16: timerToUpdateProgram *new*
+18: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 2
+16: timerToUpdateProgram
+18: timerToInvalidateFailedLookupResolutions
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 111
+
+Timeout callback:: count: 0
+18: timerToInvalidateFailedLookupResolutions *deleted*
+
+
+Program root files: [
+  "/user/username/projects/myproject/foo.d.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/foo.d.ts
 /user/username/projects/myproject/main.ts
 
@@ -247,24 +347,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.d.ts (used version)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
-/user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","inode":7}
-/a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts","inode":3}
-/user/username/projects/myproject/foo.d.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.d.ts","inode":13}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 11

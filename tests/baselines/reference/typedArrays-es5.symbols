@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typedArrays-es5.ts ===
+//// [tests/cases/compiler/typedArrays-es5.ts] ////
+
+=== typedArrays-es5.ts ===
 const float32Array = new Float32Array(1);
 >float32Array : Symbol(float32Array, Decl(typedArrays-es5.ts, 0, 5))
 >Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

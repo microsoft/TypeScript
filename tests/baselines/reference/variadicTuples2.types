@@ -1,538 +1,900 @@
-=== tests/cases/conformance/types/tuple/variadicTuples2.ts ===
+//// [tests/cases/conformance/types/tuple/variadicTuples2.ts] ////
+
+=== variadicTuples2.ts ===
 // Declarations
 
 type V00 = [number, ...string[]];
->V00 : [number, ...string[]]
+>V00 : V00
+>    : ^^^
 
 type V01 = [...string[], number];
->V01 : [...string[], number]
+>V01 : V01
+>    : ^^^
 
 type V03 = [number, ...string[], number];
->V03 : [number, ...string[], number]
+>V03 : V03
+>    : ^^^
 
 type V10 = [number, ...string[], ...boolean[]];  // Error
->V10 : [number, ...string[], ...boolean[]]
+>V10 : V10
+>    : ^^^
 
 type V11 = [number, ...string[], boolean?];  // Error
->V11 : [number, ...string[], (boolean | undefined)?]
+>V11 : V11
+>    : ^^^
 
 type V12 = [number, string?, boolean];  // Error
->V12 : [number, (string | undefined)?, boolean]
+>V12 : V12
+>    : ^^^
+
+type V15 = [...string[], ...number[]];  // Error
+>V15 : V15
+>    : ^^^
+
+type V16 = [...string[], ...Array<number>];  // Error
+>V16 : (string | number)[]
+>    : ^^^^^^^^^^^^^^^^^^^
+
+type V17 = [...Array<string>, ...number[]];  // Error
+>V17 : (string | number)[]
+>    : ^^^^^^^^^^^^^^^^^^^
+
+type V18 = [...Array<string>, ...Array<number>];  // Error
+>V18 : (string | number)[]
+>    : ^^^^^^^^^^^^^^^^^^^
 
 // Normalization
 
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
 >Tup3 : [...T, ...U, ...V]
+>     : ^^^^^^^^^^^^^^^^^^
 
 type V20 = Tup3<[number], string[], [number]>;  // [number, ...string[], number]
 >V20 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V21 = Tup3<[number], [string?], [boolean]>;  // [number, string | undefined, boolean]
 >V21 : [number, string | undefined, boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V22 = Tup3<[number], string[], boolean[]>;  // [number, (string | boolean)[]]
 >V22 : [number, ...(string | boolean)[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V23 = Tup3<[number], string[], [boolean?]>;  // [number, (string | boolean | undefined)[]]
 >V23 : [number, ...(string | boolean | undefined)[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V24 = Tup3<[number], [boolean?], string[]>;  // [number, boolean?, ...string[]]
 >V24 : [number, (boolean | undefined)?, ...string[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V25 = Tup3<string[], number[], boolean[]>;  // (string | number | boolean)[]
 >V25 : (string | number | boolean)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V26 = Tup3<string[], number[], [boolean]>;  // [...(string | number)[], boolean]
 >V26 : [...(string | number)[], boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V27 = Tup3<[number?], [string], [boolean?]>;  // [number | undefined, string, boolean?]
 >V27 : [number | undefined, string, (boolean | undefined)?]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V30<A extends unknown[]> = Tup3<A, string[], number[]>;  // [...A, ...(string | number)[]]
 >V30 : [...A, ...(string | number)[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V31<A extends unknown[]> = Tup3<string[], A, number[]>;  // (string | number | A[number])[]
 >V31 : (string | number | A[number])[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V32<A extends unknown[]> = Tup3<string[], number[], A>;  // [...(string | number)[], ...A]
 >V32 : [...(string | number)[], ...A]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V40<A extends unknown[]> = Tup3<A, [string?], number[]>;  // [...A, string?, ...number[]]
 >V40 : [...A, (string | undefined)?, ...number[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V41<A extends unknown[]> = Tup3<[string?], A, number[]>;  // [string?, ...A, ...number[]]
 >V41 : [(string | undefined)?, ...A, ...number[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V42<A extends unknown[]> = Tup3<[string?], number[], A>;  // [string?, ...number[], ...A]
 >V42 : [(string | undefined)?, ...number[], ...A]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V50<A extends unknown[]> = Tup3<A, string[], [number?]>;  // [...A, ...(string | number | undefined)[]]
 >V50 : [...A, ...(string | number | undefined)[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V51<A extends unknown[]> = Tup3<string[], A, [number?]>;  // (string | number | A[number] | undefined)[]
 >V51 : (string | number | A[number] | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type V52<A extends unknown[]> = Tup3<string[], [number?], A>;  // [...(string | number | undefined)[], ...A]
 >V52 : [...(string | number | undefined)[], ...A]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Assignability
 
 declare let tt1: [...string[], number];
 >tt1 : [...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
 tt1 = [5];
 >tt1 = [5] : [number]
+>          : ^^^^^^^^
 >tt1 : [...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >[5] : [number]
+>    : ^^^^^^^^
 >5 : 5
+>  : ^
 
 tt1 = ['abc', 5];
 >tt1 = ['abc', 5] : [string, number]
+>                 : ^^^^^^^^^^^^^^^^
 >tt1 : [...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >['abc', 5] : [string, number]
+>           : ^^^^^^^^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >5 : 5
+>  : ^
 
 tt1 = ['abc', 'def', 5];
 >tt1 = ['abc', 'def', 5] : [string, string, number]
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >tt1 : [...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >['abc', 'def', 5] : [string, string, number]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >5 : 5
+>  : ^
 
 tt1 = ['abc', 'def', 5, 6];  // Error
 >tt1 = ['abc', 'def', 5, 6] : [string, string, number, number]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tt1 : [...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >['abc', 'def', 5, 6] : [string, string, number, number]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >5 : 5
+>  : ^
 >6 : 6
+>  : ^
 
 declare function ft1(...args: [...strs: string[], num: number]): void;
 >ft1 : (...args: [...strs: string[], num: number]) => void
+>    : ^^^^    ^^                                ^^^^^    
 >args : [...strs: string[], num: number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ft1(5);
 >ft1(5) : void
+>       : ^^^^
 >ft1 : (...args: [...strs: string[], num: number]) => void
+>    : ^^^^    ^^                                ^^^^^    
 >5 : 5
+>  : ^
 
 ft1('abc', 5);
 >ft1('abc', 5) : void
+>              : ^^^^
 >ft1 : (...args: [...strs: string[], num: number]) => void
+>    : ^^^^    ^^                                ^^^^^    
 >'abc' : "abc"
+>      : ^^^^^
 >5 : 5
+>  : ^
 
 ft1('abc', 'def', 5);
 >ft1('abc', 'def', 5) : void
+>                     : ^^^^
 >ft1 : (...args: [...strs: string[], num: number]) => void
+>    : ^^^^    ^^                                ^^^^^    
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >5 : 5
+>  : ^
 
 ft1('abc', 'def', 5, 6);  // Error
 >ft1('abc', 'def', 5, 6) : void
+>                        : ^^^^
 >ft1 : (...args: [...strs: string[], num: number]) => void
+>    : ^^^^    ^^                                ^^^^^    
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >5 : 5
+>  : ^
 >6 : 6
+>  : ^
 
 declare let tt2: [number, ...string[], number];
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 tt2 = [0];  // Error
 >tt2 = [0] : [number]
+>          : ^^^^^^^^
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0] : [number]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 
 tt2 = [0, 1];
 >tt2 = [0, 1] : [number, number]
+>             : ^^^^^^^^^^^^^^^^
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 1] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 
 tt2 = [0, 1, 2];  // Error
 >tt2 = [0, 1, 2] : [number, number, number]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 1, 2] : [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 tt2 = [0, 'abc', 1];
 >tt2 = [0, 'abc', 1] : [number, string, number]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 'abc', 1] : [number, string, number]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 tt2 = [0, 'abc', 'def', 1];
 >tt2 = [0, 'abc', 'def', 1] : [number, string, string, number]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 'abc', 'def', 1] : [number, string, string, number]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 tt2 = [0, 'abc', 1, 'def'];  // Error
 >tt2 = [0, 'abc', 1, 'def'] : [number, string, number, string]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 'abc', 1, 'def'] : [number, string, number, string]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >'def' : "def"
+>      : ^^^^^
 
 tt2 = [true, 'abc', 'def', 1];  // Error
 >tt2 = [true, 'abc', 'def', 1] : [boolean, string, string, number]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[true, 'abc', 'def', 1] : [boolean, string, string, number]
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 tt2 = [0, 'abc', 'def', true];  // Error
 >tt2 = [0, 'abc', 'def', true] : [number, string, string, boolean]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tt2 : [number, ...string[], number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 'abc', 'def', true] : [number, string, string, boolean]
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 declare function ft2(n1: number, ...rest: [...strs: string[], n2: number]): void;
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >n1 : number
+>   : ^^^^^^
 >rest : [...strs: string[], n2: number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ft2(0);  // Error
 >ft2(0) : void
+>       : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >0 : 0
+>  : ^
 
 ft2(0, 1);
 >ft2(0, 1) : void
+>          : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 
 ft2(0, 1, 2);  // Error
 >ft2(0, 1, 2) : void
+>             : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 ft2(0, 'abc', 1);
 >ft2(0, 'abc', 1) : void
+>                 : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 ft2(0, 'abc', 'def', 1);
 >ft2(0, 'abc', 'def', 1) : void
+>                        : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 ft2(0, 'abc', 1, 'def');  // Error
 >ft2(0, 'abc', 1, 'def') : void
+>                        : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >'def' : "def"
+>      : ^^^^^
 
 ft2(true, 'abc', 'def', 1);  // Error
 >ft2(true, 'abc', 'def', 1) : void
+>                           : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >true : true
+>     : ^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 ft2(0, 'abc', 'def', true);  // Error
 >ft2(0, 'abc', 'def', true) : void
+>                           : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
+>    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) {
 >ft3 : <T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) => void
+>    : ^ ^^^^^^^^^         ^^ ^^              ^^ ^^                ^^ ^^                     ^^^^^^^^^
 >x : [number, ...T]
+>  : ^^^^^^^^^^^^^^
 >y : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 >z : [number, ...number[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     x = y;  // Error
 >x = y : [number, number]
+>      : ^^^^^^^^^^^^^^^^
 >x : [number, ...T]
+>  : ^^^^^^^^^^^^^^
 >y : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
     x = z;  // Error
 >x = z : [number, ...number[]]
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >x : [number, ...T]
+>  : ^^^^^^^^^^^^^^
 >z : [number, ...number[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     y = x;  // Error
 >y = x : [number, ...T]
+>      : ^^^^^^^^^^^^^^
 >y : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 >x : [number, ...T]
+>  : ^^^^^^^^^^^^^^
 
     z = x;  // Error
 >z = x : [number, ...T]
+>      : ^^^^^^^^^^^^^^
 >z : [number, ...number[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >x : [number, ...T]
+>  : ^^^^^^^^^^^^^^
 }
+
+// repro #50216
+declare let tt3: [number, string, ...any[]]
+>tt3 : [number, string, ...any[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+let tt4: [number, ...number[]] = tt3  // Error
+>tt4 : [number, ...number[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^
+>tt3 : [number, string, ...any[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Inference
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >args : [...T, (...values: T) => void]
+>     : ^^^^^^^^^^^      ^^ ^^^^^    ^
 >values : T
+>       : ^
 
     const callback = args[args.length - 1] as (...values: T) => void;
 >callback : (...values: T) => void
+>         : ^^^^      ^^ ^^^^^    
 >args[args.length - 1] as (...values: T) => void : (...values: T) => void
+>                                                : ^^^^      ^^ ^^^^^    
 >args[args.length - 1] : [...T, (...values: T) => void][number]
+>                      : ^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^
 >args : [...T, (...values: T) => void]
+>     : ^^^^^^^^^^^      ^^ ^^^^^    ^
 >args.length - 1 : number
+>                : ^^^^^^
 >args.length : number
+>            : ^^^^^^
 >args : [...T, (...values: T) => void]
+>     : ^^^^^^^^^^^      ^^ ^^^^^    ^
 >length : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >values : T
+>       : ^
 
     const values = args.slice(0, -1) as unknown as T;
 >values : T
+>       : ^
 >args.slice(0, -1) as unknown as T : T
+>                                  : ^
 >args.slice(0, -1) as unknown : unknown
+>                             : ^^^^^^^
 >args.slice(0, -1) : (((...values: T) => void) | T[number])[]
->args.slice : (start?: number | undefined, end?: number | undefined) => (((...values: T) => void) | T[number])[]
+>                  : ^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^
+>args.slice : (start?: number, end?: number) => (((...values: T) => void) | T[number])[]
+>           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >args : [...T, (...values: T) => void]
->slice : (start?: number | undefined, end?: number | undefined) => (((...values: T) => void) | T[number])[]
+>     : ^^^^^^^^^^^      ^^ ^^^^^    ^
+>slice : (start?: number, end?: number) => (((...values: T) => void) | T[number])[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
     callback(...values);
 >callback(...values) : void
+>                    : ^^^^
 >callback : (...values: T) => void
+>         : ^^^^      ^^ ^^^^^    
 >...values : unknown
+>          : ^^^^^^^
 >values : T
+>       : ^
 }
 
 pipe("foo", 123, true, (a, b, c) => {
 >pipe("foo", 123, true, (a, b, c) => {    a;  // string    b;  // number    c;  // boolean}) : void
+>                                                                                            : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >123 : 123
+>    : ^^^
 >true : true
+>     : ^^^^
 >(a, b, c) => {    a;  // string    b;  // number    c;  // boolean} : (a: string, b: number, c: boolean) => void
+>                                                                    : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
     a;  // string
 >a : string
+>  : ^^^^^^
 
     b;  // number
 >b : number
+>  : ^^^^^^
 
     c;  // boolean
 >c : boolean
+>  : ^^^^^^^
 
 })
 
 pipe("foo", 123, true, (...x) => {
 >pipe("foo", 123, true, (...x) => {    x;  // [string, number, boolean]}) : void
+>                                                                         : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >123 : 123
+>    : ^^^
 >true : true
+>     : ^^^^
 >(...x) => {    x;  // [string, number, boolean]} : (x_0: string, x_1: number, x_2: boolean) => void
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [string, number, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;  // [string, number, boolean]
 >x : [string, number, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 });
 
 declare const sa: string[];
 >sa : string[]
+>   : ^^^^^^^^
 
 pipe(...sa, (...x) => {
 >pipe(...sa, (...x) => {    x;  // string[]}) : void
+>                                             : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >...sa : string
+>      : ^^^^^^
 >sa : string[]
+>   : ^^^^^^^^
 >(...x) => {    x;  // string[]} : (...x: string[]) => void
+>                                : ^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 
     x;  // string[]
 >x : string[]
+>  : ^^^^^^^^
 
 });
 
 pipe(1, ...sa, 2, (...x) => {
 >pipe(1, ...sa, 2, (...x) => {    x;  // [number, ...string[], number]    let qq = x[x.length - 1];    let ww = x[0]}) : void
+>                                                                                                                      : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >1 : 1
+>  : ^
 >...sa : string
+>      : ^^^^^^
 >sa : string[]
+>   : ^^^^^^^^
 >2 : 2
+>  : ^
 >(...x) => {    x;  // [number, ...string[], number]    let qq = x[x.length - 1];    let ww = x[0]} : (...x: [number, ...string[], number]) => void
+>                                                                                                   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, ...string[], number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;  // [number, ...string[], number]
 >x : [number, ...string[], number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let qq = x[x.length - 1];
 >qq : string | number
+>   : ^^^^^^^^^^^^^^^
 >x[x.length - 1] : string | number
+>                : ^^^^^^^^^^^^^^^
 >x : [number, ...string[], number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.length - 1 : number
+>             : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : [number, ...string[], number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     let ww = x[0]
 >ww : number
+>   : ^^^^^^
 >x[0] : number
+>     : ^^^^^^
 >x : [number, ...string[], number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 });
 
 pipe<number[]>(1, 2, 3, 4);  // Error
 >pipe<number[]>(1, 2, 3, 4) : void
+>                           : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 pipe(...sa);  // Error
 >pipe(...sa) : void
+>            : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >...sa : string
+>      : ^^^^^^
 >sa : string[]
+>   : ^^^^^^^^
 
 declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];
 >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
 >t : [...unknown[], T, U]
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 fn1([]);  // Error
 >fn1([]) : [unknown, unknown]
+>        : ^^^^^^^^^^^^^^^^^^
 >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
 >[] : []
+>   : ^^
 
 fn1([1]);  // Error
 >fn1([1]) : [unknown, unknown]
+>         : ^^^^^^^^^^^^^^^^^^
 >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 fn1([1, 'abc']);  // [number, string]
 >fn1([1, 'abc']) : [number, string]
+>                : ^^^^^^^^^^^^^^^^
 >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1, 'abc'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 
 fn1([1, 'abc', true]);  // [string, boolean]
 >fn1([1, 'abc', true]) : [string, boolean]
+>                      : ^^^^^^^^^^^^^^^^^
 >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
->[1, 'abc', true] : [number, string, boolean]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
+>[1, 'abc', true] : [number, string, true]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 declare function fn2<T, U>(t: [T, ...unknown[], U]): [T, U];
 >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
 >t : [T, ...unknown[], U]
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 fn2([]);  // Error
 >fn2([]) : [unknown, unknown]
+>        : ^^^^^^^^^^^^^^^^^^
 >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
 >[] : []
+>   : ^^
 
 fn2([1]);  // Error
 >fn2([1]) : [unknown, unknown]
+>         : ^^^^^^^^^^^^^^^^^^
 >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 fn2([1, 'abc']);  // [number, string]
 >fn2([1, 'abc']) : [number, string]
+>                : ^^^^^^^^^^^^^^^^
 >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1, 'abc'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 
 fn2([1, 'abc', true]);  // [number, boolean]
 >fn2([1, 'abc', true]) : [number, boolean]
+>                      : ^^^^^^^^^^^^^^^^^
 >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
->[1, 'abc', true] : [number, string, boolean]
+>    : ^ ^^ ^^ ^^                    ^^^^^      
+>[1, 'abc', true] : [number, string, true]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 // Repro from #39595
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
 >stringsAndNumber : readonly [...S, number]
-    
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
+
 const a1 = foo('blah1', 1);
 >a1 : ["blah1", number]
+>   : ^^^^^^^^^^^^^^^^^
 >foo('blah1', 1) : ["blah1", number]
+>                : ^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
 >'blah1' : "blah1"
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 
 const b1 = foo('blah1', 'blah2', 1);
 >b1 : ["blah1", "blah2", number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo('blah1', 'blah2', 1) : ["blah1", "blah2", number]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
 >'blah1' : "blah1"
+>        : ^^^^^^^
 >'blah2' : "blah2"
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 
 const c1 = foo(1);  // Error
 >c1 : [string, ...string[], number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(1) : [string, ...string[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
 >1 : 1
+>  : ^
 
 const d1 = foo(1, 2);  // Error
 >d1 : [string, ...string[], number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(1, 2) : [string, ...string[], number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 >e1 : [string, ...string[], number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo('blah1', 'blah2', 1, 2, 3) : [string, ...string[], number]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
 >'blah1' : "blah1"
+>        : ^^^^^^^
 >'blah2' : "blah2"
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

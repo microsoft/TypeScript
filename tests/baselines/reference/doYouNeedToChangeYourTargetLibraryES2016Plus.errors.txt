@@ -1,39 +1,45 @@
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(2,32): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(5,31): error TS2550: Property 'padStart' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(6,29): error TS2550: Property 'padEnd' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(7,44): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(8,45): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(9,63): error TS2550: Property 'getOwnPropertyDescriptors' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(10,64): error TS2550: Property 'formatToParts' does not exist on type 'DateTimeFormat'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(11,21): error TS2583: Cannot find name 'Atomics'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(12,35): error TS2583: Cannot find name 'SharedArrayBuffer'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(15,50): error TS2550: Property 'finally' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(16,113): error TS2550: Property 'groups' does not exist on type 'RegExpMatchArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(17,111): error TS2550: Property 'groups' does not exist on type 'RegExpExecArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(18,33): error TS2550: Property 'dotAll' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(19,38): error TS2550: Property 'PluralRules' does not exist on type 'typeof Intl'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(20,27): error TS2583: Cannot find name 'AsyncGenerator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(21,35): error TS2583: Cannot find name 'AsyncGeneratorFunction'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(22,26): error TS2583: Cannot find name 'AsyncIterable'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(23,34): error TS2583: Cannot find name 'AsyncIterableIterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(24,70): error TS2550: Property 'formatToParts' does not exist on type 'NumberFormat'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(27,26): error TS2550: Property 'flat' does not exist on type 'undefined[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(28,29): error TS2550: Property 'flatMap' does not exist on type 'undefined[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(29,49): error TS2550: Property 'fromEntries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(30,32): error TS2550: Property 'trimStart' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(31,30): error TS2550: Property 'trimEnd' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(32,31): error TS2550: Property 'trimLeft' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(33,32): error TS2550: Property 'trimRight' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(34,45): error TS2550: Property 'description' does not exist on type 'symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(37,39): error TS2550: Property 'allSettled' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(38,31): error TS2550: Property 'matchAll' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(39,47): error TS2550: Property 'matchAll' does not exist on type 'SymbolConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(40,20): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(43,32): error TS2550: Property 'any' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,33): error TS2550: Property 'replaceAll' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(2,32): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(5,31): error TS2550: Property 'padStart' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(6,29): error TS2550: Property 'padEnd' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(7,44): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(8,45): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(9,63): error TS2550: Property 'getOwnPropertyDescriptors' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(10,64): error TS2550: Property 'formatToParts' does not exist on type 'DateTimeFormat'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(11,21): error TS2583: Cannot find name 'Atomics'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(12,35): error TS2583: Cannot find name 'SharedArrayBuffer'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(15,50): error TS2550: Property 'finally' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(16,58): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(16,76): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(16,95): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(16,113): error TS2550: Property 'groups' does not exist on type 'RegExpMatchArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(17,38): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(17,56): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(17,75): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(17,111): error TS2550: Property 'groups' does not exist on type 'RegExpExecArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(18,33): error TS2550: Property 'dotAll' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(19,38): error TS2550: Property 'PluralRules' does not exist on type 'typeof Intl'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(20,27): error TS2583: Cannot find name 'AsyncGenerator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(21,35): error TS2583: Cannot find name 'AsyncGeneratorFunction'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(22,26): error TS2583: Cannot find name 'AsyncIterable'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(23,34): error TS2583: Cannot find name 'AsyncIterableIterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(24,70): error TS2550: Property 'formatToParts' does not exist on type 'NumberFormat'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(27,26): error TS2550: Property 'flat' does not exist on type 'undefined[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(28,29): error TS2550: Property 'flatMap' does not exist on type 'undefined[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(29,49): error TS2550: Property 'fromEntries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(30,32): error TS2550: Property 'trimStart' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(31,30): error TS2550: Property 'trimEnd' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(32,31): error TS2550: Property 'trimLeft' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(33,32): error TS2550: Property 'trimRight' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(34,45): error TS2550: Property 'description' does not exist on type 'symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(37,39): error TS2550: Property 'allSettled' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(38,31): error TS2550: Property 'matchAll' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(39,47): error TS2550: Property 'matchAll' does not exist on type 'SymbolConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(40,20): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(43,32): error TS2550: Property 'any' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,33): error TS2550: Property 'replaceAll' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
 
 
-==== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts (33 errors) ====
+==== doYouNeedToChangeYourTargetLibraryES2016Plus.ts (39 errors) ====
     // es2016
     const testIncludes = ["hello"].includes("world");
                                    ~~~~~~~~
@@ -70,9 +76,21 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,33): err
                                                      ~~~~~~~
 !!! error TS2550: Property 'finally' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
     const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
+                                                             ~~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                                                               ~~~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                                                                                  ~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
                                                                                                                     ~~~~~~
 !!! error TS2550: Property 'groups' does not exist on type 'RegExpMatchArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
     const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
+                                         ~~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                                           ~~~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                                                              ~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
                                                                                                                   ~~~~~~
 !!! error TS2550: Property 'groups' does not exist on type 'RegExpExecArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
     const testRegExpDotAll = /foo/g.dotAll;

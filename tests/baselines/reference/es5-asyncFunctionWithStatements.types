@@ -1,71 +1,99 @@
-=== tests/cases/compiler/es5-asyncFunctionWithStatements.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionWithStatements.ts] ////
+
+=== es5-asyncFunctionWithStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function withStatement0() {
 >withStatement0 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     with (x) {
 >x : any
+>  : ^^^
 
         y;
 >y : any
+>  : ^^^
     }
 }
 
 async function withStatement1() {
 >withStatement1 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     with (await x) {
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 
         y;
 >y : any
+>  : ^^^
     }
 }
 
 async function withStatement2() {
 >withStatement2 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     with (x) {
 >x : any
+>  : ^^^
 
         a;
 >a : any
+>  : ^^^
 
         await y;
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 
         b;
 >b : any
+>  : ^^^
     }
 }
 
 async function withStatement3() {
 >withStatement3 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     with (x) {
 >x : any
+>  : ^^^
 
         with (z) {
 >z : any
+>  : ^^^
 
             a;
 >a : any
+>  : ^^^
 
             await y;
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 
             b;
 >b : any
+>  : ^^^
         }
     }
 }

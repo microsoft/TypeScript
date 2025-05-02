@@ -1,28 +1,41 @@
-=== tests/cases/compiler/propertyWrappedInTry.ts ===
+//// [tests/cases/compiler/propertyWrappedInTry.ts] ////
+
+=== propertyWrappedInTry.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     try {
 
         public bar = someInitThatMightFail();
 >bar = someInitThatMightFail() : any
+>                              : ^^^
 >bar : any
+>    : ^^^
 >someInitThatMightFail() : any
+>                        : ^^^
 >someInitThatMightFail : any
+>                      : ^^^
 
     } catch(e) {}
 >e : any
+>  : ^^^
 
 
 
     public baz() {
 >baz() : any
+>      : ^^^
 >baz : any
+>    : ^^^
 
         return this.bar; // doesn't get rewritten to Foo.bar.
 >this.bar : any
+>         : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >bar : any
+>    : ^^^
 
     }
 

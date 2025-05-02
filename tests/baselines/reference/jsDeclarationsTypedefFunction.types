@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/foo.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefFunction.ts] ////
+
+=== foo.js ===
 /**
  * @typedef {{
  *   [id: string]: [Function, Function];
@@ -7,7 +9,9 @@
 
 let id = 0
 >id : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 /**
  * @param {ResolveRejectMap} handlers
@@ -15,22 +19,38 @@ let id = 0
  */
 const send = handlers => new Promise((resolve, reject) => {
 >send : (handlers: ResolveRejectMap) => Promise<any>
+>     : ^        ^^                ^^^^^            
 >handlers => new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : (handlers: ResolveRejectMap) => Promise<any>
+>                                                                                     : ^        ^^                ^^^^^            
 >handlers : ResolveRejectMap
+>         : ^^^^^^^^^^^^^^^^
 >new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : Promise<any>
+>                                                                         : ^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >(resolve, reject) => {  handlers[++id] = [resolve, reject]} : (resolve: (value: any) => void, reject: (reason?: any) => void) => void
+>                                                            : ^       ^^^     ^^^^^^^^^^    ^^      ^^^      ^^^   ^^^^^    ^^^^^^^^^
 >resolve : (value: any) => void
+>        : ^     ^^^^^^^^^^    
 >reject : (reason?: any) => void
+>       : ^      ^^^   ^^^^^    
 
   handlers[++id] = [resolve, reject]
 >handlers[++id] = [resolve, reject] : [(value: any) => void, (reason?: any) => void]
+>                                   : ^^     ^^^^^^^^^^    ^^^      ^^^   ^^^^^    ^
 >handlers[++id] : [Function, Function]
+>               : ^^^^^^^^^^^^^^^^^^^^
 >handlers : ResolveRejectMap
+>         : ^^^^^^^^^^^^^^^^
 >++id : number
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 >[resolve, reject] : [(value: any) => void, (reason?: any) => void]
+>                  : ^^     ^^^^^^^^^^    ^^^      ^^^   ^^^^^    ^
 >resolve : (value: any) => void
+>        : ^     ^^^^^^^^^^    
 >reject : (reason?: any) => void
+>       : ^      ^^^   ^^^^^    
 
 })

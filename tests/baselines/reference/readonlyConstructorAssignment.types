@@ -1,100 +1,149 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts] ////
+
+=== readonlyConstructorAssignment.ts ===
 // Tests that readonly parameter properties behave like regular readonly properties
 
 class A {
 >A : A
+>  : ^
 
     constructor(readonly x: number) {
 >x : number
+>  : ^^^^^^
 
         this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
     }
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     constructor(x: number) {
 >x : number
+>  : ^^^^^^
 
         super(x);
 >super(x) : void
+>         : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         // Fails, x is readonly
         this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
 }
 
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     // This is the usual behavior of readonly properties:
     // if one is redeclared in a base class, then it can be assigned to.
     constructor(readonly x: number) {
 >x : number
+>  : ^^^^^^
 
         super(x);
 >super(x) : void
+>         : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 class D {
 >D : D
+>  : ^
 
     constructor(private readonly x: number) {
 >x : number
+>  : ^^^^^^
 
         this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
     }
 }
 
 // Fails, can't redeclare readonly property
 class E extends D {
 >E : E
+>  : ^
 >D : D
+>  : ^
 
     constructor(readonly x: number) {
 >x : number
+>  : ^^^^^^
 
         super(x);
 >super(x) : void
+>         : ^^^^
 >super : typeof D
+>      : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 

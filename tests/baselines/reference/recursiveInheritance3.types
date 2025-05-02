@@ -1,19 +1,29 @@
-=== tests/cases/compiler/recursiveInheritance3.ts ===
+//// [tests/cases/compiler/recursiveInheritance3.ts] ////
+
+=== recursiveInheritance3.ts ===
 class C implements I {
 >C : C
+>  : ^
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 interface I extends C {
     other(x: any): any;
 >other : (x: any) => any
+>      : ^ ^^   ^^^^^   
 >x : any
+>  : ^^^
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionSuperAndLocalVarInProperty.ts ===
+//// [tests/cases/compiler/collisionSuperAndLocalVarInProperty.ts] ////
+
+=== collisionSuperAndLocalVarInProperty.ts ===
 var _super = 10; // No Error
 >_super : Symbol(_super, Decl(collisionSuperAndLocalVarInProperty.ts, 0, 3))
 

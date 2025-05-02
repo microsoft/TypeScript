@@ -1,625 +1,983 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbols.ts ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbols.ts] ////
+
+=== uniqueSymbols.ts ===
 // declarations with call initializer
 const constCall = Symbol();
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 let letCall = Symbol();
 >letCall : symbol
+>        : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var varCall = Symbol();
 >varCall : symbol
+>        : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 // ambient declaration with type
 declare const constType: unique symbol;
 >constType : unique symbol
+>          : ^^^^^^^^^^^^^
 
 // declaration with type and call initializer
 const constTypeAndCall: unique symbol = Symbol();
 >constTypeAndCall : unique symbol
+>                 : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 // declaration from initializer
 const constInitToConstCall = constCall;
 >constInitToConstCall : symbol
+>                     : ^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 const constInitToLetCall = letCall;
 >constInitToLetCall : symbol
+>                   : ^^^^^^
 >letCall : symbol
+>        : ^^^^^^
 
 const constInitToVarCall = varCall;
 >constInitToVarCall : symbol
+>                   : ^^^^^^
 >varCall : symbol
+>        : ^^^^^^
 
 const constInitToConstDeclAmbient = constType;
 >constInitToConstDeclAmbient : symbol
+>                            : ^^^^^^
 >constType : unique symbol
+>          : ^^^^^^^^^^^^^
 
 let letInitToConstCall = constCall;
 >letInitToConstCall : symbol
+>                   : ^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 let letInitToLetCall = letCall;
 >letInitToLetCall : symbol
+>                 : ^^^^^^
 >letCall : symbol
+>        : ^^^^^^
 
 let letInitToVarCall = varCall;
 >letInitToVarCall : symbol
+>                 : ^^^^^^
 >varCall : symbol
+>        : ^^^^^^
 
 let letInitToConstDeclAmbient = constType;
 >letInitToConstDeclAmbient : symbol
+>                          : ^^^^^^
 >constType : unique symbol
+>          : ^^^^^^^^^^^^^
 
 var varInitToConstCall = constCall;
 >varInitToConstCall : symbol
+>                   : ^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 var varInitToLetCall = letCall;
 >varInitToLetCall : symbol
+>                 : ^^^^^^
 >letCall : symbol
+>        : ^^^^^^
 
 var varInitToVarCall = varCall;
 >varInitToVarCall : symbol
+>                 : ^^^^^^
 >varCall : symbol
+>        : ^^^^^^
 
 var varInitToConstDeclAmbient = constType;
 >varInitToConstDeclAmbient : symbol
+>                          : ^^^^^^
 >constType : unique symbol
+>          : ^^^^^^^^^^^^^
 
 // declaration from initializer with type query
 const constInitToConstCallWithTypeQuery: typeof constCall = constCall;
 >constInitToConstCallWithTypeQuery : unique symbol
+>                                  : ^^^^^^^^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 const constInitToConstDeclAmbientWithTypeQuery: typeof constType = constType;
 >constInitToConstDeclAmbientWithTypeQuery : unique symbol
+>                                         : ^^^^^^^^^^^^^
 >constType : unique symbol
+>          : ^^^^^^^^^^^^^
 >constType : unique symbol
+>          : ^^^^^^^^^^^^^
 
 // assignment from any
 // https://github.com/Microsoft/TypeScript/issues/29108
 const fromAny: unique symbol = {} as any;
 >fromAny : unique symbol
+>        : ^^^^^^^^^^^^^
 >{} as any : any
 >{} : {}
+>   : ^^
 
 // function return inference
 function funcReturnConstCall() { return constCall; }
 >funcReturnConstCall : () => symbol
+>                    : ^^^^^^^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 function funcReturnLetCall() { return letCall; }
 >funcReturnLetCall : () => symbol
+>                  : ^^^^^^^^^^^^
 >letCall : symbol
+>        : ^^^^^^
 
 function funcReturnVarCall() { return varCall; }
 >funcReturnVarCall : () => symbol
+>                  : ^^^^^^^^^^^^
 >varCall : symbol
+>        : ^^^^^^
 
 // function return value with type query
 function funcReturnConstCallWithTypeQuery(): typeof constCall { return constCall; }
 >funcReturnConstCallWithTypeQuery : () => typeof constCall
+>                                 : ^^^^^^                
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 // generator function yield inference
 function* genFuncYieldConstCall() { yield constCall; }
 >genFuncYieldConstCall : () => Generator<symbol, void, unknown>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield constCall : any
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 function* genFuncYieldLetCall() { yield letCall; }
 >genFuncYieldLetCall : () => Generator<symbol, void, unknown>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield letCall : any
 >letCall : symbol
+>        : ^^^^^^
 
 function* genFuncYieldVarCall() { yield varCall; }
 >genFuncYieldVarCall : () => Generator<symbol, void, unknown>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield varCall : any
 >varCall : symbol
+>        : ^^^^^^
 
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
 >genFuncYieldConstCallWithTypeQuery : () => IterableIterator<typeof constCall>
+>                                   : ^^^^^^                                  
 >constCall : unique symbol
->yield constCall : undefined
+>          : ^^^^^^^^^^^^^
+>yield constCall : any
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 // async function return inference
 async function asyncFuncReturnConstCall() { return constCall; }
 >asyncFuncReturnConstCall : () => Promise<symbol>
+>                         : ^^^^^^^^^^^^^^^^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 async function asyncFuncReturnLetCall() { return letCall; }
 >asyncFuncReturnLetCall : () => Promise<symbol>
+>                       : ^^^^^^^^^^^^^^^^^^^^^
 >letCall : symbol
+>        : ^^^^^^
 
 async function asyncFuncReturnVarCall() { return varCall; }
 >asyncFuncReturnVarCall : () => Promise<symbol>
+>                       : ^^^^^^^^^^^^^^^^^^^^^
 >varCall : symbol
+>        : ^^^^^^
 
 // async generator function yield inference
 async function* asyncGenFuncYieldConstCall() { yield constCall; }
 >asyncGenFuncYieldConstCall : () => AsyncGenerator<symbol, void, unknown>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield constCall : any
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 async function* asyncGenFuncYieldLetCall() { yield letCall; }
 >asyncGenFuncYieldLetCall : () => AsyncGenerator<symbol, void, unknown>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield letCall : any
 >letCall : symbol
+>        : ^^^^^^
 
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
 >asyncGenFuncYieldVarCall : () => AsyncGenerator<symbol, void, unknown>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield varCall : any
 >varCall : symbol
+>        : ^^^^^^
 
 // classes
 class C {
 >C : C
+>  : ^
 
     static readonly readonlyStaticCall = Symbol();
 >readonlyStaticCall : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     static readonly readonlyStaticType: unique symbol;
 >readonlyStaticType : unique symbol
+>                   : ^^^^^^^^^^^^^
 
     static readonly readonlyStaticTypeAndCall: unique symbol = Symbol();
 >readonlyStaticTypeAndCall : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     static readwriteStaticCall = Symbol();
 >readwriteStaticCall : symbol
+>                    : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     readonly readonlyCall = Symbol();
 >readonlyCall : symbol
+>             : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     readwriteCall = Symbol();
 >readwriteCall : symbol
+>              : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 }
 declare const c: C;
 >c : C
+>  : ^
 
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 >constInitToCReadonlyStaticCall : symbol
+>                               : ^^^^^^
 >C.readonlyStaticCall : unique symbol
+>                     : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticCall : unique symbol
+>                   : ^^^^^^^^^^^^^
 
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
 >constInitToCReadonlyStaticType : symbol
+>                               : ^^^^^^
 >C.readonlyStaticType : unique symbol
+>                     : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticType : unique symbol
+>                   : ^^^^^^^^^^^^^
 
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
 >constInitToCReadonlyStaticTypeAndCall : symbol
+>                                      : ^^^^^^
 >C.readonlyStaticTypeAndCall : unique symbol
+>                            : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticTypeAndCall : unique symbol
+>                          : ^^^^^^^^^^^^^
 
 const constInitToCReadwriteStaticCall = C.readwriteStaticCall;
 >constInitToCReadwriteStaticCall : symbol
+>                                : ^^^^^^
 >C.readwriteStaticCall : symbol
+>                      : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readwriteStaticCall : symbol
+>                    : ^^^^^^
 
 const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall = C.readonlyStaticCall;
 >constInitToCReadonlyStaticCallWithTypeQuery : unique symbol
+>                                            : ^^^^^^^^^^^^^
 >C.readonlyStaticCall : unique symbol
+>                     : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticCall : unique symbol
+>                   : ^^^^^^^^^^^^^
 >C.readonlyStaticCall : unique symbol
+>                     : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticCall : unique symbol
+>                   : ^^^^^^^^^^^^^
 
 const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType = C.readonlyStaticType;
 >constInitToCReadonlyStaticTypeWithTypeQuery : unique symbol
+>                                            : ^^^^^^^^^^^^^
 >C.readonlyStaticType : unique symbol
+>                     : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticType : unique symbol
+>                   : ^^^^^^^^^^^^^
 >C.readonlyStaticType : unique symbol
+>                     : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticType : unique symbol
+>                   : ^^^^^^^^^^^^^
 
 const constInitToCReadonlyStaticTypeAndCallWithTypeQuery: typeof C.readonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
 >constInitToCReadonlyStaticTypeAndCallWithTypeQuery : unique symbol
+>                                                   : ^^^^^^^^^^^^^
 >C.readonlyStaticTypeAndCall : unique symbol
+>                            : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticTypeAndCall : unique symbol
+>                          : ^^^^^^^^^^^^^
 >C.readonlyStaticTypeAndCall : unique symbol
+>                            : ^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readonlyStaticTypeAndCall : unique symbol
+>                          : ^^^^^^^^^^^^^
 
 const constInitToCReadwriteStaticCallWithTypeQuery: typeof C.readwriteStaticCall = C.readwriteStaticCall;
 >constInitToCReadwriteStaticCallWithTypeQuery : symbol
+>                                             : ^^^^^^
 >C.readwriteStaticCall : symbol
+>                      : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readwriteStaticCall : symbol
+>                    : ^^^^^^
 >C.readwriteStaticCall : symbol
+>                      : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >readwriteStaticCall : symbol
+>                    : ^^^^^^
 
 const constInitToCReadonlyCall = c.readonlyCall;
 >constInitToCReadonlyCall : symbol
+>                         : ^^^^^^
 >c.readonlyCall : symbol
+>               : ^^^^^^
 >c : C
+>  : ^
 >readonlyCall : symbol
+>             : ^^^^^^
 
 const constInitToCReadwriteCall = c.readwriteCall;
 >constInitToCReadwriteCall : symbol
+>                          : ^^^^^^
 >c.readwriteCall : symbol
+>                : ^^^^^^
 >c : C
+>  : ^
 >readwriteCall : symbol
+>              : ^^^^^^
 
 const constInitToCReadonlyCallWithTypeQuery: typeof c.readonlyCall = c.readonlyCall;
 >constInitToCReadonlyCallWithTypeQuery : symbol
+>                                      : ^^^^^^
 >c.readonlyCall : symbol
+>               : ^^^^^^
 >c : C
+>  : ^
 >readonlyCall : symbol
+>             : ^^^^^^
 >c.readonlyCall : symbol
+>               : ^^^^^^
 >c : C
+>  : ^
 >readonlyCall : symbol
+>             : ^^^^^^
 
 const constInitToCReadwriteCallWithTypeQuery: typeof c.readwriteCall = c.readwriteCall;
 >constInitToCReadwriteCallWithTypeQuery : symbol
+>                                       : ^^^^^^
 >c.readwriteCall : symbol
+>                : ^^^^^^
 >c : C
+>  : ^
 >readwriteCall : symbol
+>              : ^^^^^^
 >c.readwriteCall : symbol
+>                : ^^^^^^
 >c : C
+>  : ^
 >readwriteCall : symbol
+>              : ^^^^^^
 
 const constInitToCReadonlyCallWithIndexedAccess: C["readonlyCall"] = c.readonlyCall;
 >constInitToCReadonlyCallWithIndexedAccess : symbol
+>                                          : ^^^^^^
 >c.readonlyCall : symbol
+>               : ^^^^^^
 >c : C
+>  : ^
 >readonlyCall : symbol
+>             : ^^^^^^
 
 const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"] = c.readwriteCall;
 >constInitToCReadwriteCallWithIndexedAccess : symbol
+>                                           : ^^^^^^
 >c.readwriteCall : symbol
+>                : ^^^^^^
 >c : C
+>  : ^
 >readwriteCall : symbol
+>              : ^^^^^^
 
 // interfaces
 interface I {
     readonly readonlyType: unique symbol;
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 }
 declare const i: I;
 >i : I
+>  : ^
 
 const constInitToIReadonlyType = i.readonlyType;
 >constInitToIReadonlyType : symbol
+>                         : ^^^^^^
 >i.readonlyType : unique symbol
+>               : ^^^^^^^^^^^^^
 >i : I
+>  : ^
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 
 const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType = i.readonlyType;
 >constInitToIReadonlyTypeWithTypeQuery : unique symbol
+>                                      : ^^^^^^^^^^^^^
 >i.readonlyType : unique symbol
+>               : ^^^^^^^^^^^^^
 >i : I
+>  : ^
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 >i.readonlyType : unique symbol
+>               : ^^^^^^^^^^^^^
 >i : I
+>  : ^
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 
 const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyType;
 >constInitToIReadonlyTypeWithIndexedAccess : unique symbol
+>                                          : ^^^^^^^^^^^^^
 >i.readonlyType : unique symbol
+>               : ^^^^^^^^^^^^^
 >i : I
+>  : ^
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 
 // type literals
 type L = {
->L : { readonly readonlyType: unique symbol; nested: {    readonly readonlyNestedType: unique symbol;}; }
+>L : L
+>  : ^
 
     readonly readonlyType: unique symbol;
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 
     nested: {
 >nested : { readonly readonlyNestedType: unique symbol; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^
 
         readonly readonlyNestedType: unique symbol;
 >readonlyNestedType : unique symbol
+>                   : ^^^^^^^^^^^^^
     }
 };
 declare const l: L;
 >l : L
+>  : ^
 
 const constInitToLReadonlyType = l.readonlyType;
 >constInitToLReadonlyType : symbol
+>                         : ^^^^^^
 >l.readonlyType : unique symbol
+>               : ^^^^^^^^^^^^^
 >l : L
+>  : ^
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 
 const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedType : symbol
+>                               : ^^^^^^
 >l.nested.readonlyNestedType : unique symbol
+>                            : ^^^^^^^^^^^^^
 >l.nested : { readonly readonlyNestedType: unique symbol; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : L
+>  : ^
 >nested : { readonly readonlyNestedType: unique symbol; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyNestedType : unique symbol
+>                   : ^^^^^^^^^^^^^
 
 const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType = l.readonlyType;
 >constInitToLReadonlyTypeWithTypeQuery : unique symbol
+>                                      : ^^^^^^^^^^^^^
 >l.readonlyType : unique symbol
+>               : ^^^^^^^^^^^^^
 >l : L
+>  : ^
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 >l.readonlyType : unique symbol
+>               : ^^^^^^^^^^^^^
 >l : L
+>  : ^
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 
 const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedTypeWithTypeQuery : unique symbol
+>                                            : ^^^^^^^^^^^^^
 >l.nested.readonlyNestedType : unique symbol
+>                            : ^^^^^^^^^^^^^
 >l.nested : { readonly readonlyNestedType: unique symbol; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : L
+>  : ^
 >nested : { readonly readonlyNestedType: unique symbol; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyNestedType : unique symbol
+>                   : ^^^^^^^^^^^^^
 >l.nested.readonlyNestedType : unique symbol
+>                            : ^^^^^^^^^^^^^
 >l.nested : { readonly readonlyNestedType: unique symbol; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : L
+>  : ^
 >nested : { readonly readonlyNestedType: unique symbol; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyNestedType : unique symbol
+>                   : ^^^^^^^^^^^^^
 
 const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"] = l.readonlyType;
 >constInitToLReadonlyTypeWithIndexedAccess : unique symbol
+>                                          : ^^^^^^^^^^^^^
 >l.readonlyType : unique symbol
+>               : ^^^^^^^^^^^^^
 >l : L
+>  : ^
 >readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 
 const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"] = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedTypeWithIndexedAccess : unique symbol
+>                                                : ^^^^^^^^^^^^^
 >l.nested.readonlyNestedType : unique symbol
+>                            : ^^^^^^^^^^^^^
 >l.nested : { readonly readonlyNestedType: unique symbol; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : L
+>  : ^
 >nested : { readonly readonlyNestedType: unique symbol; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyNestedType : unique symbol
+>                   : ^^^^^^^^^^^^^
 
 // type argument inference
 const promiseForConstCall = Promise.resolve(constCall);
 >promiseForConstCall : Promise<unique symbol>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve(constCall) : Promise<unique symbol>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 const arrayOfConstCall = [constCall];
 >arrayOfConstCall : symbol[]
+>                 : ^^^^^^^^
 >[constCall] : symbol[]
+>            : ^^^^^^^^
 >constCall : unique symbol
+>          : ^^^^^^^^^^^^^
 
 // unique symbol widening in expressions
 declare const s: unique symbol;
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 declare namespace N { const s: unique symbol; }
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 declare const o: { [s]: "a", [N.s]: "b" };
 >o : { [s]: "a"; [N.s]: "b"; }
+>  : ^^^^^^^   ^^^^^^^^^   ^^^
 >[s] : "a"
+>    : ^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >[N.s] : "b"
+>      : ^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 declare function g(x: typeof s): void;
->g : { (x: typeof s): void; (x: unique symbol): void; }
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^    ^^^ ^^          ^^^    ^^^
 >x : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 declare function g(x: typeof N.s): void;
->g : { (x: unique symbol): void; (x: typeof N.s): void; }
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^    ^^^ ^^          ^^^    ^^^
 >x : unique symbol
+>  : ^^^^^^^^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 // widening positions
 
 // argument inference
 f(s);
 >f(s) : unique symbol
+>     : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 f(N.s);
 >f(N.s) : unique symbol
+>       : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 f(N["s"]);
 >f(N["s"]) : unique symbol
+>          : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
 // array literal elements
 [s];
 >[s] : symbol[]
+>    : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 [N.s];
 >[N.s] : symbol[]
+>      : ^^^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 [N["s"]];
 >[N["s"]] : symbol[]
+>         : ^^^^^^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
 // property assignments/methods
 const o2 = {
 >o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
+>                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     a: s,
 >a : symbol
+>  : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     b: N.s,
 >b : symbol
+>  : ^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     c: N["s"],
 >c : symbol
+>  : ^^^^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
     method1() { return s; },
 >method1 : () => symbol
+>        : ^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     async method2() { return s; },
 >method2 : () => Promise<symbol>
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     async * method3() { yield s; },
 >method3 : () => AsyncGenerator<symbol, void, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield s : any
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     * method4() { yield s; },
 >method4 : () => Generator<symbol, void, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield s : any
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     method5(p = s) { return p; },
 >method5 : (p?: symbol) => symbol
+>        : ^ ^^^^^^^^^^^^^^^^^^^^
 >p : symbol
+>  : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >p : symbol
+>  : ^^^^^^
 
 };
 
 // property initializers
 class C0 {
 >C0 : C0
+>   : ^^
 
     static readonly a = s;
 >a : symbol
+>  : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     static readonly b = N.s;
 >b : symbol
+>  : ^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     static readonly c = N["s"];
 >c : symbol
+>  : ^^^^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
     static d = s;
 >d : symbol
+>  : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     static e = N.s;
 >e : symbol
+>  : ^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     static f = N["s"];
 >f : symbol
+>  : ^^^^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
     readonly a = s;
 >a : symbol
+>  : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     readonly b = N.s;
 >b : symbol
+>  : ^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     readonly c = N["s"];
 >c : symbol
+>  : ^^^^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
     d = s;
 >d : symbol
+>  : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     e = N.s;
 >e : symbol
+>  : ^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     f = N["s"];
 >f : symbol
+>  : ^^^^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
     method1() { return s; }
 >method1 : () => symbol
+>        : ^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     async method2() { return s; }
 >method2 : () => Promise<symbol>
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     async * method3() { yield s; }
 >method3 : () => AsyncGenerator<symbol, void, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield s : any
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     * method4() { yield s; }
 >method4 : () => Generator<symbol, void, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield s : any
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     method5(p = s) { return p; }
 >method5 : (p?: symbol) => symbol
+>        : ^ ^^^^^^^^^^^^^^^^^^^^
 >p : symbol
+>  : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >p : symbol
+>  : ^^^^^^
 }
 
 // non-widening positions
@@ -627,168 +985,281 @@ class C0 {
 // element access
 o[s];
 >o[s] : "a"
+>     : ^^^
 >o : { [s]: "a"; [N.s]: "b"; }
+>  : ^^^^^^^   ^^^^^^^^^   ^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 o[N.s];
 >o[N.s] : "b"
+>       : ^^^
 >o : { [s]: "a"; [N.s]: "b"; }
+>  : ^^^^^^^   ^^^^^^^^^   ^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 o[N["s"]];
 >o[N["s"]] : "b"
+>          : ^^^
 >o : { [s]: "a"; [N.s]: "b"; }
+>  : ^^^^^^^   ^^^^^^^^^   ^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
 // arguments (no-inference)
 f<typeof s>(s);
 >f<typeof s>(s) : unique symbol
+>               : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 f<typeof N.s>(N.s);
 >f<typeof N.s>(N.s) : unique symbol
+>                   : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 f<typeof N.s>(N["s"]);
 >f<typeof N.s>(N["s"]) : unique symbol
+>                      : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
 g(s);
 >g(s) : void
->g : { (x: unique symbol): void; (x: unique symbol): void; }
+>     : ^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^    ^^^ ^^          ^^^    ^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 g(N.s);
 >g(N.s) : void
->g : { (x: unique symbol): void; (x: unique symbol): void; }
+>       : ^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^    ^^^ ^^          ^^^    ^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 g(N["s"]);
 >g(N["s"]) : void
->g : { (x: unique symbol): void; (x: unique symbol): void; }
+>          : ^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^    ^^^ ^^          ^^^    ^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 
 // falsy expressions
 s || "";
 >s || "" : "" | unique symbol
+>        : ^^^^^^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 N.s || "";
 >N.s || "" : "" | unique symbol
+>          : ^^^^^^^^^^^^^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 N["s"] || "";
 >N["s"] || "" : "" | unique symbol
+>             : ^^^^^^^^^^^^^^^^^^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 >"" : ""
+>   : ^^
 
 // conditionals
 Math.random() * 2 ? s : "a";
 >Math.random() * 2 ? s : "a" : unique symbol | "a"
+>                            : ^^^^^^^^^^^^^^^^^^^
 >Math.random() * 2 : number
+>                  : ^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >2 : 2
+>  : ^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
 Math.random() * 2 ? N.s : "a";
 >Math.random() * 2 ? N.s : "a" : unique symbol | "a"
+>                              : ^^^^^^^^^^^^^^^^^^^
 >Math.random() * 2 : number
+>                  : ^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >2 : 2
+>  : ^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
 Math.random() * 2 ? N["s"] : "a";
 >Math.random() * 2 ? N["s"] : "a" : unique symbol | "a"
+>                                 : ^^^^^^^^^^^^^^^^^^^
 >Math.random() * 2 : number
+>                  : ^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >2 : 2
+>  : ^
 >N["s"] : unique symbol
+>       : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 >"a" : "a"
+>    : ^^^
 
 // computed property names
 ({
 >({    [s]: "a",    [N.s]: "b",}) : { [s]: string; [N.s]: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [s]: "a",    [N.s]: "b",} : { [s]: string; [N.s]: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [s]: "a",
 >[s] : string
+>    : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
     [N.s]: "b",
 >[N.s] : string
+>      : ^^^^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 
 });
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     static [s]: "a";
 >[s] : "a"
+>    : ^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     static [N.s]: "b";
 >[N.s] : "b"
+>      : ^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     [s]: "a";
 >[s] : "a"
+>    : ^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     [N.s]: "b";
 >[N.s] : "b"
+>      : ^^^
 >N.s : unique symbol
+>    : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 }
 
 // contextual types
@@ -796,68 +1267,94 @@ class C1 {
 interface Context {
     method1(): typeof s;
 >method1 : () => typeof s
+>        : ^^^^^^        
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     method2(): Promise<typeof s>;
 >method2 : () => Promise<typeof s>
+>        : ^^^^^^                 
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     method3(): AsyncIterableIterator<typeof s>;
 >method3 : () => AsyncIterableIterator<typeof s>
+>        : ^^^^^^                               
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     method4(): IterableIterator<typeof s>;
 >method4 : () => IterableIterator<typeof s>
+>        : ^^^^^^                          
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     method5(p?: typeof s): typeof s;
 >method5 : (p?: typeof s) => typeof s
+>        : ^ ^^^        ^^^^^        
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 }
 
 const o3: Context = {
 >o3 : Context
->{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, undefined>; method4(): Generator<unique symbol, void, undefined>; method5(p?: unique symbol): unique symbol; }
+>   : ^^^^^^^
+>{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, any>; method4(): Generator<unique symbol, void, any>; method5(p?: unique symbol): unique symbol; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     method1() {
 >method1 : () => unique symbol
+>        : ^^^^^^^^^^^^^^^^^^^
 
         return s; // return type should not widen due to contextual type
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     },
     async method2() {
 >method2 : () => Promise<unique symbol>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return s; // return type should not widen due to contextual type
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     },
     async * method3() {
->method3 : () => AsyncGenerator<unique symbol, void, undefined>
+>method3 : () => AsyncGenerator<unique symbol, void, any>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield s; // yield type should not widen due to contextual type
->yield s : undefined
+>yield s : any
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     },
     * method4() {
->method4 : () => Generator<unique symbol, void, undefined>
+>method4 : () => Generator<unique symbol, void, any>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield s; // yield type should not widen due to contextual type
->yield s : undefined
+>yield s : any
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     },
     method5(p = s) { // parameter should not widen due to contextual type
 >method5 : (p?: unique symbol) => unique symbol
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
         return p;
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 
     },
 };
@@ -866,57 +1363,83 @@ const o3: Context = {
 
 const o4 = {
 >o4 : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
+>   : ^^^^^^^^^^ ^^        ^^^        ^^^^^^^^^^ ^^                 ^^^                 ^^^
 >{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
+>                                                                                                                                          : ^^^^^^^^^^ ^^        ^^^        ^^^^^^^^^^ ^^                 ^^^                 ^^^
 
     method1(p: typeof s): typeof s {
 >method1 : (p: typeof s) => typeof s
+>        : ^ ^^        ^^^^^        
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
         return p;
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 
     },
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: I["readonlyType"]) => I["readonlyType"]
+>        : ^ ^^                 ^^^^^                 
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 
         return p;
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
     }
 };
 
 const ce0 = class {
 >ce0 : typeof ce0
+>    : ^^^^^^^^^^
 >class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof ce0
+>                                                                                                                                               : ^^^^^^^^^^
 
     method1(p: typeof s): typeof s {
 >method1 : (p: typeof s) => typeof s
+>        : ^ ^^        ^^^^^        
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
         return p;
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
     }
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: I["readonlyType"]) => I["readonlyType"]
+>        : ^ ^^                 ^^^^^                 
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 
         return p;
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
     }
 };
 
 function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 >funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
+>                       : ^   ^^                              ^^^^^^^^^^^^^^ ^^        ^^^    ^^^
 >obj : { method(p: typeof s): void; }
+>    : ^^^^^^^^^ ^^        ^^^    ^^^
 >method : (p: typeof s) => void
+>       : ^ ^^        ^^^^^    
 >p : unique symbol
+>  : ^^^^^^^^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
     return obj;
->obj : { method(p: unique symbol): void; }
+>obj : { method(p: typeof s): void; }
+>    : ^^^^^^^^^ ^^        ^^^    ^^^
 }
 

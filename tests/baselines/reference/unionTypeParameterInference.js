@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeParameterInference.ts] ////
+
 //// [unionTypeParameterInference.ts]
 // Regression test for #5861
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateFreshLiteralWidening.ts] ////
+
 //// [typePredicateFreshLiteralWidening.ts]
 type Narrowable = string | number | bigint | boolean;
 

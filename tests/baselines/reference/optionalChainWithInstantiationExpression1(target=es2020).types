@@ -1,37 +1,57 @@
-=== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts ===
+//// [tests/cases/compiler/optionalChainWithInstantiationExpression1.ts] ////
+
+=== optionalChainWithInstantiationExpression1.ts ===
 declare namespace A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class b<T> {
 >b : b<T>
+>  : ^^^^
 
         static d: number;
 >d : number
+>  : ^^^^^^
 
         constructor(x: T);
 >x : T
+>  : ^
     }
 }
 
 type c = unknown;
 >c : unknown
+>  : ^^^^^^^
 
 declare const a: typeof A | undefined;
 >a : typeof A
+>  : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 a?.b<c>.d;
 >a?.b<c>.d : number
+>          : ^^^^^^
 >a?.b<c> : { new (x: unknown): A.b<unknown>; prototype: A.b<any>; d: number; }
+>        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >a?.b : typeof A.b
+>     : ^^^^^^^^^^
 >a : typeof A
+>  : ^^^^^^^^
 >b : typeof A.b
+>  : ^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 
 a?.b.d
 >a?.b.d : number
+>       : ^^^^^^
 >a?.b : typeof A.b
+>     : ^^^^^^^^^^
 >a : typeof A
+>  : ^^^^^^^^
 >b : typeof A.b
+>  : ^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 

@@ -1,19 +1,33 @@
-=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit10.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit10.ts] ////
+
+=== symbolDeclarationEmit10.ts ===
 var obj = {
 >obj : { [Symbol.isConcatSpreadable]: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    get [Symbol.isConcatSpreadable]() { return '' },    set [Symbol.isConcatSpreadable](x) { }} : { [Symbol.isConcatSpreadable]: string; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     get [Symbol.isConcatSpreadable]() { return '' },
 >[Symbol.isConcatSpreadable] : string
+>                            : ^^^^^^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 
     set [Symbol.isConcatSpreadable](x) { }
 >[Symbol.isConcatSpreadable] : string
+>                            : ^^^^^^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 }

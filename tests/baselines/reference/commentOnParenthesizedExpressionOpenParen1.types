@@ -1,9 +1,12 @@
-=== tests/cases/compiler/commentOnParenthesizedExpressionOpenParen1.ts ===
+//// [tests/cases/compiler/commentOnParenthesizedExpressionOpenParen1.ts] ////
+
+=== commentOnParenthesizedExpressionOpenParen1.ts ===
 var j;
 >j : any
 
 var f: () => any;
 >f : () => any
+>  : ^^^^^^   
 
 <any>( /* Preserve */ j = f());
 ><any>( /* Preserve */ j = f()) : any
@@ -12,4 +15,5 @@ var f: () => any;
 >j : any
 >f() : any
 >f : () => any
+>  : ^^^^^^   
 

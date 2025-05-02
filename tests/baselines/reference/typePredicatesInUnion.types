@@ -1,32 +1,48 @@
-=== tests/cases/compiler/typePredicatesInUnion.ts ===
+//// [tests/cases/compiler/typePredicatesInUnion.ts] ////
+
+=== typePredicatesInUnion.ts ===
 interface A {
     pred(x: {}): x is boolean;
 >pred : (x: {}) => x is boolean
+>     : ^ ^^  ^^^^^            
 >x : {}
+>  : ^^
 }
 interface B {
     pred(x: {}): x is string;
 >pred : (x: {}) => x is string
+>     : ^ ^^  ^^^^^           
 >x : {}
+>  : ^^
 }
 
 type Or = A | B;
->Or : A | B
+>Or : Or
+>   : ^^
 
 function f(o: Or, x: {}) {
 >f : (o: Or, x: {}) => void
+>  : ^ ^^  ^^ ^^  ^^^^^^^^^
 >o : Or
+>  : ^^
 >x : {}
+>  : ^^
 
     if (o.pred(x)) {
 >o.pred(x) : boolean
+>          : ^^^^^^^
 >o.pred : ((x: {}) => x is boolean) | ((x: {}) => x is string)
+>       : ^^ ^^  ^^^^^            ^^^^^^ ^^  ^^^^^           ^
 >o : Or
+>  : ^^
 >pred : ((x: {}) => x is boolean) | ((x: {}) => x is string)
+>     : ^^ ^^  ^^^^^            ^^^^^^ ^^  ^^^^^           ^
 >x : {}
+>  : ^^
 
         x;
 >x : string | boolean
+>  : ^^^^^^^^^^^^^^^^
     }
 }
 

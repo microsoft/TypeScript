@@ -1,4 +1,0 @@
-{
-    "cloneUrl": "https://github.com/gcanti/fp-ts.git",
-    "types": ["node", "jest"]
-}

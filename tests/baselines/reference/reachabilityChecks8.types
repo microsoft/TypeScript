@@ -1,25 +1,40 @@
-=== tests/cases/compiler/reachabilityChecks8.ts ===
+//// [tests/cases/compiler/reachabilityChecks8.ts] ////
+
+=== reachabilityChecks8.ts ===
 try {
     for (
         (function () { throw "1"; })();
 >(function () { throw "1"; })() : never
+>                               : ^^^^^
 >(function () { throw "1"; }) : () => never
+>                             : ^^^^^^^^^^^
 >function () { throw "1"; } : () => never
+>                           : ^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 
         (function () { throw "2"; })();
 >(function () { throw "2"; })() : never
+>                               : ^^^^^
 >(function () { throw "2"; }) : () => never
+>                             : ^^^^^^^^^^^
 >function () { throw "2"; } : () => never
+>                           : ^^^^^^^^^^^
 >"2" : "2"
+>    : ^^^
 
         (function () { throw "3"; })()
 >(function () { throw "3"; })() : never
+>                               : ^^^^^
 >(function () { throw "3"; }) : () => never
+>                             : ^^^^^^^^^^^
 >function () { throw "3"; } : () => never
+>                           : ^^^^^^^^^^^
 >"3" : "3"
+>    : ^^^
 
     ) {}
 } catch (e) {}
 >e : any
+>  : ^^^
 

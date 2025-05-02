@@ -1,108 +1,176 @@
-=== tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx] ////
+
+=== tsxSpreadChildrenInvalidType.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 interface TodoProp {
     id: number;
 >id : number
+>   : ^^^^^^
 
     todo: string;
 >todo : string
+>     : ^^^^^^
 }
 interface TodoListProps {
     todos: TodoProp[];
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 }
 function Todo(prop: { key: number, todo: string }) {
->Todo : (prop: {    key: number;    todo: string;}) => JSX.Element
+>Todo : (prop: { key: number; todo: string; }) => JSX.Element
+>     : ^    ^^                              ^^^^^^^^^^^^^^^^
 >prop : { key: number; todo: string; }
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number
+>    : ^^^^^^
 >todo : string
+>     : ^^^^^^
 
     return <div>{prop.key.toString() + prop.todo}</div>;
 ><div>{prop.key.toString() + prop.todo}</div> : JSX.Element
+>                                             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >prop.key.toString() + prop.todo : string
+>                                : ^^^^^^
 >prop.key.toString() : string
+>                    : ^^^^^^
 >prop.key.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >prop.key : number
+>         : ^^^^^^
 >prop : { key: number; todo: string; }
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number
+>    : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 >prop.todo : string
+>          : ^^^^^^
 >prop : { key: number; todo: string; }
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >todo : string
+>     : ^^^^^^
 >div : any
+>    : ^^^
 }
 function TodoList({ todos }: TodoListProps) {
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
+>         : ^         ^^             ^^^^^^^^^^^^^^^^
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 
     return <div>
 ><div>        {...<Todo key={todos[0].id} todo={todos[0].todo} />}    </div> : JSX.Element
+>                                                                            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
         {...<Todo key={todos[0].id} todo={todos[0].todo} />}
 ><Todo key={todos[0].id} todo={todos[0].todo} /> : JSX.Element
+>                                                : ^^^^^^^^^^^
 >Todo : (prop: { key: number; todo: string; }) => JSX.Element
+>     : ^    ^^                              ^^^^^^^^^^^^^^^^
 >key : number
+>    : ^^^^^^
 >todos[0].id : number
+>            : ^^^^^^
 >todos[0] : TodoProp
+>         : ^^^^^^^^
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 >0 : 0
+>  : ^
 >id : number
+>   : ^^^^^^
 >todo : string
+>     : ^^^^^^
 >todos[0].todo : string
+>              : ^^^^^^
 >todos[0] : TodoProp
+>         : ^^^^^^^^
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 >0 : 0
+>  : ^
 >todo : string
+>     : ^^^^^^
 
     </div>;
 >div : any
+>    : ^^^
 }
 function TodoListNoError({ todos }: TodoListProps) {
 >TodoListNoError : ({ todos }: TodoListProps) => JSX.Element
+>                : ^         ^^             ^^^^^^^^^^^^^^^^
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 
     // any is not checked
     return <div>
 ><div>        {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}    </div> : JSX.Element
+>                                                                                     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
         {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
 >(<Todo key={todos[0].id} todo={todos[0].todo} /> as any) : any
+>                                                         : ^^^
 ><Todo key={todos[0].id} todo={todos[0].todo} /> as any : any
+>                                                       : ^^^
 ><Todo key={todos[0].id} todo={todos[0].todo} /> : JSX.Element
+>                                                : ^^^^^^^^^^^
 >Todo : (prop: { key: number; todo: string; }) => JSX.Element
+>     : ^    ^^                              ^^^^^^^^^^^^^^^^
 >key : number
+>    : ^^^^^^
 >todos[0].id : number
+>            : ^^^^^^
 >todos[0] : TodoProp
+>         : ^^^^^^^^
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 >0 : 0
+>  : ^
 >id : number
+>   : ^^^^^^
 >todo : string
+>     : ^^^^^^
 >todos[0].todo : string
+>              : ^^^^^^
 >todos[0] : TodoProp
+>         : ^^^^^^^^
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 >0 : 0
+>  : ^
 >todo : string
+>     : ^^^^^^
 
     </div>;
 >div : any
+>    : ^^^
 }
 let x: TodoListProps;
 >x : TodoListProps
+>  : ^^^^^^^^^^^^^
 
     <TodoList {...x}/>
 ><TodoList {...x}/> : JSX.Element
+>                   : ^^^^^^^^^^^
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
+>         : ^         ^^             ^^^^^^^^^^^^^^^^
 >x : TodoListProps
+>  : ^^^^^^^^^^^^^
 

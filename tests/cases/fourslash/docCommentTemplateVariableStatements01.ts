@@ -33,7 +33,7 @@ for (const varName of ["a", "b", "c", "d"]) {
         "/** */");
 }
 
-verify.docCommentTemplateAt("e", /*newTextOffset*/ 8,
+verify.docCommentTemplateAt("e", /*newTextOffset*/ 7,
 `/**
  * 
  * @param x
@@ -42,7 +42,7 @@ verify.docCommentTemplateAt("e", /*newTextOffset*/ 8,
  * @returns
  */`);
 
-verify.docCommentTemplateAt("f", /*newTextOffset*/ 8,
+verify.docCommentTemplateAt("f", /*newTextOffset*/ 7,
 `/**
  * 
  * @param a

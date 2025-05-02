@@ -1,727 +1,1128 @@
-=== tests/cases/compiler/downlevelLetConst16.ts ===
+//// [tests/cases/compiler/downlevelLetConst16.ts] ////
+
+=== downlevelLetConst16.ts ===
 'use strict'
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 
 declare function use(a: any);
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >a : any
+>  : ^^^
 
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var y;
 >y : any
+>  : ^^^
 
 var z;
 >z : any
+>  : ^^^
 
 use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : any
+>  : ^^^
 
 use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : any
+>  : ^^^
 
 function foo1() {
 >foo1 : () => void
+>     : ^^^^^^^^^^
 
     let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     let [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
     let {a: z} = {a: 1};
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{a: 1} : { a: number; }
+>       : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
 }
 
 function foo2() {
 >foo2 : () => void
+>     : ^^^^^^^^^^
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         let [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
         let {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 class A {
 >A : A
+>  : ^
 
     m1() {
 >m1 : () => void
+>   : ^^^^^^^^^^
 
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         let [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
         let {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
     }
     m2() {
 >m2 : () => void
+>   : ^^^^^^^^^^
         {
             let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
             use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
             let [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
             use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
             let {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
             use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
         }
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
 
 }
 
 class B {
 >B : B
+>  : ^
 
     m1() {
 >m1 : () => void
+>   : ^^^^^^^^^^
 
         const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : 1
+>  : ^
 
         const [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
         const {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
 
     }
     m2() {
 >m2 : () => void
+>   : ^^^^^^^^^^
         {
             const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
             use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : 1
+>  : ^
 
             const [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
             use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
             const {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
             use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
 
         }
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }
 
 function bar1() {
 >bar1 : () => void
+>     : ^^^^^^^^^^
 
     const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : 1
+>  : ^
 
     const [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
     const {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
 }
 
 function bar2() {
 >bar2 : () => void
+>     : ^^^^^^^^^^
     {
         const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : 1
+>  : ^
 
         const [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
         const {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
 
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     let [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
     let {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
 }
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         let [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
         let {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 module M3 {
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
     const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : 1
+>  : ^
 
     const [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
     const {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
 
 }
 
 module M4 {
 >M4 : typeof M4
+>   : ^^^^^^^^^
     {
         const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : 1
+>  : ^
 
         const [y] = [1];
 >y : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
         const {a: z} = { a: 1 };
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
 
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : any
+>  : ^^^
 
     use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : any
+>  : ^^^
 }
 
 function foo3() {
 >foo3 : () => void
+>     : ^^^^^^^^^^
 
     for (let x; ;) {
 >x : any
+>  : ^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
     }
     for (let [y] = []; ;) {
 >y : undefined
+>  : ^^^^^^^^^
 >[] : []
+>   : ^^
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : undefined
+>  : ^^^^^^^^^
     }
     for (let {a: z} = {a: 1}; ;) {
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{a: 1} : { a: number; }
+>       : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo4() {
 >foo4 : () => void
+>     : ^^^^^^^^^^
 
     for (const x = 1; ;) {
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : 1
+>  : ^
     }
     for (const [y] = []; ;) {
 >y : undefined
+>  : ^^^^^^^^^
 >[] : []
+>   : ^^
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : undefined
+>  : ^^^^^^^^^
     }
     for (const {a: z} = { a: 1 }; ;) {
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : number
+>  : ^^^^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo5() {
 >foo5 : () => void
+>     : ^^^^^^^^^^
 
     for (let x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo6() {
 >foo6 : () => void
+>     : ^^^^^^^^^^
 
     for (const x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo7() {
 >foo7 : () => void
+>     : ^^^^^^^^^^
 
     for (let x of []) {
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo8() {
 >foo8 : () => void
+>     : ^^^^^^^^^^
 
     for (let [x] of []) {
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo9() {
 >foo9 : () => void
+>     : ^^^^^^^^^^
 
     for (let {a: x} of []) {
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo10() {
 >foo10 : () => void
+>      : ^^^^^^^^^^
 
     for (const x of []) {
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo11() {
 >foo11 : () => void
+>      : ^^^^^^^^^^
 
     for (const [x] of []) {
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function foo12() {
 >foo12 : () => void
+>      : ^^^^^^^^^^
 
     for (const {a: x} of []) {
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
     }
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }

@@ -1,22 +1,22 @@
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(1,5): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(1,6): error TS7031: Binding element 'a' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(1,10): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(1,11): error TS7031: Binding element 'b' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,5): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,6): error TS7031: Binding element 'a1' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,23): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,24): error TS7031: Binding element 'b1' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(5,5): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(5,18): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(7,5): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(7,13): error TS7008: Member 'b3' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(7,25): error TS7008: Member 'b3' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(9,6): error TS7031: Binding element 'a4' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(9,26): error TS7031: Binding element 'b4' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(11,6): error TS7031: Binding element 'a5' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(1,5): error TS1182: A destructuring declaration must have an initializer.
+noImplicitAnyDestructuringVarDeclaration.ts(1,6): error TS7031: Binding element 'a' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(1,10): error TS1182: A destructuring declaration must have an initializer.
+noImplicitAnyDestructuringVarDeclaration.ts(1,11): error TS7031: Binding element 'b' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(3,5): error TS1182: A destructuring declaration must have an initializer.
+noImplicitAnyDestructuringVarDeclaration.ts(3,6): error TS7031: Binding element 'a1' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(3,23): error TS1182: A destructuring declaration must have an initializer.
+noImplicitAnyDestructuringVarDeclaration.ts(3,24): error TS7031: Binding element 'b1' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(5,5): error TS1182: A destructuring declaration must have an initializer.
+noImplicitAnyDestructuringVarDeclaration.ts(5,18): error TS1182: A destructuring declaration must have an initializer.
+noImplicitAnyDestructuringVarDeclaration.ts(7,5): error TS1182: A destructuring declaration must have an initializer.
+noImplicitAnyDestructuringVarDeclaration.ts(7,13): error TS7008: Member 'b3' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(7,25): error TS7008: Member 'b3' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(9,6): error TS7031: Binding element 'a4' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(9,26): error TS7031: Binding element 'b4' implicitly has an 'any' type.
+noImplicitAnyDestructuringVarDeclaration.ts(11,6): error TS7031: Binding element 'a5' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts (16 errors) ====
+==== noImplicitAnyDestructuringVarDeclaration.ts (16 errors) ====
     var [a], {b}, c, d; // error
         ~~~
 !!! error TS1182: A destructuring declaration must have an initializer.

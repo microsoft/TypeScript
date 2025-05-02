@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionTypesLackingReturnTypes.ts] ////
+
 //// [functionTypesLackingReturnTypes.ts]
 // Error (no '=>')
 function f(x: ()) {

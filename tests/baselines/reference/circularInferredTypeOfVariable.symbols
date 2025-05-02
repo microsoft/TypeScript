@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularInferredTypeOfVariable.ts ===
+//// [tests/cases/compiler/circularInferredTypeOfVariable.ts] ////
+
+=== circularInferredTypeOfVariable.ts ===
 // Repro from #14428
 
 (async () => {

@@ -1,7 +1,9 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_threeLastIsBlank4.ts] ////
+
 //// [index.ts]
 import { base } from "./foo";
 
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,72 +1,114 @@
-=== tests/cases/compiler/omitTypeHelperModifiers01.ts ===
+//// [tests/cases/compiler/omitTypeHelperModifiers01.ts] ////
+
+=== omitTypeHelperModifiers01.ts ===
 type A = {
->A : { a: number; b?: string | undefined; readonly c: boolean; d: unknown; }
+>A : A
+>  : ^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     b?: string;
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly c: boolean;
 >c : boolean
+>  : ^^^^^^^
 
     d: unknown;
 >d : unknown
+>  : ^^^^^^^
 
 };
 
 type B = Omit<A, 'a'>;
->B : { b?: string | undefined; readonly c: boolean; d: unknown; }
+>B : B
+>  : ^
 
 function f(x: B) {
 >f : (x: B) => void
+>  : ^ ^^ ^^^^^^^^^
 >x : B
+>  : ^
 
     const b = x.b;
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >x.b : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : B
+>  : ^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     x.b = "hello";
 >x.b = "hello" : "hello"
+>              : ^^^^^^^
 >x.b : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : B
+>  : ^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     x.b = undefined;
 >x.b = undefined : undefined
+>                : ^^^^^^^^^
 >x.b : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : B
+>  : ^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     const c = x.c;
 >c : boolean
+>  : ^^^^^^^
 >x.c : boolean
+>    : ^^^^^^^
 >x : B
+>  : ^
 >c : boolean
+>  : ^^^^^^^
 
     x.c = true;
 >x.c = true : true
+>           : ^^^^
 >x.c : any
+>    : ^^^
 >x : B
+>  : ^
 >c : any
+>  : ^^^
 >true : true
+>     : ^^^^
 
     const d = x.d;
 >d : unknown
+>  : ^^^^^^^
 >x.d : unknown
+>    : ^^^^^^^
 >x : B
+>  : ^
 >d : unknown
+>  : ^^^^^^^
 
     x.d = d;
 >x.d = d : unknown
+>        : ^^^^^^^
 >x.d : unknown
+>    : ^^^^^^^
 >x : B
+>  : ^
 >d : unknown
+>  : ^^^^^^^
 >d : unknown
+>  : ^^^^^^^
 }
 

@@ -38,7 +38,8 @@
 const x = ["test", "A", "B", "C", "y", "z", "x", "user"];
 const globals = completion.sorted([...x, ...completion.globals])
 verify.completions(
-    { marker: ["1", "3"], exact: [{ name: "type", sortText: completion.SortText.GlobalsOrKeywords }], isNewIdentifierLocation: true, isGlobalCompletion: false },
+    { marker: ["1"], exact: ["x", "y", { name: "type", sortText: completion.SortText.GlobalsOrKeywords }], isGlobalCompletion: false },
+    { marker: ["3"], exact: [{ name: "type", sortText: completion.SortText.GlobalsOrKeywords }], isNewIdentifierLocation: true, isGlobalCompletion: false },
     { marker: ["6", "8", "12", "14"], exact: undefined, isGlobalCompletion: false },
     { marker: "2", exact: ["a.ts", "file.ts"], isGlobalCompletion: false, isNewIdentifierLocation: true },
     { marker: ["4", "19"], exact: [], isGlobalCompletion: false },
@@ -47,7 +48,7 @@ verify.completions(
     { marker: "7", exact: completion.globalsInsideFunction(x), isGlobalCompletion: true },
     { marker: "9", exact: ["x", "y"], isGlobalCompletion: false },
     { marker: "10", exact: completion.classElementKeywords, isGlobalCompletion: false, isNewIdentifierLocation: true },
-    { marker: "13", exact: globals, isGlobalCompletion: false },
+    { marker: "13", exact: completion.globalTypesPlus(["A", "B", "C"]), isGlobalCompletion: false },
     { marker: "15", exact: globals.filter(name => name !== 'x'), isGlobalCompletion: true, isNewIdentifierLocation: true },
     { marker: "16", unsorted: [...x, completion.globalThisEntry, ...completion.globalsVars, completion.undefinedVarEntry].filter(name => name !== 'user'), isGlobalCompletion: false },
     { marker: "17", exact: completion.globalKeywords, isGlobalCompletion: false },

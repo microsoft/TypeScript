@@ -1,33 +1,49 @@
-=== tests/cases/conformance/classes/classDeclarations/classBody/classBodyWithStatements.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classBody/classBodyWithStatements.ts] ////
+
+=== classBodyWithStatements.ts ===
 class C {
 >C : C
+>  : ^
 
     var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var y = 2;
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     x: number = y + 1; // ok, need a var in the statement production
 >x : number
+>  : ^^^^^^
 >y + 1 : number
+>      : ^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionES6.ts] ////
+
 //// [emitArrowFunctionES6.ts]
 var f1 = () => { }
 var f2 = (x: string, y: string) => { }

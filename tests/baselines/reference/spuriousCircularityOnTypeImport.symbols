@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/spuriousCircularityOnTypeImport.ts] ////
+
+=== types.ts ===
+export type SelectorMap<T extends Record<string, (...params: unknown[]) => unknown>> = {
+>SelectorMap : Symbol(SelectorMap, Decl(types.ts, 0, 0))
+>T : Symbol(T, Decl(types.ts, 0, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>params : Symbol(params, Decl(types.ts, 0, 50))
+
+    [key in keyof T]: T[key];
+>key : Symbol(key, Decl(types.ts, 1, 5))
+>T : Symbol(T, Decl(types.ts, 0, 24))
+>T : Symbol(T, Decl(types.ts, 0, 24))
+>key : Symbol(key, Decl(types.ts, 1, 5))
+
+};
+
+=== index.ts ===
+export type SelectorMap<T extends Record<string, (...params: unknown[]) => unknown>> = {
+>SelectorMap : Symbol(SelectorMap, Decl(index.ts, 0, 0))
+>T : Symbol(T, Decl(index.ts, 0, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>params : Symbol(params, Decl(index.ts, 0, 50))
+
+    [key in keyof T]: T[key];
+>key : Symbol(key, Decl(index.ts, 1, 5))
+>T : Symbol(T, Decl(index.ts, 0, 24))
+>T : Symbol(T, Decl(index.ts, 0, 24))
+>key : Symbol(key, Decl(index.ts, 1, 5))
+
+};
+
+export declare const value2: {
+>value2 : Symbol(value2, Decl(index.ts, 4, 20))
+
+    sliceSelectors: <FuncMap extends import('./types').SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> };
+>sliceSelectors : Symbol(sliceSelectors, Decl(index.ts, 4, 30))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 5, 21))
+>SelectorMap : Symbol(SelectorMap, Decl(types.ts, 0, 0))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 5, 21))
+>selectorsBySlice : Symbol(selectorsBySlice, Decl(index.ts, 5, 77))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 5, 21))
+>P : Symbol(P, Decl(index.ts, 5, 110))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 5, 21))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 5, 21))
+>P : Symbol(P, Decl(index.ts, 5, 110))
+
+};
+
+export declare const value3: {
+>value3 : Symbol(value3, Decl(index.ts, 8, 20))
+
+    sliceSelectors: <FuncMap extends SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> };
+>sliceSelectors : Symbol(sliceSelectors, Decl(index.ts, 8, 30))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 9, 21))
+>SelectorMap : Symbol(SelectorMap, Decl(index.ts, 0, 0))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 9, 21))
+>selectorsBySlice : Symbol(selectorsBySlice, Decl(index.ts, 9, 59))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 9, 21))
+>P : Symbol(P, Decl(index.ts, 9, 92))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 9, 21))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>FuncMap : Symbol(FuncMap, Decl(index.ts, 9, 21))
+>P : Symbol(P, Decl(index.ts, 9, 92))
+
+};
+
+

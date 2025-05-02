@@ -1,0 +1,120 @@
+//// [tests/cases/compiler/mergedInstantiationAssignment.ts] ////
+
+=== mergedInstantiationAssignment.ts ===
+// https://github.com/microsoft/TypeScript/issues/56320
+
+class GenericObject<T = number> {
+>GenericObject : GenericObject<T>
+>              : ^^^^^^^^^^^^^^^^
+
+  set x(x: T) {}
+>x : T
+>  : ^
+>x : T
+>  : ^
+}
+
+const v1 = new GenericObject() as GenericObject &
+>v1 : GenericObject<number> & ({ a?: string; } | { b?: number; })
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>new GenericObject() as GenericObject &  ({ a?: string } | { b?: number }) : GenericObject<number> & ({ a?: string; } | { b?: number; })
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>new GenericObject() : GenericObject<number>
+>                    : ^^^^^^^^^^^^^^^^^^^^^
+>GenericObject : typeof GenericObject
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+  ({ a?: string } | { b?: number });
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+v1.x = 432;
+>v1.x = 432 : 432
+>           : ^^^
+>v1.x : number
+>     : ^^^^^^
+>v1 : GenericObject<number> & ({ a?: string; } | { b?: number; })
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>x : number
+>  : ^^^^^^
+>432 : 432
+>    : ^^^
+
+class GenericObjectWithoutSetter<T = number> {
+>GenericObjectWithoutSetter : GenericObjectWithoutSetter<T>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  declare x: T;
+>x : T
+>  : ^
+}
+
+const v2 = new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &
+>v2 : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &  ({ a?: string } | { b?: number }) : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>new GenericObjectWithoutSetter() : GenericObjectWithoutSetter<number>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>GenericObjectWithoutSetter : typeof GenericObjectWithoutSetter
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ({ a?: string } | { b?: number });
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+v2.x = 42;
+>v2.x = 42 : 42
+>          : ^^
+>v2.x : number
+>     : ^^^^^^
+>v2 : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>x : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+class NormalObject {
+>NormalObject : NormalObject
+>             : ^^^^^^^^^^^^
+
+  set x(x: number) {}
+>x : number
+>  : ^^^^^^
+>x : number
+>  : ^^^^^^
+}
+
+const v3 = new NormalObject() as NormalObject &
+>v3 : NormalObject & ({ a?: string; } | { b?: number; })
+>   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>new NormalObject() as NormalObject &  ({ a?: string } | { b?: number }) : NormalObject & ({ a?: string; } | { b?: number; })
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>new NormalObject() : NormalObject
+>                   : ^^^^^^^^^^^^
+>NormalObject : typeof NormalObject
+>             : ^^^^^^^^^^^^^^^^^^^
+
+  ({ a?: string } | { b?: number });
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+v3.x = 42;
+>v3.x = 42 : 42
+>          : ^^
+>v3.x : number
+>     : ^^^^^^
+>v3 : NormalObject & ({ a?: string; } | { b?: number; })
+>   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
+>x : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+

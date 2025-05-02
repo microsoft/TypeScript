@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/jsxChildrenArrayWrongType.tsx] ////
+
+=== index.tsx ===
+/// <reference path="react18/react18.d.ts" />
+/// <reference path="react18/global.d.ts" />
+
+// target is ES5, so no `Iterable` type is present.
+
+interface PropsType {
+    children: [string, number] | boolean[];
+>children : [string, number] | boolean[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+declare class Foo extends React.Component<PropsType, {}> {}
+>Foo : Foo
+>    : ^^^
+>React.Component : React.Component<PropsType, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>React : typeof React
+>      : ^^^^^^^^^^^^
+>Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+
+const b = (
+>b : JSX.Element
+>  : ^^^^^^^^^^^
+>(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : JSX.Element
+>                                                               : ^^^^^^^^^^^
+
+    <Foo>
+><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : JSX.Element
+>                                                         : ^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+        {<div/> as unknown}
+><div/> as unknown : unknown
+>                  : ^^^^^^^
+><div/> : JSX.Element
+>       : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+
+        {"aa"}
+>"aa" : "aa"
+>     : ^^^^
+
+    </Foo>
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+);

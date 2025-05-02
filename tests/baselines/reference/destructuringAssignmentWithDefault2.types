@@ -1,121 +1,208 @@
-=== tests/cases/compiler/destructuringAssignmentWithDefault2.ts ===
+//// [tests/cases/compiler/destructuringAssignmentWithDefault2.ts] ////
+
+=== destructuringAssignmentWithDefault2.ts ===
 const a: { x?: number; y?: number } = { };
->a : { x?: number | undefined; y?: number | undefined; }
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{ } : {}
+>    : ^^
 
 let x: number;
 >x : number
+>  : ^^^^^^
 
 // Should not error out
 ({ x = 0 } = a);
->({ x = 0 } = a) : { x?: number | undefined; y?: number | undefined; }
->{ x = 0 } = a : { x?: number | undefined; y?: number | undefined; }
+>({ x = 0 } = a) : { x?: number; y?: number; }
+>                : ^^^^^^      ^^^^^^      ^^^
+>{ x = 0 } = a : { x?: number; y?: number; }
+>              : ^^^^^^      ^^^^^^      ^^^
 >{ x = 0 } : { x?: number; }
+>          : ^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
->a : { x?: number | undefined; y?: number | undefined; }
+>  : ^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 ({ x: x = 0} = a);
->({ x: x = 0} = a) : { x?: number | undefined; y?: number | undefined; }
->{ x: x = 0} = a : { x?: number | undefined; y?: number | undefined; }
+>({ x: x = 0} = a) : { x?: number; y?: number; }
+>                  : ^^^^^^      ^^^^^^      ^^^
+>{ x: x = 0} = a : { x?: number; y?: number; }
+>                : ^^^^^^      ^^^^^^      ^^^
 >{ x: x = 0} : { x?: number; }
+>            : ^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x = 0 : 0
+>      : ^
 >x : number
+>  : ^^^^^^
 >0 : 0
->a : { x?: number | undefined; y?: number | undefined; }
+>  : ^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 ({ y: x = 0} = a);
->({ y: x = 0} = a) : { x?: number | undefined; y?: number | undefined; }
->{ y: x = 0} = a : { x?: number | undefined; y?: number | undefined; }
+>({ y: x = 0} = a) : { x?: number; y?: number; }
+>                  : ^^^^^^      ^^^^^^      ^^^
+>{ y: x = 0} = a : { x?: number; y?: number; }
+>                : ^^^^^^      ^^^^^^      ^^^
 >{ y: x = 0} : { y?: number; }
+>            : ^^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >x = 0 : 0
+>      : ^
 >x : number
+>  : ^^^^^^
 >0 : 0
->a : { x?: number | undefined; y?: number | undefined; }
+>  : ^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 // Should be error
 ({ x = undefined } = a);
->({ x = undefined } = a) : { x?: number | undefined; y?: number | undefined; }
->{ x = undefined } = a : { x?: number | undefined; y?: number | undefined; }
+>({ x = undefined } = a) : { x?: number; y?: number; }
+>                        : ^^^^^^      ^^^^^^      ^^^
+>{ x = undefined } = a : { x?: number; y?: number; }
+>                      : ^^^^^^      ^^^^^^      ^^^
 >{ x = undefined } : { x?: number; }
+>                  : ^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
->a : { x?: number | undefined; y?: number | undefined; }
+>          : ^^^^^^^^^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 ({ x: x = undefined } = a);
->({ x: x = undefined } = a) : { x?: number | undefined; y?: number | undefined; }
->{ x: x = undefined } = a : { x?: number | undefined; y?: number | undefined; }
+>({ x: x = undefined } = a) : { x?: number; y?: number; }
+>                           : ^^^^^^      ^^^^^^      ^^^
+>{ x: x = undefined } = a : { x?: number; y?: number; }
+>                         : ^^^^^^      ^^^^^^      ^^^
 >{ x: x = undefined } : { x?: undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
->a : { x?: number | undefined; y?: number | undefined; }
+>          : ^^^^^^^^^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 ({ y: x = undefined } = a);
->({ y: x = undefined } = a) : { x?: number | undefined; y?: number | undefined; }
->{ y: x = undefined } = a : { x?: number | undefined; y?: number | undefined; }
+>({ y: x = undefined } = a) : { x?: number; y?: number; }
+>                           : ^^^^^^      ^^^^^^      ^^^
+>{ y: x = undefined } = a : { x?: number; y?: number; }
+>                         : ^^^^^^      ^^^^^^      ^^^
 >{ y: x = undefined } : { y?: undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^
 >y : undefined
+>  : ^^^^^^^^^
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
->a : { x?: number | undefined; y?: number | undefined; }
+>          : ^^^^^^^^^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 const { x: z1 } = a;
 >x : any
+>  : ^^^
 >z1 : number | undefined
->a : { x?: number | undefined; y?: number | undefined; }
+>   : ^^^^^^^^^^^^^^^^^^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 const { x: z2 = 0 } = a;
 >x : any
+>  : ^^^
 >z2 : number
+>   : ^^^^^^
 >0 : 0
->a : { x?: number | undefined; y?: number | undefined; }
+>  : ^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 const { x: z3 = undefined } = a;
 >x : any
+>  : ^^^
 >z3 : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
->a : { x?: number | undefined; y?: number | undefined; }
+>          : ^^^^^^^^^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 
 
 declare const r: Iterator<number>;
->r : Iterator<number, any, undefined>
+>r : Iterator<number, any, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let done: boolean;
 >done : boolean
+>     : ^^^^^^^
 
 let value;
 >value : any
+>      : ^^^
 
 ({ done = false, value } = r.next());
 >({ done = false, value } = r.next()) : IteratorResult<number, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ done = false, value } = r.next() : IteratorResult<number, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ done = false, value } : { done?: boolean; value: any; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 >value : any
+>      : ^^^
 >r.next() : IteratorResult<number, any>
->r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->r : Iterator<number, any, undefined>
->next : (...args: [] | [undefined]) => IteratorResult<number, any>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r.next : (...[value]: [] | [any]) => IteratorResult<number, any>
+>       : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r : Iterator<number, any, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [any]) => IteratorResult<number, any>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ({ done: done = false, value } = r.next());
 >({ done: done = false, value } = r.next()) : IteratorResult<number, any>
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ done: done = false, value } = r.next() : IteratorResult<number, any>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ done: done = false, value } : { done?: boolean; value: any; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >done : boolean
+>     : ^^^^^^^
 >done = false : false
+>             : ^^^^^
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 >value : any
+>      : ^^^
 >r.next() : IteratorResult<number, any>
->r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->r : Iterator<number, any, undefined>
->next : (...args: [] | [undefined]) => IteratorResult<number, any>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r.next : (...[value]: [] | [any]) => IteratorResult<number, any>
+>       : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r : Iterator<number, any, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [any]) => IteratorResult<number, any>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

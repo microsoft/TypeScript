@@ -1,12 +1,9 @@
-tests/cases/compiler/moduleImport.ts(2,17): error TS2339: Property 'Y' does not exist on type 'typeof X'.
-tests/cases/compiler/moduleImport.ts(2,17): error TS2694: Namespace 'X' has no exported member 'Y'.
+moduleImport.ts(2,17): error TS2694: Namespace 'X' has no exported member 'Y'.
 
 
-==== tests/cases/compiler/moduleImport.ts (2 errors) ====
+==== moduleImport.ts (1 errors) ====
     module A.B.C {
     	import XYZ = X.Y.Z;
-    	               ~
-!!! error TS2339: Property 'Y' does not exist on type 'typeof X'.
     	               ~
 !!! error TS2694: Namespace 'X' has no exported member 'Y'.
     	export function ping(x: number) {

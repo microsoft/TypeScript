@@ -1,101 +1,155 @@
-=== tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts] ////
+
+=== controlFlowBinaryOrExpression.ts ===
 let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let cond: boolean;
 >cond : boolean
+>     : ^^^^^^^
 
 (x = "") || (x = 0);
 >(x = "") || (x = 0) : 0
+>                    : ^
 >(x = "") : ""
+>         : ^^
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >(x = 0) : 0
+>        : ^
 >x = 0 : 0
+>      : ^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x; // string | number
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
 x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 cond || (x = 0);
 >cond || (x = 0) : true | 0
+>                : ^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >(x = 0) : 0
+>        : ^
 >x = 0 : 0
+>      : ^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x; // string | number
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
 export interface NodeList {
     length: number;
 >length : number
+>       : ^^^^^^
 }
 
 export interface HTMLCollection {
     length: number;
 >length : number
+>       : ^^^^^^
 }
 
 declare function isNodeList(sourceObj: any): sourceObj is NodeList;
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
+>           : ^         ^^   ^^^^^                     
 >sourceObj : any
 
 declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
+>                 : ^         ^^   ^^^^^                           
 >sourceObj : any
 
 type EventTargetLike = {a: string} | HTMLCollection | NodeList;
->EventTargetLike : NodeList | HTMLCollection | { a: string; }
+>EventTargetLike : EventTargetLike
+>                : ^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 var sourceObj: EventTargetLike = <any>undefined;
 >sourceObj : EventTargetLike
+>          : ^^^^^^^^^^^^^^^
 ><any>undefined : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
 if (isNodeList(sourceObj)) {
 >isNodeList(sourceObj) : boolean
+>                      : ^^^^^^^
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
+>           : ^         ^^   ^^^^^                     
 >sourceObj : EventTargetLike
+>          : ^^^^^^^^^^^^^^^
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : NodeList
+>                 : ^^^^^^
+>sourceObj : NodeList | HTMLCollection
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 if (isHTMLCollection(sourceObj)) {
 >isHTMLCollection(sourceObj) : boolean
+>                            : ^^^^^^^
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->sourceObj : NodeList | { a: string; }
+>                 : ^         ^^   ^^^^^                           
+>sourceObj : EventTargetLike
+>          : ^^^^^^^^^^^^^^^
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : HTMLCollection
+>                 : ^^^^^^
+>sourceObj : NodeList | HTMLCollection
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 >isNodeList(sourceObj) || isHTMLCollection(sourceObj) : boolean
+>                                                     : ^^^^^^^
 >isNodeList(sourceObj) : boolean
+>                      : ^^^^^^^
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
->sourceObj : HTMLCollection | { a: string; }
+>           : ^         ^^   ^^^^^                     
+>sourceObj : EventTargetLike
+>          : ^^^^^^^^^^^^^^^
 >isHTMLCollection(sourceObj) : boolean
+>                            : ^^^^^^^
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
+>                 : ^         ^^   ^^^^^                           
 >sourceObj : { a: string; }
+>          : ^^^^^      ^^^
 
     sourceObj.length;
 >sourceObj.length : number
+>                 : ^^^^^^
 >sourceObj : NodeList
+>          : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 }
 

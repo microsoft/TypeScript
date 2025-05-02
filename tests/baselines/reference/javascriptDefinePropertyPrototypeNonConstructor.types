@@ -1,25 +1,38 @@
+//// [tests/cases/compiler/javascriptDefinePropertyPrototypeNonConstructor.ts] ////
+
 === /a.js ===
 function Graphic() {
 >Graphic : typeof Graphic
+>        : ^^^^^^^^^^^^^^
 }
 
 Object.defineProperty(Graphic.prototype, "instance", {
 >Object.defineProperty(Graphic.prototype, "instance", {  get: function() {    return this;  }}) : any
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Graphic.prototype : any
 >Graphic : typeof Graphic
+>        : ^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >"instance" : "instance"
+>           : ^^^^^^^^^^
 >{  get: function() {    return this;  }} : { get: () => this; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^
 
   get: function() {
 >get : () => this
+>    : ^^^^^^^^^^
 >function() {    return this;  } : () => this
+>                                : ^^^^^^^^^^
 
     return this;
 >this : this
+>     : ^^^^
   }
 });
 

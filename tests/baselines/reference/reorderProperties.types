@@ -1,32 +1,45 @@
-=== tests/cases/compiler/reorderProperties.ts ===
+//// [tests/cases/compiler/reorderProperties.ts] ////
+
+=== reorderProperties.ts ===
 interface A<T> {
     x: T
 >x : T
+>  : ^
 }
 
 interface B<T> {
     x: T
 >x : T
+>  : ^
 }
 
 interface C<S> extends A<D<S>> {
     y: S
 >y : S
+>  : ^
 }
 
 interface D<S> extends B<C<S>> {
     y: S
 >y : S
+>  : ^
 }
 
 var c: C<{ s: string; n: number }>
 >c : C<{ s: string; n: number; }>
+>  : ^^^^^^^      ^^^^^      ^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
 var d: D<{ n: number; s: string }> = c
 >d : D<{ n: number; s: string; }>
+>  : ^^^^^^^      ^^^^^      ^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 >c : C<{ s: string; n: number; }>
+>  : ^^^^^^^      ^^^^^      ^^^^
 

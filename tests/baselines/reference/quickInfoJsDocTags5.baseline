@@ -1,3 +1,36 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTags5.js ===
+// class Foo {
+//     /**
+//      * comment
+//      * @author Me <me@domain.tld>
+//      * @see x (the parameter)
+//      * @param {number} x - x comment
+//      * @param {number} y - y comment
+//      * @returns The result
+//      */
+//     method(x, y) {
+//        return x + y;
+//     }
+// }
+// 
+// class Bar extends Foo {
+//     method(x, y) {
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) Bar.method(x: any, y: any): number
+// | comment
+// | @author Me <me@domain.tld>
+// | @see x (the parameter)
+// | @param x - x comment
+// | @param y - y comment
+// | @returns The result
+// | ----------------------------------------------------------------------
+//         const res = super.method(x, y) + 100;
+//         return res;
+//     }
+// }
+
 [
   {
     "marker": {
@@ -5,7 +38,7 @@
       "position": 285,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {

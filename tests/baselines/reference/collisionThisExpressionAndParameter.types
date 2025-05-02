@@ -1,254 +1,354 @@
-=== tests/cases/compiler/collisionThisExpressionAndParameter.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndParameter.ts] ////
+
+=== collisionThisExpressionAndParameter.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     x() {
 >x : () => void
+>  : ^^^^^^^^^^
 
         var _this = 10; // Local var. No this capture in x(), so no conflict.
 >_this : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
         function inner(_this: number) { // Error 
 >inner : (_this: number) => (x: any) => any
+>      : ^     ^^      ^^^^^^   ^^^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture into function inner
 >x => this : (x: any) => any
+>          : ^ ^^^^^^^^^^^^^
 >x : any
 >this : any
         }
     }
     y() {
 >y : () => void
+>  : ^^^^^^^^^^
 
         var lamda = (_this: number) => { // Error 
 >lamda : (_this: number) => (x: any) => this
+>      : ^     ^^      ^^^^^^   ^^^^^^^^^^^^
 >(_this: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_this: number) => (x: any) => this
+>                                                                                                                         : ^     ^^      ^^^^^^   ^^^^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
+>          : ^ ^^^^^^^^^^^^^^
 >x : any
 >this : this
+>     : ^^^^
         }
     }
     z(_this: number) { // Error 
 >z : (_this: number) => void
+>  : ^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
         var lambda = () => {
 >lambda : () => (x: any) => this
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
+>          : ^ ^^^^^^^^^^^^^^
 >x : any
 >this : this
+>     : ^^^^
         }
     }
 
     x1() {
 >x1 : () => void
+>   : ^^^^^^^^^^
 
         var _this = 10; // Local var. No this capture in x(), so no conflict.
 >_this : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
         function inner(_this: number) { // No Error 
 >inner : (_this: number) => void
+>      : ^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
         }
     }
     y1() {
 >y1 : () => void
+>   : ^^^^^^^^^^
 
         var lamda = (_this: number) => { // No Error 
 >lamda : (_this: number) => void
+>      : ^     ^^      ^^^^^^^^^
 >(_this: number) => { // No Error         } : (_this: number) => void
+>                                           : ^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
         }
     }
     z1(_this: number) { // No Error 
 >z1 : (_this: number) => void
+>   : ^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
         var lambda = () => {
 >lambda : () => void
+>       : ^^^^^^^^^^
 >() => {        } : () => void
+>                 : ^^^^^^^^^^
         }
     }
 }
 class Foo1 {
 >Foo1 : Foo1
+>     : ^^^^
 
     constructor(_this: number) { // Error
 >_this : number
+>      : ^^^^^^
 
         var x2 = {
 >x2 : { doStuff: (callback: any) => () => any; }
+>   : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 >{            doStuff: (callback) => () => {                return callback(this);            }        } : { doStuff: (callback: any) => () => any; }
+>                                                                                                        : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 
             doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
+>        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {                return callback(this);            } : (callback: any) => () => any
+>                                                                         : ^        ^^^^^^^^^^^^^^^^^^^
 >callback : any
 >() => {                return callback(this);            } : () => any
+>                                                           : ^^^^^^^^^
 
                 return callback(this);
 >callback(this) : any
 >callback : any
 >this : this
+>     : ^^^^
             }
         }
     }
 }
 declare var console: {
 >console : { log(msg: any): any; }
+>        : ^^^^^^   ^^   ^^^^^^^^^
 
     log(msg: any);
 >log : (msg: any) => any
+>    : ^   ^^   ^^^^^^^^
 >msg : any
 }
 
 function f1(_this: number) {
 >f1 : (_this: number) => void
+>   : ^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
     x => { console.log(this.x); };
 >x => { console.log(this.x); } : (x: any) => void
+>                              : ^ ^^^^^^^^^^^^^^
 >x : any
 >console.log(this.x) : any
 >console.log : (msg: any) => any
+>            : ^   ^^   ^^^^^^^^
 >console : { log(msg: any): any; }
+>        : ^^^^^^   ^^   ^^^^^^^^^
 >log : (msg: any) => any
+>    : ^   ^^   ^^^^^^^^
 >this.x : any
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 }
 
 declare class Foo2 {
 >Foo2 : Foo2
+>     : ^^^^
 
     constructor(_this: number); // no error - no code gen
 >_this : number
+>      : ^^^^^^
 
     z(_this: number); // no error - no code gen
 >z : (_this: number) => any
+>  : ^     ^^      ^^^^^^^^
 >_this : number
+>      : ^^^^^^
 }
 declare function f2(_this: number); // no error
 >f2 : (_this: number) => any
+>   : ^     ^^      ^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
 class Foo3 {
 >Foo3 : Foo3
+>     : ^^^^
 
     constructor(_this: string); // no code gen - no error
 >_this : string
+>      : ^^^^^^
 
     constructor(_this: number); // no code gen - no error
 >_this : number
+>      : ^^^^^^
 
     constructor(_this: any) { // Error
 >_this : any
 
         var x2 = {
 >x2 : { doStuff: (callback: any) => () => any; }
+>   : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 >{            doStuff: (callback) => () => {                return callback(this);            }        } : { doStuff: (callback: any) => () => any; }
+>                                                                                                        : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 
             doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
+>        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {                return callback(this);            } : (callback: any) => () => any
+>                                                                         : ^        ^^^^^^^^^^^^^^^^^^^
 >callback : any
 >() => {                return callback(this);            } : () => any
+>                                                           : ^^^^^^^^^
 
                 return callback(this);
 >callback(this) : any
 >callback : any
 >this : this
+>     : ^^^^
             }
         }
     }
 
     z(_this: string); // no code gen - no error
 >z : { (_this: string): any; (_this: number): any; }
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : string
+>      : ^^^^^^
 
     z(_this: number); // no code gen - no error
 >z : { (_this: string): any; (_this: number): any; }
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
     z(_this: any) { // Error 
 >z : { (_this: string): any; (_this: number): any; }
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : any
 
         var lambda = () => {
 >lambda : () => (x: any) => this
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
+>          : ^ ^^^^^^^^^^^^^^
 >x : any
 >this : this
+>     : ^^^^
         }
     }
 }
 declare var console: {
 >console : { log(msg: any): any; }
+>        : ^^^^^^   ^^   ^^^^^^^^^
 
     log(msg: any);
 >log : (msg: any) => any
+>    : ^   ^^   ^^^^^^^^
 >msg : any
 }
 
 function f3(_this: number); // no code gen - no error
 >f3 : { (_this: number): any; (_this: string): any; }
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
 function f3(_this: string); // no code gen - no error
 >f3 : { (_this: number): any; (_this: string): any; }
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : string
+>      : ^^^^^^
 
 function f3(_this: any) {
 >f3 : { (_this: number): any; (_this: string): any; }
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : any
 
     x => { console.log(this.x); };
 >x => { console.log(this.x); } : (x: any) => void
+>                              : ^ ^^^^^^^^^^^^^^
 >x : any
 >console.log(this.x) : any
 >console.log : (msg: any) => any
+>            : ^   ^^   ^^^^^^^^
 >console : { log(msg: any): any; }
+>        : ^^^^^^   ^^   ^^^^^^^^^
 >log : (msg: any) => any
+>    : ^   ^^   ^^^^^^^^
 >this.x : any
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 }
 
 declare class Foo4 {
 >Foo4 : Foo4
+>     : ^^^^
 
     constructor(_this: string); // no code gen - no error
 >_this : string
+>      : ^^^^^^
 
     constructor(_this: number); // no code gen - no error
 >_this : number
+>      : ^^^^^^
 
     z(_this: string); // no code gen - no error
 >z : { (_this: string): any; (_this: number): any; }
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : string
+>      : ^^^^^^
 
     z(_this: number); // no code gen - no error
 >z : { (_this: string): any; (_this: number): any; }
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 }
 
 declare function f4(_this: number); // no code gen - no error
 >f4 : { (_this: number): any; (_this: string): any; }
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : number
+>      : ^^^^^^
 
 declare function f4(_this: string); // no code gen - no error
 >f4 : { (_this: number): any; (_this: string): any; }
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : string
+>      : ^^^^^^
 

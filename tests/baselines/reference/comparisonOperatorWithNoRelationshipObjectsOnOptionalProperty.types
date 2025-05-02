@@ -1,121 +1,191 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts] ////
+
+=== comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts ===
 interface A1 {
     b?: number;
 >b : number
+>  : ^^^^^^
 }
 
 interface B1 {
     b?: string;
 >b : string
+>  : ^^^^^^
 }
 
 var a: A1;
 >a : A1
+>  : ^^
 
 var b: B1;
 >b : B1
+>  : ^^
 
 // operator <
 var ra1 = a < b;
 >ra1 : boolean
+>    : ^^^^^^^
 >a < b : boolean
+>      : ^^^^^^^
 >a : A1
+>  : ^^
 >b : B1
+>  : ^^
 
 var ra2 = b < a;
 >ra2 : boolean
+>    : ^^^^^^^
 >b < a : boolean
+>      : ^^^^^^^
 >b : B1
+>  : ^^
 >a : A1
+>  : ^^
 
 // operator >
 var rb1 = a > b;
 >rb1 : boolean
+>    : ^^^^^^^
 >a > b : boolean
+>      : ^^^^^^^
 >a : A1
+>  : ^^
 >b : B1
+>  : ^^
 
 var rb2 = b > a;
 >rb2 : boolean
+>    : ^^^^^^^
 >b > a : boolean
+>      : ^^^^^^^
 >b : B1
+>  : ^^
 >a : A1
+>  : ^^
 
 // operator <=
 var rc1 = a <= b;
 >rc1 : boolean
+>    : ^^^^^^^
 >a <= b : boolean
+>       : ^^^^^^^
 >a : A1
+>  : ^^
 >b : B1
+>  : ^^
 
 var rc2 = b <= a;
 >rc2 : boolean
+>    : ^^^^^^^
 >b <= a : boolean
+>       : ^^^^^^^
 >b : B1
+>  : ^^
 >a : A1
+>  : ^^
 
 // operator >=
 var rd1 = a >= b;
 >rd1 : boolean
+>    : ^^^^^^^
 >a >= b : boolean
+>       : ^^^^^^^
 >a : A1
+>  : ^^
 >b : B1
+>  : ^^
 
 var rd2 = b >= a;
 >rd2 : boolean
+>    : ^^^^^^^
 >b >= a : boolean
+>       : ^^^^^^^
 >b : B1
+>  : ^^
 >a : A1
+>  : ^^
 
 // operator ==
 var re1 = a == b;
 >re1 : boolean
+>    : ^^^^^^^
 >a == b : boolean
+>       : ^^^^^^^
 >a : A1
+>  : ^^
 >b : B1
+>  : ^^
 
 var re2 = b == a;
 >re2 : boolean
+>    : ^^^^^^^
 >b == a : boolean
+>       : ^^^^^^^
 >b : B1
+>  : ^^
 >a : A1
+>  : ^^
 
 // operator !=
 var rf1 = a != b;
 >rf1 : boolean
+>    : ^^^^^^^
 >a != b : boolean
+>       : ^^^^^^^
 >a : A1
+>  : ^^
 >b : B1
+>  : ^^
 
 var rf2 = b != a;
 >rf2 : boolean
+>    : ^^^^^^^
 >b != a : boolean
+>       : ^^^^^^^
 >b : B1
+>  : ^^
 >a : A1
+>  : ^^
 
 // operator ===
 var rg1 = a === b;
 >rg1 : boolean
+>    : ^^^^^^^
 >a === b : boolean
+>        : ^^^^^^^
 >a : A1
+>  : ^^
 >b : B1
+>  : ^^
 
 var rg2 = b === a;
 >rg2 : boolean
+>    : ^^^^^^^
 >b === a : boolean
+>        : ^^^^^^^
 >b : B1
+>  : ^^
 >a : A1
+>  : ^^
 
 // operator !==
 var rh1 = a !== b;
 >rh1 : boolean
+>    : ^^^^^^^
 >a !== b : boolean
+>        : ^^^^^^^
 >a : A1
+>  : ^^
 >b : B1
+>  : ^^
 
 var rh2 = b !== a;
 >rh2 : boolean
+>    : ^^^^^^^
 >b !== a : boolean
+>        : ^^^^^^^
 >b : B1
+>  : ^^
 >a : A1
+>  : ^^
 

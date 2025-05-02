@@ -1,275 +1,410 @@
-=== tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts] ////
+
+=== mappedTypesArraysTuples.ts ===
 type Box<T> = { value: T };
 >Box : Box<T>
+>    : ^^^^^^
 >value : T
+>      : ^
 
 type Boxified<T> = { [P in keyof T]: Box<T[P]> };
 >Boxified : Boxified<T>
+>         : ^^^^^^^^^^^
 
 type T00 = Boxified<[number, string?, ...boolean[]]>;
->T00 : [Box<number>, Box<string | undefined>?, ...Box<boolean>[]]
+>T00 : [Box<number>, (Box<string | undefined> | undefined)?, ...Box<boolean>[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T01 = Partial<[number, string?, ...boolean[]]>;
 >T01 : [(number | undefined)?, (string | undefined)?, ...(boolean | undefined)[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T02 = Required<[number, string?, ...boolean[]]>;
 >T02 : [number, string, ...boolean[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T10 = Boxified<string[]>;
 >T10 : Box<string>[]
+>    : ^^^^^^^^^^^^^
 
 type T11 = Partial<string[]>;
 >T11 : (string | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 type T12 = Required<string[]>;
 >T12 : string[]
+>    : ^^^^^^^^
 
 type T13 = Boxified<ReadonlyArray<string>>;
 >T13 : readonly Box<string>[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 type T14 = Partial<ReadonlyArray<string>>;
 >T14 : readonly (string | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T15 = Required<ReadonlyArray<string>>;
 >T15 : readonly string[]
+>    : ^^^^^^^^^^^^^^^^^
 
 type T20 = Boxified<(string | undefined)[]>;
 >T20 : Box<string | undefined>[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T21 = Partial<(string | undefined)[]>;
 >T21 : (string | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 type T22 = Required<(string | undefined)[]>;
 >T22 : string[]
+>    : ^^^^^^^^
 
 type T23 = Boxified<ReadonlyArray<string | undefined>>;
 >T23 : readonly Box<string | undefined>[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T24 = Partial<ReadonlyArray<string | undefined>>;
 >T24 : readonly (string | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T25 = Required<ReadonlyArray<string | undefined>>;
 >T25 : readonly string[]
+>    : ^^^^^^^^^^^^^^^^^
 
 type T30 = Boxified<Partial<string[]>>;
 >T30 : Box<string | undefined>[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T31 = Partial<Boxified<string[]>>;
 >T31 : (Box<string> | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type A = { a: string };
->A : { a: string; }
+>A : A
+>  : ^
 >a : string
+>  : ^^^^^^
 
 type B = { b: string };
->B : { b: string; }
+>B : B
+>  : ^
 >b : string
+>  : ^^^^^^
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
->T40 : string | Box<string>[] | Boxified<A> | readonly Box<A>[] | [Box<A>, Box<B>] | Box<A>[]
+>T40 : T40
+>    : ^^^
 
 type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
 >ReadWrite : ReadWrite<T>
+>          : ^^^^^^^^^^^^
 
 type T50 = Readonly<string[]>;
 >T50 : readonly string[]
+>    : ^^^^^^^^^^^^^^^^^
 
 type T51 = Readonly<[number, number]>;
 >T51 : readonly [number, number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T52 = Partial<Readonly<string[]>>;
 >T52 : readonly (string | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T53 = Readonly<Partial<string[]>>;
 >T53 : readonly (string | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T54 = ReadWrite<Required<T53>>;
 >T54 : string[]
+>    : ^^^^^^^^
 
 declare function unboxify<T>(x: Boxified<T>): T;
 >unboxify : <T>(x: Boxified<T>) => T
+>         : ^ ^^ ^^           ^^^^^ 
 >x : Boxified<T>
+>  : ^^^^^^^^^^^
 
 declare let x10: [Box<number>, Box<string>, ...Box<boolean>[]];
 >x10 : [Box<number>, Box<string>, ...Box<boolean>[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let y10 = unboxify(x10);
 >y10 : [number, string, ...boolean[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify(x10) : [number, string, ...boolean[]]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T>(x: Boxified<T>) => T
+>         : ^ ^^ ^^           ^^^^^ 
 >x10 : [Box<number>, Box<string>, ...Box<boolean>[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x11: Box<number>[];
 >x11 : Box<number>[]
+>    : ^^^^^^^^^^^^^
 
 let y11 = unboxify(x11);
 >y11 : number[]
+>    : ^^^^^^^^
 >unboxify(x11) : number[]
+>              : ^^^^^^^^
 >unboxify : <T>(x: Boxified<T>) => T
+>         : ^ ^^ ^^           ^^^^^ 
 >x11 : Box<number>[]
+>    : ^^^^^^^^^^^^^
 
 declare let x12: { a: Box<number>, b: Box<string[]> };
 >x12 : { a: Box<number>; b: Box<string[]>; }
+>    : ^^^^^           ^^^^^             ^^^
 >a : Box<number>
+>  : ^^^^^^^^^^^
 >b : Box<string[]>
+>  : ^^^^^^^^^^^^^
 
 let y12 = unboxify(x12);
 >y12 : { a: number; b: string[]; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify(x12) : { a: number; b: string[]; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T>(x: Boxified<T>) => T
+>         : ^ ^^ ^^           ^^^^^ 
 >x12 : { a: Box<number>; b: Box<string[]>; }
+>    : ^^^^^           ^^^^^             ^^^
 
 declare function nonpartial<T>(x: Partial<T>): T;
 >nonpartial : <T>(x: Partial<T>) => T
+>           : ^ ^^ ^^          ^^^^^ 
 >x : Partial<T>
+>  : ^^^^^^^^^^
 
 declare let x20: [number | undefined, string?, ...boolean[]];
 >x20 : [number | undefined, (string | undefined)?, ...boolean[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let y20 = nonpartial(x20);
 >y20 : [number, string, ...boolean[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nonpartial(x20) : [number, string, ...boolean[]]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nonpartial : <T>(x: Partial<T>) => T
+>           : ^ ^^ ^^          ^^^^^ 
 >x20 : [number | undefined, (string | undefined)?, ...boolean[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x21: (number | undefined)[];
 >x21 : (number | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 let y21 = nonpartial(x21);
 >y21 : number[]
+>    : ^^^^^^^^
 >nonpartial(x21) : number[]
+>                : ^^^^^^^^
 >nonpartial : <T>(x: Partial<T>) => T
+>           : ^ ^^ ^^          ^^^^^ 
 >x21 : (number | undefined)[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x22: { a: number | undefined, b?: string[] };
->x22 : { a: number | undefined; b?: string[] | undefined; }
+>x22 : { a: number | undefined; b?: string[]; }
+>    : ^^^^^                  ^^^^^^        ^^^
 >a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : string[] | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 let y22 = nonpartial(x22);
 >y22 : { a: number; b: string[]; }
+>    : ^^^^^^^^^^^^^^^^        ^^^
 >nonpartial(x22) : { a: number; b: string[]; }
+>                : ^^^^^^^^^^^^^^^^        ^^^
 >nonpartial : <T>(x: Partial<T>) => T
->x22 : { a: number | undefined; b?: string[] | undefined; }
+>           : ^ ^^ ^^          ^^^^^ 
+>x22 : { a: number | undefined; b?: string[]; }
+>    : ^^^^^                  ^^^^^^        ^^^
 
 type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 >__Awaited : __Awaited<T>
+>          : ^^^^^^^^^^^^
 
 type Awaitified<T> = { [P in keyof T]: __Awaited<T[P]> };
 >Awaitified : Awaitified<T>
+>           : ^^^^^^^^^^^^^
 
 declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >values : T
+>       : ^
 
 function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >f1 : (a: number, b: Promise<number>, c: string[], d: Promise<string[]>) => void
+>   : ^ ^^      ^^ ^^               ^^ ^^        ^^ ^^                 ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >c : string[]
+>  : ^^^^^^^^
 >d : Promise<string[]>
+>  : ^^^^^^^^^^^^^^^^^
 
     let x1 = all(a);
 >x1 : Promise<[number]>
+>   : ^^^^^^^^^^^^^^^^^
 >all(a) : Promise<[number]>
+>       : ^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >a : number
+>  : ^^^^^^
 
     let x2 = all(a, b);
 >x2 : Promise<[number, number]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >all(a, b) : Promise<[number, number]>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >a : number
+>  : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     let x3 = all(a, b, c);
 >x3 : Promise<[number, number, string[]]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >all(a, b, c) : Promise<[number, number, string[]]>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >a : number
+>  : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >c : string[]
+>  : ^^^^^^^^
 
     let x4 = all(a, b, c, d);
 >x4 : Promise<[number, number, string[], string[]]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >all(a, b, c, d) : Promise<[number, number, string[], string[]]>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >a : number
+>  : ^^^^^^
 >b : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >c : string[]
+>  : ^^^^^^^^
 >d : Promise<string[]>
+>  : ^^^^^^^^^^^^^^^^^
 }
 
 function f2<T extends any[]>(a: Boxified<T>) {
 >f2 : <T extends any[]>(a: Boxified<T>) => void
+>   : ^ ^^^^^^^^^     ^^ ^^           ^^^^^^^^^
 >a : Boxified<T>
+>  : ^^^^^^^^^^^
 
     let x: Box<any> | undefined = a.pop();
 >x : Box<any> | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
 >a.pop() : Box<any> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^
 >a.pop : () => Box<any> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : Boxified<T>
+>  : ^^^^^^^^^^^
 >pop : () => Box<any> | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y: Box<any>[] = a.concat(a);
 >y : Box<any>[]
+>  : ^^^^^^^^^^
 >a.concat(a) : Box<any>[]
+>            : ^^^^^^^^^^
 >a.concat : { (...items: ConcatArray<Box<any>>[]): Box<any>[]; (...items: (Box<any> | ConcatArray<Box<any>>)[]): Box<any>[]; }
+>         : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : Boxified<T>
+>  : ^^^^^^^^^^^
 >concat : { (...items: ConcatArray<Box<any>>[]): Box<any>[]; (...items: (Box<any> | ConcatArray<Box<any>>)[]): Box<any>[]; }
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : Boxified<T>
+>  : ^^^^^^^^^^^
 }
 
 // Repro from #26163
 
 type ElementType<T> = T extends Array<infer U> ? U : never;
 >ElementType : ElementType<T>
+>            : ^^^^^^^^^^^^^^
 
 type Mapped<T> = { [K in keyof T]: T[K] };
 >Mapped : Mapped<T>
+>       : ^^^^^^^^^
 
 type F<T> = ElementType<Mapped<T>>;
 >F : F<T>
+>  : ^^^^
 
 type R1 = F<[string, number, boolean]>;  // string | number | boolean
 >R1 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type R2 = ElementType<Mapped<[string, number, boolean]>>;  // string | number | boolean
 >R2 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Repro from #26163
 
 declare function acceptArray(arr: any[]): void;
 >acceptArray : (arr: any[]) => void
+>            : ^   ^^     ^^^^^    
 >arr : any[]
+>    : ^^^^^
 
 declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
 >mapArray : <T extends any[]>(arr: T) => Mapped<T>
+>         : ^ ^^^^^^^^^     ^^   ^^ ^^^^^         
 >arr : T
+>    : ^
 
 function acceptMappedArray<T extends any[]>(arr: T) {
 >acceptMappedArray : <T extends any[]>(arr: T) => void
+>                  : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^^^^
 >arr : T
+>    : ^
 
     acceptArray(mapArray(arr));
 >acceptArray(mapArray(arr)) : void
+>                           : ^^^^
 >acceptArray : (arr: any[]) => void
+>            : ^   ^^     ^^^^^    
 >mapArray(arr) : Mapped<T>
->mapArray : <T extends any[]>(arr: T) => Mapped<T>
+>              : ^^^^^^^^^
+>mapArray : <T_1 extends any[]>(arr: T_1) => Mapped<T_1>
+>         : ^^^^^^^^^^^^^     ^^   ^^   ^^^^^           
 >arr : T
+>    : ^
 }
 
 // Repro from #26163
 
 type Unconstrained<T> = ElementType<Mapped<T>>;
 >Unconstrained : Unconstrained<T>
+>              : ^^^^^^^^^^^^^^^^
 
 type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolean
 >T1 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type Constrained<T extends any[]> = ElementType<Mapped<T>>;
 >Constrained : Constrained<T>
+>            : ^^^^^^^^^^^^^^
 
 type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
 >T2 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

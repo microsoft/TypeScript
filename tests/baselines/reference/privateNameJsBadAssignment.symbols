@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.ts] ////
+
+=== privateNameJsBadAssignment.js ===
 exports.#nope = 1;           // Error (outside class body)
 function A() { }
 >A : Symbol(A, Decl(privateNameJsBadAssignment.js, 0, 18))

@@ -1,23 +1,33 @@
-=== tests/cases/compiler/node_modules/umd.d.ts ===
+//// [tests/cases/compiler/importShouldNotBeElidedInDeclarationEmit.ts] ////
+
+=== node_modules/umd.d.ts ===
 export as namespace UMD;
->UMD : typeof import("tests/cases/compiler/node_modules/umd")
+>UMD : typeof import("node_modules/umd")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type Thing = {
->Thing : { a: number; }
+>Thing : Thing
+>      : ^^^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 export declare function makeThing(): Thing;
 >makeThing : () => Thing
+>          : ^^^^^^     
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { makeThing } from "umd";
->makeThing : () => import("tests/cases/compiler/node_modules/umd").Thing
+>makeThing : () => import("node_modules/umd").Thing
+>          : ^^^^^^       ^^^^^^^^^^^^^^^^^^  ^^^^^
 
 export const thing = makeThing();
->thing : import("tests/cases/compiler/node_modules/umd").Thing
->makeThing() : import("tests/cases/compiler/node_modules/umd").Thing
->makeThing : () => import("tests/cases/compiler/node_modules/umd").Thing
+>thing : import("node_modules/umd").Thing
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>makeThing() : import("node_modules/umd").Thing
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>makeThing : () => import("node_modules/umd").Thing
+>          : ^^^^^^       ^^^^^^^^^^^^^^^^^^  ^^^^^
 

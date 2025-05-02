@@ -1,37 +1,62 @@
-=== tests/cases/conformance/Symbols/ES5SymbolProperty2.ts ===
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty2.ts] ////
+
+=== ES5SymbolProperty2.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var Symbol: any;
 >Symbol : any
+>       : ^^^
 
     export class C {
 >C : C
+>  : ^
 
         [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
+>                  : ^^^^^^^^^^
 >Symbol.iterator : any
+>                : ^^^
 >Symbol : any
+>       : ^^^
 >iterator : any
+>         : ^^^
     }
     (new C)[Symbol.iterator];
->(new C)[Symbol.iterator] : any
+>(new C)[Symbol.iterator] : () => void
+>                         : ^^^^^^^^^^
 >(new C) : C
+>        : ^
 >new C : C
+>      : ^
 >C : typeof C
+>  : ^^^^^^^^
 >Symbol.iterator : any
+>                : ^^^
 >Symbol : any
+>       : ^^^
 >iterator : any
+>         : ^^^
 }
 
 (new M.C)[Symbol.iterator];
->(new M.C)[Symbol.iterator] : any
+>(new M.C)[Symbol.iterator] : () => void
+>                           : ^^^^^^^^^^
 >(new M.C) : M.C
+>          : ^^^
 >new M.C : M.C
+>        : ^^^
 >M.C : typeof M.C
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >C : typeof M.C
+>  : ^^^^^^^^^^
 >Symbol.iterator : any
+>                : ^^^
 >Symbol : any
+>       : ^^^
 >iterator : any
+>         : ^^^
 

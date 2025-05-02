@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/binderBinaryExpressionStress.ts] ////
+
 //// [binderBinaryExpressionStress.ts]
 // regression test for https://github.com/microsoft/TypeScript/issues/35633
 // If we need to emit comments or subsitutions for a node, we have to skip the trampoline

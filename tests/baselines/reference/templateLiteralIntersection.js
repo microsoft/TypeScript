@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateLiteralIntersection.ts] ////
+
 //// [templateLiteralIntersection.ts]
 // https://github.com/microsoft/TypeScript/issues/48034
 const a = 'a'

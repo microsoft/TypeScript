@@ -1,7 +1,7 @@
-tests/cases/compiler/classExtendsMultipleBaseClasses.ts(3,19): error TS1174: Classes can only extend a single class.
+classExtendsMultipleBaseClasses.ts(3,19): error TS1174: Classes can only extend a single class.
 
 
-==== tests/cases/compiler/classExtendsMultipleBaseClasses.ts (1 errors) ====
+==== classExtendsMultipleBaseClasses.ts (1 errors) ====
     class A { }
     class B { }
     class C extends A,B { }

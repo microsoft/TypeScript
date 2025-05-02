@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedParametersWithUnderscore.ts ===
+//// [tests/cases/compiler/unusedParametersWithUnderscore.ts] ////
+
+=== unusedParametersWithUnderscore.ts ===
 function f(a, _b, c, ___, d,e___, _f) {
 >f : Symbol(f, Decl(unusedParametersWithUnderscore.ts, 0, 0))
 >a : Symbol(a, Decl(unusedParametersWithUnderscore.ts, 0, 11))

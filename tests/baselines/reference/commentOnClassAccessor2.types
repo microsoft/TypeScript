@@ -1,18 +1,25 @@
-=== tests/cases/compiler/commentOnClassAccessor2.ts ===
+//// [tests/cases/compiler/commentOnClassAccessor2.ts] ////
+
+=== commentOnClassAccessor2.ts ===
 class C {
 >C : C
+>  : ^
 
   /**
    * Getter.
    */
   get bar(): number { return 1;}
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
   /**
    * Setter.
    */
   set bar(v) { }
 >bar : number
+>    : ^^^^^^
 >v : number
+>  : ^^^^^^
 }

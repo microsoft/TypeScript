@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyTupleAndArrayElaboration.ts] ////
+
 //// [readonlyTupleAndArrayElaboration.ts]
 // @strict
 // #Repro from #30839

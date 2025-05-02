@@ -1,8 +1,13 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedArrowFunction.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedArrowFunction.ts] ////
+
+=== templateStringWithEmbeddedArrowFunction.ts ===
 var x = `abc${ x => x }def`;
 >x : string
+>  : ^^^^^^
 >`abc${ x => x }def` : string
+>                    : ^^^^^^
 >x => x : (x: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 

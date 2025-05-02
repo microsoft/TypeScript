@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertySignatures.ts] ////
+
 //// [propertySignatures.ts]
 // Should be error - duplicate identifiers
 var foo1: { a:string; a: string; };

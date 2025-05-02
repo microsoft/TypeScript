@@ -1,3 +1,4 @@
-=== tests/cases/compiler/indexSignatureWithoutTypeAnnotation1..ts ===
+//// [tests/cases/compiler/indexSignatureWithoutTypeAnnotation1..ts] ////
 
-No type information for this code.
+=== indexSignatureWithoutTypeAnnotation1..ts ===
+

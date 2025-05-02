@@ -1,41 +1,57 @@
-=== tests/cases/compiler/widenedTypes1.ts ===
+//// [tests/cases/compiler/widenedTypes1.ts] ////
+
+=== widenedTypes1.ts ===
 var a = null;
 >a : any
->null : null
 
 var b = undefined;
 >b : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var c = {x: null};
 >c : { x: any; }
+>  : ^^^^^^^^^^^
 >{x: null} : { x: null; }
+>          : ^^^^^^^^^^^^
 >x : null
->null : null
+>  : ^^^^
 
 var d = [{x: null}];
 >d : { x: any; }[]
+>  : ^^^^^^^^^^^^^
 >[{x: null}] : { x: null; }[]
+>            : ^^^^^^^^^^^^^^
 >{x: null} : { x: null; }
+>          : ^^^^^^^^^^^^
 >x : null
->null : null
+>  : ^^^^
 
 var f = [null, null];
 >f : any[]
+>  : ^^^^^
 >[null, null] : null[]
->null : null
->null : null
+>             : ^^^^^^
 
 var g = [undefined, undefined];
 >g : any[]
+>  : ^^^^^
 >[undefined, undefined] : undefined[]
+>                       : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var h = [{x: undefined}];
 >h : { x: any; }[]
+>  : ^^^^^^^^^^^^^
 >[{x: undefined}] : { x: undefined; }[]
+>                 : ^^^^^^^^^^^^^^^^^^^
 >{x: undefined} : { x: undefined; }
+>               : ^^^^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

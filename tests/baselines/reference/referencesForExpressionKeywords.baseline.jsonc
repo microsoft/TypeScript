@@ -1,7 +1,8 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     static x = 1;
-// }
+// }|>
 // /*FIND ALL REFS*/new [|C|]();
 // void [|C|];
 // typeof [|C|];
@@ -14,130 +15,48 @@
 // undefined instanceof [|C|];
 // undefined as [|C|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 150,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // <|class [|C|] {
+  //     static x = 1;
+  // }|>
+  // /*FIND ALL REFS*/new C();
+  // void C;
+  // typeof C;
+  // delete C.x;
+  // --- (line: 8) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     static x = 1;
-// }
+// }|>
 // new [|C|]();
 // /*FIND ALL REFS*/void [|C|];
 // typeof [|C|];
@@ -150,130 +69,49 @@
 // undefined instanceof [|C|];
 // undefined as [|C|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 150,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // <|class [|C|] {
+  //     static x = 1;
+  // }|>
+  // new C();
+  // /*FIND ALL REFS*/void C;
+  // typeof C;
+  // delete C.x;
+  // async function* f() {
+  // --- (line: 9) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     static x = 1;
-// }
+// }|>
 // new [|C|]();
 // void [|C|];
 // /*FIND ALL REFS*/typeof [|C|];
@@ -286,130 +124,50 @@
 // undefined instanceof [|C|];
 // undefined as [|C|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 150,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // <|class [|C|] {
+  //     static x = 1;
+  // }|>
+  // new C();
+  // void C;
+  // /*FIND ALL REFS*/typeof C;
+  // delete C.x;
+  // async function* f() {
+  //     yield C;
+  // --- (line: 10) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     static x = 1;
-// }
+// }|>
 // new [|C|]();
 // void [|C|];
 // typeof [|C|];
@@ -422,130 +180,54 @@
 // undefined instanceof [|C|];
 // undefined as [|C|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 150,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // <|class [|C|] {
+  //     static x = 1;
+  // }|>
+  // new C();
+  // void C;
+  // typeof C;
+  // delete C.x;
+  // async function* f() {
+  //     /*FIND ALL REFS*/yield C;
+  //     await C;
+  // }
+  // "x" in C;
+  // undefined instanceof C;
+  // undefined as C;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     static x = 1;
-// }
+// }|>
 // new [|C|]();
 // void [|C|];
 // typeof [|C|];
@@ -558,130 +240,54 @@
 // undefined instanceof [|C|];
 // undefined as [|C|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 150,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // <|class [|C|] {
+  //     static x = 1;
+  // }|>
+  // new C();
+  // void C;
+  // typeof C;
+  // delete C.x;
+  // async function* f() {
+  //     yield C;
+  //     /*FIND ALL REFS*/await C;
+  // }
+  // "x" in C;
+  // undefined instanceof C;
+  // undefined as C;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     static x = 1;
-// }
+// }|>
 // new [|C|]();
 // void [|C|];
 // typeof [|C|];
@@ -694,130 +300,54 @@
 // undefined instanceof [|C|];
 // undefined as [|C|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 150,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // <|class [|C|] {
+  //     static x = 1;
+  // }|>
+  // new C();
+  // void C;
+  // typeof C;
+  // delete C.x;
+  // async function* f() {
+  //     yield C;
+  //     await C;
+  // }
+  // "x" /*FIND ALL REFS*/in C;
+  // undefined instanceof C;
+  // undefined as C;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     static x = 1;
-// }
+// }|>
 // new [|C|]();
 // void [|C|];
 // typeof [|C|];
@@ -830,130 +360,54 @@
 // undefined /*FIND ALL REFS*/instanceof [|C|];
 // undefined as [|C|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 150,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // <|class [|C|] {
+  //     static x = 1;
+  // }|>
+  // new C();
+  // void C;
+  // typeof C;
+  // delete C.x;
+  // async function* f() {
+  //     yield C;
+  //     await C;
+  // }
+  // "x" in C;
+  // undefined /*FIND ALL REFS*/instanceof C;
+  // undefined as C;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     static x = 1;
-// }
+// }|>
 // new [|C|]();
 // void [|C|];
 // typeof [|C|];
@@ -966,129 +420,52 @@
 // undefined instanceof [|C|];
 // undefined /*FIND ALL REFS*/as [|C|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 150,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // <|class [|C|] {
+  //     static x = 1;
+  // }|>
+  // new C();
+  // void C;
+  // typeof C;
+  // --- (line: 7) skipped ---
 
+  // --- (line: 10) skipped ---
+  // }
+  // "x" in C;
+  // undefined instanceof C;
+  // undefined /*FIND ALL REFS*/as C;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
 // class C {
-//     static [|x|] = 1;
+//     <|static [|{| isWriteAccess: true |}x|] = 1;|>
 // }
 // new C();
 // void C;
@@ -1097,91 +474,70 @@
 // async function* f() {
 //     yield C;
 //     await C;
-// }
-// "x" in C;
-// undefined instanceof C;
-// undefined as C;
+// --- (line: 11) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-      "kind": "property",
-      "name": "(property) C.x: number",
-      "textSpan": {
-        "start": 21,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 13
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 66,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
+  // class C {
+  //     <|static [|x|] = 1;|>
+  // }
+  // new C();
+  // void C;
+  // typeof C;
+  // /*FIND ALL REFS*/delete C.x;
+  // async function* f() {
+  //     yield C;
+  //     await C;
+  // --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

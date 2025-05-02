@@ -1,9 +1,13 @@
-=== tests/cases/compiler/moduleAugmentationGlobal7.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal7.ts] ////
+
+=== moduleAugmentationGlobal7.ts ===
 namespace A {
     declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
         interface Array<T> { x }
 >x : any
+>  : ^^^
     }
 }

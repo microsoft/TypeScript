@@ -1,140 +1,243 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts] ////
+
+=== destructuringParameterProperties1.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     constructor(public [x, y, z]: string[]) {
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : string
+>  : ^^^^^^
     }
 }
 
 type TupleType1 = [string, number, boolean];
->TupleType1 : [string, number, boolean]
+>TupleType1 : TupleType1
+>           : ^^^^^^^^^^
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     constructor(public [x, y, z]: TupleType1) {
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
     }
 }
 
 type ObjType1 = { x: number; y: string; z: boolean }
->ObjType1 : { x: number; y: string; z: boolean; }
+>ObjType1 : ObjType1
+>         : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     constructor(public { x, y, z }: ObjType1) {
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
     }
 }
 
 var c1 = new C1([]);
 >c1 : C1
+>   : ^^
 >new C1([]) : C1
+>           : ^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 c1 = new C1(["larry", "{curly}", "moe"]);
 >c1 = new C1(["larry", "{curly}", "moe"]) : C1
+>                                         : ^^
 >c1 : C1
+>   : ^^
 >new C1(["larry", "{curly}", "moe"]) : C1
+>                                    : ^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >["larry", "{curly}", "moe"] : string[]
+>                            : ^^^^^^^^
 >"larry" : "larry"
+>        : ^^^^^^^
 >"{curly}" : "{curly}"
+>          : ^^^^^^^^^
 >"moe" : "moe"
+>      : ^^^^^
 
 var useC1Properties = c1.x === c1.y && c1.y === c1.z;
 >useC1Properties : boolean
+>                : ^^^^^^^
 >c1.x === c1.y && c1.y === c1.z : boolean
+>                               : ^^^^^^^
 >c1.x === c1.y : boolean
+>              : ^^^^^^^
 >c1.x : any
+>     : ^^^
 >c1 : C1
+>   : ^^
 >x : any
+>  : ^^^
 >c1.y : any
+>     : ^^^
 >c1 : C1
+>   : ^^
 >y : any
+>  : ^^^
 >c1.y === c1.z : boolean
+>              : ^^^^^^^
 >c1.y : any
+>     : ^^^
 >c1 : C1
+>   : ^^
 >y : any
+>  : ^^^
 >c1.z : any
+>     : ^^^
 >c1 : C1
+>   : ^^
 >z : any
+>  : ^^^
 
 var c2 = new C2(["10", 10, !!10]);
 >c2 : C2
+>   : ^^
 >new C2(["10", 10, !!10]) : C2
+>                         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >["10", 10, !!10] : [string, number, boolean]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"10" : "10"
+>     : ^^^^
 >10 : 10
+>   : ^^
 >!!10 : boolean
+>     : ^^^^^^^
 >!10 : boolean
+>    : ^^^^^^^
 >10 : 10
+>   : ^^
 
 var [c2_x, c2_y, c2_z] = [c2.x, c2.y, c2.z];
 >c2_x : any
+>     : ^^^
 >c2_y : any
+>     : ^^^
 >c2_z : any
+>     : ^^^
 >[c2.x, c2.y, c2.z] : [any, any, any]
+>                   : ^^^^^^^^^^^^^^^
 >c2.x : any
+>     : ^^^
 >c2 : C2
+>   : ^^
 >x : any
+>  : ^^^
 >c2.y : any
+>     : ^^^
 >c2 : C2
+>   : ^^
 >y : any
+>  : ^^^
 >c2.z : any
+>     : ^^^
 >c2 : C2
+>   : ^^
 >z : any
+>  : ^^^
 
 var c3 = new C3({x: 0, y: "", z: false});
 >c3 : C3
+>   : ^^
 >new C3({x: 0, y: "", z: false}) : C3
+>                                : ^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 >{x: 0, y: "", z: false} : { x: number; y: string; z: false; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >z : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 c3 = new C3({x: 0, "y": "y", z: true});
 >c3 = new C3({x: 0, "y": "y", z: true}) : C3
+>                                       : ^^
 >c3 : C3
+>   : ^^
 >new C3({x: 0, "y": "y", z: true}) : C3
+>                                  : ^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 >{x: 0, "y": "y", z: true} : { x: number; y: string; z: true; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >"y" : string
+>    : ^^^^^^
 >"y" : "y"
+>    : ^^^
 >z : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
 >c3_x : any
+>     : ^^^
 >c3_y : any
+>     : ^^^
 >c3_z : any
+>     : ^^^
 >[c3.x, c3.y, c3.z] : [any, any, any]
+>                   : ^^^^^^^^^^^^^^^
 >c3.x : any
+>     : ^^^
 >c3 : C3
+>   : ^^
 >x : any
+>  : ^^^
 >c3.y : any
+>     : ^^^
 >c3 : C3
+>   : ^^
 >y : any
+>  : ^^^
 >c3.z : any
+>     : ^^^
 >c3 : C3
+>   : ^^
 >z : any
+>  : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterWithInvalidConstraintType.ts] ////
+
 //// [typeParameterWithInvalidConstraintType.ts]
 class A<T extends T> {
     foo() {

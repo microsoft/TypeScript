@@ -19,16 +19,6 @@ export declare function base(): void;
 import { ios } from "some-library";
 
 
-//// [/bin/node_modules/some-library/index.ios.js]
-"use strict";
-exports.__esModule = true;
-function ios() { }
-exports.ios = ios;
-//// [/bin/node_modules/some-library/index.js]
-"use strict";
-exports.__esModule = true;
-function base() { }
-exports.base = base;
 //// [/bin/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

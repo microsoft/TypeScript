@@ -1,22 +1,23 @@
-tests/cases/conformance/types/tuple/castingTuple.ts(13,23): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+castingTuple.ts(13,23): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Source has 2 element(s) but target requires 3.
-tests/cases/conformance/types/tuple/castingTuple.ts(14,15): error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+castingTuple.ts(14,15): error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Source has 3 element(s) but target allows only 2.
-tests/cases/conformance/types/tuple/castingTuple.ts(15,14): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-tests/cases/conformance/types/tuple/castingTuple.ts(18,21): error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+castingTuple.ts(15,14): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Source has 2 element(s) but target requires 3.
-tests/cases/conformance/types/tuple/castingTuple.ts(20,33): error TS2493: Tuple type '[C, D, A]' of length '3' has no element at index '5'.
-tests/cases/conformance/types/tuple/castingTuple.ts(30,10): error TS2352: Conversion of type '[number, string]' to type '[number, number]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+castingTuple.ts(18,21): error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Source has 2 element(s) but target requires 3.
+castingTuple.ts(20,33): error TS2493: Tuple type '[C, D, A]' of length '3' has no element at index '5'.
+castingTuple.ts(30,10): error TS2352: Conversion of type '[number, string]' to type '[number, number]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'string' is not comparable to type 'number'.
-tests/cases/conformance/types/tuple/castingTuple.ts(31,10): error TS2352: Conversion of type '[C, D]' to type '[A, I]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+castingTuple.ts(31,10): error TS2352: Conversion of type '[C, D]' to type '[A, I]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type at position 0 in source is not compatible with type at position 0 in target.
     Property 'a' is missing in type 'C' but required in type 'A'.
-tests/cases/conformance/types/tuple/castingTuple.ts(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
-tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot find name 't4'.
+castingTuple.ts(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
+castingTuple.ts(33,1): error TS2304: Cannot find name 't4'.
 
 
-==== tests/cases/conformance/types/tuple/castingTuple.ts (9 errors) ====
+==== castingTuple.ts (9 errors) ====
     interface I { }
     class A { a = 10; }
     class C implements I { c };
@@ -40,6 +41,7 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var longer = numStrTuple as [number, string, boolean]
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Source has 2 element(s) but target requires 3.
     var classCDTuple: [C, D] = [new C(), new D()];
     var interfaceIITuple = <[I, I]>classCDTuple;
     var classCDATuple = <[C, D, A]>classCDTuple;
@@ -69,11 +71,11 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
 !!! error TS2352: Conversion of type '[C, D]' to type '[A, I]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type at position 0 in source is not compatible with type at position 0 in target.
 !!! error TS2352:     Property 'a' is missing in type 'C' but required in type 'A'.
-!!! related TS2728 tests/cases/conformance/types/tuple/castingTuple.ts:2:11: 'a' is declared here.
+!!! related TS2728 castingTuple.ts:2:11: 'a' is declared here.
     var array1 = <number[]>numStrTuple;
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
-!!! related TS6203 tests/cases/conformance/types/tuple/castingTuple.ts:23:5: 'array1' was also declared here.
+!!! related TS6203 castingTuple.ts:23:5: 'array1' was also declared here.
     t4[2] = 10;
     ~~
 !!! error TS2304: Cannot find name 't4'.

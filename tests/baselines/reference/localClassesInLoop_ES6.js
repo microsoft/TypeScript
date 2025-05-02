@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localClassesInLoop_ES6.ts] ////
+
 //// [localClassesInLoop_ES6.ts]
 declare function use(a: any);
 

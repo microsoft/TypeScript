@@ -1,8 +1,8 @@
-tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts(1,16): error TS2436: Ambient module declaration cannot specify relative module name.
-tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts(5,16): error TS2436: Ambient module declaration cannot specify relative module name.
+ambientExternalModuleWithRelativeModuleName.ts(1,16): error TS2436: Ambient module declaration cannot specify relative module name.
+ambientExternalModuleWithRelativeModuleName.ts(5,16): error TS2436: Ambient module declaration cannot specify relative module name.
 
 
-==== tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts (2 errors) ====
+==== ambientExternalModuleWithRelativeModuleName.ts (2 errors) ====
     declare module "./relativeModule" {
                    ~~~~~~~~~~~~~~~~~~
 !!! error TS2436: Ambient module declaration cannot specify relative module name.

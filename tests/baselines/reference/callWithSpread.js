@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread.ts] ////
+
 //// [callWithSpread.ts]
 interface X {
     foo(x: number, y: number, ...z: string[]): X;
@@ -134,8 +136,7 @@ var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         var _this = _super.call(this, 1, 2) || this;
-        _this = _super.apply(this, __spreadArray([1, 2], a, false)) || this;
-        return _this;
+        return _super.apply(this, __spreadArray([1, 2], a, false)) || this;
     }
     D.prototype.foo = function () {
         _super.prototype.foo.call(this, 1, 2);

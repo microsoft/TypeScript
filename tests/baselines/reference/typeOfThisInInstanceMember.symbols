@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts] ////
+
+=== typeOfThisInInstanceMember.ts ===
 class C {
 >C : Symbol(C, Decl(typeOfThisInInstanceMember.ts, 0, 0))
 

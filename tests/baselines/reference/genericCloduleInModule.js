@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCloduleInModule.ts] ////
+
 //// [genericCloduleInModule.ts]
 module A {
     export class B<T> {

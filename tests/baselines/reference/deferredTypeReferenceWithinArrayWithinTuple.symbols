@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deferredTypeReferenceWithinArrayWithinTuple.ts ===
+//// [tests/cases/compiler/deferredTypeReferenceWithinArrayWithinTuple.ts] ////
+
+=== deferredTypeReferenceWithinArrayWithinTuple.ts ===
 type TypeStructure =
 >TypeStructure : Symbol(TypeStructure, Decl(deferredTypeReferenceWithinArrayWithinTuple.ts, 0, 0))
 

@@ -1,152 +1,231 @@
-=== tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts ===
+//// [tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts] ////
+
+=== invalidMultipleVariableDeclarations.ts ===
 interface I {
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class C implements I {
 >C : C
+>  : ^
 
     id: number;
 >id : number
+>   : ^^^^^^
 
     valid: boolean;
 >valid : boolean
+>      : ^^^^^^^
 }
 
 class C2 extends C {
 >C2 : C2
+>   : ^^
 >C : C
+>  : ^
 
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 class D<T>{
 >D : D<T>
+>  : ^^^^
 
     source: T;
 >source : T
+>       : ^
 
     recurse: D<T>;
 >recurse : D<T>
+>        : ^^^^
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
+>        : ^^^^^^^
 }
 
 function F(x: string): number { return 42; }
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class A {
 >A : A
+>  : ^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 }
 
 // all of these are errors
 var a: any;
 >a : any
+>  : ^^^
 
 var a = 1;
 >a : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 var a = 'a string';
 >a : any
+>  : ^^^
 >'a string' : "a string"
+>           : ^^^^^^^^^^
 
 var a = new C();
 >a : any
+>  : ^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var a = new D<string>();
 >a : any
+>  : ^^^
 >new D<string>() : D<string>
+>                : ^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var a = M;
 >a : any
+>  : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var b: I;
 >b : I
+>  : ^
 
 var b = new C();
 >b : I
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var b = new C2();
 >b : I
+>  : ^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 var f = F;
 >f : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 
 var f = (x: number) => '';
 >f : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >(x: number) => '' : (x: number) => string
+>                  : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var arr: string[];
 >arr : string[]
+>    : ^^^^^^^^
 
 var arr = [1, 2, 3, 4];
 >arr : string[]
+>    : ^^^^^^^^
 >[1, 2, 3, 4] : number[]
+>             : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 var arr = [new C(), new C2(), new D<string>()];
 >arr : string[]
+>    : ^^^^^^^^
 >[new C(), new C2(), new D<string>()] : (C | D<string>)[]
+>                                     : ^^^^^^^^^^^^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >new D<string>() : D<string>
+>                : ^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var arr2 = [new D<string>()];
 >arr2 : D<string>[]
+>     : ^^^^^^^^^^^
 >[new D<string>()] : D<string>[]
+>                  : ^^^^^^^^^^^
 >new D<string>() : D<string>
+>                : ^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var arr2 = new Array<D<number>>();
 >arr2 : D<string>[]
+>     : ^^^^^^^^^^^
 >new Array<D<number>>() : D<number>[]
+>                       : ^^^^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 var m: typeof M;
 >m : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var m = M.A;
 >m : typeof M
+>  : ^^^^^^^^
 >M.A : typeof M.A
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >A : typeof M.A
+>  : ^^^^^^^^^^
 

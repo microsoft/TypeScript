@@ -1,57 +1,97 @@
-=== tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration2.ts ===
+//// [tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration2.ts] ////
+
+=== duplicateIdentifierBindingElementInParameterDeclaration2.ts ===
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 function f0(a, [a, [b]], {b}) { }
 >f0 : (a: any, [a, [b]]: [any, [any]], { b }: { b: any; }) => void
+>   : ^ ^^^^^^^        ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 function f1([a, a]) { }
 >f1 : ([a, a]: [any, any]) => void
+>   : ^      ^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 function f2({b}, {b}) { }
 >f2 : ({ b }: { b: any; }, { b }: { b: any; }) => void
+>   : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 function f3([c, [c], [[c]]]) { }
 >f3 : ([c, [c], [[c]]]: [any, [any], [[any]]]) => void
+>   : ^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : any
+>  : ^^^
 >c : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 function f4({d, d: {d}}) { }
 >f4 : ({ d, d: { d } }: { d: { d: any; }; }) => void
+>   : ^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : { d: any; }
+>  : ^^^^^^^^^^^
 >d : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 function f5({e, e: {e}}, {e}, [d, e, [[e]]], ...e) { }
 >f5 : ({ e, e: { e } }: { e: { e: any; }; }, { e }: { e: any; }, [d, e, [[e]]]: [any, any, [[any]]], ...e: any[]) => void
+>   : ^               ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >e : { e: any; }
+>  : ^^^^^^^^^^^
 >e : any
+>  : ^^^
 >e : any
+>  : ^^^
 >e : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 >e : any
+>  : ^^^
 >e : any[]
+>  : ^^^^^
 
 function f6([f, ...f]) { }
 >f6 : ([f, ...f]: [any, ...any[]]) => void
+>   : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : any
+>  : ^^^
 >f : any[]
+>  : ^^^^^
 
 function f7(a, func = (a) => { return 1 }){ }  // not error
 >f7 : (a: any, func?: (a: any) => number) => void
+>   : ^ ^^^^^^^    ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >func : (a: any) => number
+>     : ^ ^^^^^^^^^^^^^^^^
 >(a) => { return 1 } : (a: any) => number
+>                    : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >1 : 1
+>  : ^
 

@@ -1,78 +1,78 @@
-tests/cases/conformance/importAssertion/1.ts(1,14): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-tests/cases/conformance/importAssertion/1.ts(2,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-tests/cases/conformance/importAssertion/1.ts(3,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-tests/cases/conformance/importAssertion/2.ts(1,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-tests/cases/conformance/importAssertion/2.ts(2,38): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(1,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(2,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(3,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(4,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(5,12): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(7,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(8,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(9,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
-tests/cases/conformance/importAssertion/3.ts(10,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+1.ts(1,14): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+1.ts(2,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+1.ts(3,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+2.ts(1,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+2.ts(2,38): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+3.ts(1,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+3.ts(2,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+3.ts(3,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+3.ts(4,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+3.ts(5,12): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+3.ts(7,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+3.ts(8,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+3.ts(9,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+3.ts(10,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
 
 
-==== tests/cases/conformance/importAssertion/0.ts (0 errors) ====
+==== 0.ts (0 errors) ====
     export const a = 1;
     export const b = 2;
     
-==== tests/cases/conformance/importAssertion/1.ts (3 errors) ====
+==== 1.ts (3 errors) ====
     import './0' assert { type: "json" }
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     import { a, b } from './0' assert { "type": "json" }
                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     import * as foo from './0' assert { type: "json" }
                                ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     a;
     b;
     foo.a;
     foo.b;
     
-==== tests/cases/conformance/importAssertion/2.ts (2 errors) ====
+==== 2.ts (2 errors) ====
     import { a, b } from './0' assert {}
                                ~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     import { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     a;
     b;
     c;
     d;
     
-==== tests/cases/conformance/importAssertion/3.ts (9 errors) ====
+==== 3.ts (9 errors) ====
     const a = import('./0')
               ~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     const b = import('./0', { assert: { type: "json" } })
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     const c = import('./0', { assert: { type: "json", ttype: "typo" } })
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     const d = import('./0', { assert: {} })
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     const dd = import('./0', {})
                ~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     declare function foo(): any;
     const e = import('./0', foo())
               ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     const f = import()
               ~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     const g = import('./0', {}, {})
               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     const h = import('./0', { assert: { type: "json" }},)
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
     
     

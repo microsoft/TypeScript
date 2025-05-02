@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts] ////
+
+=== reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts ===
+type Tuple<T> = readonly [T, ...T[]];
+>Tuple : Symbol(Tuple, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 11))
+>T : Symbol(T, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 11))
+>T : Symbol(T, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 11))
+
+declare function bindAll<
+>bindAll : Symbol(bindAll, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 37))
+
+  TTarget extends EventTarget,
+>TTarget : Symbol(TTarget, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 2, 25))
+>EventTarget : Symbol(EventTarget, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  TTypes extends Tuple<keyof TTarget & `on${any}`>
+>TTypes : Symbol(TTypes, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 3, 30))
+>Tuple : Symbol(Tuple, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 0))
+>TTarget : Symbol(TTarget, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 2, 25))
+
+>(
+  target: TTarget,
+>target : Symbol(target, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 5, 2))
+>TTarget : Symbol(TTarget, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 2, 25))
+
+  bindings: {
+>bindings : Symbol(bindings, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 6, 18))
+
+    [K in keyof TTypes]: {
+>K : Symbol(K, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 8, 5))
+>TTypes : Symbol(TTypes, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 3, 30))
+
+      type: TTypes[K];
+>type : Symbol(type, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 8, 26))
+>TTypes : Symbol(TTypes, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 3, 30))
+>K : Symbol(K, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 8, 5))
+
+      listener: (
+>listener : Symbol(listener, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 9, 22))
+
+        ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]
+>ev : Symbol(ev, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 10, 17))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>TTarget : Symbol(TTarget, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 2, 25))
+>TTypes : Symbol(TTypes, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 3, 30))
+>K : Symbol(K, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 8, 5))
+>args : Symbol(args, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 11, 52))
+
+      ) => void;
+    };
+  }
+): void;
+
+bindAll({} as HTMLButtonElement, [
+>bindAll : Symbol(bindAll, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 37))
+>HTMLButtonElement : Symbol(HTMLButtonElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+  {
+    type: "onclick",
+>type : Symbol(type, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 18, 3))
+
+    listener: (event) => {},
+>listener : Symbol(listener, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 19, 20))
+>event : Symbol(event, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 20, 15))
+
+  },
+  {
+    type: "onkeydown",
+>type : Symbol(type, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 22, 3))
+
+    listener: (event) => {},
+>listener : Symbol(listener, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 23, 22))
+>event : Symbol(event, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 24, 15))
+
+  },
+]);
+

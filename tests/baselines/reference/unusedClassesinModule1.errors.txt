@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedClassesinModule1.ts(2,11): error TS6196: 'Calculator' is declared but never used.
+unusedClassesinModule1.ts(2,11): error TS6196: 'Calculator' is declared but never used.
 
 
-==== tests/cases/compiler/unusedClassesinModule1.ts (1 errors) ====
+==== unusedClassesinModule1.ts (1 errors) ====
     module A {
         class Calculator {
               ~~~~~~~~~~

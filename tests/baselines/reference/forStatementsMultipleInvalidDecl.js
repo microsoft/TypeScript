@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts] ////
+
 //// [forStatementsMultipleInvalidDecl.ts]
 interface I {
     id: number;

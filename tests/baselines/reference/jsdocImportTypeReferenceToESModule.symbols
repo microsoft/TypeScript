@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/ex.d.ts ===
+//// [tests/cases/conformance/jsdoc/jsdocImportTypeReferenceToESModule.ts] ////
+
+=== ex.d.ts ===
 export var config: {}
 >config : Symbol(config, Decl(ex.d.ts, 0, 10))
 
-=== tests/cases/conformance/jsdoc/test.js ===
+=== test.js ===
 /** @param {import('./ex')} a */
 function demo(a) {
 >demo : Symbol(demo, Decl(test.js, 0, 0))

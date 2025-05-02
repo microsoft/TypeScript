@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.ts] ////
+
 //// [uniqueSymbolsDeclarationsErrors.ts]
 declare const s: unique symbol;
 interface I { readonly readonlyType: unique symbol; }
@@ -62,7 +64,8 @@ export class ClassWithPrivateNamedAccessors {
 //// [uniqueSymbolsDeclarationsErrors.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClassWithPrivateNamedAccessors = exports.ClassWithPrivateNamedMethods = exports.ClassWithPrivateNamedProperties = exports.funcInferredReturnType = exports.classExpression = exports.obj = void 0;
+exports.ClassWithPrivateNamedAccessors = exports.ClassWithPrivateNamedMethods = exports.ClassWithPrivateNamedProperties = exports.classExpression = exports.obj = void 0;
+exports.funcInferredReturnType = funcInferredReturnType;
 // not allowed when emitting declarations
 exports.obj = {
     method1(p) {
@@ -84,7 +87,6 @@ exports.classExpression = classExpression;
 function funcInferredReturnType(obj) {
     return obj;
 }
-exports.funcInferredReturnType = funcInferredReturnType;
 class ClassWithPrivateNamedProperties {
 }
 exports.ClassWithPrivateNamedProperties = ClassWithPrivateNamedProperties;

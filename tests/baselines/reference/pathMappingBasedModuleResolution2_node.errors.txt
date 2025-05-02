@@ -1,11 +1,8 @@
-tests/cases/compiler/root/tsconfig.json(8,13): error TS5061: Pattern '*1*' can have at most one '*' character.
-tests/cases/compiler/root/tsconfig.json(8,22): error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
+root/tsconfig.json(5,13): error TS5061: Pattern '*1*' can have at most one '*' character.
+root/tsconfig.json(5,22): error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
 
 
-==== tests/cases/compiler/root/tsconfig.json (2 errors) ====
-    // baseurl is defined in tsconfig.json
-    // paths has errors
-    
+==== root/tsconfig.json (2 errors) ====
     {
         "compilerOptions": {
             "baseUrl": "./src",
@@ -19,5 +16,5 @@ tests/cases/compiler/root/tsconfig.json(8,22): error TS5062: Substitution '*2*' 
         }
     }
     
-==== tests/cases/compiler/root/src/folder1/file1.ts (0 errors) ====
+==== root/src/folder1/file1.ts (0 errors) ====
     export var x = 1;

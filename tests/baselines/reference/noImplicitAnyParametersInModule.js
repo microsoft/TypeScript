@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyParametersInModule.ts] ////
+
 //// [noImplicitAnyParametersInModule.ts]
 module M {
     // No implicit-'any' errors.

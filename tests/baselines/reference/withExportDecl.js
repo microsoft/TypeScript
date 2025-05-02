@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/withExportDecl.ts] ////
+
 //// [withExportDecl.ts]
 var simpleVar;
 export var exportedSimpleVar;
@@ -61,8 +63,9 @@ export var eVar3 = 10, eVar4, eVar5;
 //// [withExportDecl.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
-    exports.eVar5 = exports.eVar4 = exports.eVar3 = exports.eVar2 = exports.eVar1 = exports.m3 = exports.exportedFunction = exports.exportedArrayVar = exports.exportedWithComplicatedValue = exports.exportedVarWithInitialValue = exports.exportedSimpleVar = void 0;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.eVar5 = exports.eVar4 = exports.eVar3 = exports.eVar2 = exports.eVar1 = exports.m3 = exports.exportedArrayVar = exports.exportedWithComplicatedValue = exports.exportedVarWithInitialValue = exports.exportedSimpleVar = void 0;
+    exports.exportedFunction = exportedFunction;
     var simpleVar;
     var anotherVar;
     var varWithSimpleType;
@@ -83,7 +86,6 @@ define(["require", "exports"], function (require, exports) {
     function exportedFunction() {
         return simpleFunction();
     }
-    exports.exportedFunction = exportedFunction;
     var m1;
     (function (m1) {
         function foo() {
@@ -97,7 +99,7 @@ define(["require", "exports"], function (require, exports) {
             return m1.foo();
         }
         m3.foo = foo;
-    })(m3 = exports.m3 || (exports.m3 = {}));
+    })(m3 || (exports.m3 = m3 = {}));
     exports.eVar2 = 10;
     var eVar22;
     exports.eVar3 = 10;
@@ -122,10 +124,10 @@ export declare function exportedFunction(): {
     y: string;
     n: number;
 };
-export declare module m2 {
+export declare namespace m2 {
     var a: number;
 }
-export declare module m3 {
+export declare namespace m3 {
     function foo(): string;
 }
 export declare var eVar1: any, eVar2: number;

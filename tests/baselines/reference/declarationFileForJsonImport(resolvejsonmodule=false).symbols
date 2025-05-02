@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForJsonImport.ts] ////
+
+=== main.ts ===
+import data from "./data.json";
+>data : Symbol(data, Decl(main.ts, 0, 6))
+
+let x: string = data;
+>x : Symbol(x, Decl(main.ts, 1, 3))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+
+=== data.d.json.ts ===
+declare var val: string;
+>val : Symbol(val, Decl(data.d.json.ts, 0, 11))
+
+export default val;
+>val : Symbol(val, Decl(data.d.json.ts, 0, 11))
+

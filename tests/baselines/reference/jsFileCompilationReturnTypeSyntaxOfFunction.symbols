@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationReturnTypeSyntaxOfFunction.ts] ////
+
+=== a.js ===
 function F(): number { }
 >F : Symbol(F, Decl(a.js, 0, 0))
 

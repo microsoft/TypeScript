@@ -1,104 +1,183 @@
-=== tests/cases/compiler/indexAt.ts ===
+//// [tests/cases/compiler/indexAt.ts] ////
+
+=== indexAt.ts ===
 [0].at(0);
 >[0].at(0) : number
+>          : ^^^^^^
 >[0].at : (index: number) => number
+>       : ^     ^^      ^^^^^^^^^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 >at : (index: number) => number
+>   : ^     ^^      ^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 "foo".at(0);
 >"foo".at(0) : string
->"foo".at : (index: number) => string
+>            : ^^^^^^
+>"foo".at : (index: number) => string | undefined
+>         : ^     ^^      ^^^^^                  
 >"foo" : "foo"
->at : (index: number) => string
+>      : ^^^^^
+>at : (index: number) => string | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Int8Array().at(0);
 >new Int8Array().at(0) : number
->new Int8Array().at : (index: number) => number
->new Int8Array() : Int8Array
+>                      : ^^^^^^
+>new Int8Array().at : (index: number) => number | undefined
+>                   : ^     ^^      ^^^^^                  
+>new Int8Array() : Int8Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
->at : (index: number) => number
+>          : ^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Uint8Array().at(0);
 >new Uint8Array().at(0) : number
->new Uint8Array().at : (index: number) => number
->new Uint8Array() : Uint8Array
+>                       : ^^^^^^
+>new Uint8Array().at : (index: number) => number | undefined
+>                    : ^     ^^      ^^^^^                  
+>new Uint8Array() : Uint8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
->at : (index: number) => number
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Uint8ClampedArray().at(0);
 >new Uint8ClampedArray().at(0) : number
->new Uint8ClampedArray().at : (index: number) => number
->new Uint8ClampedArray() : Uint8ClampedArray
+>                              : ^^^^^^
+>new Uint8ClampedArray().at : (index: number) => number | undefined
+>                           : ^     ^^      ^^^^^                  
+>new Uint8ClampedArray() : Uint8ClampedArray<ArrayBuffer>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
->at : (index: number) => number
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Int16Array().at(0);
 >new Int16Array().at(0) : number
->new Int16Array().at : (index: number) => number
->new Int16Array() : Int16Array
+>                       : ^^^^^^
+>new Int16Array().at : (index: number) => number | undefined
+>                    : ^     ^^      ^^^^^                  
+>new Int16Array() : Int16Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
->at : (index: number) => number
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Uint16Array().at(0);
 >new Uint16Array().at(0) : number
->new Uint16Array().at : (index: number) => number
->new Uint16Array() : Uint16Array
+>                        : ^^^^^^
+>new Uint16Array().at : (index: number) => number | undefined
+>                     : ^     ^^      ^^^^^                  
+>new Uint16Array() : Uint16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
->at : (index: number) => number
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Int32Array().at(0);
 >new Int32Array().at(0) : number
->new Int32Array().at : (index: number) => number
->new Int32Array() : Int32Array
+>                       : ^^^^^^
+>new Int32Array().at : (index: number) => number | undefined
+>                    : ^     ^^      ^^^^^                  
+>new Int32Array() : Int32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
->at : (index: number) => number
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Uint32Array().at(0);
 >new Uint32Array().at(0) : number
->new Uint32Array().at : (index: number) => number
->new Uint32Array() : Uint32Array
+>                        : ^^^^^^
+>new Uint32Array().at : (index: number) => number | undefined
+>                     : ^     ^^      ^^^^^                  
+>new Uint32Array() : Uint32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
->at : (index: number) => number
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Float32Array().at(0);
 >new Float32Array().at(0) : number
->new Float32Array().at : (index: number) => number
->new Float32Array() : Float32Array
+>                         : ^^^^^^
+>new Float32Array().at : (index: number) => number | undefined
+>                      : ^     ^^      ^^^^^                  
+>new Float32Array() : Float32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
->at : (index: number) => number
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new Float64Array().at(0);
 >new Float64Array().at(0) : number
->new Float64Array().at : (index: number) => number
->new Float64Array() : Float64Array
+>                         : ^^^^^^
+>new Float64Array().at : (index: number) => number | undefined
+>                      : ^     ^^      ^^^^^                  
+>new Float64Array() : Float64Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
->at : (index: number) => number
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => number | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new BigInt64Array().at(0);
 >new BigInt64Array().at(0) : bigint
->new BigInt64Array().at : (index: number) => bigint
->new BigInt64Array() : BigInt64Array
+>                          : ^^^^^^
+>new BigInt64Array().at : (index: number) => bigint | undefined
+>                       : ^     ^^      ^^^^^                  
+>new BigInt64Array() : BigInt64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
->at : (index: number) => bigint
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => bigint | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 
 new BigUint64Array().at(0);
 >new BigUint64Array().at(0) : bigint
->new BigUint64Array().at : (index: number) => bigint
->new BigUint64Array() : BigUint64Array
+>                           : ^^^^^^
+>new BigUint64Array().at : (index: number) => bigint | undefined
+>                        : ^     ^^      ^^^^^                  
+>new BigUint64Array() : BigUint64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
->at : (index: number) => bigint
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>at : (index: number) => bigint | undefined
+>   : ^     ^^      ^^^^^                  
 >0 : 0
+>  : ^
 

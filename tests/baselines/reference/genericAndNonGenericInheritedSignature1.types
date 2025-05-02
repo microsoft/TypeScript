@@ -1,13 +1,19 @@
-=== tests/cases/compiler/genericAndNonGenericInheritedSignature1.ts ===
+//// [tests/cases/compiler/genericAndNonGenericInheritedSignature1.ts] ////
+
+=== genericAndNonGenericInheritedSignature1.ts ===
 interface Foo {
     f(x: any): any;
 >f : (x: any) => any
+>  : ^ ^^   ^^^^^   
 >x : any
+>  : ^^^
 }
 interface Bar {
     f<T>(x: T): T;
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 interface Hello extends Foo, Bar {
 }

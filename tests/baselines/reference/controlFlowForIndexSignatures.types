@@ -1,82 +1,133 @@
-=== tests/cases/compiler/controlFlowForIndexSignatures.ts ===
+//// [tests/cases/compiler/controlFlowForIndexSignatures.ts] ////
+
+=== controlFlowForIndexSignatures.ts ===
 type Foo = { bar: string };
->Foo : { bar: string; }
+>Foo : Foo
+>    : ^^^
 >bar : string
+>    : ^^^^^^
 
 const boo: Foo = { bar: 'bar' };
 >boo : Foo
+>    : ^^^
 >{ bar: 'bar' } : { bar: string; }
+>               : ^^^^^^^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 
 function a(aboo1?: Foo) {
 >a : (aboo1?: Foo) => void
+>  : ^     ^^^   ^^^^^^^^^
 >aboo1 : Foo | undefined
+>      : ^^^^^^^^^^^^^^^
 
     if (!aboo1) return;
 >!aboo1 : boolean
+>       : ^^^^^^^
 >aboo1 : Foo | undefined
+>      : ^^^^^^^^^^^^^^^
 
     const aboo2: { [key: string]: typeof aboo1.bar } = boo;
 >aboo2 : { [key: string]: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >aboo1.bar : string
+>          : ^^^^^^
 >aboo1 : Foo
+>      : ^^^
 >bar : string
+>    : ^^^^^^
 >boo : Foo
+>    : ^^^
 }
 
 declare let b: Foo | undefined;
 >b : Foo | undefined
+>  : ^^^^^^^^^^^^^^^
 
 if (b) {
 >b : Foo | undefined
+>  : ^^^^^^^^^^^^^^^
 
     const bboo: { [key: string]: typeof b.bar } = boo;
 >bboo : { [key: string]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >b.bar : string
+>      : ^^^^^^
 >b : Foo
+>  : ^^^
 >bar : string
+>    : ^^^^^^
 >boo : Foo
+>    : ^^^
 }
 b = boo;
 >b = boo : Foo
+>        : ^^^
 >b : Foo | undefined
+>  : ^^^^^^^^^^^^^^^
 >boo : Foo
+>    : ^^^
 
 const bboo: { [key: string]: typeof b.bar } = boo;
 >bboo : { [key: string]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >b.bar : string
+>      : ^^^^^^
 >b : Foo
+>  : ^^^
 >bar : string
+>    : ^^^^^^
 >boo : Foo
+>    : ^^^
 
 declare let c: string | number;
 >c : string | number
+>  : ^^^^^^^^^^^^^^^
 
 if (typeof c === 'string') {
 >typeof c === 'string' : boolean
+>                      : ^^^^^^^
 >typeof c : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
     type C = { [key: string]: typeof c };
 >C : { [key: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >c : string
+>  : ^^^^^^
 
     const boo1: C = { bar: 'works' };
 >boo1 : { [key: string]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ bar: 'works' } : { bar: string; }
+>                 : ^^^^^^^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 >'works' : "works"
+>        : ^^^^^^^
 
     const boo2: C = { bar: 1 }; // should error
 >boo2 : { [key: string]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ bar: 1 } : { bar: number; }
+>           : ^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 

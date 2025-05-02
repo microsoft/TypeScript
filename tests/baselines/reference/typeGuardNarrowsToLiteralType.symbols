@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsToLiteralType.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsToLiteralType.ts] ////
+
+=== typeGuardNarrowsToLiteralType.ts ===
 declare function isFoo(value: string) : value is "foo";
 >isFoo : Symbol(isFoo, Decl(typeGuardNarrowsToLiteralType.ts, 0, 0))
 >value : Symbol(value, Decl(typeGuardNarrowsToLiteralType.ts, 0, 23))

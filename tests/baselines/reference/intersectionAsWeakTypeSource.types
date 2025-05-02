@@ -1,60 +1,95 @@
-=== tests/cases/conformance/types/intersection/intersectionAsWeakTypeSource.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionAsWeakTypeSource.ts] ////
+
+=== intersectionAsWeakTypeSource.ts ===
 interface X { x: string }
 >x : string
+>  : ^^^^^^
 
 interface Y { y: number }
 >y : number
+>  : ^^^^^^
 
 interface Z { z?: boolean }
 >z : boolean
+>  : ^^^^^^^
 
 type XY = X & Y;
->XY : X & Y
+>XY : XY
+>   : ^^
 
 const xy: XY = {x: 'x', y: 10};
 >xy : XY
+>   : ^^
 >{x: 'x', y: 10} : { x: string; y: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'x' : "x"
+>    : ^^^
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 const z1: Z = xy; // error, {xy} doesn't overlap with {z}
 >z1 : Z
+>   : ^
 >xy : XY
+>   : ^^
 
 
 interface ViewStyle {
     view: number
 >view : number
+>     : ^^^^^^
 
     styleMedia: string
 >styleMedia : string
+>           : ^^^^^^
 }
 type Brand<T> = number & { __brand: T }
 >Brand : Brand<T>
+>      : ^^^^^^^^
 >__brand : T
+>        : ^
 
 declare function create<T extends { [s: string]: ViewStyle }>(styles: T): { [P in keyof T]: Brand<T[P]> };
 >create : <T extends { [s: string]: ViewStyle; }>(styles: T) => { [P in keyof T]: Brand<T[P]>; }
+>       : ^ ^^^^^^^^^                           ^^      ^^ ^^^^^                                
 >s : string
+>  : ^^^^^^
 >styles : T
+>       : ^
 
 const wrapped = create({ first: { view: 0, styleMedia: "???" } });
 >wrapped : { first: Brand<{ view: number; styleMedia: string; }>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create({ first: { view: 0, styleMedia: "???" } }) : { first: Brand<{ view: number; styleMedia: string; }>; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T extends { [s: string]: ViewStyle; }>(styles: T) => { [P in keyof T]: Brand<T[P]>; }
+>       : ^ ^^^^^^^^^                           ^^      ^^ ^^^^^                                
 >{ first: { view: 0, styleMedia: "???" } } : { first: { view: number; styleMedia: string; }; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >first : { view: number; styleMedia: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ view: 0, styleMedia: "???" } : { view: number; styleMedia: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >view : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 >styleMedia : string
+>           : ^^^^^^
 >"???" : "???"
+>      : ^^^^^
 
 const vs: ViewStyle = wrapped.first // error, first is a branded number
 >vs : ViewStyle
+>   : ^^^^^^^^^
 >wrapped.first : Brand<{ view: number; styleMedia: string; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >wrapped : { first: Brand<{ view: number; styleMedia: string; }>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >first : Brand<{ view: number; styleMedia: string; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

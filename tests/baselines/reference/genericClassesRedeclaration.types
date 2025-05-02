@@ -1,318 +1,506 @@
-=== tests/cases/compiler/genericClassesRedeclaration.ts ===
+//// [tests/cases/compiler/genericClassesRedeclaration.ts] ////
+
+=== genericClassesRedeclaration.ts ===
 declare module TypeScript {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 
     interface IIndexable<T> {
         [s: string]: T;
 >s : string
+>  : ^^^^^^
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
->createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
+>createIntrinsicsObject : { <T>(): IIndexable<T>; <T_1>(): IIndexable<T_1>; }
+>                       : ^^^ ^^^^^             ^^^^^^^^^^^               ^^^
 
     interface IHashTable<T> {
         getAllKeys(): string[];
 >getAllKeys : { (): string[]; (): string[]; }
+>           : ^^^^^^        ^^^^^^        ^^^
 
         add(key: string, data: T): boolean;
 >add : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
+>    : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
+>            : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : { (fn: (k: string, value: T, context: any) => void, context: any): void; (fn: (k: string, value: T, context: any) => void, context: any): void; }
+>    : ^^^  ^^                                           ^^       ^^   ^^^    ^^^  ^^                                           ^^       ^^   ^^^    ^^^
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
+>      : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
+>     : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         count(): number;
 >count : { (): number; (): number; }
+>      : ^^^^^^      ^^^^^^      ^^^
 
         lookup(key: string): T;
 >lookup : { (key: string): T; (key: string): T; }
+>       : ^^^   ^^      ^^^ ^^^   ^^      ^^^ ^^^
 >key : string
+>    : ^^^^^^
     }
     class StringHashTable<T> implements IHashTable<T> {
 >StringHashTable : StringHashTable<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
         private itemCount;
 >itemCount : any
+>          : ^^^
 
         private table;
 >table : any
+>      : ^^^
 
         public getAllKeys(): string[];
 >getAllKeys : () => string[]
+>           : ^^^^^^        
 
         public add(key: string, data: T): boolean;
 >add : (key: string, data: T) => boolean
+>    : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
+>            : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
+>    : ^  ^^                                           ^^       ^^   ^^^^^    
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
+>      : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
+>     : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public count(): number;
 >count : () => number
+>      : ^^^^^^      
 
         public lookup(key: string): T;
 >lookup : (key: string) => T
+>       : ^   ^^      ^^^^^ 
 >key : string
+>    : ^^^^^^
 
         public remove(key: string): void;
 >remove : (key: string) => void
+>       : ^   ^^      ^^^^^    
 >key : string
+>    : ^^^^^^
     }
     class IdentifierNameHashTable<T> extends StringHashTable<T> {
 >IdentifierNameHashTable : IdentifierNameHashTable<T>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >StringHashTable : StringHashTable<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
         public getAllKeys(): string[];
 >getAllKeys : () => string[]
+>           : ^^^^^^        
 
         public add(key: string, data: T): boolean;
 >add : (key: string, data: T) => boolean
+>    : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
+>            : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
+>    : ^  ^^                                           ^^       ^^   ^^^^^    
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
+>      : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
 >some : (fn: (k: string, value: any, context: any) => void, context: any) => boolean
+>     : ^  ^^                                             ^^       ^^   ^^^^^       
 >fn : (k: string, value: any, context: any) => void
+>   : ^ ^^      ^^     ^^   ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : any
+>      : ^^^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public lookup(key: string): T;
 >lookup : (key: string) => T
+>       : ^   ^^      ^^^^^ 
 >key : string
+>    : ^^^^^^
     }
 }
 
 declare module TypeScript {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 
     interface IIndexable<T> {
         [s: string]: T;
 >s : string
+>  : ^^^^^^
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
->createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
+>createIntrinsicsObject : { <T_1>(): IIndexable<T_1>; <T>(): IIndexable<T>; }
+>                       : ^^^^^^^^^^^               ^^^ ^^^^^             ^^^
 
     interface IHashTable<T> {
         getAllKeys(): string[];
 >getAllKeys : { (): string[]; (): string[]; }
+>           : ^^^^^^        ^^^^^^        ^^^
 
         add(key: string, data: T): boolean;
 >add : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
+>    : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
+>            : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : { (fn: (k: string, value: T, context: any) => void, context: any): void; (fn: (k: string, value: T, context: any) => void, context: any): void; }
+>    : ^^^  ^^                                           ^^       ^^   ^^^    ^^^  ^^                                           ^^       ^^   ^^^    ^^^
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
+>      : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
+>     : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         count(): number;
 >count : { (): number; (): number; }
+>      : ^^^^^^      ^^^^^^      ^^^
 
         lookup(key: string): T;
 >lookup : { (key: string): T; (key: string): T; }
+>       : ^^^   ^^      ^^^ ^^^   ^^      ^^^ ^^^
 >key : string
+>    : ^^^^^^
     }
     class StringHashTable<T> implements IHashTable<T> {
 >StringHashTable : TypeScript.StringHashTable<T>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         private itemCount;
 >itemCount : any
+>          : ^^^
 
         private table;
 >table : any
+>      : ^^^
 
         public getAllKeys(): string[];
 >getAllKeys : () => string[]
+>           : ^^^^^^        
 
         public add(key: string, data: T): boolean;
 >add : (key: string, data: T) => boolean
+>    : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
+>            : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
+>    : ^  ^^                                           ^^       ^^   ^^^^^    
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
+>      : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
+>     : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public count(): number;
 >count : () => number
+>      : ^^^^^^      
 
         public lookup(key: string): T;
 >lookup : (key: string) => T
+>       : ^   ^^      ^^^^^ 
 >key : string
+>    : ^^^^^^
 
         public remove(key: string): void;
 >remove : (key: string) => void
+>       : ^   ^^      ^^^^^    
 >key : string
+>    : ^^^^^^
     }
     class IdentifierNameHashTable<T> extends StringHashTable<T> {
 >IdentifierNameHashTable : TypeScript.IdentifierNameHashTable<T>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >StringHashTable : TypeScript.StringHashTable<T>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         public getAllKeys(): string[];
 >getAllKeys : () => string[]
+>           : ^^^^^^        
 
         public add(key: string, data: T): boolean;
 >add : (key: string, data: T) => boolean
+>    : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
+>            : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
+>    : ^^^^^^
 >data : T
+>     : ^
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
+>    : ^  ^^                                           ^^       ^^   ^^^^^    
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
+>      : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : T
+>      : ^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
 >some : (fn: (k: string, value: any, context: any) => void, context: any) => boolean
+>     : ^  ^^                                             ^^       ^^   ^^^^^       
 >fn : (k: string, value: any, context: any) => void
+>   : ^ ^^      ^^     ^^   ^^       ^^   ^^^^^    
 >k : string
+>  : ^^^^^^
 >value : any
+>      : ^^^
 >context : any
+>        : ^^^
 >context : any
+>        : ^^^
 
         public lookup(key: string): T;
 >lookup : (key: string) => T
+>       : ^   ^^      ^^^^^ 
 >key : string
+>    : ^^^^^^
     }
 }

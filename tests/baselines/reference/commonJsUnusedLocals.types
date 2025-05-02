@@ -1,12 +1,21 @@
+//// [tests/cases/compiler/commonJsUnusedLocals.ts] ////
+
 === /a.js ===
 const x = 0;
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 
 exports.y = 1;
 >exports.y = 1 : 1
+>              : ^
 >exports.y : 1
+>          : ^
 >exports : typeof import("/a")
+>        : ^^^^^^^^^^^^^^^^^^^
 >y : 1
+>  : ^
 >1 : 1
+>  : ^
 

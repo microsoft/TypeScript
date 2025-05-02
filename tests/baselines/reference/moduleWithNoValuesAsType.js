@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleWithNoValuesAsType.ts] ////
+
 //// [moduleWithNoValuesAsType.ts]
 module A { }
 var a: A; // error

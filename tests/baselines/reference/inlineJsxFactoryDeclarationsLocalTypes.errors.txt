@@ -1,21 +1,22 @@
-tests/cases/conformance/jsx/inline/component.tsx(4,136): error TS2609: JSX spread child must be an array type.
-tests/cases/conformance/jsx/inline/component.tsx(4,140): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
-tests/cases/conformance/jsx/inline/index.tsx(21,22): error TS2786: 'MySFC' cannot be used as a JSX component.
-  Its return type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not a valid JSX element.
-    Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
-tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
-tests/cases/conformance/jsx/inline/index.tsx(21,41): error TS2786: 'MyClass' cannot be used as a JSX component.
+component.tsx(4,136): error TS2609: JSX spread child must be an array type.
+component.tsx(4,140): error TS2532: Object is possibly 'undefined'.
+index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+index.tsx(21,22): error TS2786: 'MySFC' cannot be used as a JSX component.
+  Its return type 'import("renderer2").predom.JSX.Element' is not a valid JSX element.
+    Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
+index.tsx(21,40): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+index.tsx(21,41): error TS2786: 'MyClass' cannot be used as a JSX component.
   Its instance type 'MyClass' is not a valid JSX element.
     Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
-tests/cases/conformance/jsx/inline/index.tsx(21,63): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
-tests/cases/conformance/jsx/inline/index.tsx(21,64): error TS2786: 'MyClass' cannot be used as a JSX component.
+index.tsx(21,63): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+index.tsx(21,64): error TS2786: 'MyClass' cannot be used as a JSX component.
   Its instance type 'MyClass' is not a valid JSX element.
-tests/cases/conformance/jsx/inline/index.tsx(24,42): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
-tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
+    Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
+index.tsx(24,42): error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
+index.tsx(24,48): error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
 
 
-==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
+==== renderer.d.ts (0 errors) ====
     export namespace dom {
         namespace JSX {
             interface IntrinsicElements {
@@ -35,7 +36,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
         }
     }
     export function dom(): dom.JSX.Element;
-==== tests/cases/conformance/jsx/inline/renderer2.d.ts (0 errors) ====
+==== renderer2.d.ts (0 errors) ====
     export namespace predom {
         namespace JSX {
             interface IntrinsicElements {
@@ -55,7 +56,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
         }
     }
     export function predom(): predom.JSX.Element;
-==== tests/cases/conformance/jsx/inline/component.tsx (2 errors) ====
+==== component.tsx (2 errors) ====
     /** @jsx predom */
     import { predom } from "./renderer2"
     
@@ -79,15 +80,15 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
     
     export default <h></h>
     
-==== tests/cases/conformance/jsx/inline/index.tsx (8 errors) ====
+==== index.tsx (8 errors) ====
     /** @jsx dom */
     import { dom } from "./renderer"
     import prerendered, {MySFC, MyClass, tree} from "./component";
     let elem = prerendered;
     elem = <h></h>; // Expect assignability error here
     ~~~~
-!!! error TS2741: Property '__predomBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
-!!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
+!!! error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+!!! related TS2728 renderer2.d.ts:7:13: '__predomBrand' is declared here.
     
     const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
     
@@ -106,26 +107,32 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
     const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
                          ~~~~~
 !!! error TS2786: 'MySFC' cannot be used as a JSX component.
-!!! error TS2786:   Its return type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not a valid JSX element.
-!!! error TS2786:     Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
-!!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
+!!! error TS2786:   Its return type 'import("renderer2").predom.JSX.Element' is not a valid JSX element.
+!!! error TS2786:     Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
+!!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
                                            ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+!!! error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+!!! related TS2728 renderer2.d.ts:7:13: '__predomBrand' is declared here.
                                             ~~~~~~~
 !!! error TS2786: 'MyClass' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type 'MyClass' is not a valid JSX element.
 !!! error TS2786:     Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
-!!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
+!!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+!!! error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+!!! related TS2728 renderer2.d.ts:7:13: '__predomBrand' is declared here.
                                                                    ~~~~~~~
 !!! error TS2786: 'MyClass' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type 'MyClass' is not a valid JSX element.
+!!! error TS2786:     Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
+!!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
     
     // Should fail, nondom isn't allowed as children of dom
     const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
                                              ~~~~~~
-!!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
+!!! error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
+!!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
                                                    ~~~~~~
-!!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
+!!! error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
+!!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
     

@@ -1,96 +1,168 @@
-=== tests/cases/compiler/typeArgInference.ts ===
+//// [tests/cases/compiler/typeArgInference.ts] ////
+
+=== typeArgInference.ts ===
 interface I {
     f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };
->f : <T, U>(a1: {    a: T;    b: U;}[], a2: {    a: T;    b: U;}[]) => {    c: T;    d: U;}
+>f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>  : ^ ^^ ^^  ^^                 ^^  ^^                 ^^^^^               
 >a1 : { a: T; b: U; }[]
+>   : ^^^^^ ^^^^^ ^^^^^
 >a : T
+>  : ^
 >b : U
+>  : ^
 >a2 : { a: T; b: U; }[]
+>   : ^^^^^ ^^^^^ ^^^^^
 >a : T
+>  : ^
 >b : U
+>  : ^
 >c : T
+>  : ^
 >d : U
+>  : ^
 
     g<T, U>(...arg: { a: T; b: U }[][]): { c: T; d: U };
->g : <T, U>(...arg: {    a: T;    b: U;}[][]) => {    c: T;    d: U;}
+>g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>  : ^ ^^ ^^^^^   ^^                   ^^^^^               
 >arg : { a: T; b: U; }[][]
+>    : ^^^^^ ^^^^^ ^^^^^^^
 >a : T
+>  : ^
 >b : U
+>  : ^
 >c : T
+>  : ^
 >d : U
+>  : ^
 }
 var o = { a: 3, b: "test" };
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 3, b: "test" } : { a: number; b: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >b : string
+>  : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
 var x: I;
 >x : I
+>  : ^
 
 var t1 = x.f([o], [o]);
 >t1 : { c: number; d: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.f([o], [o]) : { c: number; d: string; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>    : ^ ^^ ^^  ^^                 ^^  ^^                 ^^^^^               
 >x : I
+>  : ^
 >f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>  : ^ ^^ ^^  ^^                 ^^  ^^                 ^^^^^               
 >[o] : { a: number; b: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[o] : { a: number; b: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var t1: { c: number; d: string }; 
 >t1 : { c: number; d: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 
 var t2 = x.f<number, string>([o], [o]);
 >t2 : { c: number; d: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.f<number, string>([o], [o]) : { c: number; d: string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>    : ^ ^^ ^^  ^^                 ^^  ^^                 ^^^^^               
 >x : I
+>  : ^
 >f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>  : ^ ^^ ^^  ^^                 ^^  ^^                 ^^^^^               
 >[o] : { a: number; b: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[o] : { a: number; b: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var t2: { c: number; d: string }; 
 >t2 : { c: number; d: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 
 var t3 = x.g([o], [o]);
 >t3 : { c: number; d: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.g([o], [o]) : { c: number; d: string; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>    : ^ ^^ ^^^^^   ^^                   ^^^^^               
 >x : I
+>  : ^
 >g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>  : ^ ^^ ^^^^^   ^^                   ^^^^^               
 >[o] : { a: number; b: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[o] : { a: number; b: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var t3: { c: number; d: string };
 >t3 : { c: number; d: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 
 var t4 = x.g<number, string>([o], [o]);
 >t4 : { c: number; d: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.g<number, string>([o], [o]) : { c: number; d: string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>    : ^ ^^ ^^^^^   ^^                   ^^^^^               
 >x : I
+>  : ^
 >g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>  : ^ ^^ ^^^^^   ^^                   ^^^^^               
 >[o] : { a: number; b: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[o] : { a: number; b: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var t4: { c: number; d: string };
 >t4 : { c: number; d: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringWithGenericParameter.ts ===
+//// [tests/cases/compiler/destructuringWithGenericParameter.ts] ////
+
+=== destructuringWithGenericParameter.ts ===
 class GenericClass<T> {
 >GenericClass : Symbol(GenericClass, Decl(destructuringWithGenericParameter.ts, 0, 0))
 >T : Symbol(T, Decl(destructuringWithGenericParameter.ts, 0, 19))

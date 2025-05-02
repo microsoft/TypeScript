@@ -1,23 +1,33 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameDeclaration.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDeclaration.ts] ////
+
+=== privateNameDeclaration.ts ===
 class A {
 >A : A
+>  : ^
 
     #foo: string;
 >#foo : string
+>     : ^^^^^^
 
     #bar = 6;
 >#bar : number
+>     : ^^^^^^
 >6 : 6
+>  : ^
 
     baz: string;
 >baz : string
+>    : ^^^^^^
 
     qux = 6;
 >qux : number
+>    : ^^^^^^
 >6 : 6
+>  : ^
 
     quux(): void {
 >quux : () => void
+>     : ^^^^^^    
 
     }
 }

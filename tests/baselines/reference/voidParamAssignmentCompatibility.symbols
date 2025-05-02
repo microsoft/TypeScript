@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functions/voidParamAssignmentCompatibility.ts ===
+//// [tests/cases/conformance/expressions/functions/voidParamAssignmentCompatibility.ts] ////
+
+=== voidParamAssignmentCompatibility.ts ===
 declare function g(a: void): void;
 >g : Symbol(g, Decl(voidParamAssignmentCompatibility.ts, 0, 0))
 >a : Symbol(a, Decl(voidParamAssignmentCompatibility.ts, 0, 19))

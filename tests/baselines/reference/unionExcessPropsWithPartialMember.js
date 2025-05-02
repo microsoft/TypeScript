@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionExcessPropsWithPartialMember.ts] ////
+
 //// [unionExcessPropsWithPartialMember.ts]
 interface A {
     unused?: string;

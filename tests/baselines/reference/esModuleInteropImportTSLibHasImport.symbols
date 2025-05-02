@@ -1,17 +1,20 @@
-=== tests/cases/compiler/types.d.ts ===
+//// [tests/cases/compiler/esModuleInteropImportTSLibHasImport.ts] ////
+
+=== types.d.ts ===
 declare module "tslib" { export const __exportStar: any; export const __importDefault: any; export const __importStar: any; }
 >"tslib" : Symbol("tslib", Decl(types.d.ts, 0, 0))
 >__exportStar : Symbol(__exportStar, Decl(types.d.ts, 0, 37))
 >__importDefault : Symbol(__importDefault, Decl(types.d.ts, 0, 69))
 >__importStar : Symbol(__importStar, Decl(types.d.ts, 0, 104))
 
-=== tests/cases/compiler/utils/username.ts ===
+=== utils/username.ts ===
 export const username = () => 'username';
 >username : Symbol(username, Decl(username.ts, 0, 12))
 
-=== tests/cases/compiler/utils/index.ts ===
+=== utils/index.ts ===
+
 export * from './username';
-No type information for this code.=== tests/cases/compiler/hello.ts ===
+=== hello.ts ===
 const sayHello = (name?: string) => void (`Hello, ${name}!`);
 >sayHello : Symbol(sayHello, Decl(hello.ts, 0, 5))
 >name : Symbol(name, Decl(hello.ts, 0, 18))
@@ -20,7 +23,7 @@ const sayHello = (name?: string) => void (`Hello, ${name}!`);
 export default sayHello;
 >sayHello : Symbol(sayHello, Decl(hello.ts, 0, 5))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import sayHello from "./hello";
 >sayHello : Symbol(sayHello, Decl(index.ts, 0, 6))
 

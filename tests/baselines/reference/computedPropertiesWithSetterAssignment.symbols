@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/computedPropertiesWithSetterAssignment.ts] ////
+
+=== /a.ts ===
+const k = Symbol();
+>k : Symbol(k, Decl(a.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const enum Props {
+>Props : Symbol(Props, Decl(a.ts, 0, 19))
+
+    k = 'k',
+>k : Symbol(Props.k, Decl(a.ts, 2, 18))
+}
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(a.ts, 4, 1))
+
+    get k(): Set<string>;
+>k : Symbol(Foo.k, Decl(a.ts, 6, 15), Decl(a.ts, 7, 25))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+    set k(v: Iterable<string>);
+>k : Symbol(Foo.k, Decl(a.ts, 6, 15), Decl(a.ts, 7, 25))
+>v : Symbol(v, Decl(a.ts, 8, 10))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    get [k](): Set<string>;
+>[k] : Symbol(Foo[k], Decl(a.ts, 8, 31), Decl(a.ts, 10, 27))
+>k : Symbol(k, Decl(a.ts, 0, 5))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+    set [k](v: Iterable<string>);
+>[k] : Symbol(Foo[k], Decl(a.ts, 8, 31), Decl(a.ts, 10, 27))
+>k : Symbol(k, Decl(a.ts, 0, 5))
+>v : Symbol(v, Decl(a.ts, 11, 12))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+}
+
+declare const foo: Foo;
+>foo : Symbol(foo, Decl(a.ts, 14, 13))
+>Foo : Symbol(Foo, Decl(a.ts, 4, 1))
+
+foo.k = ['foo'];
+>foo.k : Symbol(Foo.k, Decl(a.ts, 6, 15), Decl(a.ts, 7, 25))
+>foo : Symbol(foo, Decl(a.ts, 14, 13))
+>k : Symbol(Foo.k, Decl(a.ts, 6, 15), Decl(a.ts, 7, 25))
+
+foo['k'] = ['foo'];
+>foo : Symbol(foo, Decl(a.ts, 14, 13))
+>'k' : Symbol(Foo.k, Decl(a.ts, 6, 15), Decl(a.ts, 7, 25))
+
+foo[Props.k] = ['foo'];
+>foo : Symbol(foo, Decl(a.ts, 14, 13))
+>Props.k : Symbol(Props.k, Decl(a.ts, 2, 18))
+>Props : Symbol(Props, Decl(a.ts, 0, 19))
+>k : Symbol(Props.k, Decl(a.ts, 2, 18))
+
+foo[k] = ['foo'];
+>foo : Symbol(foo, Decl(a.ts, 14, 13))
+>k : Symbol(k, Decl(a.ts, 0, 5))
+

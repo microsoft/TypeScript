@@ -1,26 +1,41 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctions.ts] ////
+
+=== index.js ===
 export function a() {}
 >a : () => void
+>  : ^^^^^^^^^^
 
 export function b() {}
 >b : typeof b
+>  : ^^^^^^^^
 
 b.cat = "cat";
 >b.cat = "cat" : "cat"
+>              : ^^^^^
 >b.cat : string
+>      : ^^^^^^
 >b : typeof b
+>  : ^^^^^^^^
 >cat : string
+>    : ^^^^^^
 >"cat" : "cat"
+>      : ^^^^^
 
 export function c() {}
 >c : typeof c
+>  : ^^^^^^^^
 
 c.Cls = class {}
 >c.Cls = class {} : typeof Cls
+>                 : ^^^^^^^^^^
 >c.Cls : typeof Cls
+>      : ^^^^^^^^^^
 >c : typeof c
+>  : ^^^^^^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >class {} : typeof Cls
+>         : ^^^^^^^^^^
 
 /**
  * @param {number} a
@@ -29,10 +44,12 @@ c.Cls = class {}
  */
 export function d(a, b) { return /** @type {*} */(null); }
 >d : (a: number, b: number) => string
+>  : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >(null) : any
->null : null
 
 /**
  * @template T,U
@@ -42,10 +59,12 @@ export function d(a, b) { return /** @type {*} */(null); }
  */
 export function e(a, b) { return /** @type {*} */(null); }
 >e : <T, U>(a: T, b: U) => T & U
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >a : T
+>  : ^
 >b : U
+>  : ^
 >(null) : any
->null : null
 
 /**
  * @template T
@@ -53,76 +72,115 @@ export function e(a, b) { return /** @type {*} */(null); }
  */
 export function f(a) {
 >f : typeof f
+>  : ^^^^^^^^
 >a : T
+>  : ^
 
     return a;
 >a : T
+>  : ^
 }
 f.self = f;
 >f.self = f : typeof f
+>           : ^^^^^^^^
 >f.self : typeof f
+>       : ^^^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 >self : typeof f
+>     : ^^^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
  */
 function g(a, b) {
->g : (a: {    x: string;}, b: { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }) => void
+>g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
+>  : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 >a : { x: string; }
->b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
+>  : ^^^^^      ^^^
+>b : { y: typeof import("index").b; }
+>  : ^^^^^              ^^^^^^^  ^^^^
 
     return a.x && b.y();
 >a.x && b.y() : void
+>             : ^^^^
 >a.x : string
+>    : ^^^^^^
 >a : { x: string; }
+>  : ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >b.y() : void
->b.y : typeof import("tests/cases/conformance/jsdoc/declarations/index").b
->b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
->y : typeof import("tests/cases/conformance/jsdoc/declarations/index").b
+>      : ^^^^
+>b.y : typeof import("index").b
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { y: typeof import("index").b; }
+>  : ^^^^^              ^^^^^^^  ^^^^
+>y : typeof import("index").b
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export { g };
->g : (a: { x: string; }, b: { y: typeof b; }) => void
+>g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
+>  : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
  */
 function hh(a, b) {
->hh : (a: {    x: string;}, b: { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }) => void
+>hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
+>   : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 >a : { x: string; }
->b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
+>  : ^^^^^      ^^^
+>b : { y: typeof import("index").b; }
+>  : ^^^^^              ^^^^^^^  ^^^^
 
     return a.x && b.y();
 >a.x && b.y() : void
+>             : ^^^^
 >a.x : string
+>    : ^^^^^^
 >a : { x: string; }
+>  : ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >b.y() : void
->b.y : typeof import("tests/cases/conformance/jsdoc/declarations/index").b
->b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
->y : typeof import("tests/cases/conformance/jsdoc/declarations/index").b
+>      : ^^^^
+>b.y : typeof import("index").b
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { y: typeof import("index").b; }
+>  : ^^^^^              ^^^^^^^  ^^^^
+>y : typeof import("index").b
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export { hh as h };
->hh : (a: { x: string; }, b: { y: typeof b; }) => void
->h : (a: { x: string; }, b: { y: typeof b; }) => void
+>hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
+>   : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
+>h : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
+>  : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 
 export function i() {}
 >i : () => void
+>  : ^^^^^^^^^^
 
 export { i as ii };
 >i : () => void
+>  : ^^^^^^^^^^
 >ii : () => void
+>   : ^^^^^^^^^^
 
 export { j as jj };
 >j : () => void
+>  : ^^^^^^^^^^
 >jj : () => void
+>   : ^^^^^^^^^^
 
 export function j() {}
 >j : () => void
+>  : ^^^^^^^^^^
 

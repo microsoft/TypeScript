@@ -1,30 +1,52 @@
-=== tests/cases/compiler/capturedVarInLoop.ts ===
+//// [tests/cases/compiler/capturedVarInLoop.ts] ////
+
+=== capturedVarInLoop.ts ===
 for (var i = 0; i < 10; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 10 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     var str = 'x', len = str.length;
 >str : string
+>    : ^^^^^^
 >'x' : "x"
+>    : ^^^
 >len : number
+>    : ^^^^^^
 >str.length : number
+>           : ^^^^^^
 >str : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     let lambda1 = (y) => { };
 >lambda1 : (y: any) => void
+>        : ^ ^^^^^^^^^^^^^^
 >(y) => { } : (y: any) => void
+>           : ^ ^^^^^^^^^^^^^^
 >y : any
 
     let lambda2 = () => lambda1(len);
 >lambda2 : () => void
+>        : ^^^^^^^^^^
 >() => lambda1(len) : () => void
+>                   : ^^^^^^^^^^
 >lambda1(len) : void
+>             : ^^^^
 >lambda1 : (y: any) => void
+>        : ^ ^^^^^^^^^^^^^^
 >len : number
+>    : ^^^^^^
 }

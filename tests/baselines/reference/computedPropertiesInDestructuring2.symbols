@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computedPropertiesInDestructuring2.ts ===
+//// [tests/cases/compiler/computedPropertiesInDestructuring2.ts] ////
+
+=== computedPropertiesInDestructuring2.ts ===
 let foo2 = () => "bar";
 >foo2 : Symbol(foo2, Decl(computedPropertiesInDestructuring2.ts, 0, 3))
 

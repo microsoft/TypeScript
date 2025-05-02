@@ -1,31 +1,50 @@
-=== tests/cases/compiler/copyrightWithNewLine1.ts ===
+//// [tests/cases/compiler/copyrightWithNewLine1.ts] ////
+
+=== copyrightWithNewLine1.ts ===
 /*****************************
 * (c) Copyright - Important
 ****************************/
 
 import model = require("./greeter")
 >model : any
+>      : ^^^
 
 var el = document.getElementById('content');
 >el : HTMLElement
+>   : ^^^^^^^^^^^
 >document.getElementById('content') : HTMLElement
->document.getElementById : (elementId: string) => HTMLElement
+>                                   : ^^^^^^^^^^^
+>document.getElementById : (elementId: string) => HTMLElement | null
+>                        : ^         ^^      ^^^^^                  
 >document : Document
->getElementById : (elementId: string) => HTMLElement
+>         : ^^^^^^^^
+>getElementById : (elementId: string) => HTMLElement | null
+>               : ^         ^^      ^^^^^                  
 >'content' : "content"
+>          : ^^^^^^^^^
 
 var greeter = new model.Greeter(el);
 >greeter : any
+>        : ^^^
 >new model.Greeter(el) : any
+>                      : ^^^
 >model.Greeter : any
+>              : ^^^
 >model : any
+>      : ^^^
 >Greeter : any
+>        : ^^^
 >el : HTMLElement
+>   : ^^^^^^^^^^^
 
 /** things */
 greeter.start();
 >greeter.start() : any
+>                : ^^^
 >greeter.start : any
+>              : ^^^
 >greeter : any
+>        : ^^^
 >start : any
+>      : ^^^
 

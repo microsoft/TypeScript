@@ -1,44 +1,68 @@
-=== tests/cases/compiler/contextuallyTypedBooleanLiterals.ts ===
+//// [tests/cases/compiler/contextuallyTypedBooleanLiterals.ts] ////
+
+=== contextuallyTypedBooleanLiterals.ts ===
 // Repro from #48363
 
 type Box<T> = {
 >Box : Box<T>
+>    : ^^^^^^
 
     get: () => T,
 >get : () => T
+>    : ^^^^^^ 
 
     set: (value: T) => void
 >set : (value: T) => void
+>    : ^     ^^ ^^^^^    
 >value : T
+>      : ^
 }
 
 declare function box<T>(value: T): Box<T>;
 >box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
 >value : T
+>      : ^
 
 const bn1 = box(0);  // Box<number>
 >bn1 : Box<number>
+>    : ^^^^^^^^^^^
 >box(0) : Box<number>
+>       : ^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
 >0 : 0
+>  : ^
 
 const bn2: Box<number> = box(0);  // Ok
 >bn2 : Box<number>
+>    : ^^^^^^^^^^^
 >box(0) : Box<number>
+>       : ^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
 >0 : 0
+>  : ^
 
 const bb1 = box(false);  // Box<boolean>
 >bb1 : Box<boolean>
+>    : ^^^^^^^^^^^^
 >box(false) : Box<boolean>
+>           : ^^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
 >false : false
+>      : ^^^^^
 
 const bb2: Box<boolean> = box(false);  // Error, box<false> not assignable to Box<boolean>
 >bb2 : Box<boolean>
+>    : ^^^^^^^^^^^^
 >box(false) : Box<boolean>
+>           : ^^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
 >false : false
+>      : ^^^^^
 
 // Repro from #48150
 
@@ -47,15 +71,22 @@ interface Observable<T>
   (): T;
   (value: T): any;
 >value : T
+>      : ^
 }
 
 declare function observable<T>(value: T): Observable<T>;
 >observable : <T>(value: T) => Observable<T>
+>           : ^ ^^     ^^ ^^^^^             
 >value : T
+>      : ^
 
 const x: Observable<boolean> = observable(false);
 >x : Observable<boolean>
+>  : ^^^^^^^^^^^^^^^^^^^
 >observable(false) : Observable<boolean>
+>                  : ^^^^^^^^^^^^^^^^^^^
 >observable : <T>(value: T) => Observable<T>
+>           : ^ ^^     ^^ ^^^^^             
 >false : false
+>      : ^^^^^
 

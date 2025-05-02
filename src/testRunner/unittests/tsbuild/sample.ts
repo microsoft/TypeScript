@@ -1,573 +1,617 @@
-namespace ts {
-    describe("unittests:: tsbuild:: on 'sample1' project", () => {
-        let projFs: vfs.FileSystem;
-        let projFsWithBuild: vfs.FileSystem;
-        before(() => {
-            projFs = loadProjectFromDisk("tests/projects/sample1");
+import { Baseline } from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import {
+    fakeTsVersion,
+    patchHostForBuildInfoReadWrite,
+} from "../helpers/baseline.js";
+import { getTypeScriptLibTestLocation } from "../helpers/contents.js";
+import {
+    getSysForSampleProjectReferences,
+    getSysForSampleProjectReferencesBuilt,
+} from "../helpers/sampleProjectReferences.js";
+import {
+    createSolutionBuilderHostForBaseline,
+    verifySolutionBuilderWithDifferentTsVersion,
+} from "../helpers/solutionBuilder.js";
+import {
+    noChangeOnlyRuns,
+    noChangeRun,
+    TestTscEdit,
+    verifyTsc,
+} from "../helpers/tsc.js";
+import {
+    changeToHostTrackingWrittenFiles,
+    libFile,
+    SerializeOutputOrder,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
+
+describe("unittests:: tsbuild:: on 'sample1' project", () => {
+    describe("sanity check of clean build of 'sample1' project", () => {
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "builds correctly when outDir is specified",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests"],
+            modifySystem: sys =>
+                sys.writeFile(
+                    "logic/tsconfig.json",
+                    jsonToReadableText({
+                        compilerOptions: { composite: true, declaration: true, sourceMap: true, outDir: "outDir" },
+                        references: [{ path: "../core" }],
+                    }),
+                ),
         });
 
-        after(() => {
-            projFs = undefined!; // Release the contents
-            projFsWithBuild = undefined!;
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "builds correctly when declarationDir is specified",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests"],
+            modifySystem: sys =>
+                sys.writeFile(
+                    "logic/tsconfig.json",
+                    jsonToReadableText({
+                        compilerOptions: { composite: true, declaration: true, sourceMap: true, declarationDir: "out/decls" },
+                        references: [{ path: "../core" }],
+                    }),
+                ),
         });
 
-        function getTsBuildProjectFile(project: string, file: string): tscWatch.File {
-            return {
-                path: TestFSWithWatch.getTsBuildProjectFilePath(project, file),
-                content: projFs.readFileSync(`/src/${project}/${file}`, "utf8")!
-            };
-        }
-
-        function getSampleFsAfterBuild() {
-            if (projFsWithBuild) return projFsWithBuild;
-            const fs = projFs.shadow();
-            const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
-            const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
-            const builder = createSolutionBuilder(host, ["/src/tests"], {});
-            builder.build();
-            fs.makeReadonly();
-            return projFsWithBuild = fs;
-        }
-
-        describe("sanity check of clean build of 'sample1' project", () => {
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "builds correctly when outDir is specified",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests"],
-                modifyFs: fs => fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
-                    compilerOptions: { composite: true, declaration: true, sourceMap: true, outDir: "outDir" },
-                    references: [{ path: "../core" }]
-                })),
-            });
-
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "builds correctly when declarationDir is specified",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests"],
-                modifyFs: fs => fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
-                    compilerOptions: { composite: true, declaration: true, sourceMap: true, declarationDir: "out/decls" },
-                    references: [{ path: "../core" }]
-                })),
-            });
-
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "builds correctly when project is not composite or doesnt have any references",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/core", "--verbose"],
-                modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"composite": true,`, ""),
-            });
-        });
-
-        describe("dry builds", () => {
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "does not write any files in a dry build",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--dry"],
-            });
-        });
-
-        describe("clean builds", () => {
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "removes all files it built",
-                fs: getSampleFsAfterBuild,
-                commandLineArgs: ["--b", "/src/tests", "--clean"],
-                edits: noChangeOnlyRuns
-            });
-
-            verifyTscCompileLike(testTscCompileLike, {
-                scenario: "sample1",
-                subScenario: "cleans till project specified",
-                fs: getSampleFsAfterBuild,
-                commandLineArgs: ["--b", "/src/logic", "--clean"],
-                compile: sys => {
-                    const buildHost = createSolutionBuilderHostForBaseline(sys);
-                    const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
-                    sys.exit(builder.clean("/src/logic"));
-                }
-            });
-
-            verifyTscCompileLike(testTscCompileLike, {
-                scenario: "sample1",
-                subScenario: "cleaning project in not build order doesnt throw error",
-                fs: getSampleFsAfterBuild,
-                commandLineArgs: ["--b", "/src/logic2", "--clean"],
-                compile: sys => {
-                    const buildHost = createSolutionBuilderHostForBaseline(sys);
-                    const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
-                    sys.exit(builder.clean("/src/logic2"));
-                }
-            });
-        });
-
-        describe("force builds", () => {
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "always builds under with force option",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--force"],
-                edits: noChangeOnlyRuns
-            });
-        });
-
-        describe("can detect when and what to rebuild", () => {
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "can detect when and what to rebuild",
-                fs: getSampleFsAfterBuild,
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                edits: [
-                    // Update a file in the leaf node (tests), only it should rebuild the last one
-                    {
-                        subScenario: "Only builds the leaf node project",
-                        modifyFs: fs => fs.writeFileSync("/src/tests/index.ts", "const m = 10;"),
-                    },
-                    // Update a file in the parent (without affecting types), should get fast downstream builds
-                    {
-                        subScenario: "Detects type-only changes in upstream projects",
-                        modifyFs: fs => replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
-                    },
-                    {
-                        subScenario: "rebuilds when tsconfig changes",
-                        modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`),
-                    },
-                ]
-            });
-
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "when input file text does not change but its modified time changes",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                edits: [
-                    {
-                        subScenario: "upstream project changes without changing file text",
-                        modifyFs: fs => {
-                            const time = new Date(fs.time());
-                            fs.utimesSync("/src/core/index.ts", time, time);
-                        },
-                    },
-                ]
-            });
-
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "indicates that it would skip builds during a dry build",
-                fs: getSampleFsAfterBuild,
-                commandLineArgs: ["--b", "/src/tests", "--dry"],
-            });
-
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "rebuilds from start if force option is set",
-                fs: getSampleFsAfterBuild,
-                commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
-            });
-
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "tsbuildinfo has error",
-                fs: () => loadProjectFromFiles({
-                    "/src/project/main.ts": "export const x = 10;",
-                    "/src/project/tsconfig.json": "{}",
-                    "/src/project/tsconfig.tsbuildinfo": "Some random string",
-                }),
-                commandLineArgs: ["--b", "src/project", "-i", "-v"],
-                edits: [{
-                    subScenario: "tsbuildinfo written has error",
-                    modifyFs: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
-                }]
-            });
-
-            verifyTscCompileLike(testTscCompileLike, {
-                scenario: "sample1",
-                subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
-                fs: getSampleFsAfterBuild,
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                compile: sys => {
-                    // Buildinfo will have version which does not match with current ts version
-                    const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
-                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
-                    sys.exit(builder.build());
-                }
-            });
-
-            verifyTscCompileLike(testTscCompileLike, {
-                scenario: "sample1",
-                subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
-                fs: () => {
-                    const fs = projFs.shadow();
-                    const host = fakes.SolutionBuilderHost.create(fs, /*options*/ undefined, /*setParentNodes*/ undefined, createAbstractBuilder);
-                    const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
-                    builder.build();
-                    fs.makeReadonly();
-                    return fs;
-                },
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                compile: sys => {
-                    // Buildinfo will have version which does not match with current ts version
-                    const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
-                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
-                    sys.exit(builder.build());
-                },
-            });
-
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "rebuilds when extended config file changes",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                modifyFs: fs => {
-                    fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: { target: "es3" } }));
-                    replaceText(fs, "/src/tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
-                },
-                edits: [{
-                    subScenario: "incremental-declaration-changes",
-                    modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: {} }))
-                }]
-            });
-
-            verifyTscCompileLike(testTscCompileLike, {
-                scenario: "sample1",
-                subScenario: "builds till project specified",
-                fs: () => projFs,
-                commandLineArgs: ["--build", "/src/logic/tsconfig.json"],
-                compile: sys => {
-                    const buildHost = createSolutionBuilderHostForBaseline(sys);
-                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
-                    sys.exit(builder.build("/src/logic/tsconfig.json"));
-                }
-            });
-
-            verifyTscCompileLike(testTscCompileLike, {
-                scenario: "sample1",
-                subScenario: "building project in not build order doesnt throw error",
-                fs: () => projFs,
-                commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
-                compile: sys => {
-                    const buildHost = createSolutionBuilderHostForBaseline(sys);
-                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
-                    sys.exit(builder.build("/src/logic2/tsconfig.json"));
-                }
-            });
-
-            it("building using getNextInvalidatedProject", () => {
-                const coreConfig = getTsBuildProjectFile("core", "tsconfig.json");
-                const coreIndex = getTsBuildProjectFile("core", "index.ts");
-                const coreDecl = getTsBuildProjectFile("core", "some_decl.d.ts");
-                const coreAnotherModule = getTsBuildProjectFile("core", "anotherModule.ts");
-                const logicConfig = getTsBuildProjectFile("logic", "tsconfig.json");
-                const logicIndex = getTsBuildProjectFile("logic", "index.ts");
-                const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
-                const testsIndex = getTsBuildProjectFile("tests", "index.ts");
-                const baseline: string[] = [];
-                let oldSnap: ReturnType<TestFSWithWatch.TestServerHost["snap"]> | undefined;
-                const system = TestFSWithWatch.changeToHostTrackingWrittenFiles(
-                    fakes.patchHostForBuildInfoReadWrite(
-                        tscWatch.createWatchedSystem([
-                            coreConfig, coreIndex, coreDecl, coreAnotherModule,
-                            logicConfig, logicIndex,
-                            testsConfig, testsIndex,
-                            tscWatch.libFile
-                        ])
-                    )
-                );
-
-                const host = createSolutionBuilderHostForBaseline(system);
-                const builder = createSolutionBuilder(host, [testsConfig.path], {});
-                baseline.push("Input::");
-                baselineState();
-                verifyBuildNextResult(); // core
-                verifyBuildNextResult(); // logic
-                verifyBuildNextResult();// tests
-                verifyBuildNextResult(); // All Done
-                Harness.Baseline.runBaseline(`tsbuild/sample1/building-using-getNextInvalidatedProject.js`, baseline.join("\r\n"));
-
-                function verifyBuildNextResult() {
-                    const project = builder.getNextInvalidatedProject();
-                    const result = project && project.done();
-                    baseline.push(`Project Result:: ${JSON.stringify({ project: project?.project, result })}`);
-                    baselineState();
-                }
-
-                function baselineState() {
-                    system.serializeOutput(baseline);
-                    system.diff(baseline, oldSnap);
-                    system.writtenFiles.clear();
-                    oldSnap = system.snap();
-                }
-            });
-
-            verifyTscCompileLike(testTscCompileLike, {
-                scenario: "sample1",
-                subScenario: "building using buildReferencedProject",
-                fs: () => projFs,
-                commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
-                compile: sys => {
-                    const buildHost = createSolutionBuilderHostForBaseline(sys);
-                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
-                    sys.exit(builder.buildReferences("/src/tests"));
-                }
-            });
-        });
-
-        describe("downstream-blocked compilations", () => {
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "does not build downstream projects if upstream projects have errors",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                modifyFs: fs => replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),
-                edits: noChangeOnlyRuns
-            });
-        });
-
-        describe("project invalidation", () => {
-            it("invalidates projects correctly", () => {
-                const coreConfig = getTsBuildProjectFile("core", "tsconfig.json");
-                const coreIndex = getTsBuildProjectFile("core", "index.ts");
-                const coreDecl = getTsBuildProjectFile("core", "some_decl.d.ts");
-                const coreAnotherModule = getTsBuildProjectFile("core", "anotherModule.ts");
-                const logicConfig = getTsBuildProjectFile("logic", "tsconfig.json");
-                const logicIndex = getTsBuildProjectFile("logic", "index.ts");
-                const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
-                const testsIndex = getTsBuildProjectFile("tests", "index.ts");
-                const baseline: string[] = [];
-                let oldSnap: ReturnType<TestFSWithWatch.TestServerHost["snap"]> | undefined;
-                const system = TestFSWithWatch.changeToHostTrackingWrittenFiles(
-                    fakes.patchHostForBuildInfoReadWrite(
-                        tscWatch.createWatchedSystem([
-                            coreConfig, coreIndex, coreDecl, coreAnotherModule,
-                            logicConfig, logicIndex,
-                            testsConfig, testsIndex,
-                            tscWatch.libFile
-                        ])
-                    )
-                );
-
-                const host = createSolutionBuilderHostForBaseline(system);
-                const builder = createSolutionBuilder(host, [testsConfig.path], { dry: false, force: false, verbose: false });
-                builder.build();
-                baselineState("Build of project");
-
-                // Update a timestamp in the middle project
-                system.appendFile(logicIndex.path, "function foo() {}");
-
-                // Because we haven't reset the build context, the builder should assume there's nothing to do right now
-                const status = builder.getUpToDateStatusOfProject(logicConfig.path);
-                baseline.push(`Project should still be upto date: ${UpToDateStatusType[status.type]}`);
-                verifyInvalidation("non Dts change to logic");
-
-                // Rebuild this project
-                system.appendFile(logicIndex.path, `export class cNew {}`);
-                verifyInvalidation("Dts change to Logic");
-                Harness.Baseline.runBaseline(`tsbuild/sample1/invalidates-projects-correctly.js`, baseline.join("\r\n"));
-
-                function verifyInvalidation(heading: string) {
-                    // Rebuild this project
-                    builder.invalidateProject(logicConfig.path as ResolvedConfigFilePath);
-                    builder.getNextInvalidatedProject()?.done();
-                    baselineState(`${heading}:: After rebuilding logicConfig`);
-
-                    // Build downstream projects should update 'tests', but not 'core'
-                    builder.getNextInvalidatedProject()?.done();
-                    baselineState(`${heading}:: After building next project`);
-                }
-
-                function baselineState(heading: string) {
-                    baseline.push(heading);
-                    system.serializeOutput(baseline);
-                    system.diff(baseline, oldSnap);
-                    system.writtenFiles.clear();
-                    oldSnap = system.snap();
-                }
-            });
-        });
-
-        const coreChanges: TestTscEdit[] = [
-            {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => appendText(fs, "/src/core/index.ts", `
-export class someClass { }`),
-            },
-            {
-                subScenario: "incremental-declaration-doesnt-change",
-                modifyFs: fs => appendText(fs, "/src/core/index.ts", `
-class someClass2 { }`),
-            },
-            noChangeRun,
-        ];
-
-        describe("lists files", () => {
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "listFiles",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--listFiles"],
-                edits: coreChanges
-            });
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "listEmittedFiles",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--listEmittedFiles"],
-                edits: coreChanges
-            });
-            verifyTscWithEdits({
-                scenario: "sample1",
-                subScenario: "explainFiles",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--explainFiles", "--v"],
-                edits: coreChanges
-            });
-        });
-
-        describe("emit output", () => {
-            verifyTscWithEdits({
-                subScenario: "sample",
-                fs: () => projFs,
-                scenario: "sample1",
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                baselineSourceMap: true,
-                baselineReadFileCalls: true,
-                edits: [
-                    ...coreChanges,
-                    {
-                        subScenario: "when logic config changes declaration dir",
-                        modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
-        "declarationDir": "decls",`),
-                    },
-                    noChangeRun,
-                ],
-            });
-
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "when logic specifies tsBuildInfoFile",
-                fs: () => projFs,
-                modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"composite": true,`, `"composite": true,
-        "tsBuildInfoFile": "ownFile.tsbuildinfo",`),
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                baselineSourceMap: true,
-                baselineReadFileCalls: true
-            });
-
-            verifyTscWithEdits({
-                subScenario: "when declaration option changes",
-                fs: () => projFs,
-                scenario: "sample1",
-                commandLineArgs: ["--b", "/src/core", "--verbose"],
-                modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
-    "compilerOptions": {
-        "incremental": true,
-        "skipDefaultLibCheck": true
-    }
-}`),
-                edits: [{
-                    subScenario: "incremental-declaration-changes",
-                    modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
-                }],
-            });
-
-            verifyTscWithEdits({
-                subScenario: "when target option changes",
-                fs: () => projFs,
-                scenario: "sample1",
-                commandLineArgs: ["--b", "/src/core", "--verbose"],
-                modifyFs: fs => {
-                    fs.writeFileSync("/lib/lib.esnext.full.d.ts", `/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />`);
-                    fs.writeFileSync("/lib/lib.esnext.d.ts", libContent);
-                    fs.writeFileSync("/lib/lib.d.ts", `/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />`);
-                    fs.writeFileSync("/src/core/tsconfig.json", `{
-    "compilerOptions": {
-        "incremental": true,
-"listFiles": true,
-"listEmittedFiles": true,
-        "target": "esnext",
-    }
-}`);
-                },
-                edits: [{
-                    subScenario: "incremental-declaration-changes",
-                    modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", "esnext", "es5"),
-                }],
-            });
-
-            verifyTscWithEdits({
-                subScenario: "when module option changes",
-                fs: () => projFs,
-                scenario: "sample1",
-                commandLineArgs: ["--b", "/src/core", "--verbose"],
-                modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
-    "compilerOptions": {
-        "incremental": true,
-        "module": "commonjs"
-    }
-}`),
-                edits: [{
-                    subScenario: "incremental-declaration-changes",
-                    modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"module": "commonjs"`, `"module": "amd"`),
-                }],
-            });
-
-            verifyTscWithEdits({
-                subScenario: "when esModuleInterop option changes",
-                fs: () => projFs,
-                scenario: "sample1",
-                commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.json", `{
-    "references": [
-        { "path": "../core" },
-        { "path": "../logic" }
-    ],
-    "files": ["index.ts"],
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true,
-        "esModuleInterop": false
-    }
-}`),
-                edits: [{
-                    subScenario: "incremental-declaration-changes",
-                    modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
-                }],
-            });
-
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "reports error if input file is missing",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--v"],
-                modifyFs: fs => {
-                    fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
-                        compilerOptions: { composite: true },
-                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"]
-                    }));
-                    fs.unlinkSync("/src/core/anotherModule.ts");
-                }
-            });
-
-            verifyTsc({
-                scenario: "sample1",
-                subScenario: "reports error if input file is missing with force",
-                fs: () => projFs,
-                commandLineArgs: ["--b", "/src/tests", "--v", "--f"],
-                modifyFs: fs => {
-                    fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
-                        compilerOptions: { composite: true },
-                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"]
-                    }));
-                    fs.unlinkSync("/src/core/anotherModule.ts");
-                }
-            });
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "builds correctly when project is not composite or doesnt have any references",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "core", "--verbose"],
+            modifySystem: sys => sys.replaceFileText("core/tsconfig.json", `"composite": true,`, ""),
         });
     });
-}
+
+    describe("dry builds", () => {
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "does not write any files in a dry build",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--dry"],
+        });
+    });
+
+    describe("clean builds", () => {
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "removes all files it built",
+            sys: getSysForSampleProjectReferencesBuilt,
+            commandLineArgs: ["--b", "tests", "--clean"],
+            edits: noChangeOnlyRuns,
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "cleans till project specified",
+            sys: getSysForSampleProjectReferencesBuilt,
+            commandLineArgs: ["--b", "logic", "--clean"],
+            compile: sys => {
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
+                const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
+                sys.exit(builder.clean("logic"));
+                return buildHost.getPrograms;
+            },
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "cleaning project in not build order doesnt throw error",
+            sys: getSysForSampleProjectReferencesBuilt,
+            commandLineArgs: ["--b", "logic2", "--clean"],
+            compile: sys => {
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
+                const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
+                sys.exit(builder.clean("logic2"));
+                return buildHost.getPrograms;
+            },
+        });
+    });
+
+    describe("force builds", () => {
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "always builds under with force option",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--force"],
+            edits: noChangeOnlyRuns,
+        });
+    });
+
+    describe("can detect when and what to rebuild", () => {
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "can detect when and what to rebuild",
+            sys: getSysForSampleProjectReferencesBuilt,
+            commandLineArgs: ["--b", "tests", "--verbose"],
+            edits: [
+                // Update a file in the leaf node (tests), only it should rebuild the last one
+                {
+                    caption: "Only builds the leaf node project",
+                    edit: sys => sys.writeFile("tests/index.ts", "const m = 10;"),
+                },
+                // Update a file in the parent (without affecting types), should get fast downstream builds
+                {
+                    caption: "Detects type-only changes in upstream projects",
+                    edit: sys => sys.replaceFileText("core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
+                },
+                {
+                    caption: "rebuilds when tsconfig changes",
+                    edit: sys => sys.replaceFileText("tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`),
+                },
+            ],
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "when input file text does not change but its modified time changes",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--verbose"],
+            edits: [{
+                caption: "upstream project changes without changing file text",
+                edit: sys => sys.setModifiedTime("core/index.ts", sys.now()),
+            }],
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "when declarationMap changes",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--verbose"],
+            edits: [
+                {
+                    caption: "Disable declarationMap",
+                    edit: sys => sys.replaceFileText("core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
+                },
+                {
+                    caption: "Enable declarationMap",
+                    edit: sys => sys.replaceFileText("core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
+                },
+            ],
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "indicates that it would skip builds during a dry build",
+            sys: getSysForSampleProjectReferencesBuilt,
+            commandLineArgs: ["--b", "tests", "--dry"],
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "rebuilds from start if force option is set",
+            sys: getSysForSampleProjectReferencesBuilt,
+            commandLineArgs: ["--b", "tests", "--verbose", "--force"],
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "tsbuildinfo has error",
+            sys: () =>
+                TestServerHost.createWatchedSystem({
+                    "/home/src/workspaces/project/main.ts": "export const x = 10;",
+                    "/home/src/workspaces/project/tsconfig.json": "{}",
+                    "/home/src/workspaces/project/tsconfig.tsbuildinfo": "Some random string",
+                }),
+            commandLineArgs: ["--b", "-i", "-v"],
+            edits: [{
+                caption: "tsbuildinfo written has error",
+                edit: sys => {
+                    sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string");
+                    sys.replaceFileText("/home/src/workspaces/project/tsconfig.tsbuildinfo", `"version":"${ts.version}"`, `"version":"${fakeTsVersion}"`); // build info won't parse, need to manually sterilize for baseline
+                },
+            }],
+        });
+
+        verifySolutionBuilderWithDifferentTsVersion({
+            scenario: "sample1",
+            subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
+            sys: getSysForSampleProjectReferencesBuilt,
+            commandLineArgs: ["--b", "tests", "--verbose"],
+        }, ["tests"]);
+
+        verifySolutionBuilderWithDifferentTsVersion({
+            scenario: "sample1",
+            subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
+            sys: () => {
+                const sys = getSysForSampleProjectReferences();
+                patchHostForBuildInfoReadWrite(sys);
+                const host = ts.createSolutionBuilderHost(
+                    sys,
+                    ts.createAbstractBuilder,
+                    ts.createDiagnosticReporter(sys, /*pretty*/ true),
+                    ts.createBuilderStatusReporter(sys, /*pretty*/ true),
+                );
+                const builder = ts.createSolutionBuilder(host, ["tests"], { verbose: true });
+                builder.build();
+                sys.clearOutput();
+                return sys;
+            },
+            commandLineArgs: ["--b", "tests", "--verbose"],
+        }, ["tests"]);
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "rebuilds when extended config file changes",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--verbose"],
+            modifySystem: sys => {
+                sys.writeFile("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es5" } }));
+                sys.replaceFileText("tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
+            },
+            edits: [{
+                caption: "incremental-declaration-changes",
+                edit: sys => sys.writeFile("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: {} })),
+            }],
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "builds till project specified",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--build", "logic/tsconfig.json"],
+            compile: sys => {
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
+                const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
+                sys.exit(builder.build("logic/tsconfig.json"));
+                return buildHost.getPrograms;
+            },
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "building project in not build order doesnt throw error",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--build", "logic2/tsconfig.json"],
+            compile: sys => {
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
+                const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
+                sys.exit(builder.build("logic2/tsconfig.json"));
+                return buildHost.getPrograms;
+            },
+        });
+
+        it("building using getNextInvalidatedProject", () => {
+            const baseline: string[] = [];
+            const system = changeToHostTrackingWrittenFiles(
+                patchHostForBuildInfoReadWrite(
+                    getSysForSampleProjectReferences(),
+                ),
+            );
+
+            const host = createSolutionBuilderHostForBaseline(system);
+            const builder = ts.createSolutionBuilder(host, ["tests"], {});
+            baseline.push("Input::");
+            system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
+            verifyBuildNextResult(); // core
+            verifyBuildNextResult(); // logic
+            verifyBuildNextResult(); // tests
+            verifyBuildNextResult(); // All Done
+            Baseline.runBaseline(`tsbuild/sample1/building-using-getNextInvalidatedProject.js`, baseline.join("\r\n"));
+
+            function verifyBuildNextResult() {
+                const project = builder.getNextInvalidatedProject();
+                const result = project && project.done();
+                baseline.push(`Project Result:: ${jsonToReadableText({ project: project?.project, result })}`);
+                system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
+            }
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "building using buildReferencedProject",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--build", "logic2/tsconfig.json"],
+            compile: sys => {
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
+                const builder = ts.createSolutionBuilder(buildHost, ["tests"], { verbose: true });
+                sys.exit(builder.buildReferences("tests"));
+                return buildHost.getPrograms;
+            },
+        });
+    });
+
+    describe("downstream-blocked compilations", () => {
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "builds downstream projects even if upstream projects have errors",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--verbose"],
+            modifySystem: sys => sys.replaceFileText("logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),
+            edits: noChangeOnlyRuns,
+        });
+
+        [false, true].forEach(skipReferenceCoreFromTest =>
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: `skips builds downstream projects if upstream projects have errors with stopBuildOnErrors${skipReferenceCoreFromTest ? " when test does not reference core" : ""}`,
+                sys: () => getSysForSampleProjectReferences(/*withNodeNext*/ undefined, skipReferenceCoreFromTest),
+                commandLineArgs: ["--b", "tests", "--verbose", "--stopBuildOnErrors"],
+                modifySystem: sys => sys.appendFile("core/index.ts", `multiply();`),
+                edits: [
+                    noChangeRun,
+                    {
+                        caption: "fix error",
+                        edit: sys => sys.replaceFileText("core/index.ts", "multiply();", ""),
+                    },
+                ],
+            })
+        );
+    });
+
+    describe("project invalidation", () => {
+        it("invalidates projects correctly", () => {
+            const baseline: string[] = [];
+            const system = changeToHostTrackingWrittenFiles(
+                patchHostForBuildInfoReadWrite(
+                    getSysForSampleProjectReferences(),
+                ),
+            );
+
+            const host = createSolutionBuilderHostForBaseline(system);
+            const builder = ts.createSolutionBuilder(host, ["tests"], { dry: false, force: false, verbose: false });
+            builder.build();
+            baselineState("Build of project");
+
+            // Update a timestamp in the middle project
+            system.appendFile("logic/index.ts", "function foo() {}");
+
+            // Because we haven't reset the build context, the builder should assume there's nothing to do right now
+            const status = builder.getUpToDateStatusOfProject("logic/tsconfig.json");
+            baseline.push(`Project should still be upto date: ${ts.UpToDateStatusType[status.type]}`);
+            verifyInvalidation("non Dts change to logic");
+
+            // Rebuild this project
+            system.appendFile("logic/index.ts", `export class cNew {}`);
+            verifyInvalidation("Dts change to Logic");
+            Baseline.runBaseline(`tsbuild/sample1/invalidates-projects-correctly.js`, baseline.join("\r\n"));
+
+            function verifyInvalidation(heading: string) {
+                // Rebuild this project
+                builder.invalidateProject("/user/username/projects/sample1/logic/tsconfig.json" as ts.ResolvedConfigFilePath);
+                builder.getNextInvalidatedProject()?.done();
+                baselineState(`${heading}:: After rebuilding logicConfig`);
+
+                // Build downstream projects should update 'tests', but not 'core'
+                builder.getNextInvalidatedProject()?.done();
+                baselineState(`${heading}:: After building next project`);
+            }
+
+            function baselineState(heading: string) {
+                baseline.push(heading);
+                system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
+            }
+        });
+    });
+
+    const coreChanges: TestTscEdit[] = [
+        {
+            caption: "incremental-declaration-changes",
+            edit: sys =>
+                sys.appendFile(
+                    "core/index.ts",
+                    `
+export class someClass { }`,
+                ),
+        },
+        {
+            caption: "incremental-declaration-doesnt-change",
+            edit: sys =>
+                sys.appendFile(
+                    "core/index.ts",
+                    `
+class someClass2 { }`,
+                ),
+        },
+        noChangeRun,
+    ];
+
+    describe("lists files", () => {
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "listFiles",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--listFiles"],
+            edits: coreChanges,
+        });
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "listEmittedFiles",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--listEmittedFiles"],
+            edits: coreChanges,
+        });
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "explainFiles",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--explainFiles", "--v"],
+            edits: coreChanges,
+        });
+    });
+
+    describe("emit output", () => {
+        verifyTsc({
+            subScenario: "sample",
+            sys: getSysForSampleProjectReferences,
+            scenario: "sample1",
+            commandLineArgs: ["--b", "tests", "--verbose"],
+            baselineSourceMap: true,
+            baselineReadFileCalls: true,
+            edits: [
+                ...coreChanges,
+                {
+                    caption: "when logic config changes declaration dir",
+                    edit: sys =>
+                        sys.replaceFileText(
+                            "logic/tsconfig.json",
+                            `"declaration": true,`,
+                            `"declaration": true,
+        "declarationDir": "decls",`,
+                        ),
+                },
+                noChangeRun,
+            ],
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "when logic specifies tsBuildInfoFile",
+            sys: getSysForSampleProjectReferences,
+            modifySystem: sys =>
+                sys.replaceFileText(
+                    "logic/tsconfig.json",
+                    `"composite": true,`,
+                    `"composite": true,
+    "tsBuildInfoFile": "ownFile.tsbuildinfo",`,
+                ),
+            commandLineArgs: ["--b", "tests", "--verbose"],
+            baselineSourceMap: true,
+            baselineReadFileCalls: true,
+        });
+
+        verifyTsc({
+            subScenario: "when declaration option changes",
+            sys: getSysForSampleProjectReferences,
+            scenario: "sample1",
+            commandLineArgs: ["--b", "core", "--verbose"],
+            modifySystem: sys =>
+                sys.writeFile(
+                    "core/tsconfig.json",
+                    jsonToReadableText({
+                        compilerOptions: {
+                            incremental: true,
+                            skipDefaultLibCheck: true,
+                        },
+                    }),
+                ),
+            edits: [{
+                caption: "incremental-declaration-changes",
+                edit: sys => sys.replaceFileText("core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
+            }],
+        });
+
+        verifyTsc({
+            subScenario: "when target option changes",
+            sys: getSysForSampleProjectReferences,
+            scenario: "sample1",
+            commandLineArgs: ["--b", "core", "--verbose"],
+            modifySystem: sys => {
+                sys.writeFile(
+                    getTypeScriptLibTestLocation("esnext.full"),
+                    `/// <reference no-default-lib="true"/>
+/// <reference lib="esnext" />`,
+                );
+                sys.writeFile(
+                    libFile.path,
+                    `/// <reference no-default-lib="true"/>
+/// <reference lib="esnext" />`,
+                );
+                sys.writeFile(
+                    "core/tsconfig.json",
+                    jsonToReadableText({
+                        compilerOptions: {
+                            incremental: true,
+                            listFiles: true,
+                            listEmittedFiles: true,
+                            target: "esnext",
+                        },
+                    }),
+                );
+            },
+            edits: [{
+                caption: "incremental-declaration-changes",
+                edit: sys => sys.replaceFileText("core/tsconfig.json", "esnext", "es5"),
+            }],
+        });
+
+        verifyTsc({
+            subScenario: "when module option changes",
+            sys: getSysForSampleProjectReferences,
+            scenario: "sample1",
+            commandLineArgs: ["--b", "core", "--verbose"],
+            modifySystem: sys =>
+                sys.writeFile(
+                    "core/tsconfig.json",
+                    jsonToReadableText({
+                        compilerOptions: {
+                            incremental: true,
+                            module: "commonjs",
+                        },
+                    }),
+                ),
+            edits: [{
+                caption: "incremental-declaration-changes",
+                edit: sys => sys.replaceFileText("core/tsconfig.json", `"module": "commonjs"`, `"module": "amd"`),
+            }],
+        });
+
+        verifyTsc({
+            subScenario: "when esModuleInterop option changes",
+            sys: getSysForSampleProjectReferences,
+            scenario: "sample1",
+            commandLineArgs: ["--b", "tests", "--verbose"],
+            modifySystem: sys =>
+                sys.writeFile(
+                    "tests/tsconfig.json",
+                    jsonToReadableText({
+                        references: [
+                            { path: "../core" },
+                            { path: "../logic" },
+                        ],
+                        files: ["index.ts"],
+                        compilerOptions: {
+                            composite: true,
+                            declaration: true,
+                            forceConsistentCasingInFileNames: true,
+                            skipDefaultLibCheck: true,
+                            esModuleInterop: false,
+                        },
+                    }),
+                ),
+            edits: [{
+                caption: "incremental-declaration-changes",
+                edit: sys => sys.replaceFileText("tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
+            }],
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "reports error if input file is missing",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--v"],
+            modifySystem: sys => {
+                sys.writeFile(
+                    "core/tsconfig.json",
+                    jsonToReadableText({
+                        compilerOptions: { composite: true },
+                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"],
+                    }),
+                );
+                sys.deleteFile("core/anotherModule.ts");
+            },
+        });
+
+        verifyTsc({
+            scenario: "sample1",
+            subScenario: "reports error if input file is missing with force",
+            sys: getSysForSampleProjectReferences,
+            commandLineArgs: ["--b", "tests", "--v", "--f"],
+            modifySystem: sys => {
+                sys.writeFile(
+                    "core/tsconfig.json",
+                    jsonToReadableText({
+                        compilerOptions: { composite: true },
+                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"],
+                    }),
+                );
+                sys.deleteFile("core/anotherModule.ts");
+            },
+        });
+    });
+});

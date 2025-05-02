@@ -1,59 +1,78 @@
-=== tests/cases/compiler/simplifyingConditionalWithInteriorConditionalIsRelated.ts ===
+//// [tests/cases/compiler/simplifyingConditionalWithInteriorConditionalIsRelated.ts] ////
+
+=== simplifyingConditionalWithInteriorConditionalIsRelated.ts ===
 // from https://github.com/microsoft/TypeScript/issues/30706
 type ConditionalType<T> = T extends string ? string : number;
 >ConditionalType : ConditionalType<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
 function ConditionalOrUndefined<T>(): ConditionalType<T> | undefined {
 >ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
+>                       : ^ ^^^^^^^                              
 
     return 0 as any;
 >0 as any : any
 >0 : 0
+>  : ^
 }
 
 function JustConditional<T>(): ConditionalType<T> {
 >JustConditional : <T>() => ConditionalType<T>
+>                : ^ ^^^^^^^                  
 
     return ConditionalOrUndefined<T>()!; // shouldn't error
 >ConditionalOrUndefined<T>()! : ConditionalType<T>
+>                             : ^^^^^^^^^^^^^^^^^^
 >ConditionalOrUndefined<T>() : ConditionalType<T> | undefined
->ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ConditionalOrUndefined : <T_1>() => ConditionalType<T_1> | undefined
+>                       : ^^^^^^^^^^^                                
 }
 
 
 // For comparison...
 function genericOrUndefined<T>(): T | undefined {
 >genericOrUndefined : <T>() => T | undefined
+>                   : ^ ^^^^^^^             
 
     return 0 as any;
 >0 as any : any
 >0 : 0
+>  : ^
 }
 
 function JustGeneric<T>(): T {
 >JustGeneric : <T>() => T
+>            : ^ ^^^^^^^ 
 
     return genericOrUndefined<T>()!; // no error
 >genericOrUndefined<T>()! : NonNullable<T>
+>                         : ^^^^^^^^^^^^^^
 >genericOrUndefined<T>() : T | undefined
->genericOrUndefined : <T>() => T | undefined
+>                        : ^^^^^^^^^^^^^
+>genericOrUndefined : <T_1>() => T_1 | undefined
+>                   : ^^^^^^^^^^^               
 }
 
 // Simplified example:
 
 function f<T>() {
 >f : <T>() => void
+>  : ^ ^^^^^^^^^^^
 
     type One = T extends string ? string : string;
 >One : T extends string ? string : string
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type A = T extends number ? One : never;
 >A : T extends number ? T extends string ? string : string : never
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x: One = null as any as A;
 >x : T extends string ? string : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any as A : T extends number ? T extends string ? string : string : never
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
 }
 

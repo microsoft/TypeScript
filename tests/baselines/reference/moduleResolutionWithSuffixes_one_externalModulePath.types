@@ -1,54 +1,12 @@
-=== /node_modules/some-library/foo.ios.js ===
-"use strict";
->"use strict" : "use strict"
-
-exports.__esModule = true;
->exports.__esModule = true : true
->exports.__esModule : true
->exports : typeof import("/node_modules/some-library/foo.ios")
->__esModule : true
->true : true
-
-function iosfoo() {}
->iosfoo : () => void
-
-exports.iosfoo = iosfoo;
->exports.iosfoo = iosfoo : () => void
->exports.iosfoo : () => void
->exports : typeof import("/node_modules/some-library/foo.ios")
->iosfoo : () => void
->iosfoo : () => void
-
-=== /node_modules/some-library/foo.ios.d.ts ===
-export declare function iosfoo(): void;
->iosfoo : () => void
-
-=== /node_modules/some-library/foo.js ===
-"use strict";
->"use strict" : "use strict"
-
-exports.__esModule = true;
->exports.__esModule = true : true
->exports.__esModule : true
->exports : typeof import("/node_modules/some-library/foo")
->__esModule : true
->true : true
-
-function basefoo() {}
->basefoo : () => void
-
-exports.basefoo = basefoo;
->exports.basefoo = basefoo : () => void
->exports.basefoo : () => void
->exports : typeof import("/node_modules/some-library/foo")
->basefoo : () => void
->basefoo : () => void
-
-=== /node_modules/some-library/foo.d.ts ===
-export declare function basefoo(): void;
->basefoo : () => void
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_externalModulePath.ts] ////
 
 === /index.ts ===
 import { iosfoo } from "some-library/foo";
 >iosfoo : () => void
+>       : ^^^^^^    
+
+=== /node_modules/some-library/foo.ios.d.ts ===
+export declare function iosfoo(): void;
+>iosfoo : () => void
+>       : ^^^^^^    
 

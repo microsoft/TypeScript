@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/recursiveMappedTypes.ts] ////
+
 //// [recursiveMappedTypes.ts]
 // Recursive mapped types simply appear empty
 
@@ -95,7 +97,7 @@ export type Foo<T> = T extends { [P in infer E]: any } ? E : never;
 //// [recursiveMappedTypes.js]
 "use strict";
 // Recursive mapped types simply appear empty
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo(arg) {
     return arg;
 }

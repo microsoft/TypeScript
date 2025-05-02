@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/downlevelLetConst13.ts] ////
+
 //// [downlevelLetConst13.ts]
 'use strict'
 // exported let\const bindings should not be renamed
@@ -37,4 +39,4 @@ var M;
     M.bar6 = [2][0];
     M.bar7 = { a: 1 }.a;
     M.bar8 = { a: 1 }.a;
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));

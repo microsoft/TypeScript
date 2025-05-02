@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportSpecifiers.ts] ////
+
 === /imports.ts ===
 import { type, as, something, foo, bar } from "./exports.js";
 >type : Symbol(type, Decl(imports.ts, 0, 8))

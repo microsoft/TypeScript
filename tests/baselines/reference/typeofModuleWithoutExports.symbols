@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofModuleWithoutExports.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofModuleWithoutExports.ts] ////
+
+=== typeofModuleWithoutExports.ts ===
 module M {
 >M : Symbol(M, Decl(typeofModuleWithoutExports.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restElementAssignable.ts ===
+//// [tests/cases/compiler/restElementAssignable.ts] ////
+
+=== restElementAssignable.ts ===
 {
     const { ...props } = {};
 >props : Symbol(props, Decl(restElementAssignable.ts, 1, 11))

@@ -1,22 +1,33 @@
-=== tests/cases/compiler/generics3.ts ===
+//// [tests/cases/compiler/generics3.ts] ////
+
+=== generics3.ts ===
 class C<T> { private x: T; }
 >C : C<T>
+>  : ^^^^
 >x : T
+>  : ^
 
 interface X { f(): string; }
 >f : () => string
+>  : ^^^^^^      
 
 interface Y { f(): string; }
 >f : () => string
+>  : ^^^^^^      
 
 var a: C<X>;
 >a : C<X>
+>  : ^^^^
 
 var b: C<Y>;
 >b : C<Y>
+>  : ^^^^
 
 a = b; // Ok - should be identical
 >a = b : C<Y>
+>      : ^^^^
 >a : C<X>
+>  : ^^^^
 >b : C<Y>
+>  : ^^^^
 

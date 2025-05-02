@@ -16,4 +16,4 @@
 ////        [|break|];
 ////}
 
-verify.rangesAreOccurrences(false);
+verify.baselineDocumentHighlights();

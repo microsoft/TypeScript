@@ -1,12 +1,23 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationBindDeepExportsAssignment.ts] ////
+
+=== a.js ===
 exports.a.b.c = 0;
 >exports.a.b.c = 0 : 0
+>                  : ^
 >exports.a.b.c : any
+>              : ^^^
 >exports.a.b : any
+>            : ^^^
 >exports.a : any
->exports : typeof import("tests/cases/compiler/a")
+>          : ^^^
+>exports : typeof import("a")
+>        : ^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >0 : 0
+>  : ^
 

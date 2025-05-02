@@ -1,22 +1,39 @@
-=== tests/cases/compiler/stringMatchAll.ts ===
+//// [tests/cases/compiler/stringMatchAll.ts] ////
+
+=== stringMatchAll.ts ===
 const matches = "matchAll".matchAll(/\w/g);
->matches : IterableIterator<RegExpMatchArray>
->"matchAll".matchAll(/\w/g) : IterableIterator<RegExpMatchArray>
->"matchAll".matchAll : (regexp: RegExp) => IterableIterator<RegExpMatchArray>
+>matches : RegExpStringIterator<RegExpExecArray>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"matchAll".matchAll(/\w/g) : RegExpStringIterator<RegExpExecArray>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"matchAll".matchAll : (regexp: RegExp) => RegExpStringIterator<RegExpExecArray>
+>                    : ^      ^^      ^^^^^                                     
 >"matchAll" : "matchAll"
->matchAll : (regexp: RegExp) => IterableIterator<RegExpMatchArray>
+>           : ^^^^^^^^^^
+>matchAll : (regexp: RegExp) => RegExpStringIterator<RegExpExecArray>
+>         : ^      ^^      ^^^^^                                     
 >/\w/g : RegExp
+>      : ^^^^^^
 
 const array = [...matches];
->array : RegExpMatchArray[]
->[...matches] : RegExpMatchArray[]
->...matches : RegExpMatchArray
->matches : IterableIterator<RegExpMatchArray>
+>array : RegExpExecArray[]
+>      : ^^^^^^^^^^^^^^^^^
+>[...matches] : RegExpExecArray[]
+>             : ^^^^^^^^^^^^^^^^^
+>...matches : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>matches : RegExpStringIterator<RegExpExecArray>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { index, input } = array[0];
 >index : number
+>      : ^^^^^^
 >input : string
->array[0] : RegExpMatchArray
->array : RegExpMatchArray[]
+>      : ^^^^^^
+>array[0] : RegExpExecArray
+>         : ^^^^^^^^^^^^^^^
+>array : RegExpExecArray[]
+>      : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 

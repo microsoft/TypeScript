@@ -1,24 +1,31 @@
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a/a.ts",
-      "kind": "var",
-      "name": "hello",
-      "textSpan": {
-        "start": 56,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "\"hello\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": []
-  }
-]
+// === findAllReferences ===
+// === /home/src/workspaces/project/a/a.ts ===
+// /// <reference path="../b/b.ts" />
+// const str: string = "hello/*FIND ALL REFS*/";
 
-[]
+  // === Definitions ===
+  // === /home/src/workspaces/project/a/a.ts ===
+  // /// <reference path="../b/b.ts" />
+  // const str: string = "[|hello|]/*FIND ALL REFS*/";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "hello",
+    "displayParts": [
+     {
+      "text": "\"hello\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/b/b.ts ===
+// const str2: string = "hello/*FIND ALL REFS*/";

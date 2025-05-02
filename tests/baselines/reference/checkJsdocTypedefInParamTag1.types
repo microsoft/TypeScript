@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/0.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocTypedefInParamTag1.ts] ////
+
+=== 0.js ===
 // @ts-check
 /**
  * @typedef {Object} Opts
@@ -11,20 +13,30 @@
  */
 function foo(opts) {
 >foo : (opts: Opts) => void
+>    : ^    ^^    ^^^^^^^^^
 >opts : Opts
+>     : ^^^^
 
     opts.x;
 >opts.x : string
+>       : ^^^^^^
 >opts : Opts
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 }
 
 foo({x: 'abc'});
 >foo({x: 'abc'}) : void
+>                : ^^^^
 >foo : (opts: Opts) => void
+>    : ^    ^^    ^^^^^^^^^
 >{x: 'abc'} : { x: string; }
+>           : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
 /**
  * @typedef {Object} AnotherOpts
@@ -35,20 +47,30 @@ foo({x: 'abc'});
  */
 function foo1(opts) {
 >foo1 : (opts: AnotherOpts) => void
+>     : ^    ^^           ^^^^^^^^^
 >opts : AnotherOpts
+>     : ^^^^^^^^^^^
 
     opts.anotherX;
 >opts.anotherX : string
+>              : ^^^^^^
 >opts : AnotherOpts
+>     : ^^^^^^^^^^^
 >anotherX : string
+>         : ^^^^^^
 }
 
 foo1({anotherX: "world"});
 >foo1({anotherX: "world"}) : void
+>                          : ^^^^
 >foo1 : (opts: AnotherOpts) => void
+>     : ^    ^^           ^^^^^^^^^
 >{anotherX: "world"} : { anotherX: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^
 >anotherX : string
+>         : ^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 
 /**
  * @typedef {object} Opts1
@@ -61,17 +83,27 @@ foo1({anotherX: "world"});
  */
 function foo2(opts) {
 >foo2 : (opts: Opts1) => void
+>     : ^    ^^     ^^^^^^^^^
 >opts : Opts1
+>     : ^^^^^
 
     opts.x;
 >opts.x : string
+>       : ^^^^^^
 >opts : Opts1
+>     : ^^^^^
 >x : string
+>  : ^^^^^^
 }
 foo2({x: 'abc'});
 >foo2({x: 'abc'}) : void
+>                 : ^^^^
 >foo2 : (opts: Opts1) => void
+>     : ^    ^^     ^^^^^^^^^
 >{x: 'abc'} : { x: string; }
+>           : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 

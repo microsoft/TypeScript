@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts] ////
+
 //// [stringLiteralTypesAsTags01.ts]
 type Kind = "A" | "B"
 
@@ -47,7 +49,7 @@ function hasKind(entity, kind) {
 }
 var x = {
     kind: "A",
-    a: 100
+    a: 100,
 };
 if (hasKind(x, "A")) {
     var a = x;

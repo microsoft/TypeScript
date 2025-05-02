@@ -1,26 +1,39 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesExportsSpecifierGenerationDirectory.ts] ////
+
+=== index.ts ===
 // esm format file
 import { Thing } from "inner/other";
 >Thing : any
+>      : ^^^
 
 export const a = (await import("inner/index.js")).x();
->a : import("tests/cases/conformance/node/node_modules/inner/other").Thing
->(await import("inner/index.js")).x() : import("tests/cases/conformance/node/node_modules/inner/other").Thing
->(await import("inner/index.js")).x : () => import("tests/cases/conformance/node/node_modules/inner/other").Thing
->(await import("inner/index.js")) : typeof import("tests/cases/conformance/node/node_modules/inner/index")
->await import("inner/index.js") : typeof import("tests/cases/conformance/node/node_modules/inner/index")
->import("inner/index.js") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
+>a : import("node_modules/inner/other").Thing
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(await import("inner/index.js")).x() : import("node_modules/inner/other").Thing
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(await import("inner/index.js")).x : () => import("node_modules/inner/other").Thing
+>                                   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
+>(await import("inner/index.js")) : typeof import("node_modules/inner/index")
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await import("inner/index.js") : typeof import("node_modules/inner/index")
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("inner/index.js") : Promise<typeof import("node_modules/inner/index")>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"inner/index.js" : "inner/index.js"
->x : () => import("tests/cases/conformance/node/node_modules/inner/other").Thing
+>                 : ^^^^^^^^^^^^^^^^
+>x : () => import("node_modules/inner/other").Thing
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 // esm format file
 export { x } from "./other.js";
->x : () => import("tests/cases/conformance/node/node_modules/inner/other").Thing
+>x : () => import("node_modules/inner/other").Thing
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/other.d.ts ===
+=== node_modules/inner/other.d.ts ===
 // esm format file
 export interface Thing {}
 export const x: () => Thing;
 >x : () => Thing
+>  : ^^^^^^     
 

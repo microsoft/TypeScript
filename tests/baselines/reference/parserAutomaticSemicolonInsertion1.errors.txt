@@ -1,12 +1,12 @@
-tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
+parserAutomaticSemicolonInsertion1.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature '(): void'.
-tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
+parserAutomaticSemicolonInsertion1.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature '(): void'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts (2 errors) ====
+==== parserAutomaticSemicolonInsertion1.ts (2 errors) ====
     interface I {
         (): void;
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
+
 //// [jsxInferenceProducesLiteralAsExpected.tsx]
 import React = require("react");
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
@@ -18,7 +20,7 @@ const el2 = <Test<TestObject> model={model} foo="c" />;
 
 //// [jsxInferenceProducesLiteralAsExpected.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var TestObject = /** @class */ (function () {
     function TestObject() {

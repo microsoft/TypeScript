@@ -1,0 +1,100 @@
+asyncFunctionDeclarationParameterEvaluation.ts(2,26): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(3,21): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(3,21): error TS2538: Type 'any' cannot be used as an index type.
+asyncFunctionDeclarationParameterEvaluation.ts(4,23): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(5,23): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(6,23): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(7,23): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(8,23): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(9,41): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(10,41): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(11,24): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(12,36): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(13,36): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(15,30): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(16,25): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(16,25): error TS2538: Type 'any' cannot be used as an index type.
+asyncFunctionDeclarationParameterEvaluation.ts(17,27): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(18,27): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(19,27): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(20,27): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(21,27): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(22,48): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(23,48): error TS2304: Cannot find name 'z'.
+asyncFunctionDeclarationParameterEvaluation.ts(24,28): error TS2304: Cannot find name 'z'.
+
+
+==== asyncFunctionDeclarationParameterEvaluation.ts (24 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/40410
+    async function f1(x, y = z) {}
+                             ~
+!!! error TS2304: Cannot find name 'z'.
+    async function f2({[z]: x}) {}
+                        ~
+!!! error TS2304: Cannot find name 'z'.
+                        ~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    async function f3(x = z) { return async () => arguments; }
+                          ~
+!!! error TS2304: Cannot find name 'z'.
+    async function f4(x = z) { return async () => async () => arguments; }
+                          ~
+!!! error TS2304: Cannot find name 'z'.
+    async function f5(x = z, ...args) { }
+                          ~
+!!! error TS2304: Cannot find name 'z'.
+    async function f6(x = z, ...args) { return async () => arguments; }
+                          ~
+!!! error TS2304: Cannot find name 'z'.
+    async function f7(x = z, ...args) { return async () => async () => arguments; }
+                          ~
+!!! error TS2304: Cannot find name 'z'.
+    async function f8() { return async (x = z) => arguments; }
+                                            ~
+!!! error TS2304: Cannot find name 'z'.
+    async function f9() { return async (x = z) => async () => arguments; }
+                                            ~
+!!! error TS2304: Cannot find name 'z'.
+    async function f10(x = z) { return async () => async function () { return async () => arguments; }; }
+                           ~
+!!! error TS2304: Cannot find name 'z'.
+    function f11() { return async (x = z) => arguments; }
+                                       ~
+!!! error TS2304: Cannot find name 'z'.
+    function f12() { return async (x = z) => async () => arguments; }
+                                       ~
+!!! error TS2304: Cannot find name 'z'.
+    function f() {
+        const a1 = async (x, y = z) => {};
+                                 ~
+!!! error TS2304: Cannot find name 'z'.
+        const a2 = async ({[z]: x}) => {};
+                            ~
+!!! error TS2304: Cannot find name 'z'.
+                            ~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+        const a3 = async (x = z) => { return async () => arguments; };
+                              ~
+!!! error TS2304: Cannot find name 'z'.
+        const a4 = async (x = z) => { return async () => async () => arguments; };
+                              ~
+!!! error TS2304: Cannot find name 'z'.
+        const a5 = async (x = z, ...args) => { };
+                              ~
+!!! error TS2304: Cannot find name 'z'.
+        const a6 = async (x = z, ...args) => { return async () => arguments; };
+                              ~
+!!! error TS2304: Cannot find name 'z'.
+        const a7 = async (x = z, ...args) => { return async () => async () => arguments; };
+                              ~
+!!! error TS2304: Cannot find name 'z'.
+        const a8 = async () => { return async (x = z) => arguments; };
+                                                   ~
+!!! error TS2304: Cannot find name 'z'.
+        const a9 = async () => { return async (x = z) => async () => arguments; };
+                                                   ~
+!!! error TS2304: Cannot find name 'z'.
+        const a10 = async (x = z) => { return async () => async function () { return async () => arguments; }; };
+                               ~
+!!! error TS2304: Cannot find name 'z'.
+    }

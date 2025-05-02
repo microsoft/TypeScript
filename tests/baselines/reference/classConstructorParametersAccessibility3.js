@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility3.ts] ////
+
 //// [classConstructorParametersAccessibility3.ts]
 class Base {
     constructor(protected p: number) { }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedIndexer.ts ===
+//// [tests/cases/compiler/nestedIndexer.ts] ////
+
+=== nestedIndexer.ts ===
 function then(x) {
 >then : Symbol(then, Decl(nestedIndexer.ts, 0, 0))
 >x : Symbol(x, Decl(nestedIndexer.ts, 0, 14))

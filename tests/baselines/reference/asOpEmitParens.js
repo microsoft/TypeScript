@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/asOperator/asOpEmitParens.ts] ////
+
 //// [asOpEmitParens.ts]
 declare var x;
 // Must emit as (x + 1) * 3

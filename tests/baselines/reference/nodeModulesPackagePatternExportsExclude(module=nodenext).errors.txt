@@ -1,28 +1,25 @@
-tests/cases/conformance/node/index.cts(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/index.cts(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/index.cts(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/index.cts(9,24): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
-tests/cases/conformance/node/index.mts(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/index.mts(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/index.mts(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/index.ts(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/index.ts(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/index.ts(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.cts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.cts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.cts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.mts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.mts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.mts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.ts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.ts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/exclude/index.d.ts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
-tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
-tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
-tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
+index.cts(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+index.cts(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+index.cts(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+index.mts(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+index.mts(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+index.mts(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+index.ts(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+index.ts(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+index.ts(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.cts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.cts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.cts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.mts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.mts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.mts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.ts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.ts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.ts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 
 
-==== tests/cases/conformance/node/index.ts (3 errors) ====
+==== index.ts (3 errors) ====
     // esm format file
     import * as cjsi from "inner/cjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,7 +39,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: 
     cjsi2;
     mjsi2;
     typei2;
-==== tests/cases/conformance/node/index.mts (3 errors) ====
+==== index.mts (3 errors) ====
     // esm format file
     import * as cjsi from "inner/cjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -62,7 +59,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: 
     cjsi2;
     mjsi2;
     typei2;
-==== tests/cases/conformance/node/index.cts (4 errors) ====
+==== index.cts (3 errors) ====
     // cjs format file
     import * as cjsi from "inner/cjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,13 +75,11 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: 
     typei;
     import * as cjsi2 from "inner/cjs/index";
     import * as mjsi2 from "inner/mjs/index";
-                           ~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
     import * as typei2 from "inner/js/index";
     cjsi2;
     mjsi2;
     typei2;
-==== tests/cases/conformance/node/node_modules/inner/exclude/index.d.ts (3 errors) ====
+==== node_modules/inner/exclude/index.d.ts (3 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,7 +93,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: 
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/node_modules/inner/exclude/index.d.mts (3 errors) ====
+==== node_modules/inner/exclude/index.d.mts (3 errors) ====
     // esm format file
     import * as cjs from "inner/cjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,7 +107,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: 
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/node_modules/inner/exclude/index.d.cts (3 errors) ====
+==== node_modules/inner/exclude/index.d.cts (3 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,19 +121,17 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: 
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/node_modules/inner/index.d.ts (2 errors) ====
+==== node_modules/inner/index.d.ts (1 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs/index";
                 ~~~
 !!! error TS2303: Circular definition of import alias 'cjs'.
     import * as mjs from "inner/mjs/index";
-                         ~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
     import * as type from "inner/js/index";
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/node_modules/inner/index.d.mts (0 errors) ====
+==== node_modules/inner/index.d.mts (0 errors) ====
     // esm format file
     import * as cjs from "inner/cjs/index";
     import * as mjs from "inner/mjs/index";
@@ -146,23 +139,21 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: 
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/node_modules/inner/index.d.cts (1 errors) ====
+==== node_modules/inner/index.d.cts (0 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs/index";
     import * as mjs from "inner/mjs/index";
-                         ~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
     import * as type from "inner/js/index";
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/node_modules/inner/package.json (0 errors) ====
+==== node_modules/inner/package.json (0 errors) ====
     {
         "name": "inner",
         "private": true,

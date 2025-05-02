@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedTypeAssignment1.ts ===
+//// [tests/cases/compiler/undefinedTypeAssignment1.ts] ////
+
+=== undefinedTypeAssignment1.ts ===
 type undefined = string;
 >undefined : Symbol(undefined, Decl(undefinedTypeAssignment1.ts, 0, 0))
 

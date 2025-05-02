@@ -1,12 +1,12 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(3,15): error TS2302: Static members cannot reference class type parameters.
-tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(4,17): error TS2302: Static members cannot reference class type parameters.
-tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(8,15): error TS2302: Static members cannot reference class type parameters.
-tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(9,17): error TS2302: Static members cannot reference class type parameters.
-tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(13,15): error TS2302: Static members cannot reference class type parameters.
-tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(14,17): error TS2302: Static members cannot reference class type parameters.
+staticMembersUsingClassTypeParameter.ts(3,15): error TS2302: Static members cannot reference class type parameters.
+staticMembersUsingClassTypeParameter.ts(4,17): error TS2302: Static members cannot reference class type parameters.
+staticMembersUsingClassTypeParameter.ts(8,15): error TS2302: Static members cannot reference class type parameters.
+staticMembersUsingClassTypeParameter.ts(9,17): error TS2302: Static members cannot reference class type parameters.
+staticMembersUsingClassTypeParameter.ts(13,15): error TS2302: Static members cannot reference class type parameters.
+staticMembersUsingClassTypeParameter.ts(14,17): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts (6 errors) ====
+==== staticMembersUsingClassTypeParameter.ts (6 errors) ====
     // BUG 745747
     class C<T> {
         static x: T;

@@ -1,67 +1,97 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts] ////
+
+=== emitClassDeclarationWithGetterSetterInES6.ts ===
 class C {
 >C : C
+>  : ^
 
     _name: string;
 >_name : string
+>      : ^^^^^^
 
     get name(): string {
 >name : string
+>     : ^^^^^^
 
         return this._name;
 >this._name : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >_name : string
+>      : ^^^^^^
     }
     static get name2(): string {
 >name2 : string
+>      : ^^^^^^
 
         return "BYE";
 >"BYE" : "BYE"
+>      : ^^^^^
     }
     static get ["computedname"]() {
 >["computedname"] : string
+>                 : ^^^^^^
 >"computedname" : "computedname"
+>               : ^^^^^^^^^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
     get ["computedname1"]() {
 >["computedname1"] : string
+>                  : ^^^^^^
 >"computedname1" : "computedname1"
+>                : ^^^^^^^^^^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
     get ["computedname2"]() {
 >["computedname2"] : string
+>                  : ^^^^^^
 >"computedname2" : "computedname2"
+>                : ^^^^^^^^^^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
 
     set ["computedname3"](x: any) {
 >["computedname3"] : any
 >"computedname3" : "computedname3"
+>                : ^^^^^^^^^^^^^^^
 >x : any
     }
     set ["computedname4"](y: string) {
 >["computedname4"] : string
+>                  : ^^^^^^
 >"computedname4" : "computedname4"
+>                : ^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
     }
 
     set foo(a: string) { }
 >foo : string
+>    : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     static set bar(b: number) { }
 >bar : number
+>    : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     static set ["computedname"](b: string) { }
 >["computedname"] : string
+>                 : ^^^^^^
 >"computedname" : "computedname"
+>               : ^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 }

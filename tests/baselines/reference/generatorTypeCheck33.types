@@ -1,16 +1,22 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck33.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck33.ts] ////
+
+=== generatorTypeCheck33.ts ===
 function* g() {
 >g : () => Generator<number, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 0;
 >yield 0 : any
 >0 : 0
+>  : ^
 
     function* g2() {
 >g2 : () => Generator<string, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield "";
 >yield "" : any
 >"" : ""
+>   : ^^
     }
 }

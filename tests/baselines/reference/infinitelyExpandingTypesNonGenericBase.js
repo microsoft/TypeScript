@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingTypesNonGenericBase.ts] ////
+
 //// [infinitelyExpandingTypesNonGenericBase.ts]
 class Functionality<V> {
     property: Options<V>;

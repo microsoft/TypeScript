@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/omittedExpressionForOfLoop.ts] ////
+
 //// [omittedExpressionForOfLoop.ts]
 for (const [,] of doesNotExist) {
 }

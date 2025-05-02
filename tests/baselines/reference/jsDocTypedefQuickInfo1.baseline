@@ -1,15 +1,53 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/jsDocTypedef1.js ===
+// /**
+//  * @typedef {Object} Opts
+//  * @property {string} x
+//  * @property {string=} y
+//  * @property {string} [z]
+//  * @property {string} [w="hi"]
+//  * 
+//  * @param {Opts} opts
+//  */
+// function foo(opts) {
+//              ^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) opts: Opts
+// | @param opts
+// | ----------------------------------------------------------------------
+//     opts.x;
+// }
+// foo({x: 'abc'});
+// /**
+//  * @typedef {object} Opts1
+//  * @property {string} x
+//  * @property {string=} y
+//  * @property {string} [z]
+//  * @property {string} [w="hi"]
+//  * 
+//  * @param {Opts1} opts
+//  */
+// function foo1(opts1) {
+//               ^^^^^
+// | ----------------------------------------------------------------------
+// | (parameter) opts1: any
+// | ----------------------------------------------------------------------
+//     opts1.x;
+// }
+// foo1({x: 'abc'});
+
 [
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypedef1.js",
-      "position": 189,
+      "position": 179,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 189,
+        "start": 179,
         "length": 4
       },
       "displayParts": [
@@ -63,14 +101,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypedef1.js",
-      "position": 424,
+      "position": 400,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 424,
+        "start": 400,
         "length": 5
       },
       "displayParts": [

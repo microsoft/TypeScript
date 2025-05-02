@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameMethodInStaticFieldInit.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodInStaticFieldInit.ts] ////
+
+=== privateNameMethodInStaticFieldInit.ts ===
 class C {
 >C : Symbol(C, Decl(privateNameMethodInStaticFieldInit.ts, 0, 0))
 

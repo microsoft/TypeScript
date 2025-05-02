@@ -1,41 +1,59 @@
+//// [tests/cases/compiler/jsDeclarationsWithDefaultAsNamespaceLikeMerge.ts] ////
+
 === /helper.d.ts ===
 type Computed = () => any;
->Computed : () => any
+>Computed : Computed
+>         : ^^^^^^^^
 
 interface Mapper<R> {
     <Key extends string>(map: Key[]): { [K in Key]: R };
 >map : Key[]
+>    : ^^^^^
 
     <Map extends Record<string, string>>(map: Map): { [K in keyof Map]: R };
 >map : Map
+>    : ^^^
 }
 interface NamespacedMappers {
     mapState: Mapper<Computed>;
 >mapState : Mapper<Computed>
+>         : ^^^^^^^^^^^^^^^^
 }
 export declare function createNamespacedHelpers(): NamespacedMappers;
 >createNamespacedHelpers : () => NamespacedMappers
+>                        : ^^^^^^                 
 
 === /index.js ===
 import { createNamespacedHelpers } from './helper'
 >createNamespacedHelpers : () => import("/helper").NamespacedMappers
+>                        : ^^^^^^       ^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 
 const { mapState } = createNamespacedHelpers()
 >mapState : import("/helper").Mapper<import("/helper").Computed>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createNamespacedHelpers() : import("/helper").NamespacedMappers
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createNamespacedHelpers : () => import("/helper").NamespacedMappers
+>                        : ^^^^^^       ^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 
 export default {
 >{    computed: {        ...mapState(['panels'])    }} : { computed: { panels: import("/helper").Computed; }; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     computed: {
 >computed : { panels: import("/helper").Computed; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        ...mapState(['panels'])    } : { panels: import("/helper").Computed; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ...mapState(['panels'])
 >mapState(['panels']) : { panels: import("/helper").Computed; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapState : import("/helper").Mapper<import("/helper").Computed>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['panels'] : "panels"[]
+>           : ^^^^^^^^^^
 >'panels' : "panels"
+>         : ^^^^^^^^
     }
 }

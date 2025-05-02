@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexSignaturesInferentialTyping.ts ===
+//// [tests/cases/compiler/indexSignaturesInferentialTyping.ts] ////
+
+=== indexSignaturesInferentialTyping.ts ===
 function foo<T>(items: { [index: number]: T }): T { return undefined; }
 >foo : Symbol(foo, Decl(indexSignaturesInferentialTyping.ts, 0, 0))
 >T : Symbol(T, Decl(indexSignaturesInferentialTyping.ts, 0, 13))

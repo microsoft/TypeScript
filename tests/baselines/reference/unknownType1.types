@@ -1,230 +1,329 @@
-=== tests/cases/conformance/types/unknown/unknownType1.ts ===
+//// [tests/cases/conformance/types/unknown/unknownType1.ts] ////
+
+=== unknownType1.ts ===
 // In an intersection everything absorbs unknown
 
 type T00 = unknown & null;  // null
 >T00 : null
->null : null
+>    : ^^^^
 
 type T01 = unknown & undefined;  // undefined
 >T01 : undefined
+>    : ^^^^^^^^^
 
 type T02 = unknown & null & undefined;  // never
 >T02 : never
->null : null
+>    : ^^^^^
 
 type T03 = unknown & string;  // string
 >T03 : string
+>    : ^^^^^^
 
 type T04 = unknown & string[];  // string[]
 >T04 : string[]
+>    : ^^^^^^^^
 
 type T05 = unknown & unknown;  // unknown
 >T05 : unknown
+>    : ^^^^^^^
 
 type T06 = unknown & any;  // any
 >T06 : any
+>    : ^^^
 
 // In a union an unknown absorbs everything
 
 type T10 = unknown | null;  // unknown
 >T10 : unknown
->null : null
+>    : ^^^^^^^
 
 type T11 = unknown | undefined;  // unknown
 >T11 : unknown
+>    : ^^^^^^^
 
 type T12 = unknown | null | undefined;  // unknown
 >T12 : unknown
->null : null
+>    : ^^^^^^^
 
 type T13 = unknown | string;  // unknown
 >T13 : unknown
+>    : ^^^^^^^
 
 type T14 = unknown | string[];  // unknown
 >T14 : unknown
+>    : ^^^^^^^
 
 type T15 = unknown | unknown;  // unknown
 >T15 : unknown
+>    : ^^^^^^^
 
 type T16 = unknown | any;  // any
 >T16 : any
+>    : ^^^
 
 // Type variable and unknown in union and intersection
 
 type T20<T> = T & {};  // T & {}
 >T20 : T20<T>
+>    : ^^^^^^
 
 type T21<T> = T | {};  // T | {}
 >T21 : T21<T>
+>    : ^^^^^^
 
 type T22<T> = T & unknown;  // T
 >T22 : T
+>    : ^
 
 type T23<T> = T | unknown;  // unknown
 >T23 : unknown
+>    : ^^^^^^^
 
 // unknown in conditional types
 
 type T30<T> = unknown extends T ? true : false;  // Deferred
 >T30 : T30<T>
+>    : ^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type T31<T> = T extends unknown ? true : false;  // Deferred (so it distributes)
 >T31 : T31<T>
+>    : ^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type T32<T> = never extends T ? true : false;  // true
 >T32 : T32<T>
+>    : ^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type T33<T> = T extends never ? true : false;  // Deferred
 >T33 : T33<T>
+>    : ^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type T35<T> = T extends unknown ? { x: T } : false;
 >T35 : T35<T>
+>    : ^^^^^^
 >x : T
+>  : ^
 >false : false
+>      : ^^^^^
 
 type T36 = T35<string | number>;  // { x: string } | { x: number }
->T36 : { x: string; } | { x: number; }
+>T36 : T36
+>    : ^^^
 
 type T37 = T35<any>;  // { x: any }
 >T37 : { x: any; }
+>    : ^^^^^^^^^^^
 
 type T38 = T35<unknown>;  // { x: unknown }
 >T38 : { x: unknown; }
+>    : ^^^^^^^^^^^^^^^
 
 // keyof unknown
 
 type T40 = keyof any;  // string | number | symbol
 >T40 : string | number | symbol
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T41 = keyof unknown;  // never
 >T41 : never
+>    : ^^^^^
 
 // Only equality operators are allowed with unknown
 
 function f10(x: unknown) {
 >f10 : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     x == 5;
 >x == 5 : boolean
+>       : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >5 : 5
+>  : ^
 
     x !== 10;
 >x !== 10 : boolean
+>         : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >10 : 10
+>   : ^^
 
     x >= 0;  // Error
 >x >= 0 : boolean
+>       : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >0 : 0
+>  : ^
 
     x.foo;  // Error
 >x.foo : any
+>      : ^^^
 >x : unknown
+>  : ^^^^^^^
 >foo : any
+>    : ^^^
 
     x[10];  // Error
 >x[10] : any
+>      : ^^^
 >x : unknown
+>  : ^^^^^^^
 >10 : 10
+>   : ^^
 
     x();  // Error
 >x() : any
+>    : ^^^
 >x : unknown
+>  : ^^^^^^^
 
     x + 1;  // Error
 >x + 1 : any
+>      : ^^^
 >x : unknown
+>  : ^^^^^^^
 >1 : 1
+>  : ^
 
     x * 2;  // Error
 >x * 2 : number
+>      : ^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >2 : 2
+>  : ^
 
     -x;  // Error
 >-x : number
+>   : ^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     +x;  // Error
 >+x : number
+>   : ^^^^^^
 >x : unknown
+>  : ^^^^^^^
 }
 
 // No property accesses, element accesses, or function calls
 
 function f11(x: unknown) {
 >f11 : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     x.foo;  // Error
 >x.foo : any
+>      : ^^^
 >x : unknown
+>  : ^^^^^^^
 >foo : any
+>    : ^^^
 
     x[5];  // Error
 >x[5] : any
+>     : ^^^
 >x : unknown
+>  : ^^^^^^^
 >5 : 5
+>  : ^
 
     x();  // Error
 >x() : any
+>    : ^^^
 >x : unknown
+>  : ^^^^^^^
 
     new x();  // Error
 >new x() : any
+>        : ^^^
 >x : unknown
+>  : ^^^^^^^
 }
 
 // typeof, instanceof, and user defined type predicates
 
 declare function isFunction(x: unknown): x is Function;
 >isFunction : (x: unknown) => x is Function
+>           : ^ ^^       ^^^^^             
 >x : unknown
+>  : ^^^^^^^
 
 function f20(x: unknown) {
 >f20 : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (typeof x === "string" || typeof x === "number") {
 >typeof x === "string" || typeof x === "number" : boolean
+>                                               : ^^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
         x;  // string | number
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     if (x instanceof Error) {
 >x instanceof Error : boolean
+>                   : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 
         x;  // Error
 >x : Error
+>  : ^^^^^
     }
     if (isFunction(x)) {
 >isFunction(x) : boolean
+>              : ^^^^^^^
 >isFunction : (x: unknown) => x is Function
+>           : ^ ^^       ^^^^^             
 >x : unknown
+>  : ^^^^^^^
 
         x;  // Function
 >x : Function
+>  : ^^^^^^^^
     }
 }
 
@@ -232,270 +331,402 @@ function f20(x: unknown) {
 
 type T50<T> = { [P in keyof T]: number };
 >T50 : T50<T>
+>    : ^^^^^^
 
 type T51 = T50<any>;  // { [x: string]: number }
 >T51 : T50<any>
+>    : ^^^^^^^^
 
 type T52 = T50<unknown>;  // {}
 >T52 : T50<unknown>
+>    : ^^^^^^^^^^^^
 
 // Anything is assignable to unknown
 
 function f21<T>(pAny: any, pNever: never, pT: T) {
 >f21 : <T>(pAny: any, pNever: never, pT: T) => void
+>    : ^ ^^    ^^   ^^      ^^     ^^  ^^ ^^^^^^^^^
 >pAny : any
+>     : ^^^
 >pNever : never
+>       : ^^^^^
 >pT : T
+>   : ^
 
     let x: unknown;
 >x : unknown
+>  : ^^^^^^^
 
     x = 123;
 >x = 123 : 123
+>        : ^^^
 >x : unknown
+>  : ^^^^^^^
 >123 : 123
+>    : ^^^
 
     x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     x = [1, 2, 3];
 >x = [1, 2, 3] : number[]
+>              : ^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     x = new Error();
 >x = new Error() : Error
+>                : ^^^^^
 >x : unknown
+>  : ^^^^^^^
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 
     x = x;
 >x = x : unknown
+>      : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     x = pAny;
 >x = pAny : any
+>         : ^^^
 >x : unknown
+>  : ^^^^^^^
 >pAny : any
+>     : ^^^
 
     x = pNever;
 >x = pNever : never
+>           : ^^^^^
 >x : unknown
+>  : ^^^^^^^
 >pNever : never
+>       : ^^^^^
 
     x = pT;
 >x = pT : T
+>       : ^
 >x : unknown
+>  : ^^^^^^^
 >pT : T
+>   : ^
 }
 
 // unknown assignable only to itself and any
 
 function f22(x: unknown) {
 >f22 : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     let v1: any = x;
 >v1 : any
+>   : ^^^
 >x : unknown
+>  : ^^^^^^^
 
     let v2: unknown = x;
 >v2 : unknown
+>   : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     let v3: object = x;  // Error
 >v3 : object
+>   : ^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     let v4: string = x;  // Error
 >v4 : string
+>   : ^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     let v5: string[] = x;  // Error
 >v5 : string[]
+>   : ^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     let v6: {} = x;  // Error
 >v6 : {}
+>   : ^^
 >x : unknown
+>  : ^^^^^^^
 
     let v7: {} | null | undefined = x;  // Error
 >v7 : {} | null | undefined
->null : null
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 }
 
 // Type parameter 'T extends unknown' not related to object
 
 function f23<T extends unknown>(x: T) {
 >f23 : <T extends unknown>(x: T) => void
+>    : ^ ^^^^^^^^^       ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     let y: object = x;  // Error
 >y : object
+>  : ^^^^^^
 >x : T
+>  : ^
 }
 
 // Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
 >f24 : (x: { [x: string]: unknown; }) => void
+>    : ^ ^^                         ^^^^^^^^^
 >x : { [x: string]: unknown; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     x = {};
 >x = {} : {}
+>       : ^^
 >x : { [x: string]: unknown; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
     x = { a: 5 };
 >x = { a: 5 } : { a: number; }
+>             : ^^^^^^^^^^^^^^
 >x : { [x: string]: unknown; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 5 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
     x = [1, 2, 3]; // Error
 >x = [1, 2, 3] : number[]
+>              : ^^^^^^^^
 >x : { [x: string]: unknown; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     x = 123;  // Error
 >x = 123 : 123
+>        : ^^^
 >x : { [x: string]: unknown; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 }
 
 // Locals of type unknown always considered initialized
 
 function f25() {
 >f25 : () => void
+>    : ^^^^^^^^^^
 
     let x: unknown;
 >x : unknown
+>  : ^^^^^^^
 
     let y = x;
 >y : unknown
+>  : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 }
 
 // Spread of unknown causes result to be unknown
 
 function f26(x: {}, y: unknown, z: any) {
 >f26 : (x: {}, y: unknown, z: any) => void
+>    : ^ ^^  ^^ ^^       ^^ ^^   ^^^^^^^^^
 >x : {}
+>  : ^^
 >y : unknown
+>  : ^^^^^^^
 >z : any
+>  : ^^^
 
     let o1 = { a: 42, ...x };  // { a: number }
 >o1 : { a: number; }
+>   : ^^^^^^^^^^^^^^
 >{ a: 42, ...x } : { a: number; }
+>                : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 >x : {}
+>  : ^^
 
     let o2 = { a: 42, ...x, ...y };  // unknown
 >o2 : any
+>   : ^^^
 >{ a: 42, ...x, ...y } : any
+>                      : ^^^
 >a : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 >x : {}
+>  : ^^
 >y : unknown
+>  : ^^^^^^^
 
     let o3 = { a: 42, ...x, ...y, ...z };  // any
 >o3 : any
+>   : ^^^
 >{ a: 42, ...x, ...y, ...z } : any
+>                            : ^^^
 >a : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 >x : {}
+>  : ^^
 >y : unknown
+>  : ^^^^^^^
 >z : any
+>  : ^^^
 
     let o4 = { a: 42, ...z }; // any
 >o4 : any
+>   : ^^^
 >{ a: 42, ...z } : any
+>                : ^^^
 >a : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 >z : any
+>  : ^^^
 }
 
 // Functions with unknown return type don't need return expressions
 
 function f27(): unknown {
 >f27 : () => unknown
+>    : ^^^^^^       
 }
 
 // Rest type cannot be created from unknown
 
 function f28(x: unknown) {
 >f28 : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     let { ...a } = x;  // Error
 >a : any
+>  : ^^^
 >x : unknown
+>  : ^^^^^^^
 }
 
 // Class properties of type unknown don't need definite assignment
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     a: string;  // Error
 >a : string
+>  : ^^^^^^
 
     b: unknown;
 >b : unknown
+>  : ^^^^^^^
 
     c: any;
 >c : any
+>  : ^^^
 }
 
 // Type parameter with explicit 'unknown' constraint not assignable to '{}'
 
 function f30<T, U extends unknown>(t: T, u: U) {
 >f30 : <T, U extends unknown>(t: T, u: U) => void
+>    : ^ ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     let x: {} = t;
 >x : {}
+>  : ^^
 >t : T
+>  : ^
 
     let y: {} = u;
 >y : {}
+>  : ^^
 >u : U
+>  : ^
 }
 
 // Repro from #26796
 
 type Test1 = [unknown] extends [{}] ? true : false;  // false
 >Test1 : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
 >IsDefinitelyDefined : IsDefinitelyDefined<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type Test2 = IsDefinitelyDefined<unknown>;  // false
 >Test2 : false
+>      : ^^^^^
 
 function oops<T extends unknown>(arg: T): {} {
 >oops : <T extends unknown>(arg: T) => {}
+>     : ^ ^^^^^^^^^       ^^   ^^ ^^^^^  
 >arg : T
+>    : ^
 
     return arg;  // Error
 >arg : T
+>    : ^
 }
 

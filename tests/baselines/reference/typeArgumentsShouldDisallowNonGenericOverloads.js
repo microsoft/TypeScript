@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentsShouldDisallowNonGenericOverloads.ts] ////
+
 //// [typeArgumentsShouldDisallowNonGenericOverloads.ts]
 function foo(a: string): string;
 function foo<T>(a: T): number;

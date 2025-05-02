@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callbacksDontShareTypes.ts] ////
+
 //// [callbacksDontShareTypes.ts]
 interface Collection<T> {
     length: number;

@@ -22,7 +22,7 @@ declare global {
     function getInterR(): RequireInterface;
 }
 //// [uses.ts]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 //// [index.ts]
 import obj from "./uses.js"
@@ -31,7 +31,7 @@ export default (obj as typeof obj);
 //// [uses.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 exports.default = getInterR();
 //// [index.js]
 "use strict";
@@ -44,10 +44,10 @@ exports.default = uses_js_1.default;
 
 
 //// [uses.d.ts]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 declare const _default: RequireInterface;
 export default _default;
 //// [index.d.ts]
-/// <reference types="pkg" />
-declare const _default: RequireInterface;
+import obj from "./uses.js";
+declare const _default: typeof obj;
 export default _default;

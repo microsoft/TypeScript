@@ -1,15 +1,21 @@
-=== tests/cases/compiler/vueLikeDataAndPropsInference2.ts ===
+//// [tests/cases/compiler/vueLikeDataAndPropsInference2.ts] ////
+
+=== vueLikeDataAndPropsInference2.ts ===
 interface Instance {
     _instanceBrand: never
 >_instanceBrand : never
+>               : ^^^^^
 }
 
 type DataDef<Data, Props> = (this: Readonly<Props> & Instance) => Data
 >DataDef : DataDef<Data, Props>
+>        : ^^^^^^^^^^^^^^^^^^^^
 >this : Readonly<Props> & Instance
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type PropsDefinition<T> = {
 >PropsDefinition : PropsDefinition<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
     [K in keyof T]: T[K]
 }
@@ -17,82 +23,115 @@ type PropsDefinition<T> = {
 interface Options<
     Data = object | ((this: Instance) => object),
 >this : Instance
+>     : ^^^^^^^^
 
     PropsDef = PropsDefinition<Record<string, any>>
     > {
     data?: Data
 >data : Data
+>     : ^^^^
 
     props?: PropsDef
 >props : PropsDef
+>      : ^^^^^^^^
 
     watch?: Record<string, WatchHandler<any>>
 >watch : Record<string, WatchHandler<any>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type WatchHandler<T> = (val: T, oldVal: T) => void;
 >WatchHandler : WatchHandler<T>
+>             : ^^^^^^^^^^^^^^^
 >val : T
+>    : ^
 >oldVal : T
+>       : ^
 
 type ThisTypedOptions<Data, Props> =
 >ThisTypedOptions : ThisTypedOptions<Data, Props>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     object &
     Options<DataDef<Data, Props>, PropsDefinition<Props>> &
     ThisType<Data & Readonly<Props> & Instance>
 
 declare function test<Data, Props>(fn: ThisTypedOptions<Data, Props>): void;
->test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options<object | ((this: Instance) => object), PropsDefinition<Record<string, any>>>): void; }
+>test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
+>     : ^^^    ^^     ^^  ^^                             ^^^    ^^^  ^^       ^^^    ^^^
 >fn : ThisTypedOptions<Data, Props>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function test(fn: Options): void;
 >test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
+>     : ^^^    ^^     ^^  ^^                             ^^^    ^^^  ^^       ^^^    ^^^
 >fn : Options<object | ((this: Instance) => object), PropsDefinition<Record<string, any>>>
+>   : ^^^^^^^^^^^^^^^^^^^    ^^        ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 test({
 >test({    props: {        foo: ''    },    data(): { bar: boolean } {        return {            bar: true        }    },    watch: {        foo(newVal: string, oldVal: string): void {            this.bar = false        }    }}) : void
->test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options<object | ((this: Instance) => object), PropsDefinition<Record<string, any>>>): void; }
->{    props: {        foo: ''    },    data(): { bar: boolean } {        return {            bar: true        }    },    watch: {        foo(newVal: string, oldVal: string): void {            this.bar = false        }    }} : { props: { foo: string; }; data(this: Readonly<{ foo: string; }> & Instance): {    bar: boolean;}; watch: { foo(newVal: string, oldVal: string): void; }; }
+>                                                                                                                                                                                                                                     : ^^^^
+>test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
+>     : ^^^    ^^     ^^  ^^                             ^^^    ^^^  ^^       ^^^    ^^^
+>{    props: {        foo: ''    },    data(): { bar: boolean } {        return {            bar: true        }    },    watch: {        foo(newVal: string, oldVal: string): void {            this.bar = false        }    }} : { props: { foo: string; }; data(this: Readonly<{ foo: string; }> & Instance): { bar: boolean; }; watch: { foo(newVal: string, oldVal: string): void; }; }
+>                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^    ^^^^^^
 
     props: {
 >props : { foo: string; }
+>      : ^^^^^^^^^^^^^^^^
 >{        foo: ''    } : { foo: string; }
+>                      : ^^^^^^^^^^^^^^^^
 
         foo: ''
 >foo : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
     },
 
     data(): { bar: boolean } {
->data : (this: Readonly<{ foo: string; }> & Instance) => {    bar: boolean;}
+>data : (this: Readonly<{ foo: string; }> & Instance) => { bar: boolean; }
+>     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 
 >bar : boolean
+>    : ^^^^^^^
 
         return {
 >{            bar: true        } : { bar: true; }
+>                                : ^^^^^^^^^^^^^^
 
             bar: true
 >bar : true
+>    : ^^^^
 >true : true
+>     : ^^^^
         }
     },
 
     watch: {
 >watch : { foo(newVal: string, oldVal: string): void; }
+>      : ^^^^^^      ^^      ^^      ^^      ^^^    ^^^
 >{        foo(newVal: string, oldVal: string): void {            this.bar = false        }    } : { foo(newVal: string, oldVal: string): void; }
+>                                                                                               : ^^^^^^      ^^      ^^      ^^      ^^^    ^^^
 
         foo(newVal: string, oldVal: string): void {
 >foo : (newVal: string, oldVal: string) => void
+>    : ^      ^^      ^^      ^^      ^^^^^    
 >newVal : string
+>       : ^^^^^^
 >oldVal : string
+>       : ^^^^^^
 
             this.bar = false
 >this.bar = false : false
+>                 : ^^^^^
 >this.bar : any
 >this : any
+>     : ^^^
 >bar : any
+>    : ^^^
 >false : false
+>      : ^^^^^
         }
     }
 })

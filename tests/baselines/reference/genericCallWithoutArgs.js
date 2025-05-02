@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCallWithoutArgs.ts] ////
+
 //// [genericCallWithoutArgs.ts]
 function f<X, Y>(x: X, y: Y) {
 }

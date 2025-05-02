@@ -1,14 +1,22 @@
-=== tests/cases/compiler/nestedRedeclarationInES6AMD.ts ===
+//// [tests/cases/compiler/nestedRedeclarationInES6AMD.ts] ////
+
+=== nestedRedeclarationInES6AMD.ts ===
 function a() {
 >a : () => void
+>  : ^^^^^^^^^^
     {
         let status = 1;
 >status : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
         status = 2;
 >status = 2 : 2
+>           : ^
 >status : number
+>       : ^^^^^^
 >2 : 2
+>  : ^
     }
 }

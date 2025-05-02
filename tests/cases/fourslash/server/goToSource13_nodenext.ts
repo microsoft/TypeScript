@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /node_modules/left-pad/package.json
+// @Filename: /home/src/workspaces/project/node_modules/left-pad/package.json
 //// {
 ////   "name": "left-pad",
 ////   "version": "1.3.0",
@@ -9,16 +9,16 @@
 ////   "types": "index.d.ts"
 //// }
 
-// @Filename: /node_modules/left-pad/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/left-pad/index.d.ts
 //// declare function leftPad(str: string|number, len: number, ch?: string|number): string;
 //// declare namespace leftPad { }
 //// export = leftPad;
 
-// @Filename: /node_modules/left-pad/index.js
+// @Filename: /home/src/workspaces/project/node_modules/left-pad/index.js
 //// module.exports = leftPad;
 //// function /*end*/leftPad(str, len, ch) {}
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////       "module": "node16",
@@ -28,8 +28,8 @@
 ////   }
 //// }
 
-// @Filename: /index.mts
+// @Filename: /home/src/workspaces/project/index.mts
 //// import leftPad = require("left-pad");
 //// /*start*/leftPad("", 4);
 
-verify.goToSourceDefinition("start", "end");
+verify.baselineGoToSourceDefinition("start");

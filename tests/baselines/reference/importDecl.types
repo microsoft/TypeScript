@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importDecl_1.ts ===
+//// [tests/cases/compiler/importDecl.ts] ////
+
+=== importDecl_1.ts ===
 ///<reference path='importDecl_require.ts'/>
 ///<reference path='importDecl_require1.ts'/>
 ///<reference path='importDecl_require2.ts'/>
@@ -6,219 +8,325 @@
 ///<reference path='importDecl_require4.ts'/>
 import m4 = require("./importDecl_require"); // Emit used
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
 export var x4 = m4.x;
 >x4 : m4.d
+>   : ^^^^
 >m4.x : m4.d
+>     : ^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >x : m4.d
+>  : ^^^^
 
 export var d4 = m4.d;
 >d4 : typeof m4.d
+>   : ^^^^^^^^^^^
 >m4.d : typeof m4.d
+>     : ^^^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >d : typeof m4.d
+>  : ^^^^^^^^^^^
 
 export var f4 = m4.foo();
 >f4 : m4.d
+>   : ^^^^
 >m4.foo() : m4.d
+>         : ^^^^
 >m4.foo : () => m4.d
+>       : ^^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >foo : () => m4.d
+>    : ^^^^^^^^^^
 
 export module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     export var x2 = m4.x;
 >x2 : m4.d
+>   : ^^^^
 >m4.x : m4.d
+>     : ^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >x : m4.d
+>  : ^^^^
 
     export var d2 = m4.d;
 >d2 : typeof m4.d
+>   : ^^^^^^^^^^^
 >m4.d : typeof m4.d
+>     : ^^^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >d : typeof m4.d
+>  : ^^^^^^^^^^^
 
     export var f2 = m4.foo();
 >f2 : m4.d
+>   : ^^^^
 >m4.foo() : m4.d
+>         : ^^^^
 >m4.foo : () => m4.d
+>       : ^^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >foo : () => m4.d
+>    : ^^^^^^^^^^
 
     var x3 = m4.x;
 >x3 : m4.d
+>   : ^^^^
 >m4.x : m4.d
+>     : ^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >x : m4.d
+>  : ^^^^
 
     var d3 = m4.d;
 >d3 : typeof m4.d
+>   : ^^^^^^^^^^^
 >m4.d : typeof m4.d
+>     : ^^^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >d : typeof m4.d
+>  : ^^^^^^^^^^^
 
     var f3 = m4.foo();
 >f3 : m4.d
+>   : ^^^^
 >m4.foo() : m4.d
+>         : ^^^^
 >m4.foo : () => m4.d
+>       : ^^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >foo : () => m4.d
+>    : ^^^^^^^^^^
 }
 
 //Emit global only usage
 import glo_m4 = require("./importDecl_require1");
 >glo_m4 : typeof glo_m4
+>       : ^^^^^^^^^^^^^
 
 export var useGlo_m4_d4 = glo_m4.d;
 >useGlo_m4_d4 : typeof glo_m4.d
+>             : ^^^^^^^^^^^^^^^
 >glo_m4.d : typeof glo_m4.d
+>         : ^^^^^^^^^^^^^^^
 >glo_m4 : typeof glo_m4
+>       : ^^^^^^^^^^^^^
 >d : typeof glo_m4.d
+>  : ^^^^^^^^^^^^^^^
 
 export var useGlo_m4_f4 = glo_m4.foo();
 >useGlo_m4_f4 : glo_m4.d
+>             : ^^^^^^^^
 >glo_m4.foo() : glo_m4.d
+>             : ^^^^^^^^
 >glo_m4.foo : () => glo_m4.d
+>           : ^^^^^^^^^^^^^^
 >glo_m4 : typeof glo_m4
+>       : ^^^^^^^^^^^^^
 >foo : () => glo_m4.d
+>    : ^^^^^^^^^^^^^^
 
 //Emit even when used just in function type
 import fncOnly_m4 = require("./importDecl_require2");
 >fncOnly_m4 : typeof fncOnly_m4
+>           : ^^^^^^^^^^^^^^^^^
 
 export var useFncOnly_m4_f4 = fncOnly_m4.foo();
 >useFncOnly_m4_f4 : fncOnly_m4.d
+>                 : ^^^^^^^^^^^^
 >fncOnly_m4.foo() : fncOnly_m4.d
+>                 : ^^^^^^^^^^^^
 >fncOnly_m4.foo : () => fncOnly_m4.d
+>               : ^^^^^^^^^^^^^^^^^^
 >fncOnly_m4 : typeof fncOnly_m4
+>           : ^^^^^^^^^^^^^^^^^
 >foo : () => fncOnly_m4.d
+>    : ^^^^^^^^^^^^^^^^^^
 
 // only used privately no need to emit
 import private_m4 = require("./importDecl_require3");
 >private_m4 : typeof private_m4
+>           : ^^^^^^^^^^^^^^^^^
 
 export module usePrivate_m4_m1 {
 >usePrivate_m4_m1 : typeof usePrivate_m4_m1
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
     var x3 = private_m4.x;
 >x3 : private_m4.d
+>   : ^^^^^^^^^^^^
 >private_m4.x : private_m4.d
+>             : ^^^^^^^^^^^^
 >private_m4 : typeof private_m4
+>           : ^^^^^^^^^^^^^^^^^
 >x : private_m4.d
+>  : ^^^^^^^^^^^^
 
     var d3 = private_m4.d;
 >d3 : typeof private_m4.d
+>   : ^^^^^^^^^^^^^^^^^^^
 >private_m4.d : typeof private_m4.d
+>             : ^^^^^^^^^^^^^^^^^^^
 >private_m4 : typeof private_m4
+>           : ^^^^^^^^^^^^^^^^^
 >d : typeof private_m4.d
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var f3 = private_m4.foo();
 >f3 : private_m4.d
+>   : ^^^^^^^^^^^^
 >private_m4.foo() : private_m4.d
+>                 : ^^^^^^^^^^^^
 >private_m4.foo : () => private_m4.d
+>               : ^^^^^^^^^^^^^^^^^^
 >private_m4 : typeof private_m4
+>           : ^^^^^^^^^^^^^^^^^
 >foo : () => private_m4.d
+>    : ^^^^^^^^^^^^^^^^^^
 }
 
 // Do not emit unused import
 import m5 = require("./importDecl_require4");
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
 export var d = m5.foo2();
 >d : m4.d
+>  : ^^^^
 >m5.foo2() : m4.d
+>          : ^^^^
 >m5.foo2 : () => m4.d
+>        : ^^^^^^    
 >m5 : typeof m5
+>   : ^^^^^^^^^
 >foo2 : () => m4.d
+>     : ^^^^^^    
 
 // Do not emit multiple used import statements
 import multiImport_m4 = require("./importDecl_require"); // Emit used
 >multiImport_m4 : typeof m4
+>               : ^^^^^^^^^
 
 export var useMultiImport_m4_x4 = multiImport_m4.x;
 >useMultiImport_m4_x4 : m4.d
+>                     : ^^^^
 >multiImport_m4.x : m4.d
+>                 : ^^^^
 >multiImport_m4 : typeof m4
+>               : ^^^^^^^^^
 >x : m4.d
+>  : ^^^^
 
 export var useMultiImport_m4_d4 = multiImport_m4.d;
 >useMultiImport_m4_d4 : typeof m4.d
+>                     : ^^^^^^^^^^^
 >multiImport_m4.d : typeof m4.d
+>                 : ^^^^^^^^^^^
 >multiImport_m4 : typeof m4
+>               : ^^^^^^^^^
 >d : typeof m4.d
+>  : ^^^^^^^^^^^
 
 export var useMultiImport_m4_f4 = multiImport_m4.foo();
 >useMultiImport_m4_f4 : m4.d
+>                     : ^^^^
 >multiImport_m4.foo() : m4.d
+>                     : ^^^^
 >multiImport_m4.foo : () => m4.d
+>                   : ^^^^^^^^^^
 >multiImport_m4 : typeof m4
+>               : ^^^^^^^^^
 >foo : () => m4.d
+>    : ^^^^^^^^^^
 
-=== tests/cases/compiler/importDecl_require.ts ===
+=== importDecl_require.ts ===
 export class d {
 >d : d
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 export var x: d;
 >x : d
+>  : ^
 
 export function foo(): d { return null; }
 >foo : () => d
->null : null
+>    : ^^^^^^ 
 
-=== tests/cases/compiler/importDecl_require1.ts ===
+=== importDecl_require1.ts ===
 export class d {
 >d : d
+>  : ^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 var x: d;
 >x : d
+>  : ^
 
 export function foo(): d { return null; }
 >foo : () => d
->null : null
+>    : ^^^^^^ 
 
-=== tests/cases/compiler/importDecl_require2.ts ===
+=== importDecl_require2.ts ===
 export class d {
 >d : d
+>  : ^
 
     baz: string;
 >baz : string
+>    : ^^^^^^
 }
 export var x: d;
 >x : d
+>  : ^
 
 export function foo(): d { return null; }
 >foo : () => d
->null : null
+>    : ^^^^^^ 
 
-=== tests/cases/compiler/importDecl_require3.ts ===
+=== importDecl_require3.ts ===
 export class d {
 >d : d
+>  : ^
 
     bing: string;
 >bing : string
+>     : ^^^^^^
 }
 export var x: d;
 >x : d
+>  : ^
 
 export function foo(): d { return null; }
 >foo : () => d
->null : null
+>    : ^^^^^^ 
 
-=== tests/cases/compiler/importDecl_require4.ts ===
+=== importDecl_require4.ts ===
 import m4 = require("./importDecl_require");
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
 export function foo2(): m4.d { return null; }
 >foo2 : () => m4.d
+>     : ^^^^^^    
 >m4 : any
->null : null
+>   : ^^^
 

@@ -11,5 +11,5 @@
 ////    }
 ////}
 
-verify.goToDefinition("1", "2");
+verify.baselineGoToDefinition("1");
 

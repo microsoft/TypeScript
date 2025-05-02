@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts] ////
+
+=== classIsSubtypeOfBaseType.ts ===
 class Base<T> {
 >Base : Symbol(Base, Decl(classIsSubtypeOfBaseType.ts, 0, 0))
 >T : Symbol(T, Decl(classIsSubtypeOfBaseType.ts, 0, 11))

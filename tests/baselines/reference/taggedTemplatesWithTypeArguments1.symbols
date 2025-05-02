@@ -1,11 +1,13 @@
-=== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts] ////
+
+=== taggedTemplatesWithTypeArguments1.ts ===
 declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 >f : Symbol(f, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 0))
 >T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 19))
 >strs : Symbol(strs, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 22))
 >TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
 >callbacks : Symbol(callbacks, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 49))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 71))
 >T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 19))
 

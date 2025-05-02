@@ -1,50 +1,69 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts] ////
+
+=== objectTypesIdentityWithPrivates3.ts ===
 interface T1 { }
 interface T2 { z }
 >z : any
+>  : ^^^
 
 class C1<T> {
 >C1 : C1<T>
+>   : ^^^^^
 
     private x;
 >x : any
+>  : ^^^
 }
 
 class C2 extends C1<T1> {
 >C2 : C2
+>   : ^^
 >C1 : C1<T1>
+>   : ^^^^^^
 
     y;
 >y : any
+>  : ^^^
 }
 
 var c1: C1<T2>;
 >c1 : C1<T2>
+>   : ^^^^^^
 
 <C2>c1; // Should succeed (private x originates in the same declaration)
 ><C2>c1 : C2
+>       : ^^
 >c1 : C1<T2>
+>   : ^^^^^^
 
 
 class C3<T> {
 >C3 : C3<T>
+>   : ^^^^^
 
     private x: T; // This T is the difference between C3 and C1
 >x : T
+>  : ^
 }
 
 class C4 extends C3<T1> {
 >C4 : C4
+>   : ^^
 >C3 : C3<T1>
+>   : ^^^^^^
 
     y;
 >y : any
+>  : ^^^
 }
 
 var c3: C3<T2>;
 >c3 : C3<T2>
+>   : ^^^^^^
 
 <C4>c3; // Should fail (private x originates in the same declaration, but different types)
 ><C4>c3 : C4
+>       : ^^
 >c3 : C3<T2>
+>   : ^^^^^^
 

@@ -1,21 +1,28 @@
+//// [tests/cases/compiler/moduleResolutionWithRequire.ts] ////
+
 === /index.ts ===
 declare const require: any;
 >require : any
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     const a = require('../outside-of-rootdir/foo');
 >a : any
 >require('../outside-of-rootdir/foo') : any
 >require : any
 >'../outside-of-rootdir/foo' : "../outside-of-rootdir/foo"
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const { other }: { other: string } = require('./other');
 >other : string
+>      : ^^^^^^
 >other : string
+>      : ^^^^^^
 >require('./other') : any
 >require : any
 >'./other' : "./other"
+>          : ^^^^^^^^^
 }
 

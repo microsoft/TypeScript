@@ -1,0 +1,88 @@
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(5,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(9,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(17,7): error TS2322: Type '() => void' is not assignable to type '() => number | undefined'.
+  Type 'void' is not assignable to type 'number | undefined'.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(21,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(29,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(33,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => undefined'.
+  Type 'void' is not assignable to type 'undefined'.
+
+
+==== functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts (7 errors) ====
+    function f10(): undefined {
+        // Ok, return type allows implicit return of undefined
+    }
+    
+    function f11(): undefined | number {
+                    ~~~~~~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+        // Error, return type isn't just undefined
+    }
+    
+    function f12(): number {
+                    ~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+        // Error, return type doesn't include undefined
+    }
+    
+    const f20: () => undefined = () => {
+        // Ok, contextual type for implicit return is undefined
+    }
+    
+    const f21: () => undefined | number = () => {
+          ~~~
+!!! error TS2322: Type '() => void' is not assignable to type '() => number | undefined'.
+!!! error TS2322:   Type 'void' is not assignable to type 'number | undefined'.
+        // Error, regular void function because contextual type for implicit return isn't just undefined
+    }
+    
+    const f22: () => number = () => {
+          ~~~
+!!! error TS2322: Type '() => void' is not assignable to type '() => number'.
+!!! error TS2322:   Type 'void' is not assignable to type 'number'.
+        // Error, regular void function because contextual type for implicit return isn't just undefined
+    }
+    
+    async function f30(): Promise<undefined> {
+        // Ok, return type allows implicit return of undefined
+    }
+    
+    async function f31(): Promise<undefined | number> {
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+        // Error, return type isn't just undefined
+    }
+    
+    async function f32(): Promise<number> {
+                          ~~~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+        // Error, return type doesn't include undefined
+    }
+    
+    // Examples from #36288
+    
+    declare function f(a: () => undefined): void;
+    
+    f(() => { });
+    
+    f((): undefined => { });
+    
+    const g1: () => undefined = () => { };
+    
+    const g2 = (): undefined => { };
+    
+    function h1() {
+    }
+    
+    f(h1);  // Error
+      ~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => undefined'.
+!!! error TS2345:   Type 'void' is not assignable to type 'undefined'.
+    
+    function h2(): undefined {
+    }
+    
+    f(h2);
+    

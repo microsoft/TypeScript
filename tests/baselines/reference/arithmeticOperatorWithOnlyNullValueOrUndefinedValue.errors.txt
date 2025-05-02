@@ -1,302 +1,302 @@
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(2,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(2,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(3,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(3,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(4,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(4,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(5,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(5,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(8,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(8,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(9,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(9,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(10,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(10,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(11,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(11,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(14,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(14,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(15,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(15,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(16,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(16,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(17,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(17,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(20,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(20,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(21,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(21,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(22,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(22,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(23,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(23,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(26,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(26,19): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(27,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(27,19): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(28,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(28,24): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(29,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(29,24): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(32,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(32,19): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(33,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(33,19): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(34,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(34,24): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(35,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(35,24): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(38,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(38,20): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(39,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(39,20): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(40,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(40,25): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(41,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(41,25): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(44,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(44,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(45,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(45,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(46,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(46,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(47,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(47,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(50,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(50,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(51,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(51,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(52,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(52,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(53,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(53,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(56,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(56,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(57,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(57,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(58,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(58,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(59,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(59,23): error TS2532: Object is possibly 'undefined'.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(2,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(2,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(3,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(3,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(4,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(4,23): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(5,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(5,23): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(8,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(8,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(9,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(9,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(10,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(10,23): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(11,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(11,23): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(14,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(14,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(15,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(15,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(16,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(16,23): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(17,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(17,23): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(20,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(20,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(21,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(21,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(22,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(22,23): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(23,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(23,23): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(26,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(26,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(27,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(27,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(28,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(28,24): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(29,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(29,24): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(32,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(32,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(33,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(33,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(34,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(34,24): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(35,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(35,24): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(38,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(38,20): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(39,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(39,20): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(40,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(40,25): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(41,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(41,25): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(44,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(44,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(45,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(45,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(46,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(46,23): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(47,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(47,23): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(50,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(50,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(51,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(51,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(52,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(52,23): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(53,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(53,23): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(56,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(56,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(57,11): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(57,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(58,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(58,23): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(59,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(59,23): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts (80 errors) ====
+==== arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts (80 errors) ====
     // operator *
     var ra1 = null * null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var ra2 = null * undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ra3 = undefined * null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var ra4 = undefined * undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator /
     var rb1 = null / null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rb2 = null / undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rb3 = undefined / null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rb4 = undefined / undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator %
     var rc1 = null % null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rc2 = null % undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rc3 = undefined % null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rc4 = undefined % undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator -
     var rd1 = null - null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rd2 = null - undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rd3 = undefined - null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rd4 = undefined - undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator <<
     var re1 = null << null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                       ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var re2 = null << undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                       ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var re3 = undefined << null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                            ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var re4 = undefined << undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator >>
     var rf1 = null >> null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                       ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rf2 = null >> undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                       ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rf3 = undefined >> null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                            ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rf4 = undefined >> undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator >>>
     var rg1 = null >>> null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                        ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rg2 = null >>> undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                        ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rg3 = undefined >>> null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                             ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rg4 = undefined >>> undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                             ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator &
     var rh1 = null & null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rh2 = null & undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rh3 = undefined & null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rh4 = undefined & undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator ^
     var ri1 = null ^ null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var ri2 = null ^ undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ri3 = undefined ^ null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var ri4 = undefined ^ undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator |
     var rj1 = null | null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rj2 = null | undefined;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rj3 = undefined | null;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rj4 = undefined | undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.

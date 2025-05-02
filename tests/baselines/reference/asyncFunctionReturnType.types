@@ -1,28 +1,39 @@
-=== tests/cases/compiler/asyncFunctionReturnType.ts ===
+//// [tests/cases/compiler/asyncFunctionReturnType.ts] ////
+
+=== asyncFunctionReturnType.ts ===
 async function fAsync() {
 >fAsync : () => Promise<(number | boolean)[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Without explicit type annotation, this is just an array.
     return [1, true];
 >[1, true] : (number | boolean)[]
+>          : ^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 }
 
 async function fAsyncExplicit(): Promise<[number, boolean]> {
 >fAsyncExplicit : () => Promise<[number, boolean]>
+>               : ^^^^^^                          
 
     // This is contextually typed as a tuple.
     return [1, true];
 >[1, true] : [number, true]
+>          : ^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 }
 
 // https://github.com/Microsoft/TypeScript/issues/13128
 interface Obj {
     stringProp: string;
 >stringProp : string
+>           : ^^^^^^
 
     anyProp: any;
 >anyProp : any
@@ -30,193 +41,305 @@ interface Obj {
 
 async function fIndexedTypeForStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 >fIndexedTypeForStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
+>                          : ^   ^^   ^^^^^                          
 >obj : Obj
+>    : ^^^
 
     return obj.stringProp;
 >obj.stringProp : string
+>               : ^^^^^^
 >obj : Obj
+>    : ^^^
 >stringProp : string
+>           : ^^^^^^
 }
 
 async function fIndexedTypeForPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 >fIndexedTypeForPromiseOfStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
+>                                   : ^   ^^   ^^^^^                          
 >obj : Obj
+>    : ^^^
 
     return Promise.resolve(obj.stringProp);
 >Promise.resolve(obj.stringProp) : Promise<string>
+>                                : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj.stringProp : string
+>               : ^^^^^^
 >obj : Obj
+>    : ^^^
 >stringProp : string
+>           : ^^^^^^
 }
 
 async function fIndexedTypeForExplicitPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 >fIndexedTypeForExplicitPromiseOfStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
+>                                           : ^   ^^   ^^^^^                          
 >obj : Obj
+>    : ^^^
 
     return Promise.resolve<Obj["stringProp"]>(obj.stringProp);
 >Promise.resolve<Obj["stringProp"]>(obj.stringProp) : Promise<string>
+>                                                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj.stringProp : string
+>               : ^^^^^^
 >obj : Obj
+>    : ^^^
 >stringProp : string
+>           : ^^^^^^
 }
 
 async function fIndexedTypeForAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 >fIndexedTypeForAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
+>                       : ^   ^^   ^^^^^                       
 >obj : Obj
+>    : ^^^
 
     return obj.anyProp;
 >obj.anyProp : any
 >obj : Obj
+>    : ^^^
 >anyProp : any
+>        : ^^^
 }
 
 async function fIndexedTypeForPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 >fIndexedTypeForPromiseOfAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
+>                                : ^   ^^   ^^^^^                       
 >obj : Obj
+>    : ^^^
 
     return Promise.resolve(obj.anyProp);
 >Promise.resolve(obj.anyProp) : Promise<any>
+>                             : ^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj.anyProp : any
 >obj : Obj
+>    : ^^^
 >anyProp : any
+>        : ^^^
 }
 
 async function fIndexedTypeForExplicitPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 >fIndexedTypeForExplicitPromiseOfAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
+>                                        : ^   ^^   ^^^^^                       
 >obj : Obj
+>    : ^^^
 
     return Promise.resolve<Obj["anyProp"]>(obj.anyProp);
 >Promise.resolve<Obj["anyProp"]>(obj.anyProp) : Promise<any>
+>                                             : ^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj.anyProp : any
 >obj : Obj
+>    : ^^^
 >anyProp : any
+>        : ^^^
 }
 
 async function fGenericIndexedTypeForStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 >fGenericIndexedTypeForStringProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["stringProp"]>
+>                                 : ^    ^^^^^^^^^   ^^   ^^    ^^^^^                           
 >obj : TObj
+>    : ^^^^
 
     return obj.stringProp;
 >obj.stringProp : string
+>               : ^^^^^^
 >obj : TObj
+>    : ^^^^
 >stringProp : string
+>           : ^^^^^^
 }
 
 async function fGenericIndexedTypeForPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 >fGenericIndexedTypeForPromiseOfStringProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["stringProp"]>
+>                                          : ^    ^^^^^^^^^   ^^   ^^    ^^^^^                           
 >obj : TObj
+>    : ^^^^
 
     return Promise.resolve(obj.stringProp);
 >Promise.resolve(obj.stringProp) : Promise<string>
+>                                : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj.stringProp : string
+>               : ^^^^^^
 >obj : TObj
+>    : ^^^^
 >stringProp : string
+>           : ^^^^^^
 }
 
 async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 >fGenericIndexedTypeForExplicitPromiseOfStringProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["stringProp"]>
+>                                                  : ^    ^^^^^^^^^   ^^   ^^    ^^^^^                           
 >obj : TObj
+>    : ^^^^
 
     return Promise.resolve<TObj["stringProp"]>(obj.stringProp);
 >Promise.resolve<TObj["stringProp"]>(obj.stringProp) : Promise<Awaited<TObj["stringProp"]>>
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj.stringProp : string
+>               : ^^^^^^
 >obj : TObj
+>    : ^^^^
 >stringProp : string
+>           : ^^^^^^
 }
 
 async function fGenericIndexedTypeForAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 >fGenericIndexedTypeForAnyProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["anyProp"]>
+>                              : ^    ^^^^^^^^^   ^^   ^^    ^^^^^                        
 >obj : TObj
+>    : ^^^^
 
     return obj.anyProp;
 >obj.anyProp : any
 >obj : TObj
+>    : ^^^^
 >anyProp : any
+>        : ^^^
 }
 
 async function fGenericIndexedTypeForPromiseOfAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 >fGenericIndexedTypeForPromiseOfAnyProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["anyProp"]>
+>                                       : ^    ^^^^^^^^^   ^^   ^^    ^^^^^                        
 >obj : TObj
+>    : ^^^^
 
     return Promise.resolve(obj.anyProp);
 >Promise.resolve(obj.anyProp) : Promise<any>
+>                             : ^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj.anyProp : any
 >obj : TObj
+>    : ^^^^
 >anyProp : any
+>        : ^^^
 }
 
 async function fGenericIndexedTypeForExplicitPromiseOfAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 >fGenericIndexedTypeForExplicitPromiseOfAnyProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["anyProp"]>
+>                                               : ^    ^^^^^^^^^   ^^   ^^    ^^^^^                        
 >obj : TObj
+>    : ^^^^
 
     return Promise.resolve<TObj["anyProp"]>(obj.anyProp);
 >Promise.resolve<TObj["anyProp"]>(obj.anyProp) : Promise<Awaited<TObj["anyProp"]>>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj.anyProp : any
 >obj : TObj
+>    : ^^^^
 >anyProp : any
+>        : ^^^
 }
 
 async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
 >fGenericIndexedTypeForKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
+>                            : ^    ^^^^^^^^^   ^^ ^^^^^^^^^          ^^   ^^    ^^   ^^ ^^^^^                
 >obj : TObj
+>    : ^^^^
 >key : K
+>    : ^
 
     return obj[key];
 >obj[key] : TObj[K]
+>         : ^^^^^^^
 >obj : TObj
+>    : ^^^^
 >key : K
+>    : ^
 }
 
 async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
 >fGenericIndexedTypeForPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
+>                                     : ^    ^^^^^^^^^   ^^ ^^^^^^^^^          ^^   ^^    ^^   ^^ ^^^^^                
 >obj : TObj
+>    : ^^^^
 >key : K
+>    : ^
 
     return Promise.resolve(obj[key]);
 >Promise.resolve(obj[key]) : Promise<Awaited<TObj[K]>>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj[key] : TObj[K]
+>         : ^^^^^^^
 >obj : TObj
+>    : ^^^^
 >key : K
+>    : ^
 }
 
 async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
 >fGenericIndexedTypeForExplicitPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
+>                                             : ^    ^^^^^^^^^   ^^ ^^^^^^^^^          ^^   ^^    ^^   ^^ ^^^^^                
 >obj : TObj
+>    : ^^^^
 >key : K
+>    : ^
 
     return Promise.resolve<TObj[K]>(obj[key]);
 >Promise.resolve<TObj[K]>(obj[key]) : Promise<Awaited<TObj[K]>>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >obj[key] : TObj[K]
+>         : ^^^^^^^
 >obj : TObj
+>    : ^^^^
 >key : K
+>    : ^
 }

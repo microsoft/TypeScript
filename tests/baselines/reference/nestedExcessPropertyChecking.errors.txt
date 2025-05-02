@@ -1,0 +1,116 @@
+nestedExcessPropertyChecking.ts(6,7): error TS2322: Type 'C1' is not assignable to type 'A1 & B1'.
+  Types of property 'x' are incompatible.
+    Type '{ c: string; }' has no properties in common with type '{ a?: string | undefined; } & { b?: string | undefined; }'.
+nestedExcessPropertyChecking.ts(13,7): error TS2559: Type 'C2' has no properties in common with type 'A2 & B2'.
+nestedExcessPropertyChecking.ts(17,5): error TS2559: Type 'E' has no properties in common with type '{ nope?: any; }'.
+nestedExcessPropertyChecking.ts(18,5): error TS2559: Type '"A"' has no properties in common with type '{ nope?: any; }'.
+nestedExcessPropertyChecking.ts(30,22): error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
+nestedExcessPropertyChecking.ts(40,9): error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
+
+
+==== nestedExcessPropertyChecking.ts (6 errors) ====
+    type A1 = { x: { a?: string } };
+    type B1 = { x: { b?: string } };
+    
+    type C1 = { x: { c: string } };
+    
+    const ab1: A1 & B1 = {} as C1;  // Error
+          ~~~
+!!! error TS2322: Type 'C1' is not assignable to type 'A1 & B1'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type '{ c: string; }' has no properties in common with type '{ a?: string | undefined; } & { b?: string | undefined; }'.
+    
+    type A2 = { a?: string };
+    type B2 = { b?: string };
+    
+    type C2 = { c: string };
+    
+    const ab2: A2 & B2 = {} as C2;  // Error
+          ~~~
+!!! error TS2559: Type 'C2' has no properties in common with type 'A2 & B2'.
+    
+    enum E { A = "A" }
+    
+    let x: { nope?: any } = E.A;  // Error
+        ~
+!!! error TS2559: Type 'E' has no properties in common with type '{ nope?: any; }'.
+    let y: { nope?: any } = "A";  // Error
+        ~
+!!! error TS2559: Type '"A"' has no properties in common with type '{ nope?: any; }'.
+    
+    // Repros from #51043
+    
+    type OverridesInput = {
+        someProp?: 'A' | 'B'
+    }
+    
+    const foo1: Partial<{ something: any }> & { variables: {
+        overrides?: OverridesInput;
+    } & Partial<{
+        overrides?: OverridesInput;
+    }>} = { variables: { overrides: false } };  // Error
+                         ~~~~~~~~~
+!!! error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
+!!! related TS6500 nestedExcessPropertyChecking.ts:27:5: The expected type comes from property 'overrides' which is declared here on type '{ overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>'
+    
+    
+    interface Unrelated { _?: any }
+    
+    interface VariablesA { overrides?: OverridesInput; }
+    interface VariablesB { overrides?: OverridesInput; }
+    
+    const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
+        variables: {
+            overrides: false  // Error
+            ~~~~~~~~~
+!!! error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
+!!! related TS6500 nestedExcessPropertyChecking.ts:35:24: The expected type comes from property 'overrides' which is declared here on type 'VariablesA & VariablesB'
+        }
+    };
+    
+    // Simplified repro from #52252
+    
+    type T1 = {
+        primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
+    };
+    
+    type T2 = {
+        primary: { __typename?: 'Feature' } & { colors: { light: number } },
+    };
+    
+    type Query = T1 & T2;
+    
+    const response: Query = {
+        primary: {
+            colors: {
+                light: 1,
+                dark: 3,
+            },
+        },
+    };
+    
+    // Repro from #53412
+    
+    type BaseItem = {
+        id: number;
+    }
+    type ExtendedItem = BaseItem & {
+        description: string | null
+    };
+      
+    type BaseValue = {
+        // there are other fields
+        items: BaseItem[];
+    }
+    type ExtendedValue = BaseValue & {
+        // there are other fields
+        items: ExtendedItem[];
+    }
+    
+    const TEST_VALUE: ExtendedValue = {
+        items: [
+            {id: 1, description: null},
+            {id: 2, description: 'wigglytubble'},
+        ]
+    };
+    

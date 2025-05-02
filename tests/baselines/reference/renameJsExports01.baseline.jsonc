@@ -1,118 +1,111 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.js ===
-// exports.[|area|] = function (r) { return r * r; }
+// <|exports.[|{| isWriteAccess: true |}area|] = function (r) { return r * r; }|>
 
 // === /tests/cases/fourslash/b.js ===
 // var mod = require('./a');
 // var t = mod./*FIND ALL REFS*/[|area|](10);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.js",
-      "kind": "property",
-      "name": "(property) area: (r: any) => number",
-      "textSpan": {
-        "start": 8,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "area",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "r",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 45
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.js ===
+  // <|exports.[|area|]|> = function (r) { return r * r; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) area: (r: any) => number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "area",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "r",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// <|exports./*RENAME*/[|areaRENAME|] = function (r) { return r * r; }|>
+
+// === /tests/cases/fourslash/b.js ===
+// var mod = require('./a');
+// var t = mod.[|areaRENAME|](10);
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// <|exports.[|areaRENAME|] = function (r) { return r * r; }|>
+
+// === /tests/cases/fourslash/b.js ===
+// var mod = require('./a');
+// var t = mod./*RENAME*/[|areaRENAME|](10);

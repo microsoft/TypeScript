@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowByEquality.ts ===
+//// [tests/cases/compiler/narrowByEquality.ts] ////
+
+=== narrowByEquality.ts ===
 declare let x: number | string | boolean
 >x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
 

@@ -1,3 +1,21 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/foo.ts ===
+// /// <reference no-default-lib="true"/>
+// /// <reference path='./bar.d.ts' />
+// import.meta;
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | 
+// | ----------------------------------------------------------------------
+// ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | 
+// | The type of `import.meta`.
+// | 
+// | If you need to declare that a given property exists on `import.meta`,
+// | this type may be augmented via interface merging.
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +23,7 @@
       "position": 77,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "",
       "kindModifiers": "",
       "textSpan": {
@@ -22,7 +40,7 @@
       "position": 84,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "interface",
       "kindModifiers": "declare",
       "textSpan": {

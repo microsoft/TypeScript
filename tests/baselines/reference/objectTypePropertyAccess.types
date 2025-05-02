@@ -1,106 +1,171 @@
-=== tests/cases/conformance/types/members/objectTypePropertyAccess.ts ===
+//// [tests/cases/conformance/types/members/objectTypePropertyAccess.ts] ////
+
+=== objectTypePropertyAccess.ts ===
 // Index notation should resolve to the type of a declared property with that same name
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var r1 = c.toString();
 >r1 : string
+>   : ^^^^^^
 >c.toString() : string
+>             : ^^^^^^
 >c.toString : () => string
+>           : ^^^^^^      
 >c : C
+>  : ^
 >toString : () => string
+>         : ^^^^^^      
 
 var r2 = c['toString']();
 >r2 : string
+>   : ^^^^^^
 >c['toString']() : string
+>                : ^^^^^^
 >c['toString'] : () => string
+>              : ^^^^^^      
 >c : C
+>  : ^
 >'toString' : "toString"
+>           : ^^^^^^^^^^
 
 var r3 = c.foo;
 >r3 : string
+>   : ^^^^^^
 >c.foo : string
+>      : ^^^^^^
 >c : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 var r4 = c['foo'];
 >r4 : string
+>   : ^^^^^^
 >c['foo'] : string
+>         : ^^^^^^
 >c : C
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
 
 interface I {
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 var i: I;
 >i : I
+>  : ^
 
 var r4 = i.toString();
 >r4 : string
+>   : ^^^^^^
 >i.toString() : string
+>             : ^^^^^^
 >i.toString : () => string
+>           : ^^^^^^      
 >i : I
+>  : ^
 >toString : () => string
+>         : ^^^^^^      
 
 var r5 = i['toString']();
 >r5 : string
+>   : ^^^^^^
 >i['toString']() : string
+>                : ^^^^^^
 >i['toString'] : () => string
+>              : ^^^^^^      
 >i : I
+>  : ^
 >'toString' : "toString"
+>           : ^^^^^^^^^^
 
 var r6 = i.bar;
 >r6 : string
+>   : ^^^^^^
 >i.bar : string
+>      : ^^^^^^
 >i : I
+>  : ^
 >bar : string
+>    : ^^^^^^
 
 var r7 = i['bar'];
 >r7 : string
+>   : ^^^^^^
 >i['bar'] : string
+>         : ^^^^^^
 >i : I
+>  : ^
 >'bar' : "bar"
+>      : ^^^^^
 
 var a = {
 >a : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 >{    foo: ''} : { foo: string; }
+>              : ^^^^^^^^^^^^^^^^
 
     foo: ''
 >foo : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 }
 
 var r8 = a.toString();
 >r8 : string
+>   : ^^^^^^
 >a.toString() : string
+>             : ^^^^^^
 >a.toString : () => string
+>           : ^^^^^^      
 >a : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 
 var r9 = a['toString']();
 >r9 : string
+>   : ^^^^^^
 >a['toString']() : string
+>                : ^^^^^^
 >a['toString'] : () => string
+>              : ^^^^^^      
 >a : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 >'toString' : "toString"
+>           : ^^^^^^^^^^
 
 var r10 = a.foo;
 >r10 : string
+>    : ^^^^^^
 >a.foo : string
+>      : ^^^^^^
 >a : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
 var r11 = a['foo'];
 >r11 : string
+>    : ^^^^^^
 >a['foo'] : string
+>         : ^^^^^^
 >a : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 

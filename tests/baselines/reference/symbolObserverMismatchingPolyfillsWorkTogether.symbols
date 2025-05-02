@@ -1,4 +1,6 @@
-=== tests/cases/compiler/symbolObserverMismatchingPolyfillsWorkTogether.ts ===
+//// [tests/cases/compiler/symbolObserverMismatchingPolyfillsWorkTogether.ts] ////
+
+=== symbolObserverMismatchingPolyfillsWorkTogether.ts ===
 interface SymbolConstructor {
 >SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 0), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 2, 1))
 

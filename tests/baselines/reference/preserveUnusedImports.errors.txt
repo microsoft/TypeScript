@@ -1,0 +1,18 @@
+error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
+
+
+!!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+==== a.ts (0 errors) ====
+    export type A = {};
+    
+==== b.ts (0 errors) ====
+    export class B {}
+    
+==== c.ts (0 errors) ====
+    import { A } from './a';
+    import { B } from './b';
+    
+    let b: B;
+    

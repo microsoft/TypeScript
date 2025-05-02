@@ -1,4 +1,6 @@
-=== tests/cases/compiler/incrementOnTypeParameter.ts ===
+//// [tests/cases/compiler/incrementOnTypeParameter.ts] ////
+
+=== incrementOnTypeParameter.ts ===
 class C<T> {
 >C : Symbol(C, Decl(incrementOnTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(incrementOnTypeParameter.ts, 0, 8))

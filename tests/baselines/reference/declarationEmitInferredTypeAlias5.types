@@ -1,22 +1,33 @@
-=== tests/cases/compiler/0.ts ===
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias5.ts] ////
+
+=== 0.ts ===
 export type Data = string | boolean;
->Data : string | boolean
+>Data : Data
+>     : ^^^^
 
 let obj: Data = true;
 >obj : Data
+>    : ^^^^
 >true : true
+>     : ^^^^
 
-=== tests/cases/compiler/1.ts ===
+=== 1.ts ===
 import * as Z from "./0"
 >Z : typeof Z
+>  : ^^^^^^^^
 
 //let v2: Z.Data;
 let v = "str" || true;
 >v : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 >"str" || true : true | "str"
+>              : ^^^^^^^^^^^^
 >"str" : "str"
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 export { v }
 >v : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 

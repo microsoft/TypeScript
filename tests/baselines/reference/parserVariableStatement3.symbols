@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement3.ts] ////
+
+=== parserVariableStatement3.ts ===
 var
   a,
 >a : Symbol(a, Decl(parserVariableStatement3.ts, 0, 3))

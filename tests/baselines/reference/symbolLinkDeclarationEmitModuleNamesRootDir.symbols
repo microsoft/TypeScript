@@ -1,11 +1,35 @@
-=== tests/cases/compiler/monorepo/context/src/value-promise.d.ts ===
+//// [tests/cases/compiler/symbolLinkDeclarationEmitModuleNamesRootDir.ts] ////
+
+=== /monorepo/core/src/application.ts ===
+import { Constructor } from "@loopback/context";
+>Constructor : Symbol(Constructor, Decl(application.ts, 0, 8))
+
+export type ControllerClass = Constructor<any>;
+>ControllerClass : Symbol(ControllerClass, Decl(application.ts, 0, 48))
+>Constructor : Symbol(Constructor, Decl(application.ts, 0, 8))
+
+=== /monorepo/core/src/usage.ts ===
+import { ControllerClass } from './application';
+>ControllerClass : Symbol(ControllerClass, Decl(usage.ts, 0, 8))
+
+import { BindingKey } from '@loopback/context';
+>BindingKey : Symbol(BindingKey, Decl(usage.ts, 1, 8))
+
+export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
+>CONTROLLER_CLASS : Symbol(CONTROLLER_CLASS, Decl(usage.ts, 3, 12))
+>BindingKey.create : Symbol(BindingKey.create, Decl(bindingkey.d.ts, 2, 21))
+>BindingKey : Symbol(BindingKey, Decl(usage.ts, 1, 8))
+>create : Symbol(BindingKey.create, Decl(bindingkey.d.ts, 2, 21))
+>ControllerClass : Symbol(ControllerClass, Decl(usage.ts, 0, 8))
+
+=== /monorepo/context/src/value-promise.d.ts ===
 export type Constructor<T> = (...args: any[]) => T;
 >Constructor : Symbol(Constructor, Decl(value-promise.d.ts, 0, 0))
 >T : Symbol(T, Decl(value-promise.d.ts, 0, 24))
 >args : Symbol(args, Decl(value-promise.d.ts, 0, 30))
 >T : Symbol(T, Decl(value-promise.d.ts, 0, 24))
 
-=== tests/cases/compiler/monorepo/context/src/bindingkey.d.ts ===
+=== /monorepo/context/src/bindingkey.d.ts ===
 import { Constructor } from "./value-promise"
 >Constructor : Symbol(Constructor, Decl(bindingkey.d.ts, 0, 8))
 
@@ -27,29 +51,8 @@ export declare class BindingKey<T> {
 >T : Symbol(T, Decl(bindingkey.d.ts, 3, 16))
 }
 
-=== tests/cases/compiler/monorepo/context/index.d.ts ===
+=== /monorepo/context/index.d.ts ===
+
 export * from "./src/value-promise";
-No type information for this code.export * from "./src/bindingkey";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/monorepo/core/src/application.ts ===
-import { Constructor } from "@loopback/context";
->Constructor : Symbol(Constructor, Decl(application.ts, 0, 8))
-
-export type ControllerClass = Constructor<any>;
->ControllerClass : Symbol(ControllerClass, Decl(application.ts, 0, 48))
->Constructor : Symbol(Constructor, Decl(application.ts, 0, 8))
-
-=== tests/cases/compiler/monorepo/core/src/usage.ts ===
-import { ControllerClass } from './application';
->ControllerClass : Symbol(ControllerClass, Decl(usage.ts, 0, 8))
-
-import { BindingKey } from '@loopback/context';
->BindingKey : Symbol(BindingKey, Decl(usage.ts, 1, 8))
-
-export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
->CONTROLLER_CLASS : Symbol(CONTROLLER_CLASS, Decl(usage.ts, 3, 12))
->BindingKey.create : Symbol(BindingKey.create, Decl(bindingkey.d.ts, 2, 21))
->BindingKey : Symbol(BindingKey, Decl(usage.ts, 1, 8))
->create : Symbol(BindingKey.create, Decl(bindingkey.d.ts, 2, 21))
->ControllerClass : Symbol(ControllerClass, Decl(usage.ts, 0, 8))
+export * from "./src/bindingkey";
 

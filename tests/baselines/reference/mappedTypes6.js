@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypes6.ts] ////
+
 //// [mappedTypes6.ts]
 type T00<T> = { [P in keyof T]: T[P] };
 type T01<T> = { [P in keyof T]?: T[P] };

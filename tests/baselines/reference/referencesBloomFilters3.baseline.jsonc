@@ -1,297 +1,216 @@
-// === /tests/cases/fourslash/expression.ts ===
-// (Test[[|42|]]);
-
+// === findAllReferences ===
 // === /tests/cases/fourslash/declaration.ts ===
-// enum Test { /*FIND ALL REFS*/"[|42|]" = 1 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/declaration.ts",
-      "kind": "enum member",
-      "name": "(enum member) Test[\"42\"] = 1",
-      "textSpan": {
-        "start": 13,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "enum member",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "enumName"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"42\"",
-          "kind": "enumMemberName"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "1",
-          "kind": "numericLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 12,
-        "length": 8
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/declaration.ts",
-        "contextSpan": {
-          "start": 12,
-          "length": 8
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/expression.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// enum Test { /*FIND ALL REFS*/<|"[|{| isWriteAccess: true, isDefinition: true |}42|]" = 1|> };
 
 // === /tests/cases/fourslash/expression.ts ===
 // (Test[[|42|]]);
 
-// === /tests/cases/fourslash/declaration.ts ===
-// enum Test { "/*FIND ALL REFS*/[|42|]" = 1 };
+  // === Definitions ===
+  // === /tests/cases/fourslash/declaration.ts ===
+  // enum Test { /*FIND ALL REFS*/<|"[|42|]" = 1|> };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/declaration.ts",
-      "kind": "enum member",
-      "name": "(enum member) Test[\"42\"] = 1",
-      "textSpan": {
-        "start": 13,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "enum member",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "enumName"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"42\"",
-          "kind": "enumMemberName"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "1",
-          "kind": "numericLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 12,
-        "length": 8
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/declaration.ts",
-        "contextSpan": {
-          "start": 12,
-          "length": 8
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/expression.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) Test[\"42\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/declaration.ts ===
+// enum Test { <|"/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}42|]" = 1|> };
+
+// === /tests/cases/fourslash/expression.ts ===
+// (Test[[|42|]]);
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/declaration.ts ===
+  // enum Test { <|"/*FIND ALL REFS*/[|42|]" = 1|> };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) Test[\"42\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/declaration.ts ===
+// enum Test { <|"[|{| isWriteAccess: true |}42|]" = 1|> };
 
 // === /tests/cases/fourslash/expression.ts ===
 // (Test[/*FIND ALL REFS*/[|42|]]);
 
-// === /tests/cases/fourslash/declaration.ts ===
-// enum Test { "[|42|]" = 1 };
+  // === Definitions ===
+  // === /tests/cases/fourslash/declaration.ts ===
+  // enum Test { <|"[|42|]" = 1|> };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/declaration.ts",
-      "kind": "enum member",
-      "name": "(enum member) Test[\"42\"] = 1",
-      "textSpan": {
-        "start": 13,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "enum member",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "enumName"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"42\"",
-          "kind": "enumMemberName"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "1",
-          "kind": "numericLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 12,
-        "length": 8
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/declaration.ts",
-        "contextSpan": {
-          "start": 12,
-          "length": 8
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/expression.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) Test[\"42\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

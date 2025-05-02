@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509668.ts(3,16): error TS1317: A parameter property cannot be declared using a rest parameter.
+parser509668.ts(3,16): error TS1317: A parameter property cannot be declared using a rest parameter.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509668.ts (1 errors) ====
+==== parser509668.ts (1 errors) ====
     class Foo3 {
       // Doesn't work, but should
       constructor (public ...args: string[]) { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyForMethodParameters.ts] ////
+
 //// [noImplicitAnyForMethodParameters.ts]
 declare class A {
     private foo(a); // OK - ambient class and private method - no error

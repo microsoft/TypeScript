@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ClassTest3.ts] ////
+
 //// [es6ClassTest3.ts]
 module M {	
 	class Visibility {

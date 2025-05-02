@@ -1,18 +1,23 @@
-=== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts ===
+//// [tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts] ////
+
+=== inheritedStringIndexersFromDifferentBaseTypes.ts ===
 // string indexer tests
 interface A {
     [s: string]: number;
 >s : string
+>  : ^^^^^^
 }
 interface B {
     [s: string]: number;
 >s : string
+>  : ^^^^^^
 }
 interface C extends A, B { } // ok
 
 interface D {
     [s: string]: string;
 >s : string
+>  : ^^^^^^
 }
 interface E extends A, D { } // error
 
@@ -21,15 +26,18 @@ interface E extends A, D { } // error
 interface A2 {
     [s: number]: number;
 >s : number
+>  : ^^^^^^
 }
 interface B2 {
     [s: number]: number;
 >s : number
+>  : ^^^^^^
 }
 interface C2 extends A2, B2 { } // ok
 
 interface D2 {
     [s: number]: string;
 >s : number
+>  : ^^^^^^
 }
 interface E2 extends A2, D2 { } // error

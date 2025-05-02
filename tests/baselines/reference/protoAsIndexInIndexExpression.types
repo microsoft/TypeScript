@@ -1,42 +1,58 @@
-=== tests/cases/compiler/protoAsIndexInIndexExpression_1.ts ===
+//// [tests/cases/compiler/protoAsIndexInIndexExpression.ts] ////
+
+=== protoAsIndexInIndexExpression_1.ts ===
 ///<reference path='protoAsIndexInIndexExpression_0.ts'/>
 var EntityPrototype = undefined;
 >EntityPrototype : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var WorkspacePrototype = {
 >WorkspacePrototype : { serialize: () => any; }
+>                   : ^^^^^^^^^^^^^^^^^^^   ^^^
 >{    serialize: function (): any {    }} : { serialize: () => any; }
+>                                         : ^^^^^^^^^^^^^^^^^^^   ^^^
 
     serialize: function (): any {
 >serialize : () => any
+>          : ^^^^^^   
 >function (): any {    } : () => any
+>                        : ^^^^^^   
     }
 };
 WorkspacePrototype['__proto__'] = EntityPrototype;
 >WorkspacePrototype['__proto__'] = EntityPrototype : any
 >WorkspacePrototype['__proto__'] : error
 >WorkspacePrototype : { serialize: () => any; }
+>                   : ^^^^^^^^^^^^^^^^^^^   ^^^
 >'__proto__' : "__proto__"
+>            : ^^^^^^^^^^^
 >EntityPrototype : any
 
 var o = {
 >o : { __proto__: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >{    "__proto__": 0} : { __proto__: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
 
     "__proto__": 0
 >"__proto__" : number
+>            : ^^^^^^
 >0 : 0
+>  : ^
 
 };
 class C {
 >C : C
+>  : ^
 
     "__proto__" = 0;
 >"__proto__" : number
+>            : ^^^^^^
 >0 : 0
+>  : ^
 }
-=== tests/cases/compiler/protoAsIndexInIndexExpression_0.ts ===
+=== protoAsIndexInIndexExpression_0.ts ===
 export var x;
 >x : any
 

@@ -1,20 +1,30 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts] ////
+
+=== propertyOverridesAccessors4.ts ===
 declare class Animal {
 >Animal : Animal
+>       : ^^^^^^
 
     get sound(): string
 >sound : string
+>      : ^^^^^^
 
     set sound(val: string)
 >sound : string
+>      : ^^^^^^
 >val : string
+>    : ^^^^^^
 }
 class Lion extends Animal {
 >Lion : Lion
+>     : ^^^^
 >Animal : Animal
+>       : ^^^^^^
 
     sound = 'RAWR!' // error here
 >sound : string
+>      : ^^^^^^
 >'RAWR!' : "RAWR!"
+>        : ^^^^^^^
 }
 

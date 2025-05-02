@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceConflictingCandidates.ts ===
+//// [tests/cases/compiler/typeInferenceConflictingCandidates.ts] ////
+
+=== typeInferenceConflictingCandidates.ts ===
 declare function g<T>(a: T, b: T, c: (t: T) => T): T;
 >g : Symbol(g, Decl(typeInferenceConflictingCandidates.ts, 0, 0))
 >T : Symbol(T, Decl(typeInferenceConflictingCandidates.ts, 0, 19))

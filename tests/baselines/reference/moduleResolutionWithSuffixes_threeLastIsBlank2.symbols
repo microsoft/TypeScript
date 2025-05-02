@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_threeLastIsBlank2.ts] ////
+
 === /index.ts ===
 import { native } from "./foo";
 >native : Symbol(native, Decl(index.ts, 0, 8))

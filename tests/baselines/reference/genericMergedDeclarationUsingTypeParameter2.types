@@ -1,17 +1,26 @@
-=== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts ===
+//// [tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts] ////
+
+=== genericMergedDeclarationUsingTypeParameter2.ts ===
 class foo<T> { constructor(x: T) { } }
 >foo : foo<T>
+>    : ^^^^^^
 >x : T
+>  : ^
 
 module foo {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
     export var x: T;
 >x : T
+>  : ^
 
     var y = <T>1;
 >y : T
+>  : ^
 ><T>1 : T
+>     : ^
 >1 : 1
+>  : ^
 }
 

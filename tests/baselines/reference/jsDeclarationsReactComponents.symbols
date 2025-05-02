@@ -1,5 +1,7 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents1.jsx ===
-/// <reference path="react16.d.ts" />
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents.ts] ////
+
+=== jsDeclarationsReactComponents1.jsx ===
+/// <reference path="react16.d.ts" preserve="true" />
 import React from "react";
 >React : Symbol(React, Decl(jsDeclarationsReactComponents1.jsx, 1, 6))
 
@@ -44,7 +46,7 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents2.jsx ===
+=== jsDeclarationsReactComponents2.jsx ===
 import React from "react";
 >React : Symbol(React, Decl(jsDeclarationsReactComponents2.jsx, 0, 6))
 
@@ -80,7 +82,7 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5), Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents3.jsx ===
+=== jsDeclarationsReactComponents3.jsx ===
 import React from "react";
 >React : Symbol(React, Decl(jsDeclarationsReactComponents3.jsx, 0, 6))
 
@@ -116,7 +118,7 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5), Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents4.jsx ===
+=== jsDeclarationsReactComponents4.jsx ===
 import React from "react";
 >React : Symbol(React, Decl(jsDeclarationsReactComponents4.jsx, 0, 6))
 
@@ -153,7 +155,7 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5), Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents5.jsx ===
+=== jsDeclarationsReactComponents5.jsx ===
 import React from 'react';
 >React : Symbol(React, Decl(jsDeclarationsReactComponents5.jsx, 0, 6))
 

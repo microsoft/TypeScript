@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts] ////
+
 //// [errorRecoveryWithDotFollowedByNamespaceKeyword.ts]
 namespace A {
     function foo() {

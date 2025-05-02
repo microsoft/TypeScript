@@ -1,54 +1,54 @@
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(26,12): error TS2365: Operator '<' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(27,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(28,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(31,12): error TS2365: Operator '<' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(32,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(33,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(37,12): error TS2365: Operator '>' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(38,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(39,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(42,12): error TS2365: Operator '>' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(43,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(44,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(48,12): error TS2365: Operator '<=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(49,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(50,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(53,12): error TS2365: Operator '<=' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(54,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(55,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(59,12): error TS2365: Operator '>=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(60,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(61,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(64,12): error TS2365: Operator '>=' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(65,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(66,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(70,12): error TS2367: This condition will always return 'false' since the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(71,12): error TS2367: This condition will always return 'false' since the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(72,12): error TS2367: This condition will always return 'false' since the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(75,12): error TS2367: This condition will always return 'false' since the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(76,12): error TS2367: This condition will always return 'false' since the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(77,12): error TS2367: This condition will always return 'false' since the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(81,12): error TS2367: This condition will always return 'true' since the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(82,12): error TS2367: This condition will always return 'true' since the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(83,12): error TS2367: This condition will always return 'true' since the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(86,12): error TS2367: This condition will always return 'true' since the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(87,12): error TS2367: This condition will always return 'true' since the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(88,12): error TS2367: This condition will always return 'true' since the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(92,12): error TS2367: This condition will always return 'false' since the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(93,12): error TS2367: This condition will always return 'false' since the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(94,12): error TS2367: This condition will always return 'false' since the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(97,12): error TS2367: This condition will always return 'false' since the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(98,12): error TS2367: This condition will always return 'false' since the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(99,12): error TS2367: This condition will always return 'false' since the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(103,12): error TS2367: This condition will always return 'true' since the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(104,12): error TS2367: This condition will always return 'true' since the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(105,12): error TS2367: This condition will always return 'true' since the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(108,12): error TS2367: This condition will always return 'true' since the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(109,12): error TS2367: This condition will always return 'true' since the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS2367: This condition will always return 'true' since the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(26,12): error TS2365: Operator '<' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(27,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(28,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(31,12): error TS2365: Operator '<' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(32,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(33,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(37,12): error TS2365: Operator '>' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(38,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(39,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(42,12): error TS2365: Operator '>' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(43,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(44,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(48,12): error TS2365: Operator '<=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(49,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(50,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(53,12): error TS2365: Operator '<=' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(54,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(55,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(59,12): error TS2365: Operator '>=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(60,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(61,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(64,12): error TS2365: Operator '>=' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(65,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(66,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(70,12): error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(71,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(72,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(75,12): error TS2367: This comparison appears to be unintentional because the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(76,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(77,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(81,12): error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(82,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(83,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(86,12): error TS2367: This comparison appears to be unintentional because the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(87,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(88,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(92,12): error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(93,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(94,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(97,12): error TS2367: This comparison appears to be unintentional because the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(98,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(99,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(103,12): error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(104,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(105,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(108,12): error TS2367: This comparison appears to be unintentional because the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(109,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts (48 errors) ====
+==== comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts (48 errors) ====
     class Base {
         public a: string;
     }
@@ -168,91 +168,91 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     // operator ==
     var r5a1 = a1 == b1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
     var r5a2 = a2 == b2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
     var r5a3 = a3 == b3;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
     var r5a4 = a4 == b4;
     
     var r5b1 = b1 == a1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
     var r5b2 = b2 == a2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
     var r5b3 = b3 == a3;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
     var r5b4 = b4 == a4;
     
     // operator !=
     var r6a1 = a1 != b1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
     var r6a2 = a2 != b2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
     var r6a3 = a3 != b3;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
     var r6a4 = a4 != b4;
     
     var r6b1 = b1 != a1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
     var r6b2 = b2 != a2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
     var r6b3 = b3 != a3;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
     var r6b4 = b4 != a4;
     
     // operator ===
     var r7a1 = a1 === b1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
     var r7a2 = a2 === b2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
     var r7a3 = a3 === b3;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
     var r7a4 = a4 === b4;
     
     var r7b1 = b1 === a1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
     var r7b2 = b2 === a2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
     var r7b3 = b3 === a3;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
     var r7b4 = b4 === a4;
     
     // operator !==
     var r8a1 = a1 !== b1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
     var r8a2 = a2 !== b2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
     var r8a3 = a3 !== b3;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
     var r8a4 = a4 !== b4;
     
     var r8b1 = b1 !== a1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [b: string]: number; }' and '{ [a: string]: string; }' have no overlap.
     var r8b2 = b2 !== a2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: C; }' and '{ [index: string]: Base; }' have no overlap.
     var r8b3 = b3 !== a3;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
     var r8b4 = b4 !== a4;

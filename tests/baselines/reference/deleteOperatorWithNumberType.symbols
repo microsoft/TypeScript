@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts] ////
+
+=== deleteOperatorWithNumberType.ts ===
 // delete  operator on number type
 var NUMBER: number;
 >NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))

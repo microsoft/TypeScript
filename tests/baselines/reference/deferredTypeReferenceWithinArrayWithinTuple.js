@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deferredTypeReferenceWithinArrayWithinTuple.ts] ////
+
 //// [deferredTypeReferenceWithinArrayWithinTuple.ts]
 type TypeStructure =
   | ["or", TypeStructure[]] // problem is only here, when using array

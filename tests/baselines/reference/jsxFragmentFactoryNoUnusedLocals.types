@@ -1,50 +1,78 @@
-=== tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx ===
+//// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== jsxFragmentFactoryNoUnusedLocals.tsx ===
 /// <reference path="react16.d.ts" />
 import { Fragment, createElement } from "react"
 >Fragment : import("react").ComponentType<{}>
->createElement : { (type: "input", props?: import("react").InputHTMLAttributes<HTMLInputElement> & import("react").ClassAttributes<HTMLInputElement>, ...children: import("react").ReactNode[]): import("react").DetailedReactHTMLElement<import("react").InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>; <P extends import("react").HTMLAttributes<T>, T extends HTMLElement>(type: keyof import("react").ReactHTML, props?: import("react").ClassAttributes<T> & P, ...children: import("react").ReactNode[]): import("react").DetailedReactHTMLElement<P, T>; <P extends import("react").SVGAttributes<T>, T extends SVGElement>(type: keyof import("react").ReactSVG, props?: import("react").ClassAttributes<T> & P, ...children: import("react").ReactNode[]): import("react").ReactSVGElement; <P extends import("react").DOMAttributes<T>, T extends Element>(type: string, props?: import("react").ClassAttributes<T> & P, ...children: import("react").ReactNode[]): import("react").DOMElement<P, T>; <P>(type: import("react").SFC<P>, props?: import("react").Attributes & P, ...children: import("react").ReactNode[]): import("react").SFCElement<P>; <P>(type: import("react").ClassType<P, import("react").ClassicComponent<P, any>, import("react").ClassicComponentClass<P>>, props?: import("react").ClassAttributes<import("react").ClassicComponent<P, any>> & P, ...children: import("react").ReactNode[]): import("react").CElement<P, import("react").ClassicComponent<P, any>>; <P, T extends import("react").Component<P, any, any>, C extends import("react").ComponentClass<P, any>>(type: import("react").ClassType<P, T, C>, props?: import("react").ClassAttributes<T> & P, ...children: import("react").ReactNode[]): import("react").CElement<P, T>; <P>(type: string | import("react").SFC<P> | import("react").ComponentClass<P, any>, props?: import("react").Attributes & P, ...children: import("react").ReactNode[]): import("react").ReactElement<P>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createElement : { (type: "input", props?: (import("react").InputHTMLAttributes<HTMLInputElement> & import("react").ClassAttributes<HTMLInputElement>) | null, ...children: import("react").ReactNode[]): import("react").DetailedReactHTMLElement<import("react").InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>; <P extends import("react").HTMLAttributes<T>, T extends HTMLElement>(type: keyof import("react").ReactHTML, props?: (import("react").ClassAttributes<T> & P) | null, ...children: import("react").ReactNode[]): import("react").DetailedReactHTMLElement<P, T>; <P extends import("react").SVGAttributes<T>, T extends SVGElement>(type: keyof import("react").ReactSVG, props?: (import("react").ClassAttributes<T> & P) | null, ...children: import("react").ReactNode[]): import("react").ReactSVGElement; <P extends import("react").DOMAttributes<T>, T extends Element>(type: string, props?: (import("react").ClassAttributes<T> & P) | null, ...children: import("react").ReactNode[]): import("react").DOMElement<P, T>; <P>(type: import("react").SFC<P>, props?: (import("react").Attributes & P) | null, ...children: import("react").ReactNode[]): import("react").SFCElement<P>; <P>(type: import("react").ClassType<P, import("react").ClassicComponent<P, import("react").ComponentState>, import("react").ClassicComponentClass<P>>, props?: (import("react").ClassAttributes<import("react").ClassicComponent<P, import("react").ComponentState>> & P) | null, ...children: import("react").ReactNode[]): import("react").CElement<P, import("react").ClassicComponent<P, import("react").ComponentState>>; <P, T extends import("react").Component<P, import("react").ComponentState>, C extends import("react").ComponentClass<P>>(type: import("react").ClassType<P, T, C>, props?: (import("react").ClassAttributes<T> & P) | null, ...children: import("react").ReactNode[]): import("react").CElement<P, T>; <P>(type: import("react").SFC<P> | import("react").ComponentClass<P> | string, props?: (import("react").Attributes & P) | null, ...children: import("react").ReactNode[]): import("react").ReactElement<P>; }
+>              : ^^^    ^^       ^^     ^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^                            ^^^^^^^  ^^^^^^^^^^^^^^^                  ^       ^^^^^        ^^       ^^^^^^^  ^^^^^^^^^  ^^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^  ^^^^^^^^^^^^^^^^^^^                                     ^^^ ^^^^^^^^^       ^^^^^^^  ^^^^^^^^^^^^^^   ^^ ^^^^^^^^^           ^^    ^^             ^^^^^^^  ^^^^^^^^^^^     ^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^       ^       ^^^^^        ^^       ^^^^^^^  ^^^^^^^^^  ^^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^^^^^^^       ^^^^^^^  ^^^^^^^^^^^^^   ^^ ^^^^^^^^^          ^^    ^^             ^^^^^^^  ^^^^^^^^^^     ^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^       ^       ^^^^^        ^^       ^^^^^^^  ^^^^^^^^^  ^^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^       ^^^^^^^  ^^^^^^^^^^^^^   ^^ ^^^^^^^^^       ^^    ^^      ^^     ^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^       ^       ^^^^^        ^^       ^^^^^^^  ^^^^^^^^^  ^^^       ^^^^^^^  ^^^^^^^^^^      ^^^ ^^    ^^       ^^^^^^^  ^^^   ^^     ^^^^       ^^^^^^^  ^^^^^^^^^^    ^       ^^^^^        ^^       ^^^^^^^  ^^^^^^^^^  ^^^       ^^^^^^^  ^^^^^^^^^^   ^^^ ^^    ^^       ^^^^^^^  ^^^^^^^^^           ^^^^^^^  ^^^^^^^^^^^^^^^^           ^^^^^^^  ^^^^^^^^^^^^^^          ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^        ^^^^^^^  ^^^^^^^^^^^^^^^^           ^^^^^^^  ^^^^^^^^^^^^^^      ^       ^^^^^        ^^       ^^^^^^^  ^^^^^^^^^  ^^^       ^^^^^^^  ^^^^^^^^           ^^^^^^^  ^^^^^^^^^^^^^^^^           ^^^^^^^  ^^^^^^^^^^^^^^  ^^^ ^^ ^^^^^^^^^       ^^^^^^^  ^^^^^^^^^           ^^^^^^^  ^^^^^^^^^^^^^^ ^^ ^^^^^^^^^       ^^^^^^^  ^^^^^^^^^^^^^^   ^^    ^^       ^^^^^^^  ^^^^^^^^^         ^^     ^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^       ^       ^^^^^        ^^       ^^^^^^^  ^^^^^^^^^  ^^^       ^^^^^^^  ^^^^^^^^      ^^^ ^^    ^^       ^^^^^^^  ^^^             ^^^^^^^  ^^^^^^^^^^^^^^            ^^     ^^^^       ^^^^^^^  ^^^^^^^^^^    ^       ^^^^^        ^^       ^^^^^^^  ^^^^^^^^^  ^^^       ^^^^^^^  ^^^^^^^^^^^^   ^^^
 
 type CounterProps = {
->CounterProps : { count?: number; }
+>CounterProps : CounterProps
+>             : ^^^^^^^^^^^^
 
     count?: number
 >count : number
+>      : ^^^^^^
 }
 
 export function Counter({ count = 0 }: CounterProps) {
 >Counter : ({ count }: CounterProps) => JSX.Element
+>        : ^         ^^            ^^^^^^^^^^^^^^^^
 >count : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     const [cnt, setCnt] = null as any;
 >cnt : any
+>    : ^^^
 >setCnt : any
+>       : ^^^
 >null as any : any
->null : null
 
     return <>
 ><>        <p>{cnt}</p>        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>    </> : JSX.Element
+>                                                                                                                      : ^^^^^^^^^^^
 
         <p>{cnt}</p>
 ><p>{cnt}</p> : JSX.Element
+>             : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >cnt : any
 >p : any
+>  : ^^^
 
         <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>
 ><button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button> : JSX.Element
+>                                                                                 : ^^^^^^^^^^^
 >button : any
+>       : ^^^
 >onClick : () => any
+>        : ^^^^^^^^^
 >() => setCnt((prev) => prev + 1) : () => any
+>                                 : ^^^^^^^^^
 >setCnt((prev) => prev + 1) : any
 >setCnt : any
 >(prev) => prev + 1 : (prev: any) => any
+>                   : ^    ^^^^^^^^^^^^^
 >prev : any
 >prev + 1 : any
 >prev : any
 >1 : 1
+>  : ^
 >type : string
+>     : ^^^^^^
 >button : any
+>       : ^^^
 
     </>
 }

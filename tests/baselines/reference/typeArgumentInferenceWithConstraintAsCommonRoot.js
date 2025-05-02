@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts] ////
+
 //// [typeArgumentInferenceWithConstraintAsCommonRoot.ts]
 interface Animal { x }
 interface Giraffe extends Animal { y }

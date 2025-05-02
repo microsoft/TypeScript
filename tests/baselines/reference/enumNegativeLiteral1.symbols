@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumNegativeLiteral1.ts ===
+//// [tests/cases/compiler/enumNegativeLiteral1.ts] ////
+
+=== enumNegativeLiteral1.ts ===
 enum E {
 >E : Symbol(E, Decl(enumNegativeLiteral1.ts, 0, 0))
 

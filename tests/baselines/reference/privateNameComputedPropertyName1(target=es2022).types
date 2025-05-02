@@ -1,150 +1,247 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName1.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName1.ts] ////
+
+=== privateNameComputedPropertyName1.ts ===
 class A {
 >A : A
+>  : ^
 
     #a = 'a';
 >#a : string
+>   : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
     #b: string;
 >#b : string
+>   : ^^^^^^
 
     readonly #c = 'c';
 >#c : "c"
+>   : ^^^
 >'c' : "c"
+>    : ^^^
 
     readonly #d: string;
 >#d : string
+>   : ^^^^^^
 
     #e = '';
 >#e : string
+>   : ^^^^^^
 >'' : ""
+>   : ^^
 
     constructor() {
         this.#b = 'b';
 >this.#b = 'b' : "b"
+>              : ^^^
 >this.#b : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >'b' : "b"
+>    : ^^^
 
         this.#d = 'd';
 >this.#d = 'd' : "d"
+>              : ^^^
 >this.#d : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >'d' : "d"
+>    : ^^^
     }
 
     test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         const data: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' };
 >data : Record<string, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' } : { a: string; b: string; c: string; d: string; e: string; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 >b : string
+>  : ^^^^^^
 >'b' : "b"
+>    : ^^^
 >c : string
+>  : ^^^^^^
 >'c' : "c"
+>    : ^^^
 >d : string
+>  : ^^^^^^
 >'d' : "d"
+>    : ^^^
 >e : string
+>  : ^^^^^^
 >'e' : "e"
+>    : ^^^
 
         const {
             [this.#a]: a,
 >this.#a : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >a : string
+>  : ^^^^^^
 
             [this.#b]: b,
 >this.#b : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >b : string
+>  : ^^^^^^
 
             [this.#c]: c,
 >this.#c : "c"
+>        : ^^^
 >this : this
+>     : ^^^^
 >c : string
+>  : ^^^^^^
 
             [this.#d]: d,
 >this.#d : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >d : string
+>  : ^^^^^^
 
             [this.#e = 'e']: e,
 >this.#e = 'e' : "e"
+>              : ^^^
 >this.#e : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >'e' : "e"
+>    : ^^^
 >e : string
+>  : ^^^^^^
 
         } = data;
 >data : Record<string, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
         console.log(a, b, c, d, e);
 >console.log(a, b, c, d, e) : void
+>                           : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 >e : string
+>  : ^^^^^^
 
         const a1 = data[this.#a];
 >a1 : string
+>   : ^^^^^^
 >data[this.#a] : string
+>              : ^^^^^^
 >data : Record<string, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >this.#a : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 
         const b1 = data[this.#b];
 >b1 : string
+>   : ^^^^^^
 >data[this.#b] : string
+>              : ^^^^^^
 >data : Record<string, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >this.#b : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 
         const c1 = data[this.#c];
 >c1 : string
+>   : ^^^^^^
 >data[this.#c] : string
+>              : ^^^^^^
 >data : Record<string, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >this.#c : "c"
+>        : ^^^
 >this : this
+>     : ^^^^
 
         const d1 = data[this.#d];
 >d1 : string
+>   : ^^^^^^
 >data[this.#d] : string
+>              : ^^^^^^
 >data : Record<string, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >this.#d : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 
         const e1 = data[this.#e];
 >e1 : string
+>   : ^^^^^^
 >data[this.#e] : string
+>              : ^^^^^^
 >data : Record<string, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >this.#e : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 
         console.log(a1, b1, c1, d1);
 >console.log(a1, b1, c1, d1) : void
+>                            : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >a1 : string
+>   : ^^^^^^
 >b1 : string
+>   : ^^^^^^
 >c1 : string
+>   : ^^^^^^
 >d1 : string
+>   : ^^^^^^
     }
 }
 
 new A().test();
 >new A().test() : void
+>               : ^^^^
 >new A().test : () => void
+>             : ^^^^^^^^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >test : () => void
+>     : ^^^^^^^^^^
 
 

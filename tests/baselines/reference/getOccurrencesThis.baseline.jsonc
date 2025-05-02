@@ -1,0 +1,19 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis.ts ===
+// /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+// [|{| kind: "reference" |}this|];
+// 
+// function f() {
+//     this;
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis.ts ===
+// [|{| kind: "reference" |}this|];
+// /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+// 
+// function f() {
+//     this;
+// --- (line: 6) skipped ---

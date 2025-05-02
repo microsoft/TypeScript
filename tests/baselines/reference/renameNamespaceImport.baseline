@@ -1,4 +1,0 @@
-/*====== /src/index.ts ======*/
-
-import * as [|RENAME|] from '../lib/index';
-RENAME.someExportedVariable;

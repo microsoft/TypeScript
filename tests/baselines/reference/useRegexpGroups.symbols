@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2018/useRegexpGroups.ts ===
+//// [tests/cases/conformance/es2018/useRegexpGroups.ts] ////
+
+=== useRegexpGroups.ts ===
 let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
 >re : Symbol(re, Decl(useRegexpGroups.ts, 0, 3))
 
@@ -11,6 +13,7 @@ let result = re.exec("2015-01-02");
 let date = result[0];
 >date : Symbol(date, Decl(useRegexpGroups.ts, 3, 3))
 >result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+>0 : Symbol(RegExpExecArray[0], Decl(lib.es5.d.ts, --, --))
 
 let year1 = result.groups.year;
 >year1 : Symbol(year1, Decl(useRegexpGroups.ts, 5, 3))

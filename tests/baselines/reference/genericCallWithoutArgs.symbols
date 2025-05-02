@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCallWithoutArgs.ts ===
+//// [tests/cases/compiler/genericCallWithoutArgs.ts] ////
+
+=== genericCallWithoutArgs.ts ===
 function f<X, Y>(x: X, y: Y) {
 >f : Symbol(f, Decl(genericCallWithoutArgs.ts, 0, 0))
 >X : Symbol(X, Decl(genericCallWithoutArgs.ts, 0, 11))

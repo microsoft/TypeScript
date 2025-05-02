@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/importElisionExportNonExportAndDefault.ts] ////
+
+=== main.ts ===
+import MyFunction from "./MyComponent";
+>MyFunction : any
+>           : ^^^
+
+MyFunction({msg: "Hello World"});
+>MyFunction({msg: "Hello World"}) : error
+>MyFunction : error
+>{msg: "Hello World"} : { msg: string; }
+>                     : ^^^^^^^^^^^^^^^^
+>msg : string
+>    : ^^^^^^
+>"Hello World" : "Hello World"
+>              : ^^^^^^^^^^^^^
+
+
+=== MyComponent.ts ===
+interface MyFunction { msg: string; }
+>msg : string
+>    : ^^^^^^
+
+export const MyFunction = ({ msg }: MyFunction) => console.log(`Got message "${msg}"`);
+>MyFunction : ({ msg }: MyFunction) => void
+>           : ^       ^^          ^^^^^^^^^
+>({ msg }: MyFunction) => console.log(`Got message "${msg}"`) : ({ msg }: MyFunction) => void
+>                                                             : ^       ^^          ^^^^^^^^^
+>msg : string
+>    : ^^^^^^
+>console.log(`Got message "${msg}"`) : void
+>                                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>`Got message "${msg}"` : string
+>                       : ^^^^^^
+>msg : string
+>    : ^^^^^^
+
+export default MyFunction;
+>MyFunction : MyFunction
+>           : ^^^^^^^^^^
+

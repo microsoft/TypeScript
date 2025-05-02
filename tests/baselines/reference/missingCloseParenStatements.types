@@ -1,67 +1,117 @@
-=== tests/cases/compiler/missingCloseParenStatements.ts ===
+//// [tests/cases/compiler/missingCloseParenStatements.ts] ////
+
+=== missingCloseParenStatements.ts ===
 var a1, a2, a3 = 0;
 >a1 : any
+>   : ^^^
 >a2 : any
+>   : ^^^
 >a3 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 if ( a1 && (a2 + a3 > 0) {
 >a1 && (a2 + a3 > 0) : boolean
+>                    : ^^^^^^^
 >a1 : any
+>   : ^^^
 >(a2 + a3 > 0) : boolean
+>              : ^^^^^^^
 >a2 + a3 > 0 : boolean
+>            : ^^^^^^^
 >a2 + a3 : any
+>        : ^^^
 >a2 : any
+>   : ^^^
 >a3 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     while( (a2 > 0) && a1
 >(a2 > 0) && a1 : any
+>               : ^^^
 >(a2 > 0) : boolean
+>         : ^^^^^^^
 >a2 > 0 : boolean
+>       : ^^^^^^^
 >a2 : any
+>   : ^^^
 >0 : 0
+>  : ^
 >a1 : any
+>   : ^^^
     {
         do {
             var i = i + 1;
 >i : any
+>  : ^^^
 >i + 1 : any
+>      : ^^^
 >i : any
+>  : ^^^
 >1 : 1
+>  : ^
 
             a1 = a1 + i;
 >a1 = a1 + i : any
+>            : ^^^
 >a1 : any
+>   : ^^^
 >a1 + i : any
+>       : ^^^
 >a1 : any
+>   : ^^^
 >i : any
+>  : ^^^
 
             with ((a2 + a3 > 0) && a1 {
 >(a2 + a3 > 0) && a1 : any
+>                    : ^^^
 >(a2 + a3 > 0) : boolean
+>              : ^^^^^^^
 >a2 + a3 > 0 : boolean
+>            : ^^^^^^^
 >a2 + a3 : any
+>        : ^^^
 >a2 : any
+>   : ^^^
 >a3 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 >a1 : any
+>   : ^^^
 
                 console.log(x);
 >console.log(x) : any
+>               : ^^^
 >console.log : any
+>            : ^^^
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >x : any
+>  : ^^^
               }
         } while (i < 5 && (a1 > 5);
 >i < 5 && (a1 > 5) : boolean
+>                  : ^^^^^^^
 >i < 5 : boolean
+>      : ^^^^^^^
 >i : any
+>  : ^^^
 >5 : 5
+>  : ^
 >(a1 > 5) : boolean
+>         : ^^^^^^^
 >a1 > 5 : boolean
+>       : ^^^^^^^
 >a1 : any
+>   : ^^^
 >5 : 5
+>  : ^
     }
 }

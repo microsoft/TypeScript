@@ -1,19 +1,30 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationClassMethodContainingArrowFunction.ts] ////
+
+=== a.js ===
 class c {
 >c : c
+>  : ^
 
     method(a) {
 >method : (a: any) => void
+>       : ^ ^^^^^^^^^^^^^^
 >a : any
 
         let x = a => this.method(a);
 >x : (a: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >a => this.method(a) : (a: any) => void
+>                    : ^ ^^^^^^^^^^^^^^
 >a : any
 >this.method(a) : void
+>               : ^^^^
 >this.method : (a: any) => void
+>            : ^ ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >method : (a: any) => void
+>       : ^ ^^^^^^^^^^^^^^
 >a : any
     }
 }
+

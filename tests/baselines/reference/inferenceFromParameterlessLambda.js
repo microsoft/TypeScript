@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceFromParameterlessLambda.ts] ////
+
 //// [inferenceFromParameterlessLambda.ts]
 function foo<T>(o: Take<T>, i: Make<T>) { }
 interface Make<T> {

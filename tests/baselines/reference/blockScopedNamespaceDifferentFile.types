@@ -1,46 +1,67 @@
-=== tests/cases/compiler/test.ts ===
-// #15734 failed when test.ts comes before typings.d.ts
+//// [tests/cases/compiler/blockScopedNamespaceDifferentFile.ts] ////
+
+=== test.ts ===
 namespace C {
 >C : typeof C
+>  : ^^^^^^^^
 
     export class Name {
 >Name : Name
+>     : ^^^^
 
         static funcData = A.AA.func();
 >funcData : number
+>         : ^^^^^^
 >A.AA.func() : number
+>            : ^^^^^^
 >A.AA.func : () => number
+>          : ^^^^^^      
 >A.AA : typeof A.AA
+>     : ^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >AA : typeof A.AA
+>   : ^^^^^^^^^^^
 >func : () => number
+>     : ^^^^^^      
 
         static someConst = A.AA.foo;
 >someConst : string
+>          : ^^^^^^
 >A.AA.foo : ""
+>         : ^^
 >A.AA : typeof A.AA
+>     : ^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >AA : typeof A.AA
+>   : ^^^^^^^^^^^
 >foo : ""
+>    : ^^
 
         constructor(parameters) {}
 >parameters : any
     }
 }
 
-=== tests/cases/compiler/typings.d.ts ===
+=== typings.d.ts ===
 declare namespace A {
 >A : typeof A
+>  : ^^^^^^^^
 
     namespace AA {
 >AA : typeof AA
+>   : ^^^^^^^^^
 
         function func(): number;
 >func : () => number
+>     : ^^^^^^      
 
         const foo = "";
 >foo : ""
+>    : ^^
 >"" : ""
+>   : ^^
     }
 }
 

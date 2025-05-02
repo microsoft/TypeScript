@@ -1,56 +1,93 @@
-=== tests/cases/conformance/expressions/functionCalls/callOverload.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callOverload.ts] ////
+
+=== callOverload.ts ===
 declare function fn(x: any): void;
 >fn : (x: any) => void
+>   : ^ ^^   ^^^^^    
 >x : any
+>  : ^^^
 
 declare function takeTwo(x: any, y: any): void;
 >takeTwo : (x: any, y: any) => void
+>        : ^ ^^   ^^ ^^   ^^^^^    
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 declare function withRest(a: any, ...args: Array<any>): void;
 >withRest : (a: any, ...args: Array<any>) => void
+>         : ^ ^^   ^^^^^    ^^          ^^^^^    
 >a : any
+>  : ^^^
 >args : any[]
+>     : ^^^^^
 
 var n: number[];
 >n : number[]
+>  : ^^^^^^^^
 
 fn(1) // no error
 >fn(1) : void
+>      : ^^^^
 >fn : (x: any) => void
+>   : ^ ^^   ^^^^^    
 >1 : 1
+>  : ^
 
 fn(1, 2, 3, 4)
 >fn(1, 2, 3, 4) : void
+>               : ^^^^
 >fn : (x: any) => void
+>   : ^ ^^   ^^^^^    
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 takeTwo(1, 2, 3, 4)
 >takeTwo(1, 2, 3, 4) : void
+>                    : ^^^^
 >takeTwo : (x: any, y: any) => void
+>        : ^ ^^   ^^ ^^   ^^^^^    
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 withRest('a', ...n); // no error
 >withRest('a', ...n) : void
->withRest : (a: any, ...args: any[]) => void
+>                    : ^^^^
+>withRest : (a: any, ...args: Array<any>) => void
+>         : ^ ^^   ^^^^^    ^^          ^^^^^    
 >'a' : "a"
+>    : ^^^
 >...n : number
+>     : ^^^^^^
 >n : number[]
+>  : ^^^^^^^^
 
 withRest();
 >withRest() : void
->withRest : (a: any, ...args: any[]) => void
+>           : ^^^^
+>withRest : (a: any, ...args: Array<any>) => void
+>         : ^ ^^   ^^^^^    ^^          ^^^^^    
 
 withRest(...n); 
 >withRest(...n) : void
->withRest : (a: any, ...args: any[]) => void
+>               : ^^^^
+>withRest : (a: any, ...args: Array<any>) => void
+>         : ^ ^^   ^^^^^    ^^          ^^^^^    
 >...n : number
+>     : ^^^^^^
 >n : number[]
+>  : ^^^^^^^^
 

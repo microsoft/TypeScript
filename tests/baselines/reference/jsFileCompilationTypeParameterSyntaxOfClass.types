@@ -1,4 +1,7 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationTypeParameterSyntaxOfClass.ts] ////
+
+=== a.js ===
 class C<T> { }
 >C : C<T>
+>  : ^^^^
 

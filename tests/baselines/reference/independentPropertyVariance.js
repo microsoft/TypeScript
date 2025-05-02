@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/independentPropertyVariance.ts] ////
+
 //// [independentPropertyVariance.ts]
 // Verify that properties can vary independently in comparable relationship
 

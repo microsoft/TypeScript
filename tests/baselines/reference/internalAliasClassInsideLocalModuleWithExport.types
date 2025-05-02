@@ -1,52 +1,80 @@
-=== tests/cases/compiler/internalAliasClassInsideLocalModuleWithExport.ts ===
+//// [tests/cases/compiler/internalAliasClassInsideLocalModuleWithExport.ts] ////
+
+=== internalAliasClassInsideLocalModuleWithExport.ts ===
 export module x {
 >x : typeof x
+>  : ^^^^^^^^
 
     export class c {
 >c : c
+>  : ^
 
         foo(a: number) {
 >foo : (a: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
             return a;
 >a : number
+>  : ^^^^^^
         }
     }
 }
 
 export module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     export module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
         export import c = x.c;
 >c : typeof c
+>  : ^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >c : c
+>  : ^
 
         export var cProp = new c();
 >cProp : c
+>      : ^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
 
         var cReturnVal = cProp.foo(10);
 >cReturnVal : number
+>           : ^^^^^^
 >cProp.foo(10) : number
+>              : ^^^^^^
 >cProp.foo : (a: number) => number
+>          : ^ ^^      ^^^^^^^^^^^
 >cProp : c
+>      : ^
 >foo : (a: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 
 export var d = new m2.m3.c();
 >d : x.c
+>  : ^^^
 >new m2.m3.c() : x.c
+>              : ^^^
 >m2.m3.c : typeof x.c
+>        : ^^^^^^^^^^
 >m2.m3 : typeof m2.m3
+>      : ^^^^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 >m3 : typeof m2.m3
+>   : ^^^^^^^^^^^^
 >c : typeof x.c
+>  : ^^^^^^^^^^
 

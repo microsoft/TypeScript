@@ -1,15 +1,11 @@
-tests/cases/compiler/a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/compiler/a.ts(8,11): error TS2538: Type '1n' cannot be used as an index type.
-tests/cases/compiler/a.ts(14,1): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
-tests/cases/compiler/a.ts(19,12): error TS2538: Type 'bigint' cannot be used as an index type.
-tests/cases/compiler/b.ts(2,12): error TS1136: Property assignment expected.
-tests/cases/compiler/b.ts(2,14): error TS1005: ';' expected.
-tests/cases/compiler/b.ts(2,19): error TS1128: Declaration or statement expected.
-tests/cases/compiler/b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+a.ts(8,11): error TS2538: Type 'bigint' cannot be used as an index type.
+a.ts(9,17): error TS2538: Type 'bigint' cannot be used as an index type.
+a.ts(15,1): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
+a.ts(20,12): error TS2538: Type 'bigint' cannot be used as an index type.
 
 
-==== tests/cases/compiler/a.ts (4 errors) ====
+==== a.ts (5 errors) ====
     interface BigIntIndex<E> {
         [index: bigint]: E; // should error
          ~~~~~
@@ -21,7 +17,10 @@ tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be 
     num = arr["1"];
     num = arr[1n]; // should error
               ~~
-!!! error TS2538: Type '1n' cannot be used as an index type.
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    num = [1, 2, 3][1n]; // should error
+                    ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
     
     let key: keyof any; // should be type "string | number | symbol"
     key = 123;
@@ -40,21 +39,4 @@ tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be 
     typedArray[String(bigNum)] = 0xAA;
     typedArray["1"] = 0xBB;
     typedArray[2] = 0xCC;
-    
-    // {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
-==== tests/cases/compiler/b.ts (5 errors) ====
-    // BigInt cannot be used as an object literal property
-    const a = {1n: 123};
-               ~~
-!!! error TS1136: Property assignment expected.
-                 ~
-!!! error TS1005: ';' expected.
-                      ~
-!!! error TS1128: Declaration or statement expected.
-    const b = {[1n]: 456};
-               ~~~~
-!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-    const c = {[bigNum]: 789};
-               ~~~~~~~~
-!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
     

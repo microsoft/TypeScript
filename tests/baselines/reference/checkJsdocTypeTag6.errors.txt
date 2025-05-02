@@ -1,13 +1,16 @@
-tests/cases/conformance/jsdoc/test.js(1,12): error TS8030: The type of a function declaration must match the function's signature.
-tests/cases/conformance/jsdoc/test.js(7,5): error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
-tests/cases/conformance/jsdoc/test.js(10,12): error TS8030: The type of a function declaration must match the function's signature.
-tests/cases/conformance/jsdoc/test.js(23,12): error TS8030: The type of a function declaration must match the function's signature.
-tests/cases/conformance/jsdoc/test.js(27,7): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
-tests/cases/conformance/jsdoc/test.js(30,7): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
-tests/cases/conformance/jsdoc/test.js(34,3): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+test.js(1,12): error TS8030: The type of a function declaration must match the function's signature.
+test.js(7,5): error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
+test.js(10,12): error TS8030: The type of a function declaration must match the function's signature.
+test.js(23,12): error TS8030: The type of a function declaration must match the function's signature.
+test.js(27,7): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+test.js(30,7): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+test.js(34,3): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
 
 
-==== tests/cases/conformance/jsdoc/test.js (7 errors) ====
+==== test.js (7 errors) ====
     /** @type {number} */
                ~~~~~~
 !!! error TS8030: The type of a function declaration must match the function's signature.
@@ -45,16 +48,19 @@ tests/cases/conformance/jsdoc/test.js(34,3): error TS2322: Type '(more: any) => 
     const variableWithMoreParameters = function (more) {}; // error
           ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
     
     /** @type {() => void} */
     const arrowWithMoreParameters = (more) => {}; // error
           ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
     
     ({
       /** @type {() => void} */
       methodWithMoreParameters(more) {}, // error
       ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
     });
     

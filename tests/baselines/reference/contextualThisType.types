@@ -1,8 +1,12 @@
-=== tests/cases/conformance/types/thisType/contextualThisType.ts ===
+//// [tests/cases/conformance/types/thisType/contextualThisType.ts] ////
+
+=== contextualThisType.ts ===
 interface X {
     a: (p: this) => this;
 >a : (p: this) => this
+>  : ^ ^^    ^^^^^    
 >p : this
+>  : ^^^^
 }
 
 interface Y extends X {
@@ -10,22 +14,33 @@ interface Y extends X {
 
 var x: Y = {
 >x : Y
+>  : ^
 >{    a(p) {        return p;    }} : { a(p: Y): Y; }
+>                                   : ^^^^ ^^^^^^^^^^
 
     a(p) {
 >a : (p: Y) => Y
+>  : ^ ^^^^^^^^^
 >p : Y
+>  : ^
 
         return p;
 >p : Y
+>  : ^
     }
 }
 
 var y = x.a(x);
 >y : Y
+>  : ^
 >x.a(x) : Y
+>       : ^
 >x.a : (p: Y) => Y
+>    : ^ ^^^^^^^^^
 >x : Y
+>  : ^
 >a : (p: Y) => Y
+>  : ^ ^^^^^^^^^
 >x : Y
+>  : ^
 

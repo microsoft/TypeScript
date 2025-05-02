@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inlinedAliasAssignableToConstraintSameAsAlias.ts] ////
+
 //// [inlinedAliasAssignableToConstraintSameAsAlias.ts]
 interface RelationFields {
   x: A;

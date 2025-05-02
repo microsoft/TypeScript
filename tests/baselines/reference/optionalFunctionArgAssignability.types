@@ -1,35 +1,57 @@
-=== tests/cases/compiler/optionalFunctionArgAssignability.ts ===
+//// [tests/cases/compiler/optionalFunctionArgAssignability.ts] ////
+
+=== optionalFunctionArgAssignability.ts ===
 interface Promise<T> {
     then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>; }
+>     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^                            ^^^ ^^         ^^^               ^^        ^^^                  ^^^          ^^^
 >onFulfill : (value: T) => U
+>          : ^     ^^ ^^^^^ 
 >value : T
+>      : ^
 >onReject : (reason: any) => U
+>         : ^      ^^   ^^^^^ 
 >reason : any
+>       : ^^^
 }
  
 var a = function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U): Promise<U> { return null };
 >a : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
+>  : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U): Promise<U> { return null } : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
+>                                                                                                              : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >then : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
+>     : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >onFulfill : (value: string) => U
+>          : ^     ^^      ^^^^^ 
 >value : string
+>      : ^^^^^^
 >onReject : (reason: any) => U
+>         : ^      ^^   ^^^^^ 
 >reason : any
->null : null
+>       : ^^^
 
 var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null };
 >b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
+>  : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null } : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
+>                                                                                                              : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >then : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
+>     : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >onFulFill : (value: number) => U
+>          : ^     ^^      ^^^^^ 
 >value : number
+>      : ^^^^^^
 >onReject : (reason: any) => U
+>         : ^      ^^   ^^^^^ 
 >reason : any
->null : null
+>       : ^^^
 
 a = b; // error because number is not assignable to string
 >a = b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
+>      : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >a : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
+>  : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
+>  : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 

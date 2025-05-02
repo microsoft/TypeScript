@@ -1,28 +1,43 @@
-=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target11.ts ===
+//// [tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target11.ts] ////
+
+=== es6modulekindWithES5Target11.ts ===
 declare function foo(...args: any[]): any;
 >foo : (...args: any[]) => any
+>    : ^^^^    ^^     ^^^^^   
 >args : any[]
+>     : ^^^^^
 
 @foo
 >foo : (...args: any[]) => any
+>    : ^^^^    ^^     ^^^^^   
 
 export default class C {
 >C : C
+>  : ^
 
     static x() { return C.y; }
 >x : () => number
+>  : ^^^^^^^^^^^^
 >C.y : number
+>    : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
     static y = 1
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     p = 1;
 >p : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     method() { }
 >method : () => void
+>       : ^^^^^^^^^^
 }

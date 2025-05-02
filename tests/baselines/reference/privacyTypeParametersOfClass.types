@@ -1,82 +1,110 @@
-=== tests/cases/compiler/privacyTypeParametersOfClass.ts ===
+//// [tests/cases/compiler/privacyTypeParametersOfClass.ts] ////
+
+=== privacyTypeParametersOfClass.ts ===
 class privateClass {
 >privateClass : privateClass
+>             : ^^^^^^^^^^^^
 }
 
 export class publicClass {
 >publicClass : publicClass
+>            : ^^^^^^^^^^^
 }
 
 // TypeParameter_0_of_exported_class_1_has_or_is_using_private_type_2
 export class publicClassWithPrivateTypeParameters<T extends privateClass> {
 >publicClassWithPrivateTypeParameters : publicClassWithPrivateTypeParameters<T>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     myMethod(val: T): T { // Error
 >myMethod : (val: T) => T
+>         : ^   ^^ ^^^^^ 
 >val : T
+>    : ^
 
         return val;
 >val : T
+>    : ^
     }
 }
 
 export class publicClassWithPublicTypeParameters<T extends publicClass> {
 >publicClassWithPublicTypeParameters : publicClassWithPublicTypeParameters<T>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     myMethod(val: T): T { // No Error
 >myMethod : (val: T) => T
+>         : ^   ^^ ^^^^^ 
 >val : T
+>    : ^
 
         return val;
 >val : T
+>    : ^
     }
 }
 
 class privateClassWithPrivateTypeParameters<T extends privateClass> {
 >privateClassWithPrivateTypeParameters : privateClassWithPrivateTypeParameters<T>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     myMethod(val: T): T { // No Error
 >myMethod : (val: T) => T
+>         : ^   ^^ ^^^^^ 
 >val : T
+>    : ^
 
         return val;
 >val : T
+>    : ^
     }
 }
 
 class privateClassWithPublicTypeParameters<T extends publicClass> {
 >privateClassWithPublicTypeParameters : privateClassWithPublicTypeParameters<T>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     myMethod(val: T): T { // No Error
 >myMethod : (val: T) => T
+>         : ^   ^^ ^^^^^ 
 >val : T
+>    : ^
 
         return val;
 >val : T
+>    : ^
     }
 }
 
 export class publicClassWithPublicTypeParametersWithoutExtends<T> {
 >publicClassWithPublicTypeParametersWithoutExtends : publicClassWithPublicTypeParametersWithoutExtends<T>
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     myMethod(val: T): T { // No Error
 >myMethod : (val: T) => T
+>         : ^   ^^ ^^^^^ 
 >val : T
+>    : ^
 
         return val;
 >val : T
+>    : ^
     }
 }
 
 class privateClassWithPublicTypeParametersWithoutExtends<T> {
 >privateClassWithPublicTypeParametersWithoutExtends : privateClassWithPublicTypeParametersWithoutExtends<T>
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     myMethod(val: T): T { // No Error
 >myMethod : (val: T) => T
+>         : ^   ^^ ^^^^^ 
 >val : T
+>    : ^
 
         return val;
 >val : T
+>    : ^
     }
 }
 

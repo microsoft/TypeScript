@@ -1,9 +1,9 @@
-tests/cases/compiler/evolvingArrayResolvedAssert.ts(1,5): error TS7034: Variable 'C' implicitly has type 'any[]' in some locations where its type cannot be determined.
-tests/cases/compiler/evolvingArrayResolvedAssert.ts(2,15): error TS7005: Variable 'C' implicitly has an 'any[]' type.
-tests/cases/compiler/evolvingArrayResolvedAssert.ts(3,9): error TS7005: Variable 'C' implicitly has an 'any[]' type.
+evolvingArrayResolvedAssert.ts(1,5): error TS7034: Variable 'C' implicitly has type 'any[]' in some locations where its type cannot be determined.
+evolvingArrayResolvedAssert.ts(2,15): error TS7005: Variable 'C' implicitly has an 'any[]' type.
+evolvingArrayResolvedAssert.ts(3,9): error TS7005: Variable 'C' implicitly has an 'any[]' type.
 
 
-==== tests/cases/compiler/evolvingArrayResolvedAssert.ts (3 errors) ====
+==== evolvingArrayResolvedAssert.ts (3 errors) ====
     var C = [];
         ~
 !!! error TS7034: Variable 'C' implicitly has type 'any[]' in some locations where its type cannot be determined.

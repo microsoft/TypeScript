@@ -1,25 +1,40 @@
-=== tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts ===
+//// [tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts] ////
+
+=== genericTypeWithNonGenericBaseMisMatch.ts ===
 interface I {
 	f: (a: { a: number }) => void
 >f : (a: { a: number; }) => void
+>  : ^ ^^              ^^^^^    
 >a : { a: number; }
+>  : ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 }
 class X<T extends { a: string }> implements I {
 >X : X<T>
+>  : ^^^^
 >a : string
+>  : ^^^^^^
 
 	f(a: T): void { }
 >f : (a: T) => void
+>  : ^ ^^ ^^^^^    
 >a : T
+>  : ^
 }
 var x = new X<{ a: string }>();
 >x : X<{ a: string; }>
+>  : ^^^^^^^      ^^^^
 >new X<{ a: string }>() : X<{ a: string; }>
+>                       : ^^^^^^^      ^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
 >i : I
+>  : ^
 >x : X<{ a: string; }>
+>  : ^^^^^^^      ^^^^
 

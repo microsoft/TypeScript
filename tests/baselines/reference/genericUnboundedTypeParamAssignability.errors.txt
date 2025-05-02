@@ -1,10 +1,10 @@
-tests/cases/compiler/genericUnboundedTypeParamAssignability.ts(2,5): error TS2339: Property 'toString' does not exist on type 'T'.
-tests/cases/compiler/genericUnboundedTypeParamAssignability.ts(15,6): error TS2345: Argument of type 'T' is not assignable to parameter of type '{}'.
-tests/cases/compiler/genericUnboundedTypeParamAssignability.ts(16,6): error TS2345: Argument of type 'T' is not assignable to parameter of type 'Record<string, any>'.
-tests/cases/compiler/genericUnboundedTypeParamAssignability.ts(17,5): error TS2339: Property 'toString' does not exist on type 'T'.
+genericUnboundedTypeParamAssignability.ts(2,5): error TS2339: Property 'toString' does not exist on type 'T'.
+genericUnboundedTypeParamAssignability.ts(15,6): error TS2345: Argument of type 'T' is not assignable to parameter of type '{}'.
+genericUnboundedTypeParamAssignability.ts(16,6): error TS2345: Argument of type 'T' is not assignable to parameter of type 'Record<string, any>'.
+genericUnboundedTypeParamAssignability.ts(17,5): error TS2339: Property 'toString' does not exist on type 'T'.
 
 
-==== tests/cases/compiler/genericUnboundedTypeParamAssignability.ts (4 errors) ====
+==== genericUnboundedTypeParamAssignability.ts (4 errors) ====
     function f1<T>(o: T) {
       o.toString(); // error
         ~~~~~~~~
@@ -24,11 +24,11 @@ tests/cases/compiler/genericUnboundedTypeParamAssignability.ts(17,5): error TS23
       f2(t); // error in strict, unbounded T doesn't satisfy the constraint
          ~
 !!! error TS2345: Argument of type 'T' is not assignable to parameter of type '{}'.
-!!! related TS2208 tests/cases/compiler/genericUnboundedTypeParamAssignability.ts:13:15: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 genericUnboundedTypeParamAssignability.ts:13:15: This type parameter might need an `extends {}` constraint.
       f3(t); // error in strict, unbounded T doesn't satisfy the constraint
          ~
 !!! error TS2345: Argument of type 'T' is not assignable to parameter of type 'Record<string, any>'.
-!!! related TS2208 tests/cases/compiler/genericUnboundedTypeParamAssignability.ts:13:15: This type parameter might need an `extends Record<string, any>` constraint.
+!!! related TS2208 genericUnboundedTypeParamAssignability.ts:13:15: This type parameter might need an `extends Record<string, any>` constraint.
       t.toString();  // error, for the same reason as f1()
         ~~~~~~~~
 !!! error TS2339: Property 'toString' does not exist on type 'T'.

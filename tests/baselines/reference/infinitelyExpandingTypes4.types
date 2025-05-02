@@ -1,10 +1,15 @@
-=== tests/cases/compiler/infinitelyExpandingTypes4.ts ===
+//// [tests/cases/compiler/infinitelyExpandingTypes4.ts] ////
+
+=== infinitelyExpandingTypes4.ts ===
 interface Query<T> {
     // ...
     groupBy<K>(keySelector: (item: T) => K): Query<Grouping<K, T>>;
 >groupBy : <K>(keySelector: (item: T) => K) => Query<Grouping<K, T>>
+>        : ^ ^^           ^^              ^^^^^                     
 >keySelector : (item: T) => K
+>            : ^    ^^ ^^^^^ 
 >item : T
+>     : ^
 
     // ...
 }
@@ -13,8 +18,11 @@ interface QueryEnumerator<T> {
     // ...
     groupBy<K>(keySelector: (item: T) => K): QueryEnumerator<Grouping<K, T>>;
 >groupBy : <K>(keySelector: (item: T) => K) => QueryEnumerator<Grouping<K, T>>
+>        : ^ ^^           ^^              ^^^^^                               
 >keySelector : (item: T) => K
+>            : ^    ^^ ^^^^^ 
 >item : T
+>     : ^
 
     // ...
 }
@@ -22,24 +30,34 @@ interface QueryEnumerator<T> {
 interface Grouping<K, T> extends Query<T> {
     key(): K;
 >key : () => K
+>    : ^^^^^^ 
 }
 
 var q1: Query<number>;
 >q1 : Query<number>
+>   : ^^^^^^^^^^^^^
 
 var q2: QueryEnumerator<number>;
 >q2 : QueryEnumerator<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var q3: Query<number>;
 >q3 : Query<number>
+>   : ^^^^^^^^^^^^^
 
 q1 = q2; // should error
 >q1 = q2 : QueryEnumerator<number>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >q1 : Query<number>
+>   : ^^^^^^^^^^^^^
 >q2 : QueryEnumerator<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 q1 = q3; // should not error
 >q1 = q3 : Query<number>
+>        : ^^^^^^^^^^^^^
 >q1 : Query<number>
+>   : ^^^^^^^^^^^^^
 >q3 : Query<number>
+>   : ^^^^^^^^^^^^^
 

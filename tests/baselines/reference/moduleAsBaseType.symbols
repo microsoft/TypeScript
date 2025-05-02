@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleAsBaseType.ts ===
+//// [tests/cases/compiler/moduleAsBaseType.ts] ////
+
+=== moduleAsBaseType.ts ===
 module M {}
 >M : Symbol(M, Decl(moduleAsBaseType.ts, 0, 0))
 

@@ -1,192 +1,275 @@
-=== tests/cases/conformance/functions/functionImplementationErrors.ts ===
+//// [tests/cases/conformance/functions/functionImplementationErrors.ts] ////
+
+=== functionImplementationErrors.ts ===
 // FunctionExpression with no return type annotation with multiple return statements with unrelated types
 var f1 = function () {
 >f1 : () => "" | 3
+>   : ^^^^^^^^^^^^
 >function () {    return '';    return 3;} : () => "" | 3
+>                                          : ^^^^^^^^^^^^
 
     return '';
 >'' : ""
+>   : ^^
 
     return 3;
 >3 : 3
+>  : ^
 
 };
 var f2 = function x() {
 >f2 : () => "" | 3
+>   : ^^^^^^^^^^^^
 >function x() {    return '';    return 3;} : () => "" | 3
+>                                           : ^^^^^^^^^^^^
 >x : () => "" | 3
+>  : ^^^^^^^^^^^^
 
     return '';
 >'' : ""
+>   : ^^
 
     return 3;
 >3 : 3
+>  : ^
 
 };
 var f3 = () => {
 >f3 : () => "" | 3
+>   : ^^^^^^^^^^^^
 >() => {    return '';    return 3;} : () => "" | 3
+>                                    : ^^^^^^^^^^^^
 
     return '';
 >'' : ""
+>   : ^^
 
     return 3;
 >3 : 3
+>  : ^
 
 };
 
 // FunctionExpression with no return type annotation with return branch of number[] and other of string[]
 var f4 = function () {
 >f4 : () => string[] | number[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () {    if (true) {        return [''];    } else {        return [1];    }} : () => string[] | number[]
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (true) {
 >true : true
+>     : ^^^^
 
         return [''];
 >[''] : string[]
+>     : ^^^^^^^^
 >'' : ""
+>   : ^^
 
     } else {
         return [1];
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 // Function implemetnation with non -void return type annotation with no return
 function f5(): number {
 >f5 : () => number
+>   : ^^^^^^      
 }
 
 var m;
 >m : any
+>  : ^^^
 
 // Function signature with parameter initializer referencing in scope local variable
 function f6(n = m) {
 >f6 : (n?: number) => void
+>   : ^ ^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >m : number
+>  : ^^^^^^
 
     var m = 4;
 >m : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 }
 
 // Function signature with initializer referencing other parameter to the right
 function f7(n = m, m?) {
 >f7 : (n?: any, m?: any) => void
+>   : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >n : any
+>  : ^^^
 >m : any
+>  : ^^^
 >m : any
+>  : ^^^
 }
 
 // FunctionExpression with non -void return type annotation with a throw, no return, and other code
 // Should be error but isn't
 undefined === function (): number {
 >undefined === function (): number {    throw undefined;    var x = 4;} : boolean
+>                                                                       : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >function (): number {    throw undefined;    var x = 4;} : () => number
+>                                                         : ^^^^^^      
 
     throw undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 
     var x = 4;
 >x : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
 };
 
 class Base { private x; }
 >Base : Base
+>     : ^^^^
 >x : any
+>  : ^^^
 
 class AnotherClass { private y; }
 >AnotherClass : AnotherClass
+>             : ^^^^^^^^^^^^
 >y : any
+>  : ^^^
 
 class Derived1 extends Base { private m; }
 >Derived1 : Derived1
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >m : any
+>  : ^^^
 
 class Derived2 extends Base { private n; }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >n : any
+>  : ^^^
 
 function f8() {
 >f8 : () => Derived1 | Derived2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Derived1();
 >new Derived1() : Derived1
+>               : ^^^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 
     return new Derived2();    
 >new Derived2() : Derived2
+>               : ^^^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 }
 var f9 = function () {
 >f9 : () => Derived1 | Derived2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () {    return new Derived1();    return new Derived2();} : () => Derived1 | Derived2
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Derived1();
 >new Derived1() : Derived1
+>               : ^^^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 
     return new Derived2();
 >new Derived2() : Derived2
+>               : ^^^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 
 };
 var f10 = () => {
 >f10 : () => Derived1 | Derived2
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    return new Derived1();    return new Derived2();} : () => Derived1 | Derived2
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Derived1();
 >new Derived1() : Derived1
+>               : ^^^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 
     return new Derived2();
 >new Derived2() : Derived2
+>               : ^^^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 
 };
 function f11() {
 >f11 : () => Base | AnotherClass
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Base();
 >new Base() : Base
+>           : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
     return new AnotherClass();
 >new AnotherClass() : AnotherClass
+>                   : ^^^^^^^^^^^^
 >AnotherClass : typeof AnotherClass
+>             : ^^^^^^^^^^^^^^^^^^^
 }
 var f12 = function () {
 >f12 : () => Base | AnotherClass
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () {    return new Base();    return new AnotherClass();} : () => Base | AnotherClass
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Base();
 >new Base() : Base
+>           : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
     return new AnotherClass();
 >new AnotherClass() : AnotherClass
+>                   : ^^^^^^^^^^^^
 >AnotherClass : typeof AnotherClass
+>             : ^^^^^^^^^^^^^^^^^^^
 
 };
 var f13 = () => {
 >f13 : () => Base | AnotherClass
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    return new Base();    return new AnotherClass();} : () => Base | AnotherClass
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Base();
 >new Base() : Base
+>           : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
     return new AnotherClass();
 >new AnotherClass() : AnotherClass
+>                   : ^^^^^^^^^^^^
 >AnotherClass : typeof AnotherClass
+>             : ^^^^^^^^^^^^^^^^^^^
 
 };
 

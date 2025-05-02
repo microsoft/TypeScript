@@ -1,103 +1,185 @@
-=== tests/cases/compiler/genericReduce.ts ===
+//// [tests/cases/compiler/genericReduce.ts] ////
+
+=== genericReduce.ts ===
 var a = ["An", "array", "of", "strings"];
 >a : string[]
+>  : ^^^^^^^^
 >["An", "array", "of", "strings"] : string[]
+>                                 : ^^^^^^^^
 >"An" : "An"
+>     : ^^^^
 >"array" : "array"
+>        : ^^^^^^^
 >"of" : "of"
+>     : ^^^^
 >"strings" : "strings"
+>          : ^^^^^^^^^
 
 var b = a.map(s => s.length);
 >b : number[]
+>  : ^^^^^^^^
 >a.map(s => s.length) : number[]
+>                     : ^^^^^^^^
 >a.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>      : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >s => s.length : (s: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s.length : number
+>         : ^^^^^^
 >s : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
 var n1 = b.reduce((x, y) => x + y);
 >n1 : number
+>   : ^^^^^^
 >b.reduce((x, y) => x + y) : number
+>                          : ^^^^^^
 >b.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>         : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >b : number[]
+>  : ^^^^^^^^
 >reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>       : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(x, y) => x + y : (x: number, y: number) => number
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var n2 = b.reduceRight((x, y) => x + y);
 >n2 : number
+>   : ^^^^^^
 >b.reduceRight((x, y) => x + y) : number
+>                               : ^^^^^^
 >b.reduceRight : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>              : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >b : number[]
+>  : ^^^^^^^^
 >reduceRight : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>            : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(x, y) => x + y : (x: number, y: number) => number
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 n1.x = "fail";       // should error, as 'n1' should be type 'number', not 'any'.
 >n1.x = "fail" : "fail"
+>              : ^^^^^^
 >n1.x : any
+>     : ^^^
 >n1 : number
+>   : ^^^^^^
 >x : any
+>  : ^^^
 >"fail" : "fail"
+>       : ^^^^^^
 
 n1.toExponential(2); // should not error if 'n1' is correctly number.
 >n1.toExponential(2) : string
+>                    : ^^^^^^
 >n1.toExponential : (fractionDigits?: number) => string
+>                 : ^              ^^^      ^^^^^      
 >n1 : number
+>   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >2 : 2
+>  : ^
 
 n2.x = "fail";       // should error, as 'n2' should be type 'number', not 'any'.
 >n2.x = "fail" : "fail"
+>              : ^^^^^^
 >n2.x : any
+>     : ^^^
 >n2 : number
+>   : ^^^^^^
 >x : any
+>  : ^^^
 >"fail" : "fail"
+>       : ^^^^^^
 
 n2.toExponential(2); // should not error if 'n2' is correctly number.
 >n2.toExponential(2) : string
+>                    : ^^^^^^
 >n2.toExponential : (fractionDigits?: number) => string
+>                 : ^              ^^^      ^^^^^      
 >n2 : number
+>   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >2 : 2
+>  : ^
 
 var n3 = b.reduce<string>( (x, y) => x + y, ""); // Initial value is of type string
 >n3 : string
+>   : ^^^^^^
 >b.reduce<string>( (x, y) => x + y, "") : string
+>                                       : ^^^^^^
 >b.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>         : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >b : number[]
+>  : ^^^^^^^^
 >reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>       : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(x, y) => x + y : (x: string, y: number) => string
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >x + y : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 n3.toExponential(2); // should error if 'n3' is correctly type 'string'
 >n3.toExponential(2) : any
+>                    : ^^^
 >n3.toExponential : any
+>                 : ^^^
 >n3 : string
+>   : ^^^^^^
 >toExponential : any
+>              : ^^^
 >2 : 2
+>  : ^
 
 n3.charAt(0);        // should not error if 'n3' is correctly type 'string'
 >n3.charAt(0) : string
+>             : ^^^^^^
 >n3.charAt : (pos: number) => string
+>          : ^   ^^      ^^^^^      
 >n3 : string
+>   : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 

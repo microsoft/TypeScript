@@ -1,7 +1,7 @@
-tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions1.ts(5,17): error TS1109: Expression expected.
+taggedTemplatesWithIncompleteTemplateExpressions1.ts(5,17): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions1.ts (1 errors) ====
+==== taggedTemplatesWithIncompleteTemplateExpressions1.ts (1 errors) ====
     function f(x: TemplateStringsArray, y: string, z: string) {
     }
     

@@ -1,63 +1,81 @@
-=== tests/cases/conformance/statements/breakStatements/forBreakStatements.ts ===
+//// [tests/cases/conformance/statements/breakStatements/forBreakStatements.ts] ////
+
+=== forBreakStatements.ts ===
 for (; ;) {
     break;
 }
 
 ONE:
 >ONE : any
+>    : ^^^
 
 for (; ;) {
     break ONE;
 >ONE : any
+>    : ^^^
 }
 
 TWO:
 >TWO : any
+>    : ^^^
 
 THREE:
 >THREE : any
+>      : ^^^
 
 for (; ;) {
     break THREE;
 >THREE : any
+>      : ^^^
 }
 
 FOUR:
 >FOUR : any
+>     : ^^^
 
 for (; ;) {
     FIVE:
 >FIVE : any
+>     : ^^^
 
     for (; ;) {
         break FOUR;
 >FOUR : any
+>     : ^^^
     }
 }
 
 for (; ;) {
     SIX:
 >SIX : any
+>    : ^^^
 
     for (; ;) break SIX;
 >SIX : any
+>    : ^^^
 }
 
 SEVEN:
 >SEVEN : any
+>      : ^^^
 
 for (; ;) for (; ;) for (; ;) break SEVEN;
 >SEVEN : any
+>      : ^^^
 
 EIGHT:
 >EIGHT : any
+>      : ^^^
 
 for (; ;) {
     var fn = function () { }
 >fn : () => void
+>   : ^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
     break EIGHT;
 >EIGHT : any
+>      : ^^^
 }
 

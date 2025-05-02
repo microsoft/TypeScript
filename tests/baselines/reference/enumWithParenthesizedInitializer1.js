@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithParenthesizedInitializer1.ts] ////
+
 //// [enumWithParenthesizedInitializer1.ts]
 enum E {
  e = -(3

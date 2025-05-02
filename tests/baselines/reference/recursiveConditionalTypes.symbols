@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveConditionalTypes.ts ===
+//// [tests/cases/compiler/recursiveConditionalTypes.ts] ////
+
+=== recursiveConditionalTypes.ts ===
 // Awaiting promises
 
 type __Awaited<T> =
@@ -362,7 +364,7 @@ declare let z: Box2<Box2<string>>;
 >Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 86, 28))
 >Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 86, 28))
 
-foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+foo(z);  // string
 >foo : Symbol(foo, Decl(recursiveConditionalTypes.ts, 87, 28))
 >z : Symbol(z, Decl(recursiveConditionalTypes.ts, 91, 11))
 
@@ -566,7 +568,7 @@ let five: Add<2, 3>;
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 >_PrependNextNum : Symbol(_PrependNextNum, Decl(recursiveConditionalTypes.ts, 147, 20))
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 151, 21))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 151, 21))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 151, 74))
 
@@ -584,7 +586,7 @@ type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
 >_Enumerate : Symbol(_Enumerate, Decl(recursiveConditionalTypes.ts, 155, 12))
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >N : Symbol(N, Decl(recursiveConditionalTypes.ts, 157, 41))
 >N : Symbol(N, Decl(recursiveConditionalTypes.ts, 157, 41))
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))

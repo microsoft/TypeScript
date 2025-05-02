@@ -1,56 +1,96 @@
-=== tests/cases/compiler/contextualTypingOfConditionalExpression.ts ===
+//// [tests/cases/compiler/contextualTypingOfConditionalExpression.ts] ////
+
+=== contextualTypingOfConditionalExpression.ts ===
 var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed();
 >x : (a: number) => void
+>  : ^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 >true ? (a) => a.toExponential() : (b) => b.toFixed() : (a: number) => string
+>                                                     : ^ ^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >(a) => a.toExponential() : (a: number) => string
+>                         : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >a.toExponential() : string
+>                  : ^^^^^^
 >a.toExponential : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >(b) => b.toFixed() : (b: number) => string
+>                   : ^ ^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >b.toFixed() : string
+>            : ^^^^^^
 >b.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 class A {
 >A : A
+>  : ^
 
     foo: number;
 >foo : number
+>    : ^^^^^^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     bar: number;
 >bar : number
+>    : ^^^^^^
 }
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     baz: number;
 >baz : number
+>    : ^^^^^^
 }
 
 var x2: (a: A) => void = true ? (a) => a.foo : (b) => b.foo;
 >x2 : (a: A) => void
+>   : ^ ^^ ^^^^^    
 >a : A
+>  : ^
 >true ? (a) => a.foo : (b) => b.foo : (a: A) => number
+>                                   : ^ ^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >(a) => a.foo : (a: A) => number
+>             : ^ ^^^^^^^^^^^^^^
 >a : A
+>  : ^
 >a.foo : number
+>      : ^^^^^^
 >a : A
+>  : ^
 >foo : number
+>    : ^^^^^^
 >(b) => b.foo : (b: A) => number
+>             : ^ ^^^^^^^^^^^^^^
 >b : A
+>  : ^
 >b.foo : number
+>      : ^^^^^^
 >b : A
+>  : ^
 >foo : number
+>    : ^^^^^^
 

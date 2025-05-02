@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration4_es5.ts ===
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration4_es5.ts] ////
+
+=== asyncFunctionDeclaration4_es5.ts ===
 function await() {
 >await : Symbol(await, Decl(asyncFunctionDeclaration4_es5.ts, 0, 0))
 }

@@ -1,129 +1,207 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/constructorFunctions3.ts] ////
+
+=== a.js ===
 function Instance() {
 >Instance : typeof Instance
+>         : ^^^^^^^^^^^^^^^
 
     this.i = 'simple'
 >this.i = 'simple' : "simple"
+>                  : ^^^^^^^^
 >this.i : any
 >this : this
+>     : ^^^^
 >i : any
+>  : ^^^
 >'simple' : "simple"
+>         : ^^^^^^^^
 }
 var i = new Instance();
 >i : Instance
+>  : ^^^^^^^^
 >new Instance() : Instance
+>               : ^^^^^^^^
 >Instance : typeof Instance
+>         : ^^^^^^^^^^^^^^^
 
 Instance;
 >Instance : typeof Instance
+>         : ^^^^^^^^^^^^^^^
 
 i;
 >i : Instance
+>  : ^^^^^^^^
 
 function StaticToo() {
 >StaticToo : typeof StaticToo
+>          : ^^^^^^^^^^^^^^^^
 
     this.i = 'more complex'
 >this.i = 'more complex' : "more complex"
+>                        : ^^^^^^^^^^^^^^
 >this.i : any
 >this : this
+>     : ^^^^
 >i : any
+>  : ^^^
 >'more complex' : "more complex"
+>               : ^^^^^^^^^^^^^^
 }
 StaticToo.property = 'yep'
 >StaticToo.property = 'yep' : "yep"
+>                           : ^^^^^
 >StaticToo.property : string
+>                   : ^^^^^^
 >StaticToo : typeof StaticToo
+>          : ^^^^^^^^^^^^^^^^
 >property : string
+>         : ^^^^^^
 >'yep' : "yep"
+>      : ^^^^^
 
 var s = new StaticToo();
 >s : StaticToo
+>  : ^^^^^^^^^
 >new StaticToo() : StaticToo
+>                : ^^^^^^^^^
 >StaticToo : typeof StaticToo
+>          : ^^^^^^^^^^^^^^^^
 
 s;
 >s : StaticToo
+>  : ^^^^^^^^^
 
 StaticToo;
 >StaticToo : typeof StaticToo
+>          : ^^^^^^^^^^^^^^^^
 
 // Both!
 function A () {
 >A : typeof A
+>  : ^^^^^^^^
 
     this.x = 1
 >this.x = 1 : 1
+>           : ^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
     /** @type {1} */
     this.second = 1
 >this.second = 1 : 1
+>                : ^
 >this.second : 1
+>            : ^
 >this : this
+>     : ^^^^
 >second : 1
+>       : ^
 >1 : 1
+>  : ^
 }
 /** @param {number} n */
 A.prototype.z = function f(n) {
 >A.prototype.z = function f(n) {    return n + this.x} : (n: number) => number
+>                                                      : ^ ^^      ^^^^^^^^^^^
 >A.prototype.z : any
 >A.prototype : any
+>            : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >z : any
+>  : ^^^
 >function f(n) {    return n + this.x} : (n: number) => number
+>                                      : ^ ^^      ^^^^^^^^^^^
 >f : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     return n + this.x
 >n + this.x : number
+>           : ^^^^^^
 >n : number
+>  : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 }
 /** @param {number} m */
 A.t = function g(m) {
 >A.t = function g(m) {    return m + 1} : (m: number) => number
+>                                       : ^ ^^      ^^^^^^^^^^^
 >A.t : (m: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >t : (m: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >function g(m) {    return m + 1} : (m: number) => number
+>                                 : ^ ^^      ^^^^^^^^^^^
 >g : (m: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >m : number
+>  : ^^^^^^
 
     return m + 1
 >m + 1 : number
+>      : ^^^^^^
 >m : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 var a = new A()
 >a : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 a.z(3)
 >a.z(3) : number
+>       : ^^^^^^
 >a.z : (n: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 >a : A
+>  : ^
 >z : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >3 : 3
+>  : ^
 
 A.t(2)
 >A.t(2) : number
+>       : ^^^^^^
 >A.t : (m: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >t : (m: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 a.second = 1
 >a.second = 1 : 1
+>             : ^
 >a.second : 1
+>         : ^
 >a : A
+>  : ^
 >second : 1
+>       : ^
 >1 : 1
+>  : ^
 

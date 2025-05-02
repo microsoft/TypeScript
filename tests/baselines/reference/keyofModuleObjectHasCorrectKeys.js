@@ -15,13 +15,13 @@ test(example, "default");
 
 //// [example.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = add;
 function add(a, b) {
     return a + b;
 }
-exports["default"] = add;
 //// [test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var example = require("./example");
 test(example, "default");

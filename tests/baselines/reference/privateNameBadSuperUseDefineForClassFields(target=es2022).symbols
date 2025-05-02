@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameBadSuperUseDefineForClassFields.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameBadSuperUseDefineForClassFields.ts] ////
+
+=== privateNameBadSuperUseDefineForClassFields.ts ===
 class B {};
 >B : Symbol(B, Decl(privateNameBadSuperUseDefineForClassFields.ts, 0, 0))
 

@@ -1,26 +1,19 @@
-tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(4,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(5,20): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
-tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(7,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(8,13): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
-tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(11,20): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
-tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(20,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(21,24): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+super_inside-object-literal-getters-and-setters.ts(5,20): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+super_inside-object-literal-getters-and-setters.ts(8,13): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+super_inside-object-literal-getters-and-setters.ts(11,20): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+super_inside-object-literal-getters-and-setters.ts(21,24): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
 
 
-==== tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts (7 errors) ====
+==== super_inside-object-literal-getters-and-setters.ts (4 errors) ====
     module ObjectLiteral {
         var ThisInObjectLiteral = {
             _foo: '1',
             get foo(): string {
-                ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 return super._foo;
                        ~~~~~
 !!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
             },
             set foo(value: string) {
-                ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 super._foo = value;
                 ~~~~~
 !!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
@@ -38,8 +31,6 @@ tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(21,24): 
         public testing() {
             var test = {
                 get F() {
-                    ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     return super.test();
                            ~~~~~
 !!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.

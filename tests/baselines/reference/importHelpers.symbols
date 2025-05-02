@@ -1,4 +1,6 @@
-=== tests/cases/compiler/external.ts ===
+//// [tests/cases/compiler/importHelpers.ts] ////
+
+=== external.ts ===
 export class A { }
 >A : Symbol(A, Decl(external.ts, 0, 0))
 
@@ -36,7 +38,7 @@ export const result = id`hello world`;
 >result : Symbol(result, Decl(external.ts, 15, 12))
 >id : Symbol(id, Decl(external.ts, 9, 1))
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 class A { }
 >A : Symbol(A, Decl(script.ts, 0, 0))
 
@@ -74,7 +76,7 @@ const result = id`hello world`;
 >result : Symbol(result, Decl(script.ts, 15, 5))
 >id : Symbol(id, Decl(script.ts, 9, 1))
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
 >d : Symbol(d, Decl(tslib.d.ts, --, --))

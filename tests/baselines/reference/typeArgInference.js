@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgInference.ts] ////
+
 //// [typeArgInference.ts]
 interface I {
     f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };

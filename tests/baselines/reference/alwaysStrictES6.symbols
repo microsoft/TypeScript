@@ -1,4 +1,6 @@
-=== tests/cases/compiler/alwaysStrictES6.ts ===
+//// [tests/cases/compiler/alwaysStrictES6.ts] ////
+
+=== alwaysStrictES6.ts ===
 function f() {
 >f : Symbol(f, Decl(alwaysStrictES6.ts, 0, 0))
 

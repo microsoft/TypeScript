@@ -1,7 +1,7 @@
-tests/cases/compiler/superWithTypeArgument3.ts(8,14): error TS2754: 'super' may not use type arguments.
+superWithTypeArgument3.ts(8,14): error TS2754: 'super' may not use type arguments.
 
 
-==== tests/cases/compiler/superWithTypeArgument3.ts (1 errors) ====
+==== superWithTypeArgument3.ts (1 errors) ====
     class C<T> {
         foo: T;
         bar<U>(x: U) { }

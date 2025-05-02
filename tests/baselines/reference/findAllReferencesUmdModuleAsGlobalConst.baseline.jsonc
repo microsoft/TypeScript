@@ -1,421 +1,207 @@
+// === findAllReferences ===
+// === /node_modules/@types/three/index.d.ts ===
+// export * from "./three-core";
+// <|export as namespace /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}THREE|];|>
+
+  // === Definitions ===
+  // === /node_modules/@types/three/index.d.ts ===
+  // export * from "./three-core";
+  // <|export as namespace /*FIND ALL REFS*/[|THREE|];|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export namespace THREE",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "THREE",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /typings/global.d.ts ===
-// import * as _THREE from '[|three|]';
+// <|import * as _THREE from '/*FIND ALL REFS*/[|three|]';|>
 // declare global {
-//     const [|THREE|]: typeof _THREE;
+//     const THREE: typeof _THREE;
+// }
+
+  // === Definitions ===
+  // === /node_modules/@types/three/index.d.ts ===
+  // [|export * from "./three-core";
+  // export as namespace THREE;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/node_modules/@types/three/index\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/node_modules/@types/three/index\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /typings/global.d.ts ===
+// import * as _THREE from 'three';
+// declare global {
+//     <|const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}THREE|]: typeof _THREE;|>
 // }
 
 // === /src/index.ts ===
 // export const a = {};
 // let v = new [|THREE|].Vector2();
 
-// === /node_modules/@types/three/index.d.ts ===
-// export * from "./three-core";
-// export as namespace /*FIND ALL REFS*/[|THREE|];
+  // === Definitions ===
+  // === /typings/global.d.ts ===
+  // import * as _THREE from 'three';
+  // declare global {
+  //     <|const /*FIND ALL REFS*/[|THREE|]: typeof _THREE;|>
+  // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/@types/three/index.d.ts",
-      "kind": "var",
-      "name": "module THREE\nvar THREE: typeof import(\"/node_modules/@types/three/index\")",
-      "textSpan": {
-        "start": 0,
-        "length": 56
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "THREE",
-          "kind": "localName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "THREE",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"/node_modules/@types/three/index\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 5
-        },
-        "fileName": "/node_modules/@types/three/index.d.ts",
-        "contextSpan": {
-          "start": 30,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 5
-        },
-        "fileName": "/typings/global.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 5
-        },
-        "fileName": "/typings/global.d.ts",
-        "contextSpan": {
-          "start": 54,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 5
-        },
-        "fileName": "/src/index.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const THREE: typeof _THREE",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "THREE",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "_THREE",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /typings/global.d.ts ===
-// import * as _THREE from '/*FIND ALL REFS*/[|three|]';
+// import * as _THREE from 'three';
 // declare global {
-//     const [|THREE|]: typeof _THREE;
+//     <|const [|{| isWriteAccess: true |}THREE|]: typeof _THREE;|>
 // }
 
 // === /src/index.ts ===
 // export const a = {};
-// let v = new [|THREE|].Vector2();
+// let v = new /*FIND ALL REFS*/[|THREE|].Vector2();
 
-// === /node_modules/@types/three/index.d.ts ===
-// export * from "./three-core";
-// export as namespace [|THREE|];
+  // === Definitions ===
+  // === /typings/global.d.ts ===
+  // import * as _THREE from 'three';
+  // declare global {
+  //     <|const [|THREE|]: typeof _THREE;|>
+  // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/@types/three/index.d.ts",
-      "kind": "var",
-      "name": "module THREE\nvar THREE: typeof import(\"/node_modules/@types/three/index\")",
-      "textSpan": {
-        "start": 0,
-        "length": 56
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "THREE",
-          "kind": "localName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "THREE",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"/node_modules/@types/three/index\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 5
-        },
-        "fileName": "/node_modules/@types/three/index.d.ts",
-        "contextSpan": {
-          "start": 30,
-          "length": 26
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 5
-        },
-        "fileName": "/typings/global.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 5
-        },
-        "fileName": "/typings/global.d.ts",
-        "contextSpan": {
-          "start": 54,
-          "length": 27
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 5
-        },
-        "fileName": "/src/index.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const THREE: typeof _THREE",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "THREE",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "_THREE",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
-
-// === /typings/global.d.ts ===
-// import * as _THREE from '[|three|]';
-// declare global {
-//     const /*FIND ALL REFS*/[|THREE|]: typeof _THREE;
-// }
-
-// === /src/index.ts ===
-// export const a = {};
-// let v = new [|THREE|].Vector2();
-
-// === /node_modules/@types/three/index.d.ts ===
-// export * from "./three-core";
-// export as namespace [|THREE|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/@types/three/index.d.ts",
-      "kind": "var",
-      "name": "module THREE\nvar THREE: typeof import(\"/node_modules/@types/three/index\")",
-      "textSpan": {
-        "start": 0,
-        "length": 56
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "THREE",
-          "kind": "localName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "THREE",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"/node_modules/@types/three/index\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 5
-        },
-        "fileName": "/node_modules/@types/three/index.d.ts",
-        "contextSpan": {
-          "start": 30,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 5
-        },
-        "fileName": "/typings/global.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 5
-        },
-        "fileName": "/typings/global.d.ts",
-        "contextSpan": {
-          "start": 54,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 5
-        },
-        "fileName": "/src/index.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+   }
+  ]

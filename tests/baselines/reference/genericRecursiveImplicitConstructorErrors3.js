@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts] ////
+
 //// [genericRecursiveImplicitConstructorErrors3.ts]
 module TypeScript {
     export class MemberName <A,B,C>{

@@ -1,152 +1,227 @@
-=== tests/cases/conformance/enums/enumErrors.ts ===
+//// [tests/cases/conformance/enums/enumErrors.ts] ////
+
+=== enumErrors.ts ===
 // Enum named with PredefinedTypes
 enum any { }
 >any : any
+>    : ^^^
 
 enum number { }
 >number : number
+>       : ^^^^^^
 
 enum string { }
 >string : string
+>       : ^^^^^^
 
 enum boolean { }
 >boolean : boolean
+>        : ^^^^^^^
 
 // Enum with computed member initializer of type Number
 enum E5 {
 >E5 : E5
+>   : ^^
 
     C = new Number(30)
->C : E5
+>C : E5.C
+>  : ^^^^
 >new Number(30) : Number
+>               : ^^^^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >30 : 30
+>   : ^^
 }
 
 enum E9 {
 >E9 : E9
+>   : ^^
 
     A,
 >A : E9.A
+>  : ^^^^
 
     B = A
 >B : E9.A
+>  : ^^^^
 >A : E9
+>  : ^^
 }
 
 //Enum with computed member intializer of different enum type
 // Bug 707850: This should be allowed
 enum E10 {
 >E10 : E10
+>    : ^^^
 
     A = E9.A,
->A : E10
+>A : E10.A
+>  : ^^^^^
 >E9.A : E9
+>     : ^^
 >E9 : typeof E9
+>   : ^^^^^^^^^
 >A : E9
+>  : ^^
 
     B = E9.B
->B : E10
+>B : E10.A
+>  : ^^^^^
 >E9.B : E9
+>     : ^^
 >E9 : typeof E9
+>   : ^^^^^^^^^
 >B : E9
+>  : ^^
 }
 
 // Enum with computed member intializer of other types
 enum E11 {
 >E11 : E11
+>    : ^^^
 
     A = true,
->A : E11
+>A : E11.A
+>  : ^^^^^
 >true : true
+>     : ^^^^
 
     B = new Date(),
->B : E11
+>B : E11.B
+>  : ^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     C = window,
->C : E11
+>C : E11.C
+>  : ^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     D = {},
->D : E11
+>D : E11.D
+>  : ^^^^^
 >{} : {}
+>   : ^^
 
     E = (() => 'foo')(),
->E : E11
+>E : E11.E
+>  : ^^^^^
 >(() => 'foo')() : string
+>                : ^^^^^^
 >(() => 'foo') : () => string
+>              : ^^^^^^^^^^^^
 >() => 'foo' : () => string
+>            : ^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 }
 
 // Enum with string valued member and computed member initializers
 enum E12 {
 >E12 : E12
+>    : ^^^
 
     A = '',
 >A : E12.A
+>  : ^^^^^
 >'' : ""
+>   : ^^
 
     B = new Date(),
 >B : E12.B
+>  : ^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     C = window,
->C : E12.B
+>C : E12.C
+>  : ^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     D = {},
->D : E12.B
+>D : E12.D
+>  : ^^^^^
 >{} : {}
+>   : ^^
 
     E = 1 + 1,
->E : E12.B
+>E : E12.E
+>  : ^^^^^
 >1 + 1 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
     F = (() => 'foo')(),
->F : E12.B
+>F : E12.F
+>  : ^^^^^
 >(() => 'foo')() : string
+>                : ^^^^^^
 >(() => 'foo') : () => string
+>              : ^^^^^^^^^^^^
 >() => 'foo' : () => string
+>            : ^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 }
 
 // Enum with incorrect syntax
 enum E13 {
 >E13 : E13
+>    : ^^^
 
     postComma,
 >postComma : E13.postComma
+>          : ^^^^^^^^^^^^^
 
     postValueComma = 1,
 >postValueComma : E13.postValueComma
+>               : ^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     postSemicolon;
 >postSemicolon : E13.postSemicolon
+>              : ^^^^^^^^^^^^^^^^^
 
     postColonValueComma: 2,
 >postColonValueComma : E13.postColonValueComma
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^
 >2 : (typeof E13)["2"]
+>  : ^^^^^^^^^^^^^^^^^
 
     postColonValueSemicolon: 3;
 >postColonValueSemicolon : E13.postColonValueSemicolon
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : (typeof E13)["3"]
+>  : ^^^^^^^^^^^^^^^^^
 
 };
 
 enum E14 { a, b: any "hello" += 1, c, d}
 >E14 : E14
+>    : ^^^
 >a : E14.a
+>  : ^^^^^
 >b : E14.b
+>  : ^^^^^
 >any : E14.any
+>    : ^^^^^^^
 >"hello" : E14.hello
+>        : ^^^^^^^^^
 >1 : (typeof E14)["1"]
+>  : ^^^^^^^^^^^^^^^^^
 >c : E14.c
+>  : ^^^^^
 >d : E14.d
+>  : ^^^^^
 

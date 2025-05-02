@@ -24,8 +24,9 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "override foo(a: string): void {\n}",
+            filterText: "foo"
         }
     ],
 });

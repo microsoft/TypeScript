@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCloneReturnTypes.ts] ////
+
 //// [genericCloneReturnTypes.ts]
 class Bar<T> {
 

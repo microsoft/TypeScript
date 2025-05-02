@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/anyAssignabilityInInheritance.ts] ////
+
 //// [anyAssignabilityInInheritance.ts]
 // any is not a subtype of any other types, errors expected on all the below derived classes unless otherwise noted
 

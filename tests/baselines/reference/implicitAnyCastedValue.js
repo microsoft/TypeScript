@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyCastedValue.ts] ////
+
 //// [implicitAnyCastedValue.ts]
 var x = function () {
     return <any>0;  // this should not be an error

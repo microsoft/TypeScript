@@ -1,37 +1,54 @@
-=== tests/cases/compiler/exhaustiveSwitchWithWideningLiteralTypes.ts ===
+//// [tests/cases/compiler/exhaustiveSwitchWithWideningLiteralTypes.ts] ////
+
+=== exhaustiveSwitchWithWideningLiteralTypes.ts ===
 // Repro from #12529
 
 class A {
 >A : A
+>  : ^
 
     readonly kind = "A"; // (property) A.kind: "A"
 >kind : "A"
+>     : ^^^
 >"A" : "A"
+>    : ^^^
 }
 
 class B {
 >B : B
+>  : ^
 
     readonly kind = "B"; // (property) B.kind: "B"
 >kind : "B"
+>     : ^^^
 >"B" : "B"
+>    : ^^^
 }
 
 function f(value: A | B): number {
 >f : (value: A | B) => number
+>  : ^     ^^     ^^^^^      
 >value : A | B
+>      : ^^^^^
 
     switch(value.kind) {
 >value.kind : "A" | "B"
+>           : ^^^^^^^^^
 >value : A | B
+>      : ^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 
         case "A": return 0;
 >"A" : "A"
+>    : ^^^
 >0 : 0
+>  : ^
 
         case "B": return 1;
 >"B" : "B"
+>    : ^^^
 >1 : 1
+>  : ^
     }
 }

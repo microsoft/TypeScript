@@ -1,8 +1,8 @@
-tests/cases/compiler/collisionExportsRequireAndVar_externalmodule.ts(3,5): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
-tests/cases/compiler/collisionExportsRequireAndVar_externalmodule.ts(4,5): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndVar_externalmodule.ts(3,5): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+collisionExportsRequireAndVar_externalmodule.ts(4,5): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 
 
-==== tests/cases/compiler/collisionExportsRequireAndVar_externalmodule.ts (2 errors) ====
+==== collisionExportsRequireAndVar_externalmodule.ts (2 errors) ====
     export function foo() {
     }
     var exports = 1;
@@ -20,7 +20,7 @@ tests/cases/compiler/collisionExportsRequireAndVar_externalmodule.ts(4,5): error
         export var require = "require";
     }
     
-==== tests/cases/compiler/collisionExportsRequireAndVar_globalFile.ts (0 errors) ====
+==== collisionExportsRequireAndVar_globalFile.ts (0 errors) ====
     var exports = 0;
     var require = "require";
     module m3 {

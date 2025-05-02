@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classBody/classBodyWithStatements.ts] ////
+
 //// [classBodyWithStatements.ts]
 class C {
     var x = 1;

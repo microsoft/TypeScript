@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/emptyAssignmentPatterns01_ES5.ts] ////
+
 //// [emptyAssignmentPatterns01_ES5.ts]
 var a: any;
 

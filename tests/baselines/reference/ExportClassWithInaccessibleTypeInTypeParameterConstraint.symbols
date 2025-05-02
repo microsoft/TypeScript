@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts] ////
+
+=== ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts ===
 module A {
 >A : Symbol(A, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 0))
 

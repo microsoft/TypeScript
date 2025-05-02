@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts] ////
+
 //// [ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts]
 module A {
     class B {

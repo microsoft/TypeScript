@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/declarations/file2.js(1,9): error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
+file2.js(1,9): error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
 
 
-==== tests/cases/conformance/jsdoc/declarations/file.js (0 errors) ====
+==== file.js (0 errors) ====
     /**
      * @namespace myTypes
      * @global
@@ -22,7 +22,7 @@ tests/cases/conformance/jsdoc/declarations/file2.js(1,9): error TS18042: 'myType
     /** @typedef {myTypes.typeB|Function} myTypes.typeC */
     
     export {myTypes};
-==== tests/cases/conformance/jsdoc/declarations/file2.js (1 errors) ====
+==== file2.js (1 errors) ====
     import {myTypes} from './file.js';
             ~~~~~~~
 !!! error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.

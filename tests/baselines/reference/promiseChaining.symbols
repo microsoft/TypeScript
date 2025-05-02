@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseChaining.ts ===
+//// [tests/cases/compiler/promiseChaining.ts] ////
+
+=== promiseChaining.ts ===
 class Chain<T> {
 >Chain : Symbol(Chain, Decl(promiseChaining.ts, 0, 0))
 >T : Symbol(T, Decl(promiseChaining.ts, 0, 12))

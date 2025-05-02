@@ -1,238 +1,381 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts] ////
+
+=== unionTypeInference.ts ===
 declare const b: boolean;
 >b : boolean
+>  : ^^^^^^^
 
 declare const s: string;
 >s : string
+>  : ^^^^^^
 
 declare const sn: string | number;
 >sn : string | number
+>   : ^^^^^^^^^^^^^^^
 
 declare function f1<T>(x: T, y: string | T): T;
 >f1 : <T>(x: T, y: string | T) => T
+>   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >x : T
+>  : ^
 >y : string | T
+>  : ^^^^^^^^^^
 
 const a1 = f1(1, 2);  // 1 | 2
 >a1 : 1 | 2
+>   : ^^^^^
 >f1(1, 2) : 1 | 2
+>         : ^^^^^
 >f1 : <T>(x: T, y: string | T) => T
+>   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 const a2 = f1(1, "hello");  // 1
 >a2 : 1
+>   : ^
 >f1(1, "hello") : 1
+>               : ^
 >f1 : <T>(x: T, y: string | T) => T
+>   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 const a3 = f1(1, sn);  // number
 >a3 : number
+>   : ^^^^^^
 >f1(1, sn) : number
+>          : ^^^^^^
 >f1 : <T>(x: T, y: string | T) => T
+>   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >1 : 1
+>  : ^
 >sn : string | number
+>   : ^^^^^^^^^^^^^^^
 
 const a4 = f1(undefined, "abc");  // undefined
 >a4 : undefined
+>   : ^^^^^^^^^
 >f1(undefined, "abc") : undefined
+>                     : ^^^^^^^^^
 >f1 : <T>(x: T, y: string | T) => T
+>   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 const a5 = f1("foo", "bar");  // "foo"
 >a5 : "foo"
+>   : ^^^^^
 >f1("foo", "bar") : "foo"
+>                 : ^^^^^
 >f1 : <T>(x: T, y: string | T) => T
+>   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >"foo" : "foo"
+>      : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 const a6 = f1(true, false);  // boolean
 >a6 : boolean
+>   : ^^^^^^^
 >f1(true, false) : boolean
+>                : ^^^^^^^
 >f1 : <T>(x: T, y: string | T) => T
+>   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 const a7 = f1("hello", 1);  // Error
 >a7 : "hello"
+>   : ^^^^^^^
 >f1("hello", 1) : "hello"
+>               : ^^^^^^^
 >f1 : <T>(x: T, y: string | T) => T
+>   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >"hello" : "hello"
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 
 declare function f2<T>(value: [string, T]): T;
 >f2 : <T>(value: [string, T]) => T
+>   : ^ ^^     ^^           ^^^^^ 
 >value : [string, T]
+>      : ^^^^^^^^^^^
 
 var b1 = f2(["string", true]);  // boolean
 >b1 : boolean
+>   : ^^^^^^^
 >f2(["string", true]) : boolean
+>                     : ^^^^^^^
 >f2 : <T>(value: [string, T]) => T
+>   : ^ ^^     ^^           ^^^^^ 
 >["string", true] : [string, true]
+>                 : ^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >true : true
+>     : ^^^^
 
 declare function f3<T>(x: string | false | T): T;
 >f3 : <T>(x: string | false | T) => T
+>   : ^ ^^ ^^                  ^^^^^ 
 >x : string | false | T
+>  : ^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
 const c1 = f3(5);  // 5
 >c1 : 5
+>   : ^
 >f3(5) : 5
+>      : ^
 >f3 : <T>(x: string | false | T) => T
+>   : ^ ^^ ^^                  ^^^^^ 
 >5 : 5
+>  : ^
 
 const c2 = f3(sn);  // number
 >c2 : number
+>   : ^^^^^^
 >f3(sn) : number
+>       : ^^^^^^
 >f3 : <T>(x: string | false | T) => T
+>   : ^ ^^ ^^                  ^^^^^ 
 >sn : string | number
+>   : ^^^^^^^^^^^^^^^
 
 const c3 = f3(true);  // true
 >c3 : true
+>   : ^^^^
 >f3(true) : true
+>         : ^^^^
 >f3 : <T>(x: string | false | T) => T
+>   : ^ ^^ ^^                  ^^^^^ 
 >true : true
+>     : ^^^^
 
 const c4 = f3(b);  // true
 >c4 : true
+>   : ^^^^
 >f3(b) : true
+>      : ^^^^
 >f3 : <T>(x: string | false | T) => T
+>   : ^ ^^ ^^                  ^^^^^ 
 >b : boolean
+>  : ^^^^^^^
 
 const c5 = f3("abc");  // never
 >c5 : "abc"
+>   : ^^^^^
 >f3("abc") : "abc"
+>          : ^^^^^
 >f3 : <T>(x: string | false | T) => T
+>   : ^ ^^ ^^                  ^^^^^ 
 >"abc" : "abc"
+>      : ^^^^^
 
 declare function f4<T>(x: string & T): T;
 >f4 : <T>(x: string & T) => T
+>   : ^ ^^ ^^          ^^^^^ 
 >x : string & T
+>  : ^^^^^^^^^^
 
 const d1 = f4("abc");
 >d1 : "abc"
+>   : ^^^^^
 >f4("abc") : "abc"
+>          : ^^^^^
 >f4 : <T>(x: string & T) => T
+>   : ^ ^^ ^^          ^^^^^ 
 >"abc" : "abc"
+>      : ^^^^^
 
 const d2 = f4(s);
 >d2 : unknown
+>   : ^^^^^^^
 >f4(s) : unknown
+>      : ^^^^^^^
 >f4 : <T>(x: string & T) => T
+>   : ^ ^^ ^^          ^^^^^ 
 >s : string
+>  : ^^^^^^
 
 const d3 = f4(42);  // Error
 >d3 : 42
+>   : ^^
 >f4(42) : 42
+>       : ^^
 >f4 : <T>(x: string & T) => T
+>   : ^ ^^ ^^          ^^^^^ 
 >42 : 42
+>   : ^^
 
 export interface Foo<T> {
     then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
 >then : <U>(f: (x: T) => U | Foo<U>, g: U) => Foo<U>
+>     : ^ ^^ ^^                    ^^ ^^ ^^^^^      
 >f : (x: T) => U | Foo<U>
+>  : ^ ^^ ^^^^^          
 >x : T
+>  : ^
 >g : U
+>  : ^
 }
 export interface Bar<T> {
     then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
 >then : <S>(f: (x: T) => S | Bar<S>, g: S) => Bar<S>
+>     : ^ ^^ ^^                    ^^ ^^ ^^^^^      
 >f : (x: T) => S | Bar<S>
+>  : ^ ^^ ^^^^^          
 >x : T
+>  : ^
 >g : S
+>  : ^
 }
 
 function qux(p1: Foo<void>, p2: Bar<void>) {
 >qux : (p1: Foo<void>, p2: Bar<void>) => void
+>    : ^  ^^         ^^  ^^         ^^^^^^^^^
 >p1 : Foo<void>
+>   : ^^^^^^^^^
 >p2 : Bar<void>
+>   : ^^^^^^^^^
 
     p1 = p2;
 >p1 = p2 : Bar<void>
+>        : ^^^^^^^^^
 >p1 : Foo<void>
+>   : ^^^^^^^^^
 >p2 : Bar<void>
+>   : ^^^^^^^^^
 }
 
 // Repros from #32434
 
 declare function foo<T>(x: T | Promise<T>): void;
 >foo : <T>(x: T | Promise<T>) => void
+>    : ^ ^^ ^^              ^^^^^    
 >x : T | Promise<T>
+>  : ^^^^^^^^^^^^^^
 
 declare let x: false | Promise<true>;
 >x : false | Promise<true>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 foo(x);
 >foo(x) : void
+>       : ^^^^
 >foo : <T>(x: T | Promise<T>) => void
+>    : ^ ^^ ^^              ^^^^^    
 >x : false | Promise<true>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 declare function bar<T>(x: T, y: string | T): T;
 >bar : <T>(x: T, y: string | T) => T
+>    : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >x : T
+>  : ^
 >y : string | T
+>  : ^^^^^^^^^^
 
 const y = bar(1, 2);
 >y : 1 | 2
+>  : ^^^^^
 >bar(1, 2) : 1 | 2
+>          : ^^^^^
 >bar : <T>(x: T, y: string | T) => T
+>    : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 // Repro from #32752
 
 const containsPromises: unique symbol = Symbol();
 >containsPromises : unique symbol
+>                 : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 type DeepPromised<T> =
 >DeepPromised : DeepPromised<T>
+>             : ^^^^^^^^^^^^^^^
 
     { [containsPromises]?: true } &
 >[containsPromises] : true | undefined
+>                   : ^^^^^^^^^^^^^^^^
 >containsPromises : unique symbol
+>                 : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     { [TKey in keyof T]: T[TKey] | DeepPromised<T[TKey]> | Promise<DeepPromised<T[TKey]>> };
 
 async function fun<T>(deepPromised: DeepPromised<T>) {
 >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
+>    : ^ ^^            ^^               ^^^^^^^^^^^^^^^^^^
 >deepPromised : DeepPromised<T>
+>             : ^^^^^^^^^^^^^^^
 
     const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;
 >deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
->null : null
+>     : ^^^^^^
 >deepPromised : DeepPromised<T>
+>             : ^^^^^^^^^^^^^^^
 
     for (const value of Object.values(deepPromisedWithIndexer)) {
->value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
->Object.values(deepPromisedWithIndexer) : ({} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined)[]
->Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>value : {} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.values(deepPromisedWithIndexer) : ({} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined)[]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
+>              : ^^^^^^^^ ^^                                      ^^^     ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>       : ^^^^^^^^^^^^^^^^^
+>values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
+>       : ^^^^^^^^ ^^                                      ^^^     ^^^ ^^  ^^^     ^^^
 >deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         const awaitedValue = await value;
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
->await value : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
->value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
+>awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await value : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : {} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (awaitedValue)
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
+>awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             await fun(awaitedValue);
 >await fun(awaitedValue) : void
+>                        : ^^^^
 >fun(awaitedValue) : Promise<void>
+>                  : ^^^^^^^^^^^^^
 >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {})
+>    : ^ ^^            ^^               ^^^^^^^^^^^^^^^^^^
+>awaitedValue : {} | ({ [containsPromises]?: true; } & {})
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
     }
 }
 
@@ -240,17 +383,25 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 
 type Deep<T> = { [K in keyof T]: T[K] | Deep<T[K]> };
 >Deep : Deep<T>
+>     : ^^^^^^^
 
 declare function baz<T>(dp: Deep<T>): T;
 >baz : <T>(dp: Deep<T>) => T
+>    : ^ ^^  ^^       ^^^^^ 
 >dp : Deep<T>
+>   : ^^^^^^^
 
 declare let xx: { a: string | undefined };
 >xx : { a: string | undefined; }
+>   : ^^^^^                  ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 baz(xx);
 >baz(xx) : { a: string | undefined; }
+>        : ^^^^^                  ^^^
 >baz : <T>(dp: Deep<T>) => T
+>    : ^ ^^  ^^       ^^^^^ 
 >xx : { a: string | undefined; }
+>   : ^^^^^                  ^^^
 

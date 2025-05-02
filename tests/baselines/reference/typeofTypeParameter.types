@@ -1,16 +1,25 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts] ////
+
+=== typeofTypeParameter.ts ===
 function f<T>(x: T): T {
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     var a: typeof x;
 >a : T
+>  : ^
 >x : T
+>  : ^
 
     var y: typeof T;
 >y : any
+>  : ^^^
 >T : any
+>  : ^^^
 
     return a;
 >a : T
+>  : ^
 }

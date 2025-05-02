@@ -1,27 +1,44 @@
-=== tests/cases/compiler/firstMatchRegExpMatchArray.ts ===
+//// [tests/cases/compiler/firstMatchRegExpMatchArray.ts] ////
+
+=== firstMatchRegExpMatchArray.ts ===
 const match = ''.match(/ /)
 >match : RegExpMatchArray | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match(/ /) : RegExpMatchArray | null
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>         : ^      ^^               ^^^^^                       
 >'' : ""
+>   : ^^
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/ / : RegExp
+>    : ^^^^^^
 
 if (match !== null) {
 >match !== null : boolean
+>               : ^^^^^^^
 >match : RegExpMatchArray | null
->null : null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 
     const foo: string = match[0]
 >foo : string
+>    : ^^^^^^
 >match[0] : string
+>         : ^^^^^^
 >match : RegExpMatchArray
+>      : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     const bar: string = match[1]
 >bar : string
+>    : ^^^^^^
 >match[1] : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 >match : RegExpMatchArray
+>      : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 

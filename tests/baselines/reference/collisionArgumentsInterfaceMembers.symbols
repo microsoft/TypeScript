@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionArgumentsInterfaceMembers.ts ===
+//// [tests/cases/compiler/collisionArgumentsInterfaceMembers.ts] ////
+
+=== collisionArgumentsInterfaceMembers.ts ===
 // call
 interface i1 {
 >i1 : Symbol(i1, Decl(collisionArgumentsInterfaceMembers.ts, 0, 0))

@@ -11,12 +11,11 @@ import { assertNevar } from "./a";
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
-exports.assertNever = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.assertNever = assertNever;
 function assertNever(x, msg) {
     throw new Error("Unexpected " + msg);
 }
-exports.assertNever = assertNever;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

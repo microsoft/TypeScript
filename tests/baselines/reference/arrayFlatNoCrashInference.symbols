@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayFlatNoCrashInference.ts ===
+//// [tests/cases/compiler/arrayFlatNoCrashInference.ts] ////
+
+=== arrayFlatNoCrashInference.ts ===
 function foo<T>(arr: T[], depth: number) {
 >foo : Symbol(foo, Decl(arrayFlatNoCrashInference.ts, 0, 0))
 >T : Symbol(T, Decl(arrayFlatNoCrashInference.ts, 0, 13))

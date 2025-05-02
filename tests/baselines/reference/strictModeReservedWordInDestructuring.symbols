@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeReservedWordInDestructuring.ts ===
+//// [tests/cases/compiler/strictModeReservedWordInDestructuring.ts] ////
+
+=== strictModeReservedWordInDestructuring.ts ===
 "use strict"
 var [public] = [1];
 >public : Symbol(public, Decl(strictModeReservedWordInDestructuring.ts, 1, 5), Decl(strictModeReservedWordInDestructuring.ts, 2, 5), Decl(strictModeReservedWordInDestructuring.ts, 5, 5))

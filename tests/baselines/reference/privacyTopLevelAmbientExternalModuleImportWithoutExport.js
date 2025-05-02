@@ -52,7 +52,7 @@ export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c_public = void 0;
     // Public elements
     var c_public = /** @class */ (function () {
@@ -65,7 +65,7 @@ define(["require", "exports"], function (require, exports) {
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c_public = void 0;
     var c_public = /** @class */ (function () {
         function c_public() {
@@ -77,7 +77,7 @@ define(["require", "exports"], function (require, exports) {
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]
 define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require"], function (require, exports, im_private_mi_private, im_private_mu_private, im_private_mi_public) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.publicUse_im_private_mi_public = exports.publicUse_im_private_mu_private = exports.publicUse_im_private_mi_private = void 0;
     // Usage of privacy error imports
     var privateUse_im_private_mi_private = new im_private_mi_private.c_private();
@@ -112,8 +112,6 @@ export declare class c_public {
     bar: string;
 }
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.d.ts]
-/// <reference path="privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.d.ts" />
-/// <reference path="privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.d.ts" />
 import im_private_mi_private = require("m");
 import im_private_mu_private = require("m2");
 import im_private_mi_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require");

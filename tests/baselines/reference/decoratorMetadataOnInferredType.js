@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataOnInferredType.ts] ////
+
 //// [decoratorMetadataOnInferredType.ts]
 declare var console: {
     log(msg: string): void;

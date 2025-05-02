@@ -1,68 +1,98 @@
-=== tests/cases/conformance/override/override8.ts ===
+//// [tests/cases/conformance/override/override8.ts] ////
+
+=== override8.ts ===
 class B {
 >B : B
+>  : ^
 
     a: string
 >a : string
+>  : ^^^^^^
 }
 
 class D extends B {
 >D : D
+>  : ^
 >B : B
+>  : ^
 
     constructor(public a: string, public b: string) {
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof B
+>      : ^^^^^^^^
     }
 }
 
 class BB {
 >BB : BB
+>   : ^^
 
     constructor(public a: string) {
 >a : string
+>  : ^^^^^^
 
     }
 }
 
 class DD extends BB {
 >DD : DD
+>   : ^^
 >BB : BB
+>   : ^^
 
     constructor(public a: string) {
 >a : string
+>  : ^^^^^^
 
         super(a)
 >super(a) : void
+>         : ^^^^
 >super : typeof BB
+>      : ^^^^^^^^^
 >a : string
+>  : ^^^^^^
     }
 }
 
 class DDD extends BB {
 >DDD : DDD
+>    : ^^^
 >BB : BB
+>   : ^^
 
     public a: string;
 >a : string
+>  : ^^^^^^
 
     constructor(a: string) {
 >a : string
+>  : ^^^^^^
 
         super(a)
 >super(a) : void
+>         : ^^^^
 >super : typeof BB
+>      : ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
         this.a = a
 >this.a = a : string
+>           : ^^^^^^
 >this.a : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
     }
 }

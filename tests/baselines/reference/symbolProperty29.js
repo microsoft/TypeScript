@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty29.ts] ////
+
 //// [symbolProperty29.ts]
 class C1 {
     [Symbol.toStringTag]() {

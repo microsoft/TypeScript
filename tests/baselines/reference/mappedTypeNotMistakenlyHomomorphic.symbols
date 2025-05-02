@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts ===
+//// [tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts] ////
+
+=== mappedTypeNotMistakenlyHomomorphic.ts ===
 enum ABC { A, B }
 >ABC : Symbol(ABC, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 0))
 >A : Symbol(ABC.A, Decl(mappedTypeNotMistakenlyHomomorphic.ts, 0, 10))

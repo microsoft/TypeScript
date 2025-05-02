@@ -1,17 +1,26 @@
-=== tests/cases/compiler/missingFunctionImplementation2_a.ts ===
+//// [tests/cases/compiler/missingFunctionImplementation2.ts] ////
+
+=== missingFunctionImplementation2_a.ts ===
 export {};
 declare module "./missingFunctionImplementation2_b" {
->"./missingFunctionImplementation2_b" : typeof import("tests/cases/compiler/missingFunctionImplementation2_b")
+>"./missingFunctionImplementation2_b" : typeof import("missingFunctionImplementation2_b")
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   export function f(a, b): void;
 >f : { (a?: any, b?: any): any; (a: any, b: any): void; }
+>  : ^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 }
 
-=== tests/cases/compiler/missingFunctionImplementation2_b.ts ===
+=== missingFunctionImplementation2_b.ts ===
 export function f(a?, b?);
 >f : { (a?: any, b?: any): any; (a: any, b: any): void; }
+>  : ^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

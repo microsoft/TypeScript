@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfRef.ts] ////
+
 //// [selfRef.ts]
 module M
 {

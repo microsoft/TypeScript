@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayDestructuringInSwitch2.ts] ////
+
 //// [arrayDestructuringInSwitch2.ts]
 type X = { kind: "a", a: [1] } | { kind: "b", a: [] }
 

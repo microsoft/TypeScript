@@ -1,9 +1,9 @@
-tests/cases/compiler/numericIndexerConstraint2.ts(4,1): error TS2322: Type '{ one: number; }' is not assignable to type '{ [index: string]: Foo; }'.
+numericIndexerConstraint2.ts(4,1): error TS2322: Type '{ one: number; }' is not assignable to type '{ [index: string]: Foo; }'.
   Property 'one' is incompatible with index signature.
     Type 'number' is not assignable to type 'Foo'.
 
 
-==== tests/cases/compiler/numericIndexerConstraint2.ts (1 errors) ====
+==== numericIndexerConstraint2.ts (1 errors) ====
     class Foo { foo() { } }
     var x: { [index: string]: Foo; };
     var a: { one: number; };

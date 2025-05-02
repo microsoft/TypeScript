@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undeclaredModuleError.ts] ////
+
 //// [undeclaredModuleError.ts]
 import fs = require('fs');
 function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
@@ -18,7 +20,7 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 //// [undeclaredModuleError.js]
 define(["require", "exports", "fs"], function (require, exports, fs) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     function readdir(path, accept, callback) { }
     function join() {
         var paths = [];

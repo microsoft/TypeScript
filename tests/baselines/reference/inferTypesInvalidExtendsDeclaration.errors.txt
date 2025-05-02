@@ -1,0 +1,8 @@
+inferTypesInvalidExtendsDeclaration.ts(1,42): error TS2304: Cannot find name 'B'.
+
+
+==== inferTypesInvalidExtendsDeclaration.ts (1 errors) ====
+    type Test<T> = T extends infer A extends B ? number : string;
+                                             ~
+!!! error TS2304: Cannot find name 'B'.
+    

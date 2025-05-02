@@ -1,31 +1,44 @@
-=== tests/cases/compiler/commentsemitComments.ts ===
+//// [tests/cases/compiler/commentsemitComments.ts] ////
+
+=== commentsemitComments.ts ===
 /** Variable comments*/
 var myVariable = 10;
 >myVariable : number
+>           : ^^^^^^
 >10 : 10
+>   : ^^
 
 /** function comments*/
 function foo(/** parameter comment*/p: number) {
 >foo : (p: number) => void
+>    : ^ ^^      ^^^^^^^^^
 >p : number
+>  : ^^^^^^
 }
 
 /** variable with function type comment*/
 var fooVar: () => void;
 >fooVar : () => void
+>       : ^^^^^^    
 
 foo(50);
 >foo(50) : void
+>        : ^^^^
 >foo : (p: number) => void
+>    : ^ ^^      ^^^^^^^^^
 >50 : 50
+>   : ^^
 
 fooVar();
 >fooVar() : void
+>         : ^^^^
 >fooVar : () => void
+>       : ^^^^^^    
 
 /**class comment*/
 class c {
 >c : c
+>  : ^
 
     /** constructor comment*/
     constructor() {
@@ -34,108 +47,145 @@ class c {
     /** property comment */
     public b = 10;
 >b : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     /** function comment */
     public myFoo() {
 >myFoo : () => number
+>      : ^^^^^^^^^^^^
 
         return this.b;
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
     }
 
     /** getter comment*/
     public get prop1() {
 >prop1 : number
+>      : ^^^^^^
 
         return this.b;
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
     }
 
     /** setter comment*/
     public set prop1(val: number) {
 >prop1 : number
+>      : ^^^^^^
 >val : number
+>    : ^^^^^^
 
         this.b = val;
 >this.b = val : number
+>             : ^^^^^^
 >this.b : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >b : number
+>  : ^^^^^^
 >val : number
+>    : ^^^^^^
     }
 
     /** overload signature1*/
     public foo1(a: number): string;
 >foo1 : { (a: number): string; (b: string): string; }
+>     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     /** Overload signature 2*/
     public foo1(b: string): string;
 >foo1 : { (a: number): string; (b: string): string; }
+>     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >b : string
+>  : ^^^^^^
 
     /** overload implementation signature*/
     public foo1(aOrb) {
 >foo1 : { (a: number): string; (b: string): string; }
+>     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aOrb : any
 
         return aOrb.toString();
 >aOrb.toString() : any
 >aOrb.toString : any
 >aOrb : any
+>     : ^^^
 >toString : any
+>         : ^^^
     }
 }
 
 /**instance comment*/
 var i = new c();
 >i : c
+>  : ^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
 
 /** interface comments*/
 interface i1 {
     /** caller comments*/
     (a: number): number;
 >a : number
+>  : ^^^^^^
 
     /** new comments*/
     new (b: string);
 >b : string
+>  : ^^^^^^
 
     /**indexer property*/
     [a: number]: string;
 >a : number
+>  : ^^^^^^
 
     /** function property;*/
     myFoo(/*param prop*/a: number): string;
 >myFoo : (a: number) => string
+>      : ^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 
     /** prop*/
     prop: string;
 >prop : string
+>     : ^^^^^^
 }
 
 /**interface instance comments*/
 var i1_i: i1;
 >i1_i : i1
+>     : ^^
 
 /** this is module comment*/
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     /** class b */
     export class b {
 >b : b
+>  : ^
 
         constructor(public x: number) {
 >x : number
+>  : ^^^^^^
 
         }
     }

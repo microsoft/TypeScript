@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasDeclarationEmit.ts] ////
+
 //// [typeAliasDeclarationEmit.ts]
 export type callback<T> = () => T;
 

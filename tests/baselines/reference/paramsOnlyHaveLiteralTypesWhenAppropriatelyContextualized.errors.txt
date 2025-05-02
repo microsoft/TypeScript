@@ -1,16 +1,16 @@
-tests/cases/compiler/paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts(27,23): error TS2345: Argument of type '{ x?: number[] | undefined; y?: string[] | undefined; }' is not assignable to parameter of type '{ y?: number[] | undefined; }'.
+paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts(27,23): error TS2345: Argument of type '{ x?: number[] | undefined; y?: string[] | undefined; }' is not assignable to parameter of type '{ y?: number[] | undefined; }'.
   Types of property 'y' are incompatible.
     Type 'string[] | undefined' is not assignable to type 'number[] | undefined'.
       Type 'string[]' is not assignable to type 'number[]'.
         Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts(28,23): error TS2345: Argument of type '{ x?: number[] | undefined; y?: string[] | undefined; }' is not assignable to parameter of type '{ x?: string[] | undefined; }'.
+paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts(28,23): error TS2345: Argument of type '{ x?: number[] | undefined; y?: string[] | undefined; }' is not assignable to parameter of type '{ x?: string[] | undefined; }'.
   Types of property 'x' are incompatible.
     Type 'number[] | undefined' is not assignable to type 'string[] | undefined'.
       Type 'number[]' is not assignable to type 'string[]'.
         Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts (2 errors) ====
+==== paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts (2 errors) ====
     // Using a homomorphic mapped type over `T`
     // Produces a lower-priority inference for `T` than other
     // positions, allowing one to override the priority the argument

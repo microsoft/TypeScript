@@ -1,11 +1,17 @@
+//// [tests/cases/compiler/errorForConflictingExportEqualsValue.ts] ////
+
 === /a.ts ===
 export var x;
 >x : any
+>  : ^^^
 
 export = x;
 >x : any
+>  : ^^^
 
 import("./a");
 >import("./a") : Promise<any>
+>              : ^^^^^^^^^^^^
 >"./a" : "./a"
+>      : ^^^^^
 

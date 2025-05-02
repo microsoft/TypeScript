@@ -1,70 +1,113 @@
-=== tests/cases/compiler/badInferenceLowerPriorityThanGoodInference.ts ===
+//// [tests/cases/compiler/badInferenceLowerPriorityThanGoodInference.ts] ////
+
+=== badInferenceLowerPriorityThanGoodInference.ts ===
 // Repro from #13118
 
 interface Foo<A> {
     a: A;
 >a : A
+>  : ^
 
     b: (x: A) => void;
 >b : (x: A) => void
+>  : ^ ^^ ^^^^^    
 >x : A
+>  : ^
 }
 
 declare function canYouInferThis<A>(fn: () => Foo<A>): A;
 >canYouInferThis : <A>(fn: () => Foo<A>) => A
+>                : ^ ^^  ^^            ^^^^^ 
 >fn : () => Foo<A>
+>   : ^^^^^^      
 
 const result = canYouInferThis(() => ({
 >result : { BLAH: number; }
+>       : ^^^^^^^^^^^^^^^^^
 >canYouInferThis(() => ({    a: { BLAH: 33 },    b: x => { }})) : { BLAH: number; }
+>                                                               : ^^^^^^^^^^^^^^^^^
 >canYouInferThis : <A>(fn: () => Foo<A>) => A
+>                : ^ ^^  ^^            ^^^^^ 
 >() => ({    a: { BLAH: 33 },    b: x => { }}) : () => { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    a: { BLAH: 33 },    b: x => { }}) : { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    a: { BLAH: 33 },    b: x => { }} : { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: { BLAH: 33 },
 >a : { BLAH: number; }
+>  : ^^^^^^^^^^^^^^^^^
 >{ BLAH: 33 } : { BLAH: number; }
+>             : ^^^^^^^^^^^^^^^^^
 >BLAH : number
+>     : ^^^^^^
 >33 : 33
+>   : ^^
 
     b: x => { }
 >b : (x: { BLAH: number; }) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x => { } : (x: { BLAH: number; }) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { BLAH: number; }
+>  : ^^^^^^^^^^^^^^^^^
 
 }))
 
 result.BLAH;
 >result.BLAH : number
+>            : ^^^^^^
 >result : { BLAH: number; }
+>       : ^^^^^^^^^^^^^^^^^
 >BLAH : number
+>     : ^^^^^^
 
 // Repro from #26629
 
 function goofus <ARGS extends any[]> (f: (...args: ARGS) => any ) {}
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
+>       : ^    ^^^^^^^^^     ^^ ^^                      ^^^^^^^^^
 >f : (...args: ARGS) => any
+>  : ^^^^    ^^    ^^^^^   
 >args : ARGS
+>     : ^^^^
 
 goofus((a: string) => ({ dog() { return a; } }));
 >goofus((a: string) => ({ dog() { return a; } })) : void
+>                                                 : ^^^^
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
+>       : ^    ^^^^^^^^^     ^^ ^^                      ^^^^^^^^^
 >(a: string) => ({ dog() { return a; } }) : (a: string) => { dog(): string; }
+>                                         : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >({ dog() { return a; } }) : { dog(): string; }
+>                          : ^^^^^^^^^^^^^^^^^^
 >{ dog() { return a; } } : { dog(): string; }
+>                        : ^^^^^^^^^^^^^^^^^^
 >dog : () => string
+>    : ^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 goofus((a: string) => ({ dog: function() { return a; } }));
 >goofus((a: string) => ({ dog: function() { return a; } })) : void
+>                                                           : ^^^^
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
+>       : ^    ^^^^^^^^^     ^^ ^^                      ^^^^^^^^^
 >(a: string) => ({ dog: function() { return a; } }) : (a: string) => { dog: () => string; }
+>                                                   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >({ dog: function() { return a; } }) : { dog: () => string; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^
 >{ dog: function() { return a; } } : { dog: () => string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^
 >dog : () => string
+>    : ^^^^^^^^^^^^
 >function() { return a; } : () => string
+>                         : ^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 

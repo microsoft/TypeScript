@@ -1,8 +1,8 @@
-tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction7_es5.ts(3,24): error TS2524: 'await' expressions cannot be used in a parameter initializer.
-tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction7_es5.ts(3,29): error TS1109: Expression expected.
+asyncArrowFunction7_es5.ts(3,24): error TS2524: 'await' expressions cannot be used in a parameter initializer.
+asyncArrowFunction7_es5.ts(3,29): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction7_es5.ts (2 errors) ====
+==== asyncArrowFunction7_es5.ts (2 errors) ====
     var bar = async (): Promise<void> => {
       // 'await' here is an identifier, and not an await expression.
       var foo = async (a = await): Promise<void> => {

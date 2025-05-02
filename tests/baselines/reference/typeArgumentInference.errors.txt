@@ -1,11 +1,10 @@
-tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(68,29): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(69,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(83,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(84,74): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
-  Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
+typeArgumentInference.ts(68,29): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
+typeArgumentInference.ts(69,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
+typeArgumentInference.ts(83,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
+typeArgumentInference.ts(84,74): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts (4 errors) ====
+==== typeArgumentInference.ts (4 errors) ====
     // Generic call with no parameters
     function noParams<T>() { }
     noParams();
@@ -79,7 +78,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(84,74
     var a9a: {};
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
-!!! related TS6203 tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts:68:5: 'a9a' was also declared here.
+!!! related TS6203 typeArgumentInference.ts:68:5: 'a9a' was also declared here.
     var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
     var a9b: { a?: number; b?: string; };
     
@@ -96,11 +95,10 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(84,74
     var a9e: {};
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
-!!! related TS6203 tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts:82:5: 'a9e' was also declared here.
+!!! related TS6203 typeArgumentInference.ts:82:5: 'a9e' was also declared here.
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
-                                                                             ~~~~~
-!!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
-!!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
+                                                                             ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
     var a9f: A92;
     
     // Generic call with multiple parameters of generic type passed arguments with a single best common type

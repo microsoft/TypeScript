@@ -1,9 +1,9 @@
-tests/cases/compiler/overloadsAndTypeArgumentArityErrors.ts(5,11): error TS2558: Expected 2 type arguments, but got 3.
-tests/cases/compiler/overloadsAndTypeArgumentArityErrors.ts(6,15): error TS2558: Expected 2 type arguments, but got 3.
-tests/cases/compiler/overloadsAndTypeArgumentArityErrors.ts(9,1): error TS2554: Expected 1 arguments, but got 0.
+overloadsAndTypeArgumentArityErrors.ts(5,11): error TS2558: Expected 2 type arguments, but got 3.
+overloadsAndTypeArgumentArityErrors.ts(6,15): error TS2558: Expected 2 type arguments, but got 3.
+overloadsAndTypeArgumentArityErrors.ts(9,1): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/compiler/overloadsAndTypeArgumentArityErrors.ts (3 errors) ====
+==== overloadsAndTypeArgumentArityErrors.ts (3 errors) ====
     declare function Callbacks(flags?: string): void;
     declare function Callbacks<T>(flags?: string): void;
     declare function Callbacks<T1, T2>(flags?: string): void;
@@ -17,7 +17,7 @@ tests/cases/compiler/overloadsAndTypeArgumentArityErrors.ts(9,1): error TS2554: 
     
     declare function f<A, B = {}>(arg: number): void;
     f<number>(); // wrong number of arguments (#25683)
-    ~~~~~~~~~~~
+    ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/overloadsAndTypeArgumentArityErrors.ts:8:31: An argument for 'arg' was not provided.
+!!! related TS6210 overloadsAndTypeArgumentArityErrors.ts:8:31: An argument for 'arg' was not provided.
     

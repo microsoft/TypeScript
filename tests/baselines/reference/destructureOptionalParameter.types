@@ -1,46 +1,71 @@
-=== tests/cases/compiler/destructureOptionalParameter.ts ===
+//// [tests/cases/compiler/destructureOptionalParameter.ts] ////
+
+=== destructureOptionalParameter.ts ===
 declare function f1({ a, b }?: { a: number, b: string }): void;
->f1 : ({ a, b }?: {    a: number;    b: string;}) => void
+>f1 : ({ a, b }?: { a: number; b: string; }) => void
+>   : ^        ^^^                         ^^^^^    
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 function f2({ a, b }: { a: number, b: number } = { a: 0, b: 0 }) {
->f2 : ({ a, b }?: {    a: number;    b: number;}) => void
+>f2 : ({ a, b }?: { a: number; b: number; }) => void
+>   : ^        ^^^                         ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >{ a: 0, b: 0 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     a;
 >a : number
+>  : ^^^^^^
 
     b;
 >b : number
+>  : ^^^^^^
 }
 
 // Repro from #8681
 
 interface Type { t: void }
 >t : void
+>  : ^^^^
 
 interface QueryMetadata { q: void }
 >q : void
+>  : ^^^^
 
 interface QueryMetadataFactory {
     (selector: Type | string, {descendants, read}?: {
 >selector : string | Type
+>         : ^^^^^^^^^^^^^
 >descendants : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 >read : any
+>     : ^^^
 
         descendants?: boolean;
 >descendants : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 
         read?: any;
 >read : any
@@ -48,11 +73,15 @@ interface QueryMetadataFactory {
     }): ParameterDecorator;
     new (selector: Type | string, {descendants, read}?: {
 >selector : string | Type
+>         : ^^^^^^^^^^^^^
 >descendants : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 >read : any
+>     : ^^^
 
         descendants?: boolean;
 >descendants : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 
         read?: any;
 >read : any

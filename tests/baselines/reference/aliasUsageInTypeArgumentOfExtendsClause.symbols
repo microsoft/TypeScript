@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_main.ts ===
+//// [tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause.ts] ////
+
+=== aliasUsageInTypeArgumentOfExtendsClause_main.ts ===
 import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 0, 0))
 
@@ -32,7 +34,7 @@ class D extends C<IHasVisualizationModel> {
 >x : Symbol(D.x, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 8, 43))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 0, 80))
 }
-=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===
+=== aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===
 export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInTypeArgumentOfExtendsClause_backbone.ts, 0, 0))
 
@@ -40,7 +42,7 @@ export class Model {
 >someData : Symbol(Model.someData, Decl(aliasUsageInTypeArgumentOfExtendsClause_backbone.ts, 0, 20))
 }
 
-=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts ===
+=== aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts ===
 import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts, 0, 0))
 

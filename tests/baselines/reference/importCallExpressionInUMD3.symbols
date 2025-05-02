@@ -1,4 +1,6 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInUMD3.ts] ////
+
+=== 0.ts ===
 export class B {
 >B : Symbol(B, Decl(0.ts, 0, 0))
 
@@ -6,14 +8,14 @@ export class B {
 >print : Symbol(B.print, Decl(0.ts, 0, 16))
 }
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 async function foo() {
 >foo : Symbol(foo, Decl(2.ts, 0, 0))
 
     class C extends (await import("./0")).B {}
 >C : Symbol(C, Decl(2.ts, 0, 22))
 >(await import("./0")).B : Symbol(B, Decl(0.ts, 0, 0))
->"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 >B : Symbol(B, Decl(0.ts, 0, 0))
 
     var c = new C();

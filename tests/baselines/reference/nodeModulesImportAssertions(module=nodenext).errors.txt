@@ -1,14 +1,17 @@
-tests/cases/conformance/node/otherc.cts(1,35): error TS2836: Import assertions are not allowed on statements that transpile to commonjs 'require' calls.
+index.ts(1,35): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+otherc.cts(1,35): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
 
 
-==== tests/cases/conformance/node/index.ts (0 errors) ====
+==== index.ts (1 errors) ====
     import json from "./package.json" assert { type: "json" };
-==== tests/cases/conformance/node/otherc.cts (1 errors) ====
+                                      ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+==== otherc.cts (1 errors) ====
     import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
-                                      ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2836: Import assertions are not allowed on statements that transpile to commonjs 'require' calls.
+                                      ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
     const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "pkg",
         "private": true,

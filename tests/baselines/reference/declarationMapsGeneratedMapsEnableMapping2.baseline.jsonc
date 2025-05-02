@@ -1,0 +1,103 @@
+// === goToImplementation ===
+// === /home/src/workspaces/project/index.ts ===
+// export class Foo {
+//     member: string;
+//     [|methodName|](propName: SomeType): SomeType { return propName; }
+//     otherMethod() {
+//         if (Math.random() > 0.5) {
+//             return {x: 42};
+// --- (line: 7) skipped ---
+
+// === /home/src/workspaces/project/mymodule.ts ===
+// import * as mod from "/home/src/workspaces/project/dist/index";
+// const instance = new mod.Foo();
+// instance./*GOTO IMPL*/methodName({member: 12});
+
+  // === Details ===
+  [
+   {
+    "kind": "",
+    "displayParts": []
+   }
+  ]
+
+
+
+// === goToType ===
+// === /home/src/workspaces/project/index.ts ===
+// --- (line: 8) skipped ---
+//     }
+// }
+// 
+// export interface [|SomeType|] {
+//     member: number;
+// }
+
+// === /home/src/workspaces/project/mymodule.ts ===
+// import * as mod from "/home/src/workspaces/project/dist/index";
+// const instance = new mod.Foo();
+// instance./*GOTO TYPE*/methodName({member: 12});
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /home/src/workspaces/project/index.ts ===
+// export class Foo {
+//     member: string;
+//     [|methodName|](propName: SomeType): SomeType { return propName; }
+//     otherMethod() {
+//         if (Math.random() > 0.5) {
+//             return {x: 42};
+// --- (line: 7) skipped ---
+
+// === /home/src/workspaces/project/mymodule.ts ===
+// import * as mod from "/home/src/workspaces/project/dist/index";
+// const instance = new mod.Foo();
+// instance./*GOTO DEF*/[|methodName|]({member: 12});
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /home/src/workspaces/project/index.ts ===
+// export class Foo {
+//     member: string;
+//     [|methodName|](propName: SomeType): SomeType { return propName; }
+//     otherMethod() {
+//         if (Math.random() > 0.5) {
+//             return {x: 42};
+// --- (line: 7) skipped ---
+
+// === /home/src/workspaces/project/mymodule.ts ===
+// import * as mod from "/home/src/workspaces/project/dist/index";
+// const instance = new mod.Foo();
+// instance./*GOTO DEF POS*/methodName({member: 12});
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

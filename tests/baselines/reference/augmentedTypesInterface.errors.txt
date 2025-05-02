@@ -1,8 +1,8 @@
-tests/cases/compiler/augmentedTypesInterface.ts(23,11): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesInterface.ts(26,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesInterface.ts(23,11): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesInterface.ts(26,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 
 
-==== tests/cases/compiler/augmentedTypesInterface.ts (2 errors) ====
+==== augmentedTypesInterface.ts (2 errors) ====
     // interface then interface
     
     interface i {

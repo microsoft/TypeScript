@@ -1,62 +1,92 @@
-=== tests/cases/compiler/unionWithIndexSignature.ts ===
+//// [tests/cases/compiler/unionWithIndexSignature.ts] ////
+
+=== unionWithIndexSignature.ts ===
 interface NumList {
   kind: 'n';
 >kind : "n"
+>     : ^^^
 
   [x: number]: number;
 >x : number
+>  : ^^^^^^
 }
 interface StrList {
   kind: 's';
 >kind : "s"
+>     : ^^^
 
   [x: number]: string;
 >x : number
+>  : ^^^^^^
 }
 
 export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
 >foo : <T extends NumList | StrList>(arr: T & (NumList | StrList)) => void
+>    : ^ ^^^^^^^^^                 ^^   ^^                       ^^^^^^^^^
 >arr : T & (NumList | StrList)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 
   let zz = arr[1];  // Error
 >zz : string | number
+>   : ^^^^^^^^^^^^^^^
 >arr[1] : string | number
+>       : ^^^^^^^^^^^^^^^
 >arr : NumList | StrList
+>    : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 
 // Repro from #38102
 
 export type TypedArray = Int32Array | Uint8Array;
->TypedArray : Int32Array | Uint8Array
+>TypedArray : TypedArray
+>           : ^^^^^^^^^^
 
 export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array
+>             : ^ ^^  ^^^^^                            
 >a : {}
+>  : ^^
 
   return a instanceof Int32Array || a instanceof Uint8Array;
 >a instanceof Int32Array || a instanceof Uint8Array : boolean
+>                                                   : ^^^^^^^
 >a instanceof Int32Array : boolean
+>                        : ^^^^^^^
 >a : {}
+>  : ^^
 >Int32Array : Int32ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >a instanceof Uint8Array : boolean
+>                        : ^^^^^^^
 >a : {}
+>  : ^^
 >Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 export function flatten<T extends number|TypedArray>(arr: T) {
 >flatten : <T extends number | TypedArray>(arr: T) => void
+>        : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^^^^^
 >arr : T
+>    : ^
 
   if (isTypedArray(arr)) {
 >isTypedArray(arr) : boolean
+>                  : ^^^^^^^
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array
+>             : ^ ^^  ^^^^^                            
 >arr : number | TypedArray
+>    : ^^^^^^^^^^^^^^^^^^^
 
       arr[1];
 >arr[1] : number
->arr : Int32Array | Uint8Array
+>       : ^^^^^^
+>arr : TypedArray
+>    : ^^^^^^^^^^
 >1 : 1
+>  : ^
   }
 }
 

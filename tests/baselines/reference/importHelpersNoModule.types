@@ -1,48 +1,68 @@
-=== tests/cases/compiler/external.ts ===
+//// [tests/cases/compiler/importHelpersNoModule.ts] ////
+
+=== external.ts ===
 export class A { }
 >A : A
+>  : ^
 
 export class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 declare var dec: any;
 >dec : any
+>    : ^^^
 
 @dec
 >dec : any
+>    : ^^^
 
 class C {
 >C : C
+>  : ^
 
     method(@dec x: number) {
 >method : (x: number) => void
+>       : ^ ^^      ^^^^^^^^^
 >dec : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
     }
 }
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 class A { }
 >A : A
+>  : ^
 
 class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 declare var dec: any;
 >dec : any
+>    : ^^^
 
 @dec
 >dec : any
+>    : ^^^
 
 class C {
 >C : C
+>  : ^
 
     method(@dec x: number) {
 >method : (x: number) => void
+>       : ^ ^^      ^^^^^^^^^
 >dec : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
     }
 }
 

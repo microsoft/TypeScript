@@ -1,26 +1,25 @@
-tests/cases/conformance/types/conditional/inferTypes1.ts(36,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(37,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
+inferTypes1.ts(36,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
+inferTypes1.ts(37,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(43,25): error TS2344: Type 'string' does not satisfy the constraint 'abstract new (...args: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(44,25): error TS2344: Type 'Function' does not satisfy the constraint 'abstract new (...args: any) => any'.
+inferTypes1.ts(43,25): error TS2344: Type 'string' does not satisfy the constraint 'abstract new (...args: any) => any'.
+inferTypes1.ts(44,25): error TS2344: Type 'Function' does not satisfy the constraint 'abstract new (...args: any) => any'.
   Type 'Function' provides no match for the signature 'new (...args: any): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(55,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(56,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
+inferTypes1.ts(55,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+inferTypes1.ts(56,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
   Type 'Function' provides no match for the signature '(x: any): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(82,12): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(83,16): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(83,43): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(83,53): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(84,15): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(84,15): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(84,43): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(84,43): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(91,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
+inferTypes1.ts(82,12): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+inferTypes1.ts(83,16): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+inferTypes1.ts(83,43): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+inferTypes1.ts(83,53): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+inferTypes1.ts(84,15): error TS2304: Cannot find name 'U'.
+inferTypes1.ts(84,43): error TS2304: Cannot find name 'U'.
+inferTypes1.ts(91,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
 
 
-==== tests/cases/conformance/types/conditional/inferTypes1.ts (16 errors) ====
+==== inferTypes1.ts (14 errors) ====
     type Unpacked<T> =
         T extends (infer U)[] ? U :
         T extends (...args: any[]) => infer U ? U :
@@ -88,6 +87,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: 
     type T24 = ArgumentType<(x: string, y: string) => number>;  // Error
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
+!!! error TS2344:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     type T25 = ArgumentType<Function>;  // Error
                             ~~~~~~~~
 !!! error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
@@ -130,12 +130,8 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: 
     type T62<T> = U extends (infer U)[] ? U : U;  // Error
                   ~
 !!! error TS2304: Cannot find name 'U'.
-                  ~
-!!! error TS4081: Exported type alias 'T62' has or is using private name 'U'.
                                               ~
 !!! error TS2304: Cannot find name 'U'.
-                                              ~
-!!! error TS4081: Exported type alias 'T62' has or is using private name 'U'.
     type T63<T> = T extends ((infer A) extends infer B ? infer C : infer D) ? string : number;
     
     type T70<T extends string> = { x: T };
@@ -210,7 +206,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: 
     type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
                                            ~
 !!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
-!!! related TS2208 tests/cases/conformance/types/conditional/inferTypes1.ts:153:8: This type parameter might need an `extends string | number | symbol` constraint.
+!!! related TS2208 inferTypes1.ts:153:8: This type parameter might need an `extends string | number | symbol` constraint.
     
     // Repro from #22302
     

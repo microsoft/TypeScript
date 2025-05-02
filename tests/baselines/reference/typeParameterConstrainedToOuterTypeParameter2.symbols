@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter2.ts ===
+//// [tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter2.ts] ////
+
+=== typeParameterConstrainedToOuterTypeParameter2.ts ===
 interface A<T> {
 >A : Symbol(A, Decl(typeParameterConstrainedToOuterTypeParameter2.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterConstrainedToOuterTypeParameter2.ts, 0, 12))

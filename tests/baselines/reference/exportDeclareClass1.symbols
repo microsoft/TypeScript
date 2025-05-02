@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDeclareClass1.ts ===
+//// [tests/cases/compiler/exportDeclareClass1.ts] ////
+
+=== exportDeclareClass1.ts ===
     export declare class eaC {
 >eaC : Symbol(eaC, Decl(exportDeclareClass1.ts, 0, 0))
 

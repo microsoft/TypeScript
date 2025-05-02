@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass.ts(24,28): error TS2339: Property 'z' does not exist on type 'C'.
+protectedClassPropertyAccessibleWithinNestedSubclass.ts(24,28): error TS2339: Property 'z' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass.ts (1 errors) ====
+==== protectedClassPropertyAccessibleWithinNestedSubclass.ts (1 errors) ====
     class B {
         protected x: string;
         protected static x: string;

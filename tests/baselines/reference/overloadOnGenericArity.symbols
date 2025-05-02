@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnGenericArity.ts ===
+//// [tests/cases/compiler/overloadOnGenericArity.ts] ////
+
+=== overloadOnGenericArity.ts ===
 interface Test {
 >Test : Symbol(Test, Decl(overloadOnGenericArity.ts, 0, 0))
 

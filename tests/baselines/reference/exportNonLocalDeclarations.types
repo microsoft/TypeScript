@@ -1,7 +1,11 @@
-=== tests/cases/conformance/externalModules/exportNonLocalDeclarations.ts ===
+//// [tests/cases/conformance/externalModules/exportNonLocalDeclarations.ts] ////
+
+=== exportNonLocalDeclarations.ts ===
 export { string };
 >string : any
+>       : ^^^
 
 export type { number };
 >number : any
+>       : ^^^
 

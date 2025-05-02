@@ -1,350 +1,559 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts] ////
+
+=== enumAssignabilityInInheritance.ts ===
 // enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
 
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 interface I0 {
     [x: string]: E;
 >x : string
+>  : ^^^^^^
 
     foo: E; // identical and subtype, ok
 >foo : E
+>    : ^
 }
 
 
 declare function foo(x: E): E;
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
+>    : ^^^ ^^ ^^^ ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
 >x : E
+>  : ^
 
 declare function foo(x: number): number;
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
+>    : ^^^ ^^ ^^^ ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
 >x : number
+>  : ^^^^^^
 
 declare function foo(x: any): any;
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
+>    : ^^^ ^^ ^^^ ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
 >x : any
+>  : ^^^
 
 var r = foo(E.A); // E
 >r : E
+>  : ^
 >foo(E.A) : E
+>         : ^
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
+>    : ^^^ ^^ ^^^ ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 var r2 = foo(1); // number
 >r2 : number
+>   : ^^^^^^
 >foo(1) : number
+>       : ^^^^^^
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
+>    : ^^^ ^^ ^^^ ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
 >1 : 1
+>  : ^
 
 var r3 = foo(<any>null); // any
 >r3 : any
+>   : ^^^
 >foo(<any>null) : any
+>               : ^^^
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
+>    : ^^^ ^^ ^^^ ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
 ><any>null : any
->null : null
+>          : ^^^
 
 declare function foo2(x: string): string;
 >foo2 : { (x: string): string; (x: E): E; }
+>     : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : string
+>  : ^^^^^^
 
 declare function foo2(x: E): E;
 >foo2 : { (x: string): string; (x: E): E; }
+>     : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo2(E.A);
 >r4 : E
+>   : ^
 >foo2(E.A) : E
+>          : ^
 >foo2 : { (x: string): string; (x: E): E; }
+>     : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo3(x: boolean): boolean;
 >foo3 : { (x: boolean): boolean; (x: E): E; }
+>     : ^^^ ^^       ^^^       ^^^ ^^ ^^^ ^^^
 >x : boolean
+>  : ^^^^^^^
 
 declare function foo3(x: E): E;
 >foo3 : { (x: boolean): boolean; (x: E): E; }
+>     : ^^^ ^^       ^^^       ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo3(E.A);
 >r4 : E
+>   : ^
 >foo3(E.A) : E
+>          : ^
 >foo3 : { (x: boolean): boolean; (x: E): E; }
+>     : ^^^ ^^       ^^^       ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo4(x: Date): Date;
 >foo4 : { (x: Date): Date; (x: E): E; }
+>     : ^^^ ^^    ^^^    ^^^ ^^ ^^^ ^^^
 >x : Date
+>  : ^^^^
 
 declare function foo4(x: E): E;
 >foo4 : { (x: Date): Date; (x: E): E; }
+>     : ^^^ ^^    ^^^    ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo4(E.A);
 >r4 : E
+>   : ^
 >foo4(E.A) : E
+>          : ^
 >foo4 : { (x: Date): Date; (x: E): E; }
+>     : ^^^ ^^    ^^^    ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo5(x: RegExp): RegExp;
 >foo5 : { (x: RegExp): RegExp; (x: E): E; }
+>     : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : RegExp
+>  : ^^^^^^
 
 declare function foo5(x: E): E;
 >foo5 : { (x: RegExp): RegExp; (x: E): E; }
+>     : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo5(E.A);
 >r4 : E
+>   : ^
 >foo5(E.A) : E
+>          : ^
 >foo5 : { (x: RegExp): RegExp; (x: E): E; }
+>     : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo6(x: { bar: number }): { bar: number };
->foo6 : { (x: {    bar: number;}): {    bar: number;}; (x: E): E; }
+>foo6 : { (x: { bar: number; }): { bar: number; }; (x: E): E; }
+>     : ^^^ ^^                ^^^                ^^^ ^^ ^^^ ^^^
 >x : { bar: number; }
+>  : ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 
 declare function foo6(x: E): E;
 >foo6 : { (x: { bar: number; }): { bar: number; }; (x: E): E; }
+>     : ^^^ ^^                ^^^                ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo6(E.A);
 >r4 : E
+>   : ^
 >foo6(E.A) : E
+>          : ^
 >foo6 : { (x: { bar: number; }): { bar: number; }; (x: E): E; }
+>     : ^^^ ^^                ^^^                ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo7(x: number[]): number[];
 >foo7 : { (x: number[]): number[]; (x: E): E; }
+>     : ^^^ ^^        ^^^        ^^^ ^^ ^^^ ^^^
 >x : number[]
+>  : ^^^^^^^^
 
 declare function foo7(x: E): E;
 >foo7 : { (x: number[]): number[]; (x: E): E; }
+>     : ^^^ ^^        ^^^        ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo7(E.A);
 >r4 : E
+>   : ^
 >foo7(E.A) : E
+>          : ^
 >foo7 : { (x: number[]): number[]; (x: E): E; }
+>     : ^^^ ^^        ^^^        ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 interface I8 { foo: string; }
 >foo : string
+>    : ^^^^^^
 
 declare function foo8(x: I8): I8;
 >foo8 : { (x: I8): I8; (x: E): E; }
+>     : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >x : I8
+>  : ^^
 
 declare function foo8(x: E): E;
 >foo8 : { (x: I8): I8; (x: E): E; }
+>     : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo8(E.A);
 >r4 : E
+>   : ^
 >foo8(E.A) : E
+>          : ^
 >foo8 : { (x: I8): I8; (x: E): E; }
+>     : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 class A { foo: number; }
 >A : A
+>  : ^
 >foo : number
+>    : ^^^^^^
 
 declare function foo9(x: A): A;
 >foo9 : { (x: A): A; (x: E): E; }
+>     : ^^^ ^^ ^^^ ^^^ ^^ ^^^ ^^^
 >x : A
+>  : ^
 
 declare function foo9(x: E): E;
 >foo9 : { (x: A): A; (x: E): E; }
+>     : ^^^ ^^ ^^^ ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo9(E.A);
 >r4 : E
+>   : ^
 >foo9(E.A) : E
+>          : ^
 >foo9 : { (x: A): A; (x: E): E; }
+>     : ^^^ ^^ ^^^ ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 class A2<T> { foo: T; }
 >A2 : A2<T>
+>   : ^^^^^
 >foo : T
+>    : ^
 
 declare function foo10(x: A2<number>): A2<number>;
 >foo10 : { (x: A2<number>): A2<number>; (x: E): E; }
+>      : ^^^ ^^          ^^^          ^^^ ^^ ^^^ ^^^
 >x : A2<number>
+>  : ^^^^^^^^^^
 
 declare function foo10(x: E): E;
 >foo10 : { (x: A2<number>): A2<number>; (x: E): E; }
+>      : ^^^ ^^          ^^^          ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo10(E.A);
 >r4 : E
+>   : ^
 >foo10(E.A) : E
+>           : ^
 >foo10 : { (x: A2<number>): A2<number>; (x: E): E; }
+>      : ^^^ ^^          ^^^          ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo11(x: (x) => number): (x) => number;
 >foo11 : { (x: (x: any) => number): (x: any) => number; (x: E): E; }
+>      : ^^^ ^^    ^^^           ^^^    ^^^           ^^^ ^^ ^^^ ^^^
 >x : (x: any) => number
+>  : ^ ^^^^^^^^^^      
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 declare function foo11(x: E): E;
 >foo11 : { (x: (x: any) => number): (x: any) => number; (x: E): E; }
+>      : ^^^ ^^    ^^^           ^^^    ^^^           ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo11(E.A);
 >r4 : E
+>   : ^
 >foo11(E.A) : E
+>           : ^
 >foo11 : { (x: (x: any) => number): (x: any) => number; (x: E): E; }
+>      : ^^^ ^^    ^^^           ^^^    ^^^           ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo12(x: <T>(x: T) => T): <T>(x: T) => T;
 >foo12 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: E): E; }
+>      : ^^^ ^^              ^^^              ^^^ ^^ ^^^ ^^^
 >x : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >x : T
+>  : ^
 
 declare function foo12(x: E): E;
 >foo12 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: E): E; }
+>      : ^^^ ^^              ^^^              ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo12(E.A);
 >r4 : E
+>   : ^
 >foo12(E.A) : E
+>           : ^
 >foo12 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: E): E; }
+>      : ^^^ ^^              ^^^              ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 enum E2 { A }
 >E2 : E2
+>   : ^^
 >A : E2.A
+>  : ^^^^
 
 declare function foo13(x: E2): E2;
 >foo13 : { (x: E2): E2; (x: E): E; }
+>      : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >x : E2
+>  : ^^
 
 declare function foo13(x: E): E;
 >foo13 : { (x: E2): E2; (x: E): E; }
+>      : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo13(E.A);
 >r4 : E
+>   : ^
 >foo13(E.A) : E
+>           : ^
 >foo13 : { (x: E2): E2; (x: E): E; }
+>      : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 function f() { }
 >f : typeof f
+>  : ^^^^^^^^
 
 module f {
 >f : typeof f
+>  : ^^^^^^^^
 
     export var bar = 1;
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 declare function foo14(x: typeof f): typeof f;
 >foo14 : { (x: typeof f): typeof f; (x: E): E; }
+>      : ^^^ ^^        ^^^        ^^^ ^^ ^^^ ^^^
 >x : typeof f
+>  : ^^^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 
 declare function foo14(x: E): E;
 >foo14 : { (x: typeof f): typeof f; (x: E): E; }
+>      : ^^^ ^^        ^^^        ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo14(E.A);
 >r4 : E
+>   : ^
 >foo14(E.A) : E
+>           : ^
 >foo14 : { (x: typeof f): typeof f; (x: E): E; }
+>      : ^^^ ^^        ^^^        ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 class CC { baz: string }
 >CC : CC
+>   : ^^
 >baz : string
+>    : ^^^^^^
 
 module CC {
 >CC : typeof CC
+>   : ^^^^^^^^^
 
     export var bar = 1;
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 declare function foo15(x: CC): CC;
 >foo15 : { (x: CC): CC; (x: E): E; }
+>      : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >x : CC
+>  : ^^
 
 declare function foo15(x: E): E;
 >foo15 : { (x: CC): CC; (x: E): E; }
+>      : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo15(E.A);
 >r4 : E
+>   : ^
 >foo15(E.A) : E
+>           : ^
 >foo15 : { (x: CC): CC; (x: E): E; }
+>      : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo16(x: Object): Object;
 >foo16 : { (x: Object): Object; (x: E): E; }
+>      : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : Object
+>  : ^^^^^^
 
 declare function foo16(x: E): E;
 >foo16 : { (x: Object): Object; (x: E): E; }
+>      : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo16(E.A);
 >r4 : E
+>   : ^
 >foo16(E.A) : Object
+>           : ^^^^^^
 >foo16 : { (x: Object): Object; (x: E): E; }
+>      : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 declare function foo17(x: {}): {};
 >foo17 : { (x: {}): {}; (x: E): E; }
+>      : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >x : {}
+>  : ^^
 
 declare function foo17(x: E): E;
 >foo17 : { (x: {}): {}; (x: E): E; }
+>      : ^^^ ^^  ^^^  ^^^ ^^ ^^^ ^^^
 >x : E
+>  : ^
 
 var r4 = foo16(E.A);
 >r4 : E
+>   : ^
 >foo16(E.A) : Object
+>           : ^^^^^^
 >foo16 : { (x: Object): Object; (x: E): E; }
+>      : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 

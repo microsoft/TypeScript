@@ -1,9 +1,13 @@
-=== tests/cases/conformance/generators/generatorReturnTypeFallback.5.ts ===
+//// [tests/cases/conformance/generators/generatorReturnTypeFallback.5.ts] ////
+
+=== generatorReturnTypeFallback.5.ts ===
 // Allow generators to fallback to IterableIterator if they do not need a type for the sent value while in strictNullChecks mode.
 function* f(): IterableIterator<number> {
 >f : () => IterableIterator<number>
+>  : ^^^^^^                        
 
     yield 1;
->yield 1 : undefined
+>yield 1 : any
 >1 : 1
+>  : ^
 }

@@ -1,62 +1,84 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers4.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers4.ts] ////
+
+=== subtypingWithObjectMembers4.ts ===
 // subtyping when property names do not match
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 class A {
 >A : A
+>  : ^
 
     foo: Base;
 >foo : Base
+>    : ^^^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     fooo: Derived; // ok, inherits foo
 >fooo : Derived
+>     : ^^^^^^^
 }
 
 class A2 {
 >A2 : A2
+>   : ^^
 
     1: Base; 
 >1 : Base
+>  : ^^^^
 }
 
 class B2 extends A2 {
 >B2 : B2
+>   : ^^
 >A2 : A2
+>   : ^^
 
     1.1: Derived; // ok, inherits 1
 >1.1 : Derived
+>    : ^^^^^^^
 }
 
 class A3 {
 >A3 : A3
+>   : ^^
 
     '1': Base;
 >'1' : Base
+>    : ^^^^
 }
 
 class B3 extends A3 {
 >B3 : B3
+>   : ^^
 >A3 : A3
+>   : ^^
 
     '1.1': Derived; // ok, inherits '1'
 >'1.1' : Derived
+>      : ^^^^^^^
 }

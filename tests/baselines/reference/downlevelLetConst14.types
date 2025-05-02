@@ -1,14 +1,20 @@
-=== tests/cases/compiler/downlevelLetConst14.ts ===
+//// [tests/cases/compiler/downlevelLetConst14.ts] ////
+
+=== downlevelLetConst14.ts ===
 'use strict'
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 
 declare function use(a: any);
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >a : any
 
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var z0, z1, z2, z3;
 >z0 : any
@@ -18,80 +24,114 @@ var z0, z1, z2, z3;
 {
     let x = 20;
 >x : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     use(x);
 >use(x) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     let [z0] = [1];
 >z0 : number
+>   : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     use(z0);
 >use(z0) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z0 : number
+>   : ^^^^^^
 
     let [z1] = [1]
 >z1 : number
+>   : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     use(z1);
 >use(z1) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z1 : number
+>   : ^^^^^^
 
     let {a: z2} = { a: 1 };
 >a : any
+>  : ^^^
 >z2 : number
+>   : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     use(z2);
 >use(z2) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z2 : number
+>   : ^^^^^^
 
     let {a: z3} = { a: 1 };
 >a : any
+>  : ^^^
 >z3 : number
+>   : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     use(z3);
 >use(z3) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z3 : number
+>   : ^^^^^^
 }
 use(x);
 >use(x) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 use(z0);
 >use(z0) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z0 : any
 
 use(z1);
 >use(z1) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z1 : any
 
 use(z2);
 >use(z2) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z2 : any
 
 use(z3);
 >use(z3) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z3 : any
 
 var z6;
@@ -99,99 +139,146 @@ var z6;
 
 var y = true;
 >y : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 {
     let y = "";
 >y : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
     let [z6] = [true]
 >z6 : boolean
+>   : ^^^^^^^
 >[true] : [boolean]
+>       : ^^^^^^^^^
 >true : true
+>     : ^^^^
     {
         let y = 1;
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         let {a: z6} = {a: 1}
 >a : any
+>  : ^^^
 >z6 : number
+>   : ^^^^^^
 >{a: 1} : { a: number; }
+>       : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         use(y);
 >use(y) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : number
+>  : ^^^^^^
 
         use(z6);
 >use(z6) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z6 : number
+>   : ^^^^^^
     }
     use(y);
 >use(y) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : string
+>  : ^^^^^^
 
     use(z6);
 >use(z6) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z6 : boolean
+>   : ^^^^^^^
 }
 use(y);
 >use(y) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : true
+>  : ^^^^
 
 use(z6);
 >use(z6) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z6 : any
 
 var z = false;
 >z : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var z5 = 1;
 >z5 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 {
     let z = "";
 >z : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
     let [z5] = [5];
 >z5 : number
+>   : ^^^^^^
 >[5] : [number]
+>    : ^^^^^^^^
 >5 : 5
+>  : ^
     {
         let _z = 1;
 >_z : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
         let {a: _z5} = { a: 1 };
 >a : any
+>  : ^^^
 >_z5 : number
+>    : ^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         // try to step on generated name
         use(_z);
 >use(_z) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >_z : number
+>   : ^^^^^^
     }
     use(z);
 >use(z) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >z : string
+>  : ^^^^^^
 }
 use(y);
 >use(y) : any
 >use : (a: any) => any
+>    : ^ ^^   ^^^^^^^^
 >y : true
+>  : ^^^^
 

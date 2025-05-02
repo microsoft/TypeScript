@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promisesWithConstraints.ts] ////
+
 //// [promisesWithConstraints.ts]
 interface Promise<T> {
     then<U>(cb: (x: T) => Promise<U>): Promise<U>;

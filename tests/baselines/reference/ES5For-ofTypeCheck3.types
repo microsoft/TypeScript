@@ -1,11 +1,19 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck3.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck3.ts] ////
+
+=== ES5For-ofTypeCheck3.ts ===
 var tuple: [string, number] = ["", 0];
 >tuple : [string, number]
+>      : ^^^^^^^^^^^^^^^^
 >["", 0] : [string, number]
+>        : ^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 
 for (var v of tuple) { }
 >v : string | number
+>  : ^^^^^^^^^^^^^^^
 >tuple : [string, number]
+>      : ^^^^^^^^^^^^^^^^
 

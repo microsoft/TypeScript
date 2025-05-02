@@ -1,143 +1,214 @@
-=== tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts ===
+//// [tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 10,000
+Type Count: 25,000
+Instantiation count: 250,000 -> 500,000
+Symbol count: 100,000
+
+=== styledComponentsInstantiaionLimitNotReached.ts ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface REACT_STATICS {
     childContextTypes: true;
 >childContextTypes : true
+>                  : ^^^^
 >true : true
+>     : ^^^^
 
     contextType: true;
 >contextType : true
+>            : ^^^^
 >true : true
+>     : ^^^^
 
     contextTypes: true;
 >contextTypes : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 
     defaultProps: true;
 >defaultProps : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 
     displayName: true;
 >displayName : true
+>            : ^^^^
 >true : true
+>     : ^^^^
 
     getDefaultProps: true;
 >getDefaultProps : true
+>                : ^^^^
 >true : true
+>     : ^^^^
 
     getDerivedStateFromError: true;
 >getDerivedStateFromError : true
+>                         : ^^^^
 >true : true
+>     : ^^^^
 
     getDerivedStateFromProps: true;
 >getDerivedStateFromProps : true
+>                         : ^^^^
 >true : true
+>     : ^^^^
 
     mixins: true;
 >mixins : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 
     propTypes: true;
 >propTypes : true
+>          : ^^^^
 >true : true
+>     : ^^^^
 
     type: true;
 >type : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 }
 
 interface KNOWN_STATICS {
     name: true;
 >name : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
     length: true;
 >length : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 
     prototype: true;
 >prototype : true
+>          : ^^^^
 >true : true
+>     : ^^^^
 
     caller: true;
 >caller : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 
     callee: true;
 >callee : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 
     arguments: true;
 >arguments : true
+>          : ^^^^
 >true : true
+>     : ^^^^
 
     arity: true;
 >arity : true
+>      : ^^^^
 >true : true
+>     : ^^^^
 }
 
 interface MEMO_STATICS {
     '$$typeof': true;
 >'$$typeof' : true
+>           : ^^^^
 >true : true
+>     : ^^^^
 
     compare: true;
 >compare : true
+>        : ^^^^
 >true : true
+>     : ^^^^
 
     defaultProps: true;
 >defaultProps : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 
     displayName: true;
 >displayName : true
+>            : ^^^^
 >true : true
+>     : ^^^^
 
     propTypes: true;
 >propTypes : true
+>          : ^^^^
 >true : true
+>     : ^^^^
 
     type: true;
 >type : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 }
 
 interface FORWARD_REF_STATICS {
     '$$typeof': true;
 >'$$typeof' : true
+>           : ^^^^
 >true : true
+>     : ^^^^
 
     render: true;
 >render : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 
     defaultProps: true;
 >defaultProps : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 
     displayName: true;
 >displayName : true
+>            : ^^^^
 >true : true
+>     : ^^^^
 
     propTypes: true;
 >propTypes : true
+>          : ^^^^
 >true : true
+>     : ^^^^
 }
 
 
 type NonReactStatics<
 >NonReactStatics : NonReactStatics<S, C>
+>                : ^^^^^^^^^^^^^^^^^^^^^
 
     S extends React.ComponentType<any>,
 >React : any
+>      : ^^^
 
     C extends {
         [key: string]: true
 >key : string
+>    : ^^^^^^
 >true : true
+>     : ^^^^
 
     } = {}
     > = {
@@ -145,10 +216,12 @@ type NonReactStatics<
             keyof S,
             S extends React.MemoExoticComponent<any>
 >React : any
+>      : ^^^
 
             ? keyof MEMO_STATICS | keyof C
             : S extends React.ForwardRefExoticComponent<any>
 >React : any
+>      : ^^^
 
             ? keyof FORWARD_REF_STATICS | keyof C
             : keyof REACT_STATICS | keyof KNOWN_STATICS | keyof C
@@ -156,14 +229,18 @@ type NonReactStatics<
     };
 
 export type AnyStyledComponent = StyledComponent<any, any, any, any> | StyledComponent<any, any, any>;
->AnyStyledComponent : StyledComponent<any, any, any, any> | StyledComponent<any, any, any, never>
+>AnyStyledComponent : AnyStyledComponent
+>                   : ^^^^^^^^^^^^^^^^^^
 
 export type StyledComponent<
 >StyledComponent : StyledComponent<C, T, O, A>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     C extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
 >JSX : any
+>    : ^^^
 >React : any
+>      : ^^^
 
     T extends object,
     O extends object = {},
@@ -174,13 +251,16 @@ export type StyledComponent<
     StyledComponentBase<C, T, O, A> &
     NonReactStatics<C extends React.ComponentType<any> ? C : never>;
 >React : any
+>      : ^^^
 
 export type StyledComponentProps<
 >StyledComponentProps : StyledComponentProps<C, T, O, A>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // The Component from whose props are derived
     C extends string | React.ComponentType<any>,
 >React : any
+>      : ^^^
 
     // The Theme from the current context
     T extends object,
@@ -197,9 +277,11 @@ export type StyledComponentProps<
                 C,
                 React.ComponentPropsWithRef<
 >React : any
+>      : ^^^
 
                     C extends IntrinsicElementsKeys | React.ComponentType<any> ? C : never
 >React : any
+>      : ^^^
 
                 >
             > &
@@ -210,9 +292,11 @@ export type StyledComponentProps<
             Pick<
                 React.ComponentPropsWithRef<
 >React : any
+>      : ^^^
 
                     C extends IntrinsicElementsKeys | React.ComponentType<any> ? C : never
 >React : any
+>      : ^^^
 
                 > &
                 O,
@@ -226,6 +310,7 @@ export type StyledComponentProps<
 
 type Defaultize<P, D> = P extends any
 >Defaultize : Defaultize<P, D>
+>           : ^^^^^^^^^^^^^^^^
 
     ? string extends keyof P
     ? P
@@ -236,56 +321,77 @@ type Defaultize<P, D> = P extends any
 
 type ReactDefaultizedProps<C, P> = C extends { defaultProps: infer D } ? Defaultize<P, D> : P;
 >ReactDefaultizedProps : ReactDefaultizedProps<C, P>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultProps : D
+>             : ^
 
 type WithChildrenIfReactComponentClass<C extends string | React.ComponentType<any>> = C extends React.ComponentClass<
 >WithChildrenIfReactComponentClass : WithChildrenIfReactComponentClass<C>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 >React : any
+>      : ^^^
 
     any
 >
     ? { children?: React.ReactNode }
 >children : React.ReactNode
+>         : ^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
     : {};
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 >IntrinsicElementsKeys : keyof JSX.IntrinsicElements
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 
 type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
 >WithOptionalTheme : WithOptionalTheme<P, T>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >theme : T
+>      : ^
 
     theme?: T;
 >theme : T
+>      : ^
 
 };
 
 type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>;
 >ForwardRefExoticBase : ForwardRefExoticBase<P>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 >React : any
+>      : ^^^
 
 type StyledComponentPropsWithAs<
 >StyledComponentPropsWithAs : StyledComponentPropsWithAs<C, T, O, A, F>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     C extends string | React.ComponentType<any>,
 >React : any
+>      : ^^^
 
     T extends object,
     O extends object,
     A extends keyof any,
     F extends string | React.ComponentType<any> = C
 >React : any
+>      : ^^^
 
     > = StyledComponentProps<C, T, O, A> & { as?: C; forwardedAs?: F };
 >as : C
+>   : ^
 >forwardedAs : F
+>            : ^
 
 export type StyledComponentInnerOtherProps<C extends AnyStyledComponent> = C extends StyledComponent<
 >StyledComponentInnerOtherProps : StyledComponentInnerOtherProps<C>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     any,
     any,
@@ -298,6 +404,7 @@ export type StyledComponentInnerOtherProps<C extends AnyStyledComponent> = C ext
     : never;
 export type StyledComponentInnerAttrs<C extends AnyStyledComponent> = C extends StyledComponent<any, any, any, infer A>
 >StyledComponentInnerAttrs : StyledComponentInnerAttrs<C>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ? A
     : never;
@@ -305,6 +412,7 @@ export type StyledComponentInnerAttrs<C extends AnyStyledComponent> = C extends 
 export interface StyledComponentBase<
     C extends string | React.ComponentType<any>,
 >React : any
+>      : ^^^
 
     T extends object,
     O extends object = {},
@@ -313,27 +421,37 @@ export interface StyledComponentBase<
     // add our own fake call signature to implement the polymorphic 'as' prop
     (props: StyledComponentProps<C, T, O, A> & { as?: never; forwardedAs?: never }): React.ReactElement<
 >props : StyledComponentProps<C, T, O, A> & { as?: never; forwardedAs?: never; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^     ^^^
 >as : never
+>   : ^^^^^
 >forwardedAs : never
+>            : ^^^^^
 >React : any
+>      : ^^^
 
         StyledComponentProps<C, T, O, A>
     >;
     <AsC extends string | React.ComponentType<any> = C, FAsC extends string | React.ComponentType<any> = AsC>(
 >React : any
+>      : ^^^
 >React : any
+>      : ^^^
 
         props: StyledComponentPropsWithAs<AsC, T, O, A, FAsC>,
 >props : StyledComponentPropsWithAs<AsC, T, O, A, FAsC>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ): React.ReactElement<StyledComponentPropsWithAs<AsC, T, O, A, FAsC>>;
 >React : any
+>      : ^^^
 
     withComponent<WithC extends AnyStyledComponent>(
->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
+>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC_1 extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC_1): StyledComponent<WithC_1, T, O, A>; }
+>              : ^^^     ^^^^^^^^^                  ^^         ^^     ^^^                                                                                                                                         ^^^^^^^^^^^^^^^^^^^                                                      ^^         ^^       ^^^                                 ^^^
 
         component: WithC,
 >component : WithC
+>          : ^^^^^
 
     ): StyledComponent<
         StyledComponentInnerComponent<WithC>,
@@ -342,19 +460,25 @@ export interface StyledComponentBase<
         A | StyledComponentInnerAttrs<WithC>
     >;
     withComponent<WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
+>withComponent : { <WithC_1 extends AnyStyledComponent>(component: WithC_1): StyledComponent<StyledComponentInnerComponent<WithC_1>, T, O & StyledComponentInnerOtherProps<WithC_1>, A | StyledComponentInnerAttrs<WithC_1>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
+>              : ^^^^^^^^^^^^^^^^^^^                  ^^         ^^       ^^^                                                                                                                                               ^^^     ^^^^^^^^^                                                      ^^         ^^     ^^^                               ^^^
 >JSX : any
+>    : ^^^
 >React : any
+>      : ^^^
 
         component: WithC,
 >component : WithC
+>          : ^^^^^
 
     ): StyledComponent<WithC, T, O, A>;
 }
 
 export type StyledComponentInnerComponent<C extends React.ComponentType<any>> = C extends StyledComponent<
 >StyledComponentInnerComponent : StyledComponentInnerComponent<C>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
     infer I,
     any,
@@ -367,15 +491,20 @@ export type StyledComponentInnerComponent<C extends React.ComponentType<any>> = 
     : C;
 export type StyledComponentPropsWithRef<
 >StyledComponentPropsWithRef : StyledComponentPropsWithRef<C>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     C extends keyof JSX.IntrinsicElements | React.ComponentType<any>
 >JSX : any
+>    : ^^^
 >React : any
+>      : ^^^
 
     > = C extends AnyStyledComponent
     ? React.ComponentPropsWithRef<StyledComponentInnerComponent<C>> // shouldn't have an instantiation limit error
 >React : any
+>      : ^^^
 
     : React.ComponentPropsWithRef<C>;
 >React : any
+>      : ^^^
 

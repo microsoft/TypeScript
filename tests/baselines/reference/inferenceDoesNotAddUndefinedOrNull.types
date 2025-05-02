@@ -1,109 +1,173 @@
-=== tests/cases/compiler/inferenceDoesNotAddUndefinedOrNull.ts ===
+//// [tests/cases/compiler/inferenceDoesNotAddUndefinedOrNull.ts] ////
+
+=== inferenceDoesNotAddUndefinedOrNull.ts ===
 interface NodeArray<T extends Node> extends ReadonlyArray<T> {}
 
 interface Node {
     forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined) => T | undefined
+>             : ^ ^^      ^^                             ^^           ^^^                                         ^^^^^             
 >cbNode : (node: Node) => T | undefined
+>       : ^    ^^    ^^^^^             
 >node : Node
+>     : ^^^^
 >cbNodeArray : ((nodes: NodeArray<Node>) => T | undefined) | undefined
+>            : ^^     ^^               ^^^^^             ^^^^^^^^^^^^^
 >nodes : NodeArray<Node>
+>      : ^^^^^^^^^^^^^^^
 }
 
 declare function toArray<T>(value: T | T[]): T[];
->toArray : { <T>(value: T | T[]): T[]; <T>(value: T | readonly T[]): readonly T[]; }
+>toArray : { <T>(value: T | T[]): T[]; <T_1>(value: T_1 | readonly T_1[]): readonly T_1[]; }
+>        : ^^^ ^^     ^^       ^^^   ^^^^^^^^     ^^                    ^^^              ^^^
 >value : T | T[]
+>      : ^^^^^^^
 
 declare function toArray<T>(value: T | readonly T[]): readonly T[];
->toArray : { <T>(value: T | T[]): T[]; <T>(value: T | readonly T[]): readonly T[]; }
+>toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T>(value: T | readonly T[]): readonly T[]; }
+>        : ^^^^^^^^     ^^           ^^^     ^^^ ^^     ^^                ^^^            ^^^
 >value : T | readonly T[]
+>      : ^^^^^^^^^^^^^^^^
 
 function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
 >flatMapChildren : <T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined) => readonly T[]
+>                : ^ ^^    ^^    ^^  ^^                                             ^^^^^            
 >node : Node
+>     : ^^^^
 >cb : (child: Node) => readonly T[] | T | undefined
+>   : ^     ^^    ^^^^^                            
 >child : Node
+>      : ^^^^
 
     const result: T[] = [];
 >result : T[]
+>       : ^^^
 >[] : never[]
+>   : ^^^^^^^
 
     node.forEachChild(child => {
 >node.forEachChild(child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    }) : void | undefined
->node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
+>                                                                                                                                                         : ^^^^^^^^^^^^^^^^
+>node.forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
+>                  : ^^^^^^      ^^                               ^^           ^^^                                           ^^^^^               
 >node : Node
->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
+>     : ^^^^
+>forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
+>             : ^^^^^^      ^^                               ^^           ^^^                                           ^^^^^               
 >child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    } : (child: Node) => void
+>                                                                                                                                      : ^     ^^^^^^^^^^^^^^^
 >child : Node
+>      : ^^^^
 
         const value = cb(child);
 >value : T | readonly T[] | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb(child) : T | readonly T[] | undefined
->cb : (child: Node) => T | readonly T[] | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : (child: Node) => readonly T[] | T | undefined
+>   : ^     ^^    ^^^^^                            
 >child : Node
+>      : ^^^^
 
         if (value !== undefined) {
 >value !== undefined : boolean
+>                    : ^^^^^^^
 >value : T | readonly T[] | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
             result.push(...toArray(value));
 >result.push(...toArray(value)) : number
+>                               : ^^^^^^
 >result.push : (...items: T[]) => number
+>            : ^^^^     ^^^^^^^^^^      
 >result : T[]
+>       : ^^^
 >push : (...items: T[]) => number
+>     : ^^^^     ^^^^^^^^^^      
 >...toArray(value) : T
+>                  : ^
 >toArray(value) : readonly T[]
->toArray : { <T>(value: T | T[]): T[]; <T>(value: T | readonly T[]): readonly T[]; }
+>               : ^^^^^^^^^^^^
+>toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T_1>(value: T_1 | readonly T_1[]): readonly T_1[]; }
+>        : ^^^^^^^^     ^^           ^^^     ^^^^^^^^     ^^                    ^^^              ^^^
 >value : readonly T[] | (T & ({} | null))
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
     });
     return result;
 >result : T[]
+>       : ^^^
 }
 
 function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T | null): readonly T[] {
 >flatMapChildren2 : <T>(node: Node, cb: (child: Node) => readonly T[] | T | null) => readonly T[]
+>                 : ^ ^^    ^^    ^^  ^^                                        ^^^^^            
 >node : Node
+>     : ^^^^
 >cb : (child: Node) => readonly T[] | T | null
+>   : ^     ^^    ^^^^^                       
 >child : Node
->null : null
+>      : ^^^^
 
     const result: T[] = [];
 >result : T[]
+>       : ^^^
 >[] : never[]
+>   : ^^^^^^^
 
     node.forEachChild(child => {
 >node.forEachChild(child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    }) : void | undefined
->node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^
+>node.forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
+>                  : ^^^^^^      ^^                               ^^           ^^^                                           ^^^^^               
 >node : Node
->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
+>     : ^^^^
+>forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
+>             : ^^^^^^      ^^                               ^^           ^^^                                           ^^^^^               
 >child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    } : (child: Node) => void
+>                                                                                                                                 : ^     ^^^^^^^^^^^^^^^
 >child : Node
+>      : ^^^^
 
         const value = cb(child);
 >value : T | readonly T[] | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >cb(child) : T | readonly T[] | null
->cb : (child: Node) => T | readonly T[] | null
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
+>cb : (child: Node) => readonly T[] | T | null
+>   : ^     ^^    ^^^^^                       
 >child : Node
+>      : ^^^^
 
         if (value !== null) {
 >value !== null : boolean
+>               : ^^^^^^^
 >value : T | readonly T[] | null
->null : null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 
             result.push(...toArray(value));
 >result.push(...toArray(value)) : number
+>                               : ^^^^^^
 >result.push : (...items: T[]) => number
+>            : ^^^^     ^^^^^^^^^^      
 >result : T[]
+>       : ^^^
 >push : (...items: T[]) => number
+>     : ^^^^     ^^^^^^^^^^      
 >...toArray(value) : T
+>                  : ^
 >toArray(value) : readonly T[]
->toArray : { <T>(value: T | T[]): T[]; <T>(value: T | readonly T[]): readonly T[]; }
+>               : ^^^^^^^^^^^^
+>toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T_1>(value: T_1 | readonly T_1[]): readonly T_1[]; }
+>        : ^^^^^^^^     ^^           ^^^     ^^^^^^^^     ^^                    ^^^              ^^^
 >value : readonly T[] | (T & ({} | undefined))
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
     });
     return result;
 >result : T[]
+>       : ^^^
 }
 

@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/decorators/class/property/decoratorOnClassProperty13.ts] ////
+
+=== decoratorOnClassProperty13.ts ===
+declare function dec(target: any, propertyKey: string, desc: PropertyDescriptor): void;
+>dec : Symbol(dec, Decl(decoratorOnClassProperty13.ts, 0, 0))
+>target : Symbol(target, Decl(decoratorOnClassProperty13.ts, 0, 21))
+>propertyKey : Symbol(propertyKey, Decl(decoratorOnClassProperty13.ts, 0, 33))
+>desc : Symbol(desc, Decl(decoratorOnClassProperty13.ts, 0, 54))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClassProperty13.ts, 0, 87))
+
+    @dec accessor prop;
+>dec : Symbol(dec, Decl(decoratorOnClassProperty13.ts, 0, 0))
+>prop : Symbol(C.prop, Decl(decoratorOnClassProperty13.ts, 2, 9))
+}

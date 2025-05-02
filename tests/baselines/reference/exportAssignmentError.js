@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignmentError.ts] ////
+
 //// [exportEqualsModule_A.ts]
 module M {
 	export var x;

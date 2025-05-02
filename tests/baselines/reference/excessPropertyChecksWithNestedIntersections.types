@@ -1,143 +1,227 @@
-=== tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts ===
+//// [tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts] ////
+
+=== excessPropertyChecksWithNestedIntersections.ts ===
 // https://github.com/Microsoft/TypeScript/issues/13813
 
 interface A {
     x: string
 >x : string
+>  : ^^^^^^
 }
 
 interface B {
     a: A;
 >a : A
+>  : ^
 }
 
 interface C {
     c: number;
 >c : number
+>  : ^^^^^^
 }
 
 type D = B & C;
->D : B & C
+>D : D
+>  : ^
 
 let a: B = { a: { x: 'hello' } }; // ok
 >a : B
+>  : ^
 >{ a: { x: 'hello' } } : { a: { x: string; }; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
+>  : ^^^^^^^^^^^^^^
 >{ x: 'hello' } : { x: string; }
+>               : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 
 let b: B = { a: { x: 2 } }; // error - types of property x are incompatible
 >b : B
+>  : ^
 >{ a: { x: 2 } } : { a: { x: number; }; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{ x: 2 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 let c: B = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 >c : B
+>  : ^
 >{ a: { x: 'hello', y: 2 } } : { a: { x: string; y: number; }; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 'hello', y: 2 } : { x: string; y: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 let d: D = { a: { x: 'hello' }, c: 5 }; // ok
 >d : D
+>  : ^
 >{ a: { x: 'hello' }, c: 5 } : { a: { x: string; }; c: number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
+>  : ^^^^^^^^^^^^^^
 >{ x: 'hello' } : { x: string; }
+>               : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >c : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
 let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
 >e : D
+>  : ^
 >{ a: { x: 2 }, c: 5 } : { a: { x: number; }; c: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{ x: 2 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >c : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
 let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
 >f : D
+>  : ^
 >{ a: { x: 'hello', y: 2 }, c: 5 } : { a: { x: string; y: number; }; c: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 'hello', y: 2 } : { x: string; y: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >c : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
 // https://github.com/Microsoft/TypeScript/issues/18075
 
 export type MyType = { id: number; } & { name: string; } & { photo: { id: number; } & { url: string; } }
->MyType : { id: number; } & { name: string; } & { photo: {    id: number;} & {    url: string;}; }
+>MyType : MyType
+>       : ^^^^^^
 >id : number
+>   : ^^^^^^
 >name : string
+>     : ^^^^^^
 >photo : { id: number; } & { url: string; }
+>      : ^^^^^^      ^^^^^^^^^^^^^      ^^^
 >id : number
+>   : ^^^^^^
 >url : string
+>    : ^^^^^^
 
 export let obj: MyType;
 >obj : MyType
+>    : ^^^^^^
 
 export const photo: typeof obj.photo = {
 >photo : { id: number; } & { url: string; }
+>      : ^^^^^^      ^^^^^^^^^^^^^      ^^^
 >obj.photo : { id: number; } & { url: string; }
+>          : ^^^^^^      ^^^^^^^^^^^^^      ^^^
 >obj : MyType
+>    : ^^^^^^
 >photo : { id: number; } & { url: string; }
+>      : ^^^^^^      ^^^^^^^^^^^^^      ^^^
 >{    id: 1,    url: '',    xyz: 1 // Great! This causes an error!} : { id: number; url: string; xyz: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     id: 1,
 >id : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     url: '',
 >url : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
     xyz: 1 // Great! This causes an error!
 >xyz : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 };
 
 export const myInstance: MyType = {
 >myInstance : MyType
+>           : ^^^^^^
 >{    id: 1,    name: '',    photo: {        id: 1,        url: '',        xyz: 2 // This should also be an error    }} : { id: number; name: string; photo: { id: number; url: string; xyz: number; }; }
+>                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     id: 1,
 >id : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     name: '',
 >name : string
+>     : ^^^^^^
 >'' : ""
+>   : ^^
 
     photo: {
 >photo : { id: number; url: string; xyz: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        id: 1,        url: '',        xyz: 2 // This should also be an error    } : { id: number; url: string; xyz: number; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         id: 1,
 >id : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
         url: '',
 >url : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
         xyz: 2 // This should also be an error
 >xyz : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
     }
 };
 
@@ -145,57 +229,87 @@ export const myInstance: MyType = {
 
 export type View<T> = { [K in keyof T]: T[K] extends object ? boolean | View<T[K]> : boolean };
 >View : View<T>
+>     : ^^^^^^^
 
 interface TypeC {
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 interface TypeB {
     foo: string,
 >foo : string
+>    : ^^^^^^
 
     bar: TypeC
 >bar : TypeC
+>    : ^^^^^
 }
 
 interface TypeA {
     foo: string,
 >foo : string
+>    : ^^^^^^
 
     bar: TypeB,
 >bar : TypeB
+>    : ^^^^^
 }
 
 let test: View<TypeA>;
 >test : View<TypeA>
+>     : ^^^^^^^^^^^
 
 test = { foo: true, bar: true, boo: true }
 >test = { foo: true, bar: true, boo: true } : { foo: true; bar: true; boo: boolean; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : View<TypeA>
+>     : ^^^^^^^^^^^
 >{ foo: true, bar: true, boo: true } : { foo: true; bar: true; boo: boolean; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 >bar : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 >boo : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
 
 test = { foo: true, bar: { foo: true, bar: true, boo: true } }
 >test = { foo: true, bar: { foo: true, bar: true, boo: true } } : { foo: true; bar: { foo: true; bar: true; boo: boolean; }; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : View<TypeA>
+>     : ^^^^^^^^^^^
 >{ foo: true, bar: { foo: true, bar: true, boo: true } } : { foo: true; bar: { foo: true; bar: true; boo: boolean; }; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 >bar : { foo: true; bar: true; boo: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo: true, bar: true, boo: true } : { foo: true; bar: true; boo: boolean; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 >bar : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 >boo : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
 

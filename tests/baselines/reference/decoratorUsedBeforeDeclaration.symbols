@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorUsedBeforeDeclaration.ts ===
+//// [tests/cases/compiler/decoratorUsedBeforeDeclaration.ts] ////
+
+=== decoratorUsedBeforeDeclaration.ts ===
 @lambda(Enum.No)
 >lambda : Symbol(lambda, Decl(decoratorUsedBeforeDeclaration.ts, 39, 5))
 >Enum.No : Symbol(Enum.No, Decl(decoratorUsedBeforeDeclaration.ts, 34, 11))

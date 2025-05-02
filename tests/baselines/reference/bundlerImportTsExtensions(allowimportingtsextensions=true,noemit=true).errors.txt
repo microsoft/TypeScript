@@ -1,0 +1,81 @@
+error TS6054: File '/project/e.txt' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+  The file is in the program because:
+    Root file specified for compilation
+/project/main.ts(8,16): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './b.ts' instead?
+/project/main.ts(12,16): error TS6142: Module './c.tsx' was resolved to '/project/c.tsx', but '--jsx' is not set.
+/project/types.d.ts(2,16): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.ts' instead?
+
+
+!!! error TS6054: File '/project/e.txt' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+!!! error TS6054:   The file is in the program because:
+!!! error TS6054:     Root file specified for compilation
+==== /project/a.ts (0 errors) ====
+    export {};
+    
+==== /project/b.ts (0 errors) ====
+    export {};
+    
+==== /project/b.js (0 errors) ====
+    export {};
+    
+==== /project/b.d.ts (0 errors) ====
+    export {};
+    
+==== /project/c.ts (0 errors) ====
+    export {};
+    
+==== /project/c.tsx (0 errors) ====
+    export {};
+    
+==== /project/d/index.ts (0 errors) ====
+    export {};
+    
+==== /project/e (0 errors) ====
+    WOMP WOMP BINARY DATA
+    
+==== /project/e.ts (0 errors) ====
+    export {};
+    
+==== /project/e.txt (0 errors) ====
+    The letter e is for elephant
+    This poem is not about elephants
+    It is about the letter e
+    - Authored by GitHub Copilot, Nov 2022
+    
+==== /project/e.txt.ts (0 errors) ====
+    export {};
+    
+==== /project/main.ts (2 errors) ====
+    import {} from "./a";
+    import {} from "./a.js";
+    import {} from "./a.ts";
+    
+    import {} from "./b";
+    import {} from "./b.js";
+    import {} from "./b.ts";
+    import {} from "./b.d.ts";
+                   ~~~~~~~~~~
+!!! error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './b.ts' instead?
+    import type {} from "./b.d.ts";
+    
+    import {} from "./c.ts";
+    import {} from "./c.tsx";
+                   ~~~~~~~~~
+!!! error TS6142: Module './c.tsx' was resolved to '/project/c.tsx', but '--jsx' is not set.
+    
+    import {} from "./d";
+    import {} from "./d/index";
+    import {} from "./d/index.ts";
+    
+    // These should not resolve, but preventing them has
+    // relatively little utility compared to the cost of
+    // the filesystem hits.
+    import {} from "./e";
+    import {} from "./e.txt";
+    
+==== /project/types.d.ts (1 errors) ====
+    import {} from "./a.ts";
+    import {} from "./a.d.ts";
+                   ~~~~~~~~~~
+!!! error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.ts' instead?
+    import type {} from "./a.d.ts";

@@ -1,7 +1,7 @@
-tests/cases/compiler/commentOnImportStatement2.ts(2,22): error TS2307: Cannot find module './foo' or its corresponding type declarations.
+commentOnImportStatement2.ts(2,22): error TS2307: Cannot find module './foo' or its corresponding type declarations.
 
 
-==== tests/cases/compiler/commentOnImportStatement2.ts (1 errors) ====
+==== commentOnImportStatement2.ts (1 errors) ====
     /* not copyright */
     import foo = require('./foo');
                          ~~~~~~~

@@ -1,15 +1,24 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInSupressError.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInSupressError.ts] ////
+
+=== nonPrimitiveIndexingWithForInSupressError.ts ===
 var a: object;
 >a : object
+>  : ^^^^^^
 
 for (var key in a) {
 >key : string
+>    : ^^^^^^
 >a : object
+>  : ^^^^^^
 
     var value = a[key];
->value : error
->a[key] : error
+>value : any
+>      : ^^^
+>a[key] : any
+>       : ^^^
 >a : object
+>  : ^^^^^^
 >key : string
+>    : ^^^^^^
 }
 

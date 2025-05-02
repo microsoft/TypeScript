@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constEnumBadPropertyNames.ts ===
+//// [tests/cases/compiler/constEnumBadPropertyNames.ts] ////
+
+=== constEnumBadPropertyNames.ts ===
 const enum E { A }
 >E : Symbol(E, Decl(constEnumBadPropertyNames.ts, 0, 0))
 >A : Symbol(E.A, Decl(constEnumBadPropertyNames.ts, 0, 14))

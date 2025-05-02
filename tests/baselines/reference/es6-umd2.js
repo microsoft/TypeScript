@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6-umd2.ts] ////
+
 //// [es6-umd2.ts]
 export class A
 {

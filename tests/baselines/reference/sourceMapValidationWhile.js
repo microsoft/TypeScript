@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationWhile.ts] ////
+
 //// [sourceMapValidationWhile.ts]
 var a = 10;
 while (a == 10) {

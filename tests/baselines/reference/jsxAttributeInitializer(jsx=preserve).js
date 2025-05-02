@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxAttributeInitializer.ts] ////
+
 //// [a.tsx]
 declare var React: any;
 

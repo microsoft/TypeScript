@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseType.ts] ////
+
 //// [promiseType.ts]
 declare var p: Promise<boolean>;
 declare var x: any;

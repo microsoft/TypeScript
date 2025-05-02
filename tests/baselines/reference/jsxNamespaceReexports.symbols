@@ -1,4 +1,6 @@
-=== tests/cases/compiler/library.ts ===
+//// [tests/cases/compiler/jsxNamespaceReexports.tsx] ////
+
+=== library.ts ===
 function createElement(element: string, props: any, ...children: any[]): any {}
 >createElement : Symbol(createElement, Decl(library.ts, 0, 0))
 >element : Symbol(element, Decl(library.ts, 0, 23))
@@ -21,11 +23,11 @@ export { createElement, JSX };
 >createElement : Symbol(createElement, Decl(library.ts, 8, 8))
 >JSX : Symbol(JSX, Decl(library.ts, 8, 23))
 
-=== tests/cases/compiler/index.tsx ===
+=== index.tsx ===
 import * as MyLib from "./library";
 >MyLib : Symbol(MyLib, Decl(index.tsx, 0, 6))
 
 const content = <my-element/>;
 >content : Symbol(content, Decl(index.tsx, 2, 5))
->my-element : Symbol(MyLib.JSX.IntrinsicElements, Decl(library.ts, 2, 15))
+>my-element : Symbol(MyLib.JSX.IntrinsicElements.__index, Decl(library.ts, 3, 38))
 

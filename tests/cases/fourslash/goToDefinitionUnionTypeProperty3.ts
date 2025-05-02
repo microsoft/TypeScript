@@ -9,4 +9,4 @@
 ////
 ////var x = (strings || numbers).[|/*usage*/specialPop|]()
 
-verify.goToDefinition("usage", "definition");
+verify.baselineGoToDefinition("usage");

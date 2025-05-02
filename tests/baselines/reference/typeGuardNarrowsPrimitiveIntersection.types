@@ -1,70 +1,105 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts] ////
+
+=== typeGuardNarrowsPrimitiveIntersection.ts ===
 type Tag = {__tag: any};
->Tag : { __tag: any; }
+>Tag : Tag
+>    : ^^^
 >__tag : any
 
 declare function isNonBlank(value: string) : value is (string & Tag);
->isNonBlank : (value: string) => value is string & Tag
+>isNonBlank : (value: string) => value is (string & Tag)
+>           : ^     ^^      ^^^^^                       
 >value : string
+>      : ^^^^^^
 
 declare function doThis(value: string & Tag): void;
 >doThis : (value: string & Tag) => void
+>       : ^     ^^            ^^^^^    
 >value : string & Tag
+>      : ^^^^^^^^^^^^
 
 declare function doThat(value: string) : void;
 >doThat : (value: string) => void
+>       : ^     ^^      ^^^^^    
 >value : string
+>      : ^^^^^^
 
 let value: string;
 >value : string
+>      : ^^^^^^
 
 if (isNonBlank(value)) {
 >isNonBlank(value) : boolean
->isNonBlank : (value: string) => value is string & Tag
+>                  : ^^^^^^^
+>isNonBlank : (value: string) => value is (string & Tag)
+>           : ^     ^^      ^^^^^                       
 >value : string
+>      : ^^^^^^
 
     doThis(value);
 >doThis(value) : void
+>              : ^^^^
 >doThis : (value: string & Tag) => void
+>       : ^     ^^            ^^^^^    
 >value : string & Tag
+>      : ^^^^^^^^^^^^
 
 } else {
     doThat(value);
 >doThat(value) : void
+>              : ^^^^
 >doThat : (value: string) => void
+>       : ^     ^^      ^^^^^    
 >value : string
+>      : ^^^^^^
 }
 
 
 const enum Tag2 {}
 >Tag2 : Tag2
+>     : ^^^^
 
 declare function isNonBlank2(value: string) : value is (string & Tag2);
->isNonBlank2 : (value: string) => value is never
+>isNonBlank2 : (value: string) => value is (string & Tag2)
+>            : ^     ^^      ^^^^^                        
 >value : string
+>      : ^^^^^^
 
 declare function doThis2(value: string & Tag2): void;
 >doThis2 : (value: string & Tag2) => void
+>        : ^     ^^             ^^^^^    
 >value : never
+>      : ^^^^^
 
 declare function doThat2(value: string) : void;
 >doThat2 : (value: string) => void
+>        : ^     ^^      ^^^^^    
 >value : string
+>      : ^^^^^^
 
 if (isNonBlank2(value)) {
 >isNonBlank2(value) : boolean
->isNonBlank2 : (value: string) => value is never
+>                   : ^^^^^^^
+>isNonBlank2 : (value: string) => value is (string & Tag2)
+>            : ^     ^^      ^^^^^                        
 >value : string
+>      : ^^^^^^
 
     doThis2(value);
 >doThis2(value) : void
->doThis2 : (value: never) => void
+>               : ^^^^
+>doThis2 : (value: string & Tag2) => void
+>        : ^     ^^             ^^^^^    
 >value : never
+>      : ^^^^^
 
 } else {
     doThat2(value);
 >doThat2(value) : void
+>               : ^^^^
 >doThat2 : (value: string) => void
+>        : ^     ^^      ^^^^^    
 >value : string
+>      : ^^^^^^
 }
 

@@ -1,1 +1,0 @@
-import jimp = require("jimp");

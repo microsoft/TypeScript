@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts] ////
+
 //// [recursivelySpecializedConstructorDeclaration.ts]
 module MsPortal.Controls.Base.ItemList {
 

@@ -13,4 +13,4 @@
 ////}|]
 
 const [rDef, ...ranges] = test.ranges();
-verify.renameLocations(ranges[0], { findInStrings: true, findInComments: true, ranges });
+verify.baselineRename(ranges[0], { findInStrings: true, findInComments: true });

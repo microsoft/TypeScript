@@ -12,16 +12,16 @@ export const value = provider.Enum.Value1;
 
 //// [provider.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Enum = void 0;
 var Enum;
 (function (Enum) {
     Enum[Enum["Value1"] = 0] = "Value1";
     Enum[Enum["Value2"] = 1] = "Value2";
-})(Enum = exports.Enum || (exports.Enum = {}));
+})(Enum || (exports.Enum = Enum = {}));
 //// [consumer.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.value = void 0;
 var provider = require("./provider");
 exports.value = provider.Enum.Value1;

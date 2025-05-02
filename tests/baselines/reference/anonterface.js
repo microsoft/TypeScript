@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anonterface.ts] ////
+
 //// [anonterface.ts]
 module M {
     export class C {

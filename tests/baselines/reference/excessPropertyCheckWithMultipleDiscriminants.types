@@ -1,141 +1,428 @@
-=== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts] ////
+
+=== excessPropertyCheckWithMultipleDiscriminants.ts ===
 // Repro from #32657
 
 interface Base<T> {
     value: T;
 >value : T
+>      : ^
 }
 
 interface Int extends Base<number> {
     type: "integer";
 >type : "integer"
+>     : ^^^^^^^^^
 
     multipleOf?: number;
 >multipleOf : number
+>           : ^^^^^^
 }
 
 interface Float extends Base<number> {
     type: "number";
 >type : "number"
+>     : ^^^^^^^^
 }
 
 interface Str extends Base<string> {
     type: "string";
 >type : "string"
+>     : ^^^^^^^^
 
     format?: string;
 >format : string
+>       : ^^^^^^
 }
 
 interface Bool extends Base<boolean> {
     type: "boolean";
 >type : "boolean"
+>     : ^^^^^^^^^
 }
 
 type Primitive = Int | Float | Str | Bool;
->Primitive : Int | Float | Str | Bool
+>Primitive : Primitive
+>          : ^^^^^^^^^
 
 const foo: Primitive = {
 >foo : Primitive
+>    : ^^^^^^^^^
 >{    type: "number",    value: 10,    multipleOf: 5, // excess property    format: "what?"} : { type: "number"; value: number; multipleOf: number; format: string; }
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: "number",
 >type : "number"
+>     : ^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     value: 10,
 >value : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
     multipleOf: 5, // excess property
 >multipleOf : number
+>           : ^^^^^^
 >5 : 5
+>  : ^
 
     format: "what?"
 >format : string
+>       : ^^^^^^
 >"what?" : "what?"
+>        : ^^^^^^^
 }
 
 
 type DisjointDiscriminants = { p1: 'left'; p2: true; p3: number } | { p1: 'right'; p2: false; p4: string } | { p1: 'left'; p2: boolean };
->DisjointDiscriminants : { p1: 'left'; p2: true; p3: number; } | { p1: 'right'; p2: false; p4: string; } | { p1: 'left'; p2: boolean; }
+>DisjointDiscriminants : DisjointDiscriminants
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >p1 : "left"
+>   : ^^^^^^
 >p2 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 >p3 : number
+>   : ^^^^^^
 >p1 : "right"
+>   : ^^^^^^^
 >p2 : false
+>   : ^^^^^
 >false : false
+>      : ^^^^^
 >p4 : string
+>   : ^^^^^^
 >p1 : "left"
+>   : ^^^^^^
 >p2 : boolean
+>   : ^^^^^^^
 
 // This has excess error because variant three is the only applicable case.
 const a: DisjointDiscriminants = {
 >a : DisjointDiscriminants
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >{    p1: 'left',    p2: false,    p3: 42,    p4: "hello"} : { p1: "left"; p2: false; p3: number; p4: string; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     p1: 'left',
 >p1 : "left"
+>   : ^^^^^^
 >'left' : "left"
+>       : ^^^^^^
 
     p2: false,
 >p2 : false
+>   : ^^^^^
 >false : false
+>      : ^^^^^
 
     p3: 42,
 >p3 : number
+>   : ^^^^^^
 >42 : 42
+>   : ^^
 
     p4: "hello"
 >p4 : string
+>   : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 };
 
-// This has no excess error because variant one and three are both applicable.
+// This has excess error because variant two is not applicable.
 const b: DisjointDiscriminants = {
 >b : DisjointDiscriminants
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >{    p1: 'left',    p2: true,    p3: 42,    p4: "hello"} : { p1: "left"; p2: true; p3: number; p4: string; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     p1: 'left',
 >p1 : "left"
+>   : ^^^^^^
 >'left' : "left"
+>       : ^^^^^^
 
     p2: true,
 >p2 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 
     p3: 42,
 >p3 : number
+>   : ^^^^^^
 >42 : 42
+>   : ^^
 
     p4: "hello"
 >p4 : string
+>   : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 };
 
 // This has excess error because variant two is the only applicable case
 const c: DisjointDiscriminants = {
 >c : DisjointDiscriminants
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >{    p1: 'right',    p2: false,    p3: 42,    p4: "hello"} : { p1: "right"; p2: false; p3: number; p4: string; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     p1: 'right',
 >p1 : "right"
+>   : ^^^^^^^
 >'right' : "right"
+>        : ^^^^^^^
 
     p2: false,
 >p2 : false
+>   : ^^^^^
 >false : false
+>      : ^^^^^
 
     p3: 42,
 >p3 : number
+>   : ^^^^^^
 >42 : 42
+>   : ^^
 
     p4: "hello"
 >p4 : string
+>   : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
+
+};
+
+// Repro from #51873
+
+interface Common {
+    type: "A" | "B" | "C" | "D";
+>type : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+
+    n: number;
+>n : number
+>  : ^^^^^^
+}
+interface A {
+    type: "A";
+>type : "A"
+>     : ^^^
+
+    a?: number;
+>a : number
+>  : ^^^^^^
+}
+interface B {
+    type: "B";
+>type : "B"
+>     : ^^^
+
+    b?: number;
+>b : number
+>  : ^^^^^^
+}
+
+type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
+>CommonWithOverlappingOptionals : CommonWithOverlappingOptionals
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Should reject { b } because reduced to Common | (Common & A)
+const c1: CommonWithOverlappingOptionals = {
+>c1 : CommonWithOverlappingOptionals
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    type: "A",    n: 1,    a: 1,    b: 1  // excess property} : { type: "A"; n: number; a: number; b: number; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: "A",
+>type : "A"
+>     : ^^^
+>"A" : "A"
+>    : ^^^
+
+    n: 1,
+>n : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    a: 1,
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    b: 1  // excess property
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+type CommonWithDisjointOverlappingOptionals = Common | A | B;
+>CommonWithDisjointOverlappingOptionals : CommonWithDisjointOverlappingOptionals
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Should still reject { b } because reduced to Common | A, even though these are now disjoint
+const c2: CommonWithDisjointOverlappingOptionals = {
+>c2 : CommonWithDisjointOverlappingOptionals
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    type: "A",    n: 1,    a: 1,    b: 1  // excess property} : { type: "A"; n: number; a: number; b: number; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: "A",
+>type : "A"
+>     : ^^^
+>"A" : "A"
+>    : ^^^
+
+    n: 1,
+>n : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    a: 1,
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    b: 1  // excess property
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+// Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
+
+export type BaseAttribute<T> = {
+>BaseAttribute : BaseAttribute<T>
+>              : ^^^^^^^^^^^^^^^^
+
+    type?: string | undefined;
+>type : string
+>     : ^^^^^^
+
+    required?: boolean | undefined;
+>required : boolean
+>         : ^^^^^^^
+
+    defaultsTo?: T | undefined;
+>defaultsTo : T
+>           : ^
+
+};
+
+export type Attribute =
+>Attribute : Attribute
+>          : ^^^^^^^^^
+
+    | string
+    | StringAttribute
+    | NumberAttribute
+    | OneToOneAttribute
+
+export type Attribute2 =
+>Attribute2 : Attribute2
+>           : ^^^^^^^^^^
+
+    | string
+    | StringAttribute
+    | NumberAttribute
+
+export type StringAttribute = BaseAttribute<string> & {
+>StringAttribute : StringAttribute
+>                : ^^^^^^^^^^^^^^^
+
+    type: 'string';
+>type : "string"
+>     : ^^^^^^^^
+
+};
+
+export type NumberAttribute = BaseAttribute<number> & {
+>NumberAttribute : NumberAttribute
+>                : ^^^^^^^^^^^^^^^
+
+    type: 'number';
+>type : "number"
+>     : ^^^^^^^^
+
+    autoIncrement?: boolean | undefined;
+>autoIncrement : boolean
+>              : ^^^^^^^
+
+};
+
+export type OneToOneAttribute = BaseAttribute<any> & {
+>OneToOneAttribute : OneToOneAttribute
+>                  : ^^^^^^^^^^^^^^^^^
+
+    model: string;
+>model : string
+>      : ^^^^^^
+
+};
+
+// both should error due to excess properties
+const attributes: Attribute = {
+>attributes : Attribute
+>           : ^^^^^^^^^
+>{    type: 'string',    autoIncrement: true,    required: true,} : { type: "string"; autoIncrement: boolean; required: true; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: 'string',
+>type : "string"
+>     : ^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+    autoIncrement: true,
+>autoIncrement : boolean
+>              : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    required: true,
+>required : true
+>         : ^^^^
+>true : true
+>     : ^^^^
+
+};
+
+const attributes2: Attribute2 = {
+>attributes2 : Attribute2
+>            : ^^^^^^^^^^
+>{    type: 'string',    autoIncrement: true,    required: true,} : { type: "string"; autoIncrement: boolean; required: true; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: 'string',
+>type : "string"
+>     : ^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+    autoIncrement: true,
+>autoIncrement : boolean
+>              : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    required: true,
+>required : true
+>         : ^^^^
+>true : true
+>     : ^^^^
 
 };
 

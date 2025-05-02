@@ -1,176 +1,278 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts] ////
+
+=== memberFunctionsWithPrivateOverloads.ts ===
 class C {
 >C : C
+>  : ^
 
     private foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     private foo(x: number, y: string);
 >foo : { (x: number): any; (x: number, y: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     private foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     private bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
+>  : ^^^^
 
     private bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     private bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     private bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     private static foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     private static foo(x: number, y: string);
 >foo : { (x: number): any; (x: number, y: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     private static foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     private static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
+>  : ^^^^
 
     private static bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     private static bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     private static bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     private foo(x: number);
 >foo : { (x: number): any; (x: T, y: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     private foo(x: T, y: T);
 >foo : { (x: number): any; (x: T, y: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 
     private foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: T, y: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     private bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+>bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : "hi"
+>  : ^^^^
 
     private bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     private bar(x: T, y: T);
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 
     private bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     private static foo(x: number);
 >foo : { (x: number): any; (x: number, y: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     private static foo(x: number, y: number);
 >foo : { (x: number): any; (x: number, y: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     private static foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     private static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: number): any; }
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
+>  : ^^^^
 
     private static bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     private static bar(x: number, y: number);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     private static bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var r = c.foo(1); // error
 >r : any
+>  : ^^^
 >c.foo(1) : any
+>         : ^^^
 >c.foo : { (x: number): any; (x: number, y: string): any; }
+>      : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >c : C
+>  : ^
 >foo : { (x: number): any; (x: number, y: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 
 var d: D<number>;
 >d : D<number>
+>  : ^^^^^^^^^
 
 var r2 = d.foo(2); // error
 >r2 : any
+>   : ^^^
 >d.foo(2) : any
+>         : ^^^
 >d.foo : { (x: number): any; (x: number, y: number): any; }
+>      : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >d : D<number>
+>  : ^^^^^^^^^
 >foo : { (x: number): any; (x: number, y: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 var r3 = C.foo(1); // error
 >r3 : any
+>   : ^^^
 >C.foo(1) : any
+>         : ^^^
 >C.foo : { (x: number): any; (x: number, y: string): any; }
+>      : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >foo : { (x: number): any; (x: number, y: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 
 var r4 = D.bar(''); // error
 >r4 : any
+>   : ^^^
 >D.bar('') : any
+>          : ^^^
 >D.bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
+>      : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >'' : ""
+>   : ^^
 

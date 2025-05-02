@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts(29,13): error TS2322: Type 'string | number' is not assignable to type 'number'.
+typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts(29,13): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts (1 errors) ====
+==== typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts (1 errors) ====
     // #31995
     type State = {
         type: "numberVariant";

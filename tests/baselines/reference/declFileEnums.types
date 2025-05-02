@@ -1,89 +1,127 @@
-=== tests/cases/compiler/declFileEnums.ts ===
+//// [tests/cases/compiler/declFileEnums.ts] ////
+
+=== declFileEnums.ts ===
 enum e1 {
 >e1 : e1
+>   : ^^
 
     a,
 >a : e1.a
+>  : ^^^^
 
     b,
 >b : e1.b
+>  : ^^^^
 
     c
 >c : e1.c
+>  : ^^^^
 }
 
 enum e2 {
 >e2 : e2
+>   : ^^
 
     a = 10,
->a : e2
+>a : e2.a
+>  : ^^^^
 >10 : 10
+>   : ^^
 
     b = a + 2,
->b : e2
+>b : e2.b
+>  : ^^^^
 >a + 2 : number
->a : e2
+>      : ^^^^^^
+>a : e2.a
+>  : ^^^^
 >2 : 2
+>  : ^
 
     c = 10,
->c : e2
+>c : e2.a
+>  : ^^^^
 >10 : 10
+>   : ^^
 }
 
 enum e3 {
 >e3 : e3
+>   : ^^
 
     a = 10,
->a : e3
+>a : e3.a
+>  : ^^^^
 >10 : 10
+>   : ^^
 
     b = Math.PI,
->b : e3
+>b : e3.b
+>  : ^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 
     c = a + 3
->c : e3
+>c : e3.c
+>  : ^^^^
 >a + 3 : number
->a : e3
+>      : ^^^^^^
+>a : e3.a
+>  : ^^^^
 >3 : 3
+>  : ^
 }
 
 enum e4 {
 >e4 : e4
+>   : ^^
 
     a,
 >a : e4.a
+>  : ^^^^
 
     b,
 >b : e4.b
+>  : ^^^^
 
     c,
 >c : e4.c
+>  : ^^^^
 
     d = 10,
 >d : e4.d
+>  : ^^^^
 >10 : 10
+>   : ^^
 
     e
 >e : e4.e
+>  : ^^^^
 }
 
 enum e5 {
 >e5 : e5
+>   : ^^
 
     "Friday",
 >"Friday" : e5.Friday
+>         : ^^^^^^^^^
 
     "Saturday",
 >"Saturday" : e5.Saturday
+>           : ^^^^^^^^^^^
 
     "Sunday",
 >"Sunday" : e5.Sunday
+>         : ^^^^^^^^^
 
     "Weekend days"
 >"Weekend days" : (typeof e5)["Weekend days"]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 

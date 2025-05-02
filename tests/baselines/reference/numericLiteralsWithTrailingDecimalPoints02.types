@@ -1,167 +1,273 @@
-=== tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts ===
+//// [tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts] ////
+
+=== numericLiteralsWithTrailingDecimalPoints02.ts ===
 1..toString();
 >1..toString() : string
+>              : ^^^^^^
 >1..toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
 >1. : 1
+>   : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 1.0.toString();
 >1.0.toString() : string
+>               : ^^^^^^
 >1.0.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >1.0 : 1
+>    : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 1.toString();
 >1. : 1
+>   : ^
 >toString() : any
+>           : ^^^
 >toString : any
+>         : ^^^
 
 1.+2.0 + 3. ;
 >1.+2.0 + 3. : number
+>            : ^^^^^^
 >1.+2.0 : number
+>       : ^^^^^^
 >1. : 1
+>   : ^
 >2.0 : 2
+>    : ^
 >3. : 3
+>   : ^
 
 // Preserve whitespace where important for JS compatibility
 var i: number = 1;
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var test1 = i.toString();
 >test1 : string
+>      : ^^^^^^
 >i.toString() : string
+>             : ^^^^^^
 >i.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >i : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test2 = 2.toString();
 >test2 : number
+>      : ^^^^^^
 >2. : 2
+>   : ^
 >toString : any
+>         : ^^^
 >() : any
+>   : ^^^
 > : any
+> : ^^^
 
 var test3 = 3 .toString();
 >test3 : string
+>      : ^^^^^^
 >3 .toString() : string
+>              : ^^^^^^
 >3 .toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
 >3 : 3
+>  : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test4 = 3    .toString();
 >test4 : string
+>      : ^^^^^^
 >3    .toString() : string
+>                 : ^^^^^^
 >3    .toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >3 : 3
+>  : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test5 = 3	.toString();
 >test5 : string
+>      : ^^^^^^
 >3	.toString() : string
+>              : ^^^^^^
 >3	.toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
 >3 : 3
+>  : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test6 = 3.['toString']();
 >test6 : string
+>      : ^^^^^^
 >3.['toString']() : string
+>                 : ^^^^^^
 >3.['toString'] : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >3. : 3
+>   : ^
 >'toString' : "toString"
+>           : ^^^^^^^^^^
 
 var test7 = 3
 >test7 : string
+>      : ^^^^^^
 >3.toString() : string
+>             : ^^^^^^
 >3.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >3 : 3
+>  : ^
 
 .toString();
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test8 = new Number(4).toString();
 >test8 : string
+>      : ^^^^^^
 >new Number(4).toString() : string
+>                         : ^^^^^^
 >new Number(4).toString : (radix?: number) => string
+>                       : ^     ^^^      ^^^^^      
 >new Number(4) : Number
+>              : ^^^^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >4 : 4
+>  : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test9 = 3. + 3.;
 >test9 : number
+>      : ^^^^^^
 >3. + 3. : number
+>        : ^^^^^^
 >3. : 3
+>   : ^
 >3. : 3
+>   : ^
 
 var test10 = 0 /* comment */.toString();
 >test10 : string
+>       : ^^^^^^
 >0 /* comment */.toString() : string
+>                           : ^^^^^^
 >0 /* comment */.toString : (radix?: number) => string
+>                         : ^     ^^^      ^^^^^      
 >0 : 0
+>  : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test11 = 3. /* comment */ .toString();
 >test11 : string
+>       : ^^^^^^
 >3. /* comment */ .toString() : string
+>                             : ^^^^^^
 >3. /* comment */ .toString : (radix?: number) => string
+>                           : ^     ^^^      ^^^^^      
 >3. : 3
+>   : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test12 = 3
 >test12 : string
+>       : ^^^^^^
 >3  /* comment */ .toString() : string
+>                             : ^^^^^^
 >3  /* comment */ .toString : (radix?: number) => string
+>                           : ^     ^^^      ^^^^^      
 >3 : 3
+>  : ^
 
   /* comment */ .toString();
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test13 = 3.
 >test13 : string
+>       : ^^^^^^
 >3.  /* comment */ .toString() : string
+>                              : ^^^^^^
 >3.  /* comment */ .toString : (radix?: number) => string
+>                            : ^     ^^^      ^^^^^      
 >3. : 3
+>   : ^
 
   /* comment */ .toString();
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test14 = 3
 >test14 : string
+>       : ^^^^^^
 >3    // comment    .toString() : string
+>                               : ^^^^^^
 >3    // comment    .toString : (radix?: number) => string
+>                             : ^     ^^^      ^^^^^      
 >3 : 3
+>  : ^
 
     // comment
     .toString();
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test15 = 3.
 >test15 : string
+>       : ^^^^^^
 >3.    // comment    .toString() : string
+>                                : ^^^^^^
 >3.    // comment    .toString : (radix?: number) => string
+>                              : ^     ^^^      ^^^^^      
 >3. : 3
+>   : ^
 
     // comment
     .toString();
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test16 = 3  // comment time
 >test16 : string
+>       : ^^^^^^
 >3  // comment time    .toString() : string
+>                                  : ^^^^^^
 >3  // comment time    .toString : (radix?: number) => string
+>                                : ^     ^^^      ^^^^^      
 >3 : 3
+>  : ^
 
     .toString();
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var test17 = 3. // comment time again
 >test17 : string
+>       : ^^^^^^
 >3. // comment time again    .toString() : string
+>                                        : ^^^^^^
 >3. // comment time again    .toString : (radix?: number) => string
+>                                      : ^     ^^^      ^^^^^      
 >3. : 3
+>   : ^
 
     .toString();
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 

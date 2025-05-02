@@ -1,100 +1,127 @@
-=== tests/cases/conformance/types/primitives/null/validNullAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/null/validNullAssignments.ts] ////
+
+=== validNullAssignments.ts ===
 var a: number = null;
 >a : number
->null : null
+>  : ^^^^^^
 
 var b: boolean = null;
 >b : boolean
->null : null
+>  : ^^^^^^^
 
 var c: string = null;
 >c : string
->null : null
+>  : ^^^^^^
 
 var d: void = null;
 >d : void
->null : null
+>  : ^^^^
 
 var e: typeof undefined = null;
 >e : any
+>  : ^^^
 >undefined : undefined
->null : null
+>          : ^^^^^^^^^
 
 e = null; // ok
 >e = null : null
+>         : ^^^^
 >e : any
->null : null
+>  : ^^^
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 E.A = null; // error
 >E.A = null : null
+>           : ^^^^
 >E.A : any
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : any
->null : null
+>  : ^^^
 
 class C { foo: string }
 >C : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 var f: C;
 >f : C
+>  : ^
 
 f = null; // ok
 >f = null : null
+>         : ^^^^
 >f : C
->null : null
+>  : ^
 
 C = null; // error
 >C = null : null
+>         : ^^^^
 >C : any
->null : null
+>  : ^^^
 
 interface I { foo: string }
 >foo : string
+>    : ^^^^^^
 
 var g: I;
 >g : I
+>  : ^
 
 g = null; // ok
 >g = null : null
+>         : ^^^^
 >g : I
->null : null
+>  : ^
 
 I = null; // error
 >I = null : null
+>         : ^^^^
 >I : any
->null : null
+>  : ^^^
 
 module M { export var x = 1; }
 >M : typeof M
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 M = null; // error
 >M = null : null
+>         : ^^^^
 >M : any
->null : null
+>  : ^^^
 
 var h: { f(): void } = null;
 >h : { f(): void; }
+>  : ^^^^^^^    ^^^
 >f : () => void
->null : null
+>  : ^^^^^^    
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
     a = null;
 >a = null : null
+>         : ^^^^
 >a : T
->null : null
+>  : ^
 }
 i = null; // error
 >i = null : null
+>         : ^^^^
 >i : any
->null : null
+>  : ^^^
 

@@ -1,52 +1,78 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/classExtendsAcrossFiles.ts] ////
+
+=== a.ts ===
 import { b } from './b';
 >b : { f: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 
 export const a = {
 >a : { f: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 >{    f: () => {        class A { }        class B extends A { }        b.f();    }} : { f: () => void; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^
 
     f: () => {
 >f : () => void
+>  : ^^^^^^^^^^
 >() => {        class A { }        class B extends A { }        b.f();    } : () => void
+>                                                                           : ^^^^^^^^^^
 
         class A { }
 >A : A
+>  : ^
 
         class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 
         b.f();
 >b.f() : void
+>      : ^^^^
 >b.f : () => void
+>    : ^^^^^^^^^^
 >b : { f: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
     }
 };
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { a } from './a';
 >a : { f: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 
 export const b = {
 >b : { f: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 >{    f: () => {        class A { }        class B extends A { }        a.f();    }} : { f: () => void; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^
 
     f: () => {
 >f : () => void
+>  : ^^^^^^^^^^
 >() => {        class A { }        class B extends A { }        a.f();    } : () => void
+>                                                                           : ^^^^^^^^^^
 
         class A { }
 >A : A
+>  : ^
 
         class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 
         a.f();
 >a.f() : void
+>      : ^^^^
 >a.f : () => void
+>    : ^^^^^^^^^^
 >a : { f: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
     }
 };

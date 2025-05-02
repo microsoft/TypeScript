@@ -1,17 +1,27 @@
-=== tests/cases/compiler/callConstructAssignment.ts ===
+//// [tests/cases/compiler/callConstructAssignment.ts] ////
+
+=== callConstructAssignment.ts ===
 var foo:{ ( ):void; }
 >foo : () => void
+>    : ^^^^^^    
 
 var bar:{ new ( ):any; }
 >bar : new () => any
+>    : ^^^^^^^^^^   
 
 foo = bar; // error
 >foo = bar : new () => any
+>          : ^^^^^^^^^^   
 >foo : () => void
+>    : ^^^^^^    
 >bar : new () => any
+>    : ^^^^^^^^^^   
 
 bar = foo; // error
 >bar = foo : () => void
+>          : ^^^^^^    
 >bar : new () => any
+>    : ^^^^^^^^^^   
 >foo : () => void
+>    : ^^^^^^    
 

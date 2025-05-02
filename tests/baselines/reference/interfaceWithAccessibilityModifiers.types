@@ -1,12 +1,17 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessibilityModifiers.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessibilityModifiers.ts] ////
+
+=== interfaceWithAccessibilityModifiers.ts ===
 // Errors
 interface Foo {
     public a: any;
 >a : any
+>  : ^^^
 
     private b: any;
 >b : any
+>  : ^^^
 
     protected c: any;
 >c : any
+>  : ^^^
 }

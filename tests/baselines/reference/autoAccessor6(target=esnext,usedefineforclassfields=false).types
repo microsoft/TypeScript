@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor6.ts] ////
+
+=== autoAccessor6.ts ===
+class C1 {
+>C1 : C1
+>   : ^^
+
+    accessor a: any;
+>a : any
+>  : ^^^
+}
+
+class C2 extends C1 {
+>C2 : C2
+>   : ^^
+>C1 : C1
+>   : ^^
+
+    a = 1;
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+class C3 extends C1 {
+>C3 : C3
+>   : ^^
+>C1 : C1
+>   : ^^
+
+    get a() { return super.a; }
+>a : any
+>  : ^^^
+>super.a : any
+>        : ^^^
+>super : C1
+>      : ^^
+>a : any
+>  : ^^^
+}
+

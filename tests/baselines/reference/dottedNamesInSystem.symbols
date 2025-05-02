@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dottedNamesInSystem.ts ===
+//// [tests/cases/compiler/dottedNamesInSystem.ts] ////
+
+=== dottedNamesInSystem.ts ===
 export namespace A.B.C {
 >A : Symbol(A, Decl(dottedNamesInSystem.ts, 0, 0))
 >B : Symbol(B, Decl(dottedNamesInSystem.ts, 0, 19))

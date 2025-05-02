@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors2.ts] ////
+
 //// [propertyOverridesAccessors2.ts]
 class Base {
   get x() { return 2; }

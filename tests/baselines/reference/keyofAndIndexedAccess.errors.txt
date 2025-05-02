@@ -1,12 +1,21 @@
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(316,5): error TS2322: Type 'T' is not assignable to type '{}'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(317,5): error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
+keyofAndIndexedAccess.ts(205,24): error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
+  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
+    Type 'T[string]' is not assignable to type 'object'.
+keyofAndIndexedAccess.ts(211,24): error TS2322: Type 'T[K]' is not assignable to type 'object'.
+  Type 'T[keyof T]' is not assignable to type 'object'.
+    Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
+      Type 'T[string]' is not assignable to type 'object'.
+keyofAndIndexedAccess.ts(316,5): error TS2322: Type 'T' is not assignable to type '{}'.
+keyofAndIndexedAccess.ts(317,5): error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
     Type 'T[string]' is not assignable to type '{}'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to type '{}'.
+keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to type '{}'.
   Type 'T[keyof T]' is not assignable to type '{}'.
+    Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
+      Type 'T[string]' is not assignable to type '{}'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts (3 errors) ====
+==== keyofAndIndexedAccess.ts (5 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -212,12 +221,21 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(318,5): error TS232
         for (let s in obj[key]) {
         }
         const b = "foo" in obj[key];
+                           ~~~~~~~~
+!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
+!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'object'.
     }
     
     function f55<T, K extends keyof T>(obj: T, key: K) {
         for (let s in obj[key]) {
         }
         const b = "foo" in obj[key];
+                           ~~~~~~~~
+!!! error TS2322: Type 'T[K]' is not assignable to type 'object'.
+!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'object'.
+!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type 'object'.
     }
     
     function f60<T>(source: T, target: T) {
@@ -325,7 +343,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(318,5): error TS232
         a = x;
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{}'.
-!!! related TS2208 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts:314:14: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 keyofAndIndexedAccess.ts:314:14: This type parameter might need an `extends {}` constraint.
         a = y;
         ~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
@@ -335,6 +353,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(318,5): error TS232
         ~
 !!! error TS2322: Type 'T[K]' is not assignable to type '{}'.
 !!! error TS2322:   Type 'T[keyof T]' is not assignable to type '{}'.
+!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type '{}'.
     }
     
     function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {

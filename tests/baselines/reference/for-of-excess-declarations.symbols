@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of-excess-declarations.ts] ////
+
+=== for-of-excess-declarations.ts ===
+for (const a, { [b]: c} of [1]) {
+>a : Symbol(a, Decl(for-of-excess-declarations.ts, 0, 10))
+>c : Symbol(c, Decl(for-of-excess-declarations.ts, 0, 15))
+
+}

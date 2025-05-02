@@ -1,33 +1,33 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(18,1): error TS2741: Property 'foo1' is missing in type 'E' but required in type 'D'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(19,1): error TS2322: Type 'D | E' is not assignable to type 'D'.
-  Type 'E' is not assignable to type 'D'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(20,1): error TS2741: Property 'foo2' is missing in type 'D' but required in type 'E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(22,1): error TS2322: Type 'D | E' is not assignable to type 'E'.
-  Type 'D' is not assignable to type 'E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(24,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(25,1): error TS2322: Type 'string | number' is not assignable to type 'number'.
+unionTypesAssignability.ts(18,1): error TS2741: Property 'foo1' is missing in type 'E' but required in type 'D'.
+unionTypesAssignability.ts(19,1): error TS2322: Type 'D | E' is not assignable to type 'D'.
+  Property 'foo1' is missing in type 'E' but required in type 'D'.
+unionTypesAssignability.ts(20,1): error TS2741: Property 'foo2' is missing in type 'D' but required in type 'E'.
+unionTypesAssignability.ts(22,1): error TS2322: Type 'D | E' is not assignable to type 'E'.
+  Property 'foo2' is missing in type 'D' but required in type 'E'.
+unionTypesAssignability.ts(24,1): error TS2322: Type 'string' is not assignable to type 'number'.
+unionTypesAssignability.ts(25,1): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(26,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(28,1): error TS2322: Type 'string | number' is not assignable to type 'string'.
+unionTypesAssignability.ts(26,1): error TS2322: Type 'number' is not assignable to type 'string'.
+unionTypesAssignability.ts(28,1): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(31,1): error TS2741: Property 'foo1' is missing in type 'C' but required in type 'D'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(32,1): error TS2741: Property 'foo2' is missing in type 'C' but required in type 'E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(33,1): error TS2322: Type 'C' is not assignable to type 'D | E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(35,1): error TS2322: Type 'D' is not assignable to type 'E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(37,1): error TS2322: Type 'E' is not assignable to type 'D'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(43,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
+unionTypesAssignability.ts(31,1): error TS2741: Property 'foo1' is missing in type 'C' but required in type 'D'.
+unionTypesAssignability.ts(32,1): error TS2741: Property 'foo2' is missing in type 'C' but required in type 'E'.
+unionTypesAssignability.ts(33,1): error TS2322: Type 'C' is not assignable to type 'D | E'.
+unionTypesAssignability.ts(35,1): error TS2741: Property 'foo2' is missing in type 'D' but required in type 'E'.
+unionTypesAssignability.ts(37,1): error TS2741: Property 'foo1' is missing in type 'E' but required in type 'D'.
+unionTypesAssignability.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
+unionTypesAssignability.ts(43,1): error TS2322: Type 'string' is not assignable to type 'number'.
+unionTypesAssignability.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(65,5): error TS2322: Type 'T' is not assignable to type 'U'.
+unionTypesAssignability.ts(65,5): error TS2322: Type 'T' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
+unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
+unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts (19 errors) ====
+==== unionTypesAssignability.ts (19 errors) ====
     var unionNumberString: number | string;
     class C { }
     class D extends C { foo1() { } }
@@ -48,20 +48,22 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     d = e;
     ~
 !!! error TS2741: Property 'foo1' is missing in type 'E' but required in type 'D'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:21: 'foo1' is declared here.
+!!! related TS2728 unionTypesAssignability.ts:3:21: 'foo1' is declared here.
     d = unionDE; // error e is not assignable to d
     ~
 !!! error TS2322: Type 'D | E' is not assignable to type 'D'.
-!!! error TS2322:   Type 'E' is not assignable to type 'D'.
+!!! error TS2322:   Property 'foo1' is missing in type 'E' but required in type 'D'.
+!!! related TS2728 unionTypesAssignability.ts:3:21: 'foo1' is declared here.
     e = d;
     ~
 !!! error TS2741: Property 'foo2' is missing in type 'D' but required in type 'E'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:21: 'foo2' is declared here.
+!!! related TS2728 unionTypesAssignability.ts:4:21: 'foo2' is declared here.
     e = e;
     e = unionDE; // error d is not assignable to e
     ~
 !!! error TS2322: Type 'D | E' is not assignable to type 'E'.
-!!! error TS2322:   Type 'D' is not assignable to type 'E'.
+!!! error TS2322:   Property 'foo2' is missing in type 'D' but required in type 'E'.
+!!! related TS2728 unionTypesAssignability.ts:4:21: 'foo2' is declared here.
     num = num;
     num = str;
     ~~~
@@ -83,22 +85,24 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     d = c;
     ~
 !!! error TS2741: Property 'foo1' is missing in type 'C' but required in type 'D'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:21: 'foo1' is declared here.
+!!! related TS2728 unionTypesAssignability.ts:3:21: 'foo1' is declared here.
     e = c;
     ~
 !!! error TS2741: Property 'foo2' is missing in type 'C' but required in type 'E'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:21: 'foo2' is declared here.
+!!! related TS2728 unionTypesAssignability.ts:4:21: 'foo2' is declared here.
     unionDE = c; // error since C is not assinable to either D or E
     ~~~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'D | E'.
     d = d;
     e = d;
     ~
-!!! error TS2322: Type 'D' is not assignable to type 'E'.
+!!! error TS2741: Property 'foo2' is missing in type 'D' but required in type 'E'.
+!!! related TS2728 unionTypesAssignability.ts:4:21: 'foo2' is declared here.
     unionDE = d; // ok
     d = e;
     ~
-!!! error TS2322: Type 'E' is not assignable to type 'D'.
+!!! error TS2741: Property 'foo1' is missing in type 'E' but required in type 'D'.
+!!! related TS2728 unionTypesAssignability.ts:3:21: 'foo1' is declared here.
     e = e;
     unionDE = e; // ok
     num = num;
@@ -133,12 +137,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17: This type parameter might need an `extends T` constraint.
+!!! related TS2208 unionTypesAssignability.ts:63:17: This type parameter might need an `extends T` constraint.
         u = t; // error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14: This type parameter might need an `extends U` constraint.
+!!! related TS2208 unionTypesAssignability.ts:63:14: This type parameter might need an `extends U` constraint.
         var x : T | U;
         x = t; // ok
         x = u; // ok
@@ -147,11 +151,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17: This type parameter might need an `extends T` constraint.
+!!! related TS2208 unionTypesAssignability.ts:63:17: This type parameter might need an `extends T` constraint.
         u = x; // error T not assignable to U
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14: This type parameter might need an `extends U` constraint.
+!!! related TS2208 unionTypesAssignability.ts:63:14: This type parameter might need an `extends U` constraint.
     }
     

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessTypeConstraints.ts ===
+//// [tests/cases/compiler/indexedAccessTypeConstraints.ts] ////
+
+=== indexedAccessTypeConstraints.ts ===
 // Repro from #14557
 
 interface IData<T> {

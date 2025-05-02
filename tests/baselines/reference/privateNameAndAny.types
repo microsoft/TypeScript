@@ -1,95 +1,145 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts] ////
+
+=== privateNameAndAny.ts ===
 class A {
 >A : A
+>  : ^
 
     #foo = true;
 >#foo : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     static #baz = 10;
 >#baz : number
+>     : ^^^^^^
 >10 : 10
+>   : ^^
 
     static #m() {}
 >#m : () => void
+>   : ^^^^^^^^^^
 
     method(thing: any) {
 >method : (thing: any) => void
+>       : ^     ^^   ^^^^^^^^^
 >thing : any
+>      : ^^^
 
         thing.#foo; // OK
 >thing.#foo : any
+>           : ^^^
 >thing : any
+>      : ^^^
 
         thing.#m();
 >thing.#m() : any
+>           : ^^^
 >thing.#m : any
+>         : ^^^
 >thing : any
+>      : ^^^
 
         thing.#baz;
 >thing.#baz : any
+>           : ^^^
 >thing : any
+>      : ^^^
 
         thing.#bar; // Error
 >thing.#bar : any
+>           : ^^^
 >thing : any
+>      : ^^^
 
         thing.#foo();
 >thing.#foo() : any
+>             : ^^^
 >thing.#foo : any
+>           : ^^^
 >thing : any
+>      : ^^^
     }
     methodU(thing: unknown) {
 >methodU : (thing: unknown) => void
+>        : ^     ^^       ^^^^^^^^^
 >thing : unknown
+>      : ^^^^^^^
 
         thing.#foo;
 >thing.#foo : any
+>           : ^^^
 >thing : unknown
+>      : ^^^^^^^
 
         thing.#m();
 >thing.#m() : any
+>           : ^^^
 >thing.#m : any
+>         : ^^^
 >thing : unknown
+>      : ^^^^^^^
 
         thing.#baz;
 >thing.#baz : any
+>           : ^^^
 >thing : unknown
+>      : ^^^^^^^
 
         thing.#bar;
 >thing.#bar : any
+>           : ^^^
 >thing : unknown
+>      : ^^^^^^^
 
         thing.#foo();
 >thing.#foo() : any
+>             : ^^^
 >thing.#foo : any
+>           : ^^^
 >thing : unknown
+>      : ^^^^^^^
     }
     methodN(thing: never) {
 >methodN : (thing: never) => void
+>        : ^     ^^     ^^^^^^^^^
 >thing : never
+>      : ^^^^^
 
         thing.#foo;
 >thing.#foo : any
+>           : ^^^
 >thing : never
+>      : ^^^^^
 
         thing.#m();
 >thing.#m() : any
+>           : ^^^
 >thing.#m : any
+>         : ^^^
 >thing : never
+>      : ^^^^^
 
         thing.#baz;
 >thing.#baz : any
+>           : ^^^
 >thing : never
+>      : ^^^^^
 
         thing.#bar;
 >thing.#bar : any
+>           : ^^^
 >thing : never
+>      : ^^^^^
 
         thing.#foo();
 >thing.#foo() : any
+>             : ^^^
 >thing.#foo : any
+>           : ^^^
 >thing : never
+>      : ^^^^^
     }
 };
 

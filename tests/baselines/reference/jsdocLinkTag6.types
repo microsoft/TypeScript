@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag6.ts] ////
+
+=== /a.ts ===
+class A {
+>A : A
+>  : ^
+
+    foo() {}
+>foo : () => void
+>    : ^^^^^^^^^^
+}
+class B extends A {
+>B : B
+>  : ^
+>A : A
+>  : ^
+
+    /**
+     * @override {@link A.foo}
+     */
+    foo() {}
+>foo : () => void
+>    : ^^^^^^^^^^
+}
+

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts] ////
+
+=== controlFlowTypeofObject.ts ===
 declare function obj(x: object): void;
 >obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
 >x : Symbol(x, Decl(controlFlowTypeofObject.ts, 0, 21))

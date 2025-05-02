@@ -1,49 +1,74 @@
-=== tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts ===
+//// [tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts] ////
+
+=== thisInObjectLiterals.ts ===
 class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
     t: number;
 >t : number
+>  : ^^^^^^
 
     fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
         type ContainingThis = this;
 >ContainingThis : this
+>               : ^^^^
 
         //type of 'this' in an object literal is the containing scope's this
         var t = { x: this, y: this.t };
 >t : { x: this; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: this, y: this.t } : { x: this; y: number; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >this.t : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >t : number
+>  : ^^^^^^
 
         var t: { x: ContainingThis; y: number };
 >t : { x: this; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : this
+>  : ^^^^
 >y : number
+>  : ^^^^^^
     }
 }
 
 //type of 'this' in an object literal method is the type of the object literal
 var obj = {
 >obj : { f(): any; }
+>    : ^^^^^^^^^^^^^
 >{    f() {        return this.spaaace;    }} : { f(): any; }
+>                                             : ^^^^^^^^^^^^^
 
     f() {
 >f : () => any
+>  : ^^^^^^^^^
 
         return this.spaaace;
 >this.spaaace : any
+>             : ^^^
 >this : { f(): any; }
+>     : ^^^^^^^^^^^^^
 >spaaace : any
+>        : ^^^
     }
 };
 var obj: { f: () => any; };
 >obj : { f(): any; }
+>    : ^^^^^^^^^^^^^
 >f : () => any
+>  : ^^^^^^   
 

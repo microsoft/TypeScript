@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndEnum_externalmodule.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndEnum.ts] ////
+
+=== collisionExportsRequireAndEnum_externalmodule.ts ===
 export enum require { // Error
 >require : Symbol(require, Decl(collisionExportsRequireAndEnum_externalmodule.ts, 0, 0))
 
@@ -62,7 +64,7 @@ module m2 {
     }
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndEnum_globalFile.ts ===
+=== collisionExportsRequireAndEnum_globalFile.ts ===
 enum require {
 >require : Symbol(require, Decl(collisionExportsRequireAndEnum_globalFile.ts, 0, 0))
 

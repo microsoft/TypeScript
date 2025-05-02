@@ -1,72 +1,314 @@
-=== tests/cases/conformance/controlFlow/controlFlowInOperator.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowInOperator.ts] ////
+
+=== controlFlowInOperator.ts ===
 const a = 'a';
 >a : "a"
+>  : ^^^
 >'a' : "a"
+>    : ^^^
 
 const b = 'b';
 >b : "b"
+>  : ^^^
 >'b' : "b"
+>    : ^^^
 
 const d = 'd';
 >d : "d"
+>  : ^^^
 >'d' : "d"
+>    : ^^^
 
 type A = { [a]: number; };
->A : { a: number; }
+>A : A
+>  : ^
 >[a] : number
+>    : ^^^^^^
 >a : "a"
+>  : ^^^
 
 type B = { [b]: string; };
->B : { b: string; }
+>B : B
+>  : ^
 >[b] : string
+>    : ^^^^^^
 >b : "b"
+>  : ^^^
 
 declare const c: A | B;
 >c : A | B
+>  : ^^^^^
 
 if ('a' in c) {
 >'a' in c : boolean
+>         : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >c : A | B
+>  : ^^^^^
 
     c;      // A
 >c : A
+>  : ^
 
     c['a']; // number;
 >c['a'] : number
+>       : ^^^^^^
 >c : A
+>  : ^
 >'a' : "a"
+>    : ^^^
 }
 
 if ('d' in c) {
 >'d' in c : boolean
+>         : ^^^^^^^
 >'d' : "d"
+>    : ^^^
 >c : A | B
+>  : ^^^^^
 
     c; // never
->c : never
+>c : (A | B) & Record<"d", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 if (a in c) {
 >a in c : boolean
+>       : ^^^^^^^
 >a : "a"
+>  : ^^^
 >c : A | B
+>  : ^^^^^
 
     c;    // A
 >c : A
+>  : ^
 
     c[a]; // number;
 >c[a] : number
+>     : ^^^^^^
 >c : A
+>  : ^
 >a : "a"
+>  : ^^^
 }
 
 if (d in c) {
 >d in c : boolean
+>       : ^^^^^^^
 >d : "d"
+>  : ^^^
 >c : A | B
+>  : ^^^^^
 
     c; // never
->c : never
+>c : (A | B) & Record<"d", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+// repro from https://github.com/microsoft/TypeScript/issues/54790
+
+function uniqueID_54790(
+>uniqueID_54790 : (id: string | undefined, seenIDs: { [key: string]: string; }) => string
+>               : ^  ^^                  ^^       ^^                          ^^^^^      
+
+  id: string | undefined,
+>id : string
+>   : ^^^^^^
+
+  seenIDs: { [key: string]: string }
+>seenIDs : { [key: string]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+): string {
+  if (id === undefined) {
+>id === undefined : boolean
+>                 : ^^^^^^^
+>id : string
+>   : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    id = "1";
+>id = "1" : "1"
+>         : ^^^
+>id : string
+>   : ^^^^^^
+>"1" : "1"
+>    : ^^^
+  }
+  if (!(id in seenIDs)) {
+>!(id in seenIDs) : boolean
+>                 : ^^^^^^^
+>(id in seenIDs) : boolean
+>                : ^^^^^^^
+>id in seenIDs : boolean
+>              : ^^^^^^^
+>id : string
+>   : ^^^^^^
+>seenIDs : { [key: string]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return id;
+>id : string
+>   : ^^^^^^
+  }
+  for (let i = 1; i < Number.MAX_VALUE; i++) {
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>i < Number.MAX_VALUE : boolean
+>                     : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>Number.MAX_VALUE : number
+>                 : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>MAX_VALUE : number
+>          : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    const newID = `${id}-${i}`;
+>newID : string
+>      : ^^^^^^
+>`${id}-${i}` : string
+>             : ^^^^^^
+>id : string
+>   : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    if (!(newID in seenIDs)) {
+>!(newID in seenIDs) : boolean
+>                    : ^^^^^^^
+>(newID in seenIDs) : boolean
+>                   : ^^^^^^^
+>newID in seenIDs : boolean
+>                 : ^^^^^^^
+>newID : string
+>      : ^^^^^^
+>seenIDs : { [key: string]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      return newID;
+>newID : string
+>      : ^^^^^^
+    }
+  }
+  throw Error("heat death of the universe");
+>Error("heat death of the universe") : Error
+>                                    : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"heat death of the universe" : "heat death of the universe"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function uniqueID_54790_2(id: string | number, seenIDs: object) {
+>uniqueID_54790_2 : (id: string | number, seenIDs: object) => void
+>                 : ^  ^^               ^^       ^^      ^^^^^^^^^
+>id : string | number
+>   : ^^^^^^^^^^^^^^^
+>seenIDs : object
+>        : ^^^^^^
+
+  id = "a";
+>id = "a" : "a"
+>         : ^^^
+>id : string | number
+>   : ^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+  for (let i = 1; i < 3; i++) {
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>i < 3 : boolean
+>      : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    const newID = `${id}`;
+>newID : string
+>      : ^^^^^^
+>`${id}` : string
+>        : ^^^^^^
+>id : string
+>   : ^^^^^^
+
+    if (newID in seenIDs) {
+>newID in seenIDs : boolean
+>                 : ^^^^^^^
+>newID : string
+>      : ^^^^^^
+>seenIDs : object
+>        : ^^^^^^
+    }
+  }
+}
+
+function uniqueID_54790_3(id: string | number, seenIDs: object) {
+>uniqueID_54790_3 : (id: string | number, seenIDs: object) => void
+>                 : ^  ^^               ^^       ^^      ^^^^^^^^^
+>id : string | number
+>   : ^^^^^^^^^^^^^^^
+>seenIDs : object
+>        : ^^^^^^
+
+  id = "a";
+>id = "a" : "a"
+>         : ^^^
+>id : string | number
+>   : ^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+  for (let i = 1; i < 3; i++) {
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>i < 3 : boolean
+>      : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    const newID = id;
+>newID : string
+>      : ^^^^^^
+>id : string
+>   : ^^^^^^
+
+    if (newID in seenIDs) {
+>newID in seenIDs : boolean
+>                 : ^^^^^^^
+>newID : string
+>      : ^^^^^^
+>seenIDs : object
+>        : ^^^^^^
+    }
+  }
 }
 

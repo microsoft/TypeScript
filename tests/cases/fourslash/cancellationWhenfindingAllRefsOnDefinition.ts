@@ -23,17 +23,10 @@
 ////second./*2*/start();
 ////second.stop();
 
-let count = 1;
-
-checkRefs();
-
+verify.baselineFindAllReferences("1");
 cancellation.setCancelled();
-verifyOperationIsCancelled(checkRefs);
+verifyOperationIsCancelled(() => verify.baselineFindAllReferences('1'));
 
 // verify that internal state is still correct
 cancellation.resetCancelled();
-checkRefs();
-
-function checkRefs() {
-    verify.baselineFindAllReferencesMulti(count++, '1');
-}
+verify.baselineFindAllReferences("1");

@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfactionWithDefaultExport.ts] ////
+
+=== ./a.ts ===
+interface Foo {
+    a: number;
+>a : number
+>  : ^^^^^^
+}
+export default {} satisfies Foo;
+>{} satisfies Foo : {}
+>                 : ^^
+>{} : {}
+>   : ^^
+
+=== ./b.ts ===
+interface Foo {
+    a: number;
+>a : number
+>  : ^^^^^^
+}
+export default { a: 1 } satisfies Foo;
+>{ a: 1 } satisfies Foo : { a: number; }
+>                       : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+

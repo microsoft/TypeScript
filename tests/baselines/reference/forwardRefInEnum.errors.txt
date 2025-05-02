@@ -1,10 +1,10 @@
-tests/cases/compiler/forwardRefInEnum.ts(4,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-tests/cases/compiler/forwardRefInEnum.ts(5,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-tests/cases/compiler/forwardRefInEnum.ts(7,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-tests/cases/compiler/forwardRefInEnum.ts(8,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+forwardRefInEnum.ts(4,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+forwardRefInEnum.ts(5,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+forwardRefInEnum.ts(7,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+forwardRefInEnum.ts(8,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 
 
-==== tests/cases/compiler/forwardRefInEnum.ts (4 errors) ====
+==== forwardRefInEnum.ts (4 errors) ====
     enum E1 {
         // illegal case
         // forward reference to the element of the same enum

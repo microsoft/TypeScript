@@ -1,13 +1,19 @@
-=== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty2.ts ===
+//// [tests/cases/conformance/decorators/class/property/decoratorOnClassProperty2.ts] ////
+
+=== decoratorOnClassProperty2.ts ===
 declare function dec(target: any, propertyKey: string): void;
 >dec : (target: any, propertyKey: string) => void
+>    : ^      ^^   ^^           ^^      ^^^^^    
 >target : any
 >propertyKey : string
+>            : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     @dec public prop;
 >dec : (target: any, propertyKey: string) => void
+>    : ^      ^^   ^^           ^^      ^^^^^    
 >prop : any
 }

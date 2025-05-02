@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorOverloads3.ts ===
+//// [tests/cases/compiler/constructorOverloads3.ts] ////
+
+=== constructorOverloads3.ts ===
 declare class FooBase {
 >FooBase : Symbol(FooBase, Decl(constructorOverloads3.ts, 0, 0))
 

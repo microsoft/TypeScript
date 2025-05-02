@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constraintsUsedInPrototypeProperty.ts ===
+//// [tests/cases/compiler/constraintsUsedInPrototypeProperty.ts] ////
+
+=== constraintsUsedInPrototypeProperty.ts ===
 class Foo<T extends number, U, V extends string> { }
 >Foo : Symbol(Foo, Decl(constraintsUsedInPrototypeProperty.ts, 0, 0))
 >T : Symbol(T, Decl(constraintsUsedInPrototypeProperty.ts, 0, 10))

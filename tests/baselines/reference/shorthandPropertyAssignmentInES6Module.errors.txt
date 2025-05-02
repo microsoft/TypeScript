@@ -1,10 +1,10 @@
-tests/cases/compiler/test.ts(2,19): error TS2307: Cannot find module './missingModule' or its corresponding type declarations.
+test.ts(2,19): error TS2307: Cannot find module './missingModule' or its corresponding type declarations.
 
 
-==== tests/cases/compiler/existingModule.ts (0 errors) ====
+==== existingModule.ts (0 errors) ====
     export var x = 1;
     
-==== tests/cases/compiler/test.ts (1 errors) ====
+==== test.ts (1 errors) ====
     import {x} from './existingModule';
     import {foo} from './missingModule';
                       ~~~~~~~~~~~~~~~~~

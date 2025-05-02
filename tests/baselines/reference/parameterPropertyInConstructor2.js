@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterPropertyInConstructor2.ts] ////
+
 //// [parameterPropertyInConstructor2.ts]
 module mod {
   class Customers {

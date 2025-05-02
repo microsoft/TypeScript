@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2022/es2022IntlAPIs.ts ===
+//// [tests/cases/conformance/es2022/es2022IntlAPIs.ts] ////
+
+=== es2022IntlAPIs.ts ===
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#using_timezonename
 const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const;
 >timezoneNames : Symbol(timezoneNames, Decl(es2022IntlAPIs.ts, 1, 5))
@@ -11,7 +13,7 @@ for (const zoneName of timezoneNames) {
   var formatter = new Intl.DateTimeFormat('en-US', {
 >formatter : Symbol(formatter, Decl(es2022IntlAPIs.ts, 3, 5))
 >Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --) ... and 2 more)
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
 >DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
 
     timeZone: 'America/Los_Angeles',
@@ -22,5 +24,21 @@ for (const zoneName of timezoneNames) {
 >zoneName : Symbol(zoneName, Decl(es2022IntlAPIs.ts, 2, 10))
 
   });
+}
+
+const enumerationKeys = ['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const;
+>enumerationKeys : Symbol(enumerationKeys, Decl(es2022IntlAPIs.ts, 9, 5))
+>const : Symbol(const)
+
+for (const key of enumerationKeys) {
+>key : Symbol(key, Decl(es2022IntlAPIs.ts, 10, 10))
+>enumerationKeys : Symbol(enumerationKeys, Decl(es2022IntlAPIs.ts, 9, 5))
+
+  var supported = Intl.supportedValuesOf(key);
+>supported : Symbol(supported, Decl(es2022IntlAPIs.ts, 11, 5))
+>Intl.supportedValuesOf : Symbol(Intl.supportedValuesOf, Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>supportedValuesOf : Symbol(Intl.supportedValuesOf, Decl(lib.es2022.intl.d.ts, --, --))
+>key : Symbol(key, Decl(es2022IntlAPIs.ts, 10, 10))
 }
 

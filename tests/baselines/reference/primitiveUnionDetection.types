@@ -1,20 +1,33 @@
-=== tests/cases/compiler/primitiveUnionDetection.ts ===
+//// [tests/cases/compiler/primitiveUnionDetection.ts] ////
+
+=== primitiveUnionDetection.ts ===
 // Repro from #46624
 
 type Kind = "one" | "two" | "three";
->Kind : "one" | "two" | "three"
+>Kind : Kind
+>     : ^^^^
 
 declare function getInterfaceFromString<T extends Kind>(options?: { type?: T } & { type?: Kind }): T;
->getInterfaceFromString : <T extends Kind>(options?: {    type?: T;} & {    type?: Kind;}) => T
->options : ({ type?: T | undefined; } & { type?: Kind | undefined; }) | undefined
+>getInterfaceFromString : <T extends Kind>(options?: { type?: T; } & { type?: Kind; }) => T
+>                       : ^ ^^^^^^^^^    ^^       ^^^                                ^^^^^ 
+>options : ({ type?: T; } & { type?: Kind; }) | undefined
+>        : ^^^^^^^^^^ ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >type : T | undefined
+>     : ^^^^^^^^^^^^^
 >type : Kind | undefined
+>     : ^^^^^^^^^^^^^^^^
 
 const result = getInterfaceFromString({ type: 'two' });
 >result : "two"
+>       : ^^^^^
 >getInterfaceFromString({ type: 'two' }) : "two"
->getInterfaceFromString : <T extends Kind>(options?: ({ type?: T | undefined; } & { type?: Kind | undefined; }) | undefined) => T
+>                                        : ^^^^^
+>getInterfaceFromString : <T extends Kind>(options?: { type?: T; } & { type?: Kind; }) => T
+>                       : ^ ^^^^^^^^^    ^^       ^^^                                ^^^^^ 
 >{ type: 'two' } : { type: "two"; }
+>                : ^^^^^^^^^^^^^^^^
 >type : "two"
+>     : ^^^^^
 >'two' : "two"
+>      : ^^^^^
 

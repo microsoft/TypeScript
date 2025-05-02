@@ -1,198 +1,135 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts ===
-// /*FIND ALL REFS*/class [|C|] {
+// /*FIND ALL REFS*/<|class [|{| isWriteAccess: true, isDefinition: true |}C|] {
 //     n: number;
 //     constructor() {
 //         this.n = 12;
 //     }
-// }
+// }|>
 // let c = new [|C|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 73
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 73
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts ===
+  // /*FIND ALL REFS*/<|class [|C|] {
+  //     n: number;
+  //     constructor() {
+  //         this.n = 12;
+  //     }
+  // }|>
+  // let c = new C();
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts ===
-// class /*FIND ALL REFS*/[|C|] {
+// <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}C|] {
 //     n: number;
 //     constructor() {
 //         this.n = 12;
 //     }
-// }
+// }|>
 // let c = new [|C|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 73
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 73
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts ===
+  // <|class /*FIND ALL REFS*/[|C|] {
+  //     n: number;
+  //     constructor() {
+  //         this.n = 12;
+  //     }
+  // }|>
+  // let c = new C();
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts ===
-// class [|C|] {
+// <|class [|{| isWriteAccess: true |}C|] {
 //     n: number;
 //     constructor() {
 //         this.n = 12;
 //     }
-// }
+// }|>
 // let c = new /*FIND ALL REFS*/[|C|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 73
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 73
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts ===
+  // <|class [|C|] {
+  //     n: number;
+  //     constructor() {
+  //         this.n = 12;
+  //     }
+  // }|>
+  // let c = new /*FIND ALL REFS*/C();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

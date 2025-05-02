@@ -1,10 +1,19 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern21.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern21.ts] ////
+
+=== iterableArrayPattern21.ts ===
 var [a, b] = { 0: "", 1: true };
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >{ 0: "", 1: true } : { 0: string; 1: boolean; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >1 : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 

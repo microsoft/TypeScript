@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts] ////
+
+=== parserErrorRecovery_IncompleteMemberVariable2.ts ===
 // Interface
 interface IPoint {
 >IPoint : Symbol(IPoint, Decl(parserErrorRecovery_IncompleteMemberVariable2.ts, 0, 0))

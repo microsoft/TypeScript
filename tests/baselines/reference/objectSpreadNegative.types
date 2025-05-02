@@ -1,335 +1,552 @@
-=== tests/cases/conformance/types/spread/objectSpreadNegative.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadNegative.ts] ////
+
+=== objectSpreadNegative.ts ===
 let o = { a: 1, b: 'no' }
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 'no' } : { a: number; b: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 /// private propagates
 class PrivateOptionalX {
 >PrivateOptionalX : PrivateOptionalX
+>                 : ^^^^^^^^^^^^^^^^
 
     private x?: number;
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 class PublicX {
 >PublicX : PublicX
+>        : ^^^^^^^
 
     public x: number;
 >x : number
+>  : ^^^^^^
 }
 declare let publicX: PublicX;
 >publicX : PublicX
+>        : ^^^^^^^
 
 declare let privateOptionalX: PrivateOptionalX;
 >privateOptionalX : PrivateOptionalX
+>                 : ^^^^^^^^^^^^^^^^
 
 let o2 = { ...publicX, ...privateOptionalX };
 >o2 : {}
+>   : ^^
 >{ ...publicX, ...privateOptionalX } : {}
+>                                    : ^^
 >publicX : PublicX
+>        : ^^^^^^^
 >privateOptionalX : PrivateOptionalX
+>                 : ^^^^^^^^^^^^^^^^
 
 let sn: number = o2.x; // error, x is private
 >sn : number
+>   : ^^^^^^
 >o2.x : any
+>     : ^^^
 >o2 : {}
+>   : ^^
 >x : any
+>  : ^^^
 
 declare let optionalString: { sn?: string };
->optionalString : { sn?: string | undefined; }
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
 >sn : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
 declare let optionalNumber: { sn?: number };
->optionalNumber : { sn?: number | undefined; }
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 >sn : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
 let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
 >allOptional : { sn: string | number; }
+>            : ^^^^^^               ^^^
 >sn : string | number
+>   : ^^^^^^^^^^^^^^^
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
->optionalString : { sn?: string | undefined; }
->optionalNumber : { sn?: number | undefined; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
 // error, 'sn' is optional in source, required in target
 
 // assignability as target
 interface Bool { b: boolean };
 >b : boolean
+>  : ^^^^^^^
 
 interface Str { s: string };
 >s : string
+>  : ^^^^^^
 
 let spread = { ...{ b: true }, ...{s: "foo" } };
 >spread : { s: string; b: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...{ b: true }, ...{s: "foo" } } : { s: string; b: boolean; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: true } : { b: boolean; }
+>            : ^^^^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >{s: "foo" } : { s: string; }
+>            : ^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 spread = { s: "foo" };  // error, missing 'b'
 >spread = { s: "foo" } : { s: string; }
+>                      : ^^^^^^^^^^^^^^
 >spread : { s: string; b: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ s: "foo" } : { s: string; }
+>             : ^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 let b = { b: false };
 >b : { b: boolean; }
+>  : ^^^^^^^^^^^^^^^
 >{ b: false } : { b: boolean; }
+>             : ^^^^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 spread = b; // error, missing 's'
 >spread = b : { b: boolean; }
+>           : ^^^^^^^^^^^^^^^
 >spread : { s: string; b: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { b: boolean; }
+>  : ^^^^^^^^^^^^^^^
 
 // literal repeats are not allowed, but spread repeats are fine
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 >duplicated : { b: string; a: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' } : { b: string; a: number; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'bad' : "bad"
+>      : ^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'bad' : "bad"
+>      : ^^^^^
 >o2 : {}
+>   : ^^
 >b : string
+>  : ^^^^^^
 >'bad' : "bad"
+>      : ^^^^^
 
 let duplicatedSpread = { ...o, ...o }
 >duplicatedSpread : { a: number; b: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...o, ...o } : { a: number; b: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Note: ignore changes the order that properties are printed
 let ignore: { a: number, b: string } =
 >ignore : { a: number; b: string; }
+>       : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     { b: 'ignored', ...o }
 >{ b: 'ignored', ...o } : { a: number; b: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'ignored' : "ignored"
+>          : ^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let o3 = { a: 1, b: 'no' }
 >o3 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 'no' } : { a: number; b: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 let o4 = { b: 'yes', c: true }
 >o4 : { b: string; c: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: 'yes', c: true } : { b: string; c: boolean; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'yes' : "yes"
+>      : ^^^^^
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 let combinedBefore: { a: number, b: string, c: boolean } =
 >combinedBefore : { a: number; b: string; c: boolean; }
+>               : ^^^^^      ^^^^^      ^^^^^       ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
     { b: 'ok', ...o3, ...o4 }
 >{ b: 'ok', ...o3, ...o4 } : { b: string; c: boolean; a: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'ok' : "ok"
+>     : ^^^^
 >o3 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o4 : { b: string; c: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let combinedMid: { a: number, b: string, c: boolean } =
 >combinedMid : { a: number; b: string; c: boolean; }
+>            : ^^^^^      ^^^^^      ^^^^^       ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
     { ...o3, b: 'ok', ...o4 }
 >{ ...o3, b: 'ok', ...o4 } : { b: string; c: boolean; a: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'ok' : "ok"
+>     : ^^^^
 >o4 : { b: string; c: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >combinedNested : { a: number; b: boolean; c: string; d: string; }
+>               : ^^^^^      ^^^^^       ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 
     { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
 >{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >{ b: false, c: 'overriden' } : { b: false; c: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >c : string
+>  : ^^^^^^
 >'overriden' : "overriden"
+>            : ^^^^^^^^^^^
 >d : string
+>  : ^^^^^^
 >'actually new' : "actually new"
+>               : ^^^^^^^^^^^^^^
 >{ a: 5, d: 'maybe new' } : { a: number; d: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >d : string
+>  : ^^^^^^
 >'maybe new' : "maybe new"
+>            : ^^^^^^^^^^^
 
 let changeTypeBefore: { a: number, b: string } =
 >changeTypeBefore : { a: number; b: string; }
+>                 : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     { a: 'wrong type?', ...o3 };
 >{ a: 'wrong type?', ...o3 } : { a: number; b: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'wrong type?' : "wrong type?"
+>              : ^^^^^^^^^^^^^
 >o3 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
 >computedMiddle : { a: number; b: string; c: boolean; "in the middle": number; }
+>               : ^^^^^      ^^^^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >"in the middle" : number
+>                : ^^^^^^
 
     { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
 >{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { b: string; c: boolean; "in the middle": number; a: number; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >['in the middle'] : number
+>                  : ^^^^^^
 >'in the middle' : "in the middle"
+>                : ^^^^^^^^^^^^^^^
 >13 : 13
+>   : ^^
 >b : string
+>  : ^^^^^^
 >'maybe?' : "maybe?"
+>         : ^^^^^^^^
 >o4 : { b: string; c: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // primitives are not allowed, except for falsy ones
 let spreadNum = { ...12 };
 >spreadNum : any
+>          : ^^^
 >{ ...12 } : any
+>          : ^^^
 >12 : 12
+>   : ^^
 
 let spreadSum = { ...1 + 1 };
 >spreadSum : any
+>          : ^^^
 >{ ...1 + 1 } : any
+>             : ^^^
 >1 + 1 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
 let spreadZero = { ...0 };
 >spreadZero : any
+>           : ^^^
 >{ ...0 } : any
+>         : ^^^
 >0 : 0
+>  : ^
 
 spreadZero.toFixed(); // error, no methods even from a falsy number
 >spreadZero.toFixed() : any
+>                     : ^^^
 >spreadZero.toFixed : any
+>                   : ^^^
 >spreadZero : any
+>           : ^^^
 >toFixed : any
+>        : ^^^
 
 let spreadBool = { ...true };
 >spreadBool : any
+>           : ^^^
 >{ ...true } : any
+>            : ^^^
 >true : true
+>     : ^^^^
 
 spreadBool.valueOf();
 >spreadBool.valueOf() : any
+>                     : ^^^
 >spreadBool.valueOf : any
+>                   : ^^^
 >spreadBool : any
+>           : ^^^
 >valueOf : any
+>        : ^^^
 
 let spreadStr = { ...'foo' };
 >spreadStr : any
+>          : ^^^
 >{ ...'foo' } : any
+>             : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 spreadStr.length; // error, no 'length'
 >spreadStr.length : any
+>                 : ^^^
 >spreadStr : any
+>          : ^^^
 >length : any
+>       : ^^^
 
 spreadStr.charAt(1); // error, no methods either
 >spreadStr.charAt(1) : any
+>                    : ^^^
 >spreadStr.charAt : any
+>                 : ^^^
 >spreadStr : any
+>          : ^^^
 >charAt : any
+>       : ^^^
 >1 : 1
+>  : ^
 
 // functions are skipped
 let spreadFunc = { ...function () { } }
 >spreadFunc : {}
+>           : ^^
 >{ ...function () { } } : {}
+>                       : ^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 spreadFunc(); // error, no call signature
 >spreadFunc() : any
+>             : ^^^
 >spreadFunc : {}
+>           : ^^
 
 // write-only properties get skipped
 let setterOnly = { ...{ set b (bad: number) { } } };
 >setterOnly : { b: undefined; }
+>           : ^^^^^^^^^^^^^^^^^
 >{ ...{ set b (bad: number) { } } } : { b: undefined; }
+>                                   : ^^^^^^^^^^^^^^^^^
 >{ set b (bad: number) { } } : { b: number; }
+>                            : ^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 >bad : number
+>    : ^^^^^^
 
 setterOnly.b = 12; // error, 'b' does not exist
 >setterOnly.b = 12 : 12
+>                  : ^^
 >setterOnly.b : undefined
+>             : ^^^^^^^^^
 >setterOnly : { b: undefined; }
+>           : ^^^^^^^^^^^^^^^^^
 >b : undefined
+>  : ^^^^^^^^^
 >12 : 12
+>   : ^^
 
 // methods are skipped because they aren't enumerable
 class C { p = 1; m() { } }
 >C : C
+>  : ^
 >p : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >m : () => void
+>  : ^^^^^^^^^^
 
 let c: C = new C()
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 let spreadC = { ...c }
 >spreadC : { p: number; }
+>        : ^^^^^^^^^^^^^^
 >{ ...c } : { p: number; }
+>         : ^^^^^^^^^^^^^^
 >c : C
+>  : ^
 
 spreadC.m(); // error 'm' is not in '{ ... c }'
 >spreadC.m() : any
+>            : ^^^
 >spreadC.m : any
+>          : ^^^
 >spreadC : { p: number; }
+>        : ^^^^^^^^^^^^^^
 >m : any
+>  : ^^^
 
 // non primitive
 let obj: object = { a: 123 };
 >obj : object
+>    : ^^^^^^
 >{ a: 123 } : { a: number; }
+>           : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 
 let spreadObj = { ...obj };
 >spreadObj : {}
+>          : ^^
 >{ ...obj } : {}
+>           : ^^
 >obj : object
+>    : ^^^^^^
 
 spreadObj.a; // error 'a' is not in {}
 >spreadObj.a : any
+>            : ^^^
 >spreadObj : {}
+>          : ^^
 >a : any
+>  : ^^^
 

@@ -1,0 +1,41 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationLocal_05.ts ===
+// class Bar {
+//     public hello() {}
+// }
+// 
+// <|var [|someVar|] = new Bar();|>
+// someVa/*GOTO IMPL*/r.hello();
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "someVar",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     }
+    ],
+    "kind": "var"
+   }
+  ]

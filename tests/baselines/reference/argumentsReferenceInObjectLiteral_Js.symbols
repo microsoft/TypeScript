@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInObjectLiteral_Js.ts] ////
+
 === /a.js ===
 const a = () => {
 >a : Symbol(a, Decl(a.js, 0, 5))

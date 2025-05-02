@@ -21,7 +21,7 @@ export module ImportingModule {
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.elaborate = void 0;
     var elaborate;
     (function (elaborate) {
@@ -42,12 +42,12 @@ define(["require", "exports"], function (require, exports) {
                 })(name = mod.name || (mod.name = {}));
             })(mod = nested.mod || (nested.mod = {}));
         })(nested = elaborate.nested || (elaborate.nested = {}));
-    })(elaborate = exports.elaborate || (exports.elaborate = {}));
+    })(elaborate || (exports.elaborate = elaborate = {}));
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.ImportingModule = void 0;
     var ImportingModule;
     (function (ImportingModule) {
@@ -57,5 +57,5 @@ define(["require", "exports"], function (require, exports) {
             }
             return UsesReferredType;
         }());
-    })(ImportingModule = exports.ImportingModule || (exports.ImportingModule = {}));
+    })(ImportingModule || (exports.ImportingModule = ImportingModule = {}));
 });

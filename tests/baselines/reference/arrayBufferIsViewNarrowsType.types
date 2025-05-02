@@ -1,16 +1,26 @@
-=== tests/cases/compiler/arrayBufferIsViewNarrowsType.ts ===
+//// [tests/cases/compiler/arrayBufferIsViewNarrowsType.ts] ////
+
+=== arrayBufferIsViewNarrowsType.ts ===
 var obj: Object;
 >obj : Object
+>    : ^^^^^^
 
 if (ArrayBuffer.isView(obj)) {
 >ArrayBuffer.isView(obj) : boolean
+>                        : ^^^^^^^
 >ArrayBuffer.isView : (arg: any) => arg is ArrayBufferView
+>                   : ^   ^^   ^^^^^                      
 >ArrayBuffer : ArrayBufferConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >isView : (arg: any) => arg is ArrayBufferView
+>       : ^   ^^   ^^^^^                      
 >obj : Object
+>    : ^^^^^^
 
     // isView should be a guard that narrows type to ArrayBufferView.
     var ab: ArrayBufferView = obj;
->ab : ArrayBufferView
->obj : ArrayBufferView
+>ab : ArrayBufferView<ArrayBuffer>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : ArrayBufferView<ArrayBuffer>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

@@ -1,7 +1,7 @@
-tests/cases/compiler/sourceMapSample.ts(14,45): error TS2694: Namespace 'Foo.Bar' has no exported member 'Greeter'.
+sourceMapSample.ts(14,45): error TS2694: Namespace 'Foo.Bar' has no exported member 'Greeter'.
 
 
-==== tests/cases/compiler/sourceMapSample.ts (1 errors) ====
+==== sourceMapSample.ts (1 errors) ====
     module Foo.Bar {
         "use strict";
     

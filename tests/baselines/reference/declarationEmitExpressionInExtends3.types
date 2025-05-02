@@ -1,77 +1,108 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends3.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionInExtends3.ts] ////
+
+=== declarationEmitExpressionInExtends3.ts ===
 export class ExportedClass<T> {
 >ExportedClass : ExportedClass<T>
+>              : ^^^^^^^^^^^^^^^^
 
 	x: T;
 >x : T
+>  : ^
 }
 
 class LocalClass<T, U> {
 >LocalClass : LocalClass<T, U>
+>           : ^^^^^^^^^^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     y: U;
 >y : U
+>  : ^
 }
 
 export interface ExportedInterface {
     x: number;
 >x : number
+>  : ^^^^^^
 }
 
 interface LocalInterface {
     x: number;
 >x : number
+>  : ^^^^^^
 }
 
 function getLocalClass<T>(c: T) {
 >getLocalClass : <T>(c: T) => typeof LocalClass
+>              : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >c : T
+>  : ^
 
     return LocalClass;
 >LocalClass : typeof LocalClass
+>           : ^^^^^^^^^^^^^^^^^
 }
 
 function getExportedClass<T>(c: T) {
 >getExportedClass : <T>(c: T) => typeof ExportedClass
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : T
+>  : ^
 
     return ExportedClass;
 >ExportedClass : typeof ExportedClass
+>              : ^^^^^^^^^^^^^^^^^^^^
 }
 
 
 
 export class MyClass extends getLocalClass<LocalInterface>(undefined)<string, number> { // error LocalClass is inaccisible
 >MyClass : MyClass
+>        : ^^^^^^^
 >getLocalClass<LocalInterface>(undefined) : LocalClass<string, number>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getLocalClass : <T>(c: T) => typeof LocalClass
+>              : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 
 export class MyClass2 extends getExportedClass<LocalInterface>(undefined)<string> { // OK
 >MyClass2 : MyClass2
+>         : ^^^^^^^^
 >getExportedClass<LocalInterface>(undefined) : ExportedClass<string>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^
 >getExportedClass : <T>(c: T) => typeof ExportedClass
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 
 export class MyClass3 extends getExportedClass<LocalInterface>(undefined)<LocalInterface> { // Error LocalInterface is inaccisble
 >MyClass3 : MyClass3
+>         : ^^^^^^^^
 >getExportedClass<LocalInterface>(undefined) : ExportedClass<LocalInterface>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getExportedClass : <T>(c: T) => typeof ExportedClass
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 
 export class MyClass4 extends getExportedClass<LocalInterface>(undefined)<ExportedInterface> { // OK
 >MyClass4 : MyClass4
+>         : ^^^^^^^^
 >getExportedClass<LocalInterface>(undefined) : ExportedClass<ExportedInterface>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getExportedClass : <T>(c: T) => typeof ExportedClass
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 

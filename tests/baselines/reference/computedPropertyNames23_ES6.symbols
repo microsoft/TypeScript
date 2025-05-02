@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames23_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames23_ES6.ts] ////
+
+=== computedPropertyNames23_ES6.ts ===
 class C {
 >C : Symbol(C, Decl(computedPropertyNames23_ES6.ts, 0, 0))
 
@@ -14,6 +16,9 @@ class C {
 
         { [this.bar()]: 1 }[0]
 >[this.bar()] : Symbol([this.bar()], Decl(computedPropertyNames23_ES6.ts, 5, 9))
+>this.bar : Symbol(C.bar, Decl(computedPropertyNames23_ES6.ts, 0, 9))
+>this : Symbol(C, Decl(computedPropertyNames23_ES6.ts, 0, 0))
+>bar : Symbol(C.bar, Decl(computedPropertyNames23_ES6.ts, 0, 9))
 
     ]() { }
 }

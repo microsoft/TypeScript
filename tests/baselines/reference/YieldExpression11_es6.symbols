@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts] ////
+
+=== YieldExpression11_es6.ts ===
 class C {
 >C : Symbol(C, Decl(YieldExpression11_es6.ts, 0, 0))
 

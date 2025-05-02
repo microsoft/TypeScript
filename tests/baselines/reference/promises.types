@@ -1,16 +1,25 @@
-=== tests/cases/compiler/promises.ts ===
+//// [tests/cases/compiler/promises.ts] ////
+
+=== promises.ts ===
 interface Promise<T> {
     then<U>(success?: (value: T) => U): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => U): Promise<U>; <U_1>(success?: (value: T) => Promise<U_1>): Promise<U_1>; }
+>     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^                            ^^^ ^^       ^^^               ^^^          ^^^^^^^^       ^^^                          ^^^            ^^^
 >success : (value: T) => U
+>        : ^     ^^ ^^^^^ 
 >value : T
+>      : ^
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U_1>(success?: (value: T) => U_1): Promise<U_1>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^                            ^^^^^^^^       ^^^                 ^^^            ^^^ ^^       ^^^                        ^^^          ^^^
 >success : (value: T) => Promise<U>
+>        : ^     ^^ ^^^^^          
 >value : T
+>      : ^
 
     value: T;
 >value : T
+>      : ^
 }
 

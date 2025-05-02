@@ -1,87 +1,137 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeInference.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeInference.ts] ////
+
+=== intersectionTypeInference.ts ===
 function extend<T, U>(obj1: T, obj2: U): T & U {
 >extend : <T, U>(obj1: T, obj2: U) => T & U
+>       : ^ ^^ ^^    ^^ ^^    ^^ ^^^^^     
 >obj1 : T
+>     : ^
 >obj2 : U
+>     : ^
 
     var result: T & U;
 >result : T & U
+>       : ^^^^^
 
     obj1 = result;
 >obj1 = result : T & U
+>              : ^^^^^
 >obj1 : T
+>     : ^
 >result : T & U
+>       : ^^^^^
 
     obj2 = result;
 >obj2 = result : T & U
+>              : ^^^^^
 >obj2 : U
+>     : ^
 >result : T & U
+>       : ^^^^^
 
     result = obj1;  // Error
 >result = obj1 : T
+>              : ^
 >result : T & U
+>       : ^^^^^
 >obj1 : T
+>     : ^
 
     result = obj2;  // Error
 >result = obj2 : U
+>              : ^
 >result : T & U
+>       : ^^^^^
 >obj2 : U
+>     : ^
 
     return result;
 >result : T & U
+>       : ^^^^^
 }
 
 var x = extend({ a: "hello" }, { b: 42 });
 >x : { a: string; } & { b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extend({ a: "hello" }, { b: 42 }) : { a: string; } & { b: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extend : <T, U>(obj1: T, obj2: U) => T & U
+>       : ^ ^^ ^^    ^^ ^^    ^^ ^^^^^     
 >{ a: "hello" } : { a: string; }
+>               : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >{ b: 42 } : { b: number; }
+>          : ^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 var s = x.a;
 >s : string
+>  : ^^^^^^
 >x.a : string
+>    : ^^^^^^
 >x : { a: string; } & { b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 var n = x.b;
 >n : number
+>  : ^^^^^^
 >x.b : number
+>    : ^^^^^^
 >x : { a: string; } & { b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 interface A<T> {
     a: T;
 >a : T
+>  : ^
 }
 
 interface B<U> {
     b: U;
 >b : U
+>  : ^
 }
 
 function foo<T, U>(obj: A<T> & B<U>): T | U {
 >foo : <T, U>(obj: A<T> & B<U>) => T | U
+>    : ^ ^^ ^^   ^^           ^^^^^     
 >obj : A<T> & B<U>
+>    : ^^^^^^^^^^^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 var z = foo({ a: "hello", b: 42 });
 >z : string | number
+>  : ^^^^^^^^^^^^^^^
 >foo({ a: "hello", b: 42 }) : string | number
+>                           : ^^^^^^^^^^^^^^^
 >foo : <T, U>(obj: A<T> & B<U>) => T | U
+>    : ^ ^^ ^^   ^^           ^^^^^     
 >{ a: "hello", b: 42 } : { a: string; b: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 var z: string | number;
 >z : string | number
+>  : ^^^^^^^^^^^^^^^
 

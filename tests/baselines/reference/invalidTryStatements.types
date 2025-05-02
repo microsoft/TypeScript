@@ -1,9 +1,13 @@
-=== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts ===
+//// [tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts] ////
+
+=== invalidTryStatements.ts ===
 function fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
     catch(x) { } // error missing try
 >x : any
+>  : ^^^
 
     finally { } // potential error; can be absorbed by the 'catch'
 
@@ -12,10 +16,12 @@ function fn() {
 
 function fn2() {
 >fn2 : () => void
+>    : ^^^^^^^^^^
 
     finally { } // error missing try
     catch (x) { } // error missing try
 >x : any
+>  : ^^^
     
     try { } finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
 
@@ -23,7 +29,9 @@ function fn2() {
     
     catch (x) { } // error missing try
 >x : any
+>  : ^^^
 
     try { } catch () { } // error missing catch binding
 > : any
+> : ^^^
 }

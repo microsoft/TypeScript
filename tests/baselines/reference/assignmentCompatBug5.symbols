@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatBug5.ts ===
+//// [tests/cases/compiler/assignmentCompatBug5.ts] ////
+
+=== assignmentCompatBug5.ts ===
 function foo1(x: { a: number; }) { }
 >foo1 : Symbol(foo1, Decl(assignmentCompatBug5.ts, 0, 0))
 >x : Symbol(x, Decl(assignmentCompatBug5.ts, 0, 14))

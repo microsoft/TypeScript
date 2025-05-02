@@ -1,8 +1,8 @@
-tests/cases/conformance/jsdoc/forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
+forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
   Type 'void' is not assignable to type 'Animation'.
 
 
-==== tests/cases/conformance/jsdoc/forgot.js (1 errors) ====
+==== forgot.js (1 errors) ====
     /**
      * @param {T} a
      * @template T

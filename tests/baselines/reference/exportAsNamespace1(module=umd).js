@@ -26,7 +26,7 @@ foo.ns.b;
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
@@ -42,7 +42,7 @@ foo.ns.b;
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.ns = void 0;
     exports.ns = require("./0");
     ns.a;
@@ -59,7 +59,7 @@ foo.ns.b;
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var foo = require("./1");
     foo.ns.a;
     foo.ns.b;

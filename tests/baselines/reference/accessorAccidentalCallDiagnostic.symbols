@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorAccidentalCallDiagnostic.ts ===
+//// [tests/cases/compiler/accessorAccidentalCallDiagnostic.ts] ////
+
+=== accessorAccidentalCallDiagnostic.ts ===
 // https://github.com/microsoft/TypeScript/issues/24554
 class Test24554 {
 >Test24554 : Symbol(Test24554, Decl(accessorAccidentalCallDiagnostic.ts, 0, 0))

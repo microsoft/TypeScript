@@ -23,6 +23,17 @@
   ) {
     perf.mark("");
   }
+
+  // With ??
+  if (
+    (
+      perf &&
+      perf.mark &&
+      perf.measure
+    ) ?? !!true
+  ) {
+    perf.mark("");
+  }
 };
 
 // Original #49192
@@ -48,3 +59,15 @@ declare let inBrowser: boolean;
     }
   }
 };
+
+let _isMobile: boolean;
+function isMobile() {
+  if (_isMobile === undefined) {
+    const isMobileMatch =
+      typeof window !== 'undefined' &&
+      window.matchMedia && // no error
+      window.matchMedia('(max-device-width: 680px)');
+    _isMobile = isMobileMatch && isMobileMatch.matches;
+  }
+  return _isMobile;
+}

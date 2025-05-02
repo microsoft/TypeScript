@@ -1,9 +1,9 @@
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(21,1): error TS2741: Property 'other' is missing in type 'C' but required in type 'I'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(24,1): error TS2741: Property 'bar' is missing in type 'I' but required in type 'D'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2739: Type 'C' is missing the following properties from type 'D': other, bar
+interfaceExtendsClassWithPrivate1.ts(21,1): error TS2741: Property 'other' is missing in type 'C' but required in type 'I'.
+interfaceExtendsClassWithPrivate1.ts(24,1): error TS2741: Property 'bar' is missing in type 'I' but required in type 'D'.
+interfaceExtendsClassWithPrivate1.ts(27,1): error TS2739: Type 'C' is missing the following properties from type 'D': other, bar
 
 
-==== tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts (3 errors) ====
+==== interfaceExtendsClassWithPrivate1.ts (3 errors) ====
     class C {
         public foo(x: any) { return x; }
         private x = 1;
@@ -27,13 +27,13 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2739: T
     i = c; // error
     ~
 !!! error TS2741: Property 'other' is missing in type 'C' but required in type 'I'.
-!!! related TS2728 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:7:5: 'other' is declared here.
+!!! related TS2728 interfaceExtendsClassWithPrivate1.ts:7:5: 'other' is declared here.
     
     i = d;
     d = i; // error
     ~
 !!! error TS2741: Property 'bar' is missing in type 'I' but required in type 'D'.
-!!! related TS2728 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:13:5: 'bar' is declared here.
+!!! related TS2728 interfaceExtendsClassWithPrivate1.ts:13:5: 'bar' is declared here.
     
     c = d;
     d = c; // error

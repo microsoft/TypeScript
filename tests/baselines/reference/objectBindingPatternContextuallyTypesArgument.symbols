@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectBindingPatternContextuallyTypesArgument.ts ===
+//// [tests/cases/compiler/objectBindingPatternContextuallyTypesArgument.ts] ////
+
+=== objectBindingPatternContextuallyTypesArgument.ts ===
 declare function id<T>(x: T): T;
 >id : Symbol(id, Decl(objectBindingPatternContextuallyTypesArgument.ts, 0, 0))
 >T : Symbol(T, Decl(objectBindingPatternContextuallyTypesArgument.ts, 0, 20))

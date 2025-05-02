@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedPrivateMembers.ts(56,13): error TS6133: 'b' is declared but its value is never read.
+unusedPrivateMembers.ts(56,13): error TS6133: 'b' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedPrivateMembers.ts (1 errors) ====
+==== unusedPrivateMembers.ts (1 errors) ====
     class Test1 {
         private initializeInternal() {
         }
@@ -64,7 +64,6 @@ tests/cases/compiler/unusedPrivateMembers.ts(56,13): error TS6133: 'b' is declar
         public test() {
             var x = new Test6();
             x.a++;
-            x.b++;
         }
     }
     

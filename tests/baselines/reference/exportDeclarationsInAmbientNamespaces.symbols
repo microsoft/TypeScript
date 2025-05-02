@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDeclarationsInAmbientNamespaces.ts ===
+//// [tests/cases/compiler/exportDeclarationsInAmbientNamespaces.ts] ////
+
+=== exportDeclarationsInAmbientNamespaces.ts ===
 declare namespace Q {
 >Q : Symbol(Q, Decl(exportDeclarationsInAmbientNamespaces.ts, 0, 0))
 

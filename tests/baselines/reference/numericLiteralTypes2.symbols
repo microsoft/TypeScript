@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/numericLiteralTypes2.ts ===
+//// [tests/cases/conformance/types/literal/numericLiteralTypes2.ts] ////
+
+=== numericLiteralTypes2.ts ===
 type A1 = 1;
 >A1 : Symbol(A1, Decl(numericLiteralTypes2.ts, 0, 0))
 

@@ -1,0 +1,13 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameAlias3.ts ===
+// module SomeModule { <|export class /*RENAME*/[|SomeClassRENAME|] { }|> }
+// import M = SomeModule;
+// import C = M.[|SomeClassRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameAlias3.ts ===
+// module SomeModule { <|export class [|SomeClassRENAME|] { }|> }
+// import M = SomeModule;
+// import C = M./*RENAME*/[|SomeClassRENAME|];

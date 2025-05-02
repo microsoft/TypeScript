@@ -1,49 +1,80 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution15.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 class BigGreeter extends React.Component<{ }, {}> {
 >BigGreeter : BigGreeter
+>           : ^^^^^^^^^^
 >React.Component : React.Component<{}, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <div>Default hi</div>;
 ><div>Default hi</div> : JSX.Element
+>                      : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
     greeting: string;
 >greeting : string
+>         : ^^^^^^
 }
 
 // Error
 let a = <BigGreeter prop1="hello" />
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><BigGreeter prop1="hello" /> : JSX.Element
+>                             : ^^^^^^^^^^^
 >BigGreeter : typeof BigGreeter
+>           : ^^^^^^^^^^^^^^^^^
 >prop1 : string
+>      : ^^^^^^
 
 // OK
 let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
 >b : JSX.Element
+>  : ^^^^^^^^^^^
 ><BigGreeter ref={(input) => { this.textInput = input; }} /> : JSX.Element
+>                                                            : ^^^^^^^^^^^
 >BigGreeter : typeof BigGreeter
+>           : ^^^^^^^^^^^^^^^^^
 >ref : (input: BigGreeter) => void
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^
 >(input) => { this.textInput = input; } : (input: BigGreeter) => void
+>                                       : ^     ^^^^^^^^^^^^^^^^^^^^^
 >input : BigGreeter
+>      : ^^^^^^^^^^
 >this.textInput = input : BigGreeter
+>                       : ^^^^^^^^^^
 >this.textInput : any
+>               : ^^^
 >this : undefined
+>     : ^^^^^^^^^
 >textInput : any
+>          : ^^^
 >input : BigGreeter
+>      : ^^^^^^^^^^
 
 let c = <BigGreeter data-extra="hi" />
 >c : JSX.Element
+>  : ^^^^^^^^^^^
 ><BigGreeter data-extra="hi" /> : JSX.Element
+>                               : ^^^^^^^^^^^
 >BigGreeter : typeof BigGreeter
+>           : ^^^^^^^^^^^^^^^^^
 >data-extra : string
+>           : ^^^^^^
 

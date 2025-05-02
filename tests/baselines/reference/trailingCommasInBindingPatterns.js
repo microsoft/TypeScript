@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts] ////
+
 //// [trailingCommasInBindingPatterns.ts]
 const [...a,] = [];
 const {...b,} = {};

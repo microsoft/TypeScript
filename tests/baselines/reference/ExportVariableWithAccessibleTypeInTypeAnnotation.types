@@ -1,22 +1,33 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithAccessibleTypeInTypeAnnotation.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithAccessibleTypeInTypeAnnotation.ts] ////
+
+=== ExportVariableWithAccessibleTypeInTypeAnnotation.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export interface Point {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 
     // valid since Point is exported
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
+>       : ^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 

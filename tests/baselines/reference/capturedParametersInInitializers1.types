@@ -1,119 +1,197 @@
-=== tests/cases/compiler/capturedParametersInInitializers1.ts ===
+//// [tests/cases/compiler/capturedParametersInInitializers1.ts] ////
+
+=== capturedParametersInInitializers1.ts ===
 // ok - usage is deferred
 function foo1(y = class {c = x}, x = 1) {
 >foo1 : (y?: typeof (Anonymous class), x?: number) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >y : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class {c = x} : typeof (Anonymous class)
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     new y().c;
 >new y().c : number
+>          : ^^^^^^
 >new y() : (Anonymous class)
+>        : ^^^^^^^^^^^^^^^^^
 >y : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 }
 
 // ok - used in file
 function foo2(y = function(x: typeof z) {}, z = 1) {
 >foo2 : (y?: (x: typeof z) => void, z?: number) => void
+>     : ^ ^^^^           ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >y : (x: typeof z) => void
+>  : ^ ^^        ^^^^^^^^^
 >function(x: typeof z) {} : (x: typeof z) => void
+>                         : ^ ^^        ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     
 }
 
 // ok -used in type
 let a;
 >a : any
+>  : ^^^
 
 function foo3(y = { x: <typeof z>a }, z = 1) {
->foo3 : (y?: { x: number; }, z?: number) => void
->y : { x: number; }
->{ x: <typeof z>a } : { x: number; }
+>foo3 : (y?: { x: typeof z; }, z?: number) => void
+>     : ^ ^^^^^^^^        ^^^^^ ^^^^^^^^^^^^^^^^^^
+>y : { x: typeof z; }
+>  : ^^^^^        ^^^
+>{ x: <typeof z>a } : { x: typeof z; }
+>                   : ^^^^^        ^^^
 >x : number
+>  : ^^^^^^
 ><typeof z>a : number
+>            : ^^^^^^
 >z : number
+>  : ^^^^^^
 >a : any
+>  : ^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     
 }
 
 // error - used before declaration
 function foo4(y = {z}, z = 1) {
 >foo4 : (y?: { z: number; }, z?: number) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >y : { z: number; }
+>  : ^^^^^^^^^^^^^^
 >{z} : { z: number; }
+>    : ^^^^^^^^^^^^^^
 >z : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // error - used before declaration, IIFEs are inlined
 function foo5(y = (() => z)(), z = 1) {
 >foo5 : (y?: number, z?: number) => void
+>     : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >(() => z)() : number
+>            : ^^^^^^
 >(() => z) : () => number
+>          : ^^^^^^^^^^^^
 >() => z : () => number
+>        : ^^^^^^^^^^^^
 >z : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // ok - IIFE inside another function
 function foo6(y = () => (() => z)(), z = 1) {
 >foo6 : (y?: () => number, z?: number) => void
+>     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >y : () => number
+>  : ^^^^^^^^^^^^
 >() => (() => z)() : () => number
+>                  : ^^^^^^^^^^^^
 >(() => z)() : number
+>            : ^^^^^^
 >(() => z) : () => number
+>          : ^^^^^^^^^^^^
 >() => z : () => number
+>        : ^^^^^^^^^^^^
 >z : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // ok - used inside immediately invoked generator function
 function foo7(y = (function*() {yield z})(), z = 1) {
 >foo7 : (y?: Generator<number, void, unknown>, z?: number) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >y : Generator<number, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(function*() {yield z})() : Generator<number, void, unknown>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(function*() {yield z}) : () => Generator<number, void, unknown>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function*() {yield z} : () => Generator<number, void, unknown>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield z : any
+>        : ^^^
 >z : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // ok - used inside immediately invoked async function
 function foo8(y = (async () => z)(), z = 1) {
 >foo8 : (y?: Promise<number>, z?: number) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >y : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >(async () => z)() : Promise<number>
+>                  : ^^^^^^^^^^^^^^^
 >(async () => z) : () => Promise<number>
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >async () => z : () => Promise<number>
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >z : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // error - used as computed name of method
 function foo9(y = {[z]() { return z; }}, z = 1) {
->foo9 : (y?: { [x: number]: () => number; }, z?: number) => void
->y : { [x: number]: () => number; }
->{[z]() { return z; }} : { [x: number]: () => number; }
+>foo9 : (y?: { [z]: () => number; }, z?: number) => void
+>     : ^ ^^^^^     ^^^^^^^^^^^^ ^^^^ ^^^^^^^^^^^^^^^^^^
+>y : { [z]: () => number; }
+>  : ^^     ^^^^^^^^^^^^ ^^
+>{[z]() { return z; }} : { [z]: () => number; }
+>                      : ^^     ^^^^^^^^^^^^ ^^
 >[z] : () => number
+>    : ^^^^^^^^^^^^
 >z : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 

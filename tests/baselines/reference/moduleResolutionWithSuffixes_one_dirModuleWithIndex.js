@@ -9,16 +9,14 @@ export function base() {}
 
 //// [index.ios.js]
 "use strict";
-exports.__esModule = true;
-exports.ios = void 0;
-function ios() { }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ios = ios;
+function ios() { }
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
 "use strict";
-exports.__esModule = true;
-exports.base = void 0;
-function base() { }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.base = base;
+function base() { }

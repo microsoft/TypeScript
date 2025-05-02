@@ -1,4 +1,6 @@
-=== tests/cases/conformance/emitter/es5/asyncGenerators/O1.ts ===
+//// [tests/cases/conformance/emitter/es5/asyncGenerators/emitter.asyncGenerators.objectLiteralMethods.es5.ts] ////
+
+=== O1.ts ===
 const o1 = {
 >o1 : Symbol(o1, Decl(O1.ts, 0, 5))
 
@@ -6,7 +8,7 @@ const o1 = {
 >f : Symbol(f, Decl(O1.ts, 0, 12))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/O2.ts ===
+=== O2.ts ===
 const o2 = {
 >o2 : Symbol(o2, Decl(O2.ts, 0, 5))
 
@@ -17,7 +19,7 @@ const o2 = {
 >x : Symbol(x, Decl(O2.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/O3.ts ===
+=== O3.ts ===
 const o3 = {
 >o3 : Symbol(o3, Decl(O3.ts, 0, 5))
 
@@ -28,7 +30,7 @@ const o3 = {
 >x : Symbol(x, Decl(O3.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/O4.ts ===
+=== O4.ts ===
 const o4 = {
 >o4 : Symbol(o4, Decl(O4.ts, 0, 5))
 
@@ -39,7 +41,7 @@ const o4 = {
 >x : Symbol(x, Decl(O4.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/O5.ts ===
+=== O5.ts ===
 const o5 = {
 >o5 : Symbol(o5, Decl(O5.ts, 0, 5))
 
@@ -50,7 +52,7 @@ const o5 = {
 >x : Symbol(x, Decl(O5.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/O6.ts ===
+=== O6.ts ===
 const o6 = {
 >o6 : Symbol(o6, Decl(O6.ts, 0, 5))
 
@@ -61,7 +63,7 @@ const o6 = {
 >x : Symbol(x, Decl(O6.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/O7.ts ===
+=== O7.ts ===
 const o7 = {
 >o7 : Symbol(o7, Decl(O7.ts, 0, 5))
 

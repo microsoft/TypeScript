@@ -1,46 +1,74 @@
-=== tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx ===
+//// [tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx] ////
+
+=== contextuallyTypedStringLiteralsInJsxAttributes01.tsx ===
 namespace JSX {
     export interface IntrinsicElements {
         span: {};
 >span : {}
+>     : ^^
     }
     export interface Element {
 		something?: any;
 >something : any
+>          : ^^^
     }
 }
 
 const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
->FooComponent : (props: {    foo: "A" | "B" | "C";}) => JSX.Element
->(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: {    foo: "A" | "B" | "C";}) => JSX.Element
+>FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
+>(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>                                                              : ^     ^^                         ^^^^^^^^^^^^^^^^
 >props : { foo: "A" | "B" | "C"; }
+>      : ^^^^^^^               ^^^
 >foo : "A" | "B" | "C"
+>    : ^^^^^^^^^^^^^^^
 ><span>{props.foo}</span> : JSX.Element
+>                         : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >props.foo : "A" | "B" | "C"
+>          : ^^^^^^^^^^^^^^^
 >props : { foo: "A" | "B" | "C"; }
+>      : ^^^^^^^               ^^^
 >foo : "A" | "B" | "C"
+>    : ^^^^^^^^^^^^^^^
 >span : any
+>     : ^^^
 
 <FooComponent foo={"A"} />;
 ><FooComponent foo={"A"} /> : JSX.Element
+>                           : ^^^^^^^^^^^
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 
 <FooComponent foo="A"   />;
 ><FooComponent foo="A"   /> : JSX.Element
+>                           : ^^^^^^^^^^^
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "A"
+>    : ^^^
 
 <FooComponent foo={"f"} />;
 ><FooComponent foo={"f"} /> : JSX.Element
+>                           : ^^^^^^^^^^^
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "f"
+>    : ^^^
 >"f" : "f"
+>    : ^^^
 
 <FooComponent foo="f"   />;
 ><FooComponent foo="f"   /> : JSX.Element
+>                           : ^^^^^^^^^^^
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "f"
+>    : ^^^
 

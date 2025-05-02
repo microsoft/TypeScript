@@ -1,20 +1,17 @@
-tests/cases/conformance/node/index.ts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-tests/cases/conformance/node/otherc.cts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-tests/cases/conformance/node/otherc.cts(2,40): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
+index.ts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+otherc.cts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 
 
-==== tests/cases/conformance/node/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     import json from "./package.json" assert { type: "json" };
                                       ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-==== tests/cases/conformance/node/otherc.cts (2 errors) ====
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+==== otherc.cts (1 errors) ====
     import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
                                       ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "pkg",
         "private": true,

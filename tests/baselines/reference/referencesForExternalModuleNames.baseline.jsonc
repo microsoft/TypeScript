@@ -1,319 +1,214 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
-// /*FIND ALL REFS*/declare module "[|foo|]" {
+// /*FIND ALL REFS*/<|declare module "[|{| isWriteAccess: true, isDefinition: true |}foo|]" {
 //     var f: number;
-// }
+// }|>
 
 // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
-// import f = require("[|foo|]");
+// <|import f = require("[|foo|]");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "module",
-      "name": "module \"foo\"",
-      "textSpan": {
-        "start": 16,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 16,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // /*FIND ALL REFS*/<|declare module "[|foo|]" {
+  //     var f: number;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"foo\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
-// declare module "/*FIND ALL REFS*/[|foo|]" {
+// <|declare module "/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|]" {
 //     var f: number;
-// }
+// }|>
 
 // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
-// import f = require("[|foo|]");
+// <|import f = require("[|foo|]");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "module",
-      "name": "module \"foo\"",
-      "textSpan": {
-        "start": 16,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 16,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|declare module "/*FIND ALL REFS*/[|foo|]" {
+  //     var f: number;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"foo\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
-// /*FIND ALL REFS*/import [|f|] = require("foo");
+// /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}f|] = require("foo");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-      "kind": "alias",
-      "name": "(alias) module \"foo\"\nimport f = require(\"foo\")",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+  // /*FIND ALL REFS*/<|import [|f|] = require("foo");|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) module \"foo\"\nimport f = require(\"foo\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
-// declare module "[|foo|]" {
+// <|declare module "[|{| isWriteAccess: true |}foo|]" {
 //     var f: number;
-// }
+// }|>
 
 // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
-// import f = require("/*FIND ALL REFS*/[|foo|]");
+// <|import f = require("/*FIND ALL REFS*/[|foo|]");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "module",
-      "name": "module \"foo\"",
-      "textSpan": {
-        "start": 16,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 16,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|declare module "[|foo|]" {
+  //     var f: number;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"foo\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

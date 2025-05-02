@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
+
 //// [generatedContextualTyping.ts]
 class Base { private p; }
 class Derived1 extends Base { private m; }

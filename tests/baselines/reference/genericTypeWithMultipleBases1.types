@@ -1,38 +1,55 @@
-=== tests/cases/compiler/genericTypeWithMultipleBases1.ts ===
+//// [tests/cases/compiler/genericTypeWithMultipleBases1.ts] ////
+
+=== genericTypeWithMultipleBases1.ts ===
 export interface I1 {
     m1: () => void;
 >m1 : () => void
+>   : ^^^^^^    
 }
  
 export interface I2 {
     m2: () => void;
 >m2 : () => void
+>   : ^^^^^^    
 }
  
 export interface I3<T> extends I1, I2 {
 //export interface I3<T> extends I2, I1 {
     p1: T;
 >p1 : T
+>   : ^
 }
  
 var x: I3<number>;
 >x : I3<number>
+>  : ^^^^^^^^^^
 
 x.p1;
 >x.p1 : number
+>     : ^^^^^^
 >x : I3<number>
+>  : ^^^^^^^^^^
 >p1 : number
+>   : ^^^^^^
 
 x.m1();
 >x.m1() : void
+>       : ^^^^
 >x.m1 : () => void
+>     : ^^^^^^    
 >x : I3<number>
+>  : ^^^^^^^^^^
 >m1 : () => void
+>   : ^^^^^^    
 
 x.m2();
 >x.m2() : void
+>       : ^^^^
 >x.m2 : () => void
+>     : ^^^^^^    
 >x : I3<number>
+>  : ^^^^^^^^^^
 >m2 : () => void
+>   : ^^^^^^    
 
 

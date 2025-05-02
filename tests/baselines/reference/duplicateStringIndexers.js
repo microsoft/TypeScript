@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/duplicateStringIndexers.ts] ////
+
 //// [duplicateStringIndexers.ts]
 // it is an error to have duplicate index signatures of the same kind in a type
 

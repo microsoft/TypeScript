@@ -1,22 +1,41 @@
-=== tests/cases/compiler/objectBindingPatternContextuallyTypesArgument.ts ===
+//// [tests/cases/compiler/objectBindingPatternContextuallyTypesArgument.ts] ////
+
+=== objectBindingPatternContextuallyTypesArgument.ts ===
 declare function id<T>(x: T): T;
 >id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 const { f = (x: string) => x.length } = id({ f: x => x.charAt });
 >f : ((x: string) => number) | ((x: string) => (pos: number) => string)
+>  : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^      ^^^^^      ^
 >(x: string) => x.length : (x: string) => number
+>                        : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 >id({ f: x => x.charAt }) : { f: (x: string) => (pos: number) => string; }
+>                         : ^^^^^^ ^^^^^^^^^^^^^^   ^^      ^^^^^      ^^^
 >id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >{ f: x => x.charAt } : { f: (x: string) => (pos: number) => string; }
+>                     : ^^^^^^ ^^^^^^^^^^^^^^   ^^      ^^^^^      ^^^
 >f : (x: string) => (pos: number) => string
+>  : ^ ^^^^^^^^^^^^^^   ^^      ^^^^^      
 >x => x.charAt : (x: string) => (pos: number) => string
+>              : ^ ^^^^^^^^^^^^^^   ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >x.charAt : (pos: number) => string
+>         : ^   ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 

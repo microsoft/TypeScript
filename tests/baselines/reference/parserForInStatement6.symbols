@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement6.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement6.ts] ////
+
+=== parserForInStatement6.ts ===
 for (var a = 1, b = 2 in X) {
 >a : Symbol(a, Decl(parserForInStatement6.ts, 0, 8))
 >b : Symbol(b, Decl(parserForInStatement6.ts, 0, 15))

@@ -1,115 +1,172 @@
-=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts ===
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts] ////
+
+=== errorForUsingPropertyOfTypeAsType01.ts ===
 namespace Test1 {
 >Test1 : typeof Test1
+>      : ^^^^^^^^^^^^
 
     export interface Foo {
         bar: string;
 >bar : string
+>    : ^^^^^^
     }
 
     var x: Foo.bar = "";
 >x : Foo.bar
+>  : ^^^^^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 
     var y: Test1.Foo.bar = "";
 >y : Test1.Foo.bar
+>  : ^^^^^^^^^^^^^
 >Test1 : any
+>      : ^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 }
 
 namespace Test2 {
 >Test2 : typeof Test2
+>      : ^^^^^^^^^^^^
 
     export class Foo {
 >Foo : Foo
+>    : ^^^
 
         bar: string;
 >bar : string
+>    : ^^^^^^
     }
 
     var x: Foo.bar = "";
 >x : Foo.bar
+>  : ^^^^^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 
     var y: Test2.Foo.bar = "";
 >y : Test2.Foo.bar
+>  : ^^^^^^^^^^^^^
 >Test2 : any
+>      : ^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 }
 
 namespace Test3 {
 >Test3 : typeof Test3
+>      : ^^^^^^^^^^^^
 
     export type Foo = {
->Foo : { bar: string; }
+>Foo : Foo
+>    : ^^^
 
         bar: string;
 >bar : string
+>    : ^^^^^^
     }
 
     var x: Foo.bar = "";
 >x : Foo.bar
+>  : ^^^^^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 
     var y: Test3.Foo.bar = "";
 >y : Test3.Foo.bar
+>  : ^^^^^^^^^^^^^
 >Test3 : any
+>      : ^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 }
 
 namespace Test4 {
 >Test4 : typeof Test4
+>      : ^^^^^^^^^^^^
 
     export type Foo = { bar: number }
->Foo : { bar: number; } | { bar: string; }
+>Foo : Foo
+>    : ^^^
 >bar : number
+>    : ^^^^^^
 
                     | { bar: string }
 >bar : string
+>    : ^^^^^^
 
     var x: Foo.bar = "";
 >x : Foo.bar
+>  : ^^^^^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 
     var y: Test4.Foo.bar = "";
 >y : Test4.Foo.bar
+>  : ^^^^^^^^^^^^^
 >Test4 : any
+>      : ^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 }
 
 namespace Test5 {
 >Test5 : typeof Test5
+>      : ^^^^^^^^^^^^
 
     export type Foo = { bar: number }
->Foo : { bar: number; } | { wat: string; }
+>Foo : Foo
+>    : ^^^
 >bar : number
+>    : ^^^^^^
 
                     | { wat: string }
 >wat : string
+>    : ^^^^^^
 
     var x: Foo.bar = "";
 >x : Foo.bar
+>  : ^^^^^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 
     var y: Test5.Foo.bar = "";
 >y : Test5.Foo.bar
+>  : ^^^^^^^^^^^^^
 >Test5 : any
+>      : ^^^
 >Foo : any
+>    : ^^^
 >"" : ""
+>   : ^^
 }
 
 import lol = Test5.Foo.
 >lol : any
+>    : ^^^
 >Test5 : typeof Test5
+>      : ^^^^^^^^^^^^
 >Foo : any
+>    : ^^^
 > : any
+> : ^^^
 

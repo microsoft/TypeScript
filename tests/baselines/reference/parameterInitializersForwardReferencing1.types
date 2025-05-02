@@ -1,100 +1,153 @@
-=== tests/cases/conformance/functions/parameterInitializersForwardReferencing1.ts ===
+//// [tests/cases/conformance/functions/parameterInitializersForwardReferencing1.ts] ////
+
+=== parameterInitializersForwardReferencing1.ts ===
 let foo: string = "";
 >foo : string
+>    : ^^^^^^
 >"" : ""
+>   : ^^
 
 function f1 (bar = foo) { // unexpected compiler error; works at runtime
 >f1 : (bar?: number) => number
+>   : ^   ^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 
     var foo: number = 2;
 >foo : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 
     return bar; // returns 1
 >bar : number
+>    : ^^^^^^
 }
 
 function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at runtime
 >f2 : (bar?: (baz?: number) => number) => number
+>   : ^   ^^^^   ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : (baz?: number) => number
+>    : ^   ^^^^^^^^^^^^^^^^^^^^
 >(baz = foo) => baz : (baz?: number) => number
+>                   : ^   ^^^^^^^^^^^^^^^^^^^^
 >baz : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >baz : number
+>    : ^^^^^^
 
     var foo: number = 2;
 >foo : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 
     return bar(); // returns 1
 >bar() : number
+>      : ^^^^^^
 >bar : (baz?: number) => number
+>    : ^   ^^^^^^^^^^^^^^^^^^^^
 }
 
 function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
 >f3 : (bar?: number, foo?: number) => number
+>   : ^   ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 
     return bar;
 >bar : number
+>    : ^^^^^^
 }
 
 function f4 (foo, bar = foo) {
 >f4 : (foo: any, bar?: any) => any
+>   : ^   ^^^^^^^   ^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 >foo : any
+>    : ^^^
 
     return bar
 >bar : any
+>    : ^^^
 }
 
 function f5 (a = a) {
 >f5 : (a?: any) => any
+>   : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     return a
 >a : any
+>  : ^^^
 }
 
 function f6 (async = async) {
 >f6 : (async?: any) => any
+>   : ^     ^^^^^^^^^^^^^^
 >async : any
+>      : ^^^
 >async : any
+>      : ^^^
 
     return async
 >async : any
+>      : ^^^
 }
 
 function f7({[foo]: bar}: any[]) {
 >f7 : ({ [foo]: bar }: any[]) => void
+>   : ^              ^^     ^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : any
+>    : ^^^
 
     let foo: number = 2;
 >foo : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 }
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor(public x = 12, public y = x) {}
 >x : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function f8(foo1: string, bar = foo1) { }
 >f8 : (foo1: string, bar?: string) => void
+>   : ^    ^^      ^^   ^^^^^^^^^^^^^^^^^^
 >foo1 : string
+>     : ^^^^^^
 >bar : string
+>    : ^^^^^^
 >foo1 : string
+>     : ^^^^^^
 

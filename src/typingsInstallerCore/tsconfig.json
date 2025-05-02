@@ -1,20 +1,13 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/typingsInstallerCore.js",
         "types": [
             "node"
-        ],
-        "lib": [
-            "es6",
-            "scripthost"
         ]
     },
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" }
     ],
-    "files": [
-        "typingsInstaller.ts"
-    ]
+    "include": ["**/*"]
 }

@@ -1,6 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors2.ts] ////
+
+=== parserAccessors2.ts ===
 class C {
 >C : C
+>  : ^
 
     set Foo(a) { }
 >Foo : any

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classWithMultipleBaseClasses.ts] ////
+
 //// [classWithMultipleBaseClasses.ts]
 class A {
     foo() { }

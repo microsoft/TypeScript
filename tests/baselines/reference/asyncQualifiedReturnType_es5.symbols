@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es5/asyncQualifiedReturnType_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncQualifiedReturnType_es5.ts] ////
+
+=== asyncQualifiedReturnType_es5.ts ===
 namespace X {
 >X : Symbol(X, Decl(asyncQualifiedReturnType_es5.ts, 0, 0))
 

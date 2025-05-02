@@ -1,38 +1,40 @@
-=== tests/cases/conformance/salsa/mod.js ===
+//// [tests/cases/conformance/salsa/exportNestedNamespaces2.ts] ////
+
+=== mod.js ===
 // Based on a pattern from adonis
 exports.formatters = {}
 >exports.formatters : Symbol(formatters, Decl(mod.js, 0, 0))
 >exports : Symbol(formatters, Decl(mod.js, 0, 0))
 >formatters : Symbol(formatters, Decl(mod.js, 0, 0))
 
-=== tests/cases/conformance/salsa/first.js ===
+=== first.js ===
 exports = require('./mod')
->exports : Symbol("tests/cases/conformance/salsa/first", Decl(first.js, 0, 0))
+>exports : Symbol("first", Decl(first.js, 0, 0))
 >require : Symbol(require)
->'./mod' : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>'./mod' : Symbol("mod", Decl(mod.js, 0, 0))
 
 exports.formatters.j = function (v) {
->exports : Symbol("tests/cases/conformance/salsa/first", Decl(first.js, 0, 0))
+>exports : Symbol("first", Decl(first.js, 0, 0))
 >v : Symbol(v, Decl(first.js, 1, 33))
 
     return v
 >v : Symbol(v, Decl(first.js, 1, 33))
 }
-=== tests/cases/conformance/salsa/second.js ===
+=== second.js ===
 exports = require('./mod')
->exports : Symbol("tests/cases/conformance/salsa/second", Decl(second.js, 0, 0))
+>exports : Symbol("second", Decl(second.js, 0, 0))
 >require : Symbol(require)
->'./mod' : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>'./mod' : Symbol("mod", Decl(mod.js, 0, 0))
 
 exports.formatters.o = function (v) {
->exports : Symbol("tests/cases/conformance/salsa/second", Decl(second.js, 0, 0))
+>exports : Symbol("second", Decl(second.js, 0, 0))
 >v : Symbol(v, Decl(second.js, 1, 33))
 
     return v
 >v : Symbol(v, Decl(second.js, 1, 33))
 }
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 import * as debug from './mod'
 >debug : Symbol(debug, Decl(use.js, 0, 6))
 

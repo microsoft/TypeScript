@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericFunctionParameters.ts] ////
+
 //// [genericFunctionParameters.ts]
 declare function f1<T>(cb: <S>(x: S) => T): T;
 declare function f2<T>(cb: <S extends number>(x: S) => T): T;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts] ////
+
 //// [intersectionWithUnionConstraint.ts]
 function f1<T extends string | number, U extends string | number>(x: T & U) {
     // Combined constraint of 'T & U' is 'string | number'

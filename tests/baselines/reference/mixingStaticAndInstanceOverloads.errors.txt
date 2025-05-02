@@ -1,12 +1,12 @@
-tests/cases/compiler/mixingStaticAndInstanceOverloads.ts(5,12): error TS2388: Function overload must not be static.
-tests/cases/compiler/mixingStaticAndInstanceOverloads.ts(11,5): error TS2387: Function overload must be static.
-tests/cases/compiler/mixingStaticAndInstanceOverloads.ts(16,12): error TS2388: Function overload must not be static.
-tests/cases/compiler/mixingStaticAndInstanceOverloads.ts(17,5): error TS2387: Function overload must be static.
-tests/cases/compiler/mixingStaticAndInstanceOverloads.ts(22,5): error TS2387: Function overload must be static.
-tests/cases/compiler/mixingStaticAndInstanceOverloads.ts(23,12): error TS2388: Function overload must not be static.
+mixingStaticAndInstanceOverloads.ts(5,12): error TS2388: Function overload must not be static.
+mixingStaticAndInstanceOverloads.ts(11,5): error TS2387: Function overload must be static.
+mixingStaticAndInstanceOverloads.ts(16,12): error TS2388: Function overload must not be static.
+mixingStaticAndInstanceOverloads.ts(17,5): error TS2387: Function overload must be static.
+mixingStaticAndInstanceOverloads.ts(22,5): error TS2387: Function overload must be static.
+mixingStaticAndInstanceOverloads.ts(23,12): error TS2388: Function overload must not be static.
 
 
-==== tests/cases/compiler/mixingStaticAndInstanceOverloads.ts (6 errors) ====
+==== mixingStaticAndInstanceOverloads.ts (6 errors) ====
     class C1 {
         // ERROR
         foo1(n: number);

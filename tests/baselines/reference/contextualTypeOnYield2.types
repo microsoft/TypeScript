@@ -1,18 +1,31 @@
-=== tests/cases/compiler/contextualTypeOnYield2.ts ===
+//// [tests/cases/compiler/contextualTypeOnYield2.ts] ////
+
+=== contextualTypeOnYield2.ts ===
 type OrGen = () => (number | Generator<string, (arg: number) => void, undefined>);
->OrGen : () => number | Generator<string, (arg: number) => void, undefined>
+>OrGen : OrGen
+>      : ^^^^^
 >arg : number
+>    : ^^^^^^
 
 const g: OrGen = function* () {
 >g : OrGen
->function* () {    return (num) => console.log(num);} : () => Generator<never, (num: number) => void, unknown>
+>  : ^^^^^
+>function* () {    return (num) => console.log(num);} : () => Generator<never, (num: number) => void, undefined>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return (num) => console.log(num);
 >(num) => console.log(num) : (num: number) => void
+>                          : ^   ^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
 >console.log(num) : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >num : number
+>    : ^^^^^^
 }

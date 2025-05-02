@@ -1,57 +1,84 @@
-=== tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx ===
+//// [tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx] ////
+
+=== jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from 'react'
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 type Tab = [string, React.ReactNode]  // [tabName, tabContent]
->Tab : [string, React.ReactNode]
+>Tab : Tab
+>    : ^^^
 >React : any
+>      : ^^^
 
 interface Props {
     children: Tab[]
 >children : Tab[]
+>         : ^^^^^
 }
 
 function TabLayout(props: Props) {
 >TabLayout : (props: Props) => JSX.Element
+>          : ^     ^^     ^^^^^^^^^^^^^^^^
 >props : Props
+>      : ^^^^^
 
     return <div/>
 ><div/> : JSX.Element
+>       : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 }
 
 export class App extends React.Component<{}> {
 >App : App
+>    : ^^^
 >React.Component : React.Component<{}, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <TabLayout>
 ><TabLayout>            {[                ['Users', <div/>],                ['Products', <div/>]            ]}        </TabLayout> : JSX.Element
+>                                                                                                                                  : ^^^^^^^^^^^
 >TabLayout : (props: Props) => JSX.Element
+>          : ^     ^^     ^^^^^^^^^^^^^^^^
 
             {[
 >[                ['Users', <div/>],                ['Products', <div/>]            ] : [string, JSX.Element][]
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^
 
                 ['Users', <div/>],
 >['Users', <div/>] : [string, JSX.Element]
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 >'Users' : "Users"
+>        : ^^^^^^^
 ><div/> : JSX.Element
+>       : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
                 ['Products', <div/>]
 >['Products', <div/>] : [string, JSX.Element]
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >'Products' : "Products"
+>           : ^^^^^^^^^^
 ><div/> : JSX.Element
+>       : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
             ]}
         </TabLayout>
 >TabLayout : (props: Props) => JSX.Element
+>          : ^     ^^     ^^^^^^^^^^^^^^^^
     }
 }

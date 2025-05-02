@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessToThisTypeOnIntersection01.ts] ////
+
 //// [indexedAccessToThisTypeOnIntersection01.ts]
 interface A {
   a: string;

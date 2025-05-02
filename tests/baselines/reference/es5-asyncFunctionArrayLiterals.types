@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-asyncFunctionArrayLiterals.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionArrayLiterals.ts] ////
+
+=== es5-asyncFunctionArrayLiterals.ts ===
 declare var x, y, z, a;
 >x : any
 >y : any
@@ -7,11 +9,14 @@ declare var x, y, z, a;
 
 async function arrayLiteral0() {
 >arrayLiteral0 : () => Promise<void>
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x = [await y, z];
 >x = [await y, z] : any[]
+>                 : ^^^^^
 >x : any
 >[await y, z] : any[]
+>             : ^^^^^
 >await y : any
 >y : any
 >z : any
@@ -19,11 +24,14 @@ async function arrayLiteral0() {
 
 async function arrayLiteral1() {
 >arrayLiteral1 : () => Promise<void>
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x = [y, await z];
 >x = [y, await z] : any[]
+>                 : ^^^^^
 >x : any
 >[y, await z] : any[]
+>             : ^^^^^
 >y : any
 >await z : any
 >z : any
@@ -31,11 +39,14 @@ async function arrayLiteral1() {
 
 async function arrayLiteral2() {
 >arrayLiteral2 : () => Promise<void>
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x = [...(await y), z];
 >x = [...(await y), z] : any[]
+>                      : ^^^^^
 >x : any
 >[...(await y), z] : any[]
+>                  : ^^^^^
 >...(await y) : any
 >(await y) : any
 >await y : any
@@ -45,11 +56,14 @@ async function arrayLiteral2() {
 
 async function arrayLiteral3() {
 >arrayLiteral3 : () => Promise<void>
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x = [...y, await z];
 >x = [...y, await z] : any[]
+>                    : ^^^^^
 >x : any
 >[...y, await z] : any[]
+>                : ^^^^^
 >...y : any
 >y : any
 >await z : any
@@ -58,11 +72,14 @@ async function arrayLiteral3() {
 
 async function arrayLiteral4() {
 >arrayLiteral4 : () => Promise<void>
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x = [await y, ...z];
 >x = [await y, ...z] : any[]
+>                    : ^^^^^
 >x : any
 >[await y, ...z] : any[]
+>                : ^^^^^
 >await y : any
 >y : any
 >...z : any
@@ -71,11 +88,14 @@ async function arrayLiteral4() {
 
 async function arrayLiteral5() {
 >arrayLiteral5 : () => Promise<void>
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x = [y, ...(await z)];
 >x = [y, ...(await z)] : any[]
+>                      : ^^^^^
 >x : any
 >[y, ...(await z)] : any[]
+>                  : ^^^^^
 >y : any
 >...(await z) : any
 >(await z) : any
@@ -85,11 +105,14 @@ async function arrayLiteral5() {
 
 async function arrayLiteral6() {
 >arrayLiteral6 : () => Promise<void>
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x = [y, await z, a];
 >x = [y, await z, a] : any[]
+>                    : ^^^^^
 >x : any
 >[y, await z, a] : any[]
+>                : ^^^^^
 >y : any
 >await z : any
 >z : any
@@ -98,11 +121,14 @@ async function arrayLiteral6() {
 
 async function arrayLiteral7() {
 >arrayLiteral7 : () => Promise<void>
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x = [await y, z, await a];
 >x = [await y, z, await a] : any[]
+>                          : ^^^^^
 >x : any
 >[await y, z, await a] : any[]
+>                      : ^^^^^
 >await y : any
 >y : any
 >z : any

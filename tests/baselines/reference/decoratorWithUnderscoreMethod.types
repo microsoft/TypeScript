@@ -1,26 +1,40 @@
-=== tests/cases/compiler/decoratorWithUnderscoreMethod.ts ===
+//// [tests/cases/compiler/decoratorWithUnderscoreMethod.ts] ////
+
+=== decoratorWithUnderscoreMethod.ts ===
 declare var console : { log(arg: string): void };
 >console : { log(arg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (arg: string) => void
+>    : ^   ^^      ^^^^^    
 >arg : string
+>    : ^^^^^^
 
 function dec(): Function {
 >dec : () => Function
+>    : ^^^^^^        
 
     return function (target: any, propKey: string, descr: PropertyDescriptor): void {
 >function (target: any, propKey: string, descr: PropertyDescriptor): void {        console.log(target[propKey]);        //logs undefined        //propKey has three underscores as prefix, but the method has only two underscores    } : (target: any, propKey: string, descr: PropertyDescriptor) => void
+>                                                                                                                                                                                                                                       : ^      ^^   ^^       ^^      ^^     ^^                  ^^^^^    
 >target : any
 >propKey : string
+>        : ^^^^^^
 >descr : PropertyDescriptor
+>      : ^^^^^^^^^^^^^^^^^^
 
         console.log(target[propKey]);
 >console.log(target[propKey]) : void
+>                             : ^^^^
 >console.log : (arg: string) => void
+>            : ^   ^^      ^^^^^    
 >console : { log(arg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (arg: string) => void
+>    : ^   ^^      ^^^^^    
 >target[propKey] : any
 >target : any
 >propKey : string
+>        : ^^^^^^
 
         //logs undefined
         //propKey has three underscores as prefix, but the method has only two underscores
@@ -29,14 +43,19 @@ function dec(): Function {
 
 class A {
 >A : A
+>  : ^
 
     @dec()
 >dec() : Function
+>      : ^^^^^^^^
 >dec : () => Function
+>    : ^^^^^^        
 
     private __foo(bar: string): void {
 >__foo : (bar: string) => void
+>      : ^   ^^      ^^^^^    
 >bar : string
+>    : ^^^^^^
 
         // do something with bar
     }

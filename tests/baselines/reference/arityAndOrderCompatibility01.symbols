@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts ===
+//// [tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts] ////
+
+=== arityAndOrderCompatibility01.ts ===
 interface StrNum extends Array<string|number> {
 >StrNum : Symbol(StrNum, Decl(arityAndOrderCompatibility01.ts, 0, 0))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

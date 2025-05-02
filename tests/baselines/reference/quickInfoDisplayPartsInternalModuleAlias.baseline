@@ -1,3 +1,60 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsInternalModuleAlias.ts ===
+// module m.m1 {
+//     export class c {
+//     }
+// }
+// module m2 {
+//     import a1 = m;
+//            ^^
+// | ----------------------------------------------------------------------
+// | (alias) namespace a1
+// | import a1 = m
+// | ----------------------------------------------------------------------
+//     new a1.m1.c();
+//         ^^
+// | ----------------------------------------------------------------------
+// | (alias) namespace a1
+// | import a1 = m
+// | ----------------------------------------------------------------------
+//     import a2 = m.m1;
+//            ^^
+// | ----------------------------------------------------------------------
+// | (alias) namespace a2
+// | import a2 = m.m1
+// | ----------------------------------------------------------------------
+//     new a2.c();
+//         ^^
+// | ----------------------------------------------------------------------
+// | (alias) namespace a2
+// | import a2 = m.m1
+// | ----------------------------------------------------------------------
+//     export import a3 = m;
+//                   ^^
+// | ----------------------------------------------------------------------
+// | (alias) namespace m2.a3
+// | import m2.a3 = m
+// | ----------------------------------------------------------------------
+//     new a3.m1.c();
+//         ^^
+// | ----------------------------------------------------------------------
+// | (alias) namespace m2.a3
+// | import m2.a3 = m
+// | ----------------------------------------------------------------------
+//     export import a4 = m.m1;
+//                   ^^
+// | ----------------------------------------------------------------------
+// | (alias) namespace m2.a4
+// | import m2.a4 = m.m1
+// | ----------------------------------------------------------------------
+//     new a4.c();
+//         ^^
+// | ----------------------------------------------------------------------
+// | (alias) namespace m2.a4
+// | import m2.a4 = m.m1
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +62,7 @@
       "position": 66,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "",
       "textSpan": {
@@ -83,7 +140,7 @@
       "position": 82,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "",
       "textSpan": {
@@ -161,7 +218,7 @@
       "position": 104,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {
@@ -247,7 +304,7 @@
       "position": 123,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {
@@ -333,7 +390,7 @@
       "position": 149,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {
@@ -427,7 +484,7 @@
       "position": 165,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {
@@ -521,7 +578,7 @@
       "position": 194,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {
@@ -623,7 +680,7 @@
       "position": 213,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {

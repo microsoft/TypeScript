@@ -12,9 +12,7 @@
 ////    x./*2*/foo
 ////}
 
-verify.baselineFindAllReferencesMulti(1, '1', '2');
-
+verify.baselineFindAllReferences("1", "2");
 goTo.marker("");
 edit.insert("\n");
-
-verify.baselineFindAllReferencesMulti(2, '1', '2');
+verify.baselineFindAllReferences("1", "2");

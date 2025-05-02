@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints4.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints4.ts] ////
+
+=== wrappedAndRecursiveConstraints4.ts ===
 class C<T extends { length: number }> {
 >C : Symbol(C, Decl(wrappedAndRecursiveConstraints4.ts, 0, 0))
 >T : Symbol(T, Decl(wrappedAndRecursiveConstraints4.ts, 0, 8))

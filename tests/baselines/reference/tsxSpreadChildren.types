@@ -1,9 +1,12 @@
-=== tests/cases/conformance/jsx/tsxSpreadChildren.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadChildren.tsx] ////
+
+=== tsxSpreadChildren.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 declare var React: any;
@@ -12,69 +15,114 @@ declare var React: any;
 interface TodoProp {
     id: number;
 >id : number
+>   : ^^^^^^
 
     todo: string;
 >todo : string
+>     : ^^^^^^
 }
 interface TodoListProps {
     todos: TodoProp[];
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 }
 function Todo(prop: { key: number, todo: string }) {
->Todo : (prop: {    key: number;    todo: string;}) => JSX.Element
+>Todo : (prop: { key: number; todo: string; }) => JSX.Element
+>     : ^    ^^                              ^^^^^^^^^^^^^^^^
 >prop : { key: number; todo: string; }
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number
+>    : ^^^^^^
 >todo : string
+>     : ^^^^^^
 
     return <div>{prop.key.toString() + prop.todo}</div>;
 ><div>{prop.key.toString() + prop.todo}</div> : JSX.Element
+>                                             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >prop.key.toString() + prop.todo : string
+>                                : ^^^^^^
 >prop.key.toString() : string
+>                    : ^^^^^^
 >prop.key.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >prop.key : number
+>         : ^^^^^^
 >prop : { key: number; todo: string; }
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number
+>    : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 >prop.todo : string
+>          : ^^^^^^
 >prop : { key: number; todo: string; }
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >todo : string
+>     : ^^^^^^
 >div : any
+>    : ^^^
 }
 function TodoList({ todos }: TodoListProps) {
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
+>         : ^         ^^             ^^^^^^^^^^^^^^^^
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 
     return <div>
 ><div>        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}    </div> : JSX.Element
+>                                                                                      : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
         {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
 >todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
+>                                                          : ^^^^^^^^^^^^^
 >todos.map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
+>          : ^ ^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >todos : TodoProp[]
+>      : ^^^^^^^^^^
 >map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => JSX.Element
+>                                               : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >todo : TodoProp
+>     : ^^^^^^^^
 ><Todo key={todo.id} todo={todo.todo}/> : JSX.Element
+>                                       : ^^^^^^^^^^^
 >Todo : (prop: { key: number; todo: string; }) => JSX.Element
+>     : ^    ^^                              ^^^^^^^^^^^^^^^^
 >key : number
+>    : ^^^^^^
 >todo.id : number
+>        : ^^^^^^
 >todo : TodoProp
+>     : ^^^^^^^^
 >id : number
+>   : ^^^^^^
 >todo : string
+>     : ^^^^^^
 >todo.todo : string
+>          : ^^^^^^
 >todo : TodoProp
+>     : ^^^^^^^^
 >todo : string
+>     : ^^^^^^
 
     </div>;
 >div : any
+>    : ^^^
 }
 let x: TodoListProps;
 >x : TodoListProps
+>  : ^^^^^^^^^^^^^
 
     <TodoList {...x}/>
 ><TodoList {...x}/> : JSX.Element
+>                   : ^^^^^^^^^^^
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
+>         : ^         ^^             ^^^^^^^^^^^^^^^^
 >x : TodoListProps
+>  : ^^^^^^^^^^^^^
 

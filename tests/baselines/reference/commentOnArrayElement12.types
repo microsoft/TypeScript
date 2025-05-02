@@ -1,11 +1,17 @@
-=== tests/cases/compiler/commentOnArrayElement12.ts ===
+//// [tests/cases/compiler/commentOnArrayElement12.ts] ////
+
+=== commentOnArrayElement12.ts ===
 const array = [
 >array : any[]
+>      : ^^^^^
 >[    ,, /* comment */] : undefined[]
+>                       : ^^^^^^^^^^^
 
     ,, /* comment */
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 
 ];
 

@@ -1,68 +1,103 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts] ////
+
+=== restParametersOfNonArrayTypes.ts ===
 // Rest parameters must be an array type if they have a type annotation, so all these are errors
 
 function foo(...x: string) { }
 >foo : (...x: string) => void
+>    : ^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 var f = function foo(...x: number) { }
 >f : (...x: number) => void
+>  : ^^^^ ^^      ^^^^^^^^^
 >function foo(...x: number) { } : (...x: number) => void
+>                               : ^^^^ ^^      ^^^^^^^^^
 >foo : (...x: number) => void
+>    : ^^^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 var f2 = (...x: Date, ...y: boolean) => { }
 >f2 : (...x: Date, ...y: boolean) => void
+>   : ^^^^ ^^    ^^^^^ ^^       ^^^^^^^^^
 >(...x: Date, ...y: boolean) => { } : (...x: Date, ...y: boolean) => void
+>                                   : ^^^^ ^^    ^^^^^ ^^       ^^^^^^^^^
 >x : Date
+>  : ^^^^
 >y : boolean
+>  : ^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     foo(...x: C) { }
 >foo : (...x: C) => void
+>    : ^^^^ ^^ ^^^^^^^^^
 >x : C
+>  : ^
 }
 
 interface I {
     (...x: string);
 >x : string
+>  : ^^^^^^
 
     foo(...x: number, ...y: number);
 >foo : (...x: number, ...y: number) => any
+>    : ^^^^ ^^      ^^^^^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 var a: {
 >a : { (...x: string): any; foo(...x: string): any; }
+>  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
     (...x: string);
 >x : string
+>  : ^^^^^^
 
     foo(...x: string);
 >foo : (...x: string) => any
+>    : ^^^^ ^^      ^^^^^^^^
 >x : string
+>  : ^^^^^^
 }
 
 var b = {
 >b : { foo(...x: string): void; a: (...x: number, ...y: Date) => void; b: (...x: string) => void; }
+>  : ^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^ ^^    ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >{    foo(...x: string) { },    a: function foo(...x: number, ...y: Date) { },    b: (...x: string) => { }} : { foo(...x: string): void; a: (...x: number, ...y: Date) => void; b: (...x: string) => void; }
+>                                                                                                           : ^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^ ^^    ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 
     foo(...x: string) { },
 >foo : (...x: string) => void
+>    : ^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     a: function foo(...x: number, ...y: Date) { },
 >a : (...x: number, ...y: Date) => void
+>  : ^^^^ ^^      ^^^^^ ^^    ^^^^^^^^^
 >function foo(...x: number, ...y: Date) { } : (...x: number, ...y: Date) => void
+>                                           : ^^^^ ^^      ^^^^^ ^^    ^^^^^^^^^
 >foo : (...x: number, ...y: Date) => void
+>    : ^^^^ ^^      ^^^^^ ^^    ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : Date
+>  : ^^^^
 
     b: (...x: string) => { }
 >b : (...x: string) => void
+>  : ^^^^ ^^      ^^^^^^^^^
 >(...x: string) => { } : (...x: string) => void
+>                      : ^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 }

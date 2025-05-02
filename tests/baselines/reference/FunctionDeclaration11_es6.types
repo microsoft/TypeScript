@@ -1,4 +1,7 @@
-=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration11_es6.ts ===
+//// [tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration11_es6.ts] ////
+
+=== FunctionDeclaration11_es6.ts ===
 function * yield() {
 >yield : () => Generator<never, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

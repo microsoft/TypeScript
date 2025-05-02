@@ -1,41 +1,56 @@
-=== tests/cases/compiler/consumer.tsx ===
+//// [tests/cases/compiler/jsxViaImport.2.tsx] ////
+
+=== consumer.tsx ===
 /// <reference path="component.d.ts" />
 import BaseComponent from 'BaseComponent';
 >BaseComponent : typeof BaseComponent
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 class TestComponent extends React.Component<any, {}> {
 >TestComponent : TestComponent
+>              : ^^^^^^^^^^^^^
 >React.Component : React.Component<any, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => any
+>       : ^^^^^^^^^
 
         return <BaseComponent />;
 ><BaseComponent /> : error
 >BaseComponent : typeof BaseComponent
+>              : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 
-=== tests/cases/compiler/component.d.ts ===
+=== component.d.ts ===
 declare module JSX {
   interface ElementAttributesProperty { props; }
 >props : any
 }
 declare module React {
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
   class Component<T, U> { }
 >Component : Component<T, U>
+>          : ^^^^^^^^^^^^^^^
 }
 declare module "BaseComponent" {
 >"BaseComponent" : typeof import("BaseComponent")
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export default class extends React.Component<any, {}> {
 >React.Component : React.Component<any, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

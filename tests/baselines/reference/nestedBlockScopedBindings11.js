@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedBlockScopedBindings11.ts] ////
+
 //// [nestedBlockScopedBindings11.ts]
 var x;
 {

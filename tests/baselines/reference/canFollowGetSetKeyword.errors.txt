@@ -1,0 +1,33 @@
+error TS2318: Cannot find global type 'IterableIterator'.
+canFollowGetSetKeyword.ts(10,5): error TS18004: No value exists in scope for the shorthand property 'get'. Either declare one or provide an initializer.
+canFollowGetSetKeyword.ts(11,5): error TS1005: ',' expected.
+canFollowGetSetKeyword.ts(14,5): error TS18004: No value exists in scope for the shorthand property 'set'. Either declare one or provide an initializer.
+canFollowGetSetKeyword.ts(15,5): error TS1005: ',' expected.
+
+
+!!! error TS2318: Cannot find global type 'IterableIterator'.
+==== canFollowGetSetKeyword.ts (4 errors) ====
+    class A {
+        get
+        *x() {}
+    }
+    class B {
+        set
+        *x() {}
+    }
+    const c = {
+        get
+        ~~~
+!!! error TS18004: No value exists in scope for the shorthand property 'get'. Either declare one or provide an initializer.
+        *x() {}
+        ~
+!!! error TS1005: ',' expected.
+    };
+    const d = {
+        set
+        ~~~
+!!! error TS18004: No value exists in scope for the shorthand property 'set'. Either declare one or provide an initializer.
+        *x() {}
+        ~
+!!! error TS1005: ',' expected.
+    };

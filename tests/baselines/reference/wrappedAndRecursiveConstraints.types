@@ -1,41 +1,59 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints.ts] ////
+
+=== wrappedAndRecursiveConstraints.ts ===
 // no errors expected
 
 class C<T extends Date> {
 >C : C<T>
+>  : ^^^^
 
     constructor(public data: T) { }
 >data : T
+>     : ^
 
     foo<U extends T>(x: U) {
 >foo : <U extends T>(x: U) => U
+>    : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : U
+>  : ^
 
         return x;
 >x : U
+>  : ^
     }
 }
 
 interface Foo extends Date {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 var y: Foo = null;
 >y : Foo
->null : null
+>  : ^^^
 
 var c = new C(y);
 >c : C<Foo>
+>  : ^^^^^^
 >new C(y) : C<Foo>
+>         : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >y : Foo
+>  : ^^^
 
 var r = c.foo(y);
 >r : Foo
+>  : ^^^
 >c.foo(y) : Foo
+>         : ^^^
 >c.foo : <U extends Foo>(x: U) => U
+>      : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^
 >c : C<Foo>
+>  : ^^^^^^
 >foo : <U extends Foo>(x: U) => U
+>    : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^
 >y : Foo
+>  : ^^^
 

@@ -1,4 +1,4 @@
-/mod1.ts(1,17): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+/mod1.ts(1,17): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
 
 
 ==== /mod2.ts (0 errors) ====
@@ -11,5 +11,5 @@
 ==== /mod1.ts (1 errors) ====
     export function foo(): Lib { return {x: 1} }
                     ~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
     

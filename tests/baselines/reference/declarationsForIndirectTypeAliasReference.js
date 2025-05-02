@@ -35,11 +35,11 @@ function doSome(arg1: string,
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [a.js]
 "use strict";
-exports.__esModule = true;
-exports.doSome = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.doSome = doSome;
 var MAP = {
     a: "a"
 };
@@ -50,7 +50,6 @@ function doSome(arg1, arg2, arg3) {
     if (arg2 === void 0) { arg2 = MAP; }
     if (arg3 === void 0) { arg3 = MAP2; }
 }
-exports.doSome = doSome;
 
 
 //// [b.d.ts]

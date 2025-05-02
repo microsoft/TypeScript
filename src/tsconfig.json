@@ -2,13 +2,18 @@
     "files": [],
     "include": [],
     "references": [
+        { "path": "./compiler" },
+        { "path": "./deprecatedCompat" },
+        { "path": "./harness" },
+        { "path": "./jsTyping" },
+        { "path": "./server" },
+        { "path": "./services" },
+        { "path": "./testRunner" },
         { "path": "./tsc" },
         { "path": "./tsserver" },
+        { "path": "./typescript" },
         { "path": "./typingsInstaller" },
-        { "path": "./watchGuard" },
-        { "path": "./debug" },
-        { "path": "./cancellationToken" },
-        { "path": "./dynamicImportCompat" },
-        { "path": "./testRunner" }
+        { "path": "./typingsInstallerCore" },
+        { "path": "./watchGuard" }
     ]
 }

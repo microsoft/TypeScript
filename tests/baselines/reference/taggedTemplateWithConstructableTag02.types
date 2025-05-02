@@ -1,15 +1,22 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateWithConstructableTag02.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateWithConstructableTag02.ts] ////
+
+=== taggedTemplateWithConstructableTag02.ts ===
 interface I {
     new (...args: any[]): string;
 >args : any[]
+>     : ^^^^^
 
     new (): number;
 }
 var tag: I;
 >tag : I
+>    : ^
 
 tag `Hello world!`;
 >tag `Hello world!` : any
+>                   : ^^^
 >tag : I
+>    : ^
 >`Hello world!` : "Hello world!"
+>               : ^^^^^^^^^^^^^^
 

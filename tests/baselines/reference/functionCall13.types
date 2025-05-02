@@ -1,34 +1,57 @@
-=== tests/cases/compiler/functionCall13.ts ===
+//// [tests/cases/compiler/functionCall13.ts] ////
+
+=== functionCall13.ts ===
 function foo(a:string, ...b:number[]){}
 >foo : (a: string, ...b: number[]) => void
+>    : ^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number[]
+>  : ^^^^^^^^
 
 foo('foo', 1); 
 >foo('foo', 1) : void
+>              : ^^^^
 >foo : (a: string, ...b: number[]) => void
+>    : ^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 foo('foo'); 
 >foo('foo') : void
+>           : ^^^^
 >foo : (a: string, ...b: number[]) => void
+>    : ^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 foo();
 >foo() : void
+>      : ^^^^
 >foo : (a: string, ...b: number[]) => void
+>    : ^ ^^      ^^^^^ ^^        ^^^^^^^^^
 
 foo(1, 'bar');
 >foo(1, 'bar') : void
+>              : ^^^^
 >foo : (a: string, ...b: number[]) => void
+>    : ^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >'bar' : "bar"
+>      : ^^^^^
 
 foo('foo', 1, 3);
 >foo('foo', 1, 3) : void
+>                 : ^^^^
 >foo : (a: string, ...b: number[]) => void
+>    : ^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >3 : 3
+>  : ^
 

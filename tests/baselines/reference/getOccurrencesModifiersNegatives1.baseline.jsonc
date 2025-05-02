@@ -1,0 +1,813 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     [|{| kind: "none" |}export|] declare foobar;
+//     declare [|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] bar;
+//     export [|{| kind: "none" |}declare|] foobar;
+//     [|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}export|] declare foobar;
+//     declare [|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|{| kind: "none" |}declare|] bar;
+//     export /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] foobar;
+//     [|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|{| kind: "none" |}declare|] bar;
+//     export [|{| kind: "none" |}declare|] foobar;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     [|{| kind: "none" |}export|] declare foobar;
+//     declare /*HIGHLIGHTS*/[|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor(export conFoo,
+//                 declare conBar,
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     [|{| kind: "none" |}export|] declare foobar;
+//     declare [|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor(/*HIGHLIGHTS*/[|{| kind: "none" |}export|] conFoo,
+//                 declare conBar,
+//                 [|{| kind: "none" |}export|] declare conFooBar,
+//                 declare [|{| kind: "none" |}export|] conBarFoo,
+//                 static sue,
+//                 static [|{| kind: "none" |}export|] declare sueFooBar,
+//                 static declare [|{| kind: "none" |}export|] sueBarFoo,
+//                 declare static [|{| kind: "none" |}export|] barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|{| kind: "none" |}declare|] bar;
+//     export [|{| kind: "none" |}declare|] foobar;
+//     [|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] conBar,
+//                 export [|{| kind: "none" |}declare|] conFooBar,
+//                 [|{| kind: "none" |}declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|{| kind: "none" |}declare|] sueFooBar,
+//                 static [|{| kind: "none" |}declare|] export sueBarFoo,
+//                 [|{| kind: "none" |}declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     [|{| kind: "none" |}export|] declare foobar;
+//     declare [|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor([|{| kind: "none" |}export|] conFoo,
+//                 declare conBar,
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}export|] declare conFooBar,
+//                 declare [|{| kind: "none" |}export|] conBarFoo,
+//                 static sue,
+//                 static [|{| kind: "none" |}export|] declare sueFooBar,
+//                 static declare [|{| kind: "none" |}export|] sueBarFoo,
+//                 declare static [|{| kind: "none" |}export|] barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|{| kind: "none" |}declare|] bar;
+//     export [|{| kind: "none" |}declare|] foobar;
+//     [|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|{| kind: "none" |}declare|] conBar,
+//                 export /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] conFooBar,
+//                 [|{| kind: "none" |}declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|{| kind: "none" |}declare|] sueFooBar,
+//                 static [|{| kind: "none" |}declare|] export sueBarFoo,
+//                 [|{| kind: "none" |}declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|{| kind: "none" |}declare|] bar;
+//     export [|{| kind: "none" |}declare|] foobar;
+//     [|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|{| kind: "none" |}declare|] conBar,
+//                 export [|{| kind: "none" |}declare|] conFooBar,
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|{| kind: "none" |}declare|] sueFooBar,
+//                 static [|{| kind: "none" |}declare|] export sueBarFoo,
+//                 [|{| kind: "none" |}declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     [|{| kind: "none" |}export|] declare foobar;
+//     declare [|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor([|{| kind: "none" |}export|] conFoo,
+//                 declare conBar,
+//                 [|{| kind: "none" |}export|] declare conFooBar,
+//                 declare /*HIGHLIGHTS*/[|{| kind: "none" |}export|] conBarFoo,
+//                 static sue,
+//                 static [|{| kind: "none" |}export|] declare sueFooBar,
+//                 static declare [|{| kind: "none" |}export|] sueBarFoo,
+//                 declare static [|{| kind: "none" |}export|] barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 7) skipped ---
+//                 declare conBar,
+//                 export declare conFooBar,
+//                 declare export conBarFoo,
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}static|] sue,
+//                 [|{| kind: "none" |}static|] export declare sueFooBar,
+//                 [|{| kind: "none" |}static|] declare export sueBarFoo,
+//                 declare [|{| kind: "none" |}static|] export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 7) skipped ---
+//                 declare conBar,
+//                 export declare conFooBar,
+//                 declare export conBarFoo,
+//                 [|{| kind: "none" |}static|] sue,
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}static|] export declare sueFooBar,
+//                 [|{| kind: "none" |}static|] declare export sueBarFoo,
+//                 declare [|{| kind: "none" |}static|] export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     [|{| kind: "none" |}export|] declare foobar;
+//     declare [|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor([|{| kind: "none" |}export|] conFoo,
+//                 declare conBar,
+//                 [|{| kind: "none" |}export|] declare conFooBar,
+//                 declare [|{| kind: "none" |}export|] conBarFoo,
+//                 static sue,
+//                 static /*HIGHLIGHTS*/[|{| kind: "none" |}export|] declare sueFooBar,
+//                 static declare [|{| kind: "none" |}export|] sueBarFoo,
+//                 declare static [|{| kind: "none" |}export|] barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|{| kind: "none" |}declare|] bar;
+//     export [|{| kind: "none" |}declare|] foobar;
+//     [|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|{| kind: "none" |}declare|] conBar,
+//                 export [|{| kind: "none" |}declare|] conFooBar,
+//                 [|{| kind: "none" |}declare|] export conBarFoo,
+//                 static sue,
+//                 static export /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] sueFooBar,
+//                 static [|{| kind: "none" |}declare|] export sueBarFoo,
+//                 [|{| kind: "none" |}declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 7) skipped ---
+//                 declare conBar,
+//                 export declare conFooBar,
+//                 declare export conBarFoo,
+//                 [|{| kind: "none" |}static|] sue,
+//                 [|{| kind: "none" |}static|] export declare sueFooBar,
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}static|] declare export sueBarFoo,
+//                 declare [|{| kind: "none" |}static|] export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|{| kind: "none" |}declare|] bar;
+//     export [|{| kind: "none" |}declare|] foobar;
+//     [|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|{| kind: "none" |}declare|] conBar,
+//                 export [|{| kind: "none" |}declare|] conFooBar,
+//                 [|{| kind: "none" |}declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|{| kind: "none" |}declare|] sueFooBar,
+//                 static /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] export sueBarFoo,
+//                 [|{| kind: "none" |}declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     [|{| kind: "none" |}export|] declare foobar;
+//     declare [|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor([|{| kind: "none" |}export|] conFoo,
+//                 declare conBar,
+//                 [|{| kind: "none" |}export|] declare conFooBar,
+//                 declare [|{| kind: "none" |}export|] conBarFoo,
+//                 static sue,
+//                 static [|{| kind: "none" |}export|] declare sueFooBar,
+//                 static declare /*HIGHLIGHTS*/[|{| kind: "none" |}export|] sueBarFoo,
+//                 declare static [|{| kind: "none" |}export|] barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     export foo;
+//     [|{| kind: "none" |}declare|] bar;
+//     export [|{| kind: "none" |}declare|] foobar;
+//     [|{| kind: "none" |}declare|] export barfoo;
+// 
+//     constructor(export conFoo,
+//                 [|{| kind: "none" |}declare|] conBar,
+//                 export [|{| kind: "none" |}declare|] conFooBar,
+//                 [|{| kind: "none" |}declare|] export conBarFoo,
+//                 static sue,
+//                 static export [|{| kind: "none" |}declare|] sueFooBar,
+//                 static [|{| kind: "none" |}declare|] export sueBarFoo,
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] static export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 7) skipped ---
+//                 declare conBar,
+//                 export declare conFooBar,
+//                 declare export conBarFoo,
+//                 [|{| kind: "none" |}static|] sue,
+//                 [|{| kind: "none" |}static|] export declare sueFooBar,
+//                 [|{| kind: "none" |}static|] declare export sueBarFoo,
+//                 declare /*HIGHLIGHTS*/[|{| kind: "none" |}static|] export barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// class C {
+//     [|{| kind: "none" |}export|] foo;
+//     declare bar;
+//     [|{| kind: "none" |}export|] declare foobar;
+//     declare [|{| kind: "none" |}export|] barfoo;
+// 
+//     constructor([|{| kind: "none" |}export|] conFoo,
+//                 declare conBar,
+//                 [|{| kind: "none" |}export|] declare conFooBar,
+//                 declare [|{| kind: "none" |}export|] conBarFoo,
+//                 static sue,
+//                 static [|{| kind: "none" |}export|] declare sueFooBar,
+//                 static declare [|{| kind: "none" |}export|] sueBarFoo,
+//                 declare static /*HIGHLIGHTS*/[|{| kind: "none" |}export|] barSueFoo) {
+//     }
+// }
+// 
+// --- (line: 18) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 15) skipped ---
+// }
+// 
+// module m {
+//     /*HIGHLIGHTS*/static a;
+//     public b;
+//     private c;
+//     protected d;
+// --- (line: 23) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 16) skipped ---
+// 
+// module m {
+//     static a;
+//     /*HIGHLIGHTS*/public b;
+//     private c;
+//     protected d;
+//     static public private protected e;
+// --- (line: 24) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 17) skipped ---
+// module m {
+//     static a;
+//     public b;
+//     /*HIGHLIGHTS*/private c;
+//     protected d;
+//     static public private protected e;
+//     public static protected private f;
+// --- (line: 25) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 18) skipped ---
+//     static a;
+//     public b;
+//     private c;
+//     /*HIGHLIGHTS*/protected d;
+//     static public private protected e;
+//     public static protected private f;
+//     protected static public g;
+// --- (line: 26) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 19) skipped ---
+//     public b;
+//     private c;
+//     protected d;
+//     /*HIGHLIGHTS*/static public private protected e;
+//     public static protected private f;
+//     protected static public g;
+// }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 19) skipped ---
+//     public b;
+//     private c;
+//     protected d;
+//     static /*HIGHLIGHTS*/public private protected e;
+//     public static protected private f;
+//     protected static public g;
+// }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 19) skipped ---
+//     public b;
+//     private c;
+//     protected d;
+//     static public /*HIGHLIGHTS*/private protected e;
+//     public static protected private f;
+//     protected static public g;
+// }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 19) skipped ---
+//     public b;
+//     private c;
+//     protected d;
+//     static public private /*HIGHLIGHTS*/protected e;
+//     public static protected private f;
+//     protected static public g;
+// }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 20) skipped ---
+//     private c;
+//     protected d;
+//     static public private protected e;
+//     /*HIGHLIGHTS*/public static protected private f;
+//     protected static public g;
+// }
+// static a;
+// --- (line: 28) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 20) skipped ---
+//     private c;
+//     protected d;
+//     static public private protected e;
+//     public /*HIGHLIGHTS*/static protected private f;
+//     protected static public g;
+// }
+// static a;
+// --- (line: 28) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 20) skipped ---
+//     private c;
+//     protected d;
+//     static public private protected e;
+//     public static /*HIGHLIGHTS*/protected private f;
+//     protected static public g;
+// }
+// static a;
+// --- (line: 28) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 20) skipped ---
+//     private c;
+//     protected d;
+//     static public private protected e;
+//     public static protected /*HIGHLIGHTS*/private f;
+//     protected static public g;
+// }
+// static a;
+// --- (line: 28) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 21) skipped ---
+//     protected d;
+//     static public private protected e;
+//     public static protected private f;
+//     /*HIGHLIGHTS*/protected static public g;
+// }
+// static a;
+// public b;
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 21) skipped ---
+//     protected d;
+//     static public private protected e;
+//     public static protected private f;
+//     protected /*HIGHLIGHTS*/static public g;
+// }
+// static a;
+// public b;
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 21) skipped ---
+//     protected d;
+//     static public private protected e;
+//     public static protected private f;
+//     protected static /*HIGHLIGHTS*/public g;
+// }
+// static a;
+// public b;
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 23) skipped ---
+//     public static protected private f;
+//     protected static public g;
+// }
+// /*HIGHLIGHTS*/static a;
+// public b;
+// private c;
+// protected d;
+// --- (line: 31) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 24) skipped ---
+//     protected static public g;
+// }
+// static a;
+// /*HIGHLIGHTS*/public b;
+// private c;
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 25) skipped ---
+// }
+// static a;
+// public b;
+// /*HIGHLIGHTS*/private c;
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 26) skipped ---
+// static a;
+// public b;
+// private c;
+// /*HIGHLIGHTS*/protected d;
+// static public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 27) skipped ---
+// public b;
+// private c;
+// protected d;
+// /*HIGHLIGHTS*/static public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 27) skipped ---
+// public b;
+// private c;
+// protected d;
+// static /*HIGHLIGHTS*/public private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 27) skipped ---
+// public b;
+// private c;
+// protected d;
+// static public /*HIGHLIGHTS*/private protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 27) skipped ---
+// public b;
+// private c;
+// protected d;
+// static public private /*HIGHLIGHTS*/protected e;
+// public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 28) skipped ---
+// private c;
+// protected d;
+// static public private protected e;
+// /*HIGHLIGHTS*/public static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 28) skipped ---
+// private c;
+// protected d;
+// static public private protected e;
+// public /*HIGHLIGHTS*/static protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 28) skipped ---
+// private c;
+// protected d;
+// static public private protected e;
+// public static /*HIGHLIGHTS*/protected private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 28) skipped ---
+// private c;
+// protected d;
+// static public private protected e;
+// public static protected /*HIGHLIGHTS*/private f;
+// protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 29) skipped ---
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// /*HIGHLIGHTS*/protected static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 29) skipped ---
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// protected /*HIGHLIGHTS*/static public g;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
+// --- (line: 29) skipped ---
+// protected d;
+// static public private protected e;
+// public static protected private f;
+// protected static /*HIGHLIGHTS*/public g;

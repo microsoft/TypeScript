@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/mixinAbstractClasses.ts ===
+//// [tests/cases/conformance/classes/mixinAbstractClasses.ts] ////
+
+=== mixinAbstractClasses.ts ===
 interface Mixin {
 >Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.ts, 2, 1), Decl(mixinAbstractClasses.ts, 0, 0))
 

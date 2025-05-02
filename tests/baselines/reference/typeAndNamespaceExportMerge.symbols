@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/externalModules/typeAndNamespaceExportMerge.ts] ////
+
+=== constants.ts ===
+export const COFFEE = 0;
+>COFFEE : Symbol(COFFEE, Decl(constants.ts, 0, 12))
+
+export const TEA = 1;
+>TEA : Symbol(TEA, Decl(constants.ts, 1, 12))
+
+
+=== drink.ts ===
+export type Drink = 0 | 1;
+>Drink : Symbol(Drink, Decl(drink.ts, 0, 0), Decl(drink.ts, 1, 6))
+
+export * as Drink from "./constants";
+>Drink : Symbol(Drink, Decl(drink.ts, 0, 0), Decl(drink.ts, 1, 6))
+
+
+=== index.ts ===
+import { Drink } from "./drink";
+>Drink : Symbol(Drink, Decl(index.ts, 0, 8))
+
+// 'Drink' only refers to a type, but is being used as a value here
+const x: Drink = Drink.TEA;
+>x : Symbol(x, Decl(index.ts, 2, 5))
+>Drink : Symbol(Drink, Decl(index.ts, 0, 8))
+>Drink.TEA : Symbol(TEA, Decl(constants.ts, 1, 12))
+>Drink : Symbol(Drink, Decl(index.ts, 0, 8))
+>TEA : Symbol(TEA, Decl(constants.ts, 1, 12))
+

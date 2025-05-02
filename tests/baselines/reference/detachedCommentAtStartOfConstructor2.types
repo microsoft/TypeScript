@@ -1,34 +1,53 @@
-=== tests/cases/compiler/detachedCommentAtStartOfConstructor2.ts ===
+//// [tests/cases/compiler/detachedCommentAtStartOfConstructor2.ts] ////
+
+=== detachedCommentAtStartOfConstructor2.ts ===
 class TestFile {
 >TestFile : TestFile
+>         : ^^^^^^^^
 
     public message: string;
 >message : string
+>        : ^^^^^^
 
     public name: string;
 >name : string
+>     : ^^^^^^
 
     constructor(message: string) {
 >message : string
+>        : ^^^^^^
 
         /// <summary>Test summary</summary>
         /// <param name="message" type="String" />
 
         var getMessage = () => message + this.name;
 >getMessage : () => string
+>           : ^^^^^^^^^^^^
 >() => message + this.name : () => string
+>                          : ^^^^^^^^^^^^
 >message + this.name : string
+>                    : ^^^^^^
 >message : string
+>        : ^^^^^^
 >this.name : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >name : string
+>     : ^^^^^^
 
         this.message = getMessage();
 >this.message = getMessage() : string
+>                            : ^^^^^^
 >this.message : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >message : string
+>        : ^^^^^^
 >getMessage() : string
+>             : ^^^^^^
 >getMessage : () => string
+>           : ^^^^^^^^^^^^
     }
 }

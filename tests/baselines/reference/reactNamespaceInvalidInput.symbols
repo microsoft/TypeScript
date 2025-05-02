@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reactNamespaceInvalidInput.tsx ===
+//// [tests/cases/compiler/reactNamespaceInvalidInput.tsx] ////
+
+=== reactNamespaceInvalidInput.tsx ===
 <foo data/>;
 >data : Symbol(data, Decl(reactNamespaceInvalidInput.tsx, 0, 4))
 

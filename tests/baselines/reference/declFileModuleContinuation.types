@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileModuleContinuation.ts ===
+//// [tests/cases/compiler/declFileModuleContinuation.ts] ////
+
+=== declFileModuleContinuation.ts ===
 module A.C {
     export interface Z {
     }
@@ -6,13 +8,20 @@ module A.C {
 
 module A.B.C {
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     export class W implements A.C.Z {
 >W : W
+>  : ^
 >A.C : any
+>    : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >C : any
+>  : ^^^
     }
 }

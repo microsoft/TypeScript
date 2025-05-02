@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypes3.ts] ////
+
 //// [mappedTypes3.ts]
 class Box<P> {
     value: P;

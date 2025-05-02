@@ -1,47 +1,67 @@
-=== tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts ===
+//// [tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts] ////
+
+=== partialDiscriminatedUnionMemberHasGoodError.ts ===
 interface TypeA {
     type: "A";
 >type : "A"
+>     : ^^^
 
     param: string;
 >param : string
+>      : ^^^^^^
 }
 
 interface TypeB {
     type: "B";
 >type : "B"
+>     : ^^^
 
     param: string;
 >param : string
+>      : ^^^^^^
 }
 
 type ValidType = TypeA | TypeB;
->ValidType : TypeA | TypeB
+>ValidType : ValidType
+>          : ^^^^^^^^^
 
 interface Wrapper {
     types: ValidType[];
 >types : ValidType[]
+>      : ^^^^^^^^^^^
 }
 
 const foo: Wrapper[] = [];
 >foo : Wrapper[]
+>    : ^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 foo.push({
 >foo.push({    types: [{        type: "A"    }]}) : number
+>                                                 : ^^^^^^
 >foo.push : (...items: Wrapper[]) => number
+>         : ^^^^     ^^^^^^^^^^^^^^^^      
 >foo : Wrapper[]
+>    : ^^^^^^^^^
 >push : (...items: Wrapper[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^      
 >{    types: [{        type: "A"    }]} : { types: { type: "A"; }[]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     types: [{
 >types : { type: "A"; }[]
+>      : ^^^^^^^^^^^^^^^^
 >[{        type: "A"    }] : { type: "A"; }[]
+>                          : ^^^^^^^^^^^^^^^^
 >{        type: "A"    } : { type: "A"; }
+>                        : ^^^^^^^^^^^^^^
 
         type: "A"
 >type : "A"
+>     : ^^^
 >"A" : "A"
+>    : ^^^
 
     }]
 });

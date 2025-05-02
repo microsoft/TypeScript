@@ -1,62 +1,92 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAssignmentInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAssignmentInES6.ts] ////
+
+=== emitClassDeclarationWithPropertyAssignmentInES6.ts ===
 class C {
 >C : C
+>  : ^
 
     x: string = "Hello world";
 >x : string
+>  : ^^^^^^
 >"Hello world" : "Hello world"
+>              : ^^^^^^^^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     x: string = "Hello world";
 >x : string
+>  : ^^^^^^
 >"Hello world" : "Hello world"
+>              : ^^^^^^^^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     constructor() {
         this.y = 10;
 >this.y = 10 : 10
+>            : ^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 
 class E extends D{
 >E : E
+>  : ^
 >D : D
+>  : ^
 
     z: boolean = true;
 >z : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 
 class F extends D{
 >F : F
+>  : ^
 >D : D
+>  : ^
 
     z: boolean = true;
 >z : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
     j: string;
 >j : string
+>  : ^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof D
+>      : ^^^^^^^^
 
         this.j = "HI";
 >this.j = "HI" : "HI"
+>              : ^^^^
 >this.j : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >j : string
+>  : ^^^^^^
 >"HI" : "HI"
+>     : ^^^^
     }
 }

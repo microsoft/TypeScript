@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration14.ts(2,8): error TS1049: A 'set' accessor must have exactly one parameter.
+parserMemberAccessorDeclaration14.ts(2,8): error TS1049: A 'set' accessor must have exactly one parameter.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration14.ts (1 errors) ====
+==== parserMemberAccessorDeclaration14.ts (1 errors) ====
     class C {
        set Foo(a: number, b: number) { }
            ~~~

@@ -1,13 +1,18 @@
-=== tests/cases/compiler/jsxLibraryManagedAttributesUnusedGeneric.tsx ===
+//// [tests/cases/compiler/jsxLibraryManagedAttributesUnusedGeneric.tsx] ////
+
+=== jsxLibraryManagedAttributesUnusedGeneric.tsx ===
 // @ts-ignore
 import React from 'react'
 >React : any
+>      : ^^^
 
 declare const jsx: typeof React.createElement
 >jsx : error
 >React.createElement : error
 >React : any
+>      : ^^^
 >createElement : any
+>              : ^^^
 
 namespace jsx {
     export namespace JSX {
@@ -18,11 +23,14 @@ namespace jsx {
         export interface IntrinsicAttributes {}
         export interface IntrinsicClassAttributes<T> {}
         export type IntrinsicElements = {
->IntrinsicElements : { div: {    className: string;}; }
+>IntrinsicElements : IntrinsicElements
+>                  : ^^^^^^^^^^^^^^^^^
 
             div: { className: string }
 >div : { className: string; }
+>    : ^^^^^^^^^^^^^      ^^^
 >className : string
+>          : ^^^^^^
         }
         // Works
         // export type LibraryManagedAttributes<C, P> = P & { css: string };
@@ -30,22 +38,30 @@ namespace jsx {
         // Equivalent to above, but fails
         export type WithCSSProp<P> = P & { css: string }
 >WithCSSProp : WithCSSProp<P>
+>            : ^^^^^^^^^^^^^^
 >css : string
+>    : ^^^^^^
 
         export type LibraryManagedAttributes<C, P> = WithCSSProp<P>
 >LibraryManagedAttributes : LibraryManagedAttributes<C, P>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     }
 }
 
 declare const Comp: (p: { className?: string }) => null
->Comp : (p: {    className?: string;}) => null
+>Comp : (p: { className?: string; }) => null
+>     : ^ ^^                       ^^^^^    
 >p : { className?: string; }
+>  : ^^^^^^^^^^^^^^      ^^^
 >className : string
->null : null
+>          : ^^^^^^
 
 ;<Comp css="color:hotpink;" />
 ><Comp css="color:hotpink;" /> : jsx.JSX.Element
+>                              : ^^^^^^^^^^^^^^^
 >Comp : (p: { className?: string; }) => null
+>     : ^ ^^                       ^^^^^    
 >css : string
+>    : ^^^^^^
 

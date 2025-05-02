@@ -1,56 +1,79 @@
-/*@internal*/
-namespace ts.server {
-    export interface PackageJsonCache {
-        addOrUpdate(fileName: Path): void;
-        forEach(action: (info: ProjectPackageJsonInfo, fileName: Path) => void): void;
-        delete(fileName: Path): void;
-        get(fileName: Path): ProjectPackageJsonInfo | false | undefined;
-        getInDirectory(directory: Path): ProjectPackageJsonInfo | undefined;
-        directoryHasPackageJson(directory: Path): Ternary;
-        searchDirectoryAndAncestors(directory: Path): void;
-    }
+import {
+    combinePaths,
+    createPackageJsonInfo,
+    Debug,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
+    getDirectoryPath,
+    Path,
+    ProjectPackageJsonInfo,
+    Ternary,
+    tryFileExists,
+} from "./_namespaces/ts.js";
+import {
+    Project,
+    ProjectService,
+} from "./_namespaces/ts.server.js";
 
-    export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
-        const packageJsons = new Map<string, ProjectPackageJsonInfo>();
-        const directoriesWithoutPackageJson = new Map<string, true>();
-        return {
-            addOrUpdate,
-            forEach: packageJsons.forEach.bind(packageJsons),
-            get: packageJsons.get.bind(packageJsons),
-            delete: fileName => {
-                packageJsons.delete(fileName);
-                directoriesWithoutPackageJson.set(getDirectoryPath(fileName), true);
-            },
-            getInDirectory: directory => {
-                return packageJsons.get(combinePaths(directory, "package.json")) || undefined;
-            },
-            directoryHasPackageJson,
-            searchDirectoryAndAncestors: directory => {
-                forEachAncestorDirectory(directory, ancestor => {
-                    if (directoryHasPackageJson(ancestor) !== Ternary.Maybe) {
+/** @internal */
+export interface PackageJsonCache {
+    addOrUpdate(fileName: string, path: Path): void;
+    invalidate(path: Path): void;
+    delete(fileName: Path): void;
+    getInDirectory(directory: string): ProjectPackageJsonInfo | undefined;
+    directoryHasPackageJson(directory: string): Ternary;
+    searchDirectoryAndAncestors(directory: string, project: Project): void;
+}
+
+/** @internal */
+export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
+    const packageJsons = new Map<Path, ProjectPackageJsonInfo>();
+    const directoriesWithoutPackageJson = new Map<Path, true>();
+    return {
+        addOrUpdate,
+        invalidate,
+        delete: fileName => {
+            packageJsons.delete(fileName);
+            directoriesWithoutPackageJson.set(getDirectoryPath(fileName), true);
+        },
+        getInDirectory: directory => {
+            return packageJsons.get(host.toPath(combinePaths(directory, "package.json"))) || undefined;
+        },
+        directoryHasPackageJson: directory => directoryHasPackageJson(host.toPath(directory)),
+        searchDirectoryAndAncestors: (directory, project) => {
+            forEachAncestorDirectoryStoppingAtGlobalCache(
+                project,
+                directory,
+                ancestor => {
+                    const ancestorPath = host.toPath(ancestor);
+                    if (directoryHasPackageJson(ancestorPath) !== Ternary.Maybe) {
                         return true;
                     }
-                    const packageJsonFileName = host.toPath(combinePaths(ancestor, "package.json"));
+                    const packageJsonFileName = combinePaths(ancestor, "package.json");
                     if (tryFileExists(host, packageJsonFileName)) {
-                        addOrUpdate(packageJsonFileName);
+                        addOrUpdate(packageJsonFileName, combinePaths(ancestorPath, "package.json") as Path);
                     }
                     else {
-                        directoriesWithoutPackageJson.set(ancestor, true);
+                        directoriesWithoutPackageJson.set(ancestorPath, true);
                     }
-                });
-            },
-        };
+                },
+            );
+        },
+    };
 
-        function addOrUpdate(fileName: Path) {
-            const packageJsonInfo = Debug.checkDefined(createPackageJsonInfo(fileName, host.host));
-            packageJsons.set(fileName, packageJsonInfo);
-            directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));
-        }
+    function addOrUpdate(fileName: string, path: Path) {
+        const packageJsonInfo = Debug.checkDefined(createPackageJsonInfo(fileName, host.host));
+        packageJsons.set(path, packageJsonInfo);
+        directoriesWithoutPackageJson.delete(getDirectoryPath(path));
+    }
 
-        function directoryHasPackageJson(directory: Path) {
-            return packageJsons.has(combinePaths(directory, "package.json")) ? Ternary.True :
-                directoriesWithoutPackageJson.has(directory) ? Ternary.False :
-                Ternary.Maybe;
-        }
+    function invalidate(path: Path) {
+        packageJsons.delete(path);
+        directoriesWithoutPackageJson.delete(getDirectoryPath(path));
+    }
+
+    function directoryHasPackageJson(directory: Path) {
+        return packageJsons.has(combinePaths(directory, "package.json") as Path) ? Ternary.True :
+            directoriesWithoutPackageJson.has(directory) ? Ternary.False :
+            Ternary.Maybe;
     }
 }

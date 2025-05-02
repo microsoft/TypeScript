@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js(24,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+templateTagOnConstructorFunctions.js(24,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js (1 errors) ====
+==== templateTagOnConstructorFunctions.js (1 errors) ====
     /**
      * @template U
      * @typedef {(u: U) => U} Id

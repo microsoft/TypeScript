@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileModuleAssignmentInObjectLiteralProperty.ts ===
+//// [tests/cases/compiler/declFileModuleAssignmentInObjectLiteralProperty.ts] ////
+
+=== declFileModuleAssignmentInObjectLiteralProperty.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 0, 0))
 

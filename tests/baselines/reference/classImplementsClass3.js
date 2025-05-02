@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementsClass3.ts] ////
+
 //// [classImplementsClass3.ts]
 class A { foo(): number { return 1; } }
 class C implements A {

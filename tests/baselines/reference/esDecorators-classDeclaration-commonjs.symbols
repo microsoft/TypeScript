@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-commonjs.ts] ////
+
+=== esDecorators-classDeclaration-commonjs.ts ===
+declare var deco: any;
+>deco : Symbol(deco, Decl(esDecorators-classDeclaration-commonjs.ts, 0, 11))
+
+@deco
+>deco : Symbol(deco, Decl(esDecorators-classDeclaration-commonjs.ts, 0, 11))
+
+export class Example {
+>Example : Symbol(Example, Decl(esDecorators-classDeclaration-commonjs.ts, 0, 22))
+
+    static foo() {}
+>foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
+}
+
+Example.foo();
+>Example.foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
+>Example : Symbol(Example, Decl(esDecorators-classDeclaration-commonjs.ts, 0, 22))
+>foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
+

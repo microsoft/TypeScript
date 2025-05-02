@@ -1,10 +1,14 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithAny.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithAny.ts] ////
+
+=== instanceofOperatorWithAny.ts ===
 var a: any;
 >a : any
 
 var r: boolean = a instanceof a;
 >r : boolean
+>  : ^^^^^^^
 >a instanceof a : boolean
+>               : ^^^^^^^
 >a : any
 >a : any
 

@@ -1,9 +1,11 @@
-=== tests/cases/conformance/jsdoc/commonjs.d.ts ===
+//// [tests/cases/conformance/jsdoc/typedefCrossModule.ts] ////
+
+=== commonjs.d.ts ===
 declare var module: { exports: any};
 >module : Symbol(module, Decl(commonjs.d.ts, 0, 11))
 >exports : Symbol(exports, Decl(commonjs.d.ts, 0, 21))
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 /// <reference path="./commonjs.d.ts"/>
 /** @typedef {{ type: "a", x: 1 }} A */
 /** @typedef {{ type: "b", y: 1 }} B */
@@ -23,7 +25,7 @@ function C() {
 >p : Symbol(C.p, Decl(mod1.js, 5, 14))
 }
 
-=== tests/cases/conformance/jsdoc/mod2.js ===
+=== mod2.js ===
 /// <reference path="./commonjs.d.ts"/>
 /** @typedef {{ type: "a", x: 1 }} A */
 /** @typedef {{ type: "b", y: 1 }} B */
@@ -38,7 +40,7 @@ export function C() {
 >p : Symbol(C.p, Decl(mod2.js, 5, 21))
 }
 
-=== tests/cases/conformance/jsdoc/mod3.js ===
+=== mod3.js ===
 /// <reference path="./commonjs.d.ts"/>
 /** @typedef {{ type: "a", x: 1 }} A */
 /** @typedef {{ type: "b", y: 1 }} B */
@@ -55,7 +57,7 @@ exports.C = function() {
 >p : Symbol(C.p, Decl(mod3.js, 5, 24))
 }
 
-=== tests/cases/conformance/jsdoc/use.js ===
+=== use.js ===
 /** @type {import('./mod1').Both} */
 var both1 = { type: 'a', x: 1 };
 >both1 : Symbol(both1, Decl(use.js, 1, 3))

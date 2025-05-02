@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/parseUnaryExpressionNoTypeAssertionInJsx3.ts] ////
+
+=== index.js ===
+const x = "oops";
+>x : Symbol(x, Decl(index.js, 0, 5))
+
+const y = + <1234> x;
+>y : Symbol(y, Decl(index.js, 1, 5))
+>x : Symbol(x, Decl(index.js, 0, 5))
+

@@ -1,13 +1,21 @@
-=== tests/cases/compiler/assignmentCompatOnNew.ts ===
+//// [tests/cases/compiler/assignmentCompatOnNew.ts] ////
+
+=== assignmentCompatOnNew.ts ===
 class Foo{};
 >Foo : Foo
+>    : ^^^
 
 function bar(x: {new(): Foo;}){}
->bar : (x: {    new (): Foo;}) => void
+>bar : (x: { new (): Foo; }) => void
+>    : ^ ^^                ^^^^^^^^^
 >x : new () => Foo
+>  : ^^^^^^^^^^   
 
 bar(Foo); // Error, but should be allowed
 >bar(Foo) : void
->bar : (x: new () => Foo) => void
+>         : ^^^^
+>bar : (x: { new (): Foo; }) => void
+>    : ^ ^^                ^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 

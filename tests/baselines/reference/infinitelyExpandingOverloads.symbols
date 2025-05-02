@@ -1,4 +1,6 @@
-=== tests/cases/compiler/infinitelyExpandingOverloads.ts ===
+//// [tests/cases/compiler/infinitelyExpandingOverloads.ts] ////
+
+=== infinitelyExpandingOverloads.ts ===
 interface KnockoutSubscription2<T> {
 >KnockoutSubscription2 : Symbol(KnockoutSubscription2, Decl(infinitelyExpandingOverloads.ts, 0, 0))
 >T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 0, 32))

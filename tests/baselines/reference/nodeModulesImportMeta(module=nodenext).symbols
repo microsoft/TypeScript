@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesImportMeta.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 const x = import.meta.url;
 >x : Symbol(x, Decl(index.ts, 1, 5))
@@ -10,7 +12,7 @@ const x = import.meta.url;
 export {x};
 >x : Symbol(x, Decl(index.ts, 2, 8))
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 const x = import.meta.url;
 >x : Symbol(x, Decl(index.ts, 1, 5))

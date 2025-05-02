@@ -1,8 +1,0 @@
-tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings19_ES5.ts(1,13): error TS1125: Hexadecimal digit expected.
-
-
-==== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings19_ES5.ts (1 errors) ====
-    var x = "\u{}";
-                
-!!! error TS1125: Hexadecimal digit expected.
-    

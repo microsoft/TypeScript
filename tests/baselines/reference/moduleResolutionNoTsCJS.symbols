@@ -1,19 +1,21 @@
-=== tests/cases/compiler/x.ts ===
-// CommonJS output
-No type information for this code.
-No type information for this code.export default 0;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/y.tsx ===
+//// [tests/cases/compiler/moduleResolutionNoTsCJS.ts] ////
+
+=== x.ts ===
+
 export default 0;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/z.d.ts ===
+
+=== y.tsx ===
+
+export default 0;
+
+=== z.d.ts ===
 declare const x: number;
 >x : Symbol(x, Decl(z.d.ts, 0, 13))
 
 export default x;
 >x : Symbol(x, Decl(z.d.ts, 0, 13))
 
-=== tests/cases/compiler/user.ts ===
+=== user.ts ===
 import x from "./x.ts";
 >x : Symbol(x, Decl(user.ts, 0, 6))
 

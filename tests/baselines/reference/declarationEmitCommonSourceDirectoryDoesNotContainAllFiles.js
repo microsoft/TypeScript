@@ -28,10 +28,10 @@ declare module "index" {
 //// [DtsFileErrors]
 
 
-dist/index.d.ts(2,23): error TS2307: Cannot find module 'b' or its corresponding type declarations.
+/a/dist/index.d.ts(2,23): error TS2307: Cannot find module 'b' or its corresponding type declarations.
 
 
-==== dist/index.d.ts (1 errors) ====
+==== /a/dist/index.d.ts (1 errors) ====
     declare module "src/index" {
         import { B } from "b";
                           ~~~

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferenceOptionalPropertiesToIndexSignatures.ts ===
+//// [tests/cases/compiler/inferenceOptionalPropertiesToIndexSignatures.ts] ////
+
+=== inferenceOptionalPropertiesToIndexSignatures.ts ===
 declare function foo<T>(obj: { [x: string]: T }): T;
 >foo : Symbol(foo, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 0))
 >T : Symbol(T, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 21))
@@ -52,7 +54,7 @@ let a4 = foo(x4);  // string | number
 const param2 = Math.random() < 0.5 ? 'value2' : null;
 >param2 : Symbol(param2, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 14, 5))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 const obj = {

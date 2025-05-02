@@ -1,26 +1,38 @@
-=== tests/cases/conformance/salsa/prototypePropertyAssignmentMergedTypeReference.js ===
-// https://github.com/microsoft/TypeScript/issues/33993
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergedTypeReference.ts] ////
+
+=== prototypePropertyAssignmentMergedTypeReference.js ===
 var f = function() {
 >f : typeof f
+>  : ^^^^^^^^
 >function() {    return 12;} : typeof f
+>                            : ^^^^^^^^
 
     return 12;
 >12 : 12
+>   : ^^
 
 };
 
 f.prototype.a = "a";
 >f.prototype.a = "a" : "a"
+>                    : ^^^
 >f.prototype.a : any
 >f.prototype : any
+>            : ^^^
 >f : typeof f
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >a : any
+>  : ^^^
 >"a" : "a"
+>    : ^^^
 
 /** @type {new () => f} */
 var x = f;
 >x : new () => f
+>  : ^^^^^^^^^^ 
 >f : typeof f
+>  : ^^^^^^^^
 
 

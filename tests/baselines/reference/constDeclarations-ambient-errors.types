@@ -1,29 +1,44 @@
-=== tests/cases/compiler/constDeclarations-ambient-errors.ts ===
+//// [tests/cases/compiler/constDeclarations-ambient-errors.ts] ////
+
+=== constDeclarations-ambient-errors.ts ===
 // error: no intialization expected in ambient declarations
 declare const c1: boolean = true;
 >c1 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 
 declare const c2: number = 0;
 >c2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 declare const c3 = null, c4 :string = "", c5: any = 0;
 >c3 : any
->null : null
+>   : ^^^
 >c4 : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 >c5 : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     const c6 = 0;
 >c6 : 0
+>   : ^
 >0 : 0
+>  : ^
 
     const c7: number = 7;
 >c7 : number
+>   : ^^^^^^
 >7 : 7
+>  : ^
 }

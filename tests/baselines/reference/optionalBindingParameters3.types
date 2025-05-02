@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/optionalBindingParameters3.ts] ////
+
 === /a.js ===
 /**
  * @typedef Foo
@@ -9,6 +11,9 @@
  */
 function f({ a = "a" }) {}
 >f : ({ a }?: Foo) => void
+>  : ^     ^^^   ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"a" : "a"
+>    : ^^^
 

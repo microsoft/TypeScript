@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classWithDuplicateIdentifier.ts ===
+//// [tests/cases/compiler/classWithDuplicateIdentifier.ts] ////
+
+=== classWithDuplicateIdentifier.ts ===
 class C {
 >C : Symbol(C, Decl(classWithDuplicateIdentifier.ts, 0, 0))
 

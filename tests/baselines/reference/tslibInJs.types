@@ -1,10 +1,17 @@
-=== tests/cases/compiler/main.js ===
+//// [tests/cases/compiler/tslibInJs.ts] ////
+
+=== main.js ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 const { foo } = require("bar");
 >foo : any
+>    : ^^^
 >require("bar") : any
+>               : ^^^
 >require : any
+>        : ^^^
 >"bar" : "bar"
+>      : ^^^^^
 

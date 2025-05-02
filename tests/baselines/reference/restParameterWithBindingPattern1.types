@@ -1,6 +1,11 @@
-=== tests/cases/compiler/restParameterWithBindingPattern1.ts ===
+//// [tests/cases/compiler/restParameterWithBindingPattern1.ts] ////
+
+=== restParameterWithBindingPattern1.ts ===
 function a(...{a, b}) { }
 >a : (...{ a, b }: { a: any; b: any; }) => void
+>  : ^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

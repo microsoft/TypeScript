@@ -1,32 +1,49 @@
-=== tests/cases/compiler/customAsyncIterator.ts ===
+//// [tests/cases/compiler/customAsyncIterator.ts] ////
+
+=== customAsyncIterator.ts ===
 // GH: https://github.com/microsoft/TypeScript/issues/33239
-class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> {
+class ConstantIterator<T> implements AsyncIterator<T, void, T | undefined> {
 >ConstantIterator : ConstantIterator<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     constructor(private constant: T) {
 >constant : T
+>         : ^
     }
     async next(value?: T): Promise<IteratorResult<T>> {
 >next : (value?: T) => Promise<IteratorResult<T>>
+>     : ^     ^^^ ^^^^^                          
 >value : T
+>      : ^
 
         if (value != null) {
 >value != null : boolean
+>              : ^^^^^^^
 >value : T
->null : null
+>      : ^
 
             throw new Error("ConstantIterator.prototype.next may not take any values");
 >new Error("ConstantIterator.prototype.next may not take any values") : Error
+>                                                                     : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"ConstantIterator.prototype.next may not take any values" : "ConstantIterator.prototype.next may not take any values"
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
         return { value: this.constant, done: false };
 >{ value: this.constant, done: false } : { value: T; done: false; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
+>      : ^
 >this.constant : T
+>              : ^
 >this : this
+>     : ^^^^
 >constant : T
+>         : ^
 >done : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
     }
 }

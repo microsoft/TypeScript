@@ -1,49 +1,78 @@
-=== tests/cases/conformance/types/spread/objectSpreadComputedProperty.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadComputedProperty.ts] ////
+
+=== objectSpreadComputedProperty.ts ===
 // fixes #12200
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     let n: number = 12;
 >n : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
     let m: number = 13;
 >m : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 
     let a: any = null;
 >a : any
->null : null
 
     const o1 = { ...{}, [n]: n };
 >o1 : {}
+>   : ^^
 >{ ...{}, [n]: n } : {}
+>                  : ^^
 >{} : {}
+>   : ^^
 >[n] : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     const o2 = { ...{}, [a]: n };
 >o2 : {}
+>   : ^^
 >{ ...{}, [a]: n } : {}
+>                  : ^^
 >{} : {}
+>   : ^^
 >[a] : number
+>    : ^^^^^^
 >a : any
 >n : number
+>  : ^^^^^^
 
     const o3 = { [a]: n, ...{}, [n]: n, ...{}, [m]: m };
 >o3 : {}
+>   : ^^
 >{ [a]: n, ...{}, [n]: n, ...{}, [m]: m } : {}
+>                                         : ^^
 >[a] : number
+>    : ^^^^^^
 >a : any
 >n : number
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 >[n] : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 >[m] : number
+>    : ^^^^^^
 >m : number
+>  : ^^^^^^
 >m : number
+>  : ^^^^^^
 }
 

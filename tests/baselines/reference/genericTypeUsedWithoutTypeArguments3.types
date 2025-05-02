@@ -1,5 +1,7 @@
-=== tests/cases/compiler/genericTypeUsedWithoutTypeArguments3.ts ===
+//// [tests/cases/compiler/genericTypeUsedWithoutTypeArguments3.ts] ////
+
+=== genericTypeUsedWithoutTypeArguments3.ts ===
+
 interface Foo<T> { }
-No type information for this code.interface Bar<T> extends Foo { }
-No type information for this code.
-No type information for this code.
+interface Bar<T> extends Foo { }
+

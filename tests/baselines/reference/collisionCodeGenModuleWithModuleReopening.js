@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionCodeGenModuleWithModuleReopening.ts] ////
+
 //// [collisionCodeGenModuleWithModuleReopening.ts]
 module m1 {
     export class m1 {

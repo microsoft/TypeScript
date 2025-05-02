@@ -1,165 +1,245 @@
-=== tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts ===
+//// [tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts] ////
+
+=== moduleWithStatementsOfEveryKind.ts ===
 module A {
 >A : typeof globalThis.A
+>  : ^^^^^^^^^^^^^^^^^^^
 
     class A { s: string }
 >A : A
+>  : ^
 >s : string
+>  : ^^^^^^
 
     class AA<T> { s: T }
 >AA : AA<T>
+>   : ^^^^^
 >s : T
+>  : ^
 
     interface I { id: number }
 >id : number
+>   : ^^^^^^
 
     class B extends AA<string> implements I { id: number }
 >B : B
+>  : ^
 >AA : AA<string>
+>   : ^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 
     class BB<T> extends A {
 >BB : BB<T>
+>   : ^^^^^
 >A : A
+>  : ^
 
         id: number;
 >id : number
+>   : ^^^^^^
     }
 
     module Module {
 >Module : typeof Module
+>       : ^^^^^^^^^^^^^
 
         class A { s: string }
 >A : A
+>  : ^
 >s : string
+>  : ^^^^^^
     }
     enum Color { Blue, Red }
 >Color : Color
+>      : ^^^^^
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 >Red : Color.Red
+>    : ^^^^^^^^^
 
     var x = 12;
 >x : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
     function F(s: string): number {
 >F : (s: string) => number
+>  : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 
         return 2;
 >2 : 2
+>  : ^
     }
     var array: I[] = null;
 >array : I[]
->null : null
+>      : ^^^
 
     var fn = (s: string) => {
 >fn : (s: string) => string
+>   : ^ ^^      ^^^^^^^^^^^
 >(s: string) => {        return 'hello ' + s;    } : (s: string) => string
+>                                                  : ^ ^^      ^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
         return 'hello ' + s;
 >'hello ' + s : string
+>             : ^^^^^^
 >'hello ' : "hello "
+>         : ^^^^^^^^
 >s : string
+>  : ^^^^^^
     }
     var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : { s: string; id: number; isvalid: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ s: 'hello', id: 2, isvalid: true } : { s: string; id: number; isvalid: boolean; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >id : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 >isvalid : boolean
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 
     declare class DC {
 >DC : DC
+>   : ^^
 
         static x: number;
 >x : number
+>  : ^^^^^^
     }
 }
 
 module Y {
 >Y : typeof Y
+>  : ^^^^^^^^
 
     export class A { s: string }
 >A : A
+>  : ^
 >s : string
+>  : ^^^^^^
 
     export class AA<T> { s: T }
 >AA : AA<T>
+>   : ^^^^^
 >s : T
+>  : ^
 
     export interface I { id: number }
 >id : number
+>   : ^^^^^^
 
     export class B extends AA<string> implements I { id: number }
 >B : B
+>  : ^
 >AA : AA<string>
+>   : ^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 
     export class BB<T> extends A {
 >BB : BB<T>
+>   : ^^^^^
 >A : A
+>  : ^
 
         id: number;
 >id : number
+>   : ^^^^^^
     }
 
     export module Module {
 >Module : typeof Module
+>       : ^^^^^^^^^^^^^
 
         class A { s: string }
 >A : A
+>  : ^
 >s : string
+>  : ^^^^^^
     }
     export enum Color { Blue, Red }
 >Color : Color
+>      : ^^^^^
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 >Red : Color.Red
+>    : ^^^^^^^^^
 
     export var x = 12;
 >x : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
     export function F(s: string): number {
 >F : (s: string) => number
+>  : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 
         return 2;
 >2 : 2
+>  : ^
     }
     export var array: I[] = null;
 >array : I[]
->null : null
+>      : ^^^
 
     export var fn = (s: string) => {
 >fn : (s: string) => string
+>   : ^ ^^      ^^^^^^^^^^^
 >(s: string) => {        return 'hello ' + s;    } : (s: string) => string
+>                                                  : ^ ^^      ^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
         return 'hello ' + s;
 >'hello ' + s : string
+>             : ^^^^^^
 >'hello ' : "hello "
+>         : ^^^^^^^^
 >s : string
+>  : ^^^^^^
     }
     export var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : { s: string; id: number; isvalid: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ s: 'hello', id: 2, isvalid: true } : { s: string; id: number; isvalid: boolean; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >id : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 >isvalid : boolean
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 
     export declare class DC {
 >DC : DC
+>   : ^^
 
         static x: number;
 >x : number
+>  : ^^^^^^
     }
 }
 

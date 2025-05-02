@@ -1,19 +1,19 @@
-tests/cases/conformance/es6/Symbols/symbolType6.ts(3,1): error TS2365: Operator '+' cannot be applied to types 'symbol' and 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(4,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(4,5): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(5,1): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(6,1): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(7,1): error TS2365: Operator '+' cannot be applied to types 'symbol' and 'number'.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(8,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(9,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(10,1): error TS2365: Operator '+' cannot be applied to types 'number' and 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(11,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(12,5): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(14,1): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType6.ts(15,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+symbolType6.ts(3,1): error TS2365: Operator '+' cannot be applied to types 'symbol' and 'symbol'.
+symbolType6.ts(4,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+symbolType6.ts(4,5): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+symbolType6.ts(5,1): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+symbolType6.ts(6,1): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+symbolType6.ts(7,1): error TS2365: Operator '+' cannot be applied to types 'symbol' and 'number'.
+symbolType6.ts(8,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+symbolType6.ts(9,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+symbolType6.ts(10,1): error TS2365: Operator '+' cannot be applied to types 'number' and 'symbol'.
+symbolType6.ts(11,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+symbolType6.ts(12,5): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+symbolType6.ts(14,1): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+symbolType6.ts(15,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolType6.ts (13 errors) ====
+==== symbolType6.ts (13 errors) ====
     var s = Symbol.for("add");
     var a: any;
     s + s;

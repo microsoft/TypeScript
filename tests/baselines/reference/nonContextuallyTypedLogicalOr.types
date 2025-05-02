@@ -1,10 +1,13 @@
-=== tests/cases/compiler/nonContextuallyTypedLogicalOr.ts ===
+//// [tests/cases/compiler/nonContextuallyTypedLogicalOr.ts] ////
+
+=== nonContextuallyTypedLogicalOr.ts ===
 interface Contextual {
     dummy;
 >dummy : any
 
     p?: number;
 >p : number
+>  : ^^^^^^
 }
 
 interface Ellement {
@@ -17,15 +20,22 @@ interface Ellement {
 
 var c: Contextual;
 >c : Contextual
+>  : ^^^^^^^^^^
 
 var e: Ellement;
 >e : Ellement
+>  : ^^^^^^^^
 
 (c || e).dummy;
 >(c || e).dummy : any
 >(c || e) : Contextual | Ellement
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >c || e : Contextual | Ellement
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >c : Contextual
+>  : ^^^^^^^^^^
 >e : Ellement
+>  : ^^^^^^^^
 >dummy : any
+>      : ^^^
 

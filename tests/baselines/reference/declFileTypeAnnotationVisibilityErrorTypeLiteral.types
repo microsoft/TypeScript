@@ -1,87 +1,127 @@
-=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts] ////
+
+=== declFileTypeAnnotationVisibilityErrorTypeLiteral.ts ===
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     class private1 {
 >private1 : private1
+>         : ^^^^^^^^
     }
     module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
         export class public1 {
 >public1 : public1
+>        : ^^^^^^^
         }
     }
 
     export var x: {
 >x : { (): m2.public1[]; [n: number]: private1; [s: string]: m2.public1; x: private1; y: m2.public1; method(): private1; }
+>  : ^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^          ^^^^^^^^^^^^        ^^^
 
         x: private1;
 >x : private1
+>  : ^^^^^^^^
 
         y: m2.public1;
 >y : m2.public1
+>  : ^^^^^^^^^^
 >m2 : any
+>   : ^^^
 
         (): m2.public1[];
 >m2 : any
+>   : ^^^
 
         method(): private1;
 >method : () => private1
+>       : ^^^^^^        
 
         [n: number]: private1;
 >n : number
+>  : ^^^^^^
 
         [s: string]: m2.public1;
 >s : string
+>  : ^^^^^^
 >m2 : any
+>   : ^^^
 
     };
     export var x2 = {
 >x2 : { x: private1; y: m2.public1; method(): private1; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        x: new private1(),        y: new m2.public1(),        method() {            return new private1();        }    } : { x: private1; y: m2.public1; method(): private1; }
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x: new private1(),
 >x : private1
+>  : ^^^^^^^^
 >new private1() : private1
+>               : ^^^^^^^^
 >private1 : typeof private1
+>         : ^^^^^^^^^^^^^^^
 
         y: new m2.public1(),
 >y : m2.public1
+>  : ^^^^^^^^^^
 >new m2.public1() : m2.public1
+>                 : ^^^^^^^^^^
 >m2.public1 : typeof m2.public1
+>           : ^^^^^^^^^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 >public1 : typeof m2.public1
+>        : ^^^^^^^^^^^^^^^^^
 
         method() {
 >method : () => private1
+>       : ^^^^^^^^^^^^^^
 
             return new private1();
 >new private1() : private1
+>               : ^^^^^^^^
 >private1 : typeof private1
+>         : ^^^^^^^^^^^^^^^
         }
     };
     export var x3 = x;
 >x3 : { (): m2.public1[]; [n: number]: private1; [s: string]: m2.public1; x: private1; y: m2.public1; method(): private1; }
+>   : ^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^          ^^^^^^^^^^^^        ^^^
 >x : { (): m2.public1[]; [n: number]: private1; [s: string]: m2.public1; x: private1; y: m2.public1; method(): private1; }
+>  : ^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^          ^^^^^^^^^^^^        ^^^
 
     // Function type
     export var y: (a: private1) => m2.public1;
 >y : (a: private1) => m2.public1
+>  : ^ ^^        ^^^^^          
 >a : private1
+>  : ^^^^^^^^
 >m2 : any
+>   : ^^^
 
     export var y2 = y;
 >y2 : (a: private1) => m2.public1
+>   : ^ ^^        ^^^^^          
 >y : (a: private1) => m2.public1
+>  : ^ ^^        ^^^^^          
 
     // constructor type
     export var z: new (a: private1) => m2.public1;
 >z : new (a: private1) => m2.public1
+>  : ^^^^^ ^^        ^^^^^          
 >a : private1
+>  : ^^^^^^^^
 >m2 : any
+>   : ^^^
 
     export var z2 = z;
 >z2 : new (a: private1) => m2.public1
+>   : ^^^^^ ^^        ^^^^^          
 >z : new (a: private1) => m2.public1
+>  : ^^^^^ ^^        ^^^^^          
 }

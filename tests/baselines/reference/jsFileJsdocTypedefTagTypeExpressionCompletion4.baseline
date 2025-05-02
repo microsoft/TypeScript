@@ -1,0 +1,141 @@
+// === Completions ===
+=== /a.js ===
+// const foo = {
+//     bar: {
+//         baz: 42,
+//     }
+// }
+// /** @typedef { typeof foo. } Foo */
+//                           ^
+// | ----------------------------------------------------------------------
+// | (property) bar: {
+// |     baz: number;
+// | }
+// | (warning) baz
+// | (warning) foo
+// | (warning) Foo
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/a.js",
+      "position": 76,
+      "name": ""
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "bar",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "bar",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "baz",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "baz",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
+        },
+        {
+          "name": "foo",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
+        },
+        {
+          "name": "Foo",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

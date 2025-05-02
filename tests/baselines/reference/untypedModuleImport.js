@@ -1,9 +1,6 @@
 //// [tests/cases/conformance/moduleResolution/untypedModuleImport.ts] ////
 
 //// [index.js]
-// This tests that importing from a JS file globally works in an untyped way.
-// (Assuming we don't have `--noImplicitAny` or `--allowJs`.)
-
 This file is not processed.
 
 //// [a.ts]
@@ -23,18 +20,18 @@ foo(bar());
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = require("foo");
 foo.bar();
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = require("foo");
 foo();
 //// [c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("foo");
 require("./a");
 require("./b");
-(0, foo_1["default"])((0, foo_1.bar)());
+(0, foo_1.default)((0, foo_1.bar)());

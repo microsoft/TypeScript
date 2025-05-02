@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInConstructorParameter2.ts] ////
+
 //// [thisInConstructorParameter2.ts]
 class P {
     x = this;

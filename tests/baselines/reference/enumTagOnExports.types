@@ -1,19 +1,33 @@
-=== tests/cases/conformance/jsdoc/enumTagOnExports.js ===
+//// [tests/cases/conformance/jsdoc/enumTagOnExports.ts] ////
+
+=== enumTagOnExports.js ===
 /** @enum {number} */
 exports.a = {};
 >exports.a = {} : {}
+>               : ^^
 >exports.a : typeof a
->exports : typeof import("tests/cases/conformance/jsdoc/enumTagOnExports")
+>          : ^^^^^^^^
+>exports : typeof import("enumTagOnExports")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 /** @enum {string} */
 module.exports.b = {};
 >module.exports.b = {} : {}
+>                      : ^^
 >module.exports.b : typeof b
+>                 : ^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >b : typeof b
+>  : ^^^^^^^^
 >{} : {}
+>   : ^^
 

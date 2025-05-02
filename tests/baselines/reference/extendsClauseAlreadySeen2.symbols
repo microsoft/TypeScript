@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendsClauseAlreadySeen2.ts ===
+//// [tests/cases/compiler/extendsClauseAlreadySeen2.ts] ////
+
+=== extendsClauseAlreadySeen2.ts ===
 class C<T> {
 >C : Symbol(C, Decl(extendsClauseAlreadySeen2.ts, 0, 0))
 >T : Symbol(T, Decl(extendsClauseAlreadySeen2.ts, 0, 8))

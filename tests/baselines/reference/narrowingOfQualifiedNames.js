@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingOfQualifiedNames.ts] ////
+
 //// [narrowingOfQualifiedNames.ts]
 // Repro from #43411
 

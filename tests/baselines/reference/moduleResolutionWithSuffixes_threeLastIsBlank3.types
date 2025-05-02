@@ -1,8 +1,12 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_threeLastIsBlank3.ts] ////
+
 === /index.ts ===
 import { base } from "./foo";
 >base : () => void
+>     : ^^^^^^^^^^
 
 === /foo.ts ===
 export function base() {}
 >base : () => void
+>     : ^^^^^^^^^^
 

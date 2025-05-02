@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration13_es6.ts(3,11): error TS2304: Cannot find name 'yield'.
+FunctionDeclaration13_es6.ts(3,11): error TS2304: Cannot find name 'yield'.
 
 
-==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration13_es6.ts (1 errors) ====
+==== FunctionDeclaration13_es6.ts (1 errors) ====
     function * foo() {
        // Legal to use 'yield' in a type context.
        var v: yield;

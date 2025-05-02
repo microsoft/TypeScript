@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeIndexedAccess.ts ===
+//// [tests/cases/compiler/mappedTypeIndexedAccess.ts] ////
+
+=== mappedTypeIndexedAccess.ts ===
 // Repro from #15756
 
 type Pairs<T> = {

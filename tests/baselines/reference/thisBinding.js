@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisBinding.ts] ////
+
 //// [thisBinding.ts]
 module M {
     export interface I {

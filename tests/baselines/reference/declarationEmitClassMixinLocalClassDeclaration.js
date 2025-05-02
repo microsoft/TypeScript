@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts] ////
+
 //// [declarationEmitClassMixinLocalClassDeclaration.ts]
 export type AnyFunction<Result = any> = (...input: any[]) => Result
 
@@ -41,7 +43,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.XmlElement2 = exports.Base = exports.Mixin = void 0;
 exports.Mixin = null;
 var Base = /** @class */ (function () {

@@ -1,37 +1,59 @@
-=== tests/cases/compiler/nestedLoops.ts ===
+//// [tests/cases/compiler/nestedLoops.ts] ////
+
+=== nestedLoops.ts ===
 export class Test  {
 >Test : Test
+>     : ^^^^
 
     constructor() {
 
         let outerArray: Array<number> = [1, 2, 3];
 >outerArray : number[]
+>           : ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
         let innerArray: Array<number> = [1, 2, 3];
 >innerArray : number[]
+>           : ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
         for (let outer of outerArray)
 >outer : number
+>      : ^^^^^^
 >outerArray : number[]
+>           : ^^^^^^^^
 
             for (let inner of innerArray) {
 >inner : number
+>      : ^^^^^^
 >innerArray : number[]
+>           : ^^^^^^^^
 
                 this.aFunction((newValue, oldValue) => {
 >this.aFunction((newValue, oldValue) => {                    let x = outer + inner + newValue;                }) : void
+>                                                                                                                : ^^^^
 >this.aFunction : (func: (newValue: any, oldValue: any) => void) => void
+>               : ^    ^^                                      ^^^^^    
 >this : this
+>     : ^^^^
 >aFunction : (func: (newValue: any, oldValue: any) => void) => void
+>          : ^    ^^                                      ^^^^^    
 >(newValue, oldValue) => {                    let x = outer + inner + newValue;                } : (newValue: any, oldValue: any) => void
+>                                                                                                : ^        ^^^^^^^        ^^^^^^^^^^^^^^
 >newValue : any
 >oldValue : any
 
@@ -39,8 +61,11 @@ export class Test  {
 >x : any
 >outer + inner + newValue : any
 >outer + inner : number
+>              : ^^^^^^
 >outer : number
+>      : ^^^^^^
 >inner : number
+>      : ^^^^^^
 >newValue : any
 
                 });
@@ -49,7 +74,9 @@ export class Test  {
 
     public aFunction(func: (newValue: any, oldValue: any) => void): void {
 >aFunction : (func: (newValue: any, oldValue: any) => void) => void
+>          : ^    ^^                                      ^^^^^    
 >func : (newValue: any, oldValue: any) => void
+>     : ^        ^^   ^^        ^^   ^^^^^    
 >newValue : any
 >oldValue : any
     }

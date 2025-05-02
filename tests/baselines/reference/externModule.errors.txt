@@ -1,19 +1,19 @@
-tests/cases/compiler/externModule.ts(1,1): error TS2304: Cannot find name 'declare'.
-tests/cases/compiler/externModule.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/externModule.ts(1,16): error TS1437: Namespace must be given a name.
-tests/cases/compiler/externModule.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/externModule.ts(4,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/externModule.ts(18,6): error TS2390: Constructor implementation is missing.
-tests/cases/compiler/externModule.ts(20,13): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/externModule.ts(26,13): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/externModule.ts(28,13): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/externModule.ts(32,11): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-tests/cases/compiler/externModule.ts(34,7): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-tests/cases/compiler/externModule.ts(36,7): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-tests/cases/compiler/externModule.ts(37,3): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
+externModule.ts(1,1): error TS2304: Cannot find name 'declare'.
+externModule.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+externModule.ts(1,16): error TS1437: Namespace must be given a name.
+externModule.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+externModule.ts(4,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+externModule.ts(18,6): error TS2390: Constructor implementation is missing.
+externModule.ts(20,13): error TS2391: Function implementation is missing or not immediately following the declaration.
+externModule.ts(26,13): error TS2391: Function implementation is missing or not immediately following the declaration.
+externModule.ts(28,13): error TS2391: Function implementation is missing or not immediately following the declaration.
+externModule.ts(32,11): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
+externModule.ts(34,7): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
+externModule.ts(36,7): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
+externModule.ts(37,3): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
 
 
-==== tests/cases/compiler/externModule.ts (13 errors) ====
+==== externModule.ts (13 errors) ====
     declare module {
     ~~~~~~~
 !!! error TS2304: Cannot find name 'declare'.
@@ -42,7 +42,7 @@ tests/cases/compiler/externModule.ts(37,3): error TS2552: Cannot find name 'XDat
     	    constructor(year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number);
     	    constructor(value: number);
     	    constructor();
-    	    ~~~~~~~~~~~~~~
+    	    ~~~~~~~~~~~
 !!! error TS2390: Constructor implementation is missing.
     	    
     	    static parse(string: string): number;
@@ -66,20 +66,20 @@ tests/cases/compiler/externModule.ts(37,3): error TS2552: Cannot find name 'XDat
     var d=new XDate();
               ~~~~~
 !!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-!!! related TS2728 /.ts/lib.es5.d.ts:937:13: 'Date' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Date' is declared here.
     d.getDay();
     d=new XDate(1978,2);
           ~~~~~
 !!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-!!! related TS2728 /.ts/lib.es5.d.ts:937:13: 'Date' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Date' is declared here.
     d.getXDate();
     var n=XDate.parse("3/2/2004");
           ~~~~~
 !!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-!!! related TS2728 /.ts/lib.es5.d.ts:937:13: 'Date' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Date' is declared here.
     n=XDate.UTC(1964,2,1);
       ~~~~~
 !!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-!!! related TS2728 /.ts/lib.es5.d.ts:937:13: 'Date' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Date' is declared here.
     
     

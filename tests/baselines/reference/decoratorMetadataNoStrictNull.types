@@ -1,20 +1,31 @@
-=== tests/cases/compiler/decoratorMetadataNoStrictNull.ts ===
+//// [tests/cases/compiler/decoratorMetadataNoStrictNull.ts] ////
+
+=== decoratorMetadataNoStrictNull.ts ===
 const dec = (obj: {}, prop: string) => undefined
 >dec : (obj: {}, prop: string) => any
+>    : ^   ^^  ^^    ^^      ^^^^^^^^
 >(obj: {}, prop: string) => undefined : (obj: {}, prop: string) => any
+>                                     : ^   ^^  ^^    ^^      ^^^^^^^^
 >obj : {}
+>    : ^^
 >prop : string
+>     : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   @dec public foo: string | null;
 >dec : (obj: {}, prop: string) => any
+>    : ^   ^^  ^^    ^^      ^^^^^^^^
 >foo : string
->null : null
+>    : ^^^^^^
 
   @dec public bar: string;
 >dec : (obj: {}, prop: string) => any
+>    : ^   ^^  ^^    ^^      ^^^^^^^^
 >bar : string
+>    : ^^^^^^
 }

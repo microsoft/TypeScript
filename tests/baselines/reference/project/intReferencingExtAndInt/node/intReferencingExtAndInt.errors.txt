@@ -1,5 +1,5 @@
 internal2.ts(2,21): error TS1147: Import declarations in a namespace cannot reference a module.
-internal2.ts(2,21): error TS2792: Cannot find module 'external2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+internal2.ts(2,21): error TS2792: Cannot find module 'external2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
 ==== internal2.ts (2 errors) ====
@@ -8,7 +8,7 @@ internal2.ts(2,21): error TS2792: Cannot find module 'external2'. Did you mean t
     	                   ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
     	                   ~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'external2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'external2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     	export var a = g.square(5);
     	export var b = "foo";
     }

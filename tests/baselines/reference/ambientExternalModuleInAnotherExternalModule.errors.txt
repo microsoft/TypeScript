@@ -1,8 +1,8 @@
-tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(4,16): error TS2664: Invalid module name in augmentation, module 'ext' cannot be found.
-tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(9,22): error TS2792: Cannot find module 'ext'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+ambientExternalModuleInAnotherExternalModule.ts(4,16): error TS2664: Invalid module name in augmentation, module 'ext' cannot be found.
+ambientExternalModuleInAnotherExternalModule.ts(9,22): error TS2792: Cannot find module 'ext'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts (2 errors) ====
+==== ambientExternalModuleInAnotherExternalModule.ts (2 errors) ====
     class D { }
     export = D;
     
@@ -15,5 +15,5 @@ tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(9,22): erro
     // Cannot resolve this ext module reference
     import ext = require("ext");
                          ~~~~~
-!!! error TS2792: Cannot find module 'ext'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'ext'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     var x = ext;

@@ -1,399 +1,276 @@
+// === findAllReferences ===
 // === /a.ts ===
-// /*FIND ALL REFS*/export type [|T|] = 0;
+// /*FIND ALL REFS*/<|export type [|{| isWriteAccess: true, isDefinition: true |}T|] = 0;|>
 // export const T = 0;
 
 // === /b.ts ===
 // const x: import("./a").[|T|] = 0;
 // const x: typeof import("./a").T = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "const",
-      "name": "type T = 0",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "localName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.ts ===
+  // /*FIND ALL REFS*/<|export type [|T|] = 0;|>
+  // export const T = 0;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "type T = 0",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "localName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
-// export type /*FIND ALL REFS*/[|T|] = 0;
+// <|export type /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|] = 0;|>
 // export const T = 0;
 
 // === /b.ts ===
 // const x: import("./a").[|T|] = 0;
 // const x: typeof import("./a").T = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "const",
-      "name": "type T = 0",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "localName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export type /*FIND ALL REFS*/[|T|] = 0;|>
+  // export const T = 0;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "type T = 0",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "localName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
-undefined
 
+
+// === findAllReferences ===
 // === /a.ts ===
 // export type T = 0;
-// export const /*FIND ALL REFS*/[|T|] = 0;
+// /*FIND ALL REFS*/export const T = 0;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export type T = 0;
+// <|export const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|] = 0;|>
 
 // === /b.ts ===
 // const x: import("./a").T = 0;
 // const x: typeof import("./a").[|T|] = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "const",
-      "name": "const T: 0",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 32,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 19,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export type [|T|] = 0;|>
+  // export const /*FIND ALL REFS*/T = 0;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const T: 0",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
-// export type [|T|] = 0;
+// <|export type [|{| isWriteAccess: true |}T|] = 0;|>
 // export const T = 0;
 
 // === /b.ts ===
 // const x: import("./a")./*FIND ALL REFS*/[|T|] = 0;
 // const x: typeof import("./a").T = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "const",
-      "name": "type T = 0",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "localName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export type [|T|] = 0;|>
+  // export const T = 0;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "type T = 0",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "localName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
 // export type T = 0;
-// export const [|T|] = 0;
+// <|export const [|{| isWriteAccess: true |}T|] = 0;|>
 
 // === /b.ts ===
 // const x: import("./a").T = 0;
 // const x: typeof import("./a")./*FIND ALL REFS*/[|T|] = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "const",
-      "name": "const T: 0",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 32,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 19,
-          "length": 19
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export type [|T|] = 0;|>
+  // export const T = 0;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const T: 0",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

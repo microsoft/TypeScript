@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/declarationEmitTransitiveImportOfHtmlDeclarationItem.ts] ////
+
+=== foo.d.html.ts ===
+export declare class CustomHtmlRepresentationThing {}
+>CustomHtmlRepresentationThing : CustomHtmlRepresentationThing
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== reexporter.ts ===
+import { CustomHtmlRepresentationThing } from "./foo.html";
+>CustomHtmlRepresentationThing : typeof CustomHtmlRepresentationThing
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export function func() {
+>func : () => CustomHtmlRepresentationThing
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return new CustomHtmlRepresentationThing();
+>new CustomHtmlRepresentationThing() : CustomHtmlRepresentationThing
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>CustomHtmlRepresentationThing : typeof CustomHtmlRepresentationThing
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+=== index.ts ===
+import { func } from "./reexporter";
+>func : () => import("foo.d.html").CustomHtmlRepresentationThing
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export const c = func();
+>c : import("foo.d.html").CustomHtmlRepresentationThing
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func() : import("foo.d.html").CustomHtmlRepresentationThing
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func : () => import("foo.d.html").CustomHtmlRepresentationThing
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

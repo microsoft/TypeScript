@@ -1,9 +1,9 @@
-tests/cases/compiler/bar.ts(1,1): error TS2554: Expected 3 arguments, but got 0.
-tests/cases/compiler/bar.ts(2,1): error TS2554: Expected 3 arguments, but got 1.
-tests/cases/compiler/bar.ts(3,1): error TS2554: Expected 3 arguments, but got 2.
+bar.ts(1,1): error TS2554: Expected 3 arguments, but got 0.
+bar.ts(2,1): error TS2554: Expected 3 arguments, but got 1.
+bar.ts(3,1): error TS2554: Expected 3 arguments, but got 2.
 
 
-==== tests/cases/compiler/foo.js (0 errors) ====
+==== foo.js (0 errors) ====
     /**
      * @param a
      * @param b
@@ -12,19 +12,19 @@ tests/cases/compiler/bar.ts(3,1): error TS2554: Expected 3 arguments, but got 2.
     function f(a, b, c) { }
     
     
-==== tests/cases/compiler/bar.ts (3 errors) ====
+==== bar.ts (3 errors) ====
     f(); // Error
-    ~~~
+    ~
 !!! error TS2554: Expected 3 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/foo.js:6:12: An argument for 'a' was not provided.
+!!! related TS6210 foo.js:6:12: An argument for 'a' was not provided.
     f(1); // Error
-    ~~~~
+    ~
 !!! error TS2554: Expected 3 arguments, but got 1.
-!!! related TS6210 tests/cases/compiler/foo.js:6:15: An argument for 'b' was not provided.
+!!! related TS6210 foo.js:6:15: An argument for 'b' was not provided.
     f(1, 2); // Error
-    ~~~~~~~
+    ~
 !!! error TS2554: Expected 3 arguments, but got 2.
-!!! related TS6210 tests/cases/compiler/foo.js:6:18: An argument for 'c' was not provided.
+!!! related TS6210 foo.js:6:18: An argument for 'c' was not provided.
     
     f(1, 2, 3); // OK
     

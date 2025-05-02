@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType10_ES6.ts] ////
+
 //// [computedPropertyNamesContextualType10_ES6.ts]
 interface I {
     [s: number]: boolean;

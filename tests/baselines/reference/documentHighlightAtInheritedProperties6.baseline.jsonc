@@ -1,0 +1,63 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class C extends D {
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}prop0|]: string;|>
+//     prop1: string;
+// }
+// 
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class C extends D {
+//     prop0: string;
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}prop1|]: string;|>
+// }
+// 
+// class D extends C {
+// --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// --- (line: 3) skipped ---
+// }
+// 
+// class D extends C {
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}prop0|]: string;|>
+//     prop1: string;
+// }
+// 
+// var d: D;
+// d.prop1;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// --- (line: 4) skipped ---
+// 
+// class D extends C {
+//     prop0: string;
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}prop1|]: string;|>
+// }
+// 
+// var d: D;
+// d.[|{| kind: "reference" |}prop1|];
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// --- (line: 4) skipped ---
+// 
+// class D extends C {
+//     prop0: string;
+//     <|[|{| kind: "reference" |}prop1|]: string;|>
+// }
+// 
+// var d: D;
+// d./*HIGHLIGHTS*/[|{| kind: "reference" |}prop1|];

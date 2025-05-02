@@ -1,168 +1,229 @@
-=== tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts ===
+//// [tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts] ////
+
+=== varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts ===
 type Either<L, A> = Left<L, A> | Right<L, A>;
 >Either : Either<L, A>
+>       : ^^^^^^^^^^^^
 
 class Left<L, A> {
 >Left : Left<L, A>
+>     : ^^^^^^^^^^
 
     readonly _tag: 'Left' = 'Left'
 >_tag : "Left"
+>     : ^^^^^^
 >'Left' : "Left"
+>       : ^^^^^^
 
     readonly _A!: A
 >_A : A
+>   : ^
 
     readonly _L!: L
 >_L : L
+>   : ^
 
     constructor(readonly value: L) {}
 >value : L
+>      : ^
 
     /** The given function is applied if this is a `Right` */
     map<B>(f: (a: A) => B): Either<L, B> {
 >map : <B>(f: (a: A) => B) => Either<L, B>
+>    : ^ ^^ ^^           ^^^^^            
 >f : (a: A) => B
+>  : ^ ^^ ^^^^^ 
 >a : A
+>  : ^
 
       return this as any
 >this as any : any
 >this : this
+>     : ^^^^
     }
     ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
 >ap : <B>(fab: Either<L, (a: A) => B>) => Either<L, B>
+>   : ^ ^^   ^^                      ^^^^^            
 >fab : Either<L, (a: A) => B>
+>    : ^^^^^^^^^^^ ^^ ^^^^^ ^
 >a : A
+>  : ^
 
       return null as any
 >null as any : any
->null : null
     }
 }
 
 class Right<L, A> {
 >Right : Right<L, A>
+>      : ^^^^^^^^^^^
 
     readonly _tag: 'Right' = 'Right'
 >_tag : "Right"
+>     : ^^^^^^^
 >'Right' : "Right"
+>        : ^^^^^^^
 
     readonly _A!: A
 >_A : A
+>   : ^
 
     readonly _L!: L
 >_L : L
+>   : ^
 
     constructor(readonly value: A) {}
 >value : A
+>      : ^
 
     map<B>(f: (a: A) => B): Either<L, B> {
 >map : <B>(f: (a: A) => B) => Either<L, B>
+>    : ^ ^^ ^^           ^^^^^            
 >f : (a: A) => B
+>  : ^ ^^ ^^^^^ 
 >a : A
+>  : ^
 
       return new Right(f(this.value))
 >new Right(f(this.value)) : Right<L, B>
+>                         : ^^^^^^^^^^^
 >Right : typeof Right
+>      : ^^^^^^^^^^^^
 >f(this.value) : B
+>              : ^
 >f : (a: A) => B
+>  : ^ ^^ ^^^^^ 
 >this.value : A
+>           : ^
 >this : this
+>     : ^^^^
 >value : A
+>      : ^
     }
     ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
 >ap : <B>(fab: Either<L, (a: A) => B>) => Either<L, B>
+>   : ^ ^^   ^^                      ^^^^^            
 >fab : Either<L, (a: A) => B>
+>    : ^^^^^^^^^^^ ^^ ^^^^^ ^
 >a : A
+>  : ^
 
       return null as any;
 >null as any : any
->null : null
     }
 }
 
 class Type<A, O = A, I = unknown> {
 >Type : Type<A, O, I>
+>     : ^^^^^^^^^^^^^
 
   readonly _A!: A;
 >_A : A
+>   : ^
 
   readonly _O!: O;
 >_O : O
+>   : ^
 
   readonly _I!: I;
 >_I : I
+>   : ^
 
   constructor(
     /** a unique name for this codec */
     readonly name: string,
 >name : string
+>     : ^^^^^^
 
     /** a custom type guard */
     readonly is: (u: unknown) => u is A,
 >is : (u: unknown) => u is A
+>   : ^ ^^       ^^^^^      
 >u : unknown
+>  : ^^^^^^^
 
     /** succeeds if a value of type I can be decoded to a value of type A */
     readonly validate: (input: I, context: {}[]) => Either<{}[], A>,
 >validate : (input: I, context: {}[]) => Either<{}[], A>
+>         : ^     ^^ ^^       ^^    ^^^^^               
 >input : I
+>      : ^
 >context : {}[]
+>        : ^^^^
 
     /** converts a value of type A to a value of type O */
     readonly encode: (a: A) => O
 >encode : (a: A) => O
+>       : ^ ^^ ^^^^^ 
 >a : A
+>  : ^
 
   ) {}
   /** a version of `validate` with a default context */
   decode(i: I): Either<{}[], A> { return null as any; }
 >decode : (i: I) => Either<{}[], A>
+>       : ^ ^^ ^^^^^               
 >i : I
+>  : ^
 >null as any : any
->null : null
 }
 
 interface Any extends Type<any, any, any> {}
 
 type TypeOf<C extends Any> = C["_A"];
 >TypeOf : TypeOf<C>
+>       : ^^^^^^^^^
 
 type ToB<S extends {[_ in string | number | symbol]: Any}> = { [k in keyof S]: TypeOf<S[k]> };
 >ToB : ToB<S>
+>    : ^^^^^^
 
 type ToA<S> = { [k in keyof S]: Type<S[k]> };
 >ToA : ToA<S>
+>    : ^^^^^^
 
 type NeededInfo<MyNamespaceSchema = {}> = {
 >NeededInfo : NeededInfo<MyNamespaceSchema>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   ASchema: ToA<MyNamespaceSchema>;
 >ASchema : ToA<MyNamespaceSchema>
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 export type MyInfo = NeededInfo<ToB<{ initialize: any }>>;
->MyInfo : { ASchema: ToA<ToB<{ initialize: any; }>>; }
+>MyInfo : MyInfo
+>       : ^^^^^^
 >initialize : any
 
 const tmp1: MyInfo = null!;
 >tmp1 : MyInfo
+>     : ^^^^^^
 >null! : never
->null : null
+>      : ^^^^^
 
 function tmp2<N extends NeededInfo>(n: N) {}
->tmp2 : <N extends NeededInfo<{}>>(n: N) => void
+>tmp2 : <N extends NeededInfo>(n: N) => void
+>     : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >n : N
+>  : ^
 
 tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ??
 >tmp2(tmp1) : void
->tmp2 : <N extends NeededInfo<{}>>(n: N) => void
+>           : ^^^^
+>tmp2 : <N extends NeededInfo>(n: N) => void
+>     : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >tmp1 : MyInfo
+>     : ^^^^^^
 
 class Server<X extends NeededInfo> {}
 >Server : Server<X>
+>       : ^^^^^^^^^
 
 export class MyServer extends Server<MyInfo> {} // not assignable error at `MyInfo`
 >MyServer : MyServer
+>         : ^^^^^^^^
 >Server : Server<MyInfo>
+>       : ^^^^^^^^^^^^^^
 

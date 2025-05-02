@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx] ////
+
 //// [reactReadonlyHOCAssignabilityReal.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";
@@ -38,7 +40,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = require("react");
 function myHigherOrderComponent(Inner) {

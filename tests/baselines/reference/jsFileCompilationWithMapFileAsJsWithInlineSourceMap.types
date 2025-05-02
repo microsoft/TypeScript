@@ -1,9 +1,13 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationWithMapFileAsJsWithInlineSourceMap.ts] ////
+
+=== a.ts ===
 class c {
 >c : c
+>  : ^
 }
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 }

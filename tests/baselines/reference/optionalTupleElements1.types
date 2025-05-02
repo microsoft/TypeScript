@@ -1,189 +1,302 @@
-=== tests/cases/conformance/types/tuple/optionalTupleElements1.ts ===
+//// [tests/cases/conformance/types/tuple/optionalTupleElements1.ts] ////
+
+=== optionalTupleElements1.ts ===
 type T1 = [number, string, boolean];
->T1 : [number, string, boolean]
+>T1 : T1
+>   : ^^
 
 type T2 = [number, string, boolean?];
->T2 : [number, string, (boolean | undefined)?]
+>T2 : T2
+>   : ^^
 
 type T3 = [number, string?, boolean?];
->T3 : [number, (string | undefined)?, (boolean | undefined)?]
+>T3 : T3
+>   : ^^
 
 type T4 = [number?, string?, boolean?];
->T4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
+>T4 : T4
+>   : ^^
 
 type L1 = T1["length"];
 >L1 : 3
+>   : ^
 
 type L2 = T2["length"];
 >L2 : 3 | 2
+>   : ^^^^^
 
 type L3 = T3["length"];
 >L3 : 3 | 2 | 1
+>   : ^^^^^^^^^
 
 type L4 = T4["length"];
 >L4 : 0 | 3 | 2 | 1
+>   : ^^^^^^^^^^^^^
 
 type T5 = [number, string?, boolean];  // Error
->T5 : [number, (string | undefined)?, boolean]
+>T5 : T5
+>   : ^^
 
 function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
 >f1 : (t1: T1, t2: T2, t3: T3, t4: T4) => void
+>   : ^  ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >t1 : T1
+>   : ^^
 >t2 : T2
+>   : ^^
 >t3 : T3
+>   : ^^
 >t4 : T4
+>   : ^^
 
     t1 = t1;
 >t1 = t1 : T1
+>        : ^^
 >t1 : T1
+>   : ^^
 >t1 : T1
+>   : ^^
 
     t1 = t2;  // Error
 >t1 = t2 : T2
+>        : ^^
 >t1 : T1
+>   : ^^
 >t2 : T2
+>   : ^^
 
     t1 = t3;  // Error
 >t1 = t3 : T3
+>        : ^^
 >t1 : T1
+>   : ^^
 >t3 : T3
+>   : ^^
 
     t1 = t4;  // Error
 >t1 = t4 : T4
+>        : ^^
 >t1 : T1
+>   : ^^
 >t4 : T4
+>   : ^^
 
     t2 = t1;
 >t2 = t1 : T1
+>        : ^^
 >t2 : T2
+>   : ^^
 >t1 : T1
+>   : ^^
 
     t2 = t2;
 >t2 = t2 : T2
+>        : ^^
 >t2 : T2
+>   : ^^
 >t2 : T2
+>   : ^^
 
     t2 = t3;  // Error
 >t2 = t3 : T3
+>        : ^^
 >t2 : T2
+>   : ^^
 >t3 : T3
+>   : ^^
 
     t2 = t4;  // Error
 >t2 = t4 : T4
+>        : ^^
 >t2 : T2
+>   : ^^
 >t4 : T4
+>   : ^^
 
     t3 = t1;
 >t3 = t1 : T1
+>        : ^^
 >t3 : T3
+>   : ^^
 >t1 : T1
+>   : ^^
 
     t3 = t2;
 >t3 = t2 : T2
+>        : ^^
 >t3 : T3
+>   : ^^
 >t2 : T2
+>   : ^^
 
     t3 = t3;
 >t3 = t3 : T3
+>        : ^^
 >t3 : T3
+>   : ^^
 >t3 : T3
+>   : ^^
 
     t3 = t4;  // Error
 >t3 = t4 : T4
+>        : ^^
 >t3 : T3
+>   : ^^
 >t4 : T4
+>   : ^^
 
     t4 = t1;
 >t4 = t1 : T1
+>        : ^^
 >t4 : T4
+>   : ^^
 >t1 : T1
+>   : ^^
 
     t4 = t2;
 >t4 = t2 : T2
+>        : ^^
 >t4 : T4
+>   : ^^
 >t2 : T2
+>   : ^^
 
     t4 = t3;
 >t4 = t3 : T3
+>        : ^^
 >t4 : T4
+>   : ^^
 >t3 : T3
+>   : ^^
 
     t4 = t4;
 >t4 = t4 : T4
+>        : ^^
 >t4 : T4
+>   : ^^
 >t4 : T4
+>   : ^^
 }
 
 let t2: T2;
 >t2 : T2
+>   : ^^
 
 let t3: T3;
 >t3 : T3
+>   : ^^
 
 let t4: T4;
 >t4 : T4
+>   : ^^
 
 t2 = [42, "hello"];
 >t2 = [42, "hello"] : [number, string]
+>                   : ^^^^^^^^^^^^^^^^
 >t2 : T2
+>   : ^^
 >[42, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 t3 = [42, "hello"];
 >t3 = [42, "hello"] : [number, string]
+>                   : ^^^^^^^^^^^^^^^^
 >t3 : T3
+>   : ^^
 >[42, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 t3 = [42,,true]
 >t3 = [42,,true] : [number, undefined, true]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t3 : T3
+>   : ^^
 >[42,,true] : [number, undefined, true]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 > : undefined
+> : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 t3 = [42];
 >t3 = [42] : [number]
+>          : ^^^^^^^^
 >t3 : T3
+>   : ^^
 >[42] : [number]
+>     : ^^^^^^^^
 >42 : 42
+>   : ^^
 
 t4 = [42, "hello"];
 >t4 = [42, "hello"] : [number, string]
+>                   : ^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >[42, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 t4 = [42,,true];
 >t4 = [42,,true] : [number, undefined, true]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >[42,,true] : [number, undefined, true]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 > : undefined
+> : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 t4 = [,"hello", true];
 >t4 = [,"hello", true] : [undefined, string, true]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >[,"hello", true] : [undefined, string, true]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 
 t4 = [,,true];
 >t4 = [,,true] : [undefined, undefined, true]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t4 : T4
+>   : ^^
 >[,,true] : [undefined, undefined, true]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 t4 = [];
 >t4 = [] : []
+>        : ^^
 >t4 : T4
+>   : ^^
 >[] : []
+>   : ^^
 

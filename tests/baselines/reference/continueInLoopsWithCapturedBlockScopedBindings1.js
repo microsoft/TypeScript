@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueInLoopsWithCapturedBlockScopedBindings1.ts] ////
+
 //// [continueInLoopsWithCapturedBlockScopedBindings1.ts]
 function foo() {
     for (const i of [0, 1]) {

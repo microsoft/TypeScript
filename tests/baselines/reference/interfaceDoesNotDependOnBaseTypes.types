@@ -1,30 +1,49 @@
-=== tests/cases/conformance/types/typeAliases/interfaceDoesNotDependOnBaseTypes.ts ===
+//// [tests/cases/conformance/types/typeAliases/interfaceDoesNotDependOnBaseTypes.ts] ////
+
+=== interfaceDoesNotDependOnBaseTypes.ts ===
 var x: StringTree;
 >x : StringTree
+>  : ^^^^^^^^^^
 
 if (typeof x !== "string") {
 >typeof x !== "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : StringTree
+>  : ^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     x.push("");
 >x.push("") : number
+>           : ^^^^^^
 >x.push : (...items: StringTree[]) => number
+>       : ^^^^     ^^^^^^^^^^^^^^^^^^^      
 >x : StringTreeArray
+>  : ^^^^^^^^^^^^^^^
 >push : (...items: StringTree[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^      
 >"" : ""
+>   : ^^
 
     x.push([""]);
 >x.push([""]) : number
+>             : ^^^^^^
 >x.push : (...items: StringTree[]) => number
+>       : ^^^^     ^^^^^^^^^^^^^^^^^^^      
 >x : StringTreeArray
+>  : ^^^^^^^^^^^^^^^
 >push : (...items: StringTree[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^      
 >[""] : string[]
+>     : ^^^^^^^^
 >"" : ""
+>   : ^^
 }
 
 type StringTree = string | StringTreeArray;
->StringTree : string | StringTreeArray
+>StringTree : StringTree
+>           : ^^^^^^^^^^
 
 interface StringTreeArray extends Array<StringTree> { }

@@ -1,9 +1,9 @@
-tests/cases/compiler/methodChainError.ts(10,6): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/compiler/methodChainError.ts(16,6): error TS2349: This expression is not callable.
+methodChainError.ts(10,6): error TS2554: Expected 1 arguments, but got 0.
+methodChainError.ts(16,6): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
 
 
-==== tests/cases/compiler/methodChainError.ts (2 errors) ====
+==== methodChainError.ts (2 errors) ====
     class Builder {
         notMethod: string
         method(param: string): Builder {
@@ -14,9 +14,9 @@ tests/cases/compiler/methodChainError.ts(16,6): error TS2349: This expression is
     new Builder()
         .method("a")
         .method()
-         ~~~~~~~~
+         ~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/methodChainError.ts:3:12: An argument for 'param' was not provided.
+!!! related TS6210 methodChainError.ts:3:12: An argument for 'param' was not provided.
         .method("a");
     
         

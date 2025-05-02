@@ -1,16 +1,11 @@
-error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/conformance/node/package.json'. Supply the `rootDir` compiler option to disambiguate.
-tests/cases/conformance/node/index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
-tests/cases/conformance/node/index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
-tests/cases/conformance/node/index.cts(9,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
-tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
-tests/cases/conformance/node/node_modules/inner/index.d.cts(5,1): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/conformance/node/node_modules/inner/index.d.mts(5,1): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
-tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: Statements are not allowed in ambient contexts.
+error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+node_modules/inner/index.d.cts(5,1): error TS1036: Statements are not allowed in ambient contexts.
+node_modules/inner/index.d.mts(5,1): error TS1036: Statements are not allowed in ambient contexts.
+node_modules/inner/index.d.ts(5,1): error TS1036: Statements are not allowed in ambient contexts.
 
 
-!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/conformance/node/package.json'. Supply the `rootDir` compiler option to disambiguate.
-==== tests/cases/conformance/node/index.ts (0 errors) ====
+!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+==== index.ts (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
@@ -24,7 +19,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
     export const d = cjsi;
     export const e = mjsi;
     export const f = typei;
-==== tests/cases/conformance/node/index.mts (0 errors) ====
+==== index.mts (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
@@ -38,32 +33,24 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
     export const d = cjsi;
     export const e = mjsi;
     export const f = typei;
-==== tests/cases/conformance/node/index.cts (3 errors) ====
+==== index.cts (0 errors) ====
     // cjs format file
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
-                         ~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
     import * as type from "package";
-                          ~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
     export const a = cjs;
     export const b = mjs;
     export const c = type;
     import * as cjsi from "inner/cjs";
     import * as mjsi from "inner/mjs";
-                          ~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
     import * as typei from "inner";
     export const d = cjsi;
     export const e = mjsi;
     export const f = typei;
-==== tests/cases/conformance/node/node_modules/inner/index.d.ts (2 errors) ====
+==== node_modules/inner/index.d.ts (1 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
-                         ~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
     import * as type from "inner";
     cjs;
     ~~~
@@ -71,7 +58,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
     mjs;
     type;
     export const cjsMain = true;
-==== tests/cases/conformance/node/node_modules/inner/index.d.mts (1 errors) ====
+==== node_modules/inner/index.d.mts (1 errors) ====
     // esm format file
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
@@ -82,12 +69,10 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
     mjs;
     type;
     export const esm = true;
-==== tests/cases/conformance/node/node_modules/inner/index.d.cts (2 errors) ====
+==== node_modules/inner/index.d.cts (1 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
-                         ~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
     import * as type from "inner";
     cjs;
     ~~~
@@ -95,7 +80,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
     mjs;
     type;
     export const cjsNonmain = true;
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
@@ -106,7 +91,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
             ".": "./index.js"
         }
     }
-==== tests/cases/conformance/node/node_modules/inner/package.json (0 errors) ====
+==== node_modules/inner/package.json (0 errors) ====
     {
         "name": "inner",
         "private": true,

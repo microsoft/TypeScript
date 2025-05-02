@@ -1,14 +1,14 @@
-tests/cases/conformance/salsa/enums.js(2,10): error TS2540: Cannot assign to 'DESC' because it is a read-only property.
-tests/cases/conformance/salsa/enums.js(3,10): error TS2540: Cannot assign to 'ASC' because it is a read-only property.
+enums.js(2,10): error TS2540: Cannot assign to 'DESC' because it is a read-only property.
+enums.js(3,10): error TS2540: Cannot assign to 'ASC' because it is a read-only property.
 
 
-==== tests/cases/conformance/salsa/lovefield-ts.d.ts (0 errors) ====
+==== lovefield-ts.d.ts (0 errors) ====
     // bug #27352, crashes from github.com/google/lovefield
     declare namespace lf {
         export enum Order { ASC, DESC }
     }
     
-==== tests/cases/conformance/salsa/enums.js (2 errors) ====
+==== enums.js (2 errors) ====
     lf.Order = {}
     lf.Order.DESC = 0;
              ~~~~

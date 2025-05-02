@@ -1,39 +1,62 @@
-=== tests/cases/conformance/types/typeAliases/classDoesNotDependOnBaseTypes.ts ===
+//// [tests/cases/conformance/types/typeAliases/classDoesNotDependOnBaseTypes.ts] ////
+
+=== classDoesNotDependOnBaseTypes.ts ===
 type StringTree = string | StringTreeCollection;
->StringTree : string | StringTreeCollection
+>StringTree : StringTree
+>           : ^^^^^^^^^^
 
 class StringTreeCollectionBase {
 >StringTreeCollectionBase : StringTreeCollectionBase
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [n: number]: StringTree;
 >n : number
+>  : ^^^^^^
 }
 
 class StringTreeCollection extends StringTreeCollectionBase { }
 >StringTreeCollection : StringTreeCollection
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >StringTreeCollectionBase : StringTreeCollectionBase
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var x: StringTree;
 >x : StringTree
+>  : ^^^^^^^^^^
 
 if (typeof x !== "string") {
 >typeof x !== "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : StringTree
+>  : ^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     x[0] = "";
 >x[0] = "" : ""
+>          : ^^
 >x[0] : StringTree
+>     : ^^^^^^^^^^
 >x : StringTreeCollection
+>  : ^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >"" : ""
+>   : ^^
 
     x[0] = new StringTreeCollection;
 >x[0] = new StringTreeCollection : StringTreeCollection
+>                                : ^^^^^^^^^^^^^^^^^^^^
 >x[0] : StringTree
+>     : ^^^^^^^^^^
 >x : StringTreeCollection
+>  : ^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >new StringTreeCollection : StringTreeCollection
+>                         : ^^^^^^^^^^^^^^^^^^^^
 >StringTreeCollection : typeof StringTreeCollection
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

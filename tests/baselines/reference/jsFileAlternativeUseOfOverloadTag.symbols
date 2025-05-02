@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/jsFileAlternativeUseOfOverloadTag.ts] ////
+
+=== jsFileAlternativeUseOfOverloadTag.js ===
+// These are a few examples of existing alternative uses of @overload tag.
+// They will not work as expected with our implementation, but we are
+// trying to make sure that our changes do not result in any crashes here.
+
+const example1 = {
+>example1 : Symbol(example1, Decl(jsFileAlternativeUseOfOverloadTag.js, 4, 5))
+
+  /**
+   * @overload Example1(value)
+   *   Creates Example1
+   *   @param value [String]
+   */
+  constructor: function Example1(value, options) {},
+>constructor : Symbol(constructor, Decl(jsFileAlternativeUseOfOverloadTag.js, 4, 18))
+>Example1 : Symbol(Example1, Decl(jsFileAlternativeUseOfOverloadTag.js, 10, 14))
+>value : Symbol(value, Decl(jsFileAlternativeUseOfOverloadTag.js, 10, 33))
+>options : Symbol(options, Decl(jsFileAlternativeUseOfOverloadTag.js, 10, 39))
+
+};
+
+const example2 = {
+>example2 : Symbol(example2, Decl(jsFileAlternativeUseOfOverloadTag.js, 13, 5))
+
+  /**
+   * Example 2
+   *
+   * @overload Example2(value)
+   *   Creates Example2
+   *   @param value [String]
+   *   @param secretAccessKey [String]
+   *   @param sessionToken [String]
+   *   @example Creates with string value
+   *     const example = new Example('');
+   * @overload Example2(options)
+   *   Creates Example2
+   *   @option options value [String]
+   *   @example Creates with options object
+   *     const example = new Example2({
+   *       value: '',
+   *     });
+   */
+  constructor: function Example2() {},
+>constructor : Symbol(constructor, Decl(jsFileAlternativeUseOfOverloadTag.js, 13, 18))
+>Example2 : Symbol(Example2, Decl(jsFileAlternativeUseOfOverloadTag.js, 32, 14))
+
+};
+
+const example3 = {
+>example3 : Symbol(example3, Decl(jsFileAlternativeUseOfOverloadTag.js, 35, 5))
+
+  /**
+   * @overload evaluate(options = {}, [callback])
+   *   Evaluate something
+   *   @note Something interesting
+   *   @param options [map]
+   *   @return [string] returns evaluation result
+   *   @return [null] returns nothing if callback provided
+   *   @callback callback function (error, result)
+   *     If callback is provided it will be called with evaluation result
+   *     @param error [Error]
+   *     @param result [String]
+   *   @see callback
+   */
+  evaluate: function evaluate(options, callback) {},
+>evaluate : Symbol(evaluate, Decl(jsFileAlternativeUseOfOverloadTag.js, 35, 18))
+>evaluate : Symbol(evaluate, Decl(jsFileAlternativeUseOfOverloadTag.js, 49, 11))
+>options : Symbol(options, Decl(jsFileAlternativeUseOfOverloadTag.js, 49, 30))
+>callback : Symbol(callback, Decl(jsFileAlternativeUseOfOverloadTag.js, 49, 38))
+
+};
+

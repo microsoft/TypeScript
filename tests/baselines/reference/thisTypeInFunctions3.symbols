@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctions3.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions3.ts] ////
+
+=== thisTypeInFunctions3.ts ===
 declare class Base {
 >Base : Symbol(Base, Decl(thisTypeInFunctions3.ts, 0, 0))
 

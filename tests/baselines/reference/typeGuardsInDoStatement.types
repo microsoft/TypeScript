@@ -1,92 +1,139 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsInDoStatement.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInDoStatement.ts] ////
+
+=== typeGuardsInDoStatement.ts ===
 let cond: boolean;
 >cond : boolean
+>     : ^^^^^^^
 
 function a(x: string | number | boolean) {
 >a : (x: string | number | boolean) => void
+>  : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = true;
 >x = true : true
+>         : ^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     do {
         x; // boolean | string
 >x : string | true
+>  : ^^^^^^^^^^^^^
 
         x = undefined;
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     } while (typeof x === "string")
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     x; // number | boolean
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 }
 function b(x: string | number | boolean) {
 >b : (x: string | number | boolean) => void
+>  : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = true;
 >x = true : true
+>         : ^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     do {
         x; // boolean | string
 >x : string | true
+>  : ^^^^^^^^^^^^^
 
         if (cond) continue;
 >cond : boolean
+>     : ^^^^^^^
 
         x = undefined;
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     } while (typeof x === "string")
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     x; // number | boolean
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 }
 function c(x: string | number) {
 >c : (x: string | number) => void
+>  : ^ ^^               ^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     do {
         x; // string
 >x : string
+>  : ^^^^^^
 
         if (cond) break;
 >cond : boolean
+>     : ^^^^^^^
 
         x = undefined;
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     } while (typeof x === "string")
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     x; // string | number
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 

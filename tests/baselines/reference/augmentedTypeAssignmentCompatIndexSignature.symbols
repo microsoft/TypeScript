@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts ===
+//// [tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts] ////
+
+=== augmentedTypeAssignmentCompatIndexSignature.ts ===
 interface Foo { a }
 >Foo : Symbol(Foo, Decl(augmentedTypeAssignmentCompatIndexSignature.ts, 0, 0))
 >a : Symbol(Foo.a, Decl(augmentedTypeAssignmentCompatIndexSignature.ts, 0, 15))

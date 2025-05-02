@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmitSpreadAttribute.ts] ////
+
+=== test.tsx ===
 /// <reference path="react16.d.ts" />
 
 export function T1(a: any) {
@@ -94,6 +96,82 @@ export function T7(a: any, b: any, c: any, d: any) {
 
     return <div>T7</div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T8(a: any, b: any, c: any, d: any) {
+>T8 : Symbol(T8, Decl(test.tsx, 28, 1))
+>a : Symbol(a, Decl(test.tsx, 30, 19))
+>b : Symbol(b, Decl(test.tsx, 30, 26))
+>c : Symbol(c, Decl(test.tsx, 30, 34))
+>d : Symbol(d, Decl(test.tsx, 30, 42))
+
+    return <div className={"T8"} { ...{ __proto__: null, dir: 'rtl' } }>T8</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 31, 15))
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 31, 39))
+>dir : Symbol(dir, Decl(test.tsx, 31, 56))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T9(a: any, b: any, c: any, d: any) {
+>T9 : Symbol(T9, Decl(test.tsx, 32, 1))
+>a : Symbol(a, Decl(test.tsx, 34, 19))
+>b : Symbol(b, Decl(test.tsx, 34, 26))
+>c : Symbol(c, Decl(test.tsx, 34, 34))
+>d : Symbol(d, Decl(test.tsx, 34, 42))
+
+    return <div className={"T9"} { ...{ "__proto__": null } }>T9</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 35, 15))
+>"__proto__" : Symbol("__proto__", Decl(test.tsx, 35, 39))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+declare const __proto__: string;
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 38, 13))
+
+export function T10(a: any, b: any, c: any, d: any) {
+>T10 : Symbol(T10, Decl(test.tsx, 38, 32))
+>a : Symbol(a, Decl(test.tsx, 40, 20))
+>b : Symbol(b, Decl(test.tsx, 40, 27))
+>c : Symbol(c, Decl(test.tsx, 40, 35))
+>d : Symbol(d, Decl(test.tsx, 40, 43))
+
+    return <div className={"T10"} { ...{ [__proto__]: null } }>T10</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 41, 15))
+>[__proto__] : Symbol([__proto__], Decl(test.tsx, 41, 40))
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 38, 13))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T11(a: any, b: any, c: any, d: any) {
+>T11 : Symbol(T11, Decl(test.tsx, 42, 1))
+>a : Symbol(a, Decl(test.tsx, 44, 20))
+>b : Symbol(b, Decl(test.tsx, 44, 27))
+>c : Symbol(c, Decl(test.tsx, 44, 35))
+>d : Symbol(d, Decl(test.tsx, 44, 43))
+
+    return <div className={"T11"} { ...{ ["__proto__"]: null } }>T11</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 45, 15))
+>["__proto__"] : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
+>"__proto__" : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T12(a: any, b: any, c: any, d: any) {
+>T12 : Symbol(T12, Decl(test.tsx, 46, 1))
+>a : Symbol(a, Decl(test.tsx, 48, 20))
+>b : Symbol(b, Decl(test.tsx, 48, 27))
+>c : Symbol(c, Decl(test.tsx, 48, 35))
+>d : Symbol(d, Decl(test.tsx, 48, 43))
+
+    return <div className={"T12"} { ...{ __proto__ } }>T12</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 49, 15))
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 49, 40))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 }
 

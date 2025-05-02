@@ -5,4 +5,4 @@
 ////    return 0;
 ////})
 
-verify.rangesAreOccurrences();
+verify.baselineDocumentHighlights();

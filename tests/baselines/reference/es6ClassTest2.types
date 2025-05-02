@@ -1,15 +1,21 @@
-=== tests/cases/compiler/es6ClassTest2.ts ===
+//// [tests/cases/compiler/es6ClassTest2.ts] ////
+
+=== es6ClassTest2.ts ===
 class BasicMonster {
 >BasicMonster : BasicMonster
+>             : ^^^^^^^^^^^^
 
     constructor(public name: string, public health: number) {
 >name : string
+>     : ^^^^^^
 >health : number
+>       : ^^^^^^
 
     }
 
     attack(target) {
 >attack : (target: any) => void
+>       : ^      ^^^^^^^^^^^^^^
 >target : any
 
       // WScript.Echo("Attacks " + target);
@@ -17,62 +23,97 @@ class BasicMonster {
 
     isAlive = true;
 >isAlive : boolean
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 
 var m1 = new BasicMonster("1", 100);
 >m1 : BasicMonster
+>   : ^^^^^^^^^^^^
 >new BasicMonster("1", 100) : BasicMonster
+>                           : ^^^^^^^^^^^^
 >BasicMonster : typeof BasicMonster
+>             : ^^^^^^^^^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 >100 : 100
+>    : ^^^
 
 var m2 = new BasicMonster("2", 100);
 >m2 : BasicMonster
+>   : ^^^^^^^^^^^^
 >new BasicMonster("2", 100) : BasicMonster
+>                           : ^^^^^^^^^^^^
 >BasicMonster : typeof BasicMonster
+>             : ^^^^^^^^^^^^^^^^^^^
 >"2" : "2"
+>    : ^^^
 >100 : 100
+>    : ^^^
 
 m1.attack(m2);
 >m1.attack(m2) : void
+>              : ^^^^
 >m1.attack : (target: any) => void
+>          : ^      ^^^^^^^^^^^^^^
 >m1 : BasicMonster
+>   : ^^^^^^^^^^^^
 >attack : (target: any) => void
+>       : ^      ^^^^^^^^^^^^^^
 >m2 : BasicMonster
+>   : ^^^^^^^^^^^^
 
 m1.health = 0;
 >m1.health = 0 : 0
+>              : ^
 >m1.health : number
+>          : ^^^^^^
 >m1 : BasicMonster
+>   : ^^^^^^^^^^^^
 >health : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 console.log((<any>m5.isAlive).toString());
 >console.log((<any>m5.isAlive).toString()) : void
+>                                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >(<any>m5.isAlive).toString() : any
 >(<any>m5.isAlive).toString : any
 >(<any>m5.isAlive) : any
+>                  : ^^^
 ><any>m5.isAlive : any
 >m5.isAlive : boolean
+>           : ^^^^^^^
 >m5 : OverloadedMonster
+>   : ^^^^^^^^^^^^^^^^^
 >isAlive : boolean
+>        : ^^^^^^^
 >toString : any
+>         : ^^^
 
 class GetSetMonster {
 >GetSetMonster : GetSetMonster
+>              : ^^^^^^^^^^^^^
 
     constructor(public name: string, private _health: number) {
 >name : string
+>     : ^^^^^^
 >_health : number
+>        : ^^^^^^
 
     }
 
     attack(target) {
 >attack : (target: any) => void
+>       : ^      ^^^^^^^^^^^^^^
 >target : any
 
       // WScript.Echo("Attacks " + target);
@@ -82,99 +123,150 @@ class GetSetMonster {
   // defines one in an object literal.
     get isAlive() {
 >isAlive : boolean
+>        : ^^^^^^^
 
         return this._health > 0;
 >this._health > 0 : boolean
+>                 : ^^^^^^^
 >this._health : number
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >_health : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
     }
 
   // Likewise, "set" can be used to define setters.
     set health(value: number) {
 >health : number
+>       : ^^^^^^
 >value : number
+>      : ^^^^^^
 
         if (value < 0) {
 >value < 0 : boolean
+>          : ^^^^^^^
 >value : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
             throw new Error('Health must be non-negative.')
 >new Error('Health must be non-negative.') : Error
+>                                          : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >'Health must be non-negative.' : "Health must be non-negative."
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
         this._health = value
 >this._health = value : number
+>                     : ^^^^^^
 >this._health : number
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >_health : number
+>        : ^^^^^^
 >value : number
+>      : ^^^^^^
   }
 }
 
 var m3 = new BasicMonster("1", 100);
 >m3 : BasicMonster
+>   : ^^^^^^^^^^^^
 >new BasicMonster("1", 100) : BasicMonster
+>                           : ^^^^^^^^^^^^
 >BasicMonster : typeof BasicMonster
+>             : ^^^^^^^^^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 >100 : 100
+>    : ^^^
 
 var m4 = new BasicMonster("2", 100);
 >m4 : BasicMonster
+>   : ^^^^^^^^^^^^
 >new BasicMonster("2", 100) : BasicMonster
+>                           : ^^^^^^^^^^^^
 >BasicMonster : typeof BasicMonster
+>             : ^^^^^^^^^^^^^^^^^^^
 >"2" : "2"
+>    : ^^^
 >100 : 100
+>    : ^^^
 
 m3.attack(m4);
 >m3.attack(m4) : void
+>              : ^^^^
 >m3.attack : (target: any) => void
+>          : ^      ^^^^^^^^^^^^^^
 >m3 : BasicMonster
+>   : ^^^^^^^^^^^^
 >attack : (target: any) => void
+>       : ^      ^^^^^^^^^^^^^^
 >m4 : BasicMonster
+>   : ^^^^^^^^^^^^
 
 m3.health = 0;
 >m3.health = 0 : 0
+>              : ^
 >m3.health : number
+>          : ^^^^^^
 >m3 : BasicMonster
+>   : ^^^^^^^^^^^^
 >health : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 var x = (<any>m5.isAlive).toString()
 >x : any
 >(<any>m5.isAlive).toString() : any
 >(<any>m5.isAlive).toString : any
 >(<any>m5.isAlive) : any
+>                  : ^^^
 ><any>m5.isAlive : any
 >m5.isAlive : boolean
+>           : ^^^^^^^
 >m5 : OverloadedMonster
+>   : ^^^^^^^^^^^^^^^^^
 >isAlive : boolean
+>        : ^^^^^^^
 >toString : any
+>         : ^^^
 
 class OverloadedMonster {
 >OverloadedMonster : OverloadedMonster
+>                  : ^^^^^^^^^^^^^^^^^
 
     constructor(name: string);
 >name : string
+>     : ^^^^^^
 
     constructor(public name: string, public health?: number) {
 >name : string
+>     : ^^^^^^
 >health : number
+>       : ^^^^^^
 
     }
 
     attack();
 >attack : { (): any; (a: any): any; }
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 
     attack(a: any);
 >attack : { (): any; (a: any): any; }
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >a : any
 
     attack(target?) {
 >attack : { (): any; (a: any): any; }
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >target : any
 
         //WScript.Echo("Attacks " + target);
@@ -182,243 +274,352 @@ class OverloadedMonster {
 
     isAlive = true;
 >isAlive : boolean
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 
 var m5 = new OverloadedMonster("1");
 >m5 : OverloadedMonster
+>   : ^^^^^^^^^^^^^^^^^
 >new OverloadedMonster("1") : OverloadedMonster
+>                           : ^^^^^^^^^^^^^^^^^
 >OverloadedMonster : typeof OverloadedMonster
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 
 var m6 = new OverloadedMonster("2");
 >m6 : OverloadedMonster
+>   : ^^^^^^^^^^^^^^^^^
 >new OverloadedMonster("2") : OverloadedMonster
+>                           : ^^^^^^^^^^^^^^^^^
 >OverloadedMonster : typeof OverloadedMonster
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >"2" : "2"
+>    : ^^^
 
 m5.attack(m6);
 >m5.attack(m6) : any
 >m5.attack : { (): any; (a: any): any; }
+>          : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >m5 : OverloadedMonster
+>   : ^^^^^^^^^^^^^^^^^
 >attack : { (): any; (a: any): any; }
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >m6 : OverloadedMonster
+>   : ^^^^^^^^^^^^^^^^^
 
 m5.health = 0;
 >m5.health = 0 : 0
+>              : ^
 >m5.health : number
+>          : ^^^^^^
 >m5 : OverloadedMonster
+>   : ^^^^^^^^^^^^^^^^^
 >health : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 var y = (<any>m5.isAlive).toString()
 >y : any
 >(<any>m5.isAlive).toString() : any
 >(<any>m5.isAlive).toString : any
 >(<any>m5.isAlive) : any
+>                  : ^^^
 ><any>m5.isAlive : any
 >m5.isAlive : boolean
+>           : ^^^^^^^
 >m5 : OverloadedMonster
+>   : ^^^^^^^^^^^^^^^^^
 >isAlive : boolean
+>        : ^^^^^^^
 >toString : any
+>         : ^^^
 
 class SplatMonster {
 >SplatMonster : SplatMonster
+>             : ^^^^^^^^^^^^
 
     constructor(...args: string[]) { }
 >args : string[]
+>     : ^^^^^^^^
 
     roar(name: string, ...args: number[]) { }
 >roar : (name: string, ...args: number[]) => void
+>     : ^    ^^      ^^^^^    ^^        ^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >args : number[]
+>     : ^^^^^^^^
 }
 
 
 function foo() { return true; }
 >foo : () => boolean
+>    : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 class PrototypeMonster {
 >PrototypeMonster : PrototypeMonster
+>                 : ^^^^^^^^^^^^^^^^
 
     age: number = 1;
 >age : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     name: string;
 >name : string
+>     : ^^^^^^
 
     b = foo();
 >b : boolean
+>  : ^^^^^^^
 >foo() : boolean
+>      : ^^^^^^^
 >foo : () => boolean
+>    : ^^^^^^^^^^^^^
 }
 
 class SuperParent {
 >SuperParent : SuperParent
+>            : ^^^^^^^^^^^
 
     constructor(a: number) {
 >a : number
+>  : ^^^^^^
 
     }
 
     b(b: string) {
 >b : (b: string) => void
+>  : ^ ^^      ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
     }
 
     c() {
 >c : () => void
+>  : ^^^^^^^^^^
 
     }
 }
 
 class SuperChild extends SuperParent {
 >SuperChild : SuperChild
+>           : ^^^^^^^^^^
 >SuperParent : SuperParent
+>            : ^^^^^^^^^^^
 
     constructor() {
         super(1);
 >super(1) : void
+>         : ^^^^
 >super : typeof SuperParent
+>      : ^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
     }
 
     b() {
 >b : () => void
+>  : ^^^^^^^^^^
 
         super.b('str');
 >super.b('str') : void
+>               : ^^^^
 >super.b : (b: string) => void
+>        : ^ ^^      ^^^^^^^^^
 >super : SuperParent
+>      : ^^^^^^^^^^^
 >b : (b: string) => void
+>  : ^ ^^      ^^^^^^^^^
 >'str' : "str"
+>      : ^^^^^
     }
 
     c() {
 >c : () => void
+>  : ^^^^^^^^^^
 
         super.c();
 >super.c() : void
+>          : ^^^^
 >super.c : () => void
+>        : ^^^^^^^^^^
 >super : SuperParent
+>      : ^^^^^^^^^^^
 >c : () => void
+>  : ^^^^^^^^^^
     }
 }
 
 class Statics {
 >Statics : Statics
+>        : ^^^^^^^
 
     static foo = 1;
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     static bar: string;
 >bar : string
+>    : ^^^^^^
 
     static baz() {
 >baz : () => string
+>    : ^^^^^^^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
 }
 
 var stat = new Statics();
 >stat : Statics
+>     : ^^^^^^^
 >new Statics() : Statics
+>              : ^^^^^^^
 >Statics : typeof Statics
+>        : ^^^^^^^^^^^^^^
 
 interface IFoo {
     x: number;
 >x : number
+>  : ^^^^^^
 
     z: string;
 >z : string
+>  : ^^^^^^
 }
 
 class ImplementsInterface implements IFoo {
 >ImplementsInterface : ImplementsInterface
+>                    : ^^^^^^^^^^^^^^^^^^^
 
     public x: number;
 >x : number
+>  : ^^^^^^
 
     public z: string;
 >z : string
+>  : ^^^^^^
 
     constructor() {
         this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         this.z = "foo";
 >this.z = "foo" : "foo"
+>               : ^^^^^
 >this.z : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >z : string
+>  : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 }
 
 class Visibility {
 >Visibility : Visibility
+>           : ^^^^^^^^^^
 
     public foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     private bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 
     private x: number;
 >x : number
+>  : ^^^^^^
 
     public y: number;
 >y : number
+>  : ^^^^^^
 
     public z: number;
 >z : number
+>  : ^^^^^^
 
     constructor() {
         this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         this.y = 2;
 >this.y = 2 : 2
+>           : ^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
     }
 }
 
 class BaseClassWithConstructor {
 >BaseClassWithConstructor : BaseClassWithConstructor
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x: number, public s: string) { }
 >x : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 }
 
 // used to test codegen
 class ChildClassWithoutConstructor extends BaseClassWithConstructor { }
 >ChildClassWithoutConstructor : ChildClassWithoutConstructor
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseClassWithConstructor : BaseClassWithConstructor
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 var ccwc = new ChildClassWithoutConstructor(1, "s");
 >ccwc : ChildClassWithoutConstructor
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new ChildClassWithoutConstructor(1, "s") : ChildClassWithoutConstructor
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ChildClassWithoutConstructor : typeof ChildClassWithoutConstructor
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"s" : "s"
+>    : ^^^
 
 

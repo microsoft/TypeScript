@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/boolean/extendBooleanInterface.ts ===
+//// [tests/cases/conformance/types/primitives/boolean/extendBooleanInterface.ts] ////
+
+=== extendBooleanInterface.ts ===
 interface Boolean {
 >Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(extendBooleanInterface.ts, 0, 0))
 

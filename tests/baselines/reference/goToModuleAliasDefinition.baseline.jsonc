@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import [|n|] = require('a');|>
+// var x = new /*GOTO DEF*/n.Foo();
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "n",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": true
+   }
+  ]

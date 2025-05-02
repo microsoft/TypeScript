@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnDecoratedClassDeclaration.ts] ////
+
 //// [commentOnDecoratedClassDeclaration.ts]
 declare function decorator(x: string): any;
 

@@ -1,118 +1,180 @@
-=== tests/cases/compiler/enumMemberReduction.ts ===
+//// [tests/cases/compiler/enumMemberReduction.ts] ////
+
+=== enumMemberReduction.ts ===
 enum MyEnum {
 >MyEnum : MyEnum
+>       : ^^^^^^
 
   A,
 >A : MyEnum.A
+>  : ^^^^^^^^
 
   B,
 >B : MyEnum.B
+>  : ^^^^^^^^
 
   C,
 >C : MyEnum.C
+>  : ^^^^^^^^
 }
 
 enum MyStringEnum {
 >MyStringEnum : MyStringEnum
+>             : ^^^^^^^^^^^^
 
   A = "a",
 >A : MyStringEnum.A
+>  : ^^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
   B = "b",
 >B : MyStringEnum.B
+>  : ^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 
   C = "c",
 >C : MyStringEnum.C
+>  : ^^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 }
 
 enum MyStringEnumWithEmpty {
 >MyStringEnumWithEmpty : MyStringEnumWithEmpty
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
   A = "",
 >A : MyStringEnumWithEmpty.A
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
   B = "b",
 >B : MyStringEnumWithEmpty.B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 
   C = "c",
 >C : MyStringEnumWithEmpty.C
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 }
 
 export function fn(optionalEnum: MyEnum | undefined) {
 >fn : (optionalEnum: MyEnum | undefined) => MyEnum
+>   : ^            ^^                  ^^^^^^^^^^^
 >optionalEnum : MyEnum
+>             : ^^^^^^
 
   return optionalEnum ?? MyEnum.A;
 >optionalEnum ?? MyEnum.A : MyEnum
+>                         : ^^^^^^
 >optionalEnum : MyEnum
+>             : ^^^^^^
 >MyEnum.A : MyEnum.A
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >A : MyEnum.A
+>  : ^^^^^^^^
 }
 
 export function fn2(optionalEnum: MyEnum | undefined) {
 >fn2 : (optionalEnum: MyEnum | undefined) => MyEnum.B | MyEnum.C
+>    : ^            ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyEnum
+>             : ^^^^^^
 
   return optionalEnum || MyEnum.B;
 >optionalEnum || MyEnum.B : MyEnum.B | MyEnum.C
+>                         : ^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyEnum
+>             : ^^^^^^
 >MyEnum.B : MyEnum.B
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >B : MyEnum.B
+>  : ^^^^^^^^
 }
 
 export function fn3(optionalEnum?: MyEnum) {
 >fn3 : (optionalEnum?: MyEnum) => MyEnum
+>    : ^            ^^^      ^^^^^^^^^^^
 >optionalEnum : MyEnum
+>             : ^^^^^^
 
   return optionalEnum ?? MyEnum.A;
 >optionalEnum ?? MyEnum.A : MyEnum
+>                         : ^^^^^^
 >optionalEnum : MyEnum
+>             : ^^^^^^
 >MyEnum.A : MyEnum.A
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >A : MyEnum.A
+>  : ^^^^^^^^
 }
 
 export function fn4(optionalEnum?: MyEnum) {
 >fn4 : (optionalEnum?: MyEnum) => MyEnum.B | MyEnum.C
+>    : ^            ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyEnum
+>             : ^^^^^^
 
   return optionalEnum || MyEnum.B;
 >optionalEnum || MyEnum.B : MyEnum.B | MyEnum.C
+>                         : ^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyEnum
+>             : ^^^^^^
 >MyEnum.B : MyEnum.B
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >B : MyEnum.B
+>  : ^^^^^^^^
 }
 
 export function fn5(optionalEnum?: MyStringEnum) {
 >fn5 : (optionalEnum?: MyStringEnum) => MyStringEnum
+>    : ^            ^^^            ^^^^^^^^^^^^^^^^^
 >optionalEnum : MyStringEnum
+>             : ^^^^^^^^^^^^
 
   return optionalEnum || MyStringEnum.B;
 >optionalEnum || MyStringEnum.B : MyStringEnum
+>                               : ^^^^^^^^^^^^
 >optionalEnum : MyStringEnum
+>             : ^^^^^^^^^^^^
 >MyStringEnum.B : MyStringEnum.B
+>               : ^^^^^^^^^^^^^^
 >MyStringEnum : typeof MyStringEnum
+>             : ^^^^^^^^^^^^^^^^^^^
 >B : MyStringEnum.B
+>  : ^^^^^^^^^^^^^^
 }
 
 export function fn6(optionalEnum?: MyStringEnumWithEmpty) {
 >fn6 : (optionalEnum?: MyStringEnumWithEmpty) => MyStringEnumWithEmpty.B | MyStringEnumWithEmpty.C
+>    : ^            ^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyStringEnumWithEmpty
+>             : ^^^^^^^^^^^^^^^^^^^^^
 
   return optionalEnum || MyStringEnumWithEmpty.B;
 >optionalEnum || MyStringEnumWithEmpty.B : MyStringEnumWithEmpty.B | MyStringEnumWithEmpty.C
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyStringEnumWithEmpty
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >MyStringEnumWithEmpty.B : MyStringEnumWithEmpty.B
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >MyStringEnumWithEmpty : typeof MyStringEnumWithEmpty
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >B : MyStringEnumWithEmpty.B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 

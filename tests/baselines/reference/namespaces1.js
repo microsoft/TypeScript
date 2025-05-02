@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespaces1.ts] ////
+
 //// [namespaces1.ts]
 module X {
     export module Y {

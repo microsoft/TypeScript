@@ -1,0 +1,277 @@
+//// [tests/cases/compiler/getterSetterSubtypeAssignment.ts] ////
+
+=== getterSetterSubtypeAssignment.ts ===
+class NumberOrUndefined {
+>NumberOrUndefined : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
+
+    _x: number | undefined;
+>_x : Symbol(NumberOrUndefined._x, Decl(getterSetterSubtypeAssignment.ts, 0, 25))
+
+    get x(): number { return this._x ?? 0; }
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>this._x : Symbol(NumberOrUndefined._x, Decl(getterSetterSubtypeAssignment.ts, 0, 25))
+>this : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
+>_x : Symbol(NumberOrUndefined._x, Decl(getterSetterSubtypeAssignment.ts, 0, 25))
+
+    set x(value: number | undefined) { this._x = value; }
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>value : Symbol(value, Decl(getterSetterSubtypeAssignment.ts, 3, 10))
+>this._x : Symbol(NumberOrUndefined._x, Decl(getterSetterSubtypeAssignment.ts, 0, 25))
+>this : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
+>_x : Symbol(NumberOrUndefined._x, Decl(getterSetterSubtypeAssignment.ts, 0, 25))
+>value : Symbol(value, Decl(getterSetterSubtypeAssignment.ts, 3, 10))
+
+    additionAssignment() {
+>additionAssignment : Symbol(NumberOrUndefined.additionAssignment, Decl(getterSetterSubtypeAssignment.ts, 3, 57))
+
+        this.x += 1;
+>this.x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>this : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+    }
+
+    subtractionAssignment() {
+>subtractionAssignment : Symbol(NumberOrUndefined.subtractionAssignment, Decl(getterSetterSubtypeAssignment.ts, 7, 5))
+
+        this.x -= 1;
+>this.x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>this : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+    }
+
+    multiplicationAssignment() {
+>multiplicationAssignment : Symbol(NumberOrUndefined.multiplicationAssignment, Decl(getterSetterSubtypeAssignment.ts, 11, 5))
+
+        this.x *= 1;
+>this.x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>this : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+    }
+
+    divisionAssignment() {
+>divisionAssignment : Symbol(NumberOrUndefined.divisionAssignment, Decl(getterSetterSubtypeAssignment.ts, 15, 5))
+
+        this.x /= 1;
+>this.x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>this : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+    }
+}
+const numberOrUndefined = new NumberOrUndefined();
+>numberOrUndefined : Symbol(numberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 21, 5))
+>NumberOrUndefined : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
+
+numberOrUndefined.x += 1;
+>numberOrUndefined.x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>numberOrUndefined : Symbol(numberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 21, 5))
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+
+numberOrUndefined.x -= 1;
+>numberOrUndefined.x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>numberOrUndefined : Symbol(numberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 21, 5))
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+
+numberOrUndefined.x *= 1;
+>numberOrUndefined.x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>numberOrUndefined : Symbol(numberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 21, 5))
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+
+numberOrUndefined.x /= 1;
+>numberOrUndefined.x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+>numberOrUndefined : Symbol(numberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 21, 5))
+>x : Symbol(NumberOrUndefined.x, Decl(getterSetterSubtypeAssignment.ts, 1, 27), Decl(getterSetterSubtypeAssignment.ts, 2, 44))
+
+class NumberOrString {
+>NumberOrString : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+
+    _x: number | string = 0;
+>_x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+
+    get x(): number { return typeof this._x === 'number' ? this._x : Number(this._x); }
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>this._x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>_x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+>this._x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>_x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this._x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>_x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+
+    set x(value: number | string) { this._x = value; }
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>value : Symbol(value, Decl(getterSetterSubtypeAssignment.ts, 30, 10))
+>this._x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>_x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+>value : Symbol(value, Decl(getterSetterSubtypeAssignment.ts, 30, 10))
+
+    additionAssignmentNumber() {
+>additionAssignmentNumber : Symbol(NumberOrString.additionAssignmentNumber, Decl(getterSetterSubtypeAssignment.ts, 30, 54))
+
+        this.x += 1;
+>this.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+    }
+    additionAssignmentString() {
+>additionAssignmentString : Symbol(NumberOrString.additionAssignmentString, Decl(getterSetterSubtypeAssignment.ts, 34, 5))
+
+        this.x += '1';
+>this.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+    }
+
+    subtractionAssignment() {
+>subtractionAssignment : Symbol(NumberOrString.subtractionAssignment, Decl(getterSetterSubtypeAssignment.ts, 37, 5))
+
+        this.x -= 1;
+>this.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+    }
+
+    multiplicationAssignment() {
+>multiplicationAssignment : Symbol(NumberOrString.multiplicationAssignment, Decl(getterSetterSubtypeAssignment.ts, 41, 5))
+
+        this.x *= 1;
+>this.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+    }
+
+    divisionAssignment() {
+>divisionAssignment : Symbol(NumberOrString.divisionAssignment, Decl(getterSetterSubtypeAssignment.ts, 45, 5))
+
+        this.x /= 1;
+>this.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+    }
+}
+const numberOrString = new NumberOrString();
+>numberOrString : Symbol(numberOrString, Decl(getterSetterSubtypeAssignment.ts, 51, 5))
+>NumberOrString : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
+
+numberOrString.x += 1;
+>numberOrString.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>numberOrString : Symbol(numberOrString, Decl(getterSetterSubtypeAssignment.ts, 51, 5))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+
+numberOrString.x += '1';
+>numberOrString.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>numberOrString : Symbol(numberOrString, Decl(getterSetterSubtypeAssignment.ts, 51, 5))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+
+numberOrString.x -= 1;
+>numberOrString.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>numberOrString : Symbol(numberOrString, Decl(getterSetterSubtypeAssignment.ts, 51, 5))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+
+numberOrString.x *= 1;
+>numberOrString.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>numberOrString : Symbol(numberOrString, Decl(getterSetterSubtypeAssignment.ts, 51, 5))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+
+numberOrString.x /= 1;
+>numberOrString.x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+>numberOrString : Symbol(numberOrString, Decl(getterSetterSubtypeAssignment.ts, 51, 5))
+>x : Symbol(NumberOrString.x, Decl(getterSetterSubtypeAssignment.ts, 28, 28), Decl(getterSetterSubtypeAssignment.ts, 29, 87))
+
+type Foo = { bar: number; };
+>Foo : Symbol(Foo, Decl(getterSetterSubtypeAssignment.ts, 56, 22))
+>bar : Symbol(bar, Decl(getterSetterSubtypeAssignment.ts, 58, 12))
+
+class NumberOrObject {
+>NumberOrObject : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+
+    _x: number | Foo = 0;
+>_x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>Foo : Symbol(Foo, Decl(getterSetterSubtypeAssignment.ts, 56, 22))
+
+    get x(): number { return typeof this._x === 'number' ? this._x : this._x.bar; }
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>this._x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>this : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+>_x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>this._x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>this : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+>_x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>this._x.bar : Symbol(bar, Decl(getterSetterSubtypeAssignment.ts, 58, 12))
+>this._x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>this : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+>_x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>bar : Symbol(bar, Decl(getterSetterSubtypeAssignment.ts, 58, 12))
+
+    set x(value: number | Foo) { this._x = value; }
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>value : Symbol(value, Decl(getterSetterSubtypeAssignment.ts, 62, 10))
+>Foo : Symbol(Foo, Decl(getterSetterSubtypeAssignment.ts, 56, 22))
+>this._x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>this : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+>_x : Symbol(NumberOrObject._x, Decl(getterSetterSubtypeAssignment.ts, 59, 22))
+>value : Symbol(value, Decl(getterSetterSubtypeAssignment.ts, 62, 10))
+
+    additionAssignment() {
+>additionAssignment : Symbol(NumberOrObject.additionAssignment, Decl(getterSetterSubtypeAssignment.ts, 62, 51))
+
+        this.x += 1;
+>this.x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>this : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+    }
+
+    subtractionAssignment() {
+>subtractionAssignment : Symbol(NumberOrObject.subtractionAssignment, Decl(getterSetterSubtypeAssignment.ts, 66, 5))
+
+        this.x -= 1;
+>this.x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>this : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+    }
+
+    multiplicationAssignment() {
+>multiplicationAssignment : Symbol(NumberOrObject.multiplicationAssignment, Decl(getterSetterSubtypeAssignment.ts, 70, 5))
+
+        this.x *= 1;
+>this.x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>this : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+    }
+
+    divisionAssignment() {
+>divisionAssignment : Symbol(NumberOrObject.divisionAssignment, Decl(getterSetterSubtypeAssignment.ts, 74, 5))
+
+        this.x /= 1;
+>this.x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>this : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+    }
+}
+const numberOrObject = new NumberOrObject();
+>numberOrObject : Symbol(numberOrObject, Decl(getterSetterSubtypeAssignment.ts, 80, 5))
+>NumberOrObject : Symbol(NumberOrObject, Decl(getterSetterSubtypeAssignment.ts, 58, 28))
+
+numberOrObject.x += 1;
+>numberOrObject.x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>numberOrObject : Symbol(numberOrObject, Decl(getterSetterSubtypeAssignment.ts, 80, 5))
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+
+numberOrObject.x -= 1;
+>numberOrObject.x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>numberOrObject : Symbol(numberOrObject, Decl(getterSetterSubtypeAssignment.ts, 80, 5))
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+
+numberOrObject.x *= 1;
+>numberOrObject.x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>numberOrObject : Symbol(numberOrObject, Decl(getterSetterSubtypeAssignment.ts, 80, 5))
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+
+numberOrObject.x /= 1;
+>numberOrObject.x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+>numberOrObject : Symbol(numberOrObject, Decl(getterSetterSubtypeAssignment.ts, 80, 5))
+>x : Symbol(NumberOrObject.x, Decl(getterSetterSubtypeAssignment.ts, 60, 25), Decl(getterSetterSubtypeAssignment.ts, 61, 83))
+

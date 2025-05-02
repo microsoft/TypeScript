@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespacePrefixIntrinsics.tsx] ////
+
 //// [jsxNamespacePrefixIntrinsics.tsx]
 declare namespace JSX {
   interface IntrinsicElements {

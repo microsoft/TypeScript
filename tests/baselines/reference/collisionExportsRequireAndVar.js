@@ -29,11 +29,10 @@ module m4 {
 //// [collisionExportsRequireAndVar_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
-    exports.foo = void 0;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.foo = foo;
     function foo() {
     }
-    exports.foo = foo;
     var exports = 1;
     var require = "require";
     var m1;

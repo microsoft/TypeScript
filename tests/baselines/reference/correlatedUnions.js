@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
 //// [correlatedUnions.ts]
 // Various repros from #30581
 
@@ -174,7 +176,7 @@ function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 }
 
 function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
-    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+    const func: Func<K> = funcs[key];
     func(arg);
 }
 
@@ -235,6 +237,71 @@ type BarLookup = typeof BAR_LOOKUP;
 
 type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
 
+// repro from #43982
+
+interface Original {
+  prop1: {
+    subProp1: string;
+    subProp2: string;
+  };
+  prop2: {
+    subProp3: string;
+    subProp4: string;
+  };
+}
+type KeyOfOriginal = keyof Original;
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+
+type SameKeys<T> = {
+  [K in keyof T]: {
+    [K2 in keyof T[K]]: number;
+  };
+};
+
+type MappedFromOriginal = SameKeys<Original>;
+
+const getStringAndNumberFromOriginalAndMapped = <
+  K extends KeyOfOriginal,
+  N extends NestedKeyOfOriginalFor<K>
+>(
+  original: Original,
+  mappedFromOriginal: MappedFromOriginal,
+  key: K,
+  nestedKey: N
+): [Original[K][N], MappedFromOriginal[K][N]] => {
+  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
+};
+
+// repro from #31675
+interface Config {
+  string: string;
+  number: number;
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+  userConfig: Partial<Config>,
+  key: T,
+  defaultValue: Config[T]
+): Config[T] {
+  const userValue = userConfig[key]; 
+  const assertedCheck = userValue ? userValue! : defaultValue;
+  return assertedCheck;
+}
+
+// repro from #47523
+
+type Foo1 = {
+  x: number;
+  y: string;
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+  o: Partial<Foo1>,
+  k: K
+): Foo1[K] | undefined {
+  return o[k];
+}
+
 
 //// [correlatedUnions.js]
 "use strict";
@@ -249,7 +316,7 @@ function renderTextField(props) { }
 function renderSelectField(props) { }
 var renderFuncs = {
     text: renderTextField,
-    select: renderSelectField
+    select: renderSelectField,
 };
 function renderField(field) {
     var renderFn = renderFuncs[field.type];
@@ -293,11 +360,11 @@ function createEventListener(_a) {
 }
 var clickEvent = createEventListener({
     name: "click",
-    callback: function (ev) { return console.log(ev); }
+    callback: function (ev) { return console.log(ev); },
 });
 var scrollEvent = createEventListener({
     name: "scroll",
-    callback: function (ev) { return console.log(ev); }
+    callback: function (ev) { return console.log(ev); },
 });
 processEvents([clickEvent, scrollEvent]);
 processEvents([
@@ -329,7 +396,7 @@ function f2(funcs, key, arg) {
     func(arg);
 }
 function f3(funcs, key, arg) {
-    var func = funcs[key]; // Error, Funcs[K] not assignable to Func<K>
+    var func = funcs[key];
     func(arg);
 }
 function f4(x, y) {
@@ -355,6 +422,17 @@ function foo(prop, f) {
 }
 var ALL_BARS = [{ name: 'a' }, { name: 'b' }];
 var BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+var getStringAndNumberFromOriginalAndMapped = function (original, mappedFromOriginal, key, nestedKey) {
+    return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
+};
+function getConfigOrDefault(userConfig, key, defaultValue) {
+    var userValue = userConfig[key];
+    var assertedCheck = userValue ? userValue : defaultValue;
+    return assertedCheck;
+}
+function getValueConcrete(o, k) {
+    return o[k];
+}
 
 
 //// [correlatedUnions.d.ts]
@@ -450,12 +528,12 @@ declare function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]
 declare function createEventListener<K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>): Ev<K>;
 declare const clickEvent: {
     readonly name: "click";
-    readonly once?: boolean | undefined;
+    readonly once?: boolean;
     readonly callback: (ev: MouseEvent) => void;
 };
 declare const scrollEvent: {
     readonly name: "scroll";
-    readonly once?: boolean | undefined;
+    readonly once?: boolean;
     readonly callback: (ev: Event) => void;
 };
 declare function ff1(): void;
@@ -506,3 +584,32 @@ type BarLookup = typeof BAR_LOOKUP;
 type Baz = {
     [K in keyof BarLookup]: BarLookup[K]['name'];
 };
+interface Original {
+    prop1: {
+        subProp1: string;
+        subProp2: string;
+    };
+    prop2: {
+        subProp3: string;
+        subProp4: string;
+    };
+}
+type KeyOfOriginal = keyof Original;
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+type SameKeys<T> = {
+    [K in keyof T]: {
+        [K2 in keyof T[K]]: number;
+    };
+};
+type MappedFromOriginal = SameKeys<Original>;
+declare const getStringAndNumberFromOriginalAndMapped: <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]];
+interface Config {
+    string: string;
+    number: number;
+}
+declare function getConfigOrDefault<T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]): Config[T];
+type Foo1 = {
+    x: number;
+    y: string;
+};
+declare function getValueConcrete<K extends keyof Foo1>(o: Partial<Foo1>, k: K): Foo1[K] | undefined;

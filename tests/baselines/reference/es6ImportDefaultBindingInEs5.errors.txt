@@ -1,12 +1,12 @@
-tests/cases/compiler/es6ImportDefaultBindingInEs5_1.ts(1,8): error TS1259: Module '"tests/cases/compiler/es6ImportDefaultBindingInEs5_0"' can only be default-imported using the 'esModuleInterop' flag
+es6ImportDefaultBindingInEs5_1.ts(1,8): error TS1259: Module '"es6ImportDefaultBindingInEs5_0"' can only be default-imported using the 'esModuleInterop' flag
 
 
-==== tests/cases/compiler/es6ImportDefaultBindingInEs5_0.ts (0 errors) ====
+==== es6ImportDefaultBindingInEs5_0.ts (0 errors) ====
     var a = 10;
     export = a;
     
-==== tests/cases/compiler/es6ImportDefaultBindingInEs5_1.ts (1 errors) ====
+==== es6ImportDefaultBindingInEs5_1.ts (1 errors) ====
     import defaultBinding from "./es6ImportDefaultBindingInEs5_0";
            ~~~~~~~~~~~~~~
-!!! error TS1259: Module '"tests/cases/compiler/es6ImportDefaultBindingInEs5_0"' can only be default-imported using the 'esModuleInterop' flag
-!!! related TS2594 tests/cases/compiler/es6ImportDefaultBindingInEs5_0.ts:2:1: This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+!!! error TS1259: Module '"es6ImportDefaultBindingInEs5_0"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 es6ImportDefaultBindingInEs5_0.ts:2:1: This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.

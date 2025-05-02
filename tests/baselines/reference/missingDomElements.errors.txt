@@ -1,12 +1,12 @@
-tests/cases/compiler/missingDomElements.ts(6,24): error TS2812: Property 'textContent' does not exist on type 'Element'. Try changing the 'lib' compiler option to include 'dom'.
-tests/cases/compiler/missingDomElements.ts(7,28): error TS2812: Property 'textContent' does not exist on type 'HTMLElement'. Try changing the 'lib' compiler option to include 'dom'.
-tests/cases/compiler/missingDomElements.ts(8,33): error TS2812: Property 'textContent' does not exist on type 'HTMLInputElement'. Try changing the 'lib' compiler option to include 'dom'.
-tests/cases/compiler/missingDomElements.ts(9,47): error TS2812: Property 'textContent' does not exist on type 'EventTarget & HTMLInputElement'. Try changing the 'lib' compiler option to include 'dom'.
-tests/cases/compiler/missingDomElements.ts(16,32): error TS2339: Property 'textContent' does not exist on type 'HTMLElementFake'.
-tests/cases/compiler/missingDomElements.ts(17,21): error TS2339: Property 'textContent' does not exist on type 'Node'.
+missingDomElements.ts(6,24): error TS2812: Property 'textContent' does not exist on type 'Element'. Try changing the 'lib' compiler option to include 'dom'.
+missingDomElements.ts(7,28): error TS2812: Property 'textContent' does not exist on type 'HTMLElement'. Try changing the 'lib' compiler option to include 'dom'.
+missingDomElements.ts(8,33): error TS2812: Property 'textContent' does not exist on type 'HTMLInputElement'. Try changing the 'lib' compiler option to include 'dom'.
+missingDomElements.ts(9,47): error TS2812: Property 'textContent' does not exist on type 'EventTarget & HTMLInputElement'. Try changing the 'lib' compiler option to include 'dom'.
+missingDomElements.ts(16,32): error TS2339: Property 'textContent' does not exist on type 'HTMLElementFake'.
+missingDomElements.ts(17,21): error TS2339: Property 'textContent' does not exist on type 'Node'.
 
 
-==== tests/cases/compiler/missingDomElements.ts (6 errors) ====
+==== missingDomElements.ts (6 errors) ====
     interface Element {}
     interface EventTarget {}
     interface HTMLElement {}

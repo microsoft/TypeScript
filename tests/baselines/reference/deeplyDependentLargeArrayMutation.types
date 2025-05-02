@@ -1,234 +1,389 @@
-=== tests/cases/compiler/foo.js ===
+//// [tests/cases/compiler/deeplyDependentLargeArrayMutation.ts] ////
+
+=== foo.js ===
 // repro from #26031
 function build() {
 >build : () => void
+>      : ^^^^^^^^^^
 
     var arr = [];
 >arr : any[]
+>    : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     arr[arr.length] = 'value'; 
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value'; 
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value'; 
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value'; 
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value'; 
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value';
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     arr[arr.length] = 'value'; 
 >arr[arr.length] = 'value' : "value"
+>                          : ^^^^^^^
 >arr[arr.length] : any
 >arr : any[]
+>    : ^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 }

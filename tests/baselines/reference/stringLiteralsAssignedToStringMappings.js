@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsAssignedToStringMappings.ts] ////
+
 //// [stringLiteralsAssignedToStringMappings.ts]
 declare var x: Uppercase<Lowercase<string>>;
 

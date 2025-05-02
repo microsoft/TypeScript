@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.jsx ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.ts] ////
+
+=== jsDeclarationsNonIdentifierInferredNames.jsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(jsDeclarationsNonIdentifierInferredNames.jsx, 1, 6))

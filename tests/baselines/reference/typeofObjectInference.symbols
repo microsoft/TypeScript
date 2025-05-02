@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/typeofObjectInference.ts] ////
+
+=== typeofObjectInference.ts ===
+let val = 1
+>val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
+
+function decorateA<O extends any>(fn: (first: {value: typeof val}) => O) {
+>decorateA : Symbol(decorateA, Decl(typeofObjectInference.ts, 0, 11))
+>O : Symbol(O, Decl(typeofObjectInference.ts, 2, 19))
+>fn : Symbol(fn, Decl(typeofObjectInference.ts, 2, 34))
+>first : Symbol(first, Decl(typeofObjectInference.ts, 2, 39))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 2, 47))
+>val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
+>O : Symbol(O, Decl(typeofObjectInference.ts, 2, 19))
+
+    return (): O => fn({value: val})
+>O : Symbol(O, Decl(typeofObjectInference.ts, 2, 19))
+>fn : Symbol(fn, Decl(typeofObjectInference.ts, 2, 34))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 3, 24))
+>val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
+}
+let a = decorateA(({value}) => 5)
+>a : Symbol(a, Decl(typeofObjectInference.ts, 5, 3))
+>decorateA : Symbol(decorateA, Decl(typeofObjectInference.ts, 0, 11))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 5, 20))
+
+function decorateB<O extends any>(fn: (first: typeof val) => O) {
+>decorateB : Symbol(decorateB, Decl(typeofObjectInference.ts, 5, 33))
+>O : Symbol(O, Decl(typeofObjectInference.ts, 7, 19))
+>fn : Symbol(fn, Decl(typeofObjectInference.ts, 7, 34))
+>first : Symbol(first, Decl(typeofObjectInference.ts, 7, 39))
+>val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
+>O : Symbol(O, Decl(typeofObjectInference.ts, 7, 19))
+
+    return (): O => fn(val)
+>O : Symbol(O, Decl(typeofObjectInference.ts, 7, 19))
+>fn : Symbol(fn, Decl(typeofObjectInference.ts, 7, 34))
+>val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
+}
+let b = decorateB((value) => 5)
+>b : Symbol(b, Decl(typeofObjectInference.ts, 10, 3))
+>decorateB : Symbol(decorateB, Decl(typeofObjectInference.ts, 5, 33))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 10, 19))
+
+function decorateC<O extends any>(fn: (first: {value: number}) => O) {
+>decorateC : Symbol(decorateC, Decl(typeofObjectInference.ts, 10, 31))
+>O : Symbol(O, Decl(typeofObjectInference.ts, 12, 19))
+>fn : Symbol(fn, Decl(typeofObjectInference.ts, 12, 34))
+>first : Symbol(first, Decl(typeofObjectInference.ts, 12, 39))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 12, 47))
+>O : Symbol(O, Decl(typeofObjectInference.ts, 12, 19))
+
+    return (): O => fn({value: val})
+>O : Symbol(O, Decl(typeofObjectInference.ts, 12, 19))
+>fn : Symbol(fn, Decl(typeofObjectInference.ts, 12, 34))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 13, 24))
+>val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
+}
+let c = decorateC(({value}) => 5)
+>c : Symbol(c, Decl(typeofObjectInference.ts, 15, 3))
+>decorateC : Symbol(decorateC, Decl(typeofObjectInference.ts, 10, 31))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 15, 20))
+
+type First = {value: typeof val}
+>First : Symbol(First, Decl(typeofObjectInference.ts, 15, 33))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 17, 14))
+>val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
+
+function decorateD<O extends any>(fn: (first: First) => O) {
+>decorateD : Symbol(decorateD, Decl(typeofObjectInference.ts, 17, 32))
+>O : Symbol(O, Decl(typeofObjectInference.ts, 18, 19))
+>fn : Symbol(fn, Decl(typeofObjectInference.ts, 18, 34))
+>first : Symbol(first, Decl(typeofObjectInference.ts, 18, 39))
+>First : Symbol(First, Decl(typeofObjectInference.ts, 15, 33))
+>O : Symbol(O, Decl(typeofObjectInference.ts, 18, 19))
+
+    return (): O => fn({value: val})
+>O : Symbol(O, Decl(typeofObjectInference.ts, 18, 19))
+>fn : Symbol(fn, Decl(typeofObjectInference.ts, 18, 34))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 19, 24))
+>val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
+}
+let d = decorateD(({value}) => 5)
+>d : Symbol(d, Decl(typeofObjectInference.ts, 21, 3))
+>decorateD : Symbol(decorateD, Decl(typeofObjectInference.ts, 17, 32))
+>value : Symbol(value, Decl(typeofObjectInference.ts, 21, 20))
+

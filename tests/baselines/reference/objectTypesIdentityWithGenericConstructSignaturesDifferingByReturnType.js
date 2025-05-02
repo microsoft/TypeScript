@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts] ////
+
 //// [objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts]
 // Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
 // parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
@@ -99,7 +101,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var a;
-var b = { "new": function (x) { return null; } }; // not a construct signature, function called new
+var b = { new: function (x) { return null; } }; // not a construct signature, function called new
 function foo1b(x) { }
 function foo1c(x) { }
 function foo2(x) { }

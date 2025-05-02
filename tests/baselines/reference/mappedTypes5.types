@@ -1,197 +1,286 @@
-=== tests/cases/conformance/types/mapped/mappedTypes5.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypes5.ts] ////
+
+=== mappedTypes5.ts ===
 function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {
 >f : <T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) => void
+>  : ^ ^^ ^^          ^^ ^^           ^^  ^^                    ^^  ^^                    ^^^^^^^^^
 >p : Partial<T>
+>  : ^^^^^^^^^^
 >r : Readonly<T>
+>  : ^^^^^^^^^^^
 >pr : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >rp : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     let a1: Partial<T> = p;
 >a1 : Partial<T>
+>   : ^^^^^^^^^^
 >p : Partial<T>
+>  : ^^^^^^^^^^
 
     let a2: Partial<T> = r;
 >a2 : Partial<T>
+>   : ^^^^^^^^^^
 >r : Readonly<T>
+>  : ^^^^^^^^^^^
 
     let a3: Partial<T> = pr;
 >a3 : Partial<T>
+>   : ^^^^^^^^^^
 >pr : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     let a4: Partial<T> = rp;
 >a4 : Partial<T>
+>   : ^^^^^^^^^^
 >rp : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     let b1: Readonly<T> = p;  // Error
 >b1 : Readonly<T>
+>   : ^^^^^^^^^^^
 >p : Partial<T>
+>  : ^^^^^^^^^^
 
     let b2: Readonly<T> = r;
 >b2 : Readonly<T>
+>   : ^^^^^^^^^^^
 >r : Readonly<T>
+>  : ^^^^^^^^^^^
 
     let b3: Readonly<T> = pr;  // Error
 >b3 : Readonly<T>
+>   : ^^^^^^^^^^^
 >pr : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     let b4: Readonly<T> = rp;  // Error
 >b4 : Readonly<T>
+>   : ^^^^^^^^^^^
 >rp : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     let c1: Partial<Readonly<T>> = p;
 >c1 : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >p : Partial<T>
+>  : ^^^^^^^^^^
 
     let c2: Partial<Readonly<T>> = r;
 >c2 : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >r : Readonly<T>
+>  : ^^^^^^^^^^^
 
     let c3: Partial<Readonly<T>> = pr;
 >c3 : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >pr : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     let c4: Partial<Readonly<T>> = rp;
 >c4 : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >rp : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     let d1: Readonly<Partial<T>> = p;
 >d1 : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >p : Partial<T>
+>  : ^^^^^^^^^^
 
     let d2: Readonly<Partial<T>> = r;
 >d2 : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >r : Readonly<T>
+>  : ^^^^^^^^^^^
 
     let d3: Readonly<Partial<T>> = pr;
 >d3 : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >pr : Partial<Readonly<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     let d4: Readonly<Partial<T>> = rp;
 >d4 : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >rp : Readonly<Partial<T>>
+>   : ^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #17682
 
 type State = {
->State : { [key: string]: string | number | boolean | null; }
+>State : State
+>      : ^^^^^
 
     [key: string]: string | boolean | number | null;
 >key : string
->null : null
+>    : ^^^^^^
 
 };
 
 type Args1<T extends State> = {
 >Args1 : Args1<T>
+>      : ^^^^^^^^
 
     readonly previous: Readonly<Partial<T>>;
 >previous : Readonly<Partial<T>>
+>         : ^^^^^^^^^^^^^^^^^^^^
 
     readonly current: Readonly<Partial<T>>;
 >current : Readonly<Partial<T>>
+>        : ^^^^^^^^^^^^^^^^^^^^
 
 };
 
 type Args2<T extends State> = {
 >Args2 : Args2<T>
+>      : ^^^^^^^^
 
     readonly previous: Partial<Readonly<T>>;
 >previous : Partial<Readonly<T>>
+>         : ^^^^^^^^^^^^^^^^^^^^
 
     readonly current: Partial<Readonly<T>>;
 >current : Partial<Readonly<T>>
+>        : ^^^^^^^^^^^^^^^^^^^^
 
 };
 
 function doit<T extends State>() {
 >doit : <T extends State>() => void
+>     : ^ ^^^^^^^^^     ^^^^^^^^^^^
 
     let previous: Partial<T> = Object.create(null);
 >previous : Partial<T>
+>         : ^^^^^^^^^^
 >Object.create(null) : any
+>                    : ^^^
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 
     let current: Partial<T> = Object.create(null);
 >current : Partial<T>
+>        : ^^^^^^^^^^
 >Object.create(null) : any
+>                    : ^^^
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 
     let args1: Args1<T> = { previous, current };
 >args1 : Args1<T>
+>      : ^^^^^^^^
 >{ previous, current } : { previous: Partial<T>; current: Partial<T>; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >previous : Partial<T>
+>         : ^^^^^^^^^^
 >current : Partial<T>
+>        : ^^^^^^^^^^
 
     let args2: Args2<T> = { previous, current };
 >args2 : Args2<T>
+>      : ^^^^^^^^
 >{ previous, current } : { previous: Partial<T>; current: Partial<T>; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >previous : Partial<T>
+>         : ^^^^^^^^^^
 >current : Partial<T>
+>        : ^^^^^^^^^^
 }
 
 type State2 = { foo: number, bar: string };
->State2 : { foo: number; bar: string; }
+>State2 : State2
+>       : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
 type Args3 = {
->Args3 : { readonly previous: Readonly<Partial<State2>>; readonly current: Readonly<Partial<State2>>; }
+>Args3 : Args3
+>      : ^^^^^
 
     readonly previous: Readonly<Partial<State2>>;
 >previous : Readonly<Partial<State2>>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     readonly current: Readonly<Partial<State2>>;
 >current : Readonly<Partial<State2>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 type Args4 = {
->Args4 : { readonly previous: Partial<Readonly<State2>>; readonly current: Partial<Readonly<State2>>; }
+>Args4 : Args4
+>      : ^^^^^
 
     readonly previous: Partial<Readonly<State2>>;
 >previous : Partial<Readonly<State2>>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     readonly current: Partial<Readonly<State2>>;
 >current : Partial<Readonly<State2>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 function doit2() {
 >doit2 : () => void
+>      : ^^^^^^^^^^
 
     let previous: Partial<State2> = Object.create(null);
 >previous : Partial<State2>
+>         : ^^^^^^^^^^^^^^^
 >Object.create(null) : any
+>                    : ^^^
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 
     let current: Partial<State2> = Object.create(null);
 >current : Partial<State2>
+>        : ^^^^^^^^^^^^^^^
 >Object.create(null) : any
+>                    : ^^^
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 
     let args1: Args3 = { previous, current };
 >args1 : Args3
+>      : ^^^^^
 >{ previous, current } : { previous: Partial<State2>; current: Partial<State2>; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >previous : Partial<State2>
+>         : ^^^^^^^^^^^^^^^
 >current : Partial<State2>
+>        : ^^^^^^^^^^^^^^^
 
     let args2: Args4 = { previous, current };
 >args2 : Args4
+>      : ^^^^^
 >{ previous, current } : { previous: Partial<State2>; current: Partial<State2>; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >previous : Partial<State2>
+>         : ^^^^^^^^^^^^^^^
 >current : Partial<State2>
+>        : ^^^^^^^^^^^^^^^
 }
 

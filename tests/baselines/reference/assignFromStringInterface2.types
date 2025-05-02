@@ -1,170 +1,258 @@
-=== tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts ===
+//// [tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts] ////
+
+=== assignFromStringInterface2.ts ===
 interface String {
     doStuff(): string;
 >doStuff : () => string
+>        : ^^^^^^      
 }
 
 interface NotString {
     doStuff(): string;
 >doStuff : () => string
+>        : ^^^^^^      
 
     toString(): string;
 >toString : () => string
+>         : ^^^^^^      
 
     charAt(pos: number): string;
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >pos : number
+>    : ^^^^^^
 
     charCodeAt(index: number): number;
 >charCodeAt : (index: number) => number
+>           : ^     ^^      ^^^^^      
 >index : number
+>      : ^^^^^^
 
     concat(...strings: string[]): string;
 >concat : (...strings: string[]) => string
+>       : ^^^^       ^^        ^^^^^      
 >strings : string[]
+>        : ^^^^^^^^
 
     indexOf(searchString: string, position?: number): number;
 >indexOf : (searchString: string, position?: number) => number
+>        : ^            ^^      ^^        ^^^      ^^^^^      
 >searchString : string
+>             : ^^^^^^
 >position : number
+>         : ^^^^^^
 
     lastIndexOf(searchString: string, position?: number): number;
 >lastIndexOf : (searchString: string, position?: number) => number
+>            : ^            ^^      ^^        ^^^      ^^^^^      
 >searchString : string
+>             : ^^^^^^
 >position : number
+>         : ^^^^^^
 
     localeCompare(that: string): number;
 >localeCompare : (that: string) => number
+>              : ^    ^^      ^^^^^      
 >that : string
+>     : ^^^^^^
 
     match(regexp: string): RegExpMatchArray;
 >match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
+>      : ^^^      ^^      ^^^                ^^^      ^^      ^^^                ^^^
 >regexp : string
+>       : ^^^^^^
 
     match(regexp: RegExp): RegExpMatchArray;
 >match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
+>      : ^^^      ^^      ^^^                ^^^      ^^      ^^^                ^^^
 >regexp : RegExp
+>       : ^^^^^^
 
     replace(searchValue: string, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : string
+>            : ^^^^^^
 >replaceValue : string
+>             : ^^^^^^
 
     replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : string
+>            : ^^^^^^
 >replaceValue : (substring: string, ...args: any[]) => string
+>             : ^         ^^      ^^^^^    ^^     ^^^^^      
 >substring : string
+>          : ^^^^^^
 >args : any[]
+>     : ^^^^^
 
     replace(searchValue: RegExp, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : RegExp
+>            : ^^^^^^
 >replaceValue : string
+>             : ^^^^^^
 
     replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
 >searchValue : RegExp
+>            : ^^^^^^
 >replaceValue : (substring: string, ...args: any[]) => string
+>             : ^         ^^      ^^^^^    ^^     ^^^^^      
 >substring : string
+>          : ^^^^^^
 >args : any[]
+>     : ^^^^^
 
     search(regexp: string): number;
 >search : { (regexp: string): number; (regexp: RegExp): number; }
+>       : ^^^      ^^      ^^^      ^^^      ^^      ^^^      ^^^
 >regexp : string
+>       : ^^^^^^
 
     search(regexp: RegExp): number;
 >search : { (regexp: string): number; (regexp: RegExp): number; }
+>       : ^^^      ^^      ^^^      ^^^      ^^      ^^^      ^^^
 >regexp : RegExp
+>       : ^^^^^^
 
     slice(start?: number, end?: number): string;
 >slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 >start : number
+>      : ^^^^^^
 >end : number
+>    : ^^^^^^
 
     split(separator: string, limit?: number): string[];
 >split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
+>      : ^^^         ^^      ^^     ^^^      ^^^        ^^^         ^^      ^^     ^^^      ^^^        ^^^
 >separator : string
+>          : ^^^^^^
 >limit : number
+>      : ^^^^^^
 
     split(separator: RegExp, limit?: number): string[];
 >split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
+>      : ^^^         ^^      ^^     ^^^      ^^^        ^^^         ^^      ^^     ^^^      ^^^        ^^^
 >separator : RegExp
+>          : ^^^^^^
 >limit : number
+>      : ^^^^^^
 
     substring(start: number, end?: number): string;
 >substring : (start: number, end?: number) => string
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >start : number
+>      : ^^^^^^
 >end : number
+>    : ^^^^^^
 
     toLowerCase(): string;
 >toLowerCase : () => string
+>            : ^^^^^^      
 
     toLocaleLowerCase(): string;
 >toLocaleLowerCase : () => string
+>                  : ^^^^^^      
 
     toUpperCase(): string;
 >toUpperCase : () => string
+>            : ^^^^^^      
 
     toLocaleUpperCase(): string;
 >toLocaleUpperCase : () => string
+>                  : ^^^^^^      
 
     trim(): string;
 >trim : () => string
+>     : ^^^^^^      
 
     length: number;
 >length : number
+>       : ^^^^^^
 
     substr(from: number, length?: number): string;
 >substr : (from: number, length?: number) => string
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >from : number
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     valueOf(): string;
 >valueOf : () => string
+>        : ^^^^^^      
 
     [index: number]: string;
 >index : number
+>      : ^^^^^^
 }
 
 var x = '';
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var a: String;
 >a : String
+>  : ^^^^^^
 
 var b: NotString;
 >b : NotString
+>  : ^^^^^^^^^
 
 a = x;
 >a = x : string
+>      : ^^^^^^
 >a : String
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 a = b;
 >a = b : NotString
+>      : ^^^^^^^^^
 >a : String
+>  : ^^^^^^
 >b : NotString
+>  : ^^^^^^^^^
 
 b = a;
 >b = a : String
+>      : ^^^^^^
 >b : NotString
+>  : ^^^^^^^^^
 >a : String
+>  : ^^^^^^
 
 b = x;
 >b = x : string
+>      : ^^^^^^
 >b : NotString
+>  : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 x = a; // expected error
 >x = a : String
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >a : String
+>  : ^^^^^^
 
 x = b; // expected error
 >x = b : NotString
+>      : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >b : NotString
+>  : ^^^^^^^^^
 
 

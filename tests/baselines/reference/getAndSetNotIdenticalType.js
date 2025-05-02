@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getAndSetNotIdenticalType.ts] ////
+
 //// [getAndSetNotIdenticalType.ts]
 class C {
     get x(): number {

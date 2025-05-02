@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts] ////
+
+=== comparisonOperatorWithIntersectionType.ts ===
 declare let a: { a: 1 }
 >a : Symbol(a, Decl(comparisonOperatorWithIntersectionType.ts, 0, 11))
 >a : Symbol(a, Decl(comparisonOperatorWithIntersectionType.ts, 0, 16))

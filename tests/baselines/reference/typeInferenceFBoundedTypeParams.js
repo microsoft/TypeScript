@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceFBoundedTypeParams.ts] ////
+
 //// [typeInferenceFBoundedTypeParams.ts]
 // Example from #6037
 

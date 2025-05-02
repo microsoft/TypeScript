@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitSpreadStringlyKeyedEnum.ts] ////
+
 //// [declarationEmitSpreadStringlyKeyedEnum.ts]
 enum AgeGroups { "0-17" , "18-22" , "23-27" , "28-34" , "35-44" , "45-59" , "60-150" }
 export const SpotifyAgeGroupEnum = { ...AgeGroups };
@@ -15,7 +17,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpotifyAgeGroupEnum = void 0;
 var AgeGroups;
 (function (AgeGroups) {

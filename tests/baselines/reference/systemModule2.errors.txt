@@ -1,7 +1,7 @@
-tests/cases/compiler/systemModule2.ts(2,1): error TS1218: Export assignment is not supported when '--module' flag is 'system'.
+systemModule2.ts(2,1): error TS1218: Export assignment is not supported when '--module' flag is 'system'.
 
 
-==== tests/cases/compiler/systemModule2.ts (1 errors) ====
+==== systemModule2.ts (1 errors) ====
     var x = 1;
     export = x;
     ~~~~~~~~~~~

@@ -8,6 +8,4 @@
 ////
 ////for (let a [|in|] {}) {}
 
-for (let range of test.ranges()) {
-    verify.noDocumentHighlights(range);
-}
+verify.baselineDocumentHighlights();

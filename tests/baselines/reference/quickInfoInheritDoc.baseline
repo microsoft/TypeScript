@@ -1,3 +1,91 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoInheritDoc.ts ===
+// abstract class BaseClass {
+//     /**
+//      * Useful description always applicable
+//      * 
+//      * @returns {string} Useful description of return value always applicable.
+//      */
+//     public static doSomethingUseful(stuff?: any): string {
+//         throw new Error('Must be implemented by subclass');
+//     }
+// 
+//     /**
+//      * BaseClass.func1
+//      * @param {any} stuff1 BaseClass.func1.stuff1
+//      * @returns {void} BaseClass.func1.returns
+//      */
+//     public static func1(stuff1: any): void {
+//     }
+// 
+//     /**
+//      * Applicable description always.
+//      */
+//     public static readonly someProperty: string = 'general value';
+// }
+// 
+// 
+// 
+// 
+// class SubClass extends BaseClass {
+// 
+//     /**
+//      * @inheritDoc
+//      * 
+//      * @param {{ tiger: string; lion: string; }} [mySpecificStuff] Description of my specific parameter.
+//      */
+//     public static doSomethingUseful(mySpecificStuff?: { tiger: string; lion: string; }): string {
+//                   ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) SubClass.doSomethingUseful(mySpecificStuff?: {
+// |     tiger: string;
+// |     lion: string;
+// | }): string
+// | Useful description always applicable
+// | @returns Useful description of return value always applicable.
+// | @inheritDoc 
+// | @param mySpecificStuff Description of my specific parameter.
+// | ----------------------------------------------------------------------
+//         let useful = '';
+// 
+//         // do something useful to useful
+// 
+//         return useful;
+//     }
+// 
+//     /**
+//      * @inheritDoc
+//      * @param {any} stuff1 SubClass.func1.stuff1
+//      * @returns {void} SubClass.func1.returns
+//      */
+//     public static func1(stuff1: any): void {
+//                   ^^^^^
+// | ----------------------------------------------------------------------
+// | (method) SubClass.func1(stuff1: any): void
+// | BaseClass.func1
+// | @param stuff1 BaseClass.func1.stuff1
+// | @returns BaseClass.func1.returns
+// | @inheritDoc 
+// | @param stuff1 SubClass.func1.stuff1
+// | @returns SubClass.func1.returns
+// | ----------------------------------------------------------------------
+//     }
+// 
+//     /**
+//      * text over tag
+//      * @inheritDoc
+//      * text after tag
+//      */
+//     public static readonly someProperty: string = 'specific to this class value'
+//                            ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) SubClass.someProperty: string
+// | Applicable description always.
+// | text over tagtext after tag
+// | @inheritDoc text after tag
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +93,7 @@
       "position": 817,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "public,static",
       "textSpan": {
@@ -191,7 +279,7 @@
       "position": 1143,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "public,static",
       "textSpan": {
@@ -335,7 +423,7 @@
       "position": 1282,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "public,static",
       "textSpan": {

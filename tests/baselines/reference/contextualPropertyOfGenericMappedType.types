@@ -1,21 +1,37 @@
-=== tests/cases/compiler/contextualPropertyOfGenericMappedType.ts ===
+//// [tests/cases/compiler/contextualPropertyOfGenericMappedType.ts] ////
+
+=== contextualPropertyOfGenericMappedType.ts ===
 // Repro for #24694
 
 declare function f<T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }): void;
 >f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }) => void
+>  : ^ ^^^^^^^^^      ^^    ^^ ^^        ^^                                                   ^^^^^    
 >data : T
+>     : ^
 >handlers : { [P in keyof T]: (value: T[P], prop: P) => void; }
+>         : ^^^ ^^^^^^^^^^^^^^^     ^^    ^^    ^^ ^^^^^    ^^^
 >value : T[P]
+>      : ^^^^
 >prop : P
+>     : ^
 
 f({ data: 0 }, { data(value, key) {} });
 >f({ data: 0 }, { data(value, key) {} }) : void
+>                                        : ^^^^
 >f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }) => void
+>  : ^ ^^^^^^^^^      ^^    ^^ ^^        ^^                                                   ^^^^^    
 >{ data: 0 } : { data: number; }
+>            : ^^^^^^^^^^^^^^^^^
 >data : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 >{ data(value, key) {} } : { data(value: number, key: "data"): void; }
+>                        : ^^^^^^^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >data : (value: number, key: "data") => void
+>     : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >key : "data"
+>    : ^^^^^^
 

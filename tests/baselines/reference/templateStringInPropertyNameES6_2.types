@@ -1,12 +1,21 @@
-=== tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts] ////
+
+=== templateStringInPropertyNameES6_2.ts ===
 var x = {
 >x : any
+>  : ^^^
 >{    `abc${ 123 }def${ 456 }ghi` : any
+>                                 : ^^^
 >{ : {}
+>  : ^^
 
     `abc${ 123 }def${ 456 }ghi`: 321
 >`abc${ 123 }def${ 456 }ghi` : string
+>                            : ^^^^^^
 >123 : 123
+>    : ^^^
 >456 : 456
+>    : ^^^
 >321 : 321
+>    : ^^^
 }

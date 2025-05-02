@@ -1,221 +1,347 @@
-=== tests/cases/compiler/readonlyTupleAndArrayElaboration.ts ===
+//// [tests/cases/compiler/readonlyTupleAndArrayElaboration.ts] ////
+
+=== readonlyTupleAndArrayElaboration.ts ===
 // @strict
 // #Repro from #30839
 
 let point = [3, 4] as const;
 >point : readonly [3, 4]
+>      : ^^^^^^^^^^^^^^^
 >[3, 4] as const : readonly [3, 4]
+>                : ^^^^^^^^^^^^^^^
 >[3, 4] : readonly [3, 4]
+>       : ^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 function distanceFromOrigin([x, y]: [number, number]) {
 >distanceFromOrigin : ([x, y]: [number, number]) => number
+>                   : ^      ^^                ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     return Math.sqrt(x ** 2 + y ** 2);
 >Math.sqrt(x ** 2 + y ** 2) : number
+>                           : ^^^^^^
 >Math.sqrt : (x: number) => number
+>          : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >sqrt : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >x ** 2 + y ** 2 : number
+>                : ^^^^^^
 >x ** 2 : number
+>       : ^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >y ** 2 : number
+>       : ^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 }
 
 distanceFromOrigin(point);
 >distanceFromOrigin(point) : number
+>                          : ^^^^^^
 >distanceFromOrigin : ([x, y]: [number, number]) => number
+>                   : ^      ^^                ^^^^^^^^^^^
 >point : readonly [3, 4]
+>      : ^^^^^^^^^^^^^^^
 
 declare function arryFn(x: number[]): void;
 >arryFn : (x: number[]) => void
+>       : ^ ^^        ^^^^^    
 >x : number[]
+>  : ^^^^^^^^
 
 arryFn(point);
 >arryFn(point) : void
+>              : ^^^^
 >arryFn : (x: number[]) => void
+>       : ^ ^^        ^^^^^    
 >point : readonly [3, 4]
+>      : ^^^^^^^^^^^^^^^
 
 declare function arryFn2(x: Array<number>): void;
 >arryFn2 : (x: Array<number>) => void
+>        : ^ ^^             ^^^^^    
 >x : number[]
+>  : ^^^^^^^^
 
 arryFn2(point);
 >arryFn2(point) : void
->arryFn2 : (x: number[]) => void
+>               : ^^^^
+>arryFn2 : (x: Array<number>) => void
+>        : ^ ^^             ^^^^^    
 >point : readonly [3, 4]
+>      : ^^^^^^^^^^^^^^^
 
 declare const a: readonly number[];
 >a : readonly number[]
+>  : ^^^^^^^^^^^^^^^^^
 
 declare const b: Readonly<number[]>;
 >b : readonly number[]
+>  : ^^^^^^^^^^^^^^^^^
 
 declare const c: ReadonlyArray<number>;
 >c : readonly number[]
+>  : ^^^^^^^^^^^^^^^^^
 
 arryFn2(a);
 >arryFn2(a) : void
->arryFn2 : (x: number[]) => void
+>           : ^^^^
+>arryFn2 : (x: Array<number>) => void
+>        : ^ ^^             ^^^^^    
 >a : readonly number[]
+>  : ^^^^^^^^^^^^^^^^^
 
 arryFn2(b);
 >arryFn2(b) : void
->arryFn2 : (x: number[]) => void
+>           : ^^^^
+>arryFn2 : (x: Array<number>) => void
+>        : ^ ^^             ^^^^^    
 >b : readonly number[]
+>  : ^^^^^^^^^^^^^^^^^
 
 arryFn2(c);
 >arryFn2(c) : void
->arryFn2 : (x: number[]) => void
+>           : ^^^^
+>arryFn2 : (x: Array<number>) => void
+>        : ^ ^^             ^^^^^    
 >c : readonly number[]
+>  : ^^^^^^^^^^^^^^^^^
 
 const t1: readonly [1] = [1];
 >t1 : readonly [1]
+>   : ^^^^^^^^^^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
 const t2: readonly [] = t1;
 >t2 : readonly []
+>   : ^^^^^^^^^^^
 >t1 : readonly [1]
+>   : ^^^^^^^^^^^^
 
 const t3: readonly [1] = [1];
 >t3 : readonly [1]
+>   : ^^^^^^^^^^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
 const t4: [] = t3;
 >t4 : []
+>   : ^^
 >t3 : readonly [1]
+>   : ^^^^^^^^^^^^
 
 const t5: [1] = [1];
 >t5 : [1]
+>   : ^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
 const t6: readonly [] = t5;
 >t6 : readonly []
+>   : ^^^^^^^^^^^
 >t5 : [1]
+>   : ^^^
 
 const t7: [1] = [1];
 >t7 : [1]
+>   : ^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
 const t8: [] = t7;
 >t8 : []
+>   : ^^
 >t7 : [1]
+>   : ^^^
 
 const a1: readonly number[] = [1];
 >a1 : readonly number[]
+>   : ^^^^^^^^^^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const a2: readonly boolean[] = a1;
 >a2 : readonly boolean[]
+>   : ^^^^^^^^^^^^^^^^^^
 >a1 : readonly number[]
+>   : ^^^^^^^^^^^^^^^^^
 
 const a3: readonly number[] = [1];
 >a3 : readonly number[]
+>   : ^^^^^^^^^^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const a4: boolean[] = a3;
 >a4 : boolean[]
+>   : ^^^^^^^^^
 >a3 : readonly number[]
+>   : ^^^^^^^^^^^^^^^^^
 
 const a5: number[] = [1];
 >a5 : number[]
+>   : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const a6: readonly boolean [] = a5;
 >a6 : readonly boolean[]
+>   : ^^^^^^^^^^^^^^^^^^
 >a5 : number[]
+>   : ^^^^^^^^
 
 const a7: number[] = [1];
 >a7 : number[]
+>   : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const a8: boolean[] = a7;
 >a8 : boolean[]
+>   : ^^^^^^^^^
 >a7 : number[]
+>   : ^^^^^^^^
 
 const ta1: readonly [1] = [1];
 >ta1 : readonly [1]
+>    : ^^^^^^^^^^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
 const ta2: readonly boolean[] = ta1;
 >ta2 : readonly boolean[]
+>    : ^^^^^^^^^^^^^^^^^^
 >ta1 : readonly [1]
+>    : ^^^^^^^^^^^^
 
 const ta3: readonly [1] = [1];
 >ta3 : readonly [1]
+>    : ^^^^^^^^^^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
 const ta4: number[] = ta3;
 >ta4 : number[]
+>    : ^^^^^^^^
 >ta3 : readonly [1]
+>    : ^^^^^^^^^^^^
 
 const ta5: [1] = [1];
 >ta5 : [1]
+>    : ^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
 const ta6: readonly boolean[] = ta5;
 >ta6 : readonly boolean[]
+>    : ^^^^^^^^^^^^^^^^^^
 >ta5 : [1]
+>    : ^^^
 
 const ta7: [1] = [1];
 >ta7 : [1]
+>    : ^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
 const ta8: boolean[] = ta7;
 >ta8 : boolean[]
+>    : ^^^^^^^^^
 >ta7 : [1]
+>    : ^^^
 
 const at1: readonly number[] = [1];
 >at1 : readonly number[]
+>    : ^^^^^^^^^^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const at2: readonly [1] = at1;
 >at2 : readonly [1]
+>    : ^^^^^^^^^^^^
 >at1 : readonly number[]
+>    : ^^^^^^^^^^^^^^^^^
 
 const at3: readonly number[] = [1];
 >at3 : readonly number[]
+>    : ^^^^^^^^^^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const at4: [1] = at3;
 >at4 : [1]
+>    : ^^^
 >at3 : readonly number[]
+>    : ^^^^^^^^^^^^^^^^^
 
 const at5: number[] = [1];
 >at5 : number[]
+>    : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const at6: readonly [1] = at5;
 >at6 : readonly [1]
+>    : ^^^^^^^^^^^^
 >at5 : number[]
+>    : ^^^^^^^^
 
 const at7: number[] = [1];
 >at7 : number[]
+>    : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const at8: [1] = at7;
 >at8 : [1]
+>    : ^^^
 >at7 : number[]
+>    : ^^^^^^^^
 

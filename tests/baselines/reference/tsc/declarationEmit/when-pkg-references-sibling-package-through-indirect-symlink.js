@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/pkg1/dist/index.d.ts]
 export * from './types';
@@ -18,7 +19,12 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
 }
 
 //// [/user/username/projects/myproject/pkg1/package.json]
-{"name":"@raymondfeng/pkg1","version":"1.0.0","main":"dist/index.js","typings":"dist/index.d.ts"}
+{
+  "name": "@raymondfeng/pkg1",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts"
+}
 
 //// [/user/username/projects/myproject/pkg2/dist/index.d.ts]
 export * from './types';
@@ -27,7 +33,12 @@ export * from './types';
 export {MetadataAccessor} from '@raymondfeng/pkg1';
 
 //// [/user/username/projects/myproject/pkg2/package.json]
-{"name":"@raymondfeng/pkg2","version":"1.0.0","main":"dist/index.js","typings":"dist/index.d.ts"}
+{
+  "name": "@raymondfeng/pkg2",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts"
+}
 
 //// [/user/username/projects/myproject/pkg3/src/index.ts]
 export * from './keys';
@@ -37,11 +48,23 @@ import {MetadataAccessor} from "@raymondfeng/pkg2";
 export const ADMIN = MetadataAccessor.create<boolean>('1');
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.json]
-{"compilerOptions":{"outDir":"dist","rootDir":"src","target":"es5","module":"commonjs","strict":true,"esModuleInterop":true,"declaration":true}}
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true
+  }
+}
 
 //// [/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1] symlink(/user/username/projects/myproject/pkg1)
+
 //// [/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2] symlink(/user/username/projects/myproject/pkg2)
-//// [/a/lib/lib.d.ts]
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -53,16 +76,18 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -p pkg3 --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -p pkg3 --explainFiles
 Output::
 [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 
 [7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
 [7m [0m [91m             ~~~~~[0m
 
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 pkg1/dist/types.d.ts
   Imported via './types' from file 'pkg1/dist/index.d.ts'
@@ -81,26 +106,6 @@ pkg3/src/index.ts
 Found 1 error in pkg3/src/keys.ts[90m:2[0m
 
 
-
-Program root files: ["/user/username/projects/myproject/pkg3/src/index.ts","/user/username/projects/myproject/pkg3/src/keys.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","explainFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/pkg1/dist/types.d.ts
-/user/username/projects/myproject/pkg1/dist/index.d.ts
-/user/username/projects/myproject/pkg2/dist/types.d.ts
-/user/username/projects/myproject/pkg2/dist/index.d.ts
-/user/username/projects/myproject/pkg3/src/keys.ts
-/user/username/projects/myproject/pkg3/src/index.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 //// [/user/username/projects/myproject/pkg3/dist/keys.js]
 "use strict";
@@ -134,3 +139,5 @@ __exportStar(require("./keys"), exports);
 export * from './keys';
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

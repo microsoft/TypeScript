@@ -1,41 +1,61 @@
-=== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithNoConstructorOrBaseClass.ts ===
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithNoConstructorOrBaseClass.ts] ////
+
+=== classWithNoConstructorOrBaseClass.ts ===
 class C {
 >C : C
+>  : ^
 
     x: string;
 >x : string
+>  : ^^^^^^
 }
 
 var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r = C;
 >r : typeof C
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 class D<T,U> {
 >D : D<T, U>
+>  : ^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     y: U;
 >y : U
+>  : ^
 }
 
 var d = new D();
 >d : D<unknown, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^
 >new D() : D<unknown, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var d2 = new D<string, number>();
 >d2 : D<string, number>
+>   : ^^^^^^^^^^^^^^^^^
 >new D<string, number>() : D<string, number>
+>                        : ^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var r2 = D;
 >r2 : typeof D
+>   : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 

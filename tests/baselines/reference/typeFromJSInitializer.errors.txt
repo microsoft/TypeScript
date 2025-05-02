@@ -1,16 +1,16 @@
-tests/cases/conformance/salsa/a.js(3,5): error TS7008: Member 'unknown' implicitly has an 'any' type.
-tests/cases/conformance/salsa/a.js(4,5): error TS7008: Member 'unknowable' implicitly has an 'any' type.
-tests/cases/conformance/salsa/a.js(5,5): error TS7008: Member 'empty' implicitly has an 'any[]' type.
-tests/cases/conformance/salsa/a.js(25,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
-tests/cases/conformance/salsa/a.js(27,5): error TS2322: Type 'undefined' is not assignable to type 'null'.
-tests/cases/conformance/salsa/a.js(29,5): error TS2322: Type '1' is not assignable to type 'null'.
-tests/cases/conformance/salsa/a.js(30,5): error TS2322: Type 'true' is not assignable to type 'null'.
-tests/cases/conformance/salsa/a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
-tests/cases/conformance/salsa/a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
-tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
+a.js(3,5): error TS7008: Member 'unknown' implicitly has an 'any' type.
+a.js(4,5): error TS7008: Member 'unknowable' implicitly has an 'any' type.
+a.js(5,5): error TS7008: Member 'empty' implicitly has an 'any[]' type.
+a.js(25,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
+a.js(27,5): error TS2322: Type 'undefined' is not assignable to type 'null'.
+a.js(29,5): error TS2322: Type '1' is not assignable to type 'null'.
+a.js(30,5): error TS2322: Type 'true' is not assignable to type 'null'.
+a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
+a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
+a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/salsa/a.js (10 errors) ====
+==== a.js (10 errors) ====
     function A () {
         // should get any on this-assignments in constructor
         this.unknown = null

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/generators/generatorReturnContextualType.ts ===
+//// [tests/cases/conformance/generators/generatorReturnContextualType.ts] ////
+
+=== generatorReturnContextualType.ts ===
 // #35995
 
 function* f1(): Generator<any, { x: 'x' }, any> {
@@ -12,7 +14,7 @@ function* f1(): Generator<any, { x: 'x' }, any> {
 
 function* g1(): Iterator<any, { x: 'x' }, any> {
 >g1 : Symbol(g1, Decl(generatorReturnContextualType.ts, 4, 1))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 >x : Symbol(x, Decl(generatorReturnContextualType.ts, 6, 31))
 
   return { x: 'x' };

@@ -1,115 +1,183 @@
-=== tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts] ////
+
+=== intersectionWithIndexSignatures.ts ===
 type A = { a: string };
->A : { a: string; }
+>A : A
+>  : ^
 >a : string
+>  : ^^^^^^
 
 type B = { b: string };
->B : { b: string; }
+>B : B
+>  : ^
 >b : string
+>  : ^^^^^^
 
 declare let sa1: { x: A & B };
 >sa1 : { x: A & B; }
+>    : ^^^^^     ^^^
 >x : A & B
+>  : ^^^^^
 
 declare let sa2: { x: A } & { x: B };
 >sa2 : { x: A; } & { x: B; }
+>    : ^^^^^ ^^^^^^^^^^^ ^^^
 >x : A
+>  : ^
 >x : B
+>  : ^
 
 declare let ta1: { [key: string]: A & B };
 >ta1 : { [key: string]: A & B; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 declare let ta2: { [key: string]: A } & { [key: string]: B };
 >ta2 : { [key: string]: A; } & { [key: string]: B; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >key : string
+>    : ^^^^^^
 
 ta1 = sa1;
 >ta1 = sa1 : { x: A & B; }
+>          : ^^^^^     ^^^
 >ta1 : { [key: string]: A & B; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >sa1 : { x: A & B; }
+>    : ^^^^^     ^^^
 
 ta1 = sa2;
 >ta1 = sa2 : { x: A; } & { x: B; }
+>          : ^^^^^ ^^^^^^^^^^^ ^^^
 >ta1 : { [key: string]: A & B; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >sa2 : { x: A; } & { x: B; }
+>    : ^^^^^ ^^^^^^^^^^^ ^^^
 
 ta2 = sa1;
 >ta2 = sa1 : { x: A & B; }
+>          : ^^^^^     ^^^
 >ta2 : { [key: string]: A; } & { [key: string]: B; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sa1 : { x: A & B; }
+>    : ^^^^^     ^^^
 
 ta2 = sa2;
 >ta2 = sa2 : { x: A; } & { x: B; }
+>          : ^^^^^ ^^^^^^^^^^^ ^^^
 >ta2 : { [key: string]: A; } & { [key: string]: B; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sa2 : { x: A; } & { x: B; }
+>    : ^^^^^ ^^^^^^^^^^^ ^^^
 
 declare let sb1: { x: A } & { y: B };
 >sb1 : { x: A; } & { y: B; }
+>    : ^^^^^ ^^^^^^^^^^^ ^^^
 >x : A
+>  : ^
 >y : B
+>  : ^
 
 declare let tb1: { [key: string]: A };
 >tb1 : { [key: string]: A; }
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 tb1 = sb1;  // Error
 >tb1 = sb1 : { x: A; } & { y: B; }
+>          : ^^^^^ ^^^^^^^^^^^ ^^^
 >tb1 : { [key: string]: A; }
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >sb1 : { x: A; } & { y: B; }
+>    : ^^^^^ ^^^^^^^^^^^ ^^^
 
 // Repro from #32484
 
 type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<keyof Tgt, keyof Source>>;
 >constr : constr<Source, Tgt>
+>       : ^^^^^^^^^^^^^^^^^^^
 
 type s = constr<{}, { [key: string]: { a: string } }>;
->s : {} & Pick<{ [key: string]: { a: string; }; }, string | number>
+>s : s
+>  : ^
 >key : string
+>    : ^^^^^^
 >a : string
+>  : ^^^^^^
 
 declare const q: s;
 >q : s
+>  : ^
 
 q["asd"].a.substr(1);
 >q["asd"].a.substr(1) : string
->q["asd"].a.substr : (from: number, length?: number | undefined) => string
+>                     : ^^^^^^
+>q["asd"].a.substr : (from: number, length?: number) => string
+>                  : ^    ^^      ^^      ^^^      ^^^^^      
 >q["asd"].a : string
+>           : ^^^^^^
 >q["asd"] : { a: string; }
+>         : ^^^^^      ^^^
 >q : s
+>  : ^
 >"asd" : "asd"
+>      : ^^^^^
 >a : string
->substr : (from: number, length?: number | undefined) => string
+>  : ^^^^^^
+>substr : (from: number, length?: number) => string
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >1 : 1
+>  : ^
 
 q["asd"].b;  // Error
 >q["asd"].b : any
+>           : ^^^
 >q["asd"] : { a: string; }
+>         : ^^^^^      ^^^
 >q : s
+>  : ^
 >"asd" : "asd"
+>      : ^^^^^
 >b : any
+>  : ^^^
 
 const d: { [key: string]: {a: string, b: string} } = q;  // Error
 >d : { [key: string]: { a: string; b: string; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^
 >key : string
+>    : ^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >q : s
+>  : ^
 
 // Repro from #32484
 
 declare let ss: { a: string } & { b: number };
 >ss : { a: string; } & { b: number; }
+>   : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 declare let tt: { [key: string]: string };
 >tt : { [key: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 tt = ss;  // Error
 >tt = ss : { a: string; } & { b: number; }
+>        : ^^^^^      ^^^^^^^^^^^      ^^^
 >tt : { [key: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ss : { a: string; } & { b: number; }
+>   : ^^^^^      ^^^^^^^^^^^      ^^^
 

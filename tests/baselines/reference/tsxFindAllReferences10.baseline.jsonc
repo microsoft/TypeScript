@@ -1,16 +1,10 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
+// --- (line: 8) skipped ---
 //     className?: string;
 // }
 // interface ButtonProps extends ClickableProps {
-//     /*FIND ALL REFS*/[|onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;|>
 // }
 // interface LinkProps extends ClickableProps {
 //     goTo: string;
@@ -20,158 +14,119 @@
 // declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
 // let opt = <MainButton />;
 // let opt = <MainButton children="chidlren" />;
-// let opt = <MainButton [|onClick|]={()=>{}} />;
-// let opt = <MainButton [|onClick|]={()=>{}} ignore-prop />;
+// let opt = <MainButton <|[|{| isWriteAccess: true |}onClick|]={()=>{}}|> />;
+// let opt = <MainButton <|[|{| isWriteAccess: true |}onClick|]={()=>{}}|> ignore-prop />;
 // let opt = <MainButton goTo="goTo" />;
 // let opt = <MainButton wrong />;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "method",
-      "name": "(method) ButtonProps.onClick(event?: React.MouseEvent<HTMLButtonElement>): void",
-      "textSpan": {
-        "start": 267,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "ButtonProps",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "onClick",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "event",
-          "kind": "parameterName"
-        },
-        {
-          "text": "?",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "React",
-          "kind": "text"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "MouseEvent",
-          "kind": "text"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "HTMLButtonElement",
-          "kind": "text"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 267,
-        "length": 59
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 267,
-          "length": 59
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 694,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 694,
-          "length": 16
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 737,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 737,
-          "length": 16
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 8) skipped ---
+  //     className?: string;
+  // }
+  // interface ButtonProps extends ClickableProps {
+  //     /*FIND ALL REFS*/<|[|onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;|>
+  // }
+  // interface LinkProps extends ClickableProps {
+  //     goTo: string;
+  // --- (line: 16) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) ButtonProps.onClick(event?: React.MouseEvent<HTMLButtonElement>): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "ButtonProps",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "onClick",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "event",
+      "kind": "parameterName"
+     },
+     {
+      "text": "?",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "React",
+      "kind": "text"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "MouseEvent",
+      "kind": "text"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "HTMLButtonElement",
+      "kind": "text"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

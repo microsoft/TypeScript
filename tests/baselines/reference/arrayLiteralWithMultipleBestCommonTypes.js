@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/arrayLiteralWithMultipleBestCommonTypes.ts] ////
+
 //// [arrayLiteralWithMultipleBestCommonTypes.ts]
 // when multiple best common types exist we will choose the first candidate
 

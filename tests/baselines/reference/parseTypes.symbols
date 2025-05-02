@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseTypes.ts ===
+//// [tests/cases/compiler/parseTypes.ts] ////
+
+=== parseTypes.ts ===
 var x = <() => number>null;
 >x : Symbol(x, Decl(parseTypes.ts, 0, 3))
 

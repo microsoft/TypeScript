@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType2_ES5.ts] ////
+
 //// [computedPropertyNamesContextualType2_ES5.ts]
 interface I {
     [s: string]: (x: any) => number; // Doesn't get hit

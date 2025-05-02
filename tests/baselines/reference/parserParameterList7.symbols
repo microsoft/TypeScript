@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList7.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList7.ts] ////
+
+=== parserParameterList7.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(parserParameterList7.ts, 0, 0))
 

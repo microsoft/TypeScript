@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag7.ts] ////
+
+=== a.js ===
+/**
+ * @template const T
+ * @typedef {[T]} X
+ */
+
+/**
+ * @template const T
+ */
+class C { }
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+/**
+ * @template private T
+ * @param {T} x
+ * @returns {T}
+ */
+function f(x) {
+>f : Symbol(f, Decl(a.js, 8, 11))
+>x : Symbol(x, Decl(a.js, 15, 11))
+
+    return x;
+>x : Symbol(x, Decl(a.js, 15, 11))
+}
+

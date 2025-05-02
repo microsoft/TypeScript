@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeValueConflict1.ts ===
+//// [tests/cases/compiler/typeValueConflict1.ts] ////
+
+=== typeValueConflict1.ts ===
 module M1 {
 >M1 : Symbol(M1, Decl(typeValueConflict1.ts, 0, 0))
 

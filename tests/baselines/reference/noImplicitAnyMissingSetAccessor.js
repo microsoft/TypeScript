@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts] ////
+
 //// [noImplicitAnyMissingSetAccessor.ts]
 abstract class Parent
 {

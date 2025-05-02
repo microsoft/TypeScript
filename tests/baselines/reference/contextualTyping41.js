@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTyping41.ts] ////
+
 //// [contextualTyping41.ts]
 var foo = <{():number; (i:number):number; }> (function(){return "err";});
 

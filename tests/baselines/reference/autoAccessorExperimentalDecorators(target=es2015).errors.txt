@@ -1,0 +1,27 @@
+autoAccessorExperimentalDecorators.ts(12,5): error TS1206: Decorators are not valid here.
+autoAccessorExperimentalDecorators.ts(15,5): error TS1206: Decorators are not valid here.
+
+
+==== autoAccessorExperimentalDecorators.ts (2 errors) ====
+    declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => void;
+    
+    class C1 {
+        @dec
+        accessor a: any;
+    
+        @dec
+        static accessor b: any;
+    }
+    
+    class C2 {
+        @dec
+        ~
+!!! error TS1206: Decorators are not valid here.
+        accessor #a: any;
+    
+        @dec
+        ~
+!!! error TS1206: Decorators are not valid here.
+        static accessor #b: any;
+    }
+    

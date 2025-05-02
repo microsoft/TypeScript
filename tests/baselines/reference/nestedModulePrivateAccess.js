@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedModulePrivateAccess.ts] ////
+
 //// [nestedModulePrivateAccess.ts]
 module a{
        var x:number;

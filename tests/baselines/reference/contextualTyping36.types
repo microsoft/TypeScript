@@ -1,14 +1,27 @@
-=== tests/cases/compiler/contextualTyping36.ts ===
+//// [tests/cases/compiler/contextualTyping36.ts] ////
+
+=== contextualTyping36.ts ===
 var foo = <{ id: number; }[]>[{ id: 4 }, <{ id: number; }>({  })];
 >foo : { id: number; }[]
+>    : ^^^^^^      ^^^^^
 ><{ id: number; }[]>[{ id: 4 }, <{ id: number; }>({  })] : { id: number; }[]
+>                                                        : ^^^^^^      ^^^^^
 >id : number
+>   : ^^^^^^
 >[{ id: 4 }, <{ id: number; }>({  })] : { id: number; }[]
+>                                     : ^^^^^^      ^^^^^
 >{ id: 4 } : { id: number; }
+>          : ^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >4 : 4
+>  : ^
 ><{ id: number; }>({  }) : { id: number; }
+>                        : ^^^^^^      ^^^
 >id : number
+>   : ^^^^^^
 >({  }) : {}
+>       : ^^
 >{  } : {}
+>     : ^^
 

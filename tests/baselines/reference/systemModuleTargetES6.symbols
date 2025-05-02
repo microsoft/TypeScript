@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemModuleTargetES6.ts ===
+//// [tests/cases/compiler/systemModuleTargetES6.ts] ////
+
+=== systemModuleTargetES6.ts ===
 export class MyClass { }
 >MyClass : Symbol(MyClass, Decl(systemModuleTargetES6.ts, 0, 0))
 

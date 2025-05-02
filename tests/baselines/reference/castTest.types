@@ -1,11 +1,16 @@
-=== tests/cases/compiler/castTest.ts ===
+//// [tests/cases/compiler/castTest.ts] ////
+
+=== castTest.ts ===
 var x : any = 0;
 >x : any
 >0 : 0
+>  : ^
 
 var z = <number> x;
 >z : number
+>  : ^^^^^^
 ><number> x : number
+>           : ^^^^^^
 >x : any
 
 var y = x + z;
@@ -13,96 +18,141 @@ var y = x + z;
 >x + z : any
 >x : any
 >z : number
+>  : ^^^^^^
 
 var a = <any>0;
 >a : any
 ><any>0 : any
 >0 : 0
+>  : ^
 
 var b = <boolean>true;
 >b : boolean
+>  : ^^^^^^^
 ><boolean>true : boolean
+>              : ^^^^^^^
 >true : true
+>     : ^^^^
 
 var s = <string>"";
 >s : string
+>  : ^^^^^^
 ><string>"" : string
+>           : ^^^^^^
 >"" : ""
+>   : ^^
 
 var ar = <any[]>null;
 >ar : any[]
+>   : ^^^^^
 ><any[]>null : any[]
->null : null
+>            : ^^^^^
 
 var f = <(res : number) => void>null;
 >f : (res: number) => void
+>  : ^   ^^      ^^^^^    
 ><(res : number) => void>null : (res: number) => void
+>                             : ^   ^^      ^^^^^    
 >res : number
->null : null
+>    : ^^^^^^
 
 declare class Point
 >Point : Point
+>      : ^^^^^
 {
     x: number;
 >x : number
+>  : ^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     add(dx: number, dy: number): Point;
 >add : (dx: number, dy: number) => Point
+>    : ^  ^^      ^^  ^^      ^^^^^     
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
     mult(p: Point): Point;
 >mult : (p: Point) => Point
+>     : ^ ^^     ^^^^^     
 >p : Point
+>  : ^^^^^
 
     constructor(x: number, y: number);
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 var p_cast = <Point> ({
 >p_cast : Point
+>       : ^^^^^
 ><Point> ({    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    },    mult: function(p) { return p; }}) : Point
+>                                                                                                                                                      : ^^^^^
 >({    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    },    mult: function(p) { return p; }}) : { x: number; y: number; add: (dx: number, dy: number) => Point; mult: (p: Point) => Point; }
+>                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    },    mult: function(p) { return p; }} : { x: number; y: number; add: (dx: number, dy: number) => Point; mult: (p: Point) => Point; }
+>                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     x: 0,
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     y: 0,
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     add: function(dx, dy) {
 >add : (dx: number, dy: number) => Point
+>    : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
+>                                                                           : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
         return new Point(this.x + dx, this.y + dy);
 >new Point(this.x + dx, this.y + dy) : Point
+>                                    : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >this.x + dx : any
 >this.x : any
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 >dx : number
+>   : ^^^^^^
 >this.y + dy : any
 >this.y : any
 >this : any
+>     : ^^^
 >y : any
+>  : ^^^
 >dy : number
+>   : ^^^^^^
 
     },
     mult: function(p) { return p; }
 >mult : (p: Point) => Point
+>     : ^ ^^^^^^^^^^^^^^^^^
 >function(p) { return p; } : (p: Point) => Point
+>                          : ^ ^^^^^^^^^^^^^^^^^
 >p : Point
+>  : ^^^^^
 >p : Point
+>  : ^^^^^
 
 })
 

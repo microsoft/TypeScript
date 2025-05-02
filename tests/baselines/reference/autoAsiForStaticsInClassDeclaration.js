@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/autoAsiForStaticsInClassDeclaration.ts] ////
+
 //// [autoAsiForStaticsInClassDeclaration.ts]
 class C {
     static x

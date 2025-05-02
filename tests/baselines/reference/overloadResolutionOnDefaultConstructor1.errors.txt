@@ -1,7 +1,7 @@
-tests/cases/compiler/overloadResolutionOnDefaultConstructor1.ts(3,24): error TS2554: Expected 0 arguments, but got 1.
+overloadResolutionOnDefaultConstructor1.ts(3,24): error TS2554: Expected 0 arguments, but got 1.
 
 
-==== tests/cases/compiler/overloadResolutionOnDefaultConstructor1.ts (1 errors) ====
+==== overloadResolutionOnDefaultConstructor1.ts (1 errors) ====
     class Bar {
         public clone() {
             return new Bar(0);

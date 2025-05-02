@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/intrinsicTypes.ts] ////
+
 //// [intrinsicTypes.ts]
 type TU1 = Uppercase<'hello'>;  // "HELLO"
 type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"

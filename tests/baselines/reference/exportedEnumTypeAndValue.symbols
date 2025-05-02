@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/def.js ===
+//// [tests/cases/conformance/jsdoc/exportedEnumTypeAndValue.ts] ////
+
+=== def.js ===
 /** @enum {number} */
 const MyEnum = {
 >MyEnum : Symbol(MyEnum, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
@@ -13,7 +15,7 @@ const MyEnum = {
 export default MyEnum;
 >MyEnum : Symbol(MyEnum, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
 
-=== tests/cases/conformance/jsdoc/use.js ===
+=== use.js ===
 import MyEnum from "./def";
 >MyEnum : Symbol(MyEnum, Decl(use.js, 0, 6))
 

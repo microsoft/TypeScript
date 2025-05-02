@@ -17,10 +17,10 @@ module bar {
 
 //// [reuseInnerModuleMember_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [reuseInnerModuleMember_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='reuseInnerModuleMember_0.ts'/>
 var bar;
 (function (bar) {

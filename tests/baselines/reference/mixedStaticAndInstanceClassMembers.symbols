@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mixedStaticAndInstanceClassMembers.ts ===
+//// [tests/cases/compiler/mixedStaticAndInstanceClassMembers.ts] ////
+
+=== mixedStaticAndInstanceClassMembers.ts ===
 class A {
 >A : Symbol(A, Decl(mixedStaticAndInstanceClassMembers.ts, 0, 0))
 

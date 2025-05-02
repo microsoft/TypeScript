@@ -1,11 +1,11 @@
-tests/cases/compiler/conflictMarkerDiff3Trivia2.ts(3,1): error TS1185: Merge conflict marker encountered.
-tests/cases/compiler/conflictMarkerDiff3Trivia2.ts(4,6): error TS2304: Cannot find name 'a'.
-tests/cases/compiler/conflictMarkerDiff3Trivia2.ts(6,1): error TS1185: Merge conflict marker encountered.
-tests/cases/compiler/conflictMarkerDiff3Trivia2.ts(9,1): error TS1185: Merge conflict marker encountered.
-tests/cases/compiler/conflictMarkerDiff3Trivia2.ts(12,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerDiff3Trivia2.ts(3,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerDiff3Trivia2.ts(4,6): error TS2304: Cannot find name 'a'.
+conflictMarkerDiff3Trivia2.ts(6,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerDiff3Trivia2.ts(9,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerDiff3Trivia2.ts(12,1): error TS1185: Merge conflict marker encountered.
 
 
-==== tests/cases/compiler/conflictMarkerDiff3Trivia2.ts (5 errors) ====
+==== conflictMarkerDiff3Trivia2.ts (5 errors) ====
     class C {
       foo() {
     <<<<<<< B

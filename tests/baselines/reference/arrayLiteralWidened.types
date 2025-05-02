@@ -1,84 +1,129 @@
-=== tests/cases/conformance/types/typeRelationships/widenedTypes/arrayLiteralWidened.ts ===
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/arrayLiteralWidened.ts] ////
+
+=== arrayLiteralWidened.ts ===
 // array literals are widened upon assignment according to their element type
 
 var a = []; // any[]
 >a : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 var a = [,,];
 >a : any[]
+>  : ^^^^^
 >[,,] : undefined[]
+>     : ^^^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 
 var a = [null, null];
 >a : any[]
+>  : ^^^^^
 >[null, null] : null[]
->null : null
->null : null
+>             : ^^^^^^
 
 var a = [undefined, undefined];
 >a : any[]
+>  : ^^^^^
 >[undefined, undefined] : undefined[]
+>                       : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var b = [[], [null, null]]; // any[][]
 >b : any[][]
+>  : ^^^^^^^
 >[[], [null, null]] : undefined[][]
+>                   : ^^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >[null, null] : null[]
->null : null
->null : null
+>             : ^^^^^^
 
 var b = [[], []];
 >b : any[][]
+>  : ^^^^^^^
 >[[], []] : undefined[][]
+>         : ^^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 var b = [[undefined, undefined]];
 >b : any[][]
+>  : ^^^^^^^
 >[[undefined, undefined]] : undefined[][]
+>                         : ^^^^^^^^^^^^^
 >[undefined, undefined] : undefined[]
+>                       : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var c = [[[]]]; // any[][][]
 >c : any[][][]
+>  : ^^^^^^^^^
 >[[[]]] : undefined[][][]
+>       : ^^^^^^^^^^^^^^^
 >[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 var c = [[[null]],[undefined]]
 >c : any[][][]
+>  : ^^^^^^^^^
 >[[[null]],[undefined]] : null[][][]
+>                       : ^^^^^^^^^^
 >[[null]] : null[][]
+>         : ^^^^^^^^
 >[null] : null[]
->null : null
+>       : ^^^^^^
 >[undefined] : undefined[]
+>            : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // no widening when one or more elements are non-widening
 
 var x: undefined = undefined;
 >x : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var d = [x];
 >d : undefined[]
+>  : ^^^^^^^^^^^
 >[x] : undefined[]
+>    : ^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 
 var d = [, x];
 >d : undefined[]
+>  : ^^^^^^^^^^^
 >[, x] : undefined[]
+>      : ^^^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 
 var d = [undefined, x];
 >d : undefined[]
+>  : ^^^^^^^^^^^
 >[undefined, x] : undefined[]
+>               : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 

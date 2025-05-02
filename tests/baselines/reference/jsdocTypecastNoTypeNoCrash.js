@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocTypecastNoTypeNoCrash.ts] ////
+
 //// [index.js]
 function Foo() {}
 const a = /* @type string */(Foo);

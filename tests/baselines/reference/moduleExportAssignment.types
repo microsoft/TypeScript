@@ -1,79 +1,132 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/moduleExportAssignment.ts] ////
+
+=== use.js ===
 var npmlog = require('./npmlog')
 >npmlog : { on(s: string): void; x: number; y: 2; }
+>       : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require('./npmlog') : { on(s: string): void; x: number; y: 2; }
+>                    : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./npmlog' : "./npmlog"
+>           : ^^^^^^^^^^
 
 npmlog.x
 >npmlog.x : number
+>         : ^^^^^^
 >npmlog : { on(s: string): void; x: number; y: 2; }
+>       : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 npmlog.on
 >npmlog.on : (s: string) => void
+>          : ^ ^^      ^^^^^^^^^
 >npmlog : { on(s: string): void; x: number; y: 2; }
+>       : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >on : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 
-=== tests/cases/conformance/salsa/npmlog.js ===
+=== npmlog.js ===
 class EE {
 >EE : EE
+>   : ^^
 
     /** @param {string} s */
     on(s) { }
 >on : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 }
 var npmlog = module.exports = new EE()
 >npmlog : { on(s: string): void; x: number; y: 2; }
+>       : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports = new EE() : { on(s: string): void; x: number; y: 2; }
+>                          : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { on(s: string): void; x: number; y: 2; }
+>               : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { on(s: string): void; x: number; y: 2; }; }
+>       : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { on(s: string): void; x: number; y: 2; }
+>        : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new EE() : EE
+>         : ^^
 >EE : typeof EE
+>   : ^^^^^^^^^
 
 npmlog.on('hi') // both references should see EE.on
 >npmlog.on('hi') : void
+>                : ^^^^
 >npmlog.on : (s: string) => void
+>          : ^ ^^      ^^^^^^^^^
 >npmlog : { on(s: string): void; x: number; y: 2; }
+>       : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >on : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
 module.exports.on('hi') // here too
 >module.exports.on('hi') : void
+>                        : ^^^^
 >module.exports.on : (s: string) => void
+>                  : ^ ^^      ^^^^^^^^^
 >module.exports : { on(s: string): void; x: number; y: 2; }
+>               : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { on(s: string): void; x: number; y: 2; }; }
+>       : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { on(s: string): void; x: number; y: 2; }
+>        : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >on : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
 npmlog.x = 1
 >npmlog.x = 1 : 1
+>             : ^
 >npmlog.x : number
+>         : ^^^^^^
 >npmlog : { on(s: string): void; x: number; y: 2; }
+>       : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 module.exports.y = 2
 >module.exports.y = 2 : 2
+>                     : ^
 >module.exports.y : 2
+>                 : ^
 >module.exports : { on(s: string): void; x: number; y: 2; }
+>               : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { on(s: string): void; x: number; y: 2; }; }
+>       : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { on(s: string): void; x: number; y: 2; }
+>        : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : 2
+>  : ^
 >2 : 2
+>  : ^
 
 npmlog.y
 >npmlog.y : 2
+>         : ^
 >npmlog : { on(s: string): void; x: number; y: 2; }
+>       : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : 2
+>  : ^
 
 module.exports.x
 >module.exports.x : number
+>                 : ^^^^^^
 >module.exports : { on(s: string): void; x: number; y: 2; }
+>               : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { on(s: string): void; x: number; y: 2; }; }
+>       : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { on(s: string): void; x: number; y: 2; }
+>        : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 

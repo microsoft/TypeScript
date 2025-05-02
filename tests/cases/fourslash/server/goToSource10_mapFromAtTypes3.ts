@@ -2,10 +2,10 @@
 
 // @moduleResolution: node
 
-// @Filename: /node_modules/lodash/package.json
+// @Filename: /home/src/workspaces/project/node_modules/lodash/package.json
 //// { "name": "lodash", "version": "4.17.15", "main": "./lodash.js" }
 
-// @Filename: /node_modules/lodash/lodash.js
+// @Filename: /home/src/workspaces/project/node_modules/lodash/lodash.js
 //// ;(function() {
 ////     /**
 ////      * Adds two numbers.
@@ -51,10 +51,10 @@
 ////     }
 //// }.call(this));
 
-// @Filename: /node_modules/@types/lodash/package.json
+// @Filename: /home/src/workspaces/project/node_modules/@types/lodash/package.json
 //// { "name": "@types/lodash", "version": "4.14.97", "types": "index.d.ts" }
 
-// @Filename: /node_modules/@types/lodash/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/lodash/index.d.ts
 //// export = _;
 //// export as namespace _;
 //// declare const _: _.LoDashStatic;
@@ -63,10 +63,7 @@
 //// }
 
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// import { [|/*start*/add|] } from 'lodash';
 
-verify.goToSourceDefinition("start", [
-  { marker: "variable", unverified: true },
-  { marker: "property", unverified: true },
-]);
+verify.baselineGoToSourceDefinition("start");

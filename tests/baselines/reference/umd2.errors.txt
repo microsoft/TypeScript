@@ -1,8 +1,8 @@
-tests/cases/conformance/externalModules/a.ts(1,1): error TS2304: Cannot find name 'Foo'.
-tests/cases/conformance/externalModules/a.ts(2,8): error TS2503: Cannot find namespace 'Foo'.
+a.ts(1,1): error TS2304: Cannot find name 'Foo'.
+a.ts(2,8): error TS2503: Cannot find namespace 'Foo'.
 
 
-==== tests/cases/conformance/externalModules/a.ts (2 errors) ====
+==== a.ts (2 errors) ====
     Foo.fn();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
@@ -11,7 +11,7 @@ tests/cases/conformance/externalModules/a.ts(2,8): error TS2503: Cannot find nam
 !!! error TS2503: Cannot find namespace 'Foo'.
     let y: number = x.n;
     
-==== tests/cases/conformance/externalModules/foo.d.ts (0 errors) ====
+==== foo.d.ts (0 errors) ====
     export var x: number;
     export function fn(): void;
     export as namespace Foo;

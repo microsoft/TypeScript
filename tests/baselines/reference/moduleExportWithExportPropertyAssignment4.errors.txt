@@ -1,14 +1,14 @@
-tests/cases/conformance/salsa/a.js(4,17): error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+a.js(4,17): error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
   Property 'toFixed' does not exist on type '"string"'.
-tests/cases/conformance/salsa/a.js(5,16): error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+a.js(5,16): error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
   Property 'toFixed' does not exist on type '"string"'.
-tests/cases/conformance/salsa/mod1.js(2,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
-tests/cases/conformance/salsa/mod1.js(4,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
-tests/cases/conformance/salsa/mod1.js(5,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
-tests/cases/conformance/salsa/mod1.js(10,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
+mod1.js(2,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
+mod1.js(4,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
+mod1.js(5,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
+mod1.js(10,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
 
 
-==== tests/cases/conformance/salsa/a.js (2 errors) ====
+==== a.js (2 errors) ====
     /// <reference path='./requires.d.ts' />
     var mod1 = require('./mod1')
     mod1.justExport.toFixed()
@@ -22,10 +22,10 @@ tests/cases/conformance/salsa/mod1.js(10,1): error TS2323: Cannot redeclare expo
 !!! error TS2339:   Property 'toFixed' does not exist on type '"string"'.
     mod1.justProperty.length
     
-==== tests/cases/conformance/salsa/requires.d.ts (0 errors) ====
+==== requires.d.ts (0 errors) ====
     declare var module: { exports: any };
     declare function require(name: string): any;
-==== tests/cases/conformance/salsa/mod1.js (4 errors) ====
+==== mod1.js (4 errors) ====
     /// <reference path='./requires.d.ts' />
     module.exports.bothBefore = 'string'
     ~~~~~~~~~~~~~~~~~~~~~~~~~

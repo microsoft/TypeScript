@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeContextualTypesApplied.ts] ////
+
 //// [mappedTypeContextualTypesApplied.ts]
 type TakeString = (s: string) => any;
 

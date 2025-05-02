@@ -1,47 +1,38 @@
-namespace ts.projectSystem {
-    describe("unittests:: tsserver:: occurrence highlight on string", () => {
-        it("should be marked if only on string values", () => {
-            const file1: File = {
-                path: "/a/b/file1.ts",
-                content: `let t1 = "div";\nlet t2 = "div";\nlet t3 = { "div": 123 };\nlet t4 = t3["div"];`
-            };
+import * as ts from "../../_namespaces/ts.js";
+import {
+    baselineTsserverLogs,
+    openFilesForSession,
+    TestSession,
+} from "../helpers/tsserver.js";
+import {
+    File,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-            const host = createServerHost([file1]);
-            const session = createSession(host);
-            const projectService = session.getProjectService();
+describe("unittests:: tsserver:: occurences:: highlight on string", () => {
+    it("should be marked if only on string values", () => {
+        const file1: File = {
+            path: "/home/src/projects/project/a/b/file1.ts",
+            content: `let t1 = "div";\nlet t2 = "div";\nlet t3 = { "div": 123 };\nlet t4 = t3["div"];`,
+        };
 
-            projectService.openClientFile(file1.path);
-            {
-                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
-                    CommandNames.Occurrences,
-                    { file: file1.path, line: 1, offset: 11 }
-                );
-                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
-                const firstOccurence = highlightResponse[0];
-                assert.isTrue(firstOccurence.isInString, "Highlights should be marked with isInString");
-            }
-
-            {
-                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
-                    CommandNames.Occurrences,
-                    { file: file1.path, line: 3, offset: 13 }
-                );
-                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
-                assert.isTrue(highlightResponse.length === 2);
-                const firstOccurence = highlightResponse[0];
-                assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on property name");
-            }
-
-            {
-                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
-                    CommandNames.Occurrences,
-                    { file: file1.path, line: 4, offset: 14 }
-                );
-                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
-                assert.isTrue(highlightResponse.length === 2);
-                const firstOccurence = highlightResponse[0];
-                assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on indexer");
-            }
+        const host = TestServerHost.createServerHost([file1]);
+        const session = new TestSession(host);
+        openFilesForSession([file1], session);
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: { file: file1.path, line: 1, offset: 11, filesToSearch: [file1.path] },
         });
+
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: { file: file1.path, line: 3, offset: 13, filesToSearch: [file1.path] },
+        });
+
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: { file: file1.path, line: 4, offset: 14, filesToSearch: [file1.path] },
+        });
+        baselineTsserverLogs("occurences", "should be marked if only on string values", session);
     });
-}
+});

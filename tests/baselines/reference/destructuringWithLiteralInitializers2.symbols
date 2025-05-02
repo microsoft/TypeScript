@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts] ////
+
+=== destructuringWithLiteralInitializers2.ts ===
 function f00([x, y]) {}
 >f00 : Symbol(f00, Decl(destructuringWithLiteralInitializers2.ts, 0, 0))
 >x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 0, 14))

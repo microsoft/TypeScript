@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedOverloadedSpecializedSignatures.ts] ////
+
 //// [inheritedOverloadedSpecializedSignatures.ts]
 interface A {
   (key:string):void;

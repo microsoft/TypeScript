@@ -1,50 +1,72 @@
-=== tests/cases/compiler/bbb.d.ts ===
+//// [tests/cases/compiler/declarationEmitQualifiedAliasTypeArgument.ts] ////
+
+=== bbb.d.ts ===
 export interface INode<T> {
     data: T;
 >data : T
+>     : ^
 }
 
 export function create<T>(): () => INode<T>;
 >create : <T>() => () => INode<T>
+>       : ^ ^^^^^^^              
 
-=== tests/cases/compiler/lib.d.ts ===
+=== lib.d.ts ===
 export type G<T extends string> = { [P in T]: string };
 >G : G<T>
+>  : ^^^^
 
 export enum E {
 >E : E
+>  : ^
 
     A = "a",
 >A : E.A
+>  : ^^^
 >"a" : "a"
+>    : ^^^
 
     B = "b"
 >B : E.B
+>  : ^^^
 >"b" : "b"
+>    : ^^^
 }
 
 export type T = G<E>;
->T : { a: string; b: string; }
+>T : T
+>  : ^
 
 export type Q = G<E.A>;
->Q : { a: string; }
+>Q : Q
+>  : ^
 >E : any
+>  : ^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { T, Q } from "./lib";
 >T : any
+>  : ^^^
 >Q : any
+>  : ^^^
 
 import { create } from "./bbb";
->create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
+>create : <T>() => () => import("bbb").INode<T>
+>       : ^ ^^^^^^^             ^^^^^  ^^^^^   
 
 export const fun = create<T>();
->fun : () => import("tests/cases/compiler/bbb").INode<T>
->create<T>() : () => import("tests/cases/compiler/bbb").INode<T>
->create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
+>fun : () => import("bbb").INode<T>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create<T>() : () => import("bbb").INode<T>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create : <T>() => () => import("bbb").INode<T>
+>       : ^ ^^^^^^^             ^^^^^  ^^^^^   
 
 export const fun2 = create<Q>();
->fun2 : () => import("tests/cases/compiler/bbb").INode<Q>
->create<Q>() : () => import("tests/cases/compiler/bbb").INode<Q>
->create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
+>fun2 : () => import("bbb").INode<Q>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create<Q>() : () => import("bbb").INode<Q>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create : <T>() => () => import("bbb").INode<T>
+>       : ^ ^^^^^^^             ^^^^^  ^^^^^   
 

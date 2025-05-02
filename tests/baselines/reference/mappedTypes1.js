@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypes1.ts] ////
+
 //// [mappedTypes1.ts]
 type Item = { a: string, b: number, c: boolean };
 

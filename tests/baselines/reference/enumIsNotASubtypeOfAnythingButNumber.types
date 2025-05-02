@@ -1,221 +1,285 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts] ////
+
+=== enumIsNotASubtypeOfAnythingButNumber.ts ===
 // enums are only subtypes of number, any and no other types
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 interface I {
     [x: string]: any;
 >x : string
+>  : ^^^^^^
 
     foo: E; // ok
 >foo : E
+>    : ^
 }
 
 
 interface I2 {
     [x: string]: number;
 >x : string
+>  : ^^^^^^
 
     foo: E; // ok
 >foo : E
+>    : ^
 }
 
 // error cases
 interface I3 {
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I4 {
     [x: string]: boolean;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I5 {
     [x: string]: Date;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I6 {
     [x: string]: RegExp;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I7 {
     [x: string]: { bar: number };
 >x : string
+>  : ^^^^^^
 >bar : number
+>    : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I8 {
     [x: string]: number[];
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I9 {
     [x: string]: I8;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 class A { foo: number; }
 >A : A
+>  : ^
 >foo : number
+>    : ^^^^^^
 
 interface I10 {
     [x: string]: A;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 class A2<T> { foo: T; }
 >A2 : A2<T>
+>   : ^^^^^
 >foo : T
+>    : ^
 
 interface I11 {
     [x: string]: A2<number>;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I12 {
     [x: string]: (x) => number;
 >x : string
+>  : ^^^^^^
 >x : any
+>  : ^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I13 {
     [x: string]: <T>(x: T) => T;
 >x : string
+>  : ^^^^^^
 >x : T
+>  : ^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 enum E2 { A }
 >E2 : E2
+>   : ^^
 >A : E2.A
+>  : ^^^^
 
 interface I14 {
     [x: string]: E2;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 function f() { }
 >f : typeof f
+>  : ^^^^^^^^
 
 module f {
 >f : typeof f
+>  : ^^^^^^^^
 
     export var bar = 1;
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 interface I15 {
     [x: string]: typeof f;
 >x : string
+>  : ^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 class c { baz: string }
 >c : c
+>  : ^
 >baz : string
+>    : ^^^^^^
 
 module c {
 >c : typeof c
+>  : ^^^^^^^^
 
     export var bar = 1;
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 interface I16 {
     [x: string]: typeof c;
 >x : string
+>  : ^^^^^^
 >c : typeof c
+>  : ^^^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I17<T> {
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I18<T, U extends T> {
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: E;
 >foo : E
+>    : ^
 }
 
 
 interface I19 {
     [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
     foo: E; // BUG 831833
 >foo : E
+>    : ^
 }
 
 
 interface I20 {
     [x: string]: {};
 >x : string
+>  : ^^^^^^
 
     foo: E; // BUG 831833
 >foo : E
+>    : ^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of37.ts] ////
+
 //// [ES5For-of37.ts]
 // https://github.com/microsoft/TypeScript/issues/30083
 
@@ -45,7 +47,7 @@ try {
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (_f && !_f.done && (_b = _e["return"])) _b.call(_e);
+                    if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
                 }
                 finally { if (e_2) throw e_2.error; }
             }
@@ -59,7 +61,7 @@ try {
 catch (e_1_1) { e_1 = { error: e_1_1 }; }
 finally {
     try {
-        if (_d && !_d.done && (_a = _c["return"])) _a.call(_c);
+        if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
     }
     finally { if (e_1) throw e_1.error; }
 }

@@ -1,59 +1,91 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts] ////
+
+=== stringLiteralTypesInVariableDeclarations01.ts ===
 let a: "";
 >a : ""
+>  : ^^
 
 var b: "foo";
 >b : "foo"
+>  : ^^^^^
 
 let c: "bar";
 >c : "bar"
+>  : ^^^^^
 
 const d: "baz";
 >d : "baz"
+>  : ^^^^^
 
 a = "";
 >a = "" : ""
+>       : ^^
 >a : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 b = "foo";
 >b = "foo" : "foo"
+>          : ^^^^^
 >b : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 c = "bar";
 >c = "bar" : "bar"
+>          : ^^^^^
 >c : "bar"
+>  : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 let e: "" = "";
 >e : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 var f: "foo" = "foo";
 >f : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 let g: "bar" = "bar";
 >g : "bar"
+>  : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 const h: "baz" = "baz";
 >h : "baz"
+>  : ^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
 e = "";
 >e = "" : ""
+>       : ^^
 >e : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 f = "foo";
 >f = "foo" : "foo"
+>          : ^^^^^
 >f : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 g = "bar";
 >g = "bar" : "bar"
+>          : ^^^^^
 >g : "bar"
+>  : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 

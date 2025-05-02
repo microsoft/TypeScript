@@ -1,54 +1,91 @@
-=== tests/cases/compiler/freshLiteralInference.ts ===
+//// [tests/cases/compiler/freshLiteralInference.ts] ////
+
+=== freshLiteralInference.ts ===
 declare function f1<T extends "1" | "2" | "3">(x: T): T;
 >f1 : <T extends "1" | "2" | "3">(x: T) => T
+>   : ^ ^^^^^^^^^               ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 const value = f1("1");  // regular "1"
 >value : "1"
+>      : ^^^
 >f1("1") : "1"
+>        : ^^^
 >f1 : <T extends "1" | "2" | "3">(x: T) => T
+>   : ^ ^^^^^^^^^               ^^ ^^ ^^^^^ 
 >"1" : "1"
+>    : ^^^
 
 let x1 = value;  // regular "1"
 >x1 : "1"
+>   : ^^^
 >value : "1"
+>      : ^^^
 
 declare function f2<T extends "1" | "2" | "3">(x: { value: T }): { value: T };
->f2 : <T extends "1" | "2" | "3">(x: {    value: T;}) => {    value: T;}
+>f2 : <T extends "1" | "2" | "3">(x: { value: T; }) => { value: T; }
+>   : ^ ^^^^^^^^^               ^^ ^^             ^^^^^             
 >x : { value: T; }
+>  : ^^^^^^^^^ ^^^
 >value : T
+>      : ^
 >value : T
+>      : ^
 
 const obj2 = f2({ value: "1" });  // { value: regular "1" }
 >obj2 : { value: "1"; }
+>     : ^^^^^^^^^^^^^^^
 >f2({ value: "1" }) : { value: "1"; }
+>                   : ^^^^^^^^^^^^^^^
 >f2 : <T extends "1" | "2" | "3">(x: { value: T; }) => { value: T; }
+>   : ^ ^^^^^^^^^               ^^ ^^             ^^^^^             
 >{ value: "1" } : { value: "1"; }
+>               : ^^^^^^^^^^^^^^^
 >value : "1"
+>      : ^^^
 >"1" : "1"
+>    : ^^^
 
 let x2 = obj2.value;  // regular "1"
 >x2 : "1"
+>   : ^^^
 >obj2.value : "1"
+>           : ^^^
 >obj2 : { value: "1"; }
+>     : ^^^^^^^^^^^^^^^
 >value : "1"
+>      : ^^^
 
 declare function f3<T extends { value: "1" | "2" | "3" }>(obj: T): T;
 >f3 : <T extends { value: "1" | "2" | "3"; }>(obj: T) => T
+>   : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^ 
 >value : "1" | "2" | "3"
+>      : ^^^^^^^^^^^^^^^
 >obj : T
+>    : ^
 
 const obj3 = f3({ value: "1" });  // before: { value: fresh "1" }
 >obj3 : { value: "1"; }
+>     : ^^^^^^^^^^^^^^^
 >f3({ value: "1" }) : { value: "1"; }
+>                   : ^^^^^^^^^^^^^^^
 >f3 : <T extends { value: "1" | "2" | "3"; }>(obj: T) => T
+>   : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^ 
 >{ value: "1" } : { value: "1"; }
+>               : ^^^^^^^^^^^^^^^
 >value : "1"
+>      : ^^^
 >"1" : "1"
+>    : ^^^
 
 let x3 = obj3.value;  // before: string, after: "1"
 >x3 : "1"
+>   : ^^^
 >obj3.value : "1"
+>           : ^^^
 >obj3 : { value: "1"; }
+>     : ^^^^^^^^^^^^^^^
 >value : "1"
+>      : ^^^
 

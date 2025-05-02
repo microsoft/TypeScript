@@ -1,25 +1,17 @@
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(4,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(7,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(19,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+instancePropertiesInheritedIntoClassType.ts(19,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'Number' has no call signatures.
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(26,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(29,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'String' has no call signatures.
 
 
-==== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts (6 errors) ====
+==== instancePropertiesInheritedIntoClassType.ts (2 errors) ====
     module NonGeneric {
         class C {
             x: string;
             get y() {
-                ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 return 1;
             }
             set y(v) { }
-                ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             fn() { return this; }
             constructor(public a: number, private b: number) { }
         }
@@ -42,13 +34,9 @@ tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIn
         class C<T, U> {
             x: T;
             get y() {
-                ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 return null;
             }
             set y(v: U) { }
-                ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             fn() { return this; }
             constructor(public a: T, private b: U) { }
         }

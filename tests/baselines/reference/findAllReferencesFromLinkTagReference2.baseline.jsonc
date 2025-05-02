@@ -1,64 +1,43 @@
+// === findAllReferences ===
 // === /a.ts ===
 // enum E {
 //     /** {@link /*FIND ALL REFS*/[|Foo|]} */
 //     Foo
 // }
-// interface [|Foo|] {
+// <|interface [|{| isWriteAccess: true |}Foo|] {
 //     foo: E.Foo;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "interface",
-      "name": "interface Foo",
-      "textSpan": {
-        "start": 52,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 42,
-        "length": 33
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 3
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 52,
-          "length": 3
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 42,
-          "length": 33
-        },
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // enum E {
+  //     /** {@link /*FIND ALL REFS*/Foo} */
+  //     Foo
+  // }
+  // <|interface [|Foo|] {
+  //     foo: E.Foo;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface Foo",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]

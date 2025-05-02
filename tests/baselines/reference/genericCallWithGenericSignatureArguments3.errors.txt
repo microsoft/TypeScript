@@ -1,11 +1,12 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(32,19): error TS2345: Argument of type '(a1: (y: string) => string) => (n: Object) => 1' is not assignable to parameter of type '(x: (a: string) => boolean) => (n: Object) => 1'.
+genericCallWithGenericSignatureArguments3.ts(32,19): error TS2345: Argument of type '(a1: (y: string) => string) => (n: Object) => 1' is not assignable to parameter of type '(x: (a: string) => boolean) => (n: Object) => 1'.
   Types of parameters 'a1' and 'x' are incompatible.
-    Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(33,69): error TS2345: Argument of type '(a2: (z: string) => boolean) => number' is not assignable to parameter of type '(x: (z: string) => boolean) => (n: Object) => 1'.
+    Type '(a: string) => boolean' is not assignable to type '(y: string) => string'.
+      Type 'boolean' is not assignable to type 'string'.
+genericCallWithGenericSignatureArguments3.ts(33,69): error TS2345: Argument of type '(a2: (z: string) => boolean) => number' is not assignable to parameter of type '(x: (z: string) => boolean) => (n: Object) => 1'.
   Type 'number' is not assignable to type '(n: Object) => 1'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts (2 errors) ====
+==== genericCallWithGenericSignatureArguments3.ts (2 errors) ====
     // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
     // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
     
@@ -41,7 +42,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a1: (y: string) => string) => (n: Object) => 1' is not assignable to parameter of type '(x: (a: string) => boolean) => (n: Object) => 1'.
 !!! error TS2345:   Types of parameters 'a1' and 'x' are incompatible.
-!!! error TS2345:     Type 'boolean' is not assignable to type 'string'.
+!!! error TS2345:     Type '(a: string) => boolean' is not assignable to type '(y: string) => string'.
+!!! error TS2345:       Type 'boolean' is not assignable to type 'string'.
     var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // error
                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a2: (z: string) => boolean) => number' is not assignable to parameter of type '(x: (z: string) => boolean) => (n: Object) => 1'.

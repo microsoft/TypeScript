@@ -1,33 +1,55 @@
-=== tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts ===
+//// [tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts] ////
+
+=== contextualTypeForInitalizedVariablesFiltersUndefined.ts ===
 const fInferred = ({ a = 0 } = {}) => a;
 >fInferred : ({ a }?: { a?: number | undefined; }) => number
+>          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a = 0 } = {}) => a : ({ a }?: { a?: number | undefined; }) => number
+>                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
->{} : { a?: number | undefined; }
+>  : ^
+>{} : {}
+>   : ^^
 >a : number
+>  : ^^^^^^
 
 // const fInferred: ({ a }?: { a?: number; }) => number
 
 const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
 >fAnnotated : ({ a }?: { a?: number | undefined; }) => number
+>           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fInferred : ({ a }?: { a?: number | undefined; }) => number
+>          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a = 0 } = {}) => a : ({ a }?: { a?: number | undefined; } | undefined) => number
+>                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{} : {}
+>   : ^^
 >a : number
+>  : ^^^^^^
 
 declare var t: { s: string } | undefined;
 >t : { s: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 const { s } = t;
 >s : any
+>  : ^^^
 >t : { s: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 
 function fst({ s } = t) { }
 >fst : ({ s }?: { s: string; } | undefined) => void
+>    : ^     ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : any
+>  : ^^^
 >t : { s: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 

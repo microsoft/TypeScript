@@ -1,8 +1,8 @@
-tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(8,10): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(9,10): error TS2554: Expected 1 arguments, but got 2.
+grammarAmbiguities.ts(8,10): error TS2554: Expected 1 arguments, but got 2.
+grammarAmbiguities.ts(9,10): error TS2554: Expected 1 arguments, but got 2.
 
 
-==== tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts (2 errors) ====
+==== grammarAmbiguities.ts (2 errors) ====
     function f(n: any) { return null; }
     function g<A, B>(x: any) { return null; }
     interface A { }

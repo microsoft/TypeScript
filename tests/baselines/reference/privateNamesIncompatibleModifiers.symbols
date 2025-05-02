@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts] ////
+
+=== privateNamesIncompatibleModifiers.ts ===
 class A {
 >A : Symbol(A, Decl(privateNamesIncompatibleModifiers.ts, 0, 0))
 

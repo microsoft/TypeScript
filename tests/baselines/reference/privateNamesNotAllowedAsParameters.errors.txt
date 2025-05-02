@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesNotAllowedAsParameters.ts(2,12): error TS18009: Private identifiers cannot be used as parameters.
+privateNamesNotAllowedAsParameters.ts(2,12): error TS18009: Private identifiers cannot be used as parameters.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesNotAllowedAsParameters.ts (1 errors) ====
+==== privateNamesNotAllowedAsParameters.ts (1 errors) ====
     class A {
         setFoo(#foo: string) {}
                ~~~~

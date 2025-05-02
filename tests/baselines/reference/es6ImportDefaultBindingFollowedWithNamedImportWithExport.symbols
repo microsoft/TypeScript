@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportWithExport.ts] ////
+
+=== server.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(server.ts, 0, 10))
 
@@ -12,7 +14,7 @@ export var m = a;
 
 export default {};
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 export import defaultBinding1, { } from "server";
 >defaultBinding1 : Symbol(defaultBinding1, Decl(client.ts, 0, 13))
 

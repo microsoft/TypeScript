@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-oldStyleOctalLiteralInEnums.ts ===
+//// [tests/cases/compiler/es5-oldStyleOctalLiteralInEnums.ts] ////
+
+=== es5-oldStyleOctalLiteralInEnums.ts ===
 enum E {
 >E : Symbol(E, Decl(es5-oldStyleOctalLiteralInEnums.ts, 0, 0))
 

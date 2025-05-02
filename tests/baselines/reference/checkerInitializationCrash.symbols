@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkerInitializationCrash.ts] ////
+
 === /node_modules/@fullcalendar/react/index.d.ts ===
 import * as react from 'react';
 >react : Symbol(react, Decl(index.d.ts, 0, 6))
@@ -11,7 +13,7 @@ declare global {
     export import VNode = react.ReactNode;
 >VNode : Symbol(FullCalendarVDom.VNode, Decl(index.d.ts, 2, 30))
 >react : Symbol(react, Decl(index.d.ts, 0, 6))
->ReactNode : Symbol(react.ReactNode, Decl(index.d.ts, 2, 25), Decl(index.d.ts, 2, 30))
+>ReactNode : Symbol(react.ReactNode, Decl(index.d.ts, 2, 25))
   }
 }
 
@@ -30,7 +32,7 @@ declare global {
 >FullCalendarVDom : Symbol(FullCalendarVDom, Decl(index.d.ts, 1, 16), Decl(index.d.ts, 1, 16))
 
     type VNode = preact.VNode<any>;
->VNode : Symbol(React.ReactNode, Decl(index.d.ts, 2, 25), Decl(index.d.ts, 2, 30))
+>VNode : Symbol(VNode, Decl(index.d.ts, 2, 30))
 >preact : Symbol(preact, Decl(index.d.ts, 0, 6))
 >VNode : Symbol(preact.VNode, Decl(index.d.ts, 0, 27))
   }
@@ -50,7 +52,7 @@ declare namespace React {
 >React : Symbol(React, Decl(index.d.ts, 1, 26))
 
     type ReactNode = any;
->ReactNode : Symbol(ReactNode, Decl(index.d.ts, 2, 25), Decl(index.d.ts, 2, 30))
+>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 2, 25))
 
     function useMemo<T>(factory: () => T, deps: undefined): T;
 >useMemo : Symbol(useMemo, Decl(index.d.ts, 3, 25))

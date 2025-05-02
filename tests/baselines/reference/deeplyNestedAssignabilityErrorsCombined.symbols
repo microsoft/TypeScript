@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deeplyNestedAssignabilityErrorsCombined.ts ===
+//// [tests/cases/compiler/deeplyNestedAssignabilityErrorsCombined.ts] ////
+
+=== deeplyNestedAssignabilityErrorsCombined.ts ===
 let x = { a: { b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } };
 >x : Symbol(x, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 3))
 >a : Symbol(a, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 9))

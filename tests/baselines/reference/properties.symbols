@@ -1,4 +1,6 @@
-=== tests/cases/compiler/properties.ts ===
+//// [tests/cases/compiler/properties.ts] ////
+
+=== properties.ts ===
 class MyClass
 >MyClass : Symbol(MyClass, Decl(properties.ts, 0, 0))
 {

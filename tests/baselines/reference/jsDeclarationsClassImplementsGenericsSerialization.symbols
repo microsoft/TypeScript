@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/interface.ts ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassImplementsGenericsSerialization.ts] ////
+
+=== interface.ts ===
 export interface Encoder<T> {
 >Encoder : Symbol(Encoder, Decl(interface.ts, 0, 0))
 >T : Symbol(T, Decl(interface.ts, 0, 25))
@@ -9,7 +11,7 @@ export interface Encoder<T> {
 >T : Symbol(T, Decl(interface.ts, 0, 25))
 >Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
-=== tests/cases/conformance/jsdoc/declarations/lib.js ===
+=== lib.js ===
 /**
  * @template T
  * @implements {IEncoder<T>}

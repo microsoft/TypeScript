@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/typeofImportInstantiationExpression.ts] ////
+
+=== input.ts ===
+interface Arg<T = any, Params extends Record<string, any> = Record<string, any>> {
+    "__is_argument__"?: true;
+>"__is_argument__" : true
+>                  : ^^^^
+>true : true
+>     : ^^^^
+
+    meta?: T;
+>meta : T
+>     : ^
+
+    params?: Params;
+>params : Params
+>       : ^^^^^^
+}
+
+export function myFunction<T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) { return (arg.params || {}) as U }
+>myFunction : <T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) => U
+>           : ^ ^^^^^^^^ ^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^   ^^         ^^^^^ 
+>arg : Arg<T, U>
+>    : ^^^^^^^^^
+>(arg.params || {}) as U : U
+>                        : ^
+>(arg.params || {}) : U | {}
+>                   : ^^^^^^
+>arg.params || {} : U | {}
+>                 : ^^^^^^
+>arg.params : U
+>           : ^
+>arg : Arg<T, U>
+>    : ^^^^^^^^^
+>params : U
+>       : ^
+>{} : {}
+>   : ^^
+
+=== main.ts ===
+type T1 = typeof import('./input.js').myFunction;
+>T1 : <T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) => U
+>   : ^ ^^^^^^^^ ^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^ 
+>myFunction : error
+
+type T2 = typeof import('./input.js').myFunction<any, { slug: 'hello' }>;
+>T2 : (arg: Arg<any, { slug: "hello"; }>) => { slug: "hello"; }
+>   : ^   ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^       ^^^
+>myFunction : error
+>slug : "hello"
+>     : ^^^^^^^
+

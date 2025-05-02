@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientFunctionInGlobalFile.ts] ////
+
 //// [collisionExportsRequireAndAmbientFunctionInGlobalFile.ts]
 declare function exports(): number;
 declare function require(): string;

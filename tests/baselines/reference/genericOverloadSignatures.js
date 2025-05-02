@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericOverloadSignatures.ts] ////
+
 //// [genericOverloadSignatures.ts]
 interface A {
     <T>(x: T): void;

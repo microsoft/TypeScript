@@ -18,6 +18,12 @@ const c = async () => {
 	return 0
 }
 
+// Error (good)
+/** @type {function(): string} */
+const d = async () => {
+	return ""
+}
+
 /** @type {function(function(): string): void} */
 const f = (p) => {}
 

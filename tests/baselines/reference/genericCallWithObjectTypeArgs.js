@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts] ////
+
 //// [genericCallWithObjectTypeArgs.ts]
 class C {
     private x: string;

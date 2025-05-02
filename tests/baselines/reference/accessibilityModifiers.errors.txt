@@ -1,22 +1,22 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(21,12): error TS1029: 'private' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(22,12): error TS1029: 'private' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(23,12): error TS1029: 'private' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(24,12): error TS1029: 'private' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(26,12): error TS1029: 'protected' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(27,12): error TS1029: 'protected' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(28,12): error TS1029: 'protected' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(29,12): error TS1029: 'protected' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(31,12): error TS1029: 'public' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(32,12): error TS1029: 'public' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(33,12): error TS1029: 'public' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(34,12): error TS1029: 'public' modifier must precede 'static' modifier.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(39,13): error TS1028: Accessibility modifier already seen.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(40,12): error TS1028: Accessibility modifier already seen.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(41,13): error TS1028: Accessibility modifier already seen.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(42,12): error TS1028: Accessibility modifier already seen.
+accessibilityModifiers.ts(21,12): error TS1029: 'private' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(22,12): error TS1029: 'private' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(23,12): error TS1029: 'private' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(24,12): error TS1029: 'private' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(26,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(27,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(28,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(29,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(31,12): error TS1029: 'public' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(32,12): error TS1029: 'public' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(33,12): error TS1029: 'public' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(34,12): error TS1029: 'public' modifier must precede 'static' modifier.
+accessibilityModifiers.ts(39,13): error TS1028: Accessibility modifier already seen.
+accessibilityModifiers.ts(40,12): error TS1028: Accessibility modifier already seen.
+accessibilityModifiers.ts(41,13): error TS1028: Accessibility modifier already seen.
+accessibilityModifiers.ts(42,12): error TS1028: Accessibility modifier already seen.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts (16 errors) ====
+==== accessibilityModifiers.ts (16 errors) ====
     // No errors
     class C {
         private static privateProperty;

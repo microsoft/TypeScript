@@ -1,8 +1,8 @@
-tests/cases/compiler/classExpressionAssignment.ts(6,7): error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
+classExpressionAssignment.ts(6,7): error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
   Property 'prop' is missing in type 'A' but required in type 'A'.
 
 
-==== tests/cases/compiler/classExpressionAssignment.ts (1 errors) ====
+==== classExpressionAssignment.ts (1 errors) ====
     interface A {
       prop: string;
     }
@@ -12,5 +12,5 @@ tests/cases/compiler/classExpressionAssignment.ts(6,7): error TS2322: Type 'type
           ~
 !!! error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
 !!! error TS2322:   Property 'prop' is missing in type 'A' but required in type 'A'.
-!!! related TS2728 tests/cases/compiler/classExpressionAssignment.ts:2:3: 'prop' is declared here.
+!!! related TS2728 classExpressionAssignment.ts:2:3: 'prop' is declared here.
     

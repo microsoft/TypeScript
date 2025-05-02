@@ -1,35 +1,61 @@
-=== tests/cases/compiler/maxConstraints.ts ===
+//// [tests/cases/compiler/maxConstraints.ts] ////
+
+=== maxConstraints.ts ===
 interface Comparable<T> {
     compareTo(other: T): number;
 >compareTo : (other: T) => number
+>          : ^     ^^ ^^^^^      
 >other : T
+>      : ^
 }
 interface Comparer {
     <T extends Comparable<T>>(x: T, y: T): T;
 >x : T
+>  : ^
 >y : T
+>  : ^
 }
 var max2: Comparer = (x, y) => { return (x.compareTo(y) > 0) ? x : y };
 >max2 : Comparer
+>     : ^^^^^^^^
 >(x, y) => { return (x.compareTo(y) > 0) ? x : y } : <T extends Comparable<T>>(x: T, y: T) => T
+>                                                  : ^ ^^^^^^^^^             ^^ ^^^^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 >(x.compareTo(y) > 0) ? x : y : T
+>                             : ^
 >(x.compareTo(y) > 0) : boolean
+>                     : ^^^^^^^
 >x.compareTo(y) > 0 : boolean
+>                   : ^^^^^^^
 >x.compareTo(y) : number
+>               : ^^^^^^
 >x.compareTo : (other: T) => number
+>            : ^     ^^^^^^^^      
 >x : T
+>  : ^
 >compareTo : (other: T) => number
+>          : ^     ^^^^^^^^      
 >y : T
+>  : ^
 >0 : 0
+>  : ^
 >x : T
+>  : ^
 >y : T
+>  : ^
 
 var maxResult = max2(1, 2);
 >maxResult : Comparable<1 | 2>
+>          : ^^^^^^^^^^^^^^^^^
 >max2(1, 2) : Comparable<1 | 2>
+>           : ^^^^^^^^^^^^^^^^^
 >max2 : Comparer
+>     : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

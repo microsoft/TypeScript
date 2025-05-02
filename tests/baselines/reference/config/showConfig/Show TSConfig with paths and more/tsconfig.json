@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "outDir": "./lib",
+        "esModuleInterop": true,
+        "module": "commonjs",
+        "moduleResolution": "node10",
+        "target": "es2017",
+        "sourceMap": true,
+        "baseUrl": "./",
+        "paths": {
+            "@root/*": [
+                "./*"
+            ],
+            "@configs/*": [
+                "src/configs/*"
+            ],
+            "@common/*": [
+                "src/common/*"
+            ],
+            "*": [
+                "node_modules/*",
+                "src/types/*"
+            ]
+        },
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "/Show TSConfig with paths and more/lib"
+    ]
+}

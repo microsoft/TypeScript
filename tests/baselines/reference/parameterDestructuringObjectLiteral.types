@@ -1,33 +1,57 @@
-=== tests/cases/compiler/parameterDestructuringObjectLiteral.ts ===
+//// [tests/cases/compiler/parameterDestructuringObjectLiteral.ts] ////
+
+=== parameterDestructuringObjectLiteral.ts ===
 // Repro from #22644
 
 const fn1 = (options: { headers?: {} }) => { };
->fn1 : (options: {    headers?: {};}) => void
->(options: { headers?: {} }) => { } : (options: {    headers?: {};}) => void
+>fn1 : (options: { headers?: {}; }) => void
+>    : ^       ^^                 ^^^^^^^^^
+>(options: { headers?: {} }) => { } : (options: { headers?: {}; }) => void
+>                                   : ^       ^^                 ^^^^^^^^^
 >options : { headers?: {}; }
+>        : ^^^^^^^^^^^^  ^^^
 >headers : {}
+>        : ^^
 
 fn1({ headers: { foo: 1 } });
 >fn1({ headers: { foo: 1 } }) : void
+>                             : ^^^^
 >fn1 : (options: { headers?: {}; }) => void
+>    : ^       ^^                 ^^^^^^^^^
 >{ headers: { foo: 1 } } : { headers: { foo: number; }; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >headers : { foo: number; }
+>        : ^^^^^^^^^^^^^^^^
 >{ foo: 1 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 const fn2 = ({ headers = {} }) => { };
 >fn2 : ({ headers }: { headers?: {}; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ headers = {} }) => { } : ({ headers }: { headers?: {}; }) => void
+>                          : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >headers : {}
+>        : ^^
 >{} : {}
+>   : ^^
 
 fn2({ headers: { foo: 1 } });
 >fn2({ headers: { foo: 1 } }) : void
+>                             : ^^^^
 >fn2 : ({ headers }: { headers?: {}; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ headers: { foo: 1 } } : { headers: { foo: number; }; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >headers : { foo: number; }
+>        : ^^^^^^^^^^^^^^^^
 >{ foo: 1 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 

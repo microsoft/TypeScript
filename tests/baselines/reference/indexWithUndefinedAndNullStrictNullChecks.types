@@ -1,41 +1,61 @@
-=== tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts ===
+//// [tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts] ////
+
+=== indexWithUndefinedAndNullStrictNullChecks.ts ===
 interface N {
     [n: number]: string;
 >n : number
+>  : ^^^^^^
 }
 interface S {
     [s: string]: number;
 >s : string
+>  : ^^^^^^
 }
 let n: N;
 >n : N
+>  : ^
 
 let s: S;
 >s : S
+>  : ^
 
 let str: string = n[undefined];
 >str : string
+>    : ^^^^^^
 >n[undefined] : any
+>             : ^^^
 >n : N
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 str = n[null];
 >str = n[null] : any
+>              : ^^^
 >str : string
+>    : ^^^^^^
 >n[null] : any
+>        : ^^^
 >n : N
->null : null
+>  : ^
 
 let num: number = s[undefined];
 >num : number
+>    : ^^^^^^
 >s[undefined] : any
+>             : ^^^
 >s : S
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 num = s[null];
 >num = s[null] : any
+>              : ^^^
 >num : number
+>    : ^^^^^^
 >s[null] : any
+>        : ^^^
 >s : S
->null : null
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promisesWithConstraints.ts ===
+//// [tests/cases/compiler/promisesWithConstraints.ts] ////
+
+=== promisesWithConstraints.ts ===
 interface Promise<T> {
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 18))

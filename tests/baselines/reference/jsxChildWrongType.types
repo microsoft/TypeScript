@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/jsxChildWrongType.tsx] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+
+=== index.tsx ===
+/// <reference path="react18/react18.d.ts" />
+/// <reference path="react18/global.d.ts" />
+
+const a = (
+>a : JSX.Element
+>  : ^^^^^^^^^^^
+>(  <main>    {(<div />) as unknown}    <span />  </main>) : JSX.Element
+>                                                          : ^^^^^^^^^^^
+
+  <main>
+><main>    {(<div />) as unknown}    <span />  </main> : JSX.Element
+>                                                      : ^^^^^^^^^^^
+>main : any
+>     : ^^^
+
+    {(<div />) as unknown}
+>(<div />) as unknown : unknown
+>                     : ^^^^^^^
+>(<div />) : JSX.Element
+>          : ^^^^^^^^^^^
+><div /> : JSX.Element
+>        : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+
+    <span />
+><span /> : JSX.Element
+>         : ^^^^^^^^^^^
+>span : any
+>     : ^^^
+
+  </main>
+>main : any
+>     : ^^^
+
+);
+

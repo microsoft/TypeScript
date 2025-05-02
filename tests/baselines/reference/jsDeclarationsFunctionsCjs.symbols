@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionsCjs.ts] ////
+
+=== index.js ===
 module.exports.a = function a() {}
 >module.exports.a : Symbol(a, Decl(index.js, 0, 0))
 >module.exports : Symbol(a, Decl(index.js, 0, 0))

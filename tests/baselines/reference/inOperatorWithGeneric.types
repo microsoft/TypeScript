@@ -1,14 +1,21 @@
-=== tests/cases/compiler/inOperatorWithGeneric.ts ===
+//// [tests/cases/compiler/inOperatorWithGeneric.ts] ////
+
+=== inOperatorWithGeneric.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     foo(x:T) {
 >foo : (x: T) => void
+>    : ^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
         for (var p in x) {
 >p : Extract<keyof T, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
         }
     }
 }

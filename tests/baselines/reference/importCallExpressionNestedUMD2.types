@@ -1,17 +1,28 @@
-=== tests/cases/conformance/dynamicImport/foo.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionNestedUMD2.ts] ////
+
+=== foo.ts ===
+
 export default "./foo";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/dynamicImport/index.ts ===
+
+=== index.ts ===
 async function foo() {
 >foo : () => Promise<any>
+>    : ^^^^^^^^^^^^^^^^^^
 
     return await import((await import("./foo")).default);
 >await import((await import("./foo")).default) : any
 >import((await import("./foo")).default) : Promise<any>
+>                                        : ^^^^^^^^^^^^
 >(await import("./foo")).default : "./foo"
->(await import("./foo")) : typeof import("tests/cases/conformance/dynamicImport/foo")
->await import("./foo") : typeof import("tests/cases/conformance/dynamicImport/foo")
->import("./foo") : Promise<typeof import("tests/cases/conformance/dynamicImport/foo")>
+>                                : ^^^^^^^
+>(await import("./foo")) : typeof import("foo")
+>                        : ^^^^^^^^^^^^^^^^^^^^
+>await import("./foo") : typeof import("foo")
+>                      : ^^^^^^^^^^^^^^^^^^^^
+>import("./foo") : Promise<typeof import("foo")>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./foo" : "./foo"
+>        : ^^^^^^^
 >default : "./foo"
+>        : ^^^^^^^
 }

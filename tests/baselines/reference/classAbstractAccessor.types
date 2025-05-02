@@ -1,20 +1,30 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAccessor.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAccessor.ts] ////
+
+=== classAbstractAccessor.ts ===
 abstract class A {
 >A : A
+>  : ^
 
    abstract get a();
 >a : any
+>  : ^^^
 
    abstract get aa() { return 1; } // error
 >aa : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
    abstract set b(x: string);
 >b : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
    abstract set bb(x: string) {} // error
 >bb : string
+>   : ^^^^^^
 >x : string
+>  : ^^^^^^
 }
 

@@ -1,13 +1,21 @@
-=== tests/cases/compiler/numberAssignableToEnumInsideUnion.ts ===
+//// [tests/cases/compiler/numberAssignableToEnumInsideUnion.ts] ////
+
+=== numberAssignableToEnumInsideUnion.ts ===
 enum E { A, B }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 
 let n: number;
 >n : number
+>  : ^^^^^^
 
 let z: E | boolean = n;
 >z : boolean | E
+>  : ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 

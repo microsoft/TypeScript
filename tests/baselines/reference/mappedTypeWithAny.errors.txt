@@ -1,11 +1,11 @@
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(23,16): error TS2339: Property 'notAValue' does not exist on type 'Data'.
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(45,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(46,5): error TS2322: Type 'Objectish<any>' is not assignable to type 'any[]'.
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: Type 'string[]' is not assignable to type '[any, any]'.
+mappedTypeWithAny.ts(23,16): error TS2339: Property 'notAValue' does not exist on type 'Data'.
+mappedTypeWithAny.ts(45,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+mappedTypeWithAny.ts(46,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+mappedTypeWithAny.ts(53,5): error TS2322: Type 'string[]' is not assignable to type '[any, any]'.
   Target requires 2 element(s) but source may have fewer.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts (4 errors) ====
+==== mappedTypeWithAny.ts (4 errors) ====
     type Item = { value: string };
     type ItemMap<T> = { [P in keyof T]: Item };
     
@@ -57,7 +57,7 @@ tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: T
 !!! error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
         arr = indirectArrayish;
         ~~~
-!!! error TS2322: Type 'Objectish<any>' is not assignable to type 'any[]'.
+!!! error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
     }
     
     declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };

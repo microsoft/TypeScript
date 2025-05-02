@@ -1,32 +1,58 @@
-=== tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx ===
+//// [tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== reactReadonlyHOCAssignabilityReal.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
->myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & {    name: string;}>) => React.ComponentClass<P>
+>myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & { name: string; }>) => React.ComponentClass<P>
+>                       : ^ ^^     ^^                                           ^^^^^                       
 >Inner : React.ComponentClass<P & { name: string; }, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >React : any
+>      : ^^^
 >name : string
+>     : ^^^^^^
 >React : any
+>      : ^^^
 
     return class OuterComponent extends React.Component<P> {
 >class OuterComponent extends React.Component<P> {        render() {            return <Inner {...this.props} name="Matt"/>;        }    } : typeof OuterComponent
+>                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^
 >OuterComponent : typeof OuterComponent
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >React.Component : React.Component<P, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
         render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
             return <Inner {...this.props} name="Matt"/>;
 ><Inner {...this.props} name="Matt"/> : JSX.Element
+>                                     : ^^^^^^^^^^^
 >Inner : React.ComponentClass<P & { name: string; }, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : "Matt"
+>     : ^^^^^^
         }
     };
 }

@@ -1,20 +1,37 @@
-=== tests/cases/conformance/types/rest/restElementMustBeLast.ts ===
+//// [tests/cases/conformance/types/rest/restElementMustBeLast.ts] ////
+
+=== restElementMustBeLast.ts ===
 var [...a, x] = [1, 2, 3];  // Error, rest must be last element
 >a : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >[1, 2, 3] : [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 [...a, x] = [1, 2, 3];      // Error, rest must be last element
 >[...a, x] = [1, 2, 3] : [number, number, number]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[...a, x] : [number, number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...a : number
+>     : ^^^^^^
 >a : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >[1, 2, 3] : [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

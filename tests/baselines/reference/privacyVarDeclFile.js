@@ -426,7 +426,7 @@ module publicModuleInGlobal {
 
 //// [privacyVarDeclFile_externalModule.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicModule = exports.publicVarWithPrivateModulePropertyTypes = exports.publicClassWithPrivateModulePropertyTypes = exports.publicVarWithPublicPropertyTypes = exports.publicVarWithPrivatePropertyTypes = exports.publicClassWithWithPublicPropertyTypes = exports.publicClassWithWithPrivatePropertyTypes = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
@@ -524,7 +524,7 @@ var publicModule;
         return privateClassWithPrivateModulePropertyTypes;
     }());
     var privateVarWithPrivateModulePropertyTypes;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = /** @class */ (function () {
@@ -725,7 +725,7 @@ export declare class publicClassWithPrivateModulePropertyTypes {
 }
 export declare var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
@@ -763,7 +763,7 @@ export declare module publicModule {
     export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClass {
     }
     export class publicClass {
@@ -816,12 +816,12 @@ declare class publicClassWithWithPublicPropertyTypesInGlobal {
 }
 declare var publicVarWithPublicPropertyTypesInGlobal: publicClassInGlobal;
 declare var publicAmbientVarWithPublicPropertyTypesInGlobal: publicClassInGlobal;
-declare module publicModuleInGlobal {
+declare namespace publicModuleInGlobal {
     class privateClass {
     }
     export class publicClass {
     }
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
         export class publicClass {

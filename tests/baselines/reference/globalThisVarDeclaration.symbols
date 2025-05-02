@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2019/b.js ===
+//// [tests/cases/conformance/es2019/globalThisVarDeclaration.ts] ////
+
+=== b.js ===
 var a = 10;
 >a : Symbol(a, Decl(b.js, 0, 3))
 
@@ -49,7 +51,7 @@ top.a;
 top.b;
 >top : Symbol(top, Decl(lib.dom.d.ts, --, --))
 
-=== tests/cases/conformance/es2019/actual.ts ===
+=== actual.ts ===
 var b = 10;
 >b : Symbol(b, Decl(actual.ts, 0, 3))
 

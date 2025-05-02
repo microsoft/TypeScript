@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computedTypesKeyofNoIndexSignatureType.ts ===
+//// [tests/cases/compiler/computedTypesKeyofNoIndexSignatureType.ts] ////
+
+=== computedTypesKeyofNoIndexSignatureType.ts ===
 type Compute<A> = { [K in keyof A]: Compute<A[K]>; } & {};
 >Compute : Symbol(Compute, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 0))
 >A : Symbol(A, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 13))

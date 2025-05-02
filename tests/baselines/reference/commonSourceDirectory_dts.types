@@ -1,12 +1,15 @@
-=== /app/src/index.ts ===
-/// <reference path="../lib/bar.d.ts" />
-export const x = y;
->x : number
->y : number
+//// [tests/cases/compiler/commonSourceDirectory_dts.ts] ////
 
 === /app/lib/bar.d.ts ===
-// Test that importing a file from `node_modules` does not affect calculation of the common source directory.
-
 declare const y: number;
 >y : number
+>  : ^^^^^^
+
+=== /app/src/index.ts ===
+/// <reference path="../lib/bar.d.ts" preserve="true" />
+export const x = y;
+>x : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
 

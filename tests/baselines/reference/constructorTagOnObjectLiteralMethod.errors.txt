@@ -1,8 +1,8 @@
-tests/cases/conformance/jsdoc/example.js(3,16): error TS2339: Property 'bar' does not exist on type '{ Foo(): void; }'.
-tests/cases/conformance/jsdoc/example.js(5,2): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+example.js(3,16): error TS2339: Property 'bar' does not exist on type '{ Foo(): void; }'.
+example.js(5,2): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/jsdoc/example.js (2 errors) ====
+==== example.js (2 errors) ====
     const obj = {
       /** @constructor */
       Foo() { this.bar = "bar" }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts ===
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts] ////
+
+=== labeledStatementWithLabel_strict.ts ===
 "use strict"
 label: function fn() { }
 >fn : Symbol(fn, Decl(labeledStatementWithLabel_strict.ts, 1, 6))

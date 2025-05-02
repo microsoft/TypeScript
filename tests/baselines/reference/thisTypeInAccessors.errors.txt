@@ -1,14 +1,14 @@
-tests/cases/conformance/types/thisType/thisTypeInAccessors.ts(8,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessors.ts(9,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessors.ts(13,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessors.ts(19,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessors.ts(23,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessors.ts(24,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessors.ts(29,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessors.ts(30,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessors.ts(8,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessors.ts(9,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessors.ts(13,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessors.ts(19,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessors.ts(23,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessors.ts(24,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessors.ts(29,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessors.ts(30,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInAccessors.ts (8 errors) ====
+==== thisTypeInAccessors.ts (8 errors) ====
     interface Foo {
         n: number;
         x: number;

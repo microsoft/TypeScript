@@ -1,12 +1,18 @@
-=== tests/cases/compiler/fatarrowfunctionsInFunctionParameterDefaults.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsInFunctionParameterDefaults.ts] ////
+
+=== fatarrowfunctionsInFunctionParameterDefaults.ts ===
 function fn(x = () => this, y = x()) {
 >fn : (x?: () => any, y?: any) => any
+>   : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >x : () => any
+>  : ^^^^^^^^^
 >() => this : () => any
+>           : ^^^^^^^^^
 >this : any
 >y : any
 >x() : any
 >x : () => any
+>  : ^^^^^^^^^
 
     // should be 4
     return y;
@@ -17,7 +23,11 @@ function fn(x = () => this, y = x()) {
 fn.call(4); // Should be 4
 >fn.call(4) : any
 >fn.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>        : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >fn : (x?: () => any, y?: any) => any
+>   : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >4 : 4
+>  : ^
 

@@ -29,7 +29,7 @@ var __extends = (this && this.__extends) || (function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var reexporter_1 = __importDefault(require("./reexporter"));
 var Mine = /** @class */ (function (_super) {
     __extends(Mine, _super);
@@ -37,5 +37,5 @@ var Mine = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Mine;
-}(reexporter_1["default"]));
-exports["default"] = Mine;
+}(reexporter_1.default));
+exports.default = Mine;

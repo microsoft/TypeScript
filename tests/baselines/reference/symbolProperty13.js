@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty13.ts] ////
+
 //// [symbolProperty13.ts]
 class C {
     [Symbol.iterator]: { x; y };

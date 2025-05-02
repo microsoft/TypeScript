@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement8.ts] ////
+
 //// [parserES5ForOfStatement8.ts]
 for (var v of X) {
 }

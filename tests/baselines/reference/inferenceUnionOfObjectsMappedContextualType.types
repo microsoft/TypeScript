@@ -1,50 +1,77 @@
-=== tests/cases/compiler/inferenceUnionOfObjectsMappedContextualType.ts ===
+//// [tests/cases/compiler/inferenceUnionOfObjectsMappedContextualType.ts] ////
+
+=== inferenceUnionOfObjectsMappedContextualType.ts ===
 type Entity = {
->Entity : { someDate: Date | null; } & ({ id: string; } | { id: number; })
+>Entity : Entity
+>       : ^^^^^^
 
     someDate: Date | null;
 >someDate : Date | null
->null : null
+>         : ^^^^^^^^^^^
 
 } & ({ id: string; } | { id: number; })
 >id : string
+>   : ^^^^^^
 >id : number
+>   : ^^^^^^
 
 type RowRendererMeta<TInput extends {}> = {
 >RowRendererMeta : RowRendererMeta<TInput>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 
     [key in keyof TInput]: { key: key; caption: string; formatter?: (value: TInput[key]) => string; };
 >key : key
+>    : ^^^
 >caption : string
+>        : ^^^^^^
 >formatter : ((value: TInput[key]) => string) | undefined
+>          : ^^     ^^           ^^^^^      ^^^^^^^^^^^^^
 >value : TInput[key]
+>      : ^^^^^^^^^^^
 }
 
 type RowRenderer<TInput extends {}> = RowRendererMeta<TInput>[keyof RowRendererMeta<TInput>];
 >RowRenderer : RowRenderer<TInput>
+>            : ^^^^^^^^^^^^^^^^^^^
 
 const test: RowRenderer<Entity> = {
 >test : RowRenderer<Entity>
+>     : ^^^^^^^^^^^^^^^^^^^
 >{    key: 'someDate',    caption: 'My Date',    formatter: (value) => value ? value.toString() : '-' // value: any} : { key: "someDate"; caption: string; formatter: (value: Date | null) => string; }
+>                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     key: 'someDate',
 >key : "someDate"
+>    : ^^^^^^^^^^
 >'someDate' : "someDate"
+>           : ^^^^^^^^^^
 
     caption: 'My Date',
 >caption : string
+>        : ^^^^^^
 >'My Date' : "My Date"
+>          : ^^^^^^^^^
 
     formatter: (value) => value ? value.toString() : '-' // value: any
 >formatter : (value: Date | null) => string
+>          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >(value) => value ? value.toString() : '-' : (value: Date | null) => string
+>                                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >value : Date | null
+>      : ^^^^^^^^^^^
 >value ? value.toString() : '-' : string
+>                               : ^^^^^^
 >value : Date | null
+>      : ^^^^^^^^^^^
 >value.toString() : string
+>                 : ^^^^^^
 >value.toString : () => string
+>               : ^^^^^^      
 >value : Date
+>      : ^^^^
 >toString : () => string
+>         : ^^^^^^      
 >'-' : "-"
+>    : ^^^
 }
 

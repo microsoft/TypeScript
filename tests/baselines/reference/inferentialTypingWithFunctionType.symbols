@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferentialTypingWithFunctionType.ts ===
+//// [tests/cases/compiler/inferentialTypingWithFunctionType.ts] ////
+
+=== inferentialTypingWithFunctionType.ts ===
 declare function map<T, U>(x: T, f: (s: T) => U): U;
 >map : Symbol(map, Decl(inferentialTypingWithFunctionType.ts, 0, 0))
 >T : Symbol(T, Decl(inferentialTypingWithFunctionType.ts, 0, 21))

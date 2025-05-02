@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/jsDeclarationEmitExportAssignedArray.ts] ////
+
+=== file.js ===
 module.exports = [{ name: 'other', displayName: 'Other', defaultEnabled: true }];
 >module.exports : Symbol(module.exports, Decl(file.js, 0, 0))
 >module : Symbol(export=, Decl(file.js, 0, 0))

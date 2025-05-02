@@ -8,4 +8,4 @@
 ////const o = {};
 ////o.[|/*use*/foo|];
 
-verify.goToDefinition("use", []);
+verify.baselineGoToDefinition("use");

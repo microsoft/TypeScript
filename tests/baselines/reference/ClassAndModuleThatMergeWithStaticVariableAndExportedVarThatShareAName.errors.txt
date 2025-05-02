@@ -1,10 +1,10 @@
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(8,16): error TS2300: Duplicate identifier 'Origin'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(20,20): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(8,16): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(20,20): error TS2300: Duplicate identifier 'Origin'.
 
 
-==== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts (4 errors) ====
+==== ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts (4 errors) ====
     class Point {
         constructor(public x: number, public y: number) { }
     

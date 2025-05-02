@@ -1,84 +1,135 @@
-=== tests/cases/compiler/genericRestTypes.ts ===
+//// [tests/cases/compiler/genericRestTypes.ts] ////
+
+=== genericRestTypes.ts ===
 // Repro from #25793
 
 // Gets the parameters of a function type as a tuple
 // Removes the first element from a tuple
 type Tail<T extends any[]> = ((...args: T) => any) extends ((head: any, ...tail: infer U) => any) ? U : never;
 >Tail : Tail<T>
+>     : ^^^^^^^
 >args : T
+>     : ^
 >head : any
+>     : ^^^
 >tail : U
+>     : ^
 
 type MyFunctionType = (foo: number, bar: string) => boolean;
->MyFunctionType : (foo: number, bar: string) => boolean
+>MyFunctionType : MyFunctionType
+>               : ^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
 type Explicit = (...args: Tail<Parameters<MyFunctionType>>) => ReturnType<MyFunctionType>; // (bar: string) => boolean
->Explicit : (bar: string) => ReturnType<MyFunctionType>
+>Explicit : Explicit
+>         : ^^^^^^^^
 >args : [bar: string]
+>     : ^^^^^^^^^^^^^
 
 type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parameters<T>>) => ReturnType<T>;
 >Bind1 : Bind1<T>
+>      : ^^^^^^^^
 >head : any
+>     : ^^^
 >tail : any[]
+>     : ^^^^^
 >args : Tail<Parameters<T>>
+>     : ^^^^^^^^^^^^^^^^^^^
 
 type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
->Generic : (bar: string) => boolean
+>Generic : Generic
+>        : ^^^^^^^
 
 function assignmentWithComplexRest<T extends any[]>() {
 >assignmentWithComplexRest : <T extends any[]>() => void
+>                          : ^ ^^^^^^^^^     ^^^^^^^^^^^
 
     const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
 >fn1 : (x: string, ...rest: T) => void
+>    : ^ ^^      ^^^^^    ^^ ^^^^^    
 >x : string
+>  : ^^^^^^
 >rest : T
+>     : ^
 >(x, ..._) => x : (x: string, ..._: T) => string
+>               : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >_ : T
+>  : ^
 >x : string
+>  : ^^^^^^
 
     const fn2: (...args: never) => void = fn1;
 >fn2 : (...args: never) => void
+>    : ^^^^    ^^     ^^^^^    
 >args : never
+>     : ^^^^^
 >fn1 : (x: string, ...rest: T) => void
+>    : ^ ^^      ^^^^^    ^^ ^^^^^    
 }
 
 function assignmentWithComplexRest2<T extends any[]>() {
 >assignmentWithComplexRest2 : <T extends any[]>() => void
+>                           : ^ ^^^^^^^^^     ^^^^^^^^^^^
 
     const fn1: (cb: (x: string, ...rest: T) => void) => void = (cb) => {};
 >fn1 : (cb: (x: string, ...rest: T) => void) => void
+>    : ^  ^^                               ^^^^^    
 >cb : (x: string, ...rest: T) => void
+>   : ^ ^^      ^^^^^    ^^ ^^^^^    
 >x : string
+>  : ^^^^^^
 >rest : T
+>     : ^
 >(cb) => {} : (cb: (x: string, ...rest: T) => void) => void
+>           : ^  ^^^ ^^      ^^^^^    ^^ ^^^^^    ^^^^^^^^^
 >cb : (x: string, ...rest: T) => void
+>   : ^ ^^      ^^^^^    ^^ ^^^^^    
 
     const fn2: (cb: (...args: never) => void) => void = fn1;
 >fn2 : (cb: (...args: never) => void) => void
+>    : ^  ^^                        ^^^^^    
 >cb : (...args: never) => void
+>   : ^^^^    ^^     ^^^^^    
 >args : never
+>     : ^^^^^
 >fn1 : (cb: (x: string, ...rest: T) => void) => void
+>    : ^  ^^                               ^^^^^    
 }
 
 function assignmentWithComplexRest3<T extends any[]>() {
 >assignmentWithComplexRest3 : <T extends any[]>() => void
+>                           : ^ ^^^^^^^^^     ^^^^^^^^^^^
 
     const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
 >fn1 : (x: string, ...rest: T) => void
+>    : ^ ^^      ^^^^^    ^^ ^^^^^    
 >x : string
+>  : ^^^^^^
 >rest : T
+>     : ^
 >(x, ..._) => x : (x: string, ..._: T) => string
+>               : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >_ : T
+>  : ^
 >x : string
+>  : ^^^^^^
 
     const fn2: (...args: {x: "a"} & {x: "b"}) => void = fn1;
->fn2 : (...args: {    x: "a";} & {    x: "b";}) => void
+>fn2 : (...args: { x: "a"; } & { x: "b"; }) => void
+>    : ^^^^    ^^                         ^^^^^    
 >args : never
+>     : ^^^^^
 >x : "a"
+>  : ^^^
 >x : "b"
+>  : ^^^
 >fn1 : (x: string, ...rest: T) => void
+>    : ^ ^^      ^^^^^    ^^ ^^^^^    
 }

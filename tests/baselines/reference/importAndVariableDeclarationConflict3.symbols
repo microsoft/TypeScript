@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importAndVariableDeclarationConflict3.ts ===
+//// [tests/cases/compiler/importAndVariableDeclarationConflict3.ts] ////
+
+=== importAndVariableDeclarationConflict3.ts ===
 module m {
 >m : Symbol(m, Decl(importAndVariableDeclarationConflict3.ts, 0, 0))
 

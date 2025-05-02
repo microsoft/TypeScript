@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithBooleanType.ts(33,1): error TS2695: Left side of comma operator is unused and has no side effects.
+plusOperatorWithBooleanType.ts(33,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithBooleanType.ts (1 errors) ====
+==== plusOperatorWithBooleanType.ts (1 errors) ====
     // + operator on boolean type
     var BOOLEAN: boolean;
     

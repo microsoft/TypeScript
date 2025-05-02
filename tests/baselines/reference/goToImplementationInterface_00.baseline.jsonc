@@ -1,0 +1,120 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_00.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     hello: () => void
+// }
+// 
+// <|interface [|{| defId: 0 |}Baz|] extends Foo {}|>
+// 
+// var bar: Foo = [|{| defId: 1 |}{ hello: helloImpl /**0*/ }|];
+// var baz: Foo[] = [|{| defId: 2 |}[{ hello: helloImpl /**4*/ }]|];
+// 
+// function helloImpl () {}
+// 
+// function whatever(x: Foo = [|{| defId: 3 |}{ hello() {/**1*/} }|] ) {
+// }
+// 
+// class Bar {
+//     x: Foo = [|{| defId: 4 |}{ hello() {} }|]
+// 
+//     constructor(public f: Foo = [|{| defId: 5 |}{ hello() {/**3*/} }|] ) {}
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Baz",
+      "kind": "interfaceName"
+     }
+    ],
+    "kind": "interface"
+   },
+   {
+    "defId": 1,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "kind": "",
+    "displayParts": []
+   },
+   {
+    "defId": 3,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 4,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 5,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]

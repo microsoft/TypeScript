@@ -1,46 +1,70 @@
-=== tests/cases/conformance/override/override19.ts ===
+//// [tests/cases/conformance/override/override19.ts] ////
+
+=== override19.ts ===
 type Foo = abstract new(...args: any) => any;
->Foo : abstract new (...args: any) => any
+>Foo : Foo
+>    : ^^^
 >args : any
+>     : ^^^
 
 declare function CreateMixin<C extends Foo, T extends Foo>(Context: C, Base: T): T & {
->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => {    context: InstanceType<C>;})
+>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & { new (...args: any[]): { context: InstanceType<C>; }; }
+>            : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^       ^^ ^^    ^^ ^^^^^                                                            
 >Context : C
+>        : ^
 >Base : T
+>     : ^
 
    new (...args: any[]): { context: InstanceType<C> }
 >args : any[]
+>     : ^^^^^
 >context : InstanceType<C>
+>        : ^^^^^^^^^^^^^^^
 }
 class Context {}
 >Context : Context
+>        : ^^^^^^^
 
 class A {
 >A : A
+>  : ^
 
     doSomething() {}
 >doSomething : () => void
+>            : ^^^^^^^^^^
 }
 
 class B extends CreateMixin(Context, A) {
 >B : B
+>  : ^
 >CreateMixin(Context, A) : A & { context: Context; }
->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & { new (...args: any[]): { context: InstanceType<C>; }; }
+>            : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^       ^^ ^^    ^^ ^^^^^                                                            
 >Context : typeof Context
+>        : ^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
    override foo() {} // Remove override
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 class C extends CreateMixin(Context, A) {
 >C : C
+>  : ^
 >CreateMixin(Context, A) : A & { context: Context; }
->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & { new (...args: any[]): { context: InstanceType<C>; }; }
+>            : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^       ^^ ^^    ^^ ^^^^^                                                            
 >Context : typeof Context
+>        : ^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
     override doSomethang() {} // Suggestion 'doSomething'
 >doSomethang : () => void
+>            : ^^^^^^^^^^
 }
 

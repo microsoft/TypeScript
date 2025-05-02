@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts] ////
+
 //// [es6modulekindWithES5Target9.ts]
 import d from "mod";
 

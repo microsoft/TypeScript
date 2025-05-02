@@ -1,102 +1,154 @@
-=== tests/cases/conformance/types/literal/numericStringLiteralTypes.ts ===
+//// [tests/cases/conformance/types/literal/numericStringLiteralTypes.ts] ////
+
+=== numericStringLiteralTypes.ts ===
 type T0 = string & `${string}`;  // string
 >T0 : string
+>   : ^^^^^^
 
 type T1 = string & `${number}`;  // `${number}
 >T1 : `${number}`
+>   : ^^^^^^^^^^^
 
 type T2 = string & `${bigint}`;  // `${bigint}
 >T2 : `${bigint}`
+>   : ^^^^^^^^^^^
 
 type T3<T extends string> = string & `${T}`;  // `${T}
 >T3 : `${T}`
+>   : ^^^^^^
 
 type T4<T extends string> = string & `${Capitalize<`${T}`>}`;  // `${Capitalize<T>}`
->T4 : `${Capitalize<`${T}`>}`
+>T4 : `${Capitalize<T>}`
+>   : ^^^^^^^^^^^^^^^^^^
 
 function f1(a: boolean[], x: `${number}`) {
 >f1 : (a: boolean[], x: `${number}`) => void
+>   : ^ ^^         ^^ ^^           ^^^^^^^^^
 >a : boolean[]
+>  : ^^^^^^^^^
 >x : `${number}`
+>  : ^^^^^^^^^^^
 
     let s = a[x];  // boolean
 >s : boolean
+>  : ^^^^^^^
 >a[x] : boolean
+>     : ^^^^^^^
 >a : boolean[]
+>  : ^^^^^^^^^
 >x : `${number}`
+>  : ^^^^^^^^^^^
 }
 
 function f2(a: boolean[], x: number | `${number}`) {
 >f2 : (a: boolean[], x: number | `${number}`) => void
+>   : ^ ^^         ^^ ^^                    ^^^^^^^^^
 >a : boolean[]
+>  : ^^^^^^^^^
 >x : number | `${number}`
+>  : ^^^^^^^^^^^^^^^^^^^^
 
     let s = a[x];  // boolean
 >s : boolean
+>  : ^^^^^^^
 >a[x] : boolean
+>     : ^^^^^^^
 >a : boolean[]
+>  : ^^^^^^^^^
 >x : number | `${number}`
+>  : ^^^^^^^^^^^^^^^^^^^^
 }
 
 type T10 = boolean[][`${number}`];  // boolean
 >T10 : boolean
+>    : ^^^^^^^
 
 type T11 = boolean[][number | `${number}`];  // boolean
->T11 : boolean
+>T11 : T11
+>    : ^^^
 
 type T20<T extends number | `${number}`> = T;
 >T20 : T
+>    : ^
 
 type T21<T extends unknown[]> = { [K in keyof T]: T20<K> };
 >T21 : T21<T>
+>    : ^^^^^^
 
 type Container<T> = {
 >Container : Container<T>
+>          : ^^^^^^^^^^^^
 
     value: T
 >value : T
+>      : ^
 }
 
 type UnwrapContainers<T extends Container<unknown>[]> = { [K in keyof T]: T[K]['value'] };
 >UnwrapContainers : UnwrapContainers<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
 declare function createContainer<T extends unknown>(value: T): Container<T>;
 >createContainer : <T extends unknown>(value: T) => Container<T>
+>                : ^ ^^^^^^^^^       ^^     ^^ ^^^^^            
 >value : T
+>      : ^
 
 declare function f<T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void): void;
 >f : <T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void) => void
+>  : ^ ^^^^^^^^^                    ^^          ^^      ^^        ^^                                        ^^^^^    
 >containers : [...T]
+>           : ^^^^^^
 >callback : (...values: UnwrapContainers<T>) => void
+>         : ^^^^      ^^                   ^^^^^    
 >values : UnwrapContainers<T>
+>       : ^^^^^^^^^^^^^^^^^^^
 
 const container1 = createContainer('hi')
 >container1 : Container<string>
+>           : ^^^^^^^^^^^^^^^^^
 >createContainer('hi') : Container<string>
+>                      : ^^^^^^^^^^^^^^^^^
 >createContainer : <T extends unknown>(value: T) => Container<T>
+>                : ^ ^^^^^^^^^       ^^     ^^ ^^^^^            
 >'hi' : "hi"
+>     : ^^^^
 
 const container2 = createContainer(2)
 >container2 : Container<number>
+>           : ^^^^^^^^^^^^^^^^^
 >createContainer(2) : Container<number>
+>                   : ^^^^^^^^^^^^^^^^^
 >createContainer : <T extends unknown>(value: T) => Container<T>
+>                : ^ ^^^^^^^^^       ^^     ^^ ^^^^^            
 >2 : 2
+>  : ^
 
 f([container1, container2], (value1, value2) => {
 >f([container1, container2], (value1, value2) => {    value1;  // string    value2;  // number}) : void
+>                                                                                                : ^^^^
 >f : <T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void) => void
+>  : ^ ^^^^^^^^^                    ^^          ^^      ^^        ^^                                        ^^^^^    
 >[container1, container2] : [Container<string>, Container<number>]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >container1 : Container<string>
+>           : ^^^^^^^^^^^^^^^^^
 >container2 : Container<number>
+>           : ^^^^^^^^^^^^^^^^^
 >(value1, value2) => {    value1;  // string    value2;  // number} : (value1: string, value2: number) => void
+>                                                                   : ^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
 >value1 : string
+>       : ^^^^^^
 >value2 : number
+>       : ^^^^^^
 
     value1;  // string
 >value1 : string
+>       : ^^^^^^
 
     value2;  // number
 >value2 : number
+>       : ^^^^^^
 
 });
 

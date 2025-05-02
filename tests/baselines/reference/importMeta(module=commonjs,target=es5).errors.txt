@@ -1,42 +1,42 @@
 error TS2468: Cannot find global value 'Promise'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(1,32): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(1,44): error TS2339: Property 'blah' does not exist on type 'ImportMeta'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(1,51): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(1,63): error TS2339: Property 'blue' does not exist on type 'ImportMeta'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(1,70): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(2,1): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(2,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(11,21): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/example.ts(2,2): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-tests/cases/conformance/es2019/importMeta/example.ts(3,59): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/example.ts(6,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/example.ts(6,28): error TS2339: Property 'scriptElement' does not exist on type 'ImportMeta'.
-tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(1,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(2,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(2,23): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,23): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(1,15): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(2,15): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(2,22): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,15): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
-tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+assignmentTargets.ts(1,32): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+assignmentTargets.ts(1,44): error TS2339: Property 'blah' does not exist on type 'ImportMeta'.
+assignmentTargets.ts(1,51): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+assignmentTargets.ts(1,63): error TS2339: Property 'blue' does not exist on type 'ImportMeta'.
+assignmentTargets.ts(1,70): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+assignmentTargets.ts(2,1): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+assignmentTargets.ts(2,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentTargets.ts(11,21): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+example.ts(2,2): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+example.ts(3,59): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+example.ts(6,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+example.ts(6,28): error TS2339: Property 'scriptElement' does not exist on type 'ImportMeta'.
+moduleLookingFile01.ts(1,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+moduleLookingFile01.ts(2,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+moduleLookingFile01.ts(2,23): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+moduleLookingFile01.ts(3,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+moduleLookingFile01.ts(3,23): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+scriptLookingFile01.ts(1,15): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+scriptLookingFile01.ts(2,15): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+scriptLookingFile01.ts(2,22): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+scriptLookingFile01.ts(3,15): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
+scriptLookingFile01.ts(3,22): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
 
 
 !!! error TS2468: Cannot find global value 'Promise'.
-==== tests/cases/conformance/es2019/importMeta/example.ts (4 errors) ====
+==== example.ts (4 errors) ====
     // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
     (async () => {
      ~~~~~~~~~~~~~
-!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
       const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
                                                               ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
       const blob = await response.blob();
     
       const size = import.meta.scriptElement.dataset.size || 300;
                    ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
                                ~~~~~~~~~~~~~
 !!! error TS2339: Property 'scriptElement' does not exist on type 'ImportMeta'.
     
@@ -47,51 +47,51 @@ tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS
       document.body.appendChild(image);
     })();
     
-==== tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts (5 errors) ====
+==== moduleLookingFile01.ts (5 errors) ====
     export let x = import.meta;
                    ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
     export let y = import.metal;
                    ~~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
                           ~~~~~
 !!! error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
     export let z = import.import.import.malkovich;
                    ~~~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
                           ~~~~~~
 !!! error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
     
-==== tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts (5 errors) ====
+==== scriptLookingFile01.ts (5 errors) ====
     let globalA = import.meta;
                   ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
     let globalB = import.metal;
                   ~~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
                          ~~~~~
 !!! error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
     let globalC = import.import.import.malkovich;
                   ~~~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
                          ~~~~~~
 !!! error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
     
-==== tests/cases/conformance/es2019/importMeta/assignmentTargets.ts (8 errors) ====
+==== assignmentTargets.ts (8 errors) ====
     export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
                                    ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
                                                ~~~~
 !!! error TS2339: Property 'blah' does not exist on type 'ImportMeta'.
                                                       ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
                                                                   ~~~~
 !!! error TS2339: Property 'blue' does not exist on type 'ImportMeta'.
                                                                          ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
     import.meta = foo;
     ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.
     ~~~~~~~~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
     
@@ -104,4 +104,4 @@ tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS
     
     const { a, b, c } = import.meta.wellKnownProperty;
                         ~~~~~~~~~~~
-!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
+!!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.

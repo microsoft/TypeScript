@@ -1,36 +1,53 @@
-=== tests/cases/compiler/typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts ===
+//// [tests/cases/compiler/typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts] ////
+
+=== typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts ===
 // tricky interface
 interface Settable<T, V> {
     set(value: V): T;
 >set : (value: V) => T
+>    : ^     ^^ ^^^^^ 
 >value : V
+>      : ^
 }
 
 // implement
 class Identity<V> implements Settable<Identity<V>, V> {
 >Identity : Identity<V>
+>         : ^^^^^^^^^^^
 
     readonly item: V;
 >item : V
+>     : ^
 
     constructor(value: V) {
 >value : V
+>      : ^
 
         this.item = value;
 >this.item = value : V
+>                  : ^
 >this.item : V
+>          : ^
 >this : this
+>     : ^^^^
 >item : V
+>     : ^
 >value : V
+>      : ^
     }
     public set(value: V): Identity<V> {
 >set : (value: V) => Identity<V>
+>    : ^     ^^ ^^^^^           
 >value : V
+>      : ^
 
         return new Identity<V>(value);
 >new Identity<V>(value) : Identity<V>
+>                       : ^^^^^^^^^^^
 >Identity : typeof Identity
+>         : ^^^^^^^^^^^^^^^
 >value : V
+>      : ^
     }
 }
 
@@ -38,12 +55,15 @@ class Identity<V> implements Settable<Identity<V>, V> {
 interface Test1<V, T extends Settable<T, V> = Identity<V>> { };
 let test1: Test1<number>;
 >test1 : Test1<number, Identity<number>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // not generic parameter default
 interface Test2Base<V, T extends Settable<T, V>> { };
 type Test2<V> = Test2Base<V, Identity<V>>;
 >Test2 : Test2<V>
+>      : ^^^^^^^^
 
 let test2: Test2<number>;
 >test2 : Test2<number>
+>      : ^^^^^^^^^^^^^
 

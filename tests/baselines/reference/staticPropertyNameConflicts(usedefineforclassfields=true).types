@@ -1,0 +1,1293 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts] ////
+
+=== staticPropertyNameConflicts.ts ===
+const FunctionPropertyNames = {
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} as const : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    name: 'name',
+>name : "name"
+>     : ^^^^^^
+>'name' : "name"
+>       : ^^^^^^
+
+    length: 'length',
+>length : "length"
+>       : ^^^^^^^^
+>'length' : "length"
+>         : ^^^^^^^^
+
+    prototype: 'prototype',
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+>'prototype' : "prototype"
+>            : ^^^^^^^^^^^
+
+    caller: 'caller',
+>caller : "caller"
+>       : ^^^^^^^^
+>'caller' : "caller"
+>         : ^^^^^^^^
+
+    arguments: 'arguments',
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+>'arguments' : "arguments"
+>            : ^^^^^^^^^^^
+
+} as const;
+
+// name
+class StaticName {
+>StaticName : StaticName
+>           : ^^^^^^^^^^
+
+    static name: number; // error without useDefineForClassFields
+>name : number
+>     : ^^^^^^
+
+    name: string; // ok
+>name : string
+>     : ^^^^^^
+}
+
+class StaticName2 {
+>StaticName2 : StaticName2
+>            : ^^^^^^^^^^^
+
+    static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.name] : number
+>                             : ^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+
+    [FunctionPropertyNames.name]: number; // ok
+>[FunctionPropertyNames.name] : number
+>                             : ^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+}
+
+class StaticNameFn {
+>StaticNameFn : StaticNameFn
+>             : ^^^^^^^^^^^^
+
+    static name() {} // error without useDefineForClassFields
+>name : () => void
+>     : ^^^^^^^^^^
+
+    name() {} // ok
+>name : () => void
+>     : ^^^^^^^^^^
+}
+
+class StaticNameFn2 {
+>StaticNameFn2 : StaticNameFn2
+>              : ^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.name] : () => void
+>                             : ^^^^^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+
+    [FunctionPropertyNames.name]() {} // ok
+>[FunctionPropertyNames.name] : () => void
+>                             : ^^^^^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+}
+
+// length
+class StaticLength {
+>StaticLength : StaticLength
+>             : ^^^^^^^^^^^^
+
+    static length: number; // error without useDefineForClassFields
+>length : number
+>       : ^^^^^^
+
+    length: string; // ok
+>length : string
+>       : ^^^^^^
+}
+
+class StaticLength2 {
+>StaticLength2 : StaticLength2
+>              : ^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.length] : number
+>                               : ^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.length]: number; // ok
+>[FunctionPropertyNames.length] : number
+>                               : ^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+}
+
+class StaticLengthFn {
+>StaticLengthFn : StaticLengthFn
+>               : ^^^^^^^^^^^^^^
+
+    static length() {} // error without useDefineForClassFields
+>length : () => void
+>       : ^^^^^^^^^^
+
+    length() {} // ok
+>length : () => void
+>       : ^^^^^^^^^^
+}
+
+class StaticLengthFn2 {
+>StaticLengthFn2 : StaticLengthFn2
+>                : ^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.length] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.length]() {} // ok
+>[FunctionPropertyNames.length] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+}
+
+// prototype
+class StaticPrototype {
+>StaticPrototype : StaticPrototype
+>                : ^^^^^^^^^^^^^^^
+
+    static prototype: number; // always an error
+>prototype : StaticPrototype
+>          : ^^^^^^^^^^^^^^^
+
+    prototype: string; // ok
+>prototype : string
+>          : ^^^^^^
+}
+
+class StaticPrototype2 {
+>StaticPrototype2 : StaticPrototype2
+>                 : ^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.prototype]: number; // always an error
+>[FunctionPropertyNames.prototype] : StaticPrototype2
+>                                  : ^^^^^^^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.prototype]: string; // ok
+>[FunctionPropertyNames.prototype] : string
+>                                  : ^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+}
+
+class StaticPrototypeFn {
+>StaticPrototypeFn : StaticPrototypeFn
+>                  : ^^^^^^^^^^^^^^^^^
+
+    static prototype() {} // always an error
+>prototype : () => void
+>          : ^^^^^^^^^^
+
+    prototype() {} // ok
+>prototype : () => void
+>          : ^^^^^^^^^^
+}
+
+class StaticPrototypeFn2 {
+>StaticPrototypeFn2 : StaticPrototypeFn2
+>                   : ^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.prototype]() {} // always an error
+>[FunctionPropertyNames.prototype] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.prototype]() {} // ok
+>[FunctionPropertyNames.prototype] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+}
+
+// caller
+class StaticCaller {
+>StaticCaller : StaticCaller
+>             : ^^^^^^^^^^^^
+
+    static caller: number; // error without useDefineForClassFields
+>caller : number
+>       : ^^^^^^
+
+    caller: string; // ok
+>caller : string
+>       : ^^^^^^
+}
+
+class StaticCaller2 {
+>StaticCaller2 : StaticCaller2
+>              : ^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.caller] : number
+>                               : ^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.caller]: string; // ok
+>[FunctionPropertyNames.caller] : string
+>                               : ^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+}
+
+class StaticCallerFn {
+>StaticCallerFn : StaticCallerFn
+>               : ^^^^^^^^^^^^^^
+
+    static caller() {} // error without useDefineForClassFields
+>caller : () => void
+>       : ^^^^^^^^^^
+
+    caller() {} // ok
+>caller : () => void
+>       : ^^^^^^^^^^
+}
+
+class StaticCallerFn2 {
+>StaticCallerFn2 : StaticCallerFn2
+>                : ^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.caller] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.caller]() {} // ok
+>[FunctionPropertyNames.caller] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+}
+
+// arguments
+class StaticArguments {
+>StaticArguments : StaticArguments
+>                : ^^^^^^^^^^^^^^^
+
+    static arguments: number; // error without useDefineForClassFields
+>arguments : number
+>          : ^^^^^^
+
+    arguments: string; // ok
+>arguments : string
+>          : ^^^^^^
+}
+
+class StaticArguments2 {
+>StaticArguments2 : StaticArguments2
+>                 : ^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.arguments] : number
+>                                  : ^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.arguments]: string; // ok
+>[FunctionPropertyNames.arguments] : string
+>                                  : ^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+}
+
+class StaticArgumentsFn {
+>StaticArgumentsFn : StaticArgumentsFn
+>                  : ^^^^^^^^^^^^^^^^^
+
+    static arguments() {} // error without useDefineForClassFields
+>arguments : () => void
+>          : ^^^^^^^^^^
+
+    arguments() {} // ok
+>arguments : () => void
+>          : ^^^^^^^^^^
+}
+
+class StaticArgumentsFn2 {
+>StaticArgumentsFn2 : StaticArgumentsFn2
+>                   : ^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.arguments] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.arguments]() {} // ok
+>[FunctionPropertyNames.arguments] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+}
+
+
+// === Static properties on anonymous classes ===
+
+// name
+var StaticName_Anonymous = class {
+>StaticName_Anonymous : typeof StaticName_Anonymous
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static name: number; // error without useDefineForClassFields    name: string; // ok} : typeof StaticName_Anonymous
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static name: number; // error without useDefineForClassFields
+>name : number
+>     : ^^^^^^
+
+    name: string; // ok
+>name : string
+>     : ^^^^^^
+}
+
+var StaticName_Anonymous2 = class {
+>StaticName_Anonymous2 : typeof StaticName_Anonymous2
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields    [FunctionPropertyNames.name]: string; // ok} : typeof StaticName_Anonymous2
+>                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.name] : number
+>                             : ^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+
+    [FunctionPropertyNames.name]: string; // ok
+>[FunctionPropertyNames.name] : string
+>                             : ^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+}
+
+var StaticNameFn_Anonymous = class {
+>StaticNameFn_Anonymous : typeof StaticNameFn_Anonymous
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static name() {} // error without useDefineForClassFields    name() {} // ok} : typeof StaticNameFn_Anonymous
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static name() {} // error without useDefineForClassFields
+>name : () => void
+>     : ^^^^^^^^^^
+
+    name() {} // ok
+>name : () => void
+>     : ^^^^^^^^^^
+}
+
+var StaticNameFn_Anonymous2 = class {
+>StaticNameFn_Anonymous2 : typeof StaticNameFn_Anonymous2
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields    [FunctionPropertyNames.name]() {} // ok} : typeof StaticNameFn_Anonymous2
+>                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.name] : () => void
+>                             : ^^^^^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+
+    [FunctionPropertyNames.name]() {} // ok
+>[FunctionPropertyNames.name] : () => void
+>                             : ^^^^^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+}
+
+// length
+var StaticLength_Anonymous = class {
+>StaticLength_Anonymous : typeof StaticLength_Anonymous
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static length: number; // error without useDefineForClassFields    length: string; // ok} : typeof StaticLength_Anonymous
+>                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static length: number; // error without useDefineForClassFields
+>length : number
+>       : ^^^^^^
+
+    length: string; // ok
+>length : string
+>       : ^^^^^^
+}
+
+var StaticLength_Anonymous2 = class {
+>StaticLength_Anonymous2 : typeof StaticLength_Anonymous2
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields    [FunctionPropertyNames.length]: string; // ok} : typeof StaticLength_Anonymous2
+>                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.length] : number
+>                               : ^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.length]: string; // ok
+>[FunctionPropertyNames.length] : string
+>                               : ^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+}
+
+var StaticLengthFn_Anonymous = class {
+>StaticLengthFn_Anonymous : typeof StaticLengthFn_Anonymous
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static length() {} // error without useDefineForClassFields    length() {} // ok} : typeof StaticLengthFn_Anonymous
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static length() {} // error without useDefineForClassFields
+>length : () => void
+>       : ^^^^^^^^^^
+
+    length() {} // ok
+>length : () => void
+>       : ^^^^^^^^^^
+}
+
+var StaticLengthFn_Anonymous2 = class {
+>StaticLengthFn_Anonymous2 : typeof StaticLengthFn_Anonymous2
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields    [FunctionPropertyNames.length]() {} // ok} : typeof StaticLengthFn_Anonymous2
+>                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.length] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.length]() {} // ok
+>[FunctionPropertyNames.length] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+}
+
+// prototype
+var StaticPrototype_Anonymous = class {
+>StaticPrototype_Anonymous : typeof StaticPrototype_Anonymous
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static prototype: number; // always an error    prototype: string; // ok} : typeof StaticPrototype_Anonymous
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static prototype: number; // always an error
+>prototype : StaticPrototype_Anonymous
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    prototype: string; // ok
+>prototype : string
+>          : ^^^^^^
+}
+
+var StaticPrototype_Anonymous2 = class {
+>StaticPrototype_Anonymous2 : typeof StaticPrototype_Anonymous2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.prototype]: number; // always an error    [FunctionPropertyNames.prototype]: string; // ok} : typeof StaticPrototype_Anonymous2
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.prototype]: number; // always an error
+>[FunctionPropertyNames.prototype] : StaticPrototype_Anonymous2
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.prototype]: string; // ok
+>[FunctionPropertyNames.prototype] : string
+>                                  : ^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+}
+
+var StaticPrototypeFn_Anonymous = class {
+>StaticPrototypeFn_Anonymous : typeof StaticPrototypeFn_Anonymous
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static prototype() {} // always an error    prototype() {} // ok} : typeof StaticPrototypeFn_Anonymous
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static prototype() {} // always an error
+>prototype : () => void
+>          : ^^^^^^^^^^
+
+    prototype() {} // ok
+>prototype : () => void
+>          : ^^^^^^^^^^
+}
+
+var StaticPrototypeFn_Anonymous2 = class {
+>StaticPrototypeFn_Anonymous2 : typeof StaticPrototypeFn_Anonymous2
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.prototype]() {} // always an error    [FunctionPropertyNames.prototype]() {} // ok} : typeof StaticPrototypeFn_Anonymous2
+>                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.prototype]() {} // always an error
+>[FunctionPropertyNames.prototype] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.prototype]() {} // ok
+>[FunctionPropertyNames.prototype] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+}
+
+// caller
+var StaticCaller_Anonymous = class {
+>StaticCaller_Anonymous : typeof StaticCaller_Anonymous
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static caller: number; // error without useDefineForClassFields    caller: string; // ok} : typeof StaticCaller_Anonymous
+>                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static caller: number; // error without useDefineForClassFields
+>caller : number
+>       : ^^^^^^
+
+    caller: string; // ok
+>caller : string
+>       : ^^^^^^
+}
+
+var StaticCaller_Anonymous2 = class {
+>StaticCaller_Anonymous2 : typeof StaticCaller_Anonymous2
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields    [FunctionPropertyNames.caller]: string; // ok} : typeof StaticCaller_Anonymous2
+>                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.caller] : number
+>                               : ^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.caller]: string; // ok
+>[FunctionPropertyNames.caller] : string
+>                               : ^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+}
+
+var StaticCallerFn_Anonymous = class {
+>StaticCallerFn_Anonymous : typeof StaticCallerFn_Anonymous
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static caller() {} // error without useDefineForClassFields    caller() {} // ok} : typeof StaticCallerFn_Anonymous
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static caller() {} // error without useDefineForClassFields
+>caller : () => void
+>       : ^^^^^^^^^^
+
+    caller() {} // ok
+>caller : () => void
+>       : ^^^^^^^^^^
+}
+
+var StaticCallerFn_Anonymous2 = class {
+>StaticCallerFn_Anonymous2 : typeof StaticCallerFn_Anonymous2
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields    [FunctionPropertyNames.caller]() {} // ok} : typeof StaticCallerFn_Anonymous2
+>                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.caller] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.caller]() {} // ok
+>[FunctionPropertyNames.caller] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+}
+
+// arguments
+var StaticArguments_Anonymous = class {
+>StaticArguments_Anonymous : typeof StaticArguments_Anonymous
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static arguments: number; // error without useDefineForClassFields    arguments: string; // ok} : typeof StaticArguments_Anonymous
+>                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static arguments: number; // error without useDefineForClassFields
+>arguments : number
+>          : ^^^^^^
+
+    arguments: string; // ok
+>arguments : string
+>          : ^^^^^^
+}
+
+var StaticArguments_Anonymous2 = class {
+>StaticArguments_Anonymous2 : typeof StaticArguments_Anonymous2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields    [FunctionPropertyNames.arguments]: string; // ok} : typeof StaticArguments_Anonymous2
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.arguments] : number
+>                                  : ^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.arguments]: string; // ok
+>[FunctionPropertyNames.arguments] : string
+>                                  : ^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+}
+
+var StaticArgumentsFn_Anonymous = class {
+>StaticArgumentsFn_Anonymous : typeof StaticArgumentsFn_Anonymous
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static arguments() {} // error without useDefineForClassFields    arguments() {} // ok} : typeof StaticArgumentsFn_Anonymous
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static arguments() {} // error without useDefineForClassFields
+>arguments : () => void
+>          : ^^^^^^^^^^
+
+    arguments() {} // ok
+>arguments : () => void
+>          : ^^^^^^^^^^
+}
+
+var StaticArgumentsFn_Anonymous2 = class {
+>StaticArgumentsFn_Anonymous2 : typeof StaticArgumentsFn_Anonymous2
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class {    static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields    [FunctionPropertyNames.arguments]() {} // ok} : typeof StaticArgumentsFn_Anonymous2
+>                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.arguments] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.arguments]() {} // ok
+>[FunctionPropertyNames.arguments] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+}
+
+
+// === Static properties on default exported classes ===
+
+// name
+module TestOnDefaultExportedClass_1 {
+>TestOnDefaultExportedClass_1 : typeof TestOnDefaultExportedClass_1
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    class StaticName {
+>StaticName : StaticName
+>           : ^^^^^^^^^^
+
+        static name: number; // error without useDefineForClassFields
+>name : number
+>     : ^^^^^^
+
+        name: string; // ok
+>name : string
+>     : ^^^^^^
+    }
+}
+
+export class ExportedStaticName {
+>ExportedStaticName : ExportedStaticName
+>                   : ^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.name] : number
+>                             : ^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+
+    [FunctionPropertyNames.name]: string; // ok
+>[FunctionPropertyNames.name] : string
+>                             : ^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+}
+
+module TestOnDefaultExportedClass_2 {
+>TestOnDefaultExportedClass_2 : typeof TestOnDefaultExportedClass_2
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    class StaticNameFn {
+>StaticNameFn : StaticNameFn
+>             : ^^^^^^^^^^^^
+
+        static name() {} // error without useDefineForClassFields
+>name : () => void
+>     : ^^^^^^^^^^
+
+        name() {} // ok
+>name : () => void
+>     : ^^^^^^^^^^
+    }
+}
+
+export class ExportedStaticNameFn {
+>ExportedStaticNameFn : ExportedStaticNameFn
+>                     : ^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.name] : () => void
+>                             : ^^^^^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+
+    [FunctionPropertyNames.name]() {} // ok
+>[FunctionPropertyNames.name] : () => void
+>                             : ^^^^^^^^^^
+>FunctionPropertyNames.name : "name"
+>                           : ^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : "name"
+>     : ^^^^^^
+}
+
+// length
+module TestOnDefaultExportedClass_3 {
+>TestOnDefaultExportedClass_3 : typeof TestOnDefaultExportedClass_3
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export default class StaticLength {
+>StaticLength : StaticLength
+>             : ^^^^^^^^^^^^
+
+        static length: number; // error without useDefineForClassFields
+>length : number
+>       : ^^^^^^
+
+        length: string; // ok
+>length : string
+>       : ^^^^^^
+    }
+}
+
+export class ExportedStaticLength {
+>ExportedStaticLength : ExportedStaticLength
+>                     : ^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.length] : number
+>                               : ^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.length]: string; // ok
+>[FunctionPropertyNames.length] : string
+>                               : ^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+}
+
+module TestOnDefaultExportedClass_4 {
+>TestOnDefaultExportedClass_4 : typeof TestOnDefaultExportedClass_4
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export default class StaticLengthFn {
+>StaticLengthFn : StaticLengthFn
+>               : ^^^^^^^^^^^^^^
+
+        static length() {} // error without useDefineForClassFields
+>length : () => void
+>       : ^^^^^^^^^^
+
+        length() {} // ok
+>length : () => void
+>       : ^^^^^^^^^^
+    }
+}
+
+export class ExportedStaticLengthFn {
+>ExportedStaticLengthFn : ExportedStaticLengthFn
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.length] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.length]() {} // ok
+>[FunctionPropertyNames.length] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.length : "length"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : "length"
+>       : ^^^^^^^^
+}
+
+// prototype
+module TestOnDefaultExportedClass_5 {
+>TestOnDefaultExportedClass_5 : typeof TestOnDefaultExportedClass_5
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export default class StaticPrototype {
+>StaticPrototype : StaticPrototype
+>                : ^^^^^^^^^^^^^^^
+
+        static prototype: number; // always an error
+>prototype : StaticPrototype
+>          : ^^^^^^^^^^^^^^^
+
+        prototype: string; // ok
+>prototype : string
+>          : ^^^^^^
+    }
+}
+
+export class ExportedStaticPrototype {
+>ExportedStaticPrototype : ExportedStaticPrototype
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.prototype]: number; // always an error
+>[FunctionPropertyNames.prototype] : ExportedStaticPrototype
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.prototype]: string; // ok
+>[FunctionPropertyNames.prototype] : string
+>                                  : ^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+}
+
+module TestOnDefaultExportedClass_6 {
+>TestOnDefaultExportedClass_6 : typeof TestOnDefaultExportedClass_6
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export default class StaticPrototypeFn {
+>StaticPrototypeFn : StaticPrototypeFn
+>                  : ^^^^^^^^^^^^^^^^^
+
+        static prototype() {} // always an error
+>prototype : () => void
+>          : ^^^^^^^^^^
+
+        prototype() {} // ok
+>prototype : () => void
+>          : ^^^^^^^^^^
+    }
+}
+
+export class ExportedStaticPrototypeFn {
+>ExportedStaticPrototypeFn : ExportedStaticPrototypeFn
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.prototype]() {} // always an error
+>[FunctionPropertyNames.prototype] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.prototype]() {} // ok
+>[FunctionPropertyNames.prototype] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.prototype : "prototype"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prototype : "prototype"
+>          : ^^^^^^^^^^^
+}
+
+// caller
+module TestOnDefaultExportedClass_7 {
+>TestOnDefaultExportedClass_7 : typeof TestOnDefaultExportedClass_7
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export default class StaticCaller {
+>StaticCaller : StaticCaller
+>             : ^^^^^^^^^^^^
+
+        static caller: number; // error without useDefineForClassFields
+>caller : number
+>       : ^^^^^^
+
+        caller: string; // ok
+>caller : string
+>       : ^^^^^^
+    }
+}
+
+export class ExportedStaticCaller {
+>ExportedStaticCaller : ExportedStaticCaller
+>                     : ^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.caller] : number
+>                               : ^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.caller]: string; // ok
+>[FunctionPropertyNames.caller] : string
+>                               : ^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+}
+
+module TestOnDefaultExportedClass_8 {
+>TestOnDefaultExportedClass_8 : typeof TestOnDefaultExportedClass_8
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export default class StaticCallerFn {
+>StaticCallerFn : StaticCallerFn
+>               : ^^^^^^^^^^^^^^
+
+        static caller() {} // error without useDefineForClassFields
+>caller : () => void
+>       : ^^^^^^^^^^
+
+        caller() {} // ok
+>caller : () => void
+>       : ^^^^^^^^^^
+    }
+}
+
+export class ExportedStaticCallerFn {
+>ExportedStaticCallerFn : ExportedStaticCallerFn
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.caller] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+
+    [FunctionPropertyNames.caller]() {} // ok
+>[FunctionPropertyNames.caller] : () => void
+>                               : ^^^^^^^^^^
+>FunctionPropertyNames.caller : "caller"
+>                             : ^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caller : "caller"
+>       : ^^^^^^^^
+}
+
+// arguments
+module TestOnDefaultExportedClass_9 {
+>TestOnDefaultExportedClass_9 : typeof TestOnDefaultExportedClass_9
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export default class StaticArguments {
+>StaticArguments : StaticArguments
+>                : ^^^^^^^^^^^^^^^
+
+        static arguments: number; // error without useDefineForClassFields
+>arguments : number
+>          : ^^^^^^
+
+        arguments: string; // ok
+>arguments : string
+>          : ^^^^^^
+    }
+}
+
+export class ExportedStaticArguments {
+>ExportedStaticArguments : ExportedStaticArguments
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+>[FunctionPropertyNames.arguments] : number
+>                                  : ^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.arguments]: string; // ok
+>[FunctionPropertyNames.arguments] : string
+>                                  : ^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+}
+
+module TestOnDefaultExportedClass_10 {
+>TestOnDefaultExportedClass_10 : typeof TestOnDefaultExportedClass_10
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export default class StaticArgumentsFn {
+>StaticArgumentsFn : StaticArgumentsFn
+>                  : ^^^^^^^^^^^^^^^^^
+
+        static arguments() {} // error without useDefineForClassFields
+>arguments : () => void
+>          : ^^^^^^^^^^
+
+        arguments() {} // ok
+>arguments : () => void
+>          : ^^^^^^^^^^
+    }
+}
+
+export class ExportedStaticArgumentsFn {
+>ExportedStaticArgumentsFn : ExportedStaticArgumentsFn
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+>[FunctionPropertyNames.arguments] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+
+    [FunctionPropertyNames.arguments]() {} // ok
+>[FunctionPropertyNames.arguments] : () => void
+>                                  : ^^^^^^^^^^
+>FunctionPropertyNames.arguments : "arguments"
+>                                : ^^^^^^^^^^^
+>FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arguments : "arguments"
+>          : ^^^^^^^^^^^
+}

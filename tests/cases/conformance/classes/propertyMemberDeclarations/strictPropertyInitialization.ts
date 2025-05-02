@@ -150,3 +150,14 @@ class C12 {
         this['c'] = 1;
     }
 }
+
+enum E {
+    A = "A",
+    B = "B"
+}
+class C13 {
+    [E.A]: number;
+    constructor() {
+        this[E.A] = 1;
+    }
+}

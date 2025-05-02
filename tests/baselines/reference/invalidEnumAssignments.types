@@ -1,66 +1,99 @@
-=== tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts] ////
+
+=== invalidEnumAssignments.ts ===
 enum E {
 >E : E
+>  : ^
 
     A,
 >A : E.A
+>  : ^^^
 
     B
 >B : E.B
+>  : ^^^
 }
 
 enum E2 {
 >E2 : E2
+>   : ^^
 
     A,
 >A : E2.A
+>  : ^^^^
 
     B
 >B : E2.B
+>  : ^^^^
 }
 
 var e: E;
 >e : E
+>  : ^
 
 var e2: E2;
 >e2 : E2
+>   : ^^
 
 e = E2.A;
 >e = E2.A : E2.A
+>         : ^^^^
 >e : E
+>  : ^
 >E2.A : E2.A
+>     : ^^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >A : E2.A
+>  : ^^^^
 
 e2 = E.A;
 >e2 = E.A : E.A
+>         : ^^^
 >e2 : E2
+>   : ^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
 e = <void>null;
 >e = <void>null : void
+>               : ^^^^
 >e : E
+>  : ^
 ><void>null : void
->null : null
+>           : ^^^^
 
 e = {};
 >e = {} : {}
+>       : ^^
 >e : E
+>  : ^
 >{} : {}
+>   : ^^
 
 e = '';
 >e = '' : ""
+>       : ^^
 >e : E
+>  : ^
 >'' : ""
+>   : ^^
 
 function f<T>(a: T) {
 >f : <T>(a: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
     e = a;
 >e = a : T
+>      : ^
 >e : E
+>  : ^
 >a : T
+>  : ^
 }

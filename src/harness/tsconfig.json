@@ -1,13 +1,10 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/harness.js",
         "types": [
-            "node", "mocha", "chai"
-        ],
-        "lib": [
-            "es6",
-            "scripthost"
+            "node",
+            "mocha",
+            "chai"
         ]
     },
     "references": [
@@ -16,30 +13,8 @@
         { "path": "../jsTyping" },
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
-        { "path": "../deprecatedCompat" },
+        { "path": "../deprecatedCompat" }
     ],
 
-    "files": [
-        "collectionsImpl.ts",
-        "util.ts",
-        "documentsUtil.ts",
-        "vpathUtil.ts",
-        "vfsUtil.ts",
-        "compilerImpl.ts",
-        "evaluatorImpl.ts",
-        "fakesHosts.ts",
-        "client.ts",
-        "findUpDir.ts",
-
-        "runnerbase.ts",
-        "sourceMapRecorder.ts",
-        "harnessGlobals.ts",
-        "harnessUtils.ts",
-        "harnessIO.ts",
-        "harnessLanguageService.ts",
-        "virtualFileSystemWithWatch.ts",
-        "fourslashImpl.ts",
-        "fourslashInterfaceImpl.ts",
-        "typeWriter.ts"
-    ]
+    "include": ["**/*"]
 }

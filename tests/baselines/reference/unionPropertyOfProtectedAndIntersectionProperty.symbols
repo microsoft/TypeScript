@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/unionPropertyOfProtectedAndIntersectionProperty.ts] ////
+
+=== unionPropertyOfProtectedAndIntersectionProperty.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
+
+  protected foo = 0;
+>foo : Symbol(Foo.foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 11))
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 2, 1))
+
+  protected foo = 0;
+>foo : Symbol(Bar.foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 4, 11))
+}
+
+type Nothing<V extends Foo> = void;
+>Nothing : Symbol(Nothing, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 6, 1))
+>V : Symbol(V, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 8, 13))
+>Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
+
+type Broken<V extends Array<Foo | Bar>> = {
+>Broken : Symbol(Broken, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 8, 35))
+>V : Symbol(V, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 10, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 2, 1))
+
+  readonly [P in keyof V]: V[P] extends Foo ? Nothing<V[P]> : never;
+>P : Symbol(P, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 11, 12))
+>V : Symbol(V, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 10, 12))
+>V : Symbol(V, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 10, 12))
+>P : Symbol(P, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 11, 12))
+>Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
+>Nothing : Symbol(Nothing, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 6, 1))
+>V : Symbol(V, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 10, 12))
+>P : Symbol(P, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 11, 12))
+
+};
+
+// The issue above, #49517, is fixed very indirectly. Here's some code
+// that shows the direct result of the change:
+
+type _3 = (Foo & Bar)['foo'];         // Ok
+>_3 : Symbol(_3, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 12, 2))
+>Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 2, 1))
+
+type _4 = (Foo | Bar)['foo'];         // Error
+>_4 : Symbol(_4, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 17, 29))
+>Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 2, 1))
+
+type _5 = (Foo | (Foo & Bar))['foo']; // Prev error, now ok
+>_5 : Symbol(_5, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 18, 29))
+>Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(unionPropertyOfProtectedAndIntersectionProperty.ts, 2, 1))
+
+// V[P] in `Nothing<V[P]>` is the substitution type `V[P] & Foo`. When
+// checking if that's assignable to `Foo` in the constraint of `Nothing`,
+// it passes the regular assignability check but then goes into intersection
+// property checks. To pull `foo` from the substitution type, it gets the
+// apparent type, which turns out to be something like `(Foo & Foo') | (Foo & Bar)`
+// where `Foo` and `Foo'` are different this-type instantiations of `Foo`.
+// Those two instantiations have the same `foo` property, but then `(Foo & Bar)['foo']`
+// is a synthesized intersection property with a declaration in `Foo` and a
+// declaration in `Bar`. Because the former was marked as protected and the
+// latter was a different symbol, we previously thought the two symbols were
+// totally unrelated, as in `(Foo | Bar)['foo']`. The fix I implemented is to
+// check not that the two property symbols are identical, but that they share
+// some common declaration. The change is directly observable by seeing whether
+// `(Foo | (Foo & Bar))['foo']` is allowed.
+

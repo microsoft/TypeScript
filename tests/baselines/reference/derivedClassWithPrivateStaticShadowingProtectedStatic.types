@@ -1,46 +1,65 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingProtectedStatic.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingProtectedStatic.ts] ////
+
+=== derivedClassWithPrivateStaticShadowingProtectedStatic.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     protected static x: string;
 >x : string
+>  : ^^^^^^
 
     protected static fn(): string {
 >fn : () => string
+>   : ^^^^^^      
 
         return '';
 >'' : ""
+>   : ^^
     }
 
     protected static get a() { return 1; }
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     protected static set a(v) { }
 >a : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 }
 
 // should be error
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     private static x: string; 
 >x : string
+>  : ^^^^^^
 
     private static fn(): string {
 >fn : () => string
+>   : ^^^^^^      
 
         return '';
 >'' : ""
+>   : ^^
     }
 
     private static get a() { return 1; }
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     private static set a(v) { }
 >a : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 }

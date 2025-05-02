@@ -1,4 +1,6 @@
-=== tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts ===
+//// [tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts] ////
+
+=== esNextWeakRefs_IterableWeakMap.ts ===
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
 >IterableWeakMap_cleanup : Symbol(IterableWeakMap_cleanup, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 5))
@@ -11,7 +13,7 @@ const IterableWeakMap_cleanup = ({ ref, set }: {
 
     readonly set: Set<WeakRef<object>>;
 >set : Symbol(set, Decl(esNextWeakRefs_IterableWeakMap.ts, 2, 34))
->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
 >WeakRef : Symbol(WeakRef, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
 
 }) => {
@@ -50,7 +52,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     #refSet = new Set<WeakRef<K>>();
 >#refSet : Symbol(IterableWeakMap.#refSet, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 72))
->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
 >WeakRef : Symbol(WeakRef, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
 >K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
 

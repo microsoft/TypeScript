@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferringAnyFunctionType3.ts] ////
+
 //// [inferringAnyFunctionType3.ts]
 function f<T extends ((p1: number) => number)[]>(p: T): T {
     return p;

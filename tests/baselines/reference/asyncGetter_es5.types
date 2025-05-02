@@ -1,8 +1,12 @@
-=== tests/cases/conformance/async/es5/asyncGetter_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncGetter_es5.ts] ////
+
+=== asyncGetter_es5.ts ===
 class C {
 >C : C
+>  : ^
 
   async get foo() {
 >foo : void
+>    : ^^^^
   }
 }

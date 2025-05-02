@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts] ////
+
 //// [stringLiteralTypesTypePredicates01.ts]
 type Kind = "A" | "B"
 

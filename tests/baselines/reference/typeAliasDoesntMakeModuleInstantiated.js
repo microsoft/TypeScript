@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasDoesntMakeModuleInstantiated.ts] ////
+
 //// [typeAliasDoesntMakeModuleInstantiated.ts]
 declare module m {
     // type alias declaration here shouldnt make the module declaration instantiated

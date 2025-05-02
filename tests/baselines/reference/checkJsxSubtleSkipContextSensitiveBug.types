@@ -1,57 +1,84 @@
-=== tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx] ////
+
+=== checkJsxSubtleSkipContextSensitiveBug.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface ErrorResult { error: true }
 >error : true
+>      : ^^^^
 >true : true
+>     : ^^^^
 
 interface AsyncLoaderProps<TResult> {
     readonly prop1: () => Promise<TResult>;
 >prop1 : () => Promise<TResult>
+>      : ^^^^^^                
 
     readonly prop2: (result: Exclude<TResult, ErrorResult>) => any;
 >prop2 : (result: Exclude<TResult, ErrorResult>) => any
+>      : ^      ^^                             ^^^^^   
 >result : Exclude<TResult, ErrorResult>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
 >AsyncLoader : AsyncLoader<TResult>
+>            : ^^^^^^^^^^^^^^^^^^^^
 >React.Component : React.Component<AsyncLoaderProps<TResult>, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() { return null; }
 >render : () => null
->null : null
+>       : ^^^^^^^^^^
 }
 
 async function load(): Promise<{ success: true } | ErrorResult> {
->load : () => Promise<{    success: true;} | ErrorResult>
+>load : () => Promise<{ success: true; } | ErrorResult>
+>     : ^^^^^^                                         
 >success : true
+>        : ^^^^
 >true : true
+>     : ^^^^
 
     return { success: true };
 >{ success: true } : { success: true; }
+>                  : ^^^^^^^^^^^^^^^^^^
 >success : true
+>        : ^^^^
 >true : true
+>     : ^^^^
 }
 
 const loader = <AsyncLoader
 >loader : JSX.Element
+>       : ^^^^^^^^^^^
 ><AsyncLoader    prop1={load}    prop2={result => result}/> : JSX.Element
+>                                                           : ^^^^^^^^^^^
 >AsyncLoader : typeof AsyncLoader
+>            : ^^^^^^^^^^^^^^^^^^
 
     prop1={load}
->prop1 : () => Promise<ErrorResult | { success: true; }>
->load : () => Promise<ErrorResult | { success: true; }>
+>prop1 : () => Promise<{ success: true; } | ErrorResult>
+>      : ^^^^^^                                         
+>load : () => Promise<{ success: true; } | ErrorResult>
+>     : ^^^^^^                                         
 
     prop2={result => result}
 >prop2 : (result: { success: true; }) => { success: true; }
+>      : ^      ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^    ^^^
 >result => result : (result: { success: true; }) => { success: true; }
+>                 : ^      ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^    ^^^
 >result : { success: true; }
+>       : ^^^^^^^^^^^    ^^^
 >result : { success: true; }
+>       : ^^^^^^^^^^^    ^^^
 
 />;
 

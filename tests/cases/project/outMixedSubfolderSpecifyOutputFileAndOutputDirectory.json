@@ -4,7 +4,7 @@
     "inputFiles": [
         "test.ts"
     ],
-    "out": "bin/outAndOutDirFile.js",
+    "outFile": "bin/outAndOutDirFile.js",
     "outDir": "outdir/outAndOutDirFolder",
     "declaration": true,
     "baselineCheck": true

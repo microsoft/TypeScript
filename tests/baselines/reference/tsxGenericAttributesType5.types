@@ -1,41 +1,65 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxGenericAttributesType5.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 class B1<T extends { x: string }> extends React.Component<T, {}> {
 >B1 : B1<T>
+>   : ^^^^^
 >x : string
+>  : ^^^^^^
 >React.Component : React.Component<T, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <div>hi</div>; 
 ><div>hi</div> : JSX.Element
+>              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
 }
 class B<U> extends React.Component<U, {}> {
 >B : B<U>
+>  : ^^^^
 >React.Component : React.Component<U, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     props: U;
 >props : U
+>      : ^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <B1 {...this.props} x="hi" />;
 ><B1 {...this.props} x="hi" /> : JSX.Element
+>                              : ^^^^^^^^^^^
 >B1 : typeof B1
+>   : ^^^^^^^^^
 >this.props : U
+>           : ^
 >this : this
+>     : ^^^^
 >props : U
+>      : ^
 >x : string
+>  : ^^^^^^
     }
 }

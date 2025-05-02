@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts] ////
+
 //// [moduleMemberWithoutTypeAnnotation2.ts]
 module TypeScript {
     export module CompilerDiagnostics {

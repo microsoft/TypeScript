@@ -1,8 +1,10 @@
+//// [tests/cases/compiler/isolatedModulesDontElideReExportStar.ts] ////
+
 === /a.ts ===
 export type T = number;
 >T : Symbol(T, Decl(a.ts, 0, 0))
 
 === /b.ts ===
+
 export * from "./a";
-No type information for this code.
-No type information for this code.
+

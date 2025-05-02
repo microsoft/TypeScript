@@ -1,111 +1,178 @@
-=== tests/cases/compiler/nearbyIdenticalGenericLambdasAssignable.ts ===
+//// [tests/cases/compiler/nearbyIdenticalGenericLambdasAssignable.ts] ////
+
+=== nearbyIdenticalGenericLambdasAssignable.ts ===
 declare const fA: <T>() => { v: T };
 >fA : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 >v : T
+>  : ^
 
 const fB = <T>() => {
 >fB : <T>() => { v: T; }
+>   : ^ ^^^^^^^^^^^^ ^^^
 ><T>() => {    return { v: '' as any as T };} : <T>() => { v: T; }
+>                                             : ^ ^^^^^^^^^^^^ ^^^
 
     return { v: '' as any as T };
 >{ v: '' as any as T } : { v: T; }
+>                      : ^^^^^ ^^^
 >v : T
+>  : ^
 >'' as any as T : T
+>               : ^
 >'' as any : any
 >'' : ""
+>   : ^^
 
 };
 const fC = <T>() => {
 >fC : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 ><T>() => {    return {} as any as { v: T };} : <T>() => { v: T; }
+>                                             : ^ ^^^^^^^         
 
     return {} as any as { v: T };
 >{} as any as { v: T } : { v: T; }
+>                      : ^^^^^ ^^^
 >{} as any : any
 >{} : {}
+>   : ^^
 >v : T
+>  : ^
 
 };
 
 // Hover display is identical on all of these
 type TA = typeof fA;
 >TA : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 >fA : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 
 type TB = typeof fB;
 >TB : <T>() => { v: T; }
+>   : ^ ^^^^^^^^^^^^ ^^^
 >fB : <T>() => { v: T; }
+>   : ^ ^^^^^^^^^^^^ ^^^
 
 type TC = typeof fC;
 >TC : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 >fC : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 
 type TL = <T>() => { v: T }; 
->TL : <T>() => { v: T; }
+>TL : TL
+>   : ^^
 >v : T
+>  : ^
 
 declare function accA(x: TA): void;
 >accA : (x: TA) => void
+>     : ^ ^^  ^^^^^    
 >x : <T>() => { v: T; }
+>  : ^ ^^^^^^^         
 
 declare function accB(x: TB): void;
 >accB : (x: TB) => void
+>     : ^ ^^  ^^^^^    
 >x : <T>() => { v: T; }
+>  : ^ ^^^^^^^^^^^^ ^^^
 
 declare function accC(x: TC): void;
 >accC : (x: TC) => void
+>     : ^ ^^  ^^^^^    
 >x : <T>() => { v: T; }
+>  : ^ ^^^^^^^         
 
 declare function accL(x: TL): void;
 >accL : (x: TL) => void
+>     : ^ ^^  ^^^^^    
 >x : TL
+>  : ^^
 
 // These should all be OK, every type is identical
 accA(fA); accA(fB); accA(fC);
 >accA(fA) : void
->accA : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accA : (x: TA) => void
+>     : ^ ^^  ^^^^^    
 >fA : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 >accA(fB) : void
->accA : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accA : (x: TA) => void
+>     : ^ ^^  ^^^^^    
 >fB : <T>() => { v: T; }
+>   : ^ ^^^^^^^^^^^^ ^^^
 >accA(fC) : void
->accA : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accA : (x: TA) => void
+>     : ^ ^^  ^^^^^    
 >fC : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 
 //             ~~ previously an error
 accB(fA); accB(fB); accB(fC);
 >accB(fA) : void
->accB : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accB : (x: TB) => void
+>     : ^ ^^  ^^^^^    
 >fA : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 >accB(fB) : void
->accB : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accB : (x: TB) => void
+>     : ^ ^^  ^^^^^    
 >fB : <T>() => { v: T; }
+>   : ^ ^^^^^^^^^^^^ ^^^
 >accB(fC) : void
->accB : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accB : (x: TB) => void
+>     : ^ ^^  ^^^^^    
 >fC : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 
 //             OK
 accC(fA); accC(fB); accC(fC);
 >accC(fA) : void
->accC : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accC : (x: TC) => void
+>     : ^ ^^  ^^^^^    
 >fA : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 >accC(fB) : void
->accC : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accC : (x: TC) => void
+>     : ^ ^^  ^^^^^    
 >fB : <T>() => { v: T; }
+>   : ^ ^^^^^^^^^^^^ ^^^
 >accC(fC) : void
->accC : (x: <T>() => { v: T; }) => void
+>         : ^^^^
+>accC : (x: TC) => void
+>     : ^ ^^  ^^^^^    
 >fC : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 
 //             ~~ previously an error
 accL(fA); accL(fB); accL(fC);
 >accL(fA) : void
+>         : ^^^^
 >accL : (x: TL) => void
+>     : ^ ^^  ^^^^^    
 >fA : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 >accL(fB) : void
+>         : ^^^^
 >accL : (x: TL) => void
+>     : ^ ^^  ^^^^^    
 >fB : <T>() => { v: T; }
+>   : ^ ^^^^^^^^^^^^ ^^^
 >accL(fC) : void
+>         : ^^^^
 >accL : (x: TL) => void
+>     : ^ ^^  ^^^^^    
 >fC : <T>() => { v: T; }
+>   : ^ ^^^^^^^         
 
 //             ~~ previously an error

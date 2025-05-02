@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericClasses0.ts ===
+//// [tests/cases/compiler/genericClasses0.ts] ////
+
+=== genericClasses0.ts ===
 class C<T> {
 >C : Symbol(C, Decl(genericClasses0.ts, 0, 0))
 >T : Symbol(T, Decl(genericClasses0.ts, 0, 8))

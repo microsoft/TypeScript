@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts] ////
+
 //// [invalidModuleWithStatementsOfEveryKind.ts]
 // All of these should be an error
 

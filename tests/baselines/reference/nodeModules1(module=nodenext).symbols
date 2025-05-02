@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModules1.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 const x = 1;
 >x : Symbol(x, Decl(index.ts, 1, 5))
@@ -6,7 +8,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.ts, 2, 8))
 
-=== tests/cases/conformance/node/subfolder/index.cts ===
+=== subfolder/index.cts ===
 // cjs format file
 const x = 1;
 >x : Symbol(x, Decl(index.cts, 1, 5))
@@ -14,7 +16,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.cts, 2, 8))
 
-=== tests/cases/conformance/node/subfolder/index.mts ===
+=== subfolder/index.mts ===
 // esm format file
 const x = 1;
 >x : Symbol(x, Decl(index.mts, 1, 5))
@@ -22,7 +24,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.mts, 2, 8))
 
-=== tests/cases/conformance/node/subfolder2/index.ts ===
+=== subfolder2/index.ts ===
 // cjs format file
 const x = 1;
 >x : Symbol(x, Decl(index.ts, 1, 5))
@@ -30,7 +32,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.ts, 2, 8))
 
-=== tests/cases/conformance/node/subfolder2/index.cts ===
+=== subfolder2/index.cts ===
 // cjs format file
 const x = 1;
 >x : Symbol(x, Decl(index.cts, 1, 5))
@@ -38,7 +40,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.cts, 2, 8))
 
-=== tests/cases/conformance/node/subfolder2/index.mts ===
+=== subfolder2/index.mts ===
 // esm format file
 const x = 1;
 >x : Symbol(x, Decl(index.mts, 1, 5))
@@ -46,7 +48,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.mts, 2, 8))
 
-=== tests/cases/conformance/node/subfolder2/another/index.ts ===
+=== subfolder2/another/index.ts ===
 // esm format file
 const x = 1;
 >x : Symbol(x, Decl(index.ts, 1, 5))
@@ -54,7 +56,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.ts, 2, 8))
 
-=== tests/cases/conformance/node/subfolder2/another/index.mts ===
+=== subfolder2/another/index.mts ===
 // esm format file
 const x = 1;
 >x : Symbol(x, Decl(index.mts, 1, 5))
@@ -62,7 +64,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.mts, 2, 8))
 
-=== tests/cases/conformance/node/subfolder2/another/index.cts ===
+=== subfolder2/another/index.cts ===
 // cjs format file
 const x = 1;
 >x : Symbol(x, Decl(index.cts, 1, 5))
@@ -70,7 +72,7 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.cts, 2, 8))
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 import * as m1 from "./index.js";
 >m1 : Symbol(m1, Decl(index.mts, 0, 6))
 
@@ -318,7 +320,7 @@ const x = 1;
 export {x};
 >x : Symbol(m2.x, Decl(index.mts, 87, 8))
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // ESM-format imports below should issue errors
 import * as m1 from "./index.js";
 >m1 : Symbol(m1, Decl(index.cts, 1, 6))
@@ -567,7 +569,7 @@ const x = 1;
 export {x};
 >x : Symbol(m3.x, Decl(index.cts, 87, 8))
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 import * as m1 from "./index.js";
 >m1 : Symbol(m1, Decl(index.ts, 0, 6))
 

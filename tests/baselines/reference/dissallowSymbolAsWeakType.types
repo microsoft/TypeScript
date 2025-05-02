@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/dissallowSymbolAsWeakType.ts] ////
+
+=== dissallowSymbolAsWeakType.ts ===
+const s: symbol = Symbol('s');
+>s : symbol
+>  : ^^^^^^
+>Symbol('s') : unique symbol
+>            : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>'s' : "s"
+>    : ^^^
+
+const ws = new WeakSet([s]);
+>ws : WeakSet<object>
+>   : ^^^^^^^^^^^^^^^
+>new WeakSet([s]) : WeakSet<object>
+>                 : ^^^^^^^^^^^^^^^
+>WeakSet : WeakSetConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>[s] : symbol[]
+>    : ^^^^^^^^
+>s : symbol
+>  : ^^^^^^
+
+ws.add(s);
+>ws.add(s) : WeakSet<object>
+>          : ^^^^^^^^^^^^^^^
+>ws.add : (value: object) => WeakSet<object>
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ws : WeakSet<object>
+>   : ^^^^^^^^^^^^^^^
+>add : (value: object) => WeakSet<object>
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s : symbol
+>  : ^^^^^^
+
+ws.has(s);
+>ws.has(s) : boolean
+>          : ^^^^^^^
+>ws.has : (value: object) => boolean
+>       : ^     ^^^^^^^^^^^^^       
+>ws : WeakSet<object>
+>   : ^^^^^^^^^^^^^^^
+>has : (value: object) => boolean
+>    : ^     ^^^^^^^^^^^^^       
+>s : symbol
+>  : ^^^^^^
+
+ws.delete(s);
+>ws.delete(s) : boolean
+>             : ^^^^^^^
+>ws.delete : (value: object) => boolean
+>          : ^     ^^^^^^^^^^^^^       
+>ws : WeakSet<object>
+>   : ^^^^^^^^^^^^^^^
+>delete : (value: object) => boolean
+>       : ^     ^^^^^^^^^^^^^       
+>s : symbol
+>  : ^^^^^^
+
+const wm = new WeakMap([[s, false]]);
+>wm : WeakMap<object, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>new WeakMap([[s, false]]) : WeakMap<object, boolean>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>WeakMap : WeakMapConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>[[s, false]] : [symbol, false][]
+>             : ^^^^^^^^^^^^^^^^^
+>[s, false] : [symbol, false]
+>           : ^^^^^^^^^^^^^^^
+>s : symbol
+>  : ^^^^^^
+>false : false
+>      : ^^^^^
+
+wm.set(s, true);
+>wm.set(s, true) : WeakMap<object, boolean>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>wm.set : (key: object, value: boolean) => WeakMap<object, boolean>
+>       : ^   ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wm : WeakMap<object, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>set : (key: object, value: boolean) => WeakMap<object, boolean>
+>    : ^   ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s : symbol
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+
+wm.has(s);
+>wm.has(s) : boolean
+>          : ^^^^^^^
+>wm.has : (key: object) => boolean
+>       : ^   ^^^^^^^^^^^^^       
+>wm : WeakMap<object, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>has : (key: object) => boolean
+>    : ^   ^^^^^^^^^^^^^       
+>s : symbol
+>  : ^^^^^^
+
+wm.get(s);
+>wm.get(s) : boolean
+>          : ^^^^^^^
+>wm.get : (key: object) => boolean
+>       : ^   ^^^^^^^^^^^^^^^^^^^^
+>wm : WeakMap<object, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>get : (key: object) => boolean
+>    : ^   ^^^^^^^^^^^^^^^^^^^^
+>s : symbol
+>  : ^^^^^^
+
+wm.delete(s);
+>wm.delete(s) : boolean
+>             : ^^^^^^^
+>wm.delete : (key: object) => boolean
+>          : ^   ^^^^^^^^^^^^^       
+>wm : WeakMap<object, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>delete : (key: object) => boolean
+>       : ^   ^^^^^^^^^^^^^       
+>s : symbol
+>  : ^^^^^^
+
+const wr = new WeakRef(s);
+>wr : WeakRef<object>
+>   : ^^^^^^^^^^^^^^^
+>new WeakRef(s) : WeakRef<object>
+>               : ^^^^^^^^^^^^^^^
+>WeakRef : WeakRefConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>s : symbol
+>  : ^^^^^^
+
+wr.deref();
+>wr.deref() : object
+>           : ^^^^^^
+>wr.deref : () => object
+>         : ^^^^^^^^^^^^
+>wr : WeakRef<object>
+>   : ^^^^^^^^^^^^^^^
+>deref : () => object
+>      : ^^^^^^^^^^^^
+
+const f = new FinalizationRegistry(() => {});
+>f : FinalizationRegistry<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new FinalizationRegistry(() => {}) : FinalizationRegistry<unknown>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>FinalizationRegistry : FinalizationRegistryConstructor
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+f.register(s, null);
+>f.register(s, null) : void
+>                    : ^^^^
+>f.register : (target: WeakKey, heldValue: unknown, unregisterToken?: WeakKey) => void
+>           : ^      ^^       ^^         ^^^^^^^^^^^               ^^^       ^^^^^    
+>f : FinalizationRegistry<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>register : (target: WeakKey, heldValue: unknown, unregisterToken?: WeakKey) => void
+>         : ^      ^^       ^^         ^^^^^^^^^^^               ^^^       ^^^^^    
+>s : symbol
+>  : ^^^^^^
+
+f.unregister(s);
+>f.unregister(s) : boolean
+>                : ^^^^^^^
+>f.unregister : (unregisterToken: WeakKey) => boolean
+>             : ^               ^^       ^^^^^       
+>f : FinalizationRegistry<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unregister : (unregisterToken: WeakKey) => boolean
+>           : ^               ^^       ^^^^^       
+>s : symbol
+>  : ^^^^^^
+

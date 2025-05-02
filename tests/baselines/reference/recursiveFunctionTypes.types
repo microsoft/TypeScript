@@ -1,138 +1,218 @@
-=== tests/cases/compiler/recursiveFunctionTypes.ts ===
+//// [tests/cases/compiler/recursiveFunctionTypes.ts] ////
+
+=== recursiveFunctionTypes.ts ===
 function fn(): typeof fn { return 1; }
 >fn : () => typeof fn
+>   : ^^^^^^         
 >fn : () => typeof fn
+>   : ^^^^^^         
 >1 : 1
+>  : ^
 
 var x: number = fn; // error
 >x : number
+>  : ^^^^^^
 >fn : () => typeof fn
+>   : ^^^^^^         
 
 var y: () => number = fn; // ok
 >y : () => number
+>  : ^^^^^^      
 >fn : () => typeof fn
+>   : ^^^^^^         
 
 var f: () => typeof g;
 >f : () => typeof g
->g : () => () => typeof g
+>  : ^^^^^^        
+>g : () => typeof f
+>  : ^^^^^^        
 
 var g: () => typeof f;
 >g : () => typeof f
->f : () => () => typeof f
+>  : ^^^^^^        
+>f : () => typeof g
+>  : ^^^^^^        
 
 function f1(d: typeof f1) { }
 >f1 : (d: typeof f1) => void
+>   : ^ ^^         ^^^^^^^^^
 >d : (d: typeof f1) => void
+>  : ^ ^^         ^^^^^^^^^
 >f1 : (d: typeof f1) => void
+>   : ^ ^^         ^^^^^^^^^
 
 function f2(): typeof g2 { } 
 >f2 : () => typeof g2
->g2 : () => () => typeof g2
+>   : ^^^^^^         
+>g2 : () => typeof f2
+>   : ^^^^^^         
 
 function g2(): typeof f2 { } 
 >g2 : () => typeof f2
->f2 : () => () => typeof f2
+>   : ^^^^^^         
+>f2 : () => typeof g2
+>   : ^^^^^^         
 
 interface I<T> { }
 function f3(): I<typeof f3> { return f3; }
 >f3 : () => I<typeof f3>
+>   : ^^^^^^            
 >f3 : () => I<typeof f3>
+>   : ^^^^^^            
 >f3 : () => I<typeof f3>
+>   : ^^^^^^            
 
 var a: number = f3; // error
 >a : number
+>  : ^^^^^^
 >f3 : () => I<typeof f3>
+>   : ^^^^^^            
 
 class C {
 >C : C
+>  : ^
 
      static g(t: typeof C.g){ }
 >g : (t: typeof C.g) => void
+>  : ^ ^^          ^^^^^^^^^
 >t : (t: typeof C.g) => void
+>  : ^ ^^          ^^^^^^^^^
 >C.g : (t: typeof C.g) => void
+>    : ^ ^^          ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >g : (t: typeof C.g) => void
+>  : ^ ^^          ^^^^^^^^^
 }
 C.g(3); // error
 >C.g(3) : void
+>       : ^^^^
 >C.g : (t: typeof C.g) => void
+>    : ^ ^^          ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >g : (t: typeof C.g) => void
+>  : ^ ^^          ^^^^^^^^^
 >3 : 3
+>  : ^
 
 var f4: () => typeof f4;
 >f4 : () => typeof f4
+>   : ^^^^^^         
 >f4 : () => typeof f4
+>   : ^^^^^^         
 
 f4 = 3; // error
 >f4 = 3 : 3
->f4 : () => any
+>       : ^
+>f4 : () => typeof f4
+>   : ^^^^^^         
 >3 : 3
+>  : ^
 
 function f5() { return f5; }
 >f5 : () => typeof f5
+>   : ^^^^^^^^^^^^^^^
 >f5 : () => typeof f5
+>   : ^^^^^^^^^^^^^^^
 
 function f6(): typeof f6;
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 
 function f6(a: typeof f6): () => number;
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 >a : { (): typeof f6; (a: typeof f6): () => number; }
+>  : ^^^^^^         ^^^ ^^         ^^^            ^^^
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 
 function f6(a?: any) { return f6; }
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 >a : any
+>  : ^^^
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 
 f6("", 3); // error (arity mismatch)
 >f6("", 3) : { (): typeof f6; (a: typeof f6): () => number; } & (() => number)
+>          : ^^^^^^         ^^^ ^^         ^^^            ^^^^^^^^^^^^^      ^
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 >"" : ""
+>   : ^^
 >3 : 3
+>  : ^
 
 f6(""); // ok (function takes an any param)
 >f6("") : { (): typeof f6; (a: typeof f6): () => number; } & (() => number)
+>       : ^^^^^^         ^^^ ^^         ^^^            ^^^^^^^^^^^^^      ^
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 >"" : ""
+>   : ^^
 
 f6(); // ok
 >f6() : { (): typeof f6; (a: typeof f6): () => number; }
+>     : ^^^^^^         ^^^ ^^         ^^^            ^^^
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^
 
 declare function f7(): typeof f7;
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 
 declare function f7(a: typeof f7): () => number;
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >a : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>  : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 
 declare function f7(a: number): number;
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >a : number
+>  : ^^^^^^
 
 declare function f7(a?: typeof f7): typeof f7;
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >a : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>  : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 
 f7("", 3); // error (arity mismatch)
 >f7("", 3) : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; } & (() => number) & number
+>          : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^^^^^^^^^^^      ^^^^^^^^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >"" : ""
+>   : ^^
 >3 : 3
+>  : ^
 
 f7(""); // ok (function takes an any param)
 >f7("") : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; } & (() => number) & number
+>       : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^^^^^^^^^^^      ^^^^^^^^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >"" : ""
+>   : ^^
 
 f7(); // ok
 >f7() : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>     : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
+>   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 

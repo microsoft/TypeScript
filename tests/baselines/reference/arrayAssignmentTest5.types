@@ -1,89 +1,136 @@
-=== tests/cases/compiler/arrayAssignmentTest5.ts ===
+//// [tests/cases/compiler/arrayAssignmentTest5.ts] ////
+
+=== arrayAssignmentTest5.ts ===
 module Test {
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 
     interface IState {
     }
     interface IToken {
         startIndex: number;
 >startIndex : number
+>           : ^^^^^^
     }
     interface IStateToken extends IToken {
         state: IState;
 >state : IState
+>      : ^^^^^^
     }
     interface ILineTokens {
         tokens: IToken[];
 >tokens : IToken[]
+>       : ^^^^^^^^
 
         endState: IState;
 >endState : IState
+>         : ^^^^^^
     }
     interface IAction {
     }
     interface IMode {
         onEnter(line:string, state:IState, offset:number):IAction;
 >onEnter : (line: string, state: IState, offset: number) => IAction
+>        : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^       
 >line : string
+>     : ^^^^^^
 >state : IState
+>      : ^^^^^^
 >offset : number
+>       : ^^^^^^
 
         tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >line : string
+>     : ^^^^^^
 >state : IState
+>      : ^^^^^^
 >includeStates : boolean
+>              : ^^^^^^^
     }
     export class Bug implements IMode {
 >Bug : Bug
+>    : ^^^
 
         public onEnter(line:string, state:IState, offset:number):IAction {
 >onEnter : (line: string, state: IState, offset: number) => IAction
+>        : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^       
 >line : string
+>     : ^^^^^^
 >state : IState
+>      : ^^^^^^
 >offset : number
+>       : ^^^^^^
 
             var lineTokens:ILineTokens= this.tokenize(line, state, true);
 >lineTokens : ILineTokens
+>           : ^^^^^^^^^^^
 >this.tokenize(line, state, true) : ILineTokens
+>                                 : ^^^^^^^^^^^
 >this.tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
+>              : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >this : this
+>     : ^^^^
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >line : string
+>     : ^^^^^^
 >state : IState
+>      : ^^^^^^
 >true : true
+>     : ^^^^
 
             var tokens:IStateToken[]= lineTokens.tokens;
 >tokens : IStateToken[]
+>       : ^^^^^^^^^^^^^
 >lineTokens.tokens : IToken[]
+>                  : ^^^^^^^^
 >lineTokens : ILineTokens
+>           : ^^^^^^^^^^^
 >tokens : IToken[]
+>       : ^^^^^^^^
 
             if (tokens.length === 0) {
 >tokens.length === 0 : boolean
+>                    : ^^^^^^^
 >tokens.length : number
+>              : ^^^^^^
 >tokens : IStateToken[]
+>       : ^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
                 return this.onEnter(line, tokens, offset);        // <== this should produce an error since onEnter can not be called with (string, IStateToken[], offset)
 >this.onEnter(line, tokens, offset) : IAction
+>                                   : ^^^^^^^
 >this.onEnter : (line: string, state: IState, offset: number) => IAction
+>             : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^       
 >this : this
+>     : ^^^^
 >onEnter : (line: string, state: IState, offset: number) => IAction
+>        : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^       
 >line : string
+>     : ^^^^^^
 >tokens : IStateToken[]
+>       : ^^^^^^^^^^^^^
 >offset : number
+>       : ^^^^^^
             }
         }
         public tokenize(line:string, state:IState, includeStates:boolean):ILineTokens {
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >line : string
+>     : ^^^^^^
 >state : IState
+>      : ^^^^^^
 >includeStates : boolean
+>              : ^^^^^^^
 
             return null;
->null : null
         }
     }
 }

@@ -1,21 +1,21 @@
-tests/cases/compiler/recursiveConditionalTypes.ts(16,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/recursiveConditionalTypes.ts(20,5): error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
+recursiveConditionalTypes.ts(16,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+recursiveConditionalTypes.ts(20,5): error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
   Type 'T' is not assignable to type 'U'.
     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/compiler/recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
-tests/cases/compiler/recursiveConditionalTypes.ts(22,5): error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
+recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
+recursiveConditionalTypes.ts(22,5): error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
-tests/cases/compiler/recursiveConditionalTypes.ts(35,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/recursiveConditionalTypes.ts(47,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/recursiveConditionalTypes.ts(50,5): error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
+recursiveConditionalTypes.ts(35,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+recursiveConditionalTypes.ts(47,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+recursiveConditionalTypes.ts(50,5): error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
   Type 'number extends M ? number[] : _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
     Type 'number[] | _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
       Type 'number[]' is not assignable to type 'TupleOf<number, N>'.
-tests/cases/compiler/recursiveConditionalTypes.ts(51,5): error TS2322: Type 'TupleOf<number, N>' is not assignable to type 'TupleOf<number, M>'.
+recursiveConditionalTypes.ts(51,5): error TS2322: Type 'TupleOf<number, N>' is not assignable to type 'TupleOf<number, M>'.
   Type 'number extends N ? number[] : _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
     Type 'number[] | _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
       Type 'number[]' is not assignable to type 'TupleOf<number, M>'.
-tests/cases/compiler/recursiveConditionalTypes.ts(117,9): error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
+recursiveConditionalTypes.ts(117,9): error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
   Type '[] | Grow2<[string], T>' is not assignable to type 'Grow1<[], T>'.
     Type '[]' is not assignable to type 'Grow1<[], T>'.
       Type 'Grow2<[string], T>' is not assignable to type 'Grow1<[number], T>'.
@@ -23,10 +23,10 @@ tests/cases/compiler/recursiveConditionalTypes.ts(117,9): error TS2345: Argument
           Type '[string]' is not assignable to type 'Grow1<[number], T>'.
             Type '[string]' is not assignable to type '[number]'.
               Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
+recursiveConditionalTypes.ts(169,5): error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
 
 
-==== tests/cases/compiler/recursiveConditionalTypes.ts (10 errors) ====
+==== recursiveConditionalTypes.ts (10 errors) ====
     // Awaiting promises
     
     type __Awaited<T> =
@@ -53,7 +53,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
 !!! error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/compiler/recursiveConditionalTypes.ts:18:14: This type parameter might need an `extends U` constraint.
+!!! related TS2208 recursiveConditionalTypes.ts:18:14: This type parameter might need an `extends U` constraint.
         ta = tx;  // Error
         ~~
 !!! error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
@@ -146,7 +146,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
     
     declare let z: Box2<Box2<string>>;
     
-    foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+    foo(z);  // string
     
     // Intersect tuple element types
     
@@ -231,7 +231,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
     
     function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
         return value.length;  // Error
-        ~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
     }
     

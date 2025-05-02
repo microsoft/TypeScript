@@ -1,52 +1,82 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames48_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames48_ES5.ts] ////
+
+=== computedPropertyNames48_ES5.ts ===
 declare function extractIndexer<T>(p: { [n: number]: T }): T;
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
+>               : ^ ^^ ^^                   ^^^^^ 
 >p : { [n: number]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 enum E { x }
 >E : E
+>  : ^
 >x : E.x
+>  : ^^^
 
 var a: any;
 >a : any
+>  : ^^^
 
 extractIndexer({
 >extractIndexer({    [a]: ""}) : string
+>                              : ^^^^^^
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
->{    [a]: ""} : { [x: number]: string; }
+>               : ^ ^^ ^^                   ^^^^^ 
+>{    [a]: ""} : { [a]: string; }
+>              : ^^     ^^^^^^ ^^
 
     [a]: ""
 >[a] : string
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >"" : ""
+>   : ^^
 
 }); // Should return string
 
 extractIndexer({
 >extractIndexer({    [E.x]: ""}) : string
+>                                : ^^^^^^
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
+>               : ^ ^^ ^^                   ^^^^^ 
 >{    [E.x]: ""} : { 0: string; }
+>                : ^^^^^^^^^^^^^^
 
     [E.x]: ""
 >[E.x] : string
+>      : ^^^^^^
 >E.x : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >x : E
+>  : ^
 >"" : ""
+>   : ^^
 
 }); // Should return string
 
 extractIndexer({
 >extractIndexer({    ["" || 0]: ""}) : string
+>                                    : ^^^^^^
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
+>               : ^ ^^ ^^                   ^^^^^ 
 >{    ["" || 0]: ""} : { 0: string; }
+>                    : ^^^^^^^^^^^^^^
 
     ["" || 0]: ""
 >["" || 0] : string
+>          : ^^^^^^
 >"" || 0 : 0
+>        : ^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 >"" : ""
+>   : ^^
 
 }); // Should return any (widened form of undefined)

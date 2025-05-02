@@ -1,0 +1,36 @@
+// === findAllReferences ===
+// === /a.ts ===
+// interface Foo {
+//     property: /*FIND ALL REFS*/"[|{| isInString: true |}foo|]";
+// }
+// /**
+//  * @type {{ property: "foo"}}
+//  */
+// const obj: Foo = {
+//     property: "[|{| isInString: true |}foo|]",
+// }
+
+  // === Definitions ===
+  // === /a.ts ===
+  // interface Foo {
+  //     property: /*FIND ALL REFS*/"[|foo|]";
+  // }
+  // /**
+  //  * @type {{ property: "foo"}}
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "foo",
+    "displayParts": [
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

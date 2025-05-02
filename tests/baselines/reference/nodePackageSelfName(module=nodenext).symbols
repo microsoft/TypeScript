@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodePackageSelfName.ts] ////
+
+=== index.ts ===
 // esm format file
 import * as self from "package";
 >self : Symbol(self, Decl(index.ts, 1, 6))
@@ -6,7 +8,7 @@ import * as self from "package";
 self;
 >self : Symbol(self, Decl(index.ts, 1, 6))
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 import * as self from "package";
 >self : Symbol(self, Decl(index.mts, 1, 6))
@@ -14,7 +16,7 @@ import * as self from "package";
 self;
 >self : Symbol(self, Decl(index.mts, 1, 6))
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // esm format file
 import * as self from "package";
 >self : Symbol(self, Decl(index.cts, 1, 6))

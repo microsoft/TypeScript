@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithConstructSignatures2.ts] ////
+
 //// [objectTypesIdentityWithConstructSignatures2.ts]
 // object types are identical structurally
 
@@ -91,7 +93,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var a;
-var b = { "new": function (x) { return ''; } }; // not a construct signature, function called new
+var b = { new: function (x) { return ''; } }; // not a construct signature, function called new
 function foo1b(x) { }
 function foo1c(x) { }
 function foo2(x) { }

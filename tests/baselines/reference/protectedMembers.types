@@ -1,256 +1,392 @@
-=== tests/cases/compiler/protectedMembers.ts ===
+//// [tests/cases/compiler/protectedMembers.ts] ////
+
+=== protectedMembers.ts ===
 // Class with protected members
 class C1 {
 >C1 : C1
+>   : ^^
 
     protected x: number;
 >x : number
+>  : ^^^^^^
 
     protected static sx: number;
 >sx : number
+>   : ^^^^^^
 
     protected f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
         return this.x;
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
     }
     protected static sf() {
 >sf : () => number
+>   : ^^^^^^^^^^^^
 
         return this.sx;
 >this.sx : number
+>        : ^^^^^^
 >this : typeof C1
+>     : ^^^^^^^^^
 >sx : number
+>   : ^^^^^^
     }
 }
 
 // Derived class accessing protected members
 class C2 extends C1 {
 >C2 : C2
+>   : ^^
 >C1 : C1
+>   : ^^
 
     protected f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
         return super.f() + this.x;
 >super.f() + this.x : number
+>                   : ^^^^^^
 >super.f() : number
+>          : ^^^^^^
 >super.f : () => number
+>        : ^^^^^^^^^^^^
 >super : C1
+>      : ^^
 >f : () => number
+>  : ^^^^^^^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
     }
     protected static sf() {
 >sf : () => number
+>   : ^^^^^^^^^^^^
 
         return super.sf() + this.sx;
 >super.sf() + this.sx : number
+>                     : ^^^^^^
 >super.sf() : number
+>           : ^^^^^^
 >super.sf : () => number
+>         : ^^^^^^^^^^^^
 >super : typeof C1
+>      : ^^^^^^^^^
 >sf : () => number
+>   : ^^^^^^^^^^^^
 >this.sx : number
+>        : ^^^^^^
 >this : typeof C2
+>     : ^^^^^^^^^
 >sx : number
+>   : ^^^^^^
     }
 }
 
 // Derived class making protected members public
 class C3 extends C2 {
 >C3 : C3
+>   : ^^
 >C2 : C2
+>   : ^^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     static sx: number;
 >sx : number
+>   : ^^^^^^
 
     f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
         return super.f();
 >super.f() : number
+>          : ^^^^^^
 >super.f : () => number
+>        : ^^^^^^^^^^^^
 >super : C2
+>      : ^^
 >f : () => number
+>  : ^^^^^^^^^^^^
     }
     static sf() {
 >sf : () => number
+>   : ^^^^^^^^^^^^
 
         return super.sf();
 >super.sf() : number
+>           : ^^^^^^
 >super.sf : () => number
+>         : ^^^^^^^^^^^^
 >super : typeof C2
+>      : ^^^^^^^^^
 >sf : () => number
+>   : ^^^^^^^^^^^^
     }
 }
 
 var c1: C1;
 >c1 : C1
+>   : ^^
 
 var c2: C2;
 >c2 : C2
+>   : ^^
 
 var c3: C3;
 >c3 : C3
+>   : ^^
 
 // All of these should be errors
 c1.x;
 >c1.x : number
+>     : ^^^^^^
 >c1 : C1
+>   : ^^
 >x : number
+>  : ^^^^^^
 
 c1.f();
 >c1.f() : number
+>       : ^^^^^^
 >c1.f : () => number
+>     : ^^^^^^^^^^^^
 >c1 : C1
+>   : ^^
 >f : () => number
+>  : ^^^^^^^^^^^^
 
 C1.sx;
 >C1.sx : number
+>      : ^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >sx : number
+>   : ^^^^^^
 
 C1.sf();
 >C1.sf() : number
+>        : ^^^^^^
 >C1.sf : () => number
+>      : ^^^^^^^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >sf : () => number
+>   : ^^^^^^^^^^^^
 
 // All of these should be errors
 c2.x;
 >c2.x : number
+>     : ^^^^^^
 >c2 : C2
+>   : ^^
 >x : number
+>  : ^^^^^^
 
 c2.f();
 >c2.f() : number
+>       : ^^^^^^
 >c2.f : () => number
+>     : ^^^^^^^^^^^^
 >c2 : C2
+>   : ^^
 >f : () => number
+>  : ^^^^^^^^^^^^
 
 C2.sx;
 >C2.sx : number
+>      : ^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >sx : number
+>   : ^^^^^^
 
 C2.sf();
 >C2.sf() : number
+>        : ^^^^^^
 >C2.sf : () => number
+>      : ^^^^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >sf : () => number
+>   : ^^^^^^^^^^^^
 
 // All of these should be ok
 c3.x;
 >c3.x : number
+>     : ^^^^^^
 >c3 : C3
+>   : ^^
 >x : number
+>  : ^^^^^^
 
 c3.f();
 >c3.f() : number
+>       : ^^^^^^
 >c3.f : () => number
+>     : ^^^^^^^^^^^^
 >c3 : C3
+>   : ^^
 >f : () => number
+>  : ^^^^^^^^^^^^
 
 C3.sx;
 >C3.sx : number
+>      : ^^^^^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 >sx : number
+>   : ^^^^^^
 
 C3.sf();
 >C3.sf() : number
+>        : ^^^^^^
 >C3.sf : () => number
+>      : ^^^^^^^^^^^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 >sf : () => number
+>   : ^^^^^^^^^^^^
 
 class A {
 >A : A
+>  : ^
 
     protected x;
 >x : any
+>  : ^^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     y;
 >y : any
+>  : ^^^
 }
 
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     z;
 >z : any
+>  : ^^^
 
     static foo(a: A, b: B, c: C, d: D, e: E) {
 >foo : (a: A, b: B, c: C, d: D, e: E) => void
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 >d : D
+>  : ^
 >e : E
+>  : ^
 
         a.x = 1;  // Error, access must be through C or type derived from C
 >a.x = 1 : 1
+>        : ^
 >a.x : any
+>    : ^^^
 >a : A
+>  : ^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         b.x = 1;  // Error, access must be through C or type derived from C
 >b.x = 1 : 1
+>        : ^
 >b.x : any
+>    : ^^^
 >b : B
+>  : ^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         c.x = 1;
 >c.x = 1 : 1
+>        : ^
 >c.x : any
+>    : ^^^
 >c : C
+>  : ^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         d.x = 1;
 >d.x = 1 : 1
+>        : ^
 >d.x : any
+>    : ^^^
 >d : D
+>  : ^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         e.x = 1;
 >e.x = 1 : 1
+>        : ^
 >e.x : any
+>    : ^^^
 >e : E
+>  : ^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     d;
 >d : any
+>  : ^^^
 }
 
 interface E extends C {
     e;
 >e : any
+>  : ^^^
 }
 
 class CC {
 >CC : CC
+>   : ^^
 
     protected constructor() {
     }
@@ -258,59 +394,81 @@ class CC {
 
 class A1 {
 >A1 : A1
+>   : ^^
 
     protected x;
 >x : any
+>  : ^^^
 }
 class B1 {
 >B1 : B1
+>   : ^^
 
     x;
 >x : any
+>  : ^^^
 }
 var a1: A1;
 >a1 : A1
+>   : ^^
 
 var b1: B1;
 >b1 : B1
+>   : ^^
 
 a1 = b1;  // Error, B1 doesn't derive from A1
 >a1 = b1 : B1
+>        : ^^
 >a1 : A1
+>   : ^^
 >b1 : B1
+>   : ^^
 
 b1 = a1;  // Error, x is protected in A1 but public in B1
 >b1 = a1 : A1
+>        : ^^
 >b1 : B1
+>   : ^^
 >a1 : A1
+>   : ^^
 
 class A2 {
 >A2 : A2
+>   : ^^
 
     protected x;
 >x : any
+>  : ^^^
 }
 class B2 extends A2 {
 >B2 : B2
+>   : ^^
 >A2 : A2
+>   : ^^
 
     x;
 >x : any
+>  : ^^^
 }
 
 class A3 {
 >A3 : A3
+>   : ^^
 
     x;
 >x : any
+>  : ^^^
 }
 // Error x is protected in B3 but public in A3
 class B3 extends A3 {
 >B3 : B3
+>   : ^^
 >A3 : A3
+>   : ^^
 
     protected x;
 >x : any
+>  : ^^^
 }
 
 

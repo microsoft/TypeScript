@@ -1,64 +1,104 @@
-=== tests/cases/compiler/test.ts ===
+//// [tests/cases/compiler/declarationEmitInlinedDistributiveConditional.ts] ////
+
+=== test.ts ===
 import {dropPrivateProps1, dropPrivateProps2} from './api';
->dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("tests/cases/compiler/internal").PublicKeys1<keyof Obj>]: Obj[K]; }
->dropPrivateProps2 : <Obj>(obj: Obj) => { [K in keyof Obj extends `_${string}` ? never : keyof Obj]: Obj[K]; }
+>dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>                  : ^   ^^   ^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dropPrivateProps2 : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
+>                  : ^   ^^   ^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const a = dropPrivateProps1({foo: 42, _bar: 'secret'}); // type is {foo: number}
 >a : { foo: number; }
+>  : ^^^^^^^^^^^^^^^^
 >dropPrivateProps1({foo: 42, _bar: 'secret'}) : { foo: number; }
->dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("tests/cases/compiler/internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>                                             : ^^^^^^^^^^^^^^^^
+>dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>                  : ^   ^^   ^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{foo: 42, _bar: 'secret'} : { foo: number; _bar: string; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 >_bar : string
+>     : ^^^^^^
 >'secret' : "secret"
+>         : ^^^^^^^^
 
 //a._bar                                                // error: _bar does not exist           <===== as expected
 const b = dropPrivateProps2({foo: 42, _bar: 'secret'}); // type is {foo: number, _bar: string}
 >b : { foo: number; }
+>  : ^^^^^^^^^^^^^^^^
 >dropPrivateProps2({foo: 42, _bar: 'secret'}) : { foo: number; }
->dropPrivateProps2 : <Obj>(obj: Obj) => { [K in keyof Obj extends `_${string}` ? never : keyof Obj]: Obj[K]; }
+>                                             : ^^^^^^^^^^^^^^^^
+>dropPrivateProps2 : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
+>                  : ^   ^^   ^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{foo: 42, _bar: 'secret'} : { foo: number; _bar: string; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 >_bar : string
+>     : ^^^^^^
 >'secret' : "secret"
+>         : ^^^^^^^^
 
 //b._bar                                                // no error, type of b._bar is string   <===== NOT expected
 
-=== tests/cases/compiler/api.ts ===
+=== api.ts ===
 import {excludePrivateKeys1, excludePrivateKeys2} from './internal';
->excludePrivateKeys1 : <Obj>(obj: Obj) => { [K in import("tests/cases/compiler/internal").PublicKeys1<keyof Obj>]: Obj[K]; }
->excludePrivateKeys2 : <Obj>(obj: Obj) => { [K in keyof Obj extends `_${string}` ? never : keyof Obj]: Obj[K]; }
+>excludePrivateKeys1 : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>                    : ^   ^^   ^^   ^^^^^               ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^                       
+>excludePrivateKeys2 : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
+>                    : ^   ^^   ^^   ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            
 
 export const dropPrivateProps1 = <Obj>(obj: Obj) => excludePrivateKeys1(obj);
->dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("tests/cases/compiler/internal").PublicKeys1<keyof Obj>]: Obj[K]; }
-><Obj>(obj: Obj) => excludePrivateKeys1(obj) : <Obj>(obj: Obj) => { [K in import("tests/cases/compiler/internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>                  : ^   ^^   ^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><Obj>(obj: Obj) => excludePrivateKeys1(obj) : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>                                            : ^   ^^   ^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
->excludePrivateKeys1(obj) : { [K in import("tests/cases/compiler/internal").PublicKeys1<keyof Obj>]: Obj[K]; }
->excludePrivateKeys1 : <Obj>(obj: Obj) => { [K in import("tests/cases/compiler/internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>    : ^^^
+>excludePrivateKeys1(obj) : { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
+>                         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>excludePrivateKeys1 : <Obj_1>(obj: Obj_1) => { [K in import("internal").PublicKeys1<keyof Obj_1>]: Obj_1[K]; }
+>                    : ^^^^^^^^   ^^     ^^^^^               ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^                           
 >obj : Obj
+>    : ^^^
 
 export const dropPrivateProps2 = <Obj>(obj: Obj) => excludePrivateKeys2(obj);
->dropPrivateProps2 : <Obj>(obj: Obj) => { [K in keyof Obj extends `_${string}` ? never : keyof Obj]: Obj[K]; }
-><Obj>(obj: Obj) => excludePrivateKeys2(obj) : <Obj>(obj: Obj) => { [K in keyof Obj extends `_${string}` ? never : keyof Obj]: Obj[K]; }
+>dropPrivateProps2 : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
+>                  : ^   ^^   ^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><Obj>(obj: Obj) => excludePrivateKeys2(obj) : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
+>                                            : ^   ^^   ^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
->excludePrivateKeys2(obj) : { [K in keyof Obj extends `_${string}` ? never : keyof Obj]: Obj[K]; }
->excludePrivateKeys2 : <Obj>(obj: Obj) => { [K in keyof Obj extends `_${string}` ? never : keyof Obj]: Obj[K]; }
+>    : ^^^
+>excludePrivateKeys2(obj) : { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
+>                         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>excludePrivateKeys2 : <Obj_1>(obj: Obj_1) => { [K in keyof Obj_1 extends infer T ? T extends keyof Obj_1 ? T extends `_${string}` ? never : T : never : never]: Obj_1[K]; }
+>                    : ^^^^^^^^   ^^     ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              
 >obj : Obj
+>    : ^^^
 
-=== tests/cases/compiler/internal.ts ===
+=== internal.ts ===
 export declare function excludePrivateKeys1<Obj>(obj: Obj): {[K in PublicKeys1<keyof Obj>]: Obj[K]};
 >excludePrivateKeys1 : <Obj>(obj: Obj) => { [K in PublicKeys1<keyof Obj>]: Obj[K]; }
+>                    : ^   ^^   ^^   ^^^^^                                          
 >obj : Obj
+>    : ^^^
 
 export declare function excludePrivateKeys2<Obj>(obj: Obj): {[K in PublicKeys2<keyof Obj>]: Obj[K]};
 >excludePrivateKeys2 : <Obj>(obj: Obj) => { [K in PublicKeys2<keyof Obj>]: Obj[K]; }
+>                    : ^   ^^   ^^   ^^^^^                                          
 >obj : Obj
+>    : ^^^
 
 export type PublicKeys1<T> = T extends `_${string}` ? never : T;
 >PublicKeys1 : PublicKeys1<T>
+>            : ^^^^^^^^^^^^^^
 
 type PublicKeys2<T>        = T extends `_${string}` ? never : T;
 >PublicKeys2 : PublicKeys2<T>
+>            : ^^^^^^^^^^^^^^
 

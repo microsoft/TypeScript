@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration11.ts] ////
+
 //// [parserModuleDeclaration11.ts]
 declare module string {
     interface X { }

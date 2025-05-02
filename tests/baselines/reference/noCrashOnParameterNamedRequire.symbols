@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/noCrashOnParameterNamedRequire.ts] ////
+
+=== index.js ===
 (function(require, module, exports){
 >require : Symbol(require, Decl(index.js, 0, 10))
 >module : Symbol(module, Decl(index.js, 0, 18))

@@ -1,457 +1,1117 @@
-=== tests/cases/compiler/truthinessCallExpressionCoercion2.ts ===
+//// [tests/cases/compiler/truthinessCallExpressionCoercion2.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+
+=== truthinessCallExpressionCoercion2.ts ===
 declare class A {
 >A : A
+>  : ^
 
     static from(): string;
 >from : () => string
+>     : ^^^^^^      
 }
 
 declare class B {
 >B : B
+>  : ^
 
     static from(): string;
 >from : () => string
+>     : ^^^^^^      
 }
 
 function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
 >test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) => void
+>     : ^         ^^             ^^         ^^             ^^ ^^       ^^        ^^^             ^^^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >required2 : () => boolean
+>          : ^^^^^^       
 >b : boolean
+>  : ^^^^^^^
 >optional : (() => boolean) | undefined
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 
     // error
     required1 && console.log('required');
 >required1 && console.log('required') : void
+>                                     : ^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >console.log('required') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
+>           : ^^^^^^^^^^
 
     // error
     1 && required1 && console.log('required');
 >1 && required1 && console.log('required') : void
+>                                          : ^^^^
 >1 && required1 : () => boolean
+>               : ^^^^^^       
 >1 : 1
+>  : ^
 >required1 : () => boolean
+>          : ^^^^^^       
 >console.log('required') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
+>           : ^^^^^^^^^^
 
     // ok
     required1 && required1();
 >required1 && required1() : boolean
+>                         : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >required1() : boolean
+>            : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 
     // ok
     required1 && 1 && required1();
 >required1 && 1 && required1() : boolean
+>                              : ^^^^^^^
 >required1 && 1 : 1
+>               : ^
 >required1 : () => boolean
+>          : ^^^^^^       
 >1 : 1
+>  : ^
 >required1() : boolean
+>            : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 
     // ok
     optional && console.log('optional');
 >optional && console.log('optional') : void | undefined
+>                                    : ^^^^^^^^^^^^^^^^
 >optional : (() => boolean) | undefined
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('optional') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'optional' : "optional"
+>           : ^^^^^^^^^^
 
     // ok
     1 && optional && console.log('optional');
 >1 && optional && console.log('optional') : void | undefined
+>                                         : ^^^^^^^^^^^^^^^^
 >1 && optional : (() => boolean) | undefined
+>              : ^^^^^^^       ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >optional : (() => boolean) | undefined
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('optional') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'optional' : "optional"
+>           : ^^^^^^^^^^
 
     // ok
     !!required1 && console.log('not required');
 >!!required1 && console.log('not required') : void
+>                                           : ^^^^
 >!!required1 : true
+>            : ^^^^
 >!required1 : false
+>           : ^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >console.log('not required') : void
+>                            : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'not required' : "not required"
+>               : ^^^^^^^^^^^^^^
 
     // ok
     required1() && console.log('required call');
 >required1() && console.log('required call') : false | void
+>                                            : ^^^^^^^^^^^^
 >required1() : boolean
+>            : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >console.log('required call') : void
+>                             : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'required call' : "required call"
+>                : ^^^^^^^^^^^^^^^
 
     // ok
     required1 && required2 && required1() && required2();
 >required1 && required2 && required1() && required2() : boolean
+>                                                     : ^^^^^^^
 >required1 && required2 && required1() : boolean
+>                                      : ^^^^^^^
 >required1 && required2 : () => boolean
+>                       : ^^^^^^       
 >required1 : () => boolean
+>          : ^^^^^^       
 >required2 : () => boolean
+>          : ^^^^^^       
 >required1() : boolean
+>            : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >required2() : boolean
+>            : ^^^^^^^
 >required2 : () => boolean
+>          : ^^^^^^       
 
     // ok
     [].forEach((f: () => void) => f && f.apply(parent, []));
 >[].forEach((f: () => void) => f && f.apply(parent, [])) : void
+>                                                        : ^^^^
 >[].forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
+>           : ^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[] : never[]
+>   : ^^^^^^^
 >forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(f: () => void) => f && f.apply(parent, []) : (f: () => void) => any
+>                                            : ^ ^^          ^^^^^^^^
 >f : () => void
+>  : ^^^^^^    
 >f && f.apply(parent, []) : any
+>                         : ^^^
 >f : () => void
+>  : ^^^^^^    
 >f.apply(parent, []) : any
+>                    : ^^^
 >f.apply : (this: Function, thisArg: any, argArray?: any) => any
+>        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >f : () => void
+>  : ^^^^^^    
 >apply : (this: Function, thisArg: any, argArray?: any) => any
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >parent : Window
+>       : ^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
     // error
     required1 && required2 && required1() && console.log('foo');
 >required1 && required2 && required1() && console.log('foo') : false | void
+>                                                            : ^^^^^^^^^^^^
 >required1 && required2 && required1() : boolean
+>                                      : ^^^^^^^
 >required1 && required2 : () => boolean
+>                       : ^^^^^^       
 >required1 : () => boolean
+>          : ^^^^^^       
 >required2 : () => boolean
+>          : ^^^^^^       
 >required1() : boolean
+>            : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >console.log('foo') : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'foo' : "foo"
+>      : ^^^^^
 
     // error
     if (required1 && b) {
 >required1 && b : boolean
+>               : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >b : boolean
+>  : ^^^^^^^
+    }
+
+    // error
+    if (required1 || b) {
+>required1 || b : () => boolean
+>               : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>b : boolean
+>  : ^^^^^^^
+    }
+
+    // error
+    if (required1 || required2) {
+>required1 || required2 : () => boolean
+>                       : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>required2 : () => boolean
+>          : ^^^^^^       
+    }
+
+    // error
+    if (required1 ?? b) {
+>required1 ?? b : () => boolean
+>               : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>b : boolean
+>  : ^^^^^^^
+    }
+
+    // error
+    if (required1 ?? required2) {
+>required1 ?? required2 : () => boolean
+>                       : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>required2 : () => boolean
+>          : ^^^^^^       
     }
 
     // error
     if (((required1 && b))) {
 >((required1 && b)) : boolean
+>                   : ^^^^^^^
 >(required1 && b) : boolean
+>                 : ^^^^^^^
 >required1 && b : boolean
+>               : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >b : boolean
+>  : ^^^^^^^
     }
 
     // ok
     if (required1 && b) {
 >required1 && b : boolean
+>               : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >b : boolean
+>  : ^^^^^^^
 
         required1();
 >required1() : boolean
+>            : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
+    }
+
+    // ok
+    if (required1 || b) {
+>required1 || b : () => boolean
+>               : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>b : boolean
+>  : ^^^^^^^
+
+        required1();
+>required1() : boolean
+>            : ^^^^^^^
+>required1 : () => boolean
+>          : ^^^^^^       
+    }
+
+    // ok
+    if (required1 ?? b) {
+>required1 ?? b : () => boolean
+>               : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>b : boolean
+>  : ^^^^^^^
+
+        required1();
+>required1() : boolean
+>            : ^^^^^^^
+>required1 : () => boolean
+>          : ^^^^^^       
+    }
+
+    // ok
+    if (b ?? required1) {
+>b ?? required1 : boolean
+>               : ^^^^^^^
+>b : boolean
+>  : ^^^^^^^
+>required1 : () => boolean
+>          : ^^^^^^       
+
+        required1();
+>required1() : boolean
+>            : ^^^^^^^
+>required1 : () => boolean
+>          : ^^^^^^       
     }
 
     // ok
     if (((required1 && b))) {
 >((required1 && b)) : boolean
+>                   : ^^^^^^^
 >(required1 && b) : boolean
+>                 : ^^^^^^^
 >required1 && b : boolean
+>               : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
 >b : boolean
+>  : ^^^^^^^
 
         required1();
 >required1() : boolean
+>            : ^^^^^^^
 >required1 : () => boolean
+>          : ^^^^^^       
+    }
+
+    // error, extra parens are on purpose here
+    if ((required1)) {
+>(required1) : () => boolean
+>            : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+    }
+
+    // error
+    if (b && (required1 || required2)) {
+>b && (required1 || required2) : false | (() => boolean)
+>                              : ^^^^^^^^^^^^^^^       ^
+>b : boolean
+>  : ^^^^^^^
+>(required1 || required2) : () => boolean
+>                         : ^^^^^^       
+>required1 || required2 : () => boolean
+>                       : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>required2 : () => boolean
+>          : ^^^^^^       
+    }
+
+    // error
+    if ((required1 || required2) && b) {
+>(required1 || required2) && b : boolean
+>                              : ^^^^^^^
+>(required1 || required2) : () => boolean
+>                         : ^^^^^^       
+>required1 || required2 : () => boolean
+>                       : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>required2 : () => boolean
+>          : ^^^^^^       
+>b : boolean
+>  : ^^^^^^^
+    }
+
+    // error
+    if (b && (required1 ?? required2)) {
+>b && (required1 ?? required2) : false | (() => boolean)
+>                              : ^^^^^^^^^^^^^^^       ^
+>b : boolean
+>  : ^^^^^^^
+>(required1 ?? required2) : () => boolean
+>                         : ^^^^^^       
+>required1 ?? required2 : () => boolean
+>                       : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>required2 : () => boolean
+>          : ^^^^^^       
+    }
+
+    // error
+    if ((required1 ?? required2) && b) {
+>(required1 ?? required2) && b : boolean
+>                              : ^^^^^^^
+>(required1 ?? required2) : () => boolean
+>                         : ^^^^^^       
+>required1 ?? required2 : () => boolean
+>                       : ^^^^^^       
+>required1 : () => boolean
+>          : ^^^^^^       
+>required2 : () => boolean
+>          : ^^^^^^       
+>b : boolean
+>  : ^^^^^^^
     }
 }
 
 function checksConsole() {
 >checksConsole : () => void
+>              : ^^^^^^^^^^
 
     // error
     typeof window !== 'undefined' && window.console &&
 >typeof window !== 'undefined' && window.console &&        ((window.console as any).firebug || (window.console.error && window.console.table)) : any
+>                                                                                                                                              : ^^^
 >typeof window !== 'undefined' && window.console : false | Console
+>                                                : ^^^^^^^^^^^^^^^
 >typeof window !== 'undefined' : boolean
+>                              : ^^^^^^^
 >typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'undefined' : "undefined"
+>            : ^^^^^^^^^^^
 >window.console : Console
+>               : ^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
+>        : ^^^^^^^
 
         ((window.console as any).firebug || (window.console.error && window.console.table));
 >((window.console as any).firebug || (window.console.error && window.console.table)) : any
+>                                                                                    : ^^^
 >(window.console as any).firebug || (window.console.error && window.console.table) : any
+>                                                                                  : ^^^
 >(window.console as any).firebug : any
+>                                : ^^^
 >(window.console as any) : any
+>                        : ^^^
 >window.console as any : any
+>                      : ^^^
 >window.console : Console
+>               : ^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
+>        : ^^^^^^^
 >firebug : any
->(window.console.error && window.console.table) : (tabularData?: any, properties?: string[] | undefined) => void
->window.console.error && window.console.table : (tabularData?: any, properties?: string[] | undefined) => void
+>        : ^^^
+>(window.console.error && window.console.table) : (tabularData?: any, properties?: string[]) => void
+>                                               : ^           ^^^   ^^          ^^^        ^^^^^    
+>window.console.error && window.console.table : (tabularData?: any, properties?: string[]) => void
+>                                             : ^           ^^^   ^^          ^^^        ^^^^^    
 >window.console.error : (...data: any[]) => void
+>                     : ^^^^    ^^     ^^^^^    
 >window.console : Console
+>               : ^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
+>        : ^^^^^^^
 >error : (...data: any[]) => void
->window.console.table : (tabularData?: any, properties?: string[] | undefined) => void
+>      : ^^^^    ^^     ^^^^^    
+>window.console.table : (tabularData?: any, properties?: string[]) => void
+>                     : ^           ^^^   ^^          ^^^        ^^^^^    
 >window.console : Console
+>               : ^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
->table : (tabularData?: any, properties?: string[] | undefined) => void
+>        : ^^^^^^^
+>table : (tabularData?: any, properties?: string[]) => void
+>      : ^           ^^^   ^^          ^^^        ^^^^^    
 }
 
 function checksPropertyAccess() {
 >checksPropertyAccess : () => void
+>                     : ^^^^^^^^^^
 
     const x = {
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         foo: {
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >{            bar() { return true; }        } : { bar(): boolean; }
+>                                             : ^^^^^^^^^^^^^^^^^^^
 
             bar() { return true; }
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
         }
     }
 
     // error
     x.foo.bar && console.log('x.foo.bar');
 >x.foo.bar && console.log('x.foo.bar') : void
+>                                      : ^^^^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >console.log('x.foo.bar') : void
+>                         : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'x.foo.bar' : "x.foo.bar"
+>            : ^^^^^^^^^^^
 
     // error
     1 && x.foo.bar && console.log('x.foo.bar');
 >1 && x.foo.bar && console.log('x.foo.bar') : void
+>                                           : ^^^^
 >1 && x.foo.bar : () => boolean
+>               : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >console.log('x.foo.bar') : void
+>                         : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'x.foo.bar' : "x.foo.bar"
+>            : ^^^^^^^^^^^
 
     // ok
     x.foo.bar && x.foo.bar();
 >x.foo.bar && x.foo.bar() : boolean
+>                         : ^^^^^^^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >x.foo.bar() : boolean
+>            : ^^^^^^^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 
     // ok
     x.foo.bar && 1 && x.foo.bar();
 >x.foo.bar && 1 && x.foo.bar() : boolean
+>                              : ^^^^^^^
 >x.foo.bar && 1 : 1
+>               : ^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >x.foo.bar() : boolean
+>            : ^^^^^^^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 
     // ok
     const y = A.from && (A.from as Function) !== B.from ? true : false;
 >y : boolean
+>  : ^^^^^^^
 >A.from && (A.from as Function) !== B.from ? true : false : boolean
+>                                                         : ^^^^^^^
 >A.from && (A.from as Function) !== B.from : boolean
+>                                          : ^^^^^^^
 >A.from : () => string
+>       : ^^^^^^      
 >A : typeof A
+>  : ^^^^^^^^
 >from : () => string
+>     : ^^^^^^      
 >(A.from as Function) !== B.from : boolean
+>                                : ^^^^^^^
 >(A.from as Function) : Function
+>                     : ^^^^^^^^
 >A.from as Function : Function
+>                   : ^^^^^^^^
 >A.from : () => string
+>       : ^^^^^^      
 >A : typeof A
+>  : ^^^^^^^^
 >from : () => string
+>     : ^^^^^^      
 >B.from : () => string
+>       : ^^^^^^      
 >B : typeof B
+>  : ^^^^^^^^
 >from : () => string
+>     : ^^^^^^      
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     y;
 >y : boolean
+>  : ^^^^^^^
 
     const x1 = {
 >x1 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        a: { b: { c: () => {} } }    } : { a: { b: { c: () => void; }; }; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: { b: { c: () => {} } }
 >a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: { c: () => {} } } : { b: { c: () => void; }; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 >{ c: () => {} } : { c: () => void; }
+>                : ^^^^^^^^^^^^^^^^^^
 >c : () => void
+>  : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
     }
     const x2 = {
 >x2 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        a: { b: { c: () => {} } }    } : { a: { b: { c: () => void; }; }; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: { b: { c: () => {} } }
 >a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: { c: () => {} } } : { b: { c: () => void; }; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 >{ c: () => {} } : { c: () => void; }
+>                : ^^^^^^^^^^^^^^^^^^
 >c : () => void
+>  : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
     }
 
     // error
     x1.a.b.c && x2.a.b.c();
 >x1.a.b.c && x2.a.b.c() : void
+>                       : ^^^^
 >x1.a.b.c : () => void
+>         : ^^^^^^^^^^
 >x1.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
 >x1.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x1 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 >c : () => void
+>  : ^^^^^^^^^^
 >x2.a.b.c() : void
+>           : ^^^^
 >x2.a.b.c : () => void
+>         : ^^^^^^^^^^
 >x2.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
 >x2.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x2 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
 >c : () => void
+>  : ^^^^^^^^^^
+
+    // error, extra parens are on purpose here
+    if ((x1.a.b.c)) {
+>(x1.a.b.c) : () => void
+>           : ^^^^^^^^^^
+>x1.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x1.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x1.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x1 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+    }
+
+    // error
+    if (1 && (x1.a.b.c || x2.a.b.c)) {
+>1 && (x1.a.b.c || x2.a.b.c) : () => void
+>                            : ^^^^^^^^^^
+>1 : 1
+>  : ^
+>(x1.a.b.c || x2.a.b.c) : () => void
+>                       : ^^^^^^^^^^
+>x1.a.b.c || x2.a.b.c : () => void
+>                     : ^^^^^^^^^^
+>x1.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x1.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x1.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x1 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+>x2.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x2.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x2.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x2 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+    }
+
+    // error
+    if ((x1.a.b.c || x2.a.b.c) && 1) {
+>(x1.a.b.c || x2.a.b.c) && 1 : 1
+>                            : ^
+>(x1.a.b.c || x2.a.b.c) : () => void
+>                       : ^^^^^^^^^^
+>x1.a.b.c || x2.a.b.c : () => void
+>                     : ^^^^^^^^^^
+>x1.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x1.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x1.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x1 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+>x2.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x2.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x2.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x2 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    // error
+    if (1 && (x1.a.b.c ?? x2.a.b.c)) {
+>1 && (x1.a.b.c ?? x2.a.b.c) : () => void
+>                            : ^^^^^^^^^^
+>1 : 1
+>  : ^
+>(x1.a.b.c ?? x2.a.b.c) : () => void
+>                       : ^^^^^^^^^^
+>x1.a.b.c ?? x2.a.b.c : () => void
+>                     : ^^^^^^^^^^
+>x1.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x1.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x1.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x1 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+>x2.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x2.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x2.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x2 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+    }
+
+    // error
+    if ((x1.a.b.c ?? x2.a.b.c) && 1) {
+>(x1.a.b.c ?? x2.a.b.c) && 1 : 1
+>                            : ^
+>(x1.a.b.c ?? x2.a.b.c) : () => void
+>                       : ^^^^^^^^^^
+>x1.a.b.c ?? x2.a.b.c : () => void
+>                     : ^^^^^^^^^^
+>x1.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x1.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x1.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x1 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+>x2.a.b.c : () => void
+>         : ^^^^^^^^^^
+>x2.a.b : { c: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^
+>x2.a : { b: { c: () => void; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x2 : { a: { b: { c: () => void; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: () => void; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+>1 : 1
+>  : ^
+    }
 }
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     optional?: () => boolean;
 >optional : (() => boolean) | undefined
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 
     required() {
 >required : () => boolean
+>         : ^^^^^^^^^^^^^
 
         return true;
 >true : true
+>     : ^^^^
     }
     test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         // error
         this.required && console.log('required');
 >this.required && console.log('required') : void
+>                                         : ^^^^
 >this.required : () => boolean
+>              : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >required : () => boolean
+>         : ^^^^^^^^^^^^^
 >console.log('required') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
+>           : ^^^^^^^^^^
 
         // error
         1 && this.required && console.log('required');
 >1 && this.required && console.log('required') : void
+>                                              : ^^^^
 >1 && this.required : () => boolean
+>                   : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >this.required : () => boolean
+>              : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >required : () => boolean
+>         : ^^^^^^^^^^^^^
 >console.log('required') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
+>           : ^^^^^^^^^^
 
         // ok
         this.required && this.required();
 >this.required && this.required() : boolean
+>                                 : ^^^^^^^
 >this.required : () => boolean
+>              : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >required : () => boolean
+>         : ^^^^^^^^^^^^^
 >this.required() : boolean
+>                : ^^^^^^^
 >this.required : () => boolean
+>              : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >required : () => boolean
+>         : ^^^^^^^^^^^^^
 
         // ok
         this.required && 1 && this.required();
 >this.required && 1 && this.required() : boolean
+>                                      : ^^^^^^^
 >this.required && 1 : 1
+>                   : ^
 >this.required : () => boolean
+>              : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >required : () => boolean
+>         : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >this.required() : boolean
+>                : ^^^^^^^
 >this.required : () => boolean
+>              : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >required : () => boolean
+>         : ^^^^^^^^^^^^^
 
         // ok
         1 && this.optional && console.log('optional');
 >1 && this.optional && console.log('optional') : void | undefined
+>                                              : ^^^^^^^^^^^^^^^^
 >1 && this.optional : (() => boolean) | undefined
+>                   : ^^^^^^^       ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >this.optional : (() => boolean) | undefined
+>              : ^^^^^^^       ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >optional : (() => boolean) | undefined
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('optional') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'optional' : "optional"
+>           : ^^^^^^^^^^
     }
 }
 

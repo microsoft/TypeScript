@@ -1,6 +1,10 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/umdNamedAmdMode.ts] ////
+
+=== main.ts ===
 /// <amd-module name="a"/>
 export const a = 1;
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 

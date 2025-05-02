@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forOfStringConstituents.ts ===
+//// [tests/cases/compiler/forOfStringConstituents.ts] ////
+
+=== forOfStringConstituents.ts ===
 interface A { x: 0; y: C[]; }
 >A : Symbol(A, Decl(forOfStringConstituents.ts, 0, 0))
 >x : Symbol(A.x, Decl(forOfStringConstituents.ts, 0, 13))

@@ -1,8 +1,8 @@
-tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements02.ts(8,5): error TS2367: This condition will always return 'false' since the types '"foo"' and '"bar"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements02.ts(13,5): error TS2367: This condition will always return 'true' since the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithSwitchStatements02.ts(8,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithSwitchStatements02.ts(13,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
 
 
-==== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements02.ts (2 errors) ====
+==== stringLiteralsWithSwitchStatements02.ts (2 errors) ====
     let x: "foo";
     let y: "foo" | "bar";
     
@@ -12,13 +12,13 @@ tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements02.ts(13
     b = y == "foo";
     b = "foo" == "bar";
         ~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"foo"' and '"bar"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
     
     b = x != y;
     b = "foo" != y
     b = y != "foo";
     b = "foo" != "bar";
         ~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"foo"' and '"bar"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
     
     

@@ -1,15 +1,15 @@
 error TS2318: Cannot find global type 'IterableIterator'.
-tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts(6,1): error TS2554: Expected 2 arguments, but got 1.
+spreadOfParamsFromGeneratorMakesRequiredParams.ts(6,1): error TS2554: Expected 2 arguments, but got 1.
 
 
 !!! error TS2318: Cannot find global type 'IterableIterator'.
-==== tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts (1 errors) ====
+==== spreadOfParamsFromGeneratorMakesRequiredParams.ts (1 errors) ====
     declare function call<Fn extends (...args: any[]) => any>(
         fn: Fn,
         ...args: Parameters<Fn>
     ): any;
     
     call(function* (a: 'a') { }); // error, 2nd argument required
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6236 tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts:3:5: Arguments for the rest parameter 'args' were not provided.
+!!! related TS6236 spreadOfParamsFromGeneratorMakesRequiredParams.ts:3:5: Arguments for the rest parameter 'args' were not provided.

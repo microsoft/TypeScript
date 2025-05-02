@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/objectSpreadNegative.ts] ////
+
 //// [objectSpreadNegative.ts]
 let o = { a: 1, b: 'no' }
 

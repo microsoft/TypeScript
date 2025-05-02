@@ -1,31 +1,47 @@
-=== tests/cases/conformance/salsa/Compilation.js ===
+//// [tests/cases/conformance/salsa/annotatedThisPropertyInitializerDoesntNarrow.ts] ////
+
+=== Compilation.js ===
 // from webpack/lib/Compilation.js and filed at #26427
 /** @param {{ [s: string]: number }} map */
 function mappy(map) {}
 >mappy : (map: { [s: string]: number; }) => void
+>      : ^   ^^                        ^^^^^^^^^
 >map : { [s: string]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 export class C {
 >C : C
+>  : ^
 
     constructor() {
         /** @type {{ [assetName: string]: number}} */
         this.assets = {};
 >this.assets = {} : {}
+>                 : ^^
 >this.assets : { [assetName: string]: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >assets : { [assetName: string]: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
     }
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         mappy(this.assets)
 >mappy(this.assets) : void
+>                   : ^^^^
 >mappy : (map: { [s: string]: number; }) => void
+>      : ^   ^^                        ^^^^^^^^^
 >this.assets : { [assetName: string]: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >assets : { [assetName: string]: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

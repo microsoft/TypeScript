@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedJsxAttribute.ts] ////
+
 //// [index.tsx]
 interface Elements {
   foo: { callback?: (value: number) => void };
@@ -27,6 +29,6 @@ Test({
 <Test as="bar" callback={function (value) { }}/>;
 Test({
     as: "bar",
-    callback: function (value) { }
+    callback: function (value) { },
 });
 <Test as="bar" callback={function (value) { }}/>;

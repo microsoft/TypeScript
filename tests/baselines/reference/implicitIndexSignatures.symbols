@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitIndexSignatures.ts ===
+//// [tests/cases/compiler/implicitIndexSignatures.ts] ////
+
+=== implicitIndexSignatures.ts ===
 type StringMap = { [x: string]: string };
 >StringMap : Symbol(StringMap, Decl(implicitIndexSignatures.ts, 0, 0))
 >x : Symbol(x, Decl(implicitIndexSignatures.ts, 0, 20))

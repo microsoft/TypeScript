@@ -1,39 +1,55 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/errorWithSameNameType.ts] ////
+
+=== a.ts ===
 export interface F {
     foo1: number
 >foo1 : number
+>     : ^^^^^^
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export interface F {
     foo2: number
 >foo2 : number
+>     : ^^^^^^
 }
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 import * as A from './a'
 >A : typeof A
+>  : ^^^^^^^^
 
 import * as B from './b'
 >B : typeof B
+>  : ^^^^^^^^
 
 let a: A.F
 >a : A.F
+>  : ^^^
 >A : any
+>  : ^^^
 
 let b: B.F
 >b : B.F
+>  : ^^^
 >B : any
+>  : ^^^
 
 if (a === b) {
 >a === b : boolean
+>        : ^^^^^^^
 >a : A.F
+>  : ^^^
 >b : B.F
+>  : ^^^
 
 }
 
 a = b
 >a = b : B.F
+>      : ^^^
 >a : A.F
+>  : ^^^
 >b : B.F
+>  : ^^^
 

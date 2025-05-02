@@ -1,0 +1,78 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-outerThisReference.ts] ////
+
+=== esDecorators-classDeclaration-outerThisReference.ts ===
+declare let dec: any;
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
+
+declare let f: any;
+>f : Symbol(f, Decl(esDecorators-classDeclaration-outerThisReference.ts, 2, 11))
+
+// `this` should point to the outer `this` in both cases.
+@dec(this)
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
+>this : Symbol(globalThis)
+
+class A {
+>A : Symbol(A, Decl(esDecorators-classDeclaration-outerThisReference.ts, 2, 19))
+
+    @dec(this)
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
+>this : Symbol(globalThis)
+
+    b = 2;
+>b : Symbol(A.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 6, 9))
+}
+
+// `this` should point to the outer `this`, and maintain the correct evaluation order with respect to computed
+// property names.
+
+@dec(this)
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
+>this : Symbol(globalThis)
+
+class B {
+>B : Symbol(B, Decl(esDecorators-classDeclaration-outerThisReference.ts, 9, 1))
+
+    // @ts-ignore
+    [f(this)] = 1;
+>[f(this)] : Symbol(B[f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 15, 9))
+>f : Symbol(f, Decl(esDecorators-classDeclaration-outerThisReference.ts, 2, 11))
+>this : Symbol(B, Decl(esDecorators-classDeclaration-outerThisReference.ts, 9, 1))
+
+    @dec(this)
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
+>this : Symbol(globalThis)
+
+    b = 2;
+>b : Symbol(B.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 17, 18))
+
+    // @ts-ignore
+    [f(this)] = 3;
+>[f(this)] : Symbol(B[f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 20, 10))
+>f : Symbol(f, Decl(esDecorators-classDeclaration-outerThisReference.ts, 2, 11))
+>this : Symbol(B, Decl(esDecorators-classDeclaration-outerThisReference.ts, 9, 1))
+}
+
+// The `this` transformation should ensure that decorators inside the class body have privileged access to
+// private names.
+@dec(this)
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
+>this : Symbol(globalThis)
+
+class C {
+>C : Symbol(C, Decl(esDecorators-classDeclaration-outerThisReference.ts, 24, 1))
+
+    #a = 1;
+>#a : Symbol(C.#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
+
+    @dec(this, (x: C) => x.#a)
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
+>this : Symbol(globalThis)
+>x : Symbol(x, Decl(esDecorators-classDeclaration-outerThisReference.ts, 32, 16))
+>C : Symbol(C, Decl(esDecorators-classDeclaration-outerThisReference.ts, 24, 1))
+>x.#a : Symbol(C.#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
+>x : Symbol(x, Decl(esDecorators-classDeclaration-outerThisReference.ts, 32, 16))
+
+    b = 2;
+>b : Symbol(C.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 30, 11))
+}

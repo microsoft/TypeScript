@@ -1,11 +1,11 @@
-tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(2,6): error TS2339: Property 'length' does not exist on type '{}'.
-tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(5,6): error TS2339: Property 'length' does not exist on type 'Object'.
-tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(8,24): error TS2345: Argument of type '""' is not assignable to parameter of type '1'.
-tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(9,27): error TS2339: Property 'length' does not exist on type 'number'.
-tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(13,28): error TS2339: Property 'length' does not exist on type 'number'.
+defaultBestCommonTypesHaveDecls.ts(2,6): error TS2339: Property 'length' does not exist on type '{}'.
+defaultBestCommonTypesHaveDecls.ts(5,6): error TS2339: Property 'length' does not exist on type 'Object'.
+defaultBestCommonTypesHaveDecls.ts(8,24): error TS2345: Argument of type '""' is not assignable to parameter of type '1'.
+defaultBestCommonTypesHaveDecls.ts(9,27): error TS2339: Property 'length' does not exist on type 'number'.
+defaultBestCommonTypesHaveDecls.ts(13,28): error TS2339: Property 'length' does not exist on type 'number'.
 
 
-==== tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts (5 errors) ====
+==== defaultBestCommonTypesHaveDecls.ts (5 errors) ====
     var obj1: {};
     obj1.length;
          ~~~~~~

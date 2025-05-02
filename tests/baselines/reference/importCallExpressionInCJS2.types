@@ -1,50 +1,72 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInCJS2.ts] ////
+
+=== 0.ts ===
 export function foo() { return "foo"; }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 export function backup() { return "backup"; }
 >backup : () => string
+>       : ^^^^^^^^^^^^
 >"backup" : "backup"
+>         : ^^^^^^^^
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 async function compute(promise: Promise<any>) {
 >compute : (promise: Promise<any>) => Promise<any>
+>        : ^       ^^            ^^^^^^^^^^^^^^^^^
 >promise : Promise<any>
+>        : ^^^^^^^^^^^^
 
     let j = await promise;
 >j : any
 >await promise : any
 >promise : Promise<any>
+>        : ^^^^^^^^^^^^
 
     if (!j) {
 >!j : boolean
+>   : ^^^^^^^
 >j : any
 
         j = await import("./1");
->j = await import("./1") : typeof import("tests/cases/conformance/dynamicImport/1")
+>j = await import("./1") : typeof import("1")
+>                        : ^^^^^^^^^^^^^^^^^^
 >j : any
->await import("./1") : typeof import("tests/cases/conformance/dynamicImport/1")
->import("./1") : Promise<typeof import("tests/cases/conformance/dynamicImport/1")>
+>await import("./1") : typeof import("1")
+>                    : ^^^^^^^^^^^^^^^^^^
+>import("./1") : Promise<typeof import("1")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./1" : "./1"
+>      : ^^^^^
 
         return j.backup();
 >j.backup() : any
 >j.backup : any
 >j : any
+>  : ^^^
 >backup : any
+>       : ^^^
     }
     return j.foo();
 >j.foo() : any
 >j.foo : any
 >j : any
+>  : ^^^
 >foo : any
+>    : ^^^
 }
 
 compute(import("./0"));
 >compute(import("./0")) : Promise<any>
+>                       : ^^^^^^^^^^^^
 >compute : (promise: Promise<any>) => Promise<any>
->import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>        : ^       ^^            ^^^^^^^^^^^^^^^^^
+>import("./0") : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"
+>      : ^^^^^
 

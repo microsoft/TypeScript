@@ -2,10 +2,10 @@
 
 // @moduleResolution: node
 
-// @Filename: /node_modules/lodash/package.json
+// @Filename: /home/src/workspaces/project/node_modules/lodash/package.json
 //// { "name": "lodash", "version": "4.17.15", "main": "./lodash.js" }
 
-// @Filename: /node_modules/lodash/lodash.js
+// @Filename: /home/src/workspaces/project/node_modules/lodash/lodash.js
 //// ;(function() {
 ////     /**
 ////      * Adds two numbers.
@@ -51,10 +51,10 @@
 ////     }
 //// }.call(this));
 
-// @Filename: /node_modules/@types/lodash/package.json
+// @Filename: /home/src/workspaces/project/node_modules/@types/lodash/package.json
 //// { "name": "@types/lodash", "version": "4.14.97", "types": "index.d.ts" }
 
-// @Filename: /node_modules/@types/lodash/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/lodash/index.d.ts
 //// /// <reference path="./common/math.d.ts" />
 //// export = _;
 //// export as namespace _;
@@ -63,7 +63,7 @@
 ////     interface LoDashStatic {}
 //// }
 
-// @Filename: /node_modules/@types/lodash/common/math.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/lodash/common/math.d.ts
 //// import _ = require("../index");
 //// declare module "../index" {
 ////     interface LoDashStatic {
@@ -71,11 +71,8 @@
 ////     }
 //// }
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// import [|/*defaultImport*/_|], { [|/*unresolvableNamedImport*/foo|] } from [|/*moduleSpecifier*/'lodash'|];
 //// _.[|/*propertyAccess*/add|]
 
-verify.goToSourceDefinition("defaultImport", { file: "/node_modules/lodash/lodash.js", unverified: true });
-verify.goToSourceDefinition("unresolvableNamedImport", { file: "/node_modules/lodash/lodash.js", unverified: true });
-verify.goToSourceDefinition("moduleSpecifier", { file: "/node_modules/lodash/lodash.js", unverified: true });
-verify.goToSourceDefinition("propertyAccess", [{ marker: "variable", unverified: true }, { marker: "property", unverified: true }])
+verify.baselineGoToSourceDefinition("defaultImport", "unresolvableNamedImport", "moduleSpecifier");

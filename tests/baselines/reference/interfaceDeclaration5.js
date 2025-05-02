@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceDeclaration5.ts] ////
+
 //// [interfaceDeclaration5.ts]
 export interface I1 { item:string; }
 export class C1 { }
@@ -6,7 +8,7 @@ export class C1 { }
 //// [interfaceDeclaration5.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.C1 = void 0;
     var C1 = /** @class */ (function () {
         function C1() {

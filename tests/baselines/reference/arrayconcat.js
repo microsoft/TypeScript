@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayconcat.ts] ////
+
 //// [arrayconcat.ts]
 interface IOptions {
     name?: string;

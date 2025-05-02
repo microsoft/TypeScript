@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName01.ts ===
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName01.ts] ////
+
+=== declarationEmitThisPredicatesWithPrivateName01.ts ===
 export class C {
 >C : Symbol(C, Decl(declarationEmitThisPredicatesWithPrivateName01.ts, 0, 0))
 

@@ -1,13 +1,20 @@
-=== tests/cases/compiler/declarationEmitInvalidExport.ts ===
+//// [tests/cases/compiler/declarationEmitInvalidExport.ts] ////
+
+=== declarationEmitInvalidExport.ts ===
 if (false) {
 >false : false
+>      : ^^^^^
 
   export var myClass = 0;
 >myClass : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 }
 export type MyClass = typeof myClass;
 >MyClass : number
+>        : ^^^^^^
 >myClass : number
+>        : ^^^^^^
 }
 

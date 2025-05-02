@@ -1,91 +1,133 @@
-=== tests/cases/compiler/controlFlowFavorAssertedTypeThroughTypePredicate.ts ===
+//// [tests/cases/compiler/controlFlowFavorAssertedTypeThroughTypePredicate.ts] ////
+
+=== controlFlowFavorAssertedTypeThroughTypePredicate.ts ===
 // repro 49988#issuecomment-1192016929
 
 declare function isObject1(value: unknown): value is Record<string, unknown>;
 >isObject1 : (value: unknown) => value is Record<string, unknown>
+>          : ^     ^^       ^^^^^                                
 >value : unknown
+>      : ^^^^^^^
 
 declare const obj1: {};
 >obj1 : {}
+>     : ^^
 
 if (isObject1(obj1)) {
 >isObject1(obj1) : boolean
+>                : ^^^^^^^
 >isObject1 : (value: unknown) => value is Record<string, unknown>
+>          : ^     ^^       ^^^^^                                
 >obj1 : {}
+>     : ^^
 
     obj1;
 >obj1 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
     obj1['attr'];
 >obj1['attr'] : unknown
+>             : ^^^^^^^
 >obj1 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >'attr' : "attr"
+>       : ^^^^^^
 }
 // check type after conditional block
 obj1;
->obj1 : Record<string, unknown>
+>obj1 : {}
+>     : ^^
 
 declare const obj2: {} | undefined;
 >obj2 : {} | undefined
+>     : ^^^^^^^^^^^^^^
 
 if (isObject1(obj2)) {
 >isObject1(obj2) : boolean
+>                : ^^^^^^^
 >isObject1 : (value: unknown) => value is Record<string, unknown>
+>          : ^     ^^       ^^^^^                                
 >obj2 : {} | undefined
+>     : ^^^^^^^^^^^^^^
 
     obj2;
 >obj2 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
     obj2['attr'];
 >obj2['attr'] : unknown
+>             : ^^^^^^^
 >obj2 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >'attr' : "attr"
+>       : ^^^^^^
 }
 // check type after conditional block
 obj2;
->obj2 : Record<string, unknown> | undefined
+>obj2 : {} | undefined
+>     : ^^^^^^^^^^^^^^
 
 declare function isObject2(value: unknown): value is {};
 >isObject2 : (value: unknown) => value is {}
+>          : ^     ^^       ^^^^^           
 >value : unknown
+>      : ^^^^^^^
 
 declare const obj3: Record<string, unknown>;
 >obj3 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 if (isObject2(obj3)) {
 >isObject2(obj3) : boolean
+>                : ^^^^^^^
 >isObject2 : (value: unknown) => value is {}
+>          : ^     ^^       ^^^^^           
 >obj3 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
     obj3;
->obj3 : {}
+>obj3 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
     obj3['attr'];
->obj3['attr'] : any
->obj3 : {}
+>obj3['attr'] : unknown
+>             : ^^^^^^^
+>obj3 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >'attr' : "attr"
+>       : ^^^^^^
 }
 // check type after conditional block
 obj3;
->obj3 : {}
+>obj3 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const obj4: Record<string, unknown> | undefined;
 >obj4 : Record<string, unknown> | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (isObject2(obj4)) {
 >isObject2(obj4) : boolean
+>                : ^^^^^^^
 >isObject2 : (value: unknown) => value is {}
+>          : ^     ^^       ^^^^^           
 >obj4 : Record<string, unknown> | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     obj4;
->obj4 : {}
+>obj4 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
     obj4['attr'];
->obj4['attr'] : any
->obj4 : {}
+>obj4['attr'] : unknown
+>             : ^^^^^^^
+>obj4 : Record<string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >'attr' : "attr"
+>       : ^^^^^^
 }
 // check type after conditional block
 obj4;
->obj4 : {} | undefined
+>obj4 : Record<string, unknown> | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

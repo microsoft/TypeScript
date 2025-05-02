@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts] ////
+
 //// [stringLiteralTypesInUnionTypes04.ts]
 type T = "" | "foo";
 

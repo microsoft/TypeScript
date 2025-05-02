@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes01.ts] ////
+
+=== stringLiteralTypesInUnionTypes01.ts ===
 type T = "foo" | "bar" | "baz";
 >T : Symbol(T, Decl(stringLiteralTypesInUnionTypes01.ts, 0, 0))
 

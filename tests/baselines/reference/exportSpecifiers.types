@@ -1,57 +1,84 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportSpecifiers.ts] ////
+
 === /imports.ts ===
 import { type, as, something, foo, bar } from "./exports.js";
 >type : 0
+>     : ^
 >as : 0
+>   : ^
 >something : 0
+>          : ^
 >foo : 0
+>    : ^
 >bar : 0
+>    : ^
 
 type;
 >type : 0
+>     : ^
 
 as; // Error (used in emitting position)
 >as : 0
+>   : ^
 
 something; // Error (used in emitting position)
 >something : 0
+>          : ^
 
 foo; // Error (used in emitting position)
 >foo : 0
+>    : ^
 
 bar; // Error (used in emitting position)
 >bar : 0
+>    : ^
 
 === /exports.ts ===
 const type = 0;
 >type : 0
+>     : ^
 >0 : 0
+>  : ^
 
 const as = 0;
 >as : 0
+>   : ^
 >0 : 0
+>  : ^
 
 const something = 0;
 >something : 0
+>          : ^
 >0 : 0
+>  : ^
 
 export { type };
 >type : 0
+>     : ^
 
 export { type as };
 >as : 0
+>   : ^
 
 export { type something };
 >something : 0
+>          : ^
 
 export { type type as foo };
 >type : 0
+>     : ^
 >foo : 0
+>    : ^
 
 export { type as as bar };
 >as : 0
+>   : ^
 >bar : 0
+>    : ^
 
 export type { type something as whatever }; // Error
 >something : 0
+>          : ^
 >whatever : any
+>         : ^^^
 

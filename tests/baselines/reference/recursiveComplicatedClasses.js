@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveComplicatedClasses.ts] ////
+
 //// [recursiveComplicatedClasses.ts]
 class Signature {
     public parameters: ParameterSymbol[] = null;

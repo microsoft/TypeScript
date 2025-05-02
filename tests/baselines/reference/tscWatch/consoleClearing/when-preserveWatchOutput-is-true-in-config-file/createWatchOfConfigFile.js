@@ -1,11 +1,16 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/f.ts]
+//// [/user/username/projects/myproject/f.ts]
 
 
-//// [/tsconfig.json]
-{"compilerOptions":{"preserveWatchOutput":true}}
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "preserveWatchOutput": true
+  }
+}
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -17,96 +22,107 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p /tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:13 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/f.ts","/a/lib/lib.d.ts"]
-Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/f.ts
-/a/lib/lib.d.ts
+//// [/user/username/projects/myproject/f.js]
 
-Semantic diagnostics in builder refreshed for::
-/f.ts
-/a/lib/lib.d.ts
 
-Shape signatures in builder refreshed for::
-/f.ts (used version)
-/a/lib/lib.d.ts (used version)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/f.ts:
-  {"fileName":"/f.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/f.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/:
-  {"directoryName":""}
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/f.ts"
+]
+Program options: {
+  "preserveWatchOutput": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/f.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/f.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/myproject/f.ts (used version)
 
 exitCode:: ExitStatus.undefined
-
-//// [/f.js]
-
-
 
 Change:: Comment added to file f
 
 Input::
-//// [/f.ts]
+//// [/user/username/projects/myproject/f.ts]
 //
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
-[[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:23 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/f.ts","/a/lib/lib.d.ts"]
-Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+//// [/user/username/projects/myproject/f.js]
+//
+
+
+
+
+Program root files: [
+  "/user/username/projects/myproject/f.ts"
+]
+Program options: {
+  "preserveWatchOutput": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
-/f.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/f.ts
 
 Semantic diagnostics in builder refreshed for::
-/f.ts
+/user/username/projects/myproject/f.ts
 
 Shape signatures in builder refreshed for::
-/f.ts (computed .d.ts)
-
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/f.ts:
-  {"fileName":"/f.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":""}
+/user/username/projects/myproject/f.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/f.js]
-//
-
-

@@ -1,209 +1,277 @@
-=== tests/cases/compiler/controlFlowJavascript.js ===
+//// [tests/cases/compiler/controlFlowJavascript.ts] ////
+
+=== controlFlowJavascript.js ===
 let cond = true;
 >cond : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
 // CFA for 'let' and no initializer
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let x;
 >x : any
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
     }
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : any
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 // CFA for 'let' and 'undefined' initializer
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     let x = undefined;
 >x : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
     }
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : any
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 // CFA for 'let' and 'null' initializer
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     let x = null;
 >x : any
->null : null
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
     }
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : any
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     const y = x;  // string | number | null
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 // CFA for 'var' with no initializer
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     var x;
 >x : any
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
     }
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : any
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 // CFA for 'var' with 'undefined' initializer
 function f6() {
 >f6 : () => void
+>   : ^^^^^^^^^^
 
     var x = undefined;
 >x : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
     }
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : any
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 // CFA for 'var' with 'null' initializer
 function f7() {
 >f7 : () => void
+>   : ^^^^^^^^^^
 
     var x = null;
 >x : any
->null : null
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
     }
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : any
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     const y = x;  // string | number | null
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 // No CFA for captured outer variables
 function f9() {
 >f9 : () => void
+>   : ^^^^^^^^^^
 
     let x;
 >x : any
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
     }
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : any
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
         const z = x;  // any
 >z : any
@@ -214,33 +282,44 @@ function f9() {
 // No CFA for captured outer variables
 function f10() {
 >f10 : () => void
+>    : ^^^^^^^^^^
 
     let x;
 >x : any
 
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
     }
     if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : any
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     const f = () => {
 >f : () => void
+>  : ^^^^^^^^^^
 >() => {        const z = x;  // any    } : () => void
+>                                         : ^^^^^^^^^^
 
         const z = x;  // any
 >z : any

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/for.ts ===
+//// [tests/cases/compiler/for.ts] ////
+
+=== for.ts ===
 for (var i = 0; i < 10; i++) { // ok
 >i : Symbol(i, Decl(for.ts, 0, 8))
 >i : Symbol(i, Decl(for.ts, 0, 8))

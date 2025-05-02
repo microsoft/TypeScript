@@ -1,87 +1,140 @@
-=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithTypeParameter.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithTypeParameter.ts] ////
+
+=== exponentiationOperatorWithTypeParameter.ts ===
 // type parameter type is not valid for arithmetic operand
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 
     var a: any;
 >a : any
+>  : ^^^
 
     var b: boolean;
 >b : boolean
+>  : ^^^^^^^
 
     var c: number;
 >c : number
+>  : ^^^^^^
 
     var d: string;
 >d : string
+>  : ^^^^^^
 
     var e: {};
 >e : {}
+>  : ^^
 
     var r1a1 = a ** t;
 >r1a1 : number
+>     : ^^^^^^
 >a ** t : number
+>       : ^^^^^^
 >a : any
+>  : ^^^
 >t : T
+>  : ^
 
     var r2a1 = t ** a;
 >r2a1 : number
+>     : ^^^^^^
 >t ** a : number
+>       : ^^^^^^
 >t : T
+>  : ^
 >a : any
+>  : ^^^
 
     var r1b1 = b ** t;
 >r1b1 : number
+>     : ^^^^^^
 >b ** t : number
+>       : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r2b1 = t ** b;
 >r2b1 : number
+>     : ^^^^^^
 >t ** b : number
+>       : ^^^^^^
 >t : T
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 
     var r1c1 = c ** t;
 >r1c1 : number
+>     : ^^^^^^
 >c ** t : number
+>       : ^^^^^^
 >c : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r2c1 = t ** c;
 >r2c1 : number
+>     : ^^^^^^
 >t ** c : number
+>       : ^^^^^^
 >t : T
+>  : ^
 >c : number
+>  : ^^^^^^
 
     var r1d1 = d ** t;
 >r1d1 : number
+>     : ^^^^^^
 >d ** t : number
+>       : ^^^^^^
 >d : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r2d1 = t ** d;
 >r2d1 : number
+>     : ^^^^^^
 >t ** d : number
+>       : ^^^^^^
 >t : T
+>  : ^
 >d : string
+>  : ^^^^^^
 
     var r1e1 = e ** t;
 >r1e1 : number
+>     : ^^^^^^
 >e ** t : number
+>       : ^^^^^^
 >e : {}
+>  : ^^
 >t : T
+>  : ^
 
     var r2e1 = t ** d;
 >r2e1 : number
+>     : ^^^^^^
 >t ** d : number
+>       : ^^^^^^
 >t : T
+>  : ^
 >d : string
+>  : ^^^^^^
 
     var r1f1 = t ** t;
 >r1f1 : number
+>     : ^^^^^^
 >t ** t : number
+>       : ^^^^^^
 >t : T
+>  : ^
 >t : T
+>  : ^
 }

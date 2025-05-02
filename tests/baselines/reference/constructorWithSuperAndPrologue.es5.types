@@ -1,39 +1,58 @@
-=== tests/cases/compiler/constructorWithSuperAndPrologue.es5.ts ===
+//// [tests/cases/compiler/constructorWithSuperAndPrologue.es5.ts] ////
+
+=== constructorWithSuperAndPrologue.es5.ts ===
 // https://github.com/microsoft/TypeScript/issues/48761
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 class A {
 >A : A
+>  : ^
 
     public constructor() {
         console.log("A")
 >console.log("A") : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"A" : "A"
+>    : ^^^
     }
 }
 
 class B extends A  {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     constructor() {
         "ngInject";
 >"ngInject" : "ngInject"
+>           : ^^^^^^^^^^
 
         console.log("B")
 >console.log("B") : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"B" : "B"
+>    : ^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
     }
 }
 

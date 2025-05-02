@@ -1,37 +1,54 @@
-=== tests/cases/compiler/bug.ts ===
+//// [tests/cases/compiler/declarationEmitReadonlyComputedProperty.ts] ////
+
+=== bug.ts ===
 export const SYMBOL = Symbol()
 >SYMBOL : unique symbol
+>       : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 export interface Interface {
   readonly [SYMBOL]: string; // remove readonly and @showEmit to see the expected error
 >[SYMBOL] : string
+>         : ^^^^^^
 >SYMBOL : unique symbol
+>       : ^^^^^^^^^^^^^
 }
 
 export function createInstance(): Interface {
 >createInstance : () => Interface
+>               : ^^^^^^         
 
   return {
 >{    [SYMBOL]: ''  } : { [SYMBOL]: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 
     [SYMBOL]: ''
 >[SYMBOL] : string
+>         : ^^^^^^
 >SYMBOL : unique symbol
+>       : ^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
   }
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { createInstance } from './bug'
->createInstance : () => import("tests/cases/compiler/bug").Interface
+>createInstance : () => import("bug").Interface
+>               : ^^^^^^       ^^^^^  ^^^^^^^^^
 
 export const spread = {
 >spread : { [SYMBOL]: string; }
+>       : ^^^^^^^^^^^^      ^^^
 >{  ...createInstance(),} : { [SYMBOL]: string; }
+>                         : ^^^^^^^^^^^^      ^^^
 
   ...createInstance(),
->createInstance() : import("tests/cases/compiler/bug").Interface
->createInstance : () => import("tests/cases/compiler/bug").Interface
+>createInstance() : import("bug").Interface
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>createInstance : () => import("bug").Interface
+>               : ^^^^^^       ^^^^^  ^^^^^^^^^
 }

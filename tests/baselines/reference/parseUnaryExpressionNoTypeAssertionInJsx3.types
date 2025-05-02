@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/parseUnaryExpressionNoTypeAssertionInJsx3.ts] ////
+
+=== index.js ===
+const x = "oops";
+>x : "oops"
+>  : ^^^^^^
+>"oops" : "oops"
+>       : ^^^^^^
+
+const y = + <1234> x;
+>y : number
+>  : ^^^^^^
+>+ < : number
+>    : ^^^^^^
+>< : any
+>  : ^^^
+> : any
+> : ^^^
+>1234> x : boolean
+>        : ^^^^^^^
+>1234 : 1234
+>     : ^^^^
+>x : "oops"
+>  : ^^^^^^
+

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorCause.ts] ////
+
 //// [errorCause.ts]
 declare const a: unknown;
 

@@ -1,0 +1,75 @@
+1.ts(1,14): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+1.ts(2,28): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+1.ts(3,28): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+2.ts(1,28): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+2.ts(2,38): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+3.ts(2,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+3.ts(3,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+3.ts(4,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+3.ts(5,26): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+3.ts(7,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+3.ts(9,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+3.ts(10,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+3.ts(10,50): error TS1009: Trailing comma not allowed.
+
+
+==== 0.ts (0 errors) ====
+    export const a = 1;
+    export const b = 2;
+    
+==== 1.ts (3 errors) ====
+    import './0' with { type: "json" }
+                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    import { a, b } from './0' with { "type": "json" }
+                               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    import * as foo from './0' with { type: "json" }
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    a;
+    b;
+    foo.a;
+    foo.b;
+==== 2.ts (2 errors) ====
+    import { a, b } from './0' with {}
+                               ~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    import { a as c, b as d } from './0' with { a: "a", b: "b", c: "c" }
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    a;
+    b;
+    c;
+    d;
+==== 3.ts (9 errors) ====
+    const a = import('./0')
+    const b = import('./0', { with: { type: "json" } })
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+    const c = import('./0', { with: { type: "json", ttype: "typo" } })
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+    const d = import('./0', { with: {} })
+                            ~~~~~~~~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+    const dd = import('./0', {})
+                             ~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+    declare function foo(): any;
+    const e = import('./0', foo())
+                            ~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+    const f = import()
+              ~~~~~~~~
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+    const g = import('./0', {}, {})
+                            ~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+    const h = import('./0', { with: { type: "json" }},)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+                                                     ~
+!!! error TS1009: Trailing comma not allowed.
+    

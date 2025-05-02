@@ -1,0 +1,112 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-contextualTypes.2.ts] ////
+
+=== esDecorators-contextualTypes.2.ts ===
+class C {
+>C : Symbol(C, Decl(esDecorators-contextualTypes.2.ts, 0, 0))
+
+    @boundMethodLogger("Yadda", /*bound*/ true)
+>boundMethodLogger : Symbol(boundMethodLogger, Decl(esDecorators-contextualTypes.2.ts, 10, 13))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(esDecorators-contextualTypes.2.ts, 0, 9))
+
+        this.fooHelper();
+>this.fooHelper : Symbol(C.fooHelper, Decl(esDecorators-contextualTypes.2.ts, 4, 5))
+>this : Symbol(C, Decl(esDecorators-contextualTypes.2.ts, 0, 0))
+>fooHelper : Symbol(C.fooHelper, Decl(esDecorators-contextualTypes.2.ts, 4, 5))
+    }
+
+    fooHelper() {
+>fooHelper : Symbol(C.fooHelper, Decl(esDecorators-contextualTypes.2.ts, 4, 5))
+
+        console.log("Behold! The actual method implementation!")
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+};
+export { C };
+>C : Symbol(C, Decl(esDecorators-contextualTypes.2.ts, 10, 8))
+
+function boundMethodLogger<This, Args extends any[], Return>(source: string, bound = true) {
+>boundMethodLogger : Symbol(boundMethodLogger, Decl(esDecorators-contextualTypes.2.ts, 10, 13))
+>This : Symbol(This, Decl(esDecorators-contextualTypes.2.ts, 12, 27))
+>Args : Symbol(Args, Decl(esDecorators-contextualTypes.2.ts, 12, 32))
+>Return : Symbol(Return, Decl(esDecorators-contextualTypes.2.ts, 12, 52))
+>source : Symbol(source, Decl(esDecorators-contextualTypes.2.ts, 12, 61))
+>bound : Symbol(bound, Decl(esDecorators-contextualTypes.2.ts, 12, 76))
+
+    return function loggedDecorator(
+>loggedDecorator : Symbol(loggedDecorator, Decl(esDecorators-contextualTypes.2.ts, 13, 10))
+
+        target: (this: This, ...args: Args) => Return,
+>target : Symbol(target, Decl(esDecorators-contextualTypes.2.ts, 13, 36))
+>this : Symbol(this, Decl(esDecorators-contextualTypes.2.ts, 14, 17))
+>This : Symbol(This, Decl(esDecorators-contextualTypes.2.ts, 12, 27))
+>args : Symbol(args, Decl(esDecorators-contextualTypes.2.ts, 14, 28))
+>Args : Symbol(Args, Decl(esDecorators-contextualTypes.2.ts, 12, 32))
+>Return : Symbol(Return, Decl(esDecorators-contextualTypes.2.ts, 12, 52))
+
+        context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+>context : Symbol(context, Decl(esDecorators-contextualTypes.2.ts, 14, 54))
+>ClassMethodDecoratorContext : Symbol(ClassMethodDecoratorContext, Decl(lib.decorators.d.ts, --, --))
+>This : Symbol(This, Decl(esDecorators-contextualTypes.2.ts, 12, 27))
+>this : Symbol(this, Decl(esDecorators-contextualTypes.2.ts, 15, 52))
+>This : Symbol(This, Decl(esDecorators-contextualTypes.2.ts, 12, 27))
+>args : Symbol(args, Decl(esDecorators-contextualTypes.2.ts, 15, 63))
+>Args : Symbol(Args, Decl(esDecorators-contextualTypes.2.ts, 12, 32))
+>Return : Symbol(Return, Decl(esDecorators-contextualTypes.2.ts, 12, 52))
+
+    ): ((this: This, ...args: Args) => Return) {
+>this : Symbol(this, Decl(esDecorators-contextualTypes.2.ts, 16, 9))
+>This : Symbol(This, Decl(esDecorators-contextualTypes.2.ts, 12, 27))
+>args : Symbol(args, Decl(esDecorators-contextualTypes.2.ts, 16, 20))
+>Args : Symbol(Args, Decl(esDecorators-contextualTypes.2.ts, 12, 32))
+>Return : Symbol(Return, Decl(esDecorators-contextualTypes.2.ts, 12, 52))
+
+        if (bound) {
+>bound : Symbol(bound, Decl(esDecorators-contextualTypes.2.ts, 12, 76))
+
+            context.addInitializer(function () {
+>context.addInitializer : Symbol(ClassMethodDecoratorContext.addInitializer, Decl(lib.decorators.d.ts, --, --))
+>context : Symbol(context, Decl(esDecorators-contextualTypes.2.ts, 14, 54))
+>addInitializer : Symbol(ClassMethodDecoratorContext.addInitializer, Decl(lib.decorators.d.ts, --, --))
+
+                (this as any)[context.name] = (this as any)[context.name].bind(this);
+>this : Symbol(this, Decl(lib.decorators.d.ts, --, --))
+>context.name : Symbol(ClassMethodDecoratorContext.name, Decl(lib.decorators.d.ts, --, --))
+>context : Symbol(context, Decl(esDecorators-contextualTypes.2.ts, 14, 54))
+>name : Symbol(ClassMethodDecoratorContext.name, Decl(lib.decorators.d.ts, --, --))
+>this : Symbol(this, Decl(lib.decorators.d.ts, --, --))
+>context.name : Symbol(ClassMethodDecoratorContext.name, Decl(lib.decorators.d.ts, --, --))
+>context : Symbol(context, Decl(esDecorators-contextualTypes.2.ts, 14, 54))
+>name : Symbol(ClassMethodDecoratorContext.name, Decl(lib.decorators.d.ts, --, --))
+>this : Symbol(this, Decl(lib.decorators.d.ts, --, --))
+
+            });
+        }
+
+        return function (this, ...args) {
+>this : Symbol(this, Decl(esDecorators-contextualTypes.2.ts, 24, 25))
+>args : Symbol(args, Decl(esDecorators-contextualTypes.2.ts, 24, 30))
+
+            console.log(`<${source}>: I'm logging stuff from ${context.name.toString()}!`);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>source : Symbol(source, Decl(esDecorators-contextualTypes.2.ts, 12, 61))
+>context.name.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>context.name : Symbol(ClassMethodDecoratorContext.name, Decl(lib.decorators.d.ts, --, --))
+>context : Symbol(context, Decl(esDecorators-contextualTypes.2.ts, 14, 54))
+>name : Symbol(ClassMethodDecoratorContext.name, Decl(lib.decorators.d.ts, --, --))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+            return target.apply(this, args);
+>target.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>target : Symbol(target, Decl(esDecorators-contextualTypes.2.ts, 13, 36))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(this, Decl(esDecorators-contextualTypes.2.ts, 24, 25))
+>args : Symbol(args, Decl(esDecorators-contextualTypes.2.ts, 24, 30))
+        }
+    }
+}

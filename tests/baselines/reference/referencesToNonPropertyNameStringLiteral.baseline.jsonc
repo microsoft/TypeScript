@@ -1,22 +1,23 @@
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/server/referencesToNonPropertyNameStringLiteral.ts",
-      "kind": "var",
-      "name": "hello",
-      "textSpan": {
-        "start": 21,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "\"hello\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": []
-  }
-]
+// === findAllReferences ===
+// === /tests/cases/fourslash/server/referencesToNonPropertyNameStringLiteral.ts ===
+// const str: string = "hello/*FIND ALL REFS*/";
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/server/referencesToNonPropertyNameStringLiteral.ts ===
+  // const str: string = "[|hello|]/*FIND ALL REFS*/";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "hello",
+    "displayParts": [
+     {
+      "text": "\"hello\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

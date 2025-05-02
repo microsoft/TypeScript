@@ -1,11 +1,11 @@
-tests/cases/compiler/optionalArgsWithDefaultValues.ts(1,25): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/optionalArgsWithDefaultValues.ts(4,27): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/optionalArgsWithDefaultValues.ts(5,28): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/optionalArgsWithDefaultValues.ts(8,10): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/optionalArgsWithDefaultValues.ts(9,13): error TS1015: Parameter cannot have question mark and initializer.
+optionalArgsWithDefaultValues.ts(1,25): error TS1015: Parameter cannot have question mark and initializer.
+optionalArgsWithDefaultValues.ts(4,27): error TS1015: Parameter cannot have question mark and initializer.
+optionalArgsWithDefaultValues.ts(5,28): error TS1015: Parameter cannot have question mark and initializer.
+optionalArgsWithDefaultValues.ts(8,10): error TS1015: Parameter cannot have question mark and initializer.
+optionalArgsWithDefaultValues.ts(9,13): error TS1015: Parameter cannot have question mark and initializer.
 
 
-==== tests/cases/compiler/optionalArgsWithDefaultValues.ts (5 errors) ====
+==== optionalArgsWithDefaultValues.ts (5 errors) ====
     function foo(x: number, y?:boolean=false, z?=0) {}
                             ~
 !!! error TS1015: Parameter cannot have question mark and initializer.

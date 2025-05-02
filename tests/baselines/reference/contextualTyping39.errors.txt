@@ -1,8 +1,8 @@
-tests/cases/compiler/contextualTyping39.ts(1,11): error TS2352: Conversion of type '() => string' to type '() => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+contextualTyping39.ts(1,11): error TS2352: Conversion of type '() => string' to type '() => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'string' is not comparable to type 'number'.
 
 
-==== tests/cases/compiler/contextualTyping39.ts (1 errors) ====
+==== contextualTyping39.ts (1 errors) ====
     var foo = <{ (): number; }> function() { return "err"; };
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '() => string' to type '() => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeEquivalence.ts] ////
+
 //// [unionTypeEquivalence.ts]
 // A | B is equivalent to A if B is a subtype of A
 class C { }

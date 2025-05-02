@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedClassesinModule1.ts] ////
+
 //// [unusedClassesinModule1.ts]
 module A {
     class Calculator {

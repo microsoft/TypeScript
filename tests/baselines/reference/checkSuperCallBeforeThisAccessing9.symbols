@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noSuperInJSDocExtends.js ===
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing9.ts] ////
+
+=== noSuperInJSDocExtends.js ===
 class Based { }
 >Based : Symbol(Based, Decl(noSuperInJSDocExtends.js, 0, 0))
 

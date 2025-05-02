@@ -1,0 +1,17 @@
+awaitUsingDeclarations.4.ts(2,11): error TS2304: Cannot find name 'using'.
+awaitUsingDeclarations.4.ts(2,18): error TS2304: Cannot find name 'a'.
+awaitUsingDeclarations.4.ts(2,21): error TS1005: ';' expected.
+
+
+==== awaitUsingDeclarations.4.ts (3 errors) ====
+    {
+        await using [a] = null;
+              ~~~~~
+!!! error TS2304: Cannot find name 'using'.
+                     ~
+!!! error TS2304: Cannot find name 'a'.
+                        ~
+!!! error TS1005: ';' expected.
+    }
+    
+    export {};

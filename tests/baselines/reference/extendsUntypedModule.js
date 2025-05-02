@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/extendsUntypedModule.ts] ////
 
 //// [index.js]
-// Test that extending an untyped module is an error, unlike extending unknownSymbol.
-
 This file is not read.
 
 //// [index.js]
@@ -31,7 +29,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var foo_1 = require("foo");
 var A = /** @class */ (function (_super) {
@@ -40,5 +38,5 @@ var A = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
-}(foo_1["default"]));
+}(foo_1.default));
 exports.A = A;

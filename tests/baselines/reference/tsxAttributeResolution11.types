@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution11.tsx] ////
+
+=== react.d.ts ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -6,34 +8,44 @@ declare module JSX {
 	interface ElementAttributesProperty {
 		props;
 >props : any
+>      : ^^^
 	}
 	interface IntrinsicAttributes {
 		ref?: string;
 >ref : string
+>    : ^^^^^^
 	}
 }
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 class MyComponent {  
 >MyComponent : MyComponent
+>            : ^^^^^^^^^^^
 
   render() {
 >render : () => void
+>       : ^^^^^^^^^^
   }
 
   props: {
 >props : { ref?: string; }
+>      : ^^^^^^^^      ^^^
 
 	  ref?: string;
 >ref : string
+>    : ^^^^^^
   }
 }
 
 // Should be an OK
 var x = <MyComponent bar='world' />;
 >x : JSX.Element
+>  : ^^^^^^^^^^^
 ><MyComponent bar='world' /> : JSX.Element
+>                            : ^^^^^^^^^^^
 >MyComponent : typeof MyComponent
+>            : ^^^^^^^^^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 
 

@@ -1,26 +1,42 @@
-=== tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd02.ts ===
+//// [tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd02.ts] ////
+
+=== contextuallyTypeLogicalAnd02.ts ===
 let x: (a: string) => string;
 >x : (a: string) => string
+>  : ^ ^^      ^^^^^      
 >a : string
+>  : ^^^^^^
 
 let y = true;
 >y : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 x = y && (a => {
 >x = y && (a => {    const b: number = a;    return b;}) : (a: string) => number
+>                                                        : ^ ^^^^^^^^^^^^^^^^^^^
 >x : (a: string) => string
+>  : ^ ^^      ^^^^^      
 >y && (a => {    const b: number = a;    return b;}) : (a: string) => number
+>                                                    : ^ ^^^^^^^^^^^^^^^^^^^
 >y : true
+>  : ^^^^
 >(a => {    const b: number = a;    return b;}) : (a: string) => number
+>                                               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => {    const b: number = a;    return b;} : (a: string) => number
+>                                             : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
     const b: number = a;
 >b : number
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     return b;
 >b : number
+>  : ^^^^^^
 
 });

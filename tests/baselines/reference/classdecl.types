@@ -1,13 +1,18 @@
-=== tests/cases/compiler/classdecl.ts ===
+//// [tests/cases/compiler/classdecl.ts] ////
+
+=== classdecl.ts ===
 class a {
 >a : a
+>  : ^
 
     //constructor ();
     constructor (n: number);
 >n : number
+>  : ^^^^^^
 
     constructor (s: string);
 >s : string
+>  : ^^^^^^
 
     constructor (ns: any) {
 >ns : any
@@ -16,77 +21,103 @@ class a {
 
     public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
     public pv;
 >pv : any
 
     public get d() {
 >d : number
+>  : ^^^^^^
 
         return 30;
 >30 : 30
+>   : ^^
     }
     public set d(a: number) {
 >d : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
     }
 
     public static get p2() {
 >p2 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return { x: 30, y: 40 };
 >{ x: 30, y: 40 } : { x: number; y: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >30 : 30
+>   : ^^
 >y : number
+>  : ^^^^^^
 >40 : 40
+>   : ^^
     }
 
     private static d2() {
 >d2 : () => void
+>   : ^^^^^^^^^^
     }
     private static get p3() {
 >p3 : string
+>   : ^^^^^^
 
         return "string";
 >"string" : "string"
+>         : ^^^^^^^^
     }
     private pv3;
 >pv3 : any
 
     private foo(n: number): string;
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
     private foo(s: string): string;
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
+>  : ^^^^^^
 
     private foo(ns: any) {
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
 
         return ns.toString();
 >ns.toString() : any
 >ns.toString : any
 >ns : any
+>   : ^^^
 >toString : any
+>         : ^^^
     }
 }
 
 class b extends a {
 >b : b
+>  : ^
 >a : a
+>  : ^
 }
 
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     export class b {
 >b : b
+>  : ^
     }
     class d {
 >d : d
+>  : ^
     }
 
 
@@ -96,58 +127,79 @@ module m1 {
 
 module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     export module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
         export class c extends b {
 >c : c
+>  : ^
 >b : b
+>  : ^
         }
         export class ib2 implements m1.ib {
 >ib2 : ib2
+>    : ^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
         }
     }
 }
 
 class c extends m1.b {
 >c : c
+>  : ^
 >m1.b : m1.b
+>     : ^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >b : typeof m1.b
+>  : ^^^^^^^^^^^
 }
 
 class ib2 implements m1.ib {
 >ib2 : ib2
+>    : ^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 }
 
 declare class aAmbient {
 >aAmbient : aAmbient
+>         : ^^^^^^^^
 
     constructor (n: number);
 >n : number
+>  : ^^^^^^
 
     constructor (s: string);
 >s : string
+>  : ^^^^^^
 
     public pgF(): void;
 >pgF : () => void
+>    : ^^^^^^    
 
     public pv;
 >pv : any
 
     public d : number;
 >d : number
+>  : ^^^^^^
 
     static p2 : { x: number; y: number; };
 >p2 : { x: number; y: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     static d2();
 >d2 : () => any
+>   : ^^^^^^^^^
 
     static p3;
 >p3 : any
@@ -157,51 +209,68 @@ declare class aAmbient {
 
     private foo(s);
 >foo : (s: any) => any
+>    : ^ ^^^^^^^^^^^^^
 >s : any
 }
 
 class d {
 >d : d
+>  : ^
 
     private foo(n: number): string;
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
     private foo(s: string): string;
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
+>  : ^^^^^^
 
     private foo(ns: any) {
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
 
         return ns.toString();
 >ns.toString() : any
 >ns.toString : any
 >ns : any
+>   : ^^^
 >toString : any
+>         : ^^^
     }    
 }
 
 class e {    
 >e : e
+>  : ^
 
     private foo(s: string): string;
 >foo : { (s: string): string; (n: number): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
+>  : ^^^^^^
 
     private foo(n: number): string;
 >foo : { (s: string): string; (n: number): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
     private foo(ns: any) {
 >foo : { (s: string): string; (n: number): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
 
         return ns.toString();
 >ns.toString() : any
 >ns.toString : any
 >ns : any
+>   : ^^^
 >toString : any
+>         : ^^^
     }
 }

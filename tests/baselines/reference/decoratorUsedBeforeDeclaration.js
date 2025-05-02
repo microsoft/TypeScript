@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorUsedBeforeDeclaration.ts] ////
+
 //// [decoratorUsedBeforeDeclaration.ts]
 @lambda(Enum.No)
 @deco(Enum.No)
@@ -102,23 +104,23 @@ var Greeter = /** @class */ (function () {
     __decorate([
         lambda(Enum.No),
         deco(Enum.No)
-    ], Greeter.prototype, "greeting");
+    ], Greeter.prototype, "greeting", void 0);
     __decorate([
         lambda(Enum.No),
         deco(Enum.No)
-    ], Greeter.prototype, "greet");
+    ], Greeter.prototype, "greet", null);
     __decorate([
         lambda,
         deco
-    ], Greeter.prototype, "greet1");
+    ], Greeter.prototype, "greet1", null);
     __decorate([
         __param(0, lambda(Enum.No)),
         __param(0, deco(Enum.No))
-    ], Greeter.prototype, "greet2");
+    ], Greeter.prototype, "greet2", null);
     __decorate([
         __param(0, lambda),
         __param(0, deco)
-    ], Greeter.prototype, "greet3");
+    ], Greeter.prototype, "greet3", null);
     Greeter = __decorate([
         lambda(Enum.No),
         deco(Enum.No)
@@ -161,23 +163,23 @@ var Greeter1 = /** @class */ (function () {
     __decorate([
         lambda(Enum.No),
         deco(Enum.No)
-    ], Greeter1.prototype, "greeting");
+    ], Greeter1.prototype, "greeting", void 0);
     __decorate([
         lambda(Enum.No),
         deco(Enum.No)
-    ], Greeter1.prototype, "greet");
+    ], Greeter1.prototype, "greet", null);
     __decorate([
         lambda,
         deco
-    ], Greeter1.prototype, "greet1");
+    ], Greeter1.prototype, "greet1", null);
     __decorate([
         __param(0, lambda(Enum.No)),
         __param(0, deco(Enum.No))
-    ], Greeter1.prototype, "greet2");
+    ], Greeter1.prototype, "greet2", null);
     __decorate([
         __param(0, lambda),
         __param(0, deco)
-    ], Greeter1.prototype, "greet3");
+    ], Greeter1.prototype, "greet3", null);
     Greeter1 = __decorate([
         lambda(Enum.No),
         deco(Enum.No)

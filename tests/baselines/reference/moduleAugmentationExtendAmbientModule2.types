@@ -1,92 +1,141 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/moduleAugmentationExtendAmbientModule2.ts] ////
+
+=== main.ts ===
 /// <reference path="observable.d.ts"/>
 import { Observable } from "observable"
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
 import "./map";
 
 let x: Observable<number>;
 >x : Observable<number>
+>  : ^^^^^^^^^^^^^^^^^^
 
 let y = x.map(x => x + 1);
 >y : Observable<number>
+>  : ^^^^^^^^^^^^^^^^^^
 >x.map(x => x + 1) : Observable<number>
+>                  : ^^^^^^^^^^^^^^^^^^
 >x.map : <U>(proj: (e: number) => U) => Observable<U>
+>      : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Observable<number>
+>  : ^^^^^^^^^^^^^^^^^^
 >map : <U>(proj: (e: number) => U) => Observable<U>
+>    : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x => x + 1 : (x: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 let z1 = Observable.someValue.toFixed();
 >z1 : string
+>   : ^^^^^^
 >Observable.someValue.toFixed() : string
+>                               : ^^^^^^
 >Observable.someValue.toFixed : (fractionDigits?: number) => string
+>                             : ^              ^^^      ^^^^^      
 >Observable.someValue : number
+>                     : ^^^^^^
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 >someValue : number
+>          : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 let z2 = Observable.someAnotherValue.toLowerCase();
 >z2 : string
+>   : ^^^^^^
 >Observable.someAnotherValue.toLowerCase() : string
+>                                          : ^^^^^^
 >Observable.someAnotherValue.toLowerCase : () => string
+>                                        : ^^^^^^      
 >Observable.someAnotherValue : string
+>                            : ^^^^^^
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 >someAnotherValue : string
+>                 : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
-=== tests/cases/compiler/map.ts ===
+=== map.ts ===
 import { Observable } from "observable"
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
 (<any>Observable.prototype).map = function() { }
 >(<any>Observable.prototype).map = function() { } : () => void
+>                                                 : ^^^^^^^^^^
 >(<any>Observable.prototype).map : any
 >(<any>Observable.prototype) : any
+>                            : ^^^
 ><any>Observable.prototype : any
 >Observable.prototype : Observable<any>
+>                     : ^^^^^^^^^^^^^^^
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 >prototype : Observable<any>
+>          : ^^^^^^^^^^^^^^^
 >map : any
+>    : ^^^
 >function() { } : () => void
+>               : ^^^^^^^^^^
 
 declare module "observable" {
 >"observable" : typeof import("observable")
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface Observable<T> {
         map<U>(proj: (e:T) => U): Observable<U>
 >map : <U>(proj: (e: T) => U) => Observable<U>
+>    : ^ ^^    ^^           ^^^^^             
 >proj : (e: T) => U
+>     : ^ ^^ ^^^^^ 
 >e : T
+>  : ^
     }
     namespace Observable {
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
         let someAnotherValue: string;
 >someAnotherValue : string
+>                 : ^^^^^^
     }
 }
 
-=== tests/cases/compiler/observable.d.ts ===
+=== observable.d.ts ===
 declare module "observable" {
 >"observable" : typeof import("observable")
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     class Observable<T> {
 >Observable : Observable<T>
+>           : ^^^^^^^^^^^^^
 
         filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
+>       : ^    ^^                 ^^^^^             
 >pred : (e: T) => boolean
+>     : ^ ^^ ^^^^^       
 >e : T
+>  : ^
     }
     namespace Observable {
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
         export let someValue: number;
 >someValue : number
+>          : ^^^^^^
     }
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/classWithPublicProperty.ts ===
+//// [tests/cases/conformance/types/members/classWithPublicProperty.ts] ////
+
+=== classWithPublicProperty.ts ===
 class C {
 >C : Symbol(C, Decl(classWithPublicProperty.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitBundleWithPrologueDirectives1.ts] ////
+
 //// [test.ts]
 /* Detached Comment */
 

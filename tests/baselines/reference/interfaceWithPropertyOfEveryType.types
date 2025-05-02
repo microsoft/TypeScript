@@ -1,143 +1,208 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts] ////
+
+=== interfaceWithPropertyOfEveryType.ts ===
 class C { foo: string; }
 >C : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 function f1() { }
 >f1 : () => void
+>   : ^^^^^^^^^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var y = 1;
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 interface Foo {
     a: number;
 >a : number
+>  : ^^^^^^
 
     b: string;
 >b : string
+>  : ^^^^^^
 
     c: boolean;
 >c : boolean
+>  : ^^^^^^^
 
     d: any;
 >d : any
 
     e: void;
 >e : void
+>  : ^^^^
 
     f: number[];
 >f : number[]
+>  : ^^^^^^^^
 
     g: Object;
 >g : Object
+>  : ^^^^^^
 
     h: (x: number) => number;
 >h : (x: number) => number
+>  : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     i: <T>(x: T) => T;
 >i : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     j: Foo;
 >j : Foo
+>  : ^^^
 
     k: C;
 >k : C
+>  : ^
 
     l: typeof f1;
 >l : () => void
+>  : ^^^^^^^^^^
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     m: typeof M;
 >m : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
     n: {};
 >n : {}
+>  : ^^
 
     o: E;
 >o : E
+>  : ^
 }
 
 var a: Foo = {
 >a : Foo
+>  : ^^^
 >{    a: 1,    b: '',    c: true,    d: {},    e: null ,    f: [1],    g: {},    h: (x: number) => 1,    i: <T>(x: T) => x,    j: <Foo>null,    k: new C(),    l: f1,    m: M,    n: {},    o: E.A} : { a: number; b: string; c: true; d: {}; e: null; f: number[]; g: {}; h: (x: number) => number; i: <T>(x: T) => T; j: Foo; k: C; l: () => void; m: typeof M; n: {}; o: E; }
+>                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: 1,
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     b: '',
 >b : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
     c: true,
 >c : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
     d: {},
 >d : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     e: null ,
 >e : null
->null : null
+>  : ^^^^
 
     f: [1],
 >f : number[]
+>  : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     g: {},
 >g : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     h: (x: number) => 1,
 >h : (x: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >(x: number) => 1 : (x: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     i: <T>(x: T) => x,
 >i : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^^
 ><T>(x: T) => x : <T>(x: T) => T
+>               : ^ ^^ ^^ ^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 
     j: <Foo>null,
 >j : Foo
+>  : ^^^
 ><Foo>null : Foo
->null : null
+>          : ^^^
 
     k: new C(),
 >k : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
     l: f1,
 >l : () => void
+>  : ^^^^^^^^^^
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     m: M,
 >m : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
     n: {},
 >n : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     o: E.A
 >o : E
+>  : ^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 }
