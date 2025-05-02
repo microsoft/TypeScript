@@ -1450,6 +1450,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2024: [
                 "waitAsync",
             ],
+            esnext: [
+                "pause",
+            ],
         })),
         SharedArrayBuffer: new Map(Object.entries({
             es2017: [
