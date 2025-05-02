@@ -3068,63 +3068,63 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return isForInOrOfStatement(grandparent) && isSameScopeDescendentOf(usage, grandparent.expression, declContainer);
         }
 
-            function isUsedInFunctionOrInstanceProperty(usage: Node, declaration: Node) {
-                return isUsedInFunctionOrInstancePropertyWorker(usage, declaration);
-            }
+        function isUsedInFunctionOrInstanceProperty(usage: Node, declaration: Node) {
+            return isUsedInFunctionOrInstancePropertyWorker(usage, declaration);
+        }
 
-            function isUsedInFunctionOrInstancePropertyWorker(usage: Node, declaration: Node): boolean {
-                return !!findAncestor(usage, current => {
-                    if (current === declContainer) {
-                        return "quit";
-                    }
-                    if (isFunctionLike(current)) {
-                        return !getImmediatelyInvokedFunctionExpression(current);
-                    }
-                    if (isClassStaticBlockDeclaration(current)) {
-                        return declaration.pos < usage.pos;
-                    }
+        function isUsedInFunctionOrInstancePropertyWorker(usage: Node, declaration: Node): boolean {
+            return !!findAncestor(usage, current => {
+                if (current === declContainer) {
+                    return "quit";
+                }
+                if (isFunctionLike(current)) {
+                    return !getImmediatelyInvokedFunctionExpression(current);
+                }
+                if (isClassStaticBlockDeclaration(current)) {
+                    return declaration.pos < usage.pos;
+                }
 
-                    const propertyDeclaration = tryCast(current.parent, isPropertyDeclaration);
-                    if (propertyDeclaration) {
-                        const initializerOfProperty = propertyDeclaration.initializer === current;
-                        if (initializerOfProperty) {
-                            if (isStatic(current.parent)) {
-                                if (declaration.kind === SyntaxKind.MethodDeclaration) {
-                                    return true;
-                                }
-                                if (isPropertyDeclaration(declaration) && getContainingClass(usage) === getContainingClass(declaration)) {
-                                    const propName = declaration.name;
-                                    if (isIdentifier(propName) || isPrivateIdentifier(propName)) {
-                                        const type = getTypeOfSymbol(getSymbolOfDeclaration(declaration));
-                                        const staticBlocks = filter(declaration.parent.members, isClassStaticBlockDeclaration);
-                                        if (isPropertyInitializedInStaticBlocks(propName, type, staticBlocks, declaration.parent.pos, current.pos)) {
-                                            return true;
-                                        }
+                const propertyDeclaration = tryCast(current.parent, isPropertyDeclaration);
+                if (propertyDeclaration) {
+                    const initializerOfProperty = propertyDeclaration.initializer === current;
+                    if (initializerOfProperty) {
+                        if (isStatic(current.parent)) {
+                            if (declaration.kind === SyntaxKind.MethodDeclaration) {
+                                return true;
+                            }
+                            if (isPropertyDeclaration(declaration) && getContainingClass(usage) === getContainingClass(declaration)) {
+                                const propName = declaration.name;
+                                if (isIdentifier(propName) || isPrivateIdentifier(propName)) {
+                                    const type = getTypeOfSymbol(getSymbolOfDeclaration(declaration));
+                                    const staticBlocks = filter(declaration.parent.members, isClassStaticBlockDeclaration);
+                                    if (isPropertyInitializedInStaticBlocks(propName, type, staticBlocks, declaration.parent.pos, current.pos)) {
+                                        return true;
                                     }
                                 }
                             }
-                            else {
-                                const isDeclarationInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !isStatic(declaration);
-                                if (!isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration)) {
-                                    return true;
-                                }
+                        }
+                        else {
+                            const isDeclarationInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !isStatic(declaration);
+                            if (!isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration)) {
+                                return true;
                             }
                         }
                     }
+                }
 
-                    const decorator = tryCast(current.parent, isDecorator);
-                    if (decorator && decorator.expression === current) {
-                        if (isParameter(decorator.parent)) {
-                            return isUsedInFunctionOrInstancePropertyWorker(decorator.parent.parent.parent, declaration) ? true : "quit";
-                        }
-                        if (isMethodDeclaration(decorator.parent)) {
-                            return isUsedInFunctionOrInstancePropertyWorker(decorator.parent.parent, declaration) ? true : "quit";
-                        }
+                const decorator = tryCast(current.parent, isDecorator);
+                if (decorator && decorator.expression === current) {
+                    if (isParameter(decorator.parent)) {
+                        return isUsedInFunctionOrInstancePropertyWorker(decorator.parent.parent.parent, declaration) ? true : "quit";
                     }
+                    if (isMethodDeclaration(decorator.parent)) {
+                        return isUsedInFunctionOrInstancePropertyWorker(decorator.parent.parent, declaration) ? true : "quit";
+                    }
+                }
 
-                    return false;
-                });
-            }
+                return false;
+            });
+        }
 
         /** stopAtAnyPropertyDeclaration is used for detecting ES-standard class field use-before-def errors */
         function isPropertyImmediatelyReferencedWithinDeclaration(declaration: PropertyDeclaration | ParameterPropertyDeclaration, usage: Node, stopAtAnyPropertyDeclaration: boolean) {
