@@ -27410,7 +27410,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                if (inference.priority! & InferencePriority.ReturnType) {
+                    inference.inferredType = (inferredType && filterContextualInferredType(inferredType, instantiatedConstraint)) ?? (fallbackType && filterContextualInferredType(fallbackType, instantiatedConstraint)) ?? instantiatedConstraint;
+                }
+                else if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
@@ -27418,6 +27421,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         return inference.inferredType;
+
+        function filterContextualInferredType(inferredType: Type, constraint: Type) {
+            if (inferredType.flags & TypeFlags.Never) {
+                return inferredType;
+            }
+            const constraintWithThisArgument = getTypeWithThisArgument(constraint, inferredType);
+            const applicableByConstraint = filterType(inferredType, t => !!context.compareTypes(t, constraintWithThisArgument));
+            return !(applicableByConstraint.flags & TypeFlags.Never) ? applicableByConstraint : undefined;
+        }
     }
 
     function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
