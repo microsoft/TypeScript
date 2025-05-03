@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/noExcessPropertyCheckWithGenericMappedType1.ts] ////
+
+=== noExcessPropertyCheckWithGenericMappedType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/56391
+
+type S = { x: "abc" };
+>S : Symbol(S, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 0, 0))
+>x : Symbol(x, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 2, 10))
+
+function f<T extends S>() {
+>f : Symbol(f, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 2, 22))
+>T : Symbol(T, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 11))
+>S : Symbol(S, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 0, 0))
+
+  type Target = { [k in T["x"]]: number };
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 27))
+>k : Symbol(k, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 5, 19))
+>T : Symbol(T, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 11))
+
+  const x: Target = { abc: 1 };
+>x : Symbol(x, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 7, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 27))
+>abc : Symbol(abc, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 7, 21))
+
+  const y: Target = {};
+>y : Symbol(y, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 8, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 27))
+
+  const z: Target = { abc: "" };
+>z : Symbol(z, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 9, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 27))
+>abc : Symbol(abc, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 9, 21))
+
+  const a: Target = { abc: 1, other: 2 };
+>a : Symbol(a, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 11, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 27))
+>abc : Symbol(abc, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 11, 21))
+>other : Symbol(other, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 11, 29))
+
+  const b: Target = { other: 2 };
+>b : Symbol(b, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 12, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 27))
+>other : Symbol(other, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 12, 21))
+
+  const c: Target = { abc: 1, other: "" };
+>c : Symbol(c, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 13, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 4, 27))
+>abc : Symbol(abc, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 13, 21))
+>other : Symbol(other, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 13, 29))
+}
+
+function f2<T extends S, T2 extends string>() {
+>f2 : Symbol(f2, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 14, 1))
+>T : Symbol(T, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 12))
+>S : Symbol(S, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 0, 0))
+>T2 : Symbol(T2, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 24))
+
+  type Target = { [k in T["x"] | T2]: number };
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 47))
+>k : Symbol(k, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 17, 19))
+>T : Symbol(T, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 12))
+>T2 : Symbol(T2, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 24))
+
+  const x: Target = { abc: 1 };
+>x : Symbol(x, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 19, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 47))
+>abc : Symbol(abc, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 19, 21))
+
+  const y: Target = {};
+>y : Symbol(y, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 20, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 47))
+
+  const z: Target = { abc: "" };
+>z : Symbol(z, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 21, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 47))
+>abc : Symbol(abc, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 21, 21))
+
+  const a: Target = { abc: 1, other: 2 };
+>a : Symbol(a, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 23, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 47))
+>abc : Symbol(abc, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 23, 21))
+>other : Symbol(other, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 23, 29))
+
+  const b: Target = { other: 2 };
+>b : Symbol(b, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 24, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 47))
+>other : Symbol(other, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 24, 21))
+
+  const c: Target = { abc: 1, other: "" };
+>c : Symbol(c, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 25, 7))
+>Target : Symbol(Target, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 16, 47))
+>abc : Symbol(abc, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 25, 21))
+>other : Symbol(other, Decl(noExcessPropertyCheckWithGenericMappedType1.ts, 25, 29))
+}
+
