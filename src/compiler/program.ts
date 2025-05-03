@@ -1372,7 +1372,6 @@ const plainJSErrors = new Set<number>([
     Diagnostics.A_module_cannot_have_multiple_default_exports.code,
     Diagnostics.Another_export_default_is_here.code,
     Diagnostics.The_first_export_default_is_here.code,
-    Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module.code,
     Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode.code,
     Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here.code,
     Diagnostics.constructor_is_a_reserved_word.code,
