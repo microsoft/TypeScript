@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/jsdoc/jsDocExtendsStaticBlockUsingCurrentClass1.ts] ////
+
+=== a.js ===
+export class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+  static a() {}
+>a : Symbol(A.a, Decl(a.js, 0, 16))
+}
+
+=== b.js ===
+import { A } from "./a";
+>A : Symbol(A, Decl(b.js, 0, 8))
+
+/**
+ * @extends A
+ */
+export class B extends A {
+>B : Symbol(B, Decl(b.js, 0, 24))
+>A : Symbol(A, Decl(b.js, 0, 8))
+
+  static {
+    B.a();
+>B.a : Symbol(A.a, Decl(a.js, 0, 16))
+>B : Symbol(B, Decl(b.js, 0, 24))
+>a : Symbol(A.a, Decl(a.js, 0, 16))
+  }
+}
