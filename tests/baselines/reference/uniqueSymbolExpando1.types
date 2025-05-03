@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/uniqueSymbolExpando1.ts] ////
+
+=== uniqueSymbolExpando1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61214
+
+const TestSymbol: unique symbol = Symbol();
+>TestSymbol : unique symbol
+>           : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+const c = () => {
+>c : { (): string; testProp: string[]; [TestSymbol]: string[]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {  return "Hello, world!";} : { (): string; testProp: string[]; [TestSymbol]: string[]; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return "Hello, world!";
+>"Hello, world!" : "Hello, world!"
+>                : ^^^^^^^^^^^^^^^
+
+};
+c["testProp"] = ["Hello"];
+>c["testProp"] = ["Hello"] : string[]
+>                          : ^^^^^^^^
+>c["testProp"] : string[]
+>              : ^^^^^^^^
+>c : { (): string; testProp: string[]; [TestSymbol]: string[]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"testProp" : "testProp"
+>           : ^^^^^^^^^^
+>["Hello"] : string[]
+>          : ^^^^^^^^
+>"Hello" : "Hello"
+>        : ^^^^^^^
+
+c[TestSymbol] = ["Hello"];
+>c[TestSymbol] = ["Hello"] : string[]
+>                          : ^^^^^^^^
+>c[TestSymbol] : string[]
+>              : ^^^^^^^^
+>c : { (): string; testProp: string[]; [TestSymbol]: string[]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TestSymbol : unique symbol
+>           : ^^^^^^^^^^^^^
+>["Hello"] : string[]
+>          : ^^^^^^^^
+>"Hello" : "Hello"
+>        : ^^^^^^^
+
