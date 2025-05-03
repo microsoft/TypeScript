@@ -112,6 +112,7 @@ const jsDocTagNames = [
     "copyright",
     "default",
     "deprecated",
+    "experimental",
     "description",
     "emits",
     "enum",

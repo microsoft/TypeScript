@@ -6,6 +6,7 @@ import path from "path";
     code: number;
     reportsUnnecessary?: {};
     reportsDeprecated?: {};
+    reportsExperimental?: {};
     isEarly?: boolean;
     elidedInCompatabilityPyramid?: boolean;
 }} DiagnosticDetails */
@@ -88,7 +89,7 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         "",
         'import { DiagnosticCategory, DiagnosticMessage } from "./types.js";',
         "",
-        "function diag(code: number, category: DiagnosticCategory, key: string, message: string, reportsUnnecessary?: {}, elidedInCompatabilityPyramid?: boolean, reportsDeprecated?: {}): DiagnosticMessage {",
+        "function diag(code: number, category: DiagnosticCategory, key: string, message: string, reportsUnnecessary?: {}, elidedInCompatabilityPyramid?: boolean, reportsDeprecated?: {}, reportsExperimental?: {}): DiagnosticMessage {",
         "    return { code, category, key, message, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated };",
         "}",
         "",
@@ -96,13 +97,14 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         "/** @internal */",
         "export const Diagnostics = {",
     ];
-    messageTable.forEach(({ code, category, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated }, name) => {
+    messageTable.forEach(({ code, category, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated, reportsExperimental }, name) => {
         const propName = convertPropertyName(name);
         const argReportsUnnecessary = reportsUnnecessary ? `, /*reportsUnnecessary*/ ${reportsUnnecessary}` : "";
         const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid ? `${!reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""}, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` : "";
         const argReportsDeprecated = reportsDeprecated ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
+        const argReportsExperimental = reportsExperimental ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsExperimental*/ ${reportsExperimental}` : "";
 
-        result.push(`    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}) as DiagnosticMessage,`);
+        result.push(`    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}${argReportsExperimental}) as DiagnosticMessage,`);
     });
 
     result.push("};");

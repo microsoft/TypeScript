@@ -96,6 +96,7 @@ export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation
     /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
     reportsUnnecessary?: {};
     reportDeprecated?: {};
+    reportsExperimental?: {};
     source?: string;
     relatedInformation?: ReusableDiagnosticRelatedInformation[];
     skippedOn?: keyof CompilerOptions;
@@ -575,6 +576,7 @@ function convertToDiagnostics(
         const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, diagnosticFilePath, newProgram, toPathInBuildInfoDirectory);
         result.reportsUnnecessary = diagnostic.reportsUnnecessary;
         result.reportsDeprecated = diagnostic.reportDeprecated;
+        result.reportsExperimental = diagnostic.reportsExperimental;
         result.source = diagnostic.source;
         result.skippedOn = diagnostic.skippedOn;
         const { relatedInformation } = diagnostic;
@@ -1505,6 +1507,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
             const result: ReusableDiagnostic = toReusableDiagnosticRelatedInformation(diagnostic, diagnosticFilePath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
             result.reportDeprecated = diagnostic.reportsDeprecated;
+            result.reportsExperimental = diagnostic.reportsExperimental;
             result.source = diagnostic.source;
             result.skippedOn = diagnostic.skippedOn;
             const { relatedInformation } = diagnostic;
