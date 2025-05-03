@@ -75,3 +75,14 @@ test.tags();
 >test : Symbol(test, Decl(emitClassExpressionInDeclarationFile2.ts, 24, 5))
 >tags : Symbol((Anonymous class).tags, Decl(emitClassExpressionInDeclarationFile2.ts, 17, 34))
 
+export class Test2 {
+>Test2 : Symbol(Test2, Decl(emitClassExpressionInDeclarationFile2.ts, 27, 12))
+
+  nested = class {
+>nested : Symbol(Test2.nested, Decl(emitClassExpressionInDeclarationFile2.ts, 29, 20))
+
+    private prop = 42;
+>prop : Symbol((Anonymous class).prop, Decl(emitClassExpressionInDeclarationFile2.ts, 30, 18))
+  }
+}
+
