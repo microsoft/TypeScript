@@ -2,6 +2,7 @@ subtypingWithNumericIndexer5.ts(11,7): error TS2420: Class 'B' incorrectly imple
   'string' and 'number' index signatures are incompatible.
     Type 'Base' is not assignable to type 'Derived'.
       Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+subtypingWithNumericIndexer5.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithNumericIndexer5.ts(32,11): error TS2420: Class 'B3<T>' incorrectly implements interface 'A<T>'.
   'string' and 'number' index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
@@ -16,7 +17,7 @@ subtypingWithNumericIndexer5.ts(40,11): error TS2420: Class 'B5<T>' incorrectly 
       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
 
 
-==== subtypingWithNumericIndexer5.ts (4 errors) ====
+==== subtypingWithNumericIndexer5.ts (5 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
     interface Base { foo: string; }
@@ -42,6 +43,8 @@ subtypingWithNumericIndexer5.ts(40,11): error TS2420: Class 'B5<T>' incorrectly 
     }
     
     module Generics {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A<T extends Base> {
             [x: number]: T;
         }

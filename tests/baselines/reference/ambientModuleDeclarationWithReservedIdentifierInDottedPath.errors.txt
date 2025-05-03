@@ -1,19 +1,31 @@
+ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(3,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(3,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(9,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(9,21): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,1): error TS2304: Cannot find name 'declare'.
 ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,16): error TS2819: Namespace name cannot be 'debugger'.
 ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts(11,25): error TS1005: ';' expected.
 
 
-==== ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts (4 errors) ====
+==== ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts (8 errors) ====
     // https://github.com/microsoft/TypeScript/issues/7840
     
     declare module chrome.debugger {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         declare var tabId: number;
     }
     
     export const tabId = chrome.debugger.tabId;
     
     declare module test.class {}
+                   ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                        ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     declare module debugger {} // still an error
     ~~~~~~~

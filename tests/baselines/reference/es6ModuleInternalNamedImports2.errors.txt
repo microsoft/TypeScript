@@ -1,3 +1,7 @@
+es6ModuleInternalNamedImports2.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleInternalNamedImports2.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleInternalNamedImports2.ts(11,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleInternalNamedImports2.ts(22,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 es6ModuleInternalNamedImports2.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
 es6ModuleInternalNamedImports2.ts(25,5): error TS1194: Export declarations are not permitted in a namespace.
 es6ModuleInternalNamedImports2.ts(26,5): error TS1194: Export declarations are not permitted in a namespace.
@@ -8,8 +12,10 @@ es6ModuleInternalNamedImports2.ts(30,5): error TS1194: Export declarations are n
 es6ModuleInternalNamedImports2.ts(31,5): error TS1194: Export declarations are not permitted in a namespace.
 
 
-==== es6ModuleInternalNamedImports2.ts (8 errors) ====
+==== es6ModuleInternalNamedImports2.ts (12 errors) ====
     export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // variable
         export var M_V = 0;
         // interface
@@ -18,8 +24,12 @@ es6ModuleInternalNamedImports2.ts(31,5): error TS1194: Export declarations are n
         export class M_C { }
         // instantiated module
         export module M_M { var x; }
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // uninstantiated module
         export module M_MU { }
+                      ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // function
         export function M_F() { }
         // enum
@@ -31,6 +41,8 @@ es6ModuleInternalNamedImports2.ts(31,5): error TS1194: Export declarations are n
     }
     
     export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // Reexports
         export {M_V as v};
         ~~~~~~~~~~~~~~~~~~

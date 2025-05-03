@@ -1,11 +1,13 @@
 cloduleWithDuplicateMember1.ts(3,16): error TS2300: Duplicate identifier 'x'.
 cloduleWithDuplicateMember1.ts(6,12): error TS2300: Duplicate identifier 'foo'.
+cloduleWithDuplicateMember1.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleWithDuplicateMember1.ts(10,16): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember1.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleWithDuplicateMember1.ts(13,21): error TS2300: Duplicate identifier 'foo'.
 cloduleWithDuplicateMember1.ts(14,21): error TS2300: Duplicate identifier 'x'.
 
 
-==== cloduleWithDuplicateMember1.ts (5 errors) ====
+==== cloduleWithDuplicateMember1.ts (7 errors) ====
     class C {
         get x() { return 1; }
         static get x() {
@@ -19,11 +21,15 @@ cloduleWithDuplicateMember1.ts(14,21): error TS2300: Duplicate identifier 'x'.
     }
     
     module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x = 1;
                    ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function foo() { }
                         ~~~
 !!! error TS2300: Duplicate identifier 'foo'.

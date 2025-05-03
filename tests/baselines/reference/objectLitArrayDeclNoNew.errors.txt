@@ -1,11 +1,14 @@
+objectLitArrayDeclNoNew.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 objectLitArrayDeclNoNew.ts(22,20): error TS1011: An element access expression should take an argument.
 objectLitArrayDeclNoNew.ts(27,1): error TS1128: Declaration or statement expected.
 
 
-==== objectLitArrayDeclNoNew.ts (2 errors) ====
+==== objectLitArrayDeclNoNew.ts (3 errors) ====
     declare var console;
     "use strict";
     module Test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface IState {
         }
     

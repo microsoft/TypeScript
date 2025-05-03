@@ -1,0 +1,26 @@
+foo.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== index.ts (0 errors) ====
+    import Foo = require("./reexport");
+    function check(x: Foo.ConstFooEnum): void {
+      switch (x) {
+        case Foo.ConstFooEnum.Some:
+          break;
+      }
+    }
+==== foo.ts (1 errors) ====
+    export module ConstEnumOnlyModule {
+                  ~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      export const enum ConstFooEnum {
+        Some,
+        Values,
+        Here
+      }
+    }
+    
+==== reexport.ts (0 errors) ====
+    import * as Foo from "./foo";
+    export = Foo.ConstEnumOnlyModule;
+    

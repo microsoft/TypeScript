@@ -1,11 +1,15 @@
+twoInterfacesDifferentRootModule.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+twoInterfacesDifferentRootModule.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 twoInterfacesDifferentRootModule.ts(19,16): error TS2339: Property 'foo' does not exist on type 'A'.
 twoInterfacesDifferentRootModule.ts(27,16): error TS2339: Property 'foo' does not exist on type 'B<string>'.
 
 
-==== twoInterfacesDifferentRootModule.ts (2 errors) ====
+==== twoInterfacesDifferentRootModule.ts (4 errors) ====
     // two interfaces with different root modules should not merge
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface A {
             foo: string;
         }
@@ -16,6 +20,8 @@ twoInterfacesDifferentRootModule.ts(27,16): error TS2339: Property 'foo' does no
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface A {
             bar: number;
         }

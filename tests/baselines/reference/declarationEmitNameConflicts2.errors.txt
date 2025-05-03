@@ -1,0 +1,42 @@
+declarationEmitNameConflicts2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts2.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts2.ts(1,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts2.ts(4,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts2.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts2.ts(10,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts2.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts2.ts(10,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declarationEmitNameConflicts2.ts (8 errors) ====
+    module X.Y.base {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f() { }
+        export class C { }
+        export module M {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var v;
+        }
+        export enum E { }
+    }
+    
+    module X.Y.base.Z {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var f = X.Y.base.f; // Should be base.f
+        export var C = X.Y.base.C; // Should be base.C
+        export var M = X.Y.base.M; // Should be base.M
+        export var E = X.Y.base.E; // Should be base.E
+    }

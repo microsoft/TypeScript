@@ -1,0 +1,17 @@
+metadataOfClassFromModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== metadataOfClassFromModule.ts (1 errors) ====
+    module MyModule {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export function inject(target: any, key: string): void { }
+    
+        export class Leg { }
+    
+        export class Person {
+            @inject leftLeg: Leg;
+        }
+    
+    }

@@ -1,0 +1,19 @@
+privacyCheckExportAssignmentOnExportedGenericInterface2.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== privacyCheckExportAssignmentOnExportedGenericInterface2.ts (1 errors) ====
+    export = Foo;
+    
+    interface Foo<T> {
+    }
+    
+    function Foo<T>(array: T[]): Foo<T> {
+        return undefined;
+    }
+    
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = "hello";
+    }
+    

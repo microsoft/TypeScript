@@ -1,13 +1,19 @@
+overloadsInDifferentContainersDisagreeOnAmbient.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+overloadsInDifferentContainersDisagreeOnAmbient.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 overloadsInDifferentContainersDisagreeOnAmbient.ts(7,21): error TS2384: Overload signatures must all be ambient or non-ambient.
 
 
-==== overloadsInDifferentContainersDisagreeOnAmbient.ts (1 errors) ====
+==== overloadsInDifferentContainersDisagreeOnAmbient.ts (3 errors) ====
     declare module M {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // Error because body is not ambient and this overload is
         export function f();
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function f() { }
                         ~
 !!! error TS2384: Overload signatures must all be ambient or non-ambient.

@@ -1,3 +1,7 @@
+downlevelLetConst16.ts(101,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+downlevelLetConst16.ts(110,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+downlevelLetConst16.ts(122,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+downlevelLetConst16.ts(132,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 downlevelLetConst16.ts(151,15): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 downlevelLetConst16.ts(164,17): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 downlevelLetConst16.ts(195,14): error TS2461: Type 'undefined' is not an array type.
@@ -6,7 +10,7 @@ downlevelLetConst16.ts(216,16): error TS2461: Type 'undefined' is not an array t
 downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on type 'undefined'.
 
 
-==== downlevelLetConst16.ts (6 errors) ====
+==== downlevelLetConst16.ts (10 errors) ====
     'use strict'
     
     declare function use(a: any);
@@ -108,6 +112,8 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
     }
     
     module M1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         let x = 1;
         use(x);
         let [y] = [1];
@@ -117,6 +123,8 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         {
             let x = 1;
             use(x);
@@ -129,6 +137,8 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         const x = 1;
         use(x);
         const [y] = [1];
@@ -139,6 +149,8 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
     }
     
     module M4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         {
             const x = 1;
             use(x);

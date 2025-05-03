@@ -1,14 +1,19 @@
 classExtendsItselfIndirectly2.ts(1,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
 classExtendsItselfIndirectly2.ts(1,19): error TS2449: Class 'E' used before its declaration.
+classExtendsItselfIndirectly2.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsItselfIndirectly2.ts(4,18): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly2.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsItselfIndirectly2.ts(9,18): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly2.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsItselfIndirectly2.ts(13,11): error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
 classExtendsItselfIndirectly2.ts(13,27): error TS2449: Class 'E2' used before its declaration.
+classExtendsItselfIndirectly2.ts(15,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsItselfIndirectly2.ts(16,22): error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly2.ts(19,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsItselfIndirectly2.ts(20,22): error TS2506: 'E2' is referenced directly or indirectly in its own base expression.
 
 
-==== classExtendsItselfIndirectly2.ts (8 errors) ====
+==== classExtendsItselfIndirectly2.ts (13 errors) ====
     class C extends N.E { foo: string; } // error
           ~
 !!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
@@ -17,6 +22,8 @@ classExtendsItselfIndirectly2.ts(20,22): error TS2506: 'E2' is referenced direct
 !!! related TS2728 classExtendsItselfIndirectly2.ts:9:18: 'E' is declared here.
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class D extends C { bar: string; }
                      ~
 !!! error TS2506: 'D' is referenced directly or indirectly in its own base expression.
@@ -24,12 +31,16 @@ classExtendsItselfIndirectly2.ts(20,22): error TS2506: 'E2' is referenced direct
     }
     
     module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class E extends M.D { baz: number; }
                      ~
 !!! error TS2506: 'E' is referenced directly or indirectly in its own base expression.
     }
     
     module O {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C2<T> extends Q.E2<T> { foo: T; } // error
               ~~
 !!! error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
@@ -38,12 +49,16 @@ classExtendsItselfIndirectly2.ts(20,22): error TS2506: 'E2' is referenced direct
 !!! related TS2728 classExtendsItselfIndirectly2.ts:20:22: 'E2' is declared here.
     
         module P {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class D2<T> extends C2<T> { bar: T; }
                          ~~
 !!! error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
         }
     
         module Q {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class E2<T> extends P.D2<T> { baz: T; }
                          ~~
 !!! error TS2506: 'E2' is referenced directly or indirectly in its own base expression.

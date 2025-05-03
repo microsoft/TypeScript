@@ -1,0 +1,22 @@
+internalAliasEnumInsideLocalModuleWithExport.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasEnumInsideLocalModuleWithExport.ts(9,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== internalAliasEnumInsideLocalModuleWithExport.ts (2 errors) ====
+    export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export enum weekend {
+            Friday,
+            Saturday,
+            Sunday
+        }
+    }
+    
+    export module c {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import b = a.weekend;
+        export var bVal: b = b.Sunday;
+    }
+    

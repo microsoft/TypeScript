@@ -1,0 +1,17 @@
+foo_0.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== foo_1.ts (0 errors) ====
+    import foo = require("./foo_0");
+    if(foo.answer === 42){
+    
+    }
+    
+==== foo_0.ts (1 errors) ====
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export var answer = 42;
+    }
+    export = Foo;
+    

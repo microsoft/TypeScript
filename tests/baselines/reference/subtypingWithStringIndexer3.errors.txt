@@ -1,6 +1,7 @@
 subtypingWithStringIndexer3.ts(11,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
   'string' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+subtypingWithStringIndexer3.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithStringIndexer3.ts(24,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 subtypingWithStringIndexer3.ts(32,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
@@ -17,7 +18,7 @@ subtypingWithStringIndexer3.ts(40,11): error TS2415: Class 'B5<T>' incorrectly e
       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
 
 
-==== subtypingWithStringIndexer3.ts (5 errors) ====
+==== subtypingWithStringIndexer3.ts (6 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
     interface Base { foo: string; }
@@ -42,6 +43,8 @@ subtypingWithStringIndexer3.ts(40,11): error TS2415: Class 'B5<T>' incorrectly e
     }
     
     module Generics {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class A<T extends Derived> {
             [x: string]: T;
         }

@@ -17,7 +17,9 @@ class Point implements IPoint {
 
     constructor(public x,public y){}
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     public move(xo:number,yo:number) {
 >move : (xo: number, yo: number) => this
@@ -29,7 +31,9 @@ class Point implements IPoint {
 
 	this.x+=xo;
 >this.x+=xo : any
+>           : ^^^
 >this.x : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >x : any
@@ -39,7 +43,9 @@ class Point implements IPoint {
 
 	this.y+=yo;
 >this.y+=yo : any
+>           : ^^^
 >this.y : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >y : any
@@ -69,6 +75,7 @@ class Point implements IPoint {
 >"(" : "("
 >    : ^^^
 >this.x : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >x : any
@@ -76,6 +83,7 @@ class Point implements IPoint {
 >"," : ","
 >    : ^^^
 >this.y : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >y : any

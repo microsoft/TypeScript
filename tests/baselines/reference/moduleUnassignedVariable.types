@@ -19,10 +19,12 @@ module Bar {
 
     export var b;
 >b : any
+>  : ^^^
 
     function fooB() { return b; } // Incorrect: return b
 >fooB : () => any
 >     : ^^^^^^^^^
 >b : any
+>  : ^^^
 }
 

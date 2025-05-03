@@ -1,0 +1,19 @@
+qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts (2 errors) ====
+    module Alpha {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = 100;
+    }
+    
+    module Beta {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import p = Alpha.x;
+    }
+    
+    
+    var x = Alpha.x

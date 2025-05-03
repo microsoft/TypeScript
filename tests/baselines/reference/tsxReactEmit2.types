@@ -11,11 +11,15 @@ declare module JSX {
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 var p1: any, p2: any, p3: any;
 >p1 : any
+>   : ^^^
 >p2 : any
+>   : ^^^
 >p3 : any
+>   : ^^^
 
 var spreads1 = <div {...p1}>{p2}</div>;
 >spreads1 : JSX.Element
@@ -25,7 +29,9 @@ var spreads1 = <div {...p1}>{p2}</div>;
 >div : any
 >    : ^^^
 >p1 : any
+>   : ^^^
 >p2 : any
+>   : ^^^
 >div : any
 >    : ^^^
 
@@ -37,7 +43,9 @@ var spreads2 = <div {...p1}>{p2}</div>;
 >div : any
 >    : ^^^
 >p1 : any
+>   : ^^^
 >p2 : any
+>   : ^^^
 >div : any
 >    : ^^^
 
@@ -49,9 +57,13 @@ var spreads3 = <div x={p3} {...p1}>{p2}</div>;
 >div : any
 >    : ^^^
 >x : any
+>  : ^^^
 >p3 : any
+>   : ^^^
 >p1 : any
+>   : ^^^
 >p2 : any
+>   : ^^^
 >div : any
 >    : ^^^
 
@@ -63,9 +75,13 @@ var spreads4 = <div {...p1} x={p3} >{p2}</div>;
 >div : any
 >    : ^^^
 >p1 : any
+>   : ^^^
 >x : any
+>  : ^^^
 >p3 : any
+>   : ^^^
 >p2 : any
+>   : ^^^
 >div : any
 >    : ^^^
 
@@ -77,11 +93,17 @@ var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
 >div : any
 >    : ^^^
 >x : any
+>  : ^^^
 >p2 : any
+>   : ^^^
 >p1 : any
+>   : ^^^
 >y : any
+>  : ^^^
 >p3 : any
+>   : ^^^
 >p2 : any
+>   : ^^^
 >div : any
 >    : ^^^
 

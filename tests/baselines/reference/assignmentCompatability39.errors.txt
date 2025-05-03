@@ -1,13 +1,19 @@
+assignmentCompatability39.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+assignmentCompatability39.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatability39.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPublic<number, string>'.
   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type 'classWithTwoPublic<number, string>'.
 
 
-==== assignmentCompatability39.ts (1 errors) ====
+==== assignmentCompatability39.ts (3 errors) ====
     module __test1__ {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
         export var __val__obj4 = obj4;
     }
     module __test2__ {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export         class classWithTwoPublic<T,U> { constructor(public one: T, public two: U) {} }    var x2 = new classWithTwoPublic(1, "a");;
         export var __val__x2 = x2;
     }

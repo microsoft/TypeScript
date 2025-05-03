@@ -1,12 +1,16 @@
+genericCallWithOverloadedConstructorTypedArguments2.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericCallWithOverloadedConstructorTypedArguments2.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericCallWithOverloadedConstructorTypedArguments2.ts(31,20): error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: unknown): string; new (x: unknown, y?: unknown): string; }'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== genericCallWithOverloadedConstructorTypedArguments2.ts (1 errors) ====
+==== genericCallWithOverloadedConstructorTypedArguments2.ts (3 errors) ====
     // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
     // Inferences are made quadratic-pairwise to and from these overload sets
     
     module NonGenericParameter {
+           ~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var a: {
             new(x: boolean): boolean;
             new(x: string): string;
@@ -21,6 +25,8 @@ genericCallWithOverloadedConstructorTypedArguments2.ts(31,20): error TS2345: Arg
     }
     
     module GenericParameter {
+           ~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
             return cb;
         }

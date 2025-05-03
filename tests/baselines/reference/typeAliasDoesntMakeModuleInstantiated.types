@@ -10,6 +10,7 @@ declare module m {
     export interface IStatic {
         (selector: any /* Selector */): IInstance;
 >selector : any
+>         : ^^^
     }
     export interface IInstance { }
 }

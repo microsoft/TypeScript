@@ -1,0 +1,22 @@
+ambientExternalModuleWithInternalImportDeclaration_0.ts(2,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ambientExternalModuleWithInternalImportDeclaration_1.ts (0 errors) ====
+    ///<reference path='ambientExternalModuleWithInternalImportDeclaration_0.ts'/>
+    import A = require('M');
+    var c = new A();
+==== ambientExternalModuleWithInternalImportDeclaration_0.ts (1 errors) ====
+    declare module 'M' {
+        module C {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var f: number;
+        }
+        class C {
+            foo(): void;
+        }
+        import X = C;
+        export = X;
+    
+    }
+    

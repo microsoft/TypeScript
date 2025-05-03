@@ -1,17 +1,34 @@
+recursiveClassReferenceTest.ts(6,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(6,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 recursiveClassReferenceTest.ts(16,19): error TS2304: Cannot find name 'Element'.
+recursiveClassReferenceTest.ts(32,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(32,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(32,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(32,29): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(44,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(44,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(44,21): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 recursiveClassReferenceTest.ts(56,11): error TS2663: Cannot find name 'domNode'. Did you mean the instance member 'this.domNode'?
+recursiveClassReferenceTest.ts(76,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(76,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(76,21): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(76,31): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 recursiveClassReferenceTest.ts(88,36): error TS2663: Cannot find name 'mode'. Did you mean the instance member 'this.mode'?
 recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
   Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
 
 
-==== recursiveClassReferenceTest.ts (4 errors) ====
+==== recursiveClassReferenceTest.ts (17 errors) ====
     // Scenario 1: Test reqursive function call with "this" parameter
     // Scenario 2: Test recursive function call with cast and "this" parameter
     
     
     
     declare module Sample.Thing {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     	export interface IWidget {
     		getDomNode(): any;
@@ -40,6 +57,14 @@ recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' i
     }
     
     module Sample.Actions.Thing.Find {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                  ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export class StartFindAction implements Sample.Thing.IAction {
     		
     		public getId() { return "yo"; }
@@ -52,6 +77,12 @@ recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' i
     }
     
     module Sample.Thing.Widgets {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                  ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                        ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export class FindWidget implements Sample.Thing.IWidget {
     
     		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
@@ -86,6 +117,14 @@ recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' i
     declare var self: Window;
     
     module Sample.Thing.Languages.PlainText {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                  ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                        ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                  ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	
     	export class State implements IState {		
             constructor(private mode: IMode) { }

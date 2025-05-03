@@ -1,0 +1,22 @@
+collisionExportsRequireAndAmbientFunction.ts(5,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientFunction.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionExportsRequireAndAmbientFunction.ts (2 errors) ====
+    export declare function exports(): number;
+    
+    export declare function require(): string[];
+        
+    declare module m1 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        function exports(): string;
+        function require(): number;
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare function exports(): string;
+        export declare function require(): string[];
+        var a = 10;
+    }

@@ -1,0 +1,32 @@
+commentsMultiModuleSingleFile.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+commentsMultiModuleSingleFile.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== commentsMultiModuleSingleFile.ts (2 errors) ====
+    /** this is multi declare module*/
+    module multiM {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        /** class b*/
+        export class b {
+        }
+    
+        // class d
+        export class d {
+        }
+    }
+    
+    /// this is multi module 2
+    module multiM {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        /** class c comment*/
+        export class c {
+        }
+    
+        /// class e
+        export class e {
+        }
+    }
+    new multiM.b();
+    new multiM.c();

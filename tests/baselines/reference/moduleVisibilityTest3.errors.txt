@@ -1,10 +1,14 @@
+moduleVisibilityTest3.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest3.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleVisibilityTest3.ts(20,22): error TS2709: Cannot use namespace 'modes' as a type.
 moduleVisibilityTest3.ts(20,39): error TS2724: '_modes' has no exported member named 'Mode'. Did you mean 'IMode'?
 moduleVisibilityTest3.ts(21,22): error TS2724: '_modes' has no exported member named 'Mode'. Did you mean 'IMode'?
 
 
-==== moduleVisibilityTest3.ts (3 errors) ====
+==== moduleVisibilityTest3.ts (5 errors) ====
     module _modes {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
      export interface IMode {
       
      }
@@ -17,6 +21,8 @@ moduleVisibilityTest3.ts(21,22): error TS2724: '_modes' has no exported member n
     //_modes. // produces an internal error - please implement in derived class
     
     module editor {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
      import modes = _modes;
      
      var i : modes.IMode;

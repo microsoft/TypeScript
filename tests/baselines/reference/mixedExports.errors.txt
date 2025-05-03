@@ -1,0 +1,31 @@
+mixedExports.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixedExports.ts(7,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixedExports.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mixedExports.ts(14,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mixedExports.ts (4 errors) ====
+    declare module M {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+         function foo();
+         export function foo();
+         function foo();
+    }
+    
+    declare module M1 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+         export interface Foo {}
+         interface Foo {}
+    }
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+         interface X {x}
+         export module X {}
+                       ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+         interface X {y}
+    }

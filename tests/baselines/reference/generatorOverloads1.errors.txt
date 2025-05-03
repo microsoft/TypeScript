@@ -1,9 +1,12 @@
+generatorOverloads1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 generatorOverloads1.ts(2,13): error TS1222: An overload signature cannot be declared as a generator.
 generatorOverloads1.ts(3,13): error TS1222: An overload signature cannot be declared as a generator.
 
 
-==== generatorOverloads1.ts (2 errors) ====
+==== generatorOverloads1.ts (3 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function* f(s: string): Iterable<any>;
                 ~
 !!! error TS1222: An overload signature cannot be declared as a generator.

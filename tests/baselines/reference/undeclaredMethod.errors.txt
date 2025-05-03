@@ -1,8 +1,11 @@
+undeclaredMethod.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 undeclaredMethod.ts(10,3): error TS2339: Property 'saltbar' does not exist on type 'C'.
 
 
-==== undeclaredMethod.ts (1 errors) ====
+==== undeclaredMethod.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C {
             public salt() {}
         }

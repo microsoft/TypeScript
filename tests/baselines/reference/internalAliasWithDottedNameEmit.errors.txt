@@ -1,0 +1,28 @@
+internalAliasWithDottedNameEmit.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasWithDottedNameEmit.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasWithDottedNameEmit.ts(1,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasWithDottedNameEmit.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasWithDottedNameEmit.ts(4,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasWithDottedNameEmit.ts(4,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== internalAliasWithDottedNameEmit.ts (6 errors) ====
+    module a.b.c {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+          export var d;
+    }
+    module a.e.f {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+          import g = b.c;
+    }
+    

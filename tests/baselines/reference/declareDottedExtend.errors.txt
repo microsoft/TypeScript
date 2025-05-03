@@ -1,0 +1,20 @@
+declareDottedExtend.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declareDottedExtend.ts(1,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declareDottedExtend.ts (2 errors) ====
+    declare module A.B
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    {
+        export class C{ }
+    }
+    
+    import ab = A.B;
+    
+    class D extends ab.C{ }
+    
+    class E extends A.B.C{ }
+    

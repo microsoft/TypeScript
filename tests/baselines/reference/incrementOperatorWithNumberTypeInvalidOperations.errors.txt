@@ -1,3 +1,4 @@
+incrementOperatorWithNumberTypeInvalidOperations.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 incrementOperatorWithNumberTypeInvalidOperations.ts(18,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithNumberTypeInvalidOperations.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithNumberTypeInvalidOperations.ts(22,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
@@ -20,7 +21,7 @@ incrementOperatorWithNumberTypeInvalidOperations.ts(45,1): error TS2356: An arit
 incrementOperatorWithNumberTypeInvalidOperations.ts(46,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
 
 
-==== incrementOperatorWithNumberTypeInvalidOperations.ts (20 errors) ====
+==== incrementOperatorWithNumberTypeInvalidOperations.ts (21 errors) ====
     // ++ operator on number type
     var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
@@ -32,6 +33,8 @@ incrementOperatorWithNumberTypeInvalidOperations.ts(46,1): error TS2357: The ope
         static foo() { return 1; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: number;
     }
     

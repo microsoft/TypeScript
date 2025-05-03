@@ -56,6 +56,7 @@ var objA = new A();
 // number type var
 var ResultIsAny1 = void NUMBER;
 >ResultIsAny1 : any
+>             : ^^^
 >void NUMBER : undefined
 >            : ^^^^^^^^^
 >NUMBER : number
@@ -63,6 +64,7 @@ var ResultIsAny1 = void NUMBER;
 
 var ResultIsAny2 = void NUMBER1;
 >ResultIsAny2 : any
+>             : ^^^
 >void NUMBER1 : undefined
 >             : ^^^^^^^^^
 >NUMBER1 : number[]
@@ -71,6 +73,7 @@ var ResultIsAny2 = void NUMBER1;
 // number type literal
 var ResultIsAny3 = void 1;
 >ResultIsAny3 : any
+>             : ^^^
 >void 1 : undefined
 >       : ^^^^^^^^^
 >1 : 1
@@ -78,6 +81,7 @@ var ResultIsAny3 = void 1;
 
 var ResultIsAny4 = void { x: 1, y: 2};
 >ResultIsAny4 : any
+>             : ^^^
 >void { x: 1, y: 2} : undefined
 >                   : ^^^^^^^^^
 >{ x: 1, y: 2} : { x: number; y: number; }
@@ -93,6 +97,7 @@ var ResultIsAny4 = void { x: 1, y: 2};
 
 var ResultIsAny5 = void { x: 1, y: (n: number) => { return n; } };
 >ResultIsAny5 : any
+>             : ^^^
 >void { x: 1, y: (n: number) => { return n; } } : undefined
 >                                               : ^^^^^^^^^
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
@@ -113,6 +118,7 @@ var ResultIsAny5 = void { x: 1, y: (n: number) => { return n; } };
 // number type expressions
 var ResultIsAny6 = void objA.a;
 >ResultIsAny6 : any
+>             : ^^^
 >void objA.a : undefined
 >            : ^^^^^^^^^
 >objA.a : number
@@ -124,6 +130,7 @@ var ResultIsAny6 = void objA.a;
 
 var ResultIsAny7 = void M.n;
 >ResultIsAny7 : any
+>             : ^^^
 >void M.n : undefined
 >         : ^^^^^^^^^
 >M.n : number
@@ -135,6 +142,7 @@ var ResultIsAny7 = void M.n;
 
 var ResultIsAny8 = void NUMBER1[0];
 >ResultIsAny8 : any
+>             : ^^^
 >void NUMBER1[0] : undefined
 >                : ^^^^^^^^^
 >NUMBER1[0] : number
@@ -146,6 +154,7 @@ var ResultIsAny8 = void NUMBER1[0];
 
 var ResultIsAny9 = void foo();
 >ResultIsAny9 : any
+>             : ^^^
 >void foo() : undefined
 >           : ^^^^^^^^^
 >foo() : number
@@ -155,6 +164,7 @@ var ResultIsAny9 = void foo();
 
 var ResultIsAny10 = void A.foo();
 >ResultIsAny10 : any
+>              : ^^^
 >void A.foo() : undefined
 >             : ^^^^^^^^^
 >A.foo() : number
@@ -168,6 +178,7 @@ var ResultIsAny10 = void A.foo();
 
 var ResultIsAny11 = void (NUMBER + NUMBER);
 >ResultIsAny11 : any
+>              : ^^^
 >void (NUMBER + NUMBER) : undefined
 >                       : ^^^^^^^^^
 >(NUMBER + NUMBER) : number
@@ -182,6 +193,7 @@ var ResultIsAny11 = void (NUMBER + NUMBER);
 // multiple void  operators
 var ResultIsAny12 = void void NUMBER;
 >ResultIsAny12 : any
+>              : ^^^
 >void void NUMBER : undefined
 >                 : ^^^^^^^^^
 >void NUMBER : undefined
@@ -191,6 +203,7 @@ var ResultIsAny12 = void void NUMBER;
 
 var ResultIsAny13 = void void void (NUMBER + NUMBER);
 >ResultIsAny13 : any
+>              : ^^^
 >void void void (NUMBER + NUMBER) : undefined
 >                                 : ^^^^^^^^^
 >void void (NUMBER + NUMBER) : undefined

@@ -15,6 +15,7 @@ genericTypeReferenceWithoutTypeArgument2.ts(18,27): error TS2314: Generic type '
 genericTypeReferenceWithoutTypeArgument2.ts(18,38): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument2.ts(20,17): error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
 genericTypeReferenceWithoutTypeArgument2.ts(23,21): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(25,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericTypeReferenceWithoutTypeArgument2.ts(29,18): error TS2708: Cannot use namespace 'M' as a value.
 genericTypeReferenceWithoutTypeArgument2.ts(30,24): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument2.ts(31,24): error TS2694: Namespace 'M' has no exported member 'C'.
@@ -24,7 +25,7 @@ genericTypeReferenceWithoutTypeArgument2.ts(36,10): error TS2304: Cannot find na
 genericTypeReferenceWithoutTypeArgument2.ts(37,10): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 
 
-==== genericTypeReferenceWithoutTypeArgument2.ts (24 errors) ====
+==== genericTypeReferenceWithoutTypeArgument2.ts (25 errors) ====
     // it is an error to use a generic type without type arguments
     // all of these are errors 
     
@@ -84,6 +85,8 @@ genericTypeReferenceWithoutTypeArgument2.ts(37,10): error TS2314: Generic type '
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface E<T> { foo: T }
     }
     

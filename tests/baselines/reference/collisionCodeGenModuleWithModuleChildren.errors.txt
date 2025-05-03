@@ -1,0 +1,78 @@
+collisionCodeGenModuleWithModuleChildren.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(3,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(19,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(27,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(36,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(37,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithModuleChildren.ts(38,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionCodeGenModuleWithModuleChildren.ts (11 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = 3;
+        module m1 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            var M = 10;
+            var p = x;
+        }
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module m2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            class M {
+            }
+            var p = x;
+            var p2 = new M();
+        }
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module m3 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            function M() {
+            }
+            var p = x;
+            var p2 = M();
+        }
+    }
+    
+    module M { // shouldnt be _M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module m3 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            interface M {
+            }
+            var p = x;
+            var p2: M;
+        }
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module m4 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            module M {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                var p = x;
+            }
+        }
+    }

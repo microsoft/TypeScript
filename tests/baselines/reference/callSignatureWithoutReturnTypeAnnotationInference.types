@@ -8,6 +8,7 @@ function foo(x) {
 >foo : (x: any) => number
 >    : ^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     return 1;
 >1 : 1
@@ -27,6 +28,7 @@ function foo2(x) {
 >foo2 : (x: any) => number
 >     : ^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     return foo(x);
 >foo(x) : number
@@ -34,6 +36,7 @@ function foo2(x) {
 >foo : (x: any) => number
 >    : ^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 var r2 = foo2(1);
 >r2 : number
@@ -87,6 +90,7 @@ function foo5(x) {
 >foo5 : (x: any) => 1 | 2
 >     : ^ ^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     if (true) {
 >true : true
@@ -116,11 +120,13 @@ function foo6(x) {
 >foo6 : (x: any) => any[]
 >     : ^ ^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     try {
     }
     catch (e) {
 >e : any
+>  : ^^^
 
         return [];
 >[] : undefined[]
@@ -146,11 +152,13 @@ function foo7(x) {
 >foo7 : (x: any) => "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     return typeof x;
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 var r7 = foo7(1);
 >r7 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -351,6 +359,7 @@ class c1 {
 
     constructor(x) { }
 >x : any
+>  : ^^^
 }
 module c1 {
 >c1 : typeof c1

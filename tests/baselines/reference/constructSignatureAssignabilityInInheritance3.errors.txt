@@ -1,3 +1,5 @@
+constructSignatureAssignabilityInInheritance3.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constructSignatureAssignabilityInInheritance3.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constructSignatureAssignabilityInInheritance3.ts(41,19): error TS2430: Interface 'I2<T, U>' incorrectly extends interface 'A'.
   Types of property 'a2' are incompatible.
     Type 'new (x: T) => U[]' is not assignable to type 'new (x: number) => string[]'.
@@ -26,6 +28,7 @@ constructSignatureAssignabilityInInheritance3.ts(70,19): error TS2430: Interface
         Type '{ a: string; b: number; }' is not assignable to type '{ a: Base; b: Base; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'Base'.
+constructSignatureAssignabilityInInheritance3.ts(80,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constructSignatureAssignabilityInInheritance3.ts(86,19): error TS2430: Interface 'I6' incorrectly extends interface 'B'.
   The types returned by 'new a2(...)' are incompatible between these types.
     Type 'string[]' is not assignable to type 'T[]'.
@@ -37,17 +40,21 @@ constructSignatureAssignabilityInInheritance3.ts(95,19): error TS2430: Interface
       Type 'T' is not assignable to type 'string'.
 
 
-==== constructSignatureAssignabilityInInheritance3.ts (6 errors) ====
+==== constructSignatureAssignabilityInInheritance3.ts (9 errors) ====
     // checking subtype relations for function types as it relates to contextual signature instantiation
     // error cases
     
     module Errors {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Base { foo: string; }
         class Derived extends Base { bar: string; }
         class Derived2 extends Derived { baz: string; }
         class OtherDerived extends Base { bing: string; }
     
         module WithNonGenericSignaturesInBaseType {
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             // base type with non-generic call signatures
             interface A {
                 a2: new (x: number) => string[];
@@ -150,6 +157,8 @@ constructSignatureAssignabilityInInheritance3.ts(95,19): error TS2430: Interface
         }
     
         module WithGenericSignaturesInBaseType {
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             // base type has generic call signature
             interface B {
                 a2: new <T>(x: T) => T[];
