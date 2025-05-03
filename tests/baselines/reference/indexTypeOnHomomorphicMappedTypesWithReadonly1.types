@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/indexTypeOnHomomorphicMappedTypesWithReadonly1.ts] ////
+
+=== indexTypeOnHomomorphicMappedTypesWithReadonly1.ts ===
+type T1 = Readonly<string[]>;
+>T1 : readonly string[]
+>   : ^^^^^^^^^^^^^^^^^
+
+type R1 = keyof T1; // keyof readonly string[]
+>R1 : keyof readonly string[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+type KeyOfReadonly<T> = keyof Readonly<T>;
+>KeyOfReadonly : keyof Readonly<T>
+>              : ^^^^^^^^^^^^^^^^^
+
+type R2 = KeyOfReadonly<string[]>; // keyof readonly string[]
+>R2 : keyof readonly string[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+type Identity<T> = { [K in keyof T]: T[K] };
+>Identity : Identity<T>
+>         : ^^^^^^^^^^^
+
+type KeyOfReadonly2<T> = keyof Identity<Readonly<T>>; 
+>KeyOfReadonly2 : keyof Identity<Readonly<T>>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type R3 = KeyOfReadonly2<string[]>; // keyof readonly string[]
+>R3 : keyof readonly string[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+type KeyOfReadonly3<T> = keyof Readonly<Identity<T>>; 
+>KeyOfReadonly3 : keyof Readonly<Identity<T>>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type R4 = KeyOfReadonly3<string[]>; // keyof readonly string[]
+>R4 : keyof readonly string[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+type Writable<T> = { -readonly [K in keyof T]: T[K] };
+>Writable : Writable<T>
+>         : ^^^^^^^^^^^
+
+type KeyOfWritable<T> = keyof Writable<T>;
+>KeyOfWritable : keyof Writable<T>
+>              : ^^^^^^^^^^^^^^^^^
+
+type R5 = KeyOfWritable<readonly string[]>; // keyof string[]
+>R5 : keyof string[]
+>   : ^^^^^^^^^^^^^^
+
+type KeyOfWritable2<T> = keyof Writable<Readonly<T>>;
+>KeyOfWritable2 : keyof Writable<Readonly<T>>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type R6 = KeyOfWritable2<readonly string[]>; // keyof string[]
+>R6 : keyof string[]
+>   : ^^^^^^^^^^^^^^
+
+type KeyOfWritable3<T> = keyof Identity<Writable<Readonly<T>>>;
+>KeyOfWritable3 : keyof Identity<Writable<Readonly<T>>>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type R7 = KeyOfWritable3<string[]>; // keyof string[]
+>R7 : keyof string[]
+>   : ^^^^^^^^^^^^^^
+
+type R8 = KeyOfWritable3<readonly string[]>; // keyof string[]
+>R8 : keyof string[]
+>   : ^^^^^^^^^^^^^^
+
+type KeyOfReadonly4<T> = keyof Identity<Readonly<Writable<T>>>;
+>KeyOfReadonly4 : keyof Identity<Readonly<Writable<T>>>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type R9 = KeyOfReadonly4<string[]>; // keyof readonly string[]
+>R9 : keyof readonly string[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
