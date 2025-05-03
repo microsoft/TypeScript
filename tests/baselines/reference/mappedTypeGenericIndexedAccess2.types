@@ -1,0 +1,120 @@
+//// [tests/cases/compiler/mappedTypeGenericIndexedAccess2.ts] ////
+
+=== mappedTypeGenericIndexedAccess2.ts ===
+// https://github.com/microsoft/TypeScript/issues/60675
+
+type EventPayloads = {
+>EventPayloads : EventPayloads
+>              : ^^^^^^^^^^^^^
+
+  completeSprint: {
+>completeSprint : { automationId: string; spaceId: string; }
+>               : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+
+    automationId: string;
+>automationId : string
+>             : ^^^^^^
+
+    spaceId: string;
+>spaceId : string
+>        : ^^^^^^
+
+  };
+  sendMessage: {
+>sendMessage : { message: string; }
+>            : ^^^^^^^^^^^      ^^^
+
+    message: string;
+>message : string
+>        : ^^^^^^
+
+  };
+};
+
+type CompletedEvent<T extends keyof EventPayloads> = {
+>CompletedEvent : CompletedEvent<T>
+>               : ^^^^^^^^^^^^^^^^^
+
+  [E in T]: {
+    type: E;
+>type : E
+>     : ^
+
+    payload: EventPayloads[E];
+>payload : EventPayloads[E]
+>        : ^^^^^^^^^^^^^^^^
+
+    appName: string;
+>appName : string
+>        : ^^^^^^
+
+  };
+}[T];
+
+function overwriteAppName<T extends keyof EventPayloads>(
+>overwriteAppName : <T extends keyof EventPayloads>(scheduled: CompletedEvent<T>) => CompletedEvent<T>
+>                 : ^ ^^^^^^^^^                   ^^         ^^                 ^^^^^                 
+
+  scheduled: CompletedEvent<T>,
+>scheduled : CompletedEvent<T>
+>          : ^^^^^^^^^^^^^^^^^
+
+): CompletedEvent<T> {
+  const { appName, ...rest } = scheduled;
+>appName : string
+>        : ^^^^^^
+>rest : Omit<CompletedEvent<T>, "appName">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scheduled : CompletedEvent<T>
+>          : ^^^^^^^^^^^^^^^^^
+
+  scheduled.payload = rest.payload // ok
+>scheduled.payload = rest.payload : CompletedEvent<T>["payload"]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scheduled.payload : EventPayloads[T]
+>                  : ^^^^^^^^^^^^^^^^
+>scheduled : CompletedEvent<T>
+>          : ^^^^^^^^^^^^^^^^^
+>payload : EventPayloads[T]
+>        : ^^^^^^^^^^^^^^^^
+>rest.payload : CompletedEvent<T>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<T>, "appName">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<T>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  rest.payload = scheduled.payload // ok
+>rest.payload = scheduled.payload : EventPayloads[T]
+>                                 : ^^^^^^^^^^^^^^^^
+>rest.payload : CompletedEvent<T>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<T>, "appName">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<T>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scheduled.payload : EventPayloads[T]
+>                  : ^^^^^^^^^^^^^^^^
+>scheduled : CompletedEvent<T>
+>          : ^^^^^^^^^^^^^^^^^
+>payload : EventPayloads[T]
+>        : ^^^^^^^^^^^^^^^^
+
+  // ok
+  return {
+>{    ...rest,    appName: "test",  } : Omit<CompletedEvent<T>, "appName"> & { appName: string; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    ...rest,
+>rest : Omit<CompletedEvent<T>, "appName">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    appName: "test",
+>appName : string
+>        : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+  };
+}
+
