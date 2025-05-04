@@ -106,7 +106,7 @@ interface BigInt {
 interface BigIntConstructor {
     /**
      * Creates a BigInt value from a number, string, boolean, or another BigInt.
-     * 
+     *
      * @param value The value to convert to a BigInt.
      * @throws {RangeError} If `value` is a non-integer number.
      * @throws {TypeError} If `value` cannot be converted to a primitive, or if the primitive is undefined, null, or a symbol.
