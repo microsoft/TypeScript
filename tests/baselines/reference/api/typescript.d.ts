@@ -8411,7 +8411,7 @@ declare namespace ts {
          *
          * Default: `500`
          */
-        readonly hoverMaximumLength?: number;
+        readonly maximumHoverLength?: number;
     }
     type OrganizeImportsTypeOrder = "last" | "inline" | "first";
     /** Represents a bigint literal value without requiring bigint support */
