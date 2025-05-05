@@ -2399,7 +2399,7 @@ export class Session<TMessage = string> implements EventSender {
         const quickInfo = project.getLanguageService().getQuickInfoAtPosition(
             file,
             this.getPosition(args, scriptInfo),
-            userPreferences.hoverMaximumLength,
+            userPreferences.maximumHoverLength,
             args.verbosityLevel,
         );
         if (!quickInfo) {

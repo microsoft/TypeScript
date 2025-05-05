@@ -2761,9 +2761,16 @@ export function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean {
     return !!findAncestor(declaration, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
 }
 
-const displayPartWriter = getDisplayPartWriter();
-function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-    const absoluteMaximumLength = defaultMaximumTruncationLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
+const displayPartWriterCache = new Map<number | undefined, DisplayPartsSymbolWriter>();
+function getDisplayPartWriter(maximumLength: number | undefined): DisplayPartsSymbolWriter {
+    if (!displayPartWriterCache.has(maximumLength)) {
+        displayPartWriterCache.set(maximumLength, getDisplayPartWriterWorker(maximumLength));
+    }
+    return displayPartWriterCache.get(maximumLength)!;
+}
+
+function getDisplayPartWriterWorker(maximumLength: number | undefined): DisplayPartsSymbolWriter {
+    const absoluteMaximumLength = (maximumLength || defaultMaximumTruncationLength) * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
     let displayParts: SymbolDisplayPart[];
     let lineStart: boolean;
     let indent: number;
@@ -3036,7 +3043,8 @@ export function lineBreakPart(): SymbolDisplayPart {
 }
 
 /** @internal */
-export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
+export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void, maximumLength?: number): SymbolDisplayPart[] {
+    const displayPartWriter = getDisplayPartWriter(maximumLength);
     try {
         writeDisplayParts(displayPartWriter);
         return displayPartWriter.displayParts();
@@ -3058,7 +3066,7 @@ export function typeToDisplayParts(
 ): SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
         typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer, maximumLength, verbosityLevel, out);
-    });
+    }, maximumLength);
 }
 
 /** @internal */
@@ -3081,7 +3089,7 @@ export function signatureToDisplayParts(
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
         typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer, maximumLength, verbosityLevel, out);
-    });
+    }, maximumLength);
 }
 
 /** @internal */

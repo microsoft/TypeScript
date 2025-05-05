@@ -708,7 +708,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                                 typeWriterOut,
                             )!;
                             getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
-                        });
+                        }, maximumLength);
                         addRange(displayParts, typeParameterParts);
                     }
                     else {
@@ -904,7 +904,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     if (i > 0) writer.writeLine();
                     printer.writeNode(EmitHint.Unspecified, node, sourceFile, writer);
                 });
-            });
+            }, maximumLength);
             addRange(displayParts, expandedDisplayParts);
             symbolWasExpanded = true;
             return true;

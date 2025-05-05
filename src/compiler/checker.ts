@@ -6114,7 +6114,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
         const result = writer.getText();
 
-        const maxLength = noTruncation ? noTruncationMaximumTruncationLength * 2 : defaultMaximumTruncationLength * 2;
+        const maxLength = maximumLength || (noTruncation ? noTruncationMaximumTruncationLength * 2 : defaultMaximumTruncationLength * 2);
         if (maxLength && result && result.length >= maxLength) {
             return result.substr(0, maxLength - "...".length) + "...";
         }

@@ -10548,7 +10548,7 @@ export interface UserPreferences {
      *
      * Default: `500`
      */
-    readonly hoverMaximumLength?: number;
+    readonly maximumHoverLength?: number;
 }
 
 export type OrganizeImportsTypeOrder = "last" | "inline" | "first";
