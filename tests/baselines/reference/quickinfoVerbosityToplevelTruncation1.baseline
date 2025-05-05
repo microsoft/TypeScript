@@ -1,5 +1,5 @@
 // === QuickInfo ===
-=== /tests/cases/fourslash/quickinfoVerbosityToplevelTruncation.ts ===
+=== /tests/cases/fourslash/quickinfoVerbosityToplevelTruncation1.ts ===
 // export enum LargeEnum {
 //             ^^^^^^^^^
 // | ----------------------------------------------------------------------
@@ -94,7 +94,7 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityToplevelTruncation.ts",
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityToplevelTruncation1.ts",
       "position": 21,
       "name": "1"
     },
@@ -570,7 +570,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityToplevelTruncation.ts",
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityToplevelTruncation1.ts",
       "position": 398,
       "name": "2"
     },
