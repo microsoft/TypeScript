@@ -24057,6 +24057,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
             const effectiveTarget = addOptionality(getNonMissingTypeOfSymbol(targetProp), /*isProperty*/ false, targetIsOptional);
+            // source could resolve to `any` and that's not related to `unknown` target under strict subtype relation
+            if (effectiveTarget.flags & (relation === strictSubtypeRelation ? TypeFlags.Any : TypeFlags.AnyOrUnknown)) {
+                return Ternary.True;
+            }
             const effectiveSource = getTypeOfSourceProperty(sourceProp);
             return isRelatedTo(effectiveSource, effectiveTarget, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
         }
