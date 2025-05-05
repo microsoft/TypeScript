@@ -16316,8 +16316,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (returnSignature) {
                 const newReturnSignature = cloneSignature(returnSignature);
                 newReturnSignature.typeParameters = inferredTypeParameters;
+                const newReturnType = getOrCreateTypeFromSignature(newReturnSignature) as AnonymousType;
+                newReturnType.mapper = instantiatedSignature.mapper;
                 const newInstantiatedSignature = cloneSignature(instantiatedSignature);
-                newInstantiatedSignature.resolvedReturnType = getOrCreateTypeFromSignature(newReturnSignature);
+                newInstantiatedSignature.resolvedReturnType = newReturnType;
                 return newInstantiatedSignature;
             }
         }
@@ -16409,7 +16411,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If declaration is undefined, it is likely to be the signature of the default constructor.
             const isConstructor = kind === undefined || kind === SyntaxKind.Constructor || kind === SyntaxKind.ConstructSignature || kind === SyntaxKind.ConstructorType;
 
-            const type = createObjectType(ObjectFlags.Anonymous);
+            const type = createObjectType(ObjectFlags.Anonymous | ObjectFlags.SingleSignatureType, signature.declaration?.symbol);
             type.members = emptySymbols;
             type.properties = emptyArray;
             type.callSignatures = !isConstructor ? [signature] : emptyArray;
@@ -20528,7 +20530,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             let result = target.instantiations.get(id);
             if (!result) {
-                const newMapper = createTypeMapper(typeParameters, typeArguments);
+                let newMapper = createTypeMapper(typeParameters, typeArguments);
+                if (target.objectFlags & ObjectFlags.SingleSignatureType && mapper) {
+                    newMapper = combineTypeMappers(newMapper, mapper);
+                }
                 result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
