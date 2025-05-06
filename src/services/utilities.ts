@@ -2761,16 +2761,17 @@ export function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean {
     return !!findAncestor(declaration, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
 }
 
-const displayPartWriterCache = new Map<number | undefined, DisplayPartsSymbolWriter>();
+const displayPartWriterCache = new Map<number, DisplayPartsSymbolWriter>();
 function getDisplayPartWriter(maximumLength: number | undefined): DisplayPartsSymbolWriter {
+    maximumLength = maximumLength || defaultMaximumTruncationLength;
     if (!displayPartWriterCache.has(maximumLength)) {
         displayPartWriterCache.set(maximumLength, getDisplayPartWriterWorker(maximumLength));
     }
     return displayPartWriterCache.get(maximumLength)!;
 }
 
-function getDisplayPartWriterWorker(maximumLength: number | undefined): DisplayPartsSymbolWriter {
-    const absoluteMaximumLength = (maximumLength || defaultMaximumTruncationLength) * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
+function getDisplayPartWriterWorker(maximumLength: number): DisplayPartsSymbolWriter {
+    const absoluteMaximumLength = maximumLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
     let displayParts: SymbolDisplayPart[];
     let lineStart: boolean;
     let indent: number;
