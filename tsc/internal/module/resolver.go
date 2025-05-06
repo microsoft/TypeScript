@@ -1257,10 +1257,13 @@ func (r *resolutionState) loadNodeModuleFromDirectoryWorker(ext extensions, cand
 		onlyRecordFailuresForPackageFile bool
 		versionPaths                     packagejson.VersionPaths
 	)
-	if packageInfo.Exists() && tspath.ComparePaths(candidate, packageInfo.PackageDirectory, tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames()}) == 0 {
-		if file, ok := r.getPackageFile(ext, packageInfo); ok {
-			packageFile = file
-			onlyRecordFailuresForPackageFile = !r.resolver.host.FS().DirectoryExists(tspath.GetDirectoryPath(file))
+	if packageInfo.Exists() {
+		versionPaths = packageInfo.Contents.GetVersionPaths(r.getTraceFunc())
+		if tspath.ComparePaths(candidate, packageInfo.PackageDirectory, tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames()}) == 0 {
+			if file, ok := r.getPackageFile(ext, packageInfo); ok {
+				packageFile = file
+				onlyRecordFailuresForPackageFile = !r.resolver.host.FS().DirectoryExists(tspath.GetDirectoryPath(file))
+			}
 		}
 	}
 

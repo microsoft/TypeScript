@@ -11,11 +11,9 @@
  /main.cts(5,16): error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
 -/main.mts(1,16): error TS7016: Could not find a declaration file for module 'exports-and-types-versions/foo'. '/node_modules/exports-and-types-versions/dist/foo.js' implicitly has an 'any' type.
 -  There are types at '/node_modules/exports-and-types-versions/types/foo.d.ts', but this result could not be resolved when respecting package.json "exports". The 'exports-and-types-versions' library may need to update its package.json or typings.
-+/main.cts(6,16): error TS2307: Cannot find module 'just-types-versions/foo' or its corresponding type declarations.
 +/main.mts(1,16): error TS2307: Cannot find module 'exports-and-types-versions/foo' or its corresponding type declarations.
  /main.mts(2,16): error TS2307: Cannot find module 'exports-and-types-versions/nope' or its corresponding type declarations.
  /main.mts(5,16): error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
-+/main.mts(6,16): error TS2307: Cannot find module 'just-types-versions/foo' or its corresponding type declarations.
  
  
 -!!! error TS6504: File '/node_modules/exports-and-types-versions/dist/foo.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
@@ -24,12 +22,8 @@
  ==== /node_modules/exports-and-types-versions/package.json (0 errors) ====
      {
        "name": "exports-and-types-versions",
-@@= skipped -59, +53 lines =@@
- ==== /node_modules/just-types-versions/types/foo.d.ts (0 errors) ====
-     export {};
-     
--==== /main.cts (3 errors) ====
-+==== /main.cts (4 errors) ====
+@@= skipped -62, +54 lines =@@
+ ==== /main.cts (3 errors) ====
      import {} from "exports-and-types-versions/foo";
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS7016: Could not find a declaration file for module 'exports-and-types-versions/foo'. '/node_modules/exports-and-types-versions/dist/foo.js' implicitly has an 'any' type.
@@ -38,15 +32,8 @@
      import {} from "exports-and-types-versions/nope";
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2307: Cannot find module 'exports-and-types-versions/nope' or its corresponding type declarations.
-@@= skipped -14, +13 lines =@@
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
-     import {} from "just-types-versions/foo";
-+                   ~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module 'just-types-versions/foo' or its corresponding type declarations.
-     
--==== /main.mts (3 errors) ====
-+==== /main.mts (4 errors) ====
+@@= skipped -15, +14 lines =@@
+ ==== /main.mts (3 errors) ====
      import {} from "exports-and-types-versions/foo";
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS7016: Could not find a declaration file for module 'exports-and-types-versions/foo'. '/node_modules/exports-and-types-versions/dist/foo.js' implicitly has an 'any' type.
@@ -55,10 +42,3 @@
      import {} from "exports-and-types-versions/nope";
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2307: Cannot find module 'exports-and-types-versions/nope' or its corresponding type declarations.
-@@= skipped -15, +16 lines =@@
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
-     import {} from "just-types-versions/foo";
-+                   ~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module 'just-types-versions/foo' or its corresponding type declarations.
-     

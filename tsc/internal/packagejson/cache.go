@@ -39,7 +39,7 @@ func (p *PackageJson) GetVersionPaths(trace func(string)) VersionPaths {
 
 		for key, value := range p.Fields.TypesVersions.AsObject().Entries() {
 			keyRange, ok := semver.TryParseVersionRange(key)
-			if ok {
+			if !ok {
 				if trace != nil {
 					trace(diagnostics.X_package_json_has_a_typesVersions_entry_0_that_is_not_a_valid_semver_range.Format(key))
 				}
@@ -96,7 +96,7 @@ func (v *VersionPaths) GetPaths() *collections.OrderedMap[string, []string] {
 			}
 			slice[i] = path.Value.(string)
 		}
-		v.paths.Set(key, slice)
+		paths.Set(key, slice)
 	}
 	v.paths = paths
 	return v.paths
