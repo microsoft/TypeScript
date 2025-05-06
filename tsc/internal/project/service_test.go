@@ -70,6 +70,18 @@ func TestService(t *testing.T) {
 			assert.Equal(t, p1, p2)
 			assert.Equal(t, p1, p3)
 		})
+
+		t.Run("inferred project JS file", func(t *testing.T) {
+			t.Parallel()
+			jsFiles := map[string]string{
+				"/home/projects/TS/p1/index.js": `import { x } from "./x";`,
+			}
+			service, _ := projecttestutil.Setup(jsFiles)
+			service.OpenFile("/home/projects/TS/p1/index.js", jsFiles["/home/projects/TS/p1/index.js"], core.ScriptKindJS, "")
+			assert.Equal(t, len(service.Projects()), 1)
+			project := service.Projects()[0]
+			assert.Assert(t, project.GetProgram().GetSourceFile("/home/projects/TS/p1/index.js") != nil)
+		})
 	})
 
 	t.Run("ChangeFile", func(t *testing.T) {

@@ -619,7 +619,9 @@ func (s *Service) getDefaultProjectForScript(scriptInfo *ScriptInfo) *Project {
 
 func (s *Service) createInferredProject(currentDirectory string, projectRootPath tspath.Path) *Project {
 	// !!!
-	compilerOptions := core.CompilerOptions{}
+	compilerOptions := core.CompilerOptions{
+		AllowJs: core.TSTrue,
+	}
 	project := NewInferredProject(&compilerOptions, currentDirectory, projectRootPath, s)
 	s.inferredProjects = append(s.inferredProjects, project)
 	return project
