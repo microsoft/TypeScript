@@ -20404,7 +20404,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * Return a type mapper that combines the context's return mapper with a mapper that erases any additional type parameters
      * to their constraints.
-     * */
+     */
     function createOuterReturnMapper(context: InferenceContext) {
         return mergeTypeMappers(context.returnMapper, createInferenceContext(map(context.inferences, i => i.typeParameter), context.signature, context.flags, context.compareTypes).mapper);
     }
