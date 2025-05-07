@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/subtypeReductionWithAnyFunctionType.ts] ////
+
+=== subtypeReductionWithAnyFunctionType.ts ===
+// https://github.com/microsoft/typescript-go/issues/849
+
+declare function useMemo<T>(func: () => T): T;
+>useMemo : Symbol(useMemo, Decl(subtypeReductionWithAnyFunctionType.ts, 0, 0))
+>T : Symbol(T, Decl(subtypeReductionWithAnyFunctionType.ts, 2, 25))
+>func : Symbol(func, Decl(subtypeReductionWithAnyFunctionType.ts, 2, 28))
+>T : Symbol(T, Decl(subtypeReductionWithAnyFunctionType.ts, 2, 25))
+>T : Symbol(T, Decl(subtypeReductionWithAnyFunctionType.ts, 2, 25))
+
+function getPredicate(alwaysTrue: boolean) {
+>getPredicate : Symbol(getPredicate, Decl(subtypeReductionWithAnyFunctionType.ts, 2, 46))
+>alwaysTrue : Symbol(alwaysTrue, Decl(subtypeReductionWithAnyFunctionType.ts, 4, 22))
+
+    const predicate: (input: string) => boolean = useMemo(() => {
+>predicate : Symbol(predicate, Decl(subtypeReductionWithAnyFunctionType.ts, 5, 9))
+>input : Symbol(input, Decl(subtypeReductionWithAnyFunctionType.ts, 5, 22))
+>useMemo : Symbol(useMemo, Decl(subtypeReductionWithAnyFunctionType.ts, 0, 0))
+
+        if (alwaysTrue) {
+>alwaysTrue : Symbol(alwaysTrue, Decl(subtypeReductionWithAnyFunctionType.ts, 4, 22))
+
+            return () => true;
+        }
+        return x => x.length > 0;
+>x : Symbol(x, Decl(subtypeReductionWithAnyFunctionType.ts, 9, 14))
+>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypeReductionWithAnyFunctionType.ts, 9, 14))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+
+    });
+    return predicate;
+>predicate : Symbol(predicate, Decl(subtypeReductionWithAnyFunctionType.ts, 5, 9))
+}
+

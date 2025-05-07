@@ -4357,7 +4357,7 @@ func (r *Relater) signaturesRelatedTo(source *Type, target *Type, kind Signature
 	if r.relation == r.c.identityRelation {
 		return r.signaturesIdenticalTo(source, target, kind)
 	}
-	if target == r.c.anyFunctionType || source == r.c.anyFunctionType {
+	if target == r.c.anyFunctionType || r.relation != r.c.strictSubtypeRelation && source == r.c.anyFunctionType {
 		return TernaryTrue
 	}
 	sourceSignatures := r.c.getSignaturesOfType(source, kind)
