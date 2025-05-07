@@ -6705,6 +6705,7 @@ declare namespace ts {
         JSLiteral = 4096,
         FreshLiteral = 8192,
         ArrayLiteral = 16384,
+        SingleSignatureType = 134217728,
         ClassOrInterface = 3,
         ContainsSpread = 2097152,
         ObjectRestType = 4194304,
