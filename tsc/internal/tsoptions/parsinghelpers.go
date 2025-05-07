@@ -143,6 +143,8 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	switch key {
 	case "allowJs":
 		allOptions.AllowJs = parseTristate(value)
+	case "allowImportingTsExtensions":
+		allOptions.AllowImportingTsExtensions = parseTristate(value)
 	case "allowSyntheticDefaultImports":
 		allOptions.AllowSyntheticDefaultImports = parseTristate(value)
 	case "allowNonTsExtensions":
@@ -185,6 +187,10 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.DeclarationMap = parseTristate(value)
 	case "declaration":
 		allOptions.Declaration = parseTristate(value)
+	case "downlevelIteration":
+		allOptions.DownlevelIteration = parseTristate(value)
+	case "emitDeclarationOnly":
+		allOptions.EmitDeclarationOnly = parseTristate(value)
 	case "extendedDiagnostics":
 		allOptions.ExtendedDiagnostics = parseTristate(value)
 	case "emitDecoratorMetadata":
@@ -261,6 +267,8 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.NoFallthroughCasesInSwitch = parseTristate(value)
 	case "noEmitForJsFiles":
 		allOptions.NoEmitForJsFiles = parseTristate(value)
+	case "noErrorTruncation":
+		allOptions.NoErrorTruncation = parseTristate(value)
 	case "noImplicitAny":
 		allOptions.NoImplicitAny = parseTristate(value)
 	case "noImplicitThis":
@@ -311,6 +319,8 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.ResolvePackageJsonImports = parseTristate(value)
 	case "reactNamespace":
 		allOptions.ReactNamespace = parseString(value)
+	case "rewriteRelativeImportExtensions":
+		allOptions.RewriteRelativeImportExtensions = parseTristate(value)
 	case "rootDir":
 		allOptions.RootDir = parseString(value)
 	case "rootDirs":

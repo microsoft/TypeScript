@@ -1,9 +1,34 @@
 --- old.declarationEmitComputedPropertyName1.js
 +++ new.declarationEmitComputedPropertyName1.js
-@@= skipped -25, +25 lines =@@
- }
- 
- 
+@@= skipped -0, +-1 lines =@@
+-//// [tests/cases/compiler/declarationEmitComputedPropertyName1.ts] ////
+-
+-//// [declarationEmitComputedPropertyName1.ts]
+-// https://github.com/microsoft/TypeScript/issues/59107
+-
+-declare function create<T extends {}>(): T;
+-
+-export const c = create<{
+-  data: {
+-    ["a_b_c"]: string;
+-    ["sss"]: string;
+-    s_d: string;
+-    queryData?: string;
+-    ["foo bar"]: string;
+-  };
+-  ["a_b_c"]: string;
+-}>();
+-
+-export interface IData {
+-  ["a_b_c"]: string;
+-  nested: {
+-    ["d_e_f"]: string;
+-    value: string;
+-    ["qwe rty"]: string;
+-  };
+-}
+-
+-
 -
 -
 -//// [declarationEmitComputedPropertyName1.d.ts]
@@ -25,8 +50,5 @@
 -        ["qwe rty"]: string;
 -    };
 -}
-+//// [declarationEmitComputedPropertyName1.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.c = void 0;
-+exports.c = create();
+@@= skipped --1, +1 lines =@@
++<no content>

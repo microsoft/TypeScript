@@ -741,6 +741,7 @@ func TestParseSrcCompiler(t *testing.T) {
 		ConfigFilePath:             tsconfigFileName,
 		Declaration:                core.TSTrue,
 		DeclarationMap:             core.TSTrue,
+		EmitDeclarationOnly:        core.TSTrue,
 		AlwaysStrict:               core.TSTrue,
 		Composite:                  core.TSTrue,
 		IsolatedDeclarations:       core.TSTrue,

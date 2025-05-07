@@ -1,20 +1,45 @@
 --- old.declarationEmitBundlerConditions.js
 +++ new.declarationEmitBundlerConditions.js
-@@= skipped -30, +30 lines =@@
- export const c = makeC();
- 
- 
+@@= skipped -0, +-1 lines =@@
+-//// [tests/cases/compiler/declarationEmitBundlerConditions.ts] ////
+-
+-//// [package.json]
+-{
+-  "name": "pkg",
+-  "type": "module",
+-  "exports": {
+-    ".": {
+-      "import": "./index.js",
+-      "require": "./index.cjs"
+-    }
+-  }
+-}
+-
+-//// [index.d.ts]
+-export declare class C {
+-  private p;
+-}
+-
+-//// [index.d.cts]
+-export {};
+-
+-//// [makeC.ts]
+-import { C } from "pkg";
+-export function makeC() {
+-  return new C();
+-}
+-
+-//// [index.ts]
+-import { makeC } from "./makeC";
+-export const c = makeC();
+-
+-
 -
 -
 -//// [makeC.d.ts]
-+//// [makeC.js]
- import { C } from "pkg";
+-import { C } from "pkg";
 -export declare function makeC(): C;
 -//// [index.d.ts]
 -export declare const c: import("pkg").C;
-+export function makeC() {
-+    return new C();
-+}
-+//// [index.js]
-+import { makeC } from "./makeC";
-+export const c = makeC();
+@@= skipped --1, +1 lines =@@
++<no content>
