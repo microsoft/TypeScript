@@ -140,6 +140,11 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	if allOptions == nil {
 		return nil
 	}
+	parseCompilerOptions(key, value, allOptions)
+	return nil
+}
+
+func parseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) (foundKey bool) {
 	switch key {
 	case "allowJs":
 		allOptions.AllowJs = parseTristate(value)
@@ -255,6 +260,8 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.MapRoot = parseString(value)
 	case "module":
 		allOptions.ModuleKind = value.(core.ModuleKind)
+	case "moduleDetectionKind":
+		allOptions.ModuleDetection = value.(core.ModuleDetectionKind)
 	case "moduleResolution":
 		allOptions.ModuleResolution = value.(core.ModuleResolutionKind)
 	case "moduleSuffixes":
@@ -393,8 +400,11 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.NewLine = value.(core.NewLineKind)
 	case "watch":
 		allOptions.Watch = parseTristate(value)
+	default:
+		// different than any key above
+		return false
 	}
-	return nil
+	return true
 }
 
 func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*ast.Diagnostic {
