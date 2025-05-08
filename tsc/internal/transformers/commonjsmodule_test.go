@@ -1019,7 +1019,7 @@ exports.a = a;`,
 			t.Parallel()
 
 			compilerOptions := rec.options
-			compilerOptions.ModuleKind = core.ModuleKindCommonJS
+			compilerOptions.Module = core.ModuleKindCommonJS
 			sourceFileAffecting := compilerOptions.SourceFileAffecting()
 
 			file := parsetestutil.ParseTypeScript(rec.input, rec.jsx)

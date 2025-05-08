@@ -39,7 +39,7 @@ CompilerOptions::
   "jsx": 3,
   "module": 99,
   "moduleResolution": 100,
-  "moduleDetectionKind": 1,
+  "moduleDetection": 1,
   "noImplicitAny": true,
   "outDir": "/apath/dist",
   "paths": {

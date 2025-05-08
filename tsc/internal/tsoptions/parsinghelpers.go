@@ -259,7 +259,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "mapRoot":
 		allOptions.MapRoot = parseString(value)
 	case "module":
-		allOptions.ModuleKind = value.(core.ModuleKind)
+		allOptions.Module = value.(core.ModuleKind)
 	case "moduleDetectionKind":
 		allOptions.ModuleDetection = value.(core.ModuleDetectionKind)
 	case "moduleResolution":

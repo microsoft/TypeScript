@@ -27,7 +27,7 @@ func BenchmarkBind(b *testing.B) {
 				sourceFiles[i] = parser.ParseSourceFile(fileName, path, sourceText, core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
 			}
 
-			compilerOptions := &core.CompilerOptions{Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext}
+			compilerOptions := &core.CompilerOptions{Target: core.ScriptTargetESNext, Module: core.ModuleKindNodeNext}
 			sourceAffecting := compilerOptions.SourceFileAffecting()
 
 			// The above parses do a lot of work; ensure GC is finished before we start collecting performance data.

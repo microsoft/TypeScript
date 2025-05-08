@@ -56,10 +56,10 @@ type CompilerOptions struct {
 	Lib                                       []string                                  `json:"lib,omitzero"`
 	Locale                                    string                                    `json:"locale,omitzero"`
 	MapRoot                                   string                                    `json:"mapRoot,omitzero"`
-	ModuleKind                                ModuleKind                                `json:"module,omitzero"`
+	Module                                    ModuleKind                                `json:"module,omitzero"`
 	ModuleResolution                          ModuleResolutionKind                      `json:"moduleResolution,omitzero"`
 	ModuleSuffixes                            []string                                  `json:"moduleSuffixes,omitzero"`
-	ModuleDetection                           ModuleDetectionKind                       `json:"moduleDetectionKind,omitzero"`
+	ModuleDetection                           ModuleDetectionKind                       `json:"moduleDetection,omitzero"`
 	NewLine                                   NewLineKind                               `json:"newLine,omitzero"`
 	NoEmit                                    Tristate                                  `json:"noEmit,omitzero"`
 	NoCheck                                   Tristate                                  `json:"noCheck,omitzero"`
@@ -153,8 +153,8 @@ func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {
 }
 
 func (options *CompilerOptions) GetEmitModuleKind() ModuleKind {
-	if options.ModuleKind != ModuleKindNone {
-		return options.ModuleKind
+	if options.Module != ModuleKindNone {
+		return options.Module
 	}
 	if options.Target >= ScriptTargetES2015 {
 		return ModuleKindES2015

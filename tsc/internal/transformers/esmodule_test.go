@@ -58,7 +58,7 @@ func TestESModuleTransformer(t *testing.T) {
 			output: `import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const x = __require("other");`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindNode16},
+			options: core.CompilerOptions{Module: core.ModuleKindNode16},
 		},
 		{
 			title: "ImportEqualsDeclaration#3",
@@ -66,7 +66,7 @@ const x = __require("other");`,
 			output: `import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const x = __require("./other.js");`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue},
+			options: core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title: "ImportEqualsDeclaration#4",
@@ -74,7 +74,7 @@ const x = __require("./other.js");`,
 			output: `import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const x = __require("./other.js");`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue},
+			options: core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title: "ImportEqualsDeclaration#5",
@@ -82,7 +82,7 @@ const x = __require("./other.js");`,
 			output: `import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const x = __require("./other.jsx");`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
+			options: core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
 		},
 		{
 			title: "ImportEqualsDeclaration#6",
@@ -91,7 +91,7 @@ const x = __require("./other.jsx");`,
 const __require = _createRequire(import.meta.url);
 const x = __require("other");
 export { x };`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindNode16},
+			options: core.CompilerOptions{Module: core.ModuleKindNode16},
 		},
 
 		// ExportAssignment
@@ -104,7 +104,7 @@ export { x };`,
 			title:   "ExportAssignment#2",
 			input:   `export = x`,
 			output:  `module.exports = x;`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindPreserve},
+			options: core.CompilerOptions{Module: core.ModuleKindPreserve},
 		},
 
 		// ExportDeclaration
@@ -123,7 +123,7 @@ export { x };`,
 			title:   "ExportDeclaration#3",
 			input:   `export * as x from "other";`,
 			output:  `export * as x from "other";`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindESNext},
+			options: core.CompilerOptions{Module: core.ModuleKindESNext},
 		},
 		{
 			title:  "ExportDeclaration#4",
@@ -201,7 +201,7 @@ import(x);`,
 			output: `import { __rewriteRelativeImportExtension } from "tslib";
 export {};
 import(__rewriteRelativeImportExtension(x));`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindESNext, RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
+			options: core.CompilerOptions{Module: core.ModuleKindESNext, RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
 		{
 			title: "CallExpression#7",
@@ -212,7 +212,7 @@ var __rewriteRelativeImportExtension;`,
 export {};
 import(__rewriteRelativeImportExtension_1(x));
 var __rewriteRelativeImportExtension;`,
-			options: core.CompilerOptions{ModuleKind: core.ModuleKindESNext, RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
+			options: core.CompilerOptions{Module: core.ModuleKindESNext, RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
 	}
 	for _, rec := range data {

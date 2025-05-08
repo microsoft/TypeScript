@@ -197,7 +197,7 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 	}
 
 	updatedModuleSpecifier := rewriteModuleSpecifier(tx.emitContext, node.ModuleSpecifier, tx.compilerOptions)
-	if tx.compilerOptions.ModuleKind > core.ModuleKindES2015 || node.ExportClause == nil || !ast.IsNamespaceExport(node.ExportClause) {
+	if tx.compilerOptions.Module > core.ModuleKindES2015 || node.ExportClause == nil || !ast.IsNamespaceExport(node.ExportClause) {
 		// Either ill-formed or don't need to be transformed.
 		return tx.factory.UpdateExportDeclaration(
 			node,

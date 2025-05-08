@@ -732,7 +732,7 @@ func TestParseSrcCompiler(t *testing.T) {
 	opts := parseConfigFileContent.CompilerOptions()
 	assert.DeepEqual(t, opts, &core.CompilerOptions{
 		Lib:                        []string{"lib.es2020.d.ts"},
-		ModuleKind:                 core.ModuleKindNodeNext,
+		Module:                     core.ModuleKindNodeNext,
 		ModuleResolution:           core.ModuleResolutionKindNodeNext,
 		NewLine:                    core.NewLineKindLF,
 		OutDir:                     tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath, "built", "local")),

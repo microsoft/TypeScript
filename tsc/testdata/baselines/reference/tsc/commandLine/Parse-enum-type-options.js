@@ -11,7 +11,7 @@ ParsedCommandLine::{
             "jsx": 3,
             "module": 199,
             "moduleResolution": 99,
-            "moduleDetectionKind": 1,
+            "moduleDetection": 1,
             "newLine": 1,
             "target": 99
         },
