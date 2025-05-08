@@ -65,6 +65,7 @@
         "eslint": "^9.20.1",
         "eslint-formatter-autolinkable-stylish": "^1.4.0",
         "eslint-plugin-regexp": "^2.7.0",
+        "eslint-plugin-unicorn": "^58.0.0",
         "fast-xml-parser": "^4.5.2",
         "glob": "^10.4.5",
         "globals": "^15.15.0",

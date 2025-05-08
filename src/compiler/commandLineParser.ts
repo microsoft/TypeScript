@@ -2638,7 +2638,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
             version: undefined,
         },
         watchOptions: watchOptionMap && optionMapToObject(watchOptionMap),
-        references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath ? r.originalPath : "", originalPath: undefined })),
+        references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath || "", originalPath: undefined })),
         files: length(files) ? files : undefined,
         ...(configParseResult.options.configFile?.configFileSpecs ? {
             include: filterSameAsDefaultInclude(configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs),
@@ -2798,7 +2798,7 @@ export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: s
     return getOverwrittenDefaultOptions();
 
     function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
+        return " ".repeat(paddingLength);
     }
 
     function getOverwrittenDefaultOptions() {
@@ -2842,7 +2842,7 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
     return writeConfigurations();
 
     function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
+        return " ".repeat(paddingLength);
     }
 
     function isAllowedOptionForOutput({ category, name, isCommandLineOnly }: CommandLineOption): boolean {

@@ -1469,7 +1469,8 @@ export let sys: System = (() => {
         const nativePattern = /^native |^\([^)]+\)$|^(?:internal[\\/]|[\w\s]+(?:\.js)?$)/;
         const _fs: typeof import("fs") = require("fs");
         const _path: typeof import("path") = require("path");
-        const _os = require("os");
+        const _os: typeof import("os") = require("os");
+        const _buffer: typeof import("buffer") = require("buffer");
         // crypto can be absent on reduced node installations
         let _crypto: typeof import("crypto") | undefined;
         try {

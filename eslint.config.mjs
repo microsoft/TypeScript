@@ -1,6 +1,7 @@
 // @ts-check
 import eslint from "@eslint/js";
 import * as regexpPlugin from "eslint-plugin-regexp";
+import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import fs from "fs";
 import globals from "globals";
 import { createRequire } from "module";
@@ -38,6 +39,7 @@ export default tseslint.config(
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
     regexpPlugin.configs["flat/recommended"],
+    eslintPluginUnicorn.configs["flat/recommended"],
     {
         plugins: {
             local: {
@@ -156,6 +158,94 @@ export default tseslint.config(
             "local/no-keywords": "error",
             "local/jsdoc-format": "error",
             "local/js-extensions": "error",
+
+            // eslint-plugin-unicorn
+            // good
+            "unicorn/prefer-includes": "error",
+            "unicorn/new-for-builtins": "error",
+            "unicorn/prefer-logical-operator-over-ternary": "error",
+            "unicorn/no-instanceof-array": "error",
+            "unicorn/prefer-optional-catch-binding": "error",
+            "unicorn/require-array-join-separator": "error",
+            "unicorn/throw-new-error": "error",
+            "unicorn/no-useless-spread": "error",
+            "unicorn/no-useless-fallback-in-spread": "error",
+            "unicorn/prefer-modern-math-apis": "error",
+            "unicorn/prefer-array-find": "error",
+            "unicorn/prefer-array-some": "error",
+            "unicorn/prefer-date-now": "error",
+            "unicorn/prefer-object-from-entries": "error",
+            "unicorn/no-new-buffer": "error",
+            "unicorn/prefer-set-has": "error",
+            "unicorn/prefer-string-trim-start-end": "error",
+            "unicorn/no-zero-fractions": "error",
+            "unicorn/prefer-regexp-test": "error",
+            "unicorn/number-literal-case": "error",
+
+            // likely yes
+            "unicorn/error-message": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2265
+            "unicorn/prefer-math-min-max": "off",
+            "unicorn/prefer-global-this": "off",
+
+            // likely no
+            "unicorn/prefer-string-raw": "off",
+            "unicorn/consistent-existence-index-check": "off",
+
+            // no
+            "unicorn/filename-case": "off",
+            "unicorn/prevent-abbreviations": "off",
+            "unicorn/empty-brace-spaces": "off",
+            "unicorn/catch-error-name": "off",
+            "unicorn/prefer-module": "off",
+            "unicorn/switch-case-braces": "off",
+            "unicorn/numeric-separators-style": "off",
+            "unicorn/import-style": "off",
+            "unicorn/consistent-function-scoping": "off",
+            "unicorn/text-encoding-identifier-case": "off",
+            "unicorn/no-process-exit": "off",
+            "unicorn/prefer-export-from": "off",
+            "unicorn/prefer-ternary": "off",
+            "unicorn/template-indent": "off",
+            "unicorn/no-array-callback-reference": "off",
+            "unicorn/no-array-method-this-argument": "off", // false positives
+            "unicorn/no-nested-ternary": "off",
+            "unicorn/consistent-destructuring": "off", // false positives
+            "unicorn/no-hex-escape": "off",
+            "unicorn/no-object-as-default-parameter": "off",
+            "unicorn/escape-case": "off",
+            "unicorn/prefer-type-error": "off",
+            "unicorn/no-await-expression-member": "off",
+            "unicorn/no-useless-undefined": "off",
+            "unicorn/no-negated-condition": "off",
+            "unicorn/no-lonely-if": "off",
+            "unicorn/prefer-math-trunc": "off", // Treats `1 << 0` as invalid
+            "unicorn/no-array-for-each": "off", // false positives
+            "unicorn/no-for-loop": "off", // quick fix produces slower `.entries()`
+            "unicorn/prefer-at": "off", // perf
+            "unicorn/prefer-switch": "off", // quick fix produces non-idiomatic code for this repo
+            "unicorn/no-typeof-undefined": "off", // False positive when checking for a global without throwing
+            "unicorn/no-null": "off", // if we remove the other plugin
+            "unicorn/prefer-number-properties": "off",
+            "unicorn/prefer-string-replace-all": "off", // not available in node 14
+            "unicorn/no-array-push-push": "off",
+            "unicorn/no-new-array": "off", // I like it, but we have a few canonical use cases
+            "unicorn/explicit-length-check": "off", // I like it, but it's a lot of changes
+            "unicorn/prefer-node-protocol": "off", // I like it, but it's pure style
+            "unicorn/prefer-code-point": "off", // I suspect this is correct, but it's a lot of changes in fiddly bits of the code
+            "unicorn/no-array-reduce": "off",
+            "unicorn/no-useless-switch-case": "off",
+            "unicorn/prefer-native-coercion-functions": "off",
+            "unicorn/prefer-spread": "off",
+            "unicorn/prefer-event-target": "off",
+            "unicorn/better-regex": "off", // doesn't always produce a good alternative
+            "unicorn/prefer-string-slice": "off", // Probably good, but most are not fixed
+            "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
+            "unicorn/prefer-top-level-await": "off",
+            "unicorn/prefer-negative-index": "off",
+            "unicorn/no-unreadable-array-destructuring": "off",
+            "unicorn/no-negation-in-equality-check": "off", // inaccurate
+            "unicorn/prefer-structured-clone": "off", // Unavailable until Node 17
+            "unicorn/consistent-assert": "off", // Noisy style
             "local/no-array-mutating-method-expressions": "error",
         },
     },

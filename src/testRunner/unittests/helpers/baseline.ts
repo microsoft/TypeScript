@@ -525,5 +525,5 @@ export function baselineAfterTscCompile(
 }
 
 export function tscBaselineName(scenario: string, subScenario: string, commandLineArgs: readonly string[], suffix?: string) {
-    return `${ts.isBuildCommand(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch(commandLineArgs) ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}${suffix ? suffix : ""}.js`;
+    return `${ts.isBuildCommand(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch(commandLineArgs) ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}${suffix ?? ""}.js`;
 }

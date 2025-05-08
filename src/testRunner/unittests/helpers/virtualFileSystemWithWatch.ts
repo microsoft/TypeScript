@@ -907,7 +907,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         watches.forEach(path, ({ cb, inode }) => {
             if (this.inodeWatching && inode !== undefined && inode !== currentInode) return;
             let relativeFileName = eventFullPath ? this.getRelativePathToDirectory(fullPath, eventFullPath) : "";
-            if (useTildeSuffix) relativeFileName = (relativeFileName ? relativeFileName : getBaseFileName(fullPath)) + "~";
+            if (useTildeSuffix) relativeFileName = (relativeFileName || getBaseFileName(fullPath)) + "~";
             cb(eventName, relativeFileName);
         });
     }

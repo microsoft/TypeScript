@@ -1396,7 +1396,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
 
     function toFileIdListId(set: ReadonlySet<Path>): IncrementalBuildInfoFileIdListId {
         const fileIds = arrayFrom(set.keys(), toFileId).sort(compareValues);
-        const key = fileIds.join();
+        const key = fileIds.join(",");
         let fileIdListId = fileNamesToFileIdListId?.get(key);
         if (fileIdListId === undefined) {
             fileIdsList = append(fileIdsList, fileIds);
@@ -2247,7 +2247,7 @@ export function toProgramEmitPending(
     value: IncrementalBuildInfoBundlePendingEmit,
     options: CompilerOptions | undefined,
 ): BuilderFileEmit | undefined {
-    return !value ? getBuilderFileEmit(options || {}) : value;
+    return value || getBuilderFileEmit(options || {});
 }
 
 /** @internal */

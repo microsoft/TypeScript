@@ -1344,7 +1344,7 @@ bar;`,
                     compilerOptions: {
                         module: "none",
                         composite: true,
-                        ...(extendOptionsProject2 || {}),
+                        ...extendOptionsProject2,
                     },
                     references: [
                         { path: "../project1" },
@@ -1547,7 +1547,7 @@ bar;`,
             const config: File = {
                 path: `/user/username/projects/myproject/${packageName}/tsconfig.json`,
                 content: jsonToReadableText({
-                    compilerOptions: { composite: true, ...optionsToExtend || {} },
+                    compilerOptions: { composite: true, ...optionsToExtend },
                     references: references?.map(path => ({ path: `../${path}` })),
                 }),
             };
