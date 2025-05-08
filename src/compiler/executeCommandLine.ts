@@ -48,7 +48,6 @@ import {
     formatMessage,
     generateTSConfig,
     getBuildOrderFromAnyBuildOrder,
-    getCompilerOptionsDiffValue,
     getConfigFileParsingDiagnostics,
     getDiagnosticText,
     getErrorSummaryText,
@@ -1286,8 +1285,7 @@ function writeConfigFile(
     }
     else {
         sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
-        const output: string[] = [sys.newLine, ...getHeader(sys, "Created a new tsconfig.json with:")];
-        output.push(getCompilerOptionsDiffValue(options, sys.newLine) + sys.newLine + sys.newLine);
+        const output: string[] = [sys.newLine, ...getHeader(sys, "Created a new tsconfig.json")];
         output.push(`You can learn more at https://aka.ms/tsconfig` + sys.newLine);
         for (const line of output) {
             sys.write(line);

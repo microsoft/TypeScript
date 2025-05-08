@@ -123,6 +123,7 @@ import {
     WatchFileKind,
     WatchOptions,
 } from "./_namespaces/ts.js";
+import { isMap } from "util/types";
 
 const compileOnSaveCommandLineOption: CommandLineOption = {
     name: "compileOnSave",
@@ -2838,90 +2839,119 @@ function getSerializedCompilerOption(options: CompilerOptions): Map<string, Comp
  * @internal
  */
 export function generateTSConfig(options: CompilerOptions, fileNames: readonly string[], newLine: string): string {
-    const compilerOptionsMap = getSerializedCompilerOption(options);
     return writeConfigurations();
 
-    function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
-    }
-
-    function isAllowedOptionForOutput({ category, name, isCommandLineOnly }: CommandLineOption): boolean {
-        // Skip options which do not have a category or have categories which are more niche
-        const categoriesToSkip = [Diagnostics.Command_line_Options, Diagnostics.Editor_Support, Diagnostics.Compiler_Diagnostics, Diagnostics.Backwards_Compatibility, Diagnostics.Watch_and_Build_Modes, Diagnostics.Output_Formatting];
-        return !isCommandLineOnly && category !== undefined && (!categoriesToSkip.includes(category) || compilerOptionsMap.has(name));
-    }
+    type PresetValue = string | number | boolean | (string | number | boolean)[];
 
     function writeConfigurations() {
-        // Filter applicable options to place in the file
-        const categorizedOptions = new Map<DiagnosticMessage, CommandLineOption[]>();
-        // Set allowed categories in order
-        categorizedOptions.set(Diagnostics.Projects, []);
-        categorizedOptions.set(Diagnostics.Language_and_Environment, []);
-        categorizedOptions.set(Diagnostics.Modules, []);
-        categorizedOptions.set(Diagnostics.JavaScript_Support, []);
-        categorizedOptions.set(Diagnostics.Emit, []);
-        categorizedOptions.set(Diagnostics.Interop_Constraints, []);
-        categorizedOptions.set(Diagnostics.Type_Checking, []);
-        categorizedOptions.set(Diagnostics.Completeness, []);
-        for (const option of optionDeclarations) {
-            if (isAllowedOptionForOutput(option)) {
-                let listForCategory = categorizedOptions.get(option.category!);
-                if (!listForCategory) categorizedOptions.set(option.category!, listForCategory = []);
-                listForCategory.push(option);
-            }
-        }
-
-        // Serialize all options and their descriptions
-        let marginLength = 0;
-        let seenKnownKeys = 0;
-        const entries: { value: string; description?: string; }[] = [];
-        categorizedOptions.forEach((options, category) => {
-            if (entries.length !== 0) {
-                entries.push({ value: "" });
-            }
-            entries.push({ value: `/* ${getLocaleSpecificMessage(category)} */` });
-            for (const option of options) {
-                let optionName;
-                if (compilerOptionsMap.has(option.name)) {
-                    optionName = `"${option.name}": ${JSON.stringify(compilerOptionsMap.get(option.name))}${(seenKnownKeys += 1) === compilerOptionsMap.size ? "" : ","}`;
-                }
-                else {
-                    optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
-                }
-                entries.push({
-                    value: optionName,
-                    description: `/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`,
-                });
-                marginLength = Math.max(optionName.length, marginLength);
-            }
-        });
-
-        // Write the output
-        const tab = makePadding(2);
+        const tab = "  ";
         const result: string[] = [];
         result.push(`{`);
+        result.push(`${tab}// ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)}`);
         result.push(`${tab}"compilerOptions": {`);
-        result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)} */`);
-        result.push("");
-        // Print out each row, aligning all the descriptions on the same column.
-        for (const entry of entries) {
-            const { value, description = "" } = entry;
-            result.push(value && `${tab}${tab}${value}${description && (makePadding(marginLength - value.length + 2) + description)}`);
-        }
-        if (fileNames.length) {
-            result.push(`${tab}},`);
-            result.push(`${tab}"files": [`);
-            for (let i = 0; i < fileNames.length; i++) {
-                result.push(`${tab}${tab}${JSON.stringify(fileNames[i])}${i === fileNames.length - 1 ? "" : ","}`);
-            }
-            result.push(`${tab}]`);
-        }
-        else {
-            result.push(`${tab}}`);
-        }
-        result.push(`}`);
 
-        return result.join(newLine) + newLine;
+        emitHeader(Diagnostics.File_Layout);
+        emitOption("rootDir", "./src", "optional");
+        emitOption("outDir", "./dist", "optional");
+        newline();
+
+        emitHeader(Diagnostics.Environment_Settings);
+        emitOption("module", ModuleResolutionKind.NodeNext);
+        emitOption("target", ScriptTarget.ESNext);
+        emitOption("types", []);
+        emitHeader(Diagnostics.For_nodejs_Colon);
+        emitOption("lib", ["lib.esnext.d.ts"], "always");
+        emitOption("types", ["node"], "always");
+        emitHeader(Diagnostics.and_npm_install_d_types_Slashnode);
+
+        newline();
+
+        emitHeader(Diagnostics.Other_Outputs);
+        emitOption("sourceMap", /*value*/ true);
+        emitOption("declaration", /*value*/ true);
+        emitOption("declarationMap", /*value*/ true);
+
+        newline();
+
+        emitHeader(Diagnostics.Stricter_Typechecking_Options);
+        emitOption("noUncheckedIndexedAccess", /*value*/ true);
+        emitOption("exactOptionalPropertyTypes", /*value*/ true);
+
+        newline();
+
+        emitHeader(Diagnostics.Style_Options);
+        emitOption("noImplicitReturns", /*value*/ true, "optional");
+        emitOption("noImplicitOverride", /*value*/ true, "optional");
+        emitOption("noUnusedLocals", /*value*/ true, "optional");
+        emitOption("noUnusedParameters", /*value*/ true, "optional");
+        emitOption("noFallthroughCasesInSwitch", /*value*/ true, "optional");
+        emitOption("noPropertyAccessFromIndexSignature", /*value*/ true, "optional");
+
+        newline();
+
+        emitHeader(Diagnostics.Recommended_Options);
+        emitOption("strict", /*value*/ true);
+        emitOption("jsx", JsxEmit.ReactJSX);
+        emitOption("verbatimModuleSyntax", /*value*/ true);
+        emitOption("isolatedModules", /*value*/ true);
+        emitOption("noUncheckedSideEffectImports", /*value*/ true);
+        emitOption("moduleDetection", ModuleDetectionKind.Force);
+        emitOption("skipLibCheck", /*value*/ true);
+
+        function newline() {
+            result.push("");
+        }
+
+        function emitHeader(header: DiagnosticMessage) {
+            result.push(`${tab}${tab}// ${getLocaleSpecificMessage(header)}`);
+        }
+
+        // commented = 'always': Always comment this out, even if it's on commandline
+        // commented = 'optional': Comment out unless it's on commandline
+        // commented = 'never': Never comment this out
+        function emitOption(setting: string, value: PresetValue, commented: "always" | "optional" | "never" = "never") {
+            if (hasProperty(options, setting) && commented !== "always") {
+                result.push(`${tab}${tab}"${setting}": ${formatValue(setting, options[setting] as string | boolean)},`);
+            } else {
+                if (commented === "optional") {
+                    result.push(`${tab}${tab}// "${setting}": ${formatValue(setting, value)},`);
+                } else {
+                    result.push(`${tab}${tab}"${setting}": ${formatValue(setting, value)},`);
+                }
+            }
+        }
+
+        function formatValue(setting: string, value: PresetValue): string {
+            const option = optionDeclarations.filter(c => c.name === setting)[0];
+            if (!option) Debug.fail(`No option named ${setting}?`);
+            const map = isMap(option.type) ? option.type : undefined;
+            if (isArray(value)) {
+                // eslint-disable-next-line local/no-in-operator
+                const map = ("element" in option && isMap(option.element.type)) ? option.element.type : undefined;
+                return `[${value.map(v => formatValueWithMap(v, map)).join(", ")}]`
+            } else {
+                return formatValueWithMap(value, map);
+            }
+        }
+
+        function formatValueWithMap(value: PresetValue, map: Map<string, string | number> | undefined) {
+            if (map) {
+                const val = getNameOfCompilerOptionValue(value as string | number, map) ?? Debug.fail(`No matching value of ${value}`);
+                if (typeof val === "string") {
+                    return `"${val}"`;
+                } else {
+                    return `${val}`;
+                }
+            } else {
+                return JSON.stringify(value);
+            }
+        }
+
+        result.push(`${tab}}`);
+        result.push(`}`);
+        result.push(``);
+
+        return result.join(newLine);
     }
 }
 
