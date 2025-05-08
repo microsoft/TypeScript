@@ -20403,10 +20403,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     /**
      * Return a type mapper that combines the context's return mapper with a mapper that erases any additional type parameters
-     * to their constraints.
+     * to their inferences at the time of creation.
      */
     function createOuterReturnMapper(context: InferenceContext) {
-        return mergeTypeMappers(context.returnMapper, createInferenceContext(map(context.inferences, i => i.typeParameter), context.signature, context.flags, context.compareTypes).mapper);
+        return context.outerReturnMapper ??= mergeTypeMappers(context.returnMapper, cloneInferenceContext(context).mapper);
     }
 
     function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper {
@@ -35550,9 +35550,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // the source type uses the outer context's return mapper (which excludes inferences made from
                     // outer arguments), and (b) we don't want any further inferences going into this context.
                     // We use `createOuterReturnMapper` to ensure that all occurrences of outer type parameters are
-                    // replaced with either inferences produced from the outer return type or constraints of those
-                    // type parameters. This protects against circular inferences, i.e. avoiding situations where
-                    // inferences reference type parameters for which the inferences are being made.
+                    // replaced with inferences produced from the outer return type or preceding outer arguments.
+                    // This protects against circular inferences, i.e. avoiding situations where inferences reference
+                    // type parameters for which the inferences are being made.
                     const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
                     const returnSourceType = instantiateType(contextualType, outerContext && createOuterReturnMapper(outerContext));
                     inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
