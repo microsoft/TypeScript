@@ -252,3 +252,30 @@ func TestExtends(t *testing.T) {
 		c.verify(t, "extends")
 	}
 }
+
+func TestTypeAcquisition(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		// Without embedding, we'd need to read all of the lib files out from disk into the MapFS.
+		// Just skip this for now.
+		t.Skip("bundled files are not embedded")
+	}
+	(&tscInput{
+		subScenario: "parse tsconfig with typeAcquisition",
+		sys: newTestSys(FileMap{"/home/src/workspaces/project/tsconfig.json": `{
+	"compilerOptions": {
+		"composite": true,
+		"noEmit": true,
+	},
+	"typeAcquisition": {
+		"enable": true,
+		"include": ["0.d.ts", "1.d.ts"],
+		"exclude": ["0.js", "1.js"],
+		"disableFilenameBasedTypeAcquisition": true,
+	},
+}`},
+			"/home/src/workspaces/project",
+		),
+		commandLineArgs: []string{},
+	}).verify(t, "typeAcquisition")
+}

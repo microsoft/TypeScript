@@ -13,6 +13,9 @@ CompilerOptions::
   "configFilePath": "/apath/tsconfig.json"
 }
 
+TypeAcquisition::
+{}
+
 FileNames::
 
 Errors::

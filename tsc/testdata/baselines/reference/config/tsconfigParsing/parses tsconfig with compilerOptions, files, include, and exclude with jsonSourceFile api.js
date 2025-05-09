@@ -53,6 +53,9 @@ CompilerOptions::
   "pathsBasePath": "/apath"
 }
 
+TypeAcquisition::
+{}
+
 FileNames::
 /apath/src/index.ts,/apath/src/app.ts
 Errors::

@@ -24,6 +24,7 @@ ParsedCommandLine::{
             "excludeDirectories": null,
             "excludeFiles": null
         },
+        "typeAcquisition": null,
         "fileNames": [
             "first.ts"
         ],

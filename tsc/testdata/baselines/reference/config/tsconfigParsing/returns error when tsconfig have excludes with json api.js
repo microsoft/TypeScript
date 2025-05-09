@@ -25,6 +25,9 @@ CompilerOptions::
   "configFilePath": "/apath/tsconfig.json"
 }
 
+TypeAcquisition::
+{}
+
 FileNames::
 /apath/foge.ts,/apath/test.ts
 Errors::

@@ -41,6 +41,9 @@ CompilerOptions::
   "configFilePath": "/tsconfig.json"
 }
 
+TypeAcquisition::
+{}
+
 FileNames::
 /src/app.ts,/src/index.ts
 Errors::

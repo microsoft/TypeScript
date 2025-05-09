@@ -19,6 +19,7 @@ ParsedCommandLine::{
             "excludeDirectories": null,
             "excludeFiles": null
         },
+        "typeAcquisition": null,
         "fileNames": [],
         "projectReferences": null
     },

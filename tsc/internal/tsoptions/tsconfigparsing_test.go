@@ -155,11 +155,13 @@ func TestParseConfigFileTextToJson(t *testing.T) {
 	}
 }
 
-var parseJsonConfigFileTests = []struct {
+type parseJsonConfigTestCase struct {
 	title               string
 	noSubmoduleBaseline bool
 	input               []testConfig
-}{
+}
+
+var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 	{
 		title: "ignore dotted files and folders",
 		input: []testConfig{{
@@ -552,23 +554,25 @@ func TestParseJsonConfigFileContent(t *testing.T) {
 	for _, rec := range parseJsonConfigFileTests {
 		t.Run(rec.title+" with json api", func(t *testing.T) {
 			t.Parallel()
-			baselineParseConfigWith(t, rec.title+" with json api.js", rec.noSubmoduleBaseline, rec.input, func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
-				configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
-				path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
-				parsed, _ := tsoptions.ParseConfigFileTextToJson(configFileName, path, config.jsonText)
-				return tsoptions.ParseJsonConfigFileContent(
-					parsed,
-					host,
-					basePath,
-					nil,
-					configFileName,
-					/*resolutionStack*/ nil,
-					/*extraFileExtensions*/ nil,
-					/*extendedConfigCache*/ nil,
-				)
-			})
+			baselineParseConfigWith(t, rec.title+" with json api.js", rec.noSubmoduleBaseline, rec.input, getParsedWithJsonApi)
 		})
 	}
+}
+
+func getParsedWithJsonApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
+	configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
+	path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
+	parsed, _ := tsoptions.ParseConfigFileTextToJson(configFileName, path, config.jsonText)
+	return tsoptions.ParseJsonConfigFileContent(
+		parsed,
+		host,
+		basePath,
+		nil,
+		configFileName,
+		/*resolutionStack*/ nil,
+		/*extraFileExtensions*/ nil,
+		/*extendedConfigCache*/ nil,
+	)
 }
 
 func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
@@ -577,26 +581,28 @@ func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
 	for _, rec := range parseJsonConfigFileTests {
 		t.Run(rec.title+" with jsonSourceFile api", func(t *testing.T) {
 			t.Parallel()
-			baselineParseConfigWith(t, rec.title+" with jsonSourceFile api.js", rec.noSubmoduleBaseline, rec.input, func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
-				configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
-				path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
-				parsed := parser.ParseJSONText(configFileName, path, config.jsonText)
-				tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
-					SourceFile: parsed,
-				}
-				return tsoptions.ParseJsonSourceFileConfigFileContent(
-					tsConfigSourceFile,
-					host,
-					host.GetCurrentDirectory(),
-					nil,
-					configFileName,
-					/*resolutionStack*/ nil,
-					/*extraFileExtensions*/ nil,
-					/*extendedConfigCache*/ nil,
-				)
-			})
+			baselineParseConfigWith(t, rec.title+" with jsonSourceFile api.js", rec.noSubmoduleBaseline, rec.input, getParsedWithJsonSourceFileApi)
 		})
 	}
+}
+
+func getParsedWithJsonSourceFileApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
+	configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
+	path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
+	parsed := parser.ParseJSONText(configFileName, path, config.jsonText)
+	tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
+		SourceFile: parsed,
+	}
+	return tsoptions.ParseJsonSourceFileConfigFileContent(
+		tsConfigSourceFile,
+		host,
+		host.GetCurrentDirectory(),
+		nil,
+		configFileName,
+		/*resolutionStack*/ nil,
+		/*extraFileExtensions*/ nil,
+		/*extendedConfigCache*/ nil,
+	)
 }
 
 func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleBaseline bool, input []testConfig, getParsed func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine) {
@@ -629,6 +635,12 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleB
 			enc.SetEscapeHTML(false)
 			assert.NilError(t, enc.Encode(parsedConfigFileContent.CompilerOptions()))
 			baselineContent.WriteString("\n")
+
+			if parsedConfigFileContent.ParsedConfig.TypeAcquisition != nil {
+				baselineContent.WriteString("TypeAcquisition::\n")
+				assert.NilError(t, enc.Encode(parsedConfigFileContent.ParsedConfig.TypeAcquisition))
+				baselineContent.WriteString("\n")
+			}
 		}
 		baselineContent.WriteString("FileNames::\n")
 		baselineContent.WriteString(strings.Join(parsedConfigFileContent.ParsedConfig.FileNames, ",") + "\n")
@@ -661,6 +673,103 @@ func jsonToReadableText(input any) (string, error) {
 		return "", err
 	}
 	return buf.String(), nil
+}
+
+func TestParseTypeAcquisition(t *testing.T) {
+	t.Parallel()
+	// repo.SkipIfNoTypeScriptSubmodule(t)
+	cases := []struct {
+		title      string
+		configName string
+		config     string
+	}{
+		{
+			title: "Convert correctly format tsconfig.json to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enable": true,
+		"include": ["0.d.ts", "1.d.ts"],
+		"exclude": ["0.js", "1.js"],
+	},
+}`,
+			configName: "tsconfig.json",
+		},
+		{
+			title: "Convert incorrect format tsconfig.json to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enableAutoDiscovy": true,
+	}
+}`, configName: "tsconfig.json",
+		},
+		{
+			title:  "Convert default tsconfig.json to typeAcquisition ",
+			config: `{}`, configName: "tsconfig.json",
+		},
+		{
+			title: "Convert tsconfig.json with only enable property to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enable": true,
+	},
+}`, configName: "tsconfig.json",
+		},
+
+		// jsconfig.json
+		{
+			title: "Convert jsconfig.json to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enable": false,
+		"include": ["0.d.ts"],
+		"exclude": ["0.js"],
+	},
+}`,
+			configName: "jsconfig.json",
+		},
+		{title: "Convert default jsconfig.json to typeAcquisition ", config: `{}`, configName: "jsconfig.json"},
+		{
+			title: "Convert incorrect format jsconfig.json to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enableAutoDiscovy": true,
+	},
+}`,
+			configName: "jsconfig.json",
+		},
+		{
+			title: "Convert jsconfig.json with only enable property to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enable": false,
+	},
+}`,
+			configName: "jsconfig.json",
+		},
+	}
+	for _, test := range cases {
+		withJsonApiName := test.title + " with json api"
+		input := []testConfig{
+			{
+				jsonText:       test.config,
+				configFileName: test.configName,
+				basePath:       "/apath",
+				allFileList: map[string]string{
+					"/apath/a.ts": "",
+					"/apath/b.ts": "",
+				},
+			},
+		}
+		t.Run(withJsonApiName, func(t *testing.T) {
+			t.Parallel()
+			baselineParseConfigWith(t, withJsonApiName+".js", true, input, getParsedWithJsonApi)
+		})
+		withJsonSourceFileApiName := test.title + " with jsonSourceFile api"
+		t.Run(withJsonSourceFileApiName, func(t *testing.T) {
+			t.Parallel()
+			baselineParseConfigWith(t, withJsonSourceFileApiName+".js", true, input, getParsedWithJsonSourceFileApi)
+		})
+	}
 }
 
 func printFS(output io.Writer, files vfs.FS, root string) error {

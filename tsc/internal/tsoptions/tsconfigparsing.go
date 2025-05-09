@@ -57,6 +57,8 @@ var tsconfigRootOptionsMap = &CommandLineOption{
 	Kind: CommandLineOptionTypeObject,
 	ElementOptions: commandLineOptionsToMap([]*CommandLineOption{
 		compilerOptionsDeclaration,
+		// watchOptionsDeclaration,
+		typeAcquisitionDeclaration,
 		extendsOptionDeclaration,
 		{
 			Name: "references",
@@ -107,8 +109,8 @@ type ExtendedConfigCacheEntry struct {
 type parsedTsconfig struct {
 	raw     any
 	options *core.CompilerOptions
-	// watchOptions    *compiler.WatchOptions
-	// typeAcquisition *compiler.TypeAcquisition
+	// watchOptions *core.WatchOptions
+	typeAcquisition *core.TypeAcquisition
 	// Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet
 	extendedConfigPath any
 }
@@ -119,8 +121,8 @@ func parseOwnConfigOfJsonSourceFile(
 	basePath string,
 	configFileName string,
 ) (*parsedTsconfig, []*ast.Diagnostic) {
-	options := getDefaultCompilerOptions(configFileName)
-	// var typeAcquisition *compiler.TypeAcquisition
+	compilerOptions := getDefaultCompilerOptions(configFileName)
+	typeAcquisition := getDefaultTypeAcquisition(configFileName)
 	// var watchOptions *compiler.WatchOptions
 	var extendedConfigPath any
 	var rootCompilerOptions []*ast.PropertyName
@@ -139,7 +141,14 @@ func parseOwnConfigOfJsonSourceFile(
 		}
 		if parentOption != nil && parentOption.Name != "undefined" && value != nil {
 			if option != nil && option.Name != "" {
-				propertySetErrors = append(propertySetErrors, ParseCompilerOptions(option.Name, value, options)...)
+				var parseDiagnostics []*ast.Diagnostic
+				switch parentOption.Name {
+				case "compilerOptions":
+					parseDiagnostics = ParseCompilerOptions(option.Name, value, compilerOptions)
+				case "typeAcquisition":
+					parseDiagnostics = ParseTypeAcquisition(option.Name, value, typeAcquisition)
+				}
+				propertySetErrors = append(propertySetErrors, parseDiagnostics...)
 			} else if keyText != "" {
 				if parentOption.ElementOptions != nil {
 					// !!! TODO: support suggestion
@@ -178,9 +187,9 @@ func parseOwnConfigOfJsonSourceFile(
 	// }
 	return &parsedTsconfig{
 		raw:     json,
-		options: options,
+		options: compilerOptions,
 		// watchOptions:    watchOptions,
-		// typeAcquisition: typeAcquisition,
+		typeAcquisition:    typeAcquisition,
 		extendedConfigPath: extendedConfigPath,
 	}, errors
 }
@@ -479,19 +488,19 @@ type tsConfigOptions struct {
 	notDefined string
 }
 
-func commandLineOptionsToMap(options []*CommandLineOption) map[string]*CommandLineOption {
+func commandLineOptionsToMap(compilerOptions []*CommandLineOption) map[string]*CommandLineOption {
 	result := make(map[string]*CommandLineOption)
-	for i := range options {
-		result[(options[i]).Name] = options[i]
+	for i := range compilerOptions {
+		result[(compilerOptions[i]).Name] = compilerOptions[i]
 	}
 	return result
 }
 
 var commandLineCompilerOptionsMap map[string]*CommandLineOption = commandLineOptionsToMap(OptionsDeclarations)
 
-func convertMapToOptions[O optionParser](options *collections.OrderedMap[string, any], result O) O {
+func convertMapToOptions[O optionParser](compilerOptions *collections.OrderedMap[string, any], result O) O {
 	// this assumes any `key`, `value` pair in `options` will have `value` already be the correct type. this function should no error handling
-	for key, value := range options.Entries() {
+	for key, value := range compilerOptions.Entries() {
 		result.ParseOption(key, value)
 	}
 	return result
@@ -758,12 +767,26 @@ func getDefaultCompilerOptions(configFileName string) *core.CompilerOptions {
 	return options
 }
 
+func getDefaultTypeAcquisition(configFileName string) *core.TypeAcquisition {
+	options := &core.TypeAcquisition{}
+	if configFileName != "" && tspath.GetBaseFileName(configFileName) == "jsconfig.json" {
+		options.Enable = core.TSTrue
+	}
+	return options
+}
+
 func convertCompilerOptionsFromJsonWorker(jsonOptions any, basePath string, configFileName string) (*core.CompilerOptions, []*ast.Diagnostic) {
 	options := getDefaultCompilerOptions(configFileName)
 	_, errors := convertOptionsFromJson(commandLineCompilerOptionsMap, jsonOptions, basePath, &compilerOptionsParser{options})
 	if configFileName != "" {
 		options.ConfigFilePath = tspath.NormalizeSlashes(configFileName)
 	}
+	return options, errors
+}
+
+func convertTypeAcquisitionFromJsonWorker(jsonOptions any, basePath string, configFileName string) (*core.TypeAcquisition, []*ast.Diagnostic) {
+	options := getDefaultTypeAcquisition(configFileName)
+	_, errors := convertOptionsFromJson(typeAcquisitionDeclaration.ElementOptions, jsonOptions, basePath, &typeAcquisitionParser{options})
 	return options, errors
 }
 
@@ -778,8 +801,8 @@ func parseOwnConfigOfJson(
 		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Unknown_option_excludes_Did_you_mean_exclude))
 	}
 	options, err := convertCompilerOptionsFromJsonWorker(json.GetOrZero("compilerOptions"), basePath, configFileName)
-	errors = append(errors, err...)
-	// typeAcquisition := convertTypeAcquisitionFromJsonWorker(json.typeAcquisition, basePath, errors, configFileName)
+	typeAcquisition, err2 := convertTypeAcquisitionFromJsonWorker(json.GetOrZero("typeAcquisition"), basePath, configFileName)
+	errors = append(append(errors, err...), err2...)
 	// watchOptions := convertWatchOptionsFromJsonWorker(json.watchOptions, basePath, errors)
 	// json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors)
 	var extendedConfigPath []string
@@ -790,6 +813,7 @@ func parseOwnConfigOfJson(
 	parsedConfig := &parsedTsconfig{
 		raw:                json,
 		options:            options,
+		typeAcquisition:    typeAcquisition,
 		extendedConfigPath: extendedConfigPath,
 	}
 	return parsedConfig, errors
@@ -1176,7 +1200,9 @@ func parseJsonConfigFileContentWorker(
 
 	return &ParsedCommandLine{
 		ParsedConfig: &core.ParsedOptions{
-			CompilerOptions:   parsedConfig.options,
+			CompilerOptions: parsedConfig.options,
+			TypeAcquisition: parsedConfig.typeAcquisition,
+			// WatchOptions:      nil,
 			FileNames:         getFileNames(basePathForFileNames),
 			ProjectReferences: getProjectReferences(basePathForFileNames),
 		},
@@ -1321,43 +1347,43 @@ func substituteStringArrayWithConfigDirTemplate(list []string, basePath string) 
 	}
 }
 
-func handleOptionConfigDirTemplateSubstitution(options *core.CompilerOptions, basePath string) {
-	if options == nil {
+func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOptions, basePath string) {
+	if compilerOptions == nil {
 		return
 	}
 
 	// !!! don't hardcode this; use options declarations?
 
-	for v := range options.Paths.Values() {
+	for v := range compilerOptions.Paths.Values() {
 		substituteStringArrayWithConfigDirTemplate(v, basePath)
 	}
 
-	substituteStringArrayWithConfigDirTemplate(options.RootDirs, basePath)
-	substituteStringArrayWithConfigDirTemplate(options.TypeRoots, basePath)
+	substituteStringArrayWithConfigDirTemplate(compilerOptions.RootDirs, basePath)
+	substituteStringArrayWithConfigDirTemplate(compilerOptions.TypeRoots, basePath)
 
-	if startsWithConfigDirTemplate(options.GenerateCpuProfile) {
-		options.GenerateCpuProfile = getSubstitutedPathWithConfigDirTemplate(options.GenerateCpuProfile, basePath)
+	if startsWithConfigDirTemplate(compilerOptions.GenerateCpuProfile) {
+		compilerOptions.GenerateCpuProfile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.GenerateCpuProfile, basePath)
 	}
-	if startsWithConfigDirTemplate(options.GenerateTrace) {
-		options.GenerateTrace = getSubstitutedPathWithConfigDirTemplate(options.GenerateTrace, basePath)
+	if startsWithConfigDirTemplate(compilerOptions.GenerateTrace) {
+		compilerOptions.GenerateTrace = getSubstitutedPathWithConfigDirTemplate(compilerOptions.GenerateTrace, basePath)
 	}
-	if startsWithConfigDirTemplate(options.OutFile) {
-		options.OutFile = getSubstitutedPathWithConfigDirTemplate(options.OutFile, basePath)
+	if startsWithConfigDirTemplate(compilerOptions.OutFile) {
+		compilerOptions.OutFile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.OutFile, basePath)
 	}
-	if startsWithConfigDirTemplate(options.OutDir) {
-		options.OutDir = getSubstitutedPathWithConfigDirTemplate(options.OutDir, basePath)
+	if startsWithConfigDirTemplate(compilerOptions.OutDir) {
+		compilerOptions.OutDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.OutDir, basePath)
 	}
-	if startsWithConfigDirTemplate(options.RootDir) {
-		options.RootDir = getSubstitutedPathWithConfigDirTemplate(options.RootDir, basePath)
+	if startsWithConfigDirTemplate(compilerOptions.RootDir) {
+		compilerOptions.RootDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.RootDir, basePath)
 	}
-	if startsWithConfigDirTemplate(options.TsBuildInfoFile) {
-		options.TsBuildInfoFile = getSubstitutedPathWithConfigDirTemplate(options.TsBuildInfoFile, basePath)
+	if startsWithConfigDirTemplate(compilerOptions.TsBuildInfoFile) {
+		compilerOptions.TsBuildInfoFile = getSubstitutedPathWithConfigDirTemplate(compilerOptions.TsBuildInfoFile, basePath)
 	}
-	if startsWithConfigDirTemplate(options.BaseUrl) {
-		options.BaseUrl = getSubstitutedPathWithConfigDirTemplate(options.BaseUrl, basePath)
+	if startsWithConfigDirTemplate(compilerOptions.BaseUrl) {
+		compilerOptions.BaseUrl = getSubstitutedPathWithConfigDirTemplate(compilerOptions.BaseUrl, basePath)
 	}
-	if startsWithConfigDirTemplate(options.DeclarationDir) {
-		options.DeclarationDir = getSubstitutedPathWithConfigDirTemplate(options.DeclarationDir, basePath)
+	if startsWithConfigDirTemplate(compilerOptions.DeclarationDir) {
+		compilerOptions.DeclarationDir = getSubstitutedPathWithConfigDirTemplate(compilerOptions.DeclarationDir, basePath)
 	}
 }
 
@@ -1517,8 +1543,8 @@ func getFileNamesFromConfigSpecs(
 	return files
 }
 
-func GetSupportedExtensions(options *core.CompilerOptions, extraFileExtensions []fileExtensionInfo) [][]string {
-	needJSExtensions := options.GetAllowJS()
+func GetSupportedExtensions(compilerOptions *core.CompilerOptions, extraFileExtensions []fileExtensionInfo) [][]string {
+	needJSExtensions := compilerOptions.GetAllowJS()
 	if len(extraFileExtensions) == 0 {
 		if needJSExtensions {
 			return tspath.AllSupportedExtensions
@@ -1543,8 +1569,8 @@ func GetSupportedExtensions(options *core.CompilerOptions, extraFileExtensions [
 	return extensions
 }
 
-func GetSupportedExtensionsWithJsonIfResolveJsonModule(options *core.CompilerOptions, supportedExtensions [][]string) [][]string {
-	if options == nil || !options.GetResolveJsonModule() {
+func GetSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions *core.CompilerOptions, supportedExtensions [][]string) [][]string {
+	if compilerOptions == nil || !compilerOptions.GetResolveJsonModule() {
 		return supportedExtensions
 	}
 	if core.Same(supportedExtensions, tspath.AllSupportedExtensions) {

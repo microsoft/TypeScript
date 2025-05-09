@@ -25,6 +25,9 @@ CompilerOptions::
   "configFilePath": "/tsconfig.json"
 }
 
+TypeAcquisition::
+{}
+
 FileNames::
 /b.ts
 Errors::
@@ -56,6 +59,9 @@ CompilerOptions::
   "outDir": "/bin",
   "configFilePath": "/tsconfig.json"
 }
+
+TypeAcquisition::
+{}
 
 FileNames::
 /b.ts

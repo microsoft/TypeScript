@@ -20,6 +20,9 @@ CompilerOptions::
   "configFilePath": "/tsconfig.json"
 }
 
+TypeAcquisition::
+{}
+
 FileNames::
 /a.ts
 Errors::
@@ -47,6 +50,9 @@ CompilerOptions::
   "declarationDir": "/declarations",
   "configFilePath": "/tsconfig.json"
 }
+
+TypeAcquisition::
+{}
 
 FileNames::
 /a.ts,/declarations/a.d.ts

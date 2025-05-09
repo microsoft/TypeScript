@@ -109,6 +109,9 @@ func parseJsonToStringKey(json any) *collections.OrderedMap[string, any] {
 		if v, ok := m.Get("excludes"); ok {
 			result.Set("excludes", v)
 		}
+		if v, ok := m.Get("typeAcquisition"); ok {
+			result.Set("typeAcquisition", v)
+		}
 	}
 	return result
 }
@@ -131,6 +134,14 @@ type watchOptionsParser struct {
 
 func (o *watchOptionsParser) ParseOption(key string, value any) []*ast.Diagnostic {
 	return ParseWatchOptions(key, value, o.WatchOptions)
+}
+
+type typeAcquisitionParser struct {
+	*core.TypeAcquisition
+}
+
+func (o *typeAcquisitionParser) ParseOption(key string, value any) []*ast.Diagnostic {
+	return ParseTypeAcquisition(key, value, o.TypeAcquisition)
 }
 
 func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) []*ast.Diagnostic {
@@ -432,6 +443,26 @@ func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*
 		allOptions.ExcludeDir = parseStringArray(value)
 	case "excludeFiles":
 		allOptions.ExcludeFiles = parseStringArray(value)
+	}
+	return nil
+}
+
+func ParseTypeAcquisition(key string, value any, allOptions *core.TypeAcquisition) []*ast.Diagnostic {
+	if value == nil {
+		return nil
+	}
+	if allOptions == nil {
+		return nil
+	}
+	switch key {
+	case "enable":
+		allOptions.Enable = parseTristate(value)
+	case "include":
+		allOptions.Include = parseStringArray(value)
+	case "exclude":
+		allOptions.Exclude = parseStringArray(value)
+	case "disableFilenameBasedTypeAcquisition":
+		allOptions.DisableFilenameBasedTypeAcquisition = parseTristate(value)
 	}
 	return nil
 }
