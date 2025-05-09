@@ -2564,8 +2564,8 @@ function getCompilerOptionValueTypeString(option: CommandLineOption): string {
     return (option.type === "listOrElement") ?
         `${getCompilerOptionValueTypeString(option.element)} or Array` :
         option.type === "list" ?
-        "Array" :
-        isString(option.type) ? option.type : "string";
+            "Array" :
+            isString(option.type) ? option.type : "string";
 }
 
 function isCompilerOptionsValue(option: CommandLineOption | undefined, value: any): value is CompilerOptionsValue {
@@ -2834,125 +2834,114 @@ function getSerializedCompilerOption(options: CompilerOptions): Map<string, Comp
 /**
  * Generate tsconfig configuration when running command line "--init"
  * @param options commandlineOptions to be generated into tsconfig.json
- * @param fileNames array of filenames to be generated into tsconfig.json
- *
  * @internal
  */
-export function generateTSConfig(options: CompilerOptions, fileNames: readonly string[], newLine: string): string {
-    return writeConfigurations();
-
+export function generateTSConfig(options: CompilerOptions, newLine: string): string {
     type PresetValue = string | number | boolean | (string | number | boolean)[];
 
-    function writeConfigurations() {
-        const tab = "  ";
-        const result: string[] = [];
-        result.push(`{`);
-        result.push(`${tab}// ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)}`);
-        result.push(`${tab}"compilerOptions": {`);
+    const tab = "  ";
+    const result: string[] = [];
+    result.push(`{`);
+    result.push(`${tab}// ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)}`);
+    result.push(`${tab}"compilerOptions": {`);
 
-        emitHeader(Diagnostics.File_Layout);
-        emitOption("rootDir", "./src", "optional");
-        emitOption("outDir", "./dist", "optional");
-        newline();
+    emitHeader(Diagnostics.File_Layout);
+    emitOption("rootDir", "./src", "optional");
+    emitOption("outDir", "./dist", "optional");
 
-        emitHeader(Diagnostics.Environment_Settings);
-        emitOption("module", ModuleResolutionKind.NodeNext);
-        emitOption("target", ScriptTarget.ESNext);
-        emitOption("types", []);
-        emitHeader(Diagnostics.For_nodejs_Colon);
-        emitOption("lib", ["lib.esnext.d.ts"], "always");
-        emitOption("types", ["node"], "always");
-        emitHeader(Diagnostics.and_npm_install_d_types_Slashnode);
+    newline();
 
-        newline();
+    emitHeader(Diagnostics.Environment_Settings);
+    emitOption("module", ModuleResolutionKind.NodeNext);
+    emitOption("target", ScriptTarget.ESNext);
+    emitOption("types", []);
+    emitHeader(Diagnostics.For_nodejs_Colon);
+    emitOption("lib", ["lib.esnext.d.ts"], "always");
+    emitOption("types", ["node"], "always");
+    emitHeader(Diagnostics.and_npm_install_d_types_Slashnode);
 
-        emitHeader(Diagnostics.Other_Outputs);
-        emitOption("sourceMap", /*value*/ true);
-        emitOption("declaration", /*value*/ true);
-        emitOption("declarationMap", /*value*/ true);
+    newline();
 
-        newline();
+    emitHeader(Diagnostics.Other_Outputs);
+    emitOption("sourceMap", /*value*/ true);
+    emitOption("declaration", /*value*/ true);
+    emitOption("declarationMap", /*value*/ true);
 
-        emitHeader(Diagnostics.Stricter_Typechecking_Options);
-        emitOption("noUncheckedIndexedAccess", /*value*/ true);
-        emitOption("exactOptionalPropertyTypes", /*value*/ true);
+    newline();
 
-        newline();
+    emitHeader(Diagnostics.Stricter_Typechecking_Options);
+    emitOption("noUncheckedIndexedAccess", /*value*/ true);
+    emitOption("exactOptionalPropertyTypes", /*value*/ true);
 
-        emitHeader(Diagnostics.Style_Options);
-        emitOption("noImplicitReturns", /*value*/ true, "optional");
-        emitOption("noImplicitOverride", /*value*/ true, "optional");
-        emitOption("noUnusedLocals", /*value*/ true, "optional");
-        emitOption("noUnusedParameters", /*value*/ true, "optional");
-        emitOption("noFallthroughCasesInSwitch", /*value*/ true, "optional");
-        emitOption("noPropertyAccessFromIndexSignature", /*value*/ true, "optional");
+    newline();
 
-        newline();
+    emitHeader(Diagnostics.Style_Options);
+    emitOption("noImplicitReturns", /*value*/ true, "optional");
+    emitOption("noImplicitOverride", /*value*/ true, "optional");
+    emitOption("noUnusedLocals", /*value*/ true, "optional");
+    emitOption("noUnusedParameters", /*value*/ true, "optional");
+    emitOption("noFallthroughCasesInSwitch", /*value*/ true, "optional");
+    emitOption("noPropertyAccessFromIndexSignature", /*value*/ true, "optional");
 
-        emitHeader(Diagnostics.Recommended_Options);
-        emitOption("strict", /*value*/ true);
-        emitOption("jsx", JsxEmit.ReactJSX);
-        emitOption("verbatimModuleSyntax", /*value*/ true);
-        emitOption("isolatedModules", /*value*/ true);
-        emitOption("noUncheckedSideEffectImports", /*value*/ true);
-        emitOption("moduleDetection", ModuleDetectionKind.Force);
-        emitOption("skipLibCheck", /*value*/ true);
+    newline();
 
-        function newline() {
-            result.push("");
-        }
+    emitHeader(Diagnostics.Recommended_Options);
+    emitOption("strict", /*value*/ true);
+    emitOption("jsx", JsxEmit.ReactJSX);
+    emitOption("verbatimModuleSyntax", /*value*/ true);
+    emitOption("isolatedModules", /*value*/ true);
+    emitOption("noUncheckedSideEffectImports", /*value*/ true);
+    emitOption("moduleDetection", ModuleDetectionKind.Force);
+    emitOption("skipLibCheck", /*value*/ true);
 
-        function emitHeader(header: DiagnosticMessage) {
-            result.push(`${tab}${tab}// ${getLocaleSpecificMessage(header)}`);
-        }
-
-        // commented = 'always': Always comment this out, even if it's on commandline
-        // commented = 'optional': Comment out unless it's on commandline
-        // commented = 'never': Never comment this out
-        function emitOption(setting: string, value: PresetValue, commented: "always" | "optional" | "never" = "never") {
-            if (hasProperty(options, setting) && commented !== "always") {
-                result.push(`${tab}${tab}"${setting}": ${formatValue(setting, options[setting] as string | boolean)},`);
-            } else {
-                if (commented === "optional") {
-                    result.push(`${tab}${tab}// "${setting}": ${formatValue(setting, value)},`);
-                } else {
-                    result.push(`${tab}${tab}"${setting}": ${formatValue(setting, value)},`);
-                }
-            }
-        }
-
-        function formatValue(setting: string, value: PresetValue): string {
-            const option = optionDeclarations.filter(c => c.name === setting)[0];
-            if (!option) Debug.fail(`No option named ${setting}?`);
-            const map = isMap(option.type) ? option.type : undefined;
-            if (isArray(value)) {
-                // eslint-disable-next-line local/no-in-operator
-                const map = ("element" in option && isMap(option.element.type)) ? option.element.type : undefined;
-                return `[${value.map(v => formatValueWithMap(v, map)).join(", ")}]`
-            } else {
-                return formatValueWithMap(value, map);
-            }
-        }
-
-        function formatValueWithMap(value: PresetValue, map: Map<string, string | number> | undefined) {
-            if (map) {
-                const val = getNameOfCompilerOptionValue(value as string | number, map) ?? Debug.fail(`No matching value of ${value}`);
-                if (typeof val === "string") {
-                    return `"${val}"`;
-                } else {
-                    return `${val}`;
-                }
-            } else {
-                return JSON.stringify(value);
-            }
-        }
-
-        result.push(`${tab}}`);
-        result.push(`}`);
-        result.push(``);
-
-        return result.join(newLine);
+    function newline() {
+        result.push("");
     }
+
+    function emitHeader(header: DiagnosticMessage) {
+        result.push(`${tab}${tab}// ${getLocaleSpecificMessage(header)}`);
+    }
+
+    // commented = 'always': Always comment this out, even if it's on commandline
+    // commented = 'optional': Comment out unless it's on commandline
+    // commented = 'never': Never comment this out
+    function emitOption(setting: string, value: PresetValue, commented: "always" | "optional" | "never" = "never") {
+        if (hasProperty(options, setting) && commented !== "always") {
+            result.push(`${tab}${tab}"${setting}": ${formatValueOrArray(setting, options[setting] as string | boolean)},`);
+        } else {
+            if (commented === "optional") {
+                result.push(`${tab}${tab}// "${setting}": ${formatValueOrArray(setting, value)},`);
+            } else {
+                result.push(`${tab}${tab}"${setting}": ${formatValueOrArray(setting, value)},`);
+            }
+        }
+    }
+
+    function formatValueOrArray(settingName: string, value: PresetValue): string {
+        const option = optionDeclarations.filter(c => c.name === settingName)[0];
+        if (!option) Debug.fail(`No option named ${settingName}?`);
+        const map = isMap(option.type) ? option.type : undefined;
+        if (isArray(value)) {
+            // eslint-disable-next-line local/no-in-operator
+            const map = ("element" in option && isMap(option.element.type)) ? option.element.type : undefined;
+            return `[${value.map(v => formatSingleValue(v, map)).join(", ")}]`
+        } else {
+            return formatSingleValue(value, map);
+        }
+    }
+
+    function formatSingleValue(value: PresetValue, map: Map<string, string | number> | undefined) {
+        if (map) {
+            value = getNameOfCompilerOptionValue(value as string | number, map) ?? Debug.fail(`No matching value of ${value}`);
+        }
+        return JSON.stringify(value);
+    }
+
+    result.push(`${tab}}`);
+    result.push(`}`);
+    result.push(``);
+
+    return result.join(newLine);
 }
 
 /** @internal */

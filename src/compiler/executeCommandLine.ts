@@ -573,7 +573,7 @@ function executeCommandLineWorker(
     }
 
     if (commandLine.options.init) {
-        writeConfigFile(sys, reportDiagnostic, commandLine.options, commandLine.fileNames);
+        writeConfigFile(sys, reportDiagnostic, commandLine.options);
         return sys.exit(ExitStatus.Success);
     }
 
@@ -1276,7 +1276,6 @@ function writeConfigFile(
     sys: System,
     reportDiagnostic: DiagnosticReporter,
     options: CompilerOptions,
-    fileNames: string[],
 ) {
     const currentDirectory = sys.getCurrentDirectory();
     const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
@@ -1284,7 +1283,7 @@ function writeConfigFile(
         reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
     }
     else {
-        sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
+        sys.writeFile(file, generateTSConfig(options, sys.newLine));
         const output: string[] = [sys.newLine, ...getHeader(sys, "Created a new tsconfig.json")];
         output.push(`You can learn more at https://aka.ms/tsconfig` + sys.newLine);
         for (const line of output) {
