@@ -2908,7 +2908,7 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     // commented = 'always': Always comment this out, even if it's on commandline
     // commented = 'optional': Comment out unless it's on commandline
     // commented = 'never': Never comment this out
-    function emitOption(setting: string, value: PresetValue, commented: "always" | "optional" | "never" = "never") {
+    function emitOption(setting: string, defaultValue: PresetValue, commented: "always" | "optional" | "never" = "never") {
         let comment: boolean;
         if (commented === "always") {
             comment = true;
@@ -2917,8 +2917,8 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
         } else {
             comment = !hasProperty(options, setting);
         }
-        value = (options[setting] ?? value) as PresetValue;
 
+        const value = (options[setting] ?? defaultValue) as PresetValue;
         if (comment) {
             result.push(`${tab}${tab}// "${setting}": ${formatValueOrArray(setting, value)},`);
         } else {
