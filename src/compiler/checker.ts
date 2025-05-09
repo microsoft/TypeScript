@@ -23998,7 +23998,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (!targetProperty) continue outer;
                         if (sourceProperty === targetProperty) continue;
                         // We compare the source property to the target in the context of a single discriminant type.
-                        const related = propertyRelatedTo(source, target, sourceProperty, targetProperty, _ => combination[i], /*reportErrors*/ false, IntersectionState.None, /*skipOptional*/ strictNullChecks || relation === comparableRelation);
+                        const related = propertyRelatedTo(source, target, sourceProperty, targetProperty, _ => combination[i], /*reportErrors*/ false, IntersectionState.None, /*skipOptional*/ strictNullChecks && !exactOptionalPropertyTypes || relation === comparableRelation);
                         // If the target property could not be found, or if the properties were not related,
                         // then this constituent is not a match.
                         if (!related) {

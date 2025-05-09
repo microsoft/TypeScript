@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/unionRelationshipCheckPasses3.ts] ////
+
+=== unionRelationshipCheckPasses3.ts ===
+// https://github.com/microsoft/TypeScript/issues/61678
+
+export type U1 = { type: "A"; value: 123 } | { type: "B"; value: string };
+>U1 : Symbol(U1, Decl(unionRelationshipCheckPasses3.ts, 0, 0))
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 2, 18))
+>value : Symbol(value, Decl(unionRelationshipCheckPasses3.ts, 2, 29))
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 2, 46))
+>value : Symbol(value, Decl(unionRelationshipCheckPasses3.ts, 2, 57))
+
+const directAssignment1: U1 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" }; // error
+>directAssignment1 : Symbol(directAssignment1, Decl(unionRelationshipCheckPasses3.ts, 4, 5))
+>U1 : Symbol(U1, Decl(unionRelationshipCheckPasses3.ts, 0, 0))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 4, 47))
+>const : Symbol(const)
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 4, 72))
+>const : Symbol(const)
+>value : Symbol(value, Decl(unionRelationshipCheckPasses3.ts, 4, 92))
+
+const indirect1 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" };
+>indirect1 : Symbol(indirect1, Decl(unionRelationshipCheckPasses3.ts, 6, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 6, 35))
+>const : Symbol(const)
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 6, 60))
+>const : Symbol(const)
+>value : Symbol(value, Decl(unionRelationshipCheckPasses3.ts, 6, 80))
+
+const indirectAssignment1: U1 = indirect1; // error
+>indirectAssignment1 : Symbol(indirectAssignment1, Decl(unionRelationshipCheckPasses3.ts, 7, 5))
+>U1 : Symbol(U1, Decl(unionRelationshipCheckPasses3.ts, 0, 0))
+>indirect1 : Symbol(indirect1, Decl(unionRelationshipCheckPasses3.ts, 6, 5))
+
+export type U2 = { type: "A"; value: number } | { type: "B"; value: string };
+>U2 : Symbol(U2, Decl(unionRelationshipCheckPasses3.ts, 7, 42))
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 9, 18))
+>value : Symbol(value, Decl(unionRelationshipCheckPasses3.ts, 9, 29))
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 9, 49))
+>value : Symbol(value, Decl(unionRelationshipCheckPasses3.ts, 9, 60))
+
+const directAssignment2: U2 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" }; // error
+>directAssignment2 : Symbol(directAssignment2, Decl(unionRelationshipCheckPasses3.ts, 11, 5))
+>U2 : Symbol(U2, Decl(unionRelationshipCheckPasses3.ts, 7, 42))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 11, 47))
+>const : Symbol(const)
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 11, 72))
+>const : Symbol(const)
+>value : Symbol(value, Decl(unionRelationshipCheckPasses3.ts, 11, 92))
+
+const indirect2 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" };
+>indirect2 : Symbol(indirect2, Decl(unionRelationshipCheckPasses3.ts, 13, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 13, 35))
+>const : Symbol(const)
+>type : Symbol(type, Decl(unionRelationshipCheckPasses3.ts, 13, 60))
+>const : Symbol(const)
+>value : Symbol(value, Decl(unionRelationshipCheckPasses3.ts, 13, 80))
+
+const indirectAssignment2: U2 = indirect1; // error
+>indirectAssignment2 : Symbol(indirectAssignment2, Decl(unionRelationshipCheckPasses3.ts, 14, 5))
+>U2 : Symbol(U2, Decl(unionRelationshipCheckPasses3.ts, 7, 42))
+>indirect1 : Symbol(indirect1, Decl(unionRelationshipCheckPasses3.ts, 6, 5))
+

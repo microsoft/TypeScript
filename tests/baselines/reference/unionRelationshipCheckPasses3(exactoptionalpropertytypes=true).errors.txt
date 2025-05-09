@@ -1,0 +1,52 @@
+unionRelationshipCheckPasses3.ts(5,7): error TS2322: Type '{ type: "A"; } | { type: "B"; value: string; }' is not assignable to type 'U1'.
+  Type '{ type: "A"; }' is not assignable to type 'U1'.
+    Property 'value' is missing in type '{ type: "A"; }' but required in type '{ type: "A"; value: 123; }'.
+unionRelationshipCheckPasses3.ts(8,7): error TS2322: Type '{ type: "A"; value?: never; } | { type: "B"; value: string; }' is not assignable to type 'U1'.
+  Type '{ type: "A"; value?: never; }' is not assignable to type 'U1'.
+    Type '{ type: "A"; value?: never; }' is not assignable to type '{ type: "A"; value: 123; }'.
+      Property 'value' is optional in type '{ type: "A"; value?: never; }' but required in type '{ type: "A"; value: 123; }'.
+unionRelationshipCheckPasses3.ts(12,7): error TS2322: Type '{ type: "A"; } | { type: "B"; value: string; }' is not assignable to type 'U2'.
+  Type '{ type: "A"; }' is not assignable to type 'U2'.
+    Property 'value' is missing in type '{ type: "A"; }' but required in type '{ type: "A"; value: number; }'.
+unionRelationshipCheckPasses3.ts(15,7): error TS2322: Type '{ type: "A"; value?: never; } | { type: "B"; value: string; }' is not assignable to type 'U2'.
+  Type '{ type: "A"; value?: never; }' is not assignable to type 'U2'.
+    Type '{ type: "A"; value?: never; }' is not assignable to type '{ type: "A"; value: number; }'.
+      Property 'value' is optional in type '{ type: "A"; value?: never; }' but required in type '{ type: "A"; value: number; }'.
+
+
+==== unionRelationshipCheckPasses3.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/61678
+    
+    export type U1 = { type: "A"; value: 123 } | { type: "B"; value: string };
+    
+    const directAssignment1: U1 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" }; // error
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: "A"; } | { type: "B"; value: string; }' is not assignable to type 'U1'.
+!!! error TS2322:   Type '{ type: "A"; }' is not assignable to type 'U1'.
+!!! error TS2322:     Property 'value' is missing in type '{ type: "A"; }' but required in type '{ type: "A"; value: 123; }'.
+!!! related TS2728 unionRelationshipCheckPasses3.ts:3:31: 'value' is declared here.
+    
+    const indirect1 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" };
+    const indirectAssignment1: U1 = indirect1; // error
+          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: "A"; value?: never; } | { type: "B"; value: string; }' is not assignable to type 'U1'.
+!!! error TS2322:   Type '{ type: "A"; value?: never; }' is not assignable to type 'U1'.
+!!! error TS2322:     Type '{ type: "A"; value?: never; }' is not assignable to type '{ type: "A"; value: 123; }'.
+!!! error TS2322:       Property 'value' is optional in type '{ type: "A"; value?: never; }' but required in type '{ type: "A"; value: 123; }'.
+    
+    export type U2 = { type: "A"; value: number } | { type: "B"; value: string };
+    
+    const directAssignment2: U2 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" }; // error
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: "A"; } | { type: "B"; value: string; }' is not assignable to type 'U2'.
+!!! error TS2322:   Type '{ type: "A"; }' is not assignable to type 'U2'.
+!!! error TS2322:     Property 'value' is missing in type '{ type: "A"; }' but required in type '{ type: "A"; value: number; }'.
+!!! related TS2728 unionRelationshipCheckPasses3.ts:10:31: 'value' is declared here.
+    
+    const indirect2 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" };
+    const indirectAssignment2: U2 = indirect1; // error
+          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: "A"; value?: never; } | { type: "B"; value: string; }' is not assignable to type 'U2'.
+!!! error TS2322:   Type '{ type: "A"; value?: never; }' is not assignable to type 'U2'.
+!!! error TS2322:     Type '{ type: "A"; value?: never; }' is not assignable to type '{ type: "A"; value: number; }'.
+!!! error TS2322:       Property 'value' is optional in type '{ type: "A"; value?: never; }' but required in type '{ type: "A"; value: number; }'.

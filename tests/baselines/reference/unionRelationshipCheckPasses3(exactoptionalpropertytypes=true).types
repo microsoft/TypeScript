@@ -1,0 +1,177 @@
+//// [tests/cases/compiler/unionRelationshipCheckPasses3.ts] ////
+
+=== unionRelationshipCheckPasses3.ts ===
+// https://github.com/microsoft/TypeScript/issues/61678
+
+export type U1 = { type: "A"; value: 123 } | { type: "B"; value: string };
+>U1 : U1
+>   : ^^
+>type : "A"
+>     : ^^^
+>value : 123
+>      : ^^^
+>type : "B"
+>     : ^^^
+>value : string
+>      : ^^^^^^
+
+const directAssignment1: U1 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" }; // error
+>directAssignment1 : U1
+>                  : ^^
+>Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" } : { type: "A"; } | { type: "B"; value: string; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>{ type: "A" as const } : { type: "A"; }
+>                       : ^^^^^^^^^^^^^^
+>type : "A"
+>     : ^^^
+>"A" as const : "A"
+>             : ^^^
+>"A" : "A"
+>    : ^^^
+>{ type: "B" as const, value: "test" } : { type: "B"; value: string; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "B"
+>     : ^^^
+>"B" as const : "B"
+>             : ^^^
+>"B" : "B"
+>    : ^^^
+>value : string
+>      : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+const indirect1 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" };
+>indirect1 : { type: "A"; value?: never; } | { type: "B"; value: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" } : { type: "A"; } | { type: "B"; value: string; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>{ type: "A" as const } : { type: "A"; }
+>                       : ^^^^^^^^^^^^^^
+>type : "A"
+>     : ^^^
+>"A" as const : "A"
+>             : ^^^
+>"A" : "A"
+>    : ^^^
+>{ type: "B" as const, value: "test" } : { type: "B"; value: string; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "B"
+>     : ^^^
+>"B" as const : "B"
+>             : ^^^
+>"B" : "B"
+>    : ^^^
+>value : string
+>      : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+const indirectAssignment1: U1 = indirect1; // error
+>indirectAssignment1 : U1
+>                    : ^^
+>indirect1 : { type: "A"; value?: never; } | { type: "B"; value: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export type U2 = { type: "A"; value: number } | { type: "B"; value: string };
+>U2 : U2
+>   : ^^
+>type : "A"
+>     : ^^^
+>value : number
+>      : ^^^^^^
+>type : "B"
+>     : ^^^
+>value : string
+>      : ^^^^^^
+
+const directAssignment2: U2 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" }; // error
+>directAssignment2 : U2
+>                  : ^^
+>Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" } : { type: "A"; } | { type: "B"; value: string; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>{ type: "A" as const } : { type: "A"; }
+>                       : ^^^^^^^^^^^^^^
+>type : "A"
+>     : ^^^
+>"A" as const : "A"
+>             : ^^^
+>"A" : "A"
+>    : ^^^
+>{ type: "B" as const, value: "test" } : { type: "B"; value: string; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "B"
+>     : ^^^
+>"B" as const : "B"
+>             : ^^^
+>"B" : "B"
+>    : ^^^
+>value : string
+>      : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+const indirect2 = Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" };
+>indirect2 : { type: "A"; value?: never; } | { type: "B"; value: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() ? { type: "A" as const } : { type: "B" as const, value: "test" } : { type: "A"; } | { type: "B"; value: string; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>{ type: "A" as const } : { type: "A"; }
+>                       : ^^^^^^^^^^^^^^
+>type : "A"
+>     : ^^^
+>"A" as const : "A"
+>             : ^^^
+>"A" : "A"
+>    : ^^^
+>{ type: "B" as const, value: "test" } : { type: "B"; value: string; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "B"
+>     : ^^^
+>"B" as const : "B"
+>             : ^^^
+>"B" : "B"
+>    : ^^^
+>value : string
+>      : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+const indirectAssignment2: U2 = indirect1; // error
+>indirectAssignment2 : U2
+>                    : ^^
+>indirect1 : { type: "A"; value?: never; } | { type: "B"; value: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
