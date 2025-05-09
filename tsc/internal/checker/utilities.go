@@ -2063,3 +2063,13 @@ func IsExternalModuleSymbol(moduleSymbol *ast.Symbol) bool {
 	firstRune, _ := utf8.DecodeRuneInString(moduleSymbol.Name)
 	return moduleSymbol.Flags&ast.SymbolFlagsModule != 0 && firstRune == '"'
 }
+
+func (c *Checker) isCanceled() bool {
+	return c.ctx != nil && c.ctx.Err() != nil
+}
+
+func (c *Checker) checkNotCanceled() {
+	if c.wasCanceled {
+		panic("Checker was previously cancelled")
+	}
+}

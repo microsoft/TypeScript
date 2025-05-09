@@ -2,6 +2,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -223,19 +224,19 @@ func runMain() int {
 		return 1
 	}
 
-	diagnostics = program.GetSyntacticDiagnostics(nil)
+	diagnostics = program.GetSyntacticDiagnostics(context.Background(), nil)
 	if len(diagnostics) == 0 {
 		if opts.devel.printTypes {
 			program.PrintSourceFileWithTypes()
 		} else {
 			bindStart := time.Now()
-			_ = program.GetBindDiagnostics(nil)
+			_ = program.GetBindDiagnostics(context.Background(), nil)
 			bindTime = time.Since(bindStart)
 
 			// !!! the checker already reads noCheck, but do it here just for stats printing for now
 			if compilerOptions.NoCheck.IsFalseOrUnknown() {
 				checkStart := time.Now()
-				diagnostics = slices.Concat(program.GetGlobalDiagnostics(), program.GetSemanticDiagnostics(nil))
+				diagnostics = slices.Concat(program.GetGlobalDiagnostics(), program.GetSemanticDiagnostics(context.Background(), nil))
 				checkTime = time.Since(checkStart)
 			}
 		}

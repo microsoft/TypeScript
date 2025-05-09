@@ -1,6 +1,7 @@
 package harnessutil
 
 import (
+	"context"
 	"fmt"
 	"io/fs"
 	"maps"
@@ -538,8 +539,8 @@ func compileFilesWithHost(
 	// ] : postErrors;
 	program := createProgram(host, options, rootFiles)
 	var diagnostics []*ast.Diagnostic
-	diagnostics = append(diagnostics, program.GetSyntacticDiagnostics(nil)...)
-	diagnostics = append(diagnostics, program.GetSemanticDiagnostics(nil)...)
+	diagnostics = append(diagnostics, program.GetSyntacticDiagnostics(context.Background(), nil)...)
+	diagnostics = append(diagnostics, program.GetSemanticDiagnostics(context.Background(), nil)...)
 	diagnostics = append(diagnostics, program.GetGlobalDiagnostics()...)
 	emitResult := program.Emit(compiler.EmitOptions{})
 

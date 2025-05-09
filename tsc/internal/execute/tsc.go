@@ -1,6 +1,7 @@
 package execute
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -205,7 +206,7 @@ func compileAndEmit(sys System, program *compiler.Program, reportDiagnostic diag
 	allDiagnostics := program.GetConfigFileParsingDiagnostics()
 
 	// todo: early exit logic and append diagnostics
-	diagnostics := program.GetSyntacticDiagnostics(nil)
+	diagnostics := program.GetSyntacticDiagnostics(context.Background(), nil)
 	if len(diagnostics) == 0 {
 		diagnostics = append(diagnostics, program.GetOptionsDiagnostics()...)
 		if options.ListFilesOnly.IsFalse() {
@@ -214,7 +215,7 @@ func compileAndEmit(sys System, program *compiler.Program, reportDiagnostic diag
 		}
 	}
 	if len(diagnostics) == 0 {
-		diagnostics = append(diagnostics, program.GetSemanticDiagnostics(nil)...)
+		diagnostics = append(diagnostics, program.GetSemanticDiagnostics(context.Background(), nil)...)
 	}
 	// TODO: declaration diagnostics
 	if len(diagnostics) == 0 && options.NoEmit == core.TSTrue && (options.Declaration.IsTrue() && options.Composite.IsTrue()) {

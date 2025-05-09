@@ -472,6 +472,26 @@ func (n *Node) Members() []*Node {
 	return nil
 }
 
+func (n *Node) StatementList() *NodeList {
+	switch n.Kind {
+	case KindSourceFile:
+		return n.AsSourceFile().Statements
+	case KindBlock:
+		return n.AsBlock().Statements
+	case KindModuleBlock:
+		return n.AsModuleBlock().Statements
+	}
+	panic("Unhandled case in Node.StatementList: " + n.Kind.String())
+}
+
+func (n *Node) Statements() []*Node {
+	list := n.StatementList()
+	if list != nil {
+		return list.Nodes
+	}
+	return nil
+}
+
 func (n *Node) ModifierFlags() ModifierFlags {
 	modifiers := n.Modifiers()
 	if modifiers != nil {

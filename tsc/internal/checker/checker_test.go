@@ -68,7 +68,7 @@ func TestCheckSrcCompiler(t *testing.T) {
 		ConfigFileName: tspath.CombinePaths(rootPath, "tsconfig.json"),
 	}
 	p := compiler.NewProgram(opts)
-	p.CheckSourceFiles()
+	p.CheckSourceFiles(t.Context())
 }
 
 func BenchmarkNewChecker(b *testing.B) {
