@@ -3,8 +3,11 @@
 === noEmitHelpers.ts ===
 class A { }
 >A : A
+>  : ^
 
 class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 

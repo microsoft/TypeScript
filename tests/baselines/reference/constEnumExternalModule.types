@@ -3,22 +3,31 @@
 === m2.ts ===
 import A = require('m1')
 >A : typeof A
+>  : ^^^^^^^^
 
 var v = A.V;
 >v : A
+>  : ^
 >A.V : A
+>    : ^
 >A : typeof A
+>  : ^^^^^^^^
 >V : A
+>  : ^
 
 === m1.ts ===
 const enum E {
 >E : E
+>  : ^
 
     V = 100
 >V : E.V
+>  : ^^^
 >100 : 100
+>    : ^^^
 }
 
 export = E
 >E : E
+>  : ^
 

@@ -3,7 +3,9 @@
 === parserMemberVariableDeclaration1.ts ===
 class C {
 >C : C
+>  : ^
 
   public public Foo;
 >Foo : any
+>    : ^^^
 }

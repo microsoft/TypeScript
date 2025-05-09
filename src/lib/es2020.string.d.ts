@@ -1,4 +1,6 @@
 /// <reference lib="es2015.iterable" />
+/// <reference lib="es2020.intl" />
+/// <reference lib="es2020.symbol.wellknown" />
 
 interface String {
     /**
@@ -6,7 +8,7 @@ interface String {
      * containing the results of that search.
      * @param regexp A variable name or string literal containing the regular expression pattern and flags.
      */
-    matchAll(regexp: RegExp): IterableIterator<RegExpExecArray>;
+    matchAll(regexp: RegExp): RegExpStringIterator<RegExpExecArray>;
 
     /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
     toLocaleLowerCase(locales?: Intl.LocalesArgument): string;

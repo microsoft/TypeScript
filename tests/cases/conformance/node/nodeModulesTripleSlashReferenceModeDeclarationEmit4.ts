@@ -1,5 +1,5 @@
 // @noImplicitReferences: true
-// @module: node16,nodenext
+// @module: node16,node18,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: /node_modules/pkg/package.json
@@ -22,5 +22,5 @@ declare global {
     interface RequireInterface {}
 }
 // @filename: /index.ts
-/// <reference types="pkg" resolution-mode="import"/>
+/// <reference types="pkg" resolution-mode="import" preserve="true" />
 export interface LocalInterface extends ImportInterface {}

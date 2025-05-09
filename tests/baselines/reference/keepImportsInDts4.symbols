@@ -6,3 +6,4 @@ export {};
 === main.ts ===
 
 import "./folder/test"
+

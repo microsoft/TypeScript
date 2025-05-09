@@ -1,5 +1,8 @@
-const { TSESTree, AST_NODE_TYPES } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
+
+/** @import { TSESTree } from "@typescript-eslint/utils" */
+void 0;
 
 module.exports = createRule({
     name: "no-keywords",

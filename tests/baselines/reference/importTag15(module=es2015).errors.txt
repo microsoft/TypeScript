@@ -1,0 +1,18 @@
+1.js(1,30): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+1.js(2,33): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+
+
+==== 0.ts (0 errors) ====
+    export interface I { }
+    
+==== 1.js (2 errors) ====
+    /** @import { I } from './0' with { type: "json" } */
+                                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    /** @import * as foo from './0' with { type: "json" } */
+                                    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    
+    /** @param {I} a */
+    function f(a) {}
+    

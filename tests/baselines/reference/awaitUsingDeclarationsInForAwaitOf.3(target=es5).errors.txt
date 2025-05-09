@@ -1,0 +1,22 @@
+awaitUsingDeclarationsInForAwaitOf.3.ts(5,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+awaitUsingDeclarationsInForAwaitOf.3.ts(5,23): error TS1123: Variable declaration list cannot be empty.
+awaitUsingDeclarationsInForAwaitOf.3.ts(8,25): error TS1123: Variable declaration list cannot be empty.
+
+
+==== awaitUsingDeclarationsInForAwaitOf.3.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/pull/55558#issuecomment-1817595357
+    
+    declare const x: any[]
+    
+    for await (await using of x);
+        ~~~~~
+!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+                          
+!!! error TS1123: Variable declaration list cannot be empty.
+    
+    export async function test() {
+      for await (await using of x);
+                            
+!!! error TS1123: Variable declaration list cannot be empty.
+    }
+    

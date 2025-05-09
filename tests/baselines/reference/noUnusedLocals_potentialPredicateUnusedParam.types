@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/noUnusedLocals_potentialPredicateUnusedParam.ts] ////
+
+=== noUnusedLocals_potentialPredicateUnusedParam.ts ===
+function potentialPredicateUnusedParam(a: unknown) {
+>potentialPredicateUnusedParam : (a: unknown) => boolean
+>                              : ^ ^^       ^^^^^^^^^^^^
+>a : unknown
+>  : ^^^^^^^
+
+  return !!Math.random();
+>!!Math.random() : boolean
+>                : ^^^^^^^
+>!Math.random() : boolean
+>               : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+}
+

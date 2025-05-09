@@ -16,12 +16,11 @@ export * as aliased from "./data1";
 //// [register.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = void 0;
+exports.register = register;
 var r = [];
 function register(data) {
     r.push(data);
 }
-exports.register = register;
 //// [index.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

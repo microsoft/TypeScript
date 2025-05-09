@@ -1,7 +1,5 @@
-import * as ts from "../../../_namespaces/ts";
-import {
-    testExtractSymbol,
-} from "./helpers";
+import * as ts from "../../../_namespaces/ts.js";
+import { testExtractSymbol } from "./helpers.js";
 
 describe("unittests:: services:: extract:: extractFunctions", () => {
     testExtractFunction(
@@ -225,7 +223,6 @@ describe("unittests:: services:: extract:: extractFunctions", () => {
         [#|t2.toString();|]
     }
 }`,
-        /*includeLib*/ true,
     );
     // Confirm that the contextual type of an extracted expression counts as a use.
     testExtractFunction(
@@ -233,7 +230,6 @@ describe("unittests:: services:: extract:: extractFunctions", () => {
         `function F<T>() {
     const array: T[] = [#|[]|];
 }`,
-        /*includeLib*/ true,
     );
     // Class type parameter
     testExtractFunction(
@@ -259,7 +255,6 @@ describe("unittests:: services:: extract:: extractFunctions", () => {
         `function F<T, U extends T[], V extends U[]>(v: V) {
     [#|v.toString()|];
 }`,
-        /*includeLib*/ true,
     );
 
     testExtractFunction(
@@ -719,6 +714,6 @@ function F() {
     );
 });
 
-function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
-    testExtractSymbol(caption, text, "extractFunction", ts.Diagnostics.Extract_function, includeLib);
+function testExtractFunction(caption: string, text: string) {
+    testExtractSymbol(caption, text, "extractFunction", ts.Diagnostics.Extract_function);
 }

@@ -123,12 +123,11 @@ function f4<Q extends (arg: any) => any>(
 //// [conditionalTypeAssignabilityWhenDeferred.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.func = void 0;
+exports.func = func;
 function select(property, list, valueProp) { }
 function func(x, tipos) {
     select(x, tipos, "value");
 }
-exports.func = func;
 onlyNullablePlease(z); // works as expected
 onlyNullablePlease2(z); // works as expected
 onlyNullablePlease(y); // error as expected

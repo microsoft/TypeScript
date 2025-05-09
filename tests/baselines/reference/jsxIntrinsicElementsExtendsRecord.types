@@ -8,4 +8,5 @@ declare namespace JSX {
 <a />;
 ><a /> : error
 >a : any
+>  : ^^^
 

@@ -5,17 +5,21 @@ namespace X {
     interface A {
         kind: 'a';
 >kind : "a"
+>     : ^^^
     }
 
     interface B {
         kind: 'b';
 >kind : "b"
+>     : ^^^
     }
 
     export type C = A | B;
->C : A | B
+>C : C
+>  : ^
 }
 
 export = X;
 >X : any
+>  : ^^^
 

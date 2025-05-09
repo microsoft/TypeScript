@@ -59,6 +59,7 @@ import {
     isModifier,
     isModifierLike,
     isModuleBody,
+    isModuleExportName,
     isModuleName,
     isModuleReference,
     isNamedExportBindings,
@@ -90,6 +91,7 @@ import {
     NodeArray,
     NodesVisitor,
     NodeVisitor,
+    nullTransformationContext,
     ParameterDeclaration,
     ScriptTarget,
     setEmitFlags,
@@ -101,7 +103,7 @@ import {
     SyntaxKind,
     TransformationContext,
     Visitor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
@@ -377,7 +379,7 @@ function visitArrayWorker(
  * Starts a new lexical environment and visits a statement list, ending the lexical environment
  * and merging hoisted declarations upon completion.
  */
-export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes) {
+export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes): NodeArray<Statement> {
     context.startLexicalEnvironment();
     statements = nodesVisitor(statements, visitor, isStatement, start);
     if (ensureUseStrict) statements = context.factory.ensureUseStrict(statements);
@@ -559,7 +561,7 @@ export function visitIterationBody(body: Statement, visitor: Visitor, context: T
  * @param visitor The visitor to use when visiting expressions whose result will not be discarded at runtime.
  * @param discardVisitor The visitor to use when visiting expressions whose result will be discarded at runtime. Defaults to {@link visitor}.
  */
-export function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor = visitor): NodeArray<Expression> {
+export function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor: Visitor = visitor): NodeArray<Expression> {
     if (discardVisitor === visitor || elements.length <= 1) {
         return visitNodes(elements, visitor, isExpression);
     }
@@ -580,9 +582,9 @@ export function visitCommaListElements(elements: NodeArray<Expression>, visitor:
  * @param visitor The callback used to visit each child.
  * @param context A lexical environment context for the visitor.
  */
-export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
+export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined): T;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
+export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
 /**
  * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
  *
@@ -590,10 +592,10 @@ export function visitEachChild<T extends Node>(node: T, visitor: Visitor, contex
  * @param visitor The callback used to visit each child.
  * @param context A lexical environment context for the visitor.
  */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined;
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined;
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context = nullTransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
     if (node === undefined) {
         return undefined;
     }
@@ -1578,7 +1580,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateImportSpecifier(
             node,
             node.isTypeOnly,
-            nodeVisitor(node.propertyName, visitor, isIdentifier),
+            nodeVisitor(node.propertyName, visitor, isModuleExportName),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
         );
     },
@@ -1613,8 +1615,8 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateExportSpecifier(
             node,
             node.isTypeOnly,
-            nodeVisitor(node.propertyName, visitor, isIdentifier),
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
+            nodeVisitor(node.propertyName, visitor, isModuleExportName),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isModuleExportName)),
         );
     },
 

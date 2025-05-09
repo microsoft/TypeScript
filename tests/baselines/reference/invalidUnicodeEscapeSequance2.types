@@ -3,5 +3,7 @@
 === invalidUnicodeEscapeSequance2.ts ===
 var arg\uxxxx
 >arg : any
+>    : ^^^
 >uxxxx : any
+>      : ^^^
 

@@ -1,0 +1,267 @@
+//// [tests/cases/compiler/computedPropertiesNarrowed.ts] ////
+
+=== computedPropertiesNarrowed.ts ===
+const x: 0 | 1 = Math.random()? 0: 1;
+>x : 0 | 1
+>  : ^^^^^
+>Math.random()? 0: 1 : 0 | 1
+>                    : ^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+
+declare function assert(n: number): asserts n is 1;
+>assert : (n: number) => asserts n is 1
+>       : ^ ^^      ^^^^^              
+>n : number
+>  : ^^^^^^
+
+assert(x);
+>assert(x) : void
+>          : ^^^^
+>assert : (n: number) => asserts n is 1
+>       : ^ ^^      ^^^^^              
+>x : 0 | 1
+>  : ^^^^^
+
+export let o = {
+>o : { 1: number; }
+>  : ^^^^^^^^^^^^^^
+>{    [x]: 1 // error narrow type !== declared type} : { 1: number; }
+>                                                    : ^^^^^^^^^^^^^^
+
+    [x]: 1 // error narrow type !== declared type
+>[x] : number
+>    : ^^^^^^
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+}
+
+
+const y: 0 = 0
+>y : 0
+>  : ^
+>0 : 0
+>  : ^
+
+export let o2 = {
+>o2 : { 0: number; }
+>   : ^^^^^^^^^^^^^^
+>{    [y]: 1 // ok literal computed type } : { 0: number; }
+>                                          : ^^^^^^^^^^^^^^
+
+    [y]: 1 // ok literal computed type 
+>[y] : number
+>    : ^^^^^^
+>y : 0
+>  : ^
+>1 : 1
+>  : ^
+}
+
+// literals are ok
+export let o3 = { [1]: 1 }
+>o3 : { 1: number; }
+>   : ^^^^^^^^^^^^^^
+>{ [1]: 1 } : { 1: number; }
+>           : ^^^^^^^^^^^^^^
+>[1] : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export let o31 = { [-1]: 1 }
+>o31 : { [-1]: number; }
+>    : ^^^^^^^^^^^^^^^^^
+>{ [-1]: 1 } : { [-1]: number; }
+>            : ^^^^^^^^^^^^^^^^^
+>[-1] : number
+>     : ^^^^^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export let o32 = { [1-1]: 1 } // error number 
+>o32 : { [x: number]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [1-1]: 1 } : { [x: number]: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[1-1] : number
+>      : ^^^^^^
+>1-1 : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+let u = Symbol();
+>u : symbol
+>  : ^^^^^^
+>Symbol() : symbol
+>         : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+export let o4 = {
+>o4 : { [u]: number; }
+>   : ^^     ^^^^^^ ^^
+>{    [u]: 1 // Should error, nut a unique symbol} : { [u]: number; }
+>                                                  : ^^     ^^^^^^ ^^
+
+    [u]: 1 // Should error, nut a unique symbol
+>[u] : number
+>    : ^^^^^^
+>u : symbol
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+export let o5  ={
+>o5 : { [x: symbol]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [Symbol()]: 1 // Should error} : { [x: symbol]: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Symbol()]: 1 // Should error
+>[Symbol()] : number
+>           : ^^^^^^
+>Symbol() : symbol
+>         : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+}
+
+const uu: unique symbol = Symbol();
+>uu : unique symbol
+>   : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+export let o6  = {
+>o6 : { [uu]: number; }
+>   : ^^^^^^^^^^^^^^^^^
+>{    [uu]: 1 // Should be ok} : { [uu]: number; }
+>                              : ^^^^^^^^^^^^^^^^^
+
+    [uu]: 1 // Should be ok
+>[uu] : number
+>     : ^^^^^^
+>uu : unique symbol
+>   : ^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+}
+
+
+function foo (): 1 { return 1; }
+>foo : () => 1
+>    : ^^^^^^ 
+>1 : 1
+>  : ^
+
+export let o7 = {
+>o7 : { 1: number; }
+>   : ^^^^^^^^^^^^^^
+>{    [foo()]: 1 // Should error} : { 1: number; }
+>                                 : ^^^^^^^^^^^^^^
+
+    [foo()]: 1 // Should error
+>[foo()] : number
+>        : ^^^^^^
+>foo() : 1
+>      : ^
+>foo : () => 1
+>    : ^^^^^^ 
+>1 : 1
+>  : ^
+
+};
+
+let E = { A: 1 } as const
+>E : { readonly A: 1; }
+>  : ^^^^^^^^^^^^^^^^^^
+>{ A: 1 } as const : { readonly A: 1; }
+>                  : ^^^^^^^^^^^^^^^^^^
+>{ A: 1 } : { readonly A: 1; }
+>         : ^^^^^^^^^^^^^^^^^^
+>A : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export const o8 = {
+>o8 : { 1: number; }
+>   : ^^^^^^^^^^^^^^
+>{    [E.A]: 1 // Fresh } : { 1: number; }
+>                         : ^^^^^^^^^^^^^^
+
+    [E.A]: 1 // Fresh 
+>[E.A] : number
+>      : ^^^^^^
+>E.A : 1
+>    : ^
+>E : { readonly A: 1; }
+>  : ^^^^^^^^^^^^^^^^^^
+>A : 1
+>  : ^
+>1 : 1
+>  : ^
+}
+
+function ns() { return { v: 0 } as const }
+>ns : () => { readonly v: 0; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{ v: 0 } as const : { readonly v: 0; }
+>                  : ^^^^^^^^^^^^^^^^^^
+>{ v: 0 } : { readonly v: 0; }
+>         : ^^^^^^^^^^^^^^^^^^
+>v : 0
+>  : ^
+>0 : 0
+>  : ^
+
+export const o9 = {
+>o9 : { 0: number; }
+>   : ^^^^^^^^^^^^^^
+>{    [ns().v]: 1} : { 0: number; }
+>                  : ^^^^^^^^^^^^^^
+
+    [ns().v]: 1
+>[ns().v] : number
+>         : ^^^^^^
+>ns().v : 0
+>       : ^
+>ns() : { readonly v: 0; }
+>     : ^^^^^^^^^^^^^^^^^^
+>ns : () => { readonly v: 0; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>v : 0
+>  : ^
+>1 : 1
+>  : ^
+}
+

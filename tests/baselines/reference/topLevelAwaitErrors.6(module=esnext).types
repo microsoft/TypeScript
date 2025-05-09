@@ -4,5 +4,6 @@
 // await in exported function name should fail
 export function await() {
 >await : () => void
+>      : ^^^^^^^^^^
 }
 

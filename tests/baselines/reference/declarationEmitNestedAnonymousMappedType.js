@@ -15,11 +15,10 @@ export function enumFromStrings<const Members extends readonly string[]>() {
 //// [declarationEmitNestedAnonymousMappedType.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.enumFromStrings = void 0;
+exports.enumFromStrings = enumFromStrings;
 function enumFromStrings() {
     return Object.create(null);
 }
-exports.enumFromStrings = enumFromStrings;
 
 
 //// [declarationEmitNestedAnonymousMappedType.d.ts]

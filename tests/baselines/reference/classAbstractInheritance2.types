@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance2.ts] ////
+
+=== classAbstractInheritance2.ts ===
+abstract class A {
+>A : A
+>  : ^
+
+    abstract m1(): number;
+>m1 : () => number
+>   : ^^^^^^      
+
+    abstract m2(): number;
+>m2 : () => number
+>   : ^^^^^^      
+
+    abstract m3(): number;
+>m3 : () => number
+>   : ^^^^^^      
+
+    abstract m4(): number;
+>m4 : () => number
+>   : ^^^^^^      
+
+    abstract m5(): number;
+>m5 : () => number
+>   : ^^^^^^      
+
+    abstract m6(): number;
+>m6 : () => number
+>   : ^^^^^^      
+}
+
+class B extends A { }
+>B : B
+>  : ^
+>A : A
+>  : ^
+
+const C = class extends A {}
+>C : typeof C
+>  : ^^^^^^^^
+>class extends A {} : typeof C
+>                   : ^^^^^^^^
+>A : A
+>  : ^
+

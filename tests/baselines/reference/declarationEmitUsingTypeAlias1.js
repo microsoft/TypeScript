@@ -31,17 +31,11 @@ export const bar = (thing: SomeType) => {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = exports.foo = void 0;
-var foo = function (thing) {
+const foo = (thing) => {
     return thing;
 };
 exports.foo = foo;
-var bar = function (thing) {
+const bar = (thing) => {
     return thing.arg;
 };
 exports.bar = bar;
-
-
-//// [index.d.ts]
-import { SomeType } from "some-dep";
-export declare const foo: (thing: SomeType) => import("some-dep").SomeType;
-export declare const bar: (thing: SomeType) => import("some-dep").OtherType;

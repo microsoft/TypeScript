@@ -39,6 +39,7 @@ class C {
     }
 }
 
+
 //// [foo.js]
 class Protected {
     /** @protected */

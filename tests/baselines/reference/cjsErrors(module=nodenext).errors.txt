@@ -1,0 +1,12 @@
+index.ts(1,22): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./foo.ts/index.ts".
+
+
+==== index.ts (1 errors) ====
+    import foo = require("./foo.ts"); // Error
+                         ~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./foo.ts/index.ts".
+    import type _foo = require("./foo.ts"); // Ok
+    
+==== foo.ts/index.ts (0 errors) ====
+    export = {};
+    

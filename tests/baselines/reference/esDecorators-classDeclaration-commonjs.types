@@ -9,14 +9,20 @@ declare var deco: any;
 
 export class Example {
 >Example : Example
+>        : ^^^^^^^
 
     static foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 Example.foo();
 >Example.foo() : void
+>              : ^^^^
 >Example.foo : () => void
+>            : ^^^^^^^^^^
 >Example : typeof Example
+>        : ^^^^^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 

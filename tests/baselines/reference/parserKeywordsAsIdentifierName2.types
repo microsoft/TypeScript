@@ -4,6 +4,9 @@
 // 'public' should be marked unusable, should complain on trailing /*
 a.public /*
 >a.public : any
+>         : ^^^
 >a : any
+>  : ^^^
 >public : any
+>       : ^^^
 

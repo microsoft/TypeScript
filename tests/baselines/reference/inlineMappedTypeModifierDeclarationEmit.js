@@ -37,28 +37,27 @@ export function test2<T, K extends string>(obj: T, k: K): OmitUnveiled<T, K> {
 //// [other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test2 = exports.test1 = void 0;
+exports.test1 = test1;
+exports.test2 = test2;
 function test1(obj, k) {
     return {};
 }
-exports.test1 = test1;
 function test2(obj, k) {
     return {};
 }
-exports.test2 = test2;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processedInternally2 = exports.processedInternally1 = exports.wrappedTest2 = exports.wrappedTest1 = void 0;
+exports.processedInternally2 = exports.processedInternally1 = void 0;
+exports.wrappedTest1 = wrappedTest1;
+exports.wrappedTest2 = wrappedTest2;
 var other_1 = require("./other");
 function wrappedTest1(obj, k) {
     return (0, other_1.test1)(obj, k);
 }
-exports.wrappedTest1 = wrappedTest1;
 function wrappedTest2(obj, k) {
     return (0, other_1.test2)(obj, k);
 }
-exports.wrappedTest2 = wrappedTest2;
 exports.processedInternally1 = wrappedTest1({}, "a");
 exports.processedInternally2 = wrappedTest2({}, "a");
 
