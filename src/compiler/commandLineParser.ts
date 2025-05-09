@@ -2855,6 +2855,9 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     emitOption("module", ModuleResolutionKind.NodeNext);
     emitOption("target", ScriptTarget.ESNext);
     emitOption("types", []);
+    if (options.lib) {
+        emitOption("lib", options.lib);
+    }
     emitHeader(Diagnostics.For_nodejs_Colon);
     emitOption("lib", ["lib.esnext.d.ts"], "always");
     emitOption("types", ["node"], "always");
@@ -2906,14 +2909,20 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     // commented = 'optional': Comment out unless it's on commandline
     // commented = 'never': Never comment this out
     function emitOption(setting: string, value: PresetValue, commented: "always" | "optional" | "never" = "never") {
-        if (hasProperty(options, setting) && commented !== "always") {
-            result.push(`${tab}${tab}"${setting}": ${formatValueOrArray(setting, options[setting] as string | boolean)},`);
+        let comment: boolean;
+        if (commented === "always") {
+            comment = true;
+        } else if (commented === "never") {
+            comment = false;
         } else {
-            if (commented === "optional") {
-                result.push(`${tab}${tab}// "${setting}": ${formatValueOrArray(setting, value)},`);
-            } else {
-                result.push(`${tab}${tab}"${setting}": ${formatValueOrArray(setting, value)},`);
-            }
+            comment = !hasProperty(options, setting);
+        }
+        value = (options[setting] ?? value) as PresetValue;
+
+        if (comment) {
+            result.push(`${tab}${tab}// "${setting}": ${formatValueOrArray(setting, value)},`);
+        } else {
+            result.push(`${tab}${tab}"${setting}": ${formatValueOrArray(setting, value)},`);
         }
     }
 

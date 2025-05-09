@@ -10,8 +10,8 @@
     "target": "esnext",
     "types": ["jquery", "mocha"],
     // For nodejs:
-    "lib": ["esnext"],
-    "types": ["node"],
+    // "lib": ["esnext"],
+    // "types": ["jquery", "mocha"],
     // and npm install -d @types/node
 
     // Other Outputs

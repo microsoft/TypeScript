@@ -9,9 +9,10 @@
     "module": "esnext",
     "target": "esnext",
     "types": [],
+    "lib": ["es5", "es2015.promise"],
     // For nodejs:
-    "lib": ["esnext"],
-    "types": ["node"],
+    // "lib": ["es5", "es2015.promise"],
+    // "types": ["node"],
     // and npm install -d @types/node
 
     // Other Outputs
