@@ -2761,9 +2761,17 @@ export function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean {
     return !!findAncestor(declaration, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
 }
 
-const displayPartWriter = getDisplayPartWriter();
-function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-    const absoluteMaximumLength = defaultMaximumTruncationLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
+const displayPartWriterCache = new Map<number, DisplayPartsSymbolWriter>();
+function getDisplayPartWriter(maximumLength: number | undefined): DisplayPartsSymbolWriter {
+    maximumLength = maximumLength || defaultMaximumTruncationLength;
+    if (!displayPartWriterCache.has(maximumLength)) {
+        displayPartWriterCache.set(maximumLength, getDisplayPartWriterWorker(maximumLength));
+    }
+    return displayPartWriterCache.get(maximumLength)!;
+}
+
+function getDisplayPartWriterWorker(maximumLength: number): DisplayPartsSymbolWriter {
+    const absoluteMaximumLength = maximumLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
     let displayParts: SymbolDisplayPart[];
     let lineStart: boolean;
     let indent: number;
@@ -3036,7 +3044,8 @@ export function lineBreakPart(): SymbolDisplayPart {
 }
 
 /** @internal */
-export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
+export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void, maximumLength?: number): SymbolDisplayPart[] {
+    const displayPartWriter = getDisplayPartWriter(maximumLength);
     try {
         writeDisplayParts(displayPartWriter);
         return displayPartWriter.displayParts();
@@ -3047,10 +3056,18 @@ export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbol
 }
 
 /** @internal */
-export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None, verbosityLevel?: number, out?: WriterContextOut): SymbolDisplayPart[] {
+export function typeToDisplayParts(
+    typechecker: TypeChecker,
+    type: Type,
+    enclosingDeclaration?: Node,
+    flags: TypeFormatFlags = TypeFormatFlags.None,
+    maximumLength?: number,
+    verbosityLevel?: number,
+    out?: WriterContextOut,
+): SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
-        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer, verbosityLevel, out);
-    });
+        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer, maximumLength, verbosityLevel, out);
+    }, maximumLength);
 }
 
 /** @internal */
@@ -3061,11 +3078,19 @@ export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, e
 }
 
 /** @internal */
-export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None, verbosityLevel?: number, out?: WriterContextOut): SymbolDisplayPart[] {
+export function signatureToDisplayParts(
+    typechecker: TypeChecker,
+    signature: Signature,
+    enclosingDeclaration?: Node,
+    flags: TypeFormatFlags = TypeFormatFlags.None,
+    maximumLength?: number,
+    verbosityLevel?: number,
+    out?: WriterContextOut,
+): SymbolDisplayPart[] {
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
-        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer, verbosityLevel, out);
-    });
+        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer, maximumLength, verbosityLevel, out);
+    }, maximumLength);
 }
 
 /** @internal */

@@ -266,6 +266,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     type: Type | undefined,
     semanticMeaning: SemanticMeaning,
     alias?: Symbol,
+    maximumLength?: number,
     verbosityLevel?: number,
 ): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: SymbolDisplayPart[] = [];
@@ -495,6 +496,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                 location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol),
                 enclosingDeclaration,
                 TypeFormatFlags.InTypeAlias,
+                maximumLength,
                 verbosityLevel,
                 typeWriterOut,
             ),
@@ -602,6 +604,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                         type,
                         semanticMeaning,
                         shouldUseAliasName ? symbol : resolvedSymbol,
+                        maximumLength,
                         verbosityLevel,
                     );
                     displayParts.push(...resolvedInfo.displayParts);
@@ -700,11 +703,12 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                                 symbolDisplayNodeBuilderFlags,
                                 /*internalFlags*/ undefined,
                                 /*tracker*/ undefined,
+                                maximumLength,
                                 verbosityLevel,
                                 typeWriterOut,
                             )!;
                             getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
-                        });
+                        }, maximumLength);
                         addRange(displayParts, typeParameterParts);
                     }
                     else {
@@ -715,6 +719,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                                 type,
                                 enclosingDeclaration,
                                 /*flags*/ undefined,
+                                maximumLength,
                                 verbosityLevel,
                                 typeWriterOut,
                             ),
@@ -889,6 +894,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     symbol,
                     symbolMeaning,
                     TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+                    maximumLength,
                     verbosityLevel !== undefined ? verbosityLevel - 1 : undefined,
                     typeWriterOut,
                 );
@@ -898,7 +904,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     if (i > 0) writer.writeLine();
                     printer.writeNode(EmitHint.Unspecified, node, sourceFile, writer);
                 });
-            });
+            }, maximumLength);
             addRange(displayParts, expandedDisplayParts);
             symbolWasExpanded = true;
             return true;
@@ -973,7 +979,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
 
     function addSignatureDisplayParts(signature: Signature, allSignatures: readonly Signature[], flags = TypeFormatFlags.None) {
-        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature, verbosityLevel, typeWriterOut));
+        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature, maximumLength, verbosityLevel, typeWriterOut));
         if (allSignatures.length > 1) {
             displayParts.push(spacePart());
             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -1011,9 +1017,21 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(
     location: Node,
     semanticMeaning: SemanticMeaning = getMeaningFromLocation(location),
     alias?: Symbol,
+    maximumLength?: number,
     verbosityLevel?: number,
 ): SymbolDisplayPartsDocumentationAndSymbolKind {
-    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias, verbosityLevel);
+    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
+        typeChecker,
+        symbol,
+        sourceFile,
+        enclosingDeclaration,
+        location,
+        /*type*/ undefined,
+        semanticMeaning,
+        alias,
+        maximumLength,
+        verbosityLevel,
+    );
 }
 
 function isLocalVariableOrFunction(symbol: Symbol) {
