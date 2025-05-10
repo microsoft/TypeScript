@@ -54,12 +54,12 @@ async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 >   : ^^^^^^ 
 
   const promises = await Promise.allSettled(fn());
->promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
->         : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
->                               : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.allSettled(fn()) : Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
->                         : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>promises : { -readonly [P_1 in keyof T]: PromiseSettledResult<Awaited<T[P_1]>>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await Promise.allSettled(fn()) : { -readonly [P_1 in keyof T]: PromiseSettledResult<Awaited<T[P_1]>>; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.allSettled(fn()) : Promise<{ -readonly [P_1 in keyof T]: PromiseSettledResult<Awaited<T[P_1]>>; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; }>; <T_1>(values: Iterable<T_1 | PromiseLike<T_1>>): Promise<PromiseSettledResult<Awaited<T_1>>[]>; }
 >                   : ^^^^^^^^^^^^^^^                       ^^      ^^   ^^^                                                                               ^^^^^^^^      ^^                                ^^^                                             ^^^
 >Promise : PromiseConstructor
@@ -78,8 +78,8 @@ async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 >                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >promises.map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
 >             : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
->promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
->         : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>promises : { -readonly [P_1 in keyof T]: PromiseSettledResult<Awaited<T[P_1]>>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
 >    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : (result: PromiseSettledResult<unknown>) => [undefined, Error] | [unknown, undefined]

@@ -516,8 +516,8 @@ export interface TObject<T extends TProperties = TProperties> extends TSchema {
 >     : ^^^^^^^^^^^^^
 
     static: PropertiesReduce<T, this['params']>
->static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>>>>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>static : Evaluate<Readonly<Partial<Pick<{ [K_1 in keyof T]: Static<T[K_1], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K_1 in keyof T]: Static<T[K_1], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K_1 in keyof T]: Static<T[K_1], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K_1 in keyof T]: Static<T[K_1], this["params"]>; }, Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>>>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: 'object'
 >type : "object"

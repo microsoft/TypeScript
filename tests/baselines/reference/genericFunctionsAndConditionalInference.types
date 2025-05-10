@@ -168,12 +168,12 @@ const orphaned = <F extends Target>(at: Ops<F>) => at.dict(ok(at))
 >   : ^^^^^^
 >at.dict(ok(at)) : Result<F, { lr: LR<F, string, number>; }>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->at.dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
->        : ^ ^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>at.dict : <P>(p: { [k_1 in keyof P]: Result<F, P[k_1]>; }) => Result<F, P>
+>        : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >at : Ops<F>
 >   : ^^^^^^
->dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
->     : ^ ^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dict : <P>(p: { [k_1 in keyof P]: Result<F, P[k_1]>; }) => Result<F, P>
+>     : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ok(at) : { lr: Result<F, LR<F, string, number>>; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ok : <F_1 extends Target>(at: Ops<F_1>) => { lr: Result<F_1, LR<F_1, string, number>>; }

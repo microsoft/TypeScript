@@ -71,8 +71,8 @@ export declare function test1<T, K extends string>(obj: T, k: K): OmitReal<T, K>
 export declare function test2<T, K extends string>(obj: T, k: K): OmitUnveiled<T, K>;
 export {};
 //// [index.d.ts]
-export declare function wrappedTest1<T, K extends string>(obj: T, k: K): Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P in T_1]: T[P]; } : never;
-export declare function wrappedTest2<T, K extends string>(obj: T, k: K): { [P in Exclude<keyof T, K>]: T[P]; };
+export declare function wrappedTest1<T, K extends string>(obj: T, k: K): Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P_1 in T_1]: T[P_1]; } : never;
+export declare function wrappedTest2<T, K extends string>(obj: T, k: K): { [P_1 in Exclude<keyof T, K>]: T[P_1]; };
 export type Obj = {
     a: number;
     readonly foo: string;

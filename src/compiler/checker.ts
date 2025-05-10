@@ -6959,12 +6959,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function createMappedTypeNodeFromType(type: MappedType) {
                 Debug.assert(!!(type.flags & TypeFlags.Object));
+                const cleanup = enterNewScope(context, type.declaration, /*expandedParams*/ undefined, [getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration(type.declaration.typeParameter))]);
                 const readonlyToken = type.declaration.readonlyToken ? factory.createToken(type.declaration.readonlyToken.kind) as ReadonlyKeyword | PlusToken | MinusToken : undefined;
                 const questionToken = type.declaration.questionToken ? factory.createToken(type.declaration.questionToken.kind) as QuestionToken | PlusToken | MinusToken : undefined;
                 let appropriateConstraintTypeNode: TypeNode;
                 let newTypeVariable: TypeReferenceNode | undefined;
                 let templateType = getTemplateTypeFromMappedType(type);
-                let typeParameter = getTypeParameterFromMappedType(type);
+                const typeParameter = getTypeParameterFromMappedType(type);
                 // If the mapped type isn't `keyof` constraint-declared, _but_ still has modifiers preserved, and its naive instantiation won't preserve modifiers because its constraint isn't `keyof` constrained, we have work to do
                 const needsModifierPreservingWrapper = !isMappedTypeWithKeyofConstraintDeclaration(type)
                     && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.Unknown)
@@ -6975,14 +6976,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
                     if (isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                         const newConstraintParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
-                        const newTypeParam = cloneTypeParameter(typeParameter);
                         const name = typeParameterToName(newConstraintParam, context);
                         const target = type.target as MappedType;
-                        typeParameter = newTypeParam;
                         newTypeVariable = factory.createTypeReferenceNode(name);
                         templateType = instantiateType(
                             getTemplateTypeFromMappedType(target),
-                            makeArrayTypeMapper([getTypeParameterFromMappedType(target), getModifiersTypeFromMappedType(target)], [newTypeParam, newConstraintParam]),
+                            makeArrayTypeMapper([getTypeParameterFromMappedType(target), getModifiersTypeFromMappedType(target)], [typeParameter, newConstraintParam]),
                         );
                     }
                     appropriateConstraintTypeNode = factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, newTypeVariable || typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
@@ -7003,13 +7002,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const templateTypeNode = typeToTypeNodeHelper(removeMissingType(templateType, !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), context);
                 const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, nameTypeNode, questionToken, templateTypeNode, /*members*/ undefined);
                 context.approximateLength += 10;
-                const result = setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
+                let result: TypeNode = setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 if (isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                     // homomorphic mapped type with a non-homomorphic naive inlining
                     // wrap it with a conditional like `SomeModifiersType extends infer U ? {..the mapped type...} : never` to ensure the resulting
                     // type stays homomorphic
                     const originalConstraint = instantiateType(getConstraintOfTypeParameter(getTypeFromTypeNode(context, (type.declaration.typeParameter.constraint! as TypeOperatorNode).type) as TypeParameter) || unknownType, type.mapper);
-                    return factory.createConditionalTypeNode(
+                    result = factory.createConditionalTypeNode(
                         typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context),
                         factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier, originalConstraint.flags & TypeFlags.Unknown ? undefined : typeToTypeNodeHelper(originalConstraint, context))),
                         result,
@@ -7021,13 +7020,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // subtly different from the `keyof` constraint case, by including the `keyof` constraint on the `infer` type parameter, it doesn't rely on the constraint type being itself
                     // constrained to a `keyof` type to preserve its modifier-preserving behavior. This is all basically because we preserve modifiers for a wider set of mapped types than
                     // just homomorphic ones.
-                    return factory.createConditionalTypeNode(
+                    result = factory.createConditionalTypeNode(
                         typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context),
                         factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier, factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context)))),
                         result,
                         factory.createKeywordTypeNode(SyntaxKind.NeverKeyword),
                     );
                 }
+                cleanup();
                 return result;
             }
 
