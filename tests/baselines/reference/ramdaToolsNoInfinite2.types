@@ -495,8 +495,8 @@ declare module "Object/NonNullable" {
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         'flat': NonNullableFlat<O>;
->'flat' : { [K in keyof O]: import("Union/Exclude").Exclude<O[K], null | undefined>; }
->       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'flat' : { [K_1 in keyof O]: import("Union/Exclude").Exclude<O[K_1], null | undefined>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         'deep': NonNullableDeep<O>;
 >'deep' : NonNullableDeep<O>
@@ -656,8 +656,8 @@ declare module "List/_Internal" {
 >     : ^^^
 
     export type Naked<L extends List> = Overwrite<Required<L>, L>;
->Naked : { [K in keyof Required<L>]: K extends keyof L ? L[K] : Required<L>[K]; }
->      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Naked : { [K_1 in keyof Required<L>]: K_1 extends keyof L ? L[K_1] : Required<L>[K_1]; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare module "List/Tail" {
 >"List/Tail" : typeof import("List/Tail")
