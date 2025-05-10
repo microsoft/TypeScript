@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/importDefer/dynamicImportDeferInvalidStandalone.ts] ////
+
+=== b.ts ===
+import.defer;
+
+(import.defer)("a");
+
+Function(import.defer);
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+import.defer
