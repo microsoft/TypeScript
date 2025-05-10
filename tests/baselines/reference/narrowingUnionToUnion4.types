@@ -1,0 +1,406 @@
+//// [tests/cases/compiler/narrowingUnionToUnion4.ts] ////
+
+=== narrowingUnionToUnion4.ts ===
+const enum SyntaxKind {
+>SyntaxKind : SyntaxKind
+>           : ^^^^^^^^^^
+
+  Identifier,
+>Identifier : SyntaxKind.Identifier
+>           : ^^^^^^^^^^^^^^^^^^^^^
+
+  PropertyAccessExpression,
+>PropertyAccessExpression : SyntaxKind.PropertyAccessExpression
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ParenthesizedExpression,
+>ParenthesizedExpression : SyntaxKind.ParenthesizedExpression
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ExpressionWithTypeArguments,
+>ExpressionWithTypeArguments : SyntaxKind.ExpressionWithTypeArguments
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  NullKeyword,
+>NullKeyword : SyntaxKind.NullKeyword
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+
+  TrueKeyword,
+>TrueKeyword : SyntaxKind.TrueKeyword
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+
+  FalseKeyword,
+>FalseKeyword : SyntaxKind.FalseKeyword
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  ThisKeyword,
+>ThisKeyword : SyntaxKind.ThisKeyword
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+
+  DeleteExpression,
+>DeleteExpression : SyntaxKind.DeleteExpression
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TypeOfExpression,
+>TypeOfExpression : SyntaxKind.TypeOfExpression
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  VoidExpression,
+>VoidExpression : SyntaxKind.VoidExpression
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  AwaitExpression,
+>AwaitExpression : SyntaxKind.AwaitExpression
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TypeAssertionExpression,
+>TypeAssertionExpression : SyntaxKind.TypeAssertionExpression
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  NewExpression,
+>NewExpression : SyntaxKind.NewExpression
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  NumericLiteral,
+>NumericLiteral : SyntaxKind.NumericLiteral
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  StringLiteral,
+>StringLiteral : SyntaxKind.StringLiteral
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TemplateExpression,
+>TemplateExpression : SyntaxKind.TemplateExpression
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface TypeNodeBase extends BaseNode {
+  _typeNodeBrand: any;
+>_typeNodeBrand : any
+}
+
+interface NullLiteral extends PrimaryExpressionBase, TypeNodeBase {
+  kind: SyntaxKind.NullKeyword;
+>kind : SyntaxKind.NullKeyword
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+}
+
+interface BooleanLiteral extends PrimaryExpressionBase, TypeNodeBase {
+  kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
+>kind : SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+>SyntaxKind : any
+>           : ^^^
+}
+
+interface ThisExpression extends PrimaryExpressionBase, TypeNodeBase {
+  kind: SyntaxKind.ThisKeyword;
+>kind : SyntaxKind.ThisKeyword
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+}
+
+interface NewExpression extends PrimaryExpressionBase {
+  kind: SyntaxKind.NewExpression;
+>kind : SyntaxKind.NewExpression
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+
+  expression: Expression;
+>expression : Expression
+>           : ^^^^^^^^^^
+}
+
+interface LiteralLikeNodeBase extends BaseNode {
+  text: string;
+>text : string
+>     : ^^^^^^
+
+  isUnterminated?: boolean;
+>isUnterminated : boolean | undefined
+>               : ^^^^^^^^^^^^^^^^^^^
+
+  hasExtendedUnicodeEscape?: boolean;
+>hasExtendedUnicodeEscape : boolean | undefined
+>                         : ^^^^^^^^^^^^^^^^^^^
+}
+
+interface LiteralExpressionBase
+  extends LiteralLikeNodeBase,
+    PrimaryExpressionBase {
+  _literalExpressionBrand: any;
+>_literalExpressionBrand : any
+}
+
+interface StringLiteral extends LiteralExpressionBase {
+  kind: SyntaxKind.StringLiteral;
+>kind : SyntaxKind.StringLiteral
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+
+  singleQuote?: boolean;
+>singleQuote : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
+}
+
+interface NumericLiteral extends LiteralExpressionBase {
+  kind: SyntaxKind.NumericLiteral;
+>kind : SyntaxKind.NumericLiteral
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+}
+
+type LiteralExpression = StringLiteral | NumericLiteral;
+>LiteralExpression : LiteralExpression
+>                  : ^^^^^^^^^^^^^^^^^
+
+interface TemplateExpression extends PrimaryExpressionBase {
+  kind: SyntaxKind.TemplateExpression;
+>kind : SyntaxKind.TemplateExpression
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+}
+
+type PrimaryExpression =
+>PrimaryExpression : PrimaryExpression
+>                  : ^^^^^^^^^^^^^^^^^
+
+  | Identifier
+  | NullLiteral
+  | BooleanLiteral
+  | ThisExpression
+  | LiteralExpression
+  | TemplateExpression
+  | ParenthesizedExpression
+  | NewExpression;
+
+type Expression =
+>Expression : Expression
+>           : ^^^^^^^^^^
+
+  | PropertyAccessExpression
+  | PropertyAccessEntityNameExpression
+  | PrimaryExpression;
+
+interface BaseNode {
+  kind: SyntaxKind;
+>kind : SyntaxKind
+>     : ^^^^^^^^^^
+}
+
+interface ExpressionBase extends BaseNode {
+  _expressionBrand: any;
+>_expressionBrand : any
+}
+
+interface UnaryExpressionBase extends ExpressionBase {
+  _unaryExpressionBrand: any;
+>_unaryExpressionBrand : any
+}
+
+interface UpdateExpressionBase extends UnaryExpressionBase {
+  _updateExpressionBrand: any;
+>_updateExpressionBrand : any
+}
+
+interface LeftHandSideExpressionBase extends UpdateExpressionBase {
+  _leftHandSideExpressionBrand: any;
+>_leftHandSideExpressionBrand : any
+}
+
+interface MemberExpressionBase extends LeftHandSideExpressionBase {
+  _memberExpressionBrand: any;
+>_memberExpressionBrand : any
+}
+
+interface PrimaryExpressionBase extends MemberExpressionBase {
+  _primaryExpressionBrand: any;
+>_primaryExpressionBrand : any
+}
+
+interface Identifier extends PrimaryExpressionBase {
+  kind: SyntaxKind.Identifier;
+>kind : SyntaxKind.Identifier
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+
+  escapedText: string;
+>escapedText : string
+>            : ^^^^^^
+}
+
+interface PropertyAccessExpression extends MemberExpressionBase {
+  kind: SyntaxKind.PropertyAccessExpression;
+>kind : SyntaxKind.PropertyAccessExpression
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+
+  expression: Expression;
+>expression : Expression
+>           : ^^^^^^^^^^
+
+  name: Identifier;
+>name : Identifier
+>     : ^^^^^^^^^^
+}
+
+interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+  _propertyAccessExpressionLikeQualifiedNameBrand?: any;
+>_propertyAccessExpressionLikeQualifiedNameBrand : any
+
+  expression: EntityNameExpression;
+>expression : EntityNameExpression
+>           : ^^^^^^^^^^^^^^^^^^^^
+}
+
+interface ParenthesizedExpression extends PrimaryExpressionBase {
+  kind: SyntaxKind.ParenthesizedExpression;
+>kind : SyntaxKind.ParenthesizedExpression
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+
+  expression: Expression;
+>expression : Expression
+>           : ^^^^^^^^^^
+}
+
+type EntityNameExpression =
+>EntityNameExpression : EntityNameExpression
+>                     : ^^^^^^^^^^^^^^^^^^^^
+
+  | Identifier
+  | PropertyAccessEntityNameExpression
+  | ParenthesizedExpression;
+
+interface ExpressionWithTypeArguments extends BaseNode {
+  kind: SyntaxKind.ExpressionWithTypeArguments;
+>kind : SyntaxKind.ExpressionWithTypeArguments
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+
+  expression: Expression;
+>expression : Expression
+>           : ^^^^^^^^^^
+}
+
+declare function assert(arg: unknown): asserts arg;
+>assert : (arg: unknown) => asserts arg
+>       : ^   ^^       ^^^^^           
+>arg : unknown
+>    : ^^^^^^^
+
+declare function isEntityNameExpression(
+>isEntityNameExpression : (node: Expression) => node is EntityNameExpression
+>                       : ^    ^^          ^^^^^                            
+
+  node: Expression,
+>node : Expression
+>     : ^^^^^^^^^^
+
+): node is EntityNameExpression;
+
+declare function emitEntityName(entityName: EntityNameExpression): void;
+>emitEntityName : (entityName: EntityNameExpression) => void
+>               : ^          ^^                    ^^^^^    
+>entityName : EntityNameExpression
+>           : ^^^^^^^^^^^^^^^^^^^^
+
+export function emitExpressionWithTypeArguments(
+>emitExpressionWithTypeArguments : (node: ExpressionWithTypeArguments) => void
+>                                : ^    ^^                           ^^^^^^^^^
+
+  node: ExpressionWithTypeArguments,
+>node : ExpressionWithTypeArguments
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) {
+  if (isEntityNameExpression(node.expression)) {
+>isEntityNameExpression(node.expression) : boolean
+>                                        : ^^^^^^^
+>isEntityNameExpression : (node: Expression) => node is EntityNameExpression
+>                       : ^    ^^          ^^^^^                            
+>node.expression : Expression
+>                : ^^^^^^^^^^
+>node : ExpressionWithTypeArguments
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>expression : Expression
+>           : ^^^^^^^^^^
+
+    assert(
+>assert(      node.expression.kind === SyntaxKind.Identifier ||        node.expression.kind === SyntaxKind.PropertyAccessExpression,    ) : void
+>                                                                                                                                         : ^^^^
+>assert : (arg: unknown) => asserts arg
+>       : ^   ^^       ^^^^^           
+
+      node.expression.kind === SyntaxKind.Identifier ||
+>node.expression.kind === SyntaxKind.Identifier ||        node.expression.kind === SyntaxKind.PropertyAccessExpression : boolean
+>                                                                                                                      : ^^^^^^^
+>node.expression.kind === SyntaxKind.Identifier : boolean
+>                                               : ^^^^^^^
+>node.expression.kind : SyntaxKind.Identifier | SyntaxKind.PropertyAccessExpression | SyntaxKind.ParenthesizedExpression
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node.expression : PropertyAccessEntityNameExpression | Identifier | ParenthesizedExpression
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ExpressionWithTypeArguments
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>expression : PropertyAccessEntityNameExpression | Identifier | ParenthesizedExpression
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : SyntaxKind.Identifier | SyntaxKind.PropertyAccessExpression | SyntaxKind.ParenthesizedExpression
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind.Identifier : SyntaxKind.Identifier
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : typeof SyntaxKind
+>           : ^^^^^^^^^^^^^^^^^
+>Identifier : SyntaxKind.Identifier
+>           : ^^^^^^^^^^^^^^^^^^^^^
+
+        node.expression.kind === SyntaxKind.PropertyAccessExpression,
+>node.expression.kind === SyntaxKind.PropertyAccessExpression : boolean
+>                                                             : ^^^^^^^
+>node.expression.kind : SyntaxKind.PropertyAccessExpression | SyntaxKind.ParenthesizedExpression
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node.expression : PropertyAccessEntityNameExpression | ParenthesizedExpression
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ExpressionWithTypeArguments
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>expression : PropertyAccessEntityNameExpression | ParenthesizedExpression
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : SyntaxKind.PropertyAccessExpression | SyntaxKind.ParenthesizedExpression
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind.PropertyAccessExpression : SyntaxKind.PropertyAccessExpression
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : typeof SyntaxKind
+>           : ^^^^^^^^^^^^^^^^^
+>PropertyAccessExpression : SyntaxKind.PropertyAccessExpression
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    );
+    emitEntityName(node.expression);
+>emitEntityName(node.expression) : void
+>                                : ^^^^
+>emitEntityName : (entityName: EntityNameExpression) => void
+>               : ^          ^^                    ^^^^^    
+>node.expression : PropertyAccessEntityNameExpression | Identifier
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>node : ExpressionWithTypeArguments
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>expression : PropertyAccessEntityNameExpression | Identifier
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    // ...
+  }
+}
+
