@@ -52,7 +52,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/main.js] Inode:: 117
+//// [/user/username/projects/myproject/src/main.js] Inode:: 118
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
@@ -140,7 +140,7 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
-//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 119
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 120
 export function temp(): string;
 
 

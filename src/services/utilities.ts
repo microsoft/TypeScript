@@ -1,6 +1,5 @@
 import {
     __String,
-    addEmitFlags,
     addSyntheticLeadingComment,
     addSyntheticTrailingComment,
     AnyImportOrRequireStatement,
@@ -51,7 +50,6 @@ import {
     DocumentSpan,
     DoStatement,
     ElementAccessExpression,
-    EmitFlags,
     emitModuleKindIsNonNodeESM,
     emptyArray,
     EndOfFileToken,
@@ -101,7 +99,6 @@ import {
     getImpliedNodeFormatForFileWorker,
     getIndentString,
     getJSDocEnumTag,
-    getLastChild,
     getLineAndCharacterOfPosition,
     getLineStarts,
     getLocaleSpecificMessage,
@@ -223,7 +220,6 @@ import {
     isNamespaceExport,
     isNamespaceImport,
     isNewExpression,
-    isNumericLiteral,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isOptionalChain,
@@ -292,7 +288,6 @@ import {
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
-    Mutable,
     NewExpression,
     NewLineKind,
     Node,
@@ -332,9 +327,6 @@ import {
     ScriptTarget,
     SemicolonPreference,
     setConfigFileInOptions,
-    setOriginalNode,
-    setParentRecursive,
-    setTextRange,
     Signature,
     SignatureDeclaration,
     singleOrUndefined,
@@ -387,7 +379,6 @@ import {
     unescapeLeadingUnderscores,
     UserPreferences,
     VariableDeclaration,
-    visitEachChild,
     VoidExpression,
     walkUpParenthesizedExpressions,
     WriterContextOut,
@@ -2770,9 +2761,17 @@ export function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean {
     return !!findAncestor(declaration, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
 }
 
-const displayPartWriter = getDisplayPartWriter();
-function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-    const absoluteMaximumLength = defaultMaximumTruncationLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
+const displayPartWriterCache = new Map<number, DisplayPartsSymbolWriter>();
+function getDisplayPartWriter(maximumLength: number | undefined): DisplayPartsSymbolWriter {
+    maximumLength = maximumLength || defaultMaximumTruncationLength;
+    if (!displayPartWriterCache.has(maximumLength)) {
+        displayPartWriterCache.set(maximumLength, getDisplayPartWriterWorker(maximumLength));
+    }
+    return displayPartWriterCache.get(maximumLength)!;
+}
+
+function getDisplayPartWriterWorker(maximumLength: number): DisplayPartsSymbolWriter {
+    const absoluteMaximumLength = maximumLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
     let displayParts: SymbolDisplayPart[];
     let lineStart: boolean;
     let indent: number;
@@ -3045,7 +3044,8 @@ export function lineBreakPart(): SymbolDisplayPart {
 }
 
 /** @internal */
-export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
+export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void, maximumLength?: number): SymbolDisplayPart[] {
+    const displayPartWriter = getDisplayPartWriter(maximumLength);
     try {
         writeDisplayParts(displayPartWriter);
         return displayPartWriter.displayParts();
@@ -3056,10 +3056,18 @@ export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbol
 }
 
 /** @internal */
-export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None, verbosityLevel?: number, out?: WriterContextOut): SymbolDisplayPart[] {
+export function typeToDisplayParts(
+    typechecker: TypeChecker,
+    type: Type,
+    enclosingDeclaration?: Node,
+    flags: TypeFormatFlags = TypeFormatFlags.None,
+    maximumLength?: number,
+    verbosityLevel?: number,
+    out?: WriterContextOut,
+): SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
-        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer, verbosityLevel, out);
-    });
+        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer, maximumLength, verbosityLevel, out);
+    }, maximumLength);
 }
 
 /** @internal */
@@ -3070,11 +3078,19 @@ export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, e
 }
 
 /** @internal */
-export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
+export function signatureToDisplayParts(
+    typechecker: TypeChecker,
+    signature: Signature,
+    enclosingDeclaration?: Node,
+    flags: TypeFormatFlags = TypeFormatFlags.None,
+    maximumLength?: number,
+    verbosityLevel?: number,
+    out?: WriterContextOut,
+): SymbolDisplayPart[] {
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
-        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
-    });
+        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer, maximumLength, verbosityLevel, out);
+    }, maximumLength);
 }
 
 /** @internal */
@@ -3128,113 +3144,6 @@ export function getPrecedingNonSpaceCharacterPosition(text: string, position: nu
     return position + 1;
 }
 
-/**
- * Creates a deep, memberwise clone of a node with no source map location.
- *
- * WARNING: This is an expensive operation and is only intended to be used in refactorings
- * and code fixes (because those are triggered by explicit user actions).
- *
- * @internal
- */
-export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
-    const clone = node && getSynthesizedDeepCloneWorker(node);
-    if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-    return setParentRecursive(clone, /*incremental*/ false);
-}
-
-/** @internal */
-export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
-    node: T,
-    includeTrivia: boolean,
-    replaceNode: (node: Node) => Node | undefined,
-): T {
-    let clone = replaceNode(node);
-    if (clone) {
-        setOriginalNode(clone, node);
-    }
-    else {
-        clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, replaceNode);
-    }
-
-    if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-    return clone as T;
-}
-
-function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
-    const nodeClone: <T extends Node>(n: T) => T = replaceNode
-        ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
-        : getSynthesizedDeepClone;
-    const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
-        ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
-        : ns => ns && getSynthesizedDeepClones(ns);
-    const visited = visitEachChild(node, nodeClone, /*context*/ undefined, nodesClone, nodeClone);
-
-    if (visited === node) {
-        // This only happens for leaf nodes - internal nodes always see their children change.
-        const clone = isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
-            isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
-            factory.cloneNode(node);
-        return setTextRange(clone, node);
-    }
-
-    // PERF: As an optimization, rather than calling factory.cloneNode, we'll update
-    // the new node created by visitEachChild with the extra changes factory.cloneNode
-    // would have made.
-    (visited as Mutable<T>).parent = undefined!;
-    return visited;
-}
-
-/** @internal */
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
-/** @internal */
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
-/** @internal */
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
-    if (nodes) {
-        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
-        setTextRange(cloned, nodes);
-        return cloned;
-    }
-    return nodes;
-}
-
-/** @internal */
-export function getSynthesizedDeepClonesWithReplacements<T extends Node>(
-    nodes: NodeArray<T>,
-    includeTrivia: boolean,
-    replaceNode: (node: Node) => Node | undefined,
-): NodeArray<T> {
-    return factory.createNodeArray(nodes.map(n => getSynthesizedDeepCloneWithReplacements(n, includeTrivia, replaceNode)), nodes.hasTrailingComma);
-}
-
-/**
- * Sets EmitFlags to suppress leading and trailing trivia on the node.
- *
- * @internal
- */
-export function suppressLeadingAndTrailingTrivia(node: Node): void {
-    suppressLeadingTrivia(node);
-    suppressTrailingTrivia(node);
-}
-
-/**
- * Sets EmitFlags to suppress leading trivia on the node.
- *
- * @internal
- */
-export function suppressLeadingTrivia(node: Node): void {
-    addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
-}
-
-/**
- * Sets EmitFlags to suppress trailing trivia on the node.
- *
- * @internal @knipignore
- */
-export function suppressTrailingTrivia(node: Node): void {
-    addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
-}
-
 /** @internal */
 export function copyComments(sourceNode: Node, targetNode: Node): void {
     const sourceFile = sourceNode.getSourceFile();
@@ -3255,16 +3164,6 @@ function hasLeadingLineBreak(node: Node, text: string) {
         if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
     }
     return false;
-}
-
-function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
-    addEmitFlags(node, flag);
-    const child = getChild(node);
-    if (child) addEmitFlagsRecursively(child, flag, getChild);
-}
-
-function getFirstChild(node: Node): Node | undefined {
-    return node.forEachChild(child => child);
 }
 
 /** @internal */

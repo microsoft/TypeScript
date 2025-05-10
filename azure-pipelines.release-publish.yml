@@ -1,0 +1,123 @@
+trigger: none
+pr: none
+
+parameters:
+  - name: _REMINDER
+    default: Review & undraft the release at https://github.com/microsoft/TypeScript/releases once it appears!
+  - name: PUBLISH_TAG
+    default: dev
+  - name: RELEASE_TITLE_NAME
+    default: 0.0.0 Test
+  - name: TAG_NAME
+    default: v0.0.0-SetMe
+
+variables:
+  - name: _REMINDER
+    value: ${{ parameters._REMINDER }}
+  - name: PUBLISH_TAG
+    value: ${{ parameters.PUBLISH_TAG }}
+  - name: RELEASE_TITLE_NAME
+    value: ${{ parameters.RELEASE_TITLE_NAME }}
+  - name: TAG_NAME
+    value: ${{ parameters.TAG_NAME }}
+
+resources:
+  pipelines:
+    - pipeline: 'tgz'
+      project: 'TypeScript'
+      source: 'Release\TypeScript Release'
+  repositories:
+    - repository: 1esPipelines
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
+  parameters:
+    pool:
+      name: TypeScript-AzurePipelines-EO
+      image: 1ESPT-Mariner2.0
+      os: linux
+
+    sdl:
+      sourceAnalysisPool:
+        name: TypeScript-AzurePipelines-EO
+        image: 1ESPT-Windows2022
+        os: windows
+
+    stages:
+      - stage: Stage_1
+        displayName: Publish tarball
+        jobs:
+          - job: Job_1
+            displayName: Agent job
+            condition: succeeded()
+            timeoutInMinutes: 0
+            templateContext:
+              templateContext:
+                type: releaseJob
+                isProduction: true
+              inputs:
+                - input: pipelineArtifact
+                  pipeline: 'tgz'
+                  artifactName: 'tgz'
+                  targetPath: '$(Pipeline.Workspace)/tgz'
+            steps:
+              - checkout: none
+              - task: CmdLine@2
+                displayName: Rename versioned drop to typescript.tgz
+                inputs:
+                  script: |
+                    pushd $(Pipeline.Workspace)/tgz
+                    ls -lhR
+                    mv typescript-*.tgz typescript.tgz
+              - task: Npm@1
+                displayName: npm publish tarball
+                inputs:
+                  command: custom
+                  workingDir: $(Pipeline.Workspace)/tgz
+                  verbose: false
+                  customCommand: publish $(Pipeline.Workspace)/tgz/typescript.tgz --tag $(PUBLISH_TAG)
+                  # This must match the service connection.
+                  customEndpoint: Typescript NPM
+                  publishEndpoint: Typescript NPM
+
+      - stage: Stage_2
+        displayName: Publish git tag
+        dependsOn: Stage_1
+        jobs:
+          - job: Job_1
+            displayName: Agent job
+            condition: succeeded()
+            timeoutInMinutes: 0
+            templateContext:
+              type: releaseJob
+              isProduction: true
+              inputs:
+                - input: pipelineArtifact
+                  pipeline: 'tgz'
+                  artifactName: 'tgz'
+                  targetPath: '$(Pipeline.Workspace)/tgz'
+            steps:
+              - checkout: none
+              - task: GitHubRelease@1
+                displayName: GitHub release (create)
+                inputs:
+                  # This must match the service connection.
+                  gitHubConnection: typescript-bot connection
+                  repositoryName: microsoft/TypeScript
+                  tagSource: userSpecifiedTag
+                  tag: $(TAG_NAME)
+                  title: TypeScript $(RELEASE_TITLE_NAME)
+                  releaseNotesSource: inline
+                  releaseNotesInline: |
+                    For release notes, check out the [release announcement]().
+                    For new features, check out the [What's new in TypeScript $(TAG_NAME)]().
+                    For the complete list of fixed issues, check out the
+                    * [fixed issues query for TypeScript $(TAG_NAME)](https://github.com/microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue+milestone%3A%22TypeScript+3.3%22+is%3Aclosed+).
+                    Downloads are available on:
+                    * [npm](https://www.npmjs.com/package/typescript)
+                  assets: $(Pipeline.Workspace)/tgz/**/typescript-*.tgz
+                  isDraft: true
+                  addChangeLog: false

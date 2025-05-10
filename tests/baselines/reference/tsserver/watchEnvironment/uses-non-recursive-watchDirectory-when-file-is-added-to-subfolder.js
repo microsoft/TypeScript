@@ -259,7 +259,7 @@ Before running Timeout callback:: count: 3
 1: /a/username/workspace/project/tsconfig.json
 2: *ensureProjectForOpenFiles*
 3: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation
-//// [/a/username/workspace/project/src/file2.ts] Inode:: 114
+//// [/a/username/workspace/project/src/file2.ts] Inode:: 115
 
 
 
@@ -343,7 +343,7 @@ FsWatches::
 /a/username/workspace/project/src/file1.ts:
   {"inode":7}
 /a/username/workspace/project/src/file2.ts: *new*
-  {"inode":114}
+  {"inode":115}
 /a/username/workspace/project/tsconfig.json:
   {"inode":8}
 /home/src/tslibs/TS/Lib/lib.d.ts:
