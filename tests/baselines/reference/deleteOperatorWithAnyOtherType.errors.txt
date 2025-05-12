@@ -1,3 +1,4 @@
+deleteOperatorWithAnyOtherType.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 deleteOperatorWithAnyOtherType.ts(25,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithAnyOtherType.ts(26,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithAnyOtherType.ts(27,31): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -25,7 +26,7 @@ deleteOperatorWithAnyOtherType.ts(55,8): error TS2703: The operand of a 'delete'
 deleteOperatorWithAnyOtherType.ts(57,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
-==== deleteOperatorWithAnyOtherType.ts (25 errors) ====
+==== deleteOperatorWithAnyOtherType.ts (26 errors) ====
     // delete  operator on any type
     
     var ANY: any;
@@ -45,6 +46,8 @@ deleteOperatorWithAnyOtherType.ts(57,8): error TS2703: The operand of a 'delete'
         }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: any;
     }
     var objA = new A();

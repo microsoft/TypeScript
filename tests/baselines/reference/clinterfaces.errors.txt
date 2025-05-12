@@ -1,0 +1,31 @@
+clinterfaces.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== clinterfaces.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class C { }
+        interface C { }
+        interface D { }
+        class D { }
+    }
+    
+    interface Foo<T> {
+        a: string;
+    }
+    
+    class Foo<T>{
+        b: number;
+    }
+    
+    class Bar<T>{
+        b: number;
+    }
+    
+    interface Bar<T> {
+        a: string;
+    }
+    
+    export = Foo;
+    

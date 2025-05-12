@@ -16,6 +16,7 @@ class a {
 
     constructor (ns: any) {
 >ns : any
+>   : ^^^
 
     }
 
@@ -25,6 +26,7 @@ class a {
 
     public pv;
 >pv : any
+>   : ^^^
 
     public get d() {
 >d : number
@@ -72,6 +74,7 @@ class a {
     }
     private pv3;
 >pv3 : any
+>    : ^^^
 
     private foo(n: number): string;
 >foo : { (n: number): string; (s: string): string; }
@@ -89,10 +92,13 @@ class a {
 >foo : { (n: number): string; (s: string): string; }
 >    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
+>   : ^^^
 
         return ns.toString();
 >ns.toString() : any
+>              : ^^^
 >ns.toString : any
+>            : ^^^
 >ns : any
 >   : ^^^
 >toString : any
@@ -184,6 +190,7 @@ declare class aAmbient {
 
     public pv;
 >pv : any
+>   : ^^^
 
     public d : number;
 >d : number
@@ -203,14 +210,17 @@ declare class aAmbient {
 
     static p3;
 >p3 : any
+>   : ^^^
 
     private pv3;
 >pv3 : any
+>    : ^^^
 
     private foo(s);
 >foo : (s: any) => any
 >    : ^ ^^^^^^^^^^^^^
 >s : any
+>  : ^^^
 }
 
 class d {
@@ -233,10 +243,13 @@ class d {
 >foo : { (n: number): string; (s: string): string; }
 >    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
+>   : ^^^
 
         return ns.toString();
 >ns.toString() : any
+>              : ^^^
 >ns.toString : any
+>            : ^^^
 >ns : any
 >   : ^^^
 >toString : any
@@ -264,10 +277,13 @@ class e {
 >foo : { (s: string): string; (n: number): string; }
 >    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
+>   : ^^^
 
         return ns.toString();
 >ns.toString() : any
+>              : ^^^
 >ns.toString : any
+>            : ^^^
 >ns : any
 >   : ^^^
 >toString : any

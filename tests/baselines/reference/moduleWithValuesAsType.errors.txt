@@ -1,8 +1,11 @@
+moduleWithValuesAsType.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleWithValuesAsType.ts(5,8): error TS2709: Cannot use namespace 'A' as a type.
 
 
-==== moduleWithValuesAsType.ts (1 errors) ====
+==== moduleWithValuesAsType.ts (2 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var b = 1;
     }
     

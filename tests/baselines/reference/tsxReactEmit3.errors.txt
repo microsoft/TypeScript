@@ -1,0 +1,12 @@
+test.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== test.tsx (1 errors) ====
+    declare module JSX { interface Element { } }
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    declare var React: any;
+    
+    declare var Foo, Bar, baz;
+    
+    <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;

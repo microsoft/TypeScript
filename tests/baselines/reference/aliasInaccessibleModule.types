@@ -10,5 +10,6 @@ module M {
     export import X = N;
 >X : any
 >  : ^^^
->N : error
+>N : any
+>  : ^^^
 }

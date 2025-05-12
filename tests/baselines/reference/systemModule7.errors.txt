@@ -1,0 +1,18 @@
+systemModule7.ts(2,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+systemModule7.ts(7,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== systemModule7.ts (2 errors) ====
+    // filename: instantiatedModule.ts
+    export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x = 1;
+    }
+    
+    // filename: nonInstantiatedModule.ts
+    export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface I {}
+    }

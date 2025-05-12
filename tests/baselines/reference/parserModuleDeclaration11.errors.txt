@@ -1,0 +1,13 @@
+parserModuleDeclaration11.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== parserModuleDeclaration11.ts (1 errors) ====
+    declare module string {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface X { }
+        export function foo(s: string);
+    }
+    string.foo("abc");
+    var x: string.X;
+    

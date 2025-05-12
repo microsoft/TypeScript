@@ -1,6 +1,7 @@
 functionOverloadErrors.ts(2,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 functionOverloadErrors.ts(65,13): error TS2385: Overload signatures must all be public, private or protected.
 functionOverloadErrors.ts(68,13): error TS2385: Overload signatures must all be public, private or protected.
+functionOverloadErrors.ts(74,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or non-exported.
 functionOverloadErrors.ts(79,14): error TS2383: Overload signatures must all be exported or non-exported.
 functionOverloadErrors.ts(85,18): error TS2384: Overload signatures must all be ambient or non-ambient.
@@ -11,7 +12,7 @@ functionOverloadErrors.ts(103,10): error TS2394: This overload signature is not 
 functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== functionOverloadErrors.ts (11 errors) ====
+==== functionOverloadErrors.ts (12 errors) ====
     //Function overload signature with initializer
     function fn1(x = 3);
                  ~~~~~
@@ -92,6 +93,8 @@ functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only
     
     //Function overloads with differing export
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function fn1();
                         ~~~
 !!! error TS2383: Overload signatures must all be exported or non-exported.

@@ -7,11 +7,19 @@ parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
 parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parserharness.ts(50,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(55,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(81,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(341,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(347,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(351,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(354,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(354,35): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+parserharness.ts(499,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(500,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(504,28): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(508,28): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(687,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(691,50): error TS2304: Cannot find name 'ITextWriter'.
 parserharness.ts(716,47): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(721,62): error TS2304: Cannot find name 'ITextWriter'.
@@ -77,6 +85,7 @@ parserharness.ts(1321,21): error TS2304: Cannot find name 'TypeScript'.
 parserharness.ts(1340,38): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1344,165): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1345,26): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1414,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(1426,25): error TS2503: Cannot find namespace 'TypeScript'.
 parserharness.ts(1430,9): error TS1128: Declaration or statement expected.
 parserharness.ts(1430,17): error TS2304: Cannot find name 'optionRegex'.
@@ -107,10 +116,12 @@ parserharness.ts(1784,61): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1785,25): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1787,38): error TS2503: Cannot find namespace 'Services'.
 parserharness.ts(1787,68): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1869,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(1910,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
 
 
-==== parserharness.ts (110 errors) ====
+==== parserharness.ts (121 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -179,11 +190,15 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     }
     
     declare module process {
+                   ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function nextTick(callback: () => any): void;
         export function on(event: string, listener: Function);
     }
     
     module Harness {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // Settings 
         export var userSpecifiedroot = "";
         var global = <any>Function("return this").call(null);
@@ -210,6 +225,8 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
         // Assert functions
         export module Assert {
+                      ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var bugIds: string[] = [];
             export var throwAssertError = (error: Error) => {
                 throw error;
@@ -638,15 +655,23 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
         // Performance test
         export module Perf {
+                      ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export module Clock {
+                          ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 export var now: () => number;
                 export var resolution: number;
     
                 declare module WScript {
+                               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                     export function InitializeProjection();
                 }
     
                 declare module TestUtilities {
+                               ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                     export function QueryPerformanceCounter(): number;
                     export function QueryPerformanceFrequency(): number;
                 }
@@ -826,6 +851,8 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
         /** Functionality for compiling TypeScript code */
         export module Compiler {
+                      ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             /** Aggregate various writes into a single array of lines. Useful for passing to the
              *  TypeScript compiler to fill with source code or errors.
              */
@@ -1683,6 +1710,8 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
          *  extracts options and individual files in a multifile test
          */
         export module TestCaseParser {
+                      ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             /** all the necesarry information to set the right compiler settings */
             export interface CompilerSetting {
                 flag: string;
@@ -2198,6 +2227,8 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
         /** Runs TypeScript or Javascript code. */
         export module Runner {
+                      ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export function runCollateral(path: string, callback: (error: Error, result: any) => void ) {
                 path = switchToForwardSlashes(path);
                 runString(readFile(path), path.match(/[^\/]*$/)[0], callback);
@@ -2239,6 +2270,8 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     
         /** Support class for baseline files */
         export module Baseline {
+                      ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var reportFilename = 'baseline-report.html';
     
             var firstRun = true;

@@ -1,0 +1,17 @@
+moduleOuterQualification.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleOuterQualification.ts(3,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleOuterQualification.ts (2 errors) ====
+    declare module outer {
+                   ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      interface Beta { }
+      module inner {
+             ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        // .d.ts emit: should be 'extends outer.Beta'
+        export interface Beta extends outer.Beta { }
+      }
+    }
+    

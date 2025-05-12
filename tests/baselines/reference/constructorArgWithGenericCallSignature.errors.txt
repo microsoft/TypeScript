@@ -1,0 +1,20 @@
+constructorArgWithGenericCallSignature.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== constructorArgWithGenericCallSignature.ts (1 errors) ====
+    module Test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface MyFunc {
+            <T>(value1: T): T;
+        }
+        export class MyClass {
+            constructor(func: MyFunc) { }
+        }
+     
+     export function F(func: MyFunc) { }
+    }
+    var func: Test.MyFunc;
+    Test.F(func); // OK
+    var test = new Test.MyClass(func); // Should be OK
+    

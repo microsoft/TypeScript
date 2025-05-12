@@ -1,0 +1,20 @@
+anonterface.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== anonterface.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C {
+            m(fn:{ (n:number):string; },n2:number):string {
+                return fn(n2);
+            }
+        }
+    }
+    
+    var c=new M.C();
+    c.m(function(n) { return "hello: "+n; },18);
+    
+    
+    
+    

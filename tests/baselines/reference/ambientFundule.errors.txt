@@ -1,0 +1,9 @@
+ambientFundule.ts(2,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ambientFundule.ts (1 errors) ====
+    declare function f();
+    declare module f { var x }
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    declare function f(x);

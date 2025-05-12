@@ -6,10 +6,12 @@ defaultArgsInFunctionExpressions.ts(11,1): error TS2322: Type 'string' is not as
 defaultArgsInFunctionExpressions.ts(14,51): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 defaultArgsInFunctionExpressions.ts(17,41): error TS2322: Type 'string' is not assignable to type 'number'.
 defaultArgsInFunctionExpressions.ts(20,62): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+defaultArgsInFunctionExpressions.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+defaultArgsInFunctionExpressions.ts(24,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 defaultArgsInFunctionExpressions.ts(28,15): error TS2708: Cannot use namespace 'T' as a value.
 
 
-==== defaultArgsInFunctionExpressions.ts (9 errors) ====
+==== defaultArgsInFunctionExpressions.ts (11 errors) ====
     var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
     var n: number = f(4);
     n = f();
@@ -49,7 +51,11 @@ defaultArgsInFunctionExpressions.ts(28,15): error TS2708: Cannot use namespace '
     
     // Instantiated module
     module T { }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     module U {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x;
     }
     

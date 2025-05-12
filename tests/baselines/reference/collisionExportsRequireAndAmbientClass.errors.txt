@@ -1,0 +1,50 @@
+collisionExportsRequireAndAmbientClass_externalmodule.ts(5,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientClass_externalmodule.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientClass_globalFile.ts(5,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientClass_globalFile.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionExportsRequireAndAmbientClass_externalmodule.ts (2 errors) ====
+    export declare class require {
+    }
+    export declare class exports {
+    }
+    declare module m1 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class require {
+        }
+        class exports {
+        }
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare class require {
+        }
+        export declare class exports {
+        }
+    }
+    
+==== collisionExportsRequireAndAmbientClass_globalFile.ts (2 errors) ====
+    declare class require {
+    }
+    declare class exports {
+    }
+    declare module m3 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class require {
+        }
+        class exports {
+        }
+    }
+    module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare class require {
+        }
+        export declare class exports {
+        }
+        var a = 10;
+    }

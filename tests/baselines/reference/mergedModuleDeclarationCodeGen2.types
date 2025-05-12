@@ -23,6 +23,7 @@ module my.data {
 >data : (my: any) => void
 >     : ^  ^^^^^^^^^^^^^^
 >my : any
+>   : ^^^
 
         foo.buz();
 >foo.buz() : void

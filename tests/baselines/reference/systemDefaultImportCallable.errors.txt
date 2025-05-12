@@ -1,0 +1,19 @@
+core-js.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== core-js.d.ts (1 errors) ====
+    declare module core {
+                   ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var String: {
+            repeat(text: string, count: number): string;
+        };
+    }
+    declare module "core-js/fn/string/repeat" {
+        var repeat: typeof core.String.repeat;
+        export default repeat;
+    }
+==== greeter.ts (0 errors) ====
+    import repeat from "core-js/fn/string/repeat";
+    
+    const _: string = repeat(new Date().toUTCString() + " ", 2);

@@ -1,9 +1,12 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(12,7): error TS2322: Type '{ w: string; }' is not assignable to type '{ n: string; }'.
   Property 'w' does not exist on type '{ n: string; }'.
 
 
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
     	    [x: string]: { n: string; };

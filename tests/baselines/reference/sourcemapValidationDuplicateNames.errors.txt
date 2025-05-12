@@ -1,0 +1,17 @@
+sourcemapValidationDuplicateNames.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+sourcemapValidationDuplicateNames.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== sourcemapValidationDuplicateNames.ts (2 errors) ====
+    module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x = 10;
+        export class c {
+        }
+    }
+    module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var b = new m1.c();
+    }

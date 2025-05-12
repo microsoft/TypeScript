@@ -1,0 +1,16 @@
+global.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== global.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f(y:number) {
+            return x+y;
+        }
+    }
+    
+    var x=10;
+    M.f(3);
+    
+    

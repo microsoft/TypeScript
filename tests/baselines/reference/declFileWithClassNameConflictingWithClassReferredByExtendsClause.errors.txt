@@ -1,0 +1,52 @@
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts (10 errors) ====
+    declare module A.B.Base {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                       ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class W {
+            id: number;
+        }
+    }
+    module X.Y.base {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export class W extends A.B.Base.W {
+            name: string;
+        }
+    }
+    
+    module X.Y.base.Z {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export class W<TValue> extends X.Y.base.W {
+            value: boolean;
+        }
+    }
+    

@@ -1,9 +1,13 @@
+moduleProperty2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleProperty2.ts(7,15): error TS2304: Cannot find name 'x'.
+moduleProperty2.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type 'typeof M'.
 
 
-==== moduleProperty2.ts (2 errors) ====
+==== moduleProperty2.ts (4 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function f() {
             var x;
         }
@@ -16,6 +20,8 @@ moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type 'ty
     }
     
     module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var test3=M.y; // nope y private property of M
                     ~
 !!! error TS2339: Property 'y' does not exist on type 'typeof M'.

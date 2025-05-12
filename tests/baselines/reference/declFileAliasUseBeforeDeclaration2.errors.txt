@@ -1,0 +1,15 @@
+declFileAliasUseBeforeDeclaration2.ts(2,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileAliasUseBeforeDeclaration2.ts (1 errors) ====
+    declare module "test" {
+        module A {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            class C {
+            }
+        }
+        class B extends E {
+        }
+        import E = A.C;
+    }

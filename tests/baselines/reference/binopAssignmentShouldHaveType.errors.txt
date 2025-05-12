@@ -1,0 +1,25 @@
+binopAssignmentShouldHaveType.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== binopAssignmentShouldHaveType.ts (1 errors) ====
+    declare var console;
+    "use strict";
+    module Test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+     export class Bug {
+      getName():string {
+       return "name";
+      }
+      bug() {
+       var name:string= null;
+       if ((name= this.getName()).length > 0) {
+        console.log(name);
+       }
+      }
+     }
+    }
+    
+     
+    
+    

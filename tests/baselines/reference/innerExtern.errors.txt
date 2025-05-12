@@ -1,0 +1,25 @@
+innerExtern.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+innerExtern.ts(2,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+innerExtern.ts(5,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== innerExtern.ts (3 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare module BB {
+                              ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var Elephant;
+        }
+        export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class C {
+                x = BB.Elephant.X;
+            }
+        }
+    }
+    
+    
+    

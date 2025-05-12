@@ -1,3 +1,4 @@
+incrementOperatorWithUnsupportedStringType.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 incrementOperatorWithUnsupportedStringType.ts(18,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithUnsupportedStringType.ts(19,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithUnsupportedStringType.ts(21,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
@@ -39,7 +40,7 @@ incrementOperatorWithUnsupportedStringType.ts(65,1): error TS2356: An arithmetic
 incrementOperatorWithUnsupportedStringType.ts(65,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== incrementOperatorWithUnsupportedStringType.ts (39 errors) ====
+==== incrementOperatorWithUnsupportedStringType.ts (40 errors) ====
     // ++ operator on string type
     var STRING: string;
     var STRING1: string[] = ["", ""];
@@ -51,6 +52,8 @@ incrementOperatorWithUnsupportedStringType.ts(65,11): error TS2356: An arithmeti
         static foo() { return ""; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: string;
     }
     

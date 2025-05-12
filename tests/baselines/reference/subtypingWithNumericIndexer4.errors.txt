@@ -1,6 +1,7 @@
 subtypingWithNumericIndexer4.ts(11,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
   'number' index signatures are incompatible.
     Type 'string' is not assignable to type 'Derived'.
+subtypingWithNumericIndexer4.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithNumericIndexer4.ts(20,11): error TS2415: Class 'B' incorrectly extends base class 'A<Base>'.
   'number' index signatures are incompatible.
     Type 'string' is not assignable to type 'Base'.
@@ -12,7 +13,7 @@ subtypingWithNumericIndexer4.ts(24,11): error TS2415: Class 'B3<T>' incorrectly 
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== subtypingWithNumericIndexer4.ts (4 errors) ====
+==== subtypingWithNumericIndexer4.ts (5 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
     interface Base { foo: string; }
@@ -32,6 +33,8 @@ subtypingWithNumericIndexer4.ts(24,11): error TS2415: Class 'B3<T>' incorrectly 
     }
     
     module Generics {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class A<T extends Derived> {
             [x: number]: T;
         }

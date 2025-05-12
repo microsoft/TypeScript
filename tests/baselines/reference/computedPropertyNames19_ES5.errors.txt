@@ -1,8 +1,11 @@
+computedPropertyNames19_ES5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 computedPropertyNames19_ES5.ts(3,10): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 
-==== computedPropertyNames19_ES5.ts (1 errors) ====
+==== computedPropertyNames19_ES5.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var obj = {
             [this.bar]: 0
              ~~~~

@@ -1,0 +1,52 @@
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(1,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(5,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(5,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(5,14): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(10,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(10,14): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause2.ts(11,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileWithInternalModuleNameConflictsInExtendsClause2.ts (12 errors) ====
+    module X.A.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Z {
+        }
+    }
+    module X.A.B.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                 ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class W implements A.C.Z { // This can refer to it as A.C.Z
+        }
+    }
+    
+    module X.A.B.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                 ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module A {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        }
+    }

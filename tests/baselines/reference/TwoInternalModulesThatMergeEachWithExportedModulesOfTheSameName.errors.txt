@@ -1,0 +1,67 @@
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(6,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(15,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(15,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(22,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(23,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts (10 errors) ====
+    module A.B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x: number;
+    }
+    
+    module A{ 
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module B {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x: string;
+        }
+    }
+    
+    // ensure the right var decl is exported
+    var x: number;
+    var x = A.B.x;
+    
+    module X.Y.Z {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Line {
+            length: number;
+        }
+    }
+    
+    module X {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            module Z {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                export class Line {
+                    name: string;
+                }
+            }
+        }
+    }
+    
+    // make sure merging works as expected
+    var l: { length: number };
+    var l: X.Y.Z.Line;
+    

@@ -10,13 +10,15 @@ enumIsNotASubtypeOfAnythingButNumber.ts(66,5): error TS2411: Property 'foo' of t
 enumIsNotASubtypeOfAnythingButNumber.ts(72,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '(x: any) => number'.
 enumIsNotASubtypeOfAnythingButNumber.ts(78,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '<T>(x: T) => T'.
 enumIsNotASubtypeOfAnythingButNumber.ts(85,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'E2'.
+enumIsNotASubtypeOfAnythingButNumber.ts(90,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 enumIsNotASubtypeOfAnythingButNumber.ts(95,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof f'.
+enumIsNotASubtypeOfAnythingButNumber.ts(100,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 enumIsNotASubtypeOfAnythingButNumber.ts(105,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof c'.
 enumIsNotASubtypeOfAnythingButNumber.ts(111,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'T'.
 enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'U'.
 
 
-==== enumIsNotASubtypeOfAnythingButNumber.ts (16 errors) ====
+==== enumIsNotASubtypeOfAnythingButNumber.ts (18 errors) ====
     // enums are only subtypes of number, any and no other types
     
     enum E { A }
@@ -131,6 +133,8 @@ enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of 
     
     function f() { }
     module f {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var bar = 1;
     }
     interface I15 {
@@ -143,6 +147,8 @@ enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of 
     
     class c { baz: string }
     module c {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var bar = 1;
     }
     interface I16 {

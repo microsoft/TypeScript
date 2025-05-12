@@ -1,3 +1,5 @@
+callSignatureAssignabilityInInheritance.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+callSignatureAssignabilityInInheritance.ts(34,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 callSignatureAssignabilityInInheritance.ts(57,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
   The types returned by 'a(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
@@ -7,8 +9,10 @@ callSignatureAssignabilityInInheritance.ts(63,15): error TS2430: Interface 'I3' 
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== callSignatureAssignabilityInInheritance.ts (2 errors) ====
+==== callSignatureAssignabilityInInheritance.ts (4 errors) ====
     module CallSignature {
+           ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Base { // T
             // M's
             (x: number): void;
@@ -42,6 +46,8 @@ callSignatureAssignabilityInInheritance.ts(63,15): error TS2430: Interface 'I3' 
     }
     
     module MemberWithCallSignature {
+           ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Base { // T
             // M's
             a: (x: number) => void;

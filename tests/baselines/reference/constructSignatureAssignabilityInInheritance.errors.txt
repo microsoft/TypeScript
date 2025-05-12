@@ -1,3 +1,5 @@
+constructSignatureAssignabilityInInheritance.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constructSignatureAssignabilityInInheritance.ts(35,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constructSignatureAssignabilityInInheritance.ts(61,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
   The types returned by 'new a(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
@@ -7,10 +9,12 @@ constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== constructSignatureAssignabilityInInheritance.ts (2 errors) ====
+==== constructSignatureAssignabilityInInheritance.ts (4 errors) ====
     // Checking basic subtype relations with construct signatures
     
     module ConstructSignature {
+           ~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Base { // T
             // M's
             new (x: number): void; // BUG 842221
@@ -43,6 +47,8 @@ constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 
     }
     
     module MemberWithConstructSignature {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Base { // T
             // M's
             a: new (x: number) => void;

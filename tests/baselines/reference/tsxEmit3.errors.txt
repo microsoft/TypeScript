@@ -1,18 +1,31 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file.tsx(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file.tsx(8,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file.tsx(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(18,2): error TS2695: Left side of comma operator is unused and has no side effects.
+file.tsx(20,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(22,3): error TS2695: Left side of comma operator is unused and has no side effects.
 file.tsx(25,3): error TS2695: Left side of comma operator is unused and has no side effects.
+file.tsx(30,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file.tsx(35,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== file.tsx (4 errors) ====
+==== file.tsx (11 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements { }
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export class Foo { constructor() { } }
     	export module S {
+    	              ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     		export class Bar { }
     
     		// Emit Foo
@@ -21,12 +34,16 @@ file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no s
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	// Emit M.Foo
     	Foo, <Foo />;
     	~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     	export module S {
+    	              ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     		// Emit M.Foo
     		Foo, <Foo />;
     		~~~
@@ -41,11 +58,15 @@ file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no s
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	// Emit M.S.Bar
     	S.Bar, <S.Bar />;
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	var M = 100;
     	// Emit M_1.Foo
     	Foo, <Foo />;

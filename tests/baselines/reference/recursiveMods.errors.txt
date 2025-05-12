@@ -1,0 +1,32 @@
+recursiveMods.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveMods.ts(5,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== recursiveMods.ts (2 errors) ====
+    export module Foo {
+                  ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export class C {}
+    }
+    
+    export module Foo {
+                  ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    	function Bar() : C {
+    		if (true) { return Bar();}
+    		return new C();
+    	}
+    
+    	function Baz() : C {
+    		var c = Baz();
+    		return Bar();
+    	}
+    
+    	function Gar() {
+    		var c : C = Baz();
+    		return;
+    	}
+    	
+    }
+    

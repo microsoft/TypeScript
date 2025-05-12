@@ -2,10 +2,6 @@ error TS2318: Cannot find global type 'IterableIterator'.
 commonjs.cts(1,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 commonjs.cts(2,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-index.ts(6,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-index.ts(10,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-index.ts(16,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-index.ts(17,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(22,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(26,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -24,7 +20,7 @@ index.ts(94,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnl
 
 
 !!! error TS2318: Cannot find global type 'IterableIterator'.
-==== index.ts (20 errors) ====
+==== index.ts (16 errors) ====
     class MyClassErr {
         // No parameter properties
         constructor(public foo: string) { }
@@ -33,25 +29,17 @@ index.ts(94,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnl
     }
     
     namespace IllegalBecauseInstantiated {
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export const m = 1;
     }
     
     namespace AlsoIllegalBecauseInstantiated {
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class PrivateClass {
     
         }
     }
     
     namespace IllegalBecauseNestedInstantiated {
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         namespace Nested {
-                  ~~~~~~
-!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export const m = 1;
         }
     }
