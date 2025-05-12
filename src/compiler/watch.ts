@@ -55,7 +55,9 @@ import {
     generateDjb2Hash,
     getDefaultLibFileName,
     getDirectoryPath,
+    getEmitDeclarations,
     getEmitScriptTarget,
+    getImpliedNodeFormatForEmitWorker,
     getLineAndCharacterOfPosition,
     getNameOfScriptTarget,
     getNewLineCharacter,
@@ -73,6 +75,7 @@ import {
     isReferenceFileLocation,
     isString,
     last,
+    maxBy,
     maybeBind,
     memoize,
     ModuleKind,
@@ -154,8 +157,7 @@ function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diag
     return false;
 }
 
-/** @internal */
-export const screenStartingMessageCodes: number[] = [
+const screenStartingMessageCodes: number[] = [
     Diagnostics.Starting_compilation_in_watch_mode.code,
     Diagnostics.File_change_detected_Starting_incremental_compilation.code,
 ];
@@ -171,7 +173,7 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: st
  *
  * @internal
  */
-export function getLocaleTimeString(system: System) {
+export function getLocaleTimeString(system: System): string {
     return !system.now ?
         new Date().toLocaleTimeString() :
         // On some systems / builds of Node, there's a non-breaking space between the time and AM/PM.
@@ -223,7 +225,7 @@ export function parseConfigFileWithSystem(configFileName: string, optionsToExten
 }
 
 /** @internal */
-export function getErrorCountForSummary(diagnostics: readonly Diagnostic[]) {
+export function getErrorCountForSummary(diagnostics: readonly Diagnostic[]): number {
     return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
 }
 
@@ -254,7 +256,7 @@ export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (
 }
 
 /** @internal */
-export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
+export function getWatchErrorSummaryDiagnosticMessage(errorCount: number): DiagnosticMessage {
     return errorCount === 1 ?
         Diagnostics.Found_1_error_Watching_for_file_changes :
         Diagnostics.Found_0_errors_Watching_for_file_changes;
@@ -275,21 +277,21 @@ export function getErrorSummaryText(
     filesInError: readonly (ReportFileInError | undefined)[],
     newLine: string,
     host: HasCurrentDirectory,
-) {
+): string {
     if (errorCount === 0) return "";
     const nonNilFiles = filesInError.filter(fileInError => fileInError !== undefined);
-    const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError!.fileName}:${fileInError!.line}`)
+    const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError.fileName}:${fileInError.line}`)
         .filter((value, index, self) => self.indexOf(value) === index);
 
     const firstFileReference = nonNilFiles[0] && prettyPathForFileError(nonNilFiles[0], host.getCurrentDirectory());
 
     let messageAndArgs: DiagnosticAndArguments;
     if (errorCount === 1) {
-        messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference!] : [Diagnostics.Found_1_error];
+        messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference] : [Diagnostics.Found_1_error];
     }
     else {
         messageAndArgs = distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
-            distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!] :
+            distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference] :
             [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
     }
 
@@ -304,7 +306,7 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
 
     const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1;
     const fileToErrorCount = distinctFiles.map(file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const));
-    const maxErrors = fileToErrorCount.reduce((acc, value) => Math.max(acc, value[1] || 0), 0);
+    const maxErrors = maxBy(fileToErrorCount, 0, value => value[1]);
 
     const headerRow = Diagnostics.Errors_Files.message;
     const leftColumnHeadingLength = headerRow.split(" ")[0].length;
@@ -345,19 +347,20 @@ function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: st
 }
 
 /** @internal */
-export function explainFiles(program: Program, write: (s: string) => void) {
+export function explainFiles(program: Program, write: (s: string) => void): void {
     const reasons = program.getFileIncludeReasons();
     const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName);
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-        explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+        explainIfFileIsRedirectAndImpliedFormat(file, program.getCompilerOptionsForFile(file), relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
     }
 }
 
 /** @internal */
 export function explainIfFileIsRedirectAndImpliedFormat(
     file: SourceFile,
+    options: CompilerOptions,
     fileNameConvertor?: (fileName: string) => string,
 ): DiagnosticMessageChain[] | undefined {
     let result: DiagnosticMessageChain[] | undefined;
@@ -376,7 +379,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
         ));
     }
     if (isExternalOrCommonJsModule(file)) {
-        switch (file.impliedNodeFormat) {
+        switch (getImpliedNodeFormatForEmitWorker(file, options)) {
             case ModuleKind.ESNext:
                 if (file.packageJsonScope) {
                     (result ??= []).push(chainDiagnosticMessages(
@@ -409,7 +412,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
 }
 
 /** @internal */
-export function getMatchedFileSpec(program: Program, fileName: string) {
+export function getMatchedFileSpec(program: Program, fileName: string): string | undefined {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
 
@@ -420,7 +423,7 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
 }
 
 /** @internal */
-export function getMatchedIncludeSpec(program: Program, fileName: string) {
+export function getMatchedIncludeSpec(program: Program, fileName: string): string | true | undefined {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedIncludeSpecs) return undefined;
 
@@ -570,7 +573,7 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     emitResult: EmitResult;
     diagnostics: SortedReadonlyArray<Diagnostic>;
 } {
-    const isListFilesOnly = !!program.getCompilerOptions().listFilesOnly;
+    const options = program.getCompilerOptions();
 
     // First get and report any syntactic errors.
     const allDiagnostics = program.getConfigFileParsingDiagnostics().slice();
@@ -582,17 +585,25 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
         addRange(allDiagnostics, program.getOptionsDiagnostics(cancellationToken));
 
-        if (!isListFilesOnly) {
+        if (!options.listFilesOnly) {
             addRange(allDiagnostics, program.getGlobalDiagnostics(cancellationToken));
 
             if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
                 addRange(allDiagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
             }
+
+            if (
+                options.noEmit &&
+                getEmitDeclarations(options) &&
+                allDiagnostics.length === configFileParsingDiagnosticsLength
+            ) {
+                addRange(allDiagnostics, program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+            }
         }
     }
 
     // Emit and report any errors we ran into.
-    const emitResult = isListFilesOnly
+    const emitResult = options.listFilesOnly
         ? { emitSkipped: true, diagnostics: emptyArray }
         : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
     addRange(allDiagnostics, emitResult.diagnostics);
@@ -628,7 +639,7 @@ export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgra
     cancellationToken?: CancellationToken,
     emitOnlyDtsFiles?: boolean,
     customTransformers?: CustomTransformers,
-) {
+): ExitStatus {
     const { emitResult, diagnostics } = emitFilesAndReportErrors(
         program,
         reportDiagnostic,
@@ -655,10 +666,10 @@ export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgra
 /** @internal */
 export const noopFileWatcher: FileWatcher = { close: noop };
 /** @internal */
-export const returnNoopFileWatcher = () => noopFileWatcher;
+export const returnNoopFileWatcher = (): FileWatcher => noopFileWatcher;
 
 /** @internal */
-export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
+export function createWatchHost(system: System = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
     const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
     return {
         onWatchStatusChange,
@@ -666,6 +677,7 @@ export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusRep
         watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
         setTimeout: maybeBind(system, system.setTimeout) || noop,
         clearTimeout: maybeBind(system, system.clearTimeout) || noop,
+        preferNonRecursiveWatch: system.preferNonRecursiveWatch,
     };
 }
 
@@ -729,7 +741,7 @@ export interface WatchFactoryWithLog<X, Y = undefined> extends WatchFactory<X, Y
 }
 
 /** @internal */
-export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
+export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }): WatchFactoryWithLog<WatchType, Y> {
     const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
     const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactoryWithLog<WatchType, Y>;
@@ -772,7 +784,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
 }
 
 /** @internal */
-export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string) {
+export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string): string {
     // If text can contain the sourceMapUrl ignore sourceMapUrl for calcualting hash
     if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
         let lineEnd = text.length;
@@ -811,7 +823,7 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
 }
 
 /** @internal */
-export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
+export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost): void {
     const originalGetSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (...args) => {
         const result = originalGetSourceFile.call(compilerHost, ...args);
@@ -969,8 +981,9 @@ export interface IncrementalCompilationOptions {
     afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
     system?: System;
 }
+
 /** @internal */
-export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
+export function performIncrementalCompilation(input: IncrementalCompilationOptions): ExitStatus {
     const system = input.system || sys;
     const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
     const builderProgram = createIncrementalProgram(input);

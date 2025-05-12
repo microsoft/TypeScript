@@ -160,11 +160,11 @@ interface ZodTypeProvider extends FastifyTypeProvider {
 
 const verifyAuth =
 >verifyAuth : <T extends FastifyRequest>() => (req: T) => void
->           : ^ ^^^^^^^^^              ^^^^^^^^   ^^ ^^^^^^^^^
+>           : ^ ^^^^^^^^^              ^^^^^^^^      ^^^^^^^^^
 
   <T extends FastifyRequest>() =>
 ><T extends FastifyRequest>() =>  (req: T) => {} : <T extends FastifyRequest>() => (req: T) => void
->                                                : ^ ^^^^^^^^^              ^^^^^^^^   ^^ ^^^^^^^^^
+>                                                : ^ ^^^^^^^^^              ^^^^^^^^      ^^^^^^^^^
 
   (req: T) => {};
 >(req: T) => {} : (req: T) => void
@@ -221,7 +221,7 @@ server.route({
 >verifyAuth() : (req: FastifyRequest<RouteGenericInterface, FastifySchema, FastifyTypeProviderDefault, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema>>) => void
 >             : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >verifyAuth : <T extends FastifyRequest>() => (req: T) => void
->           : ^ ^^^^^^^^^              ^^^^^^^^   ^^ ^^^^^^^^^
+>           : ^ ^^^^^^^^^              ^^^^^^^^      ^^^^^^^^^
 
   handler: async (req) => {
 >handler : (req: FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>) => Promise<void>

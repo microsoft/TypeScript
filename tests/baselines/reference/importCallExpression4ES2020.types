@@ -57,7 +57,7 @@ class C {
 >this.myModule.then(Zero => {            console.log(Zero.foo());        }, async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        }) : Promise<void>
 >                                                                                                                                                                                                                 : ^^^^^^^^^^^^^
 >this.myModule.then : <TResult1 = typeof import("0"), TResult2 = never>(onfulfilled?: (value: typeof import("0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.myModule : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
@@ -65,7 +65,7 @@ class C {
 >myModule : Promise<typeof import("0")>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = typeof import("0"), TResult2 = never>(onfulfilled?: (value: typeof import("0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Zero => {            console.log(Zero.foo());        } : (Zero: typeof import("0")) => void
 >                                                       : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Zero : typeof import("0")

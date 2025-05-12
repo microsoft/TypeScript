@@ -1,7 +1,6 @@
 // @ts-check
 import { CancelToken } from "@esfx/canceltoken";
 import assert from "assert";
-import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
 import { EventEmitter } from "events";
@@ -9,6 +8,7 @@ import fs from "fs";
 import { glob } from "glob";
 import { task } from "hereby";
 import path from "path";
+import pc from "picocolors";
 
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
@@ -303,6 +303,7 @@ let printedWatchWarning = false;
  * @param {string} options.srcEntrypoint
  * @param {string} options.builtEntrypoint
  * @param {string} options.output
+ * @param {boolean} [options.enableCompileCache]
  * @param {Task[]} [options.mainDeps]
  * @param {BundlerTaskOptions} [options.bundlerOptions]
  */
@@ -313,7 +314,37 @@ function entrypointBuildTask(options) {
         run: () => buildProject(options.project),
     });
 
-    const bundler = createBundler(options.srcEntrypoint, options.output, options.bundlerOptions);
+    const mainDeps = options.mainDeps?.slice(0) ?? [];
+
+    let output = options.output;
+    if (options.enableCompileCache) {
+        const originalOutput = output;
+        output = path.join(path.dirname(output), "_" + path.basename(output));
+
+        const compileCacheShim = task({
+            name: `shim-compile-cache-${options.name}`,
+            run: async () => {
+                const outDir = path.dirname(originalOutput);
+                await fs.promises.mkdir(outDir, { recursive: true });
+                const moduleSpecifier = path.relative(outDir, output);
+                const lines = [
+                    `// This file is a shim which defers loading the real module until the compile cache is enabled.`,
+                    `try {`,
+                    `  const { enableCompileCache } = require("node:module");`,
+                    `  if (enableCompileCache) {`,
+                    `    enableCompileCache();`,
+                    `  }`,
+                    `} catch {}`,
+                    `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}");`,
+                ];
+                await fs.promises.writeFile(originalOutput, lines.join("\n") + "\n");
+            },
+        });
+
+        mainDeps.push(compileCacheShim);
+    }
+
+    const bundler = createBundler(options.srcEntrypoint, output, options.bundlerOptions);
 
     // If we ever need to bundle our own output, change this to depend on build
     // and run esbuild on builtEntrypoint.
@@ -336,14 +367,13 @@ function entrypointBuildTask(options) {
     const shim = task({
         name: `shim-${options.name}`,
         run: async () => {
-            const outDir = path.dirname(options.output);
+            const outDir = path.dirname(output);
             await fs.promises.mkdir(outDir, { recursive: true });
             const moduleSpecifier = path.relative(outDir, options.builtEntrypoint);
-            await fs.promises.writeFile(options.output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
+            await fs.promises.writeFile(output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
         },
     });
 
-    const mainDeps = options.mainDeps?.slice(0) ?? [];
     if (cmdLineOptions.bundle) {
         mainDeps.push(bundle);
         if (cmdLineOptions.typecheck) {
@@ -369,7 +399,7 @@ function entrypointBuildTask(options) {
             // allowing them to operate as regular tasks, while creating unresolved promises
             // in the background that keep the process running after all tasks have exited.
             if (!printedWatchWarning) {
-                console.error(chalk.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."));
+                console.error(pc.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."));
                 printedWatchWarning = true;
             }
 
@@ -392,6 +422,7 @@ const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     builtEntrypoint: "./built/local/tsc/tsc.js",
     output: "./built/local/tsc.js",
     mainDeps: [generateLibs],
+    enableCompileCache: true,
 });
 export { tsc, watchTsc };
 
@@ -429,6 +460,7 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     output: "./built/local/tsserver.js",
     mainDeps: [generateLibs, services],
     bundlerOptions: { usePublicAPI: true },
+    enableCompileCache: true,
 });
 export { tsserver, watchTsserver };
 
@@ -565,12 +597,11 @@ export const checkFormat = task({
     run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "check"], { ignoreStdout: true }),
 });
 
-const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
-    name: "cancellation-token",
-    project: "src/cancellationToken",
-    srcEntrypoint: "./src/cancellationToken/cancellationToken.ts",
-    builtEntrypoint: "./built/local/cancellationToken/cancellationToken.js",
-    output: "./built/local/cancellationToken.js",
+export const knip = task({
+    name: "knip",
+    description: "Runs knip.",
+    dependencies: [generateDiagnostics],
+    run: () => exec(process.execPath, ["node_modules/knip/bin/knip.js", "--tags=+internal,-knipignore", "--exclude=duplicates,enumMembers", ...(cmdLineOptions.fix ? ["--fix"] : [])]),
 });
 
 const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuildTask({
@@ -582,6 +613,7 @@ const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuild
     output: "./built/local/typingsInstaller.js",
     mainDeps: [services],
     bundlerOptions: { usePublicAPI: true },
+    enableCompileCache: true,
 });
 
 const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({
@@ -600,7 +632,7 @@ export const generateTypesMap = task({
         const target = "built/local/typesMap.json";
         const contents = await fs.promises.readFile(source, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
-        await fs.promises.writeFile(target, contents);
+        await fs.promises.writeFile(target, contents.replace(/\r\n/g, "\n"));
     },
 });
 
@@ -621,14 +653,14 @@ const copyBuiltLocalDiagnosticMessages = task({
 export const otherOutputs = task({
     name: "other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
-    dependencies: [cancellationToken, typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const watchOtherOutputs = task({
     name: "watch-other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
     hiddenFromTaskList: true,
-    dependencies: [watchCancellationToken, watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const local = task({
@@ -675,7 +707,7 @@ export const runTestsAndWatch = task({
     dependencies: [watchTests],
     run: async () => {
         if (!cmdLineOptions.tests && !cmdLineOptions.failed) {
-            console.log(chalk.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
+            console.log(pc.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
             return;
         }
 
@@ -687,9 +719,8 @@ export const runTestsAndWatch = task({
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
         const testCaseWatcher = chokidar.watch([
-            "tests/cases/**/*.*",
-            "tests/lib/**/*.*",
-            "tests/projects/**/*.*",
+            "tests/cases",
+            "tests/lib",
         ], {
             ignorePermissionErrors: true,
             alwaysStat: true,
@@ -714,7 +745,7 @@ export const runTestsAndWatch = task({
                 running = false;
             }
             if (watching) {
-                console.log(chalk.yellowBright(`[watch] test run complete, waiting for changes...`));
+                console.log(pc.yellowBright(`[watch] test run complete, waiting for changes...`));
                 await promise;
             }
         }
@@ -724,7 +755,7 @@ export const runTestsAndWatch = task({
         }
 
         /**
-         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'} eventName
+         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir' | 'all' | 'ready' | 'raw' | 'error'} eventName
          * @param {string} path
          * @param {fs.Stats | undefined} stats
          */
@@ -751,9 +782,9 @@ export const runTestsAndWatch = task({
          */
         function beginRunTests(path) {
             if (testsChangedDebouncer.empty) {
-                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
+                console.log(pc.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
                 if (running) {
-                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
+                    console.log(pc.yellowBright("[watch] aborting in-progress test run..."));
                 }
                 testsChangedCancelSource.cancel();
                 testsChangedCancelSource = CancelToken.source();
@@ -771,7 +802,7 @@ export const runTestsAndWatch = task({
         function endWatchMode() {
             if (watching) {
                 watching = false;
-                console.log(chalk.yellowBright("[watch] exiting watch mode..."));
+                console.log(pc.yellowBright("[watch] exiting watch mode..."));
                 testsChangedCancelSource.cancel();
                 testCaseWatcher.close();
                 watchTestsEmitter.off("rebuild", onRebuild);
@@ -876,14 +907,16 @@ export const produceLKG = task({
         }
 
         const expectedFiles = [
-            "built/local/cancellationToken.js",
             "built/local/tsc.js",
+            "built/local/_tsc.js",
             "built/local/tsserver.js",
+            "built/local/_tsserver.js",
             "built/local/tsserverlibrary.js",
             "built/local/tsserverlibrary.d.ts",
             "built/local/typescript.js",
             "built/local/typescript.d.ts",
             "built/local/typingsInstaller.js",
+            "built/local/_typingsInstaller.js",
             "built/local/watchGuard.js",
         ].concat(libs().map(lib => lib.target));
         const missingFiles = expectedFiles

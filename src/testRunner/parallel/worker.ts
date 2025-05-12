@@ -1,3 +1,4 @@
+import Mocha from "mocha";
 import {
     createRunner,
     globalTimeout,
@@ -16,7 +17,7 @@ import {
     UnitTestTask,
 } from "../_namespaces/Harness.Parallel.js";
 
-export function start(importTests: () => Promise<unknown>) {
+export function start(importTests: () => Promise<unknown>): void {
     // This brings in the tests after we finish setting things up and yield to the event loop.
     const importTestsPromise = importTests();
 
@@ -38,9 +39,6 @@ export function start(importTests: () => Promise<unknown>) {
 
     let exceptionsHooked = false;
     hookUncaughtExceptions();
-
-    // Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
-    const Mocha = require("mocha") as typeof import("mocha");
 
     /**
      * Mixin helper.

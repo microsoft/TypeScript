@@ -430,6 +430,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean, newSourceFileByResolvedPath: SourceFile | undefined): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
     /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedPastedText: SourceFile) => void): void;
     jsDocParsingMode?: JSDocParsingMode | undefined;
@@ -580,8 +581,11 @@ export interface LanguageService {
      *
      * @param fileName The path to the file
      * @param position A zero-based index of the character where you want the quick info
+     * @param maximumLength Maximum length of a quickinfo text before it is truncated.
      */
-    getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
+    getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number): QuickInfo | undefined;
+    /** @internal */
+    getQuickInfoAtPosition(fileName: string, position: number, maximumLength: number | undefined, verbosityLevel: number | undefined): QuickInfo | undefined;
 
     getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
 
@@ -698,6 +702,7 @@ export interface LanguageService {
     /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly FileTextChanges[];
 
     dispose(): void;
+    preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
     getPasteEdits(
         args: PasteEditsArgs,
         formatOptions: FormatCodeSettings,
@@ -1231,7 +1236,7 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
 }
 
 /** @internal */
-export const testFormatSettings = getDefaultFormatCodeSettings("\n");
+export const testFormatSettings: FormatCodeSettings = getDefaultFormatCodeSettings("\n");
 
 export interface DefinitionInfo extends DocumentSpan {
     kind: ScriptElementKind;
@@ -1322,6 +1327,7 @@ export interface QuickInfo {
     displayParts?: SymbolDisplayPart[];
     documentation?: SymbolDisplayPart[];
     tags?: JSDocTagInfo[];
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
@@ -1438,6 +1444,10 @@ export interface CompletionInfo {
      */
     isIncomplete?: true;
     entries: CompletionEntry[];
+    /**
+     * Default commit characters for the completion entries.
+     */
+    defaultCommitCharacters?: string[];
 }
 
 export interface CompletionEntryDataAutoImport {
@@ -1550,6 +1560,10 @@ export interface CompletionEntry {
      * is an auto-import.
      */
     data?: CompletionEntryData;
+    /**
+     * If this completion entry is selected, typing a commit character will cause the entry to be accepted.
+     */
+    commitCharacters?: string[];
 }
 
 export interface CompletionEntryLabelDetails {

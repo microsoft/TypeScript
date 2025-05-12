@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/mapGroupBy.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
 === mapGroupBy.ts ===
 const basic = Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
 >basic : Map<"small" | "large", number[]>

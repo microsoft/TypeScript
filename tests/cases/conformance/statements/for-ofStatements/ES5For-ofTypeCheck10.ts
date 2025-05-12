@@ -1,7 +1,7 @@
 //@target: ES5
 
 // In ES3/5, you cannot for...of over an arbitrary iterable.
-class StringIterator {
+class MyStringIterator {
     next() {
         return {
             done: true,
@@ -13,4 +13,4 @@ class StringIterator {
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }

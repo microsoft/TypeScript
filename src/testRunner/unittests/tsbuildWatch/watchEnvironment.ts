@@ -1,14 +1,12 @@
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
+import { createBaseline } from "../helpers/baseline.js";
 import {
-    createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -23,7 +21,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         };
 
         const allPkgFiles = pkgs(pkgFiles);
-        const system = createWatchedSystem([libFile, typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
+        const system = TestServerHost.createWatchedSystem([typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
         writePkgReferences(system);
         const { sys, baseline, cb, getPrograms } = createBaseline(system);
         const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
@@ -80,7 +78,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             watchOrSolution: solutionBuilder,
         });
 
-        function flatArray<T>(arr: T[][]): readonly T[] {
+        function flatArray<T extends {}>(arr: T[][]): readonly T[] {
             return ts.flatMap(arr, ts.identity);
         }
         function pkgs<T>(cb: (index: number) => T): T[] {

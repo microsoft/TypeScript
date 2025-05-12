@@ -3,11 +3,9 @@ import {
     getSymlinkedExtendsSys,
 } from "../helpers/extends.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { verifyTscWatch } from "../helpers/tscWatch.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: extends::", () => {
-    verifyTscWatch({
+    verifyTsc({
         scenario: "extends",
         subScenario: "resolves the symlink path",
         sys: getSymlinkedExtendsSys,
@@ -17,21 +15,21 @@ describe("unittests:: tsc:: extends::", () => {
     verifyTsc({
         scenario: "extends",
         subScenario: "configDir template",
-        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { cwd: "/home/src/projects/myproject" }),
-        commandLineArgs: ["-p", "/home/src/projects/myproject", "--explainFiles"],
+        sys: getConfigDirExtendsSys,
+        commandLineArgs: ["--explainFiles"],
     });
 
     verifyTsc({
         scenario: "extends",
         subScenario: "configDir template showConfig",
-        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { cwd: "/home/src/projects/myproject" }),
-        commandLineArgs: ["-p", "/home/src/projects/myproject", "--showConfig"],
+        sys: getConfigDirExtendsSys,
+        commandLineArgs: ["--showConfig"],
     });
 
     verifyTsc({
         scenario: "extends",
         subScenario: "configDir template with commandline",
-        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { cwd: "/home/src/projects/myproject" }),
-        commandLineArgs: ["-p", "/home/src/projects/myproject", "--explainFiles", "--outDir", "${configDir}/outDir"], // eslint-disable-line no-template-curly-in-string
+        sys: getConfigDirExtendsSys,
+        commandLineArgs: ["--explainFiles", "--outDir", "${configDir}/outDir"], // eslint-disable-line no-template-curly-in-string
     });
 });

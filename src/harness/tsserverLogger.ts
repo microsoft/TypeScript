@@ -57,7 +57,6 @@ function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, sanitizeL
     logger.hasLevel = ts.returnTrue;
     logger.loggingEnabled = ts.returnTrue;
     logger.host = host;
-    if (host) logger.logs!.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
 
     let inGroup = false;
     let firstInGroup = false;
@@ -112,7 +111,7 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms");
     s = s.replace(/"updateGraphDurationMs":\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
     s = s.replace(/"createAutoImportProviderProgramDurationMs":\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
-    s = replaceAll(s, ts.version, "FakeVersion");
+    s = s.replace(new RegExp(`\\b${ts.regExpEscape(ts.version)}\\b`, "g"), "FakeVersion");
     s = s.replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`);
     s = s.replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`);
     s = s.replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`);
@@ -127,8 +126,12 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
     s = s.replace(/getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/, `getIndentationAtPosition: getCurrentSourceFile: *`);
     s = s.replace(/getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/, `getIndentationAtPosition: computeIndentation: *`);
-    s = s.replace(/"duration":\s*\d+(?:.\d+)?/g, `"duration": *`);
-    s = replaceAll(s, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
+    s = s.replace(/"syntaxDiag":\s*\d+(?:.\d+)?/g, `"syntaxDiag": *`);
+    s = s.replace(/"semanticDiag":\s*\d+(?:.\d+)?/g, `"semanticDiag": *`);
+    s = s.replace(/"suggestionDiag":\s*\d+(?:.\d+)?/g, `"suggestionDiag": *`);
+    s = s.replace(/"regionSemanticDiag":\s*\d+(?:.\d+)?/g, `"regionSemanticDiag": *`);
+    s = s.replace(new RegExp(`\\b@ts${ts.regExpEscape(ts.versionMajorMinor)}\\b`, "g"), `@tsFakeMajor.Minor`);
+
     s = sanitizeHarnessLSException(s);
     return s;
 }

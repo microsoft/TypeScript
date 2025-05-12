@@ -13,9 +13,9 @@ interface Foo {
 
 const explicit = {
 >explicit : { n: number; x: number; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^      ^^^
 >{    n: 12,    get x(this: Foo): number { return this.n; },    set x(this: Foo, n: number) { this.n = n; }} : { n: number; x: number; }
->                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                            : ^^^^^^^^^^^^^^^^      ^^^
 
     n: 12,
 >n : number
@@ -55,9 +55,9 @@ const explicit = {
 }
 const copiedFromGetter = {
 >copiedFromGetter : { n: number; x: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^      ^^^
 >{    n: 14,    get x(this: Foo): number { return this.n; },    set x(n) { this.n = n; }} : { n: number; x: number; }
->                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                         : ^^^^^^^^^^^^^^^^      ^^^
 
     n: 14,
 >n : number
@@ -95,9 +95,9 @@ const copiedFromGetter = {
 }
 const copiedFromSetter = {
 >copiedFromSetter : { n: number; x: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^      ^^^
 >{    n: 15,    get x() { return this.n },    set x(this: Foo, n: number) { this.n = n; }} : { n: number; x: number; }
->                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                          : ^^^^^^^^^^^^^^^^      ^^^
 
     n: 15,
 >n : number
