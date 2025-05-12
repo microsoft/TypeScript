@@ -6963,6 +6963,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const questionToken = type.declaration.questionToken ? factory.createToken(type.declaration.questionToken.kind) as QuestionToken | PlusToken | MinusToken : undefined;
                 let appropriateConstraintTypeNode: TypeNode;
                 let newTypeVariable: TypeReferenceNode | undefined;
+                let templateType = getTemplateTypeFromMappedType(type);
+                const typeParameter = getTypeParameterFromMappedType(type);
                 // If the mapped type isn't `keyof` constraint-declared, _but_ still has modifiers preserved, and its naive instantiation won't preserve modifiers because its constraint isn't `keyof` constrained, we have work to do
                 const needsModifierPreservingWrapper = !isMappedTypeWithKeyofConstraintDeclaration(type)
                     && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.Unknown)
@@ -6972,9 +6974,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // We have a { [P in keyof T]: X }
                     // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
                     if (isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
-                        const newParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
-                        const name = typeParameterToName(newParam, context);
+                        const newConstraintParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
+                        const name = typeParameterToName(newConstraintParam, context);
+                        const target = type.target as MappedType;
                         newTypeVariable = factory.createTypeReferenceNode(name);
+                        templateType = instantiateType(
+                            getTemplateTypeFromMappedType(target),
+                            makeArrayTypeMapper([getTypeParameterFromMappedType(target), getModifiersTypeFromMappedType(target)], [typeParameter, newConstraintParam]),
+                        );
                     }
                     appropriateConstraintTypeNode = factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, newTypeVariable || typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
                 }
@@ -6989,9 +6996,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     appropriateConstraintTypeNode = typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context);
                 }
-                const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
+                const typeParameterNode = typeParameterToDeclarationWithConstraint(typeParameter, context, appropriateConstraintTypeNode);
+
+                // nameType and templateType nodes have to be in the new scope
+                const cleanup = enterNewScope(context, type.declaration, /*expandedParams*/ undefined, [getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration(type.declaration.typeParameter))]);
                 const nameTypeNode = type.declaration.nameType ? typeToTypeNodeHelper(getNameTypeFromMappedType(type)!, context) : undefined;
-                const templateTypeNode = typeToTypeNodeHelper(removeMissingType(getTemplateTypeFromMappedType(type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), context);
+                const templateTypeNode = typeToTypeNodeHelper(removeMissingType(templateType, !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), context);
+                cleanup();
+
                 const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, nameTypeNode, questionToken, templateTypeNode, /*members*/ undefined);
                 context.approximateLength += 10;
                 const result = setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
