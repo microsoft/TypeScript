@@ -48,8 +48,8 @@ const checked_ = checkType_<{x: number, y: string}>()({
 >         : ^^^^^^^^^^^^^^^^^^^^^^
 >checkType_<{x: number, y: string}>()({  x: 1 as number,  y: "y",  z: "z",}) : { x: number; y: "y"; }
 >                                                                            : ^^^^^^^^^^^^^^^^^^^^^^
->checkType_<{x: number, y: string}>() : <U extends { x: number; y: string; }>(value: { [K_1 in keyof U & ("x" | "y")]: U[K_1]; }) => { [K_1 in keyof U & ("x" | "y")]: U[K_1]; }
->                                     : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>checkType_<{x: number, y: string}>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
+>                                     : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >checkType_ : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
 >           : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number

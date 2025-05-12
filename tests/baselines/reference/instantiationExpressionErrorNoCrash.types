@@ -8,8 +8,8 @@ const createCacheReducer = <N extends string, QR>(
 >                                                                                                                                                                                                           : ^ ^^^^^^^^^      ^^  ^^       ^^                       ^^^^^^     ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     queries: Cache<N, QR>["queries"],
->queries : { [QK_1 in keyof QR]: any; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>queries : { [QK in keyof QR]: any; }
+>        : ^^^  ^^^^^^^^^^^^^^^^^^^^^
 
 ) => {
     const queriesMap = {} as QR;
