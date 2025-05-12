@@ -9145,20 +9145,22 @@ namespace Parser {
                 return tag;
             }
 
-            function parseTrailingTagComments(pos: number, end: number, margin: number, indentText: string) {
+            function parseTrailingTagComments(pos: number, end: number, indent: number, indentText: string) {
+                const newLinesMargin = indent;
                 // some tags, like typedef and callback, have already parsed their comments earlier
                 if (!indentText) {
-                    margin += end - pos;
+                    indent += end - pos;
                 }
-                return parseTagComments(margin, indentText.slice(margin));
+                return parseTagComments(indent, newLinesMargin, indentText.slice(indent));
             }
 
-            function parseTagComments(indent: number, initialMargin?: string): string | NodeArray<JSDocComment> | undefined {
+            function parseTagComments(indent: number, newLinesMargin?: number, initialMargin?: string): string | NodeArray<JSDocComment> | undefined {
                 const commentsPos = getNodePos();
                 let comments: string[] = [];
                 const parts: JSDocComment[] = [];
                 let linkEnd;
                 let state = JSDocState.BeginningOfLine;
+                let hasParsedFirstLine = false;
                 let margin: number | undefined;
                 function pushComment(text: string) {
                     if (!margin) {
@@ -9182,6 +9184,10 @@ namespace Parser {
                             state = JSDocState.BeginningOfLine;
                             // don't use pushComment here because we want to keep the margin unchanged
                             comments.push(scanner.getTokenText());
+                            if (newLinesMargin !== undefined && !hasParsedFirstLine) {
+                                hasParsedFirstLine = true;
+                                margin = newLinesMargin;
+                            }
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
