@@ -6348,6 +6348,8 @@ export const enum TypeFlags {
     /** @internal */
     Nullable = Undefined | Null,
     Literal = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral,
+    /** @internal */
+    BaseOfLiteral = String | Number | BigInt | Boolean,
     Unit = Enum | Literal | UniqueESSymbol | Nullable,
     Freshable = Enum | Literal,
     StringOrNumberLiteral = StringLiteral | NumberLiteral,
