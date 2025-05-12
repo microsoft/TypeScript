@@ -231,10 +231,9 @@ func TestProgram(t *testing.T) {
 			opts := core.CompilerOptions{Target: testCase.target}
 
 			program := NewProgram(ProgramOptions{
-				RootFiles:      []string{"c:/dev/src/index.ts"},
-				Host:           NewCompilerHost(&opts, "c:/dev/src", fs, bundled.LibPath()),
-				Options:        &opts,
-				SingleThreaded: false,
+				RootFiles: []string{"c:/dev/src/index.ts"},
+				Host:      NewCompilerHost(&opts, "c:/dev/src", fs, bundled.LibPath()),
+				Options:   &opts,
 			})
 
 			actualFiles := []string{}
@@ -265,10 +264,9 @@ func BenchmarkNewProgram(b *testing.B) {
 
 			opts := core.CompilerOptions{Target: testCase.target}
 			programOpts := ProgramOptions{
-				RootFiles:      []string{"c:/dev/src/index.ts"},
-				Host:           NewCompilerHost(&opts, "c:/dev/src", fs, bundled.LibPath()),
-				Options:        &opts,
-				SingleThreaded: false,
+				RootFiles: []string{"c:/dev/src/index.ts"},
+				Host:      NewCompilerHost(&opts, "c:/dev/src", fs, bundled.LibPath()),
+				Options:   &opts,
 			}
 
 			for b.Loop() {
@@ -288,7 +286,6 @@ func BenchmarkNewProgram(b *testing.B) {
 		opts := ProgramOptions{
 			ConfigFileName: tspath.CombinePaths(compilerDir, "tsconfig.json"),
 			Host:           NewCompilerHost(nil, compilerDir, fs, bundled.LibPath()),
-			SingleThreaded: false,
 		}
 
 		for b.Loop() {

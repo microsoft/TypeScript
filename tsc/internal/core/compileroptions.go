@@ -136,6 +136,10 @@ type CompilerOptions struct {
 	TscBuild            Tristate `json:"tscBuild,omitzero"`
 	Help                Tristate `json:"help,omitzero"`
 	All                 Tristate `json:"all,omitzero"`
+
+	PprofDir       string   `json:"pprofDir,omitzero"`
+	SingleThreaded Tristate `json:"singleThreaded,omitzero"`
+	Quiet          Tristate `json:"quiet,omitzero"`
 }
 
 func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {

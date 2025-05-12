@@ -37,17 +37,17 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Get pprofDir
     const pprofDir = config.get<string>("pprofDir");
-    const pprofArgs = pprofDir ? ["-pprofDir", pprofDir] : [];
+    const pprofArgs = pprofDir ? ["--pprofDir", pprofDir] : [];
 
     const serverOptions: ServerOptions = {
         run: {
             command: exe,
-            args: ["lsp", ...pprofArgs],
+            args: ["--lsp", ...pprofArgs],
             transport: TransportKind.stdio,
         },
         debug: {
             command: exe,
-            args: ["lsp", ...pprofArgs],
+            args: ["--lsp", ...pprofArgs],
             transport: TransportKind.stdio,
         },
     };

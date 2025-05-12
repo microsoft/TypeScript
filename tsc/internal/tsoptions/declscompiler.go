@@ -105,6 +105,7 @@ var optionsForCompiler = []*CommandLineOption{
 		Description:             diagnostics.Emit_a_v8_CPU_profile_of_the_compiler_run_for_debugging,
 		DefaultValueDescription: "profile.cpuprofile",
 	},
+
 	{
 		Name:        "generateTrace",
 		Kind:        CommandLineOptionTypeString,
@@ -209,6 +210,27 @@ var optionsForCompiler = []*CommandLineOption{
 		IsCommandLineOnly:       true,
 		Description:             diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
 		DefaultValueDescription: diagnostics.Platform_specific,
+	},
+
+	{
+		Name:        "quiet",
+		ShortName:   "q",
+		Kind:        CommandLineOptionTypeBoolean,
+		Category:    diagnostics.Command_line_Options,
+		Description: diagnostics.Do_not_print_diagnostics,
+	},
+	{
+		Name:        "singleThreaded",
+		Kind:        CommandLineOptionTypeBoolean,
+		Category:    diagnostics.Command_line_Options,
+		Description: diagnostics.Run_in_single_threaded_mode,
+	},
+	{
+		Name:        "pprofDir",
+		Kind:        CommandLineOptionTypeString,
+		isFilePath:  true,
+		Category:    diagnostics.Command_line_Options,
+		Description: diagnostics.Generate_pprof_CPU_Slashmemory_profiles_to_the_given_directory,
 	},
 }
 

@@ -79,12 +79,6 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	return p.string()
 }
 
-func (c *Checker) SourceFileWithTypes(sourceFile *ast.SourceFile) string {
-	p := c.newPrinter(TypeFormatFlagsInTypeAlias)
-	p.printSourceFileWithTypes(sourceFile)
-	return p.string()
-}
-
 func (c *Checker) signatureToString(s *Signature) string {
 	p := c.newPrinter(TypeFormatFlagsNone)
 	if s.flags&SignatureFlagsConstruct != 0 {
@@ -639,49 +633,6 @@ func (p *Printer) printMappedType(t *Type) {
 	p.print(": ")
 	p.printType(p.c.getTemplateTypeFromMappedType(t))
 	p.print("; }")
-}
-
-func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
-	var pos int
-	var visit func(*ast.Node) bool
-	var typesPrinted bool
-	lineStarts := scanner.GetLineStarts(sourceFile)
-	printLinesBefore := func(node *ast.Node) {
-		line := scanner.ComputeLineOfPosition(lineStarts, scanner.SkipTrivia(sourceFile.Text(), node.Pos()))
-		var nextLineStart int
-		if line+1 < len(lineStarts) {
-			nextLineStart = int(lineStarts[line+1])
-		} else {
-			nextLineStart = sourceFile.Loc.End()
-		}
-		if pos < nextLineStart {
-			if typesPrinted {
-				p.print("\n")
-			}
-			p.print(sourceFile.Text()[pos:nextLineStart])
-			pos = nextLineStart
-			typesPrinted = false
-		}
-	}
-	visit = func(node *ast.Node) bool {
-		text, t, isDeclaration := p.c.getTextAndTypeOfNode(node)
-		if text != "" && !strings.Contains(text, "\n") {
-			printLinesBefore(node)
-			p.print(">")
-			p.print(text)
-			p.print(" : ")
-			p.printType(t)
-			if isDeclaration && t.flags&TypeFlagsEnumLiteral != 0 && t.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
-				p.print(" = ")
-				p.printValue(t.AsLiteralType().value)
-			}
-			p.print("\n")
-			typesPrinted = true
-		}
-		return node.ForEachChild(visit)
-	}
-	visit(sourceFile.AsNode())
-	p.print(sourceFile.Text()[pos:sourceFile.End()])
 }
 
 func (c *Checker) getTextAndTypeOfNode(node *ast.Node) (string, *Type, bool) {

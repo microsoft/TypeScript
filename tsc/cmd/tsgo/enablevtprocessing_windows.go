@@ -4,7 +4,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-func enableVirtualTerminalProcessing() {
+func init() {
 	h, err := windows.GetStdHandle(windows.STD_OUTPUT_HANDLE)
 	if err != nil || h == windows.InvalidHandle {
 		return

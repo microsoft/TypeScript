@@ -411,6 +411,12 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.NewLine = value.(core.NewLineKind)
 	case "watch":
 		allOptions.Watch = parseTristate(value)
+	case "pprofDir":
+		allOptions.PprofDir = parseString(value)
+	case "singleThreaded":
+		allOptions.SingleThreaded = parseTristate(value)
+	case "quiet":
+		allOptions.Quiet = parseTristate(value)
 	default:
 		// different than any key above
 		return false

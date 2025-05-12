@@ -2,7 +2,6 @@ package compiler
 
 import (
 	"context"
-	"fmt"
 	"slices"
 	"sync"
 
@@ -25,7 +24,7 @@ type ProgramOptions struct {
 	RootFiles                    []string
 	Host                         CompilerHost
 	Options                      *core.CompilerOptions
-	SingleThreaded               bool
+	SingleThreaded               core.Tristate
 	ProjectReference             []core.ProjectReference
 	ConfigFileParsingDiagnostics []*ast.Diagnostic
 }
@@ -96,6 +95,7 @@ func NewProgram(options ProgramOptions) *Program {
 
 	p.configFileName = options.ConfigFileName
 	if p.configFileName != "" {
+		// !!! delete this code, require options
 		jsonText, ok := p.host.FS().ReadFile(p.configFileName)
 		if !ok {
 			panic("config file not found")
@@ -154,7 +154,7 @@ func NewProgram(options ProgramOptions) *Program {
 		}
 	}
 
-	p.processedFiles = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
+	p.processedFiles = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs, p.singleThreaded())
 	p.filesByPath = make(map[tspath.Path]*ast.SourceFile, len(p.files))
 	for _, file := range p.files {
 		p.filesByPath[file.Path()] = file
@@ -188,6 +188,10 @@ func (p *Program) GetConfigFileParsingDiagnostics() []*ast.Diagnostic {
 	return slices.Clip(p.configFileParsingDiagnostics)
 }
 
+func (p *Program) singleThreaded() bool {
+	return p.programOptions.SingleThreaded.DefaultIfUnknown(p.compilerOptions.SingleThreaded).IsTrue()
+}
+
 func (p *Program) getSourceAffectingCompilerOptions() *core.SourceFileAffectingCompilerOptions {
 	p.sourceAffectingCompilerOptionsOnce.Do(func() {
 		p.sourceAffectingCompilerOptions = p.compilerOptions.SourceFileAffecting()
@@ -196,7 +200,7 @@ func (p *Program) getSourceAffectingCompilerOptions() *core.SourceFileAffectingC
 }
 
 func (p *Program) BindSourceFiles() {
-	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
+	wg := core.NewWorkGroup(p.singleThreaded())
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
@@ -209,7 +213,7 @@ func (p *Program) BindSourceFiles() {
 
 func (p *Program) CheckSourceFiles(ctx context.Context) {
 	p.createCheckers()
-	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
+	wg := core.NewWorkGroup(p.singleThreaded())
 	for index, checker := range p.checkers {
 		wg.Queue(func() {
 			for i := index; i < len(p.files); i += len(p.checkers) {
@@ -222,8 +226,8 @@ func (p *Program) CheckSourceFiles(ctx context.Context) {
 
 func (p *Program) createCheckers() {
 	p.checkersOnce.Do(func() {
-		p.checkers = make([]*checker.Checker, core.IfElse(p.programOptions.SingleThreaded, 1, 4))
-		wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
+		p.checkers = make([]*checker.Checker, core.IfElse(p.singleThreaded(), 1, 4))
+		wg := core.NewWorkGroup(p.singleThreaded())
 		for i := range p.checkers {
 			wg.Queue(func() {
 				p.checkers[i] = checker.NewChecker(p)
@@ -500,14 +504,6 @@ func (p *Program) InstantiationCount() int {
 	return count
 }
 
-func (p *Program) PrintSourceFileWithTypes() {
-	for _, file := range p.files {
-		if tspath.GetBaseFileName(file.FileName()) == "main.ts" {
-			fmt.Print(p.GetTypeChecker().SourceFileWithTypes(file))
-		}
-	}
-}
-
 func (p *Program) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
 	return p.sourceFileMetaDatas[path]
 }
@@ -636,7 +632,7 @@ func (p *Program) Emit(options EmitOptions) *EmitResult {
 			return printer.NewTextWriter(host.Options().NewLine.GetNewLineCharacter())
 		},
 	}
-	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
+	wg := core.NewWorkGroup(p.singleThreaded())
 	var emitters []*emitter
 	sourceFiles := getSourceFilesToEmit(host, options.TargetSourceFile, options.forceDtsEmit)
 

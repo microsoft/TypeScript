@@ -56,6 +56,7 @@ func processAllProgramFiles(
 	resolver *module.Resolver,
 	rootFiles []string,
 	libs []string,
+	singleThreaded bool,
 ) processedFiles {
 	supportedExtensions := tsoptions.GetSupportedExtensions(compilerOptions, nil /*extraFileExtensions*/)
 	loader := fileLoader{
@@ -68,7 +69,7 @@ func processAllProgramFiles(
 			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
 			CurrentDirectory:          host.GetCurrentDirectory(),
 		},
-		wg:                  core.NewWorkGroup(programOptions.SingleThreaded),
+		wg:                  core.NewWorkGroup(singleThreaded),
 		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(libs)),
 		supportedExtensions: core.Flatten(tsoptions.GetSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions)),
 	}

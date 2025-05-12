@@ -26,7 +26,10 @@ CompilerOptions::{
     "project": "/home/src/workspaces/solution/project"
 }
 Output::
-project/index.ts(1,19): error TS2307: Cannot find module '../utils' or its corresponding type declarations.
+[96mproject/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module '../utils' or its corresponding type declarations.
+
+[7m1[0m import { x } from "../utils";
+[7m [0m [91m                  ~~~~~~~~~~[0m
 
 
 Found 1 error in project/index.ts[90m:1[0m

@@ -20,7 +20,10 @@ CompilerOptions::{
 
 
 Output::
-a.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
 
 
 Found 1 error in a.ts[90m:1[0m
@@ -73,7 +76,10 @@ Output::
 Edit:: introduce error
 
 Output::
-a.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
 
 
 Found 1 error in a.ts[90m:1[0m
@@ -88,7 +94,10 @@ const a: number = "hello"
 Edit:: emit when error
 
 Output::
-a.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
 
 
 Found 1 error in a.ts[90m:1[0m
@@ -107,7 +116,10 @@ Found 1 error in a.ts[90m:1[0m
 Edit:: no emit run when error
 
 Output::
-a.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
 
 
 Found 1 error in a.ts[90m:1[0m

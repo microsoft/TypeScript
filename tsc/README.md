@@ -40,8 +40,7 @@ Additional tasks are a work in progress.
 
 ### Running `tsgo`
 
-After running `hereby build`, you can run `built/local/tsgo`, which behaves mostly the same as `tsc` (respects tsconfig, but also prints out perf stats).
-This is mainly a testing entry point; for higher fidelity with regular `tsc`, run `tsgo tsc [flags]`, which behaves more similarly to `tsc`.
+After running `hereby build`, you can run `built/local/tsgo`, which behaves mostly the same as `tsc`.
 
 ### Running LSP Prototype
 

@@ -1,0 +1,14 @@
+{
+    "Do not print diagnostics.": {
+        "category": "Message",
+        "code": 100000
+    },
+    "Run in single threaded mode.": {
+        "category": "Message",
+        "code": 100001
+    },
+    "Generate pprof CPU/memory profiles to the given directory.": {
+        "category": "Message",
+        "code": 100002
+    }
+}

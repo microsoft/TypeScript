@@ -780,11 +780,16 @@ func (c *CompilationResult) GetSourceMapRecord() string {
 }
 
 func createProgram(host compiler.CompilerHost, options *core.CompilerOptions, rootFiles []string) *compiler.Program {
+	var singleThreaded core.Tristate
+	if testutil.TestProgramIsSingleThreaded() {
+		singleThreaded = core.TSTrue
+	}
+
 	programOptions := compiler.ProgramOptions{
 		RootFiles:      rootFiles,
 		Host:           host,
 		Options:        options,
-		SingleThreaded: testutil.TestProgramIsSingleThreaded(),
+		SingleThreaded: singleThreaded,
 	}
 	program := compiler.NewProgram(programOptions)
 	return program

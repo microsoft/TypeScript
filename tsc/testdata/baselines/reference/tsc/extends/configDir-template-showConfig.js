@@ -56,7 +56,7 @@ Input::--showConfig
 	export const x = 10;
 
 
-ExitStatus:: 5
+ExitStatus:: 0
 
 CompilerOptions::{
     "showConfig": true

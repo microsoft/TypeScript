@@ -2,8 +2,12 @@ package execute
 
 import (
 	"fmt"
+	"io"
+	"runtime"
 	"slices"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
@@ -27,9 +31,13 @@ func getFormatOptsOfSys(sys System) *diagnosticwriter.FormattingOptions {
 
 type diagnosticReporter = func(*ast.Diagnostic)
 
-func createDiagnosticReporter(sys System, pretty core.Tristate) diagnosticReporter {
+func createDiagnosticReporter(sys System, options *core.CompilerOptions) diagnosticReporter {
+	if options.Quiet.IsTrue() {
+		return func(diagnostic *ast.Diagnostic) {}
+	}
+
 	formatOpts := getFormatOptsOfSys(sys)
-	if pretty.IsFalseOrUnknown() {
+	if !shouldBePretty(sys, options) {
 		return func(diagnostic *ast.Diagnostic) {
 			diagnosticwriter.WriteFormatDiagnostic(sys.Writer(), diagnostic, formatOpts)
 			sys.EndWrite()
@@ -60,28 +68,30 @@ func createReportErrorSummary(sys System, options *core.CompilerOptions) func(di
 	return func(diagnostics []*ast.Diagnostic) {}
 }
 
-func reportStatistics(sys System, program *compiler.Program) {
-	// todo
-	stats := []statistic{
-		newStatistic("Files", len(program.SourceFiles())),
-		// newStatistic("Identifiers", program.IdentifierCount()),
-		// newStatistic("Symbols", program.getSymbolCount()),
-		newStatistic("Types", program.TypeCount()),
-		// newStatistic("Instantiations", program.getInstantiationCount()),
+func reportStatistics(sys System, program *compiler.Program, result compileAndEmitResult, memStats *runtime.MemStats) {
+	var stats table
+
+	stats.add("Files", len(program.SourceFiles()))
+	stats.add("Lines", program.LineCount())
+	stats.add("Identifiers", program.IdentifierCount())
+	stats.add("Symbols", program.SymbolCount())
+	stats.add("Types", program.TypeCount())
+	stats.add("Instantiations", program.InstantiationCount())
+	stats.add("Memory used", fmt.Sprintf("%vK", memStats.Alloc/1024))
+	stats.add("Memory allocs", strconv.FormatUint(memStats.Mallocs, 10))
+	stats.add("Parse time", result.parseTime)
+	if result.bindTime != 0 {
+		stats.add("Bind time", result.bindTime)
 	}
-
-	for _, stat := range stats {
-		fmt.Fprintf(sys.Writer(), "%s:"+strings.Repeat(" ", 20-len(stat.name))+"%v\n", stat.name, stat.value)
+	if result.checkTime != 0 {
+		stats.add("Check time", result.checkTime)
 	}
-}
+	if result.emitTime != 0 {
+		stats.add("Emit time", result.emitTime)
+	}
+	stats.add("Total time", result.totalTime)
 
-type statistic struct {
-	name  string
-	value int
-}
-
-func newStatistic(name string, count int) statistic {
-	return statistic{name, count}
+	stats.print(sys.Writer())
 }
 
 func printVersion(sys System) {
@@ -427,4 +437,45 @@ func getPossibleValues(option *tsoptions.CommandLineOption) string {
 
 func getDisplayNameTextOfOption(option *tsoptions.CommandLineOption) string {
 	return "--" + option.Name + core.IfElse(option.ShortName != "", ", -"+option.ShortName, "")
+}
+
+type tableRow struct {
+	name  string
+	value string
+}
+
+type table struct {
+	rows []tableRow
+}
+
+func (t *table) add(name string, value any) {
+	if d, ok := value.(time.Duration); ok {
+		value = formatDuration(d)
+	}
+	t.rows = append(t.rows, tableRow{name, fmt.Sprint(value)})
+}
+
+func (t *table) print(w io.Writer) {
+	nameWidth := 0
+	valueWidth := 0
+	for _, r := range t.rows {
+		nameWidth = max(nameWidth, len(r.name))
+		valueWidth = max(valueWidth, len(r.value))
+	}
+
+	for _, r := range t.rows {
+		fmt.Fprintf(w, "%-*s %*s\n", nameWidth+1, r.name+":", valueWidth, r.value)
+	}
+}
+
+func formatDuration(d time.Duration) string {
+	return fmt.Sprintf("%.3fs", d.Seconds())
+}
+
+func identifierCount(p *compiler.Program) int {
+	count := 0
+	for _, file := range p.SourceFiles() {
+		count += file.IdentifierCount
+	}
+	return count
 }

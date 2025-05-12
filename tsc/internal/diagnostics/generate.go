@@ -11,9 +11,11 @@ import (
 	"go/format"
 	"go/token"
 	"log"
+	"maps"
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"slices"
 	"strconv"
 	"strings"
@@ -36,12 +38,6 @@ type diagnosticMessage struct {
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	input := filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler", "diagnosticMessages.json")
-	if _, err := os.Stat(input); err != nil {
-		log.Fatalf("failed to find input file: %v", err)
-		return
-	}
-
 	output := flag.String("output", "", "path to the output diagnostics_generated.go file")
 	flag.Parse()
 
@@ -50,18 +46,16 @@ func main() {
 		return
 	}
 
-	inputFile, err := os.Open(input)
-	if err != nil {
-		log.Fatalf("failed to open input file: %v", err)
-		return
-	}
-	defer inputFile.Close()
+	rawDiagnosticMessages := readRawMessages(filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler", "diagnosticMessages.json"))
 
-	var rawDiagnosticMessages map[string]*diagnosticMessage
-	if err := json.NewDecoder(inputFile).Decode(&rawDiagnosticMessages); err != nil {
-		log.Fatalf("failed to decode input file: %v", err)
-		return
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("could not get current filename")
 	}
+	filename = filepath.FromSlash(filename) // runtime.Caller always returns forward slashes; https://go.dev/issues/3335, https://go.dev/cl/603275
+
+	rawExtraMessages := readRawMessages(filepath.Join(filepath.Dir(filename), "extraDiagnosticMessages.json"))
+	maps.Copy(rawDiagnosticMessages, rawExtraMessages)
 
 	diagnosticMessages := make([]*diagnosticMessage, 0, len(rawDiagnosticMessages))
 	for k, v := range rawDiagnosticMessages {
@@ -107,6 +101,23 @@ func main() {
 		log.Fatalf("failed to write output: %v", err)
 		return
 	}
+}
+
+func readRawMessages(p string) map[string]*diagnosticMessage {
+	file, err := os.Open(p)
+	if err != nil {
+		log.Fatalf("failed to open file: %v", err)
+		return nil
+	}
+	defer file.Close()
+
+	var rawMessages map[string]*diagnosticMessage
+	if err := json.NewDecoder(file).Decode(&rawMessages); err != nil {
+		log.Fatalf("failed to decode file: %v", err)
+		return nil
+	}
+
+	return rawMessages
 }
 
 var (

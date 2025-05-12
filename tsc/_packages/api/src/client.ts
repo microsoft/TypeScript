@@ -15,7 +15,7 @@ export class Client {
 
     constructor(options: ClientOptions) {
         this.channel = new SyncRpcChannel(options.tsserverPath, [
-            "api",
+            "--api",
             "-cwd",
             options.cwd ?? process.cwd(),
         ]);
