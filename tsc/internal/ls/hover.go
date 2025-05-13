@@ -12,12 +12,5 @@ func (l *LanguageService) ProvideHover(fileName string, position int) string {
 		// Avoid giving quickInfo for the sourceFile as a whole.
 		return ""
 	}
-
-	checker := program.GetTypeChecker()
-	if symbol := checker.GetSymbolAtLocation(node); symbol != nil {
-		if t := checker.GetTypeOfSymbolAtLocation(symbol, node); t != nil {
-			return checker.TypeToString(t)
-		}
-	}
-	return ""
+	return program.GetTypeChecker().GetQuickInfoAtLocation(node)
 }

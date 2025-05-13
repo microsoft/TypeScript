@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -76,6 +77,107 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 		t = c.getReducedType(t)
 	}
 	p.printType(t)
+	return p.string()
+}
+
+func (c *Checker) GetQuickInfoAtLocation(node *ast.Node) string {
+	symbol := c.GetSymbolAtLocation(node)
+	isAlias := symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0
+	if isAlias {
+		symbol = c.resolveAlias(symbol)
+	}
+	if symbol == nil || symbol == c.unknownSymbol {
+		return ""
+	}
+	flags := symbol.Flags
+	if flags&ast.SymbolFlagsType != 0 && !ast.IsInExpressionContext(node) {
+		// If the symbol has a type meaning and we're not in an expression context, remove any value meanings
+		flags &^= ast.SymbolFlagsValue
+	}
+	p := c.newPrinter(TypeFormatFlagsNone)
+	if isAlias {
+		p.print("(alias) ")
+	}
+	switch {
+	case flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty|ast.SymbolFlagsAccessor) != 0:
+		switch {
+		case flags&ast.SymbolFlagsProperty != 0:
+			p.print("(property) ")
+		case flags&ast.SymbolFlagsAccessor != 0:
+			p.print("(accessor) ")
+		default:
+			decl := symbol.ValueDeclaration
+			if decl != nil {
+				switch {
+				case ast.IsParameter(decl):
+					p.print("(parameter) ")
+				case ast.IsVarLet(decl):
+					p.print("let ")
+				case ast.IsVarConst(decl):
+					p.print("const ")
+				case ast.IsVarUsing(decl):
+					p.print("using ")
+				case ast.IsVarAwaitUsing(decl):
+					p.print("await using ")
+				default:
+					p.print("var ")
+				}
+			}
+		}
+		p.printName(symbol)
+		p.print(": ")
+		p.printType(c.getTypeOfSymbol(symbol))
+	case flags&ast.SymbolFlagsEnumMember != 0:
+		p.print("(enum member) ")
+		t := c.getTypeOfSymbol(symbol)
+		p.printType(t)
+		if t.flags&TypeFlagsLiteral != 0 {
+			p.print(" = ")
+			p.printValue(t.AsLiteralType().value)
+		}
+	case flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0:
+		t := c.getTypeOfSymbol(symbol)
+		signatures := c.getSignaturesOfType(t, SignatureKindCall)
+		prefix := core.IfElse(symbol.Flags&ast.SymbolFlagsMethod != 0, "(method) ", "function ")
+		for i, sig := range signatures {
+			if i != 0 {
+				p.print("\n")
+			}
+			if i == 3 && len(signatures) >= 5 {
+				p.print(fmt.Sprintf("// +%v more overloads", len(signatures)-3))
+				break
+			}
+			p.print(prefix)
+			p.printName(symbol)
+			p.printSignature(sig, ": ")
+		}
+	case flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0:
+		p.print(core.IfElse(symbol.Flags&ast.SymbolFlagsClass != 0, "class ", "interface "))
+		p.printName(symbol)
+		p.printTypeParameters(c.getDeclaredTypeOfSymbol(symbol).AsInterfaceType().LocalTypeParameters())
+	case flags&ast.SymbolFlagsEnum != 0:
+		p.print("enum ")
+		p.printName(symbol)
+	case flags&ast.SymbolFlagsModule != 0:
+		p.print(core.IfElse(symbol.ValueDeclaration != nil && ast.IsSourceFile(symbol.ValueDeclaration), "module ", "namespace "))
+		p.printName(symbol)
+	case flags&ast.SymbolFlagsTypeParameter != 0:
+		p.print("(type parameter) ")
+		p.printTypeParameterAndConstraint(c.getDeclaredTypeOfSymbol(symbol))
+	case flags&ast.SymbolFlagsTypeAlias != 0:
+		p.print("type ")
+		p.printName(symbol)
+		p.printTypeParameters(c.typeAliasLinks.Get(symbol).typeParameters)
+		if len(symbol.Declarations) != 0 {
+			p.print(" = ")
+			p.printTypeNoAlias(c.getDeclaredTypeOfSymbol(symbol))
+		}
+	case flags&ast.SymbolFlagsAlias != 0:
+		p.print("import ")
+		p.printName(symbol)
+	default:
+		p.printType(c.getTypeOfSymbol(symbol))
+	}
 	return p.string()
 }
 
@@ -333,6 +435,21 @@ func (p *Printer) printTypeArguments(typeArguments []*Type) {
 	}
 }
 
+func (p *Printer) printTypeParameters(typeParameters []*Type) {
+	if len(typeParameters) != 0 {
+		p.print("<")
+		var tail bool
+		for _, tp := range typeParameters {
+			if tail {
+				p.print(", ")
+			}
+			p.printTypeParameterAndConstraint(tp)
+			tail = true
+		}
+		p.print(">")
+	}
+}
+
 func (p *Printer) printArrayType(t *Type) {
 	d := t.AsTypeReference()
 	if d.target != p.c.globalArrayType {
@@ -460,18 +577,7 @@ func (p *Printer) printAnonymousType(t *Type) {
 }
 
 func (p *Printer) printSignature(sig *Signature, returnSeparator string) {
-	if len(sig.typeParameters) != 0 {
-		p.print("<")
-		var tail bool
-		for _, tp := range sig.typeParameters {
-			if tail {
-				p.print(", ")
-			}
-			p.printTypeParameterAndConstraint(tp)
-			tail = true
-		}
-		p.print(">")
-	}
+	p.printTypeParameters(sig.typeParameters)
 	p.print("(")
 	var tail bool
 	if sig.thisParameter != nil {
