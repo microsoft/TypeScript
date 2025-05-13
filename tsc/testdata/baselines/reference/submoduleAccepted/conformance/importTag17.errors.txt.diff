@@ -3,17 +3,21 @@
 @@= skipped -0, +0 lines =@@
 -/a.js(8,5): error TS2322: Type '1' is not assignable to type '"module"'.
 -/a.js(15,5): error TS2322: Type '1' is not assignable to type '"script"'.
-+/a.js(5,15): error TS2304: Cannot find name 'Import'.
-+/a.js(12,15): error TS2552: Cannot find name 'Require'. Did you mean 'Required'?
++/a.js(1,15): error TS2305: Module '"/node_modules/@types/foo/index"' has no exported member 'Import'.
++/a.js(12,15): error TS2749: 'Require' refers to a value, but is being used as a type here. Did you mean 'typeof Require'?
  
  
  ==== /node_modules/@types/foo/package.json (0 errors) ====
-@@= skipped -25, +25 lines =@@
+@@= skipped -21, +21 lines =@@
+     
+ ==== /a.js (2 errors) ====
+     /** @import { Import } from 'foo' with { 'resolution-mode': 'import' } */
++                  ~~~~~~
++!!! error TS2305: Module '"/node_modules/@types/foo/index"' has no exported member 'Import'.
+     /** @import { Require } from 'foo' with { 'resolution-mode': 'require' } */
      
      /**
-      * @returns { Import }
-+                  ~~~~~~
-+!!! error TS2304: Cannot find name 'Import'.
+@@= skipped -7, +9 lines =@@
       */
      export function f1() {
          return 1;
@@ -24,7 +28,7 @@
      /**
       * @returns { Require }
 +                  ~~~~~~~
-+!!! error TS2552: Cannot find name 'Require'. Did you mean 'Required'?
++!!! error TS2749: 'Require' refers to a value, but is being used as a type here. Did you mean 'typeof Require'?
       */
      export function f2() {
          return 1;

@@ -5605,7 +5605,7 @@ func (p *Printer) generateNames(node *ast.Node) {
 		}
 	case ast.KindObjectBindingPattern, ast.KindArrayBindingPattern:
 		p.generateAllNames(node.AsBindingPattern().Elements)
-	case ast.KindImportDeclaration:
+	case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 		p.generateNames(node.AsImportDeclaration().ImportClause)
 	case ast.KindImportClause:
 		p.generateNameIfNeeded(node.AsImportClause().Name())

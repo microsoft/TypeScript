@@ -381,6 +381,7 @@ const (
 	KindJSTypeAliasDeclaration
 	KindJSExportAssignment
 	KindCommonJSExport
+	KindJSImportDeclaration
 	// Transformation nodes
 	KindNotEmittedStatement
 	KindPartiallyEmittedExpression

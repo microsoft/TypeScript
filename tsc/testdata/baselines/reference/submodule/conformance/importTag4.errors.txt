@@ -1,4 +1,5 @@
-/foo.js(10,13): error TS2304: Cannot find name 'Foo'.
+/foo.js(2,14): error TS2300: Duplicate identifier 'Foo'.
+/foo.js(6,14): error TS2300: Duplicate identifier 'Foo'.
 
 
 ==== /types.ts (0 errors) ====
@@ -6,19 +7,21 @@
         a: number;
     }
     
-==== /foo.js (1 errors) ====
+==== /foo.js (2 errors) ====
     /**
      * @import { Foo } from "./types"
+                 ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
      */
     
     /**
      * @import { Foo } from "./types"
+                 ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
      */
     
     /**
      * @param { Foo } foo
-                ~~~
-!!! error TS2304: Cannot find name 'Foo'.
      */
     function f(foo) {}
     

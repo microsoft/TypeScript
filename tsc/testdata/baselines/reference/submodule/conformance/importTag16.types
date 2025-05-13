@@ -13,7 +13,7 @@ export interface I {}
  * @param {I} b
  */
 export function foo(a, b) {}
->foo : (a: Foo, b: I) => void
->a : Foo
+>foo : (a: default, b: I) => void
+>a : default
 >b : I
 

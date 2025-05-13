@@ -106,11 +106,6 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 				// export = x
 				c.output.exportEquals = n
 			}
-		case ast.KindJSExportAssignment:
-			if c.output.exportEquals == nil {
-				// module.exports = x
-				c.output.exportEquals = node.AsExportAssignment()
-			}
 
 		case ast.KindVariableStatement:
 			n := node.AsVariableStatement()

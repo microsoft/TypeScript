@@ -2217,7 +2217,7 @@ func (c *Checker) checkSourceElementWorker(node *ast.Node) {
 		c.checkEnumMember(node)
 	case ast.KindModuleDeclaration:
 		c.checkModuleDeclaration(node)
-	case ast.KindImportDeclaration:
+	case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 		c.checkImportDeclaration(node)
 	case ast.KindImportEqualsDeclaration:
 		c.checkImportEqualsDeclaration(node)
@@ -4916,7 +4916,7 @@ func (c *Checker) checkModuleAugmentationElement(node *ast.Node) {
 			break
 		}
 		fallthrough
-	case ast.KindImportDeclaration:
+	case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 		c.grammarErrorOnFirstToken(node, diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module)
 	case ast.KindBindingElement, ast.KindVariableDeclaration:
 		name := node.Name()
@@ -5098,12 +5098,8 @@ func isExclusivelyTypeOnlyImportOrExport(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindExportDeclaration:
 		return node.AsExportDeclaration().IsTypeOnly
-	case ast.KindImportDeclaration:
+	case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 		if importClause := node.AsImportDeclaration().ImportClause; importClause != nil {
-			return importClause.AsImportClause().IsTypeOnly
-		}
-	case ast.KindJSDocImportTag:
-		if importClause := node.AsJSDocImportTag().ImportClause; importClause != nil {
 			return importClause.AsImportClause().IsTypeOnly
 		}
 	}
@@ -14200,7 +14196,7 @@ func (c *Checker) getModuleSpecifierForImportOrExport(node *ast.Node) *ast.Node 
 
 func getModuleSpecifierFromNode(node *ast.Node) *ast.Node {
 	switch node.Kind {
-	case ast.KindImportDeclaration:
+	case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 		return node.AsImportDeclaration().ModuleSpecifier
 	case ast.KindExportDeclaration:
 		return node.AsExportDeclaration().ModuleSpecifier
@@ -29414,7 +29410,7 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 		// 3). Require in Javascript
 		// 4). type A = import("./f/*gotToDefinitionHere*/oo")
 		if (ast.IsExternalModuleImportEqualsDeclaration(grandParent) && getExternalModuleImportEqualsDeclarationExpression(grandParent) == node) ||
-			((parent.Kind == ast.KindImportDeclaration || parent.Kind == ast.KindExportDeclaration) && parent.AsImportDeclaration().ModuleSpecifier == node) ||
+			((parent.Kind == ast.KindImportDeclaration || parent.Kind == ast.KindJSImportDeclaration || parent.Kind == ast.KindExportDeclaration) && parent.AsImportDeclaration().ModuleSpecifier == node) ||
 			ast.IsVariableDeclarationInitializedToRequire(grandParent) ||
 			(ast.IsLiteralTypeNode(parent) && ast.IsLiteralImportTypeNode(grandParent) && grandParent.AsImportTypeNode().Argument == parent) {
 			return c.resolveExternalModuleName(node, node, ignoreErrors)

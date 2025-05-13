@@ -20,7 +20,7 @@ func isInString(file *ast.SourceFile, position int, previousToken *ast.Node) boo
 
 func tryGetImportFromModuleSpecifier(node *ast.StringLiteralLike) *ast.Node {
 	switch node.Parent.Kind {
-	case ast.KindImportDeclaration, ast.KindExportDeclaration, ast.KindJSDocImportTag:
+	case ast.KindImportDeclaration, ast.KindJSImportDeclaration, ast.KindExportDeclaration:
 		return node.Parent
 	case ast.KindExternalModuleReference:
 		return node.Parent.Parent

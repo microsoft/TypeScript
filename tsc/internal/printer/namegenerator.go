@@ -158,7 +158,7 @@ func (g *NameGenerator) generateNameForNode(node *ast.Node, privateName bool, fl
 			panic("Generated name for a module or enum cannot be private and may have neither a prefix nor suffix")
 		}
 		return g.generateNameForModuleOrEnum(node)
-	case ast.KindImportDeclaration, ast.KindExportDeclaration:
+	case ast.KindImportDeclaration, ast.KindJSImportDeclaration, ast.KindExportDeclaration:
 		if privateName || len(prefix) > 0 || len(suffix) > 0 {
 			panic("Generated name for an import or export cannot be private and may have neither a prefix nor suffix")
 		}
