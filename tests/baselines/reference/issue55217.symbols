@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/issue55217.ts] ////
+
+=== types.ts ===
+export type ProductName = 'a' | 'b'
+>ProductName : Symbol(ProductName, Decl(types.ts, 0, 0))
+
+export type SubproductNameForProductName<P extends ProductName> = P extends unknown
+>SubproductNameForProductName : Symbol(SubproductNameForProductName, Decl(types.ts, 0, 35))
+>P : Symbol(P, Decl(types.ts, 2, 41))
+>ProductName : Symbol(ProductName, Decl(types.ts, 0, 0))
+>P : Symbol(P, Decl(types.ts, 2, 41))
+
+  ? keyof EntitiesByProductName[P]
+>EntitiesByProductName : Symbol(EntitiesByProductName, Decl(types.ts, 4, 9))
+>P : Symbol(P, Decl(types.ts, 2, 41))
+
+  : never
+
+type EntitiesByProductName = {
+>EntitiesByProductName : Symbol(EntitiesByProductName, Decl(types.ts, 4, 9))
+
+  a: { a1: { value: 'a-a1' } }
+>a : Symbol(a, Decl(types.ts, 6, 30))
+>a1 : Symbol(a1, Decl(types.ts, 7, 6))
+>value : Symbol(value, Decl(types.ts, 7, 12))
+
+  b: { b1: { value: 'b-b1' } }
+>b : Symbol(b, Decl(types.ts, 7, 30))
+>b1 : Symbol(b1, Decl(types.ts, 8, 6))
+>value : Symbol(value, Decl(types.ts, 8, 12))
+}
+
+export type DiscriminatedUnion<
+>DiscriminatedUnion : Symbol(DiscriminatedUnion, Decl(types.ts, 9, 1))
+
+  P extends ProductName = ProductName,
+>P : Symbol(P, Decl(types.ts, 11, 31))
+>ProductName : Symbol(ProductName, Decl(types.ts, 0, 0))
+>ProductName : Symbol(ProductName, Decl(types.ts, 0, 0))
+
+  E extends SubproductNameForProductName<P> = SubproductNameForProductName<P>,
+>E : Symbol(E, Decl(types.ts, 12, 38))
+>SubproductNameForProductName : Symbol(SubproductNameForProductName, Decl(types.ts, 0, 35))
+>P : Symbol(P, Decl(types.ts, 11, 31))
+>SubproductNameForProductName : Symbol(SubproductNameForProductName, Decl(types.ts, 0, 35))
+>P : Symbol(P, Decl(types.ts, 11, 31))
+
+> = P extends ProductName
+>P : Symbol(P, Decl(types.ts, 11, 31))
+>ProductName : Symbol(ProductName, Decl(types.ts, 0, 0))
+
+    ? E extends SubproductNameForProductName<P>
+>E : Symbol(E, Decl(types.ts, 12, 38))
+>SubproductNameForProductName : Symbol(SubproductNameForProductName, Decl(types.ts, 0, 35))
+>P : Symbol(P, Decl(types.ts, 11, 31))
+
+    // ? E extends unknown // With unknown, the exception doesn't happen. 
+      ? EntitiesByProductName[P][E]
+>EntitiesByProductName : Symbol(EntitiesByProductName, Decl(types.ts, 4, 9))
+>P : Symbol(P, Decl(types.ts, 11, 31))
+>E : Symbol(E, Decl(types.ts, 12, 38))
+
+      : never
+    : never
+
+=== app.ts ===
+import { SubproductNameForProductName, DiscriminatedUnion, ProductName } from './types'
+>SubproductNameForProductName : Symbol(SubproductNameForProductName, Decl(app.ts, 0, 8))
+>DiscriminatedUnion : Symbol(DiscriminatedUnion, Decl(app.ts, 0, 38))
+>ProductName : Symbol(ProductName, Decl(app.ts, 0, 58))
+
+export const bug = <P extends ProductName>() => {
+>bug : Symbol(bug, Decl(app.ts, 2, 12))
+>P : Symbol(P, Decl(app.ts, 2, 20))
+>ProductName : Symbol(ProductName, Decl(app.ts, 0, 58))
+
+  const subproducts: DiscriminatedUnion<P, SubproductNameForProductName<P>>[] = []
+>subproducts : Symbol(subproducts, Decl(app.ts, 3, 7))
+>DiscriminatedUnion : Symbol(DiscriminatedUnion, Decl(app.ts, 0, 38))
+>P : Symbol(P, Decl(app.ts, 2, 20))
+>SubproductNameForProductName : Symbol(SubproductNameForProductName, Decl(app.ts, 0, 8))
+>P : Symbol(P, Decl(app.ts, 2, 20))
+
+  subproducts.map((_: DiscriminatedUnion) => null)
+>subproducts.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>subproducts : Symbol(subproducts, Decl(app.ts, 3, 7))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>_ : Symbol(_, Decl(app.ts, 4, 19))
+>DiscriminatedUnion : Symbol(DiscriminatedUnion, Decl(app.ts, 0, 38))
+}
+
