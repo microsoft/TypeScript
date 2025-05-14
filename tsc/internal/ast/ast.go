@@ -2063,8 +2063,8 @@ type TypeParameterDeclaration struct {
 	typeSyntaxBase
 	name        *IdentifierNode // IdentifierNode
 	Constraint  *TypeNode       // TypeNode. Optional
+	Expression  *Expression     // Expression. Optional, for error recovery purposes
 	DefaultType *TypeNode       // TypeNode. Optional
-	Expression  *Expression     // Expression. Optional, For error recovery purposes
 }
 
 func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name *IdentifierNode, constraint *TypeNode, defaultType *TypeNode) *Node {
@@ -2084,7 +2084,7 @@ func (f *NodeFactory) UpdateTypeParameterDeclaration(node *TypeParameterDeclarat
 }
 
 func (node *TypeParameterDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.Constraint) || visit(v, node.DefaultType)
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.Constraint) || visit(v, node.Expression) || visit(v, node.DefaultType)
 }
 
 func (node *TypeParameterDeclaration) VisitEachChild(v *NodeVisitor) *Node {
