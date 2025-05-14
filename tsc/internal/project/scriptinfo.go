@@ -27,9 +27,11 @@ type ScriptInfo struct {
 	deferredDelete        bool
 
 	containingProjects []*Project
+
+	fs vfs.FS
 }
 
-func NewScriptInfo(fileName string, path tspath.Path, scriptKind core.ScriptKind) *ScriptInfo {
+func NewScriptInfo(fileName string, path tspath.Path, scriptKind core.ScriptKind, fs vfs.FS) *ScriptInfo {
 	isDynamic := isDynamicFileName(fileName)
 	realpath := core.IfElse(isDynamic, path, "")
 	return &ScriptInfo{
@@ -38,6 +40,7 @@ func NewScriptInfo(fileName string, path tspath.Path, scriptKind core.ScriptKind
 		realpath:   realpath,
 		isDynamic:  isDynamic,
 		scriptKind: scriptKind,
+		fs:         fs,
 	}
 }
 
@@ -51,13 +54,27 @@ func (s *ScriptInfo) Path() tspath.Path {
 
 func (s *ScriptInfo) LineMap() *ls.LineMap {
 	if s.lineMap == nil {
-		s.lineMap = ls.ComputeLineStarts(s.text)
+		s.lineMap = ls.ComputeLineStarts(s.Text())
 	}
 	return s.lineMap
 }
 
 func (s *ScriptInfo) Text() string {
+	s.reloadIfNeeded()
 	return s.text
+}
+
+func (s *ScriptInfo) Version() int {
+	s.reloadIfNeeded()
+	return s.version
+}
+
+func (s *ScriptInfo) reloadIfNeeded() {
+	if s.pendingReloadFromDisk {
+		if newText, ok := s.fs.ReadFile(s.fileName); ok {
+			s.SetTextFromDisk(newText)
+		}
+	}
 }
 
 func (s *ScriptInfo) open(newText string) {
@@ -133,7 +150,7 @@ func (s *ScriptInfo) isOrphan() bool {
 }
 
 func (s *ScriptInfo) editContent(change ls.TextChange) {
-	s.setText(change.ApplyTo(s.text))
+	s.setText(change.ApplyTo(s.Text()))
 	s.markContainingProjectsAsDirty()
 }
 

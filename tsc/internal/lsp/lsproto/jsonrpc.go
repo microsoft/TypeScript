@@ -28,6 +28,10 @@ type ID struct {
 	int int32
 }
 
+func NewIDString(str string) *ID {
+	return &ID{str: str}
+}
+
 func (id *ID) MarshalJSON() ([]byte, error) {
 	if id.str != "" {
 		return json.Marshal(id.str)
@@ -43,6 +47,13 @@ func (id *ID) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &id.int)
 }
 
+func (id *ID) TryInt() (int32, bool) {
+	if id == nil || id.str != "" {
+		return 0, false
+	}
+	return id.int, true
+}
+
 func (id *ID) MustInt() int32 {
 	if id.str != "" {
 		panic("ID is not an integer")
@@ -54,9 +65,17 @@ func (id *ID) MustInt() int32 {
 
 type RequestMessage struct {
 	JSONRPC JSONRPCVersion `json:"jsonrpc"`
-	ID      *ID            `json:"id"`
+	ID      *ID            `json:"id,omitempty"`
 	Method  Method         `json:"method"`
 	Params  any            `json:"params"`
+}
+
+func NewRequestMessage(method Method, id *ID, params any) *RequestMessage {
+	return &RequestMessage{
+		ID:     id,
+		Method: method,
+		Params: params,
+	}
 }
 
 func (r *RequestMessage) UnmarshalJSON(data []byte) error {

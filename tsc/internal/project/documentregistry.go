@@ -92,9 +92,9 @@ func (r *DocumentRegistry) getDocumentWorker(
 	if entry, ok := r.documents.Load(key); ok {
 		// We have an entry for this file. However, it may be for a different version of
 		// the script snapshot. If so, update it appropriately.
-		if entry.sourceFile.Version != scriptInfo.version {
+		if entry.sourceFile.Version != scriptInfo.Version() {
 			sourceFile := parser.ParseSourceFile(scriptInfo.fileName, scriptInfo.path, scriptInfo.text, scriptTarget, scanner.JSDocParsingModeParseAll)
-			sourceFile.Version = scriptInfo.version
+			sourceFile.Version = scriptInfo.Version()
 			entry.mu.Lock()
 			defer entry.mu.Unlock()
 			entry.sourceFile = sourceFile
@@ -104,7 +104,7 @@ func (r *DocumentRegistry) getDocumentWorker(
 	} else {
 		// Have never seen this file with these settings. Create a new source file for it.
 		sourceFile := parser.ParseSourceFile(scriptInfo.fileName, scriptInfo.path, scriptInfo.text, scriptTarget, scanner.JSDocParsingModeParseAll)
-		sourceFile.Version = scriptInfo.version
+		sourceFile.Version = scriptInfo.Version()
 		entry, _ := r.documents.LoadOrStore(key, &registryEntry{
 			sourceFile: sourceFile,
 			refCount:   0,

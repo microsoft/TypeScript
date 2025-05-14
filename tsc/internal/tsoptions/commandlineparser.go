@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/stringutil"
+	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
@@ -58,6 +59,11 @@ func ParseCommandLine(
 		Errors:        parser.errors,
 		Raw:           parser.options, // !!! keep optionsBase incase needed later. todo: figure out if this is still needed
 		CompileOnSave: nil,
+
+		comparePathsOptions: tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
+			CurrentDirectory:          host.GetCurrentDirectory(),
+		},
 	}
 }
 

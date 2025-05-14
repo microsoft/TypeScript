@@ -619,7 +619,7 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleB
 			allFileLists[file] = content
 		}
 		allFileLists[configFileName] = config.jsonText
-		host := tsoptionstest.NewVFSParseConfigHost(allFileLists, config.basePath)
+		host := tsoptionstest.NewVFSParseConfigHost(allFileLists, config.basePath, true /*useCaseSensitiveFileNames*/)
 		parsedConfigFileContent := getParsed(config, host, basePath)
 
 		baselineContent.WriteString("Fs::\n")

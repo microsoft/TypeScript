@@ -97,15 +97,51 @@ type configFileSpecs struct {
 	validatedExcludeSpecs []string
 	isDefaultIncludeSpec  bool
 }
+
+func (c *configFileSpecs) matchesExclude(fileName string, comparePathsOptions tspath.ComparePathsOptions) bool {
+	if len(c.validatedExcludeSpecs) == 0 {
+		return false
+	}
+	excludePattern := getRegularExpressionForWildcard(c.validatedExcludeSpecs, comparePathsOptions.CurrentDirectory, "exclude")
+	excludeRegex := getRegexFromPattern(excludePattern, comparePathsOptions.UseCaseSensitiveFileNames)
+	if match, err := excludeRegex.MatchString(fileName); err == nil && match {
+		return true
+	}
+	if !tspath.HasExtension(fileName) {
+		if match, err := excludeRegex.MatchString(tspath.EnsureTrailingDirectorySeparator(fileName)); err == nil && match {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *configFileSpecs) matchesInclude(fileName string, comparePathsOptions tspath.ComparePathsOptions) bool {
+	if len(c.validatedIncludeSpecs) == 0 {
+		return false
+	}
+	for _, spec := range c.validatedIncludeSpecs {
+		includePattern := getPatternFromSpec(spec, comparePathsOptions.CurrentDirectory, "files")
+		if includePattern != "" {
+			includeRegex := getRegexFromPattern(includePattern, comparePathsOptions.UseCaseSensitiveFileNames)
+			if match, err := includeRegex.MatchString(fileName); err == nil && match {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 type fileExtensionInfo struct {
 	extension      string
 	isMixedContent bool
 	scriptKind     core.ScriptKind
 }
+
 type ExtendedConfigCacheEntry struct {
 	extendedResult *TsConfigSourceFile
 	extendedConfig *parsedTsconfig
 }
+
 type parsedTsconfig struct {
 	raw     any
 	options *core.CompilerOptions
@@ -1209,6 +1245,12 @@ func parseJsonConfigFileContentWorker(
 		ConfigFile: sourceFile,
 		Raw:        parsedConfig.raw,
 		Errors:     errors,
+
+		extraFileExtensions: extraFileExtensions,
+		comparePathsOptions: tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
+			CurrentDirectory:          basePathForFileNames,
+		},
 	}
 }
 
@@ -1389,7 +1431,7 @@ func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOpt
 
 // hasFileWithHigherPriorityExtension determines whether a literal or wildcard file has already been included that has a higher extension priority.
 // file is the path to the file.
-func hasFileWithHigherPriorityExtension(file string, literalFiles collections.OrderedMap[string, string], wildcardFiles collections.OrderedMap[string, string], extensions [][]string, keyMapper func(value string) string) bool {
+func hasFileWithHigherPriorityExtension(file string, extensions [][]string, hasFile func(fileName string) bool) bool {
 	var extensionGroup []string
 	for _, group := range extensions {
 		if tspath.FileExtensionIsOneOf(file, group) {
@@ -1406,8 +1448,7 @@ func hasFileWithHigherPriorityExtension(file string, literalFiles collections.Or
 		if tspath.FileExtensionIs(file, ext) && (ext != tspath.ExtensionTs || !tspath.FileExtensionIs(file, tspath.ExtensionDts)) {
 			return false
 		}
-		higherPriorityPath := keyMapper(tspath.ChangeExtension(file, ext))
-		if literalFiles.Has(higherPriorityPath) || wildcardFiles.Has(higherPriorityPath) {
+		if hasFile(tspath.ChangeExtension(file, ext)) {
 			if ext == tspath.ExtensionDts && (tspath.FileExtensionIs(file, tspath.ExtensionJs) || tspath.FileExtensionIs(file, tspath.ExtensionJsx)) {
 				// LEGACY BEHAVIOR: An off-by-one bug somewhere in the extension priority system for wildcard module loading allowed declaration
 				// files to be loaded alongside their js(x) counterparts. We regard this as generally undesirable, but retain the behavior to
@@ -1516,7 +1557,10 @@ func getFileNamesFromConfigSpecs(
 			// This handles cases where we may encounter both <file>.ts and
 			// <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
 			// directory when they are compilation outputs.
-			if hasFileWithHigherPriorityExtension(file, literalFileMap, wildcardFileMap, supportedExtensions, keyMappper) {
+			if hasFileWithHigherPriorityExtension(file, supportedExtensions, func(fileName string) bool {
+				canonicalFileName := keyMappper(fileName)
+				return literalFileMap.Has(canonicalFileName) || wildcardFileMap.Has(canonicalFileName)
+			}) {
 				continue
 			}
 			// We may have included a wildcard path with a lower priority

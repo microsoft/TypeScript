@@ -43,7 +43,10 @@ func NewServer(opts *ServerOptions) *Server {
 	}
 }
 
-var _ project.ServiceHost = (*Server)(nil)
+var (
+	_ project.ServiceHost = (*Server)(nil)
+	_ project.Client      = (*Server)(nil)
+)
 
 type Server struct {
 	r *lsproto.BaseReader
@@ -51,6 +54,7 @@ type Server struct {
 
 	stderr io.Writer
 
+	clientSeq     int32
 	requestMethod string
 	requestTime   time.Time
 
@@ -62,34 +66,98 @@ type Server struct {
 	initializeParams *lsproto.InitializeParams
 	positionEncoding lsproto.PositionEncodingKind
 
+	watchEnabled   bool
+	watcherID      int
+	watchers       core.Set[project.WatcherHandle]
 	logger         *project.Logger
 	projectService *project.Service
 	converters     *ls.Converters
 }
 
-// FS implements project.ProjectServiceHost.
+// FS implements project.ServiceHost.
 func (s *Server) FS() vfs.FS {
 	return s.fs
 }
 
-// DefaultLibraryPath implements project.ProjectServiceHost.
+// DefaultLibraryPath implements project.ServiceHost.
 func (s *Server) DefaultLibraryPath() string {
 	return s.defaultLibraryPath
 }
 
-// GetCurrentDirectory implements project.ProjectServiceHost.
+// GetCurrentDirectory implements project.ServiceHost.
 func (s *Server) GetCurrentDirectory() string {
 	return s.cwd
 }
 
-// NewLine implements project.ProjectServiceHost.
+// NewLine implements project.ServiceHost.
 func (s *Server) NewLine() string {
 	return s.newLine.GetNewLineCharacter()
 }
 
-// Trace implements project.ProjectServiceHost.
+// Trace implements project.ServiceHost.
 func (s *Server) Trace(msg string) {
 	s.Log(msg)
+}
+
+// Client implements project.ServiceHost.
+func (s *Server) Client() project.Client {
+	if !s.watchEnabled {
+		return nil
+	}
+	return s
+}
+
+// WatchFiles implements project.Client.
+func (s *Server) WatchFiles(watchers []*lsproto.FileSystemWatcher) (project.WatcherHandle, error) {
+	watcherId := fmt.Sprintf("watcher-%d", s.watcherID)
+	if err := s.sendRequest(lsproto.MethodClientRegisterCapability, &lsproto.RegistrationParams{
+		Registrations: []*lsproto.Registration{
+			{
+				Id:     watcherId,
+				Method: string(lsproto.MethodWorkspaceDidChangeWatchedFiles),
+				RegisterOptions: ptrTo(any(lsproto.DidChangeWatchedFilesRegistrationOptions{
+					Watchers: watchers,
+				})),
+			},
+		},
+	}); err != nil {
+		return "", fmt.Errorf("failed to register file watcher: %w", err)
+	}
+
+	handle := project.WatcherHandle(watcherId)
+	s.watchers.Add(handle)
+	s.watcherID++
+	return handle, nil
+}
+
+// UnwatchFiles implements project.Client.
+func (s *Server) UnwatchFiles(handle project.WatcherHandle) error {
+	if s.watchers.Has(handle) {
+		if err := s.sendRequest(lsproto.MethodClientUnregisterCapability, &lsproto.UnregistrationParams{
+			Unregisterations: []*lsproto.Unregistration{
+				{
+					Id:     string(handle),
+					Method: string(lsproto.MethodWorkspaceDidChangeWatchedFiles),
+				},
+			},
+		}); err != nil {
+			return fmt.Errorf("failed to unregister file watcher: %w", err)
+		}
+		s.watchers.Delete(handle)
+		return nil
+	}
+
+	return fmt.Errorf("no file watcher exists with ID %s", handle)
+}
+
+// RefreshDiagnostics implements project.Client.
+func (s *Server) RefreshDiagnostics() error {
+	if ptrIsTrue(s.initializeParams.Capabilities.Workspace.Diagnostics.RefreshSupport) {
+		if err := s.sendRequest(lsproto.MethodWorkspaceDiagnosticRefresh, nil); err != nil {
+			return fmt.Errorf("failed to refresh diagnostics: %w", err)
+		}
+	}
+	return nil
 }
 
 func (s *Server) Run() error {
@@ -103,6 +171,11 @@ func (s *Server) Run() error {
 				continue
 			}
 			return err
+		}
+
+		// TODO: handle response messages
+		if req == nil {
+			continue
 		}
 
 		if s.initializeParams == nil {
@@ -132,10 +205,35 @@ func (s *Server) read() (*lsproto.RequestMessage, error) {
 
 	req := &lsproto.RequestMessage{}
 	if err := json.Unmarshal(data, req); err != nil {
+		res := &lsproto.ResponseMessage{}
+		if err = json.Unmarshal(data, res); err == nil {
+			// !!! TODO: handle response
+			return nil, nil
+		}
 		return nil, fmt.Errorf("%w: %w", lsproto.ErrInvalidRequest, err)
 	}
 
 	return req, nil
+}
+
+func (s *Server) sendRequest(method lsproto.Method, params any) error {
+	s.clientSeq++
+	id := lsproto.NewIDString(fmt.Sprintf("ts%d", s.clientSeq))
+	req := lsproto.NewRequestMessage(method, id, params)
+	data, err := json.Marshal(req)
+	if err != nil {
+		return err
+	}
+	return s.w.Write(data)
+}
+
+func (s *Server) sendNotification(method lsproto.Method, params any) error {
+	req := lsproto.NewRequestMessage(method, nil /*id*/, params)
+	data, err := json.Marshal(req)
+	if err != nil {
+		return err
+	}
+	return s.w.Write(data)
 }
 
 func (s *Server) sendResult(id *lsproto.ID, result any) error {
@@ -189,6 +287,8 @@ func (s *Server) handleMessage(req *lsproto.RequestMessage) error {
 		return s.handleDidSave(req)
 	case *lsproto.DidCloseTextDocumentParams:
 		return s.handleDidClose(req)
+	case *lsproto.DidChangeWatchedFilesParams:
+		return s.handleDidChangeWatchedFiles(req)
 	case *lsproto.DocumentDiagnosticParams:
 		return s.handleDocumentDiagnostic(req)
 	case *lsproto.HoverParams:
@@ -262,9 +362,14 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) error {
 }
 
 func (s *Server) handleInitialized(req *lsproto.RequestMessage) error {
+	if s.initializeParams.Capabilities.Workspace.DidChangeWatchedFiles != nil && *s.initializeParams.Capabilities.Workspace.DidChangeWatchedFiles.DynamicRegistration {
+		s.watchEnabled = true
+	}
+
 	s.logger = project.NewLogger([]io.Writer{s.stderr}, "" /*file*/, project.LogLevelVerbose)
 	s.projectService = project.NewService(s, project.ServiceOptions{
 		Logger:           s.logger,
+		WatchEnabled:     s.watchEnabled,
 		PositionEncoding: s.positionEncoding,
 	})
 
@@ -320,6 +425,11 @@ func (s *Server) handleDidClose(req *lsproto.RequestMessage) error {
 	params := req.Params.(*lsproto.DidCloseTextDocumentParams)
 	s.projectService.CloseFile(ls.DocumentURIToFileName(params.TextDocument.Uri))
 	return nil
+}
+
+func (s *Server) handleDidChangeWatchedFiles(req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DidChangeWatchedFilesParams)
+	return s.projectService.OnWatchedFilesChanged(params.Changes)
 }
 
 func (s *Server) handleDocumentDiagnostic(req *lsproto.RequestMessage) error {
@@ -444,4 +554,11 @@ func codeFence(lang string, code string) string {
 
 func ptrTo[T any](v T) *T {
 	return &v
+}
+
+func ptrIsTrue(v *bool) bool {
+	if v == nil {
+		return false
+	}
+	return *v
 }

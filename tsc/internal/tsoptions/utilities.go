@@ -150,6 +150,19 @@ var wildcardMatchers = map[usage]WildcardMatcher{
 	usageExclude:     excludeMatcher,
 }
 
+func getPatternFromSpec(
+	spec string,
+	basePath string,
+	usage usage,
+) string {
+	pattern := getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage])
+	if pattern == "" {
+		return ""
+	}
+	ending := core.IfElse(usage == "exclude", "($|/)", "$")
+	return fmt.Sprintf("^(%s)%s", pattern, ending)
+}
+
 func getSubPatternFromSpec(
 	spec string,
 	basePath string,

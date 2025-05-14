@@ -119,6 +119,16 @@ func (api *API) PositionEncoding() lsproto.PositionEncodingKind {
 	return lsproto.PositionEncodingKindUTF8
 }
 
+// Client implements ProjectHost.
+func (api *API) Client() project.Client {
+	return nil
+}
+
+// IsWatchEnabled implements ProjectHost.
+func (api *API) IsWatchEnabled() bool {
+	return false
+}
+
 func (api *API) HandleRequest(id int, method string, payload []byte) ([]byte, error) {
 	params, err := unmarshalPayload(method, payload)
 	if err != nil {
@@ -351,7 +361,7 @@ func (api *API) getOrCreateScriptInfo(fileName string, path tspath.Path, scriptK
 	if !ok {
 		return nil
 	}
-	info = project.NewScriptInfo(fileName, path, scriptKind)
+	info = project.NewScriptInfo(fileName, path, scriptKind, api.host.FS())
 	info.SetTextFromDisk(content)
 	api.scriptInfosMu.Lock()
 	defer api.scriptInfosMu.Unlock()

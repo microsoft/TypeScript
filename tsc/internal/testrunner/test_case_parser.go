@@ -122,7 +122,7 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 	for _, data := range testUnits {
 		allFiles[tspath.GetNormalizedAbsolutePath(data.name, currentDirectory)] = data.content
 	}
-	parseConfigHost := tsoptionstest.NewVFSParseConfigHost(allFiles, currentDirectory)
+	parseConfigHost := tsoptionstest.NewVFSParseConfigHost(allFiles, currentDirectory, true /*useCaseSensitiveFileNames*/)
 
 	// check if project has tsconfig.json in the list of files
 	var tsConfig *tsoptions.ParsedCommandLine
