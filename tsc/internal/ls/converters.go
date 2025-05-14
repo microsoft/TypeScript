@@ -239,8 +239,11 @@ func (c *Converters) PositionToLineAndCharacter(scriptInfo ScriptInfo, position 
 
 	lineMap := scriptInfo.LineMap()
 
-	line, _ := slices.BinarySearch(lineMap.LineStarts, position)
-	line = max(0, line-1)
+	line, isLineStart := slices.BinarySearch(lineMap.LineStarts, position)
+	if !isLineStart {
+		line--
+	}
+	line = max(0, line)
 
 	// The current line ranges from lineMap.LineStarts[line] (or 0) to lineMap.LineStarts[line+1] (or len(text)).
 
