@@ -18,7 +18,7 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 		return nil
 	}
 
-	symbols := createSymbolTable(nil)
+	symbols := make(ast.SymbolTable)
 	isStaticSymbol := false
 
 	// Copy the given symbol into symbol tables if the symbol has the given meaning
@@ -397,4 +397,74 @@ func (c *Checker) tryGetTarget(symbol *ast.Symbol) *ast.Symbol {
 
 func (c *Checker) GetExportSymbolOfSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getMergedSymbol(core.IfElse(symbol.ExportSymbol != nil, symbol.ExportSymbol, symbol))
+}
+
+func (c *Checker) GetTypeArgumentConstraint(node *ast.Node) *Type {
+	if !ast.IsTypeNode(node) {
+		return nil
+	}
+	return c.getTypeArgumentConstraint(node)
+}
+
+func (c *Checker) getTypeArgumentConstraint(node *ast.Node) *Type {
+	typeReferenceNode := core.IfElse(ast.IsTypeReferenceType(node.Parent), node.Parent, nil)
+	if typeReferenceNode == nil {
+		return nil
+	}
+	typeParameters := c.getTypeParametersForTypeReferenceOrImport(typeReferenceNode)
+	if len(typeParameters) == 0 {
+		return nil
+	}
+
+	typeParamIndex := core.FindIndex(typeReferenceNode.TypeArguments(), func(n *ast.Node) bool {
+		return n == node
+	})
+	constraint := c.getConstraintOfTypeParameter(typeParameters[typeParamIndex])
+	if constraint != nil {
+		return c.instantiateType(
+			constraint,
+			newTypeMapper(typeParameters, c.getEffectiveTypeArguments(typeReferenceNode, typeParameters)))
+	}
+	return nil
+}
+
+func (c *Checker) IsTypeInvalidDueToUnionDiscriminant(contextualType *Type, obj *ast.Node) bool {
+	properties := obj.Properties()
+	return core.Some(properties, func(property *ast.Node) bool {
+		var nameType *Type
+		propertyName := property.Name()
+		if propertyName != nil {
+			if ast.IsJsxNamespacedName(propertyName) {
+				nameType = c.getStringLiteralType(propertyName.Text())
+			} else {
+				nameType = c.getLiteralTypeFromPropertyName(propertyName)
+			}
+		}
+		var name string
+		if nameType != nil && isTypeUsableAsPropertyName(nameType) {
+			name = getPropertyNameFromType(nameType)
+		}
+		var expected *Type
+		if name != "" {
+			expected = c.getTypeOfPropertyOfType(contextualType, name)
+		}
+		return expected != nil && isLiteralType(expected) && !c.isTypeAssignableTo(c.getTypeOfNode(property), expected)
+	})
+}
+
+// Unlike `getExportsOfModule`, this includes properties of an `export =` value.
+func (c *Checker) GetExportsAndPropertiesOfModule(moduleSymbol *ast.Symbol) []*ast.Symbol {
+	exports := c.getExportsOfModuleAsArray(moduleSymbol)
+	exportEquals := c.resolveExternalModuleSymbol(moduleSymbol, false /*dontResolveAlias*/)
+	if exportEquals != moduleSymbol {
+		t := c.getTypeOfSymbol(exportEquals)
+		if c.shouldTreatPropertiesOfExternalModuleAsExports(t) {
+			exports = append(exports, c.getPropertiesOfType(t)...)
+		}
+	}
+	return exports
+}
+
+func (c *Checker) getExportsOfModuleAsArray(moduleSymbol *ast.Symbol) []*ast.Symbol {
+	return symbolsToArray(c.getExportsOfModule(moduleSymbol))
 }

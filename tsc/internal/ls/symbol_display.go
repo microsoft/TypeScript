@@ -288,15 +288,18 @@ func isLocalVariableOrFunction(symbol *ast.Symbol) bool {
 		}
 
 		// If the parent is not source file or module block, it is a local variable.
-		for parent := decl.Parent; !ast.IsFunctionBlock(parent); parent = parent.Parent {
+		parent := decl.Parent
+		for ; !ast.IsFunctionBlock(parent); parent = parent.Parent {
 			// Reached source file or module block
 			if parent.Kind == ast.KindSourceFile || parent.Kind == ast.KindModuleBlock {
-				continue
+				break
 			}
 		}
 
-		// Parent is in function block.
-		return true
+		if ast.IsFunctionBlock(parent) {
+			// Parent is in function block.
+			return true
+		}
 	}
 	return false
 }

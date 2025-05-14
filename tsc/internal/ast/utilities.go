@@ -1527,14 +1527,14 @@ func GetExtendsHeritageClauseElement(node *Node) *ExpressionWithTypeArgumentsNod
 }
 
 func GetExtendsHeritageClauseElements(node *Node) []*ExpressionWithTypeArgumentsNode {
-	return getHeritageElements(node, KindExtendsKeyword)
+	return GetHeritageElements(node, KindExtendsKeyword)
 }
 
 func GetImplementsHeritageClauseElements(node *Node) []*ExpressionWithTypeArgumentsNode {
-	return getHeritageElements(node, KindImplementsKeyword)
+	return GetHeritageElements(node, KindImplementsKeyword)
 }
 
-func getHeritageElements(node *Node, kind Kind) []*Node {
+func GetHeritageElements(node *Node, kind Kind) []*Node {
 	clause := getHeritageClause(node, kind)
 	if clause != nil {
 		return clause.AsHeritageClause().Types.Nodes
@@ -2792,4 +2792,136 @@ func ForEachChildAndJSDoc(node *Node, sourceFile *SourceFile, v Visitor) bool {
 		}
 	}
 	return node.ForEachChild(v)
+}
+
+func IsTypeReferenceType(node *Node) bool {
+	return node.Kind == KindTypeReference || node.Kind == KindExpressionWithTypeArguments
+}
+
+func IsVariableLike(node *Node) bool {
+	switch node.Kind {
+	case KindBindingElement, KindEnumMember, KindParameter, KindPropertyAssignment, KindPropertyDeclaration,
+		KindPropertySignature, KindShorthandPropertyAssignment, KindVariableDeclaration:
+		return true
+	}
+	return false
+}
+
+func HasInitializer(node *Node) bool {
+	switch node.Kind {
+	case KindVariableDeclaration, KindParameter, KindBindingElement, KindPropertyDeclaration,
+		KindPropertyAssignment, KindEnumMember, KindForStatement, KindForInStatement, KindForOfStatement,
+		KindJsxAttribute:
+		return node.Initializer() != nil
+	default:
+		return false
+	}
+}
+
+func GetTypeAnnotationNode(node *Node) *TypeNode {
+	switch node.Kind {
+	case KindVariableDeclaration, KindParameter, KindPropertySignature, KindPropertyDeclaration,
+		KindTypePredicate, KindParenthesizedType, KindTypeOperator, KindMappedType, KindTypeAssertionExpression,
+		KindAsExpression, KindSatisfiesExpression, KindTypeAliasDeclaration, KindJSTypeAliasDeclaration,
+		KindNamedTupleMember, KindOptionalType, KindRestType, KindTemplateLiteralTypeSpan, KindJSDocTypeExpression,
+		KindJSDocPropertyTag, KindJSDocNullableType, KindJSDocNonNullableType, KindJSDocOptionalType:
+		return node.Type()
+	default:
+		funcLike := node.FunctionLikeData()
+		if funcLike != nil {
+			return funcLike.Type
+		}
+		return nil
+	}
+}
+
+func IsObjectTypeDeclaration(node *Node) bool {
+	return IsClassLike(node) || IsInterfaceDeclaration(node) || IsTypeLiteralNode(node)
+}
+
+func IsClassOrTypeElement(node *Node) bool {
+	return IsClassElement(node) || IsTypeElement(node)
+}
+
+func GetClassExtendsHeritageElement(node *Node) *ExpressionWithTypeArgumentsNode {
+	heritageElements := GetHeritageElements(node, KindExtendsKeyword)
+	if len(heritageElements) > 0 {
+		return heritageElements[0]
+	}
+	return nil
+}
+
+func GetImplementsTypeNodes(node *Node) []*ExpressionWithTypeArgumentsNode {
+	return GetHeritageElements(node, KindImplementsKeyword)
+}
+
+func IsTypeKeywordToken(node *Node) bool {
+	return node.Kind == KindTypeKeyword
+}
+
+// If node is a single comment JSDoc, we do not visit the comment node list.
+func IsJSDocSingleCommentNodeList(parent *Node, nodeList *NodeList) bool {
+	return IsJSDocSingleCommentNode(parent) && nodeList == parent.AsJSDoc().Comment
+}
+
+func IsJSDocSingleCommentNode(node *Node) bool {
+	return node.Kind == KindJSDoc && node.AsJSDoc().Comment != nil && len(node.AsJSDoc().Comment.Nodes) == 1
+}
+
+func IsValidTypeOnlyAliasUseSite(useSite *Node) bool {
+	return useSite.Flags&NodeFlagsAmbient != 0 ||
+		IsPartOfTypeQuery(useSite) ||
+		isIdentifierInNonEmittingHeritageClause(useSite) ||
+		isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite) ||
+		!(IsExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite))
+}
+
+func isIdentifierInNonEmittingHeritageClause(node *Node) bool {
+	if !IsIdentifier(node) {
+		return false
+	}
+	parent := node.Parent
+	for IsPropertyAccessExpression(parent) || IsExpressionWithTypeArguments(parent) {
+		parent = parent.Parent
+	}
+	return IsHeritageClause(parent) && (parent.AsHeritageClause().Token == KindImplementsKeyword || IsInterfaceDeclaration(parent.Parent))
+}
+
+func isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node *Node) bool {
+	for NodeKindIs(node, KindIdentifier, KindPropertyAccessExpression) {
+		node = node.Parent
+	}
+	if node.Kind != KindComputedPropertyName {
+		return false
+	}
+	if HasSyntacticModifier(node.Parent, ModifierFlagsAbstract) {
+		return true
+	}
+	return NodeKindIs(node.Parent.Parent, KindInterfaceDeclaration, KindTypeLiteral)
+}
+
+func isShorthandPropertyNameUseSite(useSite *Node) bool {
+	return IsIdentifier(useSite) && IsShorthandPropertyAssignment(useSite.Parent) && useSite.Parent.AsShorthandPropertyAssignment().Name() == useSite
+}
+
+func GetPropertyNameForPropertyNameNode(name *Node) string {
+	switch name.Kind {
+	case KindIdentifier, KindPrivateIdentifier, KindStringLiteral, KindNoSubstitutionTemplateLiteral,
+		KindNumericLiteral, KindBigIntLiteral, KindJsxNamespacedName:
+		return name.Text()
+	case KindComputedPropertyName:
+		nameExpression := name.AsComputedPropertyName().Expression
+		if IsStringOrNumericLiteralLike(nameExpression) {
+			return nameExpression.Text()
+		}
+		if IsSignedNumericLiteral(nameExpression) {
+			text := nameExpression.AsPrefixUnaryExpression().Operand.Text()
+			if nameExpression.AsPrefixUnaryExpression().Operator == KindMinusToken {
+				text = "-" + text
+			}
+			return text
+		}
+		return InternalSymbolNameMissing
+	}
+	panic("Unhandled case in getPropertyNameForPropertyNameNode")
 }

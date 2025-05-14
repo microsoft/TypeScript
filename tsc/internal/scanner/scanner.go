@@ -3,6 +3,7 @@ package scanner
 import (
 	"fmt"
 	"iter"
+	"maps"
 	"strconv"
 	"strings"
 	"unicode"
@@ -117,69 +118,73 @@ var textToKeyword = map[string]ast.Kind{
 	"of":          ast.KindOfKeyword,
 }
 
-var textToToken = map[string]ast.Kind{
-	"{":    ast.KindOpenBraceToken,
-	"}":    ast.KindCloseBraceToken,
-	"(":    ast.KindOpenParenToken,
-	")":    ast.KindCloseParenToken,
-	"[":    ast.KindOpenBracketToken,
-	"]":    ast.KindCloseBracketToken,
-	".":    ast.KindDotToken,
-	"...":  ast.KindDotDotDotToken,
-	";":    ast.KindSemicolonToken,
-	",":    ast.KindCommaToken,
-	"<":    ast.KindLessThanToken,
-	">":    ast.KindGreaterThanToken,
-	"<=":   ast.KindLessThanEqualsToken,
-	">=":   ast.KindGreaterThanEqualsToken,
-	"==":   ast.KindEqualsEqualsToken,
-	"!=":   ast.KindExclamationEqualsToken,
-	"===":  ast.KindEqualsEqualsEqualsToken,
-	"!==":  ast.KindExclamationEqualsEqualsToken,
-	"=>":   ast.KindEqualsGreaterThanToken,
-	"+":    ast.KindPlusToken,
-	"-":    ast.KindMinusToken,
-	"**":   ast.KindAsteriskAsteriskToken,
-	"*":    ast.KindAsteriskToken,
-	"/":    ast.KindSlashToken,
-	"%":    ast.KindPercentToken,
-	"++":   ast.KindPlusPlusToken,
-	"--":   ast.KindMinusMinusToken,
-	"<<":   ast.KindLessThanLessThanToken,
-	"</":   ast.KindLessThanSlashToken,
-	">>":   ast.KindGreaterThanGreaterThanToken,
-	">>>":  ast.KindGreaterThanGreaterThanGreaterThanToken,
-	"&":    ast.KindAmpersandToken,
-	"|":    ast.KindBarToken,
-	"^":    ast.KindCaretToken,
-	"!":    ast.KindExclamationToken,
-	"~":    ast.KindTildeToken,
-	"&&":   ast.KindAmpersandAmpersandToken,
-	"||":   ast.KindBarBarToken,
-	"?":    ast.KindQuestionToken,
-	"??":   ast.KindQuestionQuestionToken,
-	"?.":   ast.KindQuestionDotToken,
-	":":    ast.KindColonToken,
-	"=":    ast.KindEqualsToken,
-	"+=":   ast.KindPlusEqualsToken,
-	"-=":   ast.KindMinusEqualsToken,
-	"*=":   ast.KindAsteriskEqualsToken,
-	"**=":  ast.KindAsteriskAsteriskEqualsToken,
-	"/=":   ast.KindSlashEqualsToken,
-	"%=":   ast.KindPercentEqualsToken,
-	"<<=":  ast.KindLessThanLessThanEqualsToken,
-	">>=":  ast.KindGreaterThanGreaterThanEqualsToken,
-	">>>=": ast.KindGreaterThanGreaterThanGreaterThanEqualsToken,
-	"&=":   ast.KindAmpersandEqualsToken,
-	"|=":   ast.KindBarEqualsToken,
-	"^=":   ast.KindCaretEqualsToken,
-	"||=":  ast.KindBarBarEqualsToken,
-	"&&=":  ast.KindAmpersandAmpersandEqualsToken,
-	"??=":  ast.KindQuestionQuestionEqualsToken,
-	"@":    ast.KindAtToken,
-	"#":    ast.KindHashToken,
-	"`":    ast.KindBacktickToken,
-}
+var textToToken = func() map[string]ast.Kind {
+	m := map[string]ast.Kind{
+		"{":    ast.KindOpenBraceToken,
+		"}":    ast.KindCloseBraceToken,
+		"(":    ast.KindOpenParenToken,
+		")":    ast.KindCloseParenToken,
+		"[":    ast.KindOpenBracketToken,
+		"]":    ast.KindCloseBracketToken,
+		".":    ast.KindDotToken,
+		"...":  ast.KindDotDotDotToken,
+		";":    ast.KindSemicolonToken,
+		",":    ast.KindCommaToken,
+		"<":    ast.KindLessThanToken,
+		">":    ast.KindGreaterThanToken,
+		"<=":   ast.KindLessThanEqualsToken,
+		">=":   ast.KindGreaterThanEqualsToken,
+		"==":   ast.KindEqualsEqualsToken,
+		"!=":   ast.KindExclamationEqualsToken,
+		"===":  ast.KindEqualsEqualsEqualsToken,
+		"!==":  ast.KindExclamationEqualsEqualsToken,
+		"=>":   ast.KindEqualsGreaterThanToken,
+		"+":    ast.KindPlusToken,
+		"-":    ast.KindMinusToken,
+		"**":   ast.KindAsteriskAsteriskToken,
+		"*":    ast.KindAsteriskToken,
+		"/":    ast.KindSlashToken,
+		"%":    ast.KindPercentToken,
+		"++":   ast.KindPlusPlusToken,
+		"--":   ast.KindMinusMinusToken,
+		"<<":   ast.KindLessThanLessThanToken,
+		"</":   ast.KindLessThanSlashToken,
+		">>":   ast.KindGreaterThanGreaterThanToken,
+		">>>":  ast.KindGreaterThanGreaterThanGreaterThanToken,
+		"&":    ast.KindAmpersandToken,
+		"|":    ast.KindBarToken,
+		"^":    ast.KindCaretToken,
+		"!":    ast.KindExclamationToken,
+		"~":    ast.KindTildeToken,
+		"&&":   ast.KindAmpersandAmpersandToken,
+		"||":   ast.KindBarBarToken,
+		"?":    ast.KindQuestionToken,
+		"??":   ast.KindQuestionQuestionToken,
+		"?.":   ast.KindQuestionDotToken,
+		":":    ast.KindColonToken,
+		"=":    ast.KindEqualsToken,
+		"+=":   ast.KindPlusEqualsToken,
+		"-=":   ast.KindMinusEqualsToken,
+		"*=":   ast.KindAsteriskEqualsToken,
+		"**=":  ast.KindAsteriskAsteriskEqualsToken,
+		"/=":   ast.KindSlashEqualsToken,
+		"%=":   ast.KindPercentEqualsToken,
+		"<<=":  ast.KindLessThanLessThanEqualsToken,
+		">>=":  ast.KindGreaterThanGreaterThanEqualsToken,
+		">>>=": ast.KindGreaterThanGreaterThanGreaterThanEqualsToken,
+		"&=":   ast.KindAmpersandEqualsToken,
+		"|=":   ast.KindBarEqualsToken,
+		"^=":   ast.KindCaretEqualsToken,
+		"||=":  ast.KindBarBarEqualsToken,
+		"&&=":  ast.KindAmpersandAmpersandEqualsToken,
+		"??=":  ast.KindQuestionQuestionEqualsToken,
+		"@":    ast.KindAtToken,
+		"#":    ast.KindHashToken,
+		"`":    ast.KindBacktickToken,
+	}
+	maps.Copy(m, textToKeyword)
+	return m
+}()
 
 // As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
 // IdentifierStart ::
@@ -2013,10 +2018,7 @@ func isInUnicodeRanges(cp rune, ranges []rune) bool {
 var tokenToText map[ast.Kind]string
 
 func init() {
-	tokenToText = make(map[ast.Kind]string, len(textToKeyword)+len(textToToken))
-	for text, key := range textToKeyword {
-		tokenToText[key] = text
-	}
+	tokenToText = make(map[ast.Kind]string, len(textToToken))
 	for text, key := range textToToken {
 		tokenToText[key] = text
 	}
