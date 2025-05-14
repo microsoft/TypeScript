@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/externalModules/topLevelAwait.4.ts] ////
+
+=== topLevelAwait.4.ts ===
+(await
+>(await WebAssembly.instantiateStreaming(fetch(""))) : WebAssembly.WebAssemblyInstantiatedSource
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await WebAssembly.instantiateStreaming(fetch("")) : WebAssembly.WebAssemblyInstantiatedSource
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ WebAssembly.instantiateStreaming(fetch("")));
+>WebAssembly.instantiateStreaming(fetch("")) : Promise<WebAssembly.WebAssemblyInstantiatedSource>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>WebAssembly.instantiateStreaming : (source: Response | PromiseLike<Response>, importObject?: WebAssembly.Imports) => Promise<WebAssembly.WebAssemblyInstantiatedSource>
+>                                 : ^      ^^                                ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>WebAssembly : typeof WebAssembly
+>            : ^^^^^^^^^^^^^^^^^^
+>instantiateStreaming : (source: Response | PromiseLike<Response>, importObject?: WebAssembly.Imports) => Promise<WebAssembly.WebAssemblyInstantiatedSource>
+>                     : ^      ^^                                ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>fetch("") : Promise<Response>
+>          : ^^^^^^^^^^^^^^^^^
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+>      : ^     ^^                 ^^    ^^^           ^^^^^                 
+>"" : ""
+>   : ^^
+
+export class BitSet {}
+>BitSet : BitSet
+>       : ^^^^^^
+
