@@ -90,9 +90,9 @@ func (c *Checker) GetQuickInfoAtLocation(node *ast.Node) string {
 		return ""
 	}
 	flags := symbol.Flags
-	if flags&ast.SymbolFlagsType != 0 && !ast.IsInExpressionContext(node) {
-		// If the symbol has a type meaning and we're not in an expression context, remove any value meanings
-		flags &^= ast.SymbolFlagsValue
+	if flags&ast.SymbolFlagsType != 0 && (ast.IsPartOfTypeNode(node) || isTypeDeclarationName(node)) {
+		// If the symbol has a type meaning and we're in a type context, remove value-only meanings
+		flags &^= ast.SymbolFlagsVariable | ast.SymbolFlagsFunction
 	}
 	p := c.newPrinter(TypeFormatFlagsNone)
 	if isAlias {
