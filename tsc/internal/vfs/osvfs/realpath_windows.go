@@ -11,11 +11,25 @@ import (
 // This implementation is based on what Node's fs.realpath.native does, via libuv: https://github.com/libuv/libuv/blob/ec5a4b54f7da7eeb01679005c615fee9633cdb3b/src/win/fs.c#L2937
 
 func realpath(path string) (string, error) {
-	h, err := openMetadata(path)
-	if err != nil {
-		return "", err
+	var h windows.Handle
+	if len(path) < 248 {
+		var err error
+		h, err = openMetadata(path)
+		if err != nil {
+			return "", err
+		}
+		defer windows.CloseHandle(h) //nolint:errcheck
+	} else {
+		// For long paths, defer to os.Open to run the path through fixLongPath.
+		f, err := os.Open(path)
+		if err != nil {
+			return "", err
+		}
+		defer f.Close()
+
+		// Works on directories too since https://go.dev/cl/405275.
+		h = windows.Handle(f.Fd())
 	}
-	defer windows.CloseHandle(h) //nolint:errcheck
 
 	// based on https://github.com/golang/go/blob/f4e3ec3dbe3b8e04a058d266adf8e048bab563f2/src/os/file_windows.go#L389
 

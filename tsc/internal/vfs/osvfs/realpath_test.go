@@ -16,24 +16,11 @@ import (
 func TestSymlinkRealpath(t *testing.T) {
 	t.Parallel()
 
-	tmp := t.TempDir()
-
-	target := filepath.Join(tmp, "target")
-	targetFile := filepath.Join(target, "file")
-
-	link := filepath.Join(tmp, "link")
-	linkFile := filepath.Join(link, "file")
-
-	const expectedContents = "hello"
-
-	assert.NilError(t, os.MkdirAll(target, 0o777))
-	assert.NilError(t, os.WriteFile(targetFile, []byte(expectedContents), 0o666))
-
-	mklink(t, target, link, true)
+	targetFile, linkFile := setupSymlinks(t)
 
 	gotContents, err := os.ReadFile(linkFile)
 	assert.NilError(t, err)
-	assert.Equal(t, string(gotContents), expectedContents)
+	assert.Equal(t, string(gotContents), "hello")
 
 	fs := FS()
 
@@ -48,20 +35,63 @@ func TestSymlinkRealpath(t *testing.T) {
 	}
 }
 
-func mklink(t *testing.T, target, link string, isDir bool) {
-	t.Helper()
+func setupSymlinks(tb testing.TB) (targetFile, linkFile string) {
+	tb.Helper()
+
+	tmp := tb.TempDir()
+
+	target := filepath.Join(tmp, "target")
+	targetFile = filepath.Join(target, "file")
+
+	link := filepath.Join(tmp, "link")
+	linkFile = filepath.Join(link, "file")
+
+	assert.NilError(tb, os.MkdirAll(target, 0o777))
+	assert.NilError(tb, os.WriteFile(targetFile, []byte("hello"), 0o666))
+
+	mklink(tb, target, link, true)
+
+	return targetFile, linkFile
+}
+
+func mklink(tb testing.TB, target, link string, isDir bool) {
+	tb.Helper()
 
 	if runtime.GOOS == "windows" && isDir {
 		// Don't use os.Symlink on Windows, as it creates a "real" symlink, not a junction.
-		assert.NilError(t, exec.Command("cmd", "/c", "mklink", "/J", link, target).Run())
+		assert.NilError(tb, exec.Command("cmd", "/c", "mklink", "/J", link, target).Run())
 	} else {
 		err := os.Symlink(target, link)
 		if err != nil && !isDir && runtime.GOOS == "windows" && strings.Contains(err.Error(), "A required privilege is not held by the client") {
-			t.Log(err)
-			t.Skip("file symlink support is not enabled without elevation or developer mode")
+			tb.Log(err)
+			tb.Skip("file symlink support is not enabled without elevation or developer mode")
 		}
-		assert.NilError(t, err)
+		assert.NilError(tb, err)
 	}
+}
+
+func BenchmarkRealpath(b *testing.B) {
+	targetFile, linkFile := setupSymlinks(b)
+
+	fs := FS()
+	normalizedTargetFile := tspath.NormalizePath(targetFile)
+	normalizedLinkFile := tspath.NormalizePath(linkFile)
+
+	b.Run("target", func(b *testing.B) {
+		b.ReportAllocs()
+
+		for b.Loop() {
+			fs.Realpath(normalizedTargetFile)
+		}
+	})
+
+	b.Run("link", func(b *testing.B) {
+		b.ReportAllocs()
+
+		for b.Loop() {
+			fs.Realpath(normalizedLinkFile)
+		}
+	})
 }
 
 func TestGetAccessibleEntries(t *testing.T) {
