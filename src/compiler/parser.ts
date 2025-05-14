@@ -2205,7 +2205,7 @@ namespace Parser {
 
     function nextToken(): SyntaxKind {
         // if the keyword had an escape
-        if (isKeyword(currentToken) && (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape())) {
+        if (isKeyword(currentToken) && currentToken !== SyntaxKind.ConstructorKeyword && (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape())) {
             // issue a parse error for the escape
             parseErrorAt(scanner.getTokenStart(), scanner.getTokenEnd(), Diagnostics.Keywords_cannot_contain_escape_characters);
         }
