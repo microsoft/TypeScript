@@ -949,7 +949,7 @@ export function startEndOverlapsWithStartEnd(start1: number, end1: number, start
 }
 
 /**
- * Assumes `candidate.start <= position` holds.
+ * Assumes `candidate.pos <= position` holds.
  *
  * @internal
  */
@@ -1087,7 +1087,8 @@ function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
             return isCompletedNode((n as BinaryExpression).right, sourceFile);
         case SyntaxKind.ConditionalExpression:
             return isCompletedNode((n as ConditionalExpression).whenFalse, sourceFile);
-
+        case SyntaxKind.TypeReference:
+            return nodeEndsWith(n, SyntaxKind.GreaterThanToken, sourceFile);
         default:
             return true;
     }
