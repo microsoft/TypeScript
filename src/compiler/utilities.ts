@@ -249,6 +249,7 @@ import {
     InterfaceDeclaration,
     InternalEmitFlags,
     InternalSymbolName,
+    IntersectionType,
     IntroducesNewScopeNode,
     isAccessor,
     isAnyDirectorySeparator,
@@ -11063,20 +11064,27 @@ export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName): 
  * Indicates whether a type can be used as a property name.
  * @internal
  */
-export function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType {
-    return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
+export function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType | IntersectionType {
+    return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique) ||
+        !!(type.flags & TypeFlags.Intersection) && some((type as IntersectionType).types, isTypeUsableAsPropertyName);
 }
 
 /**
  * Gets the symbolic name for a member from its type.
  * @internal
  */
-export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
+export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType | IntersectionType): __String {
     if (type.flags & TypeFlags.UniqueESSymbol) {
         return (type as UniqueESSymbolType).escapedName;
     }
     if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
+    }
+    if (type.flags & TypeFlags.Intersection) {
+        const element = find((type as IntersectionType).types, isTypeUsableAsPropertyName);
+        if (element !== undefined) {
+            return getPropertyNameFromType(element);
+        }
     }
     return Debug.fail();
 }
