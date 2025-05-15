@@ -1,0 +1,543 @@
+// === Completions ===
+=== /n.ts ===
+// namespace N {
+//     export const InnerObjectExported = {
+//         A: "a"
+//     } as const
+//     const InnerObjectNotExported = {
+//         B: "b"
+//     } as const
+//     export type InnerObjectType = {
+//         [InnerObjectExported.A]: number
+//         [InnerObjectNotExported.B]: number
+//     }
+// }
+// const OuterObject = {
+//     C: "c"
+// } as const
+// type OuterObjectType = N.InnerObjectType & {
+//     [OuterObject.C]: number
+// }
+// import * as mu from './m'
+// declare const x1: N.InnerObjectType;
+// declare const x2: OuterObjectType;
+// declare const x3: mu.M.InnerObjectType;
+// declare const x4: mu.OuterObjectType;
+// declare const x5: mu.omega.O.InnerObjectType;
+// declare const x6: mu.omega.OuterObjectType;
+// x1.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) a
+// | (property) [InnerObjectNotExported.B]: number
+// | ----------------------------------------------------------------------
+// x2.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) a
+// | (property) [InnerObjectNotExported.B]: number
+// | (property) c
+// | ----------------------------------------------------------------------
+// x3.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) a
+// | (property) [InnerObjectNotExported.B]: number
+// | ----------------------------------------------------------------------
+// x4.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) a
+// | (property) [InnerObjectNotExported.B]: number
+// | (property) c
+// | (property) [OuterObjectNotExported.D]: number
+// | ----------------------------------------------------------------------
+// x5.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) a
+// | (property) [InnerObjectNotExported.B]: number
+// | ----------------------------------------------------------------------
+// x6.;
+//    ^
+// | ----------------------------------------------------------------------
+// | (property) a
+// | (property) [InnerObjectNotExported.B]: number
+// | (property) c
+// | (property) [OuterObjectNotExported.D]: number
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 667,
+      "name": "a"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "a",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerObjectNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 672,
+      "name": "b"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "a",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerObjectNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "c",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 677,
+      "name": "c"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "a",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerObjectNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 682,
+      "name": "d"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "a",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerObjectNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "c",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "d",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[OuterObjectNotExported.D]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 687,
+      "name": "e"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "a",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerObjectNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/n.ts",
+      "position": 692,
+      "name": "f"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "a",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "b",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[InnerObjectNotExported.B]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "c",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "d",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "[OuterObjectNotExported.D]",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  }
+]
