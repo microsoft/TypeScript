@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/confusingExclamationBeforeInAndInstanceOf.ts] ////
+
+=== confusingExclamationBeforeInAndInstanceOf.ts ===
+declare let a: any;
+>a : any
+>  : ^^^
+
+declare let b: any;
+>b : any
+>  : ^^^
+
+a! instanceof b; // should work
+>a! instanceof b : boolean
+>                : ^^^^^^^
+>a! : any
+>   : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a!instanceof b; // should work
+>a!instanceof b : boolean
+>               : ^^^^^^^
+>a! : any
+>   : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a/**/!instanceof b; // should work
+>a/**/!instanceof b : boolean
+>                   : ^^^^^^^
+>a/**/! : any
+>       : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a!/**/instanceof b; // should work
+>a!/**/instanceof b : boolean
+>                   : ^^^^^^^
+>a! : any
+>   : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a !instanceof b; // should error
+>a !instanceof b : boolean
+>                : ^^^^^^^
+>a ! : any
+>    : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a	!instanceof b; // should error
+>a	!instanceof b : boolean
+>                : ^^^^^^^
+>a	! : any
+>    : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a! in b; // should work
+>a! in b : boolean
+>        : ^^^^^^^
+>a! : any
+>   : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a!in b; // should work
+>a!in b : boolean
+>       : ^^^^^^^
+>a! : any
+>   : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a/**/!in b; // should work
+>a/**/!in b : boolean
+>           : ^^^^^^^
+>a/**/! : any
+>       : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a!/**/in b; // should work
+>a!/**/in b : boolean
+>           : ^^^^^^^
+>a! : any
+>   : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a !in b; // should error
+>a !in b : boolean
+>        : ^^^^^^^
+>a ! : any
+>    : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a	!in b; // should error
+>a	!in b : boolean
+>        : ^^^^^^^
+>a	! : any
+>    : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
