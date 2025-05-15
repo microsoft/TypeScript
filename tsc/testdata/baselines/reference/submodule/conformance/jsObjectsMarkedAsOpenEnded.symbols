@@ -15,10 +15,14 @@ class C {
 
     constructor() {
         this.member = {};
+>this.member : Symbol(member, Decl(a.js, 5, 19))
 >this : Symbol(C, Decl(a.js, 1, 15))
+>member : Symbol(member, Decl(a.js, 5, 19))
 
         this.member.a = 0;
+>this.member : Symbol(member, Decl(a.js, 5, 19))
 >this : Symbol(C, Decl(a.js, 1, 15))
+>member : Symbol(member, Decl(a.js, 5, 19))
     }
 }
 
@@ -50,7 +54,9 @@ variable.a = 1;
 >variable : Symbol(variable, Decl(a.js, 0, 3))
 
 (new C()).member.a = 1;
+>(new C()).member : Symbol(member, Decl(a.js, 5, 19))
 >C : Symbol(C, Decl(a.js, 1, 15))
+>member : Symbol(member, Decl(a.js, 5, 19))
 
 (new C()).initializedMember.a = 1;
 >(new C()).initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))

@@ -6,7 +6,9 @@ class B {
 
     constructor () {
         this.n = 1
+>this.n : Symbol(n, Decl(a.js, 1, 20))
 >this : Symbol(B, Decl(a.js, 0, 0))
+>n : Symbol(n, Decl(a.js, 1, 20))
     }
     foo() {
 >foo : Symbol(foo, Decl(a.js, 3, 5))

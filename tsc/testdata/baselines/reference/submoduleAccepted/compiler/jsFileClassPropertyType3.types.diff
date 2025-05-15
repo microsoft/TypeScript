@@ -1,15 +1,23 @@
 --- old.jsFileClassPropertyType3.types
 +++ new.jsFileClassPropertyType3.types
-@@= skipped -27, +27 lines =@@
- === bar.ts ===
- (new C()).p = "string"; // Error
- >(new C()).p = "string" : "string"
-->(new C()).p : number
-+>(new C()).p : any
- >(new C()) : C
- >new C() : C
- >C : typeof C
-->p : number
-+>p : any
- >"string" : "string"
+@@= skipped -9, +9 lines =@@
  
+             this.p = null;
+ >this.p = null : null
+->this.p : any
++>this.p : number
+ >this : this
+->p : any
++>p : number
+         }
+         else {
+             this.p = 0;
+ >this.p = 0 : 0
+->this.p : any
++>this.p : number
+ >this : this
+->p : any
++>p : number
+ >0 : 0
+         }
+     }

@@ -4,7 +4,6 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +MC.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-+MW.js(8,10): error TS2339: Property 'compiler' does not exist on type 'MW'.
 +MW.js(12,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +
@@ -25,7 +24,7 @@
 +    ~
 +!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    
-+==== MW.js (2 errors) ====
++==== MW.js (1 errors) ====
 +    /** @typedef {import("./MC")} MC */
 +    
 +    class MW {
@@ -34,8 +33,6 @@
 +       */
 +      constructor(compiler) {
 +        this.compiler = compiler;
-+             ~~~~~~~~
-+!!! error TS2339: Property 'compiler' does not exist on type 'MW'.
 +      }
 +    }
 +    

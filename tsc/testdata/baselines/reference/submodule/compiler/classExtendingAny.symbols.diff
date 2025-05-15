@@ -30,8 +30,10 @@
          super()
          this.wat = 12
 ->this.wat : Symbol(B.wat, Decl(b.js, 2, 15))
++>this.wat : Symbol(wat, Decl(b.js, 2, 15))
  >this : Symbol(B, Decl(b.js, 0, 0))
 ->wat : Symbol(B.wat, Decl(b.js, 2, 15))
++>wat : Symbol(wat, Decl(b.js, 2, 15))
      }
      f() {
 ->f : Symbol(B.f, Decl(b.js, 4, 5))
@@ -39,8 +41,10 @@
  
          this.wat
 ->this.wat : Symbol(B.wat, Decl(b.js, 2, 15))
++>this.wat : Symbol(wat, Decl(b.js, 2, 15))
  >this : Symbol(B, Decl(b.js, 0, 0))
 ->wat : Symbol(B.wat, Decl(b.js, 2, 15))
++>wat : Symbol(wat, Decl(b.js, 2, 15))
  
          this.wit
  >this : Symbol(B, Decl(b.js, 0, 0))

@@ -3,7 +3,9 @@
 === /a.js ===
 class A { constructor() { this.x = 0; } }
 >A : Symbol(A, Decl(a.js, 0, 0))
+>this.x : Symbol(x, Decl(a.js, 0, 25))
 >this : Symbol(A, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 0, 25))
 
 /** @implements A*/
 class B {}
@@ -22,6 +24,8 @@ class B3 {
 >B3 : Symbol(B3, Decl(a.js, 7, 1))
 
     constructor() { this.x = 10 }
+>this.x : Symbol(x, Decl(a.js, 11, 19))
 >this : Symbol(B3, Decl(a.js, 7, 1))
+>x : Symbol(x, Decl(a.js, 11, 19))
 }
 

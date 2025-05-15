@@ -54,7 +54,9 @@ class Sql extends Wagon {
     constructor() {
         super(); // error: not enough arguments
         this.foonly = 12
+>this.foonly : Symbol(foonly, Decl(first.js, 22, 16))
 >this : Symbol(Sql, Decl(first.js, 18, 1))
+>foonly : Symbol(foonly, Decl(first.js, 22, 16))
     }
     /**
      * @param {Array.<string>} files
@@ -86,7 +88,9 @@ var db = new Sql();
 
 db.numberOxen = db.foonly
 >db : Symbol(db, Decl(first.js, 42, 3))
+>db.foonly : Symbol(foonly, Decl(first.js, 22, 16))
 >db : Symbol(db, Decl(first.js, 42, 3))
+>foonly : Symbol(foonly, Decl(first.js, 22, 16))
 
 // error, can't extend a TS constructor function
 class Drakkhen extends Dragon {

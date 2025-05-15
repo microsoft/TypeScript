@@ -43,12 +43,14 @@
          /** @type {DoneStatus} */
          this.s = {
 ->this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
++>this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
  >this : Symbol(Thing, Decl(test.js, 17, 4))
 ->s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
++>s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
  
              status: 'done',
  >status : Symbol(status, Decl(test.js, 24, 18))
-@@= skipped -14, +12 lines =@@
+@@= skipped -14, +14 lines =@@
      }
  
      fail() {
@@ -57,12 +59,14 @@
  
          this.s = {
 ->this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
++>this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
  >this : Symbol(Thing, Decl(test.js, 17, 4))
 ->s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
++>s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
  
              status: 'done',
  >status : Symbol(status, Decl(test.js, 31, 18))
-@@= skipped -22, +20 lines =@@
+@@= skipped -22, +22 lines =@@
  /** @type {DoneStatus} */
  exports.x = {
  >exports.x : Symbol(x, Decl(test.js, 36, 1))

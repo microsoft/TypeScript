@@ -17,9 +17,9 @@ var crunch = new ex.Crunch(1);
 >1 : 1
 
 crunch.n
->crunch.n : any
+>crunch.n : number
 >crunch : Crunch
->n : any
+>n : number
 
 
 // types work
@@ -31,9 +31,9 @@ function f(wrap) {
 >wrap : Crunch
 
     wrap.n
->wrap.n : any
+>wrap.n : number
 >wrap : Crunch
->n : any
+>n : number
 }
 
 === ex.js ===
@@ -46,18 +46,18 @@ export class Crunch {
 
         this.n = n
 >this.n = n : number
->this.n : any
+>this.n : number
 >this : this
->n : any
+>n : number
 >n : number
     }
     m() {
->m : () => any
+>m : () => number
 
         return this.n
->this.n : any
+>this.n : number
 >this : this
->n : any
+>n : number
     }
 }
 

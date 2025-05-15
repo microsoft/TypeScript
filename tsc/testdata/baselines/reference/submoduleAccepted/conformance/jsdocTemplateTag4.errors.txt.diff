@@ -3,17 +3,21 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
++a.js(8,16): error TS2315: Type 'Object' is not generic.
 +a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(16,36): error TS7006: Parameter 'key' implicitly has an 'any' type.
++a.js(27,16): error TS2315: Type 'Object' is not generic.
 +a.js(28,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(35,37): error TS7006: Parameter 'key' implicitly has an 'any' type.
 +a.js(46,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
++a.js(47,16): error TS2315: Type 'Object' is not generic.
++a.js(47,31): error TS2304: Cannot find name 'V'.
 +a.js(48,10): error TS2339: Property '_map' does not exist on type '{}'.
 +a.js(55,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
 +a.js(55,40): error TS7006: Parameter 'key' implicitly has an 'any' type.
 +
 +
-+==== a.js (8 errors) ====
++==== a.js (12 errors) ====
 +    /**
 +     * Should work for function declarations
 +     * @constructor
@@ -22,6 +26,8 @@
 +     */
 +    function Multimap() {
 +        /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
++                   ~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
 +        this._map = {};
 +        ~~~~
 +!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
@@ -45,6 +51,8 @@
 +     */
 +    var Multimap2 = function() {
 +        /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
++                   ~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
 +        this._map = {};
 +        ~~~~
 +!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
@@ -71,6 +79,10 @@
 +       ~~~~~~~~~
 +!!! error TS2339: Property 'Multimap3' does not exist on type '{}'.
 +        /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
++                   ~~~~~~~~~~~~~~~~~
++!!! error TS2315: Type 'Object' is not generic.
++                                  ~
++!!! error TS2304: Cannot find name 'V'.
 +        this._map = {};
 +             ~~~~
 +!!! error TS2339: Property '_map' does not exist on type '{}'.

@@ -27,8 +27,10 @@
      constructor() {
          this.x = new A();
 ->this.x : Symbol(Q.x, Decl(index.js, 7, 19))
++>this.x : Symbol(x, Decl(index.js, 7, 19))
  >this : Symbol(Q, Decl(index.js, 6, 16))
 ->x : Symbol(Q.x, Decl(index.js, 7, 19))
++>x : Symbol(x, Decl(index.js, 7, 19))
  >A : Symbol(A, Decl(index.js, 0, 0))
      }
  }

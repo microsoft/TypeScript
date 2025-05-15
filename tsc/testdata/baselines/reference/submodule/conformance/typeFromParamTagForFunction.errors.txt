@@ -1,14 +1,9 @@
 a.js(3,13): error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
-b-ext.js(3,14): error TS2339: Property 'x' does not exist on type 'B'.
 b.js(3,13): error TS2749: 'B' refers to a value, but is being used as a type here. Did you mean 'typeof B'?
 c.js(3,13): error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
 d.js(3,13): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
-e-ext.js(3,14): error TS2339: Property 'x' does not exist on type 'E'.
-e.js(4,19): error TS2339: Property 'x' does not exist on type 'E'.
 f.js(5,13): error TS2749: 'F' refers to a value, but is being used as a type here. Did you mean 'typeof F'?
 g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type here. Did you mean 'typeof G'?
-h.js(3,14): error TS2339: Property 'x' does not exist on type 'H'.
-h.js(8,19): error TS2339: Property 'x' does not exist on type 'H'.
 
 
 ==== node.d.ts (0 errors) ====
@@ -28,12 +23,10 @@ h.js(8,19): error TS2339: Property 'x' does not exist on type 'H'.
 !!! error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
     function a(p) { p.x; }
     
-==== b-ext.js (1 errors) ====
+==== b-ext.js (0 errors) ====
     exports.B = class {
         constructor() {
             this.x = 1;
-                 ~
-!!! error TS2339: Property 'x' does not exist on type 'B'.
         }
     };
     
@@ -71,22 +64,18 @@ h.js(8,19): error TS2339: Property 'x' does not exist on type 'H'.
 !!! error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
     function d(p) { p.x; }
     
-==== e-ext.js (1 errors) ====
+==== e-ext.js (0 errors) ====
     export class E {
         constructor() {
             this.x = 1;
-                 ~
-!!! error TS2339: Property 'x' does not exist on type 'E'.
         }
     }
     
-==== e.js (1 errors) ====
+==== e.js (0 errors) ====
     const { E } = require("./e-ext");
     
     /** @param {E} p */
     function e(p) { p.x; }
-                      ~
-!!! error TS2339: Property 'x' does not exist on type 'E'.
     
 ==== f.js (1 errors) ====
     var F = function () {
@@ -108,16 +97,12 @@ h.js(8,19): error TS2339: Property 'x' does not exist on type 'H'.
 !!! error TS2749: 'G' refers to a value, but is being used as a type here. Did you mean 'typeof G'?
     function g(p) { p.x; }
     
-==== h.js (2 errors) ====
+==== h.js (0 errors) ====
     class H {
         constructor() {
             this.x = 1;
-                 ~
-!!! error TS2339: Property 'x' does not exist on type 'H'.
         }
     }
     
     /** @param {H} p */
     function h(p) { p.x; }
-                      ~
-!!! error TS2339: Property 'x' does not exist on type 'H'.

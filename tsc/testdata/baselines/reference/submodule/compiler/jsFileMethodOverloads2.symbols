@@ -15,7 +15,9 @@
 >value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 14))
 
     this.value = value;
+>this.value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 22))
 >this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+>value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 22))
 >value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 14))
   }
 
@@ -34,7 +36,9 @@
 >getTypeName : Symbol(getTypeName, Decl(jsFileMethodOverloads2.js, 10, 3))
 
     return typeof this.value;
+>this.value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 22))
 >this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+>value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 22))
   }
 
   /**
@@ -56,8 +60,12 @@
     return fn ? fn(this.value) : this.value;
 >fn : Symbol(fn, Decl(jsFileMethodOverloads2.js, 39, 12))
 >fn : Symbol(fn, Decl(jsFileMethodOverloads2.js, 39, 12))
+>this.value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 22))
 >this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+>value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 22))
+>this.value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 22))
 >this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+>value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 22))
   }
 }
 

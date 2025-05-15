@@ -26,15 +26,12 @@
  >1 : 1
  
  crunch.n
-->crunch.n : number
+ >crunch.n : number
 ->crunch : ex.Crunch
-->n : number
-+>crunch.n : any
 +>crunch : Crunch
-+>n : any
+ >n : number
  
  
- // types work
 @@= skipped -25, +25 lines =@@
   * @param {ex.Crunch} wrap
   */
@@ -45,28 +42,22 @@
 +>wrap : Crunch
  
      wrap.n
-->wrap.n : number
+ >wrap.n : number
 ->wrap : ex.Crunch
-->n : number
-+>wrap.n : any
 +>wrap : Crunch
-+>n : any
+ >n : number
  }
  
- === ex.js ===
-@@= skipped -25, +25 lines =@@
+@@= skipped -19, +19 lines =@@
+ 
+         this.n = n
+ >this.n = n : number
+->this.n : any
++>this.n : number
+ >this : this
+->n : any
  >n : number
++>n : number
      }
      m() {
-->m : () => number
-+>m : () => any
- 
-         return this.n
-->this.n : number
-+>this.n : any
- >this : this
-->n : number
-+>n : any
-     }
- }
- 
+ >m : () => number

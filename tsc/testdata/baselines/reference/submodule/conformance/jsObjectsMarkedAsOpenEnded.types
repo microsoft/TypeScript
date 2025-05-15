@@ -22,17 +22,17 @@ class C {
     constructor() {
         this.member = {};
 >this.member = {} : {}
->this.member : any
+>this.member : {}
 >this : this
->member : any
+>member : {}
 >{} : {}
 
         this.member.a = 0;
 >this.member.a = 0 : 0
 >this.member.a : any
->this.member : any
+>this.member : {}
 >this : this
->member : any
+>member : {}
 >a : any
 >0 : 0
     }
@@ -81,11 +81,11 @@ variable.a = 1;
 (new C()).member.a = 1;
 >(new C()).member.a = 1 : 1
 >(new C()).member.a : any
->(new C()).member : any
+>(new C()).member : {}
 >(new C()) : C
 >new C() : C
 >C : typeof C
->member : any
+>member : {}
 >a : any
 >1 : 1
 

@@ -7,9 +7,9 @@ class Entry {
     constructor() {
         this.c = 1
 >this.c = 1 : 1
->this.c : any
+>this.c : number
 >this : this
->c : any
+>c : number
 >1 : 1
     }
     /**
@@ -30,9 +30,9 @@ class Group {
     constructor() {
         this.d = 'no'
 >this.d = 'no' : "no"
->this.d : any
+>this.d : string
 >this : this
->d : any
+>d : string
 >'no' : "no"
     }
     /**
@@ -49,26 +49,26 @@ class Group {
 }
 /** @param {Entry | Group} chunk */
 function f(chunk) {
->f : (chunk: Entry | Group) => any
+>f : (chunk: Entry | Group) => string | number
 >chunk : Entry | Group
 
     let x = chunk.isInit(chunk) ? chunk.c : chunk.d
->x : any
->chunk.isInit(chunk) ? chunk.c : chunk.d : any
+>x : string | number
+>chunk.isInit(chunk) ? chunk.c : chunk.d : string | number
 >chunk.isInit(chunk) : boolean
 >chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
 >chunk : Entry | Group
 >isInit : ((x: any) => this is Entry) | ((x: any) => false)
 >chunk : Entry | Group
->chunk.c : any
+>chunk.c : number
 >chunk : Entry
->c : any
->chunk.d : any
+>c : number
+>chunk.d : string
 >chunk : Group
->d : any
+>d : string
 
     return x
->x : any
+>x : string | number
 }
 
 /**

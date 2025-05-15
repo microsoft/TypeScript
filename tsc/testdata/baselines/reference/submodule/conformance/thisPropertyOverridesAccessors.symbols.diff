@@ -18,10 +18,10 @@
  
          this.p = 2
 ->this.p : Symbol(Bar.p, Decl(bar.js, 2, 15))
-+>this.p : Symbol(p, Decl(foo.ts, 0, 11), Decl(foo.ts, 1, 24))
++>this.p : Symbol(p, Decl(bar.js, 2, 15))
  >this : Symbol(Bar, Decl(bar.js, 0, 0))
 ->p : Symbol(Bar.p, Decl(bar.js, 2, 15))
-+>p : Symbol(p, Decl(foo.ts, 0, 11), Decl(foo.ts, 1, 24))
++>p : Symbol(p, Decl(bar.js, 2, 15))
      }
  }
  

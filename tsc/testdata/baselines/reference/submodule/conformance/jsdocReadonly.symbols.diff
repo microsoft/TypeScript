@@ -30,8 +30,10 @@
          /** @readonly ok */
          this.ka = 2
 ->this.ka : Symbol(LOL.ka, Decl(jsdocReadonly.js, 15, 18))
++>this.ka : Symbol(ka, Decl(jsdocReadonly.js, 15, 18))
  >this : Symbol(LOL, Decl(jsdocReadonly.js, 0, 0))
 ->ka : Symbol(LOL.ka, Decl(jsdocReadonly.js, 15, 18))
++>ka : Symbol(ka, Decl(jsdocReadonly.js, 15, 18))
      }
  }
  

@@ -9,7 +9,9 @@ Outer.Inner = class {
 
     constructor() {
         this.x = 1
+>this.x : Symbol(x, Decl(a.js, 3, 19))
 >this : Symbol(Inner, Decl(a.js, 2, 13))
+>x : Symbol(x, Decl(a.js, 3, 19))
     }
     m() { }
 >m : Symbol(m, Decl(a.js, 5, 5))

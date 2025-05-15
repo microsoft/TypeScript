@@ -199,17 +199,23 @@ export class K {
 
     constructor() {
         this.p1 = 12;
+>this.p1 : Symbol(p1, Decl(index.js, 136, 19))
 >this : Symbol(K, Decl(index.js, 132, 17))
+>p1 : Symbol(p1, Decl(index.js, 136, 19))
 
         this.p2 = "ok";
+>this.p2 : Symbol(p2, Decl(index.js, 137, 21))
 >this : Symbol(K, Decl(index.js, 132, 17))
+>p2 : Symbol(p2, Decl(index.js, 137, 21))
     }
 
     method() {
 >method : Symbol(method, Decl(index.js, 139, 5))
 
         return this.p1;
+>this.p1 : Symbol(p1, Decl(index.js, 136, 19))
 >this : Symbol(K, Decl(index.js, 132, 17))
+>p1 : Symbol(p1, Decl(index.js, 136, 19))
     }
 }
 
@@ -222,7 +228,9 @@ export class M extends null {
 
     constructor() {
         this.prop = 12;
+>this.prop : Symbol(prop, Decl(index.js, 149, 19))
 >this : Symbol(M, Decl(index.js, 146, 27))
+>prop : Symbol(prop, Decl(index.js, 149, 19))
     }
 }
 
@@ -244,7 +252,9 @@ export class N extends L {
 >super : Symbol(L, Decl(index.js, 144, 1))
 
         this.another = param;
+>this.another : Symbol(another, Decl(index.js, 163, 16))
 >this : Symbol(N, Decl(index.js, 152, 1))
+>another : Symbol(another, Decl(index.js, 163, 16))
 >param : Symbol(param, Decl(index.js, 162, 16))
     }
 }
@@ -267,7 +277,9 @@ export class O extends N {
 >param : Symbol(param, Decl(index.js, 176, 16))
 
         this.another2 = param;
+>this.another2 : Symbol(another2, Decl(index.js, 177, 21))
 >this : Symbol(O, Decl(index.js, 166, 1))
+>another2 : Symbol(another2, Decl(index.js, 177, 21))
 >param : Symbol(param, Decl(index.js, 176, 16))
     }
 }

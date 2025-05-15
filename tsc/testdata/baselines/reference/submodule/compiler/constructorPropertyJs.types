@@ -13,9 +13,9 @@ class C {
 
         this.constructor = a;
 >this.constructor = a : any
->this.constructor : Function
+>this.constructor : any
 >this : this
->constructor : Function
+>constructor : any
 >a : any
     }
 }

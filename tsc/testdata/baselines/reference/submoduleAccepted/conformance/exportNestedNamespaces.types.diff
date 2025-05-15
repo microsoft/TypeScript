@@ -36,7 +36,18 @@
  >x : any
  >10 : 10
  }
-@@= skipped -41, +41 lines =@@
+@@= skipped -32, +32 lines =@@
+     constructor() {
+         this.p = 1
+ >this.p = 1 : 1
+->this.p : any
++>this.p : number
+ >this : this
+->p : any
++>p : number
+ >1 : 1
+     }
+ }
  
  === use.js ===
  import * as s from './mod'

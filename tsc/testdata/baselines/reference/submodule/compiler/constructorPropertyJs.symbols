@@ -12,9 +12,9 @@ class C {
 >a : Symbol(a, Decl(a.js, 4, 8))
 
         this.constructor = a;
->this.constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
+>this.constructor : Symbol(constructor, Decl(a.js, 4, 12))
 >this : Symbol(C, Decl(a.js, 0, 0))
->constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(constructor, Decl(a.js, 4, 12))
 >a : Symbol(a, Decl(a.js, 4, 8))
     }
 }

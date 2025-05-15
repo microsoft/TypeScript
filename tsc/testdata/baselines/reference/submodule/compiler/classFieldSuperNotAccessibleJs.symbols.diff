@@ -5,8 +5,10 @@
      constructor() {
          this.roots = "hi";
 ->this.roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
++>this.roots : Symbol(roots, Decl(index.js, 3, 19))
  >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
 ->roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
++>roots : Symbol(roots, Decl(index.js, 3, 19))
  
          /** @type number */
          this.justProp;
@@ -32,12 +34,14 @@
  
          this.foo = 10
 ->this.foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
++>this.foo : Symbol(foo, Decl(index.js, 12, 24))
  >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
 ->foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
++>foo : Symbol(foo, Decl(index.js, 12, 24))
      }
  }
  
-@@= skipped -35, +28 lines =@@
+@@= skipped -35, +32 lines =@@
  >YaddaBase : Symbol(YaddaBase, Decl(index.js, 0, 0))
  
      get rootTests() {
@@ -46,8 +50,10 @@
  
          return super.roots;
 ->super.roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
++>super.roots : Symbol(roots, Decl(index.js, 3, 19))
  >super : Symbol(YaddaBase, Decl(index.js, 0, 0))
 ->roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
++>roots : Symbol(roots, Decl(index.js, 3, 19))
      }
      get fooTests() {
 ->fooTests : Symbol(DerivedYadda.fooTests, Decl(index.js, 20, 5))
@@ -55,8 +61,10 @@
  
          return super.foo;
 ->super.foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
++>super.foo : Symbol(foo, Decl(index.js, 12, 24))
  >super : Symbol(YaddaBase, Decl(index.js, 0, 0))
 ->foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
++>foo : Symbol(foo, Decl(index.js, 12, 24))
      }
      get justPropTests() {
 ->justPropTests : Symbol(DerivedYadda.justPropTests, Decl(index.js, 23, 5))

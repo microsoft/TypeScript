@@ -9,7 +9,9 @@ UI.TreeElement = class {
 
     constructor() {
         this.treeOutline = 12
+>this.treeOutline : Symbol(treeOutline, Decl(bug24730.js, 2, 19))
 >this : Symbol(TreeElement, Decl(bug24730.js, 1, 16))
+>treeOutline : Symbol(treeOutline, Decl(bug24730.js, 2, 19))
     }
 };
 UI.context = new UI.TreeElement()

@@ -60,7 +60,17 @@
  >Classic : typeof Classic
  >class {    constructor() {        this.p = 1    }} : typeof Classic
  
-@@= skipped -48, +48 lines =@@
+     constructor() {
+         this.p = 1
+ >this.p = 1 : 1
+->this.p : any
++>this.p : number
+ >this : this
+->p : any
++>p : number
+ >1 : 1
+     }
+ }
  
  === use.js ===
  import * as s from './mod'

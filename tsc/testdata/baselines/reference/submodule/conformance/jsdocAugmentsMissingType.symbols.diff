@@ -5,12 +5,14 @@
  class A { constructor() { this.x = 0; } }
  >A : Symbol(A, Decl(a.js, 0, 0))
 ->this.x : Symbol(A.x, Decl(a.js, 0, 25))
++>this.x : Symbol(x, Decl(a.js, 0, 25))
  >this : Symbol(A, Decl(a.js, 0, 0))
 ->x : Symbol(A.x, Decl(a.js, 0, 25))
++>x : Symbol(x, Decl(a.js, 0, 25))
  
  /** @augments */
  class B extends A {
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
  >A : Symbol(A, Decl(a.js, 0, 0))
  
      m() {
@@ -18,4 +20,9 @@
 +>m : Symbol(m, Decl(a.js, 2, 19))
  
          this.x
++>this.x : Symbol(x, Decl(a.js, 0, 25))
  >this : Symbol(B, Decl(a.js, 0, 41))
++>x : Symbol(x, Decl(a.js, 0, 25))
+     }
+ }
+ 

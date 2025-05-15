@@ -3,7 +3,6 @@ functions.js(5,14): error TS7006: Parameter 'c' implicitly has an 'any' type.
 functions.js(9,23): error TS7006: Parameter 'n' implicitly has an 'any' type.
 functions.js(13,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(15,14): error TS7006: Parameter 'c' implicitly has an 'any' type.
-functions.js(22,14): error TS2339: Property 'length' does not exist on type 'C'.
 functions.js(30,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(31,19): error TS7006: Parameter 'ab' implicitly has an 'any' type.
 functions.js(31,23): error TS7006: Parameter 'onetwo' implicitly has an 'any' type.
@@ -12,7 +11,7 @@ functions.js(51,26): error TS7006: Parameter 'dref' implicitly has an 'any' type
 functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
 
 
-==== functions.js (12 errors) ====
+==== functions.js (11 errors) ====
     /**
      * @param {function(this: string, number): number} c is just passing on through
      * @return {function(this: string, number): number}
@@ -47,8 +46,6 @@ functions.js(72,14): error TS7019: Rest parameter 'args' implicitly has an 'any[
         /** @param {number} n */
         constructor(n) {
             this.length = n;
-                 ~~~~~~
-!!! error TS2339: Property 'length' does not exist on type 'C'.
         }
     }
     

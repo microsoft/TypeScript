@@ -16,9 +16,9 @@ module.exports = class {
 
         this.t = 12 + p;
 >this.t = 12 + p : number
->this.t : any
+>this.t : number
 >this : this
->t : any
+>t : number
 >12 + p : number
 >12 : 12
 >p : number
@@ -36,9 +36,9 @@ module.exports.Sub = class {
     constructor() {
         this.instance = new module.exports(10);
 >this.instance = new module.exports(10) : exports
->this.instance : any
+>this.instance : exports
 >this : this
->instance : any
+>instance : exports
 >new module.exports(10) : exports
 >module.exports : typeof exports
 >module : { exports: typeof exports; }

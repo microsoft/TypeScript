@@ -1,41 +1,30 @@
 --- old.returnTagTypeGuard.types
 +++ new.returnTagTypeGuard.types
-@@= skipped -48, +48 lines =@@
- }
- /** @param {Entry | Group} chunk */
- function f(chunk) {
-->f : (chunk: Entry | Group) => string | number
-+>f : (chunk: Entry | Group) => any
- >chunk : Entry | Group
- 
-     let x = chunk.isInit(chunk) ? chunk.c : chunk.d
-->x : string | number
-->chunk.isInit(chunk) ? chunk.c : chunk.d : string | number
-+>x : any
-+>chunk.isInit(chunk) ? chunk.c : chunk.d : any
- >chunk.isInit(chunk) : boolean
- >chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
- >chunk : Entry | Group
- >isInit : ((x: any) => this is Entry) | ((x: any) => false)
- >chunk : Entry | Group
-->chunk.c : number
-+>chunk.c : any
- >chunk : Entry
-->c : number
-->chunk.d : string
-+>c : any
-+>chunk.d : any
- >chunk : Group
-->d : string
-+>d : any
- 
-     return x
-->x : string | number
-+>x : any
- }
- 
- /**
-@@= skipped -39, +39 lines =@@
+@@= skipped -6, +6 lines =@@
+     constructor() {
+         this.c = 1
+ >this.c = 1 : 1
+->this.c : any
++>this.c : number
+ >this : this
+->c : any
++>c : number
+ >1 : 1
+     }
+     /**
+@@= skipped -23, +23 lines =@@
+     constructor() {
+         this.d = 'no'
+ >this.d = 'no' : "no"
+->this.d : any
++>this.d : string
+ >this : this
+->d : any
++>d : string
+ >'no' : "no"
+     }
+     /**
+@@= skipped -58, +58 lines =@@
  
  /** @param {boolean | number} val */
  function foo(val) {

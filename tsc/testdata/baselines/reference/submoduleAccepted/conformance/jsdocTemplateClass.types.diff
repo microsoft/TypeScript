@@ -1,6 +1,18 @@
 --- old.jsdocTemplateClass.types
 +++ new.jsdocTemplateClass.types
-@@= skipped -28, +28 lines =@@
+@@= skipped -15, +15 lines =@@
+ 
+         this.a = x
+ >this.a = x : T
+->this.a : any
++>this.a : T
+ >this : this
+->a : any
++>a : T
+ >x : T
+     }
+     /**
+@@= skipped -13, +13 lines =@@
       * @return {T}
       */
      foo(x, y, alpha) {
@@ -20,20 +32,3 @@
  >x : T
      }
  }
-@@= skipped -26, +26 lines =@@
- >false : false
- 
- f.a = g.a
-->f.a = g.a : boolean
-->f.a : number
-+>f.a = g.a : any
-+>f.a : any
- >f : Foo<number>
-->a : number
-->g.a : boolean
-+>a : any
-+>g.a : any
- >g : Foo<boolean>
-->a : boolean
-+>a : any
- 

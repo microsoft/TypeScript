@@ -27,14 +27,18 @@ class B extends A {
 		 * @type object
 		 */
 		this.x = foo;
+>this.x : Symbol(x, Decl(a.js, 10, 14))
 >this : Symbol(B, Decl(a.js, 4, 1))
+>x : Symbol(x, Decl(a.js, 10, 14))
 >foo : Symbol(foo, Decl(a.js, 10, 3))
 
 		/**
 		 * @type object
 		 */
 		this.y = super.arguments.bar;
+>this.y : Symbol(y, Decl(a.js, 14, 15))
 >this : Symbol(B, Decl(a.js, 4, 1))
+>y : Symbol(y, Decl(a.js, 14, 15))
 >super.arguments.bar : Symbol(bar, Decl(a.js, 2, 10))
 >super.arguments : Symbol(arguments, Decl(a.js, 0, 9))
 >super : Symbol(A, Decl(a.js, 0, 0))

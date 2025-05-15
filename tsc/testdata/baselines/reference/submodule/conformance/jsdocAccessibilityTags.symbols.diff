@@ -47,35 +47,43 @@
           */
          this.priv2 = 1;
 ->this.priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>this.priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
  >this : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
 ->priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
  
          /**
           * Cq docs
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
           * @protected
           */
          this.prot2 = 2;
 ->this.prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
++>this.prot2 : Symbol(prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
  >this : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
 ->prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
++>prot2 : Symbol(prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
  
          /**
           * Cr docs
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
           * @public
           */
          this.pub2 = 3;
 ->this.pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
++>this.pub2 : Symbol(pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
  >this : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
 ->pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
++>pub2 : Symbol(pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
      }
      h() { return this.priv2 }
 ->h : Symbol(C.h, Decl(jsdocAccessibilityTag.js, 44, 5))
 ->this.priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
 +>h : Symbol(h, Decl(jsdocAccessibilityTag.js, 44, 5))
++>this.priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
  >this : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
 ->priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
  }
  class B extends A {
  >B : Symbol(B, Decl(jsdocAccessibilityTag.js, 46, 1))
@@ -104,7 +112,7 @@
      }
  }
  class D extends C {
-@@= skipped -34, +30 lines =@@
+@@= skipped -34, +34 lines =@@
  >C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
  
      n() {
@@ -113,14 +121,20 @@
  
          this.priv2 + this.prot2 + this.pub2
 ->this.priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>this.priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
  >this : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
 ->priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
 ->this.prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
++>priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>this.prot2 : Symbol(prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
  >this : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
 ->prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
 ->this.pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
++>prot2 : Symbol(prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
++>this.pub2 : Symbol(pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
  >this : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
 ->pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
++>pub2 : Symbol(pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
      }
  }
  new A().priv + new A().prot + new A().pub
@@ -159,23 +173,35 @@
  
  new C().priv2 + new C().prot2 + new C().pub2
 ->new C().priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>new C().priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
  >C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
 ->priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
 ->new C().prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
++>priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>new C().prot2 : Symbol(prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
  >C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
 ->prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
 ->new C().pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
++>prot2 : Symbol(prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
++>new C().pub2 : Symbol(pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
  >C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
 ->pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
++>pub2 : Symbol(pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
  
  new D().priv2 + new D().prot2 + new D().pub2
 ->new D().priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>new D().priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
  >D : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
 ->priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
 ->new D().prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
++>priv2 : Symbol(priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
++>new D().prot2 : Symbol(prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
  >D : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
 ->prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
 ->new D().pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
++>prot2 : Symbol(prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
++>new D().pub2 : Symbol(pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
  >D : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
 ->pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
++>pub2 : Symbol(pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
  

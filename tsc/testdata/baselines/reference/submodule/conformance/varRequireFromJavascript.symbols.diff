@@ -18,28 +18,34 @@
  
  crunch.n
 ->crunch.n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
++>crunch.n : Symbol(n, Decl(ex.js, 2, 20))
  >crunch : Symbol(crunch, Decl(use.js, 3, 3))
 ->n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
++>n : Symbol(n, Decl(ex.js, 2, 20))
  
  
  // types work
-@@= skipped -24, +22 lines =@@
+@@= skipped -24, +24 lines =@@
  >wrap : Symbol(wrap, Decl(use.js, 11, 11))
  
      wrap.n
 ->wrap.n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
++>wrap.n : Symbol(n, Decl(ex.js, 2, 20))
  >wrap : Symbol(wrap, Decl(use.js, 11, 11))
 ->n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
++>n : Symbol(n, Decl(ex.js, 2, 20))
  }
  
  === ex.js ===
-@@= skipped -14, +12 lines =@@
+@@= skipped -14, +14 lines =@@
  >n : Symbol(n, Decl(ex.js, 2, 16))
  
          this.n = n
 ->this.n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
++>this.n : Symbol(n, Decl(ex.js, 2, 20))
  >this : Symbol(Crunch, Decl(ex.js, 0, 0))
 ->n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
++>n : Symbol(n, Decl(ex.js, 2, 20))
  >n : Symbol(n, Decl(ex.js, 2, 16))
      }
      m() {
@@ -48,8 +54,10 @@
  
          return this.n
 ->this.n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
++>this.n : Symbol(n, Decl(ex.js, 2, 20))
  >this : Symbol(Crunch, Decl(ex.js, 0, 0))
 ->n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
++>n : Symbol(n, Decl(ex.js, 2, 20))
      }
  }
  

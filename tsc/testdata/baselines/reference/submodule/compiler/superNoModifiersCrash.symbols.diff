@@ -12,12 +12,14 @@
  
          return this.asdf = ''
 ->this.asdf : Symbol(Parent.asdf, Decl(File.js, 3, 14))
++>this.asdf : Symbol(asdf, Decl(File.js, 3, 14))
  >this : Symbol(Parent, Decl(File.js, 0, 0))
 ->asdf : Symbol(Parent.asdf, Decl(File.js, 3, 14))
++>asdf : Symbol(asdf, Decl(File.js, 3, 14))
      }
    }
  
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  >Parent : Symbol(Parent, Decl(File.js, 0, 0))
  
      initialize() {

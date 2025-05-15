@@ -6,10 +6,8 @@
 -  Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
 -    Target signature provides too few arguments. Expected 2 or more, but got 1.
 +first.js(21,19): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
-+first.js(24,14): error TS2339: Property 'foonly' does not exist on type 'Sql'.
 +first.js(27,21): error TS8020: JSDoc types can only be used inside documentation comments.
 +first.js(44,4): error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
-+first.js(44,20): error TS2339: Property 'foonly' does not exist on type 'Sql'.
  first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 -generic.js(19,19): error TS2554: Expected 1 arguments, but got 0.
 -generic.js(20,32): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
@@ -31,11 +29,11 @@
  
  
 -==== first.js (3 errors) ====
-+==== first.js (6 errors) ====
++==== first.js (4 errors) ====
      /**
       * @constructor
       * @param {number} numberOxen
-@@= skipped -36, +35 lines =@@
+@@= skipped -36, +33 lines =@@
      }
      // ok
      class Sql extends Wagon {
@@ -47,8 +45,6 @@
 -!!! error TS2554: Expected 1 arguments, but got 0.
 -!!! related TS6210 first.js:5:16: An argument for 'numberOxen' was not provided.
              this.foonly = 12
-+                 ~~~~~~
-+!!! error TS2339: Property 'foonly' does not exist on type 'Sql'.
          }
          /**
           * @param {Array.<string>} files
@@ -65,18 +61,16 @@
              if (format === "xmlolololol") {
                  throw new Error("please do not use XML. It was a joke.");
              }
-@@= skipped -30, +29 lines =@@
+@@= skipped -30, +27 lines =@@
      }
      var db = new Sql();
      db.numberOxen = db.foonly
 +       ~~~~~~~~~~
 +!!! error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
-+                       ~~~~~~
-+!!! error TS2339: Property 'foonly' does not exist on type 'Sql'.
      
      // error, can't extend a TS constructor function
      class Drakkhen extends Dragon {
-@@= skipped -25, +29 lines =@@
+@@= skipped -25, +27 lines =@@
      }
      // ok
      class Conestoga extends Wagon {

@@ -20,7 +20,9 @@ exports.Classic = class {
 
     constructor() {
         this.p = 1
+>this.p : Symbol(p, Decl(mod.js, 5, 19))
 >this : Symbol(Classic, Decl(mod.js, 4, 17))
+>p : Symbol(p, Decl(mod.js, 5, 19))
     }
 }
 

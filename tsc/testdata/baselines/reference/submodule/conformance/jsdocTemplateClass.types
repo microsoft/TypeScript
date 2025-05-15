@@ -16,9 +16,9 @@ class Foo {
 
         this.a = x
 >this.a = x : T
->this.a : any
+>this.a : T
 >this : this
->a : any
+>a : T
 >x : T
     }
     /**
@@ -55,11 +55,11 @@ var g = new Foo(false)
 >false : false
 
 f.a = g.a
->f.a = g.a : any
->f.a : any
+>f.a = g.a : boolean
+>f.a : number
 >f : Foo<number>
->a : any
->g.a : any
+>a : number
+>g.a : boolean
 >g : Foo<boolean>
->a : any
+>a : boolean
 

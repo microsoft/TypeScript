@@ -11,7 +11,9 @@ class A {
 		 * @type object
 		 */
 		this.foo = arguments;
+>this.foo : Symbol(foo, Decl(a.js, 1, 6))
 >this : Symbol(A, Decl(a.js, 0, 0))
+>foo : Symbol(foo, Decl(a.js, 1, 6))
 >arguments : Symbol(arguments)
 	}
 }

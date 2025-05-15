@@ -41,9 +41,9 @@ class MW {
 
     this.compiler = compiler;
 >this.compiler = compiler : MC
->this.compiler : any
+>this.compiler : MC
 >this : this
->compiler : any
+>compiler : MC
 >compiler : MC
   }
 }

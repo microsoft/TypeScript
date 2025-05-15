@@ -581,6 +581,8 @@ type Checker struct {
 	templateLiteralTypes                       map[string]*Type
 	stringMappingTypes                         map[StringMappingKey]*Type
 	uniqueESSymbolTypes                        map[*ast.Symbol]*Type
+	thisExpandoKinds                           map[*ast.Symbol]thisAssignmentDeclarationKind
+	thisExpandoLocations                       map[*ast.Symbol]*ast.Node
 	subtypeReductionCache                      map[string][]*Type
 	cachedTypes                                map[CachedTypeKey]*Type
 	cachedSignatures                           map[CachedSignatureKey]*Signature
@@ -866,6 +868,8 @@ func NewChecker(program Program) *Checker {
 	c.templateLiteralTypes = make(map[string]*Type)
 	c.stringMappingTypes = make(map[StringMappingKey]*Type)
 	c.uniqueESSymbolTypes = make(map[*ast.Symbol]*Type)
+	c.thisExpandoKinds = make(map[*ast.Symbol]thisAssignmentDeclarationKind)
+	c.thisExpandoLocations = make(map[*ast.Symbol]*ast.Node)
 	c.subtypeReductionCache = make(map[string][]*Type)
 	c.cachedTypes = make(map[CachedTypeKey]*Type)
 	c.cachedSignatures = make(map[CachedSignatureKey]*Signature)
@@ -10809,9 +10813,9 @@ func (c *Checker) getFlowTypeOfProperty(reference *ast.Node, prop *ast.Symbol) *
 func (c *Checker) getTypeOfPropertyInBaseClass(property *ast.Symbol) *Type {
 	classType := c.getDeclaringClass(property)
 	if classType != nil {
-		baseClassType := c.getBaseTypes(classType)[0]
-		if baseClassType != nil {
-			return c.getTypeOfPropertyOfType(baseClassType, property.Name)
+		baseClassTypes := c.getBaseTypes(classType)
+		if len(baseClassTypes) > 0 {
+			return c.getTypeOfPropertyOfType(baseClassTypes[0], property.Name)
 		}
 	}
 	return nil
@@ -16710,14 +16714,101 @@ func (c *Checker) getTypeOfPrototypeProperty(prototype *ast.Symbol) *Type {
 	return classType
 }
 
+type thisAssignmentDeclarationKind int32
+
+const (
+	thisAssignmentDeclarationNone        thisAssignmentDeclarationKind = iota // not (all) this.property assignments
+	thisAssignmentDeclarationTyped                                            // typed; use the type annotation
+	thisAssignmentDeclarationConstructor                                      // at least one in the constructor; use control flow
+	thisAssignmentDeclarationMethod                                           // methods only; look in base first, and if not found, union all declaration types plus undefined
+)
+
 func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Type {
-	var types []*Type
+	var t *Type
+	kind, location := c.isConstructorDeclaredThisProperty(symbol)
+	if kind == thisAssignmentDeclarationTyped {
+		if location == nil {
+			panic("location should not be nil when this assignment has a type.")
+		}
+		t = c.getTypeFromTypeNode(location)
+	} else if kind == thisAssignmentDeclarationConstructor {
+		if location == nil {
+			panic("constructor should not be nil when this assignment is in a constructor.")
+		}
+		t = c.getFlowTypeInConstructor(symbol, location)
+	} else if kind == thisAssignmentDeclarationMethod {
+		t = c.getTypeOfPropertyInBaseClass(symbol)
+	}
+	if t == nil {
+		var types []*Type
+		for _, declaration := range symbol.Declarations {
+			if ast.IsBinaryExpression(declaration) {
+				types = core.AppendIfUnique(types, c.checkExpressionForMutableLocation(declaration.AsBinaryExpression().Right, CheckModeNormal))
+			}
+		}
+		if kind == thisAssignmentDeclarationMethod && len(types) > 0 {
+			if c.strictNullChecks {
+				types = core.AppendIfUnique(types, c.undefinedOrMissingType)
+			}
+		}
+		t = c.getWidenedType(c.getUnionType(types))
+	}
+	// report an all-nullable or empty union as an implicit any in JS files
+	if symbol.ValueDeclaration != nil && ast.IsInJSFile(symbol.ValueDeclaration) &&
+		c.filterType(t, func(c *Type) bool { return c.Flags() & ^TypeFlagsNullable != 0 }) == c.neverType {
+		c.reportImplicitAny(symbol.ValueDeclaration, c.anyType, WideningKindNormal)
+		return c.anyType
+	}
+	return t
+}
+
+// A property is considered a constructor declared property when all declaration sites are this.xxx assignments,
+// when no declaration sites have JSDoc type annotations, and when at least one declaration site is in the body of
+// a class constructor.
+func (c *Checker) isConstructorDeclaredThisProperty(symbol *ast.Symbol) (thisAssignmentDeclarationKind, *ast.Node) {
+	if symbol.ValueDeclaration == nil || !ast.IsBinaryExpression(symbol.ValueDeclaration) {
+		return thisAssignmentDeclarationNone, nil
+	}
+	if kind, ok := c.thisExpandoKinds[symbol]; ok {
+		location, ok2 := c.thisExpandoLocations[symbol]
+		if !ok2 {
+			panic("ctor should be cached whenever this expando location is cached")
+		}
+		return kind, location
+	}
+	allThis := true
+	var typeAnnotation *ast.Node
 	for _, declaration := range symbol.Declarations {
-		if ast.IsBinaryExpression(declaration) {
-			types = core.AppendIfUnique(types, c.checkExpressionForMutableLocation(declaration.AsBinaryExpression().Right, CheckModeNormal))
+		if !ast.IsBinaryExpression(declaration) {
+			allThis = false
+			break
+		}
+		bin := declaration.AsBinaryExpression()
+		if ast.GetAssignmentDeclarationKind(bin) == ast.JSDeclarationKindThisProperty &&
+			(bin.Left.Kind != ast.KindElementAccessExpression || ast.IsStringOrNumericLiteralLike(bin.Left.AsElementAccessExpression().ArgumentExpression)) {
+			// TODO: if bin.Type() != nil, use bin.Type()
+			if bin.Right.Kind == ast.KindTypeAssertionExpression {
+				typeAnnotation = bin.Right.AsTypeAssertion().Type
+			}
+		} else {
+			allThis = false
+			break
 		}
 	}
-	return c.getWidenedType(c.getUnionType(types))
+	var location *ast.Node
+	kind := thisAssignmentDeclarationNone
+	if allThis {
+		if typeAnnotation != nil {
+			location = typeAnnotation
+			kind = thisAssignmentDeclarationTyped
+		} else {
+			location = c.getDeclaringConstructor(symbol)
+			kind = core.IfElse(location == nil, thisAssignmentDeclarationMethod, thisAssignmentDeclarationConstructor)
+		}
+	}
+	c.thisExpandoKinds[symbol] = kind
+	c.thisExpandoLocations[symbol] = location
+	return kind, location
 }
 
 func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.Node, reportErrors bool) *Type {
@@ -27595,8 +27686,8 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 	case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
 		// In an assignment expression, the right operand is contextually typed by the type of the left operand
 		// unless it's an assignment declaration.
-		if node == binary.Right && !c.isReferenceToModuleExports(binary.Left) && (binary.Symbol == nil || c.canGetContextualTypeForAssignmentDeclaration(binary.Left)) {
-			return c.getContextualTypeFromAssignmentTarget(binary.Left)
+		if node == binary.Right && !c.isReferenceToModuleExports(binary.Left) && (binary.Symbol == nil || c.canGetContextualTypeForAssignmentDeclaration(node.Parent)) {
+			return c.getTypeOfExpression(binary.Left)
 		}
 	case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
 		// When an || expression has a contextual type, the operands are contextually typed by that type, except
@@ -27622,7 +27713,47 @@ func (c *Checker) canGetContextualTypeForAssignmentDeclaration(node *ast.Node) b
 	// binder) of the form 'F.id = expr' or 'F[xxx] = expr'. If 'F' is declared as a variable with a type annotation,
 	// we can obtain a contextual type from the annotated type without triggering a circularity. Otherwise, the
 	// assignment declaration has no contextual type.
-	symbol := c.getExportSymbolOfValueSymbolIfExported(c.getResolvedSymbol(node.Expression()))
+	left := node.AsBinaryExpression().Left
+	expr := left.Expression()
+	if ast.IsAccessExpression(left) && expr.Kind == ast.KindThisKeyword {
+		var symbol *ast.Symbol
+		if ast.IsPropertyAccessExpression(left) {
+			name := left.Name()
+			thisType := c.getTypeOfExpression(expr)
+			if ast.IsPrivateIdentifier(name) {
+				symbol = c.getPropertyOfType(thisType, binder.GetSymbolNameForPrivateIdentifier(thisType.symbol, name.Text()))
+			} else {
+				symbol = c.getPropertyOfType(thisType, name.Text())
+			}
+		} else {
+			propType := c.checkExpressionCached(left.AsElementAccessExpression().ArgumentExpression)
+			if isTypeUsableAsPropertyName(propType) {
+				symbol = c.getPropertyOfType(c.getTypeOfExpression(expr), getPropertyNameFromType(propType))
+			}
+		}
+		if symbol != nil {
+			d := symbol.ValueDeclaration
+			if d != nil && (ast.IsPropertyDeclaration(d) || ast.IsPropertySignatureDeclaration(d)) && d.Type() == nil && d.Initializer() == nil {
+				return false
+			}
+		}
+		symbol = node.Symbol()
+		if symbol != nil && symbol.ValueDeclaration != nil && symbol.ValueDeclaration.Type() == nil {
+			if !ast.IsObjectLiteralMethod(c.getThisContainer(expr, false, false)) {
+				return false
+			}
+			// and now for one single case of object literal methods
+			name := ast.GetElementOrPropertyAccessArgumentExpressionOrName(left)
+			if name == nil {
+				return false
+			} else {
+				// !!! contextual typing for `this` in object literals
+				return false
+			}
+		}
+		return true
+	}
+	symbol := c.getExportSymbolOfValueSymbolIfExported(c.getResolvedSymbol(expr))
 	return symbol.ValueDeclaration != nil && ast.IsVariableDeclaration(symbol.ValueDeclaration) && symbol.ValueDeclaration.Type() != nil
 }
 
@@ -27636,33 +27767,6 @@ func (c *Checker) isReferenceToModuleExports(node *ast.Node) bool {
 		}
 	}
 	return false
-}
-
-func (c *Checker) getContextualTypeFromAssignmentTarget(node *ast.Node) *Type {
-	if ast.IsAccessExpression(node) && node.Expression().Kind == ast.KindThisKeyword {
-		var symbol *ast.Symbol
-		if ast.IsPropertyAccessExpression(node) {
-			name := node.Name()
-			thisType := c.getTypeOfExpression(node.Expression())
-			if ast.IsPrivateIdentifier(name) {
-				symbol = c.getPropertyOfType(thisType, binder.GetSymbolNameForPrivateIdentifier(thisType.symbol, name.Text()))
-			} else {
-				symbol = c.getPropertyOfType(thisType, name.Text())
-			}
-		} else {
-			propType := c.checkExpressionCached(node.AsElementAccessExpression().ArgumentExpression)
-			if isTypeUsableAsPropertyName(propType) {
-				symbol = c.getPropertyOfType(c.getTypeOfExpression(node.Expression()), getPropertyNameFromType(propType))
-			}
-		}
-		if symbol != nil {
-			d := symbol.ValueDeclaration
-			if d != nil && (ast.IsPropertyDeclaration(d) || ast.IsPropertySignatureDeclaration(d)) && d.Type() == nil && d.Initializer() == nil {
-				return nil
-			}
-		}
-	}
-	return c.getTypeOfExpression(node)
 }
 
 func (c *Checker) getContextualTypeForObjectLiteralElement(element *ast.Node, contextFlags ContextFlags) *Type {

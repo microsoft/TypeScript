@@ -1,29 +1,26 @@
 --- old.checkJsFiles7.types
 +++ new.checkJsFiles7.types
-@@= skipped -7, +7 lines =@@
+@@= skipped -6, +6 lines =@@
+ 	constructor() {
  		/** @type {boolean} */
  		this.a = true;
- >this.a = true : true
-->this.a : boolean
-+>this.a : any
+->this.a = true : true
++>this.a = true : boolean
+ >this.a : boolean
  >this : this
-->a : boolean
-+>a : any
+ >a : boolean
++>true : boolean
  >true : true
  
  		this.a = !!this.a;
- >this.a = !!this.a : boolean
-->this.a : boolean
-+>this.a : any
- >this : this
-->a : boolean
-+>a : any
+@@= skipped -13, +14 lines =@@
+ >a : boolean
  >!!this.a : boolean
  >!this.a : boolean
 ->this.a : true
-+>this.a : any
++>this.a : boolean
  >this : this
 ->a : true
-+>a : any
++>a : boolean
  	}
  }

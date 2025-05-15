@@ -19,21 +19,25 @@
  >0 : 0
  
  class C {
-@@= skipped -27, +27 lines =@@
+@@= skipped -20, +20 lines =@@
+     constructor() {
+         this.member = {};
+ >this.member = {} : {}
+->this.member : any
++>this.member : {}
+ >this : this
+->member : any
++>member : {}
+ >{} : {}
  
          this.member.a = 0;
  >this.member.a = 0 : 0
 ->this.member.a : error
-->this.member : {}
 +>this.member.a : any
-+>this.member : any
+ >this.member : {}
  >this : this
-->member : {}
-+>member : any
- >a : any
- >0 : 0
-     }
-@@= skipped -21, +21 lines =@@
+ >member : {}
+@@= skipped -28, +28 lines =@@
  
  obj.property.a = 0;
  >obj.property.a = 0 : 0
@@ -55,15 +59,3 @@
  >1 : 1
  
  (new C()).member.a = 1;
- >(new C()).member.a = 1 : 1
- >(new C()).member.a : any
-->(new C()).member : {}
-+>(new C()).member : any
- >(new C()) : C
- >new C() : C
- >C : typeof C
-->member : {}
-+>member : any
- >a : any
- >1 : 1
- 

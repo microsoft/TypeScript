@@ -18,9 +18,10 @@ class A {
 		 */
 		this["arguments"] = foo;
 >this["arguments"] = foo : object
->this["arguments"] : any
+>this["arguments"] : object
 >this : this
 >"arguments" : "arguments"
+>foo : object
 >foo : object
 	}
 }

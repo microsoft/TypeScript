@@ -3,17 +3,14 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+a.js(3,14): error TS2339: Property 'n' does not exist on type 'B'.
 +a.js(23,18): error TS2339: Property 'identifier' does not exist on type 'Module'.
 +a.js(24,18): error TS2339: Property 'size' does not exist on type 'Module'.
 +
 +
-+==== a.js (3 errors) ====
++==== a.js (2 errors) ====
 +    class B {
 +        constructor () {
 +            this.n = 1
-+                 ~
-+!!! error TS2339: Property 'n' does not exist on type 'B'.
 +        }
 +        foo() {
 +        }

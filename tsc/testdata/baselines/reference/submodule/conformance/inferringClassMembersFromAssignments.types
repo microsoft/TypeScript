@@ -13,24 +13,24 @@ class C {
 
             this.inConstructor = 0;
 >this.inConstructor = 0 : 0
->this.inConstructor : any
+>this.inConstructor : string | number
 >this : this
->inConstructor : any
+>inConstructor : string | number
 >0 : 0
         }
         else {
             this.inConstructor = "string"
 >this.inConstructor = "string" : "string"
->this.inConstructor : any
+>this.inConstructor : string | number
 >this : this
->inConstructor : any
+>inConstructor : string | number
 >"string" : "string"
         }
         this.inMultiple = 0;
 >this.inMultiple = 0 : 0
->this.inMultiple : any
+>this.inMultiple : number
 >this : this
->inMultiple : any
+>inMultiple : number
 >0 : 0
     }
     method() {
@@ -44,9 +44,9 @@ class C {
 
             this.inMethod = 0;
 >this.inMethod = 0 : 0
->this.inMethod : any
+>this.inMethod : string | number | undefined
 >this : this
->inMethod : any
+>inMethod : string | number | undefined
 >0 : 0
 
             this.inMethodNullable = null;
@@ -58,9 +58,9 @@ class C {
         else {
             this.inMethod = "string"
 >this.inMethod = "string" : "string"
->this.inMethod : any
+>this.inMethod : string | number | undefined
 >this : this
->inMethod : any
+>inMethod : string | number | undefined
 >"string" : "string"
 
             this.inMethodNullable = undefined;
@@ -72,16 +72,16 @@ class C {
         }
         this.inMultiple = "string";
 >this.inMultiple = "string" : "string"
->this.inMultiple : any
+>this.inMultiple : number
 >this : this
->inMultiple : any
+>inMultiple : number
 >"string" : "string"
 
         this.inMultipleMethods = "string";
 >this.inMultipleMethods = "string" : "string"
->this.inMultipleMethods : any
+>this.inMultipleMethods : string | boolean | undefined
 >this : this
->inMultipleMethods : any
+>inMultipleMethods : string | boolean | undefined
 >"string" : "string"
 
         var action = () => {
@@ -96,17 +96,17 @@ class C {
 
                 this.inNestedArrowFunction = 0;
 >this.inNestedArrowFunction = 0 : 0
->this.inNestedArrowFunction : any
+>this.inNestedArrowFunction : string | number | undefined
 >this : this
->inNestedArrowFunction : any
+>inNestedArrowFunction : string | number | undefined
 >0 : 0
             }
             else {
                 this.inNestedArrowFunction = "string"
 >this.inNestedArrowFunction = "string" : "string"
->this.inNestedArrowFunction : any
+>this.inNestedArrowFunction : string | number | undefined
 >this : this
->inNestedArrowFunction : any
+>inNestedArrowFunction : string | number | undefined
 >"string" : "string"
             }
         };
@@ -122,31 +122,31 @@ class C {
 
             this.inGetter = 0;
 >this.inGetter = 0 : 0
->this.inGetter : any
+>this.inGetter : string | number | undefined
 >this : this
->inGetter : any
+>inGetter : string | number | undefined
 >0 : 0
         }
         else {
             this.inGetter = "string"
 >this.inGetter = "string" : "string"
->this.inGetter : any
+>this.inGetter : string | number | undefined
 >this : this
->inGetter : any
+>inGetter : string | number | undefined
 >"string" : "string"
         }
         this.inMultiple = false;
 >this.inMultiple = false : false
->this.inMultiple : any
+>this.inMultiple : number
 >this : this
->inMultiple : any
+>inMultiple : number
 >false : false
 
         this.inMultipleMethods = false;
 >this.inMultipleMethods = false : false
->this.inMultipleMethods : any
+>this.inMultipleMethods : string | boolean | undefined
 >this : this
->inMultipleMethods : any
+>inMultipleMethods : string | boolean | undefined
 >false : false
     }
     set() {
@@ -160,17 +160,17 @@ class C {
 
             this.inSetter = 0;
 >this.inSetter = 0 : 0
->this.inSetter : any
+>this.inSetter : string | number | undefined
 >this : this
->inSetter : any
+>inSetter : string | number | undefined
 >0 : 0
         }
         else {
             this.inSetter = "string"
 >this.inSetter = "string" : "string"
->this.inSetter : any
+>this.inSetter : string | number | undefined
 >this : this
->inSetter : any
+>inSetter : string | number | undefined
 >"string" : "string"
         }
     }
@@ -186,17 +186,17 @@ class C {
 
             this.inPropertyDeclaration = 0;
 >this.inPropertyDeclaration = 0 : 0
->this.inPropertyDeclaration : any
+>this.inPropertyDeclaration : string | number | undefined
 >this : this
->inPropertyDeclaration : any
+>inPropertyDeclaration : string | number | undefined
 >0 : 0
         }
         else {
             this.inPropertyDeclaration = "string"
 >this.inPropertyDeclaration = "string" : "string"
->this.inPropertyDeclaration : any
+>this.inPropertyDeclaration : string | number | undefined
 >this : this
->inPropertyDeclaration : any
+>inPropertyDeclaration : string | number | undefined
 >"string" : "string"
         }
     }
@@ -211,17 +211,17 @@ class C {
 
             this.inStaticMethod = 0;
 >this.inStaticMethod = 0 : 0
->this.inStaticMethod : any
+>this.inStaticMethod : string | number | undefined
 >this : typeof C
->inStaticMethod : any
+>inStaticMethod : string | number | undefined
 >0 : 0
         }
         else {
             this.inStaticMethod = "string"
 >this.inStaticMethod = "string" : "string"
->this.inStaticMethod : any
+>this.inStaticMethod : string | number | undefined
 >this : typeof C
->inStaticMethod : any
+>inStaticMethod : string | number | undefined
 >"string" : "string"
         }
 
@@ -237,17 +237,17 @@ class C {
 
                 this.inStaticNestedArrowFunction = 0;
 >this.inStaticNestedArrowFunction = 0 : 0
->this.inStaticNestedArrowFunction : any
+>this.inStaticNestedArrowFunction : string | number | undefined
 >this : typeof C
->inStaticNestedArrowFunction : any
+>inStaticNestedArrowFunction : string | number | undefined
 >0 : 0
             }
             else {
                 this.inStaticNestedArrowFunction = "string"
 >this.inStaticNestedArrowFunction = "string" : "string"
->this.inStaticNestedArrowFunction : any
+>this.inStaticNestedArrowFunction : string | number | undefined
 >this : typeof C
->inStaticNestedArrowFunction : any
+>inStaticNestedArrowFunction : string | number | undefined
 >"string" : "string"
             }
         };
@@ -263,17 +263,17 @@ class C {
 
             this.inStaticGetter = 0;
 >this.inStaticGetter = 0 : 0
->this.inStaticGetter : any
+>this.inStaticGetter : string | number | undefined
 >this : typeof C
->inStaticGetter : any
+>inStaticGetter : string | number | undefined
 >0 : 0
         }
         else {
             this.inStaticGetter = "string"
 >this.inStaticGetter = "string" : "string"
->this.inStaticGetter : any
+>this.inStaticGetter : string | number | undefined
 >this : typeof C
->inStaticGetter : any
+>inStaticGetter : string | number | undefined
 >"string" : "string"
         }
     }
@@ -288,17 +288,17 @@ class C {
 
             this.inStaticSetter = 0;
 >this.inStaticSetter = 0 : 0
->this.inStaticSetter : any
+>this.inStaticSetter : string | number | undefined
 >this : typeof C
->inStaticSetter : any
+>inStaticSetter : string | number | undefined
 >0 : 0
         }
         else {
             this.inStaticSetter = "string"
 >this.inStaticSetter = "string" : "string"
->this.inStaticSetter : any
+>this.inStaticSetter : string | number | undefined
 >this : typeof C
->inStaticSetter : any
+>inStaticSetter : string | number | undefined
 >"string" : "string"
         }
     }
@@ -314,17 +314,17 @@ class C {
 
             this.inStaticPropertyDeclaration = 0;
 >this.inStaticPropertyDeclaration = 0 : 0
->this.inStaticPropertyDeclaration : any
+>this.inStaticPropertyDeclaration : string | number | undefined
 >this : typeof C
->inStaticPropertyDeclaration : any
+>inStaticPropertyDeclaration : string | number | undefined
 >0 : 0
         }
         else {
             this.inStaticPropertyDeclaration = "string"
 >this.inStaticPropertyDeclaration = "string" : "string"
->this.inStaticPropertyDeclaration : any
+>this.inStaticPropertyDeclaration : string | number | undefined
 >this : typeof C
->inStaticPropertyDeclaration : any
+>inStaticPropertyDeclaration : string | number | undefined
 >"string" : "string"
         }
     }
@@ -341,42 +341,42 @@ var stringOrNumber: string | number;
 
 var stringOrNumber = c.inConstructor;
 >stringOrNumber : string | number
->c.inConstructor : any
+>c.inConstructor : string | number
 >c : C
->inConstructor : any
+>inConstructor : string | number
 
 var stringOrNumberOrUndefined: string | number | undefined;
 >stringOrNumberOrUndefined : string | number | undefined
 
 var stringOrNumberOrUndefined = c.inMethod;
 >stringOrNumberOrUndefined : string | number | undefined
->c.inMethod : any
+>c.inMethod : string | number | undefined
 >c : C
->inMethod : any
+>inMethod : string | number | undefined
 
 var stringOrNumberOrUndefined = c.inGetter;
 >stringOrNumberOrUndefined : string | number | undefined
->c.inGetter : any
+>c.inGetter : string | number | undefined
 >c : C
->inGetter : any
+>inGetter : string | number | undefined
 
 var stringOrNumberOrUndefined = c.inSetter;
 >stringOrNumberOrUndefined : string | number | undefined
->c.inSetter : any
+>c.inSetter : string | number | undefined
 >c : C
->inSetter : any
+>inSetter : string | number | undefined
 
 var stringOrNumberOrUndefined = c.inPropertyDeclaration;
 >stringOrNumberOrUndefined : string | number | undefined
->c.inPropertyDeclaration : any
+>c.inPropertyDeclaration : string | number | undefined
 >c : C
->inPropertyDeclaration : any
+>inPropertyDeclaration : string | number | undefined
 
 var stringOrNumberOrUndefined = c.inNestedArrowFunction
 >stringOrNumberOrUndefined : string | number | undefined
->c.inNestedArrowFunction : any
+>c.inNestedArrowFunction : string | number | undefined
 >c : C
->inNestedArrowFunction : any
+>inNestedArrowFunction : string | number | undefined
 
 var stringOrNumberOrBoolean: string | number | boolean;
 >stringOrNumberOrBoolean : string | number | boolean
@@ -386,18 +386,18 @@ var number: number;
 
 var number = c.inMultiple;
 >number : number
->c.inMultiple : any
+>c.inMultiple : number
 >c : C
->inMultiple : any
+>inMultiple : number
 
 var stringOrBooleanOrUndefined : string | boolean | undefined;
 >stringOrBooleanOrUndefined : string | boolean | undefined
 
 var stringOrBooleanOrUndefined = c.inMultipleMethods;
 >stringOrBooleanOrUndefined : string | boolean | undefined
->c.inMultipleMethods : any
+>c.inMultipleMethods : string | boolean | undefined
 >c : C
->inMultipleMethods : any
+>inMultipleMethods : string | boolean | undefined
 
 var any: any;
 >any : any
@@ -411,31 +411,31 @@ var any = c.inMethodNullable;
 
 var stringOrNumberOrUndefined = C.inStaticMethod;
 >stringOrNumberOrUndefined : string | number | undefined
->C.inStaticMethod : any
+>C.inStaticMethod : string | number | undefined
 >C : typeof C
->inStaticMethod : any
+>inStaticMethod : string | number | undefined
 
 var stringOrNumberOrUndefined = C.inStaticGetter;
 >stringOrNumberOrUndefined : string | number | undefined
->C.inStaticGetter : any
+>C.inStaticGetter : string | number | undefined
 >C : typeof C
->inStaticGetter : any
+>inStaticGetter : string | number | undefined
 
 var stringOrNumberOrUndefined = C.inStaticSetter;
 >stringOrNumberOrUndefined : string | number | undefined
->C.inStaticSetter : any
+>C.inStaticSetter : string | number | undefined
 >C : typeof C
->inStaticSetter : any
+>inStaticSetter : string | number | undefined
 
 var stringOrNumberOrUndefined = C.inStaticPropertyDeclaration;
 >stringOrNumberOrUndefined : string | number | undefined
->C.inStaticPropertyDeclaration : any
+>C.inStaticPropertyDeclaration : string | number | undefined
 >C : typeof C
->inStaticPropertyDeclaration : any
+>inStaticPropertyDeclaration : string | number | undefined
 
 var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
 >stringOrNumberOrUndefined : string | number | undefined
->C.inStaticNestedArrowFunction : any
+>C.inStaticNestedArrowFunction : string | number | undefined
 >C : typeof C
->inStaticNestedArrowFunction : any
+>inStaticNestedArrowFunction : string | number | undefined
 

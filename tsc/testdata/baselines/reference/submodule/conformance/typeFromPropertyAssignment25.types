@@ -15,9 +15,9 @@ Common.I = class {
     constructor() {
         this.i = 1
 >this.i = 1 : 1
->this.i : any
+>this.i : number
 >this : this
->i : any
+>i : number
 >1 : 1
     }
 }
@@ -38,9 +38,9 @@ Common.O = class extends Common.I {
 
         this.o = 2
 >this.o = 2 : 2
->this.o : any
+>this.o : number
 >this : this
->o : any
+>o : number
 >2 : 2
     }
 }

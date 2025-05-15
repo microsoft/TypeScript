@@ -8,9 +8,9 @@ var c;
 >c : Chunk
 
 c.chunk;
->c.chunk : any
+>c.chunk : number
 >c : Chunk
->chunk : any
+>chunk : number
 
 const D = require("./mod1");
 >D : typeof Chunk
@@ -23,9 +23,9 @@ var d;
 >d : Chunk
 
 d.chunk;
->d.chunk : any
+>d.chunk : number
 >d : Chunk
->chunk : any
+>chunk : number
 
 === types.d.ts ===
 declare function require(name: string): any;
@@ -52,9 +52,9 @@ module.exports = class Chunk {
     constructor() {
         this.chunk = 1;
 >this.chunk = 1 : 1
->this.chunk : any
+>this.chunk : number
 >this : this
->chunk : any
+>chunk : number
 >1 : 1
     }
 }

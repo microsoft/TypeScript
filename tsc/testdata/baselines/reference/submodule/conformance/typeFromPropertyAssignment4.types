@@ -16,10 +16,11 @@ Outer.Inner = class {
     constructor() {
         /** @type {number} */
         this.y = 12
->this.y = 12 : 12
->this.y : any
+>this.y = 12 : number
+>this.y : number
 >this : this
->y : any
+>y : number
+>12 : number
 >12 : 12
     }
 }

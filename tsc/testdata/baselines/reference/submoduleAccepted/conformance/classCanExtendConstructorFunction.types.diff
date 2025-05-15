@@ -127,6 +127,14 @@
  
          this.foonly = 12
  >this.foonly = 12 : 12
+->this.foonly : any
++>this.foonly : number
+ >this : this
+->foonly : any
++>foonly : number
+ >12 : 12
+     }
+     /**
 @@= skipped -38, +38 lines =@@
       * This is not assignable, so should have a type error
       */
@@ -162,26 +170,19 @@
  >0 : 0
  
                  // ????????????????????????
-@@= skipped -24, +24 lines =@@
- >Sql : typeof Sql
+@@= skipped -25, +25 lines =@@
  
  db.numberOxen = db.foonly
-->db.numberOxen = db.foonly : number
+ >db.numberOxen = db.foonly : number
 ->db.numberOxen : number
-+>db.numberOxen = db.foonly : any
 +>db.numberOxen : any
  >db : Sql
 ->numberOxen : number
-->db.foonly : number
 +>numberOxen : any
-+>db.foonly : any
+ >db.foonly : number
  >db : Sql
-->foonly : number
-+>foonly : any
- 
- // error, can't extend a TS constructor function
- class Drakkhen extends Dragon {
-@@= skipped -44, +44 lines =@@
+ >foonly : number
+@@= skipped -43, +43 lines =@@
  // ok
  class Conestoga extends Wagon {
  >Conestoga : Conestoga

@@ -1,9 +1,8 @@
-mod.js(7,14): error TS2339: Property 'p' does not exist on type 'Classic'.
 use.js(8,15): error TS2694: Namespace '"mod"' has no exported member 'n'.
 use.js(9,13): error TS2749: 's.Classic' refers to a value, but is being used as a type here. Did you mean 'typeof s.Classic'?
 
 
-==== mod.js (1 errors) ====
+==== mod.js (0 errors) ====
     module.exports.n = {};
     module.exports.n.K = function C() {
         this.x = 10;
@@ -11,8 +10,6 @@ use.js(9,13): error TS2749: 's.Classic' refers to a value, but is being used as 
     module.exports.Classic = class {
         constructor() {
             this.p = 1
-                 ~
-!!! error TS2339: Property 'p' does not exist on type 'Classic'.
         }
     }
     

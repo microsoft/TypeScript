@@ -14,7 +14,9 @@ var crunch = new ex.Crunch(1);
 >Crunch : Symbol(Crunch, Decl(ex.js, 0, 0))
 
 crunch.n
+>crunch.n : Symbol(n, Decl(ex.js, 2, 20))
 >crunch : Symbol(crunch, Decl(use.js, 3, 3))
+>n : Symbol(n, Decl(ex.js, 2, 20))
 
 
 // types work
@@ -26,7 +28,9 @@ function f(wrap) {
 >wrap : Symbol(wrap, Decl(use.js, 11, 11))
 
     wrap.n
+>wrap.n : Symbol(n, Decl(ex.js, 2, 20))
 >wrap : Symbol(wrap, Decl(use.js, 11, 11))
+>n : Symbol(n, Decl(ex.js, 2, 20))
 }
 
 === ex.js ===
@@ -38,14 +42,18 @@ export class Crunch {
 >n : Symbol(n, Decl(ex.js, 2, 16))
 
         this.n = n
+>this.n : Symbol(n, Decl(ex.js, 2, 20))
 >this : Symbol(Crunch, Decl(ex.js, 0, 0))
+>n : Symbol(n, Decl(ex.js, 2, 20))
 >n : Symbol(n, Decl(ex.js, 2, 16))
     }
     m() {
 >m : Symbol(m, Decl(ex.js, 4, 5))
 
         return this.n
+>this.n : Symbol(n, Decl(ex.js, 2, 20))
 >this : Symbol(Crunch, Decl(ex.js, 0, 0))
+>n : Symbol(n, Decl(ex.js, 2, 20))
     }
 }
 

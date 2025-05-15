@@ -16,8 +16,10 @@
      constructor() {
          this.x = 1
 ->this.x : Symbol(Inner.x, Decl(a.js, 3, 19))
++>this.x : Symbol(x, Decl(a.js, 3, 19))
  >this : Symbol(Inner, Decl(a.js, 2, 13))
 ->x : Symbol(Inner.x, Decl(a.js, 3, 19))
++>x : Symbol(x, Decl(a.js, 3, 19))
      }
      m() { }
 ->m : Symbol(Inner.m, Decl(a.js, 5, 5))
@@ -25,7 +27,7 @@
  }
  
  /** @type {Outer.Inner} */
-@@= skipped -22, +18 lines =@@
+@@= skipped -22, +20 lines =@@
  >inner : Symbol(inner, Decl(a.js, 10, 3))
  
  inner.x

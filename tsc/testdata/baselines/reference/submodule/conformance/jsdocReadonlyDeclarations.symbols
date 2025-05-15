@@ -23,7 +23,9 @@ class C {
          * @type {number}
          */
         this.y = n
+>this.y : Symbol(y, Decl(jsdocReadonlyDeclarations.js, 5, 18))
 >this : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
+>y : Symbol(y, Decl(jsdocReadonlyDeclarations.js, 5, 18))
 >n : Symbol(n, Decl(jsdocReadonlyDeclarations.js, 4, 16))
     }
 }

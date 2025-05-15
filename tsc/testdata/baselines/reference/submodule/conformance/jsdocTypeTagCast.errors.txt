@@ -1,7 +1,8 @@
 b.js(4,31): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-b.js(17,14): error TS2339: Property 'p' does not exist on type 'SomeBase'.
-b.js(23,14): error TS2339: Property 'x' does not exist on type 'SomeDerived'.
-b.js(28,14): error TS2339: Property 'q' does not exist on type 'SomeOther'.
+b.js(45,36): error TS2741: Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
+b.js(49,42): error TS2739: Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
+b.js(51,38): error TS2741: Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+b.js(52,38): error TS2741: Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
 b.js(66,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 b.js(66,38): error TS2454: Variable 'numOrStr' is used before being assigned.
 b.js(67,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
@@ -12,7 +13,7 @@ b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
 ==== a.ts (0 errors) ====
     var W: string;
     
-==== b.js (8 errors) ====
+==== b.js (9 errors) ====
     // @ts-check
     var W = /** @type {string} */(/** @type {*} */ (4));
     
@@ -32,23 +33,17 @@ b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
     class SomeBase {
         constructor() {
             this.p = 42;
-                 ~
-!!! error TS2339: Property 'p' does not exist on type 'SomeBase'.
         }
     }
     class SomeDerived extends SomeBase {
         constructor() {
             super();
             this.x = 42;
-                 ~
-!!! error TS2339: Property 'x' does not exist on type 'SomeDerived'.
         }
     }
     class SomeOther {
         constructor() {
             this.q = 42;
-                 ~
-!!! error TS2339: Property 'q' does not exist on type 'SomeOther'.
         }
     }
     
@@ -66,13 +61,24 @@ b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
     someBase = /** @type {SomeBase} */(someDerived);
     someBase = /** @type {SomeBase} */(someBase);
     someBase = /** @type {SomeBase} */(someOther); // Error
+                                       ~~~~~~~~~
+!!! error TS2741: Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
+!!! related TS2728 b.js:17:9: 'p' is declared here.
     
     someDerived = /** @type {SomeDerived} */(someDerived);
     someDerived = /** @type {SomeDerived} */(someBase);
     someDerived = /** @type {SomeDerived} */(someOther); // Error
+                                             ~~~~~~~~~
+!!! error TS2739: Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
     
     someOther = /** @type {SomeOther} */(someDerived); // Error
+                                         ~~~~~~~~~~~
+!!! error TS2741: Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+!!! related TS2728 b.js:28:9: 'q' is declared here.
     someOther = /** @type {SomeOther} */(someBase); // Error
+                                         ~~~~~~~~
+!!! error TS2741: Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
+!!! related TS2728 b.js:28:9: 'q' is declared here.
     someOther = /** @type {SomeOther} */(someOther);
     
     someFakeClass = someBase;

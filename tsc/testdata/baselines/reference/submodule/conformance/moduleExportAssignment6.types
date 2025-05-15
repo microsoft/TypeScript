@@ -10,34 +10,34 @@ class C {
 
         this.x = x
 >this.x = x : number
->this.x : any
+>this.x : number
 >this : this
->x : any
+>x : number
 >x : number
 
         this.exports = [x]
 >this.exports = [x] : number[]
->this.exports : any
+>this.exports : number[]
 >this : this
->exports : any
+>exports : number[]
 >[x] : number[]
 >x : number
     }
     /** @param {number} y */
     m(y) {
->m : (y: number) => any
+>m : (y: number) => number
 >y : number
 
         return this.x + y
->this.x + y : any
->this.x : any
+>this.x + y : number
+>this.x : number
 >this : this
->x : any
+>x : number
 >y : number
     }
 }
 function exec() {
->exec : () => any
+>exec : () => number[]
 
     const module = new C(12);
 >module : C
@@ -46,13 +46,13 @@ function exec() {
 >12 : 12
 
     return module.exports; // should be fine because `module` is defined locally
->module.exports : any
+>module.exports : number[]
 >module : C
->exports : any
+>exports : number[]
 }
 
 function tricky() {
->tricky : () => () => any
+>tricky : () => () => number[]
 
     // (a trickier variant of what webpack does)
     const module = new C(12);
@@ -62,12 +62,12 @@ function tricky() {
 >12 : 12
 
     return () => {
->() => {        return module.exports;    } : () => any
+>() => {        return module.exports;    } : () => number[]
 
         return module.exports;
->module.exports : any
+>module.exports : number[]
 >module : C
->exports : any
+>exports : number[]
     }
 }
 

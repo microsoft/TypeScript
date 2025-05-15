@@ -5,8 +5,10 @@
      constructor() {
          this.c = 1
 ->this.c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
++>this.c : Symbol(c, Decl(bug25127.js, 1, 19))
  >this : Symbol(Entry, Decl(bug25127.js, 0, 0))
 ->c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
++>c : Symbol(c, Decl(bug25127.js, 1, 19))
      }
      /**
       * @param {any} x
@@ -18,13 +20,15 @@
  >x : Symbol(x, Decl(bug25127.js, 8, 11))
  
          return true
-@@= skipped -20, +18 lines =@@
+@@= skipped -20, +20 lines =@@
  
      constructor() {
          this.d = 'no'
 ->this.d : Symbol(Group.d, Decl(bug25127.js, 13, 19))
++>this.d : Symbol(d, Decl(bug25127.js, 13, 19))
  >this : Symbol(Group, Decl(bug25127.js, 11, 1))
 ->d : Symbol(Group.d, Decl(bug25127.js, 13, 19))
++>d : Symbol(d, Decl(bug25127.js, 13, 19))
      }
      /**
       * @param {any} x
@@ -36,16 +40,20 @@
  >x : Symbol(x, Decl(bug25127.js, 20, 11))
  
          return false
-@@= skipped -26, +24 lines =@@
+@@= skipped -26, +26 lines =@@
  >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
  >isInit : Symbol(isInit, Decl(bug25127.js, 3, 5), Decl(bug25127.js, 15, 5))
  >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
 ->chunk.c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
++>chunk.c : Symbol(c, Decl(bug25127.js, 1, 19))
  >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
 ->c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
 ->chunk.d : Symbol(Group.d, Decl(bug25127.js, 13, 19))
++>c : Symbol(c, Decl(bug25127.js, 1, 19))
++>chunk.d : Symbol(d, Decl(bug25127.js, 13, 19))
  >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
 ->d : Symbol(Group.d, Decl(bug25127.js, 13, 19))
++>d : Symbol(d, Decl(bug25127.js, 13, 19))
  
      return x
  >x : Symbol(x, Decl(bug25127.js, 26, 7))

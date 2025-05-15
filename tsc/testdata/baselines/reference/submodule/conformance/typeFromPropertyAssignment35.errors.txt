@@ -2,11 +2,10 @@ bug26877.js(1,13): error TS2503: Cannot find namespace 'Emu'.
 bug26877.js(4,23): error TS2339: Property 'D' does not exist on type '{}'.
 bug26877.js(5,19): error TS2339: Property 'D' does not exist on type '{}'.
 bug26877.js(7,5): error TS2339: Property 'D' does not exist on type '{}'.
-bug26877.js(9,14): error TS2339: Property '_model' does not exist on type 'D'.
 second.js(3,5): error TS2339: Property 'D' does not exist on type '{}'.
 
 
-==== bug26877.js (5 errors) ====
+==== bug26877.js (4 errors) ====
     /** @param {Emu.D} x */
                 ~~~
 !!! error TS2503: Cannot find namespace 'Emu'.
@@ -24,8 +23,6 @@ second.js(3,5): error TS2339: Property 'D' does not exist on type '{}'.
 !!! error TS2339: Property 'D' does not exist on type '{}'.
         constructor() {
             this._model = 1
-                 ~~~~~~
-!!! error TS2339: Property '_model' does not exist on type 'D'.
         }
     }
     

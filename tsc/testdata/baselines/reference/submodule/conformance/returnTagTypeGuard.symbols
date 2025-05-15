@@ -6,7 +6,9 @@ class Entry {
 
     constructor() {
         this.c = 1
+>this.c : Symbol(c, Decl(bug25127.js, 1, 19))
 >this : Symbol(Entry, Decl(bug25127.js, 0, 0))
+>c : Symbol(c, Decl(bug25127.js, 1, 19))
     }
     /**
      * @param {any} x
@@ -24,7 +26,9 @@ class Group {
 
     constructor() {
         this.d = 'no'
+>this.d : Symbol(d, Decl(bug25127.js, 13, 19))
 >this : Symbol(Group, Decl(bug25127.js, 11, 1))
+>d : Symbol(d, Decl(bug25127.js, 13, 19))
     }
     /**
      * @param {any} x
@@ -48,8 +52,12 @@ function f(chunk) {
 >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
 >isInit : Symbol(isInit, Decl(bug25127.js, 3, 5), Decl(bug25127.js, 15, 5))
 >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
+>chunk.c : Symbol(c, Decl(bug25127.js, 1, 19))
 >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
+>c : Symbol(c, Decl(bug25127.js, 1, 19))
+>chunk.d : Symbol(d, Decl(bug25127.js, 13, 19))
 >chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
+>d : Symbol(d, Decl(bug25127.js, 13, 19))
 
     return x
 >x : Symbol(x, Decl(bug25127.js, 26, 7))

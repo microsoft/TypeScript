@@ -19,7 +19,15 @@
  >class {    constructor() {        this.i = 1    }} : typeof I
  
      constructor() {
-@@= skipped -21, +21 lines =@@
+         this.i = 1
+ >this.i = 1 : 1
+->this.i : any
++>this.i : number
+ >this : this
+->i : any
++>i : number
+ >1 : 1
+     }
  }
  Common.O = class extends Common.I {
  >Common.O = class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
@@ -45,7 +53,12 @@
  
          this.o = 2
  >this.o = 2 : 2
-@@= skipped -22, +22 lines =@@
+->this.o : any
++>this.o : number
+ >this : this
+->o : any
++>o : number
+ >2 : 2
      }
  }
  var o = new Common.O()

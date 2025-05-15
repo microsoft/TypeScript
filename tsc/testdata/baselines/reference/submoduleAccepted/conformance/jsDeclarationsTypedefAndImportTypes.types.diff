@@ -18,9 +18,11 @@
  
          this.connItem = c.item;
  >this.connItem = c.item : number
-@@= skipped -8, +8 lines =@@
+->this.connItem : any
++>this.connItem : number
  >this : this
- >connItem : any
+->connItem : any
++>connItem : number
  >c.item : number
 ->c : import("conn")
 +>c : Conn
@@ -28,12 +30,14 @@
  
          /** @type {import("./conn").Whatever} */
          this.another = "";
- >this.another = "" : ""
+->this.another = "" : ""
 ->this.another : import("conn").Whatever
++>this.another = "" : any
 +>this.another : any
  >this : this
 ->another : import("conn").Whatever
 +>another : any
++>"" : any
  >"" : ""
      }
  }

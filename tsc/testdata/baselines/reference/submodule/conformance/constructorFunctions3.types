@@ -68,6 +68,7 @@ function A () {
 >this : any
 >second : any
 >1 : 1
+>1 : 1
 }
 /** @param {number} n */
 A.prototype.z = function f(n) {

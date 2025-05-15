@@ -10,16 +10,16 @@ class C {
 
             this.p = null;
 >this.p = null : null
->this.p : any
+>this.p : number
 >this : this
->p : any
+>p : number
         }
         else {
             this.p = 0;
 >this.p = 0 : 0
->this.p : any
+>this.p : number
 >this : this
->p : any
+>p : number
 >0 : 0
         }
     }
@@ -28,10 +28,10 @@ class C {
 === bar.ts ===
 (new C()).p = "string"; // Error
 >(new C()).p = "string" : "string"
->(new C()).p : any
+>(new C()).p : number
 >(new C()) : C
 >new C() : C
 >C : typeof C
->p : any
+>p : number
 >"string" : "string"
 

@@ -1,8 +1,7 @@
-jsdocReadonlyDeclarations.js(11,14): error TS2339: Property 'y' does not exist on type 'C'.
 jsdocReadonlyDeclarations.js(14,1): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== jsdocReadonlyDeclarations.js (2 errors) ====
+==== jsdocReadonlyDeclarations.js (1 errors) ====
     class C {
         /** @readonly */
         x = 6
@@ -14,8 +13,6 @@ jsdocReadonlyDeclarations.js(14,1): error TS2554: Expected 1 arguments, but got 
              * @type {number}
              */
             this.y = n
-                 ~
-!!! error TS2339: Property 'y' does not exist on type 'C'.
         }
     }
     new C().x

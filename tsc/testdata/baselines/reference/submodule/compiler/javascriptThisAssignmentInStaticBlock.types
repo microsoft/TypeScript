@@ -7,18 +7,18 @@ class Thing {
     static {
         this.doSomething = () => {};
 >this.doSomething = () => {} : () => void
->this.doSomething : any
+>this.doSomething : () => void
 >this : typeof Thing
->doSomething : any
+>doSomething : () => void
 >() => {} : () => void
     }
 }
 
 Thing.doSomething();
->Thing.doSomething() : any
->Thing.doSomething : any
+>Thing.doSomething() : void
+>Thing.doSomething : () => void
 >Thing : typeof Thing
->doSomething : any
+>doSomething : () => void
 
 // GH#46468
 class ElementsArray extends Array {

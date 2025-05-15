@@ -10,9 +10,10 @@ class A {
 		 */
 		this.callee = arguments.callee;
 >this.callee = arguments.callee : Function
->this.callee : any
+>this.callee : Function
 >this : this
->callee : any
+>callee : Function
+>arguments.callee : Function
 >arguments.callee : Function
 >arguments : IArguments
 >callee : Function

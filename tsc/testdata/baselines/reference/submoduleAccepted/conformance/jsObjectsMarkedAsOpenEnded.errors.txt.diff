@@ -4,18 +4,17 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +a.js(2,10): error TS2339: Property 'a' does not exist on type '{}'.
-+a.js(7,14): error TS2339: Property 'member' does not exist on type 'C'.
-+a.js(8,14): error TS2339: Property 'member' does not exist on type 'C'.
++a.js(8,21): error TS2339: Property 'a' does not exist on type '{}'.
 +a.js(16,14): error TS2339: Property 'a' does not exist on type '{}'.
 +b.ts(1,10): error TS2339: Property 'a' does not exist on type '{}'.
-+b.ts(2,11): error TS2339: Property 'member' does not exist on type 'C'.
++b.ts(2,18): error TS2339: Property 'a' does not exist on type '{}'.
 +b.ts(3,29): error TS2339: Property 'a' does not exist on type '{}'.
 +b.ts(4,14): error TS2339: Property 'a' does not exist on type '{}'.
 +b.ts(5,8): error TS2339: Property 'a' does not exist on type '{}'.
 +b.ts(6,10): error TS2339: Property 'a' does not exist on type '{}'.
 +
 +
-+==== a.js (4 errors) ====
++==== a.js (3 errors) ====
 +    var variable = {};
 +    variable.a = 0;
 +             ~
@@ -25,11 +24,9 @@
 +        initializedMember = {};
 +        constructor() {
 +            this.member = {};
-+                 ~~~~~~
-+!!! error TS2339: Property 'member' does not exist on type 'C'.
 +            this.member.a = 0;
-+                 ~~~~~~
-+!!! error TS2339: Property 'member' does not exist on type 'C'.
++                        ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
 +        }
 +    }
 +    
@@ -53,8 +50,8 @@
 +             ~
 +!!! error TS2339: Property 'a' does not exist on type '{}'.
 +    (new C()).member.a = 1;
-+              ~~~~~~
-+!!! error TS2339: Property 'member' does not exist on type 'C'.
++                     ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
 +    (new C()).initializedMember.a = 1;
 +                                ~
 +!!! error TS2339: Property 'a' does not exist on type '{}'.

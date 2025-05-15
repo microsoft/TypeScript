@@ -93,9 +93,9 @@ class Sql extends Wagon {
 
         this.foonly = 12
 >this.foonly = 12 : 12
->this.foonly : any
+>this.foonly : number
 >this : this
->foonly : any
+>foonly : number
 >12 : 12
     }
     /**
@@ -144,13 +144,13 @@ var db = new Sql();
 >Sql : typeof Sql
 
 db.numberOxen = db.foonly
->db.numberOxen = db.foonly : any
+>db.numberOxen = db.foonly : number
 >db.numberOxen : any
 >db : Sql
 >numberOxen : any
->db.foonly : any
+>db.foonly : number
 >db : Sql
->foonly : any
+>foonly : number
 
 // error, can't extend a TS constructor function
 class Drakkhen extends Dragon {

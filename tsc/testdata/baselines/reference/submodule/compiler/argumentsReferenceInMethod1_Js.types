@@ -17,9 +17,10 @@ class A {
 		 */
 		this.arguments = foo;
 >this.arguments = foo : object
->this.arguments : any
+>this.arguments : object
 >this : this
->arguments : any
+>arguments : object
+>foo : object
 >foo : object
 	}
 }

@@ -43,7 +43,19 @@
  
  === b-ext.js ===
  exports.B = class {
-@@= skipped -33, +33 lines =@@
+@@= skipped -15, +15 lines =@@
+     constructor() {
+         this.x = 1;
+ >this.x = 1 : 1
+->this.x : any
++>this.x : number
+ >this : this
+->x : any
++>x : number
+ >1 : 1
+     }
+ };
+@@= skipped -18, +18 lines =@@
  function b(p) { p.x; }
  >b : (p: B) => void
  >p : B
@@ -120,15 +132,19 @@
  
  === e-ext.js ===
  export class E {
-@@= skipped -29, +29 lines =@@
- function e(p) { p.x; }
- >e : (p: E) => void
- >p : E
-->p.x : number
-+>p.x : any
- >p : E
-->x : number
-+>x : any
+@@= skipped -11, +11 lines =@@
+     constructor() {
+         this.x = 1;
+ >this.x = 1 : 1
+->this.x : any
++>this.x : number
+ >this : this
+->x : any
++>x : number
+ >1 : 1
+     }
+ }
+@@= skipped -24, +24 lines =@@
  
  === f.js ===
  var F = function () {
@@ -145,7 +161,7 @@
  >x : any
  >1 : 1
  
-@@= skipped -22, +22 lines =@@
+@@= skipped -16, +16 lines =@@
  function f(p) { p.x; }
  >f : (p: F) => void
  >p : F
@@ -180,13 +196,15 @@
  
  === h.js ===
  class H {
-@@= skipped -22, +22 lines =@@
- function h(p) { p.x; }
- >h : (p: H) => void
- >p : H
-->p.x : number
-+>p.x : any
- >p : H
-->x : number
-+>x : any
- 
+@@= skipped -11, +11 lines =@@
+     constructor() {
+         this.x = 1;
+ >this.x = 1 : 1
+->this.x : any
++>this.x : number
+ >this : this
+->x : any
++>x : number
+ >1 : 1
+     }
+ }

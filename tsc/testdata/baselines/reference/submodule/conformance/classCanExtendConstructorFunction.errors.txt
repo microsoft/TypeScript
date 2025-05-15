@@ -1,8 +1,6 @@
 first.js(21,19): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
-first.js(24,14): error TS2339: Property 'foonly' does not exist on type 'Sql'.
 first.js(27,21): error TS8020: JSDoc types can only be used inside documentation comments.
 first.js(44,4): error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
-first.js(44,20): error TS2339: Property 'foonly' does not exist on type 'Sql'.
 first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 generic.js(9,23): error TS2507: Type '<T>(flavour: T) => void' is not a constructor function type.
 generic.js(11,21): error TS2339: Property 'flavour' does not exist on type 'Chowder'.
@@ -14,7 +12,7 @@ second.ts(14,25): error TS2507: Type '{ (numberOxen: number): void; circle: (wag
 second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
 
 
-==== first.js (6 errors) ====
+==== first.js (4 errors) ====
     /**
      * @constructor
      * @param {number} numberOxen
@@ -41,8 +39,6 @@ second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Con
         constructor() {
             super(); // error: not enough arguments
             this.foonly = 12
-                 ~~~~~~
-!!! error TS2339: Property 'foonly' does not exist on type 'Sql'.
         }
         /**
          * @param {Array.<string>} files
@@ -67,8 +63,6 @@ second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Con
     db.numberOxen = db.foonly
        ~~~~~~~~~~
 !!! error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
-                       ~~~~~~
-!!! error TS2339: Property 'foonly' does not exist on type 'Sql'.
     
     // error, can't extend a TS constructor function
     class Drakkhen extends Dragon {

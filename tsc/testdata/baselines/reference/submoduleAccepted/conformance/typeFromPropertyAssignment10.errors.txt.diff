@@ -4,14 +4,13 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +main.js(4,12): error TS2503: Cannot find namespace 'Outer'.
-+someview.js(10,14): error TS2339: Property 'y' does not exist on type 'Inner'.
 +
 +
 +==== module.js (0 errors) ====
 +    var Outer = Outer || {};
 +    Outer.app = Outer.app || {};
 +    
-+==== someview.js (1 errors) ====
++==== someview.js (0 errors) ====
 +    Outer.app.SomeView = (function () {
 +        var SomeView = function() {
 +            var me = this;
@@ -22,8 +21,6 @@
 +        constructor() {
 +            /** @type {number} */
 +            this.y = 12;
-+                 ~
-+!!! error TS2339: Property 'y' does not exist on type 'Inner'.
 +        }
 +    }
 +    var example = new Outer.app.Inner();

@@ -17,9 +17,9 @@ class Parent {
 
         return this.asdf = ''
 >this.asdf = '' : ""
->this.asdf : any
+>this.asdf : string
 >this : this
->asdf : any
+>asdf : string
 >'' : ""
     }
   }

@@ -9,17 +9,19 @@
  
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
- >this._map = {} : {}
+->this._map = {} : {}
 ->this._map : { [x: string]: V; }
 ->this : this
 ->_map : { [x: string]: V; }
++>this._map = {} : any
 +>this._map : any
 +>this : any
 +>_map : any
++>{} : any
  >{} : {}
  
  };
-@@= skipped -17, +17 lines =@@
+@@= skipped -17, +18 lines =@@
   * @returns {V} the value ok
   */
  Multimap.prototype.get = function (key) {
@@ -62,17 +64,19 @@
  
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
- >this._map = {} : {}
+->this._map = {} : {}
 ->this._map : { [x: string]: V; }
 ->this : this
 ->_map : { [x: string]: V; }
++>this._map = {} : any
 +>this._map : any
 +>this : any
 +>_map : any
++>{} : any
  >{} : {}
  
  };
-@@= skipped -18, +18 lines =@@
+@@= skipped -18, +19 lines =@@
   * @returns {V} the value ok
   */
  Multimap2.prototype.get = function (key) {
@@ -127,17 +131,19 @@
  
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
- >this._map = {} : {}
+->this._map = {} : {}
 ->this._map : { [x: string]: V; }
 ->this : this
 ->_map : { [x: string]: V; }
++>this._map = {} : any
 +>this._map : any
 +>this : {}
 +>_map : any
++>{} : any
  >{} : {}
  
  };
-@@= skipped -21, +21 lines =@@
+@@= skipped -21, +22 lines =@@
   * @returns {V} the value ok
   */
  Ns.Multimap3.prototype.get = function (key) {

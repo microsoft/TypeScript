@@ -9,7 +9,9 @@
 ->this : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))
 ->p : Symbol(C.p, Decl(a.js, 1, 25))
 +>C : Symbol(C, Decl(a.js, 0, 0))
++>this.p : Symbol(p, Decl(a.js, 1, 25))
 +>this : Symbol(C, Decl(a.js, 0, 0))
++>p : Symbol(p, Decl(a.js, 1, 25))
  
  // Property assignment does nothing.
  // You have to use Object.defineProperty(C, "prototype", { q: 2 })
@@ -31,8 +33,10 @@
  
  c.p
 ->c.p : Symbol(C.p, Decl(a.js, 1, 25))
++>c.p : Symbol(p, Decl(a.js, 1, 25))
  >c : Symbol(c, Decl(a.js, 8, 5))
 ->p : Symbol(C.p, Decl(a.js, 1, 25))
++>p : Symbol(p, Decl(a.js, 1, 25))
  
  c.q
  >c : Symbol(c, Decl(a.js, 8, 5))

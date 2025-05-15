@@ -1,22 +1,35 @@
 --- old.jsdocReadonly.errors.txt
 +++ new.jsdocReadonly.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -jsdocReadonly.js(23,3): error TS2540: Cannot assign to 'y' because it is a read-only property.
-+jsdocReadonly.js(18,14): error TS2339: Property 'ka' does not exist on type 'LOL'.
- 
- 
- ==== jsdocReadonly.js (1 errors) ====
-@@= skipped -19, +19 lines =@@
-             this.y = 2
-             /** @readonly ok */
-             this.ka = 2
-+                 ~~
-+!!! error TS2339: Property 'ka' does not exist on type 'LOL'.
-         }
-     }
-     
-     var l = new LOL()
-     l.y = 12
+-
+-
+-==== jsdocReadonly.js (1 errors) ====
+-    class LOL {
+-        /**
+-         * @readonly
+-         * @private
+-         * @type {number}
+-         * Order rules do not apply to JSDoc
+-         */
+-        x = 1
+-        /** @readonly */
+-        y = 2
+-        /** @readonly Definitely not here */
+-        static z = 3
+-        /** @readonly This is OK too */
+-        constructor() {
+-            /** ok */
+-            this.y = 2
+-            /** @readonly ok */
+-            this.ka = 2
+-        }
+-    }
+-    
+-    var l = new LOL()
+-    l.y = 12
 -      ~
 -!!! error TS2540: Cannot assign to 'y' because it is a read-only property.
-     
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

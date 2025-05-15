@@ -7,9 +7,9 @@ class Base {
     constructor() {
         this.p = 1
 >this.p = 1 : 1
->this.p : any
+>this.p : number
 >this : this
->p : any
+>p : number
 >1 : 1
     }
 }
@@ -22,9 +22,9 @@ class Derived extends Base {
 
         this.p = 1
 >this.p = 1 : 1
->this.p : any
+>this.p : number
 >this : this
->p : any
+>p : number
 >1 : 1
     }
 }

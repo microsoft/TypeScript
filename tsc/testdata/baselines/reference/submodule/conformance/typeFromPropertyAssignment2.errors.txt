@@ -1,17 +1,14 @@
-a.js(6,14): error TS2339: Property 'x' does not exist on type 'I'.
 a.js(9,12): error TS2749: 'Outer' refers to a value, but is being used as a type here. Did you mean 'typeof Outer'?
 a.js(12,12): error TS2503: Cannot find namespace 'Outer'.
 
 
-==== a.js (3 errors) ====
+==== a.js (2 errors) ====
     function Outer() {
         this.y = 2
     }
     Outer.Inner = class I {
         constructor() {
             this.x = 1
-                 ~
-!!! error TS2339: Property 'x' does not exist on type 'I'.
         }
     }
     /** @type {Outer} */

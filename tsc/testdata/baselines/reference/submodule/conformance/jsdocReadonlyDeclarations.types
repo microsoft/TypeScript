@@ -25,10 +25,11 @@ class C {
          * @type {number}
          */
         this.y = n
->this.y = n : any
->this.y : any
+>this.y = n : number
+>this.y : number
 >this : this
->y : any
+>y : number
+>n : number
 >n : any
     }
 }

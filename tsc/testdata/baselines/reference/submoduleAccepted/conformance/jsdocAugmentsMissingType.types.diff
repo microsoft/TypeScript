@@ -1,6 +1,16 @@
 --- old.jsdocAugmentsMissingType.types
 +++ new.jsdocAugmentsMissingType.types
-@@= skipped -11, +11 lines =@@
+@@= skipped -3, +3 lines =@@
+ class A { constructor() { this.x = 0; } }
+ >A : A
+ >this.x = 0 : 0
+->this.x : any
++>this.x : number
+ >this : this
+->x : any
++>x : number
+ >0 : 0
+ 
  /** @augments */
  class B extends A {
  >B : B
@@ -9,3 +19,13 @@
  
      m() {
  >m : () => void
+ 
+         this.x
+->this.x : any
++>this.x : number
+ >this : this
+->x : any
++>x : number
+     }
+ }
+ 

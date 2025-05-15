@@ -29,21 +29,22 @@ MyComponent.defaultProps = {
 };
 
 const MyComponent2 = () => null;
->MyComponent2 : { (): any; defaultProps: { color: string; }; }
->() => null : { (): any; defaultProps: { color: string; }; }
+>MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
+>() => null : { (): any; defaultProps: { color: "blue" | "red"; }; }
 
 /**
  * @type {MyComponentProps}
  */
 MyComponent2.defaultProps = {
->MyComponent2.defaultProps = {    color: "red"} : { color: string; }
->MyComponent2.defaultProps : { color: string; }
->MyComponent2 : { (): any; defaultProps: { color: string; }; }
->defaultProps : { color: string; }
->{    color: "red"} : { color: string; }
+>MyComponent2.defaultProps = {    color: "red"} : { color: "blue" | "red"; }
+>MyComponent2.defaultProps : { color: "blue" | "red"; }
+>MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
+>defaultProps : { color: "blue" | "red"; }
+>{    color: "red"} : { color: "blue" | "red"; }
+>{    color: "red"} : { color: "red"; }
 
     color: "red"
->color : string
+>color : "red"
 >"red" : "red"
 }
 
@@ -52,7 +53,7 @@ MyComponent2.defaultProps = {
  */
 const check = MyComponent2;
 >check : { (): any; defaultProps?: P; }
->MyComponent2 : { (): any; defaultProps: { color: string; }; }
+>MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
 
 /**
  * 
@@ -69,12 +70,13 @@ function foo() {
      * @type {MyComponentProps}
      */
     this.props = { color: "red" };
->this.props = { color: "red" } : { color: string; }
+>this.props = { color: "red" } : { color: "blue" | "red"; }
 >this.props : any
 >this : any
 >props : any
->{ color: "red" } : { color: string; }
->color : string
+>{ color: "red" } : { color: "blue" | "red"; }
+>{ color: "red" } : { color: "red"; }
+>color : "red"
 >"red" : "red"
 
     expectLiteral(this);
@@ -87,23 +89,24 @@ function foo() {
  * @type {MyComponentProps}
  */
 module.exports = {
->module.exports = {    color: "red"} : { color: string; }
->module.exports : { color: string; }
->module : { export=: { color: string; }; }
->exports : { color: string; }
->{    color: "red"} : { color: string; }
+>module.exports = {    color: "red"} : { color: "blue" | "red"; }
+>module.exports : { color: "blue" | "red"; }
+>module : { export=: { color: "blue" | "red"; }; }
+>exports : { color: "blue" | "red"; }
+>{    color: "red"} : { color: "blue" | "red"; }
+>{    color: "red"} : { color: "red"; }
 
     color: "red"
->color : string
+>color : "red"
 >"red" : "red"
 }
 
 expectLiteral({ props: module.exports });
 >expectLiteral({ props: module.exports }) : void
 >expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
->{ props: module.exports } : { props: { color: string; }; }
->props : { color: string; }
->module.exports : { color: string; }
->module : { export=: { color: string; }; }
->exports : { color: string; }
+>{ props: module.exports } : { props: { color: "blue" | "red"; }; }
+>props : { color: "blue" | "red"; }
+>module.exports : { color: "blue" | "red"; }
+>module : { export=: { color: "blue" | "red"; }; }
+>exports : { color: "blue" | "red"; }
 

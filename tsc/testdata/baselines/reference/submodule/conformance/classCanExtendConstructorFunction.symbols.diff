@@ -85,12 +85,14 @@
 -
          this.foonly = 12
 ->this.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
++>this.foonly : Symbol(foonly, Decl(first.js, 22, 16))
  >this : Symbol(Sql, Decl(first.js, 18, 1))
 ->foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
++>foonly : Symbol(foonly, Decl(first.js, 22, 16))
      }
      /**
       * @param {Array.<string>} files
-@@= skipped -76, +56 lines =@@
+@@= skipped -76, +58 lines =@@
       * This is not assignable, so should have a type error
       */
      load(files, format) {
@@ -130,11 +132,13 @@
 ->db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 ->foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
 +>db : Symbol(db, Decl(first.js, 42, 3))
++>db.foonly : Symbol(foonly, Decl(first.js, 22, 16))
 +>db : Symbol(db, Decl(first.js, 42, 3))
++>foonly : Symbol(foonly, Decl(first.js, 22, 16))
  
  // error, can't extend a TS constructor function
  class Drakkhen extends Dragon {
-@@= skipped -56, +44 lines =@@
+@@= skipped -56, +46 lines =@@
  // ok
  class Conestoga extends Wagon {
  >Conestoga : Symbol(Conestoga, Decl(second.ts, 11, 1))

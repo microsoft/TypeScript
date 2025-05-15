@@ -5,12 +5,14 @@
  
          this.a = x
 ->this.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
++>this.a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
  >this : Symbol(Foo, Decl(templateTagOnClasses.js, 0, 0))
 ->a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
++>a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
  >x : Symbol(x, Decl(templateTagOnClasses.js, 8, 17))
      }
      /**
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +13 lines =@@
       * @return {T}
       */
      foo(x, y, alpha) {
@@ -36,7 +38,11 @@
 ->f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3), Decl(templateTagOnClasses.js, 23, 22))
 ->a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 ->g.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
++>f.a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
 +>f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3))
++>a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
++>g.a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
  >g : Symbol(g, Decl(templateTagOnClasses.js, 23, 3))
 ->a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
++>a : Symbol(a, Decl(templateTagOnClasses.js, 8, 21))
  

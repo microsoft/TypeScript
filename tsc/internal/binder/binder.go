@@ -622,8 +622,11 @@ func (b *Binder) bind(node *ast.Node) bool {
 			setFlowNode(node, b.currentFlow)
 		}
 	case ast.KindBinaryExpression:
-		if ast.IsFunctionPropertyAssignment(node) {
+		switch ast.GetAssignmentDeclarationKind(node.AsBinaryExpression()) {
+		case ast.JSDeclarationKindProperty:
 			b.bindFunctionPropertyAssignment(node)
+		case ast.JSDeclarationKindThisProperty:
+			b.bindThisPropertyAssignment(node)
 		}
 		b.checkStrictModeBinaryExpression(node)
 	case ast.KindCatchClause:
@@ -1039,6 +1042,41 @@ func (b *Binder) bindFunctionPropertyAssignment(node *ast.Node) {
 				b.declareSymbol(ast.GetExports(funcSymbol), funcSymbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
 			}
 		}
+	}
+}
+
+func (b *Binder) bindThisPropertyAssignment(node *ast.Node) {
+	if !ast.IsInJSFile(node) {
+		return
+	}
+	bin := node.AsBinaryExpression()
+	if ast.IsPropertyAccessExpression(bin.Left) && ast.IsPrivateIdentifier(bin.Left.AsPropertyAccessExpression().Name()) {
+		return
+	}
+	thisContainer := ast.GetThisContainer(node /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/, false)
+	switch thisContainer.Kind {
+	case ast.KindFunctionDeclaration, ast.KindFunctionExpression:
+		// !!! constructor functions
+	case ast.KindConstructor, ast.KindPropertyDeclaration, ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindClassStaticBlockDeclaration:
+		// this.property assignment in class member -- bind to the containing class
+		containingClass := thisContainer.Parent
+		classSymbol := containingClass.Symbol()
+		var symbolTable ast.SymbolTable
+		if ast.IsStatic(thisContainer) {
+			symbolTable = ast.GetExports(containingClass.Symbol())
+		} else {
+			symbolTable = ast.GetMembers(containingClass.Symbol())
+		}
+		if ast.HasDynamicName(node) {
+			b.declareSymbolEx(symbolTable, containingClass.Symbol(), node, ast.SymbolFlagsProperty, ast.SymbolFlagsNone, true /*isReplaceableByMethod*/, true /*isComputedName*/)
+			addLateBoundAssignmentDeclarationToSymbol(node, classSymbol)
+		} else {
+			b.declareSymbolEx(symbolTable, containingClass.Symbol(), node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsNone, true /*isReplaceableByMethod*/, false /*isComputedName*/)
+		}
+	case ast.KindSourceFile, ast.KindModuleDeclaration:
+		// top-level this.property as assignment to globals is no longer supported
+	default:
+		panic("Unhandled case in bindThisPropertyAssignment: " + thisContainer.Kind.String())
 	}
 }
 

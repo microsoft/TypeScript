@@ -8,7 +8,9 @@ var c;
 >c : Symbol(c, Decl(use.js, 3, 3))
 
 c.chunk;
+>c.chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
 >c : Symbol(c, Decl(use.js, 3, 3))
+>chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
 
 const D = require("./mod1");
 >D : Symbol(D, Decl(use.js, 6, 5))
@@ -20,7 +22,9 @@ var d;
 >d : Symbol(d, Decl(use.js, 8, 3))
 
 d.chunk;
+>d.chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
 >d : Symbol(d, Decl(use.js, 8, 3))
+>chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
 
 === types.d.ts ===
 declare function require(name: string): any;
@@ -44,7 +48,9 @@ module.exports = class Chunk {
 
     constructor() {
         this.chunk = 1;
+>this.chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
 >this : Symbol(Chunk, Decl(mod1.js, 1, 16))
+>chunk : Symbol(chunk, Decl(mod1.js, 2, 19))
     }
 }
 

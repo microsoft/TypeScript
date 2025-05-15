@@ -1,5 +1,4 @@
 a.js(1,7): error TS2339: Property 'Inner' does not exist on type '{}'.
-a.js(4,14): error TS2339: Property 'y' does not exist on type 'Inner'.
 a.js(8,12): error TS2503: Cannot find namespace 'Outer'.
 a.js(11,23): error TS2339: Property 'Inner' does not exist on type '{}'.
 b.js(1,12): error TS2503: Cannot find namespace 'Outer'.
@@ -9,15 +8,13 @@ b.js(4,19): error TS2339: Property 'Inner' does not exist on type '{}'.
 ==== def.js (0 errors) ====
     var Outer = {};
     
-==== a.js (4 errors) ====
+==== a.js (3 errors) ====
     Outer.Inner = class {
           ~~~~~
 !!! error TS2339: Property 'Inner' does not exist on type '{}'.
         constructor() {
             /** @type {number} */
             this.y = 12
-                 ~
-!!! error TS2339: Property 'y' does not exist on type 'Inner'.
         }
     }
     

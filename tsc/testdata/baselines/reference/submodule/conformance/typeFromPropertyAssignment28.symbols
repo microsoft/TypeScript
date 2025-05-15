@@ -4,7 +4,9 @@
 // mixed prototype-assignment+class declaration
 class C { constructor() { this.p = 1; } }
 >C : Symbol(C, Decl(a.js, 0, 0))
+>this.p : Symbol(p, Decl(a.js, 1, 25))
 >this : Symbol(C, Decl(a.js, 0, 0))
+>p : Symbol(p, Decl(a.js, 1, 25))
 
 // Property assignment does nothing.
 // You have to use Object.defineProperty(C, "prototype", { q: 2 })
@@ -21,7 +23,9 @@ const c = new C()
 >C : Symbol(C, Decl(a.js, 0, 0))
 
 c.p
+>c.p : Symbol(p, Decl(a.js, 1, 25))
 >c : Symbol(c, Decl(a.js, 8, 5))
+>p : Symbol(p, Decl(a.js, 1, 25))
 
 c.q
 >c : Symbol(c, Decl(a.js, 8, 5))

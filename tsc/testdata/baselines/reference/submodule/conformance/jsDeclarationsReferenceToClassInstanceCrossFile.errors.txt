@@ -1,17 +1,13 @@
-index.js(9,14): error TS2339: Property 'objects' does not exist on type 'Render'.
+index.js(7,19): error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
 index.js(14,18): error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
-index.js(18,14): error TS2339: Property 'objects' does not exist on type 'Render'.
-test.js(5,31): error TS2339: Property 'objects' does not exist on type 'Render'.
 
 
-==== test.js (1 errors) ====
+==== test.js (0 errors) ====
     const {Render} = require("./index");
     let render = new Render();
     
     render.addRectangle();
     console.log("Objects", render.objects);
-                                  ~~~~~~~
-!!! error TS2339: Property 'objects' does not exist on type 'Render'.
 ==== rectangle.js (0 errors) ====
     class Rectangle {
         constructor() {
@@ -20,7 +16,7 @@ test.js(5,31): error TS2339: Property 'objects' does not exist on type 'Render'.
     }
     
     module.exports = { Rectangle };
-==== index.js (3 errors) ====
+==== index.js (2 errors) ====
     const {Rectangle} = require('./rectangle');
     
     class Render {
@@ -28,10 +24,10 @@ test.js(5,31): error TS2339: Property 'objects' does not exist on type 'Render'.
             /**
              * Object list
              * @type {Rectangle[]}
+                      ~~~~~~~~~
+!!! error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
              */
             this.objects = [];
-                 ~~~~~~~
-!!! error TS2339: Property 'objects' does not exist on type 'Render'.
         }
         /**
          * Adds a rectangle
@@ -43,8 +39,6 @@ test.js(5,31): error TS2339: Property 'objects' does not exist on type 'Render'.
         addRectangle() {
             const obj = new Rectangle();
             this.objects.push(obj);
-                 ~~~~~~~
-!!! error TS2339: Property 'objects' does not exist on type 'Render'.
             return obj;
         }
     }

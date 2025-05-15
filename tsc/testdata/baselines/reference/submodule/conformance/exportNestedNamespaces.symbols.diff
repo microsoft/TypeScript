@@ -34,12 +34,14 @@
      constructor() {
          this.p = 1
 ->this.p : Symbol(Classic.p, Decl(mod.js, 5, 19))
++>this.p : Symbol(p, Decl(mod.js, 5, 19))
  >this : Symbol(Classic, Decl(mod.js, 4, 17))
 ->p : Symbol(Classic.p, Decl(mod.js, 5, 19))
++>p : Symbol(p, Decl(mod.js, 5, 19))
      }
  }
  
-@@= skipped -35, +28 lines =@@
+@@= skipped -35, +30 lines =@@
  
  var k = new s.n.K()
  >k : Symbol(k, Decl(use.js, 2, 3))

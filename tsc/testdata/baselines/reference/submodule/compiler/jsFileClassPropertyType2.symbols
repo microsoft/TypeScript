@@ -7,11 +7,17 @@ class C {
     constructor() {
       /** @type {number[]}*/
       this.p = [];
+>this.p : Symbol(p, Decl(foo.js, 1, 19))
 >this : Symbol(C, Decl(foo.js, 0, 0))
+>p : Symbol(p, Decl(foo.js, 1, 19))
   }
 }
 
 === bar.ts ===
 (new C()).p.push("string");
+>(new C()).p.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+>(new C()).p : Symbol(p, Decl(foo.js, 1, 19))
 >C : Symbol(C, Decl(foo.js, 0, 0))
+>p : Symbol(p, Decl(foo.js, 1, 19))
+>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
 

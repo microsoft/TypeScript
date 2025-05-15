@@ -43,7 +43,9 @@ class Thing {
     constructor() {
         /** @type {DoneStatus} */
         this.s = {
+>this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 >this : Symbol(Thing, Decl(test.js, 17, 4))
+>s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 
             status: 'done',
 >status : Symbol(status, Decl(test.js, 24, 18))
@@ -58,7 +60,9 @@ class Thing {
 >fail : Symbol(fail, Decl(test.js, 28, 5))
 
         this.s = {
+>this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 >this : Symbol(Thing, Decl(test.js, 17, 4))
+>s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 
             status: 'done',
 >status : Symbol(status, Decl(test.js, 31, 18))

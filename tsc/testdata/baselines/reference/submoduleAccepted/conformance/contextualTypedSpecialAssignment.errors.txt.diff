@@ -3,27 +3,18 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+mod.js(5,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(9,4): error TS2339: Property 'x' does not exist on type '{}'.
-+test.js(11,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(14,4): error TS2339: Property 'x' does not exist on type '{}'.
 +test.js(16,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(18,4): error TS2339: Property 'x' does not exist on type '{}'.
-+test.js(25,14): error TS2339: Property 's' does not exist on type 'Thing'.
-+test.js(27,15): error TS7006: Parameter 'n' implicitly has an 'any' type.
-+test.js(32,14): error TS2339: Property 's' does not exist on type 'Thing'.
++test.js(33,13): error TS2322: Type 'string' is not assignable to type '"done"'.
 +test.js(34,15): error TS7006: Parameter 'n' implicitly has an 'any' type.
-+test.js(42,1): error TS7022: 'x' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-+test.js(44,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
-+test.js(49,1): error TS7022: 'y' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-+test.js(51,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(57,17): error TS2339: Property 'x' does not exist on type 'Thing'.
 +test.js(59,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(61,17): error TS2339: Property 'x' does not exist on type 'Thing'.
-+test.js(69,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +
 +
-+==== test.js (17 errors) ====
++==== test.js (9 errors) ====
 +    /** @typedef {{
 +        status: 'done'
 +        m(n: number): void
@@ -37,8 +28,6 @@
 +!!! error TS2339: Property 'x' does not exist on type '{}'.
 +        status: 'done',
 +        m(n) { }
-+          ~
-+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +    }
 +    
 +    ns.x = {
@@ -59,20 +48,17 @@
 +        constructor() {
 +            /** @type {DoneStatus} */
 +            this.s = {
-+                 ~
-+!!! error TS2339: Property 's' does not exist on type 'Thing'.
 +                status: 'done',
 +                m(n) { }
-+                  ~
-+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +            }
 +        }
 +    
 +        fail() {
 +            this.s = {
-+                 ~
-+!!! error TS2339: Property 's' does not exist on type 'Thing'.
 +                status: 'done',
++                ~~~~~~
++!!! error TS2322: Type 'string' is not assignable to type '"done"'.
++!!! related TS6500 test.js:2:5: The expected type comes from property 'status' which is declared here on type '{ status: "done"; m: (n: number) => void; }'
 +                m(n) { }
 +                  ~
 +!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
@@ -84,30 +70,16 @@
 +    
 +    /** @type {DoneStatus} */
 +    exports.x = {
-+    ~~~~~~~~~~~~~
 +        status: "done",
-+    ~~~~~~~~~~~~~~~~~~~
 +        m(n) { }
-+    ~~~~~~~~~~~~
-+          ~
-+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +    }
-+    ~
-+!!! error TS7022: 'x' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 +    exports.x
 +    
 +    /** @type {DoneStatus} */
 +    module.exports.y = {
-+    ~~~~~~~~~~~~~~~~~~~~
 +        status: "done",
-+    ~~~~~~~~~~~~~~~~~~~
 +        m(n) { }
-+    ~~~~~~~~~~~~
-+          ~
-+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +    }
-+    ~
-+!!! error TS7022: 'y' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 +    module.exports.y
 +    
 +    // prototype-property assignment
@@ -131,17 +103,13 @@
 +    F.prototype = {
 +        status: "done",
 +        m(n) { }
-+          ~
-+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +    }
 +    
-+==== mod.js (1 errors) ====
++==== mod.js (0 errors) ====
 +    // module.exports assignment
 +    /** @type {{ status: 'done', m(n: number): void }} */
 +    module.exports = {
 +        status: "done",
 +        m(n) { }
-+          ~
-+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +    }
 +    

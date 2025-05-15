@@ -9,14 +9,11 @@
  
  		/**
  		 * @type Function
- 		 */
- 		this.callee = arguments.callee;
- >this.callee = arguments.callee : Function
-->this.callee : Function
-+>this.callee : any
+@@= skipped -11, +11 lines =@@
  >this : this
-->callee : Function
-+>callee : any
+ >callee : Function
  >arguments.callee : Function
++>arguments.callee : Function
  >arguments : IArguments
  >callee : Function
+ 	}

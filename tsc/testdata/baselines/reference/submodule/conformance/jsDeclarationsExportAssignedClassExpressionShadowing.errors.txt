@@ -1,9 +1,8 @@
 index.js(7,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-index.js(9,14): error TS2339: Property 'x' does not exist on type 'Q'.
 index.js(12,16): error TS2339: Property 'Another' does not exist on type 'typeof Q'.
 
 
-==== index.js (3 errors) ====
+==== index.js (2 errors) ====
     class A {
         member = new Q();
     }
@@ -16,8 +15,6 @@ index.js(12,16): error TS2339: Property 'Another' does not exist on type 'typeof
     ~~~~~~~~~~~~~~~~~~~
             this.x = new A();
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-                 ~
-!!! error TS2339: Property 'x' does not exist on type 'Q'.
         }
     ~~~~~
     }

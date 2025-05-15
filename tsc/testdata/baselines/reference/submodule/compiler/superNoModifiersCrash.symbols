@@ -11,7 +11,9 @@ class Parent {
 >arguments : Symbol(arguments)
 
         return this.asdf = ''
+>this.asdf : Symbol(asdf, Decl(File.js, 3, 14))
 >this : Symbol(Parent, Decl(File.js, 0, 0))
+>asdf : Symbol(asdf, Decl(File.js, 3, 14))
     }
   }
 

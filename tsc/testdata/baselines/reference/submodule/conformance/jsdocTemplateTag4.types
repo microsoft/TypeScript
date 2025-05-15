@@ -12,10 +12,11 @@ function Multimap() {
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
->this._map = {} : {}
+>this._map = {} : any
 >this._map : any
 >this : any
 >_map : any
+>{} : any
 >{} : {}
 
 };
@@ -56,10 +57,11 @@ var Multimap2 = function() {
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
->this._map = {} : {}
+>this._map = {} : any
 >this._map : any
 >this : any
 >_map : any
+>{} : any
 >{} : {}
 
 };
@@ -107,10 +109,11 @@ Ns.Multimap3 = function() {
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
->this._map = {} : {}
+>this._map = {} : any
 >this._map : any
 >this : {}
 >_map : any
+>{} : any
 >{} : {}
 
 };

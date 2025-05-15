@@ -152,9 +152,10 @@ type ExportTypeLinks struct {
 // Links for type aliases
 
 type TypeAliasLinks struct {
-	declaredType   *Type
-	typeParameters []*Type          // Type parameters of type alias (undefined if non-generic)
-	instantiations map[string]*Type // Instantiations of generic type alias (undefined if non-generic)
+	declaredType                  *Type
+	typeParameters                []*Type          // Type parameters of type alias (undefined if non-generic)
+	instantiations                map[string]*Type // Instantiations of generic type alias (undefined if non-generic)
+	isConstructorDeclaredProperty bool
 }
 
 // Links for declared types (type parameters, class types, interface types, enums)

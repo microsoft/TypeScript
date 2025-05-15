@@ -11,16 +11,22 @@
  
      a() {
  >a : () => void
-@@= skipped -9, +9 lines =@@
+ 
          this.b = n => n;
- >this.b = n => n : (n: number) => number
+->this.b = n => n : (n: number) => number
++>this.b = n => n : (n: any) => any
  >this.b : ((n: number) => number) | undefined
 ->this : { a(): void; b?(n: number): number; }
 +>this : { a: () => void; b?: ((n: number) => number) | undefined; }
  >b : ((n: number) => number) | undefined
- >n => n : (n: number) => number
- >n : number
-@@= skipped -10, +10 lines =@@
+->n => n : (n: number) => number
+->n : number
+->n : number
++>n => n : (n: any) => any
++>n : any
++>n : any
+     }
+ };
  
  /** @type {{ d(): void; e?(n: number): number; f?(n: number): number; g?: number }} */
  const o2 = {
@@ -31,24 +37,32 @@
  
      d() {
  >d : () => void
-@@= skipped -9, +9 lines =@@
+ 
          this.e = this.f = m => this.g || m;
- >this.e = this.f = m => this.g || m : (m: number) => number
+->this.e = this.f = m => this.g || m : (m: number) => number
++>this.e = this.f = m => this.g || m : (m: any) => any
  >this.e : ((n: number) => number) | undefined
 ->this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
 +>this : { d: () => void; e?: ((n: number) => number) | undefined; f?: ((n: number) => number) | undefined; g?: number | undefined; }
  >e : ((n: number) => number) | undefined
- >this.f = m => this.g || m : (m: number) => number
+->this.f = m => this.g || m : (m: number) => number
++>this.f = m => this.g || m : (m: any) => any
  >this.f : ((n: number) => number) | undefined
 ->this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
 +>this : { d: () => void; e?: ((n: number) => number) | undefined; f?: ((n: number) => number) | undefined; g?: number | undefined; }
  >f : ((n: number) => number) | undefined
- >m => this.g || m : (m: number) => number
- >m : number
- >this.g || m : number
+->m => this.g || m : (m: number) => number
+->m : number
+->this.g || m : number
++>m => this.g || m : (m: any) => any
++>m : any
++>this.g || m : any
  >this.g : number | undefined
 ->this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
 +>this : { d: () => void; e?: ((n: number) => number) | undefined; f?: ((n: number) => number) | undefined; g?: number | undefined; }
  >g : number | undefined
- >m : number
+->m : number
++>m : any
      }
+ };
+ 

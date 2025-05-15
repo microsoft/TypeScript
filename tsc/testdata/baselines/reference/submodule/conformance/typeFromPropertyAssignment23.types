@@ -7,9 +7,9 @@ class B {
     constructor () {
         this.n = 1
 >this.n = 1 : 1
->this.n : any
+>this.n : number
 >this : this
->n : any
+>n : number
 >1 : 1
     }
     foo() {

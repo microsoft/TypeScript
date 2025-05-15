@@ -11,15 +11,15 @@
  
      m() {
  >m : () => void
-@@= skipped -33, +33 lines =@@
- >f : () => void
+@@= skipped -24, +24 lines =@@
  
-         this.wat
-->this.wat : number
-+>this.wat : any
+         this.wat = 12
+ >this.wat = 12 : 12
+->this.wat : any
++>this.wat : number
  >this : this
-->wat : number
-+>wat : any
- 
-         this.wit
- >this.wit : any
+->wat : any
++>wat : number
+ >12 : 12
+     }
+     f() {

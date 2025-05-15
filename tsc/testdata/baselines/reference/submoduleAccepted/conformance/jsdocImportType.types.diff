@@ -8,12 +8,10 @@
 +>c : Chunk
  
  c.chunk;
-->c.chunk : number
+ >c.chunk : number
 ->c : D
-->chunk : number
-+>c.chunk : any
 +>c : Chunk
-+>chunk : any
+ >chunk : number
  
  const D = require("./mod1");
 ->D : typeof D
@@ -29,16 +27,24 @@
 +>d : Chunk
  
  d.chunk;
-->d.chunk : number
+ >d.chunk : number
 ->d : D
-->chunk : number
-+>d.chunk : any
 +>d : Chunk
-+>chunk : any
+ >chunk : number
  
  === types.d.ts ===
- declare function require(name: string): any;
-@@= skipped -51, +51 lines =@@
+@@= skipped -42, +42 lines =@@
+     constructor() {
+         this.chunk = 1;
+ >this.chunk = 1 : 1
+->this.chunk : any
++>this.chunk : number
+ >this : this
+->chunk : any
++>chunk : number
+ >1 : 1
+     }
+ }
  module.exports = Chunk;
  >module.exports = Chunk : typeof Chunk
  >module.exports : typeof Chunk

@@ -1353,8 +1353,10 @@ func GetNonAssignedNameOfDeclaration(declaration *Node) *Node {
 	// !!!
 	switch declaration.Kind {
 	case KindBinaryExpression:
-		if IsFunctionPropertyAssignment(declaration) {
-			return GetElementOrPropertyAccessArgumentExpressionOrName(declaration.AsBinaryExpression().Left)
+		bin := declaration.AsBinaryExpression()
+		kind := GetAssignmentDeclarationKind(bin)
+		if kind == JSDeclarationKindProperty || kind == JSDeclarationKindThisProperty {
+			return GetElementOrPropertyAccessArgumentExpressionOrName(bin.Left)
 		}
 		return nil
 	case KindExportAssignment, KindJSExportAssignment:
@@ -1400,21 +1402,46 @@ func getAssignedName(node *Node) *Node {
 	return nil
 }
 
-func IsFunctionPropertyAssignment(node *Node) bool {
-	if node.Kind == KindBinaryExpression {
-		expr := node.AsBinaryExpression()
-		if expr.OperatorToken.Kind == KindEqualsToken {
-			switch expr.Left.Kind {
-			case KindPropertyAccessExpression:
-				// F.id = expr
-				return IsIdentifier(expr.Left.Expression()) && IsIdentifier(expr.Left.Name())
-			case KindElementAccessExpression:
-				// F[xxx] = expr
-				return IsIdentifier(expr.Left.Expression())
-			}
-		}
+type JSDeclarationKind int
+
+const (
+	JSDeclarationKindNone JSDeclarationKind = iota
+	/// module.exports = expr
+	JSDeclarationKindModuleExports
+	/// exports.name = expr
+	/// module.exports.name = expr
+	JSDeclarationKindExportsProperty
+	/// className.prototype.name = expr
+	JSDeclarationKindPrototypeProperty
+	/// this.name = expr
+	JSDeclarationKindThisProperty
+	/// F.name = expr, F[name] = expr
+	JSDeclarationKindProperty
+)
+
+func GetAssignmentDeclarationKind(bin *BinaryExpression) JSDeclarationKind {
+	if bin.OperatorToken.Kind != KindEqualsToken || !IsAccessExpression(bin.Left) {
+		return JSDeclarationKindNone
 	}
-	return false
+	if IsModuleExportsAccessExpression(bin.Left) {
+		return JSDeclarationKindModuleExports
+	} else if (IsModuleExportsAccessExpression(bin.Left.Expression()) || IsExportsIdentifier(bin.Left.Expression())) &&
+		hasJSBindableName(bin.Left) {
+		return JSDeclarationKindExportsProperty
+	}
+	if bin.Left.Expression().Kind == KindThisKeyword {
+		return JSDeclarationKindThisProperty
+	}
+	if bin.Left.Kind == KindPropertyAccessExpression && IsIdentifier(bin.Left.Expression()) && hasJSBindableName(bin.Left) ||
+		bin.Left.Kind == KindElementAccessExpression && IsIdentifier(bin.Left.Expression()) {
+		return JSDeclarationKindProperty
+	}
+	return JSDeclarationKindNone
+}
+
+func hasJSBindableName(node *Node) bool {
+	name := GetElementOrPropertyAccessArgumentExpressionOrName(node)
+	return IsIdentifier(name) || IsStringLiteralLike(name)
 }
 
 /**

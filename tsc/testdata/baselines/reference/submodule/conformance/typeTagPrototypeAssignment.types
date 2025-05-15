@@ -2,13 +2,14 @@
 
 === bug27327.js ===
 function C() {
->C : { (): void; prototype: number; }
+>C : { (): void; prototype: string; }
 }
 /** @type {string} */
 C.prototype = 12
->C.prototype = 12 : 12
->C.prototype : number
->C : { (): void; prototype: number; }
->prototype : number
+>C.prototype = 12 : string
+>C.prototype : string
+>C : { (): void; prototype: string; }
+>prototype : string
+>12 : string
 >12 : 12
 

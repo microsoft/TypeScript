@@ -8,7 +8,9 @@ class YaddaBase {
 
     constructor() {
         this.roots = "hi";
+>this.roots : Symbol(roots, Decl(index.js, 3, 19))
 >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>roots : Symbol(roots, Decl(index.js, 3, 19))
 
         /** @type number */
         this.justProp;
@@ -27,7 +29,9 @@ class YaddaBase {
 >b : Symbol(b, Decl(index.js, 11, 5))
 
         this.foo = 10
+>this.foo : Symbol(foo, Decl(index.js, 12, 24))
 >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>foo : Symbol(foo, Decl(index.js, 12, 24))
     }
 }
 
@@ -39,13 +43,17 @@ class DerivedYadda extends YaddaBase {
 >rootTests : Symbol(rootTests, Decl(index.js, 17, 38))
 
         return super.roots;
+>super.roots : Symbol(roots, Decl(index.js, 3, 19))
 >super : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>roots : Symbol(roots, Decl(index.js, 3, 19))
     }
     get fooTests() {
 >fooTests : Symbol(fooTests, Decl(index.js, 20, 5))
 
         return super.foo;
+>super.foo : Symbol(foo, Decl(index.js, 12, 24))
 >super : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>foo : Symbol(foo, Decl(index.js, 12, 24))
     }
     get justPropTests() {
 >justPropTests : Symbol(justPropTests, Decl(index.js, 23, 5))

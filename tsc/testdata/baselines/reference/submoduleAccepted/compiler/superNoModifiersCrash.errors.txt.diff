@@ -5,13 +5,12 @@
 @@= skipped --1, +1 lines =@@
 +File.js(3,9): error TS2335: 'super' can only be referenced in a derived class.
 +File.js(3,29): error TS2461: Type 'IArguments' is not an array type.
-+File.js(4,21): error TS2339: Property 'asdf' does not exist on type 'Parent'.
 +File.js(9,5): error TS2416: Property 'initialize' in type 'Child' is not assignable to the same property in base type 'Parent'.
 +  Type '() => void' is not assignable to type '() => string'.
 +    Type 'void' is not assignable to type 'string'.
 +
 +
-+==== File.js (4 errors) ====
++==== File.js (3 errors) ====
 +    class Parent {
 +        initialize() {
 +            super.initialize(...arguments)
@@ -20,8 +19,6 @@
 +                                ~~~~~~~~~
 +!!! error TS2461: Type 'IArguments' is not an array type.
 +            return this.asdf = ''
-+                        ~~~~
-+!!! error TS2339: Property 'asdf' does not exist on type 'Parent'.
 +        }
 +      }
 +    

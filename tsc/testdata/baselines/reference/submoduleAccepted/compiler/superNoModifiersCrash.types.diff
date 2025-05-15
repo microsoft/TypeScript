@@ -15,15 +15,3 @@
  >super : any
  >initialize : any
  >...arguments : any
-@@= skipped -12, +12 lines =@@
- 
-         return this.asdf = ''
- >this.asdf = '' : ""
-->this.asdf : string
-+>this.asdf : any
- >this : this
-->asdf : string
-+>asdf : any
- >'' : ""
-     }
-   }

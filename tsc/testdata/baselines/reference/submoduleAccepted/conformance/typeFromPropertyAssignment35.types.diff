@@ -47,7 +47,16 @@
  >class {    constructor() {        this._model = 1    }} : typeof D
  
      constructor() {
-@@= skipped -38, +38 lines =@@
+         this._model = 1
+ >this._model = 1 : 1
+->this._model : any
++>this._model : number
+ >this : this
+->_model : any
++>_model : number
+ >1 : 1
+     }
+ }
  
  === second.js ===
  var Emu = {}

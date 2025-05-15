@@ -5,8 +5,10 @@
          /** @type {number[]} */
          this.data = [1, 2, 3];
 ->this.data : Symbol(Test.data, Decl(a.js, 1, 19))
++>this.data : Symbol(data, Decl(a.js, 1, 19))
  >this : Symbol(Test, Decl(a.js, 0, 0))
 ->data : Symbol(Test.data, Decl(a.js, 1, 19))
++>data : Symbol(data, Decl(a.js, 1, 19))
      }
  
      finderRaw() {
@@ -16,13 +18,17 @@
          this.data.find(function (d) {
 ->this.data.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(a.js, 1, 19))
++>this.data.find : Symbol(find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>this.data : Symbol(data, Decl(a.js, 1, 19))
  >this : Symbol(Test, Decl(a.js, 0, 0))
 ->data : Symbol(Test.data, Decl(a.js, 1, 19))
 ->find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>data : Symbol(data, Decl(a.js, 1, 19))
++>find : Symbol(find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >d : Symbol(d, Decl(a.js, 7, 33))
  
              return d === this.data.length
-@@= skipped -23, +17 lines =@@
+@@= skipped -23, +23 lines =@@
      }
  
      forEacherRaw() {
@@ -32,9 +38,13 @@
          this.data.forEach(function (d) {
 ->this.data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(a.js, 1, 19))
++>this.data.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
++>this.data : Symbol(data, Decl(a.js, 1, 19))
  >this : Symbol(Test, Decl(a.js, 0, 0))
 ->data : Symbol(Test.data, Decl(a.js, 1, 19))
 ->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>data : Symbol(data, Decl(a.js, 1, 19))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
  >d : Symbol(d, Decl(a.js, 13, 36))
  
              console.log(d === this.data.length)
@@ -55,9 +65,13 @@
          this.data.forEach(
 ->this.data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(a.js, 1, 19))
++>this.data.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
++>this.data : Symbol(data, Decl(a.js, 1, 19))
  >this : Symbol(Test, Decl(a.js, 0, 0))
 ->data : Symbol(Test.data, Decl(a.js, 1, 19))
 ->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>data : Symbol(data, Decl(a.js, 1, 19))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
  
          /** @this {Test} */
          function (d) {
@@ -87,13 +101,17 @@
          this.data.find(
 ->this.data.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(a.js, 1, 19))
++>this.data.find : Symbol(find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>this.data : Symbol(data, Decl(a.js, 1, 19))
  >this : Symbol(Test, Decl(a.js, 0, 0))
 ->data : Symbol(Test.data, Decl(a.js, 1, 19))
 ->find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>data : Symbol(data, Decl(a.js, 1, 19))
++>find : Symbol(find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  
          /** @this {Test} */
          function (d) {
-@@= skipped -64, +47 lines =@@
+@@= skipped -64, +59 lines =@@
  
              return d === this.data.length
  >d : Symbol(d, Decl(a.js, 29, 18))

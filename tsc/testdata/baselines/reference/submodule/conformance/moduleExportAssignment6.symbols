@@ -9,11 +9,15 @@ class C {
 >x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 16))
 
         this.x = x
+>this.x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 20))
 >this : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+>x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 20))
 >x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 16))
 
         this.exports = [x]
+>this.exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
 >this : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+>exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
 >x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 16))
     }
     /** @param {number} y */
@@ -22,7 +26,9 @@ class C {
 >y : Symbol(y, Decl(webpackLibNormalModule.js, 7, 6))
 
         return this.x + y
+>this.x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 20))
 >this : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+>x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 20))
 >y : Symbol(y, Decl(webpackLibNormalModule.js, 7, 6))
     }
 }
@@ -34,7 +40,9 @@ function exec() {
 >C : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
 
     return module.exports; // should be fine because `module` is defined locally
+>module.exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
 >module : Symbol(module, Decl(webpackLibNormalModule.js, 12, 9))
+>exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
 }
 
 function tricky() {
@@ -47,7 +55,9 @@ function tricky() {
 
     return () => {
         return module.exports;
+>module.exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
 >module : Symbol(module, Decl(webpackLibNormalModule.js, 18, 9))
+>exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
     }
 }
 
