@@ -2058,7 +2058,7 @@ function isShorthandAmbientModule(node: Node | undefined): boolean {
 }
 
 /** @internal */
-export function isBlockScopedContainerTopLevel(node: Node): boolean {
+export function isBlockScopedOrTopLevelContainer(node: Node): node is SourceFile | ModuleDeclaration | FunctionLikeDeclaration | ClassStaticBlockDeclaration {
     return node.kind === SyntaxKind.SourceFile ||
         node.kind === SyntaxKind.ModuleDeclaration ||
         isFunctionLikeOrClassStaticBlockDeclaration(node);
@@ -3083,7 +3083,7 @@ export function getContainingClassStaticBlock(node: Node): Node | undefined {
 }
 
 /** @internal */
-export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDeclaration | ClassStaticBlockDeclaration | undefined {
+export function getContainingFunctionOrClassStaticBlock(node: Node): FunctionLikeDeclaration | ClassStaticBlockDeclaration | undefined {
     return findAncestor(node.parent, isFunctionLikeOrClassStaticBlockDeclaration);
 }
 
