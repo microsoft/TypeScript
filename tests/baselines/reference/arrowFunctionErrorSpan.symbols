@@ -81,3 +81,9 @@ f(_ => 1 +
 
     2);
 
+f((): number => { });
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+f((): number => '');
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
