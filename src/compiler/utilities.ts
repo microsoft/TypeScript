@@ -9057,8 +9057,8 @@ const _computedOptions = createComputedCompilerOptions({
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
                 return false;
             }
-            if (compilerOptions.resolvePackageJsonExports !== undefined) {
-                return compilerOptions.resolvePackageJsonExports;
+            if (compilerOptions.resolvePackageJsonImports !== undefined) {
+                return compilerOptions.resolvePackageJsonImports;
             }
             switch (moduleResolution) {
                 case ModuleResolutionKind.Node16:
