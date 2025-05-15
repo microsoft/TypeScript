@@ -67,6 +67,7 @@ function g<T>() {
     let x: Oops;
     x = sym;
     x = "str";
+    x = "whatever"; // error
 }
 
 export {};
