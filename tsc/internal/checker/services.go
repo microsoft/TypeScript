@@ -468,3 +468,16 @@ func (c *Checker) GetExportsAndPropertiesOfModule(moduleSymbol *ast.Symbol) []*a
 func (c *Checker) getExportsOfModuleAsArray(moduleSymbol *ast.Symbol) []*ast.Symbol {
 	return symbolsToArray(c.getExportsOfModule(moduleSymbol))
 }
+
+// Returns all the properties of the Jsx.IntrinsicElements interface.
+func (c *Checker) GetJsxIntrinsicTagNamesAt(location *ast.Node) []*ast.Symbol {
+	intrinsics := c.getJsxType(JsxNames.IntrinsicElements, location)
+	if intrinsics == nil {
+		return nil
+	}
+	return c.GetPropertiesOfType(intrinsics)
+}
+
+func (c *Checker) GetContextualTypeForJsxAttribute(attribute *ast.JsxAttributeLike) *Type {
+	return c.getContextualTypeForJsxAttribute(attribute, ContextFlagsNone)
+}

@@ -1348,9 +1348,19 @@ func getCompletionData(program *compiler.Program, file *ast.SourceFile, position
 	if isRightOfDot || isRightOfQuestionDot {
 		getTypeScriptMemberSymbols()
 	} else if isRightOfOpenTag {
-		// !!! jsx completions
+		symbols = typeChecker.GetJsxIntrinsicTagNamesAt(location)
+		core.CheckEachDefined(symbols, "GetJsxIntrinsicTagNamesAt() should all be defined")
+		tryGetGlobalSymbols()
+		completionKind = CompletionKindGlobal
+		keywordFilters = KeywordCompletionFiltersNone
 	} else if isStartingCloseTag {
-		// !!! jsx completions
+		tagName := contextToken.Parent.Parent.AsJsxElement().OpeningElement.TagName()
+		tagSymbol := typeChecker.GetSymbolAtLocation(tagName)
+		if tagSymbol != nil {
+			symbols = []*ast.Symbol{tagSymbol}
+		}
+		completionKind = CompletionKindGlobal
+		keywordFilters = KeywordCompletionFiltersNone
 	} else {
 		// For JavaScript or TypeScript, if we're not after a dot, then just try to get the
 		// global symbols in scope.  These results should be valid for either language as
@@ -1457,8 +1467,10 @@ func (l *LanguageService) completionInfoFromData(
 
 	// Verify if the file is JSX language variant
 	if ast.GetLanguageVariant(file.ScriptKind) == core.LanguageVariantJSX {
-		// !!! jsx
-		return nil
+		list := l.getJsxClosingTagCompletion(data.location, file, position, clientOptions)
+		if list != nil {
+			return list
+		}
 	}
 
 	// When the completion is for the expression of a case clause (e.g. `case |`),
@@ -1518,7 +1530,7 @@ func (l *LanguageService) completionInfoFromData(
 		sortedEntries = getJSCompletionEntries(
 			file,
 			position,
-			uniqueNames,
+			&uniqueNames,
 			compilerOptions.GetEmitScriptTarget(),
 			sortedEntries,
 		)
@@ -1528,7 +1540,6 @@ func (l *LanguageService) completionInfoFromData(
 
 	itemDefaults := setCommitCharacters(clientOptions, sortedEntries, &data.defaultCommitCharacters)
 
-	// !!! port behavior of other strada fields of CompletionInfo that are non-LSP
 	return &lsproto.CompletionList{
 		IsIncomplete: data.hasUnresolvedAutoImports,
 		ItemDefaults: itemDefaults,
@@ -1546,11 +1557,12 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	preferences *UserPreferences,
 	compilerOptions *core.CompilerOptions,
 	clientOptions *lsproto.CompletionClientCapabilities,
-) (uniqueNames *core.Set[string], sortedEntries []*lsproto.CompletionItem) {
+) (uniqueNames core.Set[string], sortedEntries []*lsproto.CompletionItem) {
 	closestSymbolDeclaration := getClosestSymbolDeclaration(data.contextToken, data.location)
 	useSemicolons := probablyUsesSemicolons(file)
 	typeChecker := program.GetTypeChecker()
 	isMemberCompletion := isMemberCompletionKind(data.completionKind)
+	optionalReplacementSpan := getOptionalReplacementSpan(data.location, file)
 	// Tracks unique names.
 	// Value is set to false for global variables or completions from external module exports, because we can have multiple of those;
 	// true otherwise. Based on the order we add things we will always see locals first, then globals, then module exports.
@@ -1605,6 +1617,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 			preferences,
 			clientOptions,
 			isMemberCompletion,
+			optionalReplacementSpan,
 		)
 		if entry == nil {
 			continue
@@ -1622,7 +1635,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	for name := range maps.Keys(uniques) {
 		uniqueSet.Add(name)
 	}
-	return uniqueSet, sortedEntries
+	return *uniqueSet, sortedEntries
 }
 
 func completionNameForLiteral(
@@ -1671,6 +1684,7 @@ func (l *LanguageService) createCompletionItem(
 	preferences *UserPreferences,
 	clientOptions *lsproto.CompletionClientCapabilities,
 	isMemberCompletion bool,
+	optionalReplacementSpan *core.TextRange,
 ) *lsproto.CompletionItem {
 	contextToken := data.contextToken
 	var insertText string
@@ -1871,7 +1885,7 @@ func (l *LanguageService) createCompletionItem(
 	parentNamedImportOrExport := ast.FindAncestor(data.location, isNamedImportsOrExports)
 	if parentNamedImportOrExport != nil {
 		languageVersion := compilerOptions.GetEmitScriptTarget()
-		if !scanner.IsIdentifierText(name, languageVersion) {
+		if !scanner.IsIdentifierText(name, languageVersion, core.LanguageVariantStandard) {
 			insertText = quotePropertyName(file, preferences, name)
 
 			if parentNamedImportOrExport.Kind == ast.KindNamedImports {
@@ -1896,7 +1910,6 @@ func (l *LanguageService) createCompletionItem(
 	// Commit characters
 
 	elementKind := getSymbolKind(typeChecker, symbol, data.location)
-	kind := getCompletionsSymbolKind(elementKind)
 	var commitCharacters *[]string
 	if ptrIsTrue(clientOptions.CompletionItem.CommitCharactersSupport) {
 		if elementKind == ScriptElementKindWarning || elementKind == ScriptElementKindString {
@@ -1907,128 +1920,29 @@ func (l *LanguageService) createCompletionItem(
 		// Otherwise use the completion list default.
 	}
 
-	// Text edit
-
-	var textEdit *lsproto.TextEditOrInsertReplaceEdit
-	if replacementSpan != nil {
-		textEdit = &lsproto.TextEditOrInsertReplaceEdit{
-			TextEdit: &lsproto.TextEdit{
-				NewText: core.IfElse(insertText == "", name, insertText),
-				Range:   *replacementSpan,
-			},
-		}
-	} else {
-		// Ported from vscode ts extension.
-		optionalReplacementSpan := getOptionalReplacementSpan(data.location, file)
-		if optionalReplacementSpan != nil && ptrIsTrue(clientOptions.CompletionItem.InsertReplaceSupport) {
-			insertRange := l.createLspRangeFromBounds(optionalReplacementSpan.Pos(), position, file)
-			replaceRange := l.createLspRangeFromBounds(optionalReplacementSpan.Pos(), optionalReplacementSpan.End(), file)
-			textEdit = &lsproto.TextEditOrInsertReplaceEdit{
-				InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-					NewText: core.IfElse(insertText == "", name, insertText),
-					Insert:  *insertRange,
-					Replace: *replaceRange,
-				},
-			}
-		}
-	}
-
-	// Filter text
-
-	// Ported from vscode ts extension.
-	wordRange, wordStart := getWordRange(file, position)
-	if filterText == "" {
-		filterText = getFilterText(file, position, insertText, name, isMemberCompletion, isSnippet, wordStart)
-	}
-	if isMemberCompletion && !isSnippet {
-		accessorRange, accessorText := getDotAccessorContext(file, position)
-		if accessorText != "" {
-			filterText = accessorText + core.IfElse(insertText != "", insertText, name)
-			if textEdit == nil {
-				insertText = filterText
-				if wordRange != nil && ptrIsTrue(clientOptions.CompletionItem.InsertReplaceSupport) {
-					textEdit = &lsproto.TextEditOrInsertReplaceEdit{
-						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
-							NewText: insertText,
-							Insert: *l.createLspRangeFromBounds(
-								accessorRange.Pos(),
-								accessorRange.End(),
-								file),
-							Replace: *l.createLspRangeFromBounds(
-								min(accessorRange.Pos(), wordRange.Pos()),
-								accessorRange.End(),
-								file),
-						},
-					}
-				} else {
-					textEdit = &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: insertText,
-							Range:   *l.createLspRangeFromBounds(accessorRange.Pos(), accessorRange.End(), file),
-						},
-					}
-				}
-			}
-		}
-	}
-
-	// Adjustements based on kind modifiers.
-
+	preselect := isRecommendedCompletionMatch(symbol, data.recommendedCompletion, typeChecker)
 	kindModifiers := getSymbolModifiers(typeChecker, symbol)
-	var tags *[]lsproto.CompletionItemTag
-	var detail *string
-	// Copied from vscode ts extension: `MyCompletionItem.constructor`.
-	if kindModifiers.Has(ScriptElementKindModifierOptional) {
-		if insertText == "" {
-			insertText = name
-		}
-		if filterText == "" {
-			filterText = name
-		}
-		name = name + "?"
-	}
-	if kindModifiers.Has(ScriptElementKindModifierDeprecated) {
-		tags = &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated}
-	}
-	if kind == lsproto.CompletionItemKindFile {
-		for _, extensionModifier := range fileExtensionKindModifiers {
-			if kindModifiers.Has(extensionModifier) {
-				if strings.HasSuffix(name, string(extensionModifier)) {
-					detail = ptrTo(name)
-				} else {
-					detail = ptrTo(name + string(extensionModifier))
-				}
-				break
-			}
-		}
-	}
 
-	if hasAction && source != "" {
-		// !!! adjust label like vscode does
-	}
-
-	var insertTextFormat *lsproto.InsertTextFormat
-	if isSnippet {
-		insertTextFormat = ptrTo(lsproto.InsertTextFormatSnippet)
-	} else {
-		insertTextFormat = ptrTo(lsproto.InsertTextFormatPlainText)
-	}
-
-	return &lsproto.CompletionItem{
-		Label:            name,
-		LabelDetails:     labelDetails,
-		Kind:             &kind,
-		Tags:             tags,
-		Detail:           detail,
-		Preselect:        boolToPtr(isRecommendedCompletionMatch(symbol, data.recommendedCompletion, typeChecker)),
-		SortText:         ptrTo(string(sortText)),
-		FilterText:       strPtrTo(filterText),
-		InsertText:       strPtrTo(insertText),
-		InsertTextFormat: insertTextFormat,
-		TextEdit:         textEdit,
-		CommitCharacters: commitCharacters,
-		Data:             nil, // !!! auto-imports
-	}
+	return l.createLSPCompletionItem(
+		name,
+		insertText,
+		filterText,
+		sortText,
+		elementKind,
+		kindModifiers,
+		replacementSpan,
+		optionalReplacementSpan,
+		commitCharacters,
+		labelDetails,
+		file,
+		position,
+		clientOptions,
+		isMemberCompletion,
+		isSnippet,
+		hasAction,
+		preselect,
+		source,
+	)
 }
 
 func supportsDefaultCommitCharacters(clientOptions *lsproto.CompletionClientCapabilities) bool {
@@ -2321,9 +2235,9 @@ func getCompletionEntryDisplayNameForSymbol(
 		return "", false
 	}
 
-	// !!! isIdentifierText should take in identifierVariant language variant
+	variant := core.IfElse(isJsxIdentifierExpected, core.LanguageVariantJSX, core.LanguageVariantStandard)
 	// name is a valid identifier or private identifier text
-	if scanner.IsIdentifierText(name, target) ||
+	if scanner.IsIdentifierText(name, target, variant) ||
 		symbol.ValueDeclaration != nil && ast.IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration) {
 		return name, false
 	}
@@ -2613,8 +2527,7 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 		case ast.KindBinaryExpression:
 			return typeChecker.GetTypeAtLocation(parent.AsBinaryExpression().Left)
 		case ast.KindJsxAttribute:
-			// return typeChecker.GetContextualTypeForJsxAttribute(parent) // !!! jsx
-			return nil
+			return typeChecker.GetContextualTypeForJsxAttribute(parent)
 		default:
 			return nil
 		}
@@ -2628,8 +2541,7 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 		return nil
 	case ast.KindOpenBraceToken:
 		if ast.IsJsxExpression(parent) && !ast.IsJsxElement(parent.Parent) && !ast.IsJsxFragment(parent.Parent) {
-			// return typeChecker.GetContextualTypeForJsxAttribute(parent.Parent) // !!! jsx
-			return nil
+			return typeChecker.GetContextualTypeForJsxAttribute(parent.Parent)
 		}
 		return nil
 	default:
@@ -3156,7 +3068,7 @@ func getJSCompletionEntries(
 		if pos == position {
 			continue
 		}
-		if !uniqueNames.Has(name) && scanner.IsIdentifierText(name, target) {
+		if !uniqueNames.Has(name) && scanner.IsIdentifierText(name, target, core.LanguageVariantStandard) {
 			uniqueNames.Add(name)
 			sortedEntries = core.InsertSorted(
 				sortedEntries,
@@ -3580,9 +3492,9 @@ func filterObjectMembersList(
 	file *ast.SourceFile,
 	position int,
 	typeChecker *checker.Checker,
-) (filteredMembers []*ast.Symbol, spreadMemberNames *core.Set[string]) {
+) (filteredMembers []*ast.Symbol, spreadMemberNames core.Set[string]) {
 	if len(existingMembers) == 0 {
-		return contextualMemberSymbols, &core.Set[string]{}
+		return contextualMemberSymbols, core.Set[string]{}
 	}
 
 	membersDeclaredBySpreadAssignment := core.Set[string]{}
@@ -3632,7 +3544,7 @@ func filterObjectMembersList(
 		return !existingMemberNames.Has(m.Name)
 	})
 
-	return filteredSymbols, &membersDeclaredBySpreadAssignment
+	return filteredSymbols, membersDeclaredBySpreadAssignment
 }
 
 func isCurrentlyEditingNode(node *ast.Node, file *ast.SourceFile, position int) bool {
@@ -3956,5 +3868,218 @@ func specificKeywordCompletionInfo(
 		IsIncomplete: false,
 		ItemDefaults: itemDefaults,
 		Items:        items,
+	}
+}
+
+func (l *LanguageService) getJsxClosingTagCompletion(
+	location *ast.Node,
+	file *ast.SourceFile,
+	position int,
+	clientOptions *lsproto.CompletionClientCapabilities,
+) *lsproto.CompletionList {
+	// We wanna walk up the tree till we find a JSX closing element.
+	jsxClosingElement := ast.FindAncestorOrQuit(location, func(node *ast.Node) ast.FindAncestorResult {
+		switch node.Kind {
+		case ast.KindJsxClosingElement:
+			return ast.FindAncestorTrue
+		case ast.KindSlashToken, ast.KindGreaterThanToken, ast.KindIdentifier, ast.KindPropertyAccessExpression:
+			return ast.FindAncestorFalse
+		default:
+			return ast.FindAncestorQuit
+		}
+	})
+
+	if jsxClosingElement == nil {
+		return nil
+	}
+
+	// In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
+	// instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
+	// For example:
+	//     var x = <div> </ /*1*/
+	// The completion list at "1" will contain "div>" with type any
+	// And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
+	// And at property access expressions `<MainComponent.Child> </MainComponent. /*1*/ >` the completion will
+	// return full closing tag with an optional replacement span
+	// For example:
+	//     var x = <MainComponent.Child> </     MainComponent /*1*/  >
+	//     var y = <MainComponent.Child> </   /*2*/   MainComponent >
+	// the completion list at "1" and "2" will contain "MainComponent.Child" with a replacement span of closing tag name
+	hasClosingAngleBracket := findChildOfKind(jsxClosingElement, ast.KindGreaterThanToken, file) != nil
+	tagName := jsxClosingElement.Parent.AsJsxElement().OpeningElement.TagName()
+	closingTag := tagName.Text()
+	fullClosingTag := closingTag + core.IfElse(hasClosingAngleBracket, "", ">")
+	optionalReplacementSpan := core.NewTextRange(jsxClosingElement.TagName().Pos(), jsxClosingElement.TagName().End())
+	defaultCommitCharacters := getDefaultCommitCharacters(false /*isNewIdentifierLocation*/)
+
+	item := l.createLSPCompletionItem(
+		fullClosingTag, /*name*/
+		"",             /*insertText*/
+		"",             /*filterText*/
+		SortTextLocationPriority,
+		ScriptElementKindClassElement,
+		core.Set[ScriptElementKindModifier]{}, /*kindModifiers*/
+		nil,                                   /*replacementSpan*/
+		&optionalReplacementSpan,
+		nil, /*commitCharacters*/
+		nil, /*labelDetails*/
+		file,
+		position,
+		clientOptions,
+		true,  /*isMemberCompletion*/
+		false, /*isSnippet*/
+		false, /*hasAction*/
+		false, /*preselect*/
+		"",    /*source*/
+	)
+	items := []*lsproto.CompletionItem{item}
+	itemDefaults := setCommitCharacters(clientOptions, items, &defaultCommitCharacters)
+
+	return &lsproto.CompletionList{
+		IsIncomplete: false,
+		ItemDefaults: itemDefaults,
+		Items:        items,
+	}
+}
+
+func (l *LanguageService) createLSPCompletionItem(
+	name string,
+	insertText string,
+	filterText string,
+	sortText sortText,
+	elementKind ScriptElementKind,
+	kindModifiers core.Set[ScriptElementKindModifier],
+	replacementSpan *lsproto.Range,
+	optionalReplacementSpan *core.TextRange,
+	commitCharacters *[]string,
+	labelDetails *lsproto.CompletionItemLabelDetails,
+	file *ast.SourceFile,
+	position int,
+	clientOptions *lsproto.CompletionClientCapabilities,
+	isMemberCompletion bool,
+	isSnippet bool,
+	hasAction bool,
+	preselect bool,
+	source string,
+) *lsproto.CompletionItem {
+	kind := getCompletionsSymbolKind(elementKind)
+
+	// Text edit
+	var textEdit *lsproto.TextEditOrInsertReplaceEdit
+	if replacementSpan != nil {
+		textEdit = &lsproto.TextEditOrInsertReplaceEdit{
+			TextEdit: &lsproto.TextEdit{
+				NewText: core.IfElse(insertText == "", name, insertText),
+				Range:   *replacementSpan,
+			},
+		}
+	} else {
+		// Ported from vscode ts extension.
+		if optionalReplacementSpan != nil && ptrIsTrue(clientOptions.CompletionItem.InsertReplaceSupport) {
+			insertRange := l.createLspRangeFromBounds(optionalReplacementSpan.Pos(), position, file)
+			replaceRange := l.createLspRangeFromBounds(optionalReplacementSpan.Pos(), optionalReplacementSpan.End(), file)
+			textEdit = &lsproto.TextEditOrInsertReplaceEdit{
+				InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+					NewText: core.IfElse(insertText == "", name, insertText),
+					Insert:  *insertRange,
+					Replace: *replaceRange,
+				},
+			}
+		}
+	}
+
+	// Filter text
+
+	// Ported from vscode ts extension.
+	wordRange, wordStart := getWordRange(file, position)
+	if filterText == "" {
+		filterText = getFilterText(file, position, insertText, name, isMemberCompletion, isSnippet, wordStart)
+	}
+	if isMemberCompletion && !isSnippet {
+		accessorRange, accessorText := getDotAccessorContext(file, position)
+		if accessorText != "" {
+			filterText = accessorText + core.IfElse(insertText != "", insertText, name)
+			if textEdit == nil {
+				insertText = filterText
+				if wordRange != nil && ptrIsTrue(clientOptions.CompletionItem.InsertReplaceSupport) {
+					textEdit = &lsproto.TextEditOrInsertReplaceEdit{
+						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+							NewText: insertText,
+							Insert: *l.createLspRangeFromBounds(
+								accessorRange.Pos(),
+								accessorRange.End(),
+								file),
+							Replace: *l.createLspRangeFromBounds(
+								min(accessorRange.Pos(), wordRange.Pos()),
+								accessorRange.End(),
+								file),
+						},
+					}
+				} else {
+					textEdit = &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: insertText,
+							Range:   *l.createLspRangeFromBounds(accessorRange.Pos(), accessorRange.End(), file),
+						},
+					}
+				}
+			}
+		}
+	}
+
+	// Adjustements based on kind modifiers.
+	var tags *[]lsproto.CompletionItemTag
+	var detail *string
+	// Copied from vscode ts extension: `MyCompletionItem.constructor`.
+	if kindModifiers.Has(ScriptElementKindModifierOptional) {
+		if insertText == "" {
+			insertText = name
+		}
+		if filterText == "" {
+			filterText = name
+		}
+		name = name + "?"
+	}
+	if kindModifiers.Has(ScriptElementKindModifierDeprecated) {
+		tags = &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated}
+	}
+	if kind == lsproto.CompletionItemKindFile {
+		for _, extensionModifier := range fileExtensionKindModifiers {
+			if kindModifiers.Has(extensionModifier) {
+				if strings.HasSuffix(name, string(extensionModifier)) {
+					detail = ptrTo(name)
+				} else {
+					detail = ptrTo(name + string(extensionModifier))
+				}
+				break
+			}
+		}
+	}
+
+	if hasAction && source != "" {
+		// !!! adjust label like vscode does
+	}
+
+	var insertTextFormat *lsproto.InsertTextFormat
+	if isSnippet {
+		insertTextFormat = ptrTo(lsproto.InsertTextFormatSnippet)
+	} else {
+		insertTextFormat = ptrTo(lsproto.InsertTextFormatPlainText)
+	}
+
+	return &lsproto.CompletionItem{
+		Label:            name,
+		LabelDetails:     labelDetails,
+		Kind:             &kind,
+		Tags:             tags,
+		Detail:           detail,
+		Preselect:        boolToPtr(preselect),
+		SortText:         ptrTo(string(sortText)),
+		FilterText:       strPtrTo(filterText),
+		InsertText:       strPtrTo(insertText),
+		InsertTextFormat: insertTextFormat,
+		TextEdit:         textEdit,
+		CommitCharacters: commitCharacters,
+		Data:             nil, // !!! auto-imports
 	}
 }

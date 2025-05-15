@@ -1980,7 +1980,13 @@ func IsIdentifierStart(ch rune, languageVersion core.ScriptTarget) bool {
 }
 
 func IsIdentifierPart(ch rune, languageVersion core.ScriptTarget) bool {
-	return isWordCharacter(ch) || ch == '$' || ch >= utf8.RuneSelf && isUnicodeIdentifierPart(ch, languageVersion)
+	return IsIdentifierPartEx(ch, languageVersion, core.LanguageVariantStandard)
+}
+
+func IsIdentifierPartEx(ch rune, languageVersion core.ScriptTarget, languageVariant core.LanguageVariant) bool {
+	return isWordCharacter(ch) || ch == '$' ||
+		ch >= utf8.RuneSelf && isUnicodeIdentifierPart(ch, languageVersion) ||
+		languageVariant == core.LanguageVariantJSX && (ch == '-' || ch == ':') // "-" and ":" are valid in JSX Identifiers
 }
 
 func isUnicodeIdentifierStart(ch rune, languageVersion core.ScriptTarget) bool {

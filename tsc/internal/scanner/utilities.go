@@ -46,14 +46,14 @@ func DeclarationNameToString(name *ast.Node) string {
 	return GetTextOfNode(name)
 }
 
-func IsIdentifierText(name string, languageVersion core.ScriptTarget) bool {
+func IsIdentifierText(name string, languageVersion core.ScriptTarget, languageVariant core.LanguageVariant) bool {
 	ch, size := utf8.DecodeRuneInString(name)
 	if !IsIdentifierStart(ch, languageVersion) {
 		return false
 	}
 	for i := size; i < len(name); {
 		ch, size = utf8.DecodeRuneInString(name[i:])
-		if !IsIdentifierPart(ch, languageVersion) {
+		if !IsIdentifierPartEx(ch, languageVersion, languageVariant) {
 			return false
 		}
 		i += size

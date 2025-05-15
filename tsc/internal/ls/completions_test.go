@@ -1215,10 +1215,44 @@ class Foo {
 			},
 			expectedResult: map[string]*testCaseResult{
 				"1": {
-					list: nil, // !!! jsx
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:            "aria-label",
+								Kind:             fieldKind,
+								SortText:         sortTextLocationPriority,
+								InsertTextFormat: insertTextFormatPlainText,
+							},
+							{
+								Label:            "foo",
+								Kind:             fieldKind,
+								SortText:         sortTextLocationPriority,
+								InsertTextFormat: insertTextFormatPlainText,
+							},
+						},
+					},
 				},
 				"2": {
-					list: nil, // !!! jsx
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:            "aria-label",
+								Kind:             fieldKind,
+								SortText:         sortTextLocationPriority,
+								InsertTextFormat: insertTextFormatPlainText,
+							},
+							{
+								Label:            "foo",
+								Kind:             fieldKind,
+								SortText:         sortTextLocationPriority,
+								InsertTextFormat: insertTextFormatPlainText,
+							},
+						},
+					},
 				},
 			},
 		},
@@ -1380,6 +1414,116 @@ export function isAnyDirectorySeparator(charCode: number): boolean {
 						},
 					},
 					isIncludes: true,
+				},
+			},
+		},
+		{
+			name: "jsxTagNameCompletionUnderElementUnclosed",
+			files: map[string]string{
+				"/index.tsx": `declare namespace JSX {
+    interface IntrinsicElements {
+        button: any;
+        div: any;
+    }
+}
+function fn() {
+    return <>
+        <butto/*1*/
+    </>;
+}
+function fn2() {
+    return <>
+        preceding junk <butto/*2*/
+    </>;
+}
+function fn3() {
+    return <>
+        <butto/*3*/ style=""
+    </>;
+}`,
+			},
+			mainFileName: "/index.tsx",
+			expectedResult: map[string]*testCaseResult{
+				"1": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:            "button",
+								Kind:             fieldKind,
+								SortText:         sortTextLocationPriority,
+								InsertTextFormat: insertTextFormatPlainText,
+							},
+						},
+					},
+					isIncludes: true,
+				},
+				"2": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:            "button",
+								Kind:             fieldKind,
+								SortText:         sortTextLocationPriority,
+								InsertTextFormat: insertTextFormatPlainText,
+							},
+						},
+					},
+					isIncludes: true,
+				},
+				"3": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:            "button",
+								Kind:             fieldKind,
+								SortText:         sortTextLocationPriority,
+								InsertTextFormat: insertTextFormatPlainText,
+							},
+						},
+					},
+					isIncludes: true,
+				},
+			},
+		},
+		{
+			name: "tsxCompletionOnClosingTagWithoutJSX1",
+			files: map[string]string{
+				"/index.tsx": `var x1 = <div><//**/`,
+			},
+			mainFileName: "/index.tsx",
+			expectedResult: map[string]*testCaseResult{
+				"": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:            "div>",
+								Kind:             classKind,
+								SortText:         sortTextLocationPriority,
+								InsertTextFormat: insertTextFormatPlainText,
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+										NewText: "div>",
+										Insert: lsproto.Range{
+											Start: lsproto.Position{Line: 0, Character: 16},
+											End:   lsproto.Position{Line: 0, Character: 16},
+										},
+										Replace: lsproto.Range{
+											Start: lsproto.Position{Line: 0, Character: 16},
+											End:   lsproto.Position{Line: 0, Character: 16},
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
