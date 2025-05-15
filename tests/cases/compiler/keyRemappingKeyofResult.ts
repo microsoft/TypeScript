@@ -1,3 +1,4 @@
+// @strict: true, false
 // @target: es6
 const sym = Symbol("")
 type Orig = { [k: string]: any, str: any, [sym]: any }
@@ -21,21 +22,21 @@ x = "str";
 // equivalently, with an unresolved generic (no `exclude` shenanigans, since conditions won't execute):
 function f<T>() {
     type Orig = { [k: string]: any, str: any, [sym]: any } & T;
-    
+
     type Okay = keyof Orig;
     let a: Okay;
     a = "str";
     a = sym;
     a = "whatever";
     // type Okay = string | number | typeof sym
-    
+
     type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
     /* type Remapped = {
         str: any;
         [sym]: any;
     } */
     // no string index signature, right?
-    
+
     type Oops = keyof Remapped;
     let x: Oops;
     x = sym;
@@ -45,7 +46,7 @@ function f<T>() {
 // and another generic case with a _distributive_ mapping, to trigger a different branch in `getIndexType`
 function g<T>() {
     type Orig = { [k: string]: any, str: any, [sym]: any } & T;
-    
+
     type Okay = keyof Orig;
     let a: Okay;
     a = "str";
@@ -55,18 +56,41 @@ function g<T>() {
 
     type NonIndex<T extends PropertyKey> = {} extends Record<T, any> ? never : T;
     type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
-    
+
     type Remapped = { [K in keyof Orig as DistributiveNonIndex<K>]: any }
     /* type Remapped = {
         str: any;
         [sym]: any;
     } */
     // no string index signature, right?
-    
+
     type Oops = keyof Remapped;
     let x: Oops;
     x = sym;
     x = "str";
+}
+
+// https://github.com/microsoft/TypeScript/issues/57827
+
+type StringKeys<T> = Extract<
+  keyof {
+    [P in keyof T as T[P] extends string ? P : never]: any;
+  },
+  string
+>;
+
+function test_57827<T>(z: StringKeys<T>) {
+  const f: string = z;
+  z = "foo"; // error
+}
+
+type StringKeys2<T> = keyof {
+  [P in keyof T as T[P] extends string ? P : never]: any;
+};
+
+function h<T>(z: StringKeys2<T>) {
+  z = "foo"; // error
+  const f: string = z; // ok
 }
 
 export {};
