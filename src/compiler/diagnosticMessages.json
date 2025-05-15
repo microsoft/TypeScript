@@ -4923,7 +4923,7 @@
         "category": "Message",
         "code": 6066
     },
-    "Initializes a TypeScript project and creates a tsconfig.json file.": {
+    "Initializes a TypeScript project and creates a tsconfig.json file. Use '--init clean' to skip comments.": {
         "category": "Message",
         "code": 6070
     },

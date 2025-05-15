@@ -7434,7 +7434,7 @@ export interface CompilerOptions {
     importHelpers?: boolean;
     /** @deprecated */
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
-    /** @internal */ init?: boolean;
+    /** @internal */ init?: InitEmit;
     inlineSourceMap?: boolean;
     inlineSources?: boolean;
     isolatedModules?: boolean;
@@ -7598,6 +7598,11 @@ export const enum JsxEmit {
     ReactNative = 3,
     ReactJSX = 4,
     ReactJSXDev = 5,
+}
+
+export const enum InitEmit {
+    Default = 0,
+    Clean = 1,
 }
 
 /** @deprecated */
