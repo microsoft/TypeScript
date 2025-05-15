@@ -74,8 +74,8 @@ function flatMap(array, iterable = identity) {
 >      : ^^^^^^^^^
 >iterable : (x: unknown) => unknown
 >         : ^ ^^       ^^^^^       
->identity : <T_1>(x: T_1) => T_1
->         : ^^^^^^ ^^   ^^^^^   
+>identity : <T>(x: T) => T
+>         : ^ ^^ ^^ ^^^^^ 
 
   /** @type {unknown[]} */
   const result = [];
