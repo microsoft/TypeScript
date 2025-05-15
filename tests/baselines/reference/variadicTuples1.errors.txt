@@ -543,3 +543,9 @@ variadicTuples1.ts(411,7): error TS2322: Type '[boolean, false]' is not assignab
     
     type AnyArr = [...any];
     
+    type NeverSpread1 = [...never];
+    type IdentitySpread<T extends readonly unknown[]> = [...T];
+    type NeverSpread2 = IdentitySpread<never>;
+    type ReducedNeverSpread1 = IdentitySpread<[] & [string]>;
+    type ReducedNeverSpread2 = IdentitySpread<[string | boolean, boolean, ...number[]] & ['foo', string, 44]>;
+    
