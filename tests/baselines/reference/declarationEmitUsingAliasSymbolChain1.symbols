@@ -1,0 +1,137 @@
+//// [tests/cases/compiler/declarationEmitUsingAliasSymbolChain1.ts] ////
+
+=== node_modules/effect/dist/declarations/src/Data.d.ts ===
+import type * as Types from "./Types.js";
+>Types : Symbol(Types, Decl(Data.d.ts, 0, 11))
+
+import type * as Equal from "./Equal.js";
+>Equal : Symbol(Equal, Decl(Data.d.ts, 1, 11))
+
+export type Data<A extends Readonly<Record<string, any>> | ReadonlyArray<any>> =
+>Data : Symbol(Data, Decl(Data.d.ts, 1, 41))
+>A : Symbol(A, Decl(Data.d.ts, 3, 17))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+
+  Readonly<A> & Equal.Equal;
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(Data.d.ts, 3, 17))
+>Equal : Symbol(Equal, Decl(Data.d.ts, 1, 11))
+>Equal : Symbol(Equal.Equal, Decl(Equal.d.ts, 2, 43))
+
+export declare const TaggedClass: <Key extends string>(
+>TaggedClass : Symbol(TaggedClass, Decl(Data.d.ts, 6, 20))
+>Key : Symbol(Key, Decl(Data.d.ts, 6, 35))
+
+  tag: Key,
+>tag : Symbol(tag, Decl(Data.d.ts, 6, 55))
+>Key : Symbol(Key, Decl(Data.d.ts, 6, 35))
+
+) => new <A extends Record<string, any>>(
+>A : Symbol(A, Decl(Data.d.ts, 8, 10))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  args: Types.Equals<Omit<A, keyof Equal.Equal>, {}> extends true
+>args : Symbol(args, Decl(Data.d.ts, 8, 41))
+>Types : Symbol(Types, Decl(Data.d.ts, 0, 11))
+>Equals : Symbol(Types.Equals, Decl(Types.d.ts, 0, 0))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(Data.d.ts, 8, 10))
+>Equal : Symbol(Equal, Decl(Data.d.ts, 1, 11))
+>Equal : Symbol(Equal.Equal, Decl(Equal.d.ts, 2, 43))
+
+    ? void
+    : Omit<A, keyof Equal.Equal>,
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(Data.d.ts, 8, 10))
+>Equal : Symbol(Equal, Decl(Data.d.ts, 1, 11))
+>Equal : Symbol(Equal.Equal, Decl(Equal.d.ts, 2, 43))
+
+) => Data<
+>Data : Symbol(Data, Decl(Data.d.ts, 1, 41))
+
+  A & {
+>A : Symbol(A, Decl(Data.d.ts, 8, 10))
+
+    _tag: Key;
+>_tag : Symbol(_tag, Decl(Data.d.ts, 13, 7))
+>Key : Symbol(Key, Decl(Data.d.ts, 6, 35))
+  }
+>;
+
+=== node_modules/effect/dist/declarations/src/Equal.d.ts ===
+import * as Hash from "./Hash.js";
+>Hash : Symbol(Hash, Decl(Equal.d.ts, 0, 6))
+
+export declare const symbol: unique symbol;
+>symbol : Symbol(symbol, Decl(Equal.d.ts, 2, 20))
+
+export interface Equal extends Hash.Hash {
+>Equal : Symbol(Equal, Decl(Equal.d.ts, 2, 43))
+>Hash.Hash : Symbol(Hash.Hash, Decl(Hash.d.ts, 0, 43))
+>Hash : Symbol(Hash, Decl(Equal.d.ts, 0, 6))
+>Hash : Symbol(Hash.Hash, Decl(Hash.d.ts, 0, 43))
+
+  [symbol](that: Equal): boolean;
+>[symbol] : Symbol(Equal[symbol], Decl(Equal.d.ts, 4, 42))
+>symbol : Symbol(symbol, Decl(Equal.d.ts, 2, 20))
+>that : Symbol(that, Decl(Equal.d.ts, 5, 11))
+>Equal : Symbol(Equal, Decl(Equal.d.ts, 2, 43))
+}
+
+=== node_modules/effect/dist/declarations/src/Hash.d.ts ===
+export declare const symbol: unique symbol;
+>symbol : Symbol(symbol, Decl(Hash.d.ts, 0, 20))
+
+export interface Hash {
+>Hash : Symbol(Hash, Decl(Hash.d.ts, 0, 43))
+
+  [symbol](): number;
+>[symbol] : Symbol(Hash[symbol], Decl(Hash.d.ts, 2, 23))
+>symbol : Symbol(symbol, Decl(Hash.d.ts, 0, 20))
+}
+
+=== node_modules/effect/dist/declarations/src/Types.d.ts ===
+export type Equals<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
+>Equals : Symbol(Equals, Decl(Types.d.ts, 0, 0))
+>X : Symbol(X, Decl(Types.d.ts, 0, 19))
+>Y : Symbol(Y, Decl(Types.d.ts, 0, 21))
+>T : Symbol(T, Decl(Types.d.ts, 0, 29))
+>T : Symbol(T, Decl(Types.d.ts, 0, 29))
+>X : Symbol(X, Decl(Types.d.ts, 0, 19))
+
+  T,
+>T : Symbol(T, Decl(Types.d.ts, 0, 67))
+
+>() => T extends Y ? 1 : 2
+>T : Symbol(T, Decl(Types.d.ts, 0, 67))
+>Y : Symbol(Y, Decl(Types.d.ts, 0, 21))
+
+  ? true
+  : false;
+
+=== node_modules/effect/dist/declarations/src/index.d.ts ===
+export * as Data from "./Data.js";
+>Data : Symbol(Data, Decl(index.d.ts, 0, 6))
+
+export * as Equal from "./Equal.js";
+>Equal : Symbol(Equal, Decl(index.d.ts, 1, 6))
+
+export * as Types from "./Types.js";
+>Types : Symbol(Types, Decl(index.d.ts, 2, 6))
+
+=== node_modules/effect/dist/effect.cjs.d.ts ===
+
+export * from "./declarations/src/index";
+
+=== src/index.ts ===
+import { Data } from "effect";
+>Data : Symbol(Data, Decl(index.ts, 0, 8))
+
+export class Foo extends Data.TaggedClass("Foo")<{}> {}
+>Foo : Symbol(Foo, Decl(index.ts, 0, 30))
+>Data.TaggedClass : Symbol(Data.TaggedClass, Decl(Data.d.ts, 6, 20))
+>Data : Symbol(Data, Decl(index.ts, 0, 8))
+>TaggedClass : Symbol(Data.TaggedClass, Decl(Data.d.ts, 6, 20))
+
