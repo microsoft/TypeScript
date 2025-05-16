@@ -1780,6 +1780,12 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "toSpliced",
                 "with",
             ],
+            esnext: [
+                "toBase64",
+                "setFromBase64",
+                "toHex",
+                "setFromHex",
+            ],
         })),
         Uint8ClampedArray: new Map(Object.entries({
             es2022: [
@@ -1906,6 +1912,12 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
         Error: new Map(Object.entries({
             es2022: [
                 "cause",
+            ],
+        })),
+        Uint8Constructor: new Map(Object.entries({
+            esnext: [
+                "fromBase64",
+                "fromHex",
             ],
         })),
     }))
