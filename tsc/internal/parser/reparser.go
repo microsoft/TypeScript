@@ -43,7 +43,7 @@ func (p *Parser) reparseTags(parent *ast.Node, jsDoc []*ast.Node) {
 		if tags == nil {
 			continue
 		}
-		for _, tag := range j.AsJSDoc().Tags.Nodes {
+		for _, tag := range tags.Nodes {
 			switch tag.Kind {
 			case ast.KindJSDocTypedefTag:
 				// !!! Don't mark typedefs as exported if they are not in a module
@@ -67,7 +67,14 @@ func (p *Parser) reparseTags(parent *ast.Node, jsDoc []*ast.Node) {
 				case ast.KindJSDocTypeLiteral:
 					members := p.nodeSlicePool.NewSlice(0)
 					for _, member := range typeExpression.AsJSDocTypeLiteral().JSDocPropertyTags {
-						prop := p.factory.NewPropertySignatureDeclaration(nil, member.Name(), nil /*postfixToken*/, member.Type(), nil /*initializer*/)
+						var questionToken *ast.TokenNode
+						if member.AsJSDocPropertyTag().IsBracketed ||
+							member.AsJSDocPropertyTag().TypeExpression != nil && member.AsJSDocPropertyTag().TypeExpression.Type().Kind == ast.KindJSDocOptionalType {
+							questionToken = p.factory.NewToken(ast.KindQuestionToken)
+							questionToken.Loc = core.NewTextRange(member.Pos(), member.End())
+							questionToken.Flags = p.contextFlags | ast.NodeFlagsReparsed
+						}
+						prop := p.factory.NewPropertySignatureDeclaration(nil, member.Name(), questionToken, member.Type(), nil /*initializer*/)
 						prop.Loc = member.Loc
 						prop.Flags = p.contextFlags | ast.NodeFlagsReparsed
 						members = append(members, prop)
