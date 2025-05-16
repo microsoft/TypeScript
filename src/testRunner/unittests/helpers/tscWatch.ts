@@ -245,6 +245,7 @@ function verifyProgramStructureAndResolutionCache(
         }),
         program,
         caption,
+        /*globalTypingsCacheLocation*/ undefined,
         userResolvedModuleNames,
     );
     verifyResolutionCache(

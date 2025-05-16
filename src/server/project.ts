@@ -1117,6 +1117,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
         this.languageServiceEnabled = true;
         this.lastFileExceededProgramSize = undefined;
+        // Watch the type locations that would be added to program as part of automatic type resolutions
+        if (this.projectService.serverMode === LanguageServiceMode.Semantic) {
+            this.resolutionCache.updateTypeRootsWatch();
+        }
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
     }
 

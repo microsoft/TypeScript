@@ -8052,8 +8052,21 @@ export const enum Extension {
 
 /** @internal */
 export interface GlobalCacheResolutionResult {
-    resolution: ResolvedModuleWithFailedLookupLocations;
-    primary: ResolvedModuleWithFailedLookupLocations["resolvedModule"];
+    primary: ResolvedModuleWithFailedLookupLocations;
+    globalResolution?: ResolvedModuleWithFailedLookupLocations;
+    globalResult?: ResolvedModuleWithFailedLookupLocations;
+}
+
+/** @internal */
+export interface GlobalCacheResolutionResultDisabled extends GlobalCacheResolutionResult {
+    primary: ResolvedModuleWithFailedLookupLocations;
+}
+
+/** @internal */
+export interface GlobalCacheResolutionResultEnabled extends GlobalCacheResolutionResult {
+    primary: ResolvedModuleWithFailedLookupLocations;
+    globalResolution: ResolvedModuleWithFailedLookupLocations;
+    globalResult: ResolvedModuleWithFailedLookupLocations;
 }
 
 export interface ResolvedModuleWithFailedLookupLocations {
@@ -8071,8 +8084,18 @@ export interface ResolvedModuleWithFailedLookupLocations {
      */
     alternateResult?: string;
     /** @internal */
-    globalCacheResolution?: GlobalCacheResolutionResult | false;
+    globalCacheResolution?: GlobalCacheResolutionResult;
 }
+
+/** @internal */
+export type ResolvedModuleWithFailedLookupLocationsGlobalCachePass = ResolvedModuleWithFailedLookupLocations & {
+    globalCacheResolution: GlobalCacheResolutionResultEnabled;
+};
+
+/** @internal */
+export type ResolvedModuleWithFailedLookupLocationsGlobalCachePassDisabled = ResolvedModuleWithFailedLookupLocations & {
+    globalCacheResolution: GlobalCacheResolutionResultDisabled;
+};
 
 export interface ResolvedTypeReferenceDirective {
     // True if the type declaration file was found in a primary lookup location
