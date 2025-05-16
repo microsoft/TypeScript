@@ -1,0 +1,28 @@
+enumExportMergingES6.ts(1,13): error TS2567: Enum declarations can only merge with namespace declarations.
+enumExportMergingES6.ts(4,13): error TS2567: Enum declarations can only merge with namespace declarations.
+enumExportMergingES6.ts(7,13): error TS2567: Enum declarations can only merge with namespace declarations.
+enumExportMergingES6.ts(8,11): error TS2304: Cannot find name 'Cat'.
+enumExportMergingES6.ts(8,17): error TS2304: Cannot find name 'Dog'.
+
+
+==== enumExportMergingES6.ts (5 errors) ====
+    export enum Animals {
+                ~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+    	Cat = 1
+    }
+    export enum Animals {
+                ~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+    	Dog = 2
+    }
+    export enum Animals {
+                ~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+    	CatDog = Cat | Dog
+    	         ~~~
+!!! error TS2304: Cannot find name 'Cat'.
+    	               ~~~
+!!! error TS2304: Cannot find name 'Dog'.
+    }
+    
