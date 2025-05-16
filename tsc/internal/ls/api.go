@@ -1,6 +1,7 @@
 package ls
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -14,7 +15,7 @@ var (
 	ErrNoTokenAtPosition = errors.New("no token found at position")
 )
 
-func (l *LanguageService) GetSymbolAtPosition(fileName string, position int) (*ast.Symbol, error) {
+func (l *LanguageService) GetSymbolAtPosition(ctx context.Context, fileName string, position int) (*ast.Symbol, error) {
 	program, file := l.tryGetProgramAndFile(fileName)
 	if file == nil {
 		return nil, fmt.Errorf("%w: %s", ErrNoSourceFile, fileName)
@@ -23,17 +24,21 @@ func (l *LanguageService) GetSymbolAtPosition(fileName string, position int) (*a
 	if node == nil {
 		return nil, fmt.Errorf("%w: %s:%d", ErrNoTokenAtPosition, fileName, position)
 	}
-	checker := program.GetTypeChecker()
+	checker, done := program.GetTypeCheckerForFile(ctx, file)
+	defer done()
 	return checker.GetSymbolAtLocation(node), nil
 }
 
-func (l *LanguageService) GetSymbolAtLocation(node *ast.Node) *ast.Symbol {
+func (l *LanguageService) GetSymbolAtLocation(ctx context.Context, node *ast.Node) *ast.Symbol {
 	program := l.GetProgram()
-	checker := program.GetTypeChecker()
+	checker, done := program.GetTypeCheckerForFile(ctx, ast.GetSourceFileOfNode(node))
+	defer done()
 	return checker.GetSymbolAtLocation(node)
 }
 
-func (l *LanguageService) GetTypeOfSymbol(symbol *ast.Symbol) *checker.Type {
-	checker := l.GetProgram().GetTypeChecker()
+func (l *LanguageService) GetTypeOfSymbol(ctx context.Context, symbol *ast.Symbol) *checker.Type {
+	program := l.GetProgram()
+	checker, done := program.GetTypeChecker(ctx)
+	defer done()
 	return checker.GetTypeOfSymbolAtLocation(symbol, nil)
 }

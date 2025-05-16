@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -129,7 +130,7 @@ func (api *API) IsWatchEnabled() bool {
 	return false
 }
 
-func (api *API) HandleRequest(id int, method string, payload []byte) ([]byte, error) {
+func (api *API) HandleRequest(ctx context.Context, method string, payload []byte) ([]byte, error) {
 	params, err := unmarshalPayload(method, payload)
 	if err != nil {
 		return nil, err
@@ -155,27 +156,27 @@ func (api *API) HandleRequest(id int, method string, payload []byte) ([]byte, er
 		return encodeJSON(api.LoadProject(params.(*LoadProjectParams).ConfigFileName))
 	case MethodGetSymbolAtPosition:
 		params := params.(*GetSymbolAtPositionParams)
-		return encodeJSON(api.GetSymbolAtPosition(params.Project, params.FileName, int(params.Position)))
+		return encodeJSON(api.GetSymbolAtPosition(ctx, params.Project, params.FileName, int(params.Position)))
 	case MethodGetSymbolsAtPositions:
 		params := params.(*GetSymbolsAtPositionsParams)
 		return encodeJSON(core.TryMap(params.Positions, func(position uint32) (any, error) {
-			return api.GetSymbolAtPosition(params.Project, params.FileName, int(position))
+			return api.GetSymbolAtPosition(ctx, params.Project, params.FileName, int(position))
 		}))
 	case MethodGetSymbolAtLocation:
 		params := params.(*GetSymbolAtLocationParams)
-		return encodeJSON(api.GetSymbolAtLocation(params.Project, params.Location))
+		return encodeJSON(api.GetSymbolAtLocation(ctx, params.Project, params.Location))
 	case MethodGetSymbolsAtLocations:
 		params := params.(*GetSymbolsAtLocationsParams)
 		return encodeJSON(core.TryMap(params.Locations, func(location Handle[ast.Node]) (any, error) {
-			return api.GetSymbolAtLocation(params.Project, location)
+			return api.GetSymbolAtLocation(ctx, params.Project, location)
 		}))
 	case MethodGetTypeOfSymbol:
 		params := params.(*GetTypeOfSymbolParams)
-		return encodeJSON(api.GetTypeOfSymbol(params.Project, params.Symbol))
+		return encodeJSON(api.GetTypeOfSymbol(ctx, params.Project, params.Symbol))
 	case MethodGetTypesOfSymbols:
 		params := params.(*GetTypesOfSymbolsParams)
 		return encodeJSON(core.TryMap(params.Symbols, func(symbol Handle[ast.Symbol]) (any, error) {
-			return api.GetTypeOfSymbol(params.Project, symbol)
+			return api.GetTypeOfSymbol(ctx, params.Project, symbol)
 		}))
 	default:
 		return nil, fmt.Errorf("unhandled API method %q", method)
@@ -223,12 +224,14 @@ func (api *API) LoadProject(configFileName string) (*ProjectResponse, error) {
 	return data, nil
 }
 
-func (api *API) GetSymbolAtPosition(projectId Handle[project.Project], fileName string, position int) (*SymbolResponse, error) {
+func (api *API) GetSymbolAtPosition(ctx context.Context, projectId Handle[project.Project], fileName string, position int) (*SymbolResponse, error) {
 	project, ok := api.projects[projectId]
 	if !ok {
 		return nil, errors.New("project not found")
 	}
-	symbol, err := project.LanguageService().GetSymbolAtPosition(fileName, position)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	symbol, err := languageService.GetSymbolAtPosition(ctx, fileName, position)
 	if err != nil || symbol == nil {
 		return nil, err
 	}
@@ -239,7 +242,7 @@ func (api *API) GetSymbolAtPosition(projectId Handle[project.Project], fileName 
 	return data, nil
 }
 
-func (api *API) GetSymbolAtLocation(projectId Handle[project.Project], location Handle[ast.Node]) (*SymbolResponse, error) {
+func (api *API) GetSymbolAtLocation(ctx context.Context, projectId Handle[project.Project], location Handle[ast.Node]) (*SymbolResponse, error) {
 	project, ok := api.projects[projectId]
 	if !ok {
 		return nil, errors.New("project not found")
@@ -262,7 +265,9 @@ func (api *API) GetSymbolAtLocation(projectId Handle[project.Project], location 
 	if node == nil {
 		return nil, fmt.Errorf("node of kind %s not found at position %d in file %q", kind.String(), pos, sourceFile.FileName())
 	}
-	symbol := project.LanguageService().GetSymbolAtLocation(node)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	symbol := languageService.GetSymbolAtLocation(ctx, node)
 	if symbol == nil {
 		return nil, nil
 	}
@@ -273,7 +278,7 @@ func (api *API) GetSymbolAtLocation(projectId Handle[project.Project], location 
 	return data, nil
 }
 
-func (api *API) GetTypeOfSymbol(projectId Handle[project.Project], symbolHandle Handle[ast.Symbol]) (*TypeResponse, error) {
+func (api *API) GetTypeOfSymbol(ctx context.Context, projectId Handle[project.Project], symbolHandle Handle[ast.Symbol]) (*TypeResponse, error) {
 	project, ok := api.projects[projectId]
 	if !ok {
 		return nil, errors.New("project not found")
@@ -284,7 +289,9 @@ func (api *API) GetTypeOfSymbol(projectId Handle[project.Project], symbolHandle 
 	if !ok {
 		return nil, fmt.Errorf("symbol %q not found", symbolHandle)
 	}
-	t := project.LanguageService().GetTypeOfSymbol(symbol)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	t := languageService.GetTypeOfSymbol(ctx, symbol)
 	if t == nil {
 		return nil, nil
 	}

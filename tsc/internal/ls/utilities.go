@@ -268,10 +268,7 @@ func (l *LanguageService) createLspRangeFromNode(node *ast.Node, file *ast.Sourc
 }
 
 func (l *LanguageService) createLspRangeFromBounds(start, end int, file *ast.SourceFile) *lsproto.Range {
-	lspRange, err := l.converters.ToLSPRange(file.FileName(), core.NewTextRange(start, end))
-	if err != nil {
-		panic(err)
-	}
+	lspRange := l.converters.ToLSPRange(file, core.NewTextRange(start, end))
 	return &lspRange
 }
 

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 type JSONRPCVersion struct{}
@@ -28,8 +29,22 @@ type ID struct {
 	int int32
 }
 
+func NewID(rawValue IntegerOrString) *ID {
+	if rawValue.String != nil {
+		return &ID{str: *rawValue.String}
+	}
+	return &ID{int: *rawValue.Integer}
+}
+
 func NewIDString(str string) *ID {
 	return &ID{str: str}
+}
+
+func (id *ID) String() string {
+	if id.str != "" {
+		return id.str
+	}
+	return strconv.Itoa(int(id.int))
 }
 
 func (id *ID) MarshalJSON() ([]byte, error) {
@@ -61,13 +76,92 @@ func (id *ID) MustInt() int32 {
 	return id.int
 }
 
-// TODO(jakebailey): NotificationMessage? Use RequestMessage without ID?
+type MessageKind int
+
+const (
+	MessageKindNotification MessageKind = iota
+	MessageKindRequest
+	MessageKindResponse
+)
+
+type Message struct {
+	Kind MessageKind
+	msg  any
+}
+
+func (m *Message) AsRequest() *RequestMessage {
+	return m.msg.(*RequestMessage)
+}
+
+func (m *Message) AsResponse() *ResponseMessage {
+	return m.msg.(*ResponseMessage)
+}
+
+func (m *Message) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		JSONRPC JSONRPCVersion  `json:"jsonrpc"`
+		Method  Method          `json:"method"`
+		ID      *ID             `json:"id,omitempty"`
+		Params  json.RawMessage `json:"params"`
+		Result  any             `json:"result,omitempty"`
+		Error   *ResponseError  `json:"error,omitempty"`
+	}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+	}
+	if raw.ID != nil && raw.Method == "" {
+		m.Kind = MessageKindResponse
+		m.msg = &ResponseMessage{
+			JSONRPC: raw.JSONRPC,
+			ID:      raw.ID,
+			Result:  raw.Result,
+			Error:   raw.Error,
+		}
+		return nil
+	}
+
+	var params any
+	var err error
+	if len(raw.Params) > 0 {
+		params, err = unmarshalParams(raw.Method, raw.Params)
+		if err != nil {
+			return fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+		}
+	}
+
+	if raw.ID == nil {
+		m.Kind = MessageKindNotification
+	} else {
+		m.Kind = MessageKindRequest
+	}
+
+	m.msg = &RequestMessage{
+		JSONRPC: raw.JSONRPC,
+		ID:      raw.ID,
+		Method:  raw.Method,
+		Params:  params,
+	}
+
+	return nil
+}
+
+func (m *Message) MarshalJSON() ([]byte, error) {
+	return json.Marshal(m.msg)
+}
+
+func NewNotificationMessage(method Method, params any) *RequestMessage {
+	return &RequestMessage{
+		JSONRPC: JSONRPCVersion{},
+		Method:  method,
+		Params:  params,
+	}
+}
 
 type RequestMessage struct {
 	JSONRPC JSONRPCVersion `json:"jsonrpc"`
 	ID      *ID            `json:"id,omitempty"`
 	Method  Method         `json:"method"`
-	Params  any            `json:"params"`
+	Params  any            `json:"params,omitempty"`
 }
 
 func NewRequestMessage(method Method, id *ID, params any) *RequestMessage {
@@ -75,6 +169,13 @@ func NewRequestMessage(method Method, id *ID, params any) *RequestMessage {
 		ID:     id,
 		Method: method,
 		Params: params,
+	}
+}
+
+func (r *RequestMessage) Message() *Message {
+	return &Message{
+		Kind: MessageKindRequest,
+		msg:  r,
 	}
 }
 
@@ -108,8 +209,26 @@ type ResponseMessage struct {
 	Error   *ResponseError `json:"error,omitempty"`
 }
 
+func (r *ResponseMessage) Message() *Message {
+	return &Message{
+		Kind: MessageKindResponse,
+		msg:  r,
+	}
+}
+
 type ResponseError struct {
 	Code    int32  `json:"code"`
 	Message string `json:"message"`
 	Data    any    `json:"data,omitempty"`
+}
+
+func (r *ResponseError) String() string {
+	if r == nil {
+		return ""
+	}
+	data, err := json.Marshal(r.Data)
+	if err != nil {
+		return fmt.Sprintf("[%d]: %s\n%v", r.Code, r.Message, data)
+	}
+	return fmt.Sprintf("[%d]: %s", r.Code, r.Message)
 }

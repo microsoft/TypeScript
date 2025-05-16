@@ -1,6 +1,7 @@
 package project
 
 import (
+	"context"
 	"fmt"
 	"maps"
 	"slices"
@@ -23,8 +24,6 @@ const hr = "-----------------------------------------------"
 
 var projectNamer = &namer{}
 
-var _ ls.Host = (*Project)(nil)
-
 type Kind int
 
 const (
@@ -33,6 +32,34 @@ const (
 	KindAutoImportProvider
 	KindAuxiliary
 )
+
+type snapshot struct {
+	project          *Project
+	positionEncoding lsproto.PositionEncodingKind
+	program          *compiler.Program
+}
+
+// GetLineMap implements ls.Host.
+func (s *snapshot) GetLineMap(fileName string) *ls.LineMap {
+	file := s.program.GetSourceFile(fileName)
+	scriptInfo := s.project.host.GetScriptInfoByPath(file.Path())
+	if file.Version == scriptInfo.Version() {
+		return scriptInfo.LineMap()
+	}
+	return ls.ComputeLineStarts(file.Text())
+}
+
+// GetPositionEncoding implements ls.Host.
+func (s *snapshot) GetPositionEncoding() lsproto.PositionEncodingKind {
+	return s.positionEncoding
+}
+
+// GetProgram implements ls.Host.
+func (s *snapshot) GetProgram() *compiler.Program {
+	return s.program
+}
+
+var _ ls.Host = (*snapshot)(nil)
 
 type PendingReload int
 
@@ -57,13 +84,15 @@ type ProjectHost interface {
 	Client() Client
 }
 
+var _ compiler.CompilerHost = (*Project)(nil)
+
 type Project struct {
 	host ProjectHost
-	mu   sync.Mutex
 
 	name string
 	kind Kind
 
+	dirtyStateMu              sync.Mutex
 	initialLoadPending        bool
 	dirty                     bool
 	version                   int
@@ -84,8 +113,9 @@ type Project struct {
 	rootFileNames     *collections.OrderedMap[tspath.Path, string]
 	compilerOptions   *core.CompilerOptions
 	parsedCommandLine *tsoptions.ParsedCommandLine
-	languageService   *ls.LanguageService
+	programMu         sync.Mutex
 	program           *compiler.Program
+	checkerPool       *checkerPool
 
 	// Watchers
 	rootFilesWatch          *watchedFiles[[]string]
@@ -134,42 +164,34 @@ func NewProject(name string, kind Kind, currentDirectory string, host ProjectHos
 			return slices.Sorted(maps.Values(data))
 		})
 	}
-	project.languageService = ls.NewLanguageService(project)
 	project.markAsDirty()
 	return project
 }
 
-// FS implements LanguageServiceHost.
+// FS implements compiler.CompilerHost.
 func (p *Project) FS() vfs.FS {
 	return p.host.FS()
 }
 
-// DefaultLibraryPath implements LanguageServiceHost.
+// DefaultLibraryPath implements compiler.CompilerHost.
 func (p *Project) DefaultLibraryPath() string {
 	return p.host.DefaultLibraryPath()
 }
 
-// GetCompilerOptions implements LanguageServiceHost.
-func (p *Project) GetCompilerOptions() *core.CompilerOptions {
-	return p.compilerOptions
-}
-
-// GetCurrentDirectory implements LanguageServiceHost.
+// GetCurrentDirectory implements compiler.CompilerHost.
 func (p *Project) GetCurrentDirectory() string {
 	return p.currentDirectory
 }
 
-// GetProjectVersion implements LanguageServiceHost.
-func (p *Project) GetProjectVersion() int {
-	return p.version
-}
-
-// GetRootFileNames implements LanguageServiceHost.
 func (p *Project) GetRootFileNames() []string {
 	return slices.Collect(p.rootFileNames.Values())
 }
 
-// GetSourceFile implements LanguageServiceHost.
+func (p *Project) GetCompilerOptions() *core.CompilerOptions {
+	return p.compilerOptions
+}
+
+// GetSourceFile implements compiler.CompilerHost.
 func (p *Project) GetSourceFile(fileName string, path tspath.Path, languageVersion core.ScriptTarget) *ast.SourceFile {
 	scriptKind := p.getScriptKind(fileName)
 	if scriptInfo := p.getOrCreateScriptInfoAndAttachToProject(fileName, scriptKind); scriptInfo != nil {
@@ -181,40 +203,30 @@ func (p *Project) GetSourceFile(fileName string, path tspath.Path, languageVersi
 			oldSourceFile = p.program.GetSourceFileByPath(scriptInfo.path)
 			oldCompilerOptions = p.program.GetCompilerOptions()
 		}
-		return p.host.DocumentRegistry().AcquireDocument(scriptInfo, p.GetCompilerOptions(), oldSourceFile, oldCompilerOptions)
+		return p.host.DocumentRegistry().AcquireDocument(scriptInfo, p.compilerOptions, oldSourceFile, oldCompilerOptions)
 	}
 	return nil
 }
 
-// GetProgram implements LanguageServiceHost. Updates the program if needed.
+// Updates the program if needed.
 func (p *Project) GetProgram() *compiler.Program {
 	p.updateIfDirty()
 	return p.program
 }
 
-// NewLine implements LanguageServiceHost.
+// NewLine implements compiler.CompilerHost.
 func (p *Project) NewLine() string {
 	return p.host.NewLine()
 }
 
-// Trace implements LanguageServiceHost.
+// Trace implements compiler.CompilerHost.
 func (p *Project) Trace(msg string) {
 	p.log(msg)
 }
 
-// GetDefaultLibraryPath implements ls.Host.
+// GetDefaultLibraryPath implements compiler.CompilerHost.
 func (p *Project) GetDefaultLibraryPath() string {
 	return p.host.DefaultLibraryPath()
-}
-
-// GetScriptInfo implements ls.Host.
-func (p *Project) GetScriptInfo(fileName string) ls.ScriptInfo {
-	return p.host.GetScriptInfoByPath(p.toPath(fileName))
-}
-
-// GetPositionEncoding implements ls.Host.
-func (p *Project) GetPositionEncoding() lsproto.PositionEncodingKind {
-	return p.host.PositionEncoding()
 }
 
 func (p *Project) Name() string {
@@ -233,8 +245,24 @@ func (p *Project) CurrentProgram() *compiler.Program {
 	return p.program
 }
 
-func (p *Project) LanguageService() *ls.LanguageService {
-	return p.languageService
+func (p *Project) GetLanguageServiceForRequest(ctx context.Context) (*ls.LanguageService, func()) {
+	if core.GetRequestID(ctx) == "" {
+		panic("context must already have a request ID")
+	}
+	program := p.GetProgram()
+	checkerPool := p.checkerPool
+	snapshot := &snapshot{
+		project:          p,
+		positionEncoding: p.host.PositionEncoding(),
+		program:          program,
+	}
+	languageService := ls.NewLanguageService(ctx, snapshot)
+	cleanup := func() {
+		if checkerPool.isRequestCheckerInUse(core.GetRequestID(ctx)) {
+			panic(fmt.Errorf("checker for request ID %s not returned to pool at end of request", core.GetRequestID(ctx)))
+		}
+	}
+	return languageService, cleanup
 }
 
 func (p *Project) getRootFileWatchGlobs() []string {
@@ -275,7 +303,7 @@ func (p *Project) getModuleResolutionWatchGlobs() (failedLookups map[tspath.Path
 	return failedLookups, affectingLocaions
 }
 
-func (p *Project) updateWatchers() {
+func (p *Project) updateWatchers(ctx context.Context) {
 	client := p.host.Client()
 	if !p.host.IsWatchEnabled() || client == nil {
 		return
@@ -285,20 +313,20 @@ func (p *Project) updateWatchers() {
 	failedLookupGlobs, affectingLocationGlobs := p.getModuleResolutionWatchGlobs()
 
 	if rootFileGlobs != nil {
-		if updated, err := p.rootFilesWatch.update(rootFileGlobs); err != nil {
+		if updated, err := p.rootFilesWatch.update(ctx, rootFileGlobs); err != nil {
 			p.log(fmt.Sprintf("Failed to update root file watch: %v", err))
 		} else if updated {
 			p.log("Root file watches updated:\n" + formatFileList(rootFileGlobs, "\t", hr))
 		}
 	}
 
-	if updated, err := p.failedLookupsWatch.update(failedLookupGlobs); err != nil {
+	if updated, err := p.failedLookupsWatch.update(ctx, failedLookupGlobs); err != nil {
 		p.log(fmt.Sprintf("Failed to update failed lookup watch: %v", err))
 	} else if updated {
 		p.log("Failed lookup watches updated:\n" + formatFileList(p.failedLookupsWatch.globs, "\t", hr))
 	}
 
-	if updated, err := p.affectingLocationsWatch.update(affectingLocationGlobs); err != nil {
+	if updated, err := p.affectingLocationsWatch.update(ctx, affectingLocationGlobs); err != nil {
 		p.log(fmt.Sprintf("Failed to update affecting location watch: %v", err))
 	} else if updated {
 		p.log("Affecting location watches updated:\n" + formatFileList(p.affectingLocationsWatch.globs, "\t", hr))
@@ -348,8 +376,8 @@ func (p *Project) markFileAsDirty(path tspath.Path) {
 }
 
 func (p *Project) markAsDirty() {
-	p.mu.Lock()
-	defer p.mu.Unlock()
+	p.dirtyStateMu.Lock()
+	defer p.dirtyStateMu.Unlock()
 	if !p.dirty {
 		p.dirty = true
 		p.version++
@@ -363,8 +391,8 @@ func (p *Project) updateIfDirty() bool {
 }
 
 func (p *Project) onFileAddedOrRemoved(isSymlink bool) {
-	p.mu.Lock()
-	defer p.mu.Unlock()
+	p.dirtyStateMu.Lock()
+	defer p.dirtyStateMu.Unlock()
 	p.hasAddedOrRemovedFiles = true
 	if isSymlink {
 		p.hasAddedOrRemovedSymlinks = true
@@ -376,7 +404,12 @@ func (p *Project) onFileAddedOrRemoved(isSymlink bool) {
 // opposite of the return value in Strada, which was frequently inverted,
 // as in `updateProjectIfDirty()`.
 func (p *Project) updateGraph() bool {
-	// !!!
+	p.programMu.Lock()
+	defer p.programMu.Unlock()
+	if !p.dirty {
+		return false
+	}
+
 	p.log("Starting updateGraph: Project: " + p.name)
 	oldProgram := p.program
 	hasAddedOrRemovedFiles := p.hasAddedOrRemovedFiles
@@ -414,18 +447,27 @@ func (p *Project) updateGraph() bool {
 		}
 	}
 
-	p.updateWatchers()
+	// TODO: this is currently always synchronously called by some kind of updating request,
+	// but in Strada we throttle, so at least sometimes this should be considered top-level?
+	p.updateWatchers(context.TODO())
 	return true
 }
 
 func (p *Project) updateProgram() {
 	rootFileNames := p.GetRootFileNames()
-	compilerOptions := p.GetCompilerOptions()
+	compilerOptions := p.compilerOptions
 
+	if p.checkerPool != nil {
+		p.logf("Program %d used %d checker(s)", p.version, p.checkerPool.size())
+	}
 	p.program = compiler.NewProgram(compiler.ProgramOptions{
 		RootFiles: rootFileNames,
 		Host:      p,
 		Options:   compilerOptions,
+		CreateCheckerPool: func(program *compiler.Program) compiler.CheckerPool {
+			p.checkerPool = newCheckerPool(4, program, p.log)
+			return p.checkerPool
+		},
 	})
 
 	p.program.BindSourceFiles()

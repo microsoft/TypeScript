@@ -9,7 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
-var _ ls.ScriptInfo = (*ScriptInfo)(nil)
+var _ ls.Script = (*ScriptInfo)(nil)
 
 type ScriptInfo struct {
 	fileName   string

@@ -48,3 +48,7 @@ func (c *Checker) GetTypeOfPropertyOfContextualType(t *Type, name string) *Type 
 func GetDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 	return getDeclarationModifierFlagsFromSymbol(s)
 }
+
+func (c *Checker) WasCanceled() bool {
+	return c.wasCanceled
+}

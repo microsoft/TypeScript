@@ -239,25 +239,26 @@ type compileAndEmitResult struct {
 func compileAndEmit(sys System, program *compiler.Program, reportDiagnostic diagnosticReporter) (result compileAndEmitResult) {
 	// todo: check if third return needed after execute is fully implemented
 
+	ctx := context.Background()
 	options := program.Options()
 	allDiagnostics := program.GetConfigFileParsingDiagnostics()
 
 	// todo: early exit logic and append diagnostics
-	diagnostics := program.GetSyntacticDiagnostics(context.Background(), nil)
+	diagnostics := program.GetSyntacticDiagnostics(ctx, nil)
 	if len(diagnostics) == 0 {
 		bindStart := time.Now()
-		_ = program.GetBindDiagnostics(context.Background(), nil)
+		_ = program.GetBindDiagnostics(ctx, nil)
 		result.bindTime = time.Since(bindStart)
 
-		diagnostics = append(diagnostics, program.GetOptionsDiagnostics()...)
+		diagnostics = append(diagnostics, program.GetOptionsDiagnostics(ctx)...)
 		if options.ListFilesOnly.IsFalse() {
 			// program.GetBindDiagnostics(nil)
-			diagnostics = append(diagnostics, program.GetGlobalDiagnostics()...)
+			diagnostics = append(diagnostics, program.GetGlobalDiagnostics(ctx)...)
 		}
 	}
 	if len(diagnostics) == 0 {
 		checkStart := time.Now()
-		diagnostics = append(diagnostics, program.GetSemanticDiagnostics(context.Background(), nil)...)
+		diagnostics = append(diagnostics, program.GetSemanticDiagnostics(ctx, nil)...)
 		result.checkTime = time.Since(checkStart)
 	}
 	// TODO: declaration diagnostics

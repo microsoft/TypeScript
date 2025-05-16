@@ -1,6 +1,7 @@
 package tsbaseline
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"slices"
@@ -263,10 +264,10 @@ func newTypeWriterWalker(program *compiler.Program, hadErrorBaseline bool) *type
 	}
 }
 
-func (walker *typeWriterWalker) getTypeCheckerForCurrentFile() *checker.Checker {
+func (walker *typeWriterWalker) getTypeCheckerForCurrentFile() (*checker.Checker, func()) {
 	// If we don't use the right checker for the file, its contents won't be up to date
 	// since the types/symbols baselines appear to depend on files having been checked.
-	return walker.program.GetTypeCheckerForFile(walker.currentSourceFile)
+	return walker.program.GetTypeCheckerForFile(context.Background(), walker.currentSourceFile)
 }
 
 type typeWriterResult struct {
@@ -332,7 +333,8 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	actualPos := scanner.SkipTrivia(walker.currentSourceFile.Text(), node.Pos())
 	line, _ := scanner.GetLineAndCharacterOfPosition(walker.currentSourceFile, actualPos)
 	sourceText := scanner.GetSourceTextOfNodeFromSourceFile(walker.currentSourceFile, node, false /*includeTrivia*/)
-	fileChecker := walker.getTypeCheckerForCurrentFile()
+	fileChecker, done := walker.getTypeCheckerForCurrentFile()
+	defer done()
 
 	if !isSymbolWalk {
 		// Don't try to get the type of something that's already a type.

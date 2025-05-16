@@ -1,6 +1,7 @@
 package project
 
 import (
+	"context"
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -29,7 +30,7 @@ func newWatchedFiles[T any](client Client, watchKind lsproto.WatchKind, getGlobs
 	}
 }
 
-func (w *watchedFiles[T]) update(newData T) (updated bool, err error) {
+func (w *watchedFiles[T]) update(ctx context.Context, newData T) (updated bool, err error) {
 	newGlobs := w.getGlobs(newData)
 	w.data = newData
 	if slices.Equal(w.globs, newGlobs) {
@@ -38,7 +39,7 @@ func (w *watchedFiles[T]) update(newData T) (updated bool, err error) {
 
 	w.globs = newGlobs
 	if w.watcherID != "" {
-		if err = w.client.UnwatchFiles(w.watcherID); err != nil {
+		if err = w.client.UnwatchFiles(ctx, w.watcherID); err != nil {
 			return false, err
 		}
 	}
@@ -52,7 +53,7 @@ func (w *watchedFiles[T]) update(newData T) (updated bool, err error) {
 			Kind: &w.watchKind,
 		})
 	}
-	watcherID, err := w.client.WatchFiles(watchers)
+	watcherID, err := w.client.WatchFiles(ctx, watchers)
 	if err != nil {
 		return false, err
 	}
