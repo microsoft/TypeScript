@@ -1914,7 +1914,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "cause",
             ],
         })),
-        Uint8Constructor: new Map(Object.entries({
+        Uint8ArrayConstructor: new Map(Object.entries({
             esnext: [
                 "fromBase64",
                 "fromHex",

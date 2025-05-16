@@ -1,6 +1,6 @@
-toFromHexBase64.ts(1,25): error TS2339: Property 'fromBase64' does not exist on type 'Uint8ArrayConstructor'.
-toFromHexBase64.ts(2,25): error TS2339: Property 'fromBase64' does not exist on type 'Uint8ArrayConstructor'.
-toFromHexBase64.ts(3,25): error TS2339: Property 'fromHex' does not exist on type 'Uint8ArrayConstructor'.
+toFromHexBase64.ts(1,25): error TS2550: Property 'fromBase64' does not exist on type 'Uint8ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
+toFromHexBase64.ts(2,25): error TS2550: Property 'fromBase64' does not exist on type 'Uint8ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
+toFromHexBase64.ts(3,25): error TS2550: Property 'fromHex' does not exist on type 'Uint8ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
 toFromHexBase64.ts(12,20): error TS2550: Property 'setFromBase64' does not exist on type 'Uint8Array<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
 toFromHexBase64.ts(13,20): error TS2550: Property 'setFromBase64' does not exist on type 'Uint8Array<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
 toFromHexBase64.ts(14,20): error TS2550: Property 'setFromBase64' does not exist on type 'Uint8Array<ArrayBuffer>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
@@ -10,13 +10,13 @@ toFromHexBase64.ts(20,20): error TS2550: Property 'setFromHex' does not exist on
 ==== toFromHexBase64.ts (7 errors) ====
     const arr1 = Uint8Array.fromBase64("AAAAAA==");
                             ~~~~~~~~~~
-!!! error TS2339: Property 'fromBase64' does not exist on type 'Uint8ArrayConstructor'.
+!!! error TS2550: Property 'fromBase64' does not exist on type 'Uint8ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
     const arr2 = Uint8Array.fromBase64("AAAAAA", { alphabet: "base64url" });
                             ~~~~~~~~~~
-!!! error TS2339: Property 'fromBase64' does not exist on type 'Uint8ArrayConstructor'.
+!!! error TS2550: Property 'fromBase64' does not exist on type 'Uint8ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
     const arr3 = Uint8Array.fromHex("000000");
                             ~~~~~~~
-!!! error TS2339: Property 'fromHex' does not exist on type 'Uint8ArrayConstructor'.
+!!! error TS2550: Property 'fromHex' does not exist on type 'Uint8ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
     
     const encodedBase64_1 = arr1.toBase64();
     const encodedBase64_2 = arr1.toBase64({ alphabet: "base64" });
