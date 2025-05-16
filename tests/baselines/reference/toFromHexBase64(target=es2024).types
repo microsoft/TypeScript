@@ -1,0 +1,281 @@
+//// [tests/cases/conformance/esnext/toFromHexBase64.ts] ////
+
+=== toFromHexBase64.ts ===
+const arr1 = Uint8Array.fromBase64("AAAAAA==");
+>arr1 : any
+>     : ^^^
+>Uint8Array.fromBase64("AAAAAA==") : any
+>                                  : ^^^
+>Uint8Array.fromBase64 : any
+>                      : ^^^
+>Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>fromBase64 : any
+>           : ^^^
+>"AAAAAA==" : "AAAAAA=="
+>           : ^^^^^^^^^^
+
+const arr2 = Uint8Array.fromBase64("AAAAAA", { alphabet: "base64url" });
+>arr2 : any
+>     : ^^^
+>Uint8Array.fromBase64("AAAAAA", { alphabet: "base64url" }) : any
+>                                                           : ^^^
+>Uint8Array.fromBase64 : any
+>                      : ^^^
+>Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>fromBase64 : any
+>           : ^^^
+>"AAAAAA" : "AAAAAA"
+>         : ^^^^^^^^
+>{ alphabet: "base64url" } : { alphabet: string; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^
+>alphabet : string
+>         : ^^^^^^
+>"base64url" : "base64url"
+>            : ^^^^^^^^^^^
+
+const arr3 = Uint8Array.fromHex("000000");
+>arr3 : any
+>     : ^^^
+>Uint8Array.fromHex("000000") : any
+>                             : ^^^
+>Uint8Array.fromHex : any
+>                   : ^^^
+>Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>fromHex : any
+>        : ^^^
+>"000000" : "000000"
+>         : ^^^^^^^^
+
+const encodedBase64_1 = arr1.toBase64();
+>encodedBase64_1 : any
+>                : ^^^
+>arr1.toBase64() : any
+>                : ^^^
+>arr1.toBase64 : any
+>              : ^^^
+>arr1 : any
+>     : ^^^
+>toBase64 : any
+>         : ^^^
+
+const encodedBase64_2 = arr1.toBase64({ alphabet: "base64" });
+>encodedBase64_2 : any
+>                : ^^^
+>arr1.toBase64({ alphabet: "base64" }) : any
+>                                      : ^^^
+>arr1.toBase64 : any
+>              : ^^^
+>arr1 : any
+>     : ^^^
+>toBase64 : any
+>         : ^^^
+>{ alphabet: "base64" } : { alphabet: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^
+>alphabet : string
+>         : ^^^^^^
+>"base64" : "base64"
+>         : ^^^^^^^^
+
+const encodedBase64_3 = arr1.toBase64({ alphabet: "base64url", omitPadding: true });
+>encodedBase64_3 : any
+>                : ^^^
+>arr1.toBase64({ alphabet: "base64url", omitPadding: true }) : any
+>                                                            : ^^^
+>arr1.toBase64 : any
+>              : ^^^
+>arr1 : any
+>     : ^^^
+>toBase64 : any
+>         : ^^^
+>{ alphabet: "base64url", omitPadding: true } : { alphabet: string; omitPadding: boolean; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>alphabet : string
+>         : ^^^^^^
+>"base64url" : "base64url"
+>            : ^^^^^^^^^^^
+>omitPadding : boolean
+>            : ^^^^^^^
+>true : true
+>     : ^^^^
+
+const encodedHex_1 = arr1.toHex();
+>encodedHex_1 : any
+>             : ^^^
+>arr1.toHex() : any
+>             : ^^^
+>arr1.toHex : any
+>           : ^^^
+>arr1 : any
+>     : ^^^
+>toHex : any
+>      : ^^^
+
+const target1 = new Uint8Array(10);
+>target1 : Uint8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8Array(10) : Uint8Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+const r1 = target1.setFromBase64("AAAAAA==");
+>r1 : any
+>   : ^^^
+>target1.setFromBase64("AAAAAA==") : any
+>                                  : ^^^
+>target1.setFromBase64 : any
+>                      : ^^^
+>target1 : Uint8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>setFromBase64 : any
+>              : ^^^
+>"AAAAAA==" : "AAAAAA=="
+>           : ^^^^^^^^^^
+
+const r2 = target1.setFromBase64("AAAAAA==", { lastChunkHandling: "strict" });
+>r2 : any
+>   : ^^^
+>target1.setFromBase64("AAAAAA==", { lastChunkHandling: "strict" }) : any
+>                                                                   : ^^^
+>target1.setFromBase64 : any
+>                      : ^^^
+>target1 : Uint8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>setFromBase64 : any
+>              : ^^^
+>"AAAAAA==" : "AAAAAA=="
+>           : ^^^^^^^^^^
+>{ lastChunkHandling: "strict" } : { lastChunkHandling: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>lastChunkHandling : string
+>                  : ^^^^^^
+>"strict" : "strict"
+>         : ^^^^^^^^
+
+const r3 = target1.setFromBase64("AAAAAA", {
+>r3 : any
+>   : ^^^
+>target1.setFromBase64("AAAAAA", {  alphabet: "base64url",  lastChunkHandling: "stop-before-partial"}) : any
+>                                                                                                      : ^^^
+>target1.setFromBase64 : any
+>                      : ^^^
+>target1 : Uint8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>setFromBase64 : any
+>              : ^^^
+>"AAAAAA" : "AAAAAA"
+>         : ^^^^^^^^
+>{  alphabet: "base64url",  lastChunkHandling: "stop-before-partial"} : { alphabet: string; lastChunkHandling: string; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  alphabet: "base64url",
+>alphabet : string
+>         : ^^^^^^
+>"base64url" : "base64url"
+>            : ^^^^^^^^^^^
+
+  lastChunkHandling: "stop-before-partial"
+>lastChunkHandling : string
+>                  : ^^^^^^
+>"stop-before-partial" : "stop-before-partial"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+});
+
+const target2 = new Uint8Array(10);
+>target2 : Uint8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8Array(10) : Uint8Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+const r4 = target2.setFromHex("000000");
+>r4 : any
+>   : ^^^
+>target2.setFromHex("000000") : any
+>                             : ^^^
+>target2.setFromHex : any
+>                   : ^^^
+>target2 : Uint8Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>setFromHex : any
+>           : ^^^
+>"000000" : "000000"
+>         : ^^^^^^^^
+
+const totalWritten = r1.written + r2.written + r3.written + r4.written;
+>totalWritten : any
+>             : ^^^
+>r1.written + r2.written + r3.written + r4.written : any
+>                                                  : ^^^
+>r1.written + r2.written + r3.written : any
+>                                     : ^^^
+>r1.written + r2.written : any
+>                        : ^^^
+>r1.written : any
+>           : ^^^
+>r1 : any
+>   : ^^^
+>written : any
+>        : ^^^
+>r2.written : any
+>           : ^^^
+>r2 : any
+>   : ^^^
+>written : any
+>        : ^^^
+>r3.written : any
+>           : ^^^
+>r3 : any
+>   : ^^^
+>written : any
+>        : ^^^
+>r4.written : any
+>           : ^^^
+>r4 : any
+>   : ^^^
+>written : any
+>        : ^^^
+
+const totalRead = r1.read + r2.read + r3.read + r4.read;
+>totalRead : any
+>          : ^^^
+>r1.read + r2.read + r3.read + r4.read : any
+>                                      : ^^^
+>r1.read + r2.read + r3.read : any
+>                            : ^^^
+>r1.read + r2.read : any
+>                  : ^^^
+>r1.read : any
+>        : ^^^
+>r1 : any
+>   : ^^^
+>read : any
+>     : ^^^
+>r2.read : any
+>        : ^^^
+>r2 : any
+>   : ^^^
+>read : any
+>     : ^^^
+>r3.read : any
+>        : ^^^
+>r3 : any
+>   : ^^^
+>read : any
+>     : ^^^
+>r4.read : any
+>        : ^^^
+>r4 : any
+>   : ^^^
+>read : any
+>     : ^^^
+
