@@ -2862,6 +2862,7 @@ declare namespace ts {
             private externalFiles;
             private missingFilesMap;
             private generatedFilesMap;
+            private recordChangesToUnresolvedImports;
             private hasAddedorRemovedFiles;
             private hasAddedOrRemovedSymlinks;
             protected languageService: LanguageService;
@@ -2982,6 +2983,7 @@ declare namespace ts {
          */
         class InferredProject extends Project {
             private _isJsInferredProject;
+            private inferredTypeAcquisition;
             toggleJsInferredProject(isJsInferredProject: boolean): void;
             setCompilerOptions(options?: CompilerOptions): void;
             /** this is canonical project root path */
@@ -2990,6 +2992,7 @@ declare namespace ts {
             removeRoot(info: ScriptInfo): void;
             isProjectWithSingleRoot(): boolean;
             close(): void;
+            setTypeAcquisition(newTypeAcquisition: ts.TypeAcquisition | undefined): void;
             getTypeAcquisition(): TypeAcquisition;
         }
         class AutoImportProviderProject extends Project {
