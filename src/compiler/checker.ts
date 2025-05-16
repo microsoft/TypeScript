@@ -36142,7 +36142,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return constructorSymbol === globalPromiseSymbol;
     }
 
-    function getArgumentArityError(node: CallLikeExpression, signatures: readonly Signature[], args: readonly Expression[], headMessage?: DiagnosticMessage) {
+    function getArgumentArityError(node: CallLikeExpression, signatures: readonly Signature[], args: readonly Expression[], headMessageAndArgs?: DiagnosticAndArguments) {
         const spreadIndex = getSpreadArgumentIndex(args);
         if (spreadIndex > -1) {
             return createDiagnosticForNode(args[spreadIndex], Diagnostics.A_spread_argument_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter);
@@ -36183,9 +36183,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (min < args.length && args.length < max) {
             // between min and max, but with no matching overload
-            if (headMessage) {
+            if (headMessageAndArgs) {
                 let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
-                chain = chainDiagnosticMessages(chain, headMessage);
+                chain = chainDiagnosticMessages(chain, ...headMessageAndArgs);
                 return getDiagnosticForCallNode(node, chain);
             }
             return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
@@ -36193,9 +36193,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else if (args.length < min) {
             // too short: put the error span on the call expression, not any of the args
             let diagnostic: Diagnostic;
-            if (headMessage) {
+            if (headMessageAndArgs) {
                 let chain = chainDiagnosticMessages(/*details*/ undefined, error, parameterRange, args.length);
-                chain = chainDiagnosticMessages(chain, headMessage);
+                chain = chainDiagnosticMessages(chain, ...headMessageAndArgs);
                 diagnostic = getDiagnosticForCallNode(node, chain);
             }
             else {
@@ -36220,25 +36220,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 end++;
             }
             setTextRangePosEnd(errorSpan, pos, end);
-            if (headMessage) {
+            if (headMessageAndArgs) {
                 let chain = chainDiagnosticMessages(/*details*/ undefined, error, parameterRange, args.length);
-                chain = chainDiagnosticMessages(chain, headMessage);
+                chain = chainDiagnosticMessages(chain, ...headMessageAndArgs);
                 return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), errorSpan, chain);
             }
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), errorSpan, error, parameterRange, args.length);
         }
     }
 
-    function getTypeArgumentArityError(node: Node, signatures: readonly Signature[], typeArguments: NodeArray<TypeNode>, headMessage?: DiagnosticMessage) {
+    function getTypeArgumentArityError(node: Node, signatures: readonly Signature[], typeArguments: NodeArray<TypeNode>, headMessageAndArgs?: DiagnosticAndArguments) {
         const argCount = typeArguments.length;
         // No overloads exist
         if (signatures.length === 1) {
             const sig = signatures[0];
             const min = getMinTypeArgumentCount(sig.typeParameters);
             const max = length(sig.typeParameters);
-            if (headMessage) {
+            if (headMessageAndArgs) {
                 let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Expected_0_type_arguments_but_got_1, min < max ? min + "-" + max : min, argCount);
-                chain = chainDiagnosticMessages(chain, headMessage);
+                chain = chainDiagnosticMessages(chain, ...headMessageAndArgs);
                 return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), typeArguments, chain);
             }
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, min < max ? min + "-" + max : min, argCount);
@@ -36257,22 +36257,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         if (belowArgCount !== -Infinity && aboveArgCount !== Infinity) {
-            if (headMessage) {
+            if (headMessageAndArgs) {
                 let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_expects_0_type_arguments_but_overloads_do_exist_that_expect_either_1_or_2_type_arguments, argCount, belowArgCount, aboveArgCount);
-                chain = chainDiagnosticMessages(chain, headMessage);
+                chain = chainDiagnosticMessages(chain, ...headMessageAndArgs);
                 return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), typeArguments, chain);
             }
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_type_arguments_but_overloads_do_exist_that_expect_either_1_or_2_type_arguments, argCount, belowArgCount, aboveArgCount);
         }
-        if (headMessage) {
+        if (headMessageAndArgs) {
             let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
-            chain = chainDiagnosticMessages(chain, headMessage);
+            chain = chainDiagnosticMessages(chain, ...headMessageAndArgs);
             return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), typeArguments, chain);
         }
         return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
     }
 
-    function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessage?: DiagnosticMessage): Signature {
+    function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessageAndArgs?: DiagnosticAndArguments): Signature {
         const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
         const isDecorator = node.kind === SyntaxKind.Decorator;
         const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -36403,8 +36403,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If the call expression is a synthetic call to a `[Symbol.hasInstance]` method then we will produce a head
             // message when reporting diagnostics that explains how we got to `right[Symbol.hasInstance](left)` from
             // `left instanceof right`, as it pertains to "Argument" related messages reported for the call.
-            if (!headMessage && isInstanceof) {
-                headMessage = Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method;
+            if (!headMessageAndArgs && isInstanceof) {
+                headMessageAndArgs = [Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method];
             }
             if (candidatesForArgumentError) {
                 if (candidatesForArgumentError.length === 1 || candidatesForArgumentError.length > 3) {
@@ -36414,8 +36414,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
                         chain = chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call);
                     }
-                    if (headMessage) {
-                        chain = chainDiagnosticMessages(chain, headMessage);
+                    if (headMessageAndArgs) {
+                        chain = chainDiagnosticMessages(chain, ...headMessageAndArgs);
                     }
                     const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain, /*inferenceContext*/ undefined);
                     if (diags) {
@@ -36460,8 +36460,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         map(diags, createDiagnosticMessageChainFromDiagnostic),
                         Diagnostics.No_overload_matches_this_call,
                     );
-                    if (headMessage) {
-                        chain = chainDiagnosticMessages(chain, headMessage);
+                    if (headMessageAndArgs) {
+                        chain = chainDiagnosticMessages(chain, ...headMessageAndArgs);
                     }
                     // The below is a spread to guarantee we get a new (mutable) array - our `flatMap` helper tries to do "smart" optimizations where it reuses input
                     // arrays and the emptyArray singleton where possible, which is decidedly not what we want while we're still constructing this diagnostic
@@ -36479,18 +36479,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (candidateForArgumentArityError) {
-                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessage));
+                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessageAndArgs));
             }
             else if (candidateForTypeArgumentError) {
+                const [headMessage] = headMessageAndArgs ?? [];
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessage);
             }
             else if (!isJsxOpenFragment) {
                 const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                 if (signaturesWithCorrectTypeArgumentArity.length === 0) {
-                    diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessage));
+                    diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessageAndArgs));
                 }
                 else {
-                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, headMessage));
+                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, headMessageAndArgs));
                 }
             }
         }
@@ -37164,24 +37165,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * Gets the localized diagnostic head message to use for errors when resolving a decorator as a call expression.
+     * Gets the localized diagnostic head message and its arguments to use for errors when resolving a decorator as a call expression.
      */
-    function getDiagnosticHeadMessageForDecoratorResolution(node: Decorator) {
+    function getDiagnosticHeadMessageAndArgsForDecoratorResolution(node: Decorator): DiagnosticAndArguments {
         switch (node.parent.kind) {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                return Diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression;
+                return [Diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression];
 
             case SyntaxKind.Parameter:
-                return Diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression;
+                return [Diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression];
 
             case SyntaxKind.PropertyDeclaration:
-                return Diagnostics.Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression;
+                return [Diagnostics.Expression_type_is_not_assignable_to_decorator_type_PropertyDecorator_Ensure_0_has_a_type_assignable_to_PropertyDecorator, getTextOfNode(node)];
 
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return Diagnostics.Unable_to_resolve_signature_of_method_decorator_when_called_as_an_expression;
+                return [Diagnostics.Unable_to_resolve_signature_of_method_decorator_when_called_as_an_expression];
 
             default:
                 return Debug.fail();
@@ -37210,10 +37211,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return resolveErrorCall(node);
         }
 
-        const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
+        const headMessageAndArgs = getDiagnosticHeadMessageAndArgsForDecoratorResolution(node);
         if (!callSignatures.length) {
             const errorDetails = invocationErrorDetails(node.expression, apparentType, SignatureKind.Call);
-            const messageChain = chainDiagnosticMessages(errorDetails.messageChain, headMessage);
+            const messageChain = chainDiagnosticMessages(errorDetails.messageChain, ...headMessageAndArgs);
             const diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node.expression), node.expression, messageChain);
             if (errorDetails.relatedMessage) {
                 addRelatedInfo(diag, createDiagnosticForNode(node.expression, errorDetails.relatedMessage));
@@ -37223,7 +37224,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return resolveErrorCall(node);
         }
 
-        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None, headMessage);
+        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None, headMessageAndArgs);
     }
 
     function createSignatureForJSXIntrinsic(node: JsxCallLike, result: Type): Signature {
