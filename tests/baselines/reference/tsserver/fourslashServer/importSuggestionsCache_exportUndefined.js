@@ -124,14 +124,6 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -195,17 +187,13 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/node_modules/@types: *new*
-  {}
   {}
 /home/src/workspaces/project: *new*
   {}
 /home/src/workspaces/project/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types: *new*
-  {}
   {}
 
 Projects::
@@ -307,17 +295,13 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
   {}
 /home/src/workspaces/project:
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
   {}
 
 Projects::

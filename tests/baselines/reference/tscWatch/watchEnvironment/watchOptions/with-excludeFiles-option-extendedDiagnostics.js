@@ -54,13 +54,13 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
-ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/index.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
-ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
+ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/index.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
+ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
 ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} File location affecting resolution
 ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} File location affecting resolution

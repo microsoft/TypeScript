@@ -1749,7 +1749,7 @@ export class Session<TMessage = string> implements EventSender {
                 );
                 const packageName = getPackageNameFromTypesPackageName(unmangleScopedPackageName(packageNamePathPart));
                 const path = project.toPath(fileName);
-                if (entrypoints && some(entrypoints, e => project.toPath(e) === path)) {
+                if (some(entrypoints, e => project.toPath(e) === path)) {
                     // This file was the main entrypoint of a package. Try to resolve that same package name with
                     // the auxiliary project that only resolves to implementation files.
                     return auxiliaryProject.resolutionCache.resolveSingleModuleNameWithoutWatching(packageName, resolveFromFile).resolvedModule?.resolvedFileName;
