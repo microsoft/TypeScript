@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/indexedAccessOfConcreteNonpublicFields.ts] ////
+
+=== indexedAccessOfConcreteNonpublicFields.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(indexedAccessOfConcreteNonpublicFields.ts, 0, 0))
+
+    private _property: string = '';
+>_property : Symbol(Foo._property, Decl(indexedAccessOfConcreteNonpublicFields.ts, 0, 18))
+
+    protected _property2: string = '';
+>_property2 : Symbol(Foo._property2, Decl(indexedAccessOfConcreteNonpublicFields.ts, 1, 35))
+
+    constructor(arg: Foo['_property'], other: Foo['_property2']) {
+>arg : Symbol(arg, Decl(indexedAccessOfConcreteNonpublicFields.ts, 3, 16))
+>Foo : Symbol(Foo, Decl(indexedAccessOfConcreteNonpublicFields.ts, 0, 0))
+>other : Symbol(other, Decl(indexedAccessOfConcreteNonpublicFields.ts, 3, 38))
+>Foo : Symbol(Foo, Decl(indexedAccessOfConcreteNonpublicFields.ts, 0, 0))
+    }
+}
