@@ -307,6 +307,7 @@ export abstract class TypingsInstaller {
                 this.log.writeLine(`Loaded content of '${packageJson}':${stringifyIndented(npmConfig)}`);
                 this.log.writeLine(`Loaded content of '${packageLockJson}':${stringifyIndented(npmLock)}`);
             }
+            // Packages is present in lock file 3 vs lockfile 2 has dependencies field for already installed types package
             if (npmConfig.devDependencies && (npmLock.packages || npmLock.dependencies)) {
                 for (const key in npmConfig.devDependencies) {
                     if (
