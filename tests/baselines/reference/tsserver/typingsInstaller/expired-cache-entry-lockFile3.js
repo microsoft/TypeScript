@@ -156,6 +156,7 @@ TI:: [hh:mm:ss:mss] Loaded content of '/home/src/Library/Caches/typescript/packa
         }
       }
     }
+TI:: [hh:mm:ss:mss] Adding entry into typings cache: 'jquery' => '/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts'
 TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
 TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...

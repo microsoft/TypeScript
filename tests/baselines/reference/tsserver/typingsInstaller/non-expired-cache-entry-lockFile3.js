@@ -156,6 +156,7 @@ TI:: [hh:mm:ss:mss] Loaded content of '/home/src/Library/Caches/typescript/packa
         }
       }
     }
+TI:: [hh:mm:ss:mss] Adding entry into typings cache: 'jquery' => '/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts'
 TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
 TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -193,10 +194,10 @@ TI:: [hh:mm:ss:mss] Typing names in '/home/src/projects/project/package.json' de
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "jquery"
+      "cachedTypingPaths": [
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"
       ],
+      "newTypingNames": [],
       "filesToWatch": [
         "/home/src/projects/project/bower_components",
         "/home/src/projects/project/package.json",
@@ -226,95 +227,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "event::beginInstallTypes",
-      "eventId": 1,
-      "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/dev/null/inferredProject1*"
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "beginInstallTypes",
-      "body": {
-        "eventId": 1
-      }
-    }
-TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: [
-  "@types/jquery@tsFakeMajor.Minor"
-]
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app.js ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "open",
-      "request_seq": 1,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-After request
-
-PolledWatches::
-/home/src/Vscode/Projects/bin/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/tsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/projects/project/package.json: *new*
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-
-PendingInstalls callback:: count: 1
-1: #1 with arguments:: [
-  "@types/jquery@tsFakeMajor.Minor"
-] *new*
-
-Projects::
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-    autoImportProviderHost: false *changed*
-
-Before running PendingInstalls callback:: count: 1
-1: #1 with arguments:: [
-  "@types/jquery@tsFakeMajor.Minor"
-]
-
-TI:: Installation #1 with arguments:: [
-  "@types/jquery@tsFakeMajor.Minor"
-] complete with success::true
-
-TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -366,31 +278,52 @@ Info seq  [hh:mm:ss:mss] event:
         "kind": "action::set"
       }
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "event::endInstallTypes",
-      "eventId": 1,
-      "projectName": "/dev/null/inferredProject1*",
-      "packagesToInstall": [
-        "@types/jquery@tsFakeMajor.Minor"
-      ],
-      "installSuccess": true,
-      "typingsInstallerVersion": "FakeVersion"
-    }
-Info seq  [hh:mm:ss:mss] event:
+TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
-      "type": "event",
-      "event": "endInstallTypes",
-      "body": {
-        "eventId": 1,
-        "packages": [
-          "@types/jquery@tsFakeMajor.Minor"
-        ],
-        "success": true
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
       }
     }
-After running PendingInstalls callback:: count: 0
+After request
+
+PolledWatches::
+/home/src/Vscode/Projects/bin/bower_components: *new*
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/Vscode/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/bower_components: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/projects/project/package.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
 
 Timeout callback:: count: 2
 1: /dev/null/inferredProject1* *new*
@@ -399,6 +332,10 @@ Timeout callback:: count: 2
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
+    projectProgramVersion: 1 *changed*
     dirty: true *changed*
-    autoImportProviderHost: false
+    autoImportProviderHost: false *changed*
+
+Before running PendingInstalls callback:: count: 0
+
+After running PendingInstalls callback:: count: 0
