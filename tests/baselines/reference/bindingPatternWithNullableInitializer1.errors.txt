@@ -1,0 +1,50 @@
+bindingPatternWithNullableInitializer1.ts(10,22): error TS18048: 't' is possibly 'undefined'.
+bindingPatternWithNullableInitializer1.ts(14,22): error TS18047: 't' is possibly 'null'.
+bindingPatternWithNullableInitializer1.ts(18,22): error TS18049: 't' is possibly 'null' or 'undefined'.
+bindingPatternWithNullableInitializer1.ts(22,14): error TS2532: Object is possibly 'undefined'.
+bindingPatternWithNullableInitializer1.ts(31,18): error TS18048: 'input.a.b' is possibly 'undefined'.
+
+
+==== bindingPatternWithNullableInitializer1.ts (5 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/60119
+    
+    interface T {
+      a?: unknown;
+      b?: unknown;
+      c?: unknown;
+    }
+    
+    function f1<L extends keyof T>(k: L, t: T | undefined) {
+      const { [k]: v } = t;
+                         ~
+!!! error TS18048: 't' is possibly 'undefined'.
+    }
+    
+    function f2<L extends keyof T>(k: L, t: T | null) {
+      const { [k]: v } = t;
+                         ~
+!!! error TS18047: 't' is possibly 'null'.
+    }
+    
+    function f3<L extends keyof T>(k: L, t: T | null | undefined) {
+      const { [k]: v } = t;
+                         ~
+!!! error TS18049: 't' is possibly 'null' or 'undefined'.
+    }
+    
+    function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
+      const { f: { [k]: v } } = t;
+                 ~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/60179
+    
+    const input: {
+      a?: { b?: { c: string } };
+    } = { a: undefined };
+    
+    const { ...b } = input.a?.b;
+                     ~~~~~~~~~~
+!!! error TS18048: 'input.a.b' is possibly 'undefined'.
+    
