@@ -3991,6 +3991,10 @@
         "category": "Error",
         "code": 2881
     },
+    "'{1}' is constrained to be a subtype of '{0}'.": {
+        "category": "Error",
+        "code": 2882
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
