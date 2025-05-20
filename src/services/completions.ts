@@ -256,7 +256,6 @@ import {
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeParameterDeclaration,
-    isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableLike,
@@ -5769,8 +5768,9 @@ function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
 function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
     if (!node) return undefined;
 
-    if (isTypeNode(node) && isTypeReferenceType(node.parent)) {
-        return checker.getTypeArgumentConstraint(node);
+    if (isTypeNode(node)) {
+        const constraint = checker.getTypeArgumentConstraint(node);
+        if (constraint) return constraint;
     }
 
     const t = getConstraintOfTypeArgumentProperty(node.parent, checker);
