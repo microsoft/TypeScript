@@ -100,6 +100,7 @@ type Project struct {
 	hasAddedOrRemovedSymlinks bool
 	deferredClose             bool
 	pendingReload             PendingReload
+	dirtyFilePath             tspath.Path
 
 	comparePathsOptions tspath.ComparePathsOptions
 	currentDirectory    string
@@ -372,7 +373,15 @@ func (p *Project) getScriptKind(fileName string) core.ScriptKind {
 }
 
 func (p *Project) markFileAsDirty(path tspath.Path) {
-	p.markAsDirty()
+	p.dirtyStateMu.Lock()
+	defer p.dirtyStateMu.Unlock()
+	if !p.dirty {
+		p.dirty = true
+		p.dirtyFilePath = path
+		p.version++
+	} else if path != p.dirtyFilePath {
+		p.dirtyFilePath = ""
+	}
 }
 
 func (p *Project) markAsDirty() {
@@ -380,6 +389,7 @@ func (p *Project) markAsDirty() {
 	defer p.dirtyStateMu.Unlock()
 	if !p.dirty {
 		p.dirty = true
+		p.dirtyFilePath = ""
 		p.version++
 	}
 }
@@ -430,47 +440,54 @@ func (p *Project) updateGraph() bool {
 
 	p.hasAddedOrRemovedFiles = false
 	p.hasAddedOrRemovedSymlinks = false
-	p.updateProgram()
+	oldProgramReused := p.updateProgram()
 	p.dirty = false
+	p.dirtyFilePath = ""
 	p.log(fmt.Sprintf("Finishing updateGraph: Project: %s version: %d", p.name, p.version))
 	if hasAddedOrRemovedFiles {
 		p.log(p.print(true /*writeFileNames*/, true /*writeFileExplanation*/, false /*writeFileVersionAndText*/))
 	} else if p.program != oldProgram {
 		p.log("Different program with same set of files")
 	}
-
-	if p.program != oldProgram && oldProgram != nil {
-		for _, oldSourceFile := range oldProgram.GetSourceFiles() {
-			if p.program.GetSourceFileByPath(oldSourceFile.Path()) == nil {
-				p.host.DocumentRegistry().ReleaseDocument(oldSourceFile, oldProgram.GetCompilerOptions())
+	if !oldProgramReused {
+		if oldProgram != nil {
+			for _, oldSourceFile := range oldProgram.GetSourceFiles() {
+				if p.program.GetSourceFileByPath(oldSourceFile.Path()) == nil {
+					p.host.DocumentRegistry().ReleaseDocument(oldSourceFile, oldProgram.GetCompilerOptions())
+				}
 			}
 		}
+		// TODO: this is currently always synchronously called by some kind of updating request,
+		// but in Strada we throttle, so at least sometimes this should be considered top-level?
+		p.updateWatchers(context.TODO())
 	}
-
-	// TODO: this is currently always synchronously called by some kind of updating request,
-	// but in Strada we throttle, so at least sometimes this should be considered top-level?
-	p.updateWatchers(context.TODO())
 	return true
 }
 
-func (p *Project) updateProgram() {
-	rootFileNames := p.GetRootFileNames()
-	compilerOptions := p.compilerOptions
-
+func (p *Project) updateProgram() bool {
 	if p.checkerPool != nil {
 		p.logf("Program %d used %d checker(s)", p.version, p.checkerPool.size())
 	}
-	p.program = compiler.NewProgram(compiler.ProgramOptions{
-		RootFiles: rootFileNames,
-		Host:      p,
-		Options:   compilerOptions,
-		CreateCheckerPool: func(program *compiler.Program) compiler.CheckerPool {
-			p.checkerPool = newCheckerPool(4, program, p.log)
-			return p.checkerPool
-		},
-	})
-
+	var oldProgramReused bool
+	if p.program == nil || p.dirtyFilePath == "" {
+		rootFileNames := p.GetRootFileNames()
+		compilerOptions := p.compilerOptions
+		p.program = compiler.NewProgram(compiler.ProgramOptions{
+			RootFiles: rootFileNames,
+			Host:      p,
+			Options:   compilerOptions,
+			CreateCheckerPool: func(program *compiler.Program) compiler.CheckerPool {
+				p.checkerPool = newCheckerPool(4, program, p.log)
+				return p.checkerPool
+			},
+		})
+	} else {
+		// The only change in the current program is the contents of the file named by p.dirtyFilePath.
+		// If possible, use data from the old program to create the new program.
+		p.program, oldProgramReused = p.program.UpdateProgram(p.dirtyFilePath)
+	}
 	p.program.BindSourceFiles()
+	return oldProgramReused
 }
 
 func (p *Project) isOrphan() bool {

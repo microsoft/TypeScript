@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"context"
+	"maps"
 	"slices"
 	"sync"
 
@@ -78,11 +79,7 @@ func NewProgram(options ProgramOptions) *Program {
 	if p.compilerOptions == nil {
 		p.compilerOptions = &core.CompilerOptions{}
 	}
-	if p.programOptions.CreateCheckerPool != nil {
-		p.checkerPool = p.programOptions.CreateCheckerPool(p)
-	} else {
-		p.checkerPool = newCheckerPool(core.IfElse(p.singleThreaded(), 1, 4), p)
-	}
+	p.initCheckerPool()
 
 	// p.maxNodeModuleJsDepth = p.options.MaxNodeModuleJsDepth
 
@@ -172,6 +169,81 @@ func NewProgram(options ProgramOptions) *Program {
 	}
 
 	return p
+}
+
+// Return an updated program for which it is known that only the file with the given path has changed.
+// In addition to a new program, return a boolean indicating whether the data of the old program was reused.
+func (p *Program) UpdateProgram(changedFilePath tspath.Path) (*Program, bool) {
+	oldFile := p.filesByPath[changedFilePath]
+	newFile := p.host.GetSourceFile(oldFile.FileName(), changedFilePath, oldFile.LanguageVersion)
+	if !canReplaceFileInProgram(oldFile, newFile) {
+		return NewProgram(p.programOptions), false
+	}
+	result := &Program{
+		host:                         p.host,
+		programOptions:               p.programOptions,
+		compilerOptions:              p.compilerOptions,
+		configFileName:               p.configFileName,
+		nodeModules:                  p.nodeModules,
+		currentDirectory:             p.currentDirectory,
+		configFileParsingDiagnostics: p.configFileParsingDiagnostics,
+		resolver:                     p.resolver,
+		comparePathsOptions:          p.comparePathsOptions,
+		processedFiles:               p.processedFiles,
+		filesByPath:                  p.filesByPath,
+		currentNodeModulesDepth:      p.currentNodeModulesDepth,
+		usesUriStyleNodeCoreModules:  p.usesUriStyleNodeCoreModules,
+		unsupportedExtensions:        p.unsupportedExtensions,
+	}
+	result.initCheckerPool()
+	index := core.FindIndex(result.files, func(file *ast.SourceFile) bool { return file.Path() == newFile.Path() })
+	result.files = slices.Clone(result.files)
+	result.files[index] = newFile
+	result.filesByPath = maps.Clone(result.filesByPath)
+	result.filesByPath[newFile.Path()] = newFile
+	return result, true
+}
+
+func (p *Program) initCheckerPool() {
+	if p.programOptions.CreateCheckerPool != nil {
+		p.checkerPool = p.programOptions.CreateCheckerPool(p)
+	} else {
+		p.checkerPool = newCheckerPool(core.IfElse(p.singleThreaded(), 1, 4), p)
+	}
+}
+
+func canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.SourceFile) bool {
+	return file1.FileName() == file2.FileName() &&
+		file1.Path() == file2.Path() &&
+		file1.LanguageVersion == file2.LanguageVersion &&
+		file1.LanguageVariant == file2.LanguageVariant &&
+		file1.ScriptKind == file2.ScriptKind &&
+		file1.IsDeclarationFile == file2.IsDeclarationFile &&
+		file1.HasNoDefaultLib == file2.HasNoDefaultLib &&
+		file1.UsesUriStyleNodeCoreModules == file2.UsesUriStyleNodeCoreModules &&
+		slices.EqualFunc(file1.Imports, file2.Imports, equalModuleSpecifiers) &&
+		slices.EqualFunc(file1.ModuleAugmentations, file2.ModuleAugmentations, equalModuleAugmentationNames) &&
+		slices.Equal(file1.AmbientModuleNames, file2.AmbientModuleNames) &&
+		slices.EqualFunc(file1.ReferencedFiles, file2.ReferencedFiles, equalFileReferences) &&
+		slices.EqualFunc(file1.TypeReferenceDirectives, file2.TypeReferenceDirectives, equalFileReferences) &&
+		slices.EqualFunc(file1.LibReferenceDirectives, file2.LibReferenceDirectives, equalFileReferences) &&
+		equalCheckJSDirectives(file1.CheckJsDirective, file2.CheckJsDirective)
+}
+
+func equalModuleSpecifiers(n1 *ast.Node, n2 *ast.Node) bool {
+	return n1.Kind == n2.Kind && (!ast.IsStringLiteral(n1) || n1.Text() == n2.Text())
+}
+
+func equalModuleAugmentationNames(n1 *ast.Node, n2 *ast.Node) bool {
+	return n1.Kind == n2.Kind && n1.Text() == n2.Text()
+}
+
+func equalFileReferences(f1 *ast.FileReference, f2 *ast.FileReference) bool {
+	return f1.FileName == f2.FileName && f1.ResolutionMode == f2.ResolutionMode && f1.Preserve == f2.Preserve
+}
+
+func equalCheckJSDirectives(d1 *ast.CheckJsDirective, d2 *ast.CheckJsDirective) bool {
+	return d1 == nil && d2 == nil || d1 != nil && d2 != nil && d1.Enabled == d2.Enabled
 }
 
 func NewProgramFromParsedCommandLine(config *tsoptions.ParsedCommandLine, host CompilerHost) *Program {
