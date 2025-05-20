@@ -387,9 +387,9 @@ func (p *Project) markFileAsDirty(path tspath.Path) {
 func (p *Project) markAsDirty() {
 	p.dirtyStateMu.Lock()
 	defer p.dirtyStateMu.Unlock()
+	p.dirtyFilePath = ""
 	if !p.dirty {
 		p.dirty = true
-		p.dirtyFilePath = ""
 		p.version++
 	}
 }

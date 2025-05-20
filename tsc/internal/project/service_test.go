@@ -197,6 +197,71 @@ func TestService(t *testing.T) {
 			assert.NilError(t, err)
 			service.EnsureDefaultProjectForFile("/home/projects/TS/p1/y.ts")
 		})
+
+		t.Run("single-file change followed by config change reloads program", func(t *testing.T) {
+			t.Parallel()
+			files := maps.Clone(defaultFiles)
+			files["/home/projects/TS/p1/tsconfig.json"] = `{
+				"compilerOptions": {
+					"noLib": true,
+					"module": "nodenext",
+					"strict": true,
+				},
+				"include": ["src/index.ts"]
+			}`
+			service, host := projecttestutil.Setup(files)
+			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"], core.ScriptKindTS, "")
+			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
+			programBefore := project.GetProgram()
+			assert.Equal(t, len(programBefore.GetSourceFiles()), 2)
+
+			err := service.ChangeFile(
+				lsproto.VersionedTextDocumentIdentifier{
+					TextDocumentIdentifier: lsproto.TextDocumentIdentifier{
+						Uri: "file:///home/projects/TS/p1/src/index.ts",
+					},
+					Version: 1,
+				},
+				[]lsproto.TextDocumentContentChangeEvent{
+					lsproto.TextDocumentContentChangePartialOrTextDocumentContentChangeWholeDocument{
+						TextDocumentContentChangePartial: ptrTo(lsproto.TextDocumentContentChangePartial{
+							Range: lsproto.Range{
+								Start: lsproto.Position{
+									Line:      0,
+									Character: 0,
+								},
+								End: lsproto.Position{
+									Line:      0,
+									Character: 0,
+								},
+							},
+							Text: "\n",
+						}),
+					},
+				},
+			)
+			assert.NilError(t, err)
+
+			files["/home/projects/TS/p1/tsconfig.json"] = `{
+				"compilerOptions": {
+					"noLib": true,
+					"module": "nodenext",
+					"strict": true,
+				},
+				"include": ["./**/*"]
+			}`
+			host.ReplaceFS(files)
+			err = service.OnWatchedFilesChanged(t.Context(), []*lsproto.FileEvent{
+				{
+					Type: lsproto.FileChangeTypeChanged,
+					Uri:  "file:///home/projects/TS/p1/tsconfig.json",
+				},
+			})
+			assert.NilError(t, err)
+
+			programAfter := project.GetProgram()
+			assert.Equal(t, len(programAfter.GetSourceFiles()), 3)
+		})
 	})
 
 	t.Run("CloseFile", func(t *testing.T) {

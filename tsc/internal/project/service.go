@@ -305,11 +305,11 @@ func (s *Service) onConfigFileChanged(project *Project, changeKind lsproto.FileC
 		project.deferredClose = true
 	}
 
-	s.delayUpdateProjectGraph(project)
 	if !project.deferredClose {
 		project.pendingReload = PendingReloadFull
 		project.markAsDirty()
 	}
+	project.updateIfDirty()
 	return nil
 }
 
@@ -360,7 +360,6 @@ func (s *Service) handleDeletedFile(info *ScriptInfo, deferredDelete bool) {
 		panic("cannot delete an open file")
 	}
 
-	s.delayUpdateProjectGraphs(info.containingProjects, false /*clearSourceMapperCache*/)
 	// !!!
 	// s.handleSourceMapProjects(info)
 	info.detachAllProjects()
@@ -370,6 +369,7 @@ func (s *Service) handleDeletedFile(info *ScriptInfo, deferredDelete bool) {
 	} else {
 		s.deleteScriptInfo(info)
 	}
+	s.updateProjectGraphs(info.containingProjects, false /*clearSourceMapperCache*/)
 }
 
 func (s *Service) deleteScriptInfo(info *ScriptInfo) {
@@ -402,25 +402,13 @@ func (s *Service) OnDiscoveredSymlink(info *ScriptInfo) {
 	}
 }
 
-func (s *Service) delayUpdateProjectGraphs(projects []*Project, clearSourceMapperCache bool) {
+func (s *Service) updateProjectGraphs(projects []*Project, clearSourceMapperCache bool) {
 	for _, project := range projects {
 		if clearSourceMapperCache {
 			project.clearSourceMapperCache()
 		}
-		s.delayUpdateProjectGraph(project)
+		project.updateGraph()
 	}
-}
-
-func (s *Service) delayUpdateProjectGraph(project *Project) {
-	if project.deferredClose {
-		return
-	}
-	project.markAsDirty()
-	if project.kind == KindAutoImportProvider || project.kind == KindAuxiliary {
-		return
-	}
-	// !!! throttle
-	project.updateIfDirty()
 }
 
 func (s *Service) getOrCreateScriptInfoNotOpenedByClient(fileName string, path tspath.Path, scriptKind core.ScriptKind) *ScriptInfo {
