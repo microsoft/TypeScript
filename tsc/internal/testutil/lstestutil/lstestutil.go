@@ -212,3 +212,35 @@ func recordMarker(
 	}
 	return marker
 }
+
+// type languageServiceHost struct {
+// 	program *compiler.Program
+// 	fs      vfs.FS
+// }
+
+// // GetLineMap implements ls.Host.
+// func (l *languageServiceHost) GetLineMap(fileName string) *ls.LineMap {
+// 	text, ok := l.fs.ReadFile(fileName)
+// 	if !ok {
+// 		panic("file not found")
+// 	}
+// 	return ls.ComputeLineStarts(text)
+// }
+
+// // GetPositionEncoding implements ls.Host.
+// func (l *languageServiceHost) GetPositionEncoding() lsproto.PositionEncodingKind {
+// 	return lsproto.PositionEncodingKindUTF8
+// }
+
+// // GetProgram implements ls.Host.
+// func (l *languageServiceHost) GetProgram() *compiler.Program {
+// 	return l.program
+// }
+
+// var _ ls.Host = (*languageServiceHost)(nil)
+
+// func NewLanguageService(
+// 	files map[string]string,
+// ) *ls.LanguageService {
+// 	fs := vfstest.FromMap(files, true /*useCaseSensitiveFileNames*/)
+// }

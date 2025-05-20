@@ -704,9 +704,19 @@ func (s *Service) getDefaultProjectForScript(scriptInfo *ScriptInfo) *Project {
 }
 
 func (s *Service) createInferredProject(currentDirectory string, projectRootPath tspath.Path) *Project {
-	// !!!
 	compilerOptions := core.CompilerOptions{
-		AllowJs: core.TSTrue,
+		AllowJs:                    core.TSTrue,
+		Module:                     core.ModuleKindESNext,
+		ModuleResolution:           core.ModuleResolutionKindBundler,
+		Target:                     core.ScriptTargetES2022,
+		Jsx:                        core.JsxEmitReactJSX,
+		AllowImportingTsExtensions: core.TSTrue,
+		StrictNullChecks:           core.TSTrue,
+		StrictFunctionTypes:        core.TSTrue,
+		SourceMap:                  core.TSTrue,
+		ESModuleInterop:            core.TSTrue,
+		AllowNonTsExtensions:       core.TSTrue,
+		ResolveJsonModule:          core.TSTrue,
 	}
 	project := NewInferredProject(&compilerOptions, currentDirectory, projectRootPath, s)
 	s.inferredProjects = append(s.inferredProjects, project)
