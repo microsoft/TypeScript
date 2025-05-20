@@ -1,0 +1,54 @@
+useBeforeAssignedAutoType2.ts(17,5): error TS7034: Variable 'cur' implicitly has type 'any[]' in some locations where its type cannot be determined.
+useBeforeAssignedAutoType2.ts(23,15): error TS7005: Variable 'cur' implicitly has an 'any[]' type.
+useBeforeAssignedAutoType2.ts(29,15): error TS7005: Variable 'cur' implicitly has an 'any[]' type.
+useBeforeAssignedAutoType2.ts(34,7): error TS18048: 'cur' is possibly 'undefined'.
+
+
+==== useBeforeAssignedAutoType2.ts (4 errors) ====
+    declare function is(...arg: string[]): boolean;
+    declare class AST_Case {
+      constructor(_: { body: any });
+    }
+    declare class AST_Default {
+      constructor(_: { body: any });
+    }
+    declare class AST_Statement {
+      children: any[];
+    }
+    declare function statement(): AST_Statement;
+    declare function unexpected(): void;
+    
+    function switch_body_() {
+      var a = [],
+        branch,
+        cur;
+        ~~~
+!!! error TS7034: Variable 'cur' implicitly has type 'any[]' in some locations where its type cannot be determined.
+    
+      while (!is("punc", "}")) {
+        if (is("keyword", "case")) {
+          cur = [];
+          branch = new AST_Case({
+            body: cur,
+                  ~~~
+!!! error TS7005: Variable 'cur' implicitly has an 'any[]' type.
+          });
+          a.push(branch);
+        } else if (is("keyword", "default")) {
+          cur = [];
+          branch = new AST_Default({
+            body: cur,
+                  ~~~
+!!! error TS7005: Variable 'cur' implicitly has an 'any[]' type.
+          });
+          a.push(branch);
+        } else {
+          if (!cur) unexpected();
+          cur.push(statement());
+          ~~~
+!!! error TS18048: 'cur' is possibly 'undefined'.
+        }
+      }
+      return a;
+    }
+    
