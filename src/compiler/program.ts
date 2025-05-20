@@ -1717,6 +1717,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     let projectReferenceRedirects: Map<Path, ResolvedProjectReference | false> | undefined;
     let mapFromFileToProjectReferenceRedirects: Map<Path, Path> | undefined;
     let mapFromToProjectReferenceRedirectSource: Map<Path, SourceOfProjectReferenceRedirect> | undefined;
+    let hasResolvedReferencencesInNodeModules = false;
 
     const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
         !options.disableSourceOfProjectReferenceRedirect;
@@ -3823,6 +3824,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
 
     function getSourceOfProjectReferenceRedirect(path: Path) {
         if (!isDeclarationFileName(path)) return undefined;
+        if (!hasResolvedReferencencesInNodeModules && pathContainsNodeModules(path)) return undefined;
         if (mapFromToProjectReferenceRedirectSource === undefined) {
             mapFromToProjectReferenceRedirectSource = new Map();
             forEachResolvedProjectReference(resolvedRef => {
@@ -4140,6 +4142,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         sourceFile.path = sourceFilePath;
         sourceFile.resolvedPath = sourceFilePath;
         sourceFile.originalFileName = refPath;
+        if (!hasResolvedReferencencesInNodeModules && (pathContainsNodeModules(sourceFile.resolvedPath) || pathContainsNodeModules(sourceFile.path))) {
+            hasResolvedReferencencesInNodeModules = true;
+        }
 
         const resolvedRef: ResolvedProjectReference = { commandLine, sourceFile };
         projectReferenceRedirects.set(sourceFilePath, resolvedRef);
