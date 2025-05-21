@@ -211,7 +211,7 @@ func (s *Service) CloseFile(fileName string) {
 		info.close(fileExists)
 		for _, project := range info.containingProjects {
 			if project.kind == KindInferred && project.isRoot(info) {
-				project.removeFile(info, fileExists, true /*detachFromProject*/)
+				project.RemoveFile(info, fileExists, true /*detachFromProject*/)
 			}
 		}
 		delete(s.openFiles, info.path)
@@ -309,17 +309,17 @@ func (s *Service) onConfigFileChanged(project *Project, changeKind lsproto.FileC
 		project.pendingReload = PendingReloadFull
 		project.markAsDirty()
 	}
-	project.updateIfDirty()
+	project.updateGraph()
 	return nil
 }
 
 func (s *Service) ensureProjectStructureUpToDate() {
 	var hasChanges bool
 	for _, project := range s.configuredProjects {
-		hasChanges = project.updateIfDirty() || hasChanges
+		hasChanges = project.updateGraph() || hasChanges
 	}
 	for _, project := range s.inferredProjects {
-		hasChanges = project.updateIfDirty() || hasChanges
+		hasChanges = project.updateGraph() || hasChanges
 	}
 	if hasChanges {
 		s.ensureProjectForOpenFiles()
@@ -342,7 +342,7 @@ func (s *Service) ensureProjectForOpenFiles() {
 		}
 	}
 	for _, project := range s.inferredProjects {
-		project.updateIfDirty()
+		project.updateGraph()
 	}
 
 	s.Log("After ensureProjectForOpenFiles:")
@@ -570,7 +570,7 @@ func (s *Service) assignProjectToOpenedScriptInfo(info *ScriptInfo) assignProjec
 		// result.configFileErrors = project.getAllProjectErrors()
 	}
 	for _, project := range info.containingProjects {
-		project.updateIfDirty()
+		project.updateGraph()
 	}
 	if info.isOrphan() {
 		// !!!
@@ -598,7 +598,7 @@ func (s *Service) assignOrphanScriptInfoToInferredProject(info *ScriptInfo, proj
 		project = s.getOrCreateUnrootedInferredProject()
 	}
 
-	project.addRoot(info)
+	project.AddRoot(info)
 	project.updateGraph()
 	// !!! old code ensures that scriptInfo is only part of one project
 }
