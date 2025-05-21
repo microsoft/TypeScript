@@ -28,6 +28,19 @@
                 "-test.run",
                 "TestSubmodule/${fileBasename}"
             ]
+        },
+        {
+            "name": "Launch submodule test (with profiling)",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/internal/testrunner",
+            "args": [
+                "-test.cpuprofile",
+                "${workspaceFolder}/test.prof",
+                "-test.run",
+                "TestSubmodule/${fileBasename}"
+            ]
         }
     ]
 }
