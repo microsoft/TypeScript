@@ -9444,15 +9444,13 @@ namespace Parser {
             }
 
             function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
-                const isMarkdownOrJSDocLink = token() === SyntaxKind.OpenBracketToken
-                    || lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && isJSDocLinkTag(scanner.getTokenValue()));
-                const nameExpression = isMarkdownOrJSDocLink ? undefined : parseJSDocNameReference();
+                const nameExpression = isMarkdownOrJSDocLink() ? undefined : parseJSDocNameReference();
                 const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                 return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
             }
 
             function parseThrowsTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocThrowsTag {
-                const typeExpression = tryParseTypeExpression();
+                const typeExpression = isMarkdownOrJSDocLink() ? undefined : tryParseTypeExpression();
                 const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
                 return finishNode(factory.createJSDocThrowsTag(tagName, typeExpression, comment), start);
             }
@@ -9880,6 +9878,10 @@ namespace Parser {
                 const result = finishNode(factoryCreateIdentifier(text, originalKeywordKind), start, end);
                 nextTokenJSDoc();
                 return result;
+            }
+
+            function isMarkdownOrJSDocLink() {
+                return token() === SyntaxKind.OpenBracketToken || lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && isJSDocLinkTag(scanner.getTokenValue()));
             }
         }
     }
