@@ -53,7 +53,9 @@
         "**/*_generated.go",
         "internal/bundled/libs/**",
         "internal/lsp/lsproto/_generate/*.json",
-        "internal/lsp/lsproto/_generate/metaModelSchema.mts"
+        "internal/lsp/lsproto/_generate/metaModelSchema.mts",
+        // Needs to be LF to have a working shebang.
+        "_packages/native-preview/bin/tsgo.js"
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     // Also, if updating typescript, update the one in package.json.

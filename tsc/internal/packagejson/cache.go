@@ -10,7 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-var typeScriptVersion = semver.MustParse(core.Version)
+var typeScriptVersion = semver.MustParse(core.Version())
 
 type PackageJson struct {
 	Fields
@@ -61,7 +61,7 @@ func (p *PackageJson) GetVersionPaths(trace func(string)) VersionPaths {
 		}
 
 		if trace != nil {
-			trace(diagnostics.X_package_json_does_not_have_a_typesVersions_entry_that_matches_version_0.Format(core.VersionMajorMinor))
+			trace(diagnostics.X_package_json_does_not_have_a_typesVersions_entry_that_matches_version_0.Format(core.VersionMajorMinor()))
 		}
 	})
 	return p.versionPaths

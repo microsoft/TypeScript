@@ -1,2 +1,3 @@
 *.vsix
 dist/
+lib/

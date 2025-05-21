@@ -6,7 +6,9 @@
         "outDir": "./dist",
         "esModuleInterop": true,
         "strict": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "sourceMap": true
     },
     "include": ["./src/**/*"]
 }

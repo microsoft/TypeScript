@@ -1,32 +1,19 @@
 {
+    "private": true,
     "name": "typescript-go",
-    "author": "Microsoft Corp.",
-    "homepage": "https://www.typescriptlang.org/",
     "version": "0.0.0",
     "license": "Apache-2.0",
-    "description": "TypeScript is a language for application scale JavaScript development",
-    "keywords": [
-        "TypeScript",
-        "Microsoft",
-        "compiler",
-        "language",
-        "javascript"
-    ],
-    "bugs": {
-        "url": "https://github.com/microsoft/typescript-go/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/microsoft/typescript-go.git"
-    },
     "devDependencies": {
+        "@types/adm-zip": "^0.5.7",
         "@types/node": "latest",
         "@types/which": "^3.0.4",
+        "adm-zip": "^0.5.16",
         "chokidar": "^4.0.3",
         "dprint": "^0.49.1",
         "execa": "^9.5.2",
         "glob": "^10.4.5",
         "hereby": "^1.10.0",
+        "p-limit": "^6.2.0",
         "picocolors": "^1.1.1",
         "typescript": "^5.8.3",
         "which": "^5.0.0"
@@ -37,8 +24,8 @@
         "build:watch": "hereby build:watch",
         "test": "hereby test",
         "api:build": "npm run -w @typescript/api build",
-        "extension:build": "npm run -w typescript-lsp build",
-        "extension:watch": "npm run -w typescript-lsp watch",
+        "extension:build": "npm run -w _extension build",
+        "extension:watch": "npm run -w _extension watch",
         "node": "node --no-warnings --conditions @typescript/source"
     },
     "workspaces": [
@@ -47,7 +34,7 @@
     ],
     "packageManager": "npm@8.19.4",
     "volta": {
-        "node": "20.5.1",
+        "node": "20.19.1",
         "npm": "8.19.4"
     }
 }

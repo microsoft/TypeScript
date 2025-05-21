@@ -1,5 +1,6 @@
 // @ts-check
 
+import AdmZip from "adm-zip";
 import chokidar from "chokidar";
 import { $ as _$ } from "execa";
 import { glob } from "glob";
@@ -10,6 +11,8 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 import { parseArgs } from "node:util";
+import os from "os";
+import pLimit from "p-limit";
 import pc from "picocolors";
 import which from "which";
 
@@ -48,7 +51,7 @@ function parseEnvBoolean(name, defaultValue = false) {
     throw new Error(`Invalid value for ${name}: ${value}`);
 }
 
-const { values: options } = parseArgs({
+const { values: rawOptions } = parseArgs({
     args: process.argv.slice(2),
     options: {
         tests: { type: "string", short: "t" },
@@ -56,6 +59,9 @@ const { values: options } = parseArgs({
         debug: { type: "boolean" },
 
         insiders: { type: "boolean" },
+
+        setPrerelease: { type: "string" },
+        forRelease: { type: "boolean" },
 
         race: { type: "boolean", default: parseEnvBoolean("RACE") },
         noembed: { type: "boolean", default: parseEnvBoolean("NOEMBED") },
@@ -66,6 +72,16 @@ const { values: options } = parseArgs({
     allowPositionals: true,
     allowNegative: true,
 });
+
+// We can't use parseArgs' strict mode as it errors on hereby's --tasks flag.
+/**
+ * @typedef {{ [K in keyof T as {} extends Record<K, 1> ? never : K]: T[K] }} RemoveIndex<T>
+ * @template T
+ */
+/**
+ * @typedef {RemoveIndex<typeof rawOptions>} Options
+ */
+const options = /** @type {Options} */ (rawOptions);
 
 const defaultGoBuildTags = [
     ...(options.noembed ? ["noembed"] : []),
@@ -138,36 +154,46 @@ function isInstalled(tool) {
     return !!which.sync(tool, { nothrow: true });
 }
 
+const builtLocal = "./built/local";
+
 const libsDir = "./internal/bundled/libs";
 const libsRegexp = /(?:^|[\\/])internal[\\/]bundled[\\/]libs[\\/]/;
 
-async function generateLibs() {
-    await fs.promises.mkdir("./built/local", { recursive: true });
+/**
+ * @param {string} out
+ */
+async function generateLibs(out) {
+    await fs.promises.mkdir(out, { recursive: true });
 
     const libs = await fs.promises.readdir(libsDir);
 
     await Promise.all(libs.map(async lib => {
-        fs.promises.copyFile(`${libsDir}/${lib}`, `./built/local/${lib}`);
+        fs.promises.copyFile(path.join(libsDir, lib), path.join(out, lib));
     }));
 }
 
 export const lib = task({
     name: "lib",
-    run: generateLibs,
+    run: () => generateLibs(builtLocal),
 });
 
 /**
- * @param {string} packagePath
- * @param {AbortSignal} [abortSignal]
+ * @param {object} [opts]
+ * @param {string} [opts.out]
+ * @param {AbortSignal} [opts.abortSignal]
+ * @param {Record<string, string | undefined>} [opts.env]
+ * @param {string[]} [opts.extraFlags]
  */
-function buildExecutableToBuilt(packagePath, abortSignal) {
-    return $({ cancelSignal: abortSignal })`go build ${goBuildFlags} ${goBuildTags("noembed")} -o ./built/local/ ${packagePath}`;
+function buildTsgo(opts) {
+    opts ||= {};
+    const out = opts.out ?? "./built/local/";
+    return $({ cancelSignal: opts.abortSignal, env: opts.env })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${goBuildTags("noembed")} -o ${out} ./cmd/tsgo`;
 }
 
 export const tsgoBuild = task({
     name: "tsgo:build",
     run: async () => {
-        await buildExecutableToBuilt("./cmd/tsgo");
+        await buildTsgo();
     },
 });
 
@@ -213,12 +239,12 @@ export const buildWatch = task({
 
             if (libsChanged) {
                 console.log("Generating libs...");
-                await generateLibs();
+                await generateLibs(builtLocal);
             }
 
             if (goChanged) {
                 console.log("Building tsgo...");
-                await buildExecutableToBuilt("./cmd/tsgo", abortSignal);
+                await buildTsgo({ abortSignal });
             }
         }, {
             paths: ["cmd", "internal"],
@@ -230,7 +256,7 @@ export const buildWatch = task({
 export const cleanBuilt = task({
     name: "clean:built",
     hiddenFromTaskList: true,
-    run: () => fs.promises.rm("built", { recursive: true, force: true }),
+    run: () => rimraf("built"),
 });
 
 export const generate = task({
@@ -347,17 +373,6 @@ export const testAll = task({
         await runTestBenchmarks();
         await runTestTools();
         await runTestAPI();
-    },
-});
-
-export const installExtension = task({
-    name: "install-extension",
-    run: async () => {
-        await $({ cwd: path.join(__dirname, "_extension") })`npm run package`;
-        await $({ cwd: path.join(__dirname, "_extension") })`${options.insiders ? "code-insiders" : "code"} --install-extension typescript-lsp.vsix`;
-        console.log(pc.yellowBright("\nExtension installed. ") + "Add the following to your workspace or user settings.json:\n");
-        console.log(pc.whiteBright(`    "typescript-go.executablePath": "${path.join(__dirname, "built", "local", process.platform === "win32" ? "tsgo.exe" : "tsgo")}"\n`));
-        console.log("Select 'TypeScript: Use TypeScript Go (Experimental)' in the command palette to enable the extension and disable built-in TypeScript support.\n");
     },
 });
 
@@ -687,3 +702,532 @@ export class Debouncer {
         }
     }
 }
+
+const getVersion = memoize(() => {
+    const f = fs.readFileSync("./internal/core/version.go", "utf8");
+
+    const match = f.match(/var version\s*=\s*"(\d+\.\d+\.\d+)(-[^"]+)?"/);
+    if (!match) {
+        throw new Error("Failed to extract version from version.go");
+    }
+
+    let version = match[1];
+    if (options.setPrerelease) {
+        version += `-${options.setPrerelease}`;
+    }
+    else if (match[2]) {
+        version += match[2];
+    }
+
+    return version;
+});
+
+const extensionDir = path.resolve("./_extension");
+const builtNpm = path.resolve("./built/npm");
+const builtVsix = path.resolve("./built/vsix");
+const builtSignTmp = path.resolve("./built/sign-tmp");
+
+const getSignTempDir = memoize(async () => {
+    const dir = path.resolve(builtSignTmp);
+    await rimraf(dir);
+    await fs.promises.mkdir(dir, { recursive: true });
+    return dir;
+});
+
+const cleanSignTempDirectory = task({
+    name: "clean:sign-tmp",
+    run: () => rimraf(builtSignTmp),
+});
+
+let signCount = 0;
+
+/**
+ * @typedef {{
+ *   SignFileRecordList: {
+ *     SignFileList: { SrcPath: string; DstPath: string | null; }[];
+ *     Certs: Cert;
+ *   }[]
+ * }} DDSignFileList
+ *
+ * @param {DDSignFileList} filelist
+ */
+async function sign(filelist) {
+    const data = JSON.stringify(filelist, undefined, 4);
+    console.log("filelist:", data);
+
+    if (!process.env.MBSIGN_APPFOLDER) {
+        console.log(pc.yellow("Faking signing because MBSIGN_APPFOLDER is not set."));
+
+        // Fake signing for testing.
+
+        for (const record of filelist.SignFileRecordList) {
+            for (const file of record.SignFileList) {
+                const src = file.SrcPath;
+                const dst = file.DstPath ?? src;
+
+                if (!fs.existsSync(src)) {
+                    throw new Error(`Source file does not exist: ${src}`);
+                }
+
+                const dstDir = path.dirname(dst);
+                if (!fs.existsSync(dstDir)) {
+                    throw new Error(`Destination directory does not exist: ${dstDir}`);
+                }
+
+                if (dst.endsWith(".sig")) {
+                    console.log(`Faking signature for ${src} -> ${dst}`);
+                    // No great way to fake a signature.
+                    await fs.promises.writeFile(dst, "fake signature");
+                }
+                else {
+                    if (src === dst) {
+                        console.log(`Faking signing ${src}`);
+                    }
+                    else {
+                        console.log(`Faking signing ${src} -> ${dst}`);
+                    }
+                    const contents = await fs.promises.readFile(src);
+                    await fs.promises.writeFile(dst, contents);
+                }
+            }
+        }
+
+        return;
+    }
+
+    const tmp = await getSignTempDir();
+    const filelistPath = path.resolve(tmp, `signing-filelist-${signCount++}.json`);
+    await fs.promises.writeFile(filelistPath, data);
+
+    try {
+        const dll = path.join(process.env.MBSIGN_APPFOLDER, "DDSignFiles.dll");
+        const filelistFlag = `/filelist:${filelistPath}`;
+        await $`dotnet ${dll} -- ${filelistFlag}`;
+    }
+    finally {
+        await fs.promises.unlink(filelistPath);
+    }
+}
+
+/**
+ * @param {string} src
+ * @param {string} dest
+ * @param {(p: string) => boolean} [filter]
+ */
+function cpRecursive(src, dest, filter) {
+    return fs.promises.cp(src, dest, {
+        recursive: true,
+        filter: filter ? src => filter(src.replace(/\\/g, "/")) : undefined,
+    });
+}
+
+/**
+ * @param {string} src
+ * @param {string} dest
+ */
+function cpWithoutNodeModulesOrTsconfig(src, dest) {
+    return cpRecursive(src, dest, p => !p.endsWith("/node_modules") && !p.endsWith("/tsconfig.json"));
+}
+
+const mainNativePreviewPackage = {
+    npmPackageName: "@typescript/native-preview",
+    npmDir: path.join(builtNpm, "native-preview"),
+    npmTarball: path.join(builtNpm, "native-preview.tgz"),
+};
+
+/**
+ * @typedef {"win32" | "linux" | "darwin"} OS
+ * @typedef {"x64" | "arm" | "arm64"} Arch
+ * @typedef {"Microsoft400" | "LinuxSign" | "MacDeveloperHarden" | "8020" | "VSCodePublisher"} Cert
+ * @typedef {`${OS}-${Exclude<Arch, "arm"> | "armhf"}`} VSCodeTarget
+ */
+void 0;
+
+const nativePreviewPlatforms = memoize(() => {
+    /** @type {[OS, Arch, Cert][]} */
+    let supportedPlatforms = [
+        ["win32", "x64", "Microsoft400"],
+        ["win32", "arm64", "Microsoft400"],
+        ["linux", "x64", "LinuxSign"],
+        ["linux", "arm", "LinuxSign"],
+        ["linux", "arm64", "LinuxSign"],
+        ["darwin", "x64", "MacDeveloperHarden"],
+        ["darwin", "arm64", "MacDeveloperHarden"],
+        // Alpine?
+        // Wasm?
+    ];
+
+    if (!options.forRelease) {
+        supportedPlatforms = supportedPlatforms.filter(([os, arch]) => os === process.platform && arch === process.arch);
+        assert.equal(supportedPlatforms.length, 1, "No supported platforms found");
+    }
+
+    return supportedPlatforms.map(([os, arch, cert]) => {
+        const npmDirName = `native-preview-${os}-${arch}`;
+        const npmDir = path.join(builtNpm, npmDirName);
+        const npmTarball = `${npmDir}.tgz`;
+        const npmPackageName = `@typescript/${npmDirName}`;
+        /** @type {VSCodeTarget} */
+        const vscodeTarget = `${os}-${arch === "arm" ? "armhf" : arch}`;
+        const extensionDir = path.join(builtVsix, `typescript-native-preview-${vscodeTarget}`);
+        const vsixPath = extensionDir + ".vsix";
+        const vsixManifestPath = extensionDir + ".manifest";
+        const vsixSignaturePath = extensionDir + ".signature.p7s";
+        return {
+            nodeOs: os,
+            nodeArch: arch,
+            goos: nodeToGOOS(os),
+            goarch: nodeToGOARCH(arch),
+            npmPackageName,
+            npmDirName,
+            npmDir,
+            npmTarball,
+            vscodeTarget,
+            extensionDir,
+            vsixPath,
+            vsixManifestPath,
+            vsixSignaturePath,
+            cert,
+        };
+    });
+
+    /**
+     * @param {string} os
+     * @returns {"darwin" | "linux" | "windows"}
+     */
+    function nodeToGOOS(os) {
+        switch (os) {
+            case "darwin":
+                return "darwin";
+            case "linux":
+                return "linux";
+            case "win32":
+                return "windows";
+            default:
+                throw new Error(`Unsupported OS: ${os}`);
+        }
+    }
+
+    /**
+     * @param {string} arch
+     * @returns {"amd64" | "arm" | "arm64"}
+     */
+    function nodeToGOARCH(arch) {
+        switch (arch) {
+            case "x64":
+                return "amd64";
+            case "arm":
+                return "arm";
+            case "arm64":
+                return "arm64";
+            default:
+                throw new Error(`Unsupported ARCH: ${arch}`);
+        }
+    }
+});
+
+export const buildNativePreviewPackages = task({
+    name: "native-preview:build-packages",
+    hiddenFromTaskList: true,
+    run: async () => {
+        await rimraf(builtNpm);
+
+        const platforms = nativePreviewPlatforms();
+
+        const inputDir = "./_packages/native-preview";
+
+        const inputPackageJson = JSON.parse(fs.readFileSync(path.join(inputDir, "package.json"), "utf8"));
+        inputPackageJson.version = getVersion();
+        delete inputPackageJson.private;
+
+        const { stdout: gitHead } = await $pipe`git rev-parse HEAD`;
+        inputPackageJson.gitHead = gitHead;
+
+        const mainPackage = {
+            ...inputPackageJson,
+            optionalDependencies: Object.fromEntries(platforms.map(p => [p.npmPackageName, getVersion()])),
+        };
+
+        const mainPackageDir = mainNativePreviewPackage.npmDir;
+
+        await fs.promises.mkdir(mainPackageDir, { recursive: true });
+
+        await cpWithoutNodeModulesOrTsconfig(inputDir, mainPackageDir);
+
+        await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
+        await fs.promises.copyFile("LICENSE", path.join(mainPackageDir, "LICENSE"));
+        // No NOTICE.txt here; does not ship the binary or libs. If this changes, we should add it.
+
+        let ldflags = "-ldflags=-s -w";
+        if (options.setPrerelease) {
+            ldflags += ` -X github.com/microsoft/typescript-go/internal/core.version=${getVersion()}`;
+        }
+        const extraFlags = ["-trimpath", ldflags];
+
+        const buildLimit = pLimit(os.availableParallelism());
+
+        await Promise.all(platforms.map(async ({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => {
+            const packageJson = {
+                ...inputPackageJson,
+                bin: undefined,
+                imports: undefined,
+                name: npmPackageName,
+                os: [nodeOs],
+                cpu: [nodeArch],
+                exports: {
+                    "./package.json": "./package.json",
+                },
+            };
+
+            const out = path.join(npmDir, "lib");
+            await fs.promises.mkdir(out, { recursive: true });
+            await fs.promises.writeFile(path.join(npmDir, "package.json"), JSON.stringify(packageJson, undefined, 4));
+            await fs.promises.copyFile("LICENSE", path.join(npmDir, "LICENSE"));
+            await fs.promises.copyFile("NOTICE.txt", path.join(npmDir, "NOTICE.txt"));
+
+            const readme = [
+                `# \`${npmPackageName}\``,
+                "",
+                `This package provides ${nodeOs}-${nodeArch} support for [${packageJson.name}](https://www.npmjs.com/package/${packageJson.name}).`,
+            ];
+
+            fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
+
+            await Promise.all([
+                generateLibs(out),
+                buildLimit(() =>
+                    buildTsgo({
+                        out,
+                        env: { GOOS: goos, GOARCH: goarch, GOARM: "6", CGO_ENABLED: "0" },
+                        extraFlags,
+                    })
+                ),
+            ]);
+        }));
+    },
+});
+
+export const signNativePreviewPackages = task({
+    name: "native-preview:sign-packages",
+    hiddenFromTaskList: true,
+    run: async () => {
+        if (!options.forRelease) {
+            throw new Error("This task should not be run in non-release builds.");
+        }
+
+        const platforms = nativePreviewPlatforms();
+
+        /** @type {Map<Cert, { tmpName: string; path: string }[]>} */
+        const filelistByCert = new Map();
+        for (const { npmDir, nodeOs, cert, npmDirName } of platforms) {
+            let certFilelist = filelistByCert.get(cert);
+            if (!certFilelist) {
+                filelistByCert.set(cert, certFilelist = []);
+            }
+            certFilelist.push({
+                tmpName: npmDirName,
+                path: path.join(npmDir, "lib", nodeOs === "win32" ? "tsgo.exe" : "tsgo"),
+            });
+        }
+
+        const tmp = await getSignTempDir();
+
+        /** @type {DDSignFileList} */
+        const filelist = {
+            SignFileRecordList: [],
+        };
+
+        const macZips = [];
+
+        // First, sign the files.
+
+        for (const [cert, filelistPaths] of filelistByCert) {
+            switch (cert) {
+                case "Microsoft400":
+                    filelist.SignFileRecordList.push({
+                        SignFileList: filelistPaths.map(p => ({ SrcPath: p.path, DstPath: null })),
+                        Certs: cert,
+                    });
+                    break;
+                case "LinuxSign":
+                    filelist.SignFileRecordList.push({
+                        SignFileList: filelistPaths.map(p => ({ SrcPath: p.path, DstPath: p.path + ".sig" })),
+                        Certs: cert,
+                    });
+                    break;
+                case "MacDeveloperHarden":
+                    // Mac signing requires putting files into zips and then signing those,
+                    // along with a notarization step.
+                    for (const p of filelistPaths) {
+                        const unsignedZipPath = path.join(tmp, `${p.tmpName}.unsigned.zip`);
+                        const signedZipPath = path.join(tmp, `${p.tmpName}.signed.zip`);
+                        const notarizedZipPath = path.join(tmp, `${p.tmpName}.notarized.zip`);
+
+                        const zip = new AdmZip();
+                        zip.addLocalFile(p.path);
+                        zip.writeZip(unsignedZipPath);
+
+                        macZips.push({
+                            path: p.path,
+                            unsignedZipPath,
+                            signedZipPath,
+                            notarizedZipPath,
+                        });
+                    }
+                    filelist.SignFileRecordList.push({
+                        SignFileList: macZips.map(p => ({ SrcPath: p.unsignedZipPath, DstPath: p.signedZipPath })),
+                        Certs: cert,
+                    });
+                    break;
+                default:
+                    throw new Error(`Unknown cert: ${cert}`);
+            }
+        }
+
+        await sign(filelist);
+
+        // All of the files have been signed in place / had signatures added.
+
+        if (macZips.length) {
+            // Now, notarize the Mac files.
+
+            /** @type {DDSignFileList} */
+            const notarizeFilelist = {
+                SignFileRecordList: [
+                    {
+                        SignFileList: macZips.map(p => ({ SrcPath: p.signedZipPath, DstPath: p.notarizedZipPath })),
+                        Certs: "8020", // "MacNotarize" (friendly name not supported by the tooling)
+                    },
+                ],
+            };
+
+            await sign(notarizeFilelist);
+
+            // Finally, unzip the notarized files and move them back to their original locations.
+
+            for (const p of macZips) {
+                const zip = new AdmZip(p.notarizedZipPath);
+                zip.extractEntryTo(path.basename(p.path), path.dirname(p.path), false, true);
+            }
+
+            // chmod +x the unsipped files.
+
+            for (const p of macZips) {
+                await fs.promises.chmod(p.path, 0o755);
+            }
+        }
+    },
+});
+
+export const packNativePreviewPackages = task({
+    name: "native-preview:pack-packages",
+    hiddenFromTaskList: true,
+    dependencies: options.forRelease ? undefined : [buildNativePreviewPackages, cleanSignTempDirectory],
+    run: async () => {
+        const platforms = nativePreviewPlatforms();
+        await Promise.all([mainNativePreviewPackage, ...platforms].map(async ({ npmDir, npmTarball }) => {
+            const { stdout } = await $pipe`npm pack --json ${npmDir}`;
+            const filename = JSON.parse(stdout)[0].filename.replace("@", "").replace("/", "-");
+            await fs.promises.rename(filename, npmTarball);
+        }));
+
+        // npm packages need to be published in reverse dep order, e.g. such that no package
+        // is published before its dependencies.
+        const publishOrder = [
+            ...platforms.map(p => p.npmTarball),
+            mainNativePreviewPackage.npmTarball,
+        ].map(p => path.basename(p));
+
+        const publishOrderPath = path.join(builtNpm, "publish-order.txt");
+        await fs.promises.writeFile(publishOrderPath, publishOrder.join("\n") + "\n");
+    },
+});
+
+export const packNativePreviewExtensions = task({
+    name: "native-preview:pack-extensions",
+    hiddenFromTaskList: true,
+    dependencies: options.forRelease ? undefined : [buildNativePreviewPackages, cleanSignTempDirectory],
+    run: async () => {
+        await rimraf(builtVsix);
+        await fs.promises.mkdir(builtVsix, { recursive: true });
+
+        await $({ cwd: extensionDir })`npm run bundle`;
+
+        const version = getVersion();
+        const platforms = nativePreviewPlatforms();
+
+        await Promise.all(platforms.map(async ({ npmDir, vscodeTarget, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
+            const npmLibDir = path.join(npmDir, "lib");
+            const extensionLibDir = path.join(thisExtensionDir, "lib");
+            await fs.promises.mkdir(extensionLibDir, { recursive: true });
+
+            await cpWithoutNodeModulesOrTsconfig(extensionDir, thisExtensionDir);
+            await cpWithoutNodeModulesOrTsconfig(npmLibDir, extensionLibDir);
+
+            const packageJsonPath = path.join(thisExtensionDir, "package.json");
+            const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+            packageJson.version = version;
+            packageJson.main = "dist/extension.bundle.js";
+            fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 4));
+
+            await fs.promises.copyFile("NOTICE.txt", path.join(thisExtensionDir, "NOTICE.txt"));
+
+            await $({ cwd: thisExtensionDir })`vsce package ${version} --pre-release --no-update-package-json --no-dependencies --out ${vsixPath} --target ${vscodeTarget}`;
+
+            if (options.forRelease) {
+                await $({ cwd: thisExtensionDir })`vsce generate-manifest --packagePath ${vsixPath} --out ${vsixManifestPath}`;
+                await fs.promises.cp(vsixManifestPath, vsixSignaturePath);
+            }
+        }));
+    },
+});
+
+export const signNativePreviewExtensions = task({
+    name: "native-preview:sign-extensions",
+    hiddenFromTaskList: true,
+    run: async () => {
+        if (!options.forRelease) {
+            throw new Error("This task should not be run in non-release builds.");
+        }
+
+        const platforms = nativePreviewPlatforms();
+        await sign({
+            SignFileRecordList: [
+                {
+                    SignFileList: platforms.map(({ vsixSignaturePath }) => ({ SrcPath: vsixSignaturePath, DstPath: null })),
+                    Certs: "VSCodePublisher",
+                },
+            ],
+        });
+    },
+});
+
+export const nativePreview = task({
+    name: "native-preview",
+    dependencies: options.forRelease ? undefined : [packNativePreviewPackages, packNativePreviewExtensions],
+    run: options.forRelease ? async () => {
+        throw new Error("This task should not be run in release builds.");
+    } : undefined,
+});
+
+export const installExtension = task({
+    name: "install-extension",
+    dependencies: options.forRelease ? undefined : [packNativePreviewExtensions],
+    run: async () => {
+        if (options.forRelease) {
+            throw new Error("This task should not be run in release builds.");
+        }
+
+        const platforms = nativePreviewPlatforms();
+        const myPlatform = platforms.find(p => p.nodeOs === process.platform && p.nodeArch === process.arch);
+        if (!myPlatform) {
+            throw new Error(`No platform found for ${process.platform}-${process.arch}`);
+        }
+
+        await $`${options.insiders ? "code-insiders" : "code"} --install-extension ${myPlatform.vsixPath}`;
+        console.log(pc.yellowBright("\nExtension installed. ") + "To enable this extension, set:\n");
+        console.log(pc.whiteBright(`    "typescript.experimental.useTsgo": true\n`));
+        console.log("To configure the extension to use built/local instead of its bundled tsgo, set:\n");
+        console.log(pc.whiteBright(`    "typescript.native-preview.tsdk": "${path.join(__dirname, "built", "local")}"\n`));
+    },
+});

@@ -1,9 +1,10 @@
 {
-    "name": "typescript-lsp",
-    "displayName": "TypeScript (LSP)",
-    "publisher": "typescript",
+    "name": "native-preview",
+    "displayName": "TypeScript (Native Preview)",
+    "publisher": "TypeScriptTeam",
     "author": "Microsoft Corp.",
-    "description": "Test extension for typescript-go",
+    "description": "Preview of the native TypeScript language server for Visual Studio Code.",
+    "icon": "logo.png",
     "private": true,
     "version": "0.0.0",
     "type": "commonjs",
@@ -12,7 +13,12 @@
         "url": "https://github.com/microsoft/typescript-go"
     },
     "engines": {
-        "vscode": "^1.91.0"
+        "vscode": "^1.100.0"
+    },
+    "capabilities": {
+        "untrustedWorkspaces": {
+            "supported": false
+        }
     },
     "activationEvents": [
         "onLanguage:javascript",
@@ -23,9 +29,9 @@
     "contributes": {
         "configuration": [
             {
-                "title": "TypeScript Go",
+                "title": "TypeScript Native Preview",
                 "properties": {
-                    "typescript-go.trace.server": {
+                    "typescript.native-preview.trace.server": {
                         "type": "string",
                         "enum": [
                             "off",
@@ -33,52 +39,73 @@
                             "verbose"
                         ],
                         "default": "verbose",
-                        "description": "Trace TypeScript Go server communication."
+                        "description": "Trace TypeScript Go server communication.",
+                        "tags": ["experimental"]
                     },
-                    "typescript-go.pprofDir": {
+                    "typescript.native-preview.pprofDir": {
                         "type": "string",
-                        "description": "Directory to write pprof profiles to."
+                        "description": "Directory to write pprof profiles to.",
+                        "tags": ["experimental"]
                     },
-                    "typescript-go.executablePath": {
+                    "typescript.native-preview.tsdk": {
                         "type": "string",
-                        "description": "Path to the tsgo binary. If not specified, the extension will look for it in the default location."
+                        "description": "Path to the @typescript/native-preview package or tsgo binary directory. If not specified, the extension will look for it in the default location.",
+                        "tags": ["experimental"]
                     }
                 }
             }
         ],
         "commands": [
             {
-                "command": "typescript-go.restart",
-                "title": "TypeScript Go: Restart Language Server",
-                "enablement": "typescript-go.serverRunning"
+                "command": "typescript.native-preview.enable",
+                "title": "Enable (Experimental)",
+                "enablement": "!typescript.native-preview.serverRunning",
+                "category": "TypeScript Native Preview"
+            },
+            {
+                "command": "typescript.native-preview.disable",
+                "title": "Disable",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "TypeScript Native Preview"
+            },
+            {
+                "command": "typescript.native-preview.restart",
+                "title": "Restart Language Server",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "TypeScript Native Preview"
+            },
+            {
+                "command": "typescript.native-preview.output.focus",
+                "title": "Show Output",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "TypeScript Native Preview"
+            },
+            {
+                "command": "typescript.native-preview.lsp-trace.focus",
+                "title": "Show LSP Trace",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "TypeScript Native Preview"
             }
-        ],
-        "menus": {
-            "commandPalette": [
-                {
-                    "command": "typescript-go.restart",
-                    "when": "typescript-go.serverRunning"
-                }
-            ]
-        }
+        ]
     },
     "main": "./dist/extension.js",
     "files": [
-        "dist"
+        "dist/extension.bundle.js",
+        "lib",
+        "LICENSE",
+        "NOTICE.txt",
+        "logo.png"
     ],
     "scripts": {
         "build": "tsc",
         "watch": "tsc --watch",
-        "build:prod": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.js --minify",
-        "package": "vsce package --skip-license --no-dependencies --out typescript-lsp.vsix",
-        "install-extension": "code --install-extension typescript-lsp.vsix",
-        "vscode:prepublish": "npm run build:prod"
+        "bundle": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.bundle.js --minify"
     },
     "dependencies": {
         "vscode-languageclient": "^9.0.1"
     },
     "devDependencies": {
-        "@types/vscode": "^1.91.0",
+        "@types/vscode": "^1.100.0",
         "@vscode/vsce": "^3.3.2",
         "esbuild": "^0.25.2"
     }

@@ -2,8 +2,24 @@
 
 [Not sure what this is? Read the announcement post!](https://devblogs.microsoft.com/typescript/typescript-native-port/)
 
-This repo is very much under active development; as such there are no published artifacts at this time.
-Interested developers can clone and run locally to try out things as they become available.
+## Preview
+
+A preview build is available on npm as `@typescript/native-preview`.
+
+```sh
+npm install @typescript/native-preview
+npx tsgo # Use this as you would tsc.
+```
+
+A preview VS Code extension is [available on the VS Code marketplace](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview).
+
+To use this, set this in your VS Code settings:
+
+```json
+{
+    "typescript.experimental.useTsgo": true
+}
+```
 
 ## How to Build and Run
 
@@ -44,12 +60,7 @@ After running `hereby build`, you can run `built/local/tsgo`, which behaves most
 
 ### Running LSP Prototype
 
-* Run `hereby build` to build the LSP server
-* Run `hereby install-extension` to build and install the VS Code extension. (Use `--insiders` to target `code-insiders` instead of `code`.)
-* Copy the `"typescript-go.executablePath"` setting printed by `hereby install-extension` to your VS Code settings.
-* Select "TypeScript: Use TypeScript Go (Experimental)" from the VS Code command palette (or set `"typescript.experimental.useTsgo"` in your VS Code settings).
-
-Alternatively, to debug and run the VS Code extension without installing it globally:
+To debug and run the VS Code extension without installing it globally:
 
 * Run VS Code in the repo workspace (`code .`)
 * Copy `.vscode/launch.template.json` to `.vscode/launch.json`

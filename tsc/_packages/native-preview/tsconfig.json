@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "node16",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowJs": true,
+        "checkJs": true,
+        "noEmit": true,
+        "useUnknownInCatchVariables": false
+    },
+    "include": ["bin"]
+}
