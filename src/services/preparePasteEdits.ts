@@ -2,7 +2,17 @@ import {
     findAncestor,
     forEachChild,
     getTokenAtPosition,
+    isExportAssignment,
+    isExportDeclaration,
+    isExportSpecifier,
     isIdentifier,
+    isImportClause,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
+    isImportSpecifier,
+    isNamedExports,
+    isNamedImports,
+    isNamespaceImport,
     rangeContainsPosition,
     rangeContainsRange,
     SourceFile,
@@ -25,6 +35,13 @@ export function preparePasteEdits(
             ancestorNode => rangeContainsRange(ancestorNode, range),
         );
         if (!enclosingNode) return;
+        if (
+            isImportSpecifier(enclosingNode) || isImportClause(enclosingNode) || isNamespaceImport(enclosingNode) || isImportEqualsDeclaration(enclosingNode)
+            || isImportDeclaration(enclosingNode) || isNamedImports(enclosingNode) || isExportSpecifier(enclosingNode) || isNamedExports(enclosingNode)
+            || isExportAssignment(enclosingNode) || isExportDeclaration(enclosingNode)
+        ) {
+            return;
+        }
         forEachChild(enclosingNode, function checkNameResolution(node) {
             if (shouldProvidePasteEdits) return;
             if (isIdentifier(node) && rangeContainsPosition(range, node.getStart(sourceFile))) {
