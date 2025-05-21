@@ -4553,6 +4553,17 @@ export interface ParseConfigHost extends ModuleResolutionHost {
  */
 export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never; };
 
+/** @internal */
+export interface ResolvedRefAndOutputDts {
+    resolvedRef: ResolvedProjectReference;
+    outputDts?: string; // Not set if its a json source file
+}
+/** @internal */
+export interface ResolvedRefAndSource {
+    resolvedRef: ResolvedProjectReference;
+    source?: string; // Not set if options have --outFile
+}
+
 export interface WriteFileCallbackData {
     /** @internal */ sourceMapUrlPos?: number;
     /** @internal */ buildInfo?: BuildInfo;
@@ -4907,15 +4918,14 @@ export interface Program extends ScriptReferenceHost {
 
     getProjectReferences(): readonly ProjectReference[] | undefined;
     getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
-    /** @internal */ getProjectReferenceRedirect(fileName: string): string | undefined;
     /**
      * @internal
      * Get the referenced project if the file is input file from that reference project
      */
-    getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
+    getRedirectFromSourceFile(fileName: string): ResolvedRefAndOutputDts | undefined;
     /** @internal */ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
-    /** @internal */ getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
+    /** @internal */ getRedirectFromOutput(filePath: Path): ResolvedRefAndSource | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     /** @internal */ getCompilerOptionsForFile(file: SourceFile): CompilerOptions;
     /** @internal */ getBuildInfo?(): BuildInfo;
@@ -5031,10 +5041,10 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
 
     getSourceFiles(): readonly SourceFile[];
     getSourceFile(fileName: string): SourceFile | undefined;
-    getProjectReferenceRedirect(fileName: string): string | undefined;
+    getRedirectFromSourceFile(fileName: string): ResolvedRefAndOutputDts | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getEmitSyntaxForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
-    getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
+    getRedirectFromOutput(filePath: Path): ResolvedRefAndSource | undefined;
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
     getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
     getImpliedNodeFormatForEmit(sourceFile: SourceFile): ResolutionMode;
@@ -8176,11 +8186,6 @@ export interface CompilerHost extends ModuleResolutionHost {
     jsDocParsingMode?: JSDocParsingMode;
 }
 
-/** true if --out otherwise source file name *
- * @internal
- */
-export type SourceOfProjectReferenceRedirect = string | true;
-
 /** @internal */
 export const enum TransformFlags {
     None = 0,
@@ -8566,7 +8571,7 @@ export const enum EmitHint {
 export interface SourceFileMayBeEmittedHost {
     getCompilerOptions(): CompilerOptions;
     isSourceFileFromExternalLibrary(file: SourceFile): boolean;
-    getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
+    getRedirectFromSourceFile(fileName: string): ResolvedRefAndOutputDts | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getCurrentDirectory(): string;
     getCanonicalFileName: GetCanonicalFileName;
@@ -9966,7 +9971,7 @@ export interface ModuleSpecifierResolutionHost {
     getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
     readonly redirectTargetsMap: RedirectTargetsMap;
-    getProjectReferenceRedirect(fileName: string): string | undefined;
+    getRedirectFromSourceFile(fileName: string): ResolvedRefAndOutputDts | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     getCommonSourceDirectory(): string;

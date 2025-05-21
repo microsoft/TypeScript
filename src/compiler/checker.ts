@@ -4719,7 +4719,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
                 else if (resolvedModule.resolvedUsingTsExtension && shouldRewrite) {
-                    const redirect = host.getResolvedProjectReferenceToRedirect(sourceFile.path);
+                    const redirect = host.getRedirectFromSourceFile(sourceFile.path)?.resolvedRef;
                     if (redirect) {
                         const ignoreCase = !host.useCaseSensitiveFileNames();
                         const ownRootDir = host.getCommonSourceDirectory();
@@ -4814,9 +4814,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (moduleNotFoundError) {
             // See if this was possibly a projectReference redirect
             if (resolvedModule) {
-                const redirect = host.getProjectReferenceRedirect(resolvedModule.resolvedFileName);
-                if (redirect) {
-                    error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect, resolvedModule.resolvedFileName);
+                const redirect = host.getRedirectFromSourceFile(resolvedModule.resolvedFileName);
+                if (redirect?.outputDts) {
+                    error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect.outputDts, resolvedModule.resolvedFileName);
                     return undefined;
                 }
             }
@@ -41530,7 +41530,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
-            const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
+            const redirect = host.getRedirectFromOutput(getSourceFileOfNode(constEnumDeclaration).resolvedPath)?.resolvedRef;
             if (constEnumDeclaration.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(node) && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
                 error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
             }
@@ -48184,7 +48184,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     targetFlags & SymbolFlags.ConstEnum
                 ) {
                     const constEnumDeclaration = target.valueDeclaration as EnumDeclaration;
-                    const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
+                    const redirect = host.getRedirectFromOutput(getSourceFileOfNode(constEnumDeclaration).resolvedPath)?.resolvedRef;
                     if (constEnumDeclaration.flags & NodeFlags.Ambient && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
                         error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
                     }
@@ -53374,7 +53374,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         getPackageJsonInfoCache: () => host.getPackageJsonInfoCache?.(),
         useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         redirectTargetsMap: host.redirectTargetsMap,
-        getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
+        getRedirectFromSourceFile: fileName => host.getRedirectFromSourceFile(fileName),
         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
         fileExists: fileName => host.fileExists(fileName),
         getFileIncludeReasons: () => host.getFileIncludeReasons(),
