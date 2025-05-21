@@ -1,0 +1,18 @@
+globalThisBlockscopedProperties2.ts(3,27): error TS2339: Property 'invalid1' does not exist on type 'typeof globalThis'.
+globalThisBlockscopedProperties2.ts(4,20): error TS2339: Property 'invalid1' does not exist on type 'typeof globalThis'.
+globalThisBlockscopedProperties2.ts(5,20): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+
+
+==== globalThisBlockscopedProperties2.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/58345
+    
+    let invalid1 = globalThis.invalid1;
+                              ~~~~~~~~
+!!! error TS2339: Property 'invalid1' does not exist on type 'typeof globalThis'.
+    let y = globalThis.invalid1;
+                       ~~~~~~~~
+!!! error TS2339: Property 'invalid1' does not exist on type 'typeof globalThis'.
+    let z = globalThis.invalid2;
+                       ~~~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+    
