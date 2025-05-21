@@ -45,33 +45,6 @@ extends:
                 submodules: false
                 retryCountOnTaskFailure: 3
 
-              - task: NodeTool@0
-                inputs:
-                  versionSpec: 20.x
-                displayName: 'Install Node'
-
-              - bash: |
-                  npm install -g `node -e 'console.log(JSON.parse(fs.readFileSync("package.json", "utf8")).packageManager)'`
-                  npm --version
-                displayName: 'Install packageManager from package.json'
-
-              # Do --ignore-scripts for now to avoid needing to install/build rust.
-              - bash: npm ci --ignore-scripts
-                displayName: 'npm ci'
-
-              - bash: |
-                  set -euo pipefail
-                  version=$(grep -oP '^go \K[0-9]+\.[0-9]+' go.mod)
-                  curl -SL -o '$(Agent.BuildDirectory)/golang.tar.gz' https://aka.ms/golang/release/latest/go${version}.linux-amd64.tar.gz
-                  tar -C '$(Agent.BuildDirectory)' -xzf '$(Agent.BuildDirectory)/golang.tar.gz'
-                  rm -f '$(Agent.BuildDirectory)/golang.tar.gz'
-                  echo '##vso[task.prependpath]$(Agent.BuildDirectory)/go/bin'
-                displayName: 'Install Go'
-
-              - bash: |
-                  which go
-                  go version
-                displayName: 'Check Go version'
-
-              - bash: npx hereby build
-                displayName: 'Build'
+              - task: ComponentGovernanceComponentDetection@0
+                condition: succeededOrFailed()
+                continueOnError: True
