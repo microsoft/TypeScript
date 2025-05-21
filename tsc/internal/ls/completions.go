@@ -296,7 +296,12 @@ func (l *LanguageService) getCompletionsAtPosition(
 
 	// !!! string literal completions
 
-	// !!! label completions
+	if previousToken != nil && ast.IsBreakOrContinueStatement(previousToken.Parent) &&
+		(previousToken.Kind == ast.KindBreakKeyword ||
+			previousToken.Kind == ast.KindContinueKeyword ||
+			previousToken.Kind == ast.KindIdentifier) {
+		return l.getLabelCompletionsAtPosition(previousToken.Parent, clientOptions, file, position)
+	}
 
 	checker, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
@@ -4102,4 +4107,67 @@ func (l *LanguageService) createLSPCompletionItem(
 		CommitCharacters: commitCharacters,
 		Data:             nil, // !!! auto-imports
 	}
+}
+
+func (l *LanguageService) getLabelCompletionsAtPosition(
+	node *ast.BreakOrContinueStatement,
+	clientOptions *lsproto.CompletionClientCapabilities,
+	file *ast.SourceFile,
+	position int,
+) *lsproto.CompletionList {
+	items := l.getLabelStatementCompletions(node, clientOptions, file, position)
+	if len(items) == 0 {
+		return nil
+	}
+	defaultCommitCharacters := getDefaultCommitCharacters(false /*isNewIdentifierLocation*/)
+	itemDefaults := setCommitCharacters(clientOptions, items, &defaultCommitCharacters)
+	return &lsproto.CompletionList{
+		IsIncomplete: false,
+		ItemDefaults: itemDefaults,
+		Items:        items,
+	}
+}
+
+func (l *LanguageService) getLabelStatementCompletions(
+	node *ast.BreakOrContinueStatement,
+	clientOptions *lsproto.CompletionClientCapabilities,
+	file *ast.SourceFile,
+	position int,
+) []*lsproto.CompletionItem {
+	var uniques core.Set[string]
+	var items []*lsproto.CompletionItem
+	current := node
+	for current != nil {
+		if ast.IsFunctionLike(current) {
+			break
+		}
+		if ast.IsLabeledStatement(current) {
+			name := current.Label().Text()
+			if !uniques.Has(name) {
+				uniques.Add(name)
+				items = append(items, l.createLSPCompletionItem(
+					name,
+					"", /*insertText*/
+					"", /*filterText*/
+					SortTextLocationPriority,
+					ScriptElementKindLabel,
+					core.Set[ScriptElementKindModifier]{}, /*kindModifiers*/
+					nil,                                   /*replacementSpan*/
+					nil,                                   /*optionalReplacementSpan*/
+					nil,                                   /*commitCharacters*/
+					nil,                                   /*labelDetails*/
+					file,
+					position,
+					clientOptions,
+					false, /*isMemberCompletion*/
+					false, /*isSnippet*/
+					false, /*hasAction*/
+					false, /*preselect*/
+					"",    /*source*/
+				))
+			}
+		}
+		current = current.Parent
+	}
+	return items
 }
