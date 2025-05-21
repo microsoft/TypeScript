@@ -20,6 +20,7 @@ import {
     createDocumentRegistryInternal,
     createGetCanonicalFileName,
     createMultiMap,
+    createSharedResolutionCache,
     Debug,
     Diagnostic,
     directorySeparator,
@@ -114,6 +115,7 @@ import {
     returnNoopFileWatcher,
     ScriptKind,
     SharedExtendedConfigFileWatcher,
+    SharedResolutionCache,
     some,
     SourceFile,
     SourceFileLike,
@@ -1283,6 +1285,9 @@ export class ProjectService {
     /** @internal */
     readonly documentRegistry: DocumentRegistry;
 
+    /** @internal */
+    readonly sharedResolutionCache: SharedResolutionCache;
+
     /**
      * Container of all known scripts
      *
@@ -1424,6 +1429,7 @@ export class ProjectService {
     /** @internal */ baseline: (title?: string) => void = noop;
     /** @internal */ verifyDocumentRegistry: typeof noop = noop;
     /** @internal */ verifyProgram: (project: Project) => void = noop;
+    /** @internal */ verifyUnresovedImports: (project: Project) => void = noop;
     /** @internal */ onProjectCreation: (project: Project) => void = noop;
     /** @internal */ canUseWatchEvents: boolean;
 
@@ -1505,7 +1511,19 @@ export class ProjectService {
                 getDetailWatchInfo,
             );
         this.canUseWatchEvents = getCanUseWatchEvents(this, opts.canUseWatchEvents);
+        this.sharedResolutionCache = createSharedResolutionCache({
+            getCurrentDirectory: this.host.getCurrentDirectory.bind(this.host),
+            toPath: this.toPath.bind(this),
+            getCanonicalFileName: this.toCanonicalFileName,
+            preferNonRecursiveWatch: this.canUseWatchEvents || this.host.preferNonRecursiveWatch,
+            fileIsOpen: this.fileIsOpen.bind(this),
+        });
         opts.incrementalVerifier?.(this);
+    }
+
+    /** @internal */
+    fileIsOpen(filePath: Path): boolean {
+        return this.openFiles.has(filePath);
     }
 
     toPath(fileName: string): Path {
@@ -1594,12 +1612,7 @@ export class ProjectService {
         switch (response.kind) {
             case ActionSet:
                 // Update the typing files and update the project
-                project.updateTypingFiles(
-                    response.compilerOptions,
-                    response.typeAcquisition,
-                    response.unresolvedImports,
-                    response.typings,
-                );
+                project.updateTypingFiles(response);
                 return;
             case ActionInvalidate:
                 // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results

@@ -7,6 +7,7 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyAlternateResultScenario } from "../helpers/alternateResult.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import { forEachPackageJsonScopeScenario } from "../helpers/packageJsonScope.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -200,4 +201,16 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             },
         ],
     });
+
+    forEachPackageJsonScopeScenario(
+        /*forTsserver*/ false,
+        (subScenario, sys, edits, project) =>
+            verifyTsc({
+                scenario: "moduleResolution",
+                subScenario,
+                sys,
+                commandLineArgs: ["-p", project, "--explainFiles", "--extendedDiagnostics"],
+                edits: edits(),
+            }),
+    );
 });
