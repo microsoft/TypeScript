@@ -19,6 +19,11 @@ extends:
       os: linux
 
     sdl:
+      git:
+        submodules: false
+        fetchDepth: 1
+        fetchTags: false
+        retryCount: 3
       enableProductionSDL: true
       sourceAnalysisPool:
         name: TypeScript-AzurePipelines-EO
@@ -38,6 +43,12 @@ extends:
                 fetchDepth: 1
                 fetchTags: false
                 submodules: false
+                retryCountOnTaskFailure: 3
+
+              - task: NodeTool@0
+                inputs:
+                  versionSpec: 20.x
+                displayName: 'Install Node'
 
               - bash: |
                   npm install -g `node -e 'console.log(JSON.parse(fs.readFileSync("package.json", "utf8")).packageManager)'`
@@ -63,3 +74,4 @@ extends:
                 displayName: 'Check Go version'
 
               - bash: npx hereby build
+                displayName: 'Build'
