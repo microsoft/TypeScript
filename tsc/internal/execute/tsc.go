@@ -118,9 +118,8 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 		// updateReportDiagnostic
 		if isWatchSet(configParseResult.CompilerOptions()) {
 			return ExitStatusSuccess, createWatcher(sys, configParseResult, reportDiagnostic)
-		} else if isIncrementalCompilation(configParseResult.CompilerOptions()) {
-			return ExitStatusNotImplementedIncremental, nil
 		}
+		// !!! incremental
 		return performCompilation(
 			sys,
 			cb,
@@ -136,9 +135,8 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 		if isWatchSet(compilerOptionsFromCommandLine) {
 			// !!! reportWatchModeWithoutSysSupport
 			return ExitStatusSuccess, createWatcher(sys, commandLine, reportDiagnostic)
-		} else if isIncrementalCompilation(compilerOptionsFromCommandLine) {
-			return ExitStatusNotImplementedIncremental, nil
 		}
+		// !!! incremental
 	}
 	return performCompilation(
 		sys,

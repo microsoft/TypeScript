@@ -12,13 +12,12 @@ export class class1 {}
 	},
 }
 
-ExitStatus:: 7
+ExitStatus:: 0
 
 CompilerOptions::{
     "noEmit": true
 }
 Output::
-No output
 //// [/home/src/workspaces/project/class1.ts] no change
 //// [/home/src/workspaces/project/tsconfig.json] no change
 
