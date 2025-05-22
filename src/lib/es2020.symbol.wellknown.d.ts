@@ -21,3 +21,12 @@ interface RegExp {
      */
     [Symbol.matchAll](str: string): RegExpStringIterator<RegExpMatchArray>;
 }
+
+interface String {
+    /**
+     * Matches a string or an object that supports being matched against, and
+     * returns an iterable of matches containing the results of that search.
+     * @param regexp An object that supports being matched against.
+     */
+    matchAll(matcher: { [Symbol.matchAll](str: string): RegExpStringIterator<RegExpMatchArray>; }): RegExpStringIterator<RegExpExecArray>;
+}
