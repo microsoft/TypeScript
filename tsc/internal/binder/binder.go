@@ -797,17 +797,17 @@ func (b *Binder) bindModuleDeclaration(node *ast.Node) {
 		if ast.IsModuleAugmentationExternal(node) {
 			b.declareModuleSymbol(node)
 		} else {
-			var pattern core.Pattern
 			name := node.AsModuleDeclaration().Name()
-			if ast.IsStringLiteral(name) {
-				pattern = core.TryParsePattern(name.AsStringLiteral().Text)
-				if !pattern.IsValid() {
-					b.errorOnFirstToken(name, diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, name.AsStringLiteral().Text)
-				}
-			}
 			symbol := b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsValueModule, ast.SymbolFlagsValueModuleExcludes)
-			if pattern.StarIndex >= 0 {
-				b.file.PatternAmbientModules = append(b.file.PatternAmbientModules, &ast.PatternAmbientModule{Pattern: pattern, Symbol: symbol})
+
+			if ast.IsStringLiteral(name) {
+				pattern := core.TryParsePattern(name.AsStringLiteral().Text)
+				if !pattern.IsValid() {
+					// An invalid pattern - must have multiple wildcards.
+					b.errorOnFirstToken(name, diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, name.AsStringLiteral().Text)
+				} else if pattern.StarIndex >= 0 {
+					b.file.PatternAmbientModules = append(b.file.PatternAmbientModules, &ast.PatternAmbientModule{Pattern: pattern, Symbol: symbol})
+				}
 			}
 		}
 	} else {
