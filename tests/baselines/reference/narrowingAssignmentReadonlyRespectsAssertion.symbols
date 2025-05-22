@@ -84,9 +84,9 @@ function testFunc() {
 >val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 32))
 
       if (Array.isArray(val1)) {
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
 
           // This should retain val1 as being an array

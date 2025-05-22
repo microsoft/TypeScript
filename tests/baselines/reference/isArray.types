@@ -1,39 +1,190 @@
 //// [tests/cases/compiler/isArray.ts] ////
 
 === isArray.ts ===
-var maybeArray: number | number[];
->maybeArray : number | number[]
->           : ^^^^^^^^^^^^^^^^^
+/// @errors: 2322 4104
 
+// https://github.com/microsoft/TypeScript/issues/17002
+// Preserves mutability, false branch removes arrays, mutable or not
 
-if (Array.isArray(maybeArray)) {
->Array.isArray(maybeArray) : boolean
->                          : ^^^^^^^
->Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^            
+declare const mutable: string | string[];
+>mutable : string | string[]
+>        : ^^^^^^^^^^^^^^^^^
+
+if (Array.isArray(mutable)) {
+>Array.isArray(mutable) : boolean
+>                       : ^^^^^^^
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^            
->maybeArray : number | number[]
->           : ^^^^^^^^^^^^^^^^^
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>mutable : string | string[]
+>        : ^^^^^^^^^^^^^^^^^
 
-    maybeArray.length; // OK
->maybeArray.length : number
->                  : ^^^^^^
->maybeArray : number[]
+  const stillMutable: string[] = mutable;
+>stillMutable : string[]
+>             : ^^^^^^^^
+>mutable : string[]
+>        : ^^^^^^^^
+
+} else {
+  const narrowed: string = mutable;
+>narrowed : string
+>         : ^^^^^^
+>mutable : string
+>        : ^^^^^^
+}
+
+declare const immutable: string | readonly string[];
+>immutable : string | readonly string[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+if (Array.isArray(immutable)) {
+>Array.isArray(immutable) : boolean
+>                         : ^^^^^^^
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>immutable : string | readonly string[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const notMutable: string[] = immutable; // Should fail: readonly string[] isn't assignable to string[]
+>notMutable : string[]
 >           : ^^^^^^^^
->length : number
->       : ^^^^^^
+>immutable : readonly string[]
+>          : ^^^^^^^^^^^^^^^^^
+
+} else {
+  const narrowed: string = immutable;
+>narrowed : string
+>         : ^^^^^^
+>immutable : string
+>          : ^^^^^^
 }
-else {
-    maybeArray.toFixed(); // OK
->maybeArray.toFixed() : string
->                     : ^^^^^^
->maybeArray.toFixed : (fractionDigits?: number) => string
->                   : ^              ^^^      ^^^^^      
->maybeArray : number
->           : ^^^^^^
->toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^      
+
+// https://github.com/microsoft/TypeScript/issues/33700
+// Preserves element or iterated type of wider types
+
+declare const arrayLike: string | ArrayLike<string>;
+>arrayLike : string | ArrayLike<string>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+if (Array.isArray(arrayLike)) {
+>Array.isArray(arrayLike) : boolean
+>                         : ^^^^^^^
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>arrayLike : string | ArrayLike<string>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const arrayOfElementType: readonly string[] = arrayLike;
+>arrayOfElementType : readonly string[]
+>                   : ^^^^^^^^^^^^^^^^^
+>arrayLike : readonly string[]
+>          : ^^^^^^^^^^^^^^^^^
+
+  const notArrayOfAny: readonly void[] = arrayLike; // Should fail: string isn't assignable to void
+>notArrayOfAny : readonly void[]
+>              : ^^^^^^^^^^^^^^^
+>arrayLike : readonly string[]
+>          : ^^^^^^^^^^^^^^^^^
 }
+
+declare const iterable: string | Iterable<string>;
+>iterable : string | Iterable<string>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+if (Array.isArray(iterable)) {
+>Array.isArray(iterable) : boolean
+>                        : ^^^^^^^
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>iterable : string | Iterable<string>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const arrayOfIteratedType: readonly string[] = iterable;
+>arrayOfIteratedType : readonly string[]
+>                    : ^^^^^^^^^^^^^^^^^
+>iterable : readonly string[]
+>         : ^^^^^^^^^^^^^^^^^
+
+  const notArrayOfAny: readonly void[] = iterable; // Should fail: string isn't assignable to void
+>notArrayOfAny : readonly void[]
+>              : ^^^^^^^^^^^^^^^
+>iterable : readonly string[]
+>         : ^^^^^^^^^^^^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/pull/42316#discussion_r823218462
+// any and unknown backward compatibility
+
+declare const any: any;
+>any : any
+>    : ^^^
+
+if (Array.isArray(any)) {
+>Array.isArray(any) : boolean
+>                   : ^^^^^^^
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>any : any
+>    : ^^^
+
+  const mutableArrayOfAny: void[] = any;
+>mutableArrayOfAny : void[]
+>                  : ^^^^^^
+>any : any[]
+>    : ^^^^^
+
+  const notAny: void = any; // Should fail: any[] isn't assignable to void
+>notAny : void
+>       : ^^^^
+>any : any[]
+>    : ^^^^^
+}
+
+declare const unknown: unknown;
+>unknown : unknown
+>        : ^^^^^^^
+
+if (Array.isArray(unknown)) {
+>Array.isArray(unknown) : boolean
+>                       : ^^^^^^^
+>Array.isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>              : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : { <T>(arg: ArrayLike<T>): arg is readonly T[]; (arg: unknown): arg is any[]; <T>(arg: Iterable<T>): arg is readonly T[]; }
+>        : ^^^ ^^   ^^            ^^^                   ^^^   ^^       ^^^            ^^^ ^^   ^^           ^^^                   ^^^
+>unknown : unknown
+>        : ^^^^^^^
+
+  const mutableArrayOfAny: void[] = unknown;
+>mutableArrayOfAny : void[]
+>                  : ^^^^^^
+>unknown : any[]
+>        : ^^^^^
+
+  const notAny: void = unknown; // Should fail: any[] isn't assignable to void
+>notAny : void
+>       : ^^^^
+>unknown : any[]
+>        : ^^^^^
+}
+

@@ -76,6 +76,8 @@ interface Array<T> {
 }
 
 interface ArrayConstructor {
+    isArray<T>(arg: Iterable<T>): arg is readonly T[];
+
     /**
      * Creates an array from an iterable object.
      * @param iterable An iterable object to convert to an array.
