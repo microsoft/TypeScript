@@ -119,6 +119,7 @@ import {
     EntityNameExpression,
     EntityNameOrEntityNameExpression,
     EnumDeclaration,
+    EnumDeclarationType,
     EqualityComparer,
     equalOwnProperties,
     EqualsToken,
@@ -276,6 +277,7 @@ import {
     isDecorator,
     isElementAccessExpression,
     isEnumDeclaration,
+    isEnumLiteralDeclaration,
     isEnumMember,
     isExportAssignment,
     isExportDeclaration,
@@ -2589,7 +2591,7 @@ export function isJsonSourceFile(file: SourceFile): file is JsonSourceFile {
 }
 
 /** @internal */
-export function isEnumConst(node: EnumDeclaration): boolean {
+export function isEnumConst(node: EnumDeclarationType): boolean {
     return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
 }
 
@@ -5893,6 +5895,7 @@ export function getOperatorPrecedence(nodeKind: SyntaxKind, operatorKind: Syntax
         case SyntaxKind.StringLiteral:
         case SyntaxKind.ArrayLiteralExpression:
         case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.EnumLiteralExpression:
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.ClassExpression:
@@ -6810,6 +6813,7 @@ export function getAllAccessorDeclarations(declarations: readonly Declaration[] 
 export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
     if (!isInJSFile(node) && isFunctionDeclaration(node)) return undefined;
     if (isTypeAliasDeclaration(node)) return undefined; // has a .type, is not a type annotation
+    if (isEnumLiteralDeclaration(node)) return undefined; // has a type reference, but is not used as a hint about the meaning of the initializer.
     const type = (node as HasType).type;
     if (type || !isInJSFile(node)) return type;
     return isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node);
