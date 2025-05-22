@@ -75,6 +75,7 @@ module M {
 
 	export declare var exported_var;
 >exported_var : any
+>             : ^^^
 
 	var y = x + x;
 >y : number
@@ -254,7 +255,9 @@ var alpha = M.E.A;
 
 var omega = M.exported_var;
 >omega : any
+>      : ^^^
 >M.exported_var : any
+>               : ^^^
 >M : typeof M
 >  : ^^^^^^^^
 >exported_var : any

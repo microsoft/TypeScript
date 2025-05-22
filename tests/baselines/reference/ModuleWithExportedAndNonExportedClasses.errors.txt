@@ -1,9 +1,12 @@
+ModuleWithExportedAndNonExportedClasses.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ModuleWithExportedAndNonExportedClasses.ts(30,16): error TS2339: Property 'A2' does not exist on type 'typeof A'.
 ModuleWithExportedAndNonExportedClasses.ts(31,17): error TS2339: Property 'A2' does not exist on type 'typeof A'.
 
 
-==== ModuleWithExportedAndNonExportedClasses.ts (2 errors) ====
+==== ModuleWithExportedAndNonExportedClasses.ts (3 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class A {
             id: number;
             name: string;

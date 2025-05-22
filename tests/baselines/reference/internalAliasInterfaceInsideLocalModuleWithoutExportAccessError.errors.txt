@@ -1,13 +1,19 @@
+internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(6,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(11,10): error TS2694: Namespace '"internalAliasInterfaceInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
 
 
-==== internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+==== internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts (3 errors) ====
     export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I {
         }
     }
     
     export module c {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import b = a.I;
         export var x: b;
     }

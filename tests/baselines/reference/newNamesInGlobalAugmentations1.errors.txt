@@ -1,0 +1,27 @@
+f1.d.ts(3,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+f1.d.ts(3,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== f1.d.ts (2 errors) ====
+    export {};
+    
+    declare module M.M1 {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export let x: number;
+    }
+    declare global {
+        interface SymbolConstructor {
+            observable: symbol;
+        }
+        class Cls {x}
+        let [a, b]: number[];
+        export import X = M.M1.x;
+    }
+    
+==== main.ts (0 errors) ====
+    Symbol.observable;
+    new Cls().x
+    let c = a + b + X;

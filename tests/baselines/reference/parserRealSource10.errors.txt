@@ -1,4 +1,5 @@
 parserRealSource10.ts(4,21): error TS6053: File 'typescript.ts' not found.
+parserRealSource10.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserRealSource10.ts(127,33): error TS2449: Class 'TokenInfo' used before its declaration.
 parserRealSource10.ts(127,43): error TS1011: An element access expression should take an argument.
 parserRealSource10.ts(128,36): error TS2693: 'string' only refers to a type, but is being used as a value here.
@@ -343,7 +344,7 @@ parserRealSource10.ts(356,53): error TS2304: Cannot find name 'NodeType'.
 parserRealSource10.ts(449,41): error TS1011: An element access expression should take an argument.
 
 
-==== parserRealSource10.ts (343 errors) ====
+==== parserRealSource10.ts (344 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -352,6 +353,8 @@ parserRealSource10.ts(449,41): error TS1011: An element access expression should
 !!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export enum TokenID {
             // Keywords
             Any,

@@ -1,11 +1,14 @@
+testGlo.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 testGlo.ts(2,39): error TS1147: Import declarations in a namespace cannot reference a module.
 testGlo.ts(2,39): error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 testGlo.ts(21,35): error TS1147: Import declarations in a namespace cannot reference a module.
 testGlo.ts(21,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== testGlo.ts (4 errors) ====
+==== testGlo.ts (5 errors) ====
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export import mExported = require("mExported");
                                           ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.

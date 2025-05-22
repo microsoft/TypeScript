@@ -1,8 +1,10 @@
 parserSuperExpression4.ts(3,9): error TS2335: 'super' can only be referenced in a derived class.
+parserSuperExpression4.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserSuperExpression4.ts(7,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserSuperExpression4.ts(10,13): error TS2335: 'super' can only be referenced in a derived class.
 
 
-==== parserSuperExpression4.ts (2 errors) ====
+==== parserSuperExpression4.ts (4 errors) ====
     class C {
         private foo() {
             super.foo = 1
@@ -12,6 +14,10 @@ parserSuperExpression4.ts(10,13): error TS2335: 'super' can only be referenced i
     }
     
     module M1.M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+              ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C {
             private foo() {
                 super.foo = 1

@@ -1,9 +1,13 @@
+a.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 a.ts(3,13): error TS1100: Invalid use of 'arguments' in strict mode.
+b.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 b.ts(3,13): error TS1100: Invalid use of 'arguments' in strict mode.
 
 
-==== a.ts (1 errors) ====
+==== a.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function f() {
             var arguments = [];
                 ~~~~~~~~~
@@ -11,8 +15,10 @@ b.ts(3,13): error TS1100: Invalid use of 'arguments' in strict mode.
         }
     }
     
-==== b.ts (1 errors) ====
+==== b.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function f2() {
             var arguments = [];
                 ~~~~~~~~~

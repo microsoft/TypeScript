@@ -1,0 +1,16 @@
+exportAssignmentInternalModule_A.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportAssignmentInternalModule_B.ts (0 errors) ====
+    import modM = require("exportAssignmentInternalModule_A");
+    
+    var n: number = modM.x;
+==== exportAssignmentInternalModule_A.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export var x;
+    }
+    
+    export = M;
+    

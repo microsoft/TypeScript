@@ -15,6 +15,7 @@ declare module Q {
 
 Q.f(function() {this;});
 >Q.f(function() {this;}) : any
+>                        : ^^^
 >Q.f : (fn: () => void) => any
 >    : ^  ^^          ^^^^^^^^
 >Q : typeof Q
@@ -24,4 +25,5 @@ Q.f(function() {this;});
 >function() {this;} : () => void
 >                   : ^^^^^^^^^^
 >this : any
+>     : ^^^
 

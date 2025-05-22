@@ -19,6 +19,7 @@ module TypeScript {
 
         export var diagnosticWriter = null;
 >diagnosticWriter : any
+>                 : ^^^
 
         export function Alert(output: string) {
 >Alert : (output: string) => void
@@ -28,10 +29,13 @@ module TypeScript {
 
             if (diagnosticWriter) {
 >diagnosticWriter : any
+>                 : ^^^
 
                 diagnosticWriter.Alert(output);
 >diagnosticWriter.Alert(output) : any
+>                               : ^^^
 >diagnosticWriter.Alert : any
+>                       : ^^^
 >diagnosticWriter : any
 >                 : ^^^
 >Alert : any

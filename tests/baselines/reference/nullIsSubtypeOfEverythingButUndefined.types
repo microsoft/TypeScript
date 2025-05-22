@@ -5,6 +5,7 @@
 
 var r0 = true ? null : null;
 >r0 : any
+>   : ^^^
 >true ? null : null : null
 >                   : ^^^^
 >true : true
@@ -12,6 +13,7 @@ var r0 = true ? null : null;
 
 var r0 = true ? null : null;
 >r0 : any
+>   : ^^^
 >true ? null : null : null
 >                   : ^^^^
 >true : true
@@ -19,22 +21,29 @@ var r0 = true ? null : null;
 
 var u: typeof undefined;
 >u : any
+>  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 var r0b = true ? u : null;
 >r0b : any
+>    : ^^^
 >true ? u : null : any
+>                : ^^^
 >true : true
 >     : ^^^^
 >u : any
+>  : ^^^
 
 var r0b = true ? null : u;
 >r0b : any
+>    : ^^^
 >true ? null : u : any
+>                : ^^^
 >true : true
 >     : ^^^^
 >u : any
+>  : ^^^
 
 var r1 = true ? 1 : null;
 >r1 : number

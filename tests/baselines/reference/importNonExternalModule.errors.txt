@@ -1,3 +1,4 @@
+foo_0.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 foo_1.ts(1,22): error TS2306: File 'foo_0.ts' is not a module.
 
 
@@ -10,8 +11,10 @@ foo_1.ts(1,22): error TS2306: File 'foo_0.ts' is not a module.
     
     }
     
-==== foo_0.ts (0 errors) ====
+==== foo_0.ts (1 errors) ====
     module foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export var answer = 42;
     }
     

@@ -1,11 +1,17 @@
+reboundIdentifierOnImportAlias.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+reboundIdentifierOnImportAlias.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 reboundIdentifierOnImportAlias.ts(6,16): error TS2437: Module 'Foo' is hidden by a local declaration with the same name.
 
 
-==== reboundIdentifierOnImportAlias.ts (1 errors) ====
+==== reboundIdentifierOnImportAlias.ts (3 errors) ====
     module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x = "hello";
     }
     module Bar {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var Foo = 1;
         import F = Foo;
                    ~~~

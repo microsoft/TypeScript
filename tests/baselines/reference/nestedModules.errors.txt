@@ -1,0 +1,62 @@
+nestedModules.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(1,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(14,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(14,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(21,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== nestedModules.ts (9 errors) ====
+    module A.B.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    }
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
+        }
+    }
+    
+    module M2.X {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+              ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Point {
+            x: number; y: number;
+        }
+    }
+    
+    module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module X {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var Point: number;
+        }
+    }
+    
+    var m = M2.X;
+    var point: number;
+    var point = m.Point;
+    
+    var p: { x: number; y: number; }
+    var p: M2.X.Point;
+    

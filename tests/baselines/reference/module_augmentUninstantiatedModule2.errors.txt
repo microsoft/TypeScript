@@ -1,0 +1,21 @@
+module_augmentUninstantiatedModule2.ts(3,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== module_augmentUninstantiatedModule2.ts (1 errors) ====
+    declare var ng: ng.IAngularStatic;
+    
+    declare module ng {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+       export interface IModule {
+          name: string;
+       }
+    
+       export interface IAngularStatic {
+           module: (s: string) => IModule;
+       }
+    }
+    
+    export = ng;
+    
+    

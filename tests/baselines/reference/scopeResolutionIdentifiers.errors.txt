@@ -1,17 +1,25 @@
+scopeResolutionIdentifiers.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+scopeResolutionIdentifiers.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 scopeResolutionIdentifiers.ts(24,14): error TS2729: Property 's' is used before its initialization.
+scopeResolutionIdentifiers.ts(31,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+scopeResolutionIdentifiers.ts(33,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== scopeResolutionIdentifiers.ts (1 errors) ====
+==== scopeResolutionIdentifiers.ts (5 errors) ====
     // EveryType used in a nested scope of a different EveryType with the same name, type of the identifier is the one defined in the inner scope
     
     var s: string;
     module M1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var s: number;
         var n = s;
         var n: number;
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var s: number;
         var n = s;
         var n: number;
@@ -36,8 +44,12 @@ scopeResolutionIdentifiers.ts(24,14): error TS2729: Property 's' is used before 
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var s: any;
         module M4 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var n = s;
             var n: any;
         }

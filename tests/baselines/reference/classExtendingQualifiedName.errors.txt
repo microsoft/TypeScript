@@ -1,8 +1,11 @@
+classExtendingQualifiedName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist on type 'typeof M'.
 
 
-==== classExtendingQualifiedName.ts (1 errors) ====
+==== classExtendingQualifiedName.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C {
         }
     

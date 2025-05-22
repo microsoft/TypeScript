@@ -1,8 +1,9 @@
 this_inside-enum-should-not-be-allowed.ts(2,36): error TS2332: 'this' cannot be referenced in current location.
+this_inside-enum-should-not-be-allowed.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 this_inside-enum-should-not-be-allowed.ts(7,30): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== this_inside-enum-should-not-be-allowed.ts (2 errors) ====
+==== this_inside-enum-should-not-be-allowed.ts (3 errors) ====
     enum TopLevelEnum {
         ThisWasAllowedButShouldNotBe = this // Should not be allowed
                                        ~~~~
@@ -10,6 +11,8 @@ this_inside-enum-should-not-be-allowed.ts(7,30): error TS2332: 'this' cannot be 
     }
     
     module ModuleEnum {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         enum EnumInModule {
             WasADifferentError = this // this was handled as if this was in a module
                                  ~~~~

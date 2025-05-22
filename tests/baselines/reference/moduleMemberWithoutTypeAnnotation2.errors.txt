@@ -1,0 +1,26 @@
+moduleMemberWithoutTypeAnnotation2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleMemberWithoutTypeAnnotation2.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleMemberWithoutTypeAnnotation2.ts (2 errors) ====
+    module TypeScript {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module CompilerDiagnostics {
+                      ~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+            export interface IDiagnosticWriter {
+                Alert(output: string): void;
+            }
+    
+            export var diagnosticWriter = null;
+    
+            export function Alert(output: string) {
+                if (diagnosticWriter) {
+                    diagnosticWriter.Alert(output);
+                }
+            }
+        }
+    }
+    

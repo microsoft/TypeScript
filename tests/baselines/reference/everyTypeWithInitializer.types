@@ -101,10 +101,13 @@ var anObject = new Object();
 
 var anAny = null;
 >anAny : any
+>      : ^^^
 
 var anOtherAny = <any> new C();
 >anOtherAny : any
+>           : ^^^
 ><any> new C() : any
+>              : ^^^
 >new C() : C
 >        : ^
 >C : typeof C
@@ -112,6 +115,7 @@ var anOtherAny = <any> new C();
 
 var anUndefined = undefined;
 >anUndefined : any
+>            : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -154,6 +158,7 @@ var aLambda = (x) => 2;
 >(x) => 2 : (x: any) => number
 >         : ^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
 >  : ^
 
@@ -188,5 +193,6 @@ var aFunctionInModule = M.F2;
 // no initializer or annotation, so this is an 'any'
 var x;
 >x : any
+>  : ^^^
 
 

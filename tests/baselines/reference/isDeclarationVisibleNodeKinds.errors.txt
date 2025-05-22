@@ -1,0 +1,98 @@
+isDeclarationVisibleNodeKinds.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+isDeclarationVisibleNodeKinds.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+isDeclarationVisibleNodeKinds.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+isDeclarationVisibleNodeKinds.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+isDeclarationVisibleNodeKinds.ts(31,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+isDeclarationVisibleNodeKinds.ts(38,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+isDeclarationVisibleNodeKinds.ts(45,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+isDeclarationVisibleNodeKinds.ts(52,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+isDeclarationVisibleNodeKinds.ts(59,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== isDeclarationVisibleNodeKinds.ts (9 errors) ====
+    // Function types
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function createValidator1(schema: any): <T>(data: T) => T {
+            return undefined;
+        }
+    }
+    
+    // Constructor types
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function createValidator2(schema: any): new <T>(data: T) => T {
+            return undefined;
+        }
+    }
+    
+    // union types
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+         export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
+            return undefined;
+        }
+    }
+    
+    // Array types
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+         export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
+            return undefined;
+        }
+    }
+    
+    
+    // TypeLiterals
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function createValidator5(schema: any): { new <T>(data: T): T } {
+            return undefined;
+        }
+    }
+    
+    // Tuple types
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function createValidator6(schema: any): [ new <T>(data: T) => T, number] {
+            return undefined;
+        }
+    }
+    
+    // Paren Types
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function createValidator7(schema: any): (new <T>(data: T)=>T )[] {
+            return undefined;
+        }
+    }
+    
+    // Type reference
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
+            return undefined;
+        }
+    }
+    
+    
+    module schema {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class T {
+            get createValidator9(): <T>(data: T) => T {
+                return undefined;
+            }
+            
+            set createValidator10(v: <T>(data: T) => T) {
+            }
+        }
+    }

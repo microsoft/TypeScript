@@ -1,0 +1,15 @@
+es6ImportNamedImportInIndirectExportAssignment_0.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== es6ImportNamedImportInIndirectExportAssignment_0.ts (1 errors) ====
+    export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class c {
+        }
+    }
+    
+==== es6ImportNamedImportInIndirectExportAssignment_1.ts (0 errors) ====
+    import { a } from "./es6ImportNamedImportInIndirectExportAssignment_0";
+    import x = a;
+    export = x;

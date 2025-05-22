@@ -1,0 +1,30 @@
+exportAssignmentWithImportStatementPrivacyError.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportAssignmentWithImportStatementPrivacyError.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportAssignmentWithImportStatementPrivacyError.ts (2 errors) ====
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface connectModule {
+            (res, req, next): void;
+        }
+        export interface connectExport {
+            use: (mod: connectModule) => connectExport;
+            listen: (port: number) => void;
+        }
+    
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var server: {
+            (): m2.connectExport;
+            test1: m2.connectModule;
+            test2(): m2.connectModule;
+        };
+    }
+    import M22 = M;
+    
+    export = M;

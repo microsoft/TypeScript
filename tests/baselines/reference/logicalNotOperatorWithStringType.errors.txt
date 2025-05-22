@@ -1,3 +1,4 @@
+logicalNotOperatorWithStringType.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 logicalNotOperatorWithStringType.ts(22,25): error TS2873: This kind of expression is always falsy.
 logicalNotOperatorWithStringType.ts(23,25): error TS2872: This kind of expression is always truthy.
 logicalNotOperatorWithStringType.ts(24,25): error TS2872: This kind of expression is always truthy.
@@ -5,7 +6,7 @@ logicalNotOperatorWithStringType.ts(40,2): error TS2873: This kind of expression
 logicalNotOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== logicalNotOperatorWithStringType.ts (5 errors) ====
+==== logicalNotOperatorWithStringType.ts (6 errors) ====
     // ! operator on string type
     var STRING: string;
     var STRING1: string[] = ["", "abc"];
@@ -17,6 +18,8 @@ logicalNotOperatorWithStringType.ts(44,1): error TS2695: Left side of comma oper
         static foo() { return ""; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: string;
     }
     

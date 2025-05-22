@@ -1,14 +1,17 @@
 assignmentToFunction.ts(2,1): error TS2630: Cannot assign to 'fn' because it is a function.
+assignmentToFunction.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentToFunction.ts(8,9): error TS2630: Cannot assign to 'bar' because it is a function.
 
 
-==== assignmentToFunction.ts (2 errors) ====
+==== assignmentToFunction.ts (3 errors) ====
     function fn() { }
     fn = () => 3;
     ~~
 !!! error TS2630: Cannot assign to 'fn' because it is a function.
     
     module foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function xyz() {
             function bar() {
             }

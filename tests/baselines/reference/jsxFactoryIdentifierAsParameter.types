@@ -17,9 +17,11 @@ export class AppComponent {
 >render : (createElement: any) => any
 >       : ^             ^^^^^^^^^^^^^
 >createElement : any
+>              : ^^^
 
         return <div />;
-><div /> : error
+><div /> : any
+>        : ^^^
 >div : any
 >    : ^^^
     }

@@ -1,0 +1,16 @@
+generativeRecursionWithTypeOf.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== generativeRecursionWithTypeOf.ts (1 errors) ====
+    class C<T> {
+        static foo(x: number) { }
+        type: T;
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f(x: typeof C) {   
+            return new x<typeof x>();     
+        }
+    }
