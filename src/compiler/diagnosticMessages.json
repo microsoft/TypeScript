@@ -5702,6 +5702,10 @@
         "category": "Message",
         "code": 6283
     },
+    "Argument '{0}' for '{1}' option is a year not yet supported by this version of TypeScript.": {
+        "category": "Error",
+        "code": 6284
+    },
 
     "Enable project compilation": {
         "category": "Message",

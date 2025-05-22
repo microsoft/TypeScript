@@ -33,6 +33,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     assertParseResult("Parse multiple options of library flags", ["--lib", "es5,es2015.symbol.wellknown", "0.ts"]);
     // --lib es5,invalidOption 0.ts
     assertParseResult("Parse invalid option of library flags", ["--lib", "es5,invalidOption", "0.ts"]);
+    // --lib es2099 --target es2098 0.ts
+    assertParseResult("Parse future ECMAScript version specified for lib and target", ["--lib", "es2099", "--target", "es2098", "0.ts"]);
     // 0.ts --jsx
     assertParseResult("Parse empty options of --jsx", ["0.ts", "--jsx"]);
     // 0.ts --
