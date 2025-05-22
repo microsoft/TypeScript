@@ -452,12 +452,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/home/src/projects/project",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -489,7 +487,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "maxNodeModuleJsDepth": 2
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
@@ -515,7 +512,6 @@ Info seq  [hh:mm:ss:mss] event:
           "maxNodeModuleJsDepth": 2
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -573,14 +569,16 @@ Projects::
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts *new*
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/Library/Caches/typescript/node_modules/@types/ember__component/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts *new*
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/projects/project/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
