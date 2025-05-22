@@ -3411,7 +3411,7 @@
         "category": "Error",
         "code": 2724
     },
-    "Class name cannot be 'Object' when targeting ES5 with module {0}.": {
+    "Class name cannot be 'Object' when targeting {0} with module {1}.": {
         "category": "Error",
         "code": 2725
     },
