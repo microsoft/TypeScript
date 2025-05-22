@@ -1379,7 +1379,7 @@ function extractConstantInScope(
     const localNameText = getIdentifierForNode(node, scope, checker, file);
     const isJS = isInJSFile(scope);
 
-    let variableType = isJS || !checker.isContextSensitive(node)
+    let variableType = isJS || !checker.containsContextSensitive(node)
         ? undefined
         : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames); // TODO: GH#18217
 
