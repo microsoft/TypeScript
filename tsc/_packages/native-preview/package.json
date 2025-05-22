@@ -21,6 +21,9 @@
         "type": "git",
         "url": "https://github.com/microsoft/typescript-go.git"
     },
+    "publishConfig": {
+        "access": "public"
+    },
     "type": "module",
     "preferUnplugged": true,
     "engines": {

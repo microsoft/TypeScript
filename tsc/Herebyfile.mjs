@@ -83,6 +83,10 @@ const { values: rawOptions } = parseArgs({
  */
 const options = /** @type {Options} */ (rawOptions);
 
+if (options.forRelease && !options.setPrerelease) {
+    throw new Error("forRelease requires setPrerelease");
+}
+
 const defaultGoBuildTags = [
     ...(options.noembed ? ["noembed"] : []),
 ];
@@ -1153,7 +1157,24 @@ export const packNativePreviewExtensions = task({
 
         await $({ cwd: extensionDir })`npm run bundle`;
 
-        const version = getVersion();
+        let version = "0.0.0";
+        if (options.forRelease) {
+            // No real semver prerelease versioning.
+            // https://code.visualstudio.com/api/working-with-extensions/publishing-extension#prerelease-extensions
+            assert(options.setPrerelease, "forRelease is true but setPrerelease is not set");
+            const prerelease = options.setPrerelease;
+            assert(typeof prerelease === "string", "setPrerelease is not a string");
+            // parse `dev.<number>.<number>`.
+            const match = prerelease.match(/dev\.(\d+)\.(\d+)/);
+            if (!match) {
+                throw new Error(`Prerelease version should be in the form of dev.<number>.<number>, but got ${prerelease}`);
+            }
+            // Set version to `0.<number>.<number>`.
+            version = `0.${match[1]}.${match[2]}`;
+        }
+
+        console.log("Version:", version);
+
         const platforms = nativePreviewPlatforms();
 
         await Promise.all(platforms.map(async ({ npmDir, vscodeTarget, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
