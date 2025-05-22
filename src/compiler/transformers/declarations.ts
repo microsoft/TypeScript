@@ -886,7 +886,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    decl.importClause.phaseModifier,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
                 ),
@@ -902,7 +902,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    decl.importClause.phaseModifier,
                     visibleDefaultBinding,
                     namedBindings,
                 ),
@@ -918,7 +918,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    decl.importClause.phaseModifier,
                     visibleDefaultBinding,
                     bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                 ),
