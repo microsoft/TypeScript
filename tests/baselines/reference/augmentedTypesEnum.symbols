@@ -35,19 +35,19 @@ class e4 { public foo() { } } // error
 
 // enum then enum
 enum e5 { One }
->e5 : Symbol(e5, Decl(augmentedTypesEnum.ts, 13, 29), Decl(augmentedTypesEnum.ts, 16, 15))
+>e5 : Symbol(e5, Decl(augmentedTypesEnum.ts, 13, 29))
 >One : Symbol(e5.One, Decl(augmentedTypesEnum.ts, 16, 9))
 
 enum e5 { Two } // error
->e5 : Symbol(e5, Decl(augmentedTypesEnum.ts, 13, 29), Decl(augmentedTypesEnum.ts, 16, 15))
+>e5 : Symbol(e5, Decl(augmentedTypesEnum.ts, 16, 15))
 >Two : Symbol(e5.Two, Decl(augmentedTypesEnum.ts, 17, 9))
 
 enum e5a { One } // error
->e5a : Symbol(e5a, Decl(augmentedTypesEnum.ts, 17, 15), Decl(augmentedTypesEnum.ts, 19, 16))
+>e5a : Symbol(e5a, Decl(augmentedTypesEnum.ts, 17, 15))
 >One : Symbol(e5a.One, Decl(augmentedTypesEnum.ts, 19, 10))
 
 enum e5a { One } // error
->e5a : Symbol(e5a, Decl(augmentedTypesEnum.ts, 17, 15), Decl(augmentedTypesEnum.ts, 19, 16))
+>e5a : Symbol(e5a, Decl(augmentedTypesEnum.ts, 19, 16))
 >One : Symbol(e5a.One, Decl(augmentedTypesEnum.ts, 20, 10))
 
 // enum then internal module

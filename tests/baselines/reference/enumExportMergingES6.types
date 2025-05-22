@@ -12,27 +12,27 @@ export enum Animals {
 >  : ^
 }
 export enum Animals {
->Animals : Animals
->        : ^^^^^^^
+>Animals : import("enumExportMergingES6").Animals
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	Dog = 2
->Dog : Animals.Dog
->    : ^^^^^^^^^^^
+>Dog : import("enumExportMergingES6").Animals.Dog
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 }
 export enum Animals {
->Animals : Animals
->        : ^^^^^^^
+>Animals : import("enumExportMergingES6").Animals
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	CatDog = Cat | Dog
->CatDog : Animals.CatDog
->       : ^^^^^^^^^^^^^^
+>CatDog : import("enumExportMergingES6").Animals.CatDog
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Cat | Dog : number
 >          : ^^^^^^
->Cat : Animals.Cat
->    : ^^^^^^^^^^^
->Dog : Animals.Dog
->    : ^^^^^^^^^^^
+>Cat : any
+>    : ^^^
+>Dog : any
+>    : ^^^
 }
 
