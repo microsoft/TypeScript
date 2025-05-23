@@ -41,7 +41,7 @@
         "cwd": "${configDir}",
         "cacheKey": "4",
         "commands": [
-            { "command": "gofumpt -lang=go1.24", "exts": ["go"] }
+            { "command": "go tool mvdan.cc/gofumpt -lang=go1.24", "exts": ["go"] }
         ]
     },
     "excludes": [
