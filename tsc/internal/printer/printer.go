@@ -197,11 +197,11 @@ func (p *Printer) getLiteralTextOfNode(node *ast.LiteralLikeNode, sourceFile *as
 
 			switch {
 			case flags&getLiteralTextFlagsJsxAttributeEscape != 0:
-				return "\"" + escapeJsxAttributeString(text, quoteCharDoubleQuote) + "\""
+				return "\"" + escapeJsxAttributeString(text, QuoteCharDoubleQuote) + "\""
 			case flags&getLiteralTextFlagsNeverAsciiEscape != 0 || p.emitContext.EmitFlags(node)&EFNoAsciiEscaping != 0:
-				return "\"" + EscapeString(text, quoteCharDoubleQuote) + "\""
+				return "\"" + EscapeString(text, QuoteCharDoubleQuote) + "\""
 			default:
-				return "\"" + escapeNonAsciiString(text, quoteCharDoubleQuote) + "\""
+				return "\"" + escapeNonAsciiString(text, QuoteCharDoubleQuote) + "\""
 			}
 		}
 	}

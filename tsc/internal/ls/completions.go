@@ -256,7 +256,8 @@ const (
 // true otherwise.
 type uniqueNamesMap = map[string]bool
 
-type literalValue any // string | jsnum.Number | PseudoBigInt
+// string | jsnum.Number | PseudoBigInt
+type literalValue any
 
 type globalsSearch int
 
@@ -276,7 +277,7 @@ func (l *LanguageService) getCompletionsAtPosition(
 	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	_, previousToken := getRelevantTokens(position, file)
-	if context.TriggerCharacter != nil && !isInString(file, position, previousToken) && !isValidTrigger(file, *context.TriggerCharacter, previousToken, position) {
+	if context.TriggerCharacter != nil && !IsInString(file, position, previousToken) && !isValidTrigger(file, *context.TriggerCharacter, previousToken, position) {
 		return nil
 	}
 
@@ -294,7 +295,19 @@ func (l *LanguageService) getCompletionsAtPosition(
 
 	// !!! see if incomplete completion list and continue or clean
 
-	// !!! string literal completions
+	stringCompletions := l.getStringLiteralCompletions(
+		ctx,
+		file,
+		position,
+		previousToken,
+		compilerOptions,
+		program,
+		preferences,
+		clientOptions,
+	)
+	if stringCompletions != nil {
+		return stringCompletions
+	}
 
 	if previousToken != nil && ast.IsBreakOrContinueStatement(previousToken.Parent) &&
 		(previousToken.Kind == ast.KindBreakKeyword ||
@@ -1479,10 +1492,11 @@ func (l *LanguageService) completionInfoFromData(
 	clientOptions *lsproto.CompletionClientCapabilities,
 ) *lsproto.CompletionList {
 	keywordFilters := data.keywordFilters
-	symbols := data.symbols
 	isNewIdentifierLocation := data.isNewIdentifierLocation
 	contextToken := data.contextToken
 	literals := data.literals
+	typeChecker, done := program.GetTypeCheckerForFile(ctx, file)
+	defer done()
 
 	// Verify if the file is JSX language variant
 	if ast.GetLanguageVariant(file.ScriptKind) == core.LanguageVariantJSX {
@@ -1498,17 +1512,31 @@ func (l *LanguageService) completionInfoFromData(
 	if caseClause != nil &&
 		(contextToken.Kind == ast.KindCaseKeyword ||
 			ast.IsNodeDescendantOf(contextToken, caseClause.Expression())) {
-		// !!! switch completions
+		tracker := newCaseClauseTracker(typeChecker, caseClause.Parent.AsCaseBlock().Clauses.Nodes)
+		literals = core.Filter(literals, func(literal literalValue) bool {
+			return !tracker.hasValue(literal)
+		})
+		data.symbols = core.Filter(data.symbols, func(symbol *ast.Symbol) bool {
+			if symbol.ValueDeclaration != nil && ast.IsEnumMember(symbol.ValueDeclaration) {
+				value := typeChecker.GetConstantValue(symbol.ValueDeclaration)
+				if value != nil && tracker.hasValue(value) {
+					return false
+				}
+			}
+			return true
+		})
 	}
 
 	isChecked := isCheckedFile(file, compilerOptions)
-	if isChecked && !isNewIdentifierLocation && len(symbols) == 0 && keywordFilters == KeywordCompletionFiltersNone {
+	if isChecked && !isNewIdentifierLocation && len(data.symbols) == 0 && keywordFilters == KeywordCompletionFiltersNone {
 		return nil
 	}
 
+	optionalReplacementSpan := l.getOptionalReplacementSpan(data.location, file)
 	uniqueNames, sortedEntries := l.getCompletionEntriesFromSymbols(
 		ctx,
 		data,
+		optionalReplacementSpan,
 		nil, /*replacementToken*/
 		position,
 		file,
@@ -1570,6 +1598,7 @@ func (l *LanguageService) completionInfoFromData(
 func (l *LanguageService) getCompletionEntriesFromSymbols(
 	ctx context.Context,
 	data *completionDataData,
+	optionalReplacementSpan *lsproto.Range,
 	replacementToken *ast.Node,
 	position int,
 	file *ast.SourceFile,
@@ -1584,7 +1613,6 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	typeChecker, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
 	isMemberCompletion := isMemberCompletionKind(data.completionKind)
-	optionalReplacementSpan := getOptionalReplacementSpan(data.location, file)
 	// Tracks unique names.
 	// Value is set to false for global variables or completions from external module exports, because we can have multiple of those;
 	// true otherwise. Based on the order we add things we will always see locals first, then globals, then module exports.
@@ -1708,7 +1736,7 @@ func (l *LanguageService) createCompletionItem(
 	preferences *UserPreferences,
 	clientOptions *lsproto.CompletionClientCapabilities,
 	isMemberCompletion bool,
-	optionalReplacementSpan *core.TextRange,
+	optionalReplacementSpan *lsproto.Range,
 ) *lsproto.CompletionItem {
 	contextToken := data.contextToken
 	var insertText string
@@ -3110,12 +3138,11 @@ func getJSCompletionEntries(
 	return sortedEntries
 }
 
-func getOptionalReplacementSpan(location *ast.Node, file *ast.SourceFile) *core.TextRange {
+func (l *LanguageService) getOptionalReplacementSpan(location *ast.Node, file *ast.SourceFile) *lsproto.Range {
 	// StringLiteralLike locations are handled separately in stringCompletions.ts
 	if location != nil && location.Kind == ast.KindIdentifier {
 		start := astnav.GetStartOfNode(location, file, false /*includeJSDoc*/)
-		textRange := core.NewTextRange(start, location.End())
-		return &textRange
+		return l.createLspRangeFromBounds(start, location.End(), file)
 	}
 	return nil
 }
@@ -3934,7 +3961,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 	tagName := jsxClosingElement.Parent.AsJsxElement().OpeningElement.TagName()
 	closingTag := tagName.Text()
 	fullClosingTag := closingTag + core.IfElse(hasClosingAngleBracket, "", ">")
-	optionalReplacementSpan := core.NewTextRange(jsxClosingElement.TagName().Pos(), jsxClosingElement.TagName().End())
+	optionalReplacementSpan := l.createLspRangeFromNode(jsxClosingElement.TagName(), file)
 	defaultCommitCharacters := getDefaultCommitCharacters(false /*isNewIdentifierLocation*/)
 
 	item := l.createLSPCompletionItem(
@@ -3945,7 +3972,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 		ScriptElementKindClassElement,
 		core.Set[ScriptElementKindModifier]{}, /*kindModifiers*/
 		nil,                                   /*replacementSpan*/
-		&optionalReplacementSpan,
+		optionalReplacementSpan,
 		nil, /*commitCharacters*/
 		nil, /*labelDetails*/
 		file,
@@ -3975,7 +4002,7 @@ func (l *LanguageService) createLSPCompletionItem(
 	elementKind ScriptElementKind,
 	kindModifiers core.Set[ScriptElementKindModifier],
 	replacementSpan *lsproto.Range,
-	optionalReplacementSpan *core.TextRange,
+	optionalReplacementSpan *lsproto.Range,
 	commitCharacters *[]string,
 	labelDetails *lsproto.CompletionItemLabelDetails,
 	file *ast.SourceFile,
@@ -4001,8 +4028,11 @@ func (l *LanguageService) createLSPCompletionItem(
 	} else {
 		// Ported from vscode ts extension.
 		if optionalReplacementSpan != nil && ptrIsTrue(clientOptions.CompletionItem.InsertReplaceSupport) {
-			insertRange := l.createLspRangeFromBounds(optionalReplacementSpan.Pos(), position, file)
-			replaceRange := l.createLspRangeFromBounds(optionalReplacementSpan.Pos(), optionalReplacementSpan.End(), file)
+			insertRange := &lsproto.Range{
+				Start: optionalReplacementSpan.Start,
+				End:   l.createLspPosition(position, file),
+			}
+			replaceRange := optionalReplacementSpan
 			textEdit = &lsproto.TextEditOrInsertReplaceEdit{
 				InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 					NewText: core.IfElse(insertText == "", name, insertText),
@@ -4085,11 +4115,10 @@ func (l *LanguageService) createLSPCompletionItem(
 		// !!! adjust label like vscode does
 	}
 
+	// Client assumes plain text by default.
 	var insertTextFormat *lsproto.InsertTextFormat
 	if isSnippet {
 		insertTextFormat = ptrTo(lsproto.InsertTextFormatSnippet)
-	} else {
-		insertTextFormat = ptrTo(lsproto.InsertTextFormatPlainText)
 	}
 
 	return &lsproto.CompletionItem{

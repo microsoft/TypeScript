@@ -24,12 +24,12 @@ const (
 	getLiteralTextFlagsAllowNumericSeparator         getLiteralTextFlags = 1 << 3
 )
 
-type quoteChar rune
+type QuoteChar rune
 
 const (
-	quoteCharSingleQuote quoteChar = '\''
-	quoteCharDoubleQuote quoteChar = '"'
-	quoteCharBacktick    quoteChar = '`'
+	QuoteCharSingleQuote QuoteChar = '\''
+	QuoteCharDoubleQuote QuoteChar = '"'
+	QuoteCharBacktick    QuoteChar = '`'
 )
 
 var jsxEscapedCharsMap = map[rune]string{
@@ -73,7 +73,7 @@ func encodeUtf16EscapeSequence(b *strings.Builder, charCode rune) {
 // Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
 // but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
 // Note that this doesn't actually wrap the input in double quotes.
-func escapeStringWorker(s string, quoteChar quoteChar, flags getLiteralTextFlags, b *strings.Builder) {
+func escapeStringWorker(s string, quoteChar QuoteChar, flags getLiteralTextFlags, b *strings.Builder) {
 	pos := 0
 	i := 0
 	for i < len(s) {
@@ -92,13 +92,13 @@ func escapeStringWorker(s string, quoteChar quoteChar, flags getLiteralTextFlags
 				escape = true
 			}
 		case '$':
-			if quoteChar == quoteCharBacktick && i+1 < len(s) && s[i+1] == '{' {
+			if quoteChar == QuoteCharBacktick && i+1 < len(s) && s[i+1] == '{' {
 				escape = true
 			}
 		case rune(quoteChar), '\u2028', '\u2029', '\u0085', '\r':
 			escape = true
 		case '\n':
-			if quoteChar != quoteCharBacktick {
+			if quoteChar != QuoteCharBacktick {
 				// Template strings preserve simple LF newlines, still encode CRLF (or CR).
 				escape = true
 			}
@@ -125,7 +125,7 @@ func escapeStringWorker(s string, quoteChar quoteChar, flags getLiteralTextFlags
 				}
 
 			default:
-				if ch == '\r' && quoteChar == quoteCharBacktick && i+1 < len(s) && s[i+1] == '\n' {
+				if ch == '\r' && quoteChar == QuoteCharBacktick && i+1 < len(s) && s[i+1] == '\n' {
 					// Template strings preserve simple LF newlines, but still must escape CRLF. Left alone, the
 					// above cases for `\r` and `\n` would inadvertently escape CRLF as two independent characters.
 					size++
@@ -163,21 +163,21 @@ func escapeStringWorker(s string, quoteChar quoteChar, flags getLiteralTextFlags
 	}
 }
 
-func EscapeString(s string, quoteChar quoteChar) string {
+func EscapeString(s string, quoteChar QuoteChar) string {
 	var b strings.Builder
 	b.Grow(len(s) + 2)
 	escapeStringWorker(s, quoteChar, getLiteralTextFlagsNeverAsciiEscape, &b)
 	return b.String()
 }
 
-func escapeNonAsciiString(s string, quoteChar quoteChar) string {
+func escapeNonAsciiString(s string, quoteChar QuoteChar) string {
 	var b strings.Builder
 	b.Grow(len(s) + 2)
 	escapeStringWorker(s, quoteChar, getLiteralTextFlagsNone, &b)
 	return b.String()
 }
 
-func escapeJsxAttributeString(s string, quoteChar quoteChar) string {
+func escapeJsxAttributeString(s string, quoteChar QuoteChar) string {
 	var b strings.Builder
 	b.Grow(len(s) + 2)
 	escapeStringWorker(s, quoteChar, getLiteralTextFlagsJsxAttributeEscape|getLiteralTextFlagsNeverAsciiEscape, &b)
@@ -224,11 +224,11 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 	switch node.Kind {
 	case ast.KindStringLiteral:
 		var b strings.Builder
-		var quoteChar quoteChar
+		var quoteChar QuoteChar
 		if node.AsStringLiteral().TokenFlags&ast.TokenFlagsSingleQuote != 0 {
-			quoteChar = quoteCharSingleQuote
+			quoteChar = QuoteCharSingleQuote
 		} else {
-			quoteChar = quoteCharDoubleQuote
+			quoteChar = QuoteCharDoubleQuote
 		}
 
 		text := node.Text()
@@ -285,7 +285,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 			// If rawText is set, it is expected to be valid.
 			b.WriteString(rawText)
 		default:
-			escapeStringWorker(text, quoteCharBacktick, flags, &b)
+			escapeStringWorker(text, QuoteCharBacktick, flags, &b)
 		}
 
 		// Write trailing quote character

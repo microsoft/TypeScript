@@ -52,3 +52,7 @@ func GetDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 func (c *Checker) WasCanceled() bool {
 	return c.wasCanceled
 }
+
+func (c *Checker) GetBaseConstraintOfType(t *Type) *Type {
+	return c.getBaseConstraintOfType(t)
+}

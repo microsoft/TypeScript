@@ -1796,6 +1796,8 @@ type (
 	ObjectLiteralExpressionNode     = Node
 	ConstructorDeclarationNode      = Node
 	NamedExportsNode                = Node
+	UnionType                       = Node
+	LiteralType                     = Node
 )
 
 type (

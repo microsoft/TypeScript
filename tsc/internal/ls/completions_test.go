@@ -46,7 +46,6 @@ func TestCompletions(t *testing.T) {
 	itemDefaults := &lsproto.CompletionItemDefaults{
 		CommitCharacters: &defaultCommitCharacters,
 	}
-	insertTextFormatPlainText := ptrTo(lsproto.InsertTextFormatPlainText)
 	sortTextLocationPriority := ptrTo(string(ls.SortTextLocationPriority))
 	sortTextLocalDeclarationPriority := ptrTo(string(ls.SortTextLocalDeclarationPriority))
 	sortTextDeprecatedLocationPriority := ptrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority)))
@@ -58,54 +57,56 @@ func TestCompletions(t *testing.T) {
 	classKind := ptrTo(lsproto.CompletionItemKindClass)
 	keywordKind := ptrTo(lsproto.CompletionItemKindKeyword)
 	propertyKind := ptrTo(lsproto.CompletionItemKindProperty)
+	constantKind := ptrTo(lsproto.CompletionItemKindConstant)
+	enumMemberKind := ptrTo(lsproto.CompletionItemKindEnumMember)
 
 	stringMembers := []*lsproto.CompletionItem{
-		{Label: "charAt", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "charCodeAt", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "concat", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "indexOf", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "lastIndexOf", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "length", Kind: fieldKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "localeCompare", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "match", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "replace", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "search", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "slice", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "split", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "substring", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "toLocaleLowerCase", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "toLocaleUpperCase", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "toLowerCase", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "toString", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "toUpperCase", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "trim", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "valueOf", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "substr", Kind: methodKind, SortText: sortTextDeprecatedLocationPriority, InsertTextFormat: insertTextFormatPlainText},
+		{Label: "charAt", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "charCodeAt", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "concat", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "indexOf", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "lastIndexOf", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "length", Kind: fieldKind, SortText: sortTextLocationPriority},
+		{Label: "localeCompare", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "match", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "replace", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "search", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "slice", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "split", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "substring", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "toLocaleLowerCase", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "toLocaleUpperCase", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "toLowerCase", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "toString", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "toUpperCase", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "trim", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "valueOf", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "substr", Kind: methodKind, SortText: sortTextDeprecatedLocationPriority},
 	}
 
 	arrayMembers := []*lsproto.CompletionItem{
-		{Label: "concat", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "every", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "filter", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "forEach", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "indexOf", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "join", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "lastIndexOf", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "length", Kind: fieldKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "map", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "pop", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "push", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "reduce", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "reduceRight", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "reverse", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "shift", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "slice", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "some", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "sort", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "splice", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "toLocaleString", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "toString", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
-		{Label: "unshift", Kind: methodKind, SortText: sortTextLocationPriority, InsertTextFormat: insertTextFormatPlainText},
+		{Label: "concat", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "every", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "filter", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "forEach", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "indexOf", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "join", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "lastIndexOf", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "length", Kind: fieldKind, SortText: sortTextLocationPriority},
+		{Label: "map", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "pop", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "push", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "reduce", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "reduceRight", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "reverse", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "shift", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "slice", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "some", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "sort", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "splice", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "toLocaleString", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "toString", Kind: methodKind, SortText: sortTextLocationPriority},
+		{Label: "unshift", Kind: methodKind, SortText: sortTextLocationPriority},
 	}
 
 	testCases := []testCase{
@@ -127,11 +128,11 @@ p./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "x",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".x"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "x",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".x"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "x",
@@ -147,11 +148,11 @@ p./*a*/`,
 								},
 							},
 							{
-								Label:            "y",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".y"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "y",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".y"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "y",
@@ -190,12 +191,12 @@ p./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "x",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".?.x"),
-								InsertText:       ptrTo("?.x"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "x",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".?.x"),
+								InsertText: ptrTo("?.x"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									TextEdit: &lsproto.TextEdit{
 										NewText: "?.x",
@@ -207,12 +208,12 @@ p./*a*/`,
 								},
 							},
 							{
-								Label:            "y",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".?.y"),
-								InsertText:       ptrTo("?.y"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "y",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".?.y"),
+								InsertText: ptrTo("?.y"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									TextEdit: &lsproto.TextEdit{
 										NewText: "?.y",
@@ -242,11 +243,10 @@ x./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "foo",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".foo"),
-								InsertTextFormat: ptrTo(lsproto.InsertTextFormatPlainText),
+								Label:      "foo",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".foo"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "foo",
@@ -282,11 +282,11 @@ var t = new n(0, 1, '');t./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "x",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".x"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "x",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".x"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "x",
@@ -302,11 +302,11 @@ var t = new n(0, 1, '');t./*a*/`,
 								},
 							},
 							{
-								Label:            "y",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".y"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "y",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".y"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "y",
@@ -358,11 +358,11 @@ D./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{ // !!! `funcionMembersPlus`
 							{
-								Label:            "bar",
-								Kind:             methodKind,
-								SortText:         sortTextLocalDeclarationPriority,
-								FilterText:       ptrTo(".bar"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "bar",
+								Kind:       methodKind,
+								SortText:   sortTextLocalDeclarationPriority,
+								FilterText: ptrTo(".bar"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "bar",
@@ -378,11 +378,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "bar2",
-								Kind:             methodKind,
-								SortText:         sortTextLocalDeclarationPriority,
-								FilterText:       ptrTo(".bar2"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "bar2",
+								Kind:       methodKind,
+								SortText:   sortTextLocalDeclarationPriority,
+								FilterText: ptrTo(".bar2"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "bar2",
@@ -398,11 +398,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "apply",
-								Kind:             methodKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".apply"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "apply",
+								Kind:       methodKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".apply"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "apply",
@@ -418,11 +418,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "arguments",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".arguments"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "arguments",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".arguments"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "arguments",
@@ -438,11 +438,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "baz",
-								Kind:             functionKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".baz"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "baz",
+								Kind:       functionKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".baz"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "baz",
@@ -458,11 +458,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "bind",
-								Kind:             methodKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".bind"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "bind",
+								Kind:       methodKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".bind"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "bind",
@@ -478,11 +478,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "call",
-								Kind:             methodKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".call"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "call",
+								Kind:       methodKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".call"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "call",
@@ -498,11 +498,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "caller",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".caller"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "caller",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".caller"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "caller",
@@ -518,11 +518,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "length",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".length"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "length",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".length"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "length",
@@ -538,11 +538,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "prototype",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".prototype"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "prototype",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".prototype"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "prototype",
@@ -558,11 +558,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "toString",
-								Kind:             methodKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".toString"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "toString",
+								Kind:       methodKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".toString"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "toString",
@@ -578,11 +578,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "x",
-								Kind:             variableKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".x"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "x",
+								Kind:       variableKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".x"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "x",
@@ -621,11 +621,11 @@ D./*a*/`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "a",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".a"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "a",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".a"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "a",
@@ -641,11 +641,11 @@ D./*a*/`,
 								},
 							},
 							{
-								Label:            "b",
-								Kind:             methodKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo(".b"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "b",
+								Kind:       methodKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo(".b"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "b",
@@ -711,12 +711,12 @@ x./**/;`,
 						ItemDefaults: itemDefaults,
 						Items: append([]*lsproto.CompletionItem{
 							{
-								Label:            "0",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertText:       ptrTo("[0]"),
-								InsertTextFormat: insertTextFormatPlainText,
-								FilterText:       ptrTo(".[0]"),
+								Label:      "0",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								InsertText: ptrTo("[0]"),
+
+								FilterText: ptrTo(".[0]"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									TextEdit: &lsproto.TextEdit{
 										NewText: "[0]",
@@ -728,12 +728,12 @@ x./**/;`,
 								},
 							},
 							{
-								Label:            "1",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertText:       ptrTo("[1]"),
-								InsertTextFormat: insertTextFormatPlainText,
-								FilterText:       ptrTo(".[1]"),
+								Label:      "1",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								InsertText: ptrTo("[1]"),
+
+								FilterText: ptrTo(".[1]"),
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									TextEdit: &lsproto.TextEdit{
 										NewText: "[1]",
@@ -780,10 +780,9 @@ namespace c5b { export var y = 2; } // should be ok
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "c5b",
-								Kind:             classKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "c5b",
+								Kind:     classKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -819,16 +818,14 @@ let x: Foo = {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "x1",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "x1",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "x2",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "x2",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -839,16 +836,14 @@ let x: Foo = {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "x1",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "x1",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "x2",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "x2",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -859,16 +854,14 @@ let x: Foo = {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "x1",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "x1",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "x2",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "x2",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -898,10 +891,9 @@ var foobar: Bar<{ one: string, /**/`,
 						},
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "two",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "two",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -926,22 +918,19 @@ export = Foo;`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "prop1",
-								Kind:             methodKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "prop1",
+								Kind:     methodKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "prop2",
-								Kind:             methodKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "prop2",
+								Kind:     methodKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "prototype",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "prototype",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
 								Label:    "type",
@@ -977,16 +966,14 @@ import * as t4 from "./a" with { type: /*4*/ };`,
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "resolution-mode",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "resolution-mode",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "type",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "type",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1009,10 +996,9 @@ if (!!true) {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "topLevel",
-								Kind:             functionKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "topLevel",
+								Kind:     functionKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
 								Label:    "type",
@@ -1105,12 +1091,12 @@ declare namespace React {
 						},
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "contextType?",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								FilterText:       ptrTo("contextType"),
-								InsertText:       ptrTo("contextType"),
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:      "contextType?",
+								Kind:       fieldKind,
+								SortText:   sortTextLocationPriority,
+								FilterText: ptrTo("contextType"),
+								InsertText: ptrTo("contextType"),
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "contextType",
@@ -1225,16 +1211,14 @@ class Foo {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "aria-label",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "aria-label",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "foo",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "foo",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1245,16 +1229,14 @@ class Foo {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "aria-label",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "aria-label",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "foo",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "foo",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1280,10 +1262,10 @@ const bar: {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "foo",
-								Kind:             variableKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "foo",
+								Kind:     variableKind,
+								SortText: sortTextLocationPriority,
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "foo",
@@ -1398,10 +1380,9 @@ export function isAnyDirectorySeparator(charCode: number): boolean {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "CharacterCodes",
-								Kind:             variableKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "CharacterCodes",
+								Kind:     variableKind,
+								SortText: sortTextLocationPriority,
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "CharacterCodes",
@@ -1455,10 +1436,9 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "button",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "button",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1470,10 +1450,9 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "button",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "button",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1485,10 +1464,9 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "button",
-								Kind:             fieldKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "button",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1509,10 +1487,10 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "div>",
-								Kind:             classKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "div>",
+								Kind:     classKind,
+								SortText: sortTextLocationPriority,
+
 								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 										NewText: "div>",
@@ -1555,10 +1533,9 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "label",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "label",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1569,10 +1546,9 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "label",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "label",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1583,10 +1559,9 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "label",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "label",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1597,16 +1572,14 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "testlabel",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "testlabel",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "label",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "label",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1617,16 +1590,14 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "testlabel",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "testlabel",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "label",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "label",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1637,16 +1608,14 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "testlabel",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "testlabel",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "label",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "label",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1657,16 +1626,14 @@ function fn3() {
 						ItemDefaults: itemDefaults,
 						Items: []*lsproto.CompletionItem{
 							{
-								Label:            "testlabel",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "testlabel",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 							{
-								Label:            "label",
-								Kind:             propertyKind,
-								SortText:         sortTextLocationPriority,
-								InsertTextFormat: insertTextFormatPlainText,
+								Label:    "label",
+								Kind:     propertyKind,
+								SortText: sortTextLocationPriority,
 							},
 						},
 					},
@@ -1679,6 +1646,297 @@ function fn3() {
 					},
 					isIncludes: true,
 					excludes:   []string{"label"},
+				},
+			},
+		},
+		{
+			name: "completionForStringLiteral",
+			files: map[string]string{
+				defaultMainFileName: `type Options = "Option 1" | "Option 2" | "Option 3";
+var x: Options = "/*1*/Option 3";`,
+			},
+			expectedResult: map[string]*testCaseResult{
+				"1": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:    "Option 1",
+								Kind:     constantKind,
+								SortText: sortTextLocationPriority,
+
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "Option 1",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 1, Character: 18},
+											End:   lsproto.Position{Line: 1, Character: 26},
+										},
+									},
+								},
+							},
+							{
+								Label:    "Option 2",
+								Kind:     constantKind,
+								SortText: sortTextLocationPriority,
+
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "Option 2",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 1, Character: 18},
+											End:   lsproto.Position{Line: 1, Character: 26},
+										},
+									},
+								},
+							},
+							{
+								Label:    "Option 3",
+								Kind:     constantKind,
+								SortText: sortTextLocationPriority,
+
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "Option 3",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 1, Character: 18},
+											End:   lsproto.Position{Line: 1, Character: 26},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "switchCompletions",
+			files: map[string]string{
+				defaultMainFileName: `enum E { A, B }
+declare const e: E;
+switch (e) {
+    case E.A:
+        return 0;
+    case E./*1*/
+}
+declare const f: 1 | 2 | 3;
+switch (f) {
+    case 1:
+        return 1;
+    case /*2*/
+}
+declare const f2: 'foo' | 'bar' | 'baz';
+switch (f2) {
+    case 'bar':
+        return 1;
+    case '/*3*/'
+}
+// repro from #52874
+declare let x: "foo" | "bar";
+switch (x) {
+    case ('/*4*/')
+}`,
+			},
+			expectedResult: map[string]*testCaseResult{
+				"1": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:    "B",
+								Kind:     enumMemberKind,
+								SortText: sortTextLocationPriority,
+
+								FilterText: ptrTo(".B"),
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+										NewText: "B",
+										Insert: lsproto.Range{
+											Start: lsproto.Position{Line: 5, Character: 11},
+											End:   lsproto.Position{Line: 5, Character: 11},
+										},
+										Replace: lsproto.Range{
+											Start: lsproto.Position{Line: 5, Character: 11},
+											End:   lsproto.Position{Line: 5, Character: 11},
+										},
+									},
+								},
+							},
+						},
+					},
+					isIncludes: true,
+					excludes:   []string{"A"},
+				},
+				"2": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:            "2",
+								Kind:             constantKind,
+								SortText:         sortTextLocationPriority,
+								CommitCharacters: &[]string{},
+							},
+							{
+								Label:            "3",
+								Kind:             constantKind,
+								SortText:         sortTextLocationPriority,
+								CommitCharacters: &[]string{},
+							},
+						},
+					},
+					isIncludes: true,
+					excludes:   []string{"1"},
+				},
+				"3": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:    "foo",
+								Kind:     constantKind,
+								SortText: sortTextLocationPriority,
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "foo",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 17, Character: 10},
+											End:   lsproto.Position{Line: 17, Character: 10},
+										},
+									},
+								},
+							},
+							{
+								Label:    "baz",
+								Kind:     constantKind,
+								SortText: sortTextLocationPriority,
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "baz",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 17, Character: 10},
+											End:   lsproto.Position{Line: 17, Character: 10},
+										},
+									},
+								},
+							},
+						},
+					},
+					isIncludes: true,
+					excludes:   []string{"bar"},
+				},
+				"4": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:    "foo",
+								Kind:     constantKind,
+								SortText: sortTextLocationPriority,
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "foo",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 22, Character: 11},
+											End:   lsproto.Position{Line: 22, Character: 11},
+										},
+									},
+								},
+							},
+							{
+								Label:    "bar",
+								Kind:     constantKind,
+								SortText: sortTextLocationPriority,
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "bar",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 22, Character: 11},
+											End:   lsproto.Position{Line: 22, Character: 11},
+										},
+									},
+								},
+							},
+						},
+					},
+					isIncludes: true,
+				},
+			},
+		},
+		{
+			name: "completionForQuotedPropertyInPropertyAssignment1",
+			files: map[string]string{
+				defaultMainFileName: `export interface Configfiles {
+  jspm: string;
+  'jspm:browser': string;
+}
+
+let files: Configfiles;
+files = {
+   /*0*/: '',
+   '/*1*/': ''
+}`,
+			},
+			expectedResult: map[string]*testCaseResult{
+				"0": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:    `"jspm:browser"`,
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
+							},
+							{
+								Label:    "jspm",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
+							},
+						},
+					},
+				},
+				"1": {
+					list: &lsproto.CompletionList{
+						IsIncomplete: false,
+						ItemDefaults: itemDefaults,
+						Items: []*lsproto.CompletionItem{
+							{
+								Label:    "jspm",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "jspm",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 8, Character: 4},
+											End:   lsproto.Position{Line: 8, Character: 4},
+										},
+									},
+								},
+							},
+							{
+								Label:    "jspm:browser",
+								Kind:     fieldKind,
+								SortText: sortTextLocationPriority,
+								TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+									TextEdit: &lsproto.TextEdit{
+										NewText: "jspm:browser",
+										Range: lsproto.Range{
+											Start: lsproto.Position{Line: 8, Character: 4},
+											End:   lsproto.Position{Line: 8, Character: 4},
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
