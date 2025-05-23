@@ -602,6 +602,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         esnext: ModuleKind.ESNext,
         node16: ModuleKind.Node16,
         node18: ModuleKind.Node18,
+        node20: ModuleKind.Node20,
         nodenext: ModuleKind.NodeNext,
         preserve: ModuleKind.Preserve,
     })),
