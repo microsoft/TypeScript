@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/noUnusedLocals_selfReferenceInClassStaticBlock.ts] ////
+
+=== noUnusedLocals_selfReferenceInClassStaticBlock.ts ===
+// https://github.com/microsoft/TypeScript/issues/57620
+
+let BluethootDevice_create;
+>BluethootDevice_create : any
+
+class BluethootDevice {
+>BluethootDevice : BluethootDevice
+>                : ^^^^^^^^^^^^^^^
+
+  #id!: string;
+>#id : string
+>    : ^^^^^^
+
+  static #allowConstruct = false;
+>#allowConstruct : boolean
+>                : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+  private constructor() {
+    if (!BluethootDevice.#allowConstruct) {
+>!BluethootDevice.#allowConstruct : boolean
+>                                 : ^^^^^^^
+>BluethootDevice.#allowConstruct : boolean
+>                                : ^^^^^^^
+>BluethootDevice : typeof BluethootDevice
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+
+      throw new Error("You cannot instantiate this class directly");
+>new Error("You cannot instantiate this class directly") : Error
+>                                                        : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"You cannot instantiate this class directly" : "You cannot instantiate this class directly"
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+  }
+
+  static {
+    BluethootDevice_create = (id: string) => {
+>BluethootDevice_create = (id: string) => {      BluethootDevice.#allowConstruct = true;      const device = new BluethootDevice();      BluethootDevice.#allowConstruct = false;      device.#id = id;      return device;    } : (id: string) => BluethootDevice
+>                                                                                                                                                                                                                                : ^  ^^      ^^^^^^^^^^^^^^^^^^^^
+>BluethootDevice_create : any
+>(id: string) => {      BluethootDevice.#allowConstruct = true;      const device = new BluethootDevice();      BluethootDevice.#allowConstruct = false;      device.#id = id;      return device;    } : (id: string) => BluethootDevice
+>                                                                                                                                                                                                       : ^  ^^      ^^^^^^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+
+      BluethootDevice.#allowConstruct = true;
+>BluethootDevice.#allowConstruct = true : true
+>                                       : ^^^^
+>BluethootDevice.#allowConstruct : boolean
+>                                : ^^^^^^^
+>BluethootDevice : typeof BluethootDevice
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+      const device = new BluethootDevice();
+>device : BluethootDevice
+>       : ^^^^^^^^^^^^^^^
+>new BluethootDevice() : BluethootDevice
+>                      : ^^^^^^^^^^^^^^^
+>BluethootDevice : typeof BluethootDevice
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+
+      BluethootDevice.#allowConstruct = false;
+>BluethootDevice.#allowConstruct = false : false
+>                                        : ^^^^^
+>BluethootDevice.#allowConstruct : boolean
+>                                : ^^^^^^^
+>BluethootDevice : typeof BluethootDevice
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+      device.#id = id;
+>device.#id = id : string
+>                : ^^^^^^
+>device.#id : string
+>           : ^^^^^^
+>device : BluethootDevice
+>       : ^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+
+      return device;
+>device : BluethootDevice
+>       : ^^^^^^^^^^^^^^^
+
+    };
+  }
+
+  get id() {
+>id : string
+>   : ^^^^^^
+
+    return this.#id;
+>this.#id : string
+>         : ^^^^^^
+>this : this
+>     : ^^^^
+  }
+}
+
+BluethootDevice_create("aa");
+>BluethootDevice_create("aa") : BluethootDevice
+>                             : ^^^^^^^^^^^^^^^
+>BluethootDevice_create : (id: string) => BluethootDevice
+>                       : ^  ^^      ^^^^^^^^^^^^^^^^^^^^
+>"aa" : "aa"
+>     : ^^^^
+
+export {};
+
