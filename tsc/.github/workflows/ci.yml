@@ -31,6 +31,14 @@ jobs:
         with:
           cache-name: build
 
+      # Avoid duplicate PR annotations.
+      - name: Disable PR annotations
+        run: |
+          echo "::remove-matcher owner=eslint-compact::"
+          echo "::remove-matcher owner=eslint-stylish::"
+          echo "::remove-matcher owner=tsc::"
+          echo "::remove-matcher owner=go::"
+
       - run: npm ci
 
       - run: npx hereby build
@@ -53,6 +61,7 @@ jobs:
         config:
           - os: ubuntu-latest
             coverage: true
+            main: true
           - os: windows-latest
             coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
@@ -106,6 +115,15 @@ jobs:
         with:
           cache-name: test
 
+      # Avoid duplicate PR annotations.
+      - if: ${{ ! matrix.config.main }}
+        name: Disable PR annotations
+        run: |
+          echo "::remove-matcher owner=eslint-compact::"
+          echo "::remove-matcher owner=eslint-stylish::"
+          echo "::remove-matcher owner=tsc::"
+          echo "::remove-matcher owner=go::"
+
       - run: npm ci
 
       - run: go install gotest.tools/gotestsum@latest
@@ -155,6 +173,7 @@ jobs:
       matrix:
         config:
           - os: ubuntu-latest
+            main: true
           - os: windows-latest
             skip: ${{ github.event_name == 'merge_group' }}
           - os: macos-latest
@@ -181,6 +200,15 @@ jobs:
       - uses: ./.github/actions/setup-go
         with:
           cache-name: lint${{ (matrix.config.noembed && '-noembed') || ''}}
+
+      # Avoid duplicate PR annotations.
+      - if: ${{ ! matrix.config.main }}
+        name: Disable PR annotations
+        run: |
+          echo "::remove-matcher owner=eslint-compact::"
+          echo "::remove-matcher owner=eslint-stylish::"
+          echo "::remove-matcher owner=tsc::"
+          echo "::remove-matcher owner=go::"
 
       - run: npm ci
 
@@ -244,6 +272,14 @@ jobs:
       - uses: ./.github/actions/setup-go
         with:
           cache-name: smoke
+
+      # Avoid duplicate PR annotations.
+      - name: Disable PR annotations
+        run: |
+          echo "::remove-matcher owner=eslint-compact::"
+          echo "::remove-matcher owner=eslint-stylish::"
+          echo "::remove-matcher owner=tsc::"
+          echo "::remove-matcher owner=go::"
 
       - run: npm ci
 
