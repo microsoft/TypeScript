@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/selfCallGenericJsDoc1.ts] ////
+
+=== index.js ===
+/**
+ * @template T
+ * @typedef {T & { children: Children<T>[] | undefined }} Children
+ */
+
+/**
+ * @template T
+ * @param {Children<T>[]} groups item and groups
+ */
+export const spaceLimited = (groups) => {
+>spaceLimited : <T>(groups: Children<T>[]) => void
+>             : ^ ^^      ^^             ^^^^^^^^^
+>(groups) => {	for (let i = 0; i < groups.length; i++) {		const group = groups[i];		spaceLimited(/** @type {Children<T>} */(group.children)); // should error	}} : <T>(groups: Children<T>[]) => void
+>                                                                                                                                                                : ^ ^^      ^^             ^^^^^^^^^
+>groups : Children<T>[]
+>       : ^^^^^^^^^^^^^
+
+	for (let i = 0; i < groups.length; i++) {
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < groups.length : boolean
+>                  : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>groups.length : number
+>              : ^^^^^^
+>groups : Children<T>[]
+>       : ^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+		const group = groups[i];
+>group : Children<T>
+>      : ^^^^^^^^^^^
+>groups[i] : Children<T>
+>          : ^^^^^^^^^^^
+>groups : Children<T>[]
+>       : ^^^^^^^^^^^^^
+>i : number
+>  : ^^^^^^
+
+		spaceLimited(/** @type {Children<T>} */(group.children)); // should error
+>spaceLimited(/** @type {Children<T>} */(group.children)) : void
+>                                                         : ^^^^
+>spaceLimited : <T>(groups: Children<T>[]) => void
+>             : ^ ^^      ^^             ^^^^^^^^^
+>(group.children) : Children<T>
+>                 : ^^^^^^^^^^^
+>group.children : Children<T>[] | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>group : Children<T>
+>      : ^^^^^^^^^^^
+>children : Children<T>[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+	}
+};
+

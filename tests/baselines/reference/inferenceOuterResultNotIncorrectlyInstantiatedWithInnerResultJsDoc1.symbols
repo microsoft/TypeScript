@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResultJsDoc1.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/60988
+
+/**
+ * @template [T = any]
+ */
+class S {
+>S : Symbol(S, Decl(index.js, 0, 0))
+
+	/**
+	 * @type {Set<T>}
+	 */
+	set;
+>set : Symbol(S.set, Decl(index.js, 5, 9))
+
+	/**
+	 * @param {Set<T>} set
+	 */
+	constructor(set) {
+>set : Symbol(set, Decl(index.js, 15, 13))
+
+		this.set = set;
+>this.set : Symbol(S.set, Decl(index.js, 5, 9))
+>this : Symbol(S, Decl(index.js, 0, 0))
+>set : Symbol(S.set, Decl(index.js, 5, 9))
+>set : Symbol(set, Decl(index.js, 15, 13))
+	}
+
+	array() {
+>array : Symbol(S.array, Decl(index.js, 17, 2))
+
+		return new S(new Set([...this.set].map(item => [item])));
+>S : Symbol(S, Decl(index.js, 0, 0))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>[...this.set].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>this.set : Symbol(S.set, Decl(index.js, 5, 9))
+>this : Symbol(S, Decl(index.js, 0, 0))
+>set : Symbol(S.set, Decl(index.js, 5, 9))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(index.js, 20, 41))
+>item : Symbol(item, Decl(index.js, 20, 41))
+	}
+}
+
+/**
+ * @template [T = any]
+ * @param {Set<T>} set
+ */
+const sArray = (set) => {
+>sArray : Symbol(sArray, Decl(index.js, 28, 5))
+>set : Symbol(set, Decl(index.js, 28, 16))
+
+	return new S(new Set([...set].map(item => [item])));
+>S : Symbol(S, Decl(index.js, 0, 0))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>[...set].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>set : Symbol(set, Decl(index.js, 28, 16))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(index.js, 29, 35))
+>item : Symbol(item, Decl(index.js, 29, 35))
+
+};
+

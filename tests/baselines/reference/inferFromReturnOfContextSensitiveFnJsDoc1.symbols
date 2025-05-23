@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/inferFromReturnOfContextSensitiveFnJsDoc1.ts] ////
+
+=== index.js ===
+/**
+ * @template S
+ * @param {(arg0: { observer: EO }) => S} callback
+ * @param {Options} [options]
+ * @returns {VC<S>}
+ */
+/*
+ * @type { <S>(fn: (arg0: { observer: EO; }) => S, options?: Options) => VC<S> }
+ */
+function define(callback, options) {
+>define : Symbol(define, Decl(index.js, 0, 0))
+>callback : Symbol(callback, Decl(index.js, 9, 16))
+>options : Symbol(options, Decl(index.js, 9, 25))
+
+  const { name } = options ?? {};
+>name : Symbol(name, Decl(index.js, 10, 9))
+>options : Symbol(options, Decl(index.js, 9, 25))
+
+  const observer = new EO();
+>observer : Symbol(observer, Decl(index.js, 11, 7))
+>EO : Symbol(EO, Decl(index.js, 28, 1))
+
+  const state = callback({ observer });
+>state : Symbol(state, Decl(index.js, 12, 7))
+>callback : Symbol(callback, Decl(index.js, 9, 16))
+>observer : Symbol(observer, Decl(index.js, 12, 26))
+
+  return new VC(state);
+>VC : Symbol(VC, Decl(index.js, 14, 1))
+>state : Symbol(state, Decl(index.js, 12, 7))
+}
+
+/**
+ * @template S
+ */
+class VC {
+>VC : Symbol(VC, Decl(index.js, 14, 1))
+
+  /** @type {S} */
+  state;
+>state : Symbol(VC.state, Decl(index.js, 19, 10))
+
+  /**
+   * @param {S} state
+   */
+  constructor(state) {
+>state : Symbol(state, Decl(index.js, 25, 14))
+
+    this.state = state;
+>this.state : Symbol(VC.state, Decl(index.js, 19, 10))
+>this : Symbol(VC, Decl(index.js, 14, 1))
+>state : Symbol(VC.state, Decl(index.js, 19, 10))
+>state : Symbol(state, Decl(index.js, 25, 14))
+  }
+}
+
+/** @typedef {{ name?: string }} Options */
+
+class EO {}
+>EO : Symbol(EO, Decl(index.js, 28, 1))
+
+const v1 = define((arg0) => true, { name: "default" });
+>v1 : Symbol(v1, Decl(index.js, 34, 5))
+>define : Symbol(define, Decl(index.js, 0, 0))
+>arg0 : Symbol(arg0, Decl(index.js, 34, 19))
+>name : Symbol(name, Decl(index.js, 34, 35))
+
