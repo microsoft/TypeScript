@@ -341,6 +341,7 @@ func (c *Checker) GetRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 		for _, root := range roots {
 			result = append(result, c.GetRootSymbols(root)...)
 		}
+		return result
 	}
 	return []*ast.Symbol{symbol}
 }
